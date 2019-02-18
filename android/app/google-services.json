@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "421397732087",
+    "firebase_url": "https://sonar-bt10.firebaseio.com",
+    "project_id": "sonar-bt10",
+    "storage_bucket": "sonar-bt10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421397732087:android:332e6205b230bdde",
+        "android_client_info": {
+          "package_name": "com.britetwist.sonarandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421397732087-564fnk9ahhe38s192s60g16r3lvidr3k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3MpVbeK1WSjGAilFW5qBVAQorxIssMYI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
