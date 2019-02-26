@@ -1,4 +1,4 @@
-# sonar_frontend
+# sonar_frontend_swift
 
 A new Flutter project.
 
