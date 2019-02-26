@@ -2,8 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:geolocator/geolocator.dart';
+
 import 'dart:io' show Platform;
 
 void main() {
@@ -39,6 +44,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState();
 
+   // Text Controllers
    final nameController = TextEditingController();
    final phoneController = TextEditingController();
    final emailController = TextEditingController();
@@ -46,6 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
    final facebookController = TextEditingController();
    final twitterController = TextEditingController();
    final instagramController = TextEditingController();
+
+   // Firebase
+   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void dispose() {
@@ -60,33 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _pushData(){
-    var device = '';
-    // Set Device
-    if (Platform.isAndroid) {
-    // Android-specific code
-      device = 'Android';
-    } else if (Platform.isIOS) {
-    // iOS-specific code
-      device = 'iOS';
-    }
-
-    Firestore.instance.collection('active-transactions').document()
-    .setData(
-      {
-        'name': nameController.text,
-        'phone': phoneController.text,
-        'device': device,
-        'email': emailController.text,
-        'snapchat': snapchatController.text,
-        'facebook': facebookController.text,
-        'instagram': instagramController.text,
-        'twitter': twitterController.text,
-        'userId': 'lope',
-        'created': 'lope',
-        'location': 'lope',
-      }
-    );
+Future<Position> _getLocation() async {
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return position;
   }
 
   @override
@@ -143,7 +128,37 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.publish),
-          onPressed: _pushData
+          onPressed:() {
+                // Get Current Location
+                _getLocation().then((value) {
+                  setState(() {
+                    // Set Device
+                    var device = '';
+                    if (Platform.isAndroid) {
+                      device = 'Android';
+                    } else if (Platform.isIOS) {
+                      device = 'iOS';
+                    }
+                    // Push to Firestore
+                    Firestore.instance.collection('active-transactions').document()
+                    .setData(
+                      {
+                        'name': nameController.text,
+                        'phone': phoneController.text,
+                        'device': device,
+                        'email': emailController.text,
+                        'snapchat': snapchatController.text,
+                        'facebook': facebookController.text,
+                        'instagram': instagramController.text,
+                        'twitter': twitterController.text,
+                        'userId': _firebaseMessaging.getToken(),
+                        'created': DateTime.now(),
+                        'location': new GeoPoint(value.latitude, value.longitude)
+                      }
+                    );
+                  });
+                });
+              },
           ),
     );
   }
