@@ -4,8 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'tabs_page.dart';
+import 'dart:io' show Platform;
 
 void main() {
   runApp(MyApp());
@@ -16,12 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Firebase Analytics Demo',
+      title: 'Sonar Barebones',
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
       home: MyHomePage(
-        title: 'Firebase Analytics Demo',
+        title: 'Sonar Barebones',
       ),
     );
   }
@@ -40,18 +39,55 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState();
 
-  String _message = '';
+   final nameController = TextEditingController();
+   final phoneController = TextEditingController();
+   final emailController = TextEditingController();
+   final snapchatController = TextEditingController();
+   final facebookController = TextEditingController();
+   final twitterController = TextEditingController();
+   final instagramController = TextEditingController();
 
-  void setMessage(String message) {
-    setState(() {
-      _message = message;
-    });
+  @override
+  void dispose() {
+    // Clean up the controller when the Widget is disposed
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    snapchatController.dispose();
+    facebookController.dispose();
+    twitterController.dispose();
+    instagramController.dispose();
+    super.dispose();
   }
 
-void _pushData(){
-  Firestore.instance.collection('books').document()
-  .setData({ 'title': 'title', 'author': 'author' });
-}
+  void _pushData(){
+    var device = '';
+    // Set Device
+    if (Platform.isAndroid) {
+    // Android-specific code
+      device = 'Android';
+    } else if (Platform.isIOS) {
+    // iOS-specific code
+      device = 'iOS';
+    }
+
+    Firestore.instance.collection('active-transactions').document()
+    .setData(
+      {
+        'name': nameController.text,
+        'phone': phoneController.text,
+        'device': device,
+        'email': emailController.text,
+        'snapchat': snapchatController.text,
+        'facebook': facebookController.text,
+        'instagram': instagramController.text,
+        'twitter': twitterController.text,
+        'userId': 'lope',
+        'created': 'lope',
+        'location': 'lope',
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +97,54 @@ void _pushData(){
       ),
       body: Column(
         children: <Widget>[
-          MaterialButton(
-            child: const Text('Push Data'),
-            onPressed: _pushData,
-          )]
+          TextField(
+            controller: nameController,
+            decoration: InputDecoration(
+            hintText: 'Name'
+            ),
+          ),
+          TextField(
+            controller: phoneController,
+            decoration: InputDecoration(
+            hintText: 'Phone'
+            ),
+          ),
+          TextField(
+            controller: emailController,
+            decoration: InputDecoration(
+            hintText: 'Email'
+            ),
+          ),
+          TextField(
+            controller: snapchatController,
+            decoration: InputDecoration(
+            hintText: 'Snapchat'
+            ),
+          ),
+          TextField(
+            controller: facebookController,
+            decoration: InputDecoration(
+            hintText: 'Facebook'
+            ),
+          ),
+          TextField(
+            controller: twitterController,
+            decoration: InputDecoration(
+            hintText: 'Twitter'
+            ),
+          ),
+          TextField(
+            controller: instagramController,
+            decoration: InputDecoration(
+            hintText: 'Instagram'
+            ),
+          ),
+        ]
       ),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.tab),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute<TabsPage>(
-                settings: const RouteSettings(name: TabsPage.routeName),
-                builder: (BuildContext context) {
-                  return TabsPage();
-                }));
-          }),
+          child: const Icon(Icons.publish),
+          onPressed: _pushData
+          ),
     );
   }
 }
