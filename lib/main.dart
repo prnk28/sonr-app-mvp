@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' show Platform;
 
 void main() {
@@ -16,7 +16,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,8 +31,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title})
-      : super(key: key);
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -44,17 +42,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState();
 
-   // Text Controllers
-   final nameController = TextEditingController();
-   final phoneController = TextEditingController();
-   final emailController = TextEditingController();
-   final snapchatController = TextEditingController();
-   final facebookController = TextEditingController();
-   final twitterController = TextEditingController();
-   final instagramController = TextEditingController();
+  // Text Controllers
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final snapchatController = TextEditingController();
+  final facebookController = TextEditingController();
+  final twitterController = TextEditingController();
+  final instagramController = TextEditingController();
 
-   // Firebase
-   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  // Firebase
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void dispose() {
@@ -69,97 +67,81 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-Future<Position> _getLocation() async {
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    return position;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: <Widget>[
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Column(children: <Widget>[
           TextField(
             controller: nameController,
-            decoration: InputDecoration(
-            hintText: 'Name'
-            ),
+            decoration: InputDecoration(hintText: 'Name'),
           ),
           TextField(
             controller: phoneController,
-            decoration: InputDecoration(
-            hintText: 'Phone'
-            ),
+            decoration: InputDecoration(hintText: 'Phone'),
           ),
           TextField(
             controller: emailController,
-            decoration: InputDecoration(
-            hintText: 'Email'
-            ),
+            decoration: InputDecoration(hintText: 'Email'),
           ),
           TextField(
             controller: snapchatController,
-            decoration: InputDecoration(
-            hintText: 'Snapchat'
-            ),
+            decoration: InputDecoration(hintText: 'Snapchat'),
           ),
           TextField(
             controller: facebookController,
-            decoration: InputDecoration(
-            hintText: 'Facebook'
-            ),
+            decoration: InputDecoration(hintText: 'Facebook'),
           ),
           TextField(
             controller: twitterController,
-            decoration: InputDecoration(
-            hintText: 'Twitter'
-            ),
+            decoration: InputDecoration(hintText: 'Twitter'),
           ),
           TextField(
             controller: instagramController,
-            decoration: InputDecoration(
-            hintText: 'Instagram'
-            ),
+            decoration: InputDecoration(hintText: 'Instagram'),
           ),
-        ]
-      ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.publish),
-          onPressed:() {
-                // Get Current Location
-                _getLocation().then((value) {
-                  setState(() {
-                    // Set Device
-                    var device = '';
-                    if (Platform.isAndroid) {
-                      device = 'Android';
-                    } else if (Platform.isIOS) {
-                      device = 'iOS';
-                    }
-                    // Push to Firestore
-                    Firestore.instance.collection('active-transactions').document()
-                    .setData(
-                      {
-                        'name': nameController.text,
-                        'phone': phoneController.text,
-                        'device': device,
-                        'email': emailController.text,
-                        'snapchat': snapchatController.text,
-                        'facebook': facebookController.text,
-                        'instagram': instagramController.text,
-                        'twitter': twitterController.text,
-                        'userId': _firebaseMessaging.getToken(),
-                        'created': DateTime.now(),
-                        'location': new GeoPoint(value.latitude, value.longitude)
-                      }
-                    );
-                  });
+        ]),
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.publish),
+            onPressed: () async {
+
+              GeolocationStatus geolocationStatus =
+                  await Geolocator().checkGeolocationPermissionStatus();
+                print(geolocationStatus.toString());
+
+              if (geolocationStatus == GeolocationStatus.granted) {
+                Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                // Set Device
+                var device = '';
+                if (Platform.isAndroid) {
+                  device = 'Android';
+                } else if (Platform.isIOS) {
+                  device = 'iOS';
+                }
+                String fcmToken = await _firebaseMessaging.getToken();
+
+                // Push to Firestore
+                Firestore.instance
+                    .collection('active-transactions')
+                    .document()
+                    .setData({
+                  'name': nameController.text,
+                  'phone': phoneController.text,
+                  'device': device,
+                  'email': emailController.text,
+                  'snapchat': snapchatController.text,
+                  'facebook': facebookController.text,
+                  'instagram': instagramController.text,
+                  'twitter': twitterController.text,
+                  'userId': fcmToken,
+                  'created': DateTime.now(),
+                  'location': GeoPoint(position.latitude, position.longitude)
                 });
-              },
-          ),
-    );
+              }else{
+                await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
+              }
+            }));
   }
 }
