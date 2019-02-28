@@ -1,12 +1,10 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' show Platform;
@@ -14,7 +12,6 @@ import 'dart:io' show Platform;
 void main() {
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -50,9 +47,24 @@ class _MyHomePageState extends State<MyHomePage> {
   final facebookController = TextEditingController();
   final twitterController = TextEditingController();
   final instagramController = TextEditingController();
+  var registrationToken;
 
-  // Firebase
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  Future doc;
+
+  @override
+  void initState() {
+    super.initState();
+    CollectionReference reference = Firestore.instance.collection('active-transactions');
+    reference.snapshots().listen((querySnapshot) {
+    querySnapshot.documentChanges.forEach((change) {
+      if (change.type == DocumentChangeType.modified) {
+          change.document.data["match"].get().then((data) {
+          print(data["name"]);
+        });
+      }
+    });
+  });
+}
 
   @override
   void dispose() {
@@ -66,6 +78,35 @@ class _MyHomePageState extends State<MyHomePage> {
     instagramController.dispose();
     super.dispose();
   }
+
+  void pushData(Position position) async {
+    print("Data Pushed");
+                // Set Device
+                var device = '';
+                if (Platform.isAndroid) {
+                  device = 'Android';
+                } else if (Platform.isIOS) {
+                  device = 'iOS';
+                }
+
+                // Push to Firestore
+                doc = Firestore.instance
+                    .collection('active-transactions')
+                    .document()
+                    .setData({
+                  'name': nameController.text,
+                  'phone': phoneController.text,
+                  'device': device,
+                  'email': emailController.text,
+                  'snapchat': snapchatController.text,
+                  'facebook': facebookController.text,
+                  'instagram': instagramController.text,
+                  'twitter': twitterController.text,
+                  'created': DateTime.now(),
+                  'location': GeoPoint(position.latitude, position.longitude)
+                });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,42 +147,15 @@ class _MyHomePageState extends State<MyHomePage> {
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.publish),
             onPressed: () async {
-
               GeolocationStatus geolocationStatus =
                   await Geolocator().checkGeolocationPermissionStatus();
-                print(geolocationStatus.toString());
 
               if (geolocationStatus == GeolocationStatus.granted) {
-                Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-                // Set Device
-                var device = '';
-                if (Platform.isAndroid) {
-                  device = 'Android';
-                } else if (Platform.isIOS) {
-                  device = 'iOS';
-                }
-                String fcmToken = await _firebaseMessaging.getToken();
-
-                // Push to Firestore
-                Firestore.instance
-                    .collection('active-transactions')
-                    .document()
-                    .setData({
-                  'name': nameController.text,
-                  'phone': phoneController.text,
-                  'device': device,
-                  'email': emailController.text,
-                  'snapchat': snapchatController.text,
-                  'facebook': facebookController.text,
-                  'instagram': instagramController.text,
-                  'twitter': twitterController.text,
-                  'userId': fcmToken,
-                  'created': DateTime.now(),
-                  'location': GeoPoint(position.latitude, position.longitude)
-                });
+                pushData(await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
               }else{
                 await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
               }
-            }));
+            })
+        );
   }
 }
