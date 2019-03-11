@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:device_id/device_id.dart';
 import 'dart:io' show Platform;
 
 void main() {
@@ -52,23 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final instagramController = TextEditingController();
   var registrationToken;
 
-  Future doc;
-
   @override
   void initState() {
     super.initState();
-    CollectionReference reference =
-        Firestore.instance.collection('active-transactions');
-    reference.snapshots().listen((querySnapshot) {
-      querySnapshot.documentChanges.forEach((change) {
-        if (change.type == DocumentChangeType.modified) {
-          change.document.data["match"].get().then((data) {
-            print(data["name"]);
-            callRecycle(data["transactionID"]);
-          });
-        }
-      });
-    });
   }
 
   @override
@@ -88,15 +73,16 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Data Pushed");
     // Set Parameters
     var uuid = new Uuid();
+    var transaction = uuid.v1();
+    var doc = uuid.v4();
 
     // Push to Firestore
-    doc = Firestore.instance
+    Firestore.instance
         .collection('active-transactions')
-        .document()
+        .document(doc)
         .setData({
       'created': DateTime.now(),
       'device': device(),
-      'deviceID': await DeviceId.getID,
       'email': emailController.text,
       'facebook': facebookController.text,
       'instagram': instagramController.text,
@@ -105,8 +91,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'phone': phoneController.text,
       'snapchat': snapchatController.text,
       'twitter': twitterController.text,
-      'transactionID': uuid.v1()
+      'transactionID': transaction
     });
+
+    // Call Match Function
+    callMatch(transaction, doc);
   }
 
   Future callRecycle(String transactionID) async {
@@ -117,7 +106,28 @@ class _MyHomePageState extends State<MyHomePage> {
           'transactionID': transactionID,
         },
       );
-      print(resp);
+      print("Response: " + resp);
+    } on CloudFunctionsException catch (e) {
+      print('caught firebase functions exception');
+      print(e.code);
+      print(e.message);
+      print(e.details);
+    } catch (e) {
+      print('caught generic exception');
+      print(e);
+    }
+  }
+
+    Future callMatch(String transactionId, String docId) async {
+    try {
+      final dynamic resp = await CloudFunctions.instance.call(
+        functionName: 'matchRequest',
+        parameters: <String, dynamic>{
+          'transactionID': transactionId,
+          'documentID' : docId
+        },
+      );
+      print("Response: " + resp);
     } on CloudFunctionsException catch (e) {
       print('caught firebase functions exception');
       print(e.code);
