@@ -2,16 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'dart:async';
-
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:device_id/device_id.dart';
 import 'dart:io' show Platform;
 
 void main() {
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -54,17 +57,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    CollectionReference reference = Firestore.instance.collection('active-transactions');
+    CollectionReference reference =
+        Firestore.instance.collection('active-transactions');
     reference.snapshots().listen((querySnapshot) {
-    querySnapshot.documentChanges.forEach((change) {
-      if (change.type == DocumentChangeType.modified) {
+      querySnapshot.documentChanges.forEach((change) {
+        if (change.type == DocumentChangeType.modified) {
           change.document.data["match"].get().then((data) {
-          print(data["name"]);
-        });
-      }
+            print(data["name"]);
+            callRecycle(data["transactionID"]);
+          });
+        }
+      });
     });
-  });
-}
+  }
 
   @override
   void dispose() {
@@ -81,32 +86,48 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void pushData(Position position) async {
     print("Data Pushed");
-                // Set Device
-                var device = '';
-                if (Platform.isAndroid) {
-                  device = 'Android';
-                } else if (Platform.isIOS) {
-                  device = 'iOS';
-                }
+    // Set Parameters
+    var uuid = new Uuid();
 
-                // Push to Firestore
-                doc = Firestore.instance
-                    .collection('active-transactions')
-                    .document()
-                    .setData({
-                  'name': nameController.text,
-                  'phone': phoneController.text,
-                  'device': device,
-                  'email': emailController.text,
-                  'snapchat': snapchatController.text,
-                  'facebook': facebookController.text,
-                  'instagram': instagramController.text,
-                  'twitter': twitterController.text,
-                  'created': DateTime.now(),
-                  'location': GeoPoint(position.latitude, position.longitude)
-                });
+    // Push to Firestore
+    doc = Firestore.instance
+        .collection('active-transactions')
+        .document()
+        .setData({
+      'created': DateTime.now(),
+      'device': device(),
+      'deviceID': await DeviceId.getID,
+      'email': emailController.text,
+      'facebook': facebookController.text,
+      'instagram': instagramController.text,
+      'location': GeoPoint(position.latitude, position.longitude),
+      'name': nameController.text,
+      'phone': phoneController.text,
+      'snapchat': snapchatController.text,
+      'twitter': twitterController.text,
+      'transactionID': uuid.v1()
+    });
   }
 
+  Future callRecycle(String transactionID) async {
+    try {
+      final dynamic resp = await CloudFunctions.instance.call(
+        functionName: 'recycleTransaction',
+        parameters: <String, dynamic>{
+          'transactionID': transactionID,
+        },
+      );
+      print(resp);
+    } on CloudFunctionsException catch (e) {
+      print('caught firebase functions exception');
+      print(e.code);
+      print(e.message);
+      print(e.details);
+    } catch (e) {
+      print('caught generic exception');
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,11 +172,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   await Geolocator().checkGeolocationPermissionStatus();
 
               if (geolocationStatus == GeolocationStatus.granted) {
-                pushData(await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
-              }else{
-                await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
+                pushData(await Geolocator().getCurrentPosition(
+                    desiredAccuracy: LocationAccuracy.high));
+              } else {
+                await PermissionHandler()
+                    .requestPermissions([PermissionGroup.locationWhenInUse]);
               }
-            })
-        );
+            }));
+  }
+
+  // Helper Method
+  String device() {
+    if (Platform.isAndroid) {
+      return 'Android';
+    } else if (Platform.isIOS) {
+      return 'iOS';
+    } else {
+      return '';
+    }
   }
 }
