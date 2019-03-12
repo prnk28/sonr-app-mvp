@@ -69,35 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void pushData(Position position) async {
-    print("Data Pushed");
-    // Set Parameters
-    var uuid = new Uuid();
-    var transaction = uuid.v1();
-    var doc = uuid.v4();
-
-    // Push to Firestore
-    Firestore.instance
-        .collection('active-transactions')
-        .document(doc)
-        .setData({
-      'created': DateTime.now(),
-      'device': device(),
-      'email': emailController.text,
-      'facebook': facebookController.text,
-      'instagram': instagramController.text,
-      'location': GeoPoint(position.latitude, position.longitude),
-      'name': nameController.text,
-      'phone': phoneController.text,
-      'snapchat': snapchatController.text,
-      'twitter': twitterController.text,
-      'transactionID': transaction
-    });
-
-    // Call Match Function
-    callMatch(transaction, doc);
-  }
-
   Future callRecycle(String transactionID) async {
     try {
       final dynamic resp = await CloudFunctions.instance.call(
@@ -112,30 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e.code);
       print(e.message);
       print(e.details);
-    } catch (e) {
-      print('caught generic exception');
-      print(e);
-    }
-  }
-
-    Future callMatch(String transactionId, String docId) async {
-    try {
-      final dynamic resp = await CloudFunctions.instance.call(
-        functionName: 'matchRequest',
-        parameters: <String, dynamic>{
-          'transactionID': transactionId,
-          'documentID' : docId
-        },
-      );
-      print("Response: " + resp);
-    } on CloudFunctionsException catch (e) {
-      print('caught firebase functions exception');
-      print(e.code);
-      print(e.message);
-      print(e.details);
-    } catch (e) {
-      print('caught generic exception');
-      print(e);
     }
   }
 
@@ -182,8 +129,49 @@ class _MyHomePageState extends State<MyHomePage> {
                   await Geolocator().checkGeolocationPermissionStatus();
 
               if (geolocationStatus == GeolocationStatus.granted) {
-                pushData(await Geolocator().getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high));
+                // Set Parameters
+                var uuid = new Uuid();
+                var transaction = uuid.v1();
+                var doc = uuid.v4();
+                var position = await Geolocator()
+                    .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+                // Push to Firestore
+                Firestore.instance
+                    .collection('active-transactions')
+                    .document(doc)
+                    .setData({
+                  'created': DateTime.now(),
+                  'device': device(),
+                  'email': emailController.text,
+                  'facebook': facebookController.text,
+                  'instagram': instagramController.text,
+                  'location': GeoPoint(position.latitude, position.longitude),
+                  'name': nameController.text,
+                  'phone': phoneController.text,
+                  'snapchat': snapchatController.text,
+                  'twitter': twitterController.text,
+                  'transactionID': transaction
+                });
+
+                try {
+                  final dynamic resp = await CloudFunctions.instance.call(
+                    functionName: 'matchRequest',
+                    parameters: <String, dynamic>{
+                      'transactionID': transaction,
+                      'documentID': doc
+                    },
+                  );
+                  print(resp);
+                } on CloudFunctionsException catch (e) {
+                  print('caught firebase functions exception');
+                  print(e.code);
+                  print(e.message);
+                  print(e.details);
+                } catch (e) {
+                  print('caught generic exception');
+                  print(e);
+                }
               } else {
                 await PermissionHandler()
                     .requestPermissions([PermissionGroup.locationWhenInUse]);
