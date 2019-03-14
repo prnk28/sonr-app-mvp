@@ -1,18 +1,18 @@
 
 import 'package:flutter/material.dart';
-import 'package:sonar_frontend/sonar_button.dart';
+import 'package:sonar_frontend/widgets/sonar_button.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class UserFormPage extends StatefulWidget {
+  UserFormPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _UserFormState createState() => _UserFormState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState();
+class _UserFormState extends State<UserFormPage> {
+  _UserFormState();
 
   @override
   void dispose() {

@@ -4,7 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonar_frontend/match_transaction.dart';
+import 'package:sonar_frontend/model/match_transaction.dart';
 
 class SonarButton extends StatelessWidget {
   // Parameters
