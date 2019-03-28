@@ -5,7 +5,12 @@ class ProfileCard extends StatelessWidget {
     return SizedBox(
     height: 256,
     width: 350,
-    child: Card(
+    child: new GestureDetector(
+  onTap: () {
+    // Navigate to the second screen using a named route
+    Navigator.pushNamed(context, '/profile');
+  },
+  child: Card(
       child: Column(
         children: [
           ListTile(
@@ -38,7 +43,6 @@ class ProfileCard extends StatelessWidget {
           ),
         ],
       ),
-      //elevation: 6,
-    ));
+    )));
   }
 }

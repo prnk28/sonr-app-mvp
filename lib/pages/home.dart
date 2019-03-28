@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:sonar_frontend/widgets/profile_card.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
 
@@ -8,9 +7,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: "Sonar",
-        home: Scaffold(
+    // 4BBEE3 Zima Blue
+    return Scaffold(
             appBar: AppBar(
               title: Text('Sonar'),
             ),
@@ -22,6 +20,6 @@ class HomePage extends StatelessWidget {
                 Padding(padding: EdgeInsets.all(50.0)),
                 ProfileCard()
               ],
-            )));
+            ));
   }
 }

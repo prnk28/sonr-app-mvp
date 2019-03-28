@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/pages/home.dart';
+import 'package:sonar_frontend/pages/profile.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,11 +13,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sonar Barebones',
+      title: 'Sonar',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      initialRoute: "/",
+      routes: <String, WidgetBuilder>{
+        '/': (context) => HomePage(),
+        '/profile': (context) => ProfilePage(),
+      },
     );
   }
 }
