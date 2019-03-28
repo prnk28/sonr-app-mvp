@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SonarStack(),
-                //ProfileCard(profileStorage: ProfileStorage())
+                ProfileCard(profileStorage: ProfileStorage())
               ],
             ));
   }
