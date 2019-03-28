@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sonar_frontend/pages/home.dart';
 import 'package:sonar_frontend/pages/profile.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class Sonar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,4 +20,8 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+void main() {
+  runApp(Sonar());
 }
