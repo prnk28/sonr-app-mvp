@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sonar_frontend/utils/profile_util.dart';
 import 'package:sonar_frontend/widgets/profile_card.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
 
@@ -18,7 +19,7 @@ class HomePage extends StatelessWidget {
               children: <Widget>[
                 SonarStack(),
                 Padding(padding: EdgeInsets.all(50.0)),
-                ProfileCard()
+                ProfileCard(profileStorage: ProfileStorage())
               ],
             ));
   }
