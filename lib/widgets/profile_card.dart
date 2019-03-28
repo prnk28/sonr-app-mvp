@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SonarCard extends StatelessWidget {
-  Widget build(BuildContext context) {
+class ProfileCard extends StatelessWidget {
+    Widget build(BuildContext context) {
     return SizedBox(
-    width: 350,
     height: 256,
+    width: 350,
     child: Card(
       child: Column(
         children: [
           ListTile(
-            title: Text('Example Contact',
+            title: Text('John Smith',
                 style: TextStyle(fontWeight: FontWeight.w500)),
             subtitle: Text('Name'),
             leading: Icon(
