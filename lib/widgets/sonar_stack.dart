@@ -9,7 +9,7 @@ class SonarStack extends StatelessWidget {
         Swiper(
             layout: SwiperLayout.STACK,
             itemWidth: 325.0,
-            itemHeight: 355.0,
+            itemHeight: 400.0,
             itemBuilder: (context, index) {
               return SonarCard();
             },
