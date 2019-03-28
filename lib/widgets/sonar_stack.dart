@@ -8,8 +8,8 @@ class SonarStack extends StatelessWidget {
       children: <Widget>[
         Swiper(
             layout: SwiperLayout.STACK,
-            itemWidth: 350.0,
-            itemHeight: 350.0,
+            itemWidth: 325.0,
+            itemHeight: 355.0,
             itemBuilder: (context, index) {
               return SonarCard();
             },

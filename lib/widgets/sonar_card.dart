@@ -3,47 +3,90 @@ import 'package:flutter/material.dart';
 class SonarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 350,
-      height: 256,
-      child: GestureDetector(
+        width: 325,
+        height: 355,
+        child: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, "/contact");
           },
           child: Card(
-            child: Column(
-              children: [
-                ListTile(
-                  title: Text('Example Contact',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
-                  subtitle: Text('Name'),
-                  leading: Icon(
-                    Icons.person,
-                    color: Colors.blue[500],
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  title: Text('(408) 555-1212',
-                      style: TextStyle(fontWeight: FontWeight.w500)),
-                  subtitle: Text('Phone'),
-                  leading: Icon(
-                    Icons.contact_phone,
-                    color: Colors.blue[500],
-                  ),
-                ),
-                Divider(),
-                ListTile(
-                  title: Text('costa@example.com'),
-                  subtitle: Text('E-Mail'),
-                  leading: Icon(
-                    Icons.contact_mail,
-                    color: Colors.blue[500],
-                  ),
-                ),
-              ],
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Column(children: [
+            Center(
+              child: Padding(
+                  child: Container(
+                      width: 100.0,
+                      height: 100.0,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  "http://i.pravatar.cc/100")))),
+                  padding: EdgeInsets.only(top: 15)),
             ),
-            //elevation: 6,
-          )),
-    );
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(child: Text("Firstname",
+                    style: TextStyle(
+                    fontFamily: "CooperHewitt",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                  )),
+                padding: EdgeInsets.only(top: 8, right: 5)),
+                Padding(child: Text("Lastname",
+                    style: TextStyle(
+                    fontFamily: "CooperHewitt",
+                    fontWeight: FontWeight.w100,
+                    fontSize: 28
+                  )),
+                padding: EdgeInsets.only(top: 8))
+            ]),
+            ListTile(
+              title: Text('703-124-3134',
+                  style: TextStyle(fontWeight: FontWeight.w500)),
+              leading: Icon(
+                Icons.phone,
+                color: Colors.blue[500],
+              ),
+            ),
+            Padding(child: Divider(), padding: EdgeInsets.only(top: 40)),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // Twitter
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 0, right: 8, bottom: 8),
+                  child: FloatingActionButton(
+                backgroundColor: Colors.lightBlue,
+                onPressed: () => {},
+              )),
+              // Facebook
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 0, right: 8, bottom: 8),
+                  child: FloatingActionButton(
+                backgroundColor: Colors.lightBlue,
+                onPressed: () => {},
+              )),
+              // Snapchat
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 0, right: 8, bottom: 8),
+                  child: FloatingActionButton(
+                backgroundColor: Colors.lightBlue,
+                onPressed: () => {},
+              )),
+              // Instagram
+              Padding(
+                padding: EdgeInsets.only(left: 8, top: 0, right: 8, bottom: 8),
+                  child: FloatingActionButton(
+                backgroundColor: Colors.lightBlue,
+                onPressed: () => {},
+              ))
+            ])
+          ])),
+        ));
   }
 }
