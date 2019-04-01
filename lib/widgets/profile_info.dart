@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/info_builder.dart';
@@ -14,6 +16,13 @@ class ProfileInfo extends StatefulWidget {
 class _ProfileInfoState extends State<ProfileInfo> {
   // User Disk Reference
   ProfileModel _profile;
+  String _textFromLocation = "";
+
+  _ProfileInfoState() {
+    getTextFromLocation().then((val) => setState(() {
+          _textFromLocation = val;
+        }));
+  }
 
   // Top Widget Spacing
   double topPadding = 55;
@@ -28,10 +37,14 @@ class _ProfileInfoState extends State<ProfileInfo> {
     });
   }
 
+  Future<String> getTextFromLocation() async {
+    return await getCurrentLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: 285,
       height: 285,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -77,19 +90,17 @@ class _ProfileInfoState extends State<ProfileInfo> {
                       fontWeight: FontWeight.w200,
                       color: Colors.white54)),
               padding: EdgeInsets.only(top: 5)),
-              // Current Details
+          // Current Details
           Padding(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Icon(Icons.today, color: Colors.white70),
-                  Text("April 1, 2019", style: TextStyle(
-                      color: Colors.white70)),
-                  Text(" | ", style: TextStyle(
-                      color: Colors.white70)),
+                  Text(getTodayDate(), style: TextStyle(color: Colors.white70)),
+                  Text(" | ", style: TextStyle(color: Colors.white70)),
                   Icon(Icons.pin_drop, color: Colors.white70),
-                  Text("Richmond, US", style: TextStyle(
-                      color: Colors.white70)),
+                  Text("Richmond, VA",
+                      style: TextStyle(color: Colors.white70)),
                 ],
               ),
               padding: EdgeInsets.only(top: 55))

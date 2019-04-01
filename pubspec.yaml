@@ -20,6 +20,7 @@ dependencies:
   cloud_functions:
   firebase_analytics:
   path_provider: ^0.5.0+1
+  intl: ^0.15.8
   geolocator: ^3.0.0
   permission_handler:
   uuid: 2.0.0

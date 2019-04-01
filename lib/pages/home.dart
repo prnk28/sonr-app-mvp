@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
@@ -17,9 +18,10 @@ class HomePage extends StatelessWidget {
           leading: Icon(Icons.menu),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.search, color: Colors.white),
+              icon: Icon(Icons.location_on, color: Colors.white),
               tooltip: 'Air it',
-              onPressed: null,
+              onPressed: () { PermissionHandler()
+          .requestPermissions([PermissionGroup.locationWhenInUse]);},
             ),
           ],
         ),
