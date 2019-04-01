@@ -64,13 +64,13 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: KelsonSansRU
-      fonts:
-        - asset: assets/fonts/KelsonSansRU-Normal.ttf
-        - asset: assets/fonts/KelsonSansRU-Light.ttf
-          weight: 100
-        - asset: assets/fonts/KelsonSansRU-Bold.ttf
-          weight: 500
+  # fonts:
+  #   - family: Gotham
+  #     fonts:
+  #       - asset: assets/fonts/GothamBook.ttf
+  #       - asset: assets/fonts/Gotham-Light.otf
+  #         weight: 100
+  #       - asset: assets/fonts/Gotham-Black.otf
+  #         weight: 500
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

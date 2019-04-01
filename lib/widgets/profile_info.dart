@@ -49,23 +49,23 @@ class _ProfileInfoState extends State<ProfileInfo> {
           Padding(
                 child: Text(getGreeting(_profile.name),
                     style: TextStyle(
-                      fontFamily: "KelsonSansRU",
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       fontSize: 32,
+                      color: Colors.white
                     )),
                 padding: EdgeInsets.only(left: 10, top: 15)),
         Padding(
               child: Text("There are 5k Users with Sonar in your Area.",
                     style: TextStyle(
-                      fontFamily: "KelsonSansRU",
                       fontSize: 14,
+                      color: Colors.white54
                     )),
               padding: EdgeInsets.only(top: 10)),
           Padding(
               child: Text("You have X Sonars not in your Contacts. Tap to Add.",
                     style: TextStyle(
-                      fontFamily: "KelsonSansRU",
                       fontSize: 14,
+                      color: Colors.white54
                     )),
               padding: EdgeInsets.only(top: 5))
         ],

@@ -33,7 +33,6 @@ class SonarCard extends StatelessWidget {
                       Padding(
                           child: Text("Firstname",
                               style: TextStyle(
-                                fontFamily: "KelsonSansRU",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 26,
                               )),
@@ -41,7 +40,6 @@ class SonarCard extends StatelessWidget {
                       Padding(
                           child: Text("Lastname",
                               style: TextStyle(
-                                  fontFamily: "KelsonSansRU",
                                   fontWeight: FontWeight.w100,
                                   fontSize: 26)),
                           padding: EdgeInsets.only(top: 8))
@@ -52,7 +50,6 @@ class SonarCard extends StatelessWidget {
                             "A short Description Describing where you met this Person.",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "KelsonSansRU",
                                 fontStyle: FontStyle.italic,
                                 fontWeight: FontWeight.w100,
                                 fontSize: 14)),
@@ -62,7 +59,6 @@ class SonarCard extends StatelessWidget {
                   title: Text('Virginia, US',
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontFamily: "KelsonSansRU",
                       )),
                   leading: Icon(
                     Icons.pin_drop,
@@ -73,7 +69,6 @@ class SonarCard extends StatelessWidget {
                   title: Text('703-124-3134',
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontFamily: "KelsonSansRU",
                       )),
                   leading: Icon(
                     Icons.phone,
