@@ -12,7 +12,11 @@ class ProfileInfo extends StatefulWidget {
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
+  // User Disk Reference
   ProfileModel _profile;
+
+  // Top Widget Spacing
+  double topPadding = 55;
 
   @override
   void initState() {
@@ -28,12 +32,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
   Widget build(BuildContext context) {
     return Container(
       width: 250,
-      height: 250,
+      height: 285,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+            // User Picture
             Padding(
                 child: Container(
                     width: 50.0,
@@ -44,30 +48,51 @@ class _ProfileInfoState extends State<ProfileInfo> {
                             fit: BoxFit.fill,
                             image:
                                 new NetworkImage("http://i.pravatar.cc/100")))),
-                padding: EdgeInsets.only(top: 10)),
-          ]),
-          Padding(
+                padding: EdgeInsets.only(top: topPadding)),
+            // Greeting
+            Padding(
                 child: Text(getGreeting(_profile.name),
+                    textAlign: TextAlign.left,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 32,
-                      color: Colors.white
-                    )),
-                padding: EdgeInsets.only(left: 10, top: 15)),
-        Padding(
-              child: Text("There are 5k Users with Sonar in your Area.",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white54
-                    )),
-              padding: EdgeInsets.only(top: 10)),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 32,
+                        color: Colors.white)),
+                padding: EdgeInsets.only(top: topPadding, left: 10)),
+          ]),
+          // Users in your Area
           Padding(
-              child: Text("You have X Sonars not in your Contacts. Tap to Add.",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white54
-                    )),
-              padding: EdgeInsets.only(top: 5))
+              child: Text("There are 5k Users with Sonar in your Area.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w200,
+                      color: Colors.white54)),
+              padding: EdgeInsets.only(top: 15)),
+          // Extra Information
+          Padding(
+              child: Text("You have X Sonars not in your Contacts.",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w200,
+                      color: Colors.white54)),
+              padding: EdgeInsets.only(top: 5)),
+              // Current Details
+          Padding(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Icon(Icons.today, color: Colors.white70),
+                  Text("April 1, 2019", style: TextStyle(
+                      color: Colors.white70)),
+                  Text(" | ", style: TextStyle(
+                      color: Colors.white70)),
+                  Icon(Icons.pin_drop, color: Colors.white70),
+                  Text("Richmond, US", style: TextStyle(
+                      color: Colors.white70)),
+                ],
+              ),
+              padding: EdgeInsets.only(top: 55))
         ],
       ),
     );

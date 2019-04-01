@@ -10,13 +10,26 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 4BBEE3 Zima Blue
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Sonar"),
+          backgroundColor: Colors.indigo[800],
+          elevation: 0,
+          leading: Icon(Icons.menu),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.white),
+              tooltip: 'Air it',
+              onPressed: null,
+            ),
+          ],
+        ),
         body: Container(
           // Add box decoration
           decoration: BoxDecoration(
             // Box decoration takes a gradient
             gradient: LinearGradient(
               // Where the linear gradient begins and ends
-              begin: Alignment.topRight,
+              begin: Alignment.topCenter,
               end: Alignment.bottomLeft,
               // Add one stop for each color. Stops should increase from 0 to 1
               stops: [0.1, 0.5, 0.7, 0.9],
@@ -32,7 +45,7 @@ class HomePage extends StatelessWidget {
           child: Center(
               child: Column(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               ProfileInfo(profileStorage: ProfileStorage()),
               SonarStack()
