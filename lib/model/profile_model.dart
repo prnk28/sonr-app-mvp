@@ -2,13 +2,13 @@ import 'dart:convert';
 
 class ProfileModel {
   bool valuesSet;
-  final String phone;
-  final String name;
-  final String email;
-  final String snapchat;
-  final String facebook;
-  final String twitter;
-  final String instagram;
+   String phone;
+   String name;
+   String email;
+   String snapchat;
+   String facebook;
+   String twitter;
+   String instagram;
 
   ProfileModel({this.phone, this.name, this.email, this.snapchat,
    this.facebook, this.twitter, this.instagram});

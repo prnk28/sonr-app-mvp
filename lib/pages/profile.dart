@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
+import 'package:sonar_frontend/utils/color_builder.dart';
 
 class ProfilePage extends StatefulWidget {
   final ProfileStorage profileStorage;
@@ -14,6 +15,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfileState extends State<ProfilePage> {
   ProfileModel _profile;
+  final _formKey = GlobalKey<FormState>();
 
   // Text Controllers
   final nameController = TextEditingController();
@@ -46,74 +48,134 @@ class _ProfileState extends State<ProfilePage> {
   }
 
   @override
-  void dispose() {
-    // Clean up Controllers
-    nameController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    snapchatController.dispose();
-    facebookController.dispose();
-    twitterController.dispose();
-    instagramController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Drawer(
+        elevation: 0.5,
+        child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Center(
+                  child: Padding(
+                      child: Container(
+                          width: 100.0,
+                          height: 100.0,
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                  fit: BoxFit.fill,
+                                  image: new NetworkImage(
+                                      "http://i.pravatar.cc/100")))),
+                      padding: EdgeInsets.only(top: 10)),
+                ),
+                decoration: BoxDecoration(color: Colors.white54),
+              ),
+              Form(
+                  key: _formKey,
+                  child: Column(children: <Widget>[
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(hintText: 'Name'),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                      },
+                      onSaved: (val) => setState(() => _profile.name = val),
+                    ),
+                    TextFormField(
+                        controller: phoneController,
+                        decoration: InputDecoration(hintText: 'Phone'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                        },
+                        onSaved: (val) => setState(() => _profile.phone = val)),
+                    TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(hintText: 'Email'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                        },
+                        onSaved: (val) => setState(() => _profile.email = val)),
+                    TextFormField(
+                        controller: snapchatController,
+                        decoration: InputDecoration(hintText: 'Snapchat'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                        },
+                        onSaved: (val) => setState(() => _profile.snapchat = val)),
+                    TextFormField(
+                        controller: facebookController,
+                        decoration: InputDecoration(hintText: 'Facebook'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                        },
+                        onSaved: (val) => setState(() => _profile.facebook = val)),
+                    TextFormField(
+                        controller: twitterController,
+                        decoration: InputDecoration(hintText: 'Twitter'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                        },
+                        onSaved: (val) => setState(() => _profile.twitter = val)),
+                    TextFormField(
+                        controller: instagramController,
+                        decoration: InputDecoration(hintText: 'Instagram'),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter your name';
+                          }
+                        },
+                        onSaved: (val) => setState(() => _profile.instagram = val)),
+                  ])),
+              RaisedButton(
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _confirmSave();
+                    }
+                  },
+                  child: Text('Save')),
+            ]));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Profile'),
+
+   void _confirmSave() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Confirm Changes?"),
           actions: <Widget>[
-            // action button
-            IconButton(
-              icon: Icon(Icons.done),
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Cancel"),
               onPressed: () {
-                _updateProfile();
-                // Write to Disk
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Save"),
+              onPressed: () {
+                _formKey.currentState.save();
                 widget.profileStorage.writeProfile(_profile);
-                Navigator.pop(context, _profile);
+                Navigator.of(context).pop();
               },
             ),
           ],
-        ),
-        body: Column(children: <Widget>[
-          TextField(
-              controller: nameController,
-              decoration: InputDecoration(hintText: 'Name')),
-          TextField(
-              controller: phoneController,
-              decoration: InputDecoration(hintText: 'Phone')),
-          TextField(
-              controller: emailController,
-              decoration: InputDecoration(hintText: 'Email')),
-          TextField(
-              controller: snapchatController,
-              decoration: InputDecoration(hintText: 'Snapchat')),
-          TextField(
-              controller: facebookController,
-              decoration: InputDecoration(hintText: 'Facebook')),
-          TextField(
-              controller: twitterController,
-              decoration: InputDecoration(hintText: 'Twitter')),
-          TextField(
-              controller: instagramController,
-              decoration: InputDecoration(hintText: 'Instagram')),
-        ]));
-  }
-
-  void _updateProfile() {
-    // Get Values
-    var jsonMap = {
-      'phone': phoneController.text,
-      'name': nameController.text,
-      'email': emailController.text,
-      'snapchat': snapchatController.text,
-      'facebook': facebookController.text,
-      'twitter': twitterController.text,
-      'instagram': instagramController.text
-    };
-
-    // Set Values
-    _profile = ProfileModel.fromJson(jsonMap);
+        );
+      },
+    );
   }
 }

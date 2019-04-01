@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sonar_frontend/pages/profile.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
@@ -29,11 +30,20 @@ class HomePage extends StatelessWidget {
             ],
           )),
         ),
+        drawer: ProfilePage(profileStorage: ProfileStorage()),
         appBar: AppBar(
           title: Text("Sonar"),
           backgroundColor: getInitialColor(),
           elevation: 0,
-          leading: Icon(Icons.menu),
+          leading: Builder(builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.menu, color: Colors.white),
+              tooltip: 'Air it',
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          }),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.location_on, color: Colors.white),

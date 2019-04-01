@@ -36,6 +36,10 @@ LinearGradient getRandomGradient() {
   return _activeGradient;
 }
 
+LinearGradient getCurrentGradient(){
+  return _activeGradient;
+}
+
 Color getInitialColor() {
   return _initialColor;
 }
