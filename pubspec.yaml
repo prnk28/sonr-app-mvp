@@ -65,14 +65,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: CooperHewitt
+    - family: KelsonSansRU
       fonts:
-        - asset: assets/fonts/CooperHewitt-Book.ttf
-        - asset: assets/fonts/CooperHewitt-Heavy.ttf
-          weight: 700
-        - asset: assets/fonts/CooperHewitt-Medium.ttf
-          weight: 400
-        - asset: assets/fonts/CooperHewitt-Light.ttf
+        - asset: assets/fonts/KelsonSansRU-Normal.ttf
+        - asset: assets/fonts/KelsonSansRU-Light.ttf
           weight: 100
+        - asset: assets/fonts/KelsonSansRU-Bold.ttf
+          weight: 500
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages

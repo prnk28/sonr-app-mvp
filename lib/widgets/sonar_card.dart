@@ -33,7 +33,7 @@ class SonarCard extends StatelessWidget {
                       Padding(
                           child: Text("Firstname",
                               style: TextStyle(
-                                fontFamily: "CooperHewitt",
+                                fontFamily: "KelsonSansRU",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 26,
                               )),
@@ -41,7 +41,7 @@ class SonarCard extends StatelessWidget {
                       Padding(
                           child: Text("Lastname",
                               style: TextStyle(
-                                  fontFamily: "CooperHewitt",
+                                  fontFamily: "KelsonSansRU",
                                   fontWeight: FontWeight.w100,
                                   fontSize: 26)),
                           padding: EdgeInsets.only(top: 8))
@@ -52,9 +52,9 @@ class SonarCard extends StatelessWidget {
                             "A short Description Describing where you met this Person.",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "CooperHewitt",
+                                fontFamily: "KelsonSansRU",
                                 fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w100,
                                 fontSize: 14)),
                         padding: EdgeInsets.only(
                             top: 5, left: 40, right: 40, bottom: 5))),
@@ -62,7 +62,7 @@ class SonarCard extends StatelessWidget {
                   title: Text('Virginia, US',
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontFamily: "CooperHewitt",
+                        fontFamily: "KelsonSansRU",
                       )),
                   leading: Icon(
                     Icons.pin_drop,
@@ -73,7 +73,7 @@ class SonarCard extends StatelessWidget {
                   title: Text('703-124-3134',
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontFamily: "CooperHewitt",
+                        fontFamily: "KelsonSansRU",
                       )),
                   leading: Icon(
                     Icons.phone,
@@ -91,7 +91,7 @@ class SonarCard extends StatelessWidget {
                             child: Image.asset("assets/images/twitter-64.png",
                                 height: 32, width: 32),
                             shape: new CircleBorder(),
-                            elevation: 1.0,
+                            elevation: 2.0,
                             fillColor: Color.fromRGBO(56, 161, 243, 1),
                             padding: EdgeInsets.all(8),
                           ),
@@ -103,7 +103,7 @@ class SonarCard extends StatelessWidget {
                             child: Image.asset("assets/images/facebook-64.png",
                                 height: 32, width: 32),
                             shape: new CircleBorder(),
-                            elevation: 1.0,
+                            elevation: 2.0,
                             fillColor: Color.fromRGBO(66, 103, 178, 1),
                             padding: EdgeInsets.all(8),
                           ),
@@ -115,7 +115,7 @@ class SonarCard extends StatelessWidget {
                             child: Image.asset("assets/images/snapchat-64.png",
                                 height: 32, width: 32),
                             shape: new CircleBorder(),
-                            elevation: 1.0,
+                            elevation: 2.0,
                             fillColor: Color.fromRGBO(255, 252, 0, 1),
                             padding: EdgeInsets.all(8),
                           ),
@@ -127,7 +127,7 @@ class SonarCard extends StatelessWidget {
                             child: Image.asset("assets/images/instagram-64.png",
                                 height: 32, width: 32),
                             shape: new CircleBorder(),
-                            elevation: 1.0,
+                            elevation: 2.0,
                             fillColor: Color.fromRGBO(35, 31, 32, 1),
                             padding: EdgeInsets.all(8),
                           ),
