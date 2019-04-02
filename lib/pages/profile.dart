@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
-import 'package:sonar_frontend/utils/color_builder.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   final ProfileStorage profileStorage;
@@ -73,7 +73,18 @@ class _ProfileState extends State<ProfilePage> {
               child: Column(children: <Widget>[
                 TextFormField(
                   controller: nameController,
-                  decoration: InputDecoration(hintText: 'Name'),
+                  decoration: InputDecoration(
+                    contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 12.0)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter your name';
@@ -83,57 +94,123 @@ class _ProfileState extends State<ProfilePage> {
                 ),
                 TextFormField(
                     controller: phoneController,
-                    decoration: InputDecoration(hintText: 'Phone'),
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.phone,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Phone',
+                      hintStyle: TextStyle(fontSize: 12.0)),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Please enter your name';
+                        return 'Please enter your phone';
                       }
                     },
                     onSaved: (val) => setState(() => _profile.phone = val)),
                 TextFormField(
                     controller: emailController,
-                    decoration: InputDecoration(hintText: 'Email'),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                    },
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          Icons.email,
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 12.0)),
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'Please enter your email';
+                    //   }
+                    // },
                     onSaved: (val) => setState(() => _profile.email = val)),
                 TextFormField(
                     controller: snapchatController,
-                    decoration: InputDecoration(hintText: 'Snapchat'),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                    },
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          IconData(0xebe1, fontFamily: 'Boxicons'),
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 12.0)),
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'Please enter your name';
+                    //   }
+                    // },
                     onSaved: (val) => setState(() => _profile.snapchat = val)),
                 TextFormField(
                     controller: facebookController,
-                    decoration: InputDecoration(hintText: 'Facebook'),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                    },
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          IconData(0xebb2, fontFamily: 'Boxicons'),
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 12.0)),
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'Please enter your name';
+                    //   }
+                    // },
                     onSaved: (val) => setState(() => _profile.facebook = val)),
                 TextFormField(
                     controller: twitterController,
-                    decoration: InputDecoration(hintText: 'Twitter'),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                    },
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          IconData(0xebeb, fontFamily: 'Boxicons'),
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 12.0)),
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'Please enter your name';
+                    //   }
+                    // },
                     onSaved: (val) => setState(() => _profile.twitter = val)),
                 TextFormField(
                     controller: instagramController,
-                    decoration: InputDecoration(hintText: 'Instagram'),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter your name';
-                      }
-                    },
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0),
+                      border: InputBorder.none,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(0.0),
+                        child: Icon(
+                          IconData(0xebbe, fontFamily: "Boxicons"),
+                          color: Colors.grey,
+                        ), // icon is 48px widget.
+                      ),
+                      hintText: 'Name',
+                      hintStyle: TextStyle(fontSize: 12.0)),
+                    // validator: (value) {
+                    //   if (value.isEmpty) {
+                    //     return 'Please enter your name';
+                    //   }
+                    // },
                     onSaved: (val) => setState(() => _profile.instagram = val)),
               ])),
           Padding(
@@ -156,11 +233,10 @@ class _ProfileState extends State<ProfilePage> {
                         Icon(Icons.check, color: Colors.white),
                         Padding(
                             child: Text("Save",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white
-                            )),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
                             padding: EdgeInsets.only(right: 90))
                       ],
                     )),
