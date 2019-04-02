@@ -18,12 +18,11 @@ dependencies:
   firebase_core:
   cloud_firestore:
   cloud_functions:
+  image_picker:
   firebase_analytics:
   path_provider: ^0.5.0+1
   unicorndial: "^1.1.5"
   intl: ^0.15.8
-  font_awesome_flutter: ^8.4.0
-  boxicons_flutter: ^1.1.0
   geolocator: ^3.0.0
   permission_handler:
   uuid: 2.0.0

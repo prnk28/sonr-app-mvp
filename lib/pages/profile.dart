@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   final ProfileStorage profileStorage;
