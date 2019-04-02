@@ -51,106 +51,124 @@ class _ProfileState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Drawer(
         elevation: 0.5,
-        child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Center(
-                  child: Padding(
-                      child: Container(
-                          width: 100.0,
-                          height: 100.0,
-                          decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      "http://i.pravatar.cc/100")))),
-                      padding: EdgeInsets.only(top: 10)),
-                ),
-                decoration: BoxDecoration(color: Colors.white54),
-              ),
-              Form(
-                  key: _formKey,
-                  child: Column(children: <Widget>[
-                    TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(hintText: 'Name'),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                      },
-                      onSaved: (val) => setState(() => _profile.name = val),
-                    ),
-                    TextFormField(
-                        controller: phoneController,
-                        decoration: InputDecoration(hintText: 'Phone'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        onSaved: (val) => setState(() => _profile.phone = val)),
-                    TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(hintText: 'Email'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        onSaved: (val) => setState(() => _profile.email = val)),
-                    TextFormField(
-                        controller: snapchatController,
-                        decoration: InputDecoration(hintText: 'Snapchat'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        onSaved: (val) => setState(() => _profile.snapchat = val)),
-                    TextFormField(
-                        controller: facebookController,
-                        decoration: InputDecoration(hintText: 'Facebook'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        onSaved: (val) => setState(() => _profile.facebook = val)),
-                    TextFormField(
-                        controller: twitterController,
-                        decoration: InputDecoration(hintText: 'Twitter'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        onSaved: (val) => setState(() => _profile.twitter = val)),
-                    TextFormField(
-                        controller: instagramController,
-                        decoration: InputDecoration(hintText: 'Instagram'),
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter your name';
-                          }
-                        },
-                        onSaved: (val) => setState(() => _profile.instagram = val)),
-                  ])),
-              RaisedButton(
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _confirmSave();
+        child: ListView(padding: EdgeInsets.zero, children: <Widget>[
+          DrawerHeader(
+            child: Center(
+              child: Padding(
+                  child: Container(
+                      width: 100.0,
+                      height: 100.0,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  "http://i.pravatar.cc/100")))),
+                  padding: EdgeInsets.only(top: 10)),
+            ),
+            decoration: BoxDecoration(color: Colors.white54),
+          ),
+          Form(
+              key: _formKey,
+              child: Column(children: <Widget>[
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(hintText: 'Name'),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter your name';
                     }
                   },
-                  child: Text('Save')),
-            ]));
+                  onSaved: (val) => setState(() => _profile.name = val),
+                ),
+                TextFormField(
+                    controller: phoneController,
+                    decoration: InputDecoration(hintText: 'Phone'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _profile.phone = val)),
+                TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(hintText: 'Email'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _profile.email = val)),
+                TextFormField(
+                    controller: snapchatController,
+                    decoration: InputDecoration(hintText: 'Snapchat'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _profile.snapchat = val)),
+                TextFormField(
+                    controller: facebookController,
+                    decoration: InputDecoration(hintText: 'Facebook'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _profile.facebook = val)),
+                TextFormField(
+                    controller: twitterController,
+                    decoration: InputDecoration(hintText: 'Twitter'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _profile.twitter = val)),
+                TextFormField(
+                    controller: instagramController,
+                    decoration: InputDecoration(hintText: 'Instagram'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                    },
+                    onSaved: (val) => setState(() => _profile.instagram = val)),
+              ])),
+          Padding(
+              padding: EdgeInsets.only(left: 25, right: 25, top: 15),
+              child: ButtonTheme(
+                buttonColor: Colors.red,
+                minWidth: 200.0,
+                height: 50.0,
+                child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _confirmSave();
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(Icons.check, color: Colors.white),
+                        Padding(
+                            child: Text("Save",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white
+                            )),
+                            padding: EdgeInsets.only(right: 90))
+                      ],
+                    )),
+              ))
+        ]));
   }
 
-
-   void _confirmSave() {
+  void _confirmSave() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
