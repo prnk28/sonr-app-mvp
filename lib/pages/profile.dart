@@ -239,7 +239,8 @@ class _ProfileState extends State<ProfilePage> {
                             padding: EdgeInsets.only(right: 90))
                       ],
                     )),
-              ))
+              )),
+              Divider(),
         ]));
   }
 
