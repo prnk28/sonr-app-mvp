@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: SonarButton()
+        floatingActionButton: SonarButton(profileStorage: ProfileStorage())
       );
   }
 }

@@ -2,14 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/model/match_transaction.dart';
+import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/utils/profile_util.dart';
 
 class SonarButton extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
   final IconData icon;
-
-  SonarButton({this.onPressed, this.tooltip, this.icon});
+  final ProfileStorage profileStorage;
+  SonarButton({this.onPressed, this.tooltip, this.icon, this.profileStorage});
 
   @override
   _SonarButtonState createState() => _SonarButtonState();
@@ -22,6 +25,7 @@ class _SonarButtonState extends State<SonarButton>
   Animation<Color> _buttonColor;
   Animation<double> _animateIcon;
   Curve _curve = Curves.easeOut;
+  ProfileModel _profile;
 
   // Match Method
   _pushAndMatchData(BuildContext context) async {
@@ -31,7 +35,7 @@ class _SonarButtonState extends State<SonarButton>
       var position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
           // Provide User Data from Disk
-      var request = MatchTransaction(null, position);
+      var request = MatchTransaction(_profile, position);
 
       // Push to Firestore
       Firestore.instance
@@ -39,32 +43,34 @@ class _SonarButtonState extends State<SonarButton>
           .document(request.documentID)
           .setData(request.createTransaction());
 
-      // Attempt Match
-      try {
-        final dynamic resp = await CloudFunctions.instance.call(
-          functionName: 'matchRequest',
-          parameters: <String, dynamic>{
-            'transactionID': request.transactionID,
-            'documentID': request.documentID
-          },
-        );
-        print(resp["data"]);
-        Scaffold.of(context)
-          ..removeCurrentSnackBar()
-          ..showSnackBar(SnackBar(content: Text(resp["data"])));
-        // Cloud Fail
-      } on CloudFunctionsException catch (e) {
-        print('caught firebase functions exception');
-        print(e.code);
-        print(e.message);
-        print(e.details);
-      } catch (e) {
-        print('caught generic exception');
-        print(e);
-      }
-    } else {
-      await PermissionHandler()
-          .requestPermissions([PermissionGroup.locationWhenInUse]);
+      // Modify UI to Listen to Request
+      CloudFunctions.instance.call(
+          functionName: 'transactionRequest', parameters: <String,dynamic>{"documentID": request.documentID});
+      matchBuilder(context, request.transactionID);
+
+    //   // Attempt Match
+    //   try {
+    //     final dynamic resp = await CloudFunctions.instance.call(
+    //       functionName: 'matchRequest',
+    //       parameters: <String, dynamic>{
+    //         'transactionID': request.transactionID,
+    //         'documentID': request.documentID
+    //       },
+    //     );
+    //     print(resp["data"]);
+    //     // Cloud Fail
+    //   } on CloudFunctionsException catch (e) {
+    //     print('caught firebase functions exception');
+    //     print(e.code);
+    //     print(e.message);
+    //     print(e.details);
+    //   } catch (e) {
+    //     print('caught generic exception');
+    //     print(e);
+    //   }
+    // } else {
+    //   await PermissionHandler()
+    //       .requestPermissions([PermissionGroup.locationWhenInUse]);
     }
   }
 
@@ -88,6 +94,11 @@ class _SonarButtonState extends State<SonarButton>
         curve: Curves.linear,
       ),
     ));
+    widget.profileStorage.readProfile().then((ProfileModel value) {
+      setState(() {
+        _profile = value;
+      });
+    });
     super.initState();
   }
 
@@ -111,13 +122,30 @@ class _SonarButtonState extends State<SonarButton>
     return new Container(
       child: FloatingActionButton(
         backgroundColor: _buttonColor.value,
-        onPressed: animate,
+        onPressed:() {
+        _pushAndMatchData(context);
+      },
         tooltip: 'Toggle',
         child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
+          icon: AnimatedIcons.menu_arrow,
           progress: _animateIcon,
         ),
       ),
+    );
+  }
+
+  Widget matchBuilder(BuildContext context, String transactionID){
+    return StreamBuilder(
+      stream: Firestore.instance.collection("active-transactions").document(transactionID).snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return new Container(child:Text("Loading"), width: 400, height: 400, color: Colors.blue);
+        }
+        var userDocument = snapshot.data;
+        return AlertDialog(
+          title: new Text(userDocument["name"]),
+        );
+      }
     );
   }
 }

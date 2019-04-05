@@ -1,12 +1,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:uuid/uuid.dart';
 
 class MatchTransaction {
   // Paramaters
   final Position position;
-  final Map userData;
+  final ProfileModel userData;
   var _uuid = new Uuid();
   var documentID;
   var transactionID;
@@ -27,7 +28,7 @@ class MatchTransaction {
     };
 
     // Add User Data
-    map.addAll(userData);
+    map.addAll(userData.toJson());
     return map;
   }
 }
