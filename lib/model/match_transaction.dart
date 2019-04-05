@@ -22,13 +22,14 @@ class MatchTransaction {
   createTransaction() {
     // Create Map
     var map = {
-      'created': DateTime.now(),
-      'location': GeoPoint(position.latitude, position.longitude),
-      'transactionID': transactionID
+      'created': DateTime.now().toString(),
+      'longitude': position.longitude,
+      'latitude' : position.latitude,
+      'transactionID': transactionID,
+      'documentID': documentID,
+      'userData' : userData.toJson()
     };
 
-    // Add User Data
-    map.addAll(userData.toJson());
     return map;
   }
 }

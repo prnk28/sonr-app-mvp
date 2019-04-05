@@ -34,43 +34,30 @@ class _SonarButtonState extends State<SonarButton>
         GeolocationStatus.granted) {
       var position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          // Provide User Data from Disk
       var request = MatchTransaction(_profile, position);
-
-      // Push to Firestore
-      Firestore.instance
-          .collection('active-transactions')
-          .document(request.documentID)
-          .setData(request.createTransaction());
-
       // Modify UI to Listen to Request
-      CloudFunctions.instance.call(
-          functionName: 'transactionRequest', parameters: <String,dynamic>{"documentID": request.documentID});
-      matchBuilder(context, request.transactionID);
+      //matchBuilder(context, request.transactionID);
 
-    //   // Attempt Match
-    //   try {
-    //     final dynamic resp = await CloudFunctions.instance.call(
-    //       functionName: 'matchRequest',
-    //       parameters: <String, dynamic>{
-    //         'transactionID': request.transactionID,
-    //         'documentID': request.documentID
-    //       },
-    //     );
-    //     print(resp["data"]);
-    //     // Cloud Fail
-    //   } on CloudFunctionsException catch (e) {
-    //     print('caught firebase functions exception');
-    //     print(e.code);
-    //     print(e.message);
-    //     print(e.details);
-    //   } catch (e) {
-    //     print('caught generic exception');
-    //     print(e);
-    //   }
-    // } else {
-    //   await PermissionHandler()
-    //       .requestPermissions([PermissionGroup.locationWhenInUse]);
+      // Begin Request with Payload Data
+      try {
+        final dynamic resp = await CloudFunctions.instance.call(
+          functionName: 'matchRequest',
+          parameters: request.createTransaction(),
+        );
+        print(resp);
+        // Cloud Fail
+      } on CloudFunctionsException catch (e) {
+        print('caught firebase functions exception');
+        print(e.code);
+        print(e.message);
+        print(e.details);
+      } catch (e) {
+        print('caught generic exception');
+        print(e);
+      }
+    } else {
+      await PermissionHandler()
+          .requestPermissions([PermissionGroup.locationWhenInUse]);
     }
   }
 
@@ -122,9 +109,9 @@ class _SonarButtonState extends State<SonarButton>
     return new Container(
       child: FloatingActionButton(
         backgroundColor: _buttonColor.value,
-        onPressed:() {
-        _pushAndMatchData(context);
-      },
+        onPressed: () {
+          _pushAndMatchData(context);
+        },
         tooltip: 'Toggle',
         child: AnimatedIcon(
           icon: AnimatedIcons.menu_arrow,
@@ -134,18 +121,24 @@ class _SonarButtonState extends State<SonarButton>
     );
   }
 
-  Widget matchBuilder(BuildContext context, String transactionID){
+  Widget matchBuilder(BuildContext context, String transactionID) {
     return StreamBuilder(
-      stream: Firestore.instance.collection("active-transactions").document(transactionID).snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return new Container(child:Text("Loading"), width: 400, height: 400, color: Colors.blue);
-        }
-        var userDocument = snapshot.data;
-        return AlertDialog(
-          title: new Text(userDocument["name"]),
-        );
-      }
-    );
+        stream: Firestore.instance
+            .collection("active-transactions")
+            .document(transactionID)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return new Container(
+                child: Text("Loading"),
+                width: 400,
+                height: 400,
+                color: Colors.blue);
+          }
+          var userDocument = snapshot.data;
+          return AlertDialog(
+            title: new Text(userDocument["name"]),
+          );
+        });
   }
 }
