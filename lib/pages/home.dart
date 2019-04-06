@@ -5,6 +5,7 @@ import 'package:sonar_frontend/utils/color_builder.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
 import 'package:sonar_frontend/widgets/sonar_button.dart';
+import 'package:sonar_frontend/widgets/sonar_match.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,6 +26,7 @@ class HomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              SonarMatch(),
               ProfileInfo(profileStorage: ProfileStorage()),
               SonarStack()
             ],

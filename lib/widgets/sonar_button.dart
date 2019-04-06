@@ -1,18 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/model/match_transaction.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
+import 'package:sonar_frontend/widgets/sonar_match.dart';
 
 class SonarButton extends StatefulWidget {
-  final Function() onPressed;
-  final String tooltip;
-  final IconData icon;
   final ProfileStorage profileStorage;
-  SonarButton({this.onPressed, this.tooltip, this.icon, this.profileStorage});
+  final SonarMatch sonarMatch;
+  SonarButton({this.profileStorage, this.sonarMatch});
 
   @override
   _SonarButtonState createState() => _SonarButtonState();
@@ -20,39 +19,49 @@ class SonarButton extends StatefulWidget {
 
 class _SonarButtonState extends State<SonarButton>
     with SingleTickerProviderStateMixin {
+
   bool isOpened = false;
   AnimationController _animationController;
   Animation<Color> _buttonColor;
   Animation<double> _animateIcon;
   Curve _curve = Curves.easeOut;
   ProfileModel _profile;
+  String documentID;
 
   // Match Method
-  _pushAndMatchData(BuildContext context) async {
+  _pushAndMatchData(BuildContext context, VoidCallback callback) async {
     // Get Location'
     if (await Geolocator().checkGeolocationPermissionStatus() ==
         GeolocationStatus.granted) {
+      // Position Data
       var position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      var request = MatchTransaction(_profile, position);
-      // Modify UI to Listen to Request
-      //matchBuilder(context, request.transactionID);
 
-      // Begin Request with Payload Data
+      // Request Model
+      var request = MatchTransaction(_profile, position);
+
+      // Call Request with Payload
       try {
+        // Cloud Function Call
         final dynamic resp = await CloudFunctions.instance.call(
           functionName: 'matchRequest',
           parameters: request.createTransaction(),
         );
         print(resp);
-        // Cloud Fail
-      } on CloudFunctionsException catch (e) {
-        print('caught firebase functions exception');
-        print(e.code);
-        print(e.message);
-        print(e.details);
+
+        // Display Match GUI
+        if (resp["status"] == 200) {
+          documentID = resp["documentID"];
+          callback();
+        }
+        // Display Pending GUI
+        else if (resp["status"] == 404) {
+          documentID = resp["documentID"];
+          callback();
+        }
+        // Display Error GUI
+        else {}
       } catch (e) {
-        print('caught generic exception');
         print(e);
       }
     } else {
@@ -106,39 +115,25 @@ class _SonarButtonState extends State<SonarButton>
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: FloatingActionButton(
-        backgroundColor: _buttonColor.value,
-        onPressed: () {
-          _pushAndMatchData(context);
-        },
-        tooltip: 'Toggle',
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_arrow,
-          progress: _animateIcon,
-        ),
-      ),
+    return new StoreConnector<String, VoidCallback>(
+      converter: (store) {
+        return () => store.dispatch(documentID);
+      },
+      builder: (context, callback) {
+        return Container(
+          child: FloatingActionButton(
+            backgroundColor: _buttonColor.value,
+            onPressed: () {
+              _pushAndMatchData(context, callback);
+            },
+            tooltip: 'Toggle',
+            child: AnimatedIcon(
+              icon: AnimatedIcons.menu_arrow,
+              progress: _animateIcon,
+            ),
+          ),
+        );
+      },
     );
-  }
-
-  Widget matchBuilder(BuildContext context, String transactionID) {
-    return StreamBuilder(
-        stream: Firestore.instance
-            .collection("active-transactions")
-            .document(transactionID)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return new Container(
-                child: Text("Loading"),
-                width: 400,
-                height: 400,
-                color: Colors.blue);
-          }
-          var userDocument = snapshot.data;
-          return AlertDialog(
-            title: new Text(userDocument["name"]),
-          );
-        });
   }
 }

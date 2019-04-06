@@ -15,7 +15,6 @@ class MatchTransaction {
   // Initialization
   MatchTransaction(this.userData, this.position){
     documentID = _uuid.v4();
-    transactionID = _uuid.v1();
   }
 
   // Generation Method
@@ -25,7 +24,6 @@ class MatchTransaction {
       'created': DateTime.now().toString(),
       'longitude': position.longitude,
       'latitude' : position.latitude,
-      'transactionID': transactionID,
       'documentID': documentID,
       'userData' : userData.toJson()
     };
