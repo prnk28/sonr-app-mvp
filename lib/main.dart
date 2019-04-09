@@ -14,17 +14,18 @@ enum Actions { UpdateDocument, AuthorizeYes, AuthorizeNo, DeleteDocument }
 
 // The reducer, which takes the previous count and increments it in response
 // to an Increment action.
-String updateDocument(String document, dynamic newDocument) {
-  return document = newDocument;
+DocumentCallback updateDocument(DocumentCallback document, dynamic newDocument) {
+  DocumentCallback doc = new DocumentCallback(newDocument.documentId, newDocument.status);
+  return document = doc;
 }
 
 class Sonar extends StatelessWidget {
-  final Store<String> store;
+  final Store<DocumentCallback> store;
   const Sonar({Key key, this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<String>(
+    return StoreProvider<DocumentCallback>(
         store: store,
         child: MaterialApp(
           title: 'Sonar',
@@ -45,8 +46,15 @@ class Sonar extends StatelessWidget {
 void main() {
   // Redux Store
 
-Store<String> store = new Store<String>(updateDocument, initialState: "null");
+Store<DocumentCallback> store = new Store<DocumentCallback>(updateDocument, initialState: DocumentCallback("null", 0));
 
   // Run App
   runApp(Sonar(store: store));
+}
+
+class DocumentCallback{
+  final String documentId;
+  final int status;
+
+  DocumentCallback(this.documentId, this.status);
 }

@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/match_transaction.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/profile_util.dart';
@@ -26,7 +27,7 @@ class _SonarButtonState extends State<SonarButton>
   Animation<double> _animateIcon;
   Curve _curve = Curves.easeOut;
   ProfileModel _profile;
-  String documentID;
+  DocumentCallback document;
 
   // Match Method
   _pushAndMatchData(BuildContext context, VoidCallback callback) async {
@@ -49,18 +50,9 @@ class _SonarButtonState extends State<SonarButton>
         );
         print(resp);
 
-        // Display Match GUI
-        if (resp["status"] == 200) {
-          documentID = resp["documentID"];
-          callback();
-        }
-        // Display Pending GUI
-        else if (resp["status"] == 404) {
-          documentID = resp["documentID"];
-          callback();
-        }
-        // Display Error GUI
-        else {}
+        // Create Doc and Callback
+        document = DocumentCallback(resp["documentID"], resp["status"]);
+        callback();
       } catch (e) {
         print(e);
       }
@@ -115,9 +107,9 @@ class _SonarButtonState extends State<SonarButton>
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<String, VoidCallback>(
+    return new StoreConnector<DocumentCallback, VoidCallback>(
       converter: (store) {
-        return () => store.dispatch(documentID);
+        return () => store.dispatch(document);
       },
       builder: (context, callback) {
         return Container(

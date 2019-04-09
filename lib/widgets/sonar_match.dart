@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/widgets/authorization_dialog.dart';
 
 class SonarMatch extends StatefulWidget {
@@ -11,10 +12,10 @@ class SonarMatch extends StatefulWidget {
 class _SonarMatchState extends State<SonarMatch> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<String, String>(
-        converter: (store) => store.state.toString(),
+    return StoreConnector<DocumentCallback, DocumentCallback>(
+        converter: (store) => store.state,
         builder: (context, document) {
-          if (document == "null") {
+          if (document.documentId == "null") {
             return Container(width: 0, height: 0);
           } else {
             return Container(
