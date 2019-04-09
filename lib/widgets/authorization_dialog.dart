@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sonar_frontend/main.dart';
+import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/widgets/sonar_card.dart';
 
 class AuthDialog extends StatelessWidget {
   final DocumentCallback document;
@@ -40,7 +42,13 @@ class AuthDialog extends StatelessWidget {
           // Authorized
           else if (snap.data["status"] == 100) {
             print("Match Confirmed");
-            return Container();
+            if(userPosition == 1){
+              ProfileModel card = ProfileModel.fromJson(snap.data["secondUserData"]);
+              return Center(child:SonarCard(profile: card));
+            }else{
+              ProfileModel card = ProfileModel.fromJson(snap.data["firstUserData"]);
+              return Center(child:SonarCard(profile: card));
+            }
           }
           return Container();
         }

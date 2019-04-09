@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:sonar_frontend/model/profile_model.dart';
 
 class SonarCard extends StatelessWidget {
+  final ProfileModel profile;
+  const SonarCard({Key key, this.profile}) : super(key: key);
+
   Widget build(BuildContext context) {
+    // Set Profile
+    var nameData;
+    var phoneData;
+    if(profile != null){
+      nameData = profile.name.split(" ");
+      phoneData = profile.phone;
+    }else{
+      String name = "Firstname Lastname";
+      nameData = name.split(" ");
+      phoneData = '703-666-5555';
+    }
+
     return SizedBox(
         width: 325,
         height: 400,
@@ -31,14 +47,14 @@ class SonarCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                          child: Text("Firstname",
+                          child: Text(nameData[0] ?? 'FirstName',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 26,
                               )),
                           padding: EdgeInsets.only(top: 8, right: 5)),
                       Padding(
-                          child: Text("Lastname",
+                          child: Text(nameData[1]  ?? 'LastName',
                               style: TextStyle(
                                   fontWeight: FontWeight.w100,
                                   fontSize: 26)),
@@ -66,7 +82,7 @@ class SonarCard extends StatelessWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text('703-124-3134',
+                  title: Text(phoneData,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                       )),

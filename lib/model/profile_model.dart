@@ -13,7 +13,7 @@ class ProfileModel {
   ProfileModel({this.phone, this.name, this.email, this.snapchat,
    this.facebook, this.twitter, this.instagram});
 
-  factory ProfileModel.fromJson(Map<String, dynamic> json) {
+  factory ProfileModel.fromJson(Map<dynamic, dynamic> json) {
     return ProfileModel(
         phone: json['phone'],
         name: json['name'],
