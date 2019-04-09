@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AuthDialog extends StatelessWidget {
   final String document;
+  int userPosition = 0;
   AuthDialog({Key key, this.document}) : super(key: key);
 
   @override
@@ -19,6 +20,7 @@ class AuthDialog extends StatelessWidget {
           if (snap.data["status"] == 200) {
             return buildMatch(context, snap);
           } else if (snap.data["status"] == 404) {
+            userPosition = 1;
             return buildLoad(context);
           }
           return Container();
@@ -29,7 +31,15 @@ class AuthDialog extends StatelessWidget {
   }
 
   Widget buildMatch(BuildContext context, AsyncSnapshot snap) {
-    String name = snap.data["firstUserData"]["name"];
+    var userData;
+
+    if(userPosition == 1){
+      userData = snap.data["secondUserData"];
+    }else{
+      userData = snap.data["firstUserData"];
+    }
+
+    String name = userData["name"];
     var nameData = name.split(" ");
 
     return Container(
@@ -103,7 +113,9 @@ class AuthDialog extends StatelessWidget {
 
                         // Facebook
                         RawMaterialButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            userPosition = 0;
+                          },
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           child: Text("Confirm!"),
                           shape: RoundedRectangleBorder(
@@ -127,8 +139,8 @@ class AuthDialog extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: SpinKitRotatingCircle(
-                  color: Colors.red,
+                child: SpinKitHourGlass(
+                  color: Colors.blue,
                   size: 50.0,
                 ))));
   }
