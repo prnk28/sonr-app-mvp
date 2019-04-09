@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:sonar_frontend/widgets/authorization_dialog.dart';
 
 class SonarMatch extends StatefulWidget {
   final Widget child;
@@ -17,15 +17,8 @@ class _SonarMatchState extends State<SonarMatch> {
           if (document == "null") {
             return Container(width: 0, height: 0);
           } else {
-            return Container(width: 100, height: 50, child: StreamBuilder(
-              stream: Firestore.instance.collection("active-transactions").document(document).snapshots(),
-              builder: (context, snap){
-                return new Text(
-                  snap.data["status"].toString(),
-                  style: Theme.of(context).textTheme.display1,
-                );
-              },
-            ),);
+            return Container(
+                child: AuthDialog(document: document));
           }
         });
   }

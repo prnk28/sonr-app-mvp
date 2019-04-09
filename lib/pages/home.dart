@@ -22,13 +22,17 @@ class HomePage extends StatelessWidget {
             gradient: getRandomGradient(),
           ),
           child: Center(
-              child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
+              child: Stack(
             children: <Widget>[
-              SonarMatch(),
-              ProfileInfo(profileStorage: ProfileStorage()),
-              SonarStack()
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  ProfileInfo(profileStorage: ProfileStorage()),
+                  SonarStack()
+                ],
+              ),
+              SonarMatch()
             ],
           )),
         ),
@@ -50,12 +54,13 @@ class HomePage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.location_on, color: Colors.white),
               tooltip: 'Air it',
-              onPressed: () { PermissionHandler()
-          .requestPermissions([PermissionGroup.locationWhenInUse]);},
+              onPressed: () {
+                PermissionHandler()
+                    .requestPermissions([PermissionGroup.locationWhenInUse]);
+              },
             ),
           ],
         ),
-        floatingActionButton: SonarButton(profileStorage: ProfileStorage())
-      );
+        floatingActionButton: SonarButton(profileStorage: ProfileStorage()));
   }
 }
