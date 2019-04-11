@@ -7,12 +7,17 @@ import 'package:sonar_frontend/widgets/profile_info.dart';
 import 'package:sonar_frontend/widgets/sonar_button.dart';
 import 'package:sonar_frontend/widgets/sonar_match.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
+import 'package:pref_dessert/pref_dessert.dart';
+import 'package:sonar_frontend/model/profile_model.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+        var repo = new FuturePreferencesRepository<ContactModel>(new ContactModelDesSer());
+    var list = repo.findAll();
+    print(list);
     // 4BBEE3 Zima Blue
     return Scaffold(
         body: Container(

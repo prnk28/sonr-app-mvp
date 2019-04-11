@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:pref_dessert/pref_dessert.dart';
 class ProfileModel {
   bool valuesSet;
    String phone;
@@ -11,7 +11,7 @@ class ProfileModel {
    String instagram;
 
   ProfileModel({this.phone, this.name, this.email, this.snapchat,
-   this.facebook, this.twitter, this.instagram});
+   this.facebook, this.twitter, this.instagram}); 
 
   factory ProfileModel.fromJson(Map<dynamic, dynamic> json) {
     return ProfileModel(
@@ -66,4 +66,35 @@ class ProfileModel {
     }
     return false;
   }
+}
+
+class ContactModel {
+   String name;
+   String phone;
+   String email;
+   String snapchat;
+   String facebook;
+   String twitter;
+   String instagram;
+
+  ContactModel(this.name, this.phone, this.email, this.snapchat,
+   this.facebook, this.twitter, this.instagram);
+}
+
+class ContactModelDesSer extends DesSer<ContactModel>{
+  @override
+  ContactModel deserialize(String s) {
+    var split = s.split(",");
+    return new ContactModel(split[0], split[1], split[2], split[3], split[4], split[5], split[6]);
+  }
+
+  @override
+  String serialize(ContactModel t) {
+    return "${t.name},${t.phone},${t.email},${t.snapchat},${t.facebook},${t.twitter},${t.instagram}";
+  }
+
+  @override
+  // TODO: implement key
+  String get key => null;
+
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:pref_dessert/pref_dessert.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/widgets/sonar_card.dart';
@@ -44,10 +45,18 @@ class AuthDialog extends StatelessWidget {
             print("Match Confirmed");
             if(userPosition == 1){
               ProfileModel card = ProfileModel.fromJson(snap.data["secondUserData"]);
-              return Center(child:SonarCard(profile: card));
+              ContactModel contact = new ContactModel(card.name, card.phone, card.email, card.snapchat,
+              card.facebook, card.twitter, card.instagram);
+              var repo = new FuturePreferencesRepository<ContactModel>(new ContactModelDesSer());
+              repo.save(contact);
+              return Center(child:SonarCard(profile: contact));
             }else{
               ProfileModel card = ProfileModel.fromJson(snap.data["firstUserData"]);
-              return Center(child:SonarCard(profile: card));
+              ContactModel contact = new ContactModel(card.name, card.phone, card.email, card.snapchat,
+              card.facebook, card.twitter, card.instagram);
+              var repo = new FuturePreferencesRepository<ContactModel>(new ContactModelDesSer());
+              repo.save(contact);
+              return Center(child:SonarCard(profile: contact));
             }
           }
           return Container();

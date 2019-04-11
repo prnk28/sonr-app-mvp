@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 
 class SonarCard extends StatelessWidget {
-  final ProfileModel profile;
+  final ContactModel profile;
   const SonarCard({Key key, this.profile}) : super(key: key);
 
   Widget build(BuildContext context) {
