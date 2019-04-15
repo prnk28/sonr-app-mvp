@@ -48,7 +48,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   twitter: item['twitter'],
                   snapchat: item['snapchat'],
                   instagram: item['instagram'],
-                  profile_picture: item['profilePicture']);
+                  profile_picture: item['profile_picture']);
             }else{
               profile = new ProfileModel.blank();
             }

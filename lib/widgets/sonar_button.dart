@@ -131,7 +131,8 @@ class _SonarButtonState extends State<SonarButton>
                       facebook: item['facebook'],
                       twitter: item['twitter'],
                       snapchat: item['snapchat'],
-                      instagram: item['instagram']);
+                      instagram: item['instagram'],
+                      profile_picture: item['profile_picture']);
                 } else {
                   _profile = new ProfileModel.blank();
                 }

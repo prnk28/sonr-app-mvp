@@ -7,6 +7,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfilePicture extends StatelessWidget {
   final ProfileModel profile;
@@ -54,7 +55,6 @@ class ProfilePicture extends StatelessWidget {
     profile.profile_picture = url;
     print(profile.toJSONEncodable());
     storage.setItem('user_profile', profile.toJSONEncodable());
-    print(url);
     return(url);
   }
 }

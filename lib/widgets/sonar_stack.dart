@@ -43,7 +43,8 @@ class _SonarStackState extends State<SonarStack> {
                     facebook: item['facebook'],
                     twitter: item['twitter'],
                     snapchat: item['snapchat'],
-                    instagram: item['instagram']);
+                    instagram: item['instagram'],
+                    profile_picture: item['profile_picture']);
                 list.items.add(todoItem);
               });
             }
