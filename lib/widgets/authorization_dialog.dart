@@ -1,13 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:pref_dessert/pref_dessert.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/main.dart';
-import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/widgets/sonar_card.dart';
 
 class AuthDialog extends StatelessWidget {
+  // Storage Parameters
+  ContactList list = new ContactList();
+  LocalStorage storage = new LocalStorage('sonar_app');
+
+  // Server Parameters
   final DocumentCallback document;
   int userPosition = 0;
   AuthDialog({Key key, this.document}) : super(key: key);
@@ -43,19 +49,23 @@ class AuthDialog extends StatelessWidget {
           // Authorized
           else if (snap.data["status"] == 100) {
             print("Match Confirmed");
+
+            // Write Match to Disk
             if(userPosition == 1){
-              ProfileModel card = ProfileModel.fromJson(snap.data["secondUserData"]);
-              ContactModel contact = new ContactModel(card.name, card.phone, card.email, card.snapchat,
-              card.facebook, card.twitter, card.instagram);
-              var repo = new FuturePreferencesRepository<ContactModel>(new ContactModelDesSer());
-              repo.save(contact);
+              // Load Data By Position
+              ContactModel contact = new ContactModel.fromJson(snap.data["secondUserData"]);
+              _saveContact(contact);
+
+              // Call Cloud Function
+            _callTransferRecycle(document.documentId);
               return Center(child:SonarCard(profile: contact));
             }else{
-              ProfileModel card = ProfileModel.fromJson(snap.data["firstUserData"]);
-              ContactModel contact = new ContactModel(card.name, card.phone, card.email, card.snapchat,
-              card.facebook, card.twitter, card.instagram);
-              var repo = new FuturePreferencesRepository<ContactModel>(new ContactModelDesSer());
-              repo.save(contact);
+              // Save Data By Position
+              ContactModel contact = new ContactModel.fromJson(snap.data["firstUserData"]);
+             _saveContact(contact);
+
+              // Call Cloud Function
+            _callTransferRecycle(document.documentId);
               return Center(child:SonarCard(profile: contact));
             }
           }
@@ -181,6 +191,17 @@ class AuthDialog extends StatelessWidget {
                 ))));
   }
 
+  _callTransferRecycle(String docID) async {
+    // Init Parameters
+    var params= {"documentID" : docID};
+
+    // Call Request
+      await CloudFunctions.instance.call(
+          functionName: 'recycleTransferRequest',
+          parameters: params
+        );
+  }
+
   _confirmAuthorization(doc, userPosition) {
     // Update Doc by User Position
     if (userPosition == 1) {
@@ -249,5 +270,14 @@ class AuthDialog extends StatelessWidget {
     }
     // Reset userPosition
     userPosition = 0;
+  }
+
+  _saveContact(ContactModel m){
+      list.items.add(m);
+      _saveToStorage();
+  }
+
+   _saveToStorage() {
+    storage.setItem('contact_items', list.toJSONEncodable());
   }
 }

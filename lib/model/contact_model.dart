@@ -1,19 +1,20 @@
-import 'dart:convert';
-class ProfileModel {
-  bool valuesSet;
-   String phone;
+class ContactModel {
+  // Seven Fields
    String name;
+   String phone;
    String email;
    String snapchat;
    String facebook;
    String twitter;
    String instagram;
 
-  ProfileModel({this.phone, this.name, this.email, this.snapchat,
+  // Constructor
+  ContactModel({this.name, this.phone, this.email, this.snapchat,
    this.facebook, this.twitter, this.instagram});
 
-  factory ProfileModel.fromJson(Map<dynamic, dynamic> json) {
-    return ProfileModel(
+  // Json Decoder
+  factory ContactModel.fromJson(Map<dynamic, dynamic> json) {
+    return ContactModel(
         phone: json['phone'],
         name: json['name'],
         email: json['email'],
@@ -21,19 +22,6 @@ class ProfileModel {
         facebook: json['facebook'],
         twitter: json['twitter'],
         instagram: json['instagram']
-    );
-  }
-
-  factory ProfileModel.blank() {
-    // Return Blank
-    return ProfileModel(
-        phone: "",
-        name: "",
-        email: "",
-        snapchat: "",
-        facebook: "",
-        twitter: "",
-        instagram: ""
     );
   }
 
@@ -51,17 +39,18 @@ class ProfileModel {
 
     return m;
   }
+}
 
-  bool isEmpty(){
-    if (phone == "" &&
-        name == "" &&
-        email == "" &&
-        snapchat == "" &&
-        facebook == "" &&
-        twitter == "" &&
-        instagram == "") {
-      return true;
-    }
-    return false;
+class ContactList {
+    List<ContactModel> items;
+
+  ContactList() {
+    items = new List();
+  }
+
+  toJSONEncodable() {
+    return items.map((item) {
+      return item.toJSONEncodable();
+    }).toList();
   }
 }

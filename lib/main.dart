@@ -7,7 +7,6 @@ import 'package:redux/redux.dart';
 import 'package:sonar_frontend/pages/contact.dart';
 import 'package:sonar_frontend/pages/home.dart';
 import 'package:sonar_frontend/pages/profile.dart';
-import 'package:sonar_frontend/utils/profile_util.dart';
 
 // One simple action: Increment
 enum Actions { UpdateDocument, AuthorizeYes, AuthorizeNo, DeleteDocument }
@@ -36,7 +35,7 @@ class Sonar extends StatelessWidget {
           routes: <String, WidgetBuilder>{
             '/': (context) => HomePage(),
             '/profile': (context) =>
-                ProfilePage(profileStorage: ProfileStorage()),
+                ProfilePage(),
             '/contact': (context) => ContactPage(),
           },
         ));

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/model/contact_model.dart';
 
 class SonarCard extends StatelessWidget {
   final ContactModel profile;

@@ -1,111 +1,126 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/utils/info_builder.dart';
-import 'package:sonar_frontend/utils/profile_util.dart';
 
 class ProfileInfo extends StatefulWidget {
-  final ProfileStorage profileStorage;
-
-  const ProfileInfo({Key key, this.profileStorage}) : super(key: key);
+  const ProfileInfo({Key key}) : super(key: key);
   @override
   _ProfileInfoState createState() => _ProfileInfoState();
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
-  // User Disk Reference
-  ProfileModel _profile;
-  String _textFromLocation = "";
-
-  _ProfileInfoState() {
-    getTextFromLocation().then((val) => setState(() {
-          _textFromLocation = val;
-        }));
-  }
+  // Storage Information
+  final LocalStorage storage = new LocalStorage('sonar_app');
+  ProfileModel profile = new ProfileModel();
+  bool initialized = false;
 
   // Top Widget Spacing
   double topPadding = 55;
 
-  @override
-  void initState() {
-    super.initState();
-    widget.profileStorage.readProfile().then((ProfileModel value) {
-      setState(() {
-        _profile = value;
-      });
-    });
-  }
-
+  // Get Text Location
   Future<String> getTextFromLocation() async {
     return await getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 285,
-      height: 285,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-            // User Picture
-            Padding(
-                child: Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image:
-                                new NetworkImage("http://i.pravatar.cc/100")))),
-                padding: EdgeInsets.only(top: topPadding)),
-            // Greeting
-            Padding(
-                child: Text(getGreeting(_profile.name),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 32,
-                        color: Colors.white)),
-                padding: EdgeInsets.only(top: topPadding, left: 10)),
-          ]),
-          // Users in your Area
-          Padding(
-              child: Text("There are 5k Users with Sonar in your Area.",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w200,
-                      color: Colors.white54)),
-              padding: EdgeInsets.only(top: 15)),
-          // Extra Information
-          Padding(
-              child: Text("You have X Sonars not in your Contacts.",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w200,
-                      color: Colors.white54)),
-              padding: EdgeInsets.only(top: 5)),
-          // Current Details
-          Padding(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Icon(Icons.today, color: Colors.white70),
-                  Text(getTodayDate(), style: TextStyle(color: Colors.white70)),
-                  Text(" | ", style: TextStyle(color: Colors.white70)),
-                  Icon(Icons.pin_drop, color: Colors.white70),
-                  Text("Richmond, VA",
-                      style: TextStyle(color: Colors.white70)),
-                ],
-              ),
-              padding: EdgeInsets.only(top: 55))
-        ],
-      ),
-    );
+    return FutureBuilder(
+        future: storage.ready,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.data == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (!initialized) {
+            var item = storage.getItem('user_profile');
+
+            if (item != null) {
+              profile = new ProfileModel(
+                  name: item['name'],
+                  phone: item['phone'],
+                  email: item['email'],
+                  facebook: item['facebook'],
+                  twitter: item['twitter'],
+                  snapchat: item['snapchat'],
+                  instagram: item['instagram']);
+            }else{
+              profile = new ProfileModel.blank();
+            }
+            initialized = true;
+          }
+
+          return Container(
+            width: 285,
+            height: 285,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      // User Picture
+                      Padding(
+                          child: Container(
+                              width: 50.0,
+                              height: 50.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: new NetworkImage(
+                                          "http://i.pravatar.cc/100")))),
+                          padding: EdgeInsets.only(top: topPadding)),
+                      // Greeting
+                      Padding(
+                          child: Text(getGreeting(profile.name),
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 32,
+                                  color: Colors.white)),
+                          padding: EdgeInsets.only(top: topPadding, left: 10)),
+                    ]),
+                // Users in your Area
+                Padding(
+                    child: Text("There are 5k Users with Sonar in your Area.",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.white54)),
+                    padding: EdgeInsets.only(top: 15)),
+                // Extra Information
+                Padding(
+                    child: Text("You have X Sonars not in your Contacts.",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.white54)),
+                    padding: EdgeInsets.only(top: 5)),
+                // Current Details
+                Padding(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Icon(Icons.today, color: Colors.white70),
+                        Text(getTodayDate(),
+                            style: TextStyle(color: Colors.white70)),
+                        Text(" | ", style: TextStyle(color: Colors.white70)),
+                        Icon(Icons.pin_drop, color: Colors.white70),
+                        Text("Richmond, VA",
+                            style: TextStyle(color: Colors.white70)),
+                      ],
+                    ),
+                    padding: EdgeInsets.only(top: 55))
+              ],
+            ),
+          );
+        });
   }
 }

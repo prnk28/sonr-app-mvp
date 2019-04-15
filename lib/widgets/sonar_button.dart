@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/match_transaction.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
-import 'package:sonar_frontend/utils/profile_util.dart';
 import 'package:sonar_frontend/widgets/sonar_match.dart';
 
 class SonarButton extends StatefulWidget {
-  final ProfileStorage profileStorage;
   final SonarMatch sonarMatch;
-  SonarButton({this.profileStorage, this.sonarMatch});
+  SonarButton({this.sonarMatch});
 
   @override
   _SonarButtonState createState() => _SonarButtonState();
@@ -20,13 +19,16 @@ class SonarButton extends StatefulWidget {
 
 class _SonarButtonState extends State<SonarButton>
     with SingleTickerProviderStateMixin {
-
+  // Animation Variables
   bool isOpened = false;
   AnimationController _animationController;
   Animation<Color> _buttonColor;
   Animation<double> _animateIcon;
-  Curve _curve = Curves.easeOut;
-  ProfileModel _profile;
+
+  // Storage Information
+  final LocalStorage storage = new LocalStorage('sonar_app');
+  ProfileModel _profile = new ProfileModel();
+  bool initialized = false;
   DocumentCallback document;
 
   // Match Method
@@ -82,11 +84,6 @@ class _SonarButtonState extends State<SonarButton>
         curve: Curves.linear,
       ),
     ));
-    widget.profileStorage.readProfile().then((ProfileModel value) {
-      setState(() {
-        _profile = value;
-      });
-    });
     super.initState();
   }
 
@@ -112,19 +109,49 @@ class _SonarButtonState extends State<SonarButton>
         return () => store.dispatch(document);
       },
       builder: (context, callback) {
-        return Container(
-          child: FloatingActionButton(
-            backgroundColor: _buttonColor.value,
-            onPressed: () {
-              _pushAndMatchData(context, callback);
-            },
-            tooltip: 'Toggle',
-            child: AnimatedIcon(
-              icon: AnimatedIcons.menu_arrow,
-              progress: _animateIcon,
-            ),
-          ),
-        );
+        return FutureBuilder(
+            future: storage.ready,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              // Wait for Data
+              if (snapshot.data == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              // Initialize Data
+              if (!initialized) {
+                var item = storage.getItem('user_profile');
+
+                if (item != null) {
+                  _profile = new ProfileModel(
+                      name: item['name'],
+                      phone: item['phone'],
+                      email: item['email'],
+                      facebook: item['facebook'],
+                      twitter: item['twitter'],
+                      snapchat: item['snapchat'],
+                      instagram: item['instagram']);
+                } else {
+                  _profile = new ProfileModel.blank();
+                }
+                initialized = true;
+              }
+
+              return Container(
+                child: FloatingActionButton(
+                  backgroundColor: _buttonColor.value,
+                  onPressed: () {
+                    _pushAndMatchData(context, callback);
+                  },
+                  tooltip: 'Toggle',
+                  child: AnimatedIcon(
+                    icon: AnimatedIcons.menu_arrow,
+                    progress: _animateIcon,
+                  ),
+                ),
+              );
+            });
       },
     );
   }

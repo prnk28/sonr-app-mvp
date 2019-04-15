@@ -25,7 +25,7 @@ class MatchTransaction {
       'longitude': position.longitude,
       'latitude' : position.latitude,
       'documentID': documentID,
-      'userData' : userData.toJson()
+      'userData' : userData.toJSONEncodable()
     };
 
     return map;

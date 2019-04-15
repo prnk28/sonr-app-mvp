@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/pages/profile.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
-import 'package:sonar_frontend/utils/profile_util.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
 import 'package:sonar_frontend/widgets/sonar_button.dart';
 import 'package:sonar_frontend/widgets/sonar_match.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
-import 'package:pref_dessert/pref_dessert.dart';
-import 'package:sonar_frontend/model/profile_model.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-        var repo = new FuturePreferencesRepository<ContactModel>(new ContactModelDesSer());
-    var list = repo.findAll();
-    print(list);
     // 4BBEE3 Zima Blue
     return Scaffold(
         body: Container(
@@ -33,7 +28,7 @@ class HomePage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  ProfileInfo(profileStorage: ProfileStorage()),
+                  ProfileInfo(),
                   SonarStack()
                 ],
               ),
@@ -41,7 +36,7 @@ class HomePage extends StatelessWidget {
             ],
           )),
         ),
-        drawer: ProfilePage(profileStorage: ProfileStorage()),
+        drawer: ProfilePage(),
         appBar: AppBar(
           title: Text("Sonar"),
           backgroundColor: getInitialColor(),
@@ -66,6 +61,6 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: SonarButton(profileStorage: ProfileStorage()));
+        floatingActionButton: SonarButton());
   }
 }
