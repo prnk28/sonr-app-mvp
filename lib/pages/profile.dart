@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/widgets/profile_picture.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key, this.title}) : super(key: key);
@@ -26,6 +27,9 @@ class _ProfileState extends State<ProfilePage> {
   final facebookController = TextEditingController();
   final twitterController = TextEditingController();
   final instagramController = TextEditingController();
+
+  // Profile Link
+  String profile_link;
 
   @override
   void initState() {
@@ -88,19 +92,7 @@ class _ProfileState extends State<ProfilePage> {
               elevation: 0.5,
               child: ListView(padding: EdgeInsets.zero, children: <Widget>[
                 DrawerHeader(
-                  child: Center(
-                    child: Padding(
-                        child: Container(
-                            width: 100.0,
-                            height: 100.0,
-                            decoration: new BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: new DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: new NetworkImage(
-                                        "http://i.pravatar.cc/100")))),
-                        padding: EdgeInsets.only(top: 10)),
-                  ),
+                  child: ProfilePicture(profile: _profile),
                   decoration: BoxDecoration(color: Colors.white54),
                 ),
                 Form(

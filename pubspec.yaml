@@ -18,7 +18,9 @@ dependencies:
   firebase_core:
   cloud_firestore:
   cloud_functions:
-  image_picker:
+  firebase_storage: ^2.1.0+1
+  cached_network_image: ^0.7.0
+  image_picker: ^0.5.3+1
   flutter_redux: ^0.5.3
   localstorage: ^1.2.0
   firebase_analytics:

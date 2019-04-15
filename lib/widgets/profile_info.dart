@@ -47,7 +47,8 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   facebook: item['facebook'],
                   twitter: item['twitter'],
                   snapchat: item['snapchat'],
-                  instagram: item['instagram']);
+                  instagram: item['instagram'],
+                  profile_picture: item['profilePicture']);
             }else{
               profile = new ProfileModel.blank();
             }
@@ -73,7 +74,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   image: new DecorationImage(
                                       fit: BoxFit.fill,
                                       image: new NetworkImage(
-                                          "http://i.pravatar.cc/100")))),
+                                          profile.profile_picture)))),
                           padding: EdgeInsets.only(top: topPadding)),
                       // Greeting
                       Padding(

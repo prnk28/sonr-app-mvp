@@ -46,7 +46,6 @@ void main() {
   // Redux Store
 
 Store<DocumentCallback> store = new Store<DocumentCallback>(updateDocument, initialState: DocumentCallback("null", 0));
-
   // Run App
   runApp(Sonar(store: store));
 }

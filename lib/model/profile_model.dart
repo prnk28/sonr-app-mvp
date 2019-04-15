@@ -1,4 +1,3 @@
-import 'dart:convert';
 class ProfileModel {
   bool valuesSet;
    String phone;
@@ -8,9 +7,10 @@ class ProfileModel {
    String facebook;
    String twitter;
    String instagram;
+   String profile_picture;
 
   ProfileModel({this.phone, this.name, this.email, this.snapchat,
-   this.facebook, this.twitter, this.instagram});
+   this.facebook, this.twitter, this.instagram, this.profile_picture});
 
   factory ProfileModel.fromJson(Map<dynamic, dynamic> json) {
     return ProfileModel(
@@ -20,7 +20,8 @@ class ProfileModel {
         snapchat: json['snapchat'],
         facebook: json['facebook'],
         twitter: json['twitter'],
-        instagram: json['instagram']
+        instagram: json['instagram'],
+        profile_picture: json['profile_picture']
     );
   }
 
@@ -33,7 +34,8 @@ class ProfileModel {
         snapchat: "",
         facebook: "",
         twitter: "",
-        instagram: ""
+        instagram: "",
+        profile_picture: ""
     );
   }
 
@@ -48,6 +50,7 @@ class ProfileModel {
     m['facebook'] = facebook;
     m['twitter'] = twitter;
     m['instagram'] = instagram;
+    m['profile_picture'] = profile_picture;
 
     return m;
   }

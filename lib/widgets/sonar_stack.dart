@@ -52,40 +52,43 @@ class _SonarStackState extends State<SonarStack> {
           }
 
           // Return Widget by Count
-          if(list.items.length == 0) {
-            return Container(
-               child: Center(child: Text("Currently No Cards.",
-               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white54,
-                                  fontSize: 26))),
-               width: 325,
-               height: 400,
-            );
-          }else if(list.items.length == 1) {
-            return Container(
-               child: SonarCard(profile: list.items[0]),
-               width: 325,
-               height: 400,
-            );
-          }else{
-          // Return Stack
-          return Stack(
-            children: <Widget>[
-              Swiper(
-                  layout: SwiperLayout.STACK,
-                  itemWidth: 325.0,
-                  itemHeight: 400.0,
-                  itemBuilder: (context, index) {
-                    if (list.items.length > 0) {
-                      for (var i = 0; i < list.items.length; i++) {
-                        return SonarCard(profile: list.items[i]);
+          if (list.items.length == 0) {
+            return Center(
+                child: Container(
+              child: Center(
+                  child: Text("Currently No Cards.",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white54,
+                          fontSize: 26))),
+              width: 325,
+              height: 400,
+            ));
+          } else if (list.items.length == 1) {
+            return Center(
+                child: Container(
+              child: SonarCard(profile: list.items[0]),
+              width: 325,
+              height: 400,
+            ));
+          } else {
+            return Center(
+                child: Stack(
+              children: <Widget>[
+                Swiper(
+                    layout: SwiperLayout.STACK,
+                    itemWidth: 325.0,
+                    itemHeight: 400.0,
+                    itemBuilder: (context, index) {
+                      if (list.items.length > 0) {
+                        for (var i = 0; i < list.items.length; i++) {
+                          return SonarCard(profile: list.items[i]);
+                        }
                       }
-                    }
-                  },
-                  itemCount: list.items.length),
-            ],
-          );
+                    },
+                    itemCount: list.items.length),
+              ],
+            ));
           }
         });
   }

@@ -7,10 +7,11 @@ class ContactModel {
    String facebook;
    String twitter;
    String instagram;
+   String profile_picture;
 
   // Constructor
   ContactModel({this.name, this.phone, this.email, this.snapchat,
-   this.facebook, this.twitter, this.instagram});
+   this.facebook, this.twitter, this.instagram, this.profile_picture});
 
   // Json Decoder
   factory ContactModel.fromJson(Map<dynamic, dynamic> json) {
@@ -21,7 +22,8 @@ class ContactModel {
         snapchat: json['snapchat'],
         facebook: json['facebook'],
         twitter: json['twitter'],
-        instagram: json['instagram']
+        instagram: json['instagram'],
+        profile_picture: json['profile_picture']
     );
   }
 
@@ -36,6 +38,7 @@ class ContactModel {
     m['facebook'] = facebook;
     m['twitter'] = twitter;
     m['instagram'] = instagram;
+    m['profile_picture'] = profile_picture;
 
     return m;
   }

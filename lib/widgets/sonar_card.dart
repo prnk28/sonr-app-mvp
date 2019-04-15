@@ -40,7 +40,7 @@ class SonarCard extends StatelessWidget {
                               image: new DecorationImage(
                                   fit: BoxFit.fill,
                                   image: new NetworkImage(
-                                      "http://i.pravatar.cc/100")))),
+                                      profile.profile_picture)))),
                       padding: EdgeInsets.only(top: 10)),
                 ),
                 Row(
