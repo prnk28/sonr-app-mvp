@@ -28,6 +28,37 @@ class _ProfileState extends State<ProfilePage> {
   final instagramController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Get Profile from Disk
+    setState(() {
+      // Create new item from Storage
+      var item = storage.getItem('user_profile');
+
+      if (item != null) {
+        // Set Profile Object
+        _profile = new ProfileModel(
+            name: item['name'],
+            phone: item['phone'],
+            email: item['email'],
+            facebook: item['facebook'],
+            twitter: item['twitter'],
+            snapchat: item['snapchat'],
+            instagram: item['instagram']);
+
+        // Update Controller Text
+        phoneController.text = _profile.phone;
+        nameController.text = _profile.name;
+        emailController.text = _profile.email;
+        snapchatController.text = _profile.snapchat;
+        facebookController.text = _profile.facebook;
+        twitterController.text = _profile.twitter;
+        instagramController.text = _profile.instagram;
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: storage.ready,
@@ -50,8 +81,6 @@ class _ProfileState extends State<ProfilePage> {
                   twitter: item['twitter'],
                   snapchat: item['snapchat'],
                   instagram: item['instagram']);
-            } else {
-              _profile = new ProfileModel.blank();
             }
             initialized = true;
           }
