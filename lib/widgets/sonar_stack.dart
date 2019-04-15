@@ -51,6 +51,24 @@ class _SonarStackState extends State<SonarStack> {
             initialized = true;
           }
 
+          // Return Widget by Count
+          if(list.items.length == 0) {
+            return Container(
+               child: Center(child: Text("Currently No Cards.",
+               style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white54,
+                                  fontSize: 26))),
+               width: 325,
+               height: 400,
+            );
+          }else if(list.items.length == 1) {
+            return Container(
+               child: SonarCard(profile: list.items[0]),
+               width: 325,
+               height: 400,
+            );
+          }else{
           // Return Stack
           return Stack(
             children: <Widget>[
@@ -68,6 +86,7 @@ class _SonarStackState extends State<SonarStack> {
                   itemCount: list.items.length),
             ],
           );
+          }
         });
   }
 }
