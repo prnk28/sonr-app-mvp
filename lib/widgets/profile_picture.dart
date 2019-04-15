@@ -36,11 +36,12 @@ class ProfilePicture extends StatelessWidget {
   }
 
   _uploadImage() async {
-    //Get the file from the image picker and store it
+    // Get the file from gallery
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     var _uuid = new Uuid();
     String imageName = _uuid.v4();
-    //Create a reference to the location you want to upload to in firebase
+
+    // Create a reference to Location
     StorageReference reference =
         FirebaseStorage.instance.ref().child(imageName + ".png");
     StorageUploadTask uploadTask = reference.putFile(image);
@@ -51,10 +52,31 @@ class ProfilePicture extends StatelessWidget {
   }
 
   _updateUser(url) {
+     // Delete Previous Pic
+    if (profile.profile_picture != null) {
+      _deleteFireBaseStorageItem(profile.profile_picture);
+    }
+
+    // Save new object
     LocalStorage storage = new LocalStorage('sonar_app');
     profile.profile_picture = url;
     print(profile.toJSONEncodable());
     storage.setItem('user_profile', profile.toJSONEncodable());
-    return(url);
+    return (url);
+  }
+
+  _deleteFireBaseStorageItem(String fileUrl) {
+    String filePath = fileUrl.replaceAll(
+        new RegExp(
+            r'https://firebasestorage.googleapis.com/v0/b/sonar-bt10.appspot.com/o/'),
+        '');
+    filePath = filePath.replaceAll(new RegExp(r'%2F'), '/');
+    filePath = filePath.replaceAll(new RegExp(r'(\?alt).*'), '');
+    StorageReference storageReferance = FirebaseStorage.instance.ref();
+
+    storageReferance
+        .child(filePath)
+        .delete()
+        .then((_) => print('Successfully deleted $filePath storage item'));
   }
 }
