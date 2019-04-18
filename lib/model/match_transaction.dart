@@ -1,33 +1,45 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/utils/location_util.dart';
 import 'package:uuid/uuid.dart';
 
 class MatchTransaction {
   // Paramaters
-  final Position position;
+  final LocationData position;
   final ProfileModel userData;
-  var _uuid = new Uuid();
+  //final Placemark placemark;
   var documentID;
-  var transactionID;
 
   // Initialization
   MatchTransaction(this.userData, this.position){
+    var _uuid = new Uuid();
     documentID = _uuid.v4();
   }
 
   // Generation Method
-  createTransaction() {
+  toJSONEncodable() {
     // Create Map
     var map = {
       'created': DateTime.now().toString(),
       'longitude': position.longitude,
       'latitude' : position.latitude,
       'documentID': documentID,
-      'userData' : userData.toJSONEncodable()
+      'userData' : userData.toJSONEncodable(),
+      'message' : _generateMessage()
     };
 
     return map;
+  }
+
+  // Create Message
+  _generateMessage(){
+    // Get Data
+    var dayPart = _partOfDay();
+    var yearPart = DateFormat("MMMMd").format(DateTime.now());
+    // Message Outline
+    return " and you met on the " + dayPart + " of "
+     + yearPart + " at " + placemark.subLocality + ".";
   }
 }

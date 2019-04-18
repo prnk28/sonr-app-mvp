@@ -44,6 +44,7 @@ class AuthDialog extends StatelessWidget {
           // Cancelled
           else if (snap.data["status"] == 000) {
             print("One user declined");
+            _callTransferRecycle(document.documentId);
             return Container();
           }
           // Authorized

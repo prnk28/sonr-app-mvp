@@ -36,9 +36,13 @@ class _SonarButtonState extends State<SonarButton>
     // Get Location'
     if (await Geolocator().checkGeolocationPermissionStatus() ==
         GeolocationStatus.granted) {
+
       // Position Data
       var position = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+      // Placemark Data
+
 
       // Request Model
       var request = MatchTransaction(_profile, position);
@@ -48,7 +52,7 @@ class _SonarButtonState extends State<SonarButton>
         // Cloud Function Call
         final dynamic resp = await CloudFunctions.instance.call(
           functionName: 'matchRequest',
-          parameters: request.createTransaction(),
+          parameters: request.toJSONEncodable(),
         );
         print(resp);
 

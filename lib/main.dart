@@ -42,8 +42,7 @@ class Sonar extends StatelessWidget {
   }
 }
 
-void main() {
-  // Redux Store
+void main() { 
 
 Store<DocumentCallback> store = new Store<DocumentCallback>(updateDocument, initialState: DocumentCallback("null", 0));
   // Run App
