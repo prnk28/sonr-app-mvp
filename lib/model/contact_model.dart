@@ -8,6 +8,7 @@ class ContactModel {
    String twitter;
    String instagram;
    String profile_picture;
+   String message;
 
   // Constructor
   ContactModel({this.name, this.phone, this.email, this.snapchat,

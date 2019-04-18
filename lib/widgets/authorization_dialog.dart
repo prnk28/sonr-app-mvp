@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
+import 'package:sonar_frontend/utils/server_util.dart';
 import 'package:sonar_frontend/widgets/sonar_card.dart';
 
 class AuthDialog extends StatelessWidget {
@@ -29,7 +29,7 @@ class AuthDialog extends StatelessWidget {
     return StreamBuilder(
       stream: Firestore.instance
           .collection("active-transactions")
-          .document(document.documentId)
+          .document(document.id)
           .snapshots(),
       builder: (context, snap) {
         if (snap.data != null) {
@@ -44,7 +44,7 @@ class AuthDialog extends StatelessWidget {
           // Cancelled
           else if (snap.data["status"] == 000) {
             print("One user declined");
-            _callTransferRecycle(document.documentId);
+            ServerUtility.callTransferRecycle(document.id);
             return Container();
           }
           // Authorized
@@ -55,10 +55,11 @@ class AuthDialog extends StatelessWidget {
             if(userPosition == 1){
               // Load Data By Position
               ContactModel contact = new ContactModel.fromJson(snap.data["secondUserData"]);
+              contact.message = snap.data["message"];
               _saveContact(contact);
 
               // Call Cloud Function
-            _callTransferRecycle(document.documentId);
+            ServerUtility.callTransferRecycle(document.id);
               return Center(child:SonarCard(profile: contact));
             }else{
               // Save Data By Position
@@ -66,7 +67,7 @@ class AuthDialog extends StatelessWidget {
              _saveContact(contact);
 
               // Call Cloud Function
-            _callTransferRecycle(document.documentId);
+            ServerUtility.callTransferRecycle(document.id);
               return Center(child:SonarCard(profile: contact));
             }
           }
@@ -147,7 +148,7 @@ class AuthDialog extends StatelessWidget {
                         RawMaterialButton(
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           onPressed: () {
-                            _cancelAuthorization(document.documentId, userPosition);
+                            ServerUtility.cancelAuthorization(document.id, userPosition);
                           },
                           child: Text("Cancel"),
                           shape: RoundedRectangleBorder(
@@ -161,7 +162,7 @@ class AuthDialog extends StatelessWidget {
                         // Facebook
                         RawMaterialButton(
                           onPressed: () {
-                            _confirmAuthorization(document.documentId, userPosition);
+                            ServerUtility.confirmAuthorization(document.id, userPosition);
                           },
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           child: Text("Confirm!"),
@@ -190,87 +191,6 @@ class AuthDialog extends StatelessWidget {
                   color: Colors.blue,
                   size: 50.0,
                 ))));
-  }
-
-  _callTransferRecycle(String docID) async {
-    // Init Parameters
-    var params= {"documentID" : docID};
-
-    // Call Request
-      await CloudFunctions.instance.call(
-          functionName: 'recycleTransferRequest',
-          parameters: params
-        );
-  }
-
-  _confirmAuthorization(doc, userPosition) {
-    // Update Doc by User Position
-    if (userPosition == 1) {
-      Firestore.instance
-          .collection('active-transactions')
-          .document(doc)
-          .get()
-          .then((snap) {
-        if (snap.data["secondUserConfirmed"] == true) {
-          Firestore.instance
-              .collection('active-transactions')
-              .document(doc)
-              .updateData({
-            'firstUserConfirmed': true,
-            'status': 100
-          });
-        } else{
-          Firestore.instance
-              .collection('active-transactions')
-              .document(doc)
-              .updateData({
-            'firstUserConfirmed': true
-          });
-        }
-      });
-    } else {
-      Firestore.instance
-          .collection('active-transactions')
-          .document(doc)
-          .get()
-          .then((snap) {
-        if (snap.data["firstUserConfirmed"] == true) {
-          Firestore.instance
-              .collection('active-transactions')
-              .document(doc)
-              .updateData({
-            'secondUserConfirmed': true,
-            'status': 100
-          });
-        } else{
-          Firestore.instance
-              .collection('active-transactions')
-              .document(doc)
-              .updateData({
-            'secondUserConfirmed': true
-          });
-        }
-      });
-    }
-    // Reset userPosition
-    userPosition = 0;
-  }
-
-  _cancelAuthorization(doc, userPosition) {
-    // Update Doc by User Position
-    if (userPosition == 1) {
-      Firestore.instance
-          .collection('active-transactions')
-          .document(doc)
-          .updateData({'firstUserConfirmed': false, 'status': 000});
-    } else {
-      Firestore.instance
-          .collection('active-transactions')
-          .document(doc)
-          .updateData({'secondUserConfirmed': false, 'status': 000});
-    }
-    // Reset userPosition
-    userPosition = 0;
   }
 
   _saveContact(ContactModel m){

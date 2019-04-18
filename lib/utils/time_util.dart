@@ -138,7 +138,7 @@ class TimeData {
   toJSONEncodable() {
     var map = {
       // Accuracy
-      'timestamp': main,
+      'timestamp': main.toString(),
       'hour': hour,
       'minute': minute,
       'second': second,
@@ -154,11 +154,13 @@ class TimeData {
     return map;
   }
 
-  // Display Object
+// Display Object
   toPrint() {
-    var timeMap = this.toJSONEncodable();
-    timeMap.forEach((k, v) {
-      print("TIME DATA = " + k + " : " + v);
+    var locMap = this.toJSONEncodable();
+    locMap.forEach((k,v) {
+      var ks = k.toString();
+      var vs = v.toString();
+      print("LOCATION DATA = " + ks + " : " + vs);
     });
   }
 }

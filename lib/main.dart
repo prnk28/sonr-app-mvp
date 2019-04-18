@@ -14,7 +14,7 @@ enum Actions { UpdateDocument, AuthorizeYes, AuthorizeNo, DeleteDocument }
 // The reducer, which takes the previous count and increments it in response
 // to an Increment action.
 DocumentCallback updateDocument(DocumentCallback document, dynamic newDocument) {
-  DocumentCallback doc = new DocumentCallback(newDocument.documentId, newDocument.status);
+  DocumentCallback doc = new DocumentCallback(newDocument.id, newDocument.status);
   return document = doc;
 }
 
@@ -42,16 +42,15 @@ class Sonar extends StatelessWidget {
   }
 }
 
-void main() { 
-
+void main() {
 Store<DocumentCallback> store = new Store<DocumentCallback>(updateDocument, initialState: DocumentCallback("null", 0));
   // Run App
   runApp(Sonar(store: store));
 }
 
 class DocumentCallback{
-  final String documentId;
+  final String id;
   final int status;
 
-  DocumentCallback(this.documentId, this.status);
+  DocumentCallback(this.id, this.status);
 }

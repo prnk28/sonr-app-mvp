@@ -63,7 +63,7 @@ class SonarCard extends StatelessWidget {
                 Center(
                     child: Padding(
                         child: Text(
-                            "A short Description Describing where you met this Person.",
+                            profile.message,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontStyle: FontStyle.italic,

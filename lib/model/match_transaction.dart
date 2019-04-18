@@ -8,21 +8,23 @@ class MatchTransaction {
   final LocationData location;
   final ProfileModel userData;
   final TimeData time;
-  var documentID;
+  var id;
 
   // Initialization
   MatchTransaction(this.userData, this.location, this.time){
     var _uuid = new Uuid();
-    documentID = _uuid.v4();
+    id = _uuid.v4();
   }
 
   // Generation Method
   toJSONEncodable() {
     // Create Map
     var map = {
-      '_id': documentID,
+      'id': id,
       'created': time.toJSONEncodable(),
-      'location' : location.toJSONEncodable(),
+      'metadata' : location.toJSONEncodable(),
+      'latitude' : location.latitude,
+      'longitude' : location.longitude,
       'userData' : userData.toJSONEncodable(),
       'message' : _generateMessage()
     };
@@ -33,8 +35,8 @@ class MatchTransaction {
   // Create Message
   _generateMessage(){
     // Get Data
-    // Message Outline
-    // return " and you met on the " + dayPart + " of "
-    //  + yearPart + " at " + placemark.subLocality + ".";
+    //Message Outline
+    return " and you met on the " + time.dayPart + " of "
+     + time.yearPart + " at " + location.neighborhood + ".";
   }
 }

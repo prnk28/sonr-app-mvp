@@ -15,7 +15,7 @@ class _SonarMatchState extends State<SonarMatch> {
     return StoreConnector<DocumentCallback, DocumentCallback>(
         converter: (store) => store.state,
         builder: (context, document) {
-          if (document.documentId == "null") {
+          if (document.id == "null") {
             return Container(width: 0, height: 0);
           } else {
             return Container(

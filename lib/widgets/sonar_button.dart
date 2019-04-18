@@ -36,7 +36,7 @@ class _SonarButtonState extends State<SonarButton>
   // Match Method
   _pushAndMatchData(BuildContext context, VoidCallback callback) async {
     // Get Location'
-    if (LocationUtility.activeLocationPermission()) {
+    if (await LocationUtility.activeLocationPermission()) {
       // Generate Request Data
       LocationData location = await LocationUtility.createLocationData();
       TimeData time = TimeData.current();
@@ -56,14 +56,13 @@ class _SonarButtonState extends State<SonarButton>
         print(resp);
 
         // Create Doc and Callback
-        document = DocumentCallback(resp["documentID"], resp["status"]);
+        document = DocumentCallback(resp["id"], resp["status"]);
         callback();
       } catch (e) {
         print(e);
       }
     } else {
-      await PermissionHandler()
-          .requestPermissions([PermissionGroup.locationWhenInUse]);
+      await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
     }
   }
 

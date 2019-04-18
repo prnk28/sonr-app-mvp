@@ -101,7 +101,7 @@ class LocationData {
     return map;
   }
 
-    // Display Object
+  // Display Object
   toPrint() {
     var locMap = this.toJSONEncodable();
     locMap.forEach((k,v) {
