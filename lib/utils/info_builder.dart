@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 // Class Used to Create Strings
-// Utilized in Profile_info widget
+
 
 String getGreeting(String name){
   var firstname = name.split(" ");
@@ -12,7 +11,7 @@ String getGreeting(String name){
 }
 
 String getTodayDate(){
-   var now = new DateTime.now();
+  var now = new DateTime.now();
   var formatter = new DateFormat('LLLL dd, yyyy');
   return formatter.format(now);
 }

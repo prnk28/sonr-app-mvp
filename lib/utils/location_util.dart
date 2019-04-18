@@ -1,21 +1,41 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationUtility {
-  // Generate PlaceMark
-  static placemarkFromLatLon() async {
-    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
+  // Get Location Data
+  static createLocationData() async {
+    // Get Data
+    Position p = await currentPosition();
+    Placemark m = await placemarkFromPosition(p);
 
-    // Check Placemark Validity
-    if (placemarks != null && placemarks.isNotEmpty) {
-      return placemarks[0];
-    }
+    // Create Object
+   return LocationData.fromData(p, m);
   }
 
   // Get Positional Data
-  static positionFromDevice() async {
-      var position = await Geolocator()
+  static currentPosition() async {
+      var p = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      return position;
+      return p;
+  }
+
+  // Generate PlaceMark from Given Position
+  static placemarkFromPosition(Position p) async {
+    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(p.latitude, p.longitude);
+    // Check Placemark Validity
+    if (placemarks != null && placemarks.isNotEmpty) {
+      var m = placemarks[0];
+      return m;
+    }
+  }
+
+  // Check Location Permissions
+  static activeLocationPermission() async {
+    if (await Geolocator().checkGeolocationPermissionStatus() ==
+        GeolocationStatus.granted) {
+          return true;
+    }else{
+      return false;
+    }
   }
 }
 
@@ -42,11 +62,8 @@ class LocationData {
   this.latitude, this.longitude, this.city, this.country,
   this.locality, this.neighborhood, this.state, this.street});
 
-  // Create from Current Data
-  factory LocationData.currentData() {
-    Position pos = LocationUtility.positionFromDevice();
-    Placemark mrk = LocationUtility.positionFromDevice();
-
+  // Create Location Data Object
+  factory LocationData.fromData(Position pos, Placemark mrk) {
     // Location Object
     return LocationData(
       accuracy: pos.accuracy,
@@ -88,7 +105,9 @@ class LocationData {
   toPrint() {
     var locMap = this.toJSONEncodable();
     locMap.forEach((k,v) {
-      print("LOCATION DATA = " + k + " : " + v);
+      var ks = k.toString();
+      var vs = v.toString();
+      print("LOCATION DATA = " + ks + " : " + vs);
     });
   }
 }

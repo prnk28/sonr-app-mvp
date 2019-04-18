@@ -116,7 +116,7 @@ class TimeData {
       this.yearPart});
 
   // Create from Current Data
-  factory TimeData.currentData() {
+  factory TimeData.current() {
     var now = DateTime.now();
 
     // Time Object

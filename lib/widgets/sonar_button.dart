@@ -7,6 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/match_transaction.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/utils/location_util.dart';
+import 'package:sonar_frontend/utils/time_util.dart';
 import 'package:sonar_frontend/widgets/sonar_match.dart';
 
 class SonarButton extends StatefulWidget {
@@ -34,18 +36,15 @@ class _SonarButtonState extends State<SonarButton>
   // Match Method
   _pushAndMatchData(BuildContext context, VoidCallback callback) async {
     // Get Location'
-    if (await Geolocator().checkGeolocationPermissionStatus() ==
-        GeolocationStatus.granted) {
-
-      // Position Data
-      var position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-      // Placemark Data
-
+    if (LocationUtility.activeLocationPermission()) {
+      // Generate Request Data
+      LocationData location = await LocationUtility.createLocationData();
+      TimeData time = TimeData.current();
+      location.toPrint();
+      time.toPrint();
 
       // Request Model
-      var request = MatchTransaction(_profile, position);
+      var request = MatchTransaction(_profile, location, time);
 
       // Call Request with Payload
       try {
