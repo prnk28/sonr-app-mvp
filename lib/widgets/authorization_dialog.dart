@@ -55,7 +55,8 @@ class AuthDialog extends StatelessWidget {
             if(userPosition == 1){
               // Load Data By Position
               ContactModel contact = new ContactModel.fromJson(snap.data["secondUserData"]);
-              contact.message = snap.data["message"];
+              var firstname = contact.name.split(" ");
+              contact.message = firstname[0] + snap.data["message"];
               _saveContact(contact);
 
               // Call Cloud Function
@@ -64,6 +65,8 @@ class AuthDialog extends StatelessWidget {
             }else{
               // Save Data By Position
               ContactModel contact = new ContactModel.fromJson(snap.data["firstUserData"]);
+              var firstname = contact.name.split(" ");
+              contact.message = firstname[0] + snap.data["message"];
              _saveContact(contact);
 
               // Call Cloud Function

@@ -40,6 +40,7 @@ class ContactModel {
     m['twitter'] = twitter;
     m['instagram'] = instagram;
     m['profile_picture'] = profile_picture;
+    m['message'] = message;
 
     return m;
   }

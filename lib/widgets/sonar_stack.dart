@@ -36,7 +36,7 @@ class _SonarStackState extends State<SonarStack> {
 
             if (items != null) {
               (items as List).forEach((item) {
-                final todoItem = new ContactModel(
+                final contact = new ContactModel(
                     name: item['name'],
                     phone: item['phone'],
                     email: item['email'],
@@ -44,8 +44,10 @@ class _SonarStackState extends State<SonarStack> {
                     twitter: item['twitter'],
                     snapchat: item['snapchat'],
                     instagram: item['instagram'],
-                    profile_picture: item['profile_picture']);
-                list.items.add(todoItem);
+                    profile_picture: item['profile_picture'],
+                    );
+                    contact.message = item["message"];
+                list.items.add(contact);
               });
             }
 
