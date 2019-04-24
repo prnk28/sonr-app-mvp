@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
+import 'package:sonar_frontend/pages/contact.dart';
 
 class SonarCard extends StatelessWidget {
   final ContactModel profile;
@@ -9,10 +10,10 @@ class SonarCard extends StatelessWidget {
     // Set Profile
     var nameData;
     var phoneData;
-    if(profile != null){
+    if (profile != null) {
       nameData = profile.name.split(" ");
       phoneData = profile.phone;
-    }else{
+    } else {
       String name = "Firstname Lastname";
       nameData = name.split(" ");
       phoneData = '703-666-5555';
@@ -23,7 +24,8 @@ class SonarCard extends StatelessWidget {
         height: 400,
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, "/contact");
+            Navigator.pushNamed(context, ContactPage.routeName,
+                arguments: profile);
           },
           child: Card(
               shape: RoundedRectangleBorder(
@@ -54,16 +56,14 @@ class SonarCard extends StatelessWidget {
                               )),
                           padding: EdgeInsets.only(top: 8, right: 5)),
                       Padding(
-                          child: Text(nameData[1]  ?? 'LastName',
+                          child: Text(nameData[1] ?? 'LastName',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w100,
-                                  fontSize: 26)),
+                                  fontWeight: FontWeight.w100, fontSize: 26)),
                           padding: EdgeInsets.only(top: 8))
                     ]),
                 Center(
                     child: Padding(
-                        child: Text(
-                            profile.message,
+                        child: Text(profile.message,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontStyle: FontStyle.italic,
@@ -93,56 +93,56 @@ class SonarCard extends StatelessWidget {
                 ),
                 Padding(child: Divider(), padding: EdgeInsets.only(top: 0)),
                 Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          // Twitter
-                          RawMaterialButton(
-                            constraints: BoxConstraints.tight(Size(42, 42)),
-                            onPressed: () {},
-                            child: Image.asset("assets/images/twitter-64.png",
-                                height: 32, width: 32),
-                            shape: new CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: Color.fromRGBO(56, 161, 243, 1),
-                            padding: EdgeInsets.all(8),
-                          ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      // Twitter
+                      RawMaterialButton(
+                        constraints: BoxConstraints.tight(Size(42, 42)),
+                        onPressed: () {},
+                        child: Image.asset("assets/images/twitter-64.png",
+                            height: 32, width: 32),
+                        shape: new CircleBorder(),
+                        elevation: 2.0,
+                        fillColor: Color.fromRGBO(56, 161, 243, 1),
+                        padding: EdgeInsets.all(8),
+                      ),
 
-                          // Facebook
-                          RawMaterialButton(
-                            onPressed: () {},
-                            constraints: BoxConstraints.tight(Size(42, 42)),
-                            child: Image.asset("assets/images/facebook-64.png",
-                                height: 32, width: 32),
-                            shape: new CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: Color.fromRGBO(66, 103, 178, 1),
-                            padding: EdgeInsets.all(8),
-                          ),
+                      // Facebook
+                      RawMaterialButton(
+                        onPressed: () {},
+                        constraints: BoxConstraints.tight(Size(42, 42)),
+                        child: Image.asset("assets/images/facebook-64.png",
+                            height: 32, width: 32),
+                        shape: new CircleBorder(),
+                        elevation: 2.0,
+                        fillColor: Color.fromRGBO(66, 103, 178, 1),
+                        padding: EdgeInsets.all(8),
+                      ),
 
-                          // Snapchat
-                          RawMaterialButton(
-                            onPressed: () {},
-                            constraints: BoxConstraints.tight(Size(42, 42)),
-                            child: Image.asset("assets/images/snapchat-64.png",
-                                height: 32, width: 32),
-                            shape: new CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: Color.fromRGBO(255, 252, 0, 1),
-                            padding: EdgeInsets.all(8),
-                          ),
+                      // Snapchat
+                      RawMaterialButton(
+                        onPressed: () {},
+                        constraints: BoxConstraints.tight(Size(42, 42)),
+                        child: Image.asset("assets/images/snapchat-64.png",
+                            height: 32, width: 32),
+                        shape: new CircleBorder(),
+                        elevation: 2.0,
+                        fillColor: Color.fromRGBO(255, 252, 0, 1),
+                        padding: EdgeInsets.all(8),
+                      ),
 
-                          // Instagram
-                          RawMaterialButton(
-                            onPressed: () {},
-                            constraints: BoxConstraints.tight(Size(42, 42)),
-                            child: Image.asset("assets/images/instagram-64.png",
-                                height: 32, width: 32),
-                            shape: new CircleBorder(),
-                            elevation: 2.0,
-                            fillColor: Color.fromRGBO(35, 31, 32, 1),
-                            padding: EdgeInsets.all(8),
-                          ),
-                        ])
+                      // Instagram
+                      RawMaterialButton(
+                        onPressed: () {},
+                        constraints: BoxConstraints.tight(Size(42, 42)),
+                        child: Image.asset("assets/images/instagram-64.png",
+                            height: 32, width: 32),
+                        shape: new CircleBorder(),
+                        elevation: 2.0,
+                        fillColor: Color.fromRGBO(35, 31, 32, 1),
+                        padding: EdgeInsets.all(8),
+                      ),
+                    ])
               ])),
         ));
   }

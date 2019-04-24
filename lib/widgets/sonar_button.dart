@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -62,7 +61,8 @@ class _SonarButtonState extends State<SonarButton>
         print(e);
       }
     } else {
-      await PermissionHandler().requestPermissions([PermissionGroup.locationWhenInUse]);
+      await PermissionHandler()
+          .requestPermissions([PermissionGroup.locationWhenInUse]);
     }
   }
 
@@ -145,7 +145,7 @@ class _SonarButtonState extends State<SonarButton>
                 child: FloatingActionButton(
                   backgroundColor: _buttonColor.value,
                   onPressed: () {
-                    _pushAndMatchData(context, callback);
+                        _pushAndMatchData(context, callback);
                   },
                   tooltip: 'Toggle',
                   child: AnimatedIcon(

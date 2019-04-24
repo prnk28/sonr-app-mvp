@@ -58,9 +58,6 @@ class AuthDialog extends StatelessWidget {
               var firstname = contact.name.split(" ");
               contact.message = firstname[0] + snap.data["message"];
               _saveContact(contact);
-
-              // Call Cloud Function
-            ServerUtility.callTransferRecycle(document.id);
               return Center(child:SonarCard(profile: contact));
             }else{
               // Save Data By Position
@@ -68,9 +65,6 @@ class AuthDialog extends StatelessWidget {
               var firstname = contact.name.split(" ");
               contact.message = firstname[0] + snap.data["message"];
              _saveContact(contact);
-
-              // Call Cloud Function
-            ServerUtility.callTransferRecycle(document.id);
               return Center(child:SonarCard(profile: contact));
             }
           }
@@ -198,10 +192,14 @@ class AuthDialog extends StatelessWidget {
 
   _saveContact(ContactModel m){
       list.items.add(m);
+      print("Contact Length: " + list.items.length.toString());
       _saveToStorage();
   }
 
    _saveToStorage() {
     storage.setItem('contact_items', list.toJSONEncodable());
+
+    // Call Cloud Function
+    ServerUtility.callTransferRecycle(document.id);
   }
 }

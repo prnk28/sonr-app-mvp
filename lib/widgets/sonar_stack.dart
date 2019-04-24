@@ -36,6 +36,7 @@ class _SonarStackState extends State<SonarStack> {
 
             if (items != null) {
               (items as List).forEach((item) {
+                print(item['name']);
                 final contact = new ContactModel(
                     name: item['name'],
                     phone: item['phone'],
