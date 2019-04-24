@@ -31,7 +31,7 @@ class ProfilePicture extends StatelessWidget {
                             fit: BoxFit.fill,
                             image: profile.profile_picture == null
                                 ? AssetImage("assets/images/blank-profile.png")
-                                : NetworkImage(profile.profile_picture)))),
+                                : CachedNetworkImageProvider(profile.profile_picture)))),
                 padding: EdgeInsets.only(top: 10))));
   }
 

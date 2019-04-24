@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/pages/contact.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class SonarCard extends StatelessWidget {
   final ContactModel profile;
@@ -45,8 +46,7 @@ void _handleTap() {
                               shape: BoxShape.circle,
                               image: new DecorationImage(
                                   fit: BoxFit.fill,
-                                  image: new NetworkImage(
-                                      profile.profile_picture)))),
+                                  image: CachedNetworkImageProvider(profile.profile_picture)))),
                       padding: EdgeInsets.only(top: 10)),
                 ),
                 Row(
