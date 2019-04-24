@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/pages/profile.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
+import 'package:sonar_frontend/widgets/card_overlay.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
 import 'package:sonar_frontend/widgets/sonar_button.dart';
 import 'package:sonar_frontend/widgets/sonar_match.dart';
@@ -32,7 +32,8 @@ class HomePage extends StatelessWidget {
                   SonarStack()
                 ],
               ),
-              SonarMatch()
+              SonarMatch(),
+              CardOverlay()
             ],
           )),
         ),

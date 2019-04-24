@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/pages/contact.dart';
 
-class SonarCard extends StatelessWidget {
+class ExtendedCard extends StatelessWidget {
   final ContactModel profile;
   final ValueChanged<bool> onChanged;
   final bool active;
 
-  const SonarCard({Key key, this.profile, this.onChanged, this.active: true}) : super(key: key);
+  const ExtendedCard({Key key, this.profile, this.onChanged, this.active: true}) : super(key: key);
 
 void _handleTap() {
     onChanged(!active);

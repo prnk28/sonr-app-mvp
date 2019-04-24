@@ -36,7 +36,7 @@ class Sonar extends StatelessWidget {
             '/': (context) => HomePage(),
             '/profile': (context) =>
                 ProfilePage(),
-            '/contact': (context) => ContactPage(),
+            ContactPage.routeName: (context) => ContactPage(),
           },
         ));
   }

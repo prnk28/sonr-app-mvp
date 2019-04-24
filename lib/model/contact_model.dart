@@ -1,3 +1,6 @@
+import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter/material.dart';
+
 class ContactModel {
   // Seven Fields
    String name;
@@ -44,7 +47,28 @@ class ContactModel {
 
     return m;
   }
+
+  toContact(){
+    // Organize Data
+    var nameData = name.split(" ");
+    var phones = new List<Item>();
+    phones.add(new Item(label: "Mobile", value: phone.toString()));
+    var emails = new List<Item>();
+    emails.add(new Item(label: "Personal", value: email.toString()));
+
+    // Create Object
+    Contact c = new Contact();
+    c.givenName = nameData[0];
+    c.familyName  = nameData[1];
+    c.phones = phones;
+    c.emails = emails;
+    c.note = message;
+
+    return c;
+  }
 }
+
+
 
 class ContactList {
     List<ContactModel> items;
