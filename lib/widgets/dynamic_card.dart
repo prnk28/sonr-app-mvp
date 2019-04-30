@@ -8,12 +8,15 @@ import 'dart:math' as math;
 
 class DynamCard extends StatelessWidget {
   final ContactModel profile;
+  final String headerPath;
   final double offset;
-
-  const DynamCard({Key key, this.profile, this.offset}) : super(key: key);
+  const DynamCard({Key key, this.profile, this.offset, this.headerPath}) : super(key: key);
 
   Widget build(BuildContext context) {
+    // Initialize
     double gauss = math.exp(-(math.pow((offset.abs() - 0.5), 2) / 0.08));
+
+    // Build Widget
     return Transform.translate(
       offset: Offset(-32 * gauss * offset.sign, 0),
       child: Card(
@@ -25,8 +28,7 @@ class DynamCard extends StatelessWidget {
             Stack(children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                child: Image.asset(
-                  'assets/images/steve-johnson.jpeg',
+                child: Image.asset('assets/$headerPath',
                   height: MediaQuery.of(context).size.height * 0.15,
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment(-offset.abs(), 0),
@@ -224,7 +226,7 @@ class DynamCardContent extends StatelessWidget {
                 child: RawMaterialButton(
                   constraints: BoxConstraints.tight(Size(42, 42)),
                   onPressed: () {},
-                  child: Image.asset("assets/images/twitter-64.png",
+                  child: Image.asset("assets/images/social/twitter-64.png",
                       height: 32, width: 32),
                   shape: new CircleBorder(),
                   elevation: 2.0,
@@ -243,7 +245,7 @@ class DynamCardContent extends StatelessWidget {
                 child: RawMaterialButton(
                   onPressed: () {},
                   constraints: BoxConstraints.tight(Size(42, 42)),
-                  child: Image.asset("assets/images/facebook-64.png",
+                  child: Image.asset("assets/images/social/facebook-64.png",
                       height: 32, width: 32),
                   shape: new CircleBorder(),
                   elevation: 2.0,
@@ -262,7 +264,7 @@ class DynamCardContent extends StatelessWidget {
                 child: RawMaterialButton(
                   onPressed: () {},
                   constraints: BoxConstraints.tight(Size(42, 42)),
-                  child: Image.asset("assets/images/snapchat-64.png",
+                  child: Image.asset("assets/images/social/snapchat-64.png",
                       height: 32, width: 32),
                   shape: new CircleBorder(),
                   elevation: 2.0,
@@ -281,7 +283,7 @@ class DynamCardContent extends StatelessWidget {
                 child: RawMaterialButton(
                   onPressed: () {},
                   constraints: BoxConstraints.tight(Size(42, 42)),
-                  child: Image.asset("assets/images/instagram-64.png",
+                  child: Image.asset("assets/images/social/instagram-64.png",
                       height: 32, width: 32),
                   shape: new CircleBorder(),
                   elevation: 2.0,

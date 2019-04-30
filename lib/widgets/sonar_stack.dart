@@ -72,7 +72,7 @@ class _SonarStackState extends State<SonarStack> {
             return Center(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5725,
-                  child: DynamCard(profile: list.items[0], offset: pageOffset),
+                  child: DynamCard(profile: list.items[0], offset: pageOffset, headerPath: "assets/images/headers/1.jpg",),
             ));
           } else {
             return SizedBox(

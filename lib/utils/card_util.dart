@@ -4,6 +4,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/utils/content_builder.dart';
 import 'package:sonar_frontend/widgets/dynamic_card.dart';
 
 class CardUtility {
@@ -28,7 +29,19 @@ class CardUtility {
     // Iterate List
     if (list.items.length > 0) {
       for (var i = 0; i < list.items.length; i++) {
-        cards.add(DynamCard(profile: list.items[i], offset: pageOffset - i));
+        // Generate Header Path
+        var path;
+        if(i < 7){
+          var header = i + 1;
+          path = "images/headers/" + header.toString() + ".jpg";
+        }else{
+          // Utilize Divisiblity to Restart Generation
+          var divisibility = i / 8;
+          divisibility.round();
+          var mod = i - 8 * divisibility;
+          path = "images/headers/" + mod.toString() + ".jpg";
+        }
+        cards.add(DynamCard(profile: list.items[i], offset: pageOffset - i, headerPath: path));
       }
     }
     return cards;

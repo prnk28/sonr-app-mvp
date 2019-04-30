@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:ui';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -38,7 +40,7 @@ class ContentBuilder {
     }
   }
 
-  static String getPhone(m){
+  static String getPhone(m) {
     if (m != null) {
       return m.phone.toString();
     } else {
