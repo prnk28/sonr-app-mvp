@@ -6,7 +6,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/utils/server_util.dart';
-import 'package:sonar_frontend/widgets/sonar_card.dart';
+import 'package:sonar_frontend/widgets/dynamic_card.dart';
 
 class AuthDialog extends StatelessWidget {
   // Storage Parameters
@@ -58,14 +58,14 @@ class AuthDialog extends StatelessWidget {
               var firstname = contact.name.split(" ");
               contact.message = firstname[0] + snap.data["message"];
               _saveContact(contact);
-              return Center(child:SonarCard(profile: contact));
+              return Center(child:DynamCard(profile: contact, offset: 0));
             }else{
               // Save Data By Position
               ContactModel contact = new ContactModel.fromJson(snap.data["firstUserData"]);
               var firstname = contact.name.split(" ");
               contact.message = firstname[0] + snap.data["message"];
              _saveContact(contact);
-              return Center(child:SonarCard(profile: contact));
+              return Center(child:DynamCard(profile: contact, offset: 0));
             }
           }
           return Container();
