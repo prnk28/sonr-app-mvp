@@ -184,10 +184,26 @@ class AuthDialog extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
                 ),
-                child: SpinKitHourGlass(
-                  color: Colors.blue,
-                  size: 50.0,
-                ))));
+                child: Stack(
+                  children:<Widget>[
+                     SpinKitHourGlass(color: Colors.blue,size: 50.0),
+                  Padding(
+                  padding: EdgeInsets.only(top: 0, left: 215),
+                  child: Tooltip(
+                      message: "Cancel",
+                      child: RawMaterialButton(
+                            constraints: BoxConstraints.tight(Size(28, 28)),
+                            onPressed: () {
+                              ServerUtility.cancelAuthorization(document.id, userPosition);
+                            },
+                            child: Icon(Icons.close,
+                                color: Colors.red, size: 28),
+                            shape: new CircleBorder(),
+                            elevation: 0,
+                            fillColor: Colors.transparent,
+                            padding: EdgeInsets.all(8),
+                          ))),
+                  ]))));
   }
 
   _saveContact(ContactModel m){

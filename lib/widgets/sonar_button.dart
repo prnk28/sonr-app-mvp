@@ -30,12 +30,13 @@ class _SonarButtonState extends State<SonarButton>
   final LocalStorage storage = new LocalStorage('sonar_app');
   ProfileModel _profile = new ProfileModel();
   bool initialized = false;
+  bool requestCalled = false;
   DocumentCallback document;
 
   // Match Method
   _pushAndMatchData(BuildContext context, VoidCallback callback) async {
     // Get Location'
-    if (await LocationUtility.activeLocationPermission()) {
+    if (await LocationUtility.activeLocationPermission() && !requestCalled) {
       // Generate Request Data
       LocationData location = await LocationUtility.createLocationData();
       TimeData time = TimeData.current();
@@ -56,6 +57,13 @@ class _SonarButtonState extends State<SonarButton>
 
         // Create Doc and Callback
         document = DocumentCallback(resp["id"], resp["status"]);
+
+        // Prevent Duplicate Requests
+        if(document.status == 404) {
+          requestCalled = true;
+        }else{
+          requestCalled = false;
+        }
         callback();
       } catch (e) {
         print(e);
@@ -147,7 +155,7 @@ class _SonarButtonState extends State<SonarButton>
                   onPressed: () {
                         _pushAndMatchData(context, callback);
                   },
-                  tooltip: 'Toggle',
+                  tooltip: 'Request Sonar',
                   child: AnimatedIcon(
                     icon: AnimatedIcons.menu_arrow,
                     progress: _animateIcon,

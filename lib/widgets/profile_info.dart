@@ -21,7 +21,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
   bool initialized = false;
 
   // Top Widget Spacing
-  double topPadding = 55;
+  double topPadding = 25;
 
   // Get Text Location
   Future<String> getTextFromLocation() async {
@@ -107,7 +107,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                             style: TextStyle(color: Colors.white70)),
                       ],
                     ),
-                    padding: EdgeInsets.only(top: 35))
+                    padding: EdgeInsets.only(top: 55))
               ],
             ),
           );

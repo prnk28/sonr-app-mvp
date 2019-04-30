@@ -6,28 +6,9 @@ import 'package:sonar_frontend/model/match_transaction.dart';
 
 class ServerUtility {
 
-  // Request Access to Sonar
-  static sonarMatchRequest(MatchTransaction request, VoidCallback callback) async {
-    try {
-      // Cloud Function Call
-      final dynamic resp = await CloudFunctions.instance.call(
-        functionName: 'matchRequest',
-        parameters: request.toJSONEncodable(),
-      );
-      print(resp);
-
-      // Create Doc and Callback
-      DocumentCallback doc = DocumentCallback(resp["_id"], resp["status"]);
-      callback();
-      return doc;
-    } catch (e) {
-      print(e);
-    }
-  }
-
   static callTransferRecycle(String docID) async {
     // Init Parameters
-    var params= {"_id" : docID};
+    var params= {"id" : docID};
 
     // Call Request
       await CloudFunctions.instance.call(
