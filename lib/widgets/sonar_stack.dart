@@ -71,12 +71,12 @@ class _SonarStackState extends State<SonarStack> {
           } else if (list.items.length == 1) {
             return Center(
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.55,
+                  height: MediaQuery.of(context).size.height * 0.5725,
                   child: DynamCard(profile: list.items[0], offset: pageOffset),
             ));
           } else {
             return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.55,
+              height: MediaQuery.of(context).size.height * 0.5725,
               child: PageView(
                   controller: pageController,
                   children: CardUtility.createCardWidgets(list, pageOffset)),

@@ -63,6 +63,18 @@ class _ProfileState extends State<ProfilePage> {
   }
 
   @override
+  void dispose() {
+    phoneController.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    snapchatController.dispose();
+    facebookController.dispose();
+    twitterController.dispose();
+    instagramController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: storage.ready,

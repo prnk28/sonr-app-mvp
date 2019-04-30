@@ -47,7 +47,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
           return Container(
             width: 285,
-            height: 285,
+            height: 270,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -107,7 +107,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                             style: TextStyle(color: Colors.white70)),
                       ],
                     ),
-                    padding: EdgeInsets.only(top: 55))
+                    padding: EdgeInsets.only(top: 35))
               ],
             ),
           );
