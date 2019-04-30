@@ -10,10 +10,6 @@ class SonarCard extends StatelessWidget {
 
   const SonarCard({Key key, this.profile, this.onChanged, this.active: true}) : super(key: key);
 
-void _handleTap() {
-    onChanged(!active);
-  }
-
   Widget build(BuildContext context) {
     // Set Profile
     var nameData;
@@ -30,8 +26,6 @@ void _handleTap() {
     return SizedBox(
         width: 325,
         height: 400,
-        child: GestureDetector(
-          onTap:_handleTap,
           child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -148,6 +142,6 @@ void _handleTap() {
                       ),
                     ])
               ])),
-        ));
+        );
   }
 }

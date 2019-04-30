@@ -77,6 +77,10 @@ class ContactList {
     items = new List();
   }
 
+  add(ContactModel value){
+    items.add(value);
+  }
+
   toJSONEncodable() {
     return items.map((item) {
       return item.toJSONEncodable();

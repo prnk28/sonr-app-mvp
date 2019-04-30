@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
-import 'package:sonar_frontend/utils/info_builder.dart';
+import 'package:sonar_frontend/utils/card_util.dart';
+import 'package:sonar_frontend/utils/content_builder.dart';
+import 'package:sonar_frontend/utils/location_util.dart';
 
 class ProfileInfo extends StatefulWidget {
   const ProfileInfo({Key key}) : super(key: key);
@@ -22,7 +25,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
   // Get Text Location
   Future<String> getTextFromLocation() async {
-    return await getCurrentLocation();
+    return await ContentBuilder.getCurrentLocation();
   }
 
   @override
@@ -36,22 +39,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
             );
           }
 
+          // Get Data
           if (!initialized) {
-            var item = storage.getItem('user_profile');
-
-            if (item != null) {
-              profile = new ProfileModel(
-                  name: item['name'],
-                  phone: item['phone'],
-                  email: item['email'],
-                  facebook: item['facebook'],
-                  twitter: item['twitter'],
-                  snapchat: item['snapchat'],
-                  instagram: item['instagram'],
-                  profile_picture: item['profile_picture']);
-            }else{
-              profile = new ProfileModel.blank();
-            }
+            profile = CardUtility.getProfileModel(storage);
             initialized = true;
           }
 
@@ -73,12 +63,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   shape: BoxShape.circle,
                                   image: new DecorationImage(
                                       fit: BoxFit.fill,
-                                      image: new NetworkImage(
-                                          profile.profile_picture)))),
+                                      image: CachedNetworkImageProvider(profile.profile_picture)))),
                           padding: EdgeInsets.only(top: topPadding)),
                       // Greeting
                       Padding(
-                          child: Text(getGreeting(profile.name),
+                          child: Text(ContentBuilder.getGreeting(profile.name),
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
@@ -110,7 +99,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Icon(Icons.today, color: Colors.white70),
-                        Text(getTodayDate(),
+                        Text(ContentBuilder.getTodayDate(),
                             style: TextStyle(color: Colors.white70)),
                         Text(" | ", style: TextStyle(color: Colors.white70)),
                         Icon(Icons.pin_drop, color: Colors.white70),
