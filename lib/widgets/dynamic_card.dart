@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sonar_frontend/utils/card_util.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sonar_frontend/utils/content_builder.dart';
 import 'dart:math' as math;
 
@@ -44,6 +46,47 @@ class DynamCard extends StatelessWidget {
                                     profile.profile_picture)))),
                     padding: EdgeInsets.only(top: 10)),
               ),
+              // Export Contact
+              Padding(
+                  padding: EdgeInsets.only(top: 5, left: 265),
+                  child: Tooltip(
+                      message: "Save " +
+                          ContentBuilder.getNamePart(
+                              NamePart.FirstName, profile) +
+                          "'s Card to Contacts",
+                      child: Transform.translate(
+                          offset: Offset(-25 * offset, 0),
+                          child: RawMaterialButton(
+                            constraints: BoxConstraints.tight(Size(36, 36)),
+                            onPressed: () async {
+                              if (await CardUtility.addContactToDevice(
+                                  profile)) {
+                                Alert(
+                                  context: context,
+                                  type: AlertType.success,
+                                  title: "Success!",
+                                  desc: "Contact was saved to Phone Book.",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "GREAT",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ],
+                                ).show();
+                              }
+                            },
+                            child: Icon(Icons.group_add,
+                                color: Colors.white, size: 18),
+                            shape: new CircleBorder(),
+                            elevation: 4.0,
+                            fillColor: Colors.orange,
+                            padding: EdgeInsets.all(8),
+                          )))),
               Padding(
                   padding: EdgeInsets.only(top: 105),
                   child: Row(

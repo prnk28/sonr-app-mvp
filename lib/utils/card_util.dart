@@ -1,10 +1,25 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
 import 'package:sonar_frontend/widgets/dynamic_card.dart';
 
 class CardUtility {
+  // Export Card to Device
+  static addContactToDevice(ContactModel item) async {
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.contacts);
+    if (permission == PermissionStatus.granted) {
+      var newContact = item.toContact();
+      await ContactsService.addContact(newContact);
+      return true;
+    } else {
+      await PermissionHandler().requestPermissions([PermissionGroup.contacts]);
+    }
+  }
+
   // Creates DynamCard Widget List given data, offset
   static createCardWidgets(list, pageOffset) {
     // Init Cards

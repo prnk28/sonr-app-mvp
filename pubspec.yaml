@@ -32,6 +32,7 @@ dependencies:
   intl: ^0.15.8
   geolocator: ^3.0.0
   permission_handler:
+  rflutter_alert: ^1.0.2
   uuid: 2.0.0
 
   # The following adds the Cupertino Icons font to your application.
