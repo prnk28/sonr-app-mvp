@@ -3,7 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/pages/profile.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
-import 'package:sonar_frontend/widgets/sonar_button.dart';
+import 'package:sonar_frontend/sonar/sonar_button.dart';
 import 'package:sonar_frontend/widgets/sonar_match.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
 

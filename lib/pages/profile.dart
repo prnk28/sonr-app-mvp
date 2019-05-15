@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
-import 'package:sonar_frontend/widgets/profile_picture.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key, this.title}) : super(key: key);
@@ -104,10 +103,10 @@ class _ProfileState extends State<ProfilePage> {
           return Drawer(
               elevation: 0.5,
               child: ListView(padding: EdgeInsets.zero, children: <Widget>[
-                DrawerHeader(
-                  child: ProfilePicture(profile: _profile),
-                  decoration: BoxDecoration(color: Colors.white54),
-                ),
+                // DrawerHeader(
+                //   child: ProfilePicture(profile: _profile),
+                //   decoration: BoxDecoration(color: Colors.white54),
+                // ),
                 Form(
                     key: _formKey,
                     child: Column(children: <Widget>[

@@ -44,29 +44,6 @@ class _SonarButtonState extends State<SonarButton>
 
       // Request Model
       var request = MatchTransaction(_profile, location, time);
-
-      // Call Request with Payload
-      try {
-        // Cloud Function Call
-        final dynamic resp = await CloudFunctions.instance.call(
-          functionName: 'matchRequest',
-          parameters: request.toJSONEncodable(),
-        );
-        print(resp);
-
-        // Create Doc and Callback
-        document = DocumentCallback(resp["id"], resp["status"]);
-
-        // Prevent Duplicate Requests
-        if(document.status == 404) {
-          requestCalled = true;
-        }else{
-          requestCalled = false;
-        }
-        callback();
-      } catch (e) {
-        print(e);
-      }
     } else {
       await PermissionHandler()
           .requestPermissions([PermissionGroup.locationWhenInUse]);

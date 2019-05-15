@@ -114,7 +114,7 @@ class _SonarBoxState extends State<SonarBox> {
   /// As the user has a name, we may now show the other players
   /// ------------------------------------------------------
   _onSonarRequest() {
-    sonar.send('request', _name.text);
+    sonar.send('request',);
 	
     /// Force a rebuild
     setState(() {});

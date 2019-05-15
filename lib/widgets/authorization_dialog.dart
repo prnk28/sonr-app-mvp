@@ -4,8 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
-import 'package:sonar_frontend/utils/server_util.dart';
-import 'package:sonar_frontend/widgets/dynamic_card.dart';
 
 class AuthDialog extends StatelessWidget {
   // Storage Parameters
@@ -19,59 +17,8 @@ class AuthDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set Position
-    if(document.status == 404){
-      userPosition = 1;
-    }
 
-    // Create Stream
-    return StreamBuilder(
-      stream: Firestore.instance
-          .collection("active-transactions")
-          .document(document.id)
-          .snapshots(),
-      builder: (context, snap) {
-        if (snap.data != null) {
-          // On Match
-          if (snap.data["status"] == 200) {
-            return buildMatch(context, snap);
-          }
-          // Pending Match
-          else if (snap.data["status"] == 404) {
-            return buildLoad(context);
-          }
-          // Cancelled
-          else if (snap.data["status"] == 000) {
-            print("One user declined");
-            ServerUtility.callTransferRecycle(document.id);
-            return Container();
-          }
-          // Authorized
-          else if (snap.data["status"] == 100) {
-            print("Match Confirmed");
-
-            // Write Match to Disk
-            if(userPosition == 1){
-              // Load Data By Position
-              ContactModel contact = new ContactModel.fromJson(snap.data["secondUserData"]);
-              var firstname = contact.name.split(" ");
-              contact.message = firstname[0] + snap.data["message"];
-              _saveContact(contact);
-              return Center(child:DynamCard(profile: contact, offset: 0));
-            }else{
-              // Save Data By Position
-              ContactModel contact = new ContactModel.fromJson(snap.data["firstUserData"]);
-              var firstname = contact.name.split(" ");
-              contact.message = firstname[0] + snap.data["message"];
-             _saveContact(contact);
-              return Center(child:DynamCard(profile: contact, offset: 0));
-            }
-          }
-          return Container();
-        }
         return Container();
-      },
-    );
   }
 
   Widget buildMatch(BuildContext context, AsyncSnapshot snap) {
@@ -144,7 +91,7 @@ class AuthDialog extends StatelessWidget {
                         RawMaterialButton(
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           onPressed: () {
-                            ServerUtility.cancelAuthorization(document.id, userPosition);
+                            
                           },
                           child: Text("Cancel"),
                           shape: RoundedRectangleBorder(
@@ -158,7 +105,7 @@ class AuthDialog extends StatelessWidget {
                         // Facebook
                         RawMaterialButton(
                           onPressed: () {
-                            ServerUtility.confirmAuthorization(document.id, userPosition);
+                            
                           },
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           child: Text("Confirm!"),
@@ -193,7 +140,7 @@ class AuthDialog extends StatelessWidget {
                       child: RawMaterialButton(
                             constraints: BoxConstraints.tight(Size(28, 28)),
                             onPressed: () {
-                              ServerUtility.cancelAuthorization(document.id, userPosition);
+                              
                             },
                             child: Icon(Icons.close,
                                 color: Colors.red, size: 28),
@@ -215,6 +162,6 @@ class AuthDialog extends StatelessWidget {
     storage.setItem('contact_items', list.toJSONEncodable());
 
     // Call Cloud Function
-    ServerUtility.callTransferRecycle(document.id);
+    
   }
 }
