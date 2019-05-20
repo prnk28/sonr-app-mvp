@@ -54,17 +54,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      // User Picture
-                      Padding(
-                          child: Container(
-                              width: 50.0,
-                              height: 50.0,
-                              decoration: new BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: new DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: CachedNetworkImageProvider(profile.profile_picture)))),
-                          padding: EdgeInsets.only(top: topPadding)),
                       // Greeting
                       Padding(
                           child: Text(ContentBuilder.getGreeting(profile.name),

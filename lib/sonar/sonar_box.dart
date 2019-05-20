@@ -1,12 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
+import 'package:sonar_frontend/utils/card_util.dart';
 
 class SonarBox extends StatefulWidget {
   String title, description, buttonText;
   final Map<String, dynamic> requestData, userData;
   final Image image;
+  
 
   SonarBox(
       {Key key,
@@ -24,6 +28,10 @@ class _SonarBoxState extends State<SonarBox> {
   // Variables
   String playerName;
   List<dynamic> playersList = <dynamic>[];
+   // Storage Parameters
+  ContactList list = new ContactList();
+  LocalStorage storage = new LocalStorage('sonar_app');
+
 
   // Initialize
   @override
@@ -31,6 +39,7 @@ class _SonarBoxState extends State<SonarBox> {
     sonar.addListener(_onSonarDataReceived);
     sonar.sendRequest(widget.userData, widget.requestData);
     super.initState();
+    list = CardUtility.getContactModelList(storage);
   }
 
   // Dispose Dependencies
@@ -66,8 +75,12 @@ class _SonarBoxState extends State<SonarBox> {
       case 202:
         widget.title = message["status"].toString();
         widget.description = message["data"]["message"].toString();
+        ContactModel contact = ContactModel.fromJson(message["data"]["matchData"]);
         // force rebuild
-        setState(() {});
+        setState(() {
+          _saveContact(contact);
+          Navigator.of(context).pop();
+        });
         break;
 
       case 300:
@@ -183,6 +196,12 @@ class _SonarBoxState extends State<SonarBox> {
         //...top circlular image part,
       ],
     );
+  }
+
+  _saveContact(ContactModel m){
+      list.items.add(m);
+      print("Contact Length: " + list.items.length.toString());
+      storage.setItem('contact_items', list.toJSONEncodable());
   }
 }
 

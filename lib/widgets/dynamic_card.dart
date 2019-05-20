@@ -28,7 +28,7 @@ class DynamCard extends StatelessWidget {
             Stack(children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                child: Image.asset('assets/$headerPath',
+                child: Image.asset('$headerPath',
                   height: MediaQuery.of(context).size.height * 0.15,
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment(-offset.abs(), 0),
@@ -45,7 +45,7 @@ class DynamCard extends StatelessWidget {
                             image: new DecorationImage(
                                 fit: BoxFit.fill,
                                 image: CachedNetworkImageProvider(
-                                    profile.profile_picture)))),
+                                    "https://api.adorable.io/avatars/285/abott@adorable.png")))),
                     padding: EdgeInsets.only(top: 10)),
               ),
               // Export Contact
@@ -175,7 +175,7 @@ class DynamCardContent extends StatelessWidget {
       ]),
       Center(
           child: Padding(
-              child: Text(profile.message,
+              child: Text("Sample Message",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontStyle: FontStyle.italic,

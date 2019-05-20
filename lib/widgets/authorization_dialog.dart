@@ -149,16 +149,5 @@ class AuthDialog extends StatelessWidget {
                   ]))));
   }
 
-  _saveContact(ContactModel m){
-      list.items.add(m);
-      print("Contact Length: " + list.items.length.toString());
-      _saveToStorage();
-  }
-
-   _saveToStorage() {
-    storage.setItem('contact_items', list.toJSONEncodable());
-
-    // Call Cloud Function
-    
-  }
+  
 }
