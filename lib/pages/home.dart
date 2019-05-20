@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/pages/profile.dart';
+import 'package:sonar_frontend/sonar/sonar_communication.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
 import 'package:sonar_frontend/widgets/profile_info.dart';
 import 'package:sonar_frontend/sonar/sonar_button.dart';
-import 'package:sonar_frontend/widgets/sonar_match.dart';
 import 'package:sonar_frontend/widgets/sonar_stack.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,6 +12,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    sonar.initialize();
     // 4BBEE3 Zima Blue
     return Scaffold(
         body: Container(
@@ -30,8 +31,7 @@ class HomePage extends StatelessWidget {
                   ProfileInfo(),
                   SonarStack()
                 ],
-              ),
-              SonarMatch()
+              )
             ],
           )),
         ),

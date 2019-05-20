@@ -5,13 +5,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/match_transaction.dart';
 import 'package:sonar_frontend/model/profile_model.dart';
+import 'package:sonar_frontend/sonar/sonar_box.dart';
+import 'package:sonar_frontend/sonar/sonar_communication.dart';
 import 'package:sonar_frontend/utils/location_util.dart';
 import 'package:sonar_frontend/utils/time_util.dart';
-import 'package:sonar_frontend/widgets/sonar_match.dart';
 
 class SonarButton extends StatefulWidget {
-  final SonarMatch sonarMatch;
-  SonarButton({this.sonarMatch});
 
   @override
   _SonarButtonState createState() => _SonarButtonState();
@@ -43,7 +42,24 @@ class _SonarButtonState extends State<SonarButton>
       time.toPrint();
 
       // Request Model
-      var request = MatchTransaction(_profile, location, time);
+      var request = MatchTransaction(_profile, location, time).toJSONEncodable();
+      var data = _profile.toJSONEncodable();
+
+      // Send Request
+      sonar.sendRequest(data, request);
+
+      // Present Sonar Window
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => SonarBox(
+              title: "Success",
+              description:
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              buttonText: "Okay",
+              requestData: request,
+              userData: data,
+            ),
+      );
     } else {
       await PermissionHandler()
           .requestPermissions([PermissionGroup.locationWhenInUse]);
@@ -129,7 +145,7 @@ class _SonarButtonState extends State<SonarButton>
                 child: FloatingActionButton(
                   backgroundColor: _buttonColor.value,
                   onPressed: () {
-                        _pushAndMatchData(context, callback);
+                    _pushAndMatchData(context, callback);
                   },
                   tooltip: 'Request Sonar',
                   child: AnimatedIcon(

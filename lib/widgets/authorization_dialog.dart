@@ -91,7 +91,6 @@ class AuthDialog extends StatelessWidget {
                         RawMaterialButton(
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           onPressed: () {
-                            
                           },
                           child: Text("Cancel"),
                           shape: RoundedRectangleBorder(
@@ -105,7 +104,6 @@ class AuthDialog extends StatelessWidget {
                         // Facebook
                         RawMaterialButton(
                           onPressed: () {
-                            
                           },
                           constraints: BoxConstraints.tight(Size(84, 42)),
                           child: Text("Confirm!"),
@@ -140,7 +138,6 @@ class AuthDialog extends StatelessWidget {
                       child: RawMaterialButton(
                             constraints: BoxConstraints.tight(Size(28, 28)),
                             onPressed: () {
-                              
                             },
                             child: Icon(Icons.close,
                                 color: Colors.red, size: 28),

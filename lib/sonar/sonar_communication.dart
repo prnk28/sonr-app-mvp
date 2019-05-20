@@ -23,12 +23,16 @@ class SonarCommunication {
     ///
     /// Let's initialize the WebSockets communication
     ///
-    sockets.initCommunication();
+    //sockets.initCommunication();
 
     ///
     /// and ask to be notified as soon as a message comes in
     ///
     sockets.addListener(_onMessageReceived);
+  }
+
+  initialize(){
+    sockets.initCommunication();
   }
 
   /// ----------------------------------------------------------
@@ -50,6 +54,7 @@ class SonarCommunication {
       ///
       case 'connect':
         _clientId = message["data"];
+        print(message);
         break;
 
       ///
@@ -58,6 +63,7 @@ class SonarCommunication {
       ///
       default:
         _listeners.forEach((Function callback){
+          print(message);
           callback(message);
         });
         break;
@@ -78,6 +84,18 @@ class SonarCommunication {
     }));
   }
 
+    sendRequest(Map data, Map request){
+    ///
+    /// Send the action to the server
+    /// To send the message, we need to serialize the JSON
+    ///
+    sockets.send(json.encode({
+      "action": "request",
+      "data": data,
+      "request": request
+    }));
+  }
+
   /// ==========================================================
   ///
   /// Listeners to allow the different pages to be notified
@@ -94,5 +112,10 @@ class SonarCommunication {
   }
   removeListener(Function callback){
     _listeners.remove(callback);
+  }
+
+// Closes Communication with Websocket
+  close(){
+    sockets.reset();
   }
 }

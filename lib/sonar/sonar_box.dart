@@ -1,9 +1,22 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
 
 class SonarBox extends StatefulWidget {
-  SonarBox({Key key}) : super(key: key);
+  String title, description, buttonText;
+  final Map<String, dynamic> requestData, userData;
+  final Image image;
+
+  SonarBox(
+      {Key key,
+      this.title,
+      this.description,
+      this.buttonText,
+      this.image,
+      this.requestData,
+      this.userData})
+      : super(key: key);
   _SonarBoxState createState() => _SonarBoxState();
 }
 
@@ -15,8 +28,9 @@ class _SonarBoxState extends State<SonarBox> {
   // Initialize
   @override
   void initState() {
-    super.initState();
     sonar.addListener(_onSonarDataReceived);
+    sonar.sendRequest(widget.userData, widget.requestData);
+    super.initState();
   }
 
   // Dispose Dependencies
@@ -26,7 +40,7 @@ class _SonarBoxState extends State<SonarBox> {
     super.dispose();
   }
 
-   /// -------------------------------------------------------------------
+  /// -------------------------------------------------------------------
   /// This routine handles all messages that are sent by the server.
   /// In this page, only the following 2 actions have to be processed
   ///  - players_list
@@ -36,37 +50,43 @@ class _SonarBoxState extends State<SonarBox> {
     // Update UI based on Status code sent from Server
     switch (message["status"]) {
       case 102:
-        playersList = message["data"];
+        widget.title = message["status"].toString();
+        widget.description = message["data"]["message"].toString();
         // force rebuild
         setState(() {});
         break;
 
       case 200:
-        playersList = message["data"];
+        widget.title = message["status"].toString();
+        widget.description = message["data"]["message"].toString();
         // force rebuild
         setState(() {});
         break;
 
       case 202:
-        playersList = message["data"];
+        widget.title = message["status"].toString();
+        widget.description = message["data"]["message"].toString();
         // force rebuild
         setState(() {});
         break;
 
       case 300:
-        playersList = message["data"];
+        widget.title = message["status"].toString();
+        widget.description = message["data"]["message"].toString();
         // force rebuild
         setState(() {});
         break;
 
       case 404:
-        playersList = message["data"];
+        widget.title = message["status"].toString();
+        widget.description = message["data"]["message"].toString();
         // force rebuild
         setState(() {});
         break;
 
       case 409:
-        playersList = message["data"];
+        widget.title = message["status"].toString();
+        widget.description = message["data"]["message"].toString();
         // force rebuild
         setState(() {});
         break;
@@ -77,116 +97,105 @@ class _SonarBoxState extends State<SonarBox> {
   /// If the user has not yet joined, let the user enter
   /// his/her name and join the list of players
   /// -----------------------------------------------------------
-  Widget _buildJoin() {
-    if (sonar.playerName != "") {
-      return new Container();
-    }
-    return new Container(
-      padding: const EdgeInsets.all(16.0),
-      child: new Column(
-        children: <Widget>[
-          new TextField(
-            controller: _name,
-            keyboardType: TextInputType.text,
-            decoration: new InputDecoration(
-              hintText: 'Enter your name',
-              contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-              border: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(32.0),
-              ),
-              icon: const Icon(Icons.person),
-            ),
-          ),
-          new Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: new RaisedButton(
-              onPressed: _onGameJoin,
-              child: new Text('Join...'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// ------------------------------------------------------
-  /// The user wants to join, so let's send his/her name
-  /// As the user has a name, we may now show the other players
-  /// ------------------------------------------------------
-  _onSonarRequest() {
-    sonar.send('request',);
-	
-    /// Force a rebuild
-    setState(() {});
-  }
-
-  /// ------------------------------------------------------
-  /// Builds the list of players
-  /// ------------------------------------------------------
-  Widget _playersList() {
-    ///
-    /// If the user has not yet joined, do not display
-    /// the list of players
-    ///
-    if (sonar.playerName == "") {
-      return new Container();
-    }
-
-    ///
-    /// Display the list of players.
-    /// For each of them, put a Button that could be used
-    /// to launch a new game
-    ///
-    List<Widget> children = playersList.map((playerInfo) {
-        return new ListTile(
-          title: new Text(playerInfo["name"]),
-          trailing: new RaisedButton(
-            onPressed: (){
-              _onPlayGame(playerInfo["name"], playerInfo["id"]);
-            },
-            child: new Text('Play'),
-          ),
-        );
-      }).toList();
-
-    return new Column(
-      children: children,
-    );
-  }
-
-  /// --------------------------------------------------------------
-  /// We launch a new Game, we need to:
-  ///    * send the action "new_game", together with the ID
-  ///      of the opponent we choosed
-  ///    * redirect to the game board
-  ///      As we are the game initiator, we will play with the "X"
-  /// --------------------------------------------------------------
-  _onPlayGame(String opponentName, String opponentId){
-    // We need to send the opponentId to initiate a new game
-    sonar.send('new_game', opponentId);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return new SafeArea(
-      bottom: false,
-      top: false,
-      child: Scaffold(
-        appBar: new AppBar(
-          title: new Text('TicTacToe'),
-        ),
-        body: SingleChildScrollView(
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Consts.padding),
+      ),
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+      child: dialogContent(context),
+    );
+  }
+
+  dialogContent(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(
+            top: Consts.avatarRadius + Consts.padding,
+            bottom: Consts.padding,
+            left: Consts.padding,
+            right: Consts.padding,
+          ),
+          margin: EdgeInsets.only(top: Consts.avatarRadius),
+          decoration: new BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(Consts.padding),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10.0,
+                offset: const Offset(0.0, 10.0),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // To make the card compact
             children: <Widget>[
-              _buildJoin(),
-              new Text('List of players:'),
-              _playersList(),
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                widget.description,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              SizedBox(height: 24.0),
+              Align(
+                  alignment: Alignment.bottomRight,
+                  child: Row(children: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        sonar.sendRequest(widget.userData, widget.requestData);
+                        //Navigator.of(context).pop(); // To close the dialog
+                      },
+                      child: Text("Request"),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        sonar.sendRequest(widget.userData, widget.requestData);
+                        //Navigator.of(context).pop(); // To close the dialog
+                      },
+                      child: Text("Approve"),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        sonar.sendRequest(widget.userData, widget.requestData);
+                        //Navigator.of(context).pop(); // To close the dialog
+                      },
+                      child: Text("Decline"),
+                    )
+                  ])),
             ],
           ),
         ),
-      ),
+        Positioned(
+          left: Consts.padding,
+          right: Consts.padding,
+          child: CircleAvatar(
+            backgroundColor: Colors.blueAccent,
+            radius: Consts.avatarRadius,
+          ),
+        ),
+        //...top circlular image part,
+      ],
     );
   }
 }
+
+class Consts {
+  Consts._();
+
+  static const double padding = 16.0;
+  static const double avatarRadius = 66.0;
 }

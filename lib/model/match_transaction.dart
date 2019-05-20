@@ -19,17 +19,14 @@ class MatchTransaction {
   // Generation Method
   toJSONEncodable() {
     // Create Map
-    var map = {
-      'id': id,
+    var requestMap = {
       'created': time.toJSONEncodable(),
       'metadata' : location.toJSONEncodable(),
       'latitude' : location.latitude,
       'longitude' : location.longitude,
-      'userData' : userData.toJSONEncodable(),
-      'message' : _generateMessage()
     };
 
-    return map;
+    return requestMap;
   }
 
   // Create Message
