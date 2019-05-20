@@ -156,21 +156,14 @@ class _SonarBoxState extends State<SonarBox> {
                   child: Row(children: <Widget>[
                     FlatButton(
                       onPressed: () {
-                        sonar.sendRequest(widget.userData, widget.requestData);
-                        //Navigator.of(context).pop(); // To close the dialog
-                      },
-                      child: Text("Request"),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        sonar.sendRequest(widget.userData, widget.requestData);
+                        sonar.sendApprove();
                         //Navigator.of(context).pop(); // To close the dialog
                       },
                       child: Text("Approve"),
                     ),
                     FlatButton(
                       onPressed: () {
-                        sonar.sendRequest(widget.userData, widget.requestData);
+                        sonar.sendDecline();
                         //Navigator.of(context).pop(); // To close the dialog
                       },
                       child: Text("Decline"),

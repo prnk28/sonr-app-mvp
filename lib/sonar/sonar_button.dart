@@ -45,9 +45,6 @@ class _SonarButtonState extends State<SonarButton>
       var request = MatchTransaction(_profile, location, time).toJSONEncodable();
       var data = _profile.toJSONEncodable();
 
-      // Send Request
-      sonar.sendRequest(data, request);
-
       // Present Sonar Window
       showDialog(
         context: context,

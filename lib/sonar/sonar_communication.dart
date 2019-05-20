@@ -96,6 +96,26 @@ class SonarCommunication {
     }));
   }
 
+  sendApprove(){
+    ///
+    /// Send the action to the server
+    /// To send the message, we need to serialize the JSON
+    ///
+    sockets.send(json.encode({
+      "action": "approve",
+    }));
+  }
+
+  sendDecline(){
+    ///
+    /// Send the action to the server
+    /// To send the message, we need to serialize the JSON
+    ///
+    sockets.send(json.encode({
+      "action": "decline",
+    }));
+  }
+
   /// ==========================================================
   ///
   /// Listeners to allow the different pages to be notified
