@@ -2,29 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:sonar_frontend/pages/home.dart';
 
-// One simple action: Increment
-enum Actions { UpdateDocument, AuthorizeYes, AuthorizeNo, DeleteDocument }
-
-// The reducer, which takes the previous count and increments it in response
-// to an Increment action.
-DocumentCallback updateDocument(DocumentCallback document, dynamic newDocument) {
-  DocumentCallback doc = new DocumentCallback(newDocument.id, newDocument.status);
-  return document = doc;
-}
-
 class Sonar extends StatelessWidget {
-  final Store<DocumentCallback> store;
-  const Sonar({Key key, this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<DocumentCallback>(
-        store: store,
-        child: MaterialApp(
+    return MaterialApp(
           title: 'Sonar',
           theme: ThemeData(
             primarySwatch: Colors.blue,
@@ -33,19 +17,11 @@ class Sonar extends StatelessWidget {
           routes: <String, WidgetBuilder>{
             '/': (context) => HomePage(),
           },
-        ));
+        );
   }
 }
 
 void main() {
-Store<DocumentCallback> store = new Store<DocumentCallback>(updateDocument, initialState: DocumentCallback("null", 0));
   // Run App
-  runApp(Sonar(store: store));
-}
-
-class DocumentCallback{
-  final String id;
-  final int status;
-
-  DocumentCallback(this.id, this.status);
+  runApp(Sonar());
 }

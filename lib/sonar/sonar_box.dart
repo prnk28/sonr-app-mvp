@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
 import 'package:sonar_frontend/utils/card_util.dart';
@@ -29,7 +28,6 @@ class _SonarBoxState extends State<SonarBox> {
   List<dynamic> playersList = <dynamic>[];
    // Storage Parameters
   ContactList list = new ContactList();
-  LocalStorage storage = new LocalStorage('sonar_app');
 
 
   // Initialize
@@ -38,7 +36,7 @@ class _SonarBoxState extends State<SonarBox> {
     sonar.addListener(_onSonarDataReceived);
     sonar.sendRequest(widget.userData, widget.requestData);
     super.initState();
-    list = CardUtility.getContactModelList(storage);
+    list = CardUtility.getContactModelList(null);
   }
 
   // Dispose Dependencies
@@ -74,10 +72,8 @@ class _SonarBoxState extends State<SonarBox> {
       case 202:
         widget.title = message["status"].toString();
         widget.description = message["data"]["message"].toString();
-        ContactModel contact = ContactModel.fromJson(message["data"]["matchData"]);
         // force rebuild
         setState(() {
-          _saveContact(contact);
           Navigator.of(context).pop();
         });
         break;
@@ -195,12 +191,6 @@ class _SonarBoxState extends State<SonarBox> {
         //...top circlular image part,
       ],
     );
-  }
-
-  _saveContact(ContactModel m){
-      list.items.add(m);
-      print("Contact Length: " + list.items.length.toString());
-      storage.setItem('contact_items', list.toJSONEncodable());
   }
 }
 

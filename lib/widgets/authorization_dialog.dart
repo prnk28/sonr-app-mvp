@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/main.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 
 class AuthDialog extends StatelessWidget {
   // Storage Parameters
   ContactList list = new ContactList();
-  LocalStorage storage = new LocalStorage('sonar_app');
 
   // Server Parameters
   final DocumentCallback document;
