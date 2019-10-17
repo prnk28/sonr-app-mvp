@@ -6,6 +6,8 @@
 	<string>I need it </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Because</string>
+	<key>NSContactsUsageDescription</key>  
+<string>This app requires contacts access to function properly.</string>  
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
