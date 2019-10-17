@@ -22,6 +22,7 @@ dependencies:
   localstorage: ^1.2.0
   flutter_spinkit: "^3.1.0"
   path_provider: ^0.5.0+1
+  flare_flutter: ^1.5.0
   fluro: "^1.4.0"
   contacts_service: ^0.2.5
   unicorndial: "^1.1.5"
@@ -53,6 +54,7 @@ flutter:
 
 # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/animations/
     - assets/images/
     - assets/images/social/
     - assets/images/headers/
