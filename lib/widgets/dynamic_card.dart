@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sonar_frontend/utils/card_util.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sonar_frontend/utils/content_builder.dart';
@@ -44,7 +43,7 @@ class DynamCard extends StatelessWidget {
                             shape: BoxShape.circle,
                             image: new DecorationImage(
                                 fit: BoxFit.fill,
-                                image: CachedNetworkImageProvider(
+                                image: NetworkImage(
                                     "https://api.adorable.io/avatars/285/abott@adorable.png")))),
                     padding: EdgeInsets.only(top: 10)),
               ),

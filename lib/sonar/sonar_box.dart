@@ -5,7 +5,6 @@ import 'package:localstorage/localstorage.dart';
 import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
 import 'package:sonar_frontend/utils/card_util.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 class SonarBox extends StatefulWidget {
   String title, description, buttonText;
@@ -125,10 +124,6 @@ class _SonarBoxState extends State<SonarBox> {
   dialogContent(BuildContext context) {
     return Stack(
       children: <Widget>[
-        FlareActor("assets/animations/Success.flr",
-color: Colors.white,
-fit: BoxFit.contain,
-alignment: Alignment.center),
         Container(
           padding: EdgeInsets.only(
             top: Consts.avatarRadius + Consts.padding,

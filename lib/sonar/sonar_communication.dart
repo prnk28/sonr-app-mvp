@@ -76,7 +76,7 @@ class SonarCommunication {
   send(String action, Map data){
     ///
     /// Send the action to the server
-    /// To send the message, we need to serialize the JSON 
+    /// To send the message, we need to serialize the JSON
     ///
     sockets.send(json.encode({
       "action": action,
