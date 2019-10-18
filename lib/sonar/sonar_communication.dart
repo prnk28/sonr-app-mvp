@@ -53,7 +53,7 @@ class SonarCommunication {
       /// Let's record it
       ///
       case 'connect':
-        _clientId = message["data"];
+        _clientId = message["data"]["id"];
         print(message);
         break;
 
