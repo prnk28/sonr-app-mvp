@@ -1,56 +1,78 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key key}) : super(key: key);
+class HomePageState extends State {
+  @override
+  void initState() {
+    super.initState();
+    // Geolocater Initialization
+    var geolocator = Geolocator();
+    var locationOptions =
+        LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
-  var geolocator = Geolocator();
-  var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    // Setup Location Stream
+    StreamSubscription<Position> positionStream = geolocator
+        .getPositionStream(locationOptions)
+        .listen((Position position) {
+      print(position == null
+          ? 'Unknown'
+          : position.latitude.toString() +
+              ', ' +
+              position.longitude.toString() +
+              ', ' +
+              position.heading.toString());
+    });
+
+    // Connect to Sonar-WS
+    sonar.initialize();
+  }
 
   @override
   Widget build(BuildContext context) {
-    sonar.initialize();
+    print("build");
     // 4BBEE3 Zima Blue
     return Scaffold(
-        body: Container(
+      body: Container(
           // Add box decoration
           decoration: BoxDecoration(
             // Box decoration takes a gradient
             gradient: getRandomGradient(),
           ),
-          child: Center(
-              child: Stack(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: Padding(
-                      child: Text("Welcome to Sonar, move to either receiving or sending position.",
-                                  style: TextStyle(color: Colors.white70, fontSize: 26)),
-                      padding: EdgeInsets.only(top: 180, left: 30)
-                    )
-                  )
-                ],
-              )
+              Container(
+                  child: Padding(
+                      child: Text(
+                          "Welcome to Sonar, move to either receiving or sending position.",
+                          style:
+                              TextStyle(color: Colors.white70, fontSize: 26)),
+                      padding: EdgeInsets.only(top: 180, left: 30))),
             ],
           )),
+      appBar: AppBar(
+        title: Text("Sonar"),
+        backgroundColor: getInitialColor(),
+        elevation: 0,
+        leading: MaterialButton(
+          child: Icon(Icons.location_on),
+          onPressed: () {
+            PermissionHandler()
+                .requestPermissions([PermissionGroup.locationWhenInUse]);
+          },
         ),
-        appBar: AppBar(
-          title: Text("Sonar"),
-          backgroundColor: getInitialColor(),
-          elevation: 0,
-          leading: MaterialButton(
-            child: Icon(Icons.location_on),
-            onPressed: (){
-              
-            },
-          ),
-        ),
-      );
+      ),
+    );
   }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  HomePageState createState() => new HomePageState();
 }
