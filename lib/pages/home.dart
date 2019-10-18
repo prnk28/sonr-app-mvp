@@ -24,6 +24,13 @@ class HomePage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
+                  Container(
+                    child: Padding(
+                      child: Text("Welcome to Sonar, move to either receiving or sending position.",
+                                  style: TextStyle(color: Colors.white70, fontSize: 26)),
+                      padding: EdgeInsets.only(top: 180, left: 30)
+                    )
+                  )
                 ],
               )
             ],
@@ -33,23 +40,6 @@ class HomePage extends StatelessWidget {
           title: Text("Sonar"),
           backgroundColor: getInitialColor(),
           elevation: 0,
-          leading: Builder(builder: (context) {
-            return IconButton(
-              icon: Icon(Icons.menu, color: Colors.white),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          }),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search, color: Colors.white),
-              onPressed: () {
-                PermissionHandler()
-                    .requestPermissions([PermissionGroup.locationWhenInUse]);
-              },
-            ),
-          ],
         ),
       );
   }
