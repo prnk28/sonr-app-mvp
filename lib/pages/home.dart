@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
 import 'package:sonar_frontend/utils/color_builder.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key key}) : super(key: key);
+
+  var geolocator = Geolocator();
+  var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,12 @@ class HomePage extends StatelessWidget {
           title: Text("Sonar"),
           backgroundColor: getInitialColor(),
           elevation: 0,
+          leading: MaterialButton(
+            child: Icon(Icons.location_on),
+            onPressed: (){
+              
+            },
+          ),
         ),
       );
   }
