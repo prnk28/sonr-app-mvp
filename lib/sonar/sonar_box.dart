@@ -1,9 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sonar_frontend/model/contact_model.dart';
 import 'package:sonar_frontend/sonar/sonar_communication.dart';
-import 'package:sonar_frontend/utils/card_util.dart';
 
 class SonarBox extends StatefulWidget {
   String title, description, buttonText;
@@ -27,7 +24,6 @@ class _SonarBoxState extends State<SonarBox> {
   String playerName;
   List<dynamic> playersList = <dynamic>[];
    // Storage Parameters
-  ContactList list = new ContactList();
 
 
   // Initialize
@@ -36,7 +32,7 @@ class _SonarBoxState extends State<SonarBox> {
     sonar.addListener(_onSonarDataReceived);
     sonar.sendRequest(widget.userData, widget.requestData);
     super.initState();
-    list = CardUtility.getContactModelList(null);
+//    list = CardUtility.getContactModelList(null);
   }
 
   // Dispose Dependencies

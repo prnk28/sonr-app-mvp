@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^0.5.0+1
   intl: ^0.15.8
   geolocator: ^3.0.0
+  flutter_compass: ^0.3.3
   permission_handler:
   rflutter_alert: ^1.0.2
   uuid: 2.0.0

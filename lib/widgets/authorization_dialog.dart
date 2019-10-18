@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:sonar_frontend/main.dart';
-import 'package:sonar_frontend/model/contact_model.dart';
 
-class AuthDialog extends StatelessWidget {
-  // Storage Parameters
-  ContactList list = new ContactList();
+class AuthDialog extends StatefulWidget {
 
   // Server Parameters
-  final DocumentCallback document;
+
+  AuthDialog({Key key}) : super(key: key);
+
+  @override
+  _AuthDialogState createState() => _AuthDialogState();
+}
+
+class _AuthDialogState extends State<AuthDialog> {
   int userPosition = 0;
-  AuthDialog({Key key, this.document}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +148,4 @@ class AuthDialog extends StatelessWidget {
                           ))),
                   ]))));
   }
-
-  
 }
