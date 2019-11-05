@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sonar_frontend/sonar/sonar_communication.dart';
+import 'package:sonar_frontend/websockets/client_ws.dart';
 
 class SonarBox extends StatefulWidget {
   String title, description, buttonText;
@@ -31,6 +31,7 @@ class _SonarBoxState extends State<SonarBox> {
   void initState() {
     sonar.addListener(_onSonarDataReceived);
     sonar.sendRequest(widget.userData, widget.requestData);
+    sonar
     super.initState();
 //    list = CardUtility.getContactModelList(null);
   }

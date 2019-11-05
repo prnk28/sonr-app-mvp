@@ -1,7 +1,11 @@
+// Remote Packages
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sonar_frontend/utils/content_builder.dart';
 import 'dart:math' as math;
+
+// Local Classes
+import '../model/contact_model.dart';
 
 class DynamCard extends StatelessWidget {
   final ContactModel profile;
