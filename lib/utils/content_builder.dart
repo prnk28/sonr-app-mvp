@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonar_frontend/model/contact_model.dart';
 
 enum NamePart { FirstName, LastName }
 

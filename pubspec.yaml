@@ -1,77 +1,69 @@
+# ** ------------------ **
+# **    PROJECT INFO    **
+# ** ------------------ **
+# -- Basic --
 name: sonar_frontend
-description: A new Flutter project.
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# Read more about versioning at semver.org.
+description: The dead simple way to connect with people and transfer files.
 version: 1.0.0+1
 
+# -- Flutter Settings --
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
+# ** ------------------ **
+# **    DEPENDENCIES    **
+# ** ------------------ **
 dependencies:
+  # ** --- SDK -- **
   flutter:
     sdk: flutter
-  flutter_redux: ^0.5.3
-  web_socket_channel: "^1.0.8"
-  flutter_spinkit: "^3.1.0"
-  path_provider: ^0.5.0+1
-  intl: ^0.15.8
-  geolocator: ^3.0.0
+
+  # ** - User Defined - **
+  # -- BLoC --
+  bloc: ^2.0.0
+  equatable: ^0.6.1
+  flutter_bloc: ^2.0.0
+
+  # -- Device --
   flutter_compass: ^0.3.3
+  geolocator: ^3.0.0
   permission_handler:
-  rflutter_alert: ^1.0.2
   uuid: 2.0.0
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  # -- Extension --
+  path_provider: ^0.5.0+1
+  intl: ^0.15.8
 
+  # -- Network --
+  web_socket_channel: "^1.0.8"
+
+  # -- UI/UX --
+  flutter_spinkit: "^3.1.0"
+  rflutter_alert: ^1.0.2
+
+# ** -- TEST -- **
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 
-# For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
-# The following section is specific to Flutter.
+# ** ------------------ **
+# **   FLUTTER BUILD    **
+# ** ------------------ **
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
+# -- Theme/Colors --
   uses-material-design: true
 
-# To add assets to your application, add an assets section, like this:
+# -- Media --
   assets:
     - assets/animations/
     - assets/images/
     - assets/images/social/
     - assets/images/headers/
-  #  - assets/images/facebook-64.png
-  #  - assets/images/instagram-64.png
-  #  - assets/images/snapchat-64.png
-  #  - assets/images/twitter-64.png
 
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.io/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
+# -- Fonts --
   fonts:
     - family: Boxicons
       fonts:
         - asset: assets/fonts/boxicons.ttf
           weight: 400
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.io/custom-fonts/#from-packages

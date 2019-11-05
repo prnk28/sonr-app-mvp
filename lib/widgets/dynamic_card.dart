@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sonar_frontend/model/contact_model.dart';
-import 'package:sonar_frontend/utils/card_util.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sonar_frontend/utils/content_builder.dart';
 import 'dart:math' as math;
