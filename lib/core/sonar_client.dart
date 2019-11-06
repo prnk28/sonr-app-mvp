@@ -5,11 +5,19 @@ import '../utils/time_util.dart';
 
 SonarClient sonar = new SonarClient();
 
+enum SonarState { ZERO, SEND, SEND_SEARCH, RECEIVE, RECEIVE_SEARCH }
+
+
+
 class SonarClient {
-  // Variables
+  // Properties
   WSClient ws;
   LocationUtility location;
   TimeUtility time;
+
+  // Variables
+  String _websocketsID;
+  SonarState _currentState;
 
   // Initialize
   SonarClient() {
@@ -21,15 +29,20 @@ class SonarClient {
     time = new TimeUtility();
   }
 
-  // WebSockets Info
-  String websocketsID;
-
   // Getter/Setter Variables
   String get wsID {
-    return websocketsID;
+    return _websocketsID;
   }
 
   set wsID(String clientWsID) {
-    websocketsID = clientWsID;
+    _websocketsID = clientWsID;
+  }
+
+  SonarState get wsStatus {
+    return _currentState;
+  }
+
+  set wsStatus(SonarState clientWsStatus) {
+    _currentState = clientWsStatus;
   }
 }

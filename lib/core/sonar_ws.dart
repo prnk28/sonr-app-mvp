@@ -45,12 +45,10 @@ class WSClient {
   msgCancel() {}
 
   msgJoin(
-      ProfileModel profile, DirectionModel direction, LocationModel location) {
+      ProfileModel profile) {
     // Setup Data Map
     var data = {
       'profile': profile.toJSON(),
-      'direction': profile.toJSON(),
-      'location': profile.toJSON(),
     };
 
     // Action: JOIN To Server
@@ -105,6 +103,7 @@ class WSClient {
       // ** CODE: 1, EVENT: Join Lobby
       case 1:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.ZERO;
         print(message);
         break;
 
@@ -112,6 +111,7 @@ class WSClient {
       // ** CODE: 2, EVENT: Create Lobby
       case 2:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.ZERO;
         print(message);
         break;
 

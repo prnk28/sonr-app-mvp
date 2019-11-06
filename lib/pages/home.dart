@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sensors/sensors.dart';
 import 'dart:math' as Math;
 
 // Local Classes
+import '../model/location_model.dart';
+import '../model/profile_model.dart';
 import '../widgets/placeholder_widget.dart';
 import '../core/sonar_client.dart';
 import '../model/direction_model.dart';
@@ -85,8 +88,10 @@ class HomePageState extends State {
         leading: MaterialButton(
           child: Icon(Icons.location_on),
           onPressed: () {
-            PermissionHandler()
-                .requestPermissions([PermissionGroup.locationWhenInUse]);
+            // Join Lobby
+            ProfileModel profile =
+                new ProfileModel("firstName", "lastName", "profilePicture");
+            sonar.ws.msgJoin(profile);
           },
         ),
       ),
@@ -141,9 +146,20 @@ class PositionListItemState extends State<PositionListItem> {
   final Position _position;
   String _address = '';
 
+  List<double> _gyroscopeValues;
+  List<StreamSubscription<dynamic>> _streamSubscriptions =
+      <StreamSubscription<dynamic>>[];
+
   @override
   void initState() {
     super.initState();
+
+    // Gyroscope
+    _streamSubscriptions.add(gyroscopeEvents.listen((GyroscopeEvent event) {
+      setState(() {
+        _gyroscopeValues = <double>[event.x, event.y, event.z];
+      });
+    }));
 
     // Use Compass
     FlutterCompass.events.listen((double direction) {
@@ -160,6 +176,9 @@ class PositionListItemState extends State<PositionListItem> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> gyroscope =
+        _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
+
     final Row row = Row(
       children: <Widget>[
         Column(
@@ -183,33 +202,34 @@ class PositionListItemState extends State<PositionListItem> {
                 style: const TextStyle(fontSize: 16.0, color: Colors.black),
               ),
               StreamBuilder<double>(
-      stream: FlutterCompass.events,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error reading heading: ${snapshot.error}');
-        }
+                stream: FlutterCompass.events,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error reading heading: ${snapshot.error}');
+                  }
 
-        if (!snapshot.hasData) {
-          return Center(
-            child: Container(
-              width: 32,
-              height: 32,
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Container(
+                        width: 32,
+                        height: 32,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
 
-        double direction = snapshot.data;
+                  double direction = snapshot.data;
 
-        return Container(
-          alignment: Alignment.center,
-          child: Transform.rotate(
-            angle: ((direction ?? 0) * (Math.pi / 180) * -1),
-            child: Icon(Icons.arrow_upward),
-          ),
-        );
-      },
-    )
+                  return Container(
+                    alignment: Alignment.center,
+                    child: Transform.rotate(
+                      angle: ((direction ?? 0) * (Math.pi / 180) * -1),
+                      child: Icon(Icons.arrow_upward),
+                    ),
+                  );
+                },
+              ),
+              Text('Gyroscope: $gyroscope'),
             ]),
         Expanded(
           child: Column(
@@ -246,7 +266,7 @@ class PositionListItemState extends State<PositionListItem> {
     });
   }
 
-    _generateAddressString(Placemark placemark) {
+  _generateAddressString(Placemark placemark) {
     final String name = placemark.name ?? '';
     final String city = placemark.locality ?? '';
     final String state = placemark.administrativeArea ?? '';
