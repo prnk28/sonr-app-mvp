@@ -189,29 +189,27 @@ class PositionListItemState extends State<PositionListItem> {
     final List<String> gyroscope =
         _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
 
-    // TODO: Detect Receiving Position
-    if (_accelerometerValues[0] > 1 || _accelerometerValues[0] < -1) {
-      // Get Initial Values
-      var initialAntiPodal = directionModel.antipodalDegrees;
-
-      // Check Timer
-      _timer = new Timer(const Duration(milliseconds: 800), () {
-          var diff = _direction - initialAntiPodal;
-          if (diff.abs() >= 120) {
-            setState(() {
-              sonar.wsStatus = SonarState.RECEIVE;
-            });
-          }
+    // If Device is Landscape its Receiving
+    if (_accelerometerValues[0] > 7.5 || _accelerometerValues[0] < -7.5) {
+      setState(() {
+        // Set Client Status
+        sonar.wsStatus = SonarState.RECEIVE;
       });
     } else {
-// Detect Position for Zero and Send
+    // Detect Position for Zero and Send
       if (_accelerometerValues[1] > 4.1) {
         setState(() {
+          // Set Client Status
           sonar.wsStatus = SonarState.ZERO;
+
+          
         });
       } else {
         setState(() {
+          // Set Client Status
           sonar.wsStatus = SonarState.SEND;
+
+
         });
       }
     }

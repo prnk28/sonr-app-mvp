@@ -7,8 +7,6 @@ SonarClient sonar = new SonarClient();
 
 enum SonarState { ZERO, SEND, SEND_SEARCH, RECEIVE, RECEIVE_SEARCH }
 
-
-
 class SonarClient {
   // Properties
   WSClient ws;
@@ -43,6 +41,7 @@ class SonarClient {
   }
 
   set wsStatus(SonarState clientWsStatus) {
+    // Set New State
     _currentState = clientWsStatus;
   }
 }
