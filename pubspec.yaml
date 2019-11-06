@@ -1,6 +1,6 @@
-# ** ------------------ **
+# ** ================== **
 # **    PROJECT INFO    **
-# ** ------------------ **
+# ** ================== **
 # -- Basic --
 name: sonar_frontend
 description: The dead simple way to connect with people and transfer files.
@@ -10,9 +10,9 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
-# ** ------------------ **
+# ** ================== **
 # **    DEPENDENCIES    **
-# ** ------------------ **
+# ** ================== **
 dependencies:
   # ** --- SDK -- **
   flutter:
@@ -47,9 +47,9 @@ dev_dependencies:
     sdk: flutter
 
 
-# ** ------------------ **
+# ** ================== **
 # **   FLUTTER BUILD    **
-# ** ------------------ **
+# ** ================== **
 flutter:
 # -- Theme/Colors --
   uses-material-design: true

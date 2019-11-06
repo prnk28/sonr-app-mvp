@@ -1,26 +1,48 @@
+// Remote Packages
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_compass/flutter_compass.dart';
+
+// Local Classes
+import '../model/location_model.dart';
+import '../model/direction_model.dart';
 
 class LocationUtility {
-  // Get Location Data
-  static createLocationData() async {
+  // Get Direction Data
+  currentDirection() async {
+    var lastDirection = await FlutterCompass.events.last;
+    return lastDirection;
+  }
+
+  // Get Direction Model
+  currentDirectionModel() async {
     // Get Data
-    Position p = await currentPosition();
+    double dir = await currentDirection();
+
+    // Create Object
+    return DirectionModel(dir);
+  }
+
+  // Get Location Data
+  currentLocation() async {
+    var p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return p;
+  }
+
+  // Get Location Model
+  currentLocationModel() async {
+    // Get Data
+    Position p = await currentLocation();
     Placemark m = await placemarkFromPosition(p);
 
     // Create Object
-   return LocationData.fromData(p, m);
-  }
-
-  // Get Positional Data
-  static currentPosition() async {
-      var p = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      return p;
+    return LocationModel(p, m);
   }
 
   // Generate PlaceMark from Given Position
-  static placemarkFromPosition(Position p) async {
-    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(p.latitude, p.longitude);
+  placemarkFromPosition(Position p) async {
+    List<Placemark> placemarks =
+        await Geolocator().placemarkFromCoordinates(p.latitude, p.longitude);
     // Check Placemark Validity
     if (placemarks != null && placemarks.isNotEmpty) {
       var m = placemarks[0];
@@ -29,85 +51,12 @@ class LocationUtility {
   }
 
   // Check Location Permissions
-  static activeLocationPermission() async {
+  checkLocationPermission() async {
     if (await Geolocator().checkGeolocationPermissionStatus() ==
         GeolocationStatus.granted) {
-          return true;
-    }else{
+      return true;
+    } else {
       return false;
     }
-  }
-}
-
-class LocationData {
-  // POSITIONAL DATA
-  // ===============
-  double accuracy;
-  double altitude;
-  double direction; // Known as Heading
-  double latitude;
-  double longitude;
-
-  // PLACEMARK DATA
-  // ==============
-  String city; // Known as Sub-Admin
-  String country;
-  String locality;
-  String neighborhood; // Known as Sub-Locality
-  String state; // Known as Admin
-  String street; // Known as Name
-
-  // Constructor (11 Parameters)
-  LocationData({this.accuracy, this.altitude, this.direction,
-  this.latitude, this.longitude, this.city, this.country,
-  this.locality, this.neighborhood, this.state, this.street});
-
-  // Create Location Data Object
-  factory LocationData.fromData(Position pos, Placemark mrk) {
-    // Location Object
-    return LocationData(
-      accuracy: pos.accuracy,
-      altitude: pos.altitude,
-      direction: pos.heading,
-      latitude: pos.latitude,
-      longitude: pos.longitude,
-      city: mrk.subAdministrativeArea,
-      country: mrk.country,
-      locality: mrk.locality,
-      neighborhood: mrk.subAdministrativeArea,
-      state: mrk.administrativeArea,
-      street: mrk.locality,
-    );
-  }
-
-  // Convert Object to Encodable (11 Parameters)
-  toJSONEncodable() {
-    var map = {
-      // Position
-      'accuracy': accuracy,
-      'altitude': altitude,
-      'direction' : direction,
-      'latitude': latitude,
-      'longitude' : longitude,
-
-      // Placemark
-      'city' : city,
-      'country': country,
-      'locality': locality,
-      'neighborhood' : neighborhood,
-      'state': state,
-      'street' : street,
-    };
-    return map;
-  }
-
-  // Display Object
-  toPrint() {
-    var locMap = this.toJSONEncodable();
-    locMap.forEach((k,v) {
-      var ks = k.toString();
-      var vs = v.toString();
-      print("LOCATION DATA = " + ks + " : " + vs);
-    });
   }
 }

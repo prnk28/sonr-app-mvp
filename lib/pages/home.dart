@@ -1,12 +1,16 @@
+// Remote Packages
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonar_frontend/sonar/sonar_communication.dart';
-import 'package:sonar_frontend/utils/color_builder.dart';
 import 'dart:math' as Math;
+
+// Local Classes
 import '../widgets/placeholder_widget.dart';
+import '../core/sonar_client.dart';
+import '../model/direction_model.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,8 +22,9 @@ class HomePageState extends State {
   void initState() {
     super.initState();
 
-    // Connect to Sonar-WS
-    sonar.initialize();
+
+    // JOIN Server
+    //sonar.ws.msgJoin();
   }
 
   StreamSubscription<Position> _positionStreamSubscription;
@@ -76,7 +81,7 @@ class HomePageState extends State {
           }),
       appBar: AppBar(
         title: Text("Sonar"),
-        backgroundColor: getInitialColor(),
+        backgroundColor: Colors.white,
         elevation: 0,
         leading: MaterialButton(
           child: Icon(Icons.location_on),
@@ -144,7 +149,12 @@ class PositionListItemState extends State<PositionListItem> {
     // Use Compass
     FlutterCompass.events.listen((double direction) {
       setState(() {
+        // Set New Direction
         _direction = direction;
+
+        // Create Model
+        DirectionModel model = new DirectionModel(_direction);
+        log(model.toJSON());
       });
     });
   }
@@ -229,7 +239,7 @@ class PositionListItemState extends State<PositionListItem> {
         .placemarkFromCoordinates(_position.latitude, _position.longitude);
 
     if (placemarks != null && placemarks.isNotEmpty) {
-      address = _buildAddressString(placemarks.first);
+      address = _generateAddressString(placemarks.first);
     }
 
     setState(() {
@@ -237,7 +247,7 @@ class PositionListItemState extends State<PositionListItem> {
     });
   }
 
-  static String _buildAddressString(Placemark placemark) {
+    _generateAddressString(Placemark placemark) {
     final String name = placemark.name ?? '';
     final String city = placemark.locality ?? '';
     final String state = placemark.administrativeArea ?? '';

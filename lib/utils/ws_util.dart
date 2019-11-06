@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -50,12 +52,13 @@ class WebSocketsNotifications {
     ///
     try {
       _channel = new IOWebSocketChannel.connect(_SERVER_ADDRESS);
-
+      log("Connected to Server");
       ///
       /// Start listening to new notifications / messages
       ///
       _channel.stream.listen(_onReceptionOfMessageFromServer);
     } catch(e){
+      log("Error Has Occurred");
       ///
       /// General error handling
       /// TODO

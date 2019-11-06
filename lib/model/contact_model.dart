@@ -39,7 +39,7 @@ class ContactModel {
   }
 
   // JSON Encoder
-   toJSONEncodable() {
+   toJSON() {
     Map<String, dynamic> m = new Map();
 
     m['name'] = name;

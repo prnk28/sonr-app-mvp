@@ -31,7 +31,7 @@ class _SonarBoxState extends State<SonarBox> {
   void initState() {
     sonar.addListener(_onSonarDataReceived);
     sonar.sendRequest(widget.userData, widget.requestData);
-    sonar
+    
     super.initState();
 //    list = CardUtility.getContactModelList(null);
   }

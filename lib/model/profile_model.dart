@@ -1,19 +1,19 @@
-import 'package:sonar_frontend/utils/location_util.dart';
-
 class ProfileModel {
-  // Paramaters
-  final LocationData location;
+  // Initial Data
+  final String firstName;
+  final String lastName;
+  final String profilePicture;
 
   // Constructor
-  ProfileModel(this.location);
+  ProfileModel(this.firstName, this.lastName, this.profilePicture);
 
   // TODO: sonar_id "Add MongoDB reference ID to be able to modify/reference user details"
   // Generation Method
-  toJSONEncodable() {
+  toJSON() {
     return {
-      'first_name' : location.toJSONEncodable(),
-      'last_name' : location.latitude,
-      'profile_picture' : location.longitude,
+      'first_name' : firstName,
+      'last_name' : lastName,
+      'profile_picture' : profilePicture,
     };
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class DirectionModel {
   // Initial Variables
   final double degrees;
@@ -36,11 +38,11 @@ class DirectionModel {
       "NNW"
     ];
     this.compassDesignation = compassArray[(compassValue % 16)];
-    print(this.compassDesignation);
+    log(this.compassDesignation);
   }
 
   // JSON Generation
-  toJSONEncodable() {
+  toJSON() {
     return {
       'antipodal_degrees': antipodalDegrees.toString(),
       'compass_designation': compassDesignation,
