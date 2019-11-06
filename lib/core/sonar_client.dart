@@ -15,7 +15,6 @@ class SonarClient {
   SonarClient() {
     // WS Setup
     ws = new WSClient();
-    ws.initialize();
 
     // Utilities Setup
     location = new LocationUtility();

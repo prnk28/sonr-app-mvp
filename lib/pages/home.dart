@@ -22,9 +22,8 @@ class HomePageState extends State {
   void initState() {
     super.initState();
 
-
-    // JOIN Server
-    //sonar.ws.msgJoin();
+    // Connect to Server
+    sonar.ws.initialize();
   }
 
   StreamSubscription<Position> _positionStreamSubscription;

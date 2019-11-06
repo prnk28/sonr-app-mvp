@@ -28,11 +28,12 @@ dependencies:
   flutter_compass: ^0.3.3
   geolocator: ^3.0.0
   permission_handler:
+  sensors: ^0.4.1+1
   uuid: 2.0.0
 
   # -- Extension --
-  path_provider: ^0.5.0+1
   intl: ^0.15.8
+  path_provider: ^0.5.0+1
 
   # -- Network --
   web_socket_channel: "^1.0.8"
