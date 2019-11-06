@@ -142,10 +142,11 @@ class PositionListItem extends StatefulWidget {
 class PositionListItemState extends State<PositionListItem> {
   PositionListItemState(this._position);
   double _direction;
-
+  Timer _timer;
+  DirectionModel directionModel;
   final Position _position;
   String _address = '';
-
+  List<double> _accelerometerValues;
   List<double> _gyroscopeValues;
   List<StreamSubscription<dynamic>> _streamSubscriptions =
       <StreamSubscription<dynamic>>[];
@@ -153,6 +154,13 @@ class PositionListItemState extends State<PositionListItem> {
   @override
   void initState() {
     super.initState();
+    //Accelerometer events
+    _streamSubscriptions
+        .add(accelerometerEvents.listen((AccelerometerEvent event) {
+      setState(() {
+        _accelerometerValues = <double>[event.x, event.y, event.z];
+      });
+    }));
 
     // Gyroscope
     _streamSubscriptions.add(gyroscopeEvents.listen((GyroscopeEvent event) {
@@ -168,17 +176,47 @@ class PositionListItemState extends State<PositionListItem> {
         _direction = direction;
 
         // Create Model
-        DirectionModel model = new DirectionModel(_direction);
-        log(model.toJSON());
+        directionModel = new DirectionModel(_direction);
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Sensory Input
+    final List<String> accelerometer =
+        _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
     final List<String> gyroscope =
         _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
 
+    // TODO: Detect Receiving Position
+    if (_accelerometerValues[0] > 1 || _accelerometerValues[0] < -1) {
+      // Get Initial Values
+      var initialAntiPodal = directionModel.antipodalDegrees;
+
+      // Check Timer
+      _timer = new Timer(const Duration(milliseconds: 800), () {
+          var diff = _direction - initialAntiPodal;
+          if (diff.abs() >= 120) {
+            setState(() {
+              sonar.wsStatus = SonarState.RECEIVE;
+            });
+          }
+      });
+    } else {
+// Detect Position for Zero and Send
+      if (_accelerometerValues[1] > 4.1) {
+        setState(() {
+          sonar.wsStatus = SonarState.ZERO;
+        });
+      } else {
+        setState(() {
+          sonar.wsStatus = SonarState.SEND;
+        });
+      }
+    }
+
+    // Create Cell
     final Row row = Row(
       children: <Widget>[
         Column(
@@ -201,35 +239,11 @@ class PositionListItemState extends State<PositionListItem> {
                 'Alt: ${_position.altitude}',
                 style: const TextStyle(fontSize: 16.0, color: Colors.black),
               ),
-              StreamBuilder<double>(
-                stream: FlutterCompass.events,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text('Error reading heading: ${snapshot.error}');
-                  }
-
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-
-                  double direction = snapshot.data;
-
-                  return Container(
-                    alignment: Alignment.center,
-                    child: Transform.rotate(
-                      angle: ((direction ?? 0) * (Math.pi / 180) * -1),
-                      child: Icon(Icons.arrow_upward),
-                    ),
-                  );
-                },
-              ),
+              Text('Accelerometer: $accelerometer'),
               Text('Gyroscope: $gyroscope'),
+              Text('Direction: ' + directionModel.degrees.toString()),
+              Text('Antipodal: ' + directionModel.antipodalDegrees.toString()),
+              Text('Status: ' + sonar.wsStatus.toString()),
             ]),
         Expanded(
           child: Column(
