@@ -63,7 +63,6 @@ class HomePageState extends State {
 
   @override
   Widget build(BuildContext context) {
-    print("build");
     // 4BBEE3 Zima Blue
     return Scaffold(
       body: FutureBuilder<GeolocationStatus>(
@@ -141,13 +140,8 @@ class PositionListItem extends StatefulWidget {
 
 class PositionListItemState extends State<PositionListItem> {
   PositionListItemState(this._position);
-  double _direction;
-  Timer _timer;
-  DirectionModel directionModel;
   final Position _position;
-  String _address = '';
   List<double> _accelerometerValues;
-  List<double> _gyroscopeValues;
   List<StreamSubscription<dynamic>> _streamSubscriptions =
       <StreamSubscription<dynamic>>[];
 
@@ -158,25 +152,18 @@ class PositionListItemState extends State<PositionListItem> {
     _streamSubscriptions
         .add(accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
+        // Get Accelerometer Values
         _accelerometerValues = <double>[event.x, event.y, event.z];
+
+        // Check Device Position
+        sonar.wsStatus = sonar.location.checkDevicePosition(_accelerometerValues);
       });
     }));
 
-    // Gyroscope
-    _streamSubscriptions.add(gyroscopeEvents.listen((GyroscopeEvent event) {
-      setState(() {
-        _gyroscopeValues = <double>[event.x, event.y, event.z];
-      });
-    }));
-
-    // Use Compass
+    // Update Direction
     FlutterCompass.events.listen((double direction) {
       setState(() {
-        // Set New Direction
-        _direction = direction;
-
-        // Create Model
-        directionModel = new DirectionModel(_direction);
+        sonar.currentDirection = new DirectionModel(direction);
       });
     });
   }
@@ -186,104 +173,39 @@ class PositionListItemState extends State<PositionListItem> {
     // Sensory Input
     final List<String> accelerometer =
         _accelerometerValues?.map((double v) => v.toStringAsFixed(1))?.toList();
-    final List<String> gyroscope =
-        _gyroscopeValues?.map((double v) => v.toStringAsFixed(1))?.toList();
-
-    // If Device is Landscape its Receiving
-    if (_accelerometerValues[0] > 7.5 || _accelerometerValues[0] < -7.5) {
-      setState(() {
-        // Set Client Status
-        sonar.wsStatus = SonarState.RECEIVE;
-      });
-    } else {
-    // Detect Position for Zero and Send
-      if (_accelerometerValues[1] > 4.1) {
-        setState(() {
-          // Set Client Status
-          sonar.wsStatus = SonarState.ZERO;
-
-          
-        });
-      } else {
-        setState(() {
-          // Set Client Status
-          sonar.wsStatus = SonarState.SEND;
-
-
-        });
-      }
-    }
 
     // Create Cell
-    final Row row = Row(
-      children: <Widget>[
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Acc: ${_position.accuracy}',
-                style: const TextStyle(fontSize: 16.0, color: Colors.black),
-              ),
-              Text(
-                'Lat: ${_position.latitude}',
-                style: const TextStyle(fontSize: 16.0, color: Colors.black),
-              ),
-              Text(
-                'Lon: ${_position.longitude}',
-                style: const TextStyle(fontSize: 16.0, color: Colors.black),
-              ),
-              Text(
-                'Alt: ${_position.altitude}',
-                style: const TextStyle(fontSize: 16.0, color: Colors.black),
-              ),
-              Text('Accelerometer: $accelerometer'),
-              Text('Gyroscope: $gyroscope'),
-              Text('Direction: ' + directionModel.degrees.toString()),
-              Text('Antipodal: ' + directionModel.antipodalDegrees.toString()),
-              Text('Status: ' + sonar.wsStatus.toString()),
-            ]),
-        Expanded(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+    return ListTile(
+      title: Row(
+        children: <Widget>[
+          Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  _position.timestamp.toLocal().toString(),
-                  style: const TextStyle(fontSize: 14.0, color: Colors.grey),
-                )
+                  'Acc: ${_position.accuracy}',
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+                Text(
+                  'Lat: ${_position.latitude}',
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+                Text(
+                  'Lon: ${_position.longitude}',
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+                Text(
+                  'Alt: ${_position.altitude}',
+                  style: const TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+                Text('Accelerometer: $accelerometer'),
+                Text('Direction: ' + sonar.currentDirection.degrees.toString()),
+                Text(
+                    'Antipodal: ' + sonar.currentDirection.antipodalDegrees.toString()),
+                Text('Status: ' + sonar.wsStatus.toString()),
               ]),
-        ),
-      ],
+        ],
+      ),
     );
-
-    return ListTile(
-      onTap: _onTap,
-      title: row,
-      subtitle: Text(_address),
-    );
-  }
-
-  Future<void> _onTap() async {
-    String address = 'unknown';
-    final List<Placemark> placemarks = await Geolocator()
-        .placemarkFromCoordinates(_position.latitude, _position.longitude);
-
-    if (placemarks != null && placemarks.isNotEmpty) {
-      address = _generateAddressString(placemarks.first);
-    }
-
-    setState(() {
-      _address = '$address';
-    });
-  }
-
-  _generateAddressString(Placemark placemark) {
-    final String name = placemark.name ?? '';
-    final String city = placemark.locality ?? '';
-    final String state = placemark.administrativeArea ?? '';
-    final String country = placemark.country ?? '';
-
-    return '$name, $city, $state, $country';
   }
 }
