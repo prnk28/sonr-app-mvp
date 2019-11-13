@@ -11,7 +11,7 @@ WebSocketsNotifications sockets = new WebSocketsNotifications();
 ///
 /// Put your WebSockets server IP address and port number
 ///
-const String _SERVER_ADDRESS = "ws://localhost:60214";
+const String _SERVER_ADDRESS = "ws://match.sonr.io";
 
 class WebSocketsNotifications {
   static final WebSocketsNotifications _sockets = new WebSocketsNotifications._internal();

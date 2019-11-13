@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/prad/.development/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/Prad/Developer/sonar_frontend"
-export "FLUTTER_TARGET=/Users/Prad/Developer/sonar_frontend/lib/main.dart"
+export "FLUTTER_APPLICATION_PATH=/Users/Prad/Developer/sonar_app"
+export "FLUTTER_TARGET=/Users/Prad/Developer/sonar_app/lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "SYMROOT=${SOURCE_ROOT}/../build/ios"
 export "FLUTTER_FRAMEWORK_DIR=/Users/prad/.development/flutter/bin/cache/artifacts/engine/ios"
