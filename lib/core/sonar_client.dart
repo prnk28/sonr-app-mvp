@@ -22,7 +22,6 @@ class SonarClient {
   String _websocketsID;
   SonarState _currentState;
   DirectionModel _currentDirectionModel;
-  LocationModel _currentLocationModel;
 
   // Initialize
   SonarClient() {
@@ -32,9 +31,6 @@ class SonarClient {
     // Utilities Setup
     location = new LocationUtility();
     time = new TimeUtility();
-
-    // Set Location
-    currentLocation = location.getCurrentLocation();
   }
 
 // Current Device Direction
@@ -45,16 +41,6 @@ class SonarClient {
   set currentDirection(DirectionModel currDir) {
     // Set New State
     _currentDirectionModel = currDir;
-  }
-
-  // Current Device Location
-  LocationModel get currentLocation {
-    return location.getCurrentLocation();
-  }
-
-  set currentLocation(LocationModel currLoc) {
-    // Set New State
-    _currentLocationModel = currLoc;
   }
 
   // WebSockets Client ID

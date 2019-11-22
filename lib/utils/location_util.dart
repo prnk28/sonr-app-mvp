@@ -49,14 +49,7 @@ class LocationUtility {
     return DirectionModel(dir);
   }
 
-  getCurrentLocation() {
-    // Await for current Position
-    _getCurrentLocationFuture().then((model) {
-      return model;
-    });
-  }
-
-  Future<LocationModel> _getCurrentLocationFuture() async {
+  Future<LocationModel> getCurrentLocation() async {
     // Get Current Position
     Position currentPosition = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -76,7 +69,7 @@ class LocationUtility {
     if (placemarkList != null && placemarkList.isNotEmpty) {
       // Return Placemark
       // Return
-    return LocationModel(currentPosition, placemarkList[0]);
+      return LocationModel(currentPosition, placemarkList[0]);
     } else {
       // No Placemark
       return LocationModel(currentPosition, null);

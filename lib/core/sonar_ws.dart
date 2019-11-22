@@ -45,45 +45,55 @@ class WSClient {
   msgCancel() {}
 
   msgJoin() {
-    // Setup Data Map
+    // Set Location
+    sonar.location.getCurrentLocation().then((location) {
     ProfileModel profile =
                 new ProfileModel("firstName", "lastName", "profilePicture");
 
+    // Set Data
     var data = {
       'profile': profile.toJSON(),
-      'location': sonar.currentLocation.toJSON()
+      'location': location.toJSON()
     };
-  print(jsonEncode({'action': "SEND", 'data': data}));
+
     // Action: JOIN To Server
     sockets.send(jsonEncode({'action': "JOIN", 'data': data}));
+    });
   }
 
   msgReceive(DirectionModel direction) {
     // Action: RECEIVE To Server
-    var directionJson = {'direction' : direction.toJSON()};
-    sockets.send(jsonEncode({'action': "RECEIVE", 'data': directionJson}));
+    var data = {
+      'direction': direction.toJSON()
+    };
+    sockets.send(jsonEncode({'action': "RECEIVE", 'data': data}));
   }
 
   msgReceiveSearch(DirectionModel direction) {
     // Action: RECEIVE.SEARCH To Server
-    var directionJson = {'direction' : direction.toJSON()};
+    var data = {
+      'direction': direction.toJSON()
+    };
     sockets.send(
-        jsonEncode({'action': "RECEIVE.SEARCH", 'data': directionJson}));
+        jsonEncode({'action': "RECEIVE.SEARCH", 'data': data}));
   }
 
   msgSend(DirectionModel direction) {
     // Action: SEND To Server
-    var directionJson = {'direction' : direction.toJSON()};
-
-    print(jsonEncode({'action': "SEND", 'data': directionJson}));
-    sockets.send(jsonEncode({'action': "SEND", 'data': directionJson}));
+    var data = {
+      'direction': direction.toJSON()
+    };
+    print(jsonEncode({'action': "SEND", 'data': data}));
+    sockets.send(jsonEncode({'action': "SEND", 'data': data}));
   }
 
   msgSendSearch(DirectionModel direction) {
     // Action: SEND.SEARCH To Server
-    var directionJson = {'direction' : direction.toString()};
+    var data = {
+      'direction': direction.toJSON()
+    };
     sockets.send(
-        jsonEncode({'action': "SEND.SEARCH", 'data': directionJson}));
+        jsonEncode({'action': "SEND.SEARCH", 'data': data}));
   }
 
   msgZero() {
@@ -128,6 +138,7 @@ class WSClient {
       // ** CODE: 3, EVENT: Zero Position
       case 3:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.ZERO;
         print(message);
         break;
 
@@ -135,6 +146,7 @@ class WSClient {
       // ** CODE: 10, EVENT: Send
       case 10:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.SEND;
         print(message);
         break;
 
@@ -142,6 +154,7 @@ class WSClient {
       // ** CODE: 11, EVENT: Send.Search
       case 11:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.SEND_SEARCH;
         print(message);
         break;
 
@@ -156,6 +169,7 @@ class WSClient {
       // ** CODE: 20, EVENT: Receive
       case 20:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.RECEIVE;
         print(message);
         break;
 
@@ -163,6 +177,7 @@ class WSClient {
       // ** CODE: 21, EVENT: Receive.Search
       case 21:
         sonar.wsID = message["data"]["id"].toString();
+        sonar.wsStatus = SonarState.RECEIVE_SEARCH;
         print(message);
         break;
 
