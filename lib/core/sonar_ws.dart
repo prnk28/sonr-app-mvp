@@ -44,37 +44,46 @@ class WSClient {
 
   msgCancel() {}
 
-  msgJoin(
-      ProfileModel profile) {
+  msgJoin() {
     // Setup Data Map
+    ProfileModel profile =
+                new ProfileModel("firstName", "lastName", "profilePicture");
+
     var data = {
       'profile': profile.toJSON(),
+      'location': sonar.currentLocation.toJSON()
     };
-
+  print(jsonEncode({'action': "SEND", 'data': data}));
     // Action: JOIN To Server
     sockets.send(jsonEncode({'action': "JOIN", 'data': data}));
   }
 
   msgReceive(DirectionModel direction) {
     // Action: RECEIVE To Server
-    sockets.send(jsonEncode({'action': "RECEIVE", 'data': direction.toJSON()}));
+    var directionJson = {'direction' : direction.toJSON()};
+    sockets.send(jsonEncode({'action': "RECEIVE", 'data': directionJson}));
   }
 
   msgReceiveSearch(DirectionModel direction) {
     // Action: RECEIVE.SEARCH To Server
+    var directionJson = {'direction' : direction.toJSON()};
     sockets.send(
-        jsonEncode({'action': "RECEIVE.SEARCH", 'data': direction.toJSON()}));
+        jsonEncode({'action': "RECEIVE.SEARCH", 'data': directionJson}));
   }
 
   msgSend(DirectionModel direction) {
     // Action: SEND To Server
-    sockets.send(jsonEncode({'action': "SEND", 'data': direction.toJSON()}));
+    var directionJson = {'direction' : direction.toJSON()};
+
+    print(jsonEncode({'action': "SEND", 'data': directionJson}));
+    sockets.send(jsonEncode({'action': "SEND", 'data': directionJson}));
   }
 
   msgSendSearch(DirectionModel direction) {
     // Action: SEND.SEARCH To Server
+    var directionJson = {'direction' : direction.toString()};
     sockets.send(
-        jsonEncode({'action': "SEND.SEARCH", 'data': direction.toJSON()}));
+        jsonEncode({'action': "SEND.SEARCH", 'data': directionJson}));
   }
 
   msgZero() {

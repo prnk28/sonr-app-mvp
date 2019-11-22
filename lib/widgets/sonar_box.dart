@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sonar_frontend/websockets/client_ws.dart';
+import 'package:sonar_frontend/core/sonar_ws.dart';
 
 class SonarBox extends StatefulWidget {
   String title, description, buttonText;

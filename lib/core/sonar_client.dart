@@ -1,4 +1,5 @@
 // Import Utilities
+import 'package:geolocator/geolocator.dart';
 import 'package:sonar_frontend/model/location_model.dart';
 
 import '../core/sonar_ws.dart';
@@ -31,6 +32,9 @@ class SonarClient {
     // Utilities Setup
     location = new LocationUtility();
     time = new TimeUtility();
+
+    // Set Location
+    currentLocation = location.getCurrentLocation();
   }
 
 // Current Device Direction
@@ -45,7 +49,7 @@ class SonarClient {
 
   // Current Device Location
   LocationModel get currentLocation {
-    return _currentLocationModel;
+    return location.getCurrentLocation();
   }
 
   set currentLocation(LocationModel currLoc) {
@@ -70,5 +74,22 @@ class SonarClient {
   set wsStatus(SonarState clientWsStatus) {
     // Set New State
     _currentState = clientWsStatus;
+
+    switch (clientWsStatus) {
+      case SonarState.ZERO:
+        break;
+      case SonarState.SEND:
+        ws.msgSend(currentDirection);
+        break;
+      case SonarState.SEND_SEARCH:
+        // TODO: Handle this case.
+        break;
+      case SonarState.RECEIVE:
+        ws.msgReceive(currentDirection);
+        break;
+      case SonarState.RECEIVE_SEARCH:
+        // TODO: Handle this case.
+        break;
+    }
   }
 }

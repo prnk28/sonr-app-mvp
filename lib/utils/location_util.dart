@@ -1,4 +1,6 @@
 // Remote Packages
+import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 
@@ -47,31 +49,47 @@ class LocationUtility {
     return DirectionModel(dir);
   }
 
-  // Get Location Data
-  currentLocation() async {
-    var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    return p;
+  getCurrentLocation() {
+    // Await for current Position
+    _getCurrentLocationFuture().then((model) {
+      return model;
+    });
   }
 
-  // Get Location Model
-  currentLocationModel() async {
-    // Get Data
-    Position p = await currentLocation();
-    Placemark m = await placemarkFromPosition(p);
+  Future<LocationModel> _getCurrentLocationFuture() async {
+    // Get Current Position
+    Position currentPosition = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .catchError((error) {
+      print(error);
+    });
 
-    // Create Object
-    return LocationModel(p, m);
-  }
+    // Get Current Placemark
+    List<Placemark> placemarkList = await Geolocator()
+        .placemarkFromCoordinates(
+            currentPosition.latitude, currentPosition.longitude)
+        .catchError((error) {
+      print(error);
+    });
 
-  // Generate PlaceMark from Given Position
-  placemarkFromPosition(Position p) async {
-    List<Placemark> placemarks =
-        await Geolocator().placemarkFromCoordinates(p.latitude, p.longitude);
     // Check Placemark Validity
-    if (placemarks != null && placemarks.isNotEmpty) {
-      var m = placemarks[0];
-      return m;
+    if (placemarkList != null && placemarkList.isNotEmpty) {
+      // Return Placemark
+      // Return
+    return LocationModel(currentPosition, placemarkList[0]);
+    } else {
+      // No Placemark
+      return LocationModel(currentPosition, null);
     }
+  }
+
+  // Creates Readable Address
+  generateAddressString(Placemark placemark) {
+    final String name = placemark.name ?? '';
+    final String city = placemark.locality ?? '';
+    final String state = placemark.administrativeArea ?? '';
+    final String country = placemark.country ?? '';
+
+    return '$name, $city, $state, $country';
   }
 }

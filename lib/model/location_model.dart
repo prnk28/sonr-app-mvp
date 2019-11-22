@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 class LocationModel {
   // INITIAL Data
   final Position position;
-  final Placemark mark;
+  final Placemark placemark;
 
   // POSITIONAL DATA
   // ===============
@@ -12,6 +12,7 @@ class LocationModel {
   double direction; // Known as Heading
   double latitude;
   double longitude;
+  bool positionValid;
 
   // PLACEMARK DATA
   // ==============
@@ -22,46 +23,150 @@ class LocationModel {
   String neighborhood; // Known as Sub-Locality
   String state; // Known as Admin
   String street; // Known as Name
+  bool placemarkValid;
 
   // Constructor
-  LocationModel(this.position, this.mark) {
-    // Create Readable Address
-    address = _generateAddressString(mark);
+  LocationModel(this.position, this.placemark) {
+    // Check if Position is Valid
+    if (position != null) {
+      accuracy = position.accuracy;
+      altitude = position.altitude;
+      direction = position.heading;
+      latitude = position.latitude;
+      longitude = position.longitude;
+      positionValid = true;
 
-    // Set Variables
-    accuracy = position.accuracy;
-    altitude = position.altitude;
-    direction = position.heading;
-    latitude = position.latitude;
-    longitude = position.longitude;
-    city = mark.subAdministrativeArea;
-    country = mark.country;
-    locality = mark.locality;
-    neighborhood = mark.subAdministrativeArea;
-    state = mark.administrativeArea;
-    street = mark.locality;
+    // Position Unavailible
+    } else {
+      accuracy = 0;
+      altitude = 0;
+      direction = 0;
+      latitude = 0;
+      longitude = 0;
+      positionValid = false;
+    }
+
+    // Check if Placemark is Valid
+    if (placemark != null) {
+      // Create Readable Address
+      address = _generateAddressString(placemark);
+
+      // Set Placemark Data
+      city = placemark.subAdministrativeArea;
+      country = placemark.country;
+      locality = placemark.locality;
+      neighborhood = placemark.subAdministrativeArea;
+      state = placemark.administrativeArea;
+      street = placemark.locality;
+      placemarkValid = true;
+
+      // Placemark Unavailible
+    } else {
+      address = "N/A";
+      city = "N/A";
+      country = "N/A";
+      locality = "N/A";
+      neighborhood = "N/A";
+      state = "N/A";
+      street = "N/A";
+      placemarkValid = false;
+    }
+    print(this.toJSON());
   }
 
   // JSON Generation
   toJSON() {
-    var map = {
-      // Position
-      'accuracy': accuracy,
-      'altitude': altitude,
-      'direction': direction,
-      'latitude': latitude,
-      'longitude': longitude,
+    var map;
+    // Check Validity
+    if (positionValid && placemarkValid) {
+      map = {
+        // Status
+        'status': 'FULL',
 
-      // Placemark
-      'address': address,
-      'city': city,
-      'country': country,
-      'locality': locality,
-      'neighborhood': neighborhood,
-      'state': state,
-      'street': street,
-    };
+        // Position
+        'accuracy': accuracy,
+        'altitude': altitude,
+        'direction': direction,
+        'latitude': latitude,
+        'longitude': longitude,
+
+        // Placemark
+        'address': address,
+        'city': city,
+        'country': country,
+        'locality': locality,
+        'neighborhood': neighborhood,
+        'state': state,
+        'street': street,
+      };
+    } else if (positionValid && !placemarkValid) {
+      map = {
+        // Status
+        'status': 'POSITION-ONLY',
+
+        // Position
+        'accuracy': accuracy,
+        'altitude': altitude,
+        'direction': direction,
+        'latitude': latitude,
+        'longitude': longitude,
+
+        // Placemark
+        'address': address,
+        'city': city,
+        'country': country,
+        'locality': locality,
+        'neighborhood': neighborhood,
+        'state': state,
+        'street': street,
+      };
+    } else {
+      map = {
+        // Status
+        'status': 'UNAVAILIBLE',
+
+        // Position
+        'accuracy': accuracy,
+        'altitude': altitude,
+        'direction': direction,
+        'latitude': latitude,
+        'longitude': longitude,
+
+        // Placemark
+        'address': address,
+        'city': city,
+        'country': country,
+        'locality': locality,
+        'neighborhood': neighborhood,
+        'state': state,
+        'street': street,
+      };
+    }
+
+    // Return Map
     return map;
+  }
+
+  // Generate PlaceMark from Given Position
+  _getPlacemarkFromPosition(Position p) {
+    // Await for List of Placemarks
+    Geolocator().placemarkFromCoordinates(p.latitude, p.longitude).then(
+        (placemarkList) {
+      // Check Placemark Validity
+      if (placemarkList != null && placemarkList.isNotEmpty) {
+
+        // Return Placemark
+        return placemarkList[0];
+      } else {
+        // No Placemark
+        return null;
+      }
+    },
+    // Error Finding Placemark
+    onError: (error) {
+      print(error);
+      return null;
+    });
   }
 
   // Creates Readable Address

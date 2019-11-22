@@ -88,9 +88,7 @@ class HomePageState extends State {
           child: Icon(Icons.location_on),
           onPressed: () {
             // Join Lobby
-            ProfileModel profile =
-                new ProfileModel("firstName", "lastName", "profilePicture");
-            sonar.ws.msgJoin(profile);
+            sonar.ws.msgJoin();
           },
         ),
       ),
