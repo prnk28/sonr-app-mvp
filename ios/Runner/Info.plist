@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I need it </string>
+	<string>Required for the App</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Because</string>
-	<key>NSContactsUsageDescription</key>  
-<string>This app requires contacts access to function properly.</string>  
+	<string>Requried for the App</string>
+	<key>LSApplicationCategoryType</key>
+	<string>Privacy - Location When In Use Usage Description</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>sonar_frontend_swift</string>
+	<string>sonar_app</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

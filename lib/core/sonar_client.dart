@@ -1,6 +1,6 @@
 // Import Utilities
 import 'package:geolocator/geolocator.dart';
-import 'package:sonar_frontend/model/location_model.dart';
+import 'package:sonar_app/model/location_model.dart';
 
 import '../core/sonar_ws.dart';
 import '../model/direction_model.dart';

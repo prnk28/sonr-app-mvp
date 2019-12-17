@@ -85,12 +85,22 @@ class HomePageState extends State {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: MaterialButton(
-          child: Icon(Icons.location_on),
+          child: Icon(Icons.face),
           onPressed: () {
             // Join Lobby
             sonar.ws.msgJoin();
           },
         ),
+        actions: <Widget>[
+          MaterialButton(
+          child: Icon(Icons.location_on),
+          onPressed: () async {
+            // Join Lobby
+            PermissionHandler()
+                .requestPermissions([PermissionGroup.locationWhenInUse]);
+          },
+        )
+        ],
       ),
     );
   }

@@ -2,7 +2,7 @@
 # **    PROJECT INFO    **
 # ** ================== **
 # -- Basic --
-name: sonar_frontend
+name: sonar_app
 description: The dead simple way to connect with people and transfer files.
 version: 1.0.0+1
 

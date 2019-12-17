@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:sonar_frontend/pages/home.dart';
+import 'package:sonar_app/pages/home.dart';
 
 class Sonar extends StatelessWidget {
 
