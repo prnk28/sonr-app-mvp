@@ -1,16 +1,12 @@
 // Remote Packages
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors/sensors.dart';
-import 'dart:math' as Math;
 
 // Local Classes
-import '../model/location_model.dart';
-import '../model/profile_model.dart';
 import '../widgets/placeholder_widget.dart';
 import '../core/sonar_client.dart';
 import '../model/direction_model.dart';

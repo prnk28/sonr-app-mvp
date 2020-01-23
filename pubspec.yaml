@@ -20,12 +20,11 @@ dependencies:
 
   # ** - User Defined - **
   # -- BLoC --
-  bloc: ^2.0.0
-  equatable: ^0.6.1
-  flutter_bloc: ^2.0.0
+  flutter_bloc: ^3.1.0
+  equatable: ^1.0.0
 
   # -- Device --
-  flutter_compass: ^0.3.3
+  flutter_compass:
   geolocator: ^3.0.0
   permission_handler:
   sensors: ^0.4.1+1
