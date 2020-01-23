@@ -1,15 +1,14 @@
 // Remote Packages
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sensors/sensors.dart';
+import 'package:sonar_app/utils/location_util.dart';
 
 // Local Classes
-import '../widgets/placeholder_widget.dart';
-import '../core/sonar_client.dart';
-import '../models/models.dart';
+import 'package:sonar_app/widgets/placeholder_widget.dart';
+import 'package:sonar_app/core/sonar_client.dart';
+import 'package:sonar_app/models/models.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -145,9 +144,7 @@ class PositionListItem extends StatefulWidget {
 class PositionListItemState extends State<PositionListItem> {
   PositionListItemState(this._position);
   final Position _position;
-  List<double> _accelerometerValues;
-  List<StreamSubscription<dynamic>> _streamSubscriptions =
-      <StreamSubscription<dynamic>>[];
+
 
   @override
   void initState() {
@@ -160,7 +157,7 @@ class PositionListItemState extends State<PositionListItem> {
         _accelerometerValues = <double>[event.x, event.y, event.z];
 
         // Check Device Position
-        sonar.wsStatus = sonar.location.checkDevicePosition(_accelerometerValues);
+        sonar.wsStatus = LocationUtility.getSonarState(_accelerometerValues);
       });
     }));
 

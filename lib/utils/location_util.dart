@@ -10,7 +10,7 @@ import '../models/models.dart';
 
 class LocationUtility {
   // Check Location Permissions
-  checkLocationPermission() async {
+  static checkLocationPermission() async {
     if (await Geolocator().checkGeolocationPermissionStatus() ==
         GeolocationStatus.granted) {
       return true;
@@ -19,28 +19,14 @@ class LocationUtility {
     }
   }
 
-  // Check State by Position
-  checkDevicePosition(List<double> _accelerometerValues) {
-    if (_accelerometerValues[0] > 7.5 || _accelerometerValues[0] < -7.5) {
-      return SonarState.RECEIVE;
-    } else {
-      // Detect Position for Zero and Send
-      if (_accelerometerValues[1] > 4.1) {
-        return SonarState.ZERO;
-      } else {
-        return SonarState.SEND;
-      }
-    }
-  }
-
   // Get Direction Data
-  currentDirection() async {
+  static currentDirection() async {
     var lastDirection = await FlutterCompass.events.last;
     return lastDirection;
   }
 
   // Get Direction Model
-  currentDirectionModel() async {
+  static currentDirectionModel() async {
     // Get Data
     double dir = await currentDirection();
 
@@ -48,7 +34,7 @@ class LocationUtility {
     return Direction(dir);
   }
 
-  Future<LocationModel> getCurrentLocation() async {
+  static Future<LocationModel> getCurrentLocation() async {
     // Get Current Position
     Position currentPosition = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -75,13 +61,49 @@ class LocationUtility {
     }
   }
 
+  // Generate PlaceMark from Given Position
+  static getPlacemarkFromPosition(Position p) {
+    // Await for List of Placemarks
+    Geolocator().placemarkFromCoordinates(p.latitude, p.longitude).then(
+        (placemarkList) {
+      // Check Placemark Validity
+      if (placemarkList != null && placemarkList.isNotEmpty) {
+
+        // Return Placemark
+        return placemarkList[0];
+      } else {
+        // No Placemark
+        return null;
+      }
+    },
+    // Error Finding Placemark
+    onError: (error) {
+      print(error);
+      return null;
+    });
+  }
+
   // Creates Readable Address
-  generateAddressString(Placemark placemark) {
+  static getAddressString(Placemark placemark) {
     final String name = placemark.name ?? '';
     final String city = placemark.locality ?? '';
     final String state = placemark.administrativeArea ?? '';
     final String country = placemark.country ?? '';
 
     return '$name, $city, $state, $country';
+  }
+
+  // Check State by Position
+  static getSonarState(List<double> _accelerometerValues) {
+    if (_accelerometerValues[0] > 7.5 || _accelerometerValues[0] < -7.5) {
+      return SonarState.RECEIVE;
+    } else {
+      // Detect Position for Zero and Send
+      if (_accelerometerValues[1] > 4.1) {
+        return SonarState.ZERO;
+      } else {
+        return SonarState.SEND;
+      }
+    }
   }
 }

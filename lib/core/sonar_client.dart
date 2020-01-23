@@ -1,9 +1,6 @@
 // Import Utilities
-import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/models/models.dart';
-
-import '../core/sonar_ws.dart';
-import '../utils/utils.dart';
+import 'package:sonar_app/core/core.dart';
 
 SonarClient sonar = new SonarClient();
 
@@ -12,8 +9,6 @@ enum SonarState { ZERO, SEND, SEND_SEARCH, RECEIVE, RECEIVE_SEARCH }
 class SonarClient {
   // Properties
   WSClient ws;
-  LocationUtility location;
-  TimeUtility time;
 
   // Variables
   String _websocketsID;
@@ -24,10 +19,6 @@ class SonarClient {
   SonarClient() {
     // WS Setup
     ws = new WSClient();
-
-    // Utilities Setup
-    location = new LocationUtility();
-    time = new TimeUtility();
   }
 
 // Current Device Direction

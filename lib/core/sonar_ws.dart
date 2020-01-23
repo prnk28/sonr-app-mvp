@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 
 // Local Classes
-import '../core/sonar_client.dart';
-import '../models/models.dart';
-import '../utils/ws_util.dart';
+import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/utils/utils.dart';
 
 class WSClient {
 // ==================================
@@ -44,7 +44,7 @@ class WSClient {
 
   msgJoin() {
     // Set Location
-    sonar.location.getCurrentLocation().then((location) {
+    LocationUtility.getCurrentLocation().then((location) {
     ProfileModel profile =
                 new ProfileModel("firstName", "lastName", "profilePicture");
 

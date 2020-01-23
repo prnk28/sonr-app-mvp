@@ -1,5 +1,4 @@
-import 'package:geolocator/geolocator.dart';
-
+import 'package:sonar_app/utils/utils.dart';
 class LocationModel {
   // INITIAL Data
   final Position position;
@@ -49,7 +48,7 @@ class LocationModel {
     // Check if Placemark is Valid
     if (placemark != null) {
       // Create Readable Address
-      address = _generateAddressString(placemark);
+      address = LocationUtility.getAddressString(placemark);
 
       // Set Placemark Data
       city = placemark.subAdministrativeArea;
@@ -145,37 +144,5 @@ class LocationModel {
 
     // Return Map
     return map;
-  }
-
-  // Generate PlaceMark from Given Position
-  _getPlacemarkFromPosition(Position p) {
-    // Await for List of Placemarks
-    Geolocator().placemarkFromCoordinates(p.latitude, p.longitude).then(
-        (placemarkList) {
-      // Check Placemark Validity
-      if (placemarkList != null && placemarkList.isNotEmpty) {
-
-        // Return Placemark
-        return placemarkList[0];
-      } else {
-        // No Placemark
-        return null;
-      }
-    },
-    // Error Finding Placemark
-    onError: (error) {
-      print(error);
-      return null;
-    });
-  }
-
-  // Creates Readable Address
-  _generateAddressString(Placemark placemark) {
-    final String name = placemark.name ?? '';
-    final String city = placemark.locality ?? '';
-    final String state = placemark.administrativeArea ?? '';
-    final String country = placemark.country ?? '';
-
-    return '$name, $city, $state, $country';
   }
 }

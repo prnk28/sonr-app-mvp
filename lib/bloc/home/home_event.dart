@@ -6,10 +6,10 @@ abstract class HomeEvent extends Equatable {
 }
 
 class GetDirection extends HomeEvent {
-  final double degrees;
+  final List<double> accelerometerValues;
 
-  const GetDirection({@required this.degrees}) : assert(degrees != null);
+  const GetDirection({@required this.accelerometerValues}) : assert(accelerometerValues != null);
 
   @override
-  List<Object> get props => [degrees];
+  List<Object> get props => [accelerometerValues];
 }
