@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:meta/meta.dart';
+export 'package:bloc/bloc.dart';
+export 'package:meta/meta.dart';
+export 'package:equatable/equatable.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();

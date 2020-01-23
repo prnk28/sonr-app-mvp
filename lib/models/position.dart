@@ -1,7 +1,7 @@
 import 'package:sensors/sensors.dart';
 import 'package:sonar_app/core/sonar_client.dart';
 
-class Position {
+class PositionModel {
   // *********************
   // ** Constructor Var **
   // *********************
@@ -28,7 +28,7 @@ class Position {
   double gyroZ;
   List<double> gyroData = new List();
 
-  Position(this.accelerometerEvent, this.gyroscopeEvent, this.state) {
+  PositionModel(this.accelerometerEvent, this.gyroscopeEvent, this.state) {
     // Set Accelerometer Positional Data
     accelX = accelerometerEvent.x;
     accelY = accelerometerEvent.y;

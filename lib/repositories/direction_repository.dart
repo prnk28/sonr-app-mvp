@@ -15,6 +15,7 @@ class DirectionRepository {
     FlutterCompass.events.listen((newDegrees) {
       // List not Valid
       if(!degreeValues.isValidated) {
+        print(newDegrees);
         degreeValues.add(newDegrees);
       }else{
         return degreeValues.last();

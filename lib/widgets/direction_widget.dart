@@ -13,7 +13,11 @@ class Direction extends StatelessWidget {
         title: Text('Flutter Weather'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search)
+            icon: Icon(Icons.search),
+            onPressed: () async{
+              BlocProvider.of<HomeBloc>(context)
+                    .add(GetDirection(accelerometerValues: <double>[]));
+            },
           )
         ],
       ),

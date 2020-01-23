@@ -10,7 +10,7 @@ class PositionRepository {
     
   }
 
-  _getDeviceState(Position position){
+  _getDeviceState(PositionModel position){
     // Set Sonar State by Accelerometer
     if (position.accelX > 7.5 || position.accelX < -7.5) {
       return SonarState.RECEIVE;

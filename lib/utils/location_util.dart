@@ -25,15 +25,6 @@ class LocationUtility {
     return lastDirection;
   }
 
-  // Get Direction Model
-  static currentDirectionModel() async {
-    // Get Data
-    double dir = await currentDirection();
-
-    // Create Object
-    return Direction(dir);
-  }
-
   static Future<LocationModel> getCurrentLocation() async {
     // Get Current Position
     Position currentPosition = await Geolocator()

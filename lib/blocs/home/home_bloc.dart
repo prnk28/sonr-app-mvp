@@ -1,7 +1,12 @@
 import 'dart:async';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repositories/repositories.dart';
-import 'package:sonar_app/blocs/bloc.dart';
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
+
+import '../blocs.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final DirectionRepository directionRepository;

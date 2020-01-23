@@ -1,4 +1,6 @@
 
+import 'package:sonar_app/utils/utils.dart';
+
 class TimeData {
   // MAIN OBJECT
   // ===============
