@@ -6,8 +6,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 
 // Local Classes
 import '../core/sonar_client.dart';
-import '../model/location_model.dart';
-import '../model/direction_model.dart';
+import '../models/models.dart';
 
 class LocationUtility {
   // Check Location Permissions
@@ -46,7 +45,7 @@ class LocationUtility {
     double dir = await currentDirection();
 
     // Create Object
-    return DirectionModel(dir);
+    return Direction(dir);
   }
 
   Future<LocationModel> getCurrentLocation() async {

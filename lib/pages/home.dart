@@ -9,7 +9,7 @@ import 'package:sensors/sensors.dart';
 // Local Classes
 import '../widgets/placeholder_widget.dart';
 import '../core/sonar_client.dart';
-import '../model/direction_model.dart';
+import '../models/models.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -167,7 +167,7 @@ class PositionListItemState extends State<PositionListItem> {
     // Update Direction
     FlutterCompass.events.listen((double direction) {
       setState(() {
-        sonar.currentDirection = new DirectionModel(direction);
+        sonar.currentDirection = new Direction(direction);
       });
     });
   }

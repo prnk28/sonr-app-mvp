@@ -5,9 +5,7 @@ import 'package:flutter/foundation.dart';
 
 // Local Classes
 import '../core/sonar_client.dart';
-import '../model/direction_model.dart';
-import '../model/location_model.dart';
-import '../model/profile_model.dart';
+import '../models/models.dart';
 import '../utils/ws_util.dart';
 
 class WSClient {
@@ -61,7 +59,7 @@ class WSClient {
     });
   }
 
-  msgReceive(DirectionModel direction) {
+  msgReceive(Direction direction) {
     // Action: RECEIVE To Server
     var data = {
       'direction': direction.toJSON()
@@ -69,7 +67,7 @@ class WSClient {
     sockets.send(jsonEncode({'action': "RECEIVE", 'data': data}));
   }
 
-  msgReceiveSearch(DirectionModel direction) {
+  msgReceiveSearch(Direction direction) {
     // Action: RECEIVE.SEARCH To Server
     var data = {
       'direction': direction.toJSON()
@@ -78,7 +76,7 @@ class WSClient {
         jsonEncode({'action': "RECEIVE.SEARCH", 'data': data}));
   }
 
-  msgSend(DirectionModel direction) {
+  msgSend(Direction direction) {
     // Action: SEND To Server
     var data = {
       'direction': direction.toJSON()
@@ -87,7 +85,7 @@ class WSClient {
     sockets.send(jsonEncode({'action': "SEND", 'data': data}));
   }
 
-  msgSendSearch(DirectionModel direction) {
+  msgSendSearch(Direction direction) {
     // Action: SEND.SEARCH To Server
     var data = {
       'direction': direction.toJSON()

@@ -1,12 +1,9 @@
 // Import Utilities
 import 'package:geolocator/geolocator.dart';
-import 'package:sonar_app/model/location_model.dart';
+import 'package:sonar_app/models/models.dart';
 
 import '../core/sonar_ws.dart';
-import '../model/direction_model.dart';
-import '../model/location_model.dart';
-import '../utils/location_util.dart';
-import '../utils/time_util.dart';
+import '../utils/utils.dart';
 
 SonarClient sonar = new SonarClient();
 
@@ -21,7 +18,7 @@ class SonarClient {
   // Variables
   String _websocketsID;
   SonarState _currentState;
-  DirectionModel _currentDirectionModel;
+  Direction _currentDirectionModel;
 
   // Initialize
   SonarClient() {
@@ -34,11 +31,11 @@ class SonarClient {
   }
 
 // Current Device Direction
-  DirectionModel get currentDirection {
+  Direction get currentDirection {
     return _currentDirectionModel;
   }
 
-  set currentDirection(DirectionModel currDir) {
+  set currentDirection(Direction currDir) {
     // Set New State
     _currentDirectionModel = currDir;
   }

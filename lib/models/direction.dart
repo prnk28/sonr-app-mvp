@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-class DirectionModel {
+class Direction {
   // Initial Variables
   final double degrees;
 
@@ -9,7 +9,7 @@ class DirectionModel {
   String compassDesignation;
 
   // Constructor
-  DirectionModel(this.degrees) {
+  Direction(this.degrees) {
     // Set Antipodal
     if (this.degrees >= 180) {
       this.antipodalDegrees = 360 - degrees;
