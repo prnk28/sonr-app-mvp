@@ -9,17 +9,18 @@ class DirectionRepository {
   // Check Threshold of Direction
   Future<double> _getDegrees() async {
     // Init Vars
-    double degrees = 0;
     ThresholdList degreeValues = new ThresholdList(4);
 
-    // Handle Stream
-    await for (double newDegrees in FlutterCompass.events) {
-      if(!degreeValues.isValidated){
-        
+    // Listen to Stream
+    FlutterCompass.events.listen((newDegrees) {
+      // List not Valid
+      if(!degreeValues.isValidated) {
+        degreeValues.add(newDegrees);
+      }else{
+        return degreeValues.last();
       }
-    }
-
-    return degrees;
+    });
+    return degreeValues.last();
   }
 
   double _getAntipodalDegrees(double degrees) {
