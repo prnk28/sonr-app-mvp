@@ -11,7 +11,7 @@ class Position {
   // *********************
   // ** Sonar State  *****
   // *********************
-  SonarState state;
+  final SonarState state;
 
   // *******************
   // ** Sensor Values **
@@ -28,7 +28,7 @@ class Position {
   double gyroZ;
   List<double> gyroData = new List();
 
-  Position(this.accelerometerEvent, this.gyroscopeEvent) {
+  Position(this.accelerometerEvent, this.gyroscopeEvent, this.state) {
     // Set Accelerometer Positional Data
     accelX = accelerometerEvent.x;
     accelY = accelerometerEvent.y;
@@ -41,17 +41,7 @@ class Position {
     gyroZ = gyroscopeEvent.z;
     gyroData = [gyroX, gyroY, gyroZ];
 
-    // Set Sonar State by Accelerometer
-    if (accelX > 7.5 || accelX < -7.5) {
-      state = SonarState.RECEIVE;
-    } else {
-      // Detect Position for Zero and Send
-      if (accelY > 4.1) {
-        state = SonarState.ZERO;
-      } else {
-        state = SonarState.SEND;
-      }
-    }
+    
   }
 
   // Generation Method

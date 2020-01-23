@@ -6,9 +6,21 @@ import 'package:sensors/sensors.dart';
 
 class PositionRepository {
 
-  getDeviceState(){
-    accelerometerEvents.listen((AccelerometerEvent event) {
+  getPosition(){
+    
+  }
 
-    });
+  _getDeviceState(Position position){
+    // Set Sonar State by Accelerometer
+    if (position.accelX > 7.5 || position.accelX < -7.5) {
+      return SonarState.RECEIVE;
+    } else {
+      // Detect Position for Zero and Send
+      if (position.accelY > 4.1) {
+        return SonarState.ZERO;
+      } else {
+        return SonarState.SEND;
+      }
+    }
   }
 }
