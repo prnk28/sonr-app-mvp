@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 // Local Classes
 import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/utils/utils.dart';
+import 'package:sonar_app/core/core.dart';
 
 class SonarClient {
 // ==================================

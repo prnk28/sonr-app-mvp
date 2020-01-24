@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:sensors/sensors.dart';
-import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 import '../bloc.dart';
@@ -105,11 +104,11 @@ MotionBloc({@required SensorProvider sensorProvider})
   // On InMotion Event ->
   Stream<MotionState> _mapInMotionToState(InMotion motion) async* {
     // Send State
-    if (motion.position.state == SonarState.SEND) {
+    if (motion.position.state == Orientation.SEND) {
       yield Send(motion.position);
     }
     // Receive State
-    else if (motion.position.state == SonarState.RECEIVE) {
+    else if (motion.position.state == Orientation.RECEIVE) {
       yield Receive(motion.position);
     }
     // Continue Shift

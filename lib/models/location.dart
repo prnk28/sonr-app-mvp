@@ -1,5 +1,5 @@
-import 'package:sonar_app/utils/utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Location extends Equatable {
   // *********************

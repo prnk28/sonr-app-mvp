@@ -19,7 +19,7 @@ class App extends StatelessWidget {
       title: 'Flutter Timer',
       home: BlocProvider(
         create: (context) => MotionBloc(sensorProvider: SensorProvider()),
-        child: Motion(),
+        child: OrientationState(),
       ),
     );
   }
