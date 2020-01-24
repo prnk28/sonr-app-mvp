@@ -3,33 +3,28 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonar_app/repositories/repositories.dart';
+import 'package:sonar_app/data/sensor_provider.dart';
 import 'package:sonar_app/widgets/widgets.dart';
 
-import 'blocs/blocs.dart';
-import 'blocs/bloc_delegate.dart';
-
-class Sonar extends StatelessWidget {
-
-  final DirectionRepository directionRepository;
-
-  const Sonar({Key key, this.directionRepository}) : super(key: key);
-
+import 'bloc/bloc.dart';
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Weather',
+      theme: ThemeData(
+        primaryColor: Color.fromRGBO(109, 234, 255, 1),
+        accentColor: Color.fromRGBO(72, 74, 126, 1),
+        brightness: Brightness.dark,
+      ),
+      title: 'Flutter Timer',
       home: BlocProvider(
-        create: (context) =>
-            HomeBloc(directionRepository: directionRepository),
-        child: Direction(),
+        create: (context) => MotionBloc(sensorProvider: SensorProvider()),
+        child: Motion(),
       ),
     );
   }
 }
 
 void main() {
-  // Run App
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(Sonar());
+  runApp(App());
 }

@@ -45,18 +45,8 @@ class Motion extends Equatable {
   // Create Object from Events
   static Motion create({AccelerometerEvent a}) {
     // Both Events Provided
-    if (a != null && g != null) {
+    if (a != null) {
 // Return Object
-      return Motion(
-          accelX: a.x,
-          accelY: a.y,
-          accelZ: a.z,
-          state: _getStateFromAccelerometer(a.x, a.y),
-          lastUpdated: DateTime.now());
-    }
-    // Only Acceleration Provided
-    else if (a != null && g == null) {
-// Return Accelerometer Object
       return Motion(
           accelX: a.x,
           accelY: a.y,

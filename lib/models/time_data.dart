@@ -54,7 +54,7 @@ class TimeData {
   }
 
   // Convert Object to Encodable (11 Parameters)
-  toJSONEncodable() {
+  toJSON() {
     var map = {
       // Accuracy
       'timestamp': main.toString(),
@@ -75,7 +75,7 @@ class TimeData {
 
 // Display Object
   toPrint() {
-    var locMap = this.toJSONEncodable();
+    var locMap = this.toJSON();
     locMap.forEach((k,v) {
       var ks = k.toString();
       var vs = v.toString();

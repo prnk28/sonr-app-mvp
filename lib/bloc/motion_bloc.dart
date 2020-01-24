@@ -5,6 +5,7 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 import './bloc.dart';
+import 'package:meta/meta.dart';
 
 class MotionBloc extends Bloc<MotionEvent, MotionState> {
   // Data Provider
@@ -15,7 +16,11 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   StreamSubscription<AccelerometerEvent> _motionSubscription;
 
   // Constructer
-  MotionBloc(this._sensorProvider);
+MotionBloc({@required SensorProvider sensorProvider})
+      : assert(sensorProvider != null),
+        _sensorProvider = sensorProvider;
+
+  // Initial State
   @override
   MotionState get initialState => Zero(_initialPosition);
 
