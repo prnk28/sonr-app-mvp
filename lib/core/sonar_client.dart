@@ -4,7 +4,6 @@ import 'package:sonar_app/core/core.dart';
 
 SonarClient sonar = new SonarClient();
 
-enum SonarState { ZERO, SEND, SEND_SEARCH, RECEIVE, RECEIVE_SEARCH }
 
 class SonarClient {
   // Properties
@@ -12,7 +11,6 @@ class SonarClient {
 
   // Variables
   String _websocketsID;
-  SonarState _currentState;
   Direction _currentDirectionModel;
 
   // Initialize
@@ -41,29 +39,25 @@ class SonarClient {
   }
 
 // WebSockets Device Orientation
-  SonarState get wsStatus {
-    return _currentState;
-  }
 
-  set wsStatus(SonarState clientWsStatus) {
-    // Set New State
-    _currentState = clientWsStatus;
+  // set wsStatus(SonarState clientWsStatus) {
+  //   // Set New State
 
-    switch (clientWsStatus) {
-      case SonarState.ZERO:
-        break;
-      case SonarState.SEND:
-        ws.msgSend(currentDirection);
-        break;
-      case SonarState.SEND_SEARCH:
-        // TODO: Handle this case.
-        break;
-      case SonarState.RECEIVE:
-        ws.msgReceive(currentDirection);
-        break;
-      case SonarState.RECEIVE_SEARCH:
-        // TODO: Handle this case.
-        break;
-    }
-  }
+  //   switch (clientWsStatus) {
+  //     case SonarState.ZERO:
+  //       break;
+  //     case SonarState.SEND:
+  //       ws.msgSend(currentDirection);
+  //       break;
+  //     case SonarState.SEND_SEARCH:
+  //       // TODO: Handle this case.
+  //       break;
+  //     case SonarState.RECEIVE:
+  //       ws.msgReceive(currentDirection);
+  //       break;
+  //     case SonarState.RECEIVE_SEARCH:
+  //       // TODO: Handle this case.
+  //       break;
+  //   }
+  // }
 }

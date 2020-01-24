@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/widgets/widgets.dart';
 
-class Motion extends StatelessWidget {
+class Orientation extends StatelessWidget {
   static const TextStyle bigTextStyle = TextStyle(
     fontSize: 60,
     fontWeight: FontWeight.bold,
@@ -24,7 +24,7 @@ class Motion extends StatelessWidget {
               child: BlocBuilder<MotionBloc, MotionState>(
                 builder: (context, state) {
                   return Text(state.position.state.toString(),
-                    style: Motion.bigTextStyle,
+                    style: Orientation.bigTextStyle,
                   );
                 },
               ),
@@ -33,7 +33,7 @@ class Motion extends StatelessWidget {
           BlocBuilder<MotionBloc, MotionState>(
             condition: (previousState, state) =>
                 state.runtimeType != previousState.runtimeType,
-            builder: (context, state) => MotionActions(),
+            builder: (context, state) => OrientationActions(),
           ),
         ],
       ),

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/bloc/motion_bloc.dart';
 
-class MotionActions extends StatelessWidget {
+class OrientationActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

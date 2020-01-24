@@ -4,7 +4,7 @@ import 'package:sensors/sensors.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
-import './bloc.dart';
+import '../bloc.dart';
 import 'package:meta/meta.dart';
 
 class MotionBloc extends Bloc<MotionEvent, MotionState> {
