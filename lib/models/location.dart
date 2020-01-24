@@ -1,148 +1,109 @@
 import 'package:sonar_app/utils/utils.dart';
-class LocationModel {
-  // INITIAL Data
-  final Position position;
-  final Placemark placemark;
+import 'package:equatable/equatable.dart';
 
-  // POSITIONAL DATA
-  // ===============
-  double accuracy;
-  double altitude;
-  double direction; // Known as Heading
-  double latitude;
-  double longitude;
-  bool positionValid;
+class Location extends Equatable {
+  // *********************
+  // ** POSITIONAL DATA **
+  // *********************
+  final double accuracy;
+  final double altitude;
+  final double direction; // Known as Heading
+  final double latitude;
+  final double longitude;
 
   // PLACEMARK DATA
-  // ==============
-  String address;
-  String city; // Known as Sub-Admin
-  String country;
-  String locality;
-  String neighborhood; // Known as Sub-Locality
-  String state; // Known as Admin
-  String street; // Known as Name
-  bool placemarkValid;
+  final String address;
+  final String city; // Known as Sub-Admin
+  final String country;
+  final String locality;
+  final String neighborhood; // Known as Sub-Locality
+  final String state; // Known as Admin
+  final String street; // Known as Name
 
-  // Constructor
-  LocationModel(this.position, this.placemark) {
+  // *********************
+  // ** Constructor Var **
+  // *********************
+  const Location(
+      {
+      // Position Data
+      this.accuracy,
+      this.altitude,
+      this.direction,
+      this.latitude,
+      this.longitude,
+
+      // Placemark Data
+      this.address,
+      this.city,
+      this.country,
+      this.locality,
+      this.neighborhood,
+      this.state,
+      this.street});
+
+  // **************************
+  // ** Class Implementation **
+  // **************************
+  @override
+  List<Object> get props => [
+        // Position Data
+        accuracy,
+        altitude,
+        direction,
+        latitude,
+        longitude,
+
+        // Placemark Data
+        address,
+        city,
+        country,
+        locality,
+        neighborhood,
+        state,
+        street
+      ];
+
+  // ***********************
+  // ** Object Generation **
+  // ***********************
+  // Create Object from Events
+  static Location create(Position pos, Placemark mark) {
     // Check if Position is Valid
-    if (position != null) {
-      accuracy = position.accuracy;
-      altitude = position.altitude;
-      direction = position.heading;
-      latitude = position.latitude;
-      longitude = position.longitude;
-      positionValid = true;
-
-    // Position Unavailible
-    } else {
-      accuracy = 0;
-      altitude = 0;
-      direction = 0;
-      latitude = 0;
-      longitude = 0;
-      positionValid = false;
-    }
-
-    // Check if Placemark is Valid
-    if (placemark != null) {
-      // Create Readable Address
-      address = LocationUtility.getAddressString(placemark);
-
-      // Set Placemark Data
-      city = placemark.subAdministrativeArea;
-      country = placemark.country;
-      locality = placemark.locality;
-      neighborhood = placemark.subAdministrativeArea;
-      state = placemark.administrativeArea;
-      street = placemark.locality;
-      placemarkValid = true;
-
-      // Placemark Unavailible
-    } else {
-      address = "N/A";
-      city = "N/A";
-      country = "N/A";
-      locality = "N/A";
-      neighborhood = "N/A";
-      state = "N/A";
-      street = "N/A";
-      placemarkValid = false;
-    }
-    print(this.toJSON());
+    return Location(
+      accuracy: pos.accuracy,
+      altitude: pos.altitude,
+      direction: pos.heading,
+      latitude: pos.latitude,
+      longitude: pos.longitude,
+      city: mark.subAdministrativeArea,
+      country: mark.country,
+      locality: mark.locality,
+      neighborhood: mark.subAdministrativeArea,
+      state: mark.administrativeArea,
+      street: mark.locality,
+    );
   }
 
-  // JSON Generation
+  // *********************
+  // ** JSON Conversion **
+  // *********************
   toJSON() {
-    var map;
-    // Check Validity
-    if (positionValid && placemarkValid) {
-      map = {
-        // Status
-        'status': 'FULL',
+    return {
+      // Position
+      'accuracy': accuracy,
+      'altitude': altitude,
+      'direction': direction,
+      'latitude': latitude,
+      'longitude': longitude,
 
-        // Position
-        'accuracy': accuracy,
-        'altitude': altitude,
-        'direction': direction,
-        'latitude': latitude,
-        'longitude': longitude,
-
-        // Placemark
-        'address': address,
-        'city': city,
-        'country': country,
-        'locality': locality,
-        'neighborhood': neighborhood,
-        'state': state,
-        'street': street,
-      };
-    } else if (positionValid && !placemarkValid) {
-      map = {
-        // Status
-        'status': 'POSITION-ONLY',
-
-        // Position
-        'accuracy': accuracy,
-        'altitude': altitude,
-        'direction': direction,
-        'latitude': latitude,
-        'longitude': longitude,
-
-        // Placemark
-        'address': address,
-        'city': city,
-        'country': country,
-        'locality': locality,
-        'neighborhood': neighborhood,
-        'state': state,
-        'street': street,
-      };
-    } else {
-      map = {
-        // Status
-        'status': 'UNAVAILIBLE',
-
-        // Position
-        'accuracy': accuracy,
-        'altitude': altitude,
-        'direction': direction,
-        'latitude': latitude,
-        'longitude': longitude,
-
-        // Placemark
-        'address': address,
-        'city': city,
-        'country': country,
-        'locality': locality,
-        'neighborhood': neighborhood,
-        'state': state,
-        'street': street,
-      };
-    }
-
-    // Return Map
-    return map;
+      // Placemark
+      'address': address,
+      'city': city,
+      'country': country,
+      'locality': locality,
+      'neighborhood': neighborhood,
+      'state': state,
+      'street': street,
+    };
   }
 }

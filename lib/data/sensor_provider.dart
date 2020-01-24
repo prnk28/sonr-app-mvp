@@ -24,10 +24,4 @@ class SensorProvider {
     // Return Stream
     return Geolocator().getPositionStream(locationOptions);
   }
-
-  // Current Location
-  Future<Position> currentLocation() async {
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    return position;
-  }
 }

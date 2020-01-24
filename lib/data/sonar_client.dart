@@ -5,20 +5,19 @@ import 'package:flutter/foundation.dart';
 
 // Local Classes
 import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/utils/utils.dart';
 
-class WSClient {
+class SonarClient {
 // ==================================
 // SONAR-WS-CLIENT Initialization
 // ==================================
-  static final WSClient _wsClient = new WSClient._internal();
+  static final SonarClient _wsClient = new SonarClient._internal();
 
-  factory WSClient() {
+  factory SonarClient() {
     return _wsClient;
   }
 
-  WSClient._internal() {
+  SonarClient._internal() {
     sockets.addListener(_onMessageReceived);
   }
 
@@ -44,19 +43,19 @@ class WSClient {
 
   msgJoin() {
     // Set Location
-    LocationUtility.getCurrentLocation().then((location) {
-    ProfileModel profile =
-                new ProfileModel("firstName", "lastName", "profilePicture");
+    // LocationUtility.getCurrentLocation().then((location) {
+    // ProfileModel profile =
+    //             new ProfileModel("firstName", "lastName", "profilePicture");
 
     // Set Data
-    var data = {
-      'profile': profile.toJSON(),
-      'location': location.toJSON()
-    };
+    // var data = {
+    //   'profile': profile.toJSON(),
+    //   'location': location.toJSON()
+    // };
 
-    // Action: JOIN To Server
-    sockets.send(jsonEncode({'action': "JOIN", 'data': data}));
-    });
+    // // Action: JOIN To Server
+    // sockets.send(jsonEncode({'action': "JOIN", 'data': data}));
+    // });
   }
 
   msgReceive(Direction direction) {

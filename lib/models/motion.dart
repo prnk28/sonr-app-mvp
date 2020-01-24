@@ -18,7 +18,6 @@ class Motion extends Equatable {
   // *********************
   // ** Constructor Var **
   // *********************
-
   const Motion({
     this.accelX,
     this.accelY,
