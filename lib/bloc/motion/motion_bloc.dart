@@ -15,7 +15,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   StreamSubscription<AccelerometerEvent> _motionSubscription;
 
   // Constructer
-MotionBloc({@required SensorProvider sensorProvider})
+  MotionBloc({@required SensorProvider sensorProvider})
       : assert(sensorProvider != null),
         _sensorProvider = sensorProvider;
 
@@ -35,6 +35,8 @@ MotionBloc({@required SensorProvider sensorProvider})
       yield* _mapPauseToState(event);
     } else if (event is Resume) {
       yield* _mapResumeToState(event);
+    } else if (event is Reset) {
+      yield* _mapResetToState(event);
     }
     // Device InMotion
     else if (event is InMotion) {
