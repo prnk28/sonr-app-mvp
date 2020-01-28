@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 abstract class SonarEvent extends Equatable {
   const SonarEvent();
@@ -10,20 +11,25 @@ abstract class SonarEvent extends Equatable {
 // Connect to WS, Join/Create Lobby
 class Initialize extends SonarEvent {}
 
-// Device Position BLoC State
-class SetZero extends SonarEvent {}
+// Device Position: Sender/Receiver/Zero BLoC State
+class UpdatePosition extends SonarEvent {
+    final String newPosition;
 
-// Device Position BLoC State
-class SetSender extends SonarEvent {}
+  const UpdatePosition({@required this.newPosition});
 
-// Device Position BLoC State
-class SetReceiver extends SonarEvent {}
+   @override
+  List<Object> get props => [newPosition];
+}
 
-// Approve Authentication
-class Approve extends SonarEvent {}
+// Approve/Decline Authentication
+class SetAuthentication extends SonarEvent {
+  final String authentication;
 
-// Decline Authentication
-class Decline extends SonarEvent {}
+  const SetAuthentication({@required this.authentication});
+
+   @override
+  List<Object> get props => [authentication];
+}
 
 // Cancel Sequence
 class Cancel extends SonarEvent {}

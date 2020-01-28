@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:sonar_app/repositories/repositories.dart';
 import '../bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:sonar_app/data/data.dart';
@@ -8,6 +9,7 @@ import 'package:sonar_app/models/models.dart';
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   final MotionBloc _motionBloc;
+  SonarRepository _sonarRepository = new SonarRepository();
 
   // Stream Management
   StreamSubscription _motionSubscription;
@@ -29,16 +31,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Device Can See Updates
     if (event is Initialize) {
       yield* _mapInitializeToState(event);
-    } else if (event is SetZero) {
-      yield* _mapSetZeroToState(event);
-    } else if (event is SetSender) {
-      yield* _mapSetSenderToState(event);
-    } else if (event is SetReceiver) {
-      // yield* _mapSetReceiverToState(event);
-    } else if (event is Approve) {
-      // yield* _mapApproveToState(event);
-    } else if (event is Decline) {
-      // yield* _mapDeclineToState(event);
+    } else if (event is UpdatePosition) {
+      yield* _mapUpdatePositionToState(event);
+    } else if (event is SetAuthentication) {
+      //yield* _mapSetSenderToState(event);
     }
     // Device InMotion
     else if (event is Cancel) {
@@ -58,6 +54,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // On Initialize Event ->
   Stream<SonarState> _mapInitializeToState(Initialize initialize) async* {
     // Connect to WS Join/Create Lobby
+    _sonarRepository.initialize();
+    _sonarRepository.msgJoin();
 
     // Device Ready State
     yield Ready();
@@ -68,28 +66,39 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Listen to BLoC and Add InSonar Event every update
     _motionSubscription = _motionBloc.listen((state) {
       if (state is Zero) {
-        add(SetZero());
+        add(UpdatePosition(newPosition: "Zero"));
       } else if (state is Receive) {
-        add(SetReceiver());
+        add(UpdatePosition(newPosition: "Receive"));
       } else if (state is Send) {
-        add(SetSender());
+        add(UpdatePosition(newPosition: "Send"));
       }
     });
+
+    // _sonarSubscription = sonarWS.channel.stream.listen((message) {
+
+    // });
   }
 
     // On SetZero Event ->
-  Stream<SonarState> _mapSetZeroToState(SetZero setZero) async* {
-    // Cancel Previous Subscriptions
-    _motionSubscription?.cancel();
-
-    // Device Ready State
-    yield Ready();
+  Stream<SonarState> _mapUpdatePositionToState(UpdatePosition position) async* {
+ // Send State
+    if (position.newPosition == "Send") {
+      yield Sending();
+    }
+    // Receive State
+    else if (position.newPosition == "Receive") {
+      yield Receiving();
+    }
+    // Continue Shift
+    else {
+      yield Ready();
+    }
   }
 
-    // On SetSender Event ->
-  Stream<SonarState> _mapSetSenderToState(SetSender setSender) async* {
-    // Add Stream for WebSockets
-    // Device Ready State
-    yield Sending();
-  }
+  //   // On SetSender Event ->
+  // Stream<SonarState> _mapSetSenderToState(SetSender setSender) async* {
+  //   // Add Stream for WebSockets
+  //   // Device Ready State
+  //   yield Sending();
+  // }
 }

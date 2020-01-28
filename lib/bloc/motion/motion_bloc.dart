@@ -58,7 +58,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
 
     // Cancel Previous Subscriptions
     _motionSubscription?.cancel();
-
+ 
     // Listen to Stream and Add InMotion Event every update
     _motionSubscription = _sensorProvider.motion().listen((newPosition) {
       add(InMotion(position: Motion.create(a: newPosition)));

@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -6,42 +8,36 @@ import 'package:web_socket_channel/io.dart';
 ///
 /// Application-level global variable to access the WebSockets
 ///
-WebSocketsNotifications sockets = new WebSocketsNotifications();
+SonarWS sonarWS = new SonarWS();
 
 ///
 /// Put your WebSockets server IP address and port number
 ///
 const String _SERVER_ADDRESS = "ws://match.sonr.io";
 
-class WebSocketsNotifications {
-  static final WebSocketsNotifications _sockets = new WebSocketsNotifications._internal();
+class SonarWS {
+  static final SonarWS _sockets = new SonarWS._internal();
 
-  factory WebSocketsNotifications(){
+  factory SonarWS(){
     return _sockets;
   }
 
-  WebSocketsNotifications._internal();
+  SonarWS._internal();
 
   ///
   /// The WebSocket "open" channel
   ///
-  IOWebSocketChannel _channel;
+  IOWebSocketChannel channel;
 
   ///
   /// Is the connection established?
   ///
   bool _isOn = false;
-  ///
-  /// Listeners
-  /// List of methods to be called when a new message
-  /// comes in.
-  ///
-  ObserverList<Function> _listeners = new ObserverList<Function>();
 
   /// ----------------------------------------------------------
   /// Initialization the WebSockets connection with the server
   /// ----------------------------------------------------------
-  initCommunication() async {
+  connect() async {
     ///
     /// Just in case, close any previous communication
     ///
@@ -51,12 +47,12 @@ class WebSocketsNotifications {
     /// Open a new WebSocket communication
     ///
     try {
-      _channel = new IOWebSocketChannel.connect(_SERVER_ADDRESS);
+      channel = new IOWebSocketChannel.connect(_SERVER_ADDRESS);
       log("Connected to Server");
       ///
       /// Start listening to new notifications / messages
       ///
-      _channel.stream.listen(_onReceptionOfMessageFromServer);
+      channel.stream.listen(_onReceptionOfMessageFromServer);
     } catch(e){
       log("Error Has Occurred");
       ///
@@ -70,9 +66,9 @@ class WebSocketsNotifications {
   /// Closes the WebSocket communication
   /// ----------------------------------------------------------
   reset(){
-    if (_channel != null){
-      if (_channel.sink != null){
-        _channel.sink.close();
+    if (channel != null){
+      if (channel.sink != null){
+        channel.sink.close();
         _isOn = false;
       }
     }
@@ -83,32 +79,20 @@ class WebSocketsNotifications {
   /// ---------------------------------------------------------
   send(String message){
     // print(message);
-    if (_channel != null){
-      if (_channel.sink != null && _isOn){
-        _channel.sink.add(message);
+    if (channel != null){
+      if (channel.sink != null && _isOn){
+        channel.sink.add(message);
       }
     }
   }
-
-  /// ---------------------------------------------------------
-  /// Adds a callback to be invoked in case of incoming
-  /// notification
-  /// ---------------------------------------------------------
-  addListener(Function callback){
-    _listeners.add(callback);
-  }
-  removeListener(Function callback){
-    _listeners.remove(callback);
-  }
-
   /// ----------------------------------------------------------
   /// Callback which is invoked each time that we are receiving
   /// a message from the server
   /// ----------------------------------------------------------
-  _onReceptionOfMessageFromServer(message){
+  _onReceptionOfMessageFromServer(serverMessage){
     _isOn = true;
-    _listeners.forEach((Function callback){
-      callback(message);
-    });
+    // Convert server message to map
+    Map message = json.decode(serverMessage);
+    print(message);
   }
 }
