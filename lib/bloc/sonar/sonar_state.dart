@@ -8,8 +8,8 @@ abstract class SonarState extends Equatable {
 }
 
 // Preload State
-class Default extends SonarState {
-  const Default() : super();
+class Initial extends SonarState {
+  const Initial() : super();
 }
 
 // Connected to Lobby/Network Post Initialize
@@ -25,6 +25,11 @@ class Sending extends SonarState {
 // In Receiving Position
 class Receiving extends SonarState {
   const Receiving() : super();
+}
+
+// Found Match
+class Found extends SonarState {
+  const Found() : super();
 }
 
 // Pending Confirmation
