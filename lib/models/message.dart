@@ -9,7 +9,7 @@ class Message extends Equatable {
   // From JSON
   final int code;
   final String message;
-  final Map data;
+  final Data data;
 
   // Interpreted Values
   final MessageCategory category;

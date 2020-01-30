@@ -1,17 +1,24 @@
 import 'package:equatable/equatable.dart';
+import 'package:sonar_app/core/core.dart';
 
 class Match extends Equatable {
 // *******************
   // ** JSON Values **
   // *******************
-  // From JSON
-  final String lobbyId;
+  // Variables
+  final String clientId;
+  final MatchStatus status;
+  final String firstName;
+  final String lastName;
+  final String profilePic;
 
   // *********************
   // ** Constructor Var **
   // *********************
-  const Match({
-    this.lobbyId,
+  const Match(this.clientId, this.status, {
+      this.firstName,
+      this.lastName,
+      this.profilePic
   });
 
   // **************************
@@ -19,17 +26,26 @@ class Match extends Equatable {
   // **************************
   @override
   List<Object> get props => [
-    lobbyId,
+    firstName,
+    lastName,
+    profilePic,
+    clientId
       ];
 
   // ***********************
   // ** Object Generation **
   // ***********************
   // Create Object from Events
-  static Match fromJSON(dynamic json) {
-// Return Object
+  static Match fromMessage(dynamic data) {
       return Match(
-          lobbyId: json["id"],
+        // Required Variables
+          data["client_id"],
+          data["status"],
+
+          // Conditionals
+          firstName: data["first_name"],
+          lastName: data["last_name"],
+          profilePic: data["profile_pic"]
       );
   }
 }

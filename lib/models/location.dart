@@ -7,7 +7,6 @@ class Location extends Equatable {
   // *********************
   final double accuracy;
   final double altitude;
-  final double direction; // Known as Heading
   final double latitude;
   final double longitude;
 
@@ -28,7 +27,6 @@ class Location extends Equatable {
       // Position Data
       this.accuracy,
       this.altitude,
-      this.direction,
       this.latitude,
       this.longitude,
 
@@ -49,7 +47,6 @@ class Location extends Equatable {
         // Position Data
         accuracy,
         altitude,
-        direction,
         latitude,
         longitude,
 
@@ -72,7 +69,6 @@ class Location extends Equatable {
     return Location(
       accuracy: pos.accuracy,
       altitude: pos.altitude,
-      direction: pos.heading,
       latitude: pos.latitude,
       longitude: pos.longitude,
       city: mark.subAdministrativeArea,
@@ -84,6 +80,23 @@ class Location extends Equatable {
     );
   }
 
+    // Create Object from Events
+  static Location fromMap(Map data) {
+    // Check if Position is Valid
+    return Location(
+      accuracy: data["accuracy"],
+      altitude: data["altitude"],
+      latitude: data["latitude"],
+      longitude: data["longitude"],
+      city: data["city"],
+      country: data["country"],
+      locality: data["locality"],
+      neighborhood: data["neighborhood"],
+      state: data["state"],
+      street: data["street"],
+    );
+  }
+
   // *********************
   // ** JSON Conversion **
   // *********************
@@ -92,7 +105,6 @@ class Location extends Equatable {
       // Position
       'accuracy': accuracy,
       'altitude': altitude,
-      'direction': direction,
       'latitude': latitude,
       'longitude': longitude,
 

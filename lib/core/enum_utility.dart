@@ -3,9 +3,9 @@
 // *******************
 // Authentication Status for Sonar Process
 enum AuthenticationStatus {
-  Default,
-  Declined,
   Accepted,
+  Declined,
+  Default
 }
 
 // Device Heading Postion
@@ -28,6 +28,16 @@ enum CompassDesignation {
   NNW
 }
 
+// Kind of Data Model Returned from Server
+enum DataType { 
+  AuthorizationStatus,
+  Circle,
+  Client,
+  Lobby,
+  Match,
+  None
+}
+
 // Sonar Process Failed
 enum FailType { 
   None,
@@ -37,9 +47,25 @@ enum FailType {
   NetworkError 
 }
 
+// Kind of File Sent from Sender
+enum FileType { 
+  Contact,
+  Photo,
+  Video,
+  Document,
+  Unknown
+}
+
+// Status Match is In
+enum MatchStatus { 
+  Sender,
+  Receiver,
+  Default
+}
+
 // Server Message Type
 enum MessageCategory {
-  Initialization,
+  Client,
   Lobby,
   Sender,
   Receiver,
