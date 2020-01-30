@@ -11,27 +11,27 @@ abstract class MotionState extends Equatable {
 }
 
 // Device in Default Position
-class Zero extends MotionState {
-  const Zero(Motion position) : super(position);
+class Default extends MotionState {
+  const Default(Motion position) : super(position);
 }
 
 // Device in Motion
-class Shift extends MotionState {
-  const Shift(Motion position) : super(position);
+class Shifting extends MotionState {
+  const Shifting(Motion position) : super(position);
 }
 
-// Device in Tilted Y-Threshold
-class Send extends MotionState {
-  const Send(Motion position) : super(position);
+// Device in Tilted Y-Threshold/ Sending Mode
+class Tilted extends MotionState {
+  const Tilted(Motion position) : super(position);
 }
 
-// Device in Landscape Mode
-class Receive extends MotionState {
-  const Receive(Motion position) : super(position);
+// Device in Receiving Mode/ Landscape
+class Landscaped extends MotionState {
+  const Landscaped(Motion position) : super(position);
 }
 
 // Device in Transfer Suspend Motion
-class Suspend extends MotionState {
+class Suspended extends MotionState {
   final MotionState lastState;
-  const Suspend(Motion position, this.lastState) : super(position);
+  const Suspended(Motion position, this.lastState) : super(position);
 }

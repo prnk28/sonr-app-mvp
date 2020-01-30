@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import '../bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 
@@ -56,7 +57,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapInitializeToState(Initialize initialize) async* {
     // Connect to WS Join/Create Lobby
     _sonarRepository.initialize();
-    _sonarRepository.msgJoin();
+    //_sonarRepository.msgJoin();
 
     // Device Ready State
     yield Ready();
@@ -77,11 +78,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // On SetZero Event ->
   Stream<SonarState> _mapShiftMotionToState(ShiftMotion motion) async* {
     // Send State
-    if (motion.newPosition.state == Orientation.SEND) {
+    if (motion.newPosition.state == Orientation.Tilt) {
       yield Sending();
     }
     // Receive State
-    else if (motion.newPosition.state == Orientation.RECEIVE) {
+    else if (motion.newPosition.state == Orientation.Landscape) {
       yield Receiving();
     }
     // Continue Shift

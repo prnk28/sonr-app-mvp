@@ -22,9 +22,6 @@ class Pause extends MotionEvent {}
 // Informs Bloc to Resume (After transfer complete)
 class Resume extends MotionEvent {}
 
-// Informs Bloc Position back to Zero
-class Reset extends MotionEvent {}
-
 // Informs Bloc Device in motion
 class InMotion extends MotionEvent {
   final Motion position;

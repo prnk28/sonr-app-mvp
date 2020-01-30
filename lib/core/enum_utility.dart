@@ -1,16 +1,14 @@
 // *******************
 // ** GLOBAL ENUMS ***
 // *******************
-enum MessageCategory {
-  Initialization,
-  Lobby,
-  Sender,
-  Receiver,
-  Authorization,
-  WebRTC,
-  Error,
+// Authentication Status for Sonar Process
+enum AuthenticationStatus {
+  Default,
+  Declined,
+  Accepted,
 }
 
+// Device Heading Postion
 enum CompassDesignation {
   N,
   NNE,
@@ -30,7 +28,40 @@ enum CompassDesignation {
   NNW
 }
 
-enum Orientation { ZERO, SEND, RECEIVE }
+// Sonar Process Failed
+enum FailType { 
+  None,
+  MatchDeclined,
+  UserCancelled, 
+  ServerError, 
+  NetworkError 
+}
+
+// Server Message Type
+enum MessageCategory {
+  Initialization,
+  Lobby,
+  Sender,
+  Receiver,
+  Authorization,
+  WebRTC,
+  Error,
+}
+
+// Device Motion
+enum Orientation { Default, Tilt, Landscape }
+
+// Stage in Sonar Transfer
+enum SonarStage {
+  Ready,
+  Sending,
+  Receiving,
+  Found,
+  Pending,
+  Transferring,
+  Complete,
+  Error
+}
 
 // ****************************
 // ** Enum Centric Methods ****
@@ -53,13 +84,49 @@ CompassDesignation getCompassDesignationFromDegrees(double degrees) {
 Orientation getOrientationFromAccelerometer(double x, double y) {
   // Set Sonar State by Accelerometer
   if (x > 7.5 || x < -7.5) {
-    return Orientation.RECEIVE;
+    return Orientation.Landscape;
   } else {
-    // Detect Position for Zero and Send
+    // Detect Position for Default and Tilt
     if (y > 4.1) {
-      return Orientation.ZERO;
+      return Orientation.Default;
     } else {
-      return Orientation.SEND;
+      return Orientation.Tilt;
     }
+  }
+}
+
+// Used by Process Model
+SonarStage getSonarStageFromString(String stage) {
+  stage = 'SonarStage.$stage';
+  return SonarStage.values
+      .firstWhere((f) => f.toString() == stage, orElse: () => null);
+}
+
+// Used by Process Model
+String getMessageForFailType(FailType failType) {
+  // Message by enum to be displayed
+  switch (failType) {
+    case FailType.MatchDeclined:
+      return "Match has declined to have Sonar Transfer.";
+    case FailType.UserCancelled:
+      return "Sonar Cancelled.";
+    case FailType.ServerError:
+      return "Server Error, Sonar can't be used right now.";
+    case FailType.NetworkError:
+      return "Your Device is having trouble connecting to the Internet.";
+    default:
+      return "";
+  }
+}
+
+FailType getFailTypeFromCode(int code) {
+  if (code == 40) {
+    return FailType.UserCancelled;
+  } else if (code == 41 || code == 31 || code == 44) {
+    return FailType.ServerError;
+  } else if (code == 52) {
+    return FailType.MatchDeclined;
+  } else {
+    return FailType.None;
   }
 }

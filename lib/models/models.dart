@@ -1,7 +1,6 @@
 export 'client.dart';
 export 'data.dart';
 export 'direction.dart';
-export 'error.dart';
 export 'file.dart';
 export 'lobby.dart';
 export 'location.dart';

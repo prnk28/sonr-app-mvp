@@ -60,7 +60,7 @@ class Motion extends Equatable {
           accelX: 0,
           accelY: 0,
           accelZ: 0,
-          state: Orientation.ZERO,
+          state: Orientation.Default,
           lastUpdated: DateTime.now());
     }
   }
