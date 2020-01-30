@@ -39,7 +39,7 @@ class SonarRepository {
 
   msgCancel() {}
 
-  msgJoin() {
+  msgJoin(Location userLocation) {
     // Set Location
     // LocationUtility.getCurrentLocation().then((location) {
     // ProfileModel profile =

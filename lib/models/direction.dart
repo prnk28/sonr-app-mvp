@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sonar_app/core/core.dart';
 
 class Direction extends Equatable {
   // *******************
@@ -6,7 +7,7 @@ class Direction extends Equatable {
   // *******************
   final double degrees;
   final double antipodalDegrees;
-  final String compassDesignation;
+  final CompassDesignation compassDesignation;
   final DateTime lastUpdated;
 
 // *********************
@@ -39,7 +40,7 @@ class Direction extends Equatable {
       return Direction(
           degrees: degrees,
           antipodalDegrees: _getAntipodalDegrees(degrees),
-          compassDesignation: _getCompassDesignation(degrees),
+          compassDesignation: getCompassDesignationFromDegrees(degrees),
           lastUpdated: DateTime.now());
   }
 
@@ -52,32 +53,6 @@ class Direction extends Equatable {
     }
   }
 
-  static String _getCompassDesignation(double degrees) {
-// Set Compass Value
-    var compassValue = ((degrees / 22.5) + 0.5).toInt();
-
-    // Possible Values
-    var compassArray = [
-      "N",
-      "NNE",
-      "NE",
-      "ENE",
-      "E",
-      "ESE",
-      "SE",
-      "SSE",
-      "S",
-      "SSW",
-      "SW",
-      "WSW",
-      "W",
-      "WNW",
-      "NW",
-      "NNW"
-    ];
-    return compassArray[(compassValue % 16)];
-  }
-
   // *********************
   // ** JSON Conversion **
   // *********************
@@ -86,7 +61,7 @@ class Direction extends Equatable {
     return {
       'degrees': degrees,
       'antipodal_degrees': antipodalDegrees,
-      'compass_designation': compassDesignation,
+      'compass_designation': compassDesignation.toString(),
       'last_updated': lastUpdated
     };
   }

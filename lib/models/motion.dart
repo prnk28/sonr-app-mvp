@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:sensors/sensors.dart';
+import 'package:sonar_app/core/core.dart';
 
-enum Orientation { ZERO, SEND, RECEIVE }
 class Motion extends Equatable {
   // *******************
   // ** Sensor Values **
@@ -50,7 +50,7 @@ class Motion extends Equatable {
           accelX: a.x,
           accelY: a.y,
           accelZ: a.z,
-          state: _getStateFromAccelerometer(a.x, a.y),
+          state: getOrientationFromAccelerometer(a.x, a.y),
           lastUpdated: DateTime.now());
     }
     // No Data Provided
@@ -62,20 +62,6 @@ class Motion extends Equatable {
           accelZ: 0,
           state: Orientation.ZERO,
           lastUpdated: DateTime.now());
-    }
-  }
-
-  static Orientation _getStateFromAccelerometer(double x, double y) {
-    // Set Sonar State by Accelerometer
-    if (x > 7.5 || x < -7.5) {
-      return Orientation.RECEIVE;
-    } else {
-      // Detect Position for Zero and Send
-      if (y > 4.1) {
-        return Orientation.ZERO;
-      } else {
-        return Orientation.SEND;
-      }
     }
   }
 

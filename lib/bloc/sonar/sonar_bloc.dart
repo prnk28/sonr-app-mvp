@@ -21,7 +21,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Initial State
   @override
-  SonarState get initialState => Default();
+  SonarState get initialState => Initial();
 
   // Map Events to State
   @override
@@ -31,9 +31,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Device Can See Updates
     if (event is Initialize) {
       yield* _mapInitializeToState(event);
-    } else if (event is UpdatePosition) {
-      yield* _mapUpdatePositionToState(event);
-    } else if (event is SetAuthentication) {
+    } else if (event is ShiftMotion) {
+      yield* _mapShiftMotionToState(event);
+    } else if (event is Authenticate) {
       //yield* _mapSetSenderToState(event);
     }
     // Device InMotion
@@ -48,6 +48,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   @override
   Future<void> close() {
     _motionSubscription?.cancel();
+    
     return super.close();
   }
 
@@ -65,13 +66,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // Listen to BLoC and Add InSonar Event every update
     _motionSubscription = _motionBloc.listen((state) {
-      if (state is Zero) {
-        add(UpdatePosition(newPosition: "Zero"));
-      } else if (state is Receive) {
-        add(UpdatePosition(newPosition: "Receive"));
-      } else if (state is Send) {
-        add(UpdatePosition(newPosition: "Send"));
-      }
+        add(ShiftMotion(newPosition: state.position));
     });
 
     // _sonarSubscription = sonarWS.channel.stream.listen((message) {
@@ -80,13 +75,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   }
 
     // On SetZero Event ->
-  Stream<SonarState> _mapUpdatePositionToState(UpdatePosition position) async* {
- // Send State
-    if (position.newPosition == "Send") {
+  Stream<SonarState> _mapShiftMotionToState(ShiftMotion motion) async* {
+    // Send State
+    if (motion.newPosition.state == Orientation.SEND) {
       yield Sending();
     }
     // Receive State
-    else if (position.newPosition == "Receive") {
+    else if (motion.newPosition.state == Orientation.RECEIVE) {
       yield Receiving();
     }
     // Continue Shift
@@ -94,11 +89,4 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield Ready();
     }
   }
-
-  //   // On SetSender Event ->
-  // Stream<SonarState> _mapSetSenderToState(SetSender setSender) async* {
-  //   // Add Stream for WebSockets
-  //   // Device Ready State
-  //   yield Sending();
-  // }
 }

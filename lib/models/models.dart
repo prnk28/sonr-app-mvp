@@ -1,6 +1,11 @@
-export 'direction.dart';
-export 'location.dart';
-export 'motion.dart';
-export 'message.dart';
-export 'lobby.dart';
 export 'client.dart';
+export 'data.dart';
+export 'direction.dart';
+export 'error.dart';
+export 'file.dart';
+export 'lobby.dart';
+export 'location.dart';
+export 'match.dart';
+export 'message.dart';
+export 'motion.dart';
+export 'process.dart';

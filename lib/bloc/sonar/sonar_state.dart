@@ -12,7 +12,7 @@ class Initial extends SonarState {
   const Initial() : super();
 }
 
-// Connected to Lobby/Network Post Initialize
+// Connected to Lobby/WS
 class Ready extends SonarState {
   const Ready() : super();
 }
@@ -32,14 +32,14 @@ class Found extends SonarState {
   const Found() : super();
 }
 
-// Pending Confirmation
+// Pending Transfer Confirmation
 class Authenticating extends SonarState {
   const Authenticating() : super();
 }
 
-// In Sending/Receiving Position
-class Transfering extends SonarState {
-  const Transfering() : super();
+// In WebRTC Transfer or Contact Transfer
+class Transferring extends SonarState {
+  const Transferring() : super();
 }
 
 // Transfer Succesful
