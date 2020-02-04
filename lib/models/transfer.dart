@@ -14,7 +14,6 @@ class Transfer extends Equatable {
   // From JSON
   final String id;
   final FileType fileType;
-  final Image file;
 
   // *********************
   // ** Constructor Var **
@@ -26,7 +25,7 @@ class Transfer extends Equatable {
 
   // Constructer
   const Transfer(this.lobby, this.sender, this.receiver,
-      {this.id, this.fileType, this.file});
+      {this.id, this.fileType});
 
   // **************************
   // ** Class Implementation **
@@ -45,7 +44,7 @@ class Transfer extends Equatable {
         previousTransfer.receiver,
         id: json["id"],
         fileType: getFileTypeFromString(json["file_type"]),
-        file: BlobManager.imageFromBlob(json["file"]));
+        );
   }
 
   // Create Object from Events
