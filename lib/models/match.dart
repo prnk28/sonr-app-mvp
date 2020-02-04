@@ -18,7 +18,7 @@ class Match extends Equatable {
   const Match(this.clientId, this.status, {
       this.firstName,
       this.lastName,
-      this.profilePic
+      this.profilePic,
   });
 
   // **************************
