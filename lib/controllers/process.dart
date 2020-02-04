@@ -9,10 +9,11 @@ class Process extends Equatable {
   // *******************
   // Variables
   final Client user;
-  final Lobby currentLobby;
+  final Lobby lobby;
 
   // Dynamic Values
-  final Match matchedClient;
+  final Client match;
+  final Transfer transfer;
 
   // Enum Values
   final AuthenticationStatus matchStatus;
@@ -25,8 +26,9 @@ class Process extends Equatable {
   // *********************
   const Process(
     this.user,
-    this.currentLobby, {
-    this.matchedClient,
+    this.lobby, {
+    this.match,
+    this.transfer,
     this.matchStatus,
     this.userStatus,
     this.error,
@@ -39,7 +41,7 @@ class Process extends Equatable {
   @override
   List<Object> get props => [
         user,
-        currentLobby,
+        lobby,
       ];
 
   // ***********************
@@ -50,7 +52,7 @@ class Process extends Equatable {
     return Process(user, lobby,
         currentStage: SonarStage.Ready,
         error: FailType.None,
-        matchedClient: null,
+        match: null,
         matchStatus: AuthenticationStatus.Default,
         userStatus: AuthenticationStatus.Default);
   }
@@ -69,10 +71,10 @@ class Process extends Equatable {
     return Process(
         // Required Variables
         currentProcess.user,
-        currentProcess.currentLobby,
+        currentProcess.lobby,
         // Conditionals
-        matchedClient:
-            newMatchPeer != null ? newMatchPeer : currentProcess.matchedClient,
+        match:
+            newMatchPeer != null ? newMatchPeer : currentProcess.match,
         userStatus:
             newUserStatus != null ? newUserStatus : currentProcess.userStatus,
         matchStatus: newMatchStatus != null

@@ -16,83 +16,85 @@ abstract class SonarEvent extends Equatable {
 // ** Single Events ****
 // *********************
 // Connect to WS, Join/Create Lobby
-class Initialize extends SonarEvent {}
+class Initialize extends SonarEvent {
+  final Process runningProcess;
+
+  const Initialize({@required this.runningProcess});
+}
 
 // Send to Server Sequence
 class Send extends SonarEvent {
-  final Client user;
-  final Lobby connectedLobby;
+  final Process runningProcess;
   final Direction newDirection;
 
   const Send(
-      {@required this.user,
-      @required this.connectedLobby,
+      {@required this.runningProcess,
       @required this.newDirection});
-
-  @override
-  List<Object> get props => [user, connectedLobby, newDirection];
 }
 
 // Receive to Server Sequence
 class Receive extends SonarEvent {
-  final Client user;
-  final Lobby connectedLobby;
+  final Process runningProcess;
   final Direction newDirection;
 
   const Receive(
-      {@required this.user,
-      @required this.connectedLobby,
+      {@required this.runningProcess,
       @required this.newDirection});
-
-  @override
-  List<Object> get props => [user, connectedLobby, newDirection];
 }
 
 // Point to Receiver for 2s
-class AutoSelect extends SonarEvent {}
+class AutoSelect extends SonarEvent {
+  final Process runningProcess;
+  final Client match;
+
+  const AutoSelect(
+      {@required this.runningProcess,
+      @required this.match});
+}
 
 // Tap Peer from List
-class Select extends SonarEvent {}
+class Select extends SonarEvent {
+  final Process runningProcess;
+  final Client match;
+
+    const Select(
+      {@required this.runningProcess,
+      @required this.match});
+}
 
 // Sender Requests Authorization
 class Request extends SonarEvent {
+  final Process runningProcess;
   final Client match;
 
-  const Request({@required this.match});
-
-  @override
-  List<Object> get props => [match];
+    const Request(
+      {@required this.runningProcess,
+      @required this.match});
 }
 
 // Receiver Offerred Sonar Transfer
 class Offered extends SonarEvent {
+  final Process runningProcess;
   final bool decision;
   final Client sender;
 
-  const Offered({@required this.sender, @required this.decision});
-
-  @override
-  List<Object> get props => [sender, decision];
+  const Offered({@required this.runningProcess, @required this.sender, @required this.decision});
 }
 
 // Authentication Success
 class StartTransfer extends SonarEvent {
+  final Process runningProcess;
   final Transfer transfer;
 
-  const StartTransfer({@required this.transfer});
-
-  @override
-  List<Object> get props => [transfer];
+  const StartTransfer({@required this.runningProcess, @required this.transfer});
 }
 
 // Transfer Complete
 class CompleteTransfer extends SonarEvent {
+  final Process runningProcess;
   final Transfer transfer;
 
-  const CompleteTransfer({@required this.transfer});
-
-  @override
-  List<Object> get props => [transfer];
+  const CompleteTransfer({@required this.runningProcess, @required this.transfer});
 }
 
 // Cancel on Button Tap
@@ -100,9 +102,6 @@ class CancelSonar extends SonarEvent {
   final Process runningProcess;
 
   const CancelSonar({@required this.runningProcess});
-
-  @override
-  List<Object> get props => [runningProcess];
 }
 
 // On Cancel, On Done, On Zero
@@ -110,9 +109,6 @@ class ResetSonar extends SonarEvent {
   final Process runningProcess;
 
   const ResetSonar({@required this.runningProcess});
-
-  @override
-  List<Object> get props => [runningProcess];
 }
 
 // ***************************

@@ -23,7 +23,8 @@ class OrientationState extends StatelessWidget {
             child: Center(
               child: BlocBuilder<MotionBloc, MotionState>(
                 builder: (context, state) {
-                  return Text(state.position.state.toString(),
+                  return Text(
+                    state.position.state.toString(),
                     style: OrientationState.bigTextStyle,
                   );
                 },
@@ -31,6 +32,11 @@ class OrientationState extends StatelessWidget {
             ),
           ),
           BlocBuilder<MotionBloc, MotionState>(
+            condition: (previousState, state) =>
+                state.runtimeType != previousState.runtimeType,
+            builder: (context, state) => OrientationActions(),
+          ),
+          BlocBuilder<SonarBloc, SonarState>(
             condition: (previousState, state) =>
                 state.runtimeType != previousState.runtimeType,
             builder: (context, state) => OrientationActions(),

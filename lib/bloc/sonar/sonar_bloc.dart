@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/models/client.dart';
 import 'package:sonar_app/models/location.dart';
 import 'package:sonar_app/repositories/repositories.dart';
@@ -16,11 +17,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   StreamSubscription _sonarSubscription;
 
   // Constructer
+  Process runningProcess;
   SonarBloc(this._motionBloc);
 
   // Initial State
   @override
-  SonarState get initialState => Initial();
+  SonarState get initialState => Initial(runningProcess);
 
   // Map Events to State
   @override
@@ -34,27 +36,28 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapUpdateOrientationToState(event);
     } else if (event is ReadMessage) {
       yield* _mapReadMessageToState(event);
-    } else if (event is Send) {
-      yield* _mapSendToState(event);
-    } else if (event is Receive) {
-      yield* _mapReceiveToState(event);
-    } else if (event is AutoSelect) {
-      yield* _mapAutoSelectToState(event);
-    } else if (event is Select) {
-      yield* _mapSelectState(event);
-    } else if (event is Request) {
-      yield* _mapRequestToState(event);
-    } else if (event is Offered) {
-      yield* _mapOfferedToState(event);
-    } else if (event is StartTransfer) {
-      yield* _mapStartTransferToState(event);
-    } else if (event is CompleteTransfer) {
-      yield* _mapCompleteTransferState(event);
-    } else if (event is CancelSonar) {
-      yield* _mapCancelSonarToState(event);
-    } else if (event is ResetSonar) {
-      yield* _mapResetSonarToState(event);
-    } 
+    }
+    // } else if (event is Send) {
+    //   yield* _mapSendToState(event);
+    // } else if (event is Receive) {
+    //   yield* _mapReceiveToState(event);
+    // } else if (event is AutoSelect) {
+    //   yield* _mapAutoSelectToState(event);
+    // } else if (event is Select) {
+    //   yield* _mapSelectState(event);
+    // } else if (event is Request) {
+    //   yield* _mapRequestToState(event);
+    // } else if (event is Offered) {
+    //   yield* _mapOfferedToState(event);
+    // } else if (event is StartTransfer) {
+    //   yield* _mapStartTransferToState(event);
+    // } else if (event is CompleteTransfer) {
+    //   yield* _mapCompleteTransferState(event);
+    // } else if (event is CancelSonar) {
+    //   yield* _mapCancelSonarToState(event);
+    // } else if (event is ResetSonar) {
+    //   yield* _mapResetSonarToState(event);
+    // } 
   }
 
   // Close Subscription Streams
@@ -66,16 +69,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   }
 
   // On Initialize Event ->
-  Stream<SonarState> _mapInitializeToState(Initialize initialize) async* {
+  Stream<SonarState> _mapInitializeToState(Initialize initializeEvent) async* {
     // Initialize Variables
     Location fakeLocation = Location.fakeLocation();
     Profile fakeProfile = Profile.fakeProfile();
 
     // Connect to WS Join/Create Lobby
     _sonarRepository.initializeSonar(fakeLocation, fakeProfile);
-
-    // Device Ready State
-    yield Ready();
 
     // Cancel Previous Subscriptions
     _motionSubscription?.cancel();
@@ -101,16 +101,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       UpdateOrientation motionEvent) async* {
     // Send State
     if (motionEvent.newPosition.state == Orientation.Tilt) {
-      yield Sending();
+      // yield Sending();
     }
     // Receive State
     else if (motionEvent.newPosition.state == Orientation.LandscapeLeft ||
         motionEvent.newPosition.state == Orientation.LandscapeRight) {
-      yield Receiving();
+      // yield Receiving();
     }
     // Continue Shift
     else {
-      yield Ready();
+      // yield Ready();
     }
   }
 
@@ -139,63 +139,63 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     }
   }
 
-    // On Pause Event ->
-  Stream<SonarState> _mapSendToState(Send sendEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //   // On Pause Event ->
+  // Stream<SonarState> _mapSendToState(Send sendEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapAutoSelectToState(AutoSelect autoSelectEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapAutoSelectToState(AutoSelect autoSelectEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapSelectState(Select selectEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapSelectState(Select selectEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapRequestToState(Request requestEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapRequestToState(Request requestEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-        // On Pause Event ->
-  Stream<SonarState> _mapStartTransferToState(StartTransfer startTransferEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //       // On Pause Event ->
+  // Stream<SonarState> _mapStartTransferToState(StartTransfer startTransferEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapCompleteTransferState(CompleteTransfer completeTransferEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapCompleteTransferState(CompleteTransfer completeTransferEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapCancelSonarToState(CancelSonar cancelSonarEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapCancelSonarToState(CancelSonar cancelSonarEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 
-      // On Pause Event ->
-  Stream<SonarState> _mapResetSonarToState(ResetSonar resetSonarEvent) async* {
-      // Set Suspend state with lastState
-      yield Sending();
-  }
+  //     // On Pause Event ->
+  // Stream<SonarState> _mapResetSonarToState(ResetSonar resetSonarEvent) async* {
+  //     // Set Suspend state with lastState
+  //     yield Sending();
+  // }
 }
