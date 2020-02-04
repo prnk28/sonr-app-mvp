@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:sonar_app/controllers/process.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/models/transfer.dart';
 
 abstract class SonarEvent extends Equatable {
   const SonarEvent();
@@ -9,28 +12,11 @@ abstract class SonarEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// *********************
+// ** Single Events ****
+// *********************
 // Connect to WS, Join/Create Lobby
 class Initialize extends SonarEvent {}
-
-// Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription
-class ShiftMotion extends SonarEvent {
-  final Motion newPosition;
-
-  const ShiftMotion({@required this.newPosition});
-
-  @override
-  List<Object> get props => [newPosition];
-}
-
-// Approve/Decline Authentication
-class Authenticate extends SonarEvent {
-  final String authentication;
-
-  const Authenticate({@required this.authentication});
-
-  @override
-  List<Object> get props => [authentication];
-}
 
 // Send to Server Sequence
 class Send extends SonarEvent {
@@ -63,22 +49,91 @@ class Receive extends SonarEvent {
 }
 
 // Point to Receiver for 2s
-class Match extends SonarEvent {}
+class AutoSelect extends SonarEvent {}
 
 // Tap Peer from List
 class Select extends SonarEvent {}
 
-// Receiver Chosen
-class Offered extends SonarEvent {}
+// Sender Requests Authorization
+class Request extends SonarEvent {
+  final Client match;
+
+  const Request({@required this.match});
+
+  @override
+  List<Object> get props => [match];
+}
+
+// Receiver Offerred Sonar Transfer
+class Offered extends SonarEvent {
+  final bool decision;
+  final Client sender;
+
+  const Offered({@required this.sender, @required this.decision});
+
+  @override
+  List<Object> get props => [sender, decision];
+}
 
 // Authentication Success
-class Transfer extends SonarEvent {}
+class StartTransfer extends SonarEvent {
+  final Transfer transfer;
+
+  const StartTransfer({@required this.transfer});
+
+  @override
+  List<Object> get props => [transfer];
+}
 
 // Transfer Complete
-class Done extends SonarEvent {}
+class CompleteTransfer extends SonarEvent {
+  final Transfer transfer;
+
+  const CompleteTransfer({@required this.transfer});
+
+  @override
+  List<Object> get props => [transfer];
+}
 
 // Cancel on Button Tap
-class Cancel extends SonarEvent {}
+class CancelSonar extends SonarEvent {
+  final Process runningProcess;
+
+  const CancelSonar({@required this.runningProcess});
+
+  @override
+  List<Object> get props => [runningProcess];
+}
 
 // On Cancel, On Done, On Zero
-class Reset extends SonarEvent {}
+class ResetSonar extends SonarEvent {
+  final Process runningProcess;
+
+  const ResetSonar({@required this.runningProcess});
+
+  @override
+  List<Object> get props => [runningProcess];
+}
+
+// ***************************
+// ** Subscription Events ****
+// ***************************
+// Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription
+class UpdateOrientation extends SonarEvent {
+  final Motion newPosition;
+
+  const UpdateOrientation({@required this.newPosition});
+
+  @override
+  List<Object> get props => [newPosition];
+}
+
+// Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription
+class ReadMessage extends SonarEvent {
+  final Message incomingMessage;
+
+  const ReadMessage({@required this.incomingMessage});
+
+  @override
+  List<Object> get props => [incomingMessage];
+}

@@ -57,7 +57,7 @@ class Direction extends Equatable {
   // ** JSON Conversion **
   // *********************
   // Generation Method
-  toJSON() {
+  toMap() {
     return {
       'degrees': degrees,
       'antipodal_degrees': antipodalDegrees,

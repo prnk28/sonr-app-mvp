@@ -118,7 +118,7 @@ class Location extends Equatable {
   // *********************
   // ** JSON Conversion **
   // *********************
-  toJSON() {
+  toMap() {
     return {
       // Position
       'accuracy': accuracy,

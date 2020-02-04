@@ -1,25 +1,24 @@
-// Remote Packages
-import 'dart:convert';
-
 // Local Classes
 import 'package:sonar_app/controllers/controllers.dart';
-import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
+import 'package:sonar_app/models/models.dart';
 
 // Constant Sonar Domain
 const String SERVER_ADDRESS = "ws://match.sonr.io";
+
 class SonarRepository {
   // **************************
   // ** Class Initialization **
   // **************************
   // Websockets Sonar Object
   static final Websockets sonarWS = new Websockets("ws://match.sonr.io");
-  
+
   // Initialize
-  SonarRepository._internal(){
+  SonarRepository._internal() {
     sonarWS.connect();
   }
-  
+
   // Constructer
   factory SonarRepository() {
     SonarRepository _wsClient = new SonarRepository._internal();
@@ -30,66 +29,81 @@ class SonarRepository {
   // ** WebSockets Server Actions **
   // *******************************
   // Connect to Server, Join/Create Lobby
-  initializeSonar(Location currentLocation, Client currentClient) {
-    // Set Data
-    var data = {
-      'profile': currentClient.user.toJSON(),
-      'location': currentLocation.toJSON()
-    };
+  initializeSonar(Location location, Profile profile) {
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Initialize, givenData: {
+      "location": location.toMap(),
+      "profile": profile.toMap()
+    });
+    print(message);
 
     // Action: JOIN To Server
-    sonarWS.send(jsonEncode({'action': "JOIN", 'data': data}));
+    sonarWS.send(message);
   }
 
-  // Authorize Match
-  setAuthorize(bool authStatus, Client currentClient, Match potentialMatch) {
-    // Send msg based on bool
-    if (authStatus) {
-      // Action: AUTHORIZE.TRUE To Server
-      sonarWS.send(jsonEncode({'action': "AUTHORIZE.TRUE"}));
-    } else {
-      // Action: AUTHORIZE.FALSE To Server
-      sonarWS.send(jsonEncode({'action': "AUTHORIZE.FALSE"}));
-    }
-  }
 
   // Client Sending Mode
   setSending(Direction currentDirection) {
-    // Action: SEND To Server
-    var data = {'direction': currentDirection.toJSON()};
-    print(jsonEncode({'action': "SEND", 'data': data}));
-    sonarWS.send(jsonEncode({'action': "SEND", 'data': data}));
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Sending, givenData: {
+      "direction": currentDirection.toMap(),
+    });
+
+    // Action: JOIN To Server
+    sonarWS.send(message);
   }
 
   // Client Receiving Mode
   setReceiving(Direction currentDirection) {
-    // Action: RECEIVE To Server
-    var data = {'direction': currentDirection.toJSON()};
-    sonarWS.send(jsonEncode({'action': "RECEIVE", 'data': data}));
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Receiving, givenData: {
+      "direction": currentDirection.toMap(),
+    });
+
+    // Action: JOIN To Server
+    sonarWS.send(message);
   }
 
   // User Selected Match or Auto-Matched
-  setSelect(Match potentialMatch){
+  setSelect(Client potentialMatch) {
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Select, givenData: {
+      "match": potentialMatch.toMap(),
+    });
 
+    // Action: Select To Server
+    sonarWS.send(message);
+  }
+
+  // Authorize Match
+  requestAuthorization(Client potentialMatch) {
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Request, givenData: {
+      "match": potentialMatch.toMap()
+    });
+
+    // Action: Authorize To Server
+    sonarWS.send(message);
   }
 
   // Begin Transfer between Client and Match
-  setTransfer(Client currentClient, Match currentMatch){
+  startTransfer(Client currentClient, Client currentMatch) {
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Transfer, givenData: {
+      "sender": currentClient.toMap(),
+      "receiver": currentMatch.toMap()
+    });
 
+    // Action: JOIN To Server
+    sonarWS.send(message);
   }
 
   // Transfer has Finished
-  completeTransfer(Process sonarProcess){
-
-  }
+  completeTransfer(Process sonarProcess) {}
 
   // Cancel Sequence
-  cancelSonar(Client currentClient, Process sonarProcess){
-
-  }
+  cancelSonar(Client currentClient, Process sonarProcess) {}
 
   // Reset Sonar Client
-  reset(Client currentClient, Process sonarProcess){
-
-  }
+  reset(Client currentClient, Process sonarProcess) {}
 }

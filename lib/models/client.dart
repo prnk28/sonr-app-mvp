@@ -39,6 +39,17 @@ class Client extends Equatable {
         // TODO: Fix Profile Temporary Fix
         user: Profile.fakeProfile());
   }
+
+  // *********************
+  // ** JSON Conversion **
+  // *********************
+  toMap() {
+    return {
+      'id': id,
+      'joined': joined.toString(),
+      'profile': user.toMap()
+    };
+  }
 }
 
 // Basic Profile Class for Client
@@ -68,7 +79,7 @@ class Profile {
   // *********************
   // ** JSON Conversion **
   // *********************
-  toJSON() {
+  toMap() {
     return {
       'first_name': firstName,
       'last_name': lastName,

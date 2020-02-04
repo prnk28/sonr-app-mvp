@@ -33,25 +33,36 @@ enum FailType { None, MatchDeclined, UserCancelled, ServerError, NetworkError }
 // Kind of File Sent from Sender
 enum FileType { Contact, Photo, Video, Document, Unknown }
 
-// Status Match is In
-enum MatchStatus { Sender, Receiver, Default }
-
-// Server Message Type
-enum MessageCategory {
-  Client,
+// Incoming Message: Type
+enum IncomingMessageDataType {
+  Info,
   Lobby,
-  Sender,
-  Receiver,
-  Authorization,
-  WebRTC,
+  Senders,
+  Receivers,
+  Match,
   Error,
 }
 
 // Device Motion
 enum Orientation { Default, Tilt, LandscapeLeft, LandscapeRight }
 
+// Outgoing Message: Action
+enum OutgoingMessageAction {
+  Initialize,
+  Sending,
+  Receiving,
+  Select,
+  Request,
+  Authorize,
+  Transfer,
+  Complete,
+  Cancel,
+  Error,
+}
+
 // Stage in Sonar Transfer
 enum SonarStage {
+  Connected,
   Ready,
   Sending,
   Receiving,
@@ -66,10 +77,10 @@ enum SonarStage {
 // ** Enum Centric Methods ****
 // ****************************
 // Used by Message Model
-MessageCategory getMessageCategoryFromString(String message) {
-  message = 'MessageCategory.$message';
-  return MessageCategory.values
-      .firstWhere((f) => f.toString() == message, orElse: () => null);
+IncomingMessageDataType getMessageDataTypeFromString(String type) {
+  type = 'IncomingMessageType.$type';
+  return IncomingMessageDataType.values
+      .firstWhere((f) => f.toString() == type, orElse: () => null);
 }
 
 // Used by Direction Model
@@ -103,6 +114,13 @@ SonarStage getSonarStageFromString(String stage) {
       .firstWhere((f) => f.toString() == stage, orElse: () => null);
 }
 
+// File Type from Strong
+FileType getFileTypeFromString(String type) {
+  type = 'FileType.$type';
+  return FileType.values
+      .firstWhere((f) => f.toString() == type, orElse: () => null);
+}
+
 // Used by Process Model
 String getMessageForFailType(FailType failType) {
   // Message by enum to be displayed
@@ -120,6 +138,7 @@ String getMessageForFailType(FailType failType) {
   }
 }
 
+// Fail Type from Sonar Code
 FailType getFailTypeFromCode(int code) {
   if (code == 40) {
     return FailType.UserCancelled;

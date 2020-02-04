@@ -1,9 +1,5 @@
 export 'client.dart';
-export 'data.dart';
 export 'direction.dart';
-export 'file.dart';
 export 'lobby.dart';
 export 'location.dart';
-export 'match.dart';
-export 'message.dart';
 export 'motion.dart';

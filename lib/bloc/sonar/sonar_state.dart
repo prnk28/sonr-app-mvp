@@ -1,7 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:sonar_app/controllers/controllers.dart';
 
 abstract class SonarState extends Equatable {
-  const SonarState();
+  final Process runningProcess;
+  
+  const SonarState(this.runningProcess);
 
   @override
   List<Object> get props => [];
@@ -9,45 +12,45 @@ abstract class SonarState extends Equatable {
 
 // Preload State
 class Initial extends SonarState {
-  const Initial() : super();
+  const Initial(Process runningProcess) : super(runningProcess);
 }
 
 // Connected to Lobby/WS
 class Ready extends SonarState {
-  const Ready() : super();
+  const Ready(Process runningProcess) : super(runningProcess);
 }
 
 // In Sending Position
 class Sending extends SonarState {
-  const Sending() : super();
+  const Sending(Process runningProcess) : super(runningProcess);
 }
 
 // In Receiving Position
 class Receiving extends SonarState {
-  const Receiving() : super();
+  const Receiving(Process runningProcess) : super(runningProcess);
 }
 
-// Found Match
+// Found Match: Either Select or AutoSelect
 class Found extends SonarState {
-  const Found() : super();
+  const Found(Process runningProcess) : super(runningProcess);
 }
 
 // Pending Transfer Confirmation
 class Authenticating extends SonarState {
-  const Authenticating() : super();
+  const Authenticating(Process runningProcess) : super(runningProcess);
 }
 
 // In WebRTC Transfer or Contact Transfer
 class Transferring extends SonarState {
-  const Transferring() : super();
+  const Transferring(Process runningProcess) : super(runningProcess);
 }
 
 // Transfer Succesful
 class Complete extends SonarState {
-  const Complete() : super();
+  const Complete(Process runningProcess) : super(runningProcess);
 }
 
 // Failed Sonar: Cancel/Decline/Error
 class Failed extends SonarState {
-  const Failed() : super();
+  const Failed(Process runningProcess) : super(runningProcess);
 }
