@@ -102,7 +102,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
       yield Tilted(motion.position);
     }
     // Receive State
-    else if (motion.position.state == Orientation.Landscape) {
+    else if (motion.position.state == Orientation.LandscapeLeft || motion.position.state == Orientation.LandscapeRight) {
       yield Landscaped(motion.position);
     }
     // Continue Shift

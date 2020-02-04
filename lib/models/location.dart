@@ -96,6 +96,24 @@ class Location extends Equatable {
       street: data["street"],
     );
   }
+  
+  // Fake Data Method
+  static Location fakeLocation() {
+    // Create Map
+   return Location(
+      accuracy: 12345,
+			altitude: 123,
+			latitude: 123,
+			longitude: 800,
+			address: "Ex",
+			city: "Ex",
+			country: "Ex",
+			locality: "Ex",
+			neighborhood: "Ex",
+			state: "Ex",
+			street: "Ex"
+    );
+  }
 
   // *********************
   // ** JSON Conversion **

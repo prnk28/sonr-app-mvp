@@ -2,11 +2,7 @@
 // ** GLOBAL ENUMS ***
 // *******************
 // Authentication Status for Sonar Process
-enum AuthenticationStatus {
-  Accepted,
-  Declined,
-  Default
-}
+enum AuthenticationStatus { Accepted, Declined, Default }
 
 // Device Heading Postion
 enum CompassDesignation {
@@ -29,39 +25,16 @@ enum CompassDesignation {
 }
 
 // Kind of Data Model Returned from Server
-enum DataType { 
-  AuthorizationStatus,
-  Circle,
-  Client,
-  Lobby,
-  Match,
-  None
-}
+enum DataType { AuthorizationStatus, Circle, Client, Lobby, Match, None }
 
 // Sonar Process Failed
-enum FailType { 
-  None,
-  MatchDeclined,
-  UserCancelled, 
-  ServerError, 
-  NetworkError 
-}
+enum FailType { None, MatchDeclined, UserCancelled, ServerError, NetworkError }
 
 // Kind of File Sent from Sender
-enum FileType { 
-  Contact,
-  Photo,
-  Video,
-  Document,
-  Unknown
-}
+enum FileType { Contact, Photo, Video, Document, Unknown }
 
 // Status Match is In
-enum MatchStatus { 
-  Sender,
-  Receiver,
-  Default
-}
+enum MatchStatus { Sender, Receiver, Default }
 
 // Server Message Type
 enum MessageCategory {
@@ -75,7 +48,7 @@ enum MessageCategory {
 }
 
 // Device Motion
-enum Orientation { Default, Tilt, Landscape }
+enum Orientation { Default, Tilt, LandscapeLeft, LandscapeRight }
 
 // Stage in Sonar Transfer
 enum SonarStage {
@@ -109,8 +82,10 @@ CompassDesignation getCompassDesignationFromDegrees(double degrees) {
 // Used in Motion Model
 Orientation getOrientationFromAccelerometer(double x, double y) {
   // Set Sonar State by Accelerometer
-  if (x > 7.5 || x < -7.5) {
-    return Orientation.Landscape;
+  if (x > 7.5) {
+    return Orientation.LandscapeLeft;
+  } else if (x < -7.5) {
+    return Orientation.LandscapeRight;
   } else {
     // Detect Position for Default and Tilt
     if (y > 4.1) {
