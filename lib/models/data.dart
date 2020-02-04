@@ -32,7 +32,7 @@ class Data extends Equatable {
   static Data fromMessage(MessageCategory category, Map data) {
     switch (category) {
       case MessageCategory.Authorization:
-            return Data();
+            return Data(kind: DataType.AuthorizationStatus, value: data["auth_status"]);
         break;
       case MessageCategory.Client:
         return Data(kind: DataType.Client, value: Client.fromMap(data));
@@ -41,10 +41,10 @@ class Data extends Equatable {
         return Data(kind: DataType.Lobby, value: Lobby.fromMap(data));
         break;
       case MessageCategory.Sender:
-        
+        return Data(kind: DataType.Circle, value: data["circle"]);
         break;
       case MessageCategory.Receiver:
-        
+        return Data(kind: DataType.Circle, value: data["circle"]);
         break;
       case MessageCategory.WebRTC:
         

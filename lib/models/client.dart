@@ -6,7 +6,6 @@ class Client extends Equatable {
   // *******************
   // From JSON
   final String id;
-  final String connection;
   final DateTime joined;
 
   // *********************
@@ -15,8 +14,7 @@ class Client extends Equatable {
   const Client(
     {
       this.id,
-      this.connection,
-      this.joined
+      this.joined,
       });
 
   // **************************
@@ -24,7 +22,7 @@ class Client extends Equatable {
   // **************************
   @override
   List<Object> get props =>
-      [id, connection, joined];
+      [id, joined];
 
   // ***********************
   // ** Object Generation **
@@ -34,7 +32,6 @@ class Client extends Equatable {
 // Return Object
     return Client(
         id: data["id"],
-        connection: data["connection"],
         joined: data["joined"]);
   }
 }

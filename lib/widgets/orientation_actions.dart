@@ -18,7 +18,7 @@ class OrientationActions extends StatelessWidget {
     MotionBloc motionBloc,
   }) {
     final MotionState currentState = motionBloc.state;
-    if (currentState is Zero) {
+    if (currentState is Default) {
       return [
         FloatingActionButton(
           child: Icon(Icons.play_arrow),
@@ -35,19 +35,19 @@ class OrientationActions extends StatelessWidget {
         )
       ];
     }
-    if (currentState is Send) {
+    if (currentState is Tilted) {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => motionBloc.add(Reset()),
+          onPressed: () => {},
         ),
       ];
     }
-    if (currentState is Receive) {
+    if (currentState is Landscaped) {
       return [
         FloatingActionButton(
           child: Icon(Icons.replay),
-          onPressed: () => motionBloc.add(Reset()),
+          onPressed: () => {},
         ),
       ];
     }
