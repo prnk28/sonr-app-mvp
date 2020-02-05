@@ -2,32 +2,37 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:web_socket_channel/io.dart';
 
+// Application-level global variable to access the WebSockets
+Websockets sonarWS = new Websockets();
+
+// Websockets Address
+const String _SERVER_ADDRESS = "ws://match.sonr.io";
 class Websockets {
   // **************************
   // ** Class Initialization **
   // **************************
-  // Server Address
-  final String serverAddress;
-
   // Initialize
-  Websockets._internal(this.serverAddress);
+  static final Websockets _sockets = new Websockets._internal();
 
   // Constructer
-  factory Websockets(String serverAddress) {
-    Websockets _sockets = new Websockets._internal(serverAddress);
+  factory Websockets() {
     return _sockets;
   }
+  
+  Websockets._internal();
 
   // The WebSocket "open" channel
-  IOWebSocketChannel _channel;
-
-  // WS Server Stream
-  Stream messages;
+  IOWebSocketChannel channel;
 
   // Is the connection established?
   bool _isOn = false;
+
+  // Socket Listeners
+  ObserverList<Function> _listeners = new ObserverList<Function>();
 
   // ****************************
   // ** Start WS Communication **
@@ -39,14 +44,10 @@ class Websockets {
     // Open a new WebSocket communication
     try {
       // Initialize Channel
-      _channel = new IOWebSocketChannel.connect(serverAddress);
-      log("Connected to Server");
-
-      // Start Stream
-      messages = _channel.stream;
+      channel = new IOWebSocketChannel.connect(_SERVER_ADDRESS);
 
       // Generic Callback
-      _channel.stream.listen(_onReceptionOfMessageFromServer);
+      channel.stream.listen(_onReceptionOfMessageFromServer);
     } catch (e) {
       log("Error Has Occurred");
     }
@@ -57,13 +58,24 @@ class Websockets {
   // ****************************
   send(String message) {
     // Validate Channel
-    if (_channel != null) {
+    if (channel != null) {
       // Verify Connection
-      if (_channel.sink != null && _isOn) {
+      if (channel.sink != null && _isOn) {
         // Send Message to Channel
-        _channel.sink.add(message);
+        channel.sink.add(message);
       }
     }
+  }
+
+  // **********************************
+  // ** Message Callbacks for Stream **
+  // **********************************
+  addListener(Function callback){
+    _listeners.add(callback);
+  }
+
+  removeListener(Function callback){
+    _listeners.remove(callback);
   }
 
   // *******************************
@@ -74,17 +86,21 @@ class Websockets {
     _isOn = true;
 
     // Convert server message to map
-    Map message = json.decode(serverMessage);
-    print(message);
+    Message message = Message.incoming(serverMessage);
+
+    // Send Message to All Listeners
+    _listeners.forEach((Function callback){
+      callback(message);
+    });
   }
 
   // ********************************
   // ** Close Server Communication **
   // ********************************
   disconnect() {
-    if (_channel != null) {
-      if (_channel.sink != null) {
-        _channel.sink.close();
+    if (channel != null) {
+      if (channel.sink != null) {
+        channel.sink.close();
         _isOn = false;
       }
     }

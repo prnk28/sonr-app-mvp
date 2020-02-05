@@ -10,22 +10,20 @@ class Message extends Equatable {
   // *******************
   // From JSON
   final String message;
+  final SonarStage stage;
   final int code;
   final Map data;
   final IncomingMessageDataType type;
-
-  // Interpreted Values
-  final DateTime received;
 
   // *********************
   // ** Constructor Var **
   // *********************
   const Message(
-    this.message,
     this.code,
+    this.stage,
+    this.message,  
     this.type, {
     this.data,
-    this.received,
   });
 
   // **************************
@@ -33,28 +31,42 @@ class Message extends Equatable {
   // **************************
   @override
   List<Object> get props => [
-        message,
         code,
+        stage,
+        message,
         type,
-        received,
+        data
       ];
+
+  @override
+  String toString() {
+    return '{ ${this.code}, ${this.stage}, ${this.message}, ${this.type}, ${this.data}}';
+  }
 
   // ***********************
   // ** Object Generation **
   // ***********************
   // Create Incoming Message from Server
-  static Message incoming(dynamic json) {
-    return Message(json["message"], json["code"],
-        getMessageDataTypeFromString(json["type"]),
-        data: json["data"], received: DateTime.now());
+  factory Message.incoming(dynamic serverMessage) {
+    // Init Json
+    var json = jsonDecode(serverMessage);
+    
+    // Return Message
+    return Message(
+     json["code"] as int,
+     getSonarStageFromString(json["stage"]),
+     json["message"] as String,
+     getDataTypeFromString(json["type"]),
+     data: json["data"]);
   }
 
   // Create Outgoing Message to Server
   static String outgoing(OutgoingMessageAction actionType, {Map givenData}) {
     // Construct JSON Map
-    var map = {"action": actionType.toString(), "data": givenData};
+    var map = {"action": getShortMessageAction(actionType), "data": givenData};
 
     // Convert and Return Object
+    print("Outgoing Message: " + jsonEncode(map));
     return jsonEncode(map);
   }
 }

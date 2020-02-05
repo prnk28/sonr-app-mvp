@@ -1,4 +1,6 @@
 // Local Classes
+import 'dart:async';
+
 import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
@@ -12,7 +14,7 @@ class SonarRepository {
   // ** Class Initialization **
   // **************************
   // Websockets Sonar Object
-  static final Websockets sonarWS = new Websockets("ws://match.sonr.io");
+  static final SonarRepository _sonarRepository = new SonarRepository._internal();
 
   // Initialize
   SonarRepository._internal() {
@@ -21,8 +23,11 @@ class SonarRepository {
 
   // Constructer
   factory SonarRepository() {
-    SonarRepository _wsClient = new SonarRepository._internal();
-    return _wsClient;
+    return _sonarRepository;
+  }
+
+  Stream messages() {
+    return sonarWS.channel.stream;
   }
 
   // *******************************
@@ -35,7 +40,6 @@ class SonarRepository {
       "location": location.toMap(),
       "profile": profile.toMap()
     });
-    print(message);
 
     // Action: JOIN To Server
     sonarWS.send(message);

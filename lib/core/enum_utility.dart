@@ -54,6 +54,7 @@ enum OutgoingMessageAction {
   Select,
   Request,
   Authorize,
+  Decline,
   Transfer,
   Complete,
   Cancel,
@@ -62,23 +63,23 @@ enum OutgoingMessageAction {
 
 // Stage in Sonar Transfer
 enum SonarStage {
-  Connected,
-  Ready,
-  Sending,
-  Receiving,
-  Found,
-  Pending,
-  Transferring,
-  Complete,
-  Error
+  CONNECTED,
+  READY,
+  SENDING,
+  RECEIVING,
+  FOUND,
+  PENDING,
+  TRANSFERRING,
+  COMPLETE,
+  ERROR
 }
 
 // ****************************
 // ** Enum Centric Methods ****
 // ****************************
 // Used by Message Model
-IncomingMessageDataType getMessageDataTypeFromString(String type) {
-  type = 'IncomingMessageType.$type';
+IncomingMessageDataType getDataTypeFromString(String type) {
+  type = 'IncomingMessageDataType.$type';
   return IncomingMessageDataType.values
       .firstWhere((f) => f.toString() == type, orElse: () => null);
 }
@@ -136,6 +137,36 @@ String getMessageForFailType(FailType failType) {
     default:
       return "";
   }
+}
+
+// Get Action for OutgoingMessageAction
+String getShortMessageAction(OutgoingMessageAction action) {
+  // Switch of Action
+  switch (action) {
+    case OutgoingMessageAction.Initialize:
+      return "INITIALIZE";
+    case OutgoingMessageAction.Sending:
+      return "SENDING";
+    case OutgoingMessageAction.Receiving:
+      return "RECEIVING";
+    case OutgoingMessageAction.Select:
+      return "SELECT";
+    case OutgoingMessageAction.Request:
+      return "REQUEST";
+    case OutgoingMessageAction.Authorize:
+      return "AUTHORIZE";
+    case OutgoingMessageAction.Decline:
+      return "DECLINE";
+    case OutgoingMessageAction.Transfer:
+      return "TRANSFER";
+    case OutgoingMessageAction.Complete:
+      return "COMPLETE";
+    case OutgoingMessageAction.Cancel:
+      return "CANCEL";
+    case OutgoingMessageAction.Error:
+      return "ERROR";
+  }
+  return "NONE";
 }
 
 // Fail Type from Sonar Code

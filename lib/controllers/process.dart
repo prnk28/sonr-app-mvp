@@ -50,7 +50,7 @@ class Process extends Equatable {
   // Create Default Object with Default Variables
   static Process create(Client user, Lobby lobby) {
     return Process(user, lobby,
-        currentStage: SonarStage.Ready,
+        currentStage: SonarStage.READY,
         error: FailType.None,
         match: null,
         matchStatus: AuthenticationStatus.Default,
@@ -97,26 +97,26 @@ class Process extends Equatable {
       switch (currentProcess.matchStatus) {
         case AuthenticationStatus.Accepted:
           return Process.update(currentProcess,
-              newStage: SonarStage.Transferring,
+              newStage: SonarStage.TRANSFERRING,
               newError: FailType.None,
               newMatchStatus: AuthenticationStatus.Accepted);
           break;
         // Match Pending Authentication
         case AuthenticationStatus.Default:
           return Process.update(currentProcess,
-              newStage: SonarStage.Pending,
+              newStage: SonarStage.PENDING,
               newError: FailType.None,
               newMatchStatus: AuthenticationStatus.Accepted);
           break;
         // Matched User Already Declined
         case AuthenticationStatus.Declined:
           return Process.update(currentProcess,
-              newStage: SonarStage.Error, newError: FailType.MatchDeclined);
+              newStage: SonarStage.ERROR, newError: FailType.MatchDeclined);
       }
     }
     // If User Declined Transfer
     return Process.update(currentProcess,
-        newStage: SonarStage.Error,
+        newStage: SonarStage.ERROR,
         newError: FailType.MatchDeclined,
         newMatchStatus: AuthenticationStatus.Declined);
   }
@@ -133,26 +133,26 @@ class Process extends Equatable {
       switch (currentProcess.matchStatus) {
         case AuthenticationStatus.Accepted:
           return Process.update(currentProcess,
-              newStage: SonarStage.Transferring,
+              newStage: SonarStage.TRANSFERRING,
               newError: FailType.None,
               newUserStatus: AuthenticationStatus.Accepted);
           break;
         // Match Pending Authentication
         case AuthenticationStatus.Default:
           return Process.update(currentProcess,
-              newStage: SonarStage.Pending,
+              newStage: SonarStage.PENDING,
               newError: FailType.None,
               newUserStatus: AuthenticationStatus.Accepted);
           break;
         // Matched User Already Declined
         case AuthenticationStatus.Declined:
           return Process.update(currentProcess,
-              newStage: SonarStage.Error, newError: FailType.MatchDeclined);
+              newStage: SonarStage.ERROR, newError: FailType.MatchDeclined);
       }
     }
     // If User Declined Transfer
     return Process.update(currentProcess,
-        newStage: SonarStage.Error,
+        newStage: SonarStage.ERROR,
         newError: FailType.UserCancelled,
         newUserStatus: AuthenticationStatus.Declined);
   }

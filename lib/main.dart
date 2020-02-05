@@ -7,21 +7,23 @@ import 'package:sonar_app/data/sensor_provider.dart';
 import 'package:sonar_app/widgets/widgets.dart';
 
 import 'bloc/bloc.dart';
+
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Color.fromRGBO(109, 234, 255, 1),
-        accentColor: Color.fromRGBO(72, 74, 126, 1),
-        brightness: Brightness.dark,
-      ),
-      title: 'Flutter Timer',
-      home: BlocProvider(
-        create: (context) => MotionBloc(sensorProvider: SensorProvider()),
-        child: OrientationState(),
-      ),
-    );
+        theme: ThemeData(
+          primaryColor: Color.fromRGBO(109, 234, 255, 1),
+          accentColor: Color.fromRGBO(72, 74, 126, 1),
+          brightness: Brightness.dark,
+        ),
+        title: 'Flutter Timer',
+        home: BlocProvider(
+            create: (context) => MotionBloc(sensorProvider: SensorProvider()),
+            child: BlocProvider(
+              create: (context) => SonarBloc(BlocProvider.of<MotionBloc>(context)),
+              child: OrientationState(),
+            )));
   }
 }
 

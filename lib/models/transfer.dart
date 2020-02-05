@@ -32,7 +32,7 @@ class Transfer extends Equatable {
   // **************************
   @override
   List<Object> get props => [
-        lobby, sender, receiver, id, fileType, file
+        lobby, sender, receiver, id, fileType
       ];
 
   // ***********************

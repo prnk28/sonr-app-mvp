@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:sonar_app/controllers/controllers.dart';
-import 'package:sonar_app/models/client.dart';
-import 'package:sonar_app/models/location.dart';
+import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
@@ -14,15 +14,17 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Stream Management
   StreamSubscription _motionSubscription;
-  StreamSubscription _sonarSubscription;
 
   // Constructer
   Process runningProcess;
-  SonarBloc(this._motionBloc);
+  SonarBloc(this._motionBloc) {
+    // Subscribe to Server WS Updates
+    sonarWS.addListener(_onMessageReceived);
+  }
 
   // Initial State
   @override
-  SonarState get initialState => Initial(runningProcess);
+  SonarState get initialState => Initial();
 
   // Map Events to State
   @override
@@ -57,14 +59,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     //   yield* _mapCancelSonarToState(event);
     // } else if (event is ResetSonar) {
     //   yield* _mapResetSonarToState(event);
-    // } 
+    // }
   }
 
   // Close Subscription Streams
   @override
   Future<void> close() {
     _motionSubscription?.cancel();
-    _sonarSubscription?.cancel();
+    sonarWS.removeListener(_onMessageReceived);
     return super.close();
   }
 
@@ -75,25 +77,24 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     Profile fakeProfile = Profile.fakeProfile();
 
     // Connect to WS Join/Create Lobby
-    _sonarRepository.initializeSonar(fakeLocation, fakeProfile);
+    print("In Bloc: " +
+        _sonarRepository.initializeSonar(fakeLocation, fakeProfile));
+
+    // Device Pending State
+    yield Ready(initializeEvent.runningProcess);
 
     // Cancel Previous Subscriptions
     _motionSubscription?.cancel();
-    _sonarSubscription?.cancel();
 
     // Listen to BLoC and Add InSonar Event every update
     _motionSubscription = _motionBloc.listen((state) {
       add(UpdateOrientation(newPosition: state.position));
     });
+  }
 
-    // Subscribe to Server Messages
-    _sonarSubscription = SonarRepository.sonarWS.messages.listen((json) {
-      // Create Message Object
-      Message newMessage = Message.incoming(json);
-
-      // Add To Event
-      add(ReadMessage(incomingMessage: newMessage));
-    });
+  // On ServerResponse Event ->
+  _onMessageReceived(Message message) {
+    add(ReadMessage(incomingMessage: message));
   }
 
   // On Shift Event ->
@@ -101,21 +102,25 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       UpdateOrientation motionEvent) async* {
     // Send State
     if (motionEvent.newPosition.state == Orientation.Tilt) {
+      print("Sonar Bloc Motion Stream: " + motionEvent.newPosition.state.toString());
       // yield Sending();
     }
     // Receive State
     else if (motionEvent.newPosition.state == Orientation.LandscapeLeft ||
         motionEvent.newPosition.state == Orientation.LandscapeRight) {
+          print("Sonar Bloc Motion Stream: " + motionEvent.newPosition.state.toString());
       // yield Receiving();
     }
     // Continue Shift
     else {
+      print("Sonar Bloc Motion Stream: " + motionEvent.newPosition.state.toString());
       // yield Ready();
     }
   }
 
-  // On ServerResponse Event ->
+  // Map ReadMessage
   Stream<SonarState> _mapReadMessageToState(ReadMessage messageEvent) async* {
+    print("MapReadMessage: " + messageEvent.incomingMessage.toString());
     switch (messageEvent.incomingMessage.code) {
       // Initialized
       case 0:

@@ -13,13 +13,13 @@ class OrientationState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Flutter Accelerometer')),
+      appBar: AppBar(title: Text('Sonar Demo')),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 60.0),
+            padding: EdgeInsets.symmetric(vertical: 45.0),
             child: Center(
               child: BlocBuilder<MotionBloc, MotionState>(
                 builder: (context, state) {
@@ -31,16 +31,10 @@ class OrientationState extends StatelessWidget {
               ),
             ),
           ),
-          BlocBuilder<MotionBloc, MotionState>(
-            condition: (previousState, state) =>
-                state.runtimeType != previousState.runtimeType,
-            builder: (context, state) => OrientationActions(),
-          ),
+
           BlocBuilder<SonarBloc, SonarState>(
-            condition: (previousState, state) =>
-                state.runtimeType != previousState.runtimeType,
-            builder: (context, state) => OrientationActions(),
-          ),
+                builder: (context, state) => OrientationActions()
+              ),
         ],
       ),
     );
