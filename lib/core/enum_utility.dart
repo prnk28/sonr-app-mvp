@@ -51,9 +51,9 @@ enum OutgoingMessageAction {
   Select,
   Request,
   Authorize,
-  Decline,
   Transfer,
   Complete,
+  Reset,
   Cancel,
 }
 
@@ -77,7 +77,7 @@ enum SonarStage {
   TRANSFERRING,
   TRANSFER_STOP,
   TRANSFER_COMPLETE,
-  
+
   // Errors
   ERROR_RECEIVER_DECLINED,
   ERROR_SENDER_CANCELLED,
@@ -150,14 +150,14 @@ String getShortMessageAction(OutgoingMessageAction action) {
       return "REQUEST";
     case OutgoingMessageAction.Authorize:
       return "AUTHORIZE";
-    case OutgoingMessageAction.Decline:
-      return "DECLINE";
     case OutgoingMessageAction.Transfer:
       return "TRANSFER";
     case OutgoingMessageAction.Complete:
       return "COMPLETE";
     case OutgoingMessageAction.Cancel:
       return "CANCEL";
+    case OutgoingMessageAction.Reset:
+      return "RESET";
   }
   return "NONE";
 }

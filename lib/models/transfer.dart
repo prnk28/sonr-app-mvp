@@ -23,6 +23,8 @@ class Transfer extends Equatable {
   final Client sender;
   final Client receiver;
 
+  
+
   // Constructer
   const Transfer(this.lobby, this.sender, this.receiver,
       {this.id});
