@@ -26,10 +26,6 @@ class SonarRepository {
     return _sonarRepository;
   }
 
-  Stream messages() {
-    return sonarWS.channel.stream;
-  }
-
   // *******************************
   // ** WebSockets Server Actions **
   // *******************************

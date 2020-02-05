@@ -18,7 +18,6 @@ class Process extends Equatable {
   // Enum Values
   final AuthenticationStatus matchStatus;
   final AuthenticationStatus userStatus;
-  final FailType error;
   final SonarStage currentStage;
 
   // *********************
@@ -31,7 +30,6 @@ class Process extends Equatable {
     this.transfer,
     this.matchStatus,
     this.userStatus,
-    this.error,
     this.currentStage,
   });
 
@@ -51,7 +49,6 @@ class Process extends Equatable {
   static Process create(Client user, Lobby lobby) {
     return Process(user, lobby,
         currentStage: SonarStage.READY,
-        error: FailType.None,
         match: null,
         matchStatus: AuthenticationStatus.Default,
         userStatus: AuthenticationStatus.Default);
@@ -65,7 +62,6 @@ class Process extends Equatable {
       {Match newMatchPeer,
       AuthenticationStatus newUserStatus,
       AuthenticationStatus newMatchStatus,
-      FailType newError,
       SonarStage newStage}) {
     // Return Based on Provided Variables
     return Process(
@@ -80,7 +76,6 @@ class Process extends Equatable {
         matchStatus: newMatchStatus != null
             ? newMatchStatus
             : currentProcess.matchStatus,
-        error: newError != null ? newError : currentProcess.error,
         currentStage:
             newStage != null ? newStage : currentProcess.currentStage);
   }
@@ -98,26 +93,23 @@ class Process extends Equatable {
         case AuthenticationStatus.Accepted:
           return Process.update(currentProcess,
               newStage: SonarStage.TRANSFERRING,
-              newError: FailType.None,
               newMatchStatus: AuthenticationStatus.Accepted);
           break;
         // Match Pending Authentication
         case AuthenticationStatus.Default:
           return Process.update(currentProcess,
-              newStage: SonarStage.PENDING,
-              newError: FailType.None,
+              newStage: SonarStage.SENDER_MATCH_PENDING,
               newMatchStatus: AuthenticationStatus.Accepted);
           break;
         // Matched User Already Declined
         case AuthenticationStatus.Declined:
           return Process.update(currentProcess,
-              newStage: SonarStage.ERROR, newError: FailType.MatchDeclined);
+              newStage: SonarStage.ERROR_RECEIVER_DECLINED);
       }
     }
     // If User Declined Transfer
     return Process.update(currentProcess,
-        newStage: SonarStage.ERROR,
-        newError: FailType.MatchDeclined,
+        newStage: SonarStage.ERROR_SENDER_CANCELLED,
         newMatchStatus: AuthenticationStatus.Declined);
   }
 
@@ -134,26 +126,23 @@ class Process extends Equatable {
         case AuthenticationStatus.Accepted:
           return Process.update(currentProcess,
               newStage: SonarStage.TRANSFERRING,
-              newError: FailType.None,
               newUserStatus: AuthenticationStatus.Accepted);
           break;
         // Match Pending Authentication
         case AuthenticationStatus.Default:
           return Process.update(currentProcess,
-              newStage: SonarStage.PENDING,
-              newError: FailType.None,
+              newStage: SonarStage.SENDER_MATCH_PENDING,
               newUserStatus: AuthenticationStatus.Accepted);
           break;
         // Matched User Already Declined
         case AuthenticationStatus.Declined:
           return Process.update(currentProcess,
-              newStage: SonarStage.ERROR, newError: FailType.MatchDeclined);
+              newStage: SonarStage.ERROR_RECEIVER_DECLINED);
       }
     }
     // If User Declined Transfer
     return Process.update(currentProcess,
-        newStage: SonarStage.ERROR,
-        newError: FailType.UserCancelled,
+        newStage: SonarStage.ERROR_SENDER_CANCELLED,
         newUserStatus: AuthenticationStatus.Declined);
   }
 }

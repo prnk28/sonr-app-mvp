@@ -27,9 +27,6 @@ enum CompassDesignation {
 // Kind of Data Model Returned from Server
 enum DataType { AuthorizationStatus, Circle, Client, Lobby, Match, None }
 
-// Sonar Process Failed
-enum FailType { None, MatchDeclined, UserCancelled, ServerError, NetworkError }
-
 // Kind of File Sent from Sender
 enum FileType { Contact, Photo, Video, Document, Unknown }
 
@@ -58,20 +55,35 @@ enum OutgoingMessageAction {
   Transfer,
   Complete,
   Cancel,
-  Error,
 }
 
 // Stage in Sonar Transfer
 enum SonarStage {
+  // Initial
   CONNECTED,
   READY,
+  // Sending
   SENDING,
+  SENDER_MATCH_FOUND,
+  SENDER_MATCH_SELECTED,
+  SENDER_MATCH_PENDING,
+  // Receiving
   RECEIVING,
-  FOUND,
-  PENDING,
+  RECEIVER_OFFERED,
+  RECEIVER_AUTHORIZED,
+  RECEIVER_DECLINED,
+
+  // Transfer
   TRANSFERRING,
-  COMPLETE,
-  ERROR
+  TRANSFER_STOP,
+  TRANSFER_COMPLETE,
+  
+  // Errors
+  ERROR_RECEIVER_DECLINED,
+  ERROR_SENDER_CANCELLED,
+  ERROR_SENDER_TIMEOUT,
+  ERROR_TRANSFER_FAIL,
+  ERROR_WS_DOWN
 }
 
 // ****************************
@@ -122,23 +134,6 @@ FileType getFileTypeFromString(String type) {
       .firstWhere((f) => f.toString() == type, orElse: () => null);
 }
 
-// Used by Process Model
-String getMessageForFailType(FailType failType) {
-  // Message by enum to be displayed
-  switch (failType) {
-    case FailType.MatchDeclined:
-      return "Match has declined to have Sonar Transfer.";
-    case FailType.UserCancelled:
-      return "Sonar Cancelled.";
-    case FailType.ServerError:
-      return "Server Error, Sonar can't be used right now.";
-    case FailType.NetworkError:
-      return "Your Device is having trouble connecting to the Internet.";
-    default:
-      return "";
-  }
-}
-
 // Get Action for OutgoingMessageAction
 String getShortMessageAction(OutgoingMessageAction action) {
   // Switch of Action
@@ -163,21 +158,6 @@ String getShortMessageAction(OutgoingMessageAction action) {
       return "COMPLETE";
     case OutgoingMessageAction.Cancel:
       return "CANCEL";
-    case OutgoingMessageAction.Error:
-      return "ERROR";
   }
   return "NONE";
-}
-
-// Fail Type from Sonar Code
-FailType getFailTypeFromCode(int code) {
-  if (code == 40) {
-    return FailType.UserCancelled;
-  } else if (code == 41 || code == 31 || code == 44) {
-    return FailType.ServerError;
-  } else if (code == 52) {
-    return FailType.MatchDeclined;
-  } else {
-    return FailType.None;
-  }
 }

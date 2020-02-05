@@ -13,7 +13,7 @@ class Transfer extends Equatable {
   // *******************
   // From JSON
   final String id;
-  final FileType fileType;
+  //final FileType fileType;
 
   // *********************
   // ** Constructor Var **
@@ -25,14 +25,14 @@ class Transfer extends Equatable {
 
   // Constructer
   const Transfer(this.lobby, this.sender, this.receiver,
-      {this.id, this.fileType});
+      {this.id});
 
   // **************************
   // ** Class Implementation **
   // **************************
   @override
   List<Object> get props => [
-        lobby, sender, receiver, id, fileType
+        lobby, sender, receiver, id
       ];
 
   // ***********************
@@ -43,7 +43,7 @@ class Transfer extends Equatable {
     return Transfer(previousTransfer.lobby, previousTransfer.sender,
         previousTransfer.receiver,
         id: json["id"],
-        fileType: getFileTypeFromString(json["file_type"]),
+        // fileType: getFileTypeFromString(json["file_type"]),
         );
   }
 
@@ -59,9 +59,9 @@ class Transfer extends Equatable {
   toMap() {
     return {
       // Properties
-      'lobby': lobby,
-      'sender': sender,
-      'receiver': receiver,
+      'lobbyId': lobby.id,
+      'senderId': sender.id,
+      'receiverId': receiver.id,
     };
   }
 }
