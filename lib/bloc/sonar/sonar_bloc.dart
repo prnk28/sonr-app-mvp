@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/repositories/repositories.dart';
@@ -12,7 +11,7 @@ import 'package:sonar_app/core/core.dart';
 // *********************
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
-  final MotionBloc _motionBloc;
+  final OrientationBloc _motionBloc;
   SonarRepository _sonarRepository = new SonarRepository();
 
   // Stream Management

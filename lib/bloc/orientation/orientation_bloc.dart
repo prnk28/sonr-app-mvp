@@ -7,7 +7,7 @@ import 'package:sonar_app/models/models.dart';
 import '../bloc.dart';
 import 'package:meta/meta.dart';
 
-class MotionBloc extends Bloc<MotionEvent, MotionState> {
+class OrientationBloc extends Bloc<OrientationEvent, OrientationState> {
   // Data Provider
   final SensorProvider _sensorProvider;
   Motion _initialPosition = Motion.create();
@@ -16,18 +16,18 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   StreamSubscription<AccelerometerEvent> _motionSubscription;
 
   // Constructer
-  MotionBloc({@required SensorProvider sensorProvider})
+  OrientationBloc({@required SensorProvider sensorProvider})
       : assert(sensorProvider != null),
         _sensorProvider = sensorProvider;
 
   // Initial State
   @override
-  MotionState get initialState => Default(_initialPosition);
+  OrientationState get initialState => Default(_initialPosition);
 
   // Map Events to State
   @override
-  Stream<MotionState> mapEventToState(
-    MotionEvent event,
+  Stream<OrientationState> mapEventToState(
+    OrientationEvent event,
   ) async* {
     // Device Can See Updates
     if (event is Start) {
@@ -51,7 +51,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   }
 
   // On Start Event ->
-  Stream<MotionState> _mapStartToState(Start start) async* {
+  Stream<OrientationState> _mapStartToState(Start start) async* {
     // Device Pending State
     yield Shifting(start.position);
 
@@ -65,7 +65,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   }
 
   // On Pause Event ->
-  Stream<MotionState> _mapPauseToState(Pause pause) async* {
+  Stream<OrientationState> _mapPauseToState(Pause pause) async* {
     // Verify Position not Zero
     if (state is Tilted || state is Landscaped) {
       // Pause Subscription
@@ -76,7 +76,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   }
 
   // On Resume Event ->
-  Stream<MotionState> _mapResumeToState(Resume pause) async* {
+  Stream<OrientationState> _mapResumeToState(Resume pause) async* {
     // Verify Pause State
     if (state is Suspended) {
       // Referece Suspend state
@@ -96,7 +96,7 @@ class MotionBloc extends Bloc<MotionEvent, MotionState> {
   }
 
   // On InMotion Event ->
-  Stream<MotionState> _mapInMotionToState(InMotion motion) async* {
+  Stream<OrientationState> _mapInMotionToState(InMotion motion) async* {
     // Send State
     if (motion.position.state == Orientation.Tilt) {
       yield Tilted(motion.position);

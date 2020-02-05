@@ -17,13 +17,22 @@ class App extends StatelessWidget {
           accentColor: Color.fromRGBO(72, 74, 126, 1),
           brightness: Brightness.dark,
         ),
-        title: 'Flutter Timer',
-        home: BlocProvider(
-            create: (context) => MotionBloc(sensorProvider: SensorProvider()),
-            child: BlocProvider(
-              create: (context) => SonarBloc(BlocProvider.of<MotionBloc>(context)),
-              child: OrientationState(),
-            )));
+        title: 'Sonar',
+        home: MultiBlocProvider(
+          providers: [
+            // Motion Data Stream
+            BlocProvider<OrientationBloc>(
+              create: (BuildContext context) =>
+                  OrientationBloc(sensorProvider: SensorProvider()),
+            ),
+            // Sonar Communication
+            BlocProvider<SonarBloc>(
+              create: (BuildContext context) =>
+                  SonarBloc(BlocProvider.of<OrientationBloc>(context)),
+            ),
+          ],
+          child: OrientationWidget(),
+        ));
   }
 }
 

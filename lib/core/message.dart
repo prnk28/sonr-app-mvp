@@ -66,7 +66,6 @@ class Message extends Equatable {
     var map = {"action": getShortMessageAction(actionType), "data": givenData};
 
     // Convert and Return Object
-    print("Outgoing Message: " + jsonEncode(map));
     return jsonEncode(map);
   }
 }

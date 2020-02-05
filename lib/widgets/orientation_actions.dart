@@ -10,16 +10,16 @@ class OrientationActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: _mapStateToActionButtons(
-        motionBloc: BlocProvider.of<MotionBloc>(context),
+        motionBloc: BlocProvider.of<OrientationBloc>(context),
         sonarBloc: BlocProvider.of<SonarBloc>(context),
       ),
     );
   }
 
   List<Widget> _mapStateToActionButtons({
-    MotionBloc motionBloc, SonarBloc sonarBloc
+    OrientationBloc motionBloc, SonarBloc sonarBloc
   }) {
-    final MotionState currentState = motionBloc.state;
+    final OrientationState currentState = motionBloc.state;
     final SonarState currentSonarState = sonarBloc.state;
     if (currentSonarState is Initial) {
       return [
