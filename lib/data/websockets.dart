@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
-import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/controllers/controllers.dart';
 import 'package:web_socket_channel/io.dart';
 
 // Application-level global variable to access the WebSockets

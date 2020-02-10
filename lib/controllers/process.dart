@@ -50,8 +50,8 @@ class Process extends Equatable {
     return Process(user, lobby,
         currentStage: SonarStage.READY,
         match: null,
-        matchStatus: AuthenticationStatus.Default,
-        userStatus: AuthenticationStatus.Default);
+        matchStatus: AuthenticationStatus.Pending,
+        userStatus: AuthenticationStatus.Pending);
   }
 
   // ***************************************************************************
@@ -96,7 +96,7 @@ class Process extends Equatable {
               newMatchStatus: AuthenticationStatus.Accepted);
           break;
         // Match Pending Authentication
-        case AuthenticationStatus.Default:
+        case AuthenticationStatus.Pending:
           return Process.update(currentProcess,
               newStage: SonarStage.SENDER_MATCH_PENDING,
               newMatchStatus: AuthenticationStatus.Accepted);
@@ -129,7 +129,7 @@ class Process extends Equatable {
               newUserStatus: AuthenticationStatus.Accepted);
           break;
         // Match Pending Authentication
-        case AuthenticationStatus.Default:
+        case AuthenticationStatus.Pending:
           return Process.update(currentProcess,
               newStage: SonarStage.SENDER_MATCH_PENDING,
               newUserStatus: AuthenticationStatus.Accepted);

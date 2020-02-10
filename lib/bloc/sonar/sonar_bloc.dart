@@ -5,6 +5,7 @@ import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/controllers/controllers.dart';
 
 // *********************
 // ** Initialization ***

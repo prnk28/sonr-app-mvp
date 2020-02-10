@@ -2,7 +2,7 @@
 // ** GLOBAL ENUMS ***
 // *******************
 // Authentication Status for Sonar Process
-enum AuthenticationStatus { Accepted, Declined, Default }
+enum AuthenticationStatus { Accepted, Declined, Pending }
 
 // Device Heading Postion
 enum CompassDesignation {
@@ -28,7 +28,7 @@ enum CompassDesignation {
 enum DataType { AuthorizationStatus, Circle, Client, Lobby, Match, None }
 
 // Kind of File Sent from Sender
-enum FileType { Contact, Photo, Video, Document, Unknown }
+enum FileType { Contact, Photo, Video, Album, Document, Unknown }
 
 // Incoming Message: Type
 enum IncomingMessageDataType {
