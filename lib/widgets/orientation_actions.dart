@@ -10,24 +10,22 @@ class OrientationActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: _mapStateToActionButtons(
-        motionBloc: BlocProvider.of<OrientationBloc>(context),
+        sensorBloc: BlocProvider.of<SensorBloc>(context),
         sonarBloc: BlocProvider.of<SonarBloc>(context),
       ),
     );
   }
 
   List<Widget> _mapStateToActionButtons({
-    OrientationBloc motionBloc, SonarBloc sonarBloc
+    SensorBloc sensorBloc, SonarBloc sonarBloc
   }) {
-    final OrientationState currentState = motionBloc.state;
-    final SonarState currentSonarState = sonarBloc.state;
-    if (currentSonarState is Initial) {
+    final SonarState currentState = sonarBloc.state;
+    if (currentState is Initial) {
       return [
         FloatingActionButton(
           child: Icon(Icons.cloud_upload),
           onPressed: () {
               sonarBloc.add(Initialize(runningProcess: Process.create(null, null)));
-              motionBloc.add(Start(position: currentState.position));
           }
         ),
       ];

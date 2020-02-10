@@ -6,7 +6,7 @@ import 'package:sonar_app/widgets/widgets.dart';
 
 class OrientationWidget extends StatelessWidget {
   static const TextStyle bigTextStyle = TextStyle(
-    fontSize: 60,
+    fontSize: 40,
     fontWeight: FontWeight.bold,
   );
 
@@ -15,26 +15,37 @@ class OrientationWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Sonar Demo')),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 45.0),
-            child: Center(
-              child: BlocBuilder<OrientationBloc, OrientationState>(
-                builder: (context, state) {
+            padding: EdgeInsets.symmetric(vertical: 15.0),
+            child: BlocBuilder<SensorBloc, SensorState>(
+              builder: (context, state) {
+                if (state is Tilted) {
                   return Text(
-                    state.position.state.toString(),
+                    state.motion.state.toString() +
+                        " , " +
+                        state.direction.degrees.toString(),
                     style: OrientationWidget.bigTextStyle,
                   );
-                },
-              ),
+                } else if (state is Landscaped) {
+                  return Text(
+                    state.motion.state.toString() +
+                        " , " +
+                        state.direction.degrees.toString(),
+                    style: OrientationWidget.bigTextStyle,
+                  );
+                } else {
+                  return Text(
+                    "Waiting to Begin.",
+                    style: OrientationWidget.bigTextStyle,
+                  );
+                }
+              },
+              
             ),
           ),
-
           BlocBuilder<SonarBloc, SonarState>(
-                builder: (context, state) => OrientationActions()
-              ),
+              builder: (context, state) => OrientationActions()),
         ],
       ),
     );

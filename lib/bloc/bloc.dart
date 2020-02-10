@@ -1,7 +1,7 @@
-// Motion
-export 'orientation/orientation_bloc.dart';
-export 'orientation/orientation_event.dart';
-export 'orientation/orientation_state.dart';
+// Sensor
+export 'sensor/sensor_bloc.dart';
+export 'sensor/sensor_event.dart';
+export 'sensor/sensor_state.dart';
 
 // Sonar
 export 'sonar/sonar_bloc.dart';

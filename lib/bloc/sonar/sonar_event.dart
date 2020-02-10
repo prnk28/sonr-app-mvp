@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/controllers/process.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
@@ -115,13 +116,14 @@ class ResetSonar extends SonarEvent {
 // ** Subscription Events ****
 // ***************************
 // Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription
-class UpdateOrientation extends SonarEvent {
-  final Motion newPosition;
+class UpdateSensors extends SonarEvent {
+  final Direction direction;
+  final Motion motion;
 
-  const UpdateOrientation({@required this.newPosition});
+  const UpdateSensors({@required this.motion, @required this.direction});
 
   @override
-  List<Object> get props => [newPosition];
+  List<Object> get props => [direction, motion];
 }
 
 // Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription

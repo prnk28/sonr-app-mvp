@@ -11,20 +11,24 @@ import 'package:sonar_app/core/core.dart';
 // *********************
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
-  final OrientationBloc _motionBloc;
+  final SensorBloc _sensorBloc;
   SonarRepository _sonarRepository = new SonarRepository();
 
   // Stream Management
-  StreamSubscription _motionSubscription;
+  StreamSubscription _sensorSubscription;
 
   // Constructer
-  SonarBloc(this._motionBloc) {
+  SonarBloc(this._sensorBloc) {
     // Subscribe to Server WS Updates
     sonarWS.addListener(_onMessageReceived);
 
     // Subscribe to Motion BLoC Updates
-    _motionSubscription = _motionBloc.listen((state) {
-      add(UpdateOrientation(newPosition: state.position));
+    _sensorSubscription = _sensorBloc.listen((state) {
+      if (state is Tilted) {
+        add(UpdateSensors(direction: state.direction, motion: state.motion));
+      } else if (state is Landscaped) {
+        add(UpdateSensors(direction: state.direction, motion: state.motion));
+      }
     });
   }
 
@@ -47,7 +51,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Device Can See Updates
     if (event is Initialize) {
       yield* _mapInitializeToState(event);
-    } else if (event is UpdateOrientation) {
+    } else if (event is UpdateSensors) {
       yield* _mapUpdateOrientationToState(event);
     } else if (event is ReadMessage) {
       yield* _mapReadMessageToState(event);
@@ -80,7 +84,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***************************
   @override
   Future<void> close() {
-    _motionSubscription?.cancel();
+    _sensorSubscription?.cancel();
     sonarWS.removeListener(_onMessageReceived);
     return super.close();
   }
@@ -97,26 +101,26 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     _sonarRepository.initializeSonar(fakeLocation, fakeProfile);
 
     // Device Pending State
-    yield Ready(initializeEvent.runningProcess);
+    yield Ready();
   }
 
 // ***********************************
 // ** On Device Orientation Update ***
 // ***********************************
   Stream<SonarState> _mapUpdateOrientationToState(
-      UpdateOrientation motionEvent) async* {
+      UpdateSensors sensorInput) async* {
     // Send State
-    if (motionEvent.newPosition.state == Orientation.Tilt) {
-      // yield Sending();
+    if (sensorInput.motion.state == Orientation.Tilt) {
+      yield Sending(sensorInput.direction);
     }
     // Receive State
-    else if (motionEvent.newPosition.state == Orientation.LandscapeLeft ||
-        motionEvent.newPosition.state == Orientation.LandscapeRight) {
-      // yield Receiving();
+    else if (sensorInput.motion.state == Orientation.LandscapeLeft ||
+        sensorInput.motion.state == Orientation.LandscapeRight) {
+      yield Receiving(sensorInput.direction);
     }
     // Continue Shift
     else {
-      // yield Ready();
+      yield Ready();
     }
   }
 

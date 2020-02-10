@@ -7,11 +7,8 @@ import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 
 class LocationRepository {
-  final SensorProvider sensorProvider;
-
   // Constructer
-  LocationRepository({@required this.sensorProvider})
-      : assert(sensorProvider != null);
+  LocationRepository();
 
   // Get Current Location
   Future<Location> getLocation() async {

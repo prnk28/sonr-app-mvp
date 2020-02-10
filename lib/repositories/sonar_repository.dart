@@ -87,10 +87,9 @@ class SonarRepository {
   }
 
   // Begin Transfer between Client and Match
-  startTransfer(Client currentClient, Client currentMatch) {
+  startTransfer(Client currentMatch) {
     // Create Message
     var message = Message.outgoing(OutgoingMessageAction.Transfer, givenData: {
-      "sender": currentClient.toMap(),
       "receiver": currentMatch.toMap()
     });
 
@@ -102,8 +101,8 @@ class SonarRepository {
   completeTransfer(Process sonarProcess) {}
 
   // Cancel Sequence
-  cancelSonar(Client currentClient, Process sonarProcess) {}
+  cancelSonar(Process sonarProcess) {}
 
   // Reset Sonar Client
-  reset(Client currentClient, Process sonarProcess) {}
+  reset(Process sonarProcess) {}
 }

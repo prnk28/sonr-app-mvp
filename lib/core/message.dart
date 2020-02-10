@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 
 class Message extends Equatable {
 // *******************

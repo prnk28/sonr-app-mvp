@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/controllers/controllers.dart';
+import 'package:sonar_app/models/direction.dart';
 
 abstract class SonarState extends Equatable {
   const SonarState();
@@ -16,47 +17,49 @@ class Initial extends SonarState {
 // Connected to Lobby/WS
 class Ready extends SonarState {
   final Process runningProcess;
-  const Ready(this.runningProcess);
+  const Ready({this.runningProcess});
 }
 
 // In Sending Position
 class Sending extends SonarState {
   final Process runningProcess;
-  const Sending(this.runningProcess);
+  final Direction direction;
+  const Sending(this.direction, {this.runningProcess});
 }
 
 // In Receiving Position
 class Receiving extends SonarState {
   final Process runningProcess;
-  const Receiving(this.runningProcess);
+  final Direction direction;
+  const Receiving(this.direction, {this.runningProcess});
 }
 
 // Found Match: Either Select or AutoSelect
 class Found extends SonarState {
   final Process runningProcess;
-  const Found(this.runningProcess);
+  const Found({this.runningProcess});
 }
 
 // Pending Transfer Confirmation
 class Authenticating extends SonarState {
   final Process runningProcess;
-  const Authenticating(this.runningProcess);
+  const Authenticating({this.runningProcess});
 }
 
 // In WebRTC Transfer or Contact Transfer
 class Transferring extends SonarState {
   final Process runningProcess;
-  const Transferring(this.runningProcess);
+  const Transferring({this.runningProcess});
 }
 
 // Transfer Succesful
 class Complete extends SonarState {
   final Process runningProcess;
-  const Complete(this.runningProcess);
+  const Complete({this.runningProcess});
 }
 
 // Failed Sonar: Cancel/Decline/Error
 class Failed extends SonarState {
   final Process runningProcess;
-  const Failed(this.runningProcess);
+  const Failed({this.runningProcess});
 }

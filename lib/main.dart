@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonar_app/data/sensor_provider.dart';
 import 'package:sonar_app/widgets/widgets.dart';
 
 import 'bloc/bloc.dart';
@@ -21,14 +20,14 @@ class App extends StatelessWidget {
         home: MultiBlocProvider(
           providers: [
             // Motion Data Stream
-            BlocProvider<OrientationBloc>(
+            BlocProvider<SensorBloc>(
               create: (BuildContext context) =>
-                  OrientationBloc(sensorProvider: SensorProvider()),
+                  SensorBloc(),
             ),
             // Sonar Communication
             BlocProvider<SonarBloc>(
               create: (BuildContext context) =>
-                  SonarBloc(BlocProvider.of<OrientationBloc>(context)),
+                  SonarBloc(BlocProvider.of<SensorBloc>(context)),
             ),
           ],
           child: OrientationWidget(),
