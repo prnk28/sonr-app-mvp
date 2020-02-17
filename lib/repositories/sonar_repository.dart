@@ -86,6 +86,17 @@ class SonarRepository {
     sonarWS.send(message);
   }
 
+    // Recipient Authorize Match
+  sendAuthorization(bool decision, Client potentialMatch) {
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Request, givenData: {
+      "match": potentialMatch.toMap()
+    });
+
+    // Action: Authorize To Server
+    sonarWS.send(message);
+  }
+
   // Begin Transfer between Client and Match
   startTransfer(Client currentMatch) {
     // Create Message

@@ -1,3 +1,4 @@
+export 'circle.dart';
 export 'client.dart';
 export 'direction.dart';
 export 'lobby.dart';

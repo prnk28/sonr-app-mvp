@@ -34,6 +34,13 @@ class Receiving extends SonarState {
   const Receiving(this.direction, {this.runningProcess});
 }
 
+// In Between Send/Receive Cycle
+class Pending extends SonarState {
+  final Process runningProcess;
+  final Direction direction;
+  const Pending(this.direction, {this.runningProcess});
+}
+
 // Found Match: Either Select or AutoSelect
 class Found extends SonarState {
   final Process runningProcess;

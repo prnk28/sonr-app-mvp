@@ -15,6 +15,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   final SensorBloc _sensorBloc;
   SonarRepository _sonarRepository = new SonarRepository();
 
+  // Variables
+  Process _currentProcess;
+
   // Stream Management
   StreamSubscription _sensorSubscription;
 
@@ -61,8 +64,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     //   yield* _mapSendToState(event);
     // } else if (event is Receive) {
     //   yield* _mapReceiveToState(event);
-    // } else if (event is AutoSelect) {
-    //   yield* _mapAutoSelectToState(event);
     // } else if (event is Select) {
     //   yield* _mapSelectState(event);
     // } else if (event is Request) {
@@ -87,6 +88,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Future<void> close() {
     _sensorSubscription?.cancel();
     sonarWS.removeListener(_onMessageReceived);
+    sonarWS.disconnect();
     return super.close();
   }
 
@@ -131,23 +133,70 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapReadMessageToState(ReadMessage messageEvent) async* {
     print("MapReadMessage: " + messageEvent.incomingMessage.toString());
     switch (messageEvent.incomingMessage.code) {
-      // Initialized
+      // Connected
       case 0:
+        // Create Client and Initialize Process
+        _currentProcess = new Process(Client.fromMap(messageEvent.incomingMessage.data));
         break;
-      // Initialized
+      // Ready
       case 1:
+        // Add to Process
+        _currentProcess.lobby = Lobby.fromMap(messageEvent.incomingMessage.data);
+
+        // Update Status
+        _currentProcess.currentStage = SonarStage.READY;
         break;
-      // Initialized
-      case 0:
+      // Sending
+      case 10:
+        // Update Receivers Circle
+        _currentProcess.receivers = Circle.fromMap(messageEvent.incomingMessage.data["receivers"]);
+        
+        // Update Status
+        _currentProcess.currentStage = SonarStage.SENDING;
         break;
-      // Initialized
-      case 0:
+      // Sender Match Found
+      case 11:
         break;
-      // Initialized
-      case 0:
+      // Sender Match Requested
+      case 12:
         break;
-      // Initialized
-      case 0:
+      // Receiving
+      case 20:
+        // Update Senders Circle
+        _currentProcess.senders = Circle.fromMap(messageEvent.incomingMessage.data["senders"]);
+        
+        // Update Status
+        _currentProcess.currentStage = SonarStage.RECEIVING;
+        break;
+      // Receiver Offered
+      case 21:
+        break;
+      // Receiver Authorized
+      case 22:
+        break;
+      // Transferring
+      case 30:
+        break;
+      // Transfer Recepient
+      case 31:
+        break;
+      // Transfer Complete
+      case 32:
+        break;
+      // Error: Receiver Declined
+      case 40:
+        break;
+      // Error: Sender Cancelled
+      case 41:
+        break;
+      // Error: Sender Timeout
+      case 42:
+        break;
+      // Error: Transfer Fail
+      case 43:
+        break;
+      // Error: WS Down
+      case 44:
         break;
       default:
     }
@@ -169,12 +218,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   //     yield Sending();
   // }
 
-// ************************
-// ** Auto-Select Event ***
-// ************************
-  // Stream<SonarState> _mapAutoSelectToState(AutoSelect autoSelectEvent) async* {
+// ********************
+// ** Compare Event ***
+// ********************
+  // Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
   //     // Set Suspend state with lastState
-  //     yield Sending();
+  //     yield Pending();
   // }
 
 // *******************

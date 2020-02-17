@@ -13,23 +13,18 @@ class Direction extends Equatable {
 // *********************
   // ** Constructor Var **
   // *********************
-  const Direction({
-    this.degrees,
-    this.antipodalDegrees,
-    this.compassDesignation,
-    this.lastUpdated
-  });
+  const Direction(
+      {this.degrees,
+      this.antipodalDegrees,
+      this.compassDesignation,
+      this.lastUpdated});
 
   // **************************
   // ** Class Implementation **
   // **************************
   @override
-  List<Object> get props => [
-    degrees,
-    antipodalDegrees,
-    compassDesignation,
-    lastUpdated
-      ];
+  List<Object> get props =>
+      [degrees, antipodalDegrees, compassDesignation, lastUpdated];
 
   // ***********************
   // ** Object Generation **
@@ -37,11 +32,20 @@ class Direction extends Equatable {
   // Create Object from Events
   static Direction create({double degrees}) {
     // Both Events Provided
-      return Direction(
-          degrees: degrees,
-          antipodalDegrees: _getAntipodalDegrees(degrees),
-          compassDesignation: getCompassDesignationFromDegrees(degrees),
-          lastUpdated: DateTime.now());
+    return Direction(
+        degrees: degrees,
+        antipodalDegrees: _getAntipodalDegrees(degrees),
+        compassDesignation: getCompassDesignationFromDegrees(degrees),
+        lastUpdated: DateTime.now());
+  }
+
+  // Create Object from Events
+  static Direction fromMap(Map data) {
+    return Direction(
+        degrees: data["degrees"],
+        antipodalDegrees: data["antipodal_degrees"],
+        compassDesignation: data["compass_designation"],
+        lastUpdated: data["last_updated"]);
   }
 
   static double _getAntipodalDegrees(double degrees) {

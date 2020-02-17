@@ -25,7 +25,7 @@ class OrientationActions extends StatelessWidget {
         FloatingActionButton(
           child: Icon(Icons.cloud_upload),
           onPressed: () {
-              sonarBloc.add(Initialize(runningProcess: Process.create(null, null)));
+              sonarBloc.add(Initialize());
           }
         ),
       ];
