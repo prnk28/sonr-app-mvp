@@ -20,8 +20,8 @@ dependencies:
 
   # ** - User Defined - **
   # -- BLoC --
-  flutter_bloc: ^3.1.0
-  equatable: ^1.0.0
+  flutter_bloc: ^3.2.0
+  equatable: ^1.1.0
 
   # -- Device --
   flutter_compass:

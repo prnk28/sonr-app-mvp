@@ -19,8 +19,9 @@ class OrientationActions extends StatelessWidget {
   List<Widget> _mapStateToActionButtons({
     SensorBloc sensorBloc, SonarBloc sonarBloc
   }) {
-    final SonarState currentState = sonarBloc.state;
-    if (currentState is Initial) {
+    // Initialize
+    final SonarState sonarState = sonarBloc.state;
+    if (sonarState is Initial) {
       return [
         FloatingActionButton(
           child: Icon(Icons.cloud_upload),

@@ -66,7 +66,6 @@ class Direction extends Equatable {
       'degrees': degrees,
       'antipodal_degrees': antipodalDegrees,
       'compass_designation': compassDesignation.toString(),
-      'last_updated': lastUpdated
     };
   }
 }

@@ -103,8 +103,8 @@ class Location extends Equatable {
    return Location(
       accuracy: 12345,
 			altitude: 123,
-			latitude: 123,
-			longitude: 800,
+			latitude: 45,
+			longitude: -120,
 			address: "Ex",
 			city: "Ex",
 			country: "Ex",

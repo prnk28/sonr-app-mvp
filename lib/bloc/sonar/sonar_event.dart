@@ -37,15 +37,6 @@ class Receive extends SonarEvent {
       @required this.newDirection});
 }
 
-// Receiver/Sender Compare Directions with Circle
-class Compare extends SonarEvent {
-  final Direction newDirection;
-
-  const Compare(
-      {
-      @required this.newDirection});
-}
-
 // Tap Peer from List or Point to Receiver for 2s
 class Select extends SonarEvent {
   final Client match;
@@ -94,28 +85,4 @@ class CancelSonar extends SonarEvent {
 // On Cancel, On Done, On Zero
 class ResetSonar extends SonarEvent {
   const ResetSonar();
-}
-
-// ***************************
-// ** Subscription Events ****
-// ***************************
-// Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription
-class UpdateSensors extends SonarEvent {
-  final Direction direction;
-  final Motion motion;
-
-  const UpdateSensors({@required this.motion, @required this.direction});
-
-  @override
-  List<Object> get props => [direction, motion];
-}
-
-// Device Position: Sender/Receiver/Zero BLoC State - Constantly Updated by Subscription
-class ReadMessage extends SonarEvent {
-  final Message incomingMessage;
-
-  const ReadMessage({@required this.incomingMessage});
-
-  @override
-  List<Object> get props => [incomingMessage];
 }

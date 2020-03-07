@@ -49,6 +49,7 @@ class SonarRepository {
       "direction": currentDirection.toMap(),
     });
 
+  print(message);
     // Action: JOIN To Server
     sonarWS.send(message);
   }

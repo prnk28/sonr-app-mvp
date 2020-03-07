@@ -29,10 +29,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Subscribe to Motion BLoC Updates
     _sensorSubscription = _sensorBloc.listen((state) {
       if (state is Tilted) {
-        add(UpdateSensors(direction: state.direction, motion: state.motion));
-      } else if (state is Landscaped) {
-        add(UpdateSensors(direction: state.direction, motion: state.motion));
-      }
+        
+      } 
     });
   }
 
@@ -40,9 +38,80 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   @override
   SonarState get initialState => Initial();
 
+// *********************
+// ** Read Server Msg **
+// *********************
   // Subscribe to Sonar Websockets Messages
   _onMessageReceived(Message message) {
-    add(ReadMessage(incomingMessage: message));
+    print("MapReadMessage: " + message.toString());
+    switch (message.code) {
+      // Connected
+      case 0:
+        // Create Client and Initialize Process
+        _currentProcess = new Process(Client.fromMap(message.data));
+        break;
+      // Ready
+      case 1:
+        // Add to Process
+        _currentProcess.lobby = Lobby.fromMap(message.data);
+
+        // Update Status
+        _currentProcess.currentStage = SonarStage.READY;
+        break;
+      // Sending
+      case 10:
+        // Update Receivers Circle
+        _currentProcess.receivers = Circle.fromMap(message.data["receivers"]);
+
+        // Update Status
+        _currentProcess.currentStage = SonarStage.SENDING;
+        break;
+      // Sender Match Found
+      case 11:
+        break;
+      // Sender Match Requested
+      case 12:
+        break;
+      // Receiving
+      case 20:
+        // Update Senders Circle
+        _currentProcess.senders = Circle.fromMap(message.data["senders"]);
+
+        // Update Status
+        _currentProcess.currentStage = SonarStage.RECEIVING;
+        break;
+      // Receiver Offered
+      case 21:
+        break;
+      // Receiver Authorized
+      case 22:
+        break;
+      // Transferring
+      case 30:
+        break;
+      // Transfer Recepient
+      case 31:
+        break;
+      // Transfer Complete
+      case 32:
+        break;
+      // Error: Receiver Declined
+      case 40:
+        break;
+      // Error: Sender Cancelled
+      case 41:
+        break;
+      // Error: Sender Timeout
+      case 42:
+        break;
+      // Error: Transfer Fail
+      case 43:
+        break;
+      // Error: WS Down
+      case 44:
+        break;
+      default:
+    }
   }
 
 // *********************************
@@ -55,16 +124,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Device Can See Updates
     if (event is Initialize) {
       yield* _mapInitializeToState(event);
-    } else if (event is UpdateSensors) {
-      yield* _mapUpdateOrientationToState(event);
-    } else if (event is ReadMessage) {
-      yield* _mapReadMessageToState(event);
+    } else if (event is Send) {
+      yield* _mapSendToState(event);
+    } else if (event is Receive) {
+      yield* _mapReceiveToState(event);
     }
-    // } else if (event is Send) {
-    //   yield* _mapSendToState(event);
-    // } else if (event is Receive) {
-    //   yield* _mapReceiveToState(event);
-    // } else if (event is Select) {
+    // else if (event is Select) {
     //   yield* _mapSelectState(event);
     // } else if (event is Request) {
     //   yield* _mapRequestToState(event);
@@ -107,116 +172,23 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     yield Ready();
   }
 
-// ***********************************
-// ** On Device Orientation Update ***
-// ***********************************
-  Stream<SonarState> _mapUpdateOrientationToState(
-      UpdateSensors sensorInput) async* {
-    // Send State
-    if (sensorInput.motion.state == Orientation.Tilt) {
-      yield Sending(sensorInput.direction);
-    }
-    // Receive State
-    else if (sensorInput.motion.state == Orientation.LandscapeLeft ||
-        sensorInput.motion.state == Orientation.LandscapeRight) {
-      yield Receiving(sensorInput.direction);
-    }
-    // Continue Shift
-    else {
-      yield Ready();
-    }
-  }
-
-// ************************
-// ** ReadMessage Event ***
-// ************************
-  Stream<SonarState> _mapReadMessageToState(ReadMessage messageEvent) async* {
-    print("MapReadMessage: " + messageEvent.incomingMessage.toString());
-    switch (messageEvent.incomingMessage.code) {
-      // Connected
-      case 0:
-        // Create Client and Initialize Process
-        _currentProcess = new Process(Client.fromMap(messageEvent.incomingMessage.data));
-        break;
-      // Ready
-      case 1:
-        // Add to Process
-        _currentProcess.lobby = Lobby.fromMap(messageEvent.incomingMessage.data);
-
-        // Update Status
-        _currentProcess.currentStage = SonarStage.READY;
-        break;
-      // Sending
-      case 10:
-        // Update Receivers Circle
-        _currentProcess.receivers = Circle.fromMap(messageEvent.incomingMessage.data["receivers"]);
-        
-        // Update Status
-        _currentProcess.currentStage = SonarStage.SENDING;
-        break;
-      // Sender Match Found
-      case 11:
-        break;
-      // Sender Match Requested
-      case 12:
-        break;
-      // Receiving
-      case 20:
-        // Update Senders Circle
-        _currentProcess.senders = Circle.fromMap(messageEvent.incomingMessage.data["senders"]);
-        
-        // Update Status
-        _currentProcess.currentStage = SonarStage.RECEIVING;
-        break;
-      // Receiver Offered
-      case 21:
-        break;
-      // Receiver Authorized
-      case 22:
-        break;
-      // Transferring
-      case 30:
-        break;
-      // Transfer Recepient
-      case 31:
-        break;
-      // Transfer Complete
-      case 32:
-        break;
-      // Error: Receiver Declined
-      case 40:
-        break;
-      // Error: Sender Cancelled
-      case 41:
-        break;
-      // Error: Sender Timeout
-      case 42:
-        break;
-      // Error: Transfer Fail
-      case 43:
-        break;
-      // Error: WS Down
-      case 44:
-        break;
-      default:
-    }
-  }
-
 // *****************
 // ** Send Event ***
 // *****************
-  // Stream<SonarState> _mapSendToState(Send sendEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+  Stream<SonarState> _mapSendToState(Send sendEvent) async* {
+    _sonarRepository.setSending(sendEvent.newDirection);
+    // Set Suspend state with lastState
+    yield Sending(sendEvent.newDirection);
+  }
 
 // ********************
 // ** Receive Event ***
 // ********************
-  // Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+  Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
+    _sonarRepository.setReceiving(receiveEvent.newDirection);
+    // Set Suspend state with lastState
+    yield Receiving(receiveEvent.newDirection);
+  }
 
 // ********************
 // ** Compare Event ***

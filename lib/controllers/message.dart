@@ -49,6 +49,7 @@ class Message extends Equatable {
   factory Message.incoming(dynamic serverMessage) {
     // Init Json
     var json = jsonDecode(serverMessage);
+    print(json);
     
     // Return Message
     return Message(
