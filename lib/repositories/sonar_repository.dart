@@ -46,7 +46,7 @@ class SonarRepository {
   setSending(Direction currentDirection) {
     // Create Message
     var message = Message.outgoing(OutgoingMessageAction.Sending, givenData: {
-      "direction": currentDirection.toMap(),
+      "direction": currentDirection.toSendMap(),
     });
 
   print(message);
@@ -58,7 +58,7 @@ class SonarRepository {
   setReceiving(Direction currentDirection) {
     // Create Message
     var message = Message.outgoing(OutgoingMessageAction.Receiving, givenData: {
-      "direction": currentDirection.toMap(),
+      "direction": currentDirection.toReceiveMap(),
     });
   print(message);
     // Action: JOIN To Server

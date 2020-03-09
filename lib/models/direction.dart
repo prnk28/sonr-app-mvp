@@ -71,10 +71,17 @@ class Direction extends Equatable {
   // ** JSON Conversion **
   // *********************
   // Generation Method
-  toMap() {
+  toReceiveMap() {
     return {
       'degrees': degrees,
       'antipodal_degrees': antipodalDegrees,
+      'compass_designation': compassDesignation.toString(),
+    };
+  }
+
+  toSendMap() {
+    return {
+      'degrees': degrees,
       'compass_designation': compassDesignation.toString(),
     };
   }

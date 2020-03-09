@@ -87,7 +87,7 @@ class Match extends Equatable {
   toMap() {
     return {
       'id': id,
-      'direction': direction.toMap(),
+      'direction': direction.toSendMap(),
       'status': status,
       'profile': user.toMap()
     };
