@@ -30,13 +30,20 @@ class Direction extends Equatable {
   // ** Object Generation **
   // ***********************
   // Create Object from Events
-  static Direction create({double degrees}) {
+  static Direction create({double degrees, double accelerometerX}) {
+    if (accelerometerX != null) {
+      return Direction(
+          degrees: degrees,
+          antipodalDegrees: _getAntipodalDegrees(degrees, accelerometerX),
+          compassDesignation: getCompassDesignationFromDegrees(degrees),
+          lastUpdated: DateTime.now());
+    } else {
+      return Direction(
+          degrees: degrees,
+          compassDesignation: getCompassDesignationFromDegrees(degrees),
+          lastUpdated: DateTime.now());
+    }
     // Both Events Provided
-    return Direction(
-        degrees: degrees,
-        antipodalDegrees: _getAntipodalDegrees(degrees),
-        compassDesignation: getCompassDesignationFromDegrees(degrees),
-        lastUpdated: DateTime.now());
   }
 
   // Create Object from Events
@@ -48,12 +55,15 @@ class Direction extends Equatable {
         lastUpdated: data["last_updated"]);
   }
 
-  static double _getAntipodalDegrees(double degrees) {
-    // Find Antipodal
-    if (degrees >= 180) {
-      return (360 - degrees);
+  static double _getAntipodalDegrees(double degrees, double accelerometerX) {
+
+    // Check Accelerometer
+    if (accelerometerX < 0) {
+      // Adjust by Tilt
+      return (degrees - 90);
     } else {
-      return (degrees + 180);
+      // Adjust by Tilt
+      return (degrees - 270);
     }
   }
 

@@ -60,7 +60,7 @@ class SonarRepository {
     var message = Message.outgoing(OutgoingMessageAction.Receiving, givenData: {
       "direction": currentDirection.toMap(),
     });
-
+  print(message);
     // Action: JOIN To Server
     sonarWS.send(message);
   }

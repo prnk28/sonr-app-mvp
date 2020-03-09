@@ -35,7 +35,7 @@ class SensorBloc extends Bloc<SensorEvent, SensorState> {
     // Refresh Direction on Turn from Tilt
     _directionSubscription = FlutterCompass.events.listen((newData) {
       // Refresh Inputs
-      add(RefreshInput(newDirection: Direction.create(degrees: newData)));
+      add(RefreshInput(newDirection: Direction.create(degrees: newData, accelerometerX: _currentMotion.accelX)));
     });
   }
 
