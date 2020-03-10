@@ -5,16 +5,12 @@ class Circle {
   // *******************
   // ** Class Values ***
   // *******************
-  final String lobbyId;
-  final int size;
   final List<Match> circle;
 
   // *****************
   // ** Constructor **
   // *****************
   const Circle({
-    this.lobbyId,
-    this.size,
     this.circle,
   });
 
@@ -22,17 +18,17 @@ class Circle {
   // ** Object Generation **
   // ***********************
   // Create Object from Events
-  static Circle fromMap(Map data) {
+  static Circle fromMap(List data) {
     // Initialize
-    List circleData = data["circle"];
     List<Match> temp = new List<Match>();
     
     // Iterate through JSON Map
-    for (var peer in circleData) {
+    for (var peer in data) {
       // Convert Map to Object
-      temp.add(Match.fromMap(peer));
+      temp.add(Match.fromJson(peer));
     }
 
-    return Circle(lobbyId: data["lobbyId"], size: data["size"], circle: temp);
+    print("CIRCLE SIZE: " + temp.length.toString());
+    return Circle(circle: temp);
   }
 }

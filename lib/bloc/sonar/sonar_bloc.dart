@@ -20,6 +20,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Stream Management
   StreamSubscription _sensorSubscription;
+  SensorState _sensorState;
 
   // Constructer
   SonarBloc(this._sensorBloc) {
@@ -28,9 +29,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // Subscribe to Motion BLoC Updates
     _sensorSubscription = _sensorBloc.listen((state) {
-      if (state is Tilted) {
-        
-      } 
+      _sensorState = state;
     });
   }
 
@@ -43,7 +42,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   // Subscribe to Sonar Websockets Messages
   _onMessageReceived(Message message) {
-    print("MapReadMessage: " + message.toString());
+    //sprint("MapReadMessage: " + message.data.toString());
     switch (message.code) {
       // Connected
       case 0:
@@ -60,8 +59,17 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         break;
       // Sending
       case 10:
+        Map map = message.data["receivers"];
+        List<Match> matches = new List<Match>();
         // Update Receivers Circle
-        _currentProcess.receivers = Circle.fromMap(message.data["receivers"]);
+        for (final value in map.values) {
+          matches.add(Match.fromJson(value));
+        }
+
+        for (Match m in matches) {
+          
+          print(m.id);
+        }
 
         // Update Status
         _currentProcess.currentStage = SonarStage.SENDING;
@@ -75,6 +83,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Receiving
       case 20:
         // Update Senders Circle
+        print(message.data["senders"]);
         _currentProcess.senders = Circle.fromMap(message.data["senders"]);
 
         // Update Status

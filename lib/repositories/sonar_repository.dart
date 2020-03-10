@@ -48,8 +48,6 @@ class SonarRepository {
     var message = Message.outgoing(OutgoingMessageAction.Sending, givenData: {
       "direction": currentDirection.toSendMap(),
     });
-
-  print(message);
     // Action: JOIN To Server
     sonarWS.send(message);
   }
@@ -60,7 +58,7 @@ class SonarRepository {
     var message = Message.outgoing(OutgoingMessageAction.Receiving, givenData: {
       "direction": currentDirection.toReceiveMap(),
     });
-  print(message);
+
     // Action: JOIN To Server
     sonarWS.send(message);
   }

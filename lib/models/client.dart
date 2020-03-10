@@ -55,29 +55,27 @@ class Match extends Equatable {
   // From JSON
   final String id;
   final Direction direction;
-  final String status;
   final Profile user;
 
   // *****************
   // ** Constructor **
   // *****************
-  const Match({this.id, this.direction, this.status, this.user});
+  const Match({this.id, this.direction, this.user});
 
   // **************************
   // ** Class Implementation **
   // **************************
   @override
-  List<Object> get props => [id, direction, status, user];
+  List<Object> get props => [id, direction, user];
 
   // ***********************
   // ** Object Generation **
   // ***********************
   // Create Object from Events
-  static Match fromMap(Map data) {
+  static Match fromJson(Map data) {
     return Match(
         id: data["id"],
         direction: Direction.fromMap(data["direction"]),
-        status: data["status"],
         user: Profile.fromMap(data["profile"]));
   }
 
@@ -88,7 +86,6 @@ class Match extends Equatable {
     return {
       'id': id,
       'direction': direction.toSendMap(),
-      'status': status,
       'profile': user.toMap()
     };
   }
