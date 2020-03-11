@@ -27,7 +27,7 @@ class App extends StatelessWidget {
             // Sonar Communication
             BlocProvider<SonarBloc>(
               create: (BuildContext context) =>
-                  SonarBloc(BlocProvider.of<SensorBloc>(context)),
+                  SonarBloc(),
             ),
           ],
           child: OrientationWidget(),

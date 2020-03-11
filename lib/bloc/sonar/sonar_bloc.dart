@@ -12,25 +12,15 @@ import 'package:sonar_app/controllers/controllers.dart';
 // *********************
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
-  final SensorBloc _sensorBloc;
   SonarRepository _sonarRepository = new SonarRepository();
 
   // Variables
   Process _currentProcess;
 
-  // Stream Management
-  StreamSubscription _sensorSubscription;
-  SensorState _sensorState;
-
   // Constructer
-  SonarBloc(this._sensorBloc) {
+  SonarBloc() {
     // Subscribe to Server WS Updates
     sonarWS.addListener(_onMessageReceived);
-
-    // Subscribe to Motion BLoC Updates
-    _sensorSubscription = _sensorBloc.listen((state) {
-      _sensorState = state;
-    });
   }
 
   // Initial State
@@ -60,19 +50,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Sending
       case 10:
         Map map = message.data["receivers"];
-        List<Match> matches = new List<Match>();
-        // Update Receivers Circle
-        for (final value in map.values) {
-          matches.add(Match.fromJson(value));
-        }
-
-        for (Match m in matches) {
-          
-          print(m.id);
-        }
-
         // Update Status
         _currentProcess.currentStage = SonarStage.SENDING;
+        add(Send(matches: map));
         break;
       // Sender Match Found
       case 11:
@@ -82,12 +62,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         break;
       // Receiving
       case 20:
-        // Update Senders Circle
-        print(message.data["senders"]);
+        Map map = message.data["senders"];
+
         _currentProcess.senders = Circle.fromMap(message.data["senders"]);
 
         // Update Status
         _currentProcess.currentStage = SonarStage.RECEIVING;
+        add(Send(matches: map));
         break;
       // Receiver Offered
       case 21:
@@ -160,7 +141,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***************************
   @override
   Future<void> close() {
-    _sensorSubscription?.cancel();
     sonarWS.removeListener(_onMessageReceived);
     sonarWS.disconnect();
     return super.close();
@@ -185,18 +165,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ** Send Event ***
 // *****************
   Stream<SonarState> _mapSendToState(Send sendEvent) async* {
-    _sonarRepository.setSending(sendEvent.newDirection);
     // Set Suspend state with lastState
-    yield Sending(sendEvent.newDirection);
+    yield Sending(matches: sendEvent.matches);
   }
 
 // ********************
 // ** Receive Event ***
 // ********************
   Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
-    _sonarRepository.setReceiving(receiveEvent.newDirection);
     // Set Suspend state with lastState
-    yield Receiving(receiveEvent.newDirection);
+    yield Receiving(matches: receiveEvent.matches);
   }
 
 // ********************

@@ -16,20 +16,31 @@ class OrientationActions extends StatelessWidget {
     );
   }
 
-  List<Widget> _mapStateToActionButtons({
-    SensorBloc sensorBloc, SonarBloc sonarBloc
-  }) {
+  List<Widget> _mapStateToActionButtons(
+      {SensorBloc sensorBloc, SonarBloc sonarBloc}) {
     // Initialize
     final SonarState sonarState = sonarBloc.state;
+    final SensorState sensorState = sensorBloc.state;
     if (sonarState is Initial) {
       return [
         FloatingActionButton(
-          child: Icon(Icons.cloud_upload),
-          onPressed: () {
+            child: Icon(Icons.cloud_upload),
+            onPressed: () {
               sonarBloc.add(Initialize());
-          }
-        ),
+            }),
       ];
+    } else if (sonarState is Sending) {
+      if (sensorState is Tilted) {
+        for (final value in sonarState.matches.values) {
+          var matchDirection = value["direction"]["direction"];
+          print(sensorState.direction.degrees);
+          print( matchDirection["antipodal_degrees"]);
+          var difference = sensorState.direction.degrees - matchDirection["antipodal_degrees"];
+          difference.abs();
+          print("Match/Client Difference: " + difference.toString());
+        }
+      }
+      
     }
     return [];
   }

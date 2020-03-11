@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/controllers/controllers.dart';
-import 'package:sonar_app/models/direction.dart';
+import 'package:sonar_app/models/models.dart';
 
 abstract class SonarState extends Equatable {
   const SonarState();
@@ -23,15 +23,15 @@ class Ready extends SonarState {
 // In Sending Position
 class Sending extends SonarState {
   final Process runningProcess;
-  final Direction direction;
-  const Sending(this.direction, {this.runningProcess});
+  final Map matches;
+  const Sending({this.runningProcess, this.matches});
 }
 
 // In Receiving Position
 class Receiving extends SonarState {
   final Process runningProcess;
-  final Direction direction;
-  const Receiving(this.direction, {this.runningProcess});
+  final Map matches;
+  const Receiving({this.runningProcess, this.matches});
 }
 
 // In Between Send/Receive Cycle

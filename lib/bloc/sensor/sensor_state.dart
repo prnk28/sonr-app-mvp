@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/models/models.dart';
 
 abstract class SensorState extends Equatable {
