@@ -13,45 +13,110 @@ class OrientationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      SonarRepository _sonarRepository = new SonarRepository();
+    // Sonar Repo
+    SonarRepository _sonarRepository = new SonarRepository();
+
+    // Top Down
     return Scaffold(
       appBar: AppBar(title: Text('Sonar Demo')),
       body: Column(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
+
+            // Build With Sensor Bloc
             child: BlocBuilder<SensorBloc, SensorState>(
               builder: (context, state) {
+                SonarState sonarState
+                = BlocProvider.of<SonarBloc>(context).state;
+                // Check Sensor Tilted
                 if (state is Tilted) {
+                  // Call Sending Action
                   _sonarRepository.setSending(state.direction);
+
+                  // Iterate Between Matches
+                  if (sonarState is Sending) {
+                    for (final value in sonarState.matches.values) {
+                      var matchDirection = value["direction"]["direction"];
+                      print(matchDirection["antipodal_degrees"]);
+                      var difference = state.direction.degrees -
+                          matchDirection["antipodal_degrees"];
+                      difference.abs();
+                      print(
+                          "Match/Client Difference: " + difference.toString());
+                    }
+                  }
+
+                  // Return Text Widget
                   return Text(
                     state.motion.state.toString() +
                         " , " +
                         state.direction.degrees.toString(),
-                    style: OrientationWidget.bigTextStyle,
-                  );
-                } else if (state is Landscaped) {
-                  _sonarRepository.setReceiving(state.direction);
-                  return Text(
-                    state.motion.state.toString() +
-                        " , " +
-                        state.direction.degrees.toString(),
-                    style: OrientationWidget.bigTextStyle,
-                  );
-                } else {
-                  return Text(
-                    "Waiting to Begin.",
                     style: OrientationWidget.bigTextStyle,
                   );
                 }
+                // Check Sensor Landscape
+                else if (state is Landscaped) {
+                  // Call Receiving Action
+                  _sonarRepository.setReceiving(state.direction);
+
+                  // Return Text Widget
+                  return Text(
+                    state.motion.state.toString() +
+                        " , " +
+                        state.direction.degrees.toString(),
+                    style: OrientationWidget.bigTextStyle,
+                  );
+                }
+                // Check Sensor Default
+                else {
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // Return Text Widget
+                        Text(
+                          "Waiting to Begin.",
+                          style: OrientationWidget.bigTextStyle,
+                        ),
+                        FloatingActionButton(
+                            child: Icon(Icons.cloud_upload),
+                            onPressed: () {
+                              BlocProvider.of<SonarBloc>(context)
+                                  .add(Initialize());
+                            }),
+                      ]);
+                }
               },
-              
             ),
           ),
-          BlocBuilder<SonarBloc, SonarState>(
-              builder: (context, state) => OrientationActions()),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: _mapStateToActionButtons(
+          //     sensorBloc: BlocProvider.of<SensorBloc>(context),
+          //     sonarBloc: BlocProvider.of<SonarBloc>(context),
+          //   ),
+          // ),
         ],
       ),
     );
+  }
+
+  List<Widget> _mapStateToActionButtons(
+      {SensorBloc sensorBloc, SonarBloc sonarBloc}) {
+    // Initialize
+    final SonarState sonarState = sonarBloc.state;
+    final SensorState sensorState = sensorBloc.state;
+    if (sonarState is Initial) {
+      return [
+        FloatingActionButton(
+            child: Icon(Icons.cloud_upload),
+            onPressed: () {
+              sonarBloc.add(Initialize());
+            }),
+      ];
+    } else if (sonarState is Sending) {
+      if (sensorState is Tilted) {}
+    }
+    return [];
   }
 }

@@ -4,7 +4,6 @@ import 'package:sonar_app/models/models.dart';
 
 abstract class SonarState extends Equatable {
   const SonarState();
-
   @override
   List<Object> get props => [];
 }
