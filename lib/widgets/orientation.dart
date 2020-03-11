@@ -37,7 +37,7 @@ class OrientationWidget extends StatelessWidget {
                   // Iterate Between Matches
                   if (sonarState is Sending) {
                     for (final value in sonarState.matches.values) {
-                      var matchDirection = value["direction"]["direction"];
+                      var matchDirection = value["direction"];
                       print(matchDirection["antipodal_degrees"]);
                       var difference = state.direction.degrees -
                           matchDirection["antipodal_degrees"];
