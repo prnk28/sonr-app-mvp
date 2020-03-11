@@ -89,34 +89,8 @@ class OrientationWidget extends StatelessWidget {
               },
             ),
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: _mapStateToActionButtons(
-          //     sensorBloc: BlocProvider.of<SensorBloc>(context),
-          //     sonarBloc: BlocProvider.of<SonarBloc>(context),
-          //   ),
-          // ),
         ],
       ),
     );
-  }
-
-  List<Widget> _mapStateToActionButtons(
-      {SensorBloc sensorBloc, SonarBloc sonarBloc}) {
-    // Initialize
-    final SonarState sonarState = sonarBloc.state;
-    final SensorState sensorState = sensorBloc.state;
-    if (sonarState is Initial) {
-      return [
-        FloatingActionButton(
-            child: Icon(Icons.cloud_upload),
-            onPressed: () {
-              sonarBloc.add(Initialize());
-            }),
-      ];
-    } else if (sonarState is Sending) {
-      if (sensorState is Tilted) {}
-    }
-    return [];
   }
 }
