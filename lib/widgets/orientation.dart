@@ -34,16 +34,16 @@ class OrientationWidget extends StatelessWidget {
                   // Call Sending Action
                   _sonarRepository.setSending(state.direction);
 
+                  var _differences = [];
                   // Iterate Between Matches
                   if (sonarState is Sending) {
                     for (final value in sonarState.matches.values) {
                       var matchDirection = value["direction"];
-                      print(matchDirection["antipodal_degrees"]);
                       var difference = state.direction.degrees -
                           matchDirection["antipodal_degrees"];
                       difference.abs();
-                      print(
-                          "Match/Client Difference: " + difference.toString());
+                      print(value);
+                      _differences.add(difference);
                     }
                   }
 
@@ -51,7 +51,7 @@ class OrientationWidget extends StatelessWidget {
                   return Text(
                     state.motion.state.toString() +
                         " , " +
-                        state.direction.degrees.toString(),
+                        state.direction.degrees.toString() + ", Match/Client Difference: " + _differences.toString(),
                     style: OrientationWidget.bigTextStyle,
                   );
                 }

@@ -32,7 +32,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   // Subscribe to Sonar Websockets Messages
   _onMessageReceived(Message message) {
-    //sprint("MapReadMessage: " + message.data.toString());
+    print("MapReadMessage: " + message.data.toString());
     switch (message.code) {
       // Connected
       case 0:
