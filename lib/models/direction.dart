@@ -56,14 +56,23 @@ class Direction extends Equatable {
   }
 
   static double _getAntipodalDegrees(double degrees, double accelerometerX) {
-
-    // Check Accelerometer
+    // Right Tilt
     if (accelerometerX < 0) {
-      // Adjust by Tilt
-      return (degrees - 90);
-    } else {
-      // Adjust by Tilt
-      return (degrees - 270);
+      // Adjust by Degrees
+      if(degrees < 270){
+        return (degrees + 90);
+      }else{
+        return (degrees - 270);
+      }
+    }
+    // Left Tilt
+    else {
+      // Adjust by Degrees
+      if(degrees < 90){
+        return (270 - degrees);
+      }else{
+        return (degrees - 90);
+      }
     }
   }
 

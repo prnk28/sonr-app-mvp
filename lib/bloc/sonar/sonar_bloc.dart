@@ -68,7 +68,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
         // Update Status
         _currentProcess.currentStage = SonarStage.RECEIVING;
-        add(Send(matches: map));
+        add(Receive(matches: map));
         break;
       // Receiver Offered
       case 21:
