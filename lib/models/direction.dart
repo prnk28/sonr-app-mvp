@@ -60,18 +60,50 @@ class Direction extends Equatable {
     if (accelerometerX < 0) {
       // Adjust by Degrees
       if(degrees < 270){
-        return (degrees + 90);
+        // Get Temp Value
+        var temp = degrees + 90;
+
+        // Get Reciprocal of Adjusted
+        if(temp < 180){
+          return temp + 180;
+        }else{
+          return temp - 180;
+        }
       }else{
-        return (degrees - 270);
+        // Get Temp Value
+        var temp = degrees - 270;
+
+        // Get Reciprocal of Adjusted
+        if(temp < 180){
+          return temp + 180;
+        }else{
+          return temp - 180;
+        }
       }
     }
     // Left Tilt
     else {
       // Adjust by Degrees
       if(degrees < 90){
-        return (270 - degrees);
+        // Get Temp Value
+        var temp = 270 - degrees;
+
+        // Get Reciprocal of Adjusted
+        if(temp < 180){
+          return temp + 180;
+        }else{
+          return temp - 180;
+        }
       }else{
-        return (degrees - 90);
+        // Get Temp Value
+        var temp = degrees - 90;
+
+        // Get Reciprocal of Adjusted
+        if(temp < 180){
+          return temp + 180;
+        }else{
+          return temp - 180;
+        }
       }
     }
   }
