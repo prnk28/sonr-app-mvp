@@ -5,30 +5,44 @@ class Circle {
   // *******************
   // ** Class Values ***
   // *******************
-  final List<Match> circle;
+  final dynamic matches;
+  final Direction clientDirection;
+  dynamic closestMatch;
 
   // *****************
   // ** Constructor **
   // *****************
-  const Circle({
-    this.circle,
-  });
+  Circle(this.matches, this.clientDirection, bool sender) {
+    // Temp Array of Differences
+    var _differences = [];
+    var _matches = {};
 
-  // ***********************
-  // ** Object Generation **
-  // ***********************
-  // Create Object from Events
-  static Circle fromMap(List data) {
-    // Initialize
-    List<Match> temp = new List<Match>();
-    
-    // Iterate through JSON Map
-    for (var peer in data) {
-      // Convert Map to Object
-      temp.add(Match.fromJson(peer));
+    // Check Sender Receiver
+    if (sender) {
+      // Iterate through matches
+      for (final value in this.matches) {
+        var matchDirection = value["direction"];
+        var difference =
+            clientDirection.degrees - matchDirection["antipodal_degrees"];
+        difference.abs();
+        value["difference"] = difference;
+        _differences.add(difference);
+        _matches[difference] = value;
+      }
+    } else {
+      // Iterate through matches
+      for (final value in this.matches) {
+        var matchDirection = value["direction"];
+        var difference =
+            clientDirection.antipodalDegrees - matchDirection["degrees"];
+        value["difference"] = difference.abs();
+        _differences.add(difference.abs());
+        _matches[difference.abs()] = value;
+      }
     }
 
-    print("CIRCLE SIZE: " + temp.length.toString());
-    return Circle(circle: temp);
+    // Find Closest Match
+    _differences.sort();
+    closestMatch = _matches[_differences[0]];
   }
 }

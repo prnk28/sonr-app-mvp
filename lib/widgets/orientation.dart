@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import 'package:sonar_app/widgets/widgets.dart';
 
@@ -27,31 +28,27 @@ class OrientationWidget extends StatelessWidget {
             // Build With Sensor Bloc
             child: BlocBuilder<SensorBloc, SensorState>(
               builder: (context, state) {
-                SonarState sonarState
-                = BlocProvider.of<SonarBloc>(context).state;
+                SonarState sonarState =
+                    BlocProvider.of<SonarBloc>(context).state;
                 // Check Sensor Tilted
                 if (state is Tilted) {
                   // Call Sending Action
                   _sonarRepository.setSending(state.direction);
+                  var circle;
 
-                  var _differences = [];
                   // Iterate Between Matches
                   if (sonarState is Sending) {
-                    for (final value in sonarState.matches.values) {
-                      var matchDirection = value["direction"];
-                      var difference = state.direction.degrees -
-                          matchDirection["antipodal_degrees"];
-                      difference.abs();
-                      print(value);
-                      _differences.add(difference);
-                    }
+                    circle = new Circle(
+                        sonarState.matches.values, state.direction, true);
                   }
 
                   // Return Text Widget
                   return Text(
                     state.motion.state.toString() +
                         " , " +
-                        state.direction.degrees.toString() + ", Match/Client Difference: " + _differences.toString(),
+                        state.direction.degrees.toString() +
+                        ", Match/Client Difference: " +
+                        circle.closestMatch["difference"].toString(),
                     style: OrientationWidget.bigTextStyle,
                   );
                 }
@@ -59,13 +56,26 @@ class OrientationWidget extends StatelessWidget {
                 else if (state is Landscaped) {
                   // Call Receiving Action
                   _sonarRepository.setReceiving(state.direction);
+                  var circle;
+
+                  // Iterate Between Matches
+                  if (sonarState is Receiving) {
+                    circle = new Circle(
+                        sonarState.matches.values, state.direction, false);
+                  }
+var colorTween = ColorTween(begin: Colors.red, end: Colors.blue).lerp(circle.closestMatch["difference"]);
+
 
                   // Return Text Widget
                   return Text(
                     state.motion.state.toString() +
                         " , " +
-                        state.direction.degrees.toString(),
-                    style: OrientationWidget.bigTextStyle,
+                        state.direction.degrees.toString() +
+                        " , " +
+                        ", Match/Client Difference: " +
+                        circle.closestMatch["difference"].toString(),
+                    style: TextStyle(color: colorTween, fontSize: 40,
+    fontWeight: FontWeight.bold,)
                   );
                 }
                 // Check Sensor Default

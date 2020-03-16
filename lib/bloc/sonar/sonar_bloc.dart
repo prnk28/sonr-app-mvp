@@ -32,7 +32,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   // Subscribe to Sonar Websockets Messages
   _onMessageReceived(Message message) {
-    print("MapReadMessage: " + message.data.toString());
+    //print("MapReadMessage: " + message.data.toString());
     switch (message.code) {
       // Connected
       case 0:
@@ -63,8 +63,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Receiving
       case 20:
         Map map = message.data["senders"];
-
-        _currentProcess.senders = Circle.fromMap(message.data["senders"]);
 
         // Update Status
         _currentProcess.currentStage = SonarStage.RECEIVING;
