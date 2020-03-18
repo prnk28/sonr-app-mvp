@@ -21,19 +21,27 @@ class Initialize extends SonarEvent {
 
 // Send to Server Sequence
 class Send extends SonarEvent {
-  final Map matches;
+  final Circle map;
 
   const Send(
       {
-      this.matches});
+      this.map});
 }
 
 // Receive to Server Sequence
 class Receive extends SonarEvent {
-  final Map matches;
+  final Circle map;
 
   const Receive(
-      {this.matches});
+      {this.map});
+}
+
+// Update Event
+class Update extends SonarEvent {
+  final Circle map;
+
+    const Update(
+      {this.map});
 }
 
 // Tap Peer from List or Point to Receiver for 2s

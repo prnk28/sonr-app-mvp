@@ -34,21 +34,23 @@ class OrientationWidget extends StatelessWidget {
                 if (state is Tilted) {
                   // Call Sending Action
                   _sonarRepository.setSending(state.direction);
-                  var circle;
 
                   // Iterate Between Matches
                   if (sonarState is Sending) {
-                    circle = new Circle(
-                        sonarState.matches.values, state.direction, true);
+                    // Return Text Widget
+                    return Text(
+                      state.motion.state.toString() +
+                          " , " +
+                          state.direction.degrees.toString() +
+                          ", Match/Client Difference: " +
+                          sonarState.matches.closestMatch["difference"]
+                              .toString(),
+                      style: OrientationWidget.bigTextStyle,
+                    );
                   }
-
-                  // Return Text Widget
                   return Text(
-                    state.motion.state.toString() +
-                        " , " +
-                        state.direction.degrees.toString() +
-                        ", Match/Client Difference: " +
-                        circle.closestMatch["difference"].toString(),
+                    "No Receivers" " , " +
+                          state.direction.degrees.toString(),
                     style: OrientationWidget.bigTextStyle,
                   );
                 }
@@ -56,26 +58,52 @@ class OrientationWidget extends StatelessWidget {
                 else if (state is Landscaped) {
                   // Call Receiving Action
                   _sonarRepository.setReceiving(state.direction);
-                  var circle;
 
                   // Iterate Between Matches
                   if (sonarState is Receiving) {
-                    circle = new Circle(
-                        sonarState.matches.values, state.direction, false);
+
+                    // Determine Tween Value
+                    var tweenValue;
+
+                    // Withing Threshold
+                    if (sonarState.matches.closestMatch["difference"] <= 8) {
+                      tweenValue = 0.0;
+                    }
+                    // Close to threshold
+                    else if (sonarState.matches.closestMatch["difference"] <=
+                        100) {
+                      tweenValue =
+                          sonarState.matches.closestMatch["difference"];
+                    }
+                    // Not in threshold
+                    else {
+                      tweenValue = 1.0;
+                    }
+
+                    // Create Color Tween Based on Client Differences
+                    var colorTween =
+                        ColorTween(begin: Colors.red, end: Colors.blue)
+                            .lerp(tweenValue);
+
+                    // Return Text Widget
+                    return Text(
+                        state.motion.state.toString() +
+                            " , " +
+                            state.direction.degrees.toString() +
+                            " , " +
+                            ", Match/Client Difference: " +
+                            sonarState.matches.closestMatch["difference"]
+                                .toString(),
+                        style: TextStyle(
+                          color: colorTween,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ));
                   }
-var colorTween = ColorTween(begin: Colors.red, end: Colors.blue).lerp(circle.closestMatch["difference"]);
-
-
-                  // Return Text Widget
                   return Text(
-                    state.motion.state.toString() +
-                        " , " +
-                        state.direction.degrees.toString() +
-                        " , " +
-                        ", Match/Client Difference: " +
-                        circle.closestMatch["difference"].toString(),
-                    style: TextStyle(color: colorTween, fontSize: 40,
-    fontWeight: FontWeight.bold,)
+                    "No Senders" " , " +
+                          state.direction.degrees.toString(),
+                    style: OrientationWidget.bigTextStyle,
                   );
                 }
                 // Check Sensor Default

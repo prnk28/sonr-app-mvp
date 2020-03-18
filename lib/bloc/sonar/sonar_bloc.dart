@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_compass/flutter_compass.dart';
+import 'package:sensors/sensors.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/repositories/repositories.dart';
@@ -13,14 +15,31 @@ import 'package:sonar_app/controllers/controllers.dart';
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   SonarRepository _sonarRepository = new SonarRepository();
+  final SensorBloc _sensorBloc;
+  StreamSubscription _sensorSubscription;
+  StreamSubscription<AccelerometerEvent> _motionSubscription;
+  Direction _lastDirection;
+  Motion _currentMotion = Motion.create();
 
   // Variables
   Process _currentProcess;
 
   // Constructer
-  SonarBloc() {
+  SonarBloc(this._sensorBloc) {
     // Subscribe to Server WS Updates
     sonarWS.addListener(_onMessageReceived);
+
+     // Listen to Stream and Add UpdateInput Event every update
+    _motionSubscription = accelerometerEvents.listen((newData) {
+      // Update Motion Var
+      _currentMotion = Motion.create(a: newData);
+    });
+
+      // Subscribe to Motion BLoC Updates
+    _sensorSubscription = FlutterCompass.events.listen((newData) {
+      // Refresh Inputs
+      _lastDirection = Direction.create(degrees: newData, accelerometerX: _currentMotion.accelX);
+    });
   }
 
   // Initial State
@@ -32,7 +51,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   // Subscribe to Sonar Websockets Messages
   _onMessageReceived(Message message) {
-    //print("MapReadMessage: " + message.data.toString());
+    print(message.data);
     switch (message.code) {
       // Connected
       case 0:
@@ -49,10 +68,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         break;
       // Sending
       case 10:
-        Map map = message.data["receivers"];
         // Update Status
         _currentProcess.currentStage = SonarStage.SENDING;
-        add(Send(matches: map));
+        add(Update(map: Circle.fromMap(message.data["receivers"], _lastDirection, true)));
         break;
       // Sender Match Found
       case 11:
@@ -62,11 +80,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         break;
       // Receiving
       case 20:
-        Map map = message.data["senders"];
-
         // Update Status
         _currentProcess.currentStage = SonarStage.RECEIVING;
-        add(Receive(matches: map));
+        add(Update(map: Circle.fromMap(message.data["senders"], _lastDirection, false)));
         break;
       // Receiver Offered
       case 21:
@@ -117,8 +133,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     } else if (event is Receive) {
       yield* _mapReceiveToState(event);
     }
-    // else if (event is Select) {
-    //   yield* _mapSelectState(event);
+    else if (event is Update) {
+      yield* _mapUpdateToState(event);
+    }
     // } else if (event is Request) {
     //   yield* _mapRequestToState(event);
     // } else if (event is Offered) {
@@ -164,7 +181,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *****************
   Stream<SonarState> _mapSendToState(Send sendEvent) async* {
     // Set Suspend state with lastState
-    yield Sending(matches: sendEvent.matches);
+    yield Sending(matches: sendEvent.map);
   }
 
 // ********************
@@ -172,16 +189,21 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
     // Set Suspend state with lastState
-    yield Receiving(matches: receiveEvent.matches);
+    yield Receiving(matches: receiveEvent.map);
   }
 
 // ********************
-// ** Compare Event ***
+// ** Update Event ***
 // ********************
-  // Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Pending();
-  // }
+  Stream<SonarState> _mapUpdateToState(Update updateEvent) async* {
+      if(updateEvent.map.sender){
+        add(Send(map: updateEvent.map));
+      }else{
+        add(Receive(map: updateEvent.map));
+      }
+      // Set Suspend state with lastState
+      yield Updating();
+  }
 
 // *******************
 // ** Select Event ***

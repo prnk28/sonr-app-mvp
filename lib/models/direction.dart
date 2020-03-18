@@ -47,36 +47,51 @@ class Direction extends Equatable {
   }
 
   // Create Object from Events
-  static Direction fromMap(Map data) {
+  static Direction fromReceiveMap(Map data) {
     return Direction(
+      degrees: data["degrees"],
+      antipodalDegrees: data["antipodal_degrees"],
+      compassDesignation: data["compass_designation"],
+    );
+  }
+
+  static Direction fromMap(Map data) {
+    if (data["antipodal_degrees"] == null) {
+      return Direction(
+        degrees: data["degrees"],
+        compassDesignation: data["compass_designation"],
+      );
+    } else {
+      return Direction(
         degrees: data["degrees"],
         antipodalDegrees: data["antipodal_degrees"],
         compassDesignation: data["compass_designation"],
-        lastUpdated: data["last_updated"]);
+      );
+    }
   }
 
   static double _getAntipodalDegrees(double degrees, double accelerometerX) {
     // Right Tilt
     if (accelerometerX < 0) {
       // Adjust by Degrees
-      if(degrees < 270){
+      if (degrees < 270) {
         // Get Temp Value
         var temp = degrees + 90;
 
         // Get Reciprocal of Adjusted
-        if(temp < 180){
+        if (temp < 180) {
           return temp + 180;
-        }else{
+        } else {
           return temp - 180;
         }
-      }else{
+      } else {
         // Get Temp Value
         var temp = degrees - 270;
 
         // Get Reciprocal of Adjusted
-        if(temp < 180){
+        if (temp < 180) {
           return temp + 180;
-        }else{
+        } else {
           return temp - 180;
         }
       }
@@ -84,24 +99,24 @@ class Direction extends Equatable {
     // Left Tilt
     else {
       // Adjust by Degrees
-      if(degrees < 90){
+      if (degrees < 90) {
         // Get Temp Value
         var temp = 270 - degrees;
 
         // Get Reciprocal of Adjusted
-        if(temp < 180){
+        if (temp < 180) {
           return temp + 180;
-        }else{
+        } else {
           return temp - 180;
         }
-      }else{
+      } else {
         // Get Temp Value
         var temp = degrees - 90;
 
         // Get Reciprocal of Adjusted
-        if(temp < 180){
+        if (temp < 180) {
           return temp + 180;
-        }else{
+        } else {
           return temp - 180;
         }
       }

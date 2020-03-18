@@ -22,15 +22,19 @@ class Ready extends SonarState {
 // In Sending Position
 class Sending extends SonarState {
   final Process runningProcess;
-  final Map matches;
+  final Circle matches;
   const Sending({this.runningProcess, this.matches});
 }
 
 // In Receiving Position
 class Receiving extends SonarState {
   final Process runningProcess;
-  final Map matches;
+  final Circle matches;
   const Receiving({this.runningProcess, this.matches});
+}
+
+class Updating extends SonarState {
+  const Updating();
 }
 
 // In Between Send/Receive Cycle
