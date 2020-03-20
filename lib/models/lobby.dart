@@ -7,7 +7,6 @@ class Lobby extends Equatable {
   // *******************
   // From JSON
   final String id;
-  final Location location;
   final List senders;
   final List receivers;
   final int size;
@@ -17,7 +16,6 @@ class Lobby extends Equatable {
   // *********************
   const Lobby({
     this.id,
-    this.location,
     this.senders,
     this.receivers,
     this.size,
@@ -29,7 +27,6 @@ class Lobby extends Equatable {
   @override
   List<Object> get props => [
     id,
-    location,
     senders,
     receivers,
     size,
@@ -42,7 +39,6 @@ class Lobby extends Equatable {
   static Lobby fromMap(Map json) {
       return Lobby(
           id: json["id"],
-          location: Location.fromMap(json["location"]),
           senders: json["senders"],
           receivers: json["receivers"],
           size: json["size"],

@@ -15,9 +15,6 @@ import 'package:sonar_app/controllers/controllers.dart';
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   SonarRepository _sonarRepository = new SonarRepository();
-  final SensorBloc _sensorBloc;
-  StreamSubscription _sensorSubscription;
-  StreamSubscription<AccelerometerEvent> _motionSubscription;
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
 
@@ -25,20 +22,21 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Process _currentProcess;
 
   // Constructer
-  SonarBloc(this._sensorBloc) {
+  SonarBloc() {
     // Subscribe to Server WS Updates
     sonarWS.addListener(_onMessageReceived);
 
-     // Listen to Stream and Add UpdateInput Event every update
-    _motionSubscription = accelerometerEvents.listen((newData) {
+    // Listen to Stream and Add UpdateInput Event every update
+    accelerometerEvents.listen((newData) {
       // Update Motion Var
       _currentMotion = Motion.create(a: newData);
     });
 
-      // Subscribe to Motion BLoC Updates
-    _sensorSubscription = FlutterCompass.events.listen((newData) {
+    // Subscribe to Motion BLoC Updates
+    FlutterCompass.events.listen((newData) {
       // Refresh Inputs
-      _lastDirection = Direction.create(degrees: newData, accelerometerX: _currentMotion.accelX);
+      _lastDirection = Direction.create(
+          degrees: newData, accelerometerX: _currentMotion.accelX);
     });
   }
 
@@ -70,7 +68,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       case 10:
         // Update Status
         _currentProcess.currentStage = SonarStage.SENDING;
-        add(Update(map: Circle.fromMap(message.data["receivers"], _lastDirection, true)));
+
+        // Set Map
+        Map map = message.data["receivers"];
+
+        // Check Null
+        if (map.values.length != 0) {
+          add(Update(map: Circle.fromMap(map, _lastDirection, true)));
+        } else {
+          print("No Receivers");
+        }
         break;
       // Sender Match Found
       case 11:
@@ -82,7 +89,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       case 20:
         // Update Status
         _currentProcess.currentStage = SonarStage.RECEIVING;
-        add(Update(map: Circle.fromMap(message.data["senders"], _lastDirection, false)));
+
+        // Set Map
+        Map map = message.data["senders"];
+
+        // Check Null
+        if (map.values.length != 0) {
+          add(Update(map: Circle.fromMap(map, _lastDirection, false)));
+        } else {
+          print("No Senders");
+        }
         break;
       // Receiver Offered
       case 21:
@@ -127,14 +143,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   ) async* {
     // Device Can See Updates
     if (event is Initialize) {
-      yield* _mapInitializeToState(event);
+      yield* _mapInitializeToState(event, _lastDirection, _currentMotion);
     } else if (event is Send) {
-      yield* _mapSendToState(event);
+      yield* _mapSendToState(event, _lastDirection, _currentMotion);
     } else if (event is Receive) {
-      yield* _mapReceiveToState(event);
-    }
-    else if (event is Update) {
-      yield* _mapUpdateToState(event);
+      yield* _mapReceiveToState(event, _lastDirection, _currentMotion);
+    } else if (event is Update) {
+      yield* _mapUpdateToState(event, _lastDirection, _currentMotion);
     }
     // } else if (event is Request) {
     //   yield* _mapRequestToState(event);
@@ -164,7 +179,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
 // ** Initialize Event ***
 // ***********************
-  Stream<SonarState> _mapInitializeToState(Initialize initializeEvent) async* {
+  Stream<SonarState> _mapInitializeToState(
+      Initialize initializeEvent, Direction direction, Motion motion) async* {
     // Initialize Variables
     Location fakeLocation = Location.fakeLocation();
     Profile fakeProfile = Profile.fakeProfile();
@@ -179,7 +195,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *****************
 // ** Send Event ***
 // *****************
-  Stream<SonarState> _mapSendToState(Send sendEvent) async* {
+  Stream<SonarState> _mapSendToState(
+      Send sendEvent, Direction direction, Motion motion) async* {
     // Set Suspend state with lastState
     yield Sending(matches: sendEvent.map);
   }
@@ -187,7 +204,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
 // ** Receive Event ***
 // ********************
-  Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
+  Stream<SonarState> _mapReceiveToState(
+      Receive receiveEvent, Direction direction, Motion motion) async* {
     // Set Suspend state with lastState
     yield Receiving(matches: receiveEvent.map);
   }
@@ -195,15 +213,58 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
 // ** Update Event ***
 // ********************
-  Stream<SonarState> _mapUpdateToState(Update updateEvent) async* {
-      if(updateEvent.map.sender){
-        add(Send(map: updateEvent.map));
-      }else{
-        add(Receive(map: updateEvent.map));
-      }
-      // Set Suspend state with lastState
-      yield Updating();
+  Stream<SonarState> _mapUpdateToState(
+      Update updateEvent, Direction direction, Motion motion) async* {
+    if (updateEvent.map.sender) {
+      add(Send(map: updateEvent.map));
+    } else {
+      add(Receive(map: updateEvent.map));
+    }
+    // Set Suspend state with lastState
+    yield Updating();
   }
+
+
+  // On InMotion Event ->
+  Stream<SonarState> _mapRefreshInputToState(
+      RefreshInput updateSensors) async* {
+    // Check State
+    if (_currentMotion.state == Orientation.Tilt ||
+        _currentMotion.state == Orientation.LandscapeLeft ||
+        _currentMotion.state == Orientation.LandscapeRight) {
+      // Compare Directions
+      add(CompareDirections(_lastDirection, updateSensors.newDirection));
+      // Pending State
+      yield Updating();
+    }
+  }
+
+  // On InMotion Event ->
+  Stream<SonarState> _mapCompareDirectionsToState(
+      CompareDirections compareDirections) async* {
+    // Check Directions
+    if (compareDirections.lastDirection != compareDirections.newDirection) {
+      // Set as new direction
+      _lastDirection = compareDirections.newDirection;
+    }
+
+    // Check State
+    if (_currentMotion.state == Orientation.Tilt) {
+      // Update State
+      _sonarRepository.setSending(_lastDirection);
+    }
+    // Receive State
+    else if (_currentMotion.state == Orientation.LandscapeLeft ||
+        _currentMotion.state == Orientation.LandscapeRight) {
+      // Update State
+      _sonarRepository.setReceiving(_lastDirection);
+    }
+    // Continue Shift
+    else {
+      //yield Default(motion: _currentMotion);
+    }
+  }
+}
 
 // *******************
 // ** Select Event ***

@@ -10,66 +10,99 @@ abstract class SonarState extends Equatable {
 
 // Preload State
 class Initial extends SonarState {
-  const Initial();
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Initial({this.currentMotion, this.currentDirection});
 }
 
 // Connected to Lobby/WS
 class Ready extends SonarState {
   final Process runningProcess;
-  const Ready({this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Ready({this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
 // In Sending Position
 class Sending extends SonarState {
   final Process runningProcess;
   final Circle matches;
-  const Sending({this.runningProcess, this.matches});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Sending(
+      {this.runningProcess,
+      this.matches,
+      this.currentMotion,
+      this.currentDirection});
 }
 
 // In Receiving Position
 class Receiving extends SonarState {
   final Process runningProcess;
   final Circle matches;
-  const Receiving({this.runningProcess, this.matches});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Receiving(
+      {this.runningProcess,
+      this.matches,
+      this.currentMotion,
+      this.currentDirection});
 }
 
 class Updating extends SonarState {
-  const Updating();
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Updating({this.currentMotion, this.currentDirection});
 }
 
 // In Between Send/Receive Cycle
 class Pending extends SonarState {
   final Process runningProcess;
-  final Direction direction;
-  const Pending(this.direction, {this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Pending(
+      {this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
 // Found Match: Either Select or AutoSelect
 class Found extends SonarState {
   final Process runningProcess;
-  const Found({this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Found({this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
 // Pending Transfer Confirmation
 class Authenticating extends SonarState {
   final Process runningProcess;
-  const Authenticating({this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Authenticating(
+      {this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
 // In WebRTC Transfer or Contact Transfer
 class Transferring extends SonarState {
   final Process runningProcess;
-  const Transferring({this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Transferring(
+      {this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
 // Transfer Succesful
 class Complete extends SonarState {
   final Process runningProcess;
-  const Complete({this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Complete(
+      {this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
 // Failed Sonar: Cancel/Decline/Error
 class Failed extends SonarState {
   final Process runningProcess;
-  const Failed({this.runningProcess});
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Failed({this.runningProcess, this.currentMotion, this.currentDirection});
 }

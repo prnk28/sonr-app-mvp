@@ -17,8 +17,8 @@ class Circle extends Equatable {
   // *****************
   static Circle fromMap(Map map, clientDirection, bool sender) {
     // Temp Array of Differences
-    //var _differences = [];
-    var _matches = new Map<String, double>();
+    var _differences = [];
+    var _matches = {};
     var _closestMatch;
     var matches = map.values;
 
@@ -33,8 +33,8 @@ class Circle extends Equatable {
           var difference =
               clientDirection.degrees - matchDirection["antipodal_degrees"];
           value["difference"] = difference.abs();
-          //_differences.add(difference.abs());
-          _matches[value.id] = difference.abs();
+          _differences.add(difference.abs());
+          _matches[difference.abs()] = value;
         }
       }
     } else {
@@ -48,25 +48,16 @@ class Circle extends Equatable {
           var difference =
               clientDirection.antipodalDegrees - matchDirection["degrees"];
           value["difference"] = difference.abs();
-          // _differences.add(difference.abs());
-          _matches[value.id] = difference.abs();
+          _differences.add(difference.abs());
+          _matches[difference.abs()] = value;
         }
       }
     }
 
-    // Convert Differences to List
-    var _differences = _matches.values.toList();
-
-    // Sort
+    // Find Closest Match
     _differences.sort();
-    
-    // Get Closest Key
-    var closestKey = _matches.keys.firstWhere(
-    (k) => _matches[k] == _differences[0], orElse: () => null);
-
-    // Set Closest Match by Finding from Map
-    _closestMatch = map[closestKey];
-    print("Closest Match: " + _closestMatch.toString());
+    _closestMatch = _matches[_differences[0]];
+    //print("Closest Match: " + _closestMatch.toString());
 
     return Circle(
       matches: _matches,
