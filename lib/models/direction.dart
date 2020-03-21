@@ -46,15 +46,6 @@ class Direction extends Equatable {
     // Both Events Provided
   }
 
-  // Create Object from Events
-  static Direction fromReceiveMap(Map data) {
-    return Direction(
-      degrees: data["degrees"],
-      antipodalDegrees: data["antipodal_degrees"],
-      compassDesignation: data["compass_designation"],
-    );
-  }
-
   static Direction fromMap(Map data) {
     if (data["antipodal_degrees"] == null) {
       return Direction(

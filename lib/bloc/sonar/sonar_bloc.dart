@@ -202,7 +202,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       Send sendEvent, Direction direction, Motion motion) async* {
     // Set Suspend state with lastState
     if (sendEvent.map != null) {
-      yield Sending(matches: sendEvent.map, currentMotion: motion, currentDirection: _lastDirection);
+      yield Sending(
+          matches: sendEvent.map,
+          currentMotion: motion,
+          currentDirection: _lastDirection,
+          closestMatch: sendEvent.map.closestMatch);
     } else {
       yield Sending(currentMotion: motion, currentDirection: _lastDirection);
     }
@@ -215,7 +219,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       Receive receiveEvent, Direction direction, Motion motion) async* {
     // Set Suspend state with lastState
     if (receiveEvent.map != null) {
-      yield Receiving(matches: receiveEvent.map, currentMotion: motion, currentDirection: _lastDirection);
+      yield Receiving(
+          matches: receiveEvent.map,
+          currentMotion: motion,
+          currentDirection: _lastDirection,
+          closestMatch: receiveEvent.map.closestMatch);
     } else {
       yield Receiving(currentMotion: motion, currentDirection: _lastDirection);
     }
@@ -262,16 +270,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check State
     if (_currentMotion.state == Orientation.Tilt) {
       // Update State
-      _sonarRepository.setSending(_lastDirection);
+      _sonarRepository.setSending(compareDirections.newDirection);
     }
     // Receive State
     else if (_currentMotion.state == Orientation.LandscapeLeft ||
         _currentMotion.state == Orientation.LandscapeRight) {
       // Update State
-      _sonarRepository.setReceiving(_lastDirection);
-    }else{
+      _sonarRepository.setReceiving(compareDirections.newDirection);
+    } else {
       // Update State Dont Duplicate Call
-      if(_currentProcess.currentStage != SonarStage.READY){
+      if (_currentProcess.currentStage != SonarStage.READY) {
         _sonarRepository.setReset();
       }
     }

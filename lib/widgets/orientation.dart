@@ -35,7 +35,7 @@ class OrientationWidget extends StatelessWidget {
                         " , " +
                         state.currentDirection.degrees.toString() +
                         ", Match/Client Difference: " +
-                        state.matches.closestMatch["difference"].toString(),
+                        state.closestMatch["difference"].toString(),
                     style: OrientationWidget.bigTextStyle,
                   );
                   }else{
@@ -81,7 +81,7 @@ class OrientationWidget extends StatelessWidget {
                             state.currentDirection.degrees.toString() +
                             " , " +
                             ", Match/Client Difference: " +
-                            state.matches.closestMatch["difference"].toString(),
+                            state.closestMatch["difference"].toString(),
                         style: TextStyle(
                           color: colorTween,
                           fontSize: 40,

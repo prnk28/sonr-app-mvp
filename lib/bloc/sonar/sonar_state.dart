@@ -28,11 +28,13 @@ class Sending extends SonarState {
   final Process runningProcess;
   final Circle matches;
   final Motion currentMotion;
+  final dynamic closestMatch;
   final Direction currentDirection;
   const Sending(
       {this.runningProcess,
       this.matches,
       this.currentMotion,
+      this.closestMatch,
       this.currentDirection});
 }
 
@@ -41,10 +43,12 @@ class Receiving extends SonarState {
   final Process runningProcess;
   final Circle matches;
   final Motion currentMotion;
+  final dynamic closestMatch;
   final Direction currentDirection;
   const Receiving(
       {this.runningProcess,
       this.matches,
+      this.closestMatch,
       this.currentMotion,
       this.currentDirection});
 }
