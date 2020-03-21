@@ -14,9 +14,6 @@ class OrientationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Sonar Repo
-    SonarRepository _sonarRepository = new SonarRepository();
-
     // Top Down
     return Scaffold(
       appBar: AppBar(title: Text('Sonar Demo')),
@@ -28,35 +25,34 @@ class OrientationWidget extends StatelessWidget {
             // Build With Sensor Bloc
             child: BlocBuilder<SonarBloc, SonarState>(
               builder: (context, state) {
+                print(state);
                 // Check Tilt
-                if (state.motion.state == Enum.Orientation.Tilt) {
-// Call Sending Action
-                  _sonarRepository.setSending(state.direction);
-
-                  // Iterate Between Matches
-                  if (state is Sending) {
-                    // Return Text Widget
-                    return Text(
-                      state.motion.state.toString() +
-                          " , " +
-                          state.direction.degrees.toString() +
-                          ", Match/Client Difference: " +
-                          state.matches.closestMatch["difference"].toString(),
-                      style: OrientationWidget.bigTextStyle,
-                    );
-                  }
+                if (state is Sending) {
+                  if (state.matches != null) {
+                  // Return Text Widget
                   return Text(
-                    "No Receivers" " , " + state.direction.degrees.toString(),
+                    state.currentMotion.state.toString() +
+                        " , " +
+                        state.currentDirection.degrees.toString() +
+                        ", Match/Client Difference: " +
+                        state.matches.closestMatch["difference"].toString(),
                     style: OrientationWidget.bigTextStyle,
                   );
-                } else if (state.motion.state ==
-                        Enum.Orientation.LandscapeLeft ||
-                    state.motion.state == Enum.Orientation.LandscapeRight) {
-// Call Receiving Action
-                  _sonarRepository.setReceiving(state.direction);
-
-                  // Iterate Between Matches
-                  if (state is Receiving) {
+                  }else{
+                     // Return Text Widget
+                    return Text(
+                        state.currentMotion.state.toString() +
+                            " No Receivers, " +
+                            state.currentDirection.degrees.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ));
+                  }
+                } else if (state is Receiving) {
+                  // Check if Matches Null
+                  if (state.matches != null) {
                     // Determine Tween Value
                     var tweenValue;
 
@@ -80,9 +76,9 @@ class OrientationWidget extends StatelessWidget {
 
                     // Return Text Widget
                     return Text(
-                        state.motion.state.toString() +
+                        state.currentMotion.state.toString() +
                             " , " +
-                            state.direction.degrees.toString() +
+                            state.currentDirection.degrees.toString() +
                             " , " +
                             ", Match/Client Difference: " +
                             state.matches.closestMatch["difference"].toString(),
@@ -91,24 +87,36 @@ class OrientationWidget extends StatelessWidget {
                           fontSize: 40,
                           fontWeight: FontWeight.bold,
                         ));
+                  } else {
+                    // Return Text Widget
+                    return Text(
+                        state.currentMotion.state.toString() +
+                            " No Senders, " +
+                            state.currentDirection.degrees.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ));
                   }
-                  // Check Sensor Default
+                } else {
+// Check Sensor Default
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // Return Text Widget
+                        Text(
+                          "Waiting to Begin.",
+                          style: OrientationWidget.bigTextStyle,
+                        ),
+                        FloatingActionButton(
+                            child: Icon(Icons.cloud_upload),
+                            onPressed: () {
+                              BlocProvider.of<SonarBloc>(context)
+                                  .add(Initialize());
+                            }),
+                      ]);
                 }
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // Return Text Widget
-                      Text(
-                        "Waiting to Begin.",
-                        style: OrientationWidget.bigTextStyle,
-                      ),
-                      FloatingActionButton(
-                          child: Icon(Icons.cloud_upload),
-                          onPressed: () {
-                            BlocProvider.of<SonarBloc>(context)
-                                .add(Initialize());
-                          }),
-                    ]);
               },
             ),
           ),

@@ -19,11 +19,6 @@ class App extends StatelessWidget {
         title: 'Sonar',
         home: MultiBlocProvider(
           providers: [
-            // Motion Data Stream
-            BlocProvider<SensorBloc>(
-              create: (BuildContext context) =>
-                  SensorBloc(),
-            ),
             // Sonar Communication
             BlocProvider<SonarBloc>(
               create: (BuildContext context) =>

@@ -127,8 +127,8 @@ class CompareDirections extends SonarEvent{
 }
 
 // Update Sensory Input
-class RefreshInput extends SonarEvent{
+class Refresh extends SonarEvent{
   final Direction newDirection;
 
-  RefreshInput({this.newDirection});
+  Refresh({this.newDirection});
 }

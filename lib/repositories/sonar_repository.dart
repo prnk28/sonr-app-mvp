@@ -63,6 +63,15 @@ class SonarRepository {
     sonarWS.send(message);
   }
 
+    // Client Reset Mode
+  setReset() {
+    // Create Message
+    var message = Message.outgoing(OutgoingMessageAction.Reset);
+
+    // Action: JOIN To Server
+    sonarWS.send(message);
+  }
+
   // User Selected Match or Auto-Matched
   setSelect(Client potentialMatch) {
     // Create Message

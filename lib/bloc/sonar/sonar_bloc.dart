@@ -35,8 +35,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Subscribe to Motion BLoC Updates
     FlutterCompass.events.listen((newData) {
       // Refresh Inputs
-      _lastDirection = Direction.create(
-          degrees: newData, accelerometerX: _currentMotion.accelX);
+      add(Refresh(
+          newDirection: Direction.create(
+              degrees: newData, accelerometerX: _currentMotion.accelX)));
     });
   }
 
@@ -76,7 +77,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         if (map.values.length != 0) {
           add(Update(map: Circle.fromMap(map, _lastDirection, true)));
         } else {
-          print("No Receivers");
+          add(Update(map: Circle.fromMap(null, _lastDirection, true)));
         }
         break;
       // Sender Match Found
@@ -97,7 +98,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         if (map.values.length != 0) {
           add(Update(map: Circle.fromMap(map, _lastDirection, false)));
         } else {
-          print("No Senders");
+          add(Update(map: Circle.fromMap(null, _lastDirection, false)));
         }
         break;
       // Receiver Offered
@@ -150,9 +151,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapReceiveToState(event, _lastDirection, _currentMotion);
     } else if (event is Update) {
       yield* _mapUpdateToState(event, _lastDirection, _currentMotion);
+    } else if (event is Refresh) {
+      yield* _mapRefreshInputToState(event);
+    } else if (event is CompareDirections) {
+      yield* _mapCompareDirectionsToState(event);
     }
-    // } else if (event is Request) {
-    //   yield* _mapRequestToState(event);
     // } else if (event is Offered) {
     //   yield* _mapOfferedToState(event);
     // } else if (event is StartTransfer) {
@@ -198,7 +201,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapSendToState(
       Send sendEvent, Direction direction, Motion motion) async* {
     // Set Suspend state with lastState
-    yield Sending(matches: sendEvent.map);
+    if (sendEvent.map != null) {
+      yield Sending(matches: sendEvent.map, currentMotion: motion, currentDirection: _lastDirection);
+    } else {
+      yield Sending(currentMotion: motion, currentDirection: _lastDirection);
+    }
   }
 
 // ********************
@@ -207,7 +214,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapReceiveToState(
       Receive receiveEvent, Direction direction, Motion motion) async* {
     // Set Suspend state with lastState
-    yield Receiving(matches: receiveEvent.map);
+    if (receiveEvent.map != null) {
+      yield Receiving(matches: receiveEvent.map, currentMotion: motion, currentDirection: _lastDirection);
+    } else {
+      yield Receiving(currentMotion: motion, currentDirection: _lastDirection);
+    }
   }
 
 // ********************
@@ -220,14 +231,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     } else {
       add(Receive(map: updateEvent.map));
     }
-    // Set Suspend state with lastState
-    yield Updating();
+    yield Loading();
   }
 
-
   // On InMotion Event ->
-  Stream<SonarState> _mapRefreshInputToState(
-      RefreshInput updateSensors) async* {
+  Stream<SonarState> _mapRefreshInputToState(Refresh updateSensors) async* {
     // Check State
     if (_currentMotion.state == Orientation.Tilt ||
         _currentMotion.state == Orientation.LandscapeLeft ||
@@ -235,7 +243,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Compare Directions
       add(CompareDirections(_lastDirection, updateSensors.newDirection));
       // Pending State
-      yield Updating();
+    } else {
+      yield Ready(
+          currentDirection: updateSensors.newDirection,
+          currentMotion: _currentMotion);
     }
   }
 
@@ -258,10 +269,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         _currentMotion.state == Orientation.LandscapeRight) {
       // Update State
       _sonarRepository.setReceiving(_lastDirection);
-    }
-    // Continue Shift
-    else {
-      //yield Default(motion: _currentMotion);
+    }else{
+      // Update State Dont Duplicate Call
+      if(_currentProcess.currentStage != SonarStage.READY){
+        _sonarRepository.setReset();
+      }
     }
   }
 }
@@ -269,56 +281,55 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *******************
 // ** Select Event ***
 // *******************
-  // Stream<SonarState> _mapSelectState(Select selectEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+// Stream<SonarState> _mapSelectState(Select selectEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }
 
 // ********************
 // ** Request Event ***
 // ********************
-  // Stream<SonarState> _mapRequestToState(Request requestEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+// Stream<SonarState> _mapRequestToState(Request requestEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }
 
 // ********************************
 // ** Receiver Gets Offer Event ***
 // ********************************
-  // Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+// Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }
 
 // ***************************
 // ** Begin Transfer Event ***
 // ***************************
-  // Stream<SonarState> _mapStartTransferToState(StartTransfer startTransferEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+// Stream<SonarState> _mapStartTransferToState(StartTransfer startTransferEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }
 
 // ******************************
 // ** Complete Transfer Event ***
 // ******************************
-  // Stream<SonarState> _mapCompleteTransferState(CompleteTransfer completeTransferEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+// Stream<SonarState> _mapCompleteTransferState(CompleteTransfer completeTransferEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }
 
 // ****************************
 // ** Cancel Transfer Event ***
 // ****************************
-  // Stream<SonarState> _mapCancelSonarToState(CancelSonar cancelSonarEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
+// Stream<SonarState> _mapCancelSonarToState(CancelSonar cancelSonarEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }
 
 // ************************
 // ** Reset Sonar Event ***
 // ************************
-  // Stream<SonarState> _mapResetSonarToState(ResetSonar resetSonarEvent) async* {
-  //     // Set Suspend state with lastState
-  //     yield Sending();
-  // }
-}
+// Stream<SonarState> _mapResetSonarToState(ResetSonar resetSonarEvent) async* {
+//     // Set Suspend state with lastState
+//     yield Sending();
+// }

@@ -20,7 +20,15 @@ class Circle extends Equatable {
     var _differences = [];
     var _matches = {};
     var _closestMatch;
-    var matches = map.values;
+    var matches;
+
+    // Check Map Null
+    if (map != null) {
+      matches = map.values;
+    } else {
+      matches = null;
+      _matches = null;
+    }
 
     // Check Sender Receiver
     if (sender) {
@@ -28,8 +36,8 @@ class Circle extends Equatable {
       if (matches != null) {
         for (final value in matches) {
           var matchDirection = value["direction"];
-          print("Antipodal: "+ matchDirection["antipodal_degrees"].toString());
-          print("Degrees: "+ clientDirection.degrees.toString());
+          print("Antipodal: " + matchDirection["antipodal_degrees"].toString());
+          print("Degrees: " + clientDirection.degrees.toString());
           var difference =
               clientDirection.degrees - matchDirection["antipodal_degrees"];
           value["difference"] = difference.abs();
@@ -41,10 +49,9 @@ class Circle extends Equatable {
       // Iterate through matches
       if (matches != null) {
         for (final value in matches) {
-          
           var matchDirection = value["direction"];
-          print("Degrees: "+ matchDirection["degrees"].toString());
-          print("Antipodal: "+ clientDirection.antipodalDegrees.toString());
+          print("Degrees: " + matchDirection["degrees"].toString());
+          print("Antipodal: " + clientDirection.antipodalDegrees.toString());
           var difference =
               clientDirection.antipodalDegrees - matchDirection["degrees"];
           value["difference"] = difference.abs();
@@ -56,15 +63,16 @@ class Circle extends Equatable {
 
     // Find Closest Match
     _differences.sort();
-    _closestMatch = _matches[_differences[0]];
-    //print("Closest Match: " + _closestMatch.toString());
+
+    // Set Match
+    if(_matches != null){
+      _closestMatch = _matches[_differences[0]];
+    }else{
+      _closestMatch = null;
+    }
 
     return Circle(
-      matches: _matches,
-      closestMatch: _closestMatch,
-      sender: sender
-    );
-
+        matches: _matches, closestMatch: _closestMatch, sender: sender);
   }
 
   // Adjust Props

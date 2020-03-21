@@ -49,10 +49,10 @@ class Receiving extends SonarState {
       this.currentDirection});
 }
 
-class Updating extends SonarState {
+class Loading extends SonarState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Updating({this.currentMotion, this.currentDirection});
+  const Loading({this.currentMotion, this.currentDirection});
 }
 
 // In Between Send/Receive Cycle
