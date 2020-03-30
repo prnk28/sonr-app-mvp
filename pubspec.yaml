@@ -28,6 +28,7 @@ dependencies:
   geolocator: ^3.0.0
   permission_handler:
   sensors: ^0.4.1+1
+  socket_io: ^0.9.3
   uuid: 2.0.0
 
   # -- Extension --
