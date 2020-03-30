@@ -3,18 +3,20 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/data/data.dart';
-import 'package:sonar_app/repositories/repositories.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/controllers/controllers.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 // *********************
 // ** Initialization ***
 // *********************
+Socket socket = io('http://match.sonr.io', <String, dynamic>{
+    'transports': ['websocket'],
+  });
+
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
-  SonarRepository _sonarRepository = new SonarRepository();
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
 
@@ -23,8 +25,22 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   SonarBloc() {
-    // Subscribe to Server WS Updates
-    sonarWS.addListener(_onMessageReceived);
+    // Create Socket
+    // ** Connected **
+    socket.on('connect', (_) {
+      print("Connected to Socket");
+      //_currentProcess = new Process(Client.fromMap(_));
+    });
+
+    // ** Info **
+    socket.on('INFO', (data) {
+      // Add to Process
+      //_currentProcess.lobby = Lobby.fromMap(message.data);
+      print("Lobby Id: " + data);
+
+      // Update Status
+      _currentProcess.currentStage = SonarStage.READY;
+    });
 
     // Listen to Stream and Add UpdateInput Event every update
     accelerometerEvents.listen((newData) {
@@ -45,6 +61,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   @override
   SonarState get initialState => Initial();
 
+_socketStatus(dynamic data) { 
+	print("Socket status: " + data); 
+}
+
 // *********************
 // ** Read Server Msg **
 // *********************
@@ -59,11 +79,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         break;
       // Ready
       case 1:
-        // Add to Process
-        _currentProcess.lobby = Lobby.fromMap(message.data);
-
-        // Update Status
-        _currentProcess.currentStage = SonarStage.READY;
         break;
       // Sending
       case 10:
@@ -80,12 +95,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           add(Update(map: Circle.fromMap(null, _lastDirection, true)));
         }
         break;
-      // Sender Match Found
-      case 11:
-        break;
-      // Sender Match Requested
-      case 12:
-        break;
       // Receiving
       case 20:
         // Update Status
@@ -100,36 +109,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         } else {
           add(Update(map: Circle.fromMap(null, _lastDirection, false)));
         }
-        break;
-      // Receiver Offered
-      case 21:
-        break;
-      // Receiver Authorized
-      case 22:
-        break;
-      // Transferring
-      case 30:
-        break;
-      // Transfer Recepient
-      case 31:
-        break;
-      // Transfer Complete
-      case 32:
-        break;
-      // Error: Receiver Declined
-      case 40:
-        break;
-      // Error: Sender Cancelled
-      case 41:
-        break;
-      // Error: Sender Timeout
-      case 42:
-        break;
-      // Error: Transfer Fail
-      case 43:
-        break;
-      // Error: WS Down
-      case 44:
         break;
       default:
     }
@@ -174,8 +153,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***************************
   @override
   Future<void> close() {
-    sonarWS.removeListener(_onMessageReceived);
-    sonarWS.disconnect();
     return super.close();
   }
 
@@ -189,7 +166,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     Profile fakeProfile = Profile.fakeProfile();
 
     // Connect to WS Join/Create Lobby
-    _sonarRepository.initializeSonar(fakeLocation, fakeProfile);
+    // _sonarRepository.initializeSonar(fakeLocation, fakeProfile);
 
     // Device Pending State
     yield Ready();
@@ -270,17 +247,17 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check State
     if (_currentMotion.state == Orientation.Tilt) {
       // Update State
-      _sonarRepository.setSending(compareDirections.newDirection);
+      // _sonarRepository.setSending(compareDirections.newDirection);
     }
     // Receive State
     else if (_currentMotion.state == Orientation.LandscapeLeft ||
         _currentMotion.state == Orientation.LandscapeRight) {
       // Update State
-      _sonarRepository.setReceiving(compareDirections.newDirection);
+      // _sonarRepository.setReceiving(compareDirections.newDirection);
     } else {
       // Update State Dont Duplicate Call
       if (_currentProcess.currentStage != SonarStage.READY) {
-        _sonarRepository.setReset();
+        // _sonarRepository.setReset();
       }
     }
   }
