@@ -12,8 +12,8 @@ import 'package:socket_io_client/socket_io_client.dart';
 // ** Initialization ***
 // *********************
 Socket socket = io('http://match.sonr.io', <String, dynamic>{
-    'transports': ['websocket'],
-  });
+  'transports': ['websocket'],
+});
 
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
@@ -190,7 +190,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     Location fakeLocation = Location.fakeLocation();
     Profile fakeProfile = Profile.fakeProfile();
 
-    // Connect to WS Join/Create Lobby
+    // Emit to Socket.io
     socket.emit("INITIALIZE", [fakeLocation.toMap(), fakeProfile.toMap()]);
 
     // Device Pending State
@@ -268,17 +268,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Set as new direction
       _lastDirection = compareDirections.newDirection;
     }
-
     // Check State
     if (_currentMotion.state == Orientation.Tilt) {
       // Update State
-      // _sonarRepository.setSending(compareDirections.newDirection);
+      socket.emit("SENDING", [compareDirections.newDirection.toSendMap()]);
     }
     // Receive State
     else if (_currentMotion.state == Orientation.LandscapeLeft ||
         _currentMotion.state == Orientation.LandscapeRight) {
       // Update State
-      // _sonarRepository.setReceiving(compareDirections.newDirection);
+      socket.emit("RECEIVING", [compareDirections.newDirection.toReceiveMap()]);
     } else {
       // Update State Dont Duplicate Call
       if (_currentProcess.currentStage != SonarStage.READY) {
