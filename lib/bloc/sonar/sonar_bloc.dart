@@ -25,21 +25,51 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   SonarBloc() {
-    // Create Socket
     // ** Connected **
     socket.on('connect', (_) {
       print("Connected to Socket");
-      //_currentProcess = new Process(Client.fromMap(_));
     });
 
-    // ** Info **
+    // ** INFO **
     socket.on('INFO', (data) {
       // Add to Process
-      //_currentProcess.lobby = Lobby.fromMap(message.data);
       print("Lobby Id: " + data);
+    });
 
-      // Update Status
-      _currentProcess.currentStage = SonarStage.READY;
+    // ** NEW_SENDER **
+    socket.on('NEW_SENDER', (data) {
+      // Add to Process
+      print("NEW_SENDER: " + data);
+    });
+
+    // ** SENDER_UPDATE **
+    socket.on('SENDER_UPDATE', (data) {
+      // Add to Process
+      print("SENDER_UPDATE: " + data);
+    });
+
+    // ** SENDER_LEFT **
+    socket.on('SENDER_LEFT', (data) {
+      // Add to Process
+      print("SENDER_LEFT: " + data);
+    });
+
+    // ** NEW_RECEIVER **
+    socket.on('NEW_RECEIVER', (data) {
+      // Add to Process
+      print("NEW_RECEIVER: " + data);
+    });
+
+    // ** RECEIVER_UPDATE **
+    socket.on('RECEIVER_UPDATE', (data) {
+      // Add to Process
+      print("RECEIVER_UPDATE: " + data);
+    });
+
+    // ** RECEIVER_LEFT **
+    socket.on('RECEIVER_LEFT', (data) {
+      // Add to Process
+      print("RECEIVER_LEFT: " + data);
     });
 
     // Listen to Stream and Add UpdateInput Event every update
@@ -60,11 +90,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Initial State
   @override
   SonarState get initialState => Initial();
-
-_socketStatus(dynamic data) { 
-	print("Socket status: " + data); 
-}
-
 // *********************
 // ** Read Server Msg **
 // *********************
@@ -166,7 +191,7 @@ _socketStatus(dynamic data) {
     Profile fakeProfile = Profile.fakeProfile();
 
     // Connect to WS Join/Create Lobby
-    // _sonarRepository.initializeSonar(fakeLocation, fakeProfile);
+    socket.emit("INITIALIZE", [fakeLocation.toMap(), fakeProfile.toMap()]);
 
     // Device Pending State
     yield Ready();
