@@ -19,7 +19,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
-  Circle _circle;
+  Circle _circle = new Circle();
   // Variables
   Process _currentProcess;
 
@@ -38,13 +38,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** NEW_SENDER **
     socket.on('NEW_SENDER', (data) {
-      _circle = new Circle("Receiver");
+      // Send Last Recorded Direction to New Sender
+      socket.emit("RECEIVING", [_lastDirection.toReceiveMap()]);
+
       // Add to Process
       print("NEW_SENDER: " + data);
     });
 
     // ** SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
+      _circle.status = "Receiver";
       _circle.update(_lastDirection, data);
       // Add to Process
       print("SENDER_UPDATE: " + data);
@@ -58,7 +61,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
-      _circle = new Circle("Sender");
+      // Send Last Recorded Direction to New Receiver
+      socket.emit("SENDING", [_lastDirection.toReceiveMap()]);
+
       // Add to Process
       print("NEW_RECEIVER: " + data);
     });
@@ -66,7 +71,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // ** RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
       print("RECEIVER_UPDATE: " + data.toString());
-      _circle = new Circle("Sender");
+      _circle.status = "Sender";
       _circle.update(_lastDirection, data);
       // Add to Process
     });
@@ -85,10 +90,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // Subscribe to Motion BLoC Updates
     FlutterCompass.events.listen((newData) {
+      // Initialize Direction
+      var newDirection = Direction.create(
+          degrees: newData, accelerometerX: _currentMotion.accelX);
+      // Modify Circle
+      _circle.modify(newDirection);
+
       // Refresh Inputs
-      add(Refresh(
-          newDirection: Direction.create(
-              degrees: newData, accelerometerX: _currentMotion.accelX)));
+      add(Refresh(newDirection: newDirection));
     });
   }
 

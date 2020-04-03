@@ -7,38 +7,78 @@ class Circle {
   // *******************
   SortedMap differences;
   Map matches;
-  final String status;
+  String status;
 
-  Circle(this.status) {
+  Circle() {
     differences = new SortedMap(Ordering.byValue());
     matches = new Map();
   }
 
-  // *******************
-  // ** Update Circle **
-  // *******************
+  // ****************************************
+  // ** Update Circle Due to Incoming Data **
+  // ****************************************
   void update(currentDirection, data) {
     // Find Difference, Check Sender
     if (this.status == "Sender") {
+      // Get Sender Difference
       var difference = currentDirection.degrees - data["antipodal_degrees"];
-      differences[data["id"]] = difference.abs();
+      this.differences[data["id"]] = difference.abs();
       data["difference"] = difference.abs();
-    } else {
-      var difference = currentDirection.antipodalDegrees - data["degrees"];
-      differences[data["id"]] = difference.abs();
-      data["difference"] = difference.abs();
-    }
-    print("Difference: " + data["difference"].toString());
 
-    // Add/Replace to matches object
-    this.matches[data["id"]] = data;
+      // Log
+      print("Difference: " + data["difference"].toString());
+
+      // Add/Replace to matches object
+      this.matches[data["id"]] = data;
+    } else if (this.status == "Receiver") {
+      // Get Receiver Difference
+      var difference = currentDirection.antipodalDegrees - data["degrees"];
+      this.differences[data["id"]] = difference.abs();
+      data["difference"] = difference.abs();
+
+      // Log
+      print("Difference: " + data["difference"].toString());
+
+      // Add/Replace to matches object
+      this.matches[data["id"]] = data;
+    } else {
+      TypeError();
+    }
+  }
+
+  // *******************************************
+  // ** Modify Circle Due to Directional Data **
+  // *******************************************
+  void modify(currentDirection) {
+    if (this.matches.keys.length > 0) {
+      dynamic closest = this.closest();
+      if (this.status == "Sender") {
+        // Get Sender Difference
+        var difference =
+            currentDirection.degrees - closest["antipodal_degrees"];
+        this.differences[closest["id"]] = difference.abs();
+        closest["difference"] = difference.abs();
+
+        // Log
+        print("Difference: " + closest["difference"].toString());
+      } else if (this.status == "Receiver") {
+        // Get Receiver Difference
+        var difference = currentDirection.antipodalDegrees - closest["degrees"];
+        this.differences[closest["id"]] = difference.abs();
+        closest["difference"] = difference.abs();
+
+        // Log
+        print("Difference: " + closest["difference"].toString());
+      } else {
+        TypeError();
+      }
+    }
   }
 
   // *************
   // ** Closest **
   // *************
   dynamic closest() {
-    print(matches[differences.keys.first]);
-    return matches[differences.keys.first];
+    return this.matches[this.differences.keys.first];
   }
 }
