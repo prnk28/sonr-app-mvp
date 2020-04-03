@@ -10,11 +10,15 @@ class Direction extends Equatable {
   final CompassDesignation compassDesignation;
   final DateTime lastUpdated;
 
+  final String id;
+
 // *********************
   // ** Constructor Var **
   // *********************
   const Direction(
-      {this.degrees,
+      {
+      this.id,
+      this.degrees,
       this.antipodalDegrees,
       this.compassDesignation,
       this.lastUpdated});
@@ -24,7 +28,7 @@ class Direction extends Equatable {
   // **************************
   @override
   List<Object> get props =>
-      [degrees, antipodalDegrees, compassDesignation, lastUpdated];
+      [degrees, antipodalDegrees, compassDesignation, lastUpdated, id];
 
   // ***********************
   // ** Object Generation **
@@ -49,11 +53,13 @@ class Direction extends Equatable {
   static Direction fromMap(Map data) {
     if (data["antipodal_degrees"] == null) {
       return Direction(
+        id: data["id"],
         degrees: data["degrees"],
         compassDesignation: data["compass_designation"],
       );
     } else {
       return Direction(
+        id: data["id"],
         degrees: data["degrees"],
         antipodalDegrees: data["antipodal_degrees"],
         compassDesignation: data["compass_designation"],

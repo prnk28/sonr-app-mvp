@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'models.dart';
-import 'package:equatable/equatable.dart';
 
 class Circle extends Equatable {
   // *******************
@@ -10,7 +9,9 @@ class Circle extends Equatable {
   final dynamic closestMatch;
   final bool sender;
 
-  const Circle({this.matches, this.closestMatch, this.sender});
+  const Circle({this.matches, this.closestMatch, this.sender}){
+    
+  }
 
   // *****************
   // ** Constructor **
