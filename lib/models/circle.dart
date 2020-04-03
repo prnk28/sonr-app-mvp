@@ -1,82 +1,44 @@
-import 'package:equatable/equatable.dart';
+import 'package:sortedmap/sortedmap.dart';
 import 'models.dart';
 
-class Circle extends Equatable {
+class Circle {
   // *******************
-  // ** Class Values ***
+  // ** Initialize *****
   // *******************
-  final dynamic matches;
-  final dynamic closestMatch;
-  final bool sender;
+  SortedMap differences;
+  Map matches;
+  final String status;
 
-  const Circle({this.matches, this.closestMatch, this.sender}){
-    
+  Circle(this.status) {
+    differences = new SortedMap(Ordering.byValue());
+    matches = new Map();
   }
 
-  // *****************
-  // ** Constructor **
-  // *****************
-  static Circle fromMap(Map map, clientDirection, bool sender) {
-    // Temp Array of Differences
-    var _differences = [];
-    var _matches = {};
-    var _closestMatch;
-    var matches;
-
-    // Check Map Null
-    if (map != null) {
-      matches = map.values;
+  // *******************
+  // ** Update Circle **
+  // *******************
+  void update(currentDirection, data) {
+    // Find Difference, Check Sender
+    if (this.status == "Sender") {
+      var difference = currentDirection.degrees - data["antipodal_degrees"];
+      differences[data["id"]] = difference.abs();
+      data["difference"] = difference.abs();
     } else {
-      matches = null;
-      _matches = null;
+      var difference = currentDirection.antipodalDegrees - data["degrees"];
+      differences[data["id"]] = difference.abs();
+      data["difference"] = difference.abs();
     }
+    print("Difference: " + data["difference"].toString());
 
-    // Check Sender Receiver
-    if (sender) {
-      // Iterate through matches
-      if (matches != null) {
-        for (final value in matches) {
-          var matchDirection = value["direction"];
-          print("Antipodal: " + matchDirection["antipodal_degrees"].toString());
-          print("Degrees: " + clientDirection.degrees.toString());
-          var difference =
-              clientDirection.degrees - matchDirection["antipodal_degrees"];
-          value["difference"] = difference.abs();
-          _differences.add(difference.abs());
-          _matches[difference.abs()] = value;
-        }
-      }
-    } else {
-      // Iterate through matches
-      if (matches != null) {
-        for (final value in matches) {
-          var matchDirection = value["direction"];
-          print("Degrees: " + matchDirection["degrees"].toString());
-          print("Antipodal: " + clientDirection.antipodalDegrees.toString());
-          var difference =
-              clientDirection.antipodalDegrees - matchDirection["degrees"];
-          value["difference"] = difference.abs();
-          _differences.add(difference.abs());
-          _matches[difference.abs()] = value;
-        }
-      }
-    }
-
-    // Find Closest Match
-    _differences.sort();
-
-    // Set Match
-    if(_matches != null){
-      _closestMatch = _matches[_differences[0]];
-    }else{
-      _closestMatch = null;
-    }
-
-    return Circle(
-        matches: _matches, closestMatch: _closestMatch, sender: sender);
+    // Add/Replace to matches object
+    this.matches[data["id"]] = data;
   }
 
-  // Adjust Props
-  @override
-  List<Object> get props => [matches, closestMatch];
+  // *************
+  // ** Closest **
+  // *************
+  dynamic closest() {
+    print(matches[differences.keys.first]);
+    return matches[differences.keys.first];
+  }
 }

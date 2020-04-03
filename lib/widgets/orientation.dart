@@ -29,17 +29,17 @@ class OrientationWidget extends StatelessWidget {
                 // Check Tilt
                 if (state is Sending) {
                   if (state.matches != null) {
-                  // Return Text Widget
-                  return Text(
-                    state.currentMotion.state.toString() +
-                        " , " +
-                        state.currentDirection.degrees.toString() +
-                        ", Match/Client Difference: " +
-                        state.closestMatch["difference"].toString(),
-                    style: OrientationWidget.bigTextStyle,
-                  );
-                  }else{
-                     // Return Text Widget
+                    // Return Text Widget
+                    return Text(
+                      state.currentMotion.state.toString() +
+                          " , " +
+                          state.currentDirection.degrees.toString() +
+                          ", Match/Client Difference: " +
+                          state.matches.closest()["difference"].toString(),
+                      style: OrientationWidget.bigTextStyle,
+                    );
+                  } else {
+                    // Return Text Widget
                     return Text(
                         state.currentMotion.state.toString() +
                             " No Receivers, " +
@@ -57,12 +57,12 @@ class OrientationWidget extends StatelessWidget {
                     var tweenValue;
 
                     // Withing Threshold
-                    if (state.matches.closestMatch["difference"] <= 8) {
+                    if (state.matches.closest()["difference"] <= 8) {
                       tweenValue = 0.0;
                     }
                     // Close to threshold
-                    else if (state.matches.closestMatch["difference"] <= 100) {
-                      tweenValue = state.matches.closestMatch["difference"];
+                    else if (state.matches.closest()["difference"] <= 100) {
+                      tweenValue = state.matches.closest()["difference"];
                     }
                     // Not in threshold
                     else {
@@ -81,7 +81,7 @@ class OrientationWidget extends StatelessWidget {
                             state.currentDirection.degrees.toString() +
                             " , " +
                             ", Match/Client Difference: " +
-                            state.closestMatch["difference"].toString(),
+                            state.matches.closest()["difference"].toString(),
                         style: TextStyle(
                           color: colorTween,
                           fontSize: 40,

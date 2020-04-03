@@ -19,7 +19,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
-
+  Circle _circle;
   // Variables
   Process _currentProcess;
 
@@ -38,12 +38,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** NEW_SENDER **
     socket.on('NEW_SENDER', (data) {
+      _circle = new Circle("Receiver");
       // Add to Process
       print("NEW_SENDER: " + data);
     });
 
     // ** SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
+      _circle.update(_lastDirection, data);
       // Add to Process
       print("SENDER_UPDATE: " + data);
     });
@@ -56,14 +58,17 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
+      _circle = new Circle("Sender");
       // Add to Process
       print("NEW_RECEIVER: " + data);
     });
 
     // ** RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
+      print("RECEIVER_UPDATE: " + data.toString());
+      _circle = new Circle("Sender");
+      _circle.update(_lastDirection, data);
       // Add to Process
-      print("RECEIVER_UPDATE: " + data);
     });
 
     // ** RECEIVER_LEFT **
@@ -90,55 +95,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Initial State
   @override
   SonarState get initialState => Initial();
-// *********************
-// ** Read Server Msg **
-// *********************
-  // Subscribe to Sonar Websockets Messages
-  _onMessageReceived(Message message) {
-    print(message.data);
-    switch (message.code) {
-      // Connected
-      case 0:
-        // Create Client and Initialize Process
-        _currentProcess = new Process(Client.fromMap(message.data));
-        break;
-      // Ready
-      case 1:
-        break;
-      // Sending
-      case 10:
-        // Update Status
-        _currentProcess.currentStage = SonarStage.SENDING;
-
-        // Set Map
-        Map map = message.data["receivers"];
-
-        // Check Null
-        if (map.values.length != 0) {
-          add(Update(map: Circle.fromMap(map, _lastDirection, true)));
-        } else {
-          add(Update(map: Circle.fromMap(null, _lastDirection, true)));
-        }
-        break;
-      // Receiving
-      case 20:
-        // Update Status
-        _currentProcess.currentStage = SonarStage.RECEIVING;
-
-        // Set Map
-        Map map = message.data["senders"];
-
-        // Check Null
-        if (map.values.length != 0) {
-          add(Update(map: Circle.fromMap(map, _lastDirection, false)));
-        } else {
-          add(Update(map: Circle.fromMap(null, _lastDirection, false)));
-        }
-        break;
-      default:
-    }
-  }
-
 // *********************************
 // ** Map Events to State Method ***
 // *********************************
@@ -207,8 +163,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield Sending(
           matches: sendEvent.map,
           currentMotion: motion,
-          currentDirection: _lastDirection,
-          closestMatch: sendEvent.map.closestMatch);
+          currentDirection: _lastDirection);
     } else {
       yield Sending(currentMotion: motion, currentDirection: _lastDirection);
     }
@@ -224,8 +179,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield Receiving(
           matches: receiveEvent.map,
           currentMotion: motion,
-          currentDirection: _lastDirection,
-          closestMatch: receiveEvent.map.closestMatch);
+          currentDirection: _lastDirection);
     } else {
       yield Receiving(currentMotion: motion, currentDirection: _lastDirection);
     }
@@ -236,7 +190,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapUpdateToState(
       Update updateEvent, Direction direction, Motion motion) async* {
-    if (updateEvent.map.sender) {
+    if (updateEvent.map.status == "Sender") {
       add(Send(map: updateEvent.map));
     } else {
       add(Receive(map: updateEvent.map));
