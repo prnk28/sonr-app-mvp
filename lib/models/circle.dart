@@ -46,6 +46,17 @@ class Circle {
     }
   }
 
+  // ****************************************************
+  // ** Remove Object from Circle Due to Incoming Data **
+  // ****************************************************
+  void exit(id) {
+    // Remove from Differences
+    this.differences.remove(id);
+
+    // Remove from Matches
+    this.matches.remove(id);
+  }
+
   // *******************************************
   // ** Modify Circle Due to Directional Data **
   // *******************************************

@@ -53,10 +53,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("SENDER_UPDATE: " + data);
     });
 
-    // ** SENDER_LEFT **
-    socket.on('SENDER_LEFT', (data) {
+    // ** SENDER_EXIT **
+    socket.on('SENDER_EXIT', (id) {
+      // Remove Sender from Circle
+      _circle.exit(id);
+
       // Add to Process
-      print("SENDER_LEFT: " + data);
+      print("SENDER_EXIT: " + id);
     });
 
     // ** NEW_RECEIVER **
@@ -76,10 +79,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Add to Process
     });
 
-    // ** RECEIVER_LEFT **
-    socket.on('RECEIVER_LEFT', (data) {
+    // ** RECEIVER_EXIT **
+    socket.on('RECEIVER_EXIT', (id) {
+      // Remove Receiver from Circle
+      _circle.exit(id);
+
       // Add to Process
-      print("RECEIVER_LEFT: " + data);
+      print("RECEIVER_EXIT: " + id);
     });
 
     // Listen to Stream and Add UpdateInput Event every update
