@@ -32,6 +32,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** INFO **
     socket.on('INFO', (data) {
+      add(Refresh(newDirection: _lastDirection));
       // Add to Process
       print("Lobby Id: " + data);
     });
@@ -59,6 +60,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('SENDER_EXIT', (id) {
       // Remove Sender from Circle
       _circle.exit(id);
+      add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
       print("SENDER_EXIT: " + id);
@@ -87,6 +89,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('RECEIVER_EXIT', (id) {
       // Remove Receiver from Circle
       _circle.exit(id);
+      add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
       print("RECEIVER_EXIT: " + id);

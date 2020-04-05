@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/core/core.dart';
 
 abstract class SonarState extends Equatable {
   const SonarState();

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:sonar_app/controllers/controllers.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/models/transfer.dart';
 

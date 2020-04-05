@@ -1,5 +1,4 @@
 import 'package:sortedmap/sortedmap.dart';
-import 'models.dart';
 
 class Circle {
   // *******************
