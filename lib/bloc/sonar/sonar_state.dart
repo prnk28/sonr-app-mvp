@@ -55,15 +55,6 @@ class Loading extends SonarState {
   const Loading({this.currentMotion, this.currentDirection});
 }
 
-// In Between Send/Receive Cycle
-class Pending extends SonarState {
-  final Process runningProcess;
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Pending(
-      {this.runningProcess, this.currentMotion, this.currentDirection});
-}
-
 // Found Match: Either Select or AutoSelect
 class Found extends SonarState {
   final Process runningProcess;

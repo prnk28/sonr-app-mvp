@@ -39,6 +39,11 @@ class Receive extends SonarEvent {
   const Receive({this.map, this.currentDirection, this.currentMotion});
 }
 
+// Receive to Server Sequence
+class Load extends SonarEvent {
+  const Load();
+}
+
 // Update Event
 class Update extends SonarEvent {
   final Circle map;
@@ -119,7 +124,7 @@ class ResetSonar extends SonarEvent {
 }
 
 // Update Sensory Input
-class CompareDirections extends SonarEvent{
+class CompareDirections extends SonarEvent {
   final Direction lastDirection;
   final Direction newDirection;
 
@@ -127,7 +132,7 @@ class CompareDirections extends SonarEvent{
 }
 
 // Update Sensory Input
-class Refresh extends SonarEvent{
+class Refresh extends SonarEvent {
   final Direction newDirection;
 
   Refresh({this.newDirection});

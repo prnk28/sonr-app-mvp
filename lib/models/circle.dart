@@ -61,7 +61,7 @@ class Circle {
   // ** Modify Circle Due to Directional Data **
   // *******************************************
   void modify(currentDirection) {
-    if (this.matches.keys.length > 0) {
+    if (this.valid()) {
       dynamic closest = this.closest();
       if (this.status == "Sender") {
         // Get Sender Difference
@@ -86,10 +86,25 @@ class Circle {
     }
   }
 
+  // *******************************************
+  // ** Check if Circle has Receivers/Senders **
+  // *******************************************
+  bool valid() {
+    if (this.matches.keys.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // *************
   // ** Closest **
   // *************
   dynamic closest() {
-    return this.matches[this.differences.keys.first];
+    if (this.valid()) {
+      return this.matches[this.differences.keys.first];
+    } else {
+      return null;
+    }
   }
 }

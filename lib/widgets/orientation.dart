@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/core/enum_utility.dart' as Enum;
-import 'package:sonar_app/repositories/repositories.dart';
 
 class OrientationWidget extends StatelessWidget {
   static const TextStyle bigTextStyle = TextStyle(
@@ -28,7 +25,7 @@ class OrientationWidget extends StatelessWidget {
                 print(state);
                 // Check Tilt
                 if (state is Sending) {
-                  if (state.matches != null) {
+                  if (state.matches.valid()) {
                     // Return Text Widget
                     return Text(
                       state.currentMotion.state.toString() +
@@ -51,8 +48,7 @@ class OrientationWidget extends StatelessWidget {
                         ));
                   }
                 } else if (state is Receiving) {
-                  // Check if Matches Null
-                  if (state.matches != null) {
+                  if (state.matches.valid()) {
                     // Determine Tween Value
                     var tweenValue;
 
