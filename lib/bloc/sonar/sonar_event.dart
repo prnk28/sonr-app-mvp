@@ -39,11 +39,6 @@ class Receive extends SonarEvent {
   const Receive({this.map, this.currentDirection, this.currentMotion});
 }
 
-// Receive to Server Sequence
-class Load extends SonarEvent {
-  const Load();
-}
-
 // Update Event
 class Update extends SonarEvent {
   final Circle map;

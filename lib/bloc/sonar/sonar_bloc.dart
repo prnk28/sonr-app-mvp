@@ -40,7 +40,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
       socket.emit("RECEIVING", [_lastDirection.toReceiveMap()]);
-
+      add(Refresh(newDirection: _lastDirection));
       // Add to Process
       print("NEW_SENDER: " + data);
     });
@@ -49,6 +49,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('SENDER_UPDATE', (data) {
       _circle.status = "Receiver";
       _circle.update(_lastDirection, data);
+      add(Refresh(newDirection: _lastDirection));
+
       // Add to Process
       print("SENDER_UPDATE: " + data);
     });
@@ -66,6 +68,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
       socket.emit("SENDING", [_lastDirection.toReceiveMap()]);
+      add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
       print("NEW_RECEIVER: " + data);
@@ -76,6 +79,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("RECEIVER_UPDATE: " + data.toString());
       _circle.status = "Sender";
       _circle.update(_lastDirection, data);
+      add(Refresh(newDirection: _lastDirection));
       // Add to Process
     });
 
@@ -130,8 +134,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapRefreshInputToState(event);
     } else if (event is CompareDirections) {
       yield* _mapCompareDirectionsToState(event);
-    } else if (event is Load) {
-      yield* _mapLoadingToState(event, this.state);
     }
     // } else if (event is Offered) {
     //   yield* _mapOfferedToState(event);
@@ -144,14 +146,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // } else if (event is ResetSonar) {
     //   yield* _mapResetSonarToState(event);
     // }
-  }
-
-// ***************************
-// ** Close Streams on End ***
-// ***************************
-  @override
-  Future<void> close() {
-    return super.close();
   }
 
 // ***********************
@@ -186,15 +180,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     }
   }
 
-// *****************
-// ** Loading Event ***
-// *****************
-  Stream<SonarState> _mapLoadingToState(
-      Load loadEvent, SonarState lastState) async* {
-    add(Refresh(newDirection: _lastDirection));
-    yield Loading();
-  }
-
 // ********************
 // ** Receive Event ***
 // ********************
@@ -224,14 +209,49 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     yield Loading();
   }
 
-  // On InMotion Event ->
+// **************************
+// ** Refresh Input Event ***
+// **************************
   Stream<SonarState> _mapRefreshInputToState(Refresh updateSensors) async* {
     // Check State
     if (_currentMotion.state == Orientation.Tilt ||
         _currentMotion.state == Orientation.LandscapeLeft ||
         _currentMotion.state == Orientation.LandscapeRight) {
-      // Compare Directions
-      add(CompareDirections(_lastDirection, updateSensors.newDirection));
+      // Check Directions
+      if (_lastDirection != updateSensors.newDirection) {
+        // Set as new direction
+        _lastDirection = updateSensors.newDirection;
+      }
+      // Check State
+      if (_currentMotion.state == Orientation.Tilt) {
+        // Update State
+        socket.emit("SENDING", [updateSensors.newDirection.toSendMap()]);
+        _circle.status = "Sender";
+
+        // Post Update
+        add(Update(
+            currentDirection: _lastDirection,
+            currentMotion: _currentMotion,
+            map: _circle));
+      }
+      // Receive State
+      else if (_currentMotion.state == Orientation.LandscapeLeft ||
+          _currentMotion.state == Orientation.LandscapeRight) {
+        // Update State
+        socket.emit("RECEIVING", [updateSensors.newDirection.toReceiveMap()]);
+        _circle.status = "Receiver";
+
+        // Post Update
+        add(Update(
+            currentDirection: _lastDirection,
+            currentMotion: _currentMotion,
+            map: _circle));
+      } else {
+        // Update State Dont Duplicate Call
+        if (_currentProcess.currentStage != SonarStage.READY) {
+          // _sonarRepository.setReset();
+        }
+      }
       // Pending State
     } else {
       yield Ready(
@@ -240,7 +260,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     }
   }
 
-  // On InMotion Event ->
+// ******************************
+// ** Compare Direction Event ***
+// ******************************
   Stream<SonarState> _mapCompareDirectionsToState(
       CompareDirections compareDirections) async* {
     // Check Directions
