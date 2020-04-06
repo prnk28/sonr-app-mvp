@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +28,16 @@ class OrientationWidget extends StatelessWidget {
                 // Check Tilt
                 if (state is Sending) {
                   if (state.matches.valid()) {
+                    // Withing Threshold
+                    if (state.matches.closest()["difference"] <= 30) {
+                      // Begin Timer 2s
+                      const twentySeconds = const Duration(seconds: 2);
+                      new Timer(
+                          twentySeconds,
+                          () => BlocProvider.of<SonarBloc>(context)
+                              .add(Request()));
+                    }
+
                     // Return Text Widget
                     return Text(
                       state.currentMotion.state.toString() +
@@ -53,11 +65,11 @@ class OrientationWidget extends StatelessWidget {
                     var tweenValue;
 
                     // Withing Threshold
-                    if (state.matches.closest()["difference"] <= 8) {
+                    if (state.matches.closest()["difference"] <= 30) {
                       tweenValue = 0.0;
                     }
                     // Close to threshold
-                    else if (state.matches.closest()["difference"] <= 100) {
+                    else if (state.matches.closest()["difference"] <= 160) {
                       tweenValue = state.matches.closest()["difference"];
                     }
                     // Not in threshold

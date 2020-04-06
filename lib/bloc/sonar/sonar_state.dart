@@ -9,14 +9,18 @@ abstract class SonarState extends Equatable {
   List<Object> get props => [];
 }
 
-// Preload State
+// ********************
+// ** Preload State ***
+// ********************
 class Initial extends SonarState {
   final Motion currentMotion;
   final Direction currentDirection;
   const Initial({this.currentMotion, this.currentDirection});
 }
 
-// Connected to Lobby/WS
+// ****************************
+// ** Connected to Lobby/WS ***
+// ****************************
 class Ready extends SonarState {
   final Process runningProcess;
   final Motion currentMotion;
@@ -24,7 +28,18 @@ class Ready extends SonarState {
   const Ready({this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
-// In Sending Position
+// ********************************
+// ** Between Reads from Server ***
+// ********************************
+class Loading extends SonarState {
+  final Motion currentMotion;
+  final Direction currentDirection;
+  const Loading({this.currentMotion, this.currentDirection});
+}
+
+// **************************
+// ** In Sending Position ***
+// **************************
 class Sending extends SonarState {
   final Process runningProcess;
   final Circle matches;
@@ -37,7 +52,9 @@ class Sending extends SonarState {
       this.currentDirection});
 }
 
-// In Receiving Position
+// ****************************
+// ** In Receiving Position ***
+// ****************************
 class Receiving extends SonarState {
   final Process runningProcess;
   final Circle matches;
@@ -50,30 +67,28 @@ class Receiving extends SonarState {
       this.currentDirection});
 }
 
-class Loading extends SonarState {
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Loading({this.currentMotion, this.currentDirection});
+// **********************************************
+// ** After Request Pending Receiver Decision ***
+// **********************************************
+class Pending extends SonarState {
+  final dynamic match;
+  const Pending({this.match});
 }
 
-// Found Match: Either Select or AutoSelect
-class Found extends SonarState {
-  final Process runningProcess;
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Found({this.runningProcess, this.currentMotion, this.currentDirection});
+// ********************************
+// ** After Offered from Sender ***
+// ********************************
+class Offered extends SonarState {
+  // Sender Data and File Metadata
+  final dynamic match;
+  final dynamic file;
+
+  const Offered({this.match, this.file});
 }
 
-// Pending Transfer Confirmation
-class Authenticating extends SonarState {
-  final Process runningProcess;
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Authenticating(
-      {this.runningProcess, this.currentMotion, this.currentDirection});
-}
-
-// In WebRTC Transfer or Contact Transfer
+// *********************************************
+// ** In WebRTC Transfer or Contact Transfer ***
+// *********************************************
 class Transferring extends SonarState {
   final Process runningProcess;
   final Motion currentMotion;
@@ -82,7 +97,9 @@ class Transferring extends SonarState {
       {this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
-// Transfer Succesful
+// *************************
+// ** Transfer Succesful ***
+// *************************
 class Complete extends SonarState {
   final Process runningProcess;
   final Motion currentMotion;
@@ -91,7 +108,9 @@ class Complete extends SonarState {
       {this.runningProcess, this.currentMotion, this.currentDirection});
 }
 
-// Failed Sonar: Cancel/Decline/Error
+// *****************************************
+// ** Failed Sonar: Cancel/Decline/Error ***
+// *****************************************
 class Failed extends SonarState {
   final Process runningProcess;
   final Motion currentMotion;
