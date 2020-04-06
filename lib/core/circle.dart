@@ -6,7 +6,7 @@ class Circle {
   // *******************
   SortedMap differences;
   Map matches;
-  String status;
+  String status = "Default";
 
   Circle() {
     differences = new SortedMap(Ordering.byValue());

@@ -286,7 +286,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       } else {
         // Update State Dont Duplicate Call
         if (_currentProcess.currentStage != SonarStage.READY) {
-          // _sonarRepository.setReset();
+          socket.emit("RESET");
+          _circle.status = "Default";
         }
       }
       // Pending State
