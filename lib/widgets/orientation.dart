@@ -107,6 +107,37 @@ class OrientationWidget extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ));
                   }
+                } else if (state is Pending) {
+                  if (state.status == "SENDER") {
+                    return Text(
+                        "Pending Authorization from " +
+                            state.match["profile"]["firstName"].toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ));
+                  } else if (state.status == "RECEIVER") {
+                    return AlertDialog(
+                      title: Text("Accept"),
+                      content: Text("Request from " +
+                          state.match["profile"]["firstName"].toString()),
+                      actions: <Widget>[
+                        FlatButton(
+                            onPressed: () {
+                              BlocProvider.of<SonarBloc>(context)
+                                  .add(Authorize(true, state.match["id"]));
+                            },
+                            child: Text("Yes")),
+                        FlatButton(
+                            onPressed: () {
+                              BlocProvider.of<SonarBloc>(context)
+                                  .add(Authorize(false, state.match["id"]));
+                            },
+                            child: Text("No")),
+                      ],
+                    );
+                  }
                 } else {
 // Check Sensor Default
                   return Row(

@@ -72,18 +72,12 @@ class Receiving extends SonarState {
 // **********************************************
 class Pending extends SonarState {
   final dynamic match;
-  const Pending({this.match});
-}
-
-// ********************************
-// ** After Offered from Sender ***
-// ********************************
-class Offered extends SonarState {
-  // Sender Data and File Metadata
-  final dynamic match;
   final dynamic file;
 
-  const Offered({this.match, this.file});
+  // Sender/Receiver
+  final String status;
+
+  const Pending(this.status, {this.match, this.file});
 }
 
 // *********************************************

@@ -28,19 +28,19 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   SonarBloc() {
-    // ** Connected **
+    // ** SOCKET::Connected **
     socket.on('connect', (_) {
       print("Connected to Socket");
     });
 
-    // ** INFO **
+    // ** SOCKET::INFO **
     socket.on('INFO', (data) {
       add(Refresh(newDirection: _lastDirection));
       // Add to Process
       print("Lobby Id: " + data);
     });
 
-    // ** NEW_SENDER **
+    // ** SOCKET::NEW_SENDER **
     socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
       socket.emit("RECEIVING", [_lastDirection.toReceiveMap()]);
@@ -49,7 +49,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("NEW_SENDER: " + data);
     });
 
-    // ** SENDER_UPDATE **
+    // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
       _circle.status = "Receiver";
       _circle.update(_lastDirection, data);
@@ -59,7 +59,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("SENDER_UPDATE: " + data);
     });
 
-    // ** SENDER_EXIT **
+    // ** SOCKET::SENDER_EXIT **
     socket.on('SENDER_EXIT', (id) {
       // Remove Sender from Circle
       _circle.exit(id);
@@ -69,7 +69,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("SENDER_EXIT: " + id);
     });
 
-    // ** NEW_RECEIVER **
+    // ** SOCKET::NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
       socket.emit("SENDING", [_lastDirection.toReceiveMap()]);
@@ -79,7 +79,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("NEW_RECEIVER: " + data);
     });
 
-    // ** RECEIVER_UPDATE **
+    // ** SOCKET::RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
       print("RECEIVER_UPDATE: " + data.toString());
       _circle.status = "Sender";
@@ -88,7 +88,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Add to Process
     });
 
-    // ** RECEIVER_EXIT **
+    // ** SOCKET::RECEIVER_EXIT **
     socket.on('RECEIVER_EXIT', (id) {
       // Remove Receiver from Circle
       _circle.exit(id);
@@ -98,16 +98,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("RECEIVER_EXIT: " + id);
     });
 
-    // ** SENDER_OFFERED **
+    // ** SOCKET::SENDER_OFFERED **
     socket.on('SENDER_OFFERED', ([matchProfile, fileData]) {
       // Remove Sender from Circle
-      add(Refresh(newDirection: _lastDirection));
+      add(Offered(profileData: matchProfile, fileData: fileData));
 
       // Add to Process
       print("SENDER_OFFERED: " + matchProfile + ", " + fileData);
     });
 
-    // ** ERROR **
+    // ** SOCKET::ERROR **
     socket.on('ERROR', (error) {
       // Remove Receiver from Circle
 
@@ -115,13 +115,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("ERROR: " + error);
     });
 
-    // Listen to Stream and Add UpdateInput Event every update
+    // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
       // Update Motion Var
       _currentMotion = Motion.create(a: newData);
     });
 
-    // Subscribe to Motion BLoC Updates
+    // ** Directional Events **
     FlutterCompass.events.listen((newData) {
       // Initialize Direction
       var newDirection = Direction.create(
@@ -157,6 +157,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapRefreshInputToState(event);
     } else if (event is Request) {
       yield* _mapRequestToState(event);
+    } else if (event is Offered) {
+      yield* _mapOfferedToState(event);
+    } else if (event is Authorize) {
+      yield* _mapAuthorizeToState(event);
     }
   }
 
@@ -224,7 +228,31 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       requested = true;
 
       // Device Pending State
-      yield Pending(match: _circle.closest());
+      yield Pending("SENDER", match: _circle.closest());
+    }
+  }
+
+// ***********************
+// ** Offered Event ***
+// ***********************
+  Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Device Pending State
+      yield Pending("RECEIVER",
+          match: offeredEvent.profileData, file: offeredEvent.fileData);
+    }
+  }
+
+// **********************
+// ** Authorize Event ***
+// **********************
+  Stream<SonarState> _mapAuthorizeToState(Authorize authorizeEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Emit Decision to Server
+      socket
+          .emit("AUTHORIZE", [authorizeEvent.matchId, authorizeEvent.decision]);
     }
   }
 
@@ -257,7 +285,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Check State
       if (_currentMotion.state == Orientation.Tilt) {
         // Check Init Status
-        if (initialized) {
+        if (initialized && !requested) {
           // Emit Send
           socket.emit("SENDING", [updateSensors.newDirection.toSendMap()]);
           _circle.status = "Sender";

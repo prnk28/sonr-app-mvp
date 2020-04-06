@@ -51,6 +51,20 @@ class Request extends SonarEvent {
   const Request();
 }
 
+// Receiver Gets Authorization Request
+class Offered extends SonarEvent {
+  final dynamic profileData;
+  final dynamic fileData;
+  const Offered({this.profileData, this.fileData});
+}
+
+// Receiver Gets Authorization Request
+class Authorize extends SonarEvent {
+  final bool decision;
+  final String matchId;
+  const Authorize(this.decision, this.matchId);
+}
+
 // Update Sensory Input
 class Refresh extends SonarEvent {
   final Direction newDirection;
