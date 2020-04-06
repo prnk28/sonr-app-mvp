@@ -5,7 +5,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 
 class OrientationWidget extends StatelessWidget {
   static const TextStyle bigTextStyle = TextStyle(
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: FontWeight.bold,
   );
 
@@ -105,6 +105,7 @@ class OrientationWidget extends StatelessWidget {
                           "Waiting to Begin.",
                           style: OrientationWidget.bigTextStyle,
                         ),
+                        Divider(),
                         FloatingActionButton(
                             child: Icon(Icons.cloud_upload),
                             onPressed: () {

@@ -22,6 +22,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Circle _circle = new Circle();
   // Variables
   Process _currentProcess;
+  bool initialized = false;
 
   // Constructer
   SonarBloc() {
@@ -95,6 +96,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("RECEIVER_EXIT: " + id);
     });
 
+    // ** RECEIVER_EXIT **
+    socket.on('ERROR', (error) {
+      // Remove Receiver from Circle
+
+      // Add to Process
+      print("ERROR: " + error);
+    });
+
     // Listen to Stream and Add UpdateInput Event every update
     accelerometerEvents.listen((newData) {
       // Update Motion Var
@@ -162,6 +171,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // Emit to Socket.io
     socket.emit("INITIALIZE", [fakeLocation.toMap(), fakeProfile.toMap()]);
+    initialized = true;
 
     // Device Pending State
     yield Ready();
@@ -227,9 +237,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       }
       // Check State
       if (_currentMotion.state == Orientation.Tilt) {
-        // Update State
-        socket.emit("SENDING", [updateSensors.newDirection.toSendMap()]);
-        _circle.status = "Sender";
+        // Check Init Status
+        if (initialized) {
+          // Emit Send
+          socket.emit("SENDING", [updateSensors.newDirection.toSendMap()]);
+          _circle.status = "Sender";
+        }
 
         // Post Update
         add(Update(
@@ -240,10 +253,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Receive State
       else if (_currentMotion.state == Orientation.LandscapeLeft ||
           _currentMotion.state == Orientation.LandscapeRight) {
-        // Update State
-        socket.emit("RECEIVING", [updateSensors.newDirection.toReceiveMap()]);
-        _circle.status = "Receiver";
-
+        // Check Init Status
+        if (initialized) {
+          // Emit Receive
+          socket.emit("RECEIVING", [updateSensors.newDirection.toReceiveMap()]);
+          _circle.status = "Receiver";
+        }
         // Post Update
         add(Update(
             currentDirection: _lastDirection,
