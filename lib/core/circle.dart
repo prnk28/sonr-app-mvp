@@ -24,9 +24,6 @@ class Circle {
       this.differences[data["id"]] = difference.abs();
       data["difference"] = difference.abs();
 
-      // Log
-      print("Difference: " + data["difference"].toString());
-
       // Add/Replace to matches object
       this.matches[data["id"]] = data;
     } else if (this.status == "Receiver") {
@@ -34,9 +31,6 @@ class Circle {
       var difference = currentDirection.antipodalDegrees - data["degrees"];
       this.differences[data["id"]] = difference.abs();
       data["difference"] = difference.abs();
-
-      // Log
-      print("Difference: " + data["difference"].toString());
 
       // Add/Replace to matches object
       this.matches[data["id"]] = data;
@@ -76,9 +70,6 @@ class Circle {
         var difference = currentDirection.antipodalDegrees - closest["degrees"];
         this.differences[closest["id"]] = difference.abs();
         closest["difference"] = difference.abs();
-
-        // Log
-        print("Difference: " + closest["difference"].toString());
       } else {
         TypeError();
       }

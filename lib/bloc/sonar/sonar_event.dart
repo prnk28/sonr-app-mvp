@@ -48,7 +48,8 @@ class Update extends SonarEvent {
 
 // Sender Requests Authorization
 class Request extends SonarEvent {
-  const Request();
+  final String id;
+  const Request(this.id);
 }
 
 // Receiver Gets Authorization Request

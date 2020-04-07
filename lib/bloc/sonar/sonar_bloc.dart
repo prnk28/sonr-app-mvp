@@ -21,10 +21,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Motion _currentMotion = Motion.create();
   Circle _circle = new Circle();
 
-  // Variables
+  // Transfer Variables
   Process _currentProcess;
   bool initialized = false;
   bool requested = false;
+  bool offered = false;
+  dynamic _fileData;
+  dynamic _profileData;
 
   // Constructer
   SonarBloc() {
@@ -51,12 +54,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
-      _circle.status = "Receiver";
       _circle.update(_lastDirection, data);
       add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
-      print("SENDER_UPDATE: " + data);
+      //print("SENDER_UPDATE: " + data);
     });
 
     // ** SOCKET::SENDER_EXIT **
@@ -81,8 +83,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** SOCKET::RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
-      print("RECEIVER_UPDATE: " + data.toString());
-      _circle.status = "Sender";
+      //print("RECEIVER_UPDATE: " + data.toString());
       _circle.update(_lastDirection, data);
       add(Refresh(newDirection: _lastDirection));
       // Add to Process
@@ -99,12 +100,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     });
 
     // ** SOCKET::SENDER_OFFERED **
-    socket.on('SENDER_OFFERED', ([matchProfile, fileData]) {
+    socket.on('SENDER_OFFERED', (data) {
+      print("SENDER_OFFERED: " + data.toString());
+
+      _profileData = data[0];
+      _fileData = data[1];
+
       // Remove Sender from Circle
-      add(Offered(profileData: matchProfile, fileData: fileData));
+      add(Offered(profileData: _circle.closest(), fileData: data[1]));
 
       // Add to Process
-      print("SENDER_OFFERED: " + matchProfile + ", " + fileData);
     });
 
     // ** SOCKET::ERROR **
@@ -123,14 +128,50 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** Directional Events **
     FlutterCompass.events.listen((newData) {
-      // Initialize Direction
-      var newDirection = Direction.create(
-          degrees: newData, accelerometerX: _currentMotion.accelX);
-      // Modify Circle
-      _circle.modify(newDirection);
+      // Check Status
+      if (!offered && !requested) {
+        // Initialize Direction
+        var newDirection = Direction.create(
+            degrees: newData, accelerometerX: _currentMotion.accelX);
+        // Modify Circle
+        _circle.modify(newDirection);
 
-      // Refresh Inputs
-      add(Refresh(newDirection: newDirection));
+        // Check Sender Threshold
+        if (_currentMotion.state == Orientation.Tilt) {
+          // Set Sender
+          _circle.status = "Sender";
+
+          // Check Valid
+          if (_lastDirection != null) {
+            // Generate Difference
+            var difference = newDirection.degrees - _lastDirection.degrees;
+
+            // Threshold
+            if (difference.abs() > 5) {
+              // Refresh Inputs
+              add(Refresh(newDirection: newDirection));
+            }
+          }
+          add(Refresh(newDirection: newDirection));
+        }
+        // Check Receiver Threshold
+        else if (_currentMotion.state == Orientation.LandscapeLeft ||
+            _currentMotion.state == Orientation.LandscapeRight) {
+          // Set Receiver
+          _circle.status = "Receiver";
+
+          // Check Valid
+          if (_lastDirection != null) {
+            // Generate Difference
+            var difference = newDirection.degrees - _lastDirection.degrees;
+            if (difference.abs() > 10) {
+              // Refresh Inputs
+              add(Refresh(newDirection: newDirection));
+            }
+          }
+          add(Refresh(newDirection: newDirection));
+        }
+      }
     });
   }
 
@@ -189,6 +230,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *****************
   Stream<SonarState> _mapSendToState(
       Send sendEvent, Direction direction, Motion motion) async* {
+    // Check Init Status
+    if (initialized && !requested) {
+      // Emit Send
+      socket.emit("SENDING", [_lastDirection.toSendMap()]);
+    }
+
     // Set Suspend state with lastState
     if (sendEvent.map != null) {
       yield Sending(
@@ -205,6 +252,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapReceiveToState(
       Receive receiveEvent, Direction direction, Motion motion) async* {
+    // Check Init Status
+    if (initialized) {
+      // Emit Receive
+      socket.emit("RECEIVING", [_lastDirection.toReceiveMap()]);
+    }
+
     // Set Suspend state with lastState
     if (receiveEvent.map != null) {
       yield Receiving(
@@ -224,7 +277,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (initialized && !requested) {
       var dummyFileData = {"type": "Image", "size": 20};
       // Emit to Socket.io
-      socket.emit("REQUEST", [_circle.closest()["id"], dummyFileData]);
+      socket.emit("REQUEST", [requestEvent.id, dummyFileData]);
       requested = true;
 
       // Device Pending State
@@ -237,7 +290,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
   Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
     // Check Status
-    if (initialized) {
+    if (initialized & !offered) {
+      // Set Offered
+      offered = true;
+
       // Device Pending State
       yield Pending("RECEIVER",
           match: offeredEvent.profileData, file: offeredEvent.fileData);
@@ -273,56 +329,43 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ** Refresh Input Event ***
 // **************************
   Stream<SonarState> _mapRefreshInputToState(Refresh updateSensors) async* {
-    // Check State
-    if (_currentMotion.state == Orientation.Tilt ||
-        _currentMotion.state == Orientation.LandscapeLeft ||
-        _currentMotion.state == Orientation.LandscapeRight) {
-      // Check Directions
-      if (_lastDirection != updateSensors.newDirection) {
-        // Set as new direction
-        _lastDirection = updateSensors.newDirection;
-      }
+// Check Status
+    if (!offered && !requested) {
       // Check State
-      if (_currentMotion.state == Orientation.Tilt) {
-        // Check Init Status
-        if (initialized && !requested) {
-          // Emit Send
-          socket.emit("SENDING", [updateSensors.newDirection.toSendMap()]);
-          _circle.status = "Sender";
-        }
-
-        // Post Update
-        add(Update(
-            currentDirection: _lastDirection,
-            currentMotion: _currentMotion,
-            map: _circle));
-      }
-      // Receive State
-      else if (_currentMotion.state == Orientation.LandscapeLeft ||
+      if (_currentMotion.state == Orientation.Tilt ||
+          _currentMotion.state == Orientation.LandscapeLeft ||
           _currentMotion.state == Orientation.LandscapeRight) {
-        // Check Init Status
-        if (initialized) {
-          // Emit Receive
-          socket.emit("RECEIVING", [updateSensors.newDirection.toReceiveMap()]);
-          _circle.status = "Receiver";
+        // Check Directions
+        if (_lastDirection != updateSensors.newDirection) {
+          // Set as new direction
+          _lastDirection = updateSensors.newDirection;
         }
-        // Post Update
-        add(Update(
-            currentDirection: _lastDirection,
-            currentMotion: _currentMotion,
-            map: _circle));
+        // Check State
+        if (_currentMotion.state == Orientation.Tilt) {
+          // Post Update
+          add(Update(
+              currentDirection: _lastDirection,
+              currentMotion: _currentMotion,
+              map: _circle));
+        }
+        // Receive State
+        else if (_currentMotion.state == Orientation.LandscapeLeft ||
+            _currentMotion.state == Orientation.LandscapeRight) {
+          // Post Update
+          add(Update(
+              currentDirection: _lastDirection,
+              currentMotion: _currentMotion,
+              map: _circle));
+        }
+        // Pending State
       } else {
-        // Update State Dont Duplicate Call
-        if (_currentProcess.currentStage != SonarStage.READY) {
-          socket.emit("RESET");
-          _circle.status = "Default";
-        }
+        // socket.emit("RESET");
+        // _circle.status = "Default";
+
+        yield Ready(
+            currentDirection: updateSensors.newDirection,
+            currentMotion: _currentMotion);
       }
-      // Pending State
-    } else {
-      yield Ready(
-          currentDirection: updateSensors.newDirection,
-          currentMotion: _currentMotion);
     }
   }
 }
