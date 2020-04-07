@@ -112,6 +112,18 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Add to Process
     });
 
+    // ** SOCKET::RECEIVER_AUTHORIZED **
+    socket.on('RECEIVER_AUTHORIZED', (data) {
+      // Add to Process
+      print("RECEIVER_AUTHORIZED: " + data.toString());
+    });
+
+    // ** SOCKET::RECEIVER_DECLINED **
+    socket.on('RECEIVER_DECLINED', (data) {
+      // Add to Process
+      print("RECEIVER_DECLINED: " + data.toString());
+    });
+
     // ** SOCKET::ERROR **
     socket.on('ERROR', (error) {
       // Remove Receiver from Circle
@@ -233,7 +245,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Init Status
     if (initialized && !requested) {
       // Emit Send
-      socket.emit("SENDING", [_lastDirection.toSendMap()]);
+      const delay = const Duration(milliseconds: 500);
+      new Timer(
+          delay,
+          () => {
+                socket.emit("SENDING", [_lastDirection.toSendMap()])
+              });
     }
 
     // Set Suspend state with lastState
@@ -253,9 +270,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapReceiveToState(
       Receive receiveEvent, Direction direction, Motion motion) async* {
     // Check Init Status
-    if (initialized) {
-      // Emit Receive
-      socket.emit("RECEIVING", [_lastDirection.toReceiveMap()]);
+    if (initialized && !offered) {
+      const delay = const Duration(milliseconds: 750);
+      new Timer(
+          delay,
+          () => {
+                // Emit Receive
+                socket.emit("RECEIVING", [_lastDirection.toReceiveMap()])
+              });
     }
 
     // Set Suspend state with lastState
