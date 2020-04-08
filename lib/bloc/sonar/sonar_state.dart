@@ -22,10 +22,9 @@ class Initial extends SonarState {
 // ** Connected to Lobby/WS ***
 // ****************************
 class Ready extends SonarState {
-  final Process runningProcess;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Ready({this.runningProcess, this.currentMotion, this.currentDirection});
+  const Ready({this.currentMotion, this.currentDirection});
 }
 
 // ********************************
@@ -41,30 +40,20 @@ class Loading extends SonarState {
 // ** In Sending Position ***
 // **************************
 class Sending extends SonarState {
-  final Process runningProcess;
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Sending(
-      {this.runningProcess,
-      this.matches,
-      this.currentMotion,
-      this.currentDirection});
+  const Sending({this.matches, this.currentMotion, this.currentDirection});
 }
 
 // ****************************
 // ** In Receiving Position ***
 // ****************************
 class Receiving extends SonarState {
-  final Process runningProcess;
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Receiving(
-      {this.runningProcess,
-      this.matches,
-      this.currentMotion,
-      this.currentDirection});
+  const Receiving({this.matches, this.currentMotion, this.currentDirection});
 }
 
 // **********************************************
@@ -102,20 +91,12 @@ class Failed extends SonarState {
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
 class Transferring extends SonarState {
-  final Process runningProcess;
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Transferring(
-      {this.runningProcess, this.currentMotion, this.currentDirection});
+  const Transferring();
 }
 
 // *************************
 // ** Transfer Succesful ***
 // *************************
 class Complete extends SonarState {
-  final Process runningProcess;
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Complete(
-      {this.runningProcess, this.currentMotion, this.currentDirection});
+  const Complete();
 }

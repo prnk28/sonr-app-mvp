@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
@@ -78,6 +79,19 @@ class Declined extends SonarEvent {
   final String matchId;
   final dynamic profile;
   const Declined(this.profile, this.matchId);
+}
+
+// Sender Begins Transfer
+class Transfer extends SonarEvent {
+  final String fileType;
+  const Transfer(this.fileType);
+}
+
+// Sender Begins Transfer
+class Received extends SonarEvent {
+  final String fileType;
+  final ByteData file;
+  const Received(this.fileType, this.file);
 }
 
 // Update Sensory Input

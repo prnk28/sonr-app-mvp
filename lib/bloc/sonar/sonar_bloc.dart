@@ -9,6 +9,8 @@ import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/controllers/controllers.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 // *********************
 // ** Initialization ***
@@ -226,6 +228,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapAcceptedToState(event);
     } else if (event is Declined) {
       yield* _mapDeclinedToState(event);
+    } else if (event is Transfer) {
+      yield* _mapTransferToState(event);
+    } else if (event is Received) {
+      yield* _mapReceivedToState(event);
     }
   }
 
@@ -358,7 +364,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     }
   }
 
-  // **********************
+// **********************
 // ** Declined Event ***
 // **********************
   Stream<SonarState> _mapDeclinedToState(Declined declinedEvent) async* {
@@ -367,6 +373,34 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Emit Decision to Server
       yield Failed(
           profile: declinedEvent.profile, matchId: declinedEvent.matchId);
+    }
+  }
+
+// *********************
+// ** Transfer Event ***
+// *********************
+  Stream<SonarState> _mapTransferToState(Transfer declinedEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Audio as bytes
+      ByteData bytes = await rootBundle.load('assets/audio/truck.mp3');
+      print(bytes.buffer.asUint64List()[1]);
+
+      // Emit Decision to Server
+      yield Transferring();
+    }
+  }
+
+// *********************
+// ** Received Event ***
+// *********************
+  Stream<SonarState> _mapReceivedToState(Received declinedEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Read Data
+
+      // Emit Decision to Server
+      yield Complete();
     }
   }
 
@@ -431,6 +465,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // ** Read Local Data of Assets ***
   // ********************************
   Future<Uint8List> readFileByte(String filePath) async {
+    Directory appDir = await getApplicationDocumentsDirectory();
+    // appDir.path + '/' +
     Uri myUri = Uri.parse(filePath);
     File audioFile = new File.fromUri(myUri);
     Uint8List bytes;
@@ -447,9 +483,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // ********************************
   // ** Write Local Data of Assets **
   // ********************************
-  Future<void> writeToFile(ByteData data, String path) {
+  Future<void> writeToFile(ByteData data, String path) async {
     final buffer = data.buffer;
-    return new File(path).writeAsBytes(
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    return new File(tempPath + path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 }

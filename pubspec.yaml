@@ -27,6 +27,7 @@ dependencies:
   flutter_compass:
   geolocator: ^3.0.0
   permission_handler:
+  just_audio: ^0.1.4
   sensors: ^0.4.1+1
   socket_io_client: ^0.9.1
   vibration: ^1.2.4
@@ -62,6 +63,7 @@ flutter:
     - assets/images/
     - assets/images/social/
     - assets/images/headers/
+    - assets/audio/
 
   # -- Fonts --
   fonts:
