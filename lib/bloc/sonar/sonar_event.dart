@@ -66,6 +66,20 @@ class Authorize extends SonarEvent {
   const Authorize(this.decision, this.matchId);
 }
 
+// Receiver has Accepted
+class Accepted extends SonarEvent {
+  final dynamic profile;
+  final String matchId;
+  const Accepted(this.profile, this.matchId);
+}
+
+// Receiver has Declined
+class Declined extends SonarEvent {
+  final String matchId;
+  final dynamic profile;
+  const Declined(this.profile, this.matchId);
+}
+
 // Update Sensory Input
 class Refresh extends SonarEvent {
   final Direction newDirection;

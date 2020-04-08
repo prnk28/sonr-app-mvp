@@ -149,8 +149,40 @@ class OrientationWidget extends StatelessWidget {
                               }),
                         ]);
                   }
+                } else if (state is PreTransfer) {
+                  Vibration.vibrate();
+                  return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                            state.profile["profile"]["first_name"].toString() +
+                                " has Accepted.",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Divider(),
+                        FloatingActionButton(
+                            child: Icon(Icons.image), onPressed: () {
+                              
+                            }),
+                        FloatingActionButton(
+                            child: Icon(Icons.surround_sound),
+                            onPressed: () {
+
+                            }),
+                      ]);
+                } else if (state is Failed) {
+                  return Text(
+                      state.profile["profile"]["first_name"].toString() +
+                          " has Declined.",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ));
                 } else {
-// Check Sensor Default
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

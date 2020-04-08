@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:sensors/sensors.dart';
@@ -114,12 +116,18 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** SOCKET::RECEIVER_AUTHORIZED **
     socket.on('RECEIVER_AUTHORIZED', (data) {
+      dynamic matchId = data[0];
+
+      add(Accepted(_circle.closest(), matchId));
       // Add to Process
       print("RECEIVER_AUTHORIZED: " + data.toString());
     });
 
     // ** SOCKET::RECEIVER_DECLINED **
     socket.on('RECEIVER_DECLINED', (data) {
+      dynamic matchId = data[0];
+
+      add(Declined(_circle.closest(), matchId));
       // Add to Process
       print("RECEIVER_DECLINED: " + data.toString());
     });
@@ -214,6 +222,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapOfferedToState(event);
     } else if (event is Authorize) {
       yield* _mapAuthorizeToState(event);
+    } else if (event is Accepted) {
+      yield* _mapAcceptedToState(event);
+    } else if (event is Declined) {
+      yield* _mapDeclinedToState(event);
     }
   }
 
@@ -334,6 +346,30 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     }
   }
 
+// **********************
+// ** Accepted Event ***
+// **********************
+  Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Emit Decision to Server
+      yield PreTransfer(
+          profile: acceptedEvent.profile, matchId: acceptedEvent.matchId);
+    }
+  }
+
+  // **********************
+// ** Declined Event ***
+// **********************
+  Stream<SonarState> _mapDeclinedToState(Declined declinedEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Emit Decision to Server
+      yield Failed(
+          profile: declinedEvent.profile, matchId: declinedEvent.matchId);
+    }
+  }
+
 // ********************
 // ** Update Event ***
 // ********************
@@ -389,5 +425,31 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
             currentMotion: _currentMotion);
       }
     }
+  }
+
+  // ********************************
+  // ** Read Local Data of Assets ***
+  // ********************************
+  Future<Uint8List> readFileByte(String filePath) async {
+    Uri myUri = Uri.parse(filePath);
+    File audioFile = new File.fromUri(myUri);
+    Uint8List bytes;
+    await audioFile.readAsBytes().then((value) {
+      bytes = Uint8List.fromList(value);
+      print('reading of bytes is completed');
+    }).catchError((onError) {
+      print('Exception Error while reading audio from path:' +
+          onError.toString());
+    });
+    return bytes;
+  }
+
+  // ********************************
+  // ** Write Local Data of Assets **
+  // ********************************
+  Future<void> writeToFile(ByteData data, String path) {
+    final buffer = data.buffer;
+    return new File(path).writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 }

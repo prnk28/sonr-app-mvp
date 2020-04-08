@@ -80,6 +80,24 @@ class Pending extends SonarState {
   const Pending(this.status, {this.match, this.file});
 }
 
+// *******************************************
+// ** Post Authorization Receiver Accepted ***
+// *******************************************
+class PreTransfer extends SonarState {
+  final dynamic profile;
+  final String matchId;
+  const PreTransfer({this.profile, this.matchId});
+}
+
+// *******************************************
+// ** Post Authorization Receiver Declined ***
+// *******************************************
+class Failed extends SonarState {
+  final dynamic profile;
+  final String matchId;
+  const Failed({this.profile, this.matchId});
+}
+
 // *********************************************
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
@@ -99,16 +117,5 @@ class Complete extends SonarState {
   final Motion currentMotion;
   final Direction currentDirection;
   const Complete(
-      {this.runningProcess, this.currentMotion, this.currentDirection});
-}
-
-// *****************************************
-// ** Failed Sonar: Cancel/Decline/Error ***
-// *****************************************
-class Failed extends SonarState {
-  final Process runningProcess;
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Failed(
       {this.runningProcess, this.currentMotion, this.currentDirection});
 }
