@@ -24,10 +24,9 @@ dependencies:
   equatable: ^1.1.0
 
   # -- Device --
-  flutter_compass:
-  geolocator: ^3.0.0
-  permission_handler:
-  just_audio: ^0.1.4
+  flutter_compass: '^0.4.1'
+  geolocator: ^5.3.1
+  permission_handler: ^5.0.0+hotfix.3
   sensors: ^0.4.1+1
   socket_io_client: ^0.9.1
   vibration: ^1.2.4
@@ -35,7 +34,7 @@ dependencies:
 
   # -- Extension --
   intl: ^0.15.8
-  path_provider: ^0.5.0+1
+  path_provider: ^1.6.5
   sortedmap: ^0.4.2+1
 
   # -- Network --
@@ -43,6 +42,7 @@ dependencies:
 
   # -- UI/UX --
   flutter_spinkit: "^3.1.0"
+  logger: ^0.8.3
   rflutter_alert: ^1.0.2
 
 # ** -- TEST -- **

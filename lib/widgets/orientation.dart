@@ -164,13 +164,16 @@ class OrientationWidget extends StatelessWidget {
                             )),
                         Divider(),
                         FloatingActionButton(
-                            child: Icon(Icons.image), onPressed: () {
-                              
+                            child: Icon(Icons.image),
+                            onPressed: () {
+                              BlocProvider.of<SonarBloc>(context)
+                                  .add(Transfer("Image"));
                             }),
                         FloatingActionButton(
                             child: Icon(Icons.surround_sound),
                             onPressed: () {
-
+                              BlocProvider.of<SonarBloc>(context)
+                                  .add(Transfer("Audio"));
                             }),
                       ]);
                 } else if (state is Failed) {

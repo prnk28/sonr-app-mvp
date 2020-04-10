@@ -383,8 +383,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (initialized) {
       // Audio as bytes
-      ByteData bytes = await rootBundle.load('assets/audio/truck.mp3');
-      print(bytes.buffer.asUint64List()[1]);
+      rootBundle.load('assets/audio/truck.mp3').then((value) => () {
+            print(value.buffer.asUint64List()[1]);
+          });
 
       // Emit Decision to Server
       yield Transferring();
