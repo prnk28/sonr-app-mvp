@@ -5,9 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:soundpool/soundpool.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/controllers/controllers.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -24,9 +24,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
   Circle _circle = new Circle();
+  Soundpool _soundpool = new Soundpool(streamType: StreamType.music);
 
   // Transfer Variables
-  Process _currentProcess;
   bool initialized = false;
   bool requested = false;
   bool offered = false;
@@ -132,6 +132,23 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Declined(_circle.closest(), matchId));
       // Add to Process
       print("RECEIVER_DECLINED: " + data.toString());
+    });
+
+    // ** SOCKET::TRANSFERRED**
+    socket.on('TRANSFERRED', (data) async {
+      dynamic type = data[0];
+      dynamic file = data[1].cast<int>();
+
+      Uint8List outputAsUint8List = new Uint8List.fromList(file);
+      var buffer = outputAsUint8List.buffer;
+      var bdata = new ByteData.view(buffer);
+      int soundId = await _soundpool.load(bdata);
+      _soundpool.play(soundId);
+
+      print(
+          "TRANSFERRED: " + type.toString() + " fileData: " + file.toString());
+      //add(Declined(_circle.closest(), matchId));
+      // Add to Process
     });
 
     // ** SOCKET::ERROR **
@@ -379,14 +396,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
 // ** Transfer Event ***
 // *********************
-  Stream<SonarState> _mapTransferToState(Transfer declinedEvent) async* {
+  Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (initialized) {
       // Audio as bytes
-      rootBundle.load('assets/audio/truck.mp3').then((value) => () {
-            print(value.buffer.asUint64List()[1]);
-          });
-
+      ByteData asset = await rootBundle.load('assets/audio/truck.mp3');
+      socket.emit("TRANSFER",
+          ["AUDIO", _circle.closest()["id"], asset.buffer.asUint8List()]);
       // Emit Decision to Server
       yield Transferring();
     }
@@ -488,7 +504,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     final buffer = data.buffer;
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
-    return new File(tempPath + path).writeAsBytes(
+    return new File(tempPath + "/" + path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 }
