@@ -87,6 +87,21 @@ class Circle {
     }
   }
 
+  // ***************************************
+  // ** Check if Closest Within Threshold **
+  // ***************************************
+  bool withinThreshold() {
+    if (this.valid()) {
+      if (this.closest()["difference"] <= 30) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   // *************
   // ** Closest **
   // *************

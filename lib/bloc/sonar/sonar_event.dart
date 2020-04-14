@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
+import 'package:sonar_app/bloc/sonar/sonar_state.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
@@ -87,11 +90,17 @@ class Transfer extends SonarEvent {
   const Transfer(this.fileType);
 }
 
-// Sender Begins Transfer
+// Sender Sent Transfer
 class Received extends SonarEvent {
   final String fileType;
-  final ByteData file;
+  final Uint8List file;
   const Received(this.fileType, this.file);
+}
+
+class Completed extends SonarEvent {
+  final String matchId;
+  final dynamic profile;
+  const Completed(this.profile, this.matchId);
 }
 
 // Update Sensory Input

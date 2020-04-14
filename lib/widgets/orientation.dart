@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:vibration/vibration.dart';
 
@@ -28,16 +29,14 @@ class OrientationWidget extends StatelessWidget {
                 print(state);
                 // Check Tilt
                 if (state is Sending) {
-                  if (state.matches.valid()) {
-                    // Withing Threshold
-                    if (state.matches.closest()["difference"] <= 30) {
-                      // Begin Timer 2s
-                      const twentySeconds = const Duration(seconds: 2);
-                      new Timer(
-                          twentySeconds,
-                          () => BlocProvider.of<SonarBloc>(context)
-                              .add(Request(state.matches.closest()["id"])));
-                    }
+                  // Closeset Within Threshold
+                  if (state.matches.withinThreshold()) {
+                    // Begin Timer 2s
+                    const twentySeconds = const Duration(seconds: 2);
+                    new Timer(
+                        twentySeconds,
+                        () => BlocProvider.of<SonarBloc>(context)
+                            .add(Request(state.matches.closest()["id"])));
 
                     // Return Text Widget
                     return Text(
@@ -180,6 +179,22 @@ class OrientationWidget extends StatelessWidget {
                   return Text(
                       state.profile["profile"]["first_name"].toString() +
                           " has Declined.",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ));
+                } else if (state is Transferring) {
+                  return SpinKitRing(color: Colors.white);
+                } else if (state is Received) {
+                  return Text("Received.",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ));
+                } else if (state is Completed) {
+                  return Text("Complete.",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 40,

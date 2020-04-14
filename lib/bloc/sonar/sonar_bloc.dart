@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
-import 'package:flutter_compass/flutter_compass.dart';
+import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:soundpool/soundpool.dart';
@@ -134,27 +134,31 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       print("RECEIVER_DECLINED: " + data.toString());
     });
 
+    // ** SOCKET::RECEIVER_COMPLETED **
+    socket.on('RECEIVER_COMPLETED', (data) {
+      dynamic matchId = data[0];
+
+      add(Completed(_circle.closest(), matchId));
+      // Add to Process
+      print("RECEIVER_COMPLETED: " + data.toString());
+    });
+
     // ** SOCKET::TRANSFERRED**
-    socket.on('TRANSFERRED', (data) async {
+    socket.on('SENDER_TRANSFERRED', (data) async {
       dynamic type = data[0];
       dynamic file = data[1].cast<int>();
 
       Uint8List outputAsUint8List = new Uint8List.fromList(file);
-      var buffer = outputAsUint8List.buffer;
-      var bdata = new ByteData.view(buffer);
-      int soundId = await _soundpool.load(bdata);
-      _soundpool.play(soundId);
+      add(Received(type, outputAsUint8List));
 
-      print(
-          "TRANSFERRED: " + type.toString() + " fileData: " + file.toString());
-      //add(Declined(_circle.closest(), matchId));
-      // Add to Process
+      print("SENDER_TRANSFERRED: " +
+          type.toString() +
+          " fileData: " +
+          file.toString());
     });
 
     // ** SOCKET::ERROR **
     socket.on('ERROR', (error) {
-      // Remove Receiver from Circle
-
       // Add to Process
       print("ERROR: " + error);
     });
@@ -166,14 +170,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     });
 
     // ** Directional Events **
-    FlutterCompass.events.listen((newData) {
+    Compass()
+        .compassUpdates(interval: Duration(milliseconds: 200))
+        .listen((newData) {
       // Check Status
       if (!offered && !requested) {
         // Initialize Direction
         var newDirection = Direction.create(
             degrees: newData, accelerometerX: _currentMotion.accelX);
-        // Modify Circle
-        _circle.modify(newDirection);
 
         // Check Sender Threshold
         if (_currentMotion.state == Orientation.Tilt) {
@@ -187,6 +191,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
             // Threshold
             if (difference.abs() > 5) {
+              // Modify Circle
+              _circle.modify(newDirection);
+
               // Refresh Inputs
               add(Refresh(newDirection: newDirection));
             }
@@ -204,6 +211,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
             // Generate Difference
             var difference = newDirection.degrees - _lastDirection.degrees;
             if (difference.abs() > 10) {
+              // Modify Circle
+              _circle.modify(newDirection);
               // Refresh Inputs
               add(Refresh(newDirection: newDirection));
             }
@@ -249,6 +258,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapTransferToState(event);
     } else if (event is Received) {
       yield* _mapReceivedToState(event);
+    } else if (event is Completed) {
+      yield* _mapCompletedToState(event);
     }
   }
 
@@ -411,11 +422,30 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
 // ** Received Event ***
 // *********************
-  Stream<SonarState> _mapReceivedToState(Received declinedEvent) async* {
+  Stream<SonarState> _mapReceivedToState(Received receivedEvent) async* {
     // Check Status
     if (initialized) {
       // Read Data
+      var buffer = receivedEvent.file.buffer;
+      var bdata = new ByteData.view(buffer);
+      int soundId = await _soundpool.load(bdata);
+      _soundpool.play(soundId);
 
+      // Emit Completed
+      socket.emit(
+          "COMPLETE", [_circle.closest()["id"], _circle.closest()["profile"]]);
+
+      // Emit Decision to Server
+      yield Complete();
+    }
+  }
+
+// *********************
+// ** Completed Event ***
+// *********************
+  Stream<SonarState> _mapCompletedToState(Completed completedEvent) async* {
+    // Check Status
+    if (initialized) {
       // Emit Decision to Server
       yield Complete();
     }

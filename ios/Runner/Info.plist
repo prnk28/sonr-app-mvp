@@ -6,6 +6,8 @@
 	<string>Required for the App</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Requried for the App</string>
+	<key>NSMotionUsageDescription</key>
+<string>A reason to get the permission</string>
 	<key>LSApplicationCategoryType</key>
 	<string>Privacy - Location When In Use Usage Description</string>
 	<key>CFBundleDevelopmentRegion</key>
