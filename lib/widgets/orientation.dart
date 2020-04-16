@@ -198,12 +198,19 @@ class OrientationWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ));
                 } else if (state is Complete) {
-                  return Text("Complete.",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ));
+                  return Column(children: [
+                    Text("Complete.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    FloatingActionButton(
+                        child: Icon(Icons.done_all),
+                        onPressed: () {
+                          BlocProvider.of<SonarBloc>(context).add(Reset(0));
+                        }),
+                  ]);
                 } else {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
