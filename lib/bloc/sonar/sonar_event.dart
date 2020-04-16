@@ -97,10 +97,17 @@ class Received extends SonarEvent {
   const Received(this.fileType, this.file);
 }
 
+// On Transfer Complete
 class Completed extends SonarEvent {
   final String matchId;
   final dynamic profile;
   const Completed(this.profile, this.matchId);
+}
+
+// Reset UI
+class Reset extends SonarEvent {
+  final int secondDelay;
+  const Reset(this.secondDelay);
 }
 
 // Update Sensory Input

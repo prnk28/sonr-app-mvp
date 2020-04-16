@@ -176,6 +176,10 @@ class OrientationWidget extends StatelessWidget {
                             }),
                       ]);
                 } else if (state is Failed) {
+                  // Set Display Timer
+                  BlocProvider.of<SonarBloc>(context).add(Reset(3));
+
+                  // Yield Decline Result
                   return Text(
                       state.profile["profile"]["first_name"].toString() +
                           " has Declined.",
@@ -193,7 +197,7 @@ class OrientationWidget extends StatelessWidget {
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                       ));
-                } else if (state is Completed) {
+                } else if (state is Complete) {
                   return Text("Complete.",
                       style: TextStyle(
                         color: Colors.white,

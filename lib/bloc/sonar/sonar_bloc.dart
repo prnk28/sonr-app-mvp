@@ -171,7 +171,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** Directional Events **
     Compass()
-        .compassUpdates(interval: Duration(milliseconds: 200))
+        .compassUpdates(interval: Duration(milliseconds: 300))
         .listen((newData) {
       // Check Status
       if (!offered && !requested) {
@@ -260,6 +260,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapReceivedToState(event);
     } else if (event is Completed) {
       yield* _mapCompletedToState(event);
+    } else if (event is Reset) {
+      yield* _mapResetToState(event);
     }
   }
 
@@ -374,9 +376,18 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAuthorizeToState(Authorize authorizeEvent) async* {
     // Check Status
     if (initialized) {
-      // Emit Decision to Server
+      // Send To Server
       socket
           .emit("AUTHORIZE", [authorizeEvent.matchId, authorizeEvent.decision]);
+
+      // Yield Receiver Decision
+      if (authorizeEvent.decision) {
+        yield Transferring();
+      }
+      // Receiver Declined
+      else {
+        add(Reset(0));
+      }
     }
   }
 
@@ -451,6 +462,30 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     }
   }
 
+// *********************
+// ** Reset Event ***
+// *********************
+  Stream<SonarState> _mapResetToState(Reset resetEvent) async* {
+    // Check Status
+    if (initialized) {
+      // Reset Vars
+      offered = false;
+      requested = false;
+
+      // Reset circle
+      socket.emit("RESET");
+      _circle.status = "Default";
+
+      // Set Delay
+      await new Future.delayed(Duration(seconds: resetEvent.secondDelay));
+
+      // Yield Ready
+      yield Ready();
+    } else {
+      add(Initialize());
+    }
+  }
+
 // ********************
 // ** Update Event ***
 // ********************
@@ -498,9 +533,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
         }
         // Pending State
       } else {
-        // socket.emit("RESET");
-        // _circle.status = "Default";
-
         yield Ready(
             currentDirection: updateSensors.newDirection,
             currentMotion: _currentMotion);
