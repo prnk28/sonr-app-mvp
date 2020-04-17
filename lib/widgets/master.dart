@@ -5,9 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/widgets/widgets.dart';
 import 'package:vibration/vibration.dart';
 
-class OrientationWidget extends StatelessWidget {
+class MasterWidget extends StatelessWidget {
   static const TextStyle bigTextStyle = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
@@ -45,7 +46,7 @@ class OrientationWidget extends StatelessWidget {
                           state.currentDirection.degrees.toString() +
                           ", Match/Client Difference: " +
                           state.matches.closest()["difference"].toString(),
-                      style: OrientationWidget.bigTextStyle,
+                      style: MasterWidget.bigTextStyle,
                     );
                   } else {
                     // Return Text Widget
@@ -212,13 +213,15 @@ class OrientationWidget extends StatelessWidget {
                         }),
                   ]);
                 } else {
+                  return InitializeWidget(
+                      sonarBloc: BlocProvider.of<SonarBloc>(context));
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Return Text Widget
                         Text(
                           "Waiting to Begin.",
-                          style: OrientationWidget.bigTextStyle,
+                          style: MasterWidget.bigTextStyle,
                         ),
                         Divider(),
                         FloatingActionButton(

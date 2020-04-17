@@ -98,7 +98,7 @@ class Profile {
   // *******************
   final String firstName;
   final String lastName;
-  final String profilePicture;
+  final List<int> profilePicture;
 
   // *****************
   // ** Constructor **
@@ -110,8 +110,7 @@ class Profile {
   // ***********************
   // Fake Data Method
   static Profile fakeProfile() {
-    return Profile("Napoleon", "Braxton",
-        "https://ui-avatars.com/api/?name=Napoleon+Braxton");
+    return Profile("Napoleon", "Braxton", new List<int>());
   }
 
   // Create Object from Events

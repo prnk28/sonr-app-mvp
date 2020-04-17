@@ -36,6 +36,7 @@ dependencies:
 
   # -- Extension --
   intl: ^0.15.8
+  image_picker:
   path_provider: ^1.6.5
   sortedmap: ^0.4.2+1
 

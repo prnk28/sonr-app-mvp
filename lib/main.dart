@@ -21,11 +21,10 @@ class App extends StatelessWidget {
           providers: [
             // Sonar Communication
             BlocProvider<SonarBloc>(
-              create: (BuildContext context) =>
-                  SonarBloc(),
+              create: (BuildContext context) => SonarBloc(),
             ),
           ],
-          child: OrientationWidget(),
+          child: MasterWidget(),
         ));
   }
 }

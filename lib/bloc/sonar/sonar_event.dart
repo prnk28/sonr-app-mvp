@@ -18,9 +18,8 @@ abstract class SonarEvent extends Equatable {
 // *********************
 // Connect to WS, Join/Create Lobby
 class Initialize extends SonarEvent {
-  final Motion currentMotion;
-  final Direction currentDirection;
-  const Initialize({this.currentDirection, this.currentMotion});
+  final Profile userProfile;
+  const Initialize({this.userProfile});
 }
 
 // Send to Server Sequence

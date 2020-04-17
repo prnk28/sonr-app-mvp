@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
+import 'package:logger/logger.dart';
 import 'package:sensors/sensors.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:soundpool/soundpool.dart';
@@ -18,6 +19,8 @@ import 'package:flutter/services.dart' show rootBundle;
 Socket socket = io('http://match.sonr.io', <String, dynamic>{
   'transports': ['websocket'],
 });
+
+var logger = Logger();
 
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
@@ -37,14 +40,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   SonarBloc() {
     // ** SOCKET::Connected **
     socket.on('connect', (_) {
-      print("Connected to Socket");
+      logger.v("Connected to Socket");
     });
 
     // ** SOCKET::INFO **
     socket.on('INFO', (data) {
       add(Refresh(newDirection: _lastDirection));
       // Add to Process
-      print("Lobby Id: " + data);
+      logger.v("Lobby Id: " + data);
     });
 
     // ** SOCKET::NEW_SENDER **
@@ -53,16 +56,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       socket.emit("RECEIVING", [_lastDirection.toReceiveMap()]);
       add(Refresh(newDirection: _lastDirection));
       // Add to Process
-      print("NEW_SENDER: " + data);
+      logger.i("NEW_SENDER: " + data);
     });
 
     // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
       _circle.update(_lastDirection, data);
       add(Refresh(newDirection: _lastDirection));
-
-      // Add to Process
-      //print("SENDER_UPDATE: " + data);
     });
 
     // ** SOCKET::SENDER_EXIT **
@@ -72,7 +72,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
-      print("SENDER_EXIT: " + id);
+      logger.w("SENDER_EXIT: " + id);
     });
 
     // ** SOCKET::NEW_RECEIVER **
@@ -82,7 +82,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
-      print("NEW_RECEIVER: " + data);
+      logger.i("NEW_RECEIVER: " + data);
     });
 
     // ** SOCKET::RECEIVER_UPDATE **
@@ -90,7 +90,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       //print("RECEIVER_UPDATE: " + data.toString());
       _circle.update(_lastDirection, data);
       add(Refresh(newDirection: _lastDirection));
-      // Add to Process
     });
 
     // ** SOCKET::RECEIVER_EXIT **
@@ -100,12 +99,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
-      print("RECEIVER_EXIT: " + id);
+      logger.w("RECEIVER_EXIT: " + id);
     });
 
     // ** SOCKET::SENDER_OFFERED **
     socket.on('SENDER_OFFERED', (data) {
-      print("SENDER_OFFERED: " + data.toString());
+      logger.i("SENDER_OFFERED: " + data.toString());
 
       _profileData = data[0];
       _fileData = data[1];
@@ -122,7 +121,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       add(Accepted(_circle.closest(), matchId));
       // Add to Process
-      print("RECEIVER_AUTHORIZED: " + data.toString());
+      logger.i("RECEIVER_AUTHORIZED: " + data.toString());
     });
 
     // ** SOCKET::RECEIVER_DECLINED **
@@ -131,7 +130,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       add(Declined(_circle.closest(), matchId));
       // Add to Process
-      print("RECEIVER_DECLINED: " + data.toString());
+      logger.w("RECEIVER_DECLINED: " + data.toString());
     });
 
     // ** SOCKET::RECEIVER_COMPLETED **
@@ -140,7 +139,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       add(Completed(_circle.closest(), matchId));
       // Add to Process
-      print("RECEIVER_COMPLETED: " + data.toString());
+      logger.i("RECEIVER_COMPLETED: " + data.toString());
     });
 
     // ** SOCKET::TRANSFERRED**
@@ -151,7 +150,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       Uint8List outputAsUint8List = new Uint8List.fromList(file);
       add(Received(type, outputAsUint8List));
 
-      print("SENDER_TRANSFERRED: " +
+      logger.i("SENDER_TRANSFERRED: " +
           type.toString() +
           " fileData: " +
           file.toString());
@@ -160,7 +159,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // ** SOCKET::ERROR **
     socket.on('ERROR', (error) {
       // Add to Process
-      print("ERROR: " + error);
+      logger.e("ERROR: " + error);
     });
 
     // ** Accelerometer Events **
@@ -274,10 +273,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (!initialized) {
 // Initialize Variables
       Location fakeLocation = Location.fakeLocation();
-      Profile fakeProfile = Profile.fakeProfile();
 
       // Emit to Socket.io
-      socket.emit("INITIALIZE", [fakeLocation.toMap(), fakeProfile.toMap()]);
+      socket.emit("INITIALIZE",
+          [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
       initialized = true;
 
       // Device Pending State
