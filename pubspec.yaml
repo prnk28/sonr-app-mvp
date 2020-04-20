@@ -24,12 +24,10 @@ dependencies:
   equatable: ^1.1.0
 
   # -- Device --
-  # flutter_compass: ^0.4.1
   flutter_sensor_compass: ^0.1.1
   geolocator: ^5.3.1
   permission_handler: ^5.0.0+hotfix.3
   sensors: ^0.4.1+1
-  socket_io_client: ^0.9.1
   soundpool: ^1.0.1
   vibration: ^1.2.4
   uuid: 2.0.0
@@ -41,7 +39,8 @@ dependencies:
   sortedmap: ^0.4.2+1
 
   # -- Network --
-  web_socket_channel: "^1.0.8"
+  flutter_webrtc:
+  socket_io_client: ^0.9.1
 
   # -- UI/UX --
   flutter_spinkit: "^3.1.0"
