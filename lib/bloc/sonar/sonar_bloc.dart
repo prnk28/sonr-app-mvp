@@ -38,10 +38,6 @@ const dcConstraints = {
   'optional': [],
 };
 
-// Peer WEBRTC Connection
-RTCPeerConnection localConnection =
-    new RTCPeerConnection(socket.id, configuration);
-
 var logger = Logger();
 
 // ***********************
@@ -55,17 +51,47 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Soundpool _soundpool = new Soundpool(streamType: StreamType.music);
 
   // Transfer Variables
+  RTCPeerConnection localConnection;
+  RTCDataChannelInit dataChannelDict = null;
+  RTCDataChannel dataChannel;
   bool initialized = false;
   bool requested = false;
   bool offered = false;
-  dynamic _fileData;
-  dynamic _profileData;
 
   // Constructer
   SonarBloc() {
     // ** SOCKET::Connected **
-    socket.on('connect', (_) {
+    socket.on('connect', (_) async {
       logger.v("Connected to Socket");
+
+      // Peer WEBRTC Connection
+      localConnection =
+          await createPeerConnection(configuration, dcConstraints);
+      localConnection.onSignalingState = _onSignalingState;
+      localConnection.onIceGatheringState = _onIceGatheringState;
+      localConnection.onIceConnectionState = _onIceConnectionState;
+      localConnection.onIceCandidate = _onIceCandidate;
+      localConnection.onRenegotiationNeeded = _onRenegotiationNeeded;
+
+      // Create Data Channel Dictionary
+      dataChannelDict = new RTCDataChannelInit();
+      dataChannelDict.id = 1;
+      dataChannelDict.ordered = true;
+      dataChannelDict.maxRetransmitTime = -1;
+      dataChannelDict.maxRetransmits = -1;
+      dataChannelDict.protocol = "sctp";
+      dataChannelDict.negotiated = false;
+
+      // Set Data Channel
+      dataChannel = await localConnection.createDataChannel(
+          'dataChannel', dataChannelDict);
+      localConnection.onDataChannel = _onDataChannel;
+
+      // Set Description
+      RTCSessionDescription description =
+          await localConnection.createOffer(dcConstraints);
+      print(description.sdp);
+      localConnection.setLocalDescription(description);
     });
 
     // ** SOCKET::INFO **
@@ -131,8 +157,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('SENDER_OFFERED', (data) async {
       logger.i("SENDER_OFFERED: " + data.toString());
 
-      _profileData = data[0];
-      _fileData = data[1];
       dynamic _offer = data[2];
 
       // Set Local Connection
@@ -206,20 +230,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       logger.e("ERROR: " + error);
     });
 
-    // ** WebRTC::New Candidate on Local **
-    localConnection.onIceCandidate = (RTCIceCandidate candidate) {
-      // Create params
-      var params = [_circle.closest()["id"], candidate];
+    // // ** WebRTC::New Candidate on Local **
+    // localConnection.onIceCandidate = (RTCIceCandidate candidate) {
+    //   // Create params
+    //   var params = [_circle.closest()["id"], candidate];
 
-      // Emite New Ice Candidate
-      socket.emit("NEW_CANDIDATE", params);
-    };
-
-    // ** WebRTC::New Candidate on Local **
-    localConnection.onIceConnectionState = (RTCIceConnectionState state) {
-      // Emite New Ice Candidate
-      logger.w("onIceConnectionState: " + state.toString());
-    };
+    //   // Emite New Ice Candidate
+    //   socket.emit("NEW_CANDIDATE", params);
+    // };
 
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
@@ -408,6 +426,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       // Create Offer and Emit
       var offer = await localConnection.createOffer(dcConstraints);
+      print(offer.toString());
       await localConnection.setLocalDescription(offer);
       socket.emit('OFFER', [requestEvent.id, dummyFileData, offer]);
 
@@ -604,6 +623,35 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
             currentMotion: _currentMotion);
       }
     }
+  }
+
+  // ** WebRTC::New Candidate on Local **
+  _onIceConnectionState(RTCIceConnectionState state) {
+    // Emite New Ice Candidate
+    print(state);
+  }
+
+  _onDataChannel(RTCDataChannel channel) {
+    channel.onMessage = (RTCDataChannelMessage message) {
+      print(message.toString());
+    };
+  }
+
+  _onSignalingState(RTCSignalingState state) {
+    print(state);
+  }
+
+  _onIceGatheringState(RTCIceGatheringState state) {
+    print(state);
+  }
+
+  _onIceCandidate(RTCIceCandidate candidate) {
+    print('onCandidate: ' + candidate.candidate);
+    localConnection.addCandidate(candidate);
+  }
+
+  _onRenegotiationNeeded() {
+    print("RenegotiationNeeded");
   }
 
   // ********************************
