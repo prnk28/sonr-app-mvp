@@ -17,12 +17,36 @@ import 'package:flutter/services.dart' show rootBundle;
 // *********************
 // ** Initialization ***
 // *********************
+// SocketIO Connection
 Socket socket = io('http://match.sonr.io', <String, dynamic>{
   'transports': ['websocket'],
 });
 
+// ICE RTCConfiguration Map
+const configuration = {
+  'iceServers': [
+    {'urls': 'turn:165.227.86.78:3478'}
+  ]
+};
+
+// Create DC Constraints
+const dcConstraints = {
+  'mandatory': {
+    'OfferToReceiveAudio': false,
+    'OfferToReceiveVideo': false,
+  },
+  'optional': [],
+};
+
+// Peer WEBRTC Connection
+RTCPeerConnection localConnection =
+    new RTCPeerConnection(socket.id, configuration);
+
 var logger = Logger();
 
+// ***********************
+// ** Sonar Bloc Class ***
+// ***********************
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   Direction _lastDirection;
@@ -36,15 +60,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   bool offered = false;
   dynamic _fileData;
   dynamic _profileData;
-
-  // WebRTC
-  RTCPeerConnection _peerConnection;
-  bool _inCalling = false;
-
-  RTCDataChannelInit _dataChannelDict = null;
-  RTCDataChannel _dataChannel;
-
-  String _sdp;
 
   // Constructer
   SonarBloc() {
@@ -113,11 +128,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     });
 
     // ** SOCKET::SENDER_OFFERED **
-    socket.on('SENDER_OFFERED', (data) {
+    socket.on('SENDER_OFFERED', (data) async {
       logger.i("SENDER_OFFERED: " + data.toString());
 
       _profileData = data[0];
       _fileData = data[1];
+      dynamic _offer = data[2];
+
+      // Set Local Connection
+      localConnection
+          .setRemoteDescription(new RTCSessionDescription(_offer, "data"));
 
       // Remove Sender from Circle
       add(Offered(profileData: _circle.closest(), fileData: data[1]));
@@ -126,8 +146,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     });
 
     // ** SOCKET::RECEIVER_AUTHORIZED **
-    socket.on('RECEIVER_AUTHORIZED', (data) {
+    socket.on('RECEIVER_AUTHORIZED', (data) async {
       dynamic matchId = data[0];
+      dynamic _answer = data[1];
+
+      await localConnection
+          .setRemoteDescription(new RTCSessionDescription(_answer, "data"));
 
       add(Accepted(_circle.closest(), matchId));
       // Add to Process
@@ -141,6 +165,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Declined(_circle.closest(), matchId));
       // Add to Process
       logger.w("RECEIVER_DECLINED: " + data.toString());
+    });
+
+    // ** SOCKET::NEW_CANDIDATE **
+    socket.on('WEBRTC_NEW_CANDIDATE', (data) async {
+      try {
+        await localConnection.addCandidate(data);
+      } catch (e) {
+        print('Error adding received ice candidate ' + e);
+      }
+      logger.i("WEBRTC_NEW_CANDIDATE: " + data.toString());
     });
 
     // ** SOCKET::RECEIVER_COMPLETED **
@@ -171,6 +205,21 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Add to Process
       logger.e("ERROR: " + error);
     });
+
+    // ** WebRTC::New Candidate on Local **
+    localConnection.onIceCandidate = (RTCIceCandidate candidate) {
+      // Create params
+      var params = [_circle.closest()["id"], candidate];
+
+      // Emite New Ice Candidate
+      socket.emit("NEW_CANDIDATE", params);
+    };
+
+    // ** WebRTC::New Candidate on Local **
+    localConnection.onIceConnectionState = (RTCIceConnectionState state) {
+      // Emite New Ice Candidate
+      logger.w("onIceConnectionState: " + state.toString());
+    };
 
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
@@ -283,8 +332,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (!initialized) {
 // Initialize Variables
       Location fakeLocation = Location.fakeLocation();
-      _makeCall();
-
       // Emit to Socket.io
       socket.emit("INITIALIZE",
           [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
@@ -357,8 +404,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (initialized && !requested) {
       var dummyFileData = {"type": "Image", "size": 20};
       // Emit to Socket.io
-      socket.emit("REQUEST", [requestEvent.id, dummyFileData]);
       requested = true;
+
+      // Create Offer and Emit
+      var offer = await localConnection.createOffer(dcConstraints);
+      await localConnection.setLocalDescription(offer);
+      socket.emit('OFFER', [requestEvent.id, dummyFileData, offer]);
 
       // Device Pending State
       yield Pending("SENDER", match: _circle.closest());
@@ -386,16 +437,21 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAuthorizeToState(Authorize authorizeEvent) async* {
     // Check Status
     if (initialized) {
-      // Send To Server
-      socket
-          .emit("AUTHORIZE", [authorizeEvent.matchId, authorizeEvent.decision]);
-
       // Yield Receiver Decision
       if (authorizeEvent.decision) {
+        // Create Answer
+        var answer = await localConnection.createAnswer(dcConstraints);
+        await localConnection.setLocalDescription(answer);
+
+        // Emit to Socket
+        socket.emit("AUTHORIZE",
+            [authorizeEvent.matchId, authorizeEvent.decision, answer]);
         yield Transferring();
       }
       // Receiver Declined
       else {
+        socket.emit(
+            "AUTHORIZE", [authorizeEvent.matchId, authorizeEvent.decision]);
         add(Reset(0));
       }
     }
@@ -495,102 +551,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Initialize());
     }
   }
-
-  _makeCall() async {
-    Map<String, dynamic> configuration = {
-      "iceServers": [
-        {"url": "stun:stun.l.google.com:19302"},
-      ]
-    };
-
-    final Map<String, dynamic> offer_sdp_constraints = {
-      "mandatory": {
-        "OfferToReceiveAudio": false,
-        "OfferToReceiveVideo": false,
-      },
-      "optional": [],
-    };
-
-    final Map<String, dynamic> loopback_constraints = {
-      "mandatory": {},
-      "optional": [
-        {"DtlsSrtpKeyAgreement": true},
-      ],
-    };
-
-    if (_peerConnection != null) return;
-
-    try {
-      _peerConnection =
-          await createPeerConnection(configuration, loopback_constraints);
-
-      _peerConnection.onSignalingState = _onSignalingState;
-      _peerConnection.onIceGatheringState = _onIceGatheringState;
-      _peerConnection.onIceConnectionState = _onIceConnectionState;
-      _peerConnection.onIceCandidate = _onCandidate;
-      _peerConnection.onRenegotiationNeeded = _onRenegotiationNeeded;
-
-      _dataChannelDict = new RTCDataChannelInit();
-      _dataChannelDict.id = 1;
-      _dataChannelDict.ordered = true;
-      _dataChannelDict.maxRetransmitTime = -1;
-      _dataChannelDict.maxRetransmits = -1;
-      _dataChannelDict.protocol = "sctp";
-      _dataChannelDict.negotiated = false;
-
-      _dataChannel = await _peerConnection.createDataChannel(
-          'dataChannel', _dataChannelDict);
-      _peerConnection.onDataChannel = _onDataChannel;
-
-      RTCSessionDescription description =
-          await _peerConnection.createOffer(offer_sdp_constraints);
-      print(description.sdp);
-      _peerConnection.setLocalDescription(description);
-
-      _sdp = description.sdp;
-      //change for loopback.
-      description.type = 'answer';
-      _peerConnection.setRemoteDescription(description);
-    } catch (e) {
-      print(e.toString());
-    }
-    _inCalling = true;
-  }
-
-  _hangUp() async {
-    try {
-      await _dataChannel.close();
-      await _peerConnection.close();
-      _peerConnection = null;
-    } catch (e) {
-      print(e.toString());
-    }
-    _inCalling = false;
-  }
-
-  _onSignalingState(RTCSignalingState state) {
-    print(state);
-  }
-
-  _onIceGatheringState(RTCIceGatheringState state) {
-    print(state);
-  }
-
-  _onIceConnectionState(RTCIceConnectionState state) {
-    print(state);
-  }
-
-  _onCandidate(RTCIceCandidate candidate) {
-    print('onCandidate: ' + candidate.candidate);
-    _peerConnection.addCandidate(candidate);
-    _sdp += candidate.candidate;
-  }
-
-  _onRenegotiationNeeded() {
-    print('RenegotiationNeeded');
-  }
-
-  _onDataChannel(RTCDataChannel dataChannel) {}
 
 // ********************
 // ** Update Event ***
