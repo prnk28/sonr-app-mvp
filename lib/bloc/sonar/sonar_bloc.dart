@@ -31,6 +31,7 @@ var logger = Logger();
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   Signaling _rtcSignaler;
+  RTCDataChannel _dataChannel;
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
   Circle _circle = new Circle();
@@ -45,6 +46,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   SonarBloc() {
     // Initialize WebRTC Signaling
     _rtcSignaler = new Signaling();
+
+    _rtcSignaler.onDataChannel = (channel) {
+      _dataChannel = channel;
+    };
 
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
@@ -114,14 +119,49 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     socket.on('SENDER_OFFERED', (data) async {
       logger.i("SENDER_OFFERED: " + data.toString());
 
-      dynamic _offer = data[2];
+      dynamic _offer = data[0];
+
+      _rtcSignaler.handleOffer(_offer);
 
       // Remove Sender from Circle
-      add(Offered(
-          profileData: _circle.closest(), fileData: data[1], offer: _offer));
+      add(Offered(profileData: _circle.closest()));
 
       // Add to Process
     });
+
+    // ** SOCKET::RECEIVER_ANSWERED **
+    socket.on('RECEIVER_ANSWERED', (data) async {
+      logger.i("RECEIVER_ANSWERED: " + data.toString());
+
+      dynamic _answer = data[0];
+
+      _rtcSignaler.handleAnswer(_answer);
+
+      // Remove Sender from Circle
+      //add(Offered(profileData: _circle.closest()));
+
+      // Add to Process
+    });
+
+    // ** SOCKET::NEW_CANDIDATE **
+    socket.on('NEW_CANDIDATE', (data) async {
+      logger.i("NEW_CANDIDATE: " + data.toString());
+
+      _rtcSignaler.handleCandidate(data);
+
+      // Remove Sender from Circle
+      //add(Offered(profileData: _circle.closest()));
+
+      // Add to Process
+    });
+
+    _rtcSignaler.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
+      if (data.isBinary) {
+        print('Got binary [' + data.binary.toString() + ']');
+      } else {
+        print(data.text);
+      }
+    };
 
     // ** SOCKET::RECEIVER_AUTHORIZED **
     socket.on('RECEIVER_AUTHORIZED', (data) async {
@@ -140,17 +180,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Declined(_circle.closest(), matchId));
       // Add to Process
       logger.w("RECEIVER_DECLINED: " + data.toString());
-    });
-
-    // ** SOCKET::NEW_CANDIDATE **
-    socket.on('WEBRTC_NEW_CANDIDATE', (data) async {
-      try {
-        // TODO: Fix This WEBRTC Handler
-        // await _localConnection.addCandidate(data);
-      } catch (e) {
-        print('Error adding received ice candidate ' + e);
-      }
-      logger.i("WEBRTC_NEW_CANDIDATE: " + data.toString());
     });
 
     // ** SOCKET::RECEIVER_COMPLETED **
@@ -371,7 +400,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // TODO: Fix This WEBRTC Handler
       //var offer = await _localConnection.createOffer(constraints);
       //await _localConnection.setLocalDescription(offer);
-      socket.emit('OFFER', [requestEvent.id, dummyFileData]); //offer.toMap()]);
+      //offer.toMap()]);
+      _rtcSignaler.invite(_circle.closest()["id"]);
 
       // Device Pending State
       yield Pending("SENDER", match: _circle.closest());
@@ -468,10 +498,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (initialized) {
       // Audio as bytes
       ByteData asset = await rootBundle.load('assets/audio/truck.mp3');
-      //socket.emit("TRANSFER",
-      //  ["AUDIO", _circle.closest()["id"], asset.buffer.asUint8List()]);
-
-      //_dataChannel.send(RTCDataChannelMessage("Message Test"));
+      String text = 'Say hello ' + ' times, from [' + socket.id + ']';
+      _dataChannel.send(RTCDataChannelMessage.fromBinary(Uint8List(5)));
+      _dataChannel.send(RTCDataChannelMessage(text));
       // Emit Decision to Server
       yield Transferring();
     }

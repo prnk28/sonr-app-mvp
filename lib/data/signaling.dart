@@ -50,15 +50,11 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 // *******************
 class Signaling {
   // WebRTC Variables
-  var _selfId;
   var _sessionId;
   var _peerConnections = new Map<String, RTCPeerConnection>();
   var _dataChannels = new Map<String, RTCDataChannel>();
   var _remoteCandidates = [];
-  var _turnCredential;
 
-  MediaStream _localStream;
-  List<MediaStream> _remoteStreams;
   SignalingStateCallback onStateChange;
   StreamStateCallback onLocalStream;
   StreamStateCallback onAddRemoteStream;
@@ -76,7 +72,7 @@ class Signaling {
     List<dynamic> peers = data;
     if (this.onPeersUpdate != null) {
       Map<String, dynamic> event = new Map<String, dynamic>();
-      event['self'] = _selfId;
+      event['self'] = socket.id;
       event['peers'] = peers;
       this.onPeersUpdate(event);
     }
@@ -134,11 +130,6 @@ class Signaling {
     var pc = _peerConnections.remove(id);
     _dataChannels.remove(id);
 
-    if (_localStream != null) {
-      _localStream.dispose();
-      _localStream = null;
-    }
-
     if (pc != null) {
       pc.close();
     }
@@ -148,15 +139,10 @@ class Signaling {
     }
   }
 
-  void handleBye(data) {
+  void handleExit(data) {
     var to = data['to'];
     var sessionId = data['session_id'];
     print('bye: ' + sessionId);
-
-    if (_localStream != null) {
-      _localStream.dispose();
-      _localStream = null;
-    }
 
     var pc = _peerConnections[to];
     if (pc != null) {
@@ -177,11 +163,6 @@ class Signaling {
   }
 
   void close() {
-    if (_localStream != null) {
-      _localStream.dispose();
-      _localStream = null;
-    }
-
     _peerConnections.forEach((key, pc) {
       pc.close();
     });
@@ -191,7 +172,7 @@ class Signaling {
 // ** WebRTC Message Sending ***
 // *****************************
   void invite(String peerId) {
-    this._sessionId = this._selfId + '-' + peerId;
+    this._sessionId = socket.id + '-' + peerId;
 
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateNew);
@@ -204,11 +185,10 @@ class Signaling {
     });
   }
 
-  void bye() {
-    // TODO: Replace With Socket.io - socket.emit();
-    _send('bye', {
+  void exit() {
+    socket.emit('EXIT', {
       'session_id': this._sessionId,
-      'from': this._selfId,
+      'from': socket.id,
     });
   }
 
@@ -219,10 +199,9 @@ class Signaling {
     RTCPeerConnection pc =
         await createPeerConnection(configuration, constraints);
     pc.onIceCandidate = (candidate) {
-      // TODO: Replace With Socket.io - socket.emit();
-      _send('candidate', {
+      socket.emit('CANDIDATE', {
         'to': id,
-        'from': _selfId,
+        'from': socket.id,
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,
           'sdpMid': candidate.sdpMid,
@@ -263,10 +242,9 @@ class Signaling {
       RTCSessionDescription s = await pc.createOffer(constraints);
       pc.setLocalDescription(s);
 
-      // TODO: Replace With Socket.io - socket.emit();
-      _send('offer', {
+      socket.emit('OFFER', {
         'to': id,
-        'from': _selfId,
+        'from': socket.id,
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': this._sessionId,
       });
@@ -280,10 +258,9 @@ class Signaling {
       RTCSessionDescription s = await pc.createAnswer(constraints);
       pc.setLocalDescription(s);
 
-      // TODO: Replace With Socket.io - socket.emit();
-      _send('answer', {
+      socket.emit('ANSWER', {
         'to': id,
-        'from': _selfId,
+        'from': socket.id,
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': this._sessionId,
       });
