@@ -22,22 +22,6 @@ Socket socket = io('http://match.sonr.io', <String, dynamic>{
   'transports': ['websocket'],
 });
 
-// ICE RTCConfiguration Map
-const configuration = {
-  'iceServers': [
-    {'urls': 'turn:165.227.86.78:3478'}
-  ]
-};
-
-// Create DC Constraints
-const dcConstraints = {
-  'mandatory': {
-    'OfferToReceiveAudio': false,
-    'OfferToReceiveVideo': false,
-  },
-  'optional': [],
-};
-
 var logger = Logger();
 
 // ***********************
@@ -51,9 +35,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Soundpool _soundpool = new Soundpool(streamType: StreamType.music);
 
   // Transfer Variables
-  RTCPeerConnection localConnection;
-  RTCDataChannelInit dataChannelDict = null;
-  RTCDataChannel dataChannel;
   bool initialized = false;
   bool requested = false;
   bool offered = false;
@@ -63,35 +44,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       logger.v("Connected to Socket");
-
-      // Peer WEBRTC Connection
-      localConnection =
-          await createPeerConnection(configuration, dcConstraints);
-      localConnection.onSignalingState = _onSignalingState;
-      localConnection.onIceGatheringState = _onIceGatheringState;
-      localConnection.onIceConnectionState = _onIceConnectionState;
-      localConnection.onIceCandidate = _onIceCandidate;
-      localConnection.onRenegotiationNeeded = _onRenegotiationNeeded;
-
-      // Create Data Channel Dictionary
-      dataChannelDict = new RTCDataChannelInit();
-      dataChannelDict.id = 1;
-      dataChannelDict.ordered = true;
-      dataChannelDict.maxRetransmitTime = -1;
-      dataChannelDict.maxRetransmits = -1;
-      dataChannelDict.protocol = "sctp";
-      dataChannelDict.negotiated = false;
-
-      // Set Data Channel
-      dataChannel = await localConnection.createDataChannel(
-          'dataChannel', dataChannelDict);
-      localConnection.onDataChannel = _onDataChannel;
-
-      // Set Description
-      RTCSessionDescription description =
-          await localConnection.createOffer(dcConstraints);
-      print(description.sdp);
-      localConnection.setLocalDescription(description);
     });
 
     // ** SOCKET::INFO **
@@ -159,12 +111,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       dynamic _offer = data[2];
 
-      // Set Local Connection
-      localConnection
-          .setRemoteDescription(new RTCSessionDescription(_offer, "data"));
-
       // Remove Sender from Circle
-      add(Offered(profileData: _circle.closest(), fileData: data[1]));
+      add(Offered(
+          profileData: _circle.closest(), fileData: data[1], offer: _offer));
 
       // Add to Process
     });
@@ -174,10 +123,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       dynamic matchId = data[0];
       dynamic _answer = data[1];
 
-      await localConnection
-          .setRemoteDescription(new RTCSessionDescription(_answer, "data"));
-
-      add(Accepted(_circle.closest(), matchId));
+      add(Accepted(_circle.closest(), matchId, _answer));
       // Add to Process
       logger.i("RECEIVER_AUTHORIZED: " + data.toString());
     });
@@ -194,7 +140,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // ** SOCKET::NEW_CANDIDATE **
     socket.on('WEBRTC_NEW_CANDIDATE', (data) async {
       try {
-        await localConnection.addCandidate(data);
+        // TODO: Fix This WEBRTC Handler
+        // await _localConnection.addCandidate(data);
       } catch (e) {
         print('Error adding received ice candidate ' + e);
       }
@@ -230,15 +177,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       logger.e("ERROR: " + error);
     });
 
-    // // ** WebRTC::New Candidate on Local **
-    // localConnection.onIceCandidate = (RTCIceCandidate candidate) {
-    //   // Create params
-    //   var params = [_circle.closest()["id"], candidate];
-
-    //   // Emite New Ice Candidate
-    //   socket.emit("NEW_CANDIDATE", params);
-    // };
-
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
       // Update Motion Var
@@ -247,7 +185,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** Directional Events **
     Compass()
-        .compassUpdates(interval: Duration(milliseconds: 300))
+        .compassUpdates(interval: Duration(milliseconds: 400))
         .listen((newData) {
       // Check Status
       if (!offered && !requested) {
@@ -425,10 +363,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       requested = true;
 
       // Create Offer and Emit
-      var offer = await localConnection.createOffer(dcConstraints);
-      print(offer.toString());
-      await localConnection.setLocalDescription(offer);
-      socket.emit('OFFER', [requestEvent.id, dummyFileData, offer]);
+      // TODO: Fix This WEBRTC Handler
+      //var offer = await _localConnection.createOffer(constraints);
+      //await _localConnection.setLocalDescription(offer);
+      socket.emit('OFFER', [requestEvent.id, dummyFileData]); //offer.toMap()]);
 
       // Device Pending State
       yield Pending("SENDER", match: _circle.closest());
@@ -443,6 +381,15 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (initialized & !offered) {
       // Set Offered
       offered = true;
+
+      // Initialize Remote Description
+      //RTCSessionDescription remoteDescription =
+      //    new RTCSessionDescription(offeredEvent.offer["sdp"], "offer");
+
+      // Set Local Connection
+      // TODO: Fix This WEBRTC Handler
+      //print(remoteDescription.toString());
+      //await _localConnection.setRemoteDescription(remoteDescription);
 
       // Device Pending State
       yield Pending("RECEIVER",
@@ -459,12 +406,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Yield Receiver Decision
       if (authorizeEvent.decision) {
         // Create Answer
-        var answer = await localConnection.createAnswer(dcConstraints);
-        await localConnection.setLocalDescription(answer);
+        // TODO: Fix This WEBRTC Handler
+        //var answer = await _localConnection.createAnswer(constraints);
+        //await _localConnection.setLocalDescription(answer);
 
         // Emit to Socket
         socket.emit("AUTHORIZE",
-            [authorizeEvent.matchId, authorizeEvent.decision, answer]);
+            [authorizeEvent.matchId, authorizeEvent.decision]); //, answer]);
         yield Transferring();
       }
       // Receiver Declined
@@ -482,6 +430,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (initialized) {
+      //RTCSessionDescription remoteDescription =
+      //  new RTCSessionDescription(acceptedEvent.answer["sdp"], "answer");
+
+      // Set Local Connection
+      // TODO: Fix This WEBRTC Handler
+      // await _remoteConnection.setRemoteDescription(remoteDescription);
+
       // Emit Decision to Server
       yield PreTransfer(
           profile: acceptedEvent.profile, matchId: acceptedEvent.matchId);
@@ -508,8 +463,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (initialized) {
       // Audio as bytes
       ByteData asset = await rootBundle.load('assets/audio/truck.mp3');
-      socket.emit("TRANSFER",
-          ["AUDIO", _circle.closest()["id"], asset.buffer.asUint8List()]);
+      //socket.emit("TRANSFER",
+      //  ["AUDIO", _circle.closest()["id"], asset.buffer.asUint8List()]);
+
+      //_dataChannel.send(RTCDataChannelMessage("Message Test"));
       // Emit Decision to Server
       yield Transferring();
     }
@@ -623,35 +580,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
             currentMotion: _currentMotion);
       }
     }
-  }
-
-  // ** WebRTC::New Candidate on Local **
-  _onIceConnectionState(RTCIceConnectionState state) {
-    // Emite New Ice Candidate
-    print(state);
-  }
-
-  _onDataChannel(RTCDataChannel channel) {
-    channel.onMessage = (RTCDataChannelMessage message) {
-      print(message.toString());
-    };
-  }
-
-  _onSignalingState(RTCSignalingState state) {
-    print(state);
-  }
-
-  _onIceGatheringState(RTCIceGatheringState state) {
-    print(state);
-  }
-
-  _onIceCandidate(RTCIceCandidate candidate) {
-    print('onCandidate: ' + candidate.candidate);
-    localConnection.addCandidate(candidate);
-  }
-
-  _onRenegotiationNeeded() {
-    print("RenegotiationNeeded");
   }
 
   // ********************************

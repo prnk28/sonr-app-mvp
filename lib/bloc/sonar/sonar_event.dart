@@ -59,7 +59,8 @@ class Request extends SonarEvent {
 class Offered extends SonarEvent {
   final dynamic profileData;
   final dynamic fileData;
-  const Offered({this.profileData, this.fileData});
+  final dynamic offer;
+  const Offered({this.profileData, this.fileData, this.offer});
 }
 
 // Receiver Gets Authorization Request
@@ -72,8 +73,9 @@ class Authorize extends SonarEvent {
 // Receiver has Accepted
 class Accepted extends SonarEvent {
   final dynamic profile;
+  final dynamic answer;
   final String matchId;
-  const Accepted(this.profile, this.matchId);
+  const Accepted(this.profile, this.matchId, this.answer);
 }
 
 // Receiver has Declined

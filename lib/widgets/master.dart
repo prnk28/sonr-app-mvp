@@ -31,13 +31,14 @@ class MasterWidget extends StatelessWidget {
                 // Check Tilt
                 if (state is Sending) {
                   // Closeset Within Threshold
-                  if (state.matches.withinThreshold()) {
+                  if (state.matches.valid()) {
                     // Begin Timer 2s
-                    const twentySeconds = const Duration(seconds: 2);
-                    new Timer(
-                        twentySeconds,
-                        () => BlocProvider.of<SonarBloc>(context)
-                            .add(Request(state.matches.closest()["id"])));
+                    // const twentySeconds = const Duration(seconds: 2);
+                    // new Timer(
+                    //     twentySeconds,
+                    //     () =>
+                    BlocProvider.of<SonarBloc>(context)
+                        .add(Request(state.matches.closest()["id"]));
 
                     // Return Text Widget
                     return Text(
