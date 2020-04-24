@@ -6,6 +6,7 @@ import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:logger/logger.dart';
 import 'package:sensors/sensors.dart';
+import 'package:sonar_app/data/signaling.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:soundpool/soundpool.dart';
 import '../bloc.dart';
@@ -29,6 +30,7 @@ var logger = Logger();
 // ***********************
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
+  Signaling _rtcSignaler;
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
   Circle _circle = new Circle();
@@ -41,6 +43,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   SonarBloc() {
+    // Initialize WebRTC Signaling
+    _rtcSignaler = new Signaling();
+
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       logger.v("Connected to Socket");

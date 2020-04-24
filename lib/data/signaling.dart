@@ -1,8 +1,9 @@
+import 'package:flutter_webrtc/webrtc.dart';
+import 'package:sonar_app/bloc/bloc.dart';
+
 // *******************
 // * Signaling Enum **
 // *******************
-import 'package:flutter_webrtc/webrtc.dart';
-
 enum SignalingState {
   CallStateNew,
   CallStateRinging,
@@ -14,6 +15,26 @@ enum SignalingState {
   ConnectionError,
 }
 
+// **********************
+// * Required RTC Maps **
+// **********************
+// ICE RTCConfiguration Map
+final configuration = {
+  'iceServers': [
+    //{"url": "stun:stun.l.google.com:19302"},
+    {'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
+  ]
+};
+
+// Create DC Constraints
+final constraints = {
+  'mandatory': {
+    'OfferToReceiveAudio': false,
+    'OfferToReceiveVideo': false,
+  },
+  'optional': [],
+};
+
 // *********************************
 // * Callbacks for Signaling API. **
 // *********************************
@@ -24,28 +45,10 @@ typedef void DataChannelMessageCallback(
     RTCDataChannel dc, RTCDataChannelMessage data);
 typedef void DataChannelCallback(RTCDataChannel dc);
 
+// *******************
+// * Initialization **
+// *******************
 class Signaling {
-// ICE RTCConfiguration Map
-  final configuration = {
-    'iceServers': [
-      //{"url": "stun:stun.l.google.com:19302"},
-      {
-        'urls': 'stun:165.227.86.78:3478',
-        'username': 'test',
-        'password': 'test'
-      }
-    ]
-  };
-
-// Create DC Constraints
-  final constraints = {
-    'mandatory': {
-      'OfferToReceiveAudio': false,
-      'OfferToReceiveVideo': false,
-    },
-    'optional': [],
-  };
-
   // WebRTC Variables
   var _selfId;
   var _sessionId;
@@ -69,7 +72,7 @@ class Signaling {
 // *************************
 // ** Socket.io Handlers ***
 // *************************
-  _handlePeerUpdate(data) {
+  void handlePeerUpdate(data) {
     List<dynamic> peers = data;
     if (this.onPeersUpdate != null) {
       Map<String, dynamic> event = new Map<String, dynamic>();
@@ -79,7 +82,7 @@ class Signaling {
     }
   }
 
-  _handleOffer(data) async {
+  void handleOffer(data) async {
     var id = data['from'];
     var description = data['description'];
     var sessionId = data['session_id'];
@@ -102,7 +105,7 @@ class Signaling {
     }
   }
 
-  _handleAnswer(data) async {
+  void handleAnswer(data) async {
     var id = data['from'];
     var description = data['description'];
 
@@ -113,7 +116,7 @@ class Signaling {
     }
   }
 
-  _handleCandidate(data) async {
+  void handleCandidate(data) async {
     var id = data['from'];
     var candidateMap = data['candidate'];
     var pc = _peerConnections[id];
@@ -126,7 +129,7 @@ class Signaling {
     }
   }
 
-  _handleLeave(data) {
+  void handleLeave(data) {
     var id = data;
     var pc = _peerConnections.remove(id);
     _dataChannels.remove(id);
@@ -145,7 +148,7 @@ class Signaling {
     }
   }
 
-  _handleBye(data) {
+  void handleBye(data) {
     var to = data['to'];
     var sessionId = data['session_id'];
     print('bye: ' + sessionId);
@@ -173,7 +176,7 @@ class Signaling {
     }
   }
 
-  close() {
+  void close() {
     if (_localStream != null) {
       _localStream.dispose();
       _localStream = null;
@@ -184,9 +187,9 @@ class Signaling {
     });
   }
 
-// ********************
-// ** Class Methods ***
-// ********************
+// *****************************
+// ** WebRTC Message Sending ***
+// *****************************
   void invite(String peerId) {
     this._sessionId = this._selfId + '-' + peerId;
 
@@ -202,6 +205,7 @@ class Signaling {
   }
 
   void bye() {
+    // TODO: Replace With Socket.io - socket.emit();
     _send('bye', {
       'session_id': this._sessionId,
       'from': this._selfId,
@@ -215,6 +219,7 @@ class Signaling {
     RTCPeerConnection pc =
         await createPeerConnection(configuration, constraints);
     pc.onIceCandidate = (candidate) {
+      // TODO: Replace With Socket.io - socket.emit();
       _send('candidate', {
         'to': id,
         'from': _selfId,
@@ -257,6 +262,8 @@ class Signaling {
     try {
       RTCSessionDescription s = await pc.createOffer(constraints);
       pc.setLocalDescription(s);
+
+      // TODO: Replace With Socket.io - socket.emit();
       _send('offer', {
         'to': id,
         'from': _selfId,
@@ -272,6 +279,8 @@ class Signaling {
     try {
       RTCSessionDescription s = await pc.createAnswer(constraints);
       pc.setLocalDescription(s);
+
+      // TODO: Replace With Socket.io - socket.emit();
       _send('answer', {
         'to': id,
         'from': _selfId,
