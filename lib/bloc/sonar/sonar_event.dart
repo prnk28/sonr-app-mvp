@@ -67,7 +67,8 @@ class Offered extends SonarEvent {
 class Authorize extends SonarEvent {
   final bool decision;
   final String matchId;
-  const Authorize(this.decision, this.matchId);
+  final dynamic offer;
+  const Authorize(this.decision, this.matchId, this.offer);
 }
 
 // Receiver has Accepted

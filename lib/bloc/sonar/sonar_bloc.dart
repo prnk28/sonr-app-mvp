@@ -6,8 +6,8 @@ import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:logger/logger.dart';
 import 'package:sensors/sensors.dart';
-import 'package:sonar_app/data/signaling.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/repositories/repositories.dart';
 import 'package:soundpool/soundpool.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
@@ -30,7 +30,7 @@ var logger = Logger();
 // ***********************
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
-  Signaling _rtcSignaler;
+  RTCRepository _rtcSignaler;
   RTCDataChannel _dataChannel;
   Direction _lastDirection;
   Motion _currentMotion = Motion.create();
@@ -44,13 +44,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   SonarBloc() {
-    // Initialize WebRTC Signaling
-    _rtcSignaler = new Signaling();
-
-    _rtcSignaler.onDataChannel = (channel) {
-      _dataChannel = channel;
-    };
-
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       logger.v("Connected to Socket");
@@ -121,12 +114,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       dynamic _offer = data[0];
 
-      _rtcSignaler.handleOffer(_offer);
-
       // Remove Sender from Circle
-      add(Offered(profileData: _circle.closest()));
-
-      // Add to Process
+      add(Offered(profileData: _circle.closest(), offer: _offer));
     });
 
     // ** SOCKET::RECEIVER_ANSWERED **
@@ -136,11 +125,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       dynamic _answer = data[0];
 
       _rtcSignaler.handleAnswer(_answer);
-
-      // Remove Sender from Circle
-      //add(Offered(profileData: _circle.closest()));
-
-      // Add to Process
     });
 
     // ** SOCKET::NEW_CANDIDATE **
@@ -148,20 +132,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       logger.i("NEW_CANDIDATE: " + data.toString());
 
       _rtcSignaler.handleCandidate(data);
-
-      // Remove Sender from Circle
-      //add(Offered(profileData: _circle.closest()));
-
-      // Add to Process
     });
-
-    _rtcSignaler.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
-      if (data.isBinary) {
-        print('Got binary [' + data.binary.toString() + ']');
-      } else {
-        print(data.text);
-      }
-    };
 
     // ** SOCKET::RECEIVER_AUTHORIZED **
     socket.on('RECEIVER_AUTHORIZED', (data) async {
@@ -210,6 +181,22 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Add to Process
       logger.e("ERROR: " + error);
     });
+
+    // ** RTC::Initialization **
+    _rtcSignaler = new RTCRepository();
+
+    _rtcSignaler.onDataChannel = (channel) {
+      _dataChannel = channel;
+    };
+
+    // ** RTC::Data Message **
+    _rtcSignaler.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
+      if (data.isBinary) {
+        logger.i('Got binary [' + data.binary.toString() + ']');
+      } else {
+        logger.i(data.text);
+      }
+    };
 
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
@@ -392,15 +379,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapRequestToState(Request requestEvent) async* {
     // Check Status
     if (initialized && !requested) {
-      var dummyFileData = {"type": "Image", "size": 20};
       // Emit to Socket.io
       requested = true;
 
       // Create Offer and Emit
-      // TODO: Fix This WEBRTC Handler
-      //var offer = await _localConnection.createOffer(constraints);
-      //await _localConnection.setLocalDescription(offer);
-      //offer.toMap()]);
       _rtcSignaler.invite(_circle.closest()["id"]);
 
       // Device Pending State
@@ -417,18 +399,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Set Offered
       offered = true;
 
-      // Initialize Remote Description
-      //RTCSessionDescription remoteDescription =
-      //    new RTCSessionDescription(offeredEvent.offer["sdp"], "offer");
-
-      // Set Local Connection
-      // TODO: Fix This WEBRTC Handler
-      //print(remoteDescription.toString());
-      //await _localConnection.setRemoteDescription(remoteDescription);
-
       // Device Pending State
       yield Pending("RECEIVER",
-          match: offeredEvent.profileData, file: offeredEvent.fileData);
+          match: offeredEvent.profileData,
+          file: offeredEvent.fileData,
+          offer: offeredEvent.offer);
     }
   }
 
@@ -441,9 +416,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Yield Receiver Decision
       if (authorizeEvent.decision) {
         // Create Answer
-        // TODO: Fix This WEBRTC Handler
-        //var answer = await _localConnection.createAnswer(constraints);
-        //await _localConnection.setLocalDescription(answer);
+        _rtcSignaler.handleOffer(authorizeEvent.offer);
 
         // Emit to Socket
         socket.emit("AUTHORIZE",
@@ -465,13 +438,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (initialized) {
-      //RTCSessionDescription remoteDescription =
-      //  new RTCSessionDescription(acceptedEvent.answer["sdp"], "answer");
-
-      // Set Local Connection
-      // TODO: Fix This WEBRTC Handler
-      // await _remoteConnection.setRemoteDescription(remoteDescription);
-
       // Emit Decision to Server
       yield PreTransfer(
           profile: acceptedEvent.profile, matchId: acceptedEvent.matchId);

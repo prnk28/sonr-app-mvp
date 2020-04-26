@@ -10,7 +10,7 @@ import 'package:sonar_app/models/client.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class InitializeWidget extends StatelessWidget {
+class InitializeView extends StatelessWidget {
   // Form Image Data
   File _image;
   List<int> _imageBytes;
@@ -21,7 +21,7 @@ class InitializeWidget extends StatelessWidget {
 
   final Bloc sonarBloc;
 
-  InitializeWidget({Key key, this.sonarBloc}) : super(key: key);
+  InitializeView({Key key, this.sonarBloc}) : super(key: key);
 
   Future getImage() async {
     _image = await ImagePicker.pickImage(source: ImageSource.camera);

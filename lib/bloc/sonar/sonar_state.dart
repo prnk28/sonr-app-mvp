@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:sonar_app/controllers/controllers.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
 
@@ -62,11 +61,12 @@ class Receiving extends SonarState {
 class Pending extends SonarState {
   final dynamic match;
   final dynamic file;
+  final dynamic offer;
 
   // Sender/Receiver
   final String status;
 
-  const Pending(this.status, {this.match, this.file});
+  const Pending(this.status, {this.match, this.file, this.offer});
 }
 
 // *******************************************

@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonar_app/widgets/widgets.dart';
+import 'package:sonar_app/widgets/master.dart';
 
 import 'bloc/bloc.dart';
 

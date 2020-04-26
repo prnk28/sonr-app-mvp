@@ -48,7 +48,7 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 // *******************
 // * Initialization **
 // *******************
-class Signaling {
+class RTCRepository {
   // WebRTC Variables
   var _sessionId;
   var _peerConnections = new Map<String, RTCPeerConnection>();
@@ -63,7 +63,7 @@ class Signaling {
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
 
-  Signaling();
+  RTCRepository();
 
 // *************************
 // ** Socket.io Handlers ***
