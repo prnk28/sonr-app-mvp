@@ -10,18 +10,24 @@ import 'package:sonar_app/models/client.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class InitializeView extends StatelessWidget {
+class InitializeView extends StatefulWidget {
   // Form Image Data
-  File _image;
-  List<int> _imageBytes;
-
-  // Form Strings
-  String _firstName;
-  String _lastName;
-
   final Bloc sonarBloc;
 
   InitializeView({Key key, this.sonarBloc}) : super(key: key);
+
+  @override
+  _InitializeViewState createState() => _InitializeViewState();
+}
+
+class _InitializeViewState extends State<InitializeView> {
+  File _image;
+
+  List<int> _imageBytes;
+
+  String _firstName;
+
+  String _lastName;
 
   Future getImage() async {
     _image = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -70,11 +76,9 @@ class InitializeView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
               onPressed: () {
-                // Validate will return true if the form is valid, or false if
-                // the form is invalid.
                 if (_formKey.currentState.validate()) {
                   // Process data.
-                  sonarBloc.add(Initialize(
+                  widget.sonarBloc.add(Initialize(
                       userProfile: new Profile(
                           this._firstName, this._lastName, this._imageBytes)));
                 }

@@ -25,7 +25,7 @@ class SendingView extends StatelessWidget {
             state.currentDirection.degrees.toString() +
             ", Match/Client Difference: " +
             state.matches.closest()["difference"].toString(),
-        style: Design.mediumTextStyle,
+        style: Design.getTextStyle(TextDesign.MediumText),
       );
     } else {
       // Return Text Widget
@@ -33,7 +33,7 @@ class SendingView extends StatelessWidget {
           state.currentMotion.state.toString() +
               " No Receivers, " +
               state.currentDirection.degrees.toString(),
-          style: Design.bigTextStyle);
+          style: Design.getTextStyle(TextDesign.BigText));
     }
   }
 }

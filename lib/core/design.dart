@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sonar_app/core/core.dart';
 
 class Design {
 // **************************
@@ -13,14 +14,21 @@ class Design {
 // *******************
 // *** Text Styles ***
 // *******************
-  static TextStyle mediumTextStyle = TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-  );
 
-  static TextStyle bigTextStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 40,
-    fontWeight: FontWeight.bold,
-  );
+  static getTextStyle(TextDesign design) {
+    switch (design) {
+      case TextDesign.MediumText:
+        return TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+        );
+      case TextDesign.BigText:
+        return TextStyle(
+          color: Colors.white,
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+        );
+      default:
+    }
+  }
 }
