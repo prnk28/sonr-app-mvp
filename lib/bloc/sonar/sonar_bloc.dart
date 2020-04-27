@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:logger/logger.dart';
@@ -13,7 +14,6 @@ import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 // *********************
 // ** Initialization ***
@@ -84,7 +84,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // ** SOCKET::NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
-      socket.emit("SENDING", [_lastDirection.toReceiveMap()]);
+      if (_lastDirection != null) {
+        socket.emit("SENDING", [_lastDirection.toReceiveMap()]);
+      }
+
       add(Refresh(newDirection: _lastDirection));
 
       // Add to Process
@@ -118,15 +121,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Offered(profileData: _circle.closest(), offer: _offer));
     });
 
-    // ** SOCKET::RECEIVER_ANSWERED **
-    socket.on('RECEIVER_ANSWERED', (data) async {
-      logger.i("RECEIVER_ANSWERED: " + data.toString());
-
-      dynamic _answer = data[0];
-
-      _rtcSignaler.handleAnswer(_answer);
-    });
-
     // ** SOCKET::NEW_CANDIDATE **
     socket.on('NEW_CANDIDATE', (data) async {
       logger.i("NEW_CANDIDATE: " + data.toString());
@@ -134,14 +128,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       _rtcSignaler.handleCandidate(data);
     });
 
-    // ** SOCKET::RECEIVER_AUTHORIZED **
-    socket.on('RECEIVER_AUTHORIZED', (data) async {
-      dynamic matchId = data[0];
-      dynamic _answer = data[1];
+    // ** SOCKET::RECEIVER_ANSWERED **
+    socket.on('RECEIVER_ANSWERED', (data) async {
+      logger.i("RECEIVER_ANSWERED: " + data.toString());
 
-      add(Accepted(_circle.closest(), matchId, _answer));
-      // Add to Process
-      logger.i("RECEIVER_AUTHORIZED: " + data.toString());
+      dynamic _answer = data[0];
+
+      add(Accepted(_circle.closest(), _circle.closest()["id"], _answer));
     });
 
     // ** SOCKET::RECEIVER_DECLINED **
@@ -160,20 +153,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       add(Completed(_circle.closest(), matchId));
       // Add to Process
       logger.i("RECEIVER_COMPLETED: " + data.toString());
-    });
-
-    // ** SOCKET::TRANSFERRED**
-    socket.on('SENDER_TRANSFERRED', (data) async {
-      dynamic type = data[0];
-      dynamic file = data[1].cast<int>();
-
-      Uint8List outputAsUint8List = new Uint8List.fromList(file);
-      add(Received(type, outputAsUint8List));
-
-      logger.i("SENDER_TRANSFERRED: " +
-          type.toString() +
-          " fileData: " +
-          file.toString());
     });
 
     // ** SOCKET::ERROR **
@@ -417,16 +396,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       if (authorizeEvent.decision) {
         // Create Answer
         _rtcSignaler.handleOffer(authorizeEvent.offer);
-
-        // Emit to Socket
-        socket.emit("AUTHORIZE",
-            [authorizeEvent.matchId, authorizeEvent.decision]); //, answer]);
         yield Transferring();
       }
       // Receiver Declined
       else {
-        socket.emit(
-            "AUTHORIZE", [authorizeEvent.matchId, authorizeEvent.decision]);
+        socket.emit("DECLINE", authorizeEvent.matchId);
         add(Reset(0));
       }
     }
@@ -438,6 +412,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (initialized) {
+      _rtcSignaler.handleAnswer(acceptedEvent.answer);
       // Emit Decision to Server
       yield PreTransfer(
           profile: acceptedEvent.profile, matchId: acceptedEvent.matchId);
@@ -464,9 +439,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (initialized) {
       // Audio as bytes
       ByteData asset = await rootBundle.load('assets/audio/truck.mp3');
+      var binary = asset.buffer.asUint8List();
       String text = 'Say hello ' + ' times, from [' + socket.id + ']';
-      _dataChannel.send(RTCDataChannelMessage.fromBinary(Uint8List(5)));
       _dataChannel.send(RTCDataChannelMessage(text));
+      _dataChannel.send(RTCDataChannelMessage.fromBinary(binary));
       // Emit Decision to Server
       yield Transferring();
     }
@@ -580,35 +556,5 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
             currentMotion: _currentMotion);
       }
     }
-  }
-
-  // ********************************
-  // ** Read Local Data of Assets ***
-  // ********************************
-  Future<Uint8List> readFileByte(String filePath) async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    // appDir.path + '/' +
-    Uri myUri = Uri.parse(filePath);
-    File audioFile = new File.fromUri(myUri);
-    Uint8List bytes;
-    await audioFile.readAsBytes().then((value) {
-      bytes = Uint8List.fromList(value);
-      print('reading of bytes is completed');
-    }).catchError((onError) {
-      print('Exception Error while reading audio from path:' +
-          onError.toString());
-    });
-    return bytes;
-  }
-
-  // ********************************
-  // ** Write Local Data of Assets **
-  // ********************************
-  Future<void> writeToFile(ByteData data, String path) async {
-    final buffer = data.buffer;
-    Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
-    return new File(tempPath + "/" + path).writeAsBytes(
-        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 }

@@ -40,15 +40,6 @@ class Receive extends SonarEvent {
   const Receive({this.map, this.currentDirection, this.currentMotion});
 }
 
-// Update Event
-class Update extends SonarEvent {
-  final Circle map;
-  final Motion currentMotion;
-  final Direction currentDirection;
-
-  const Update({this.map, this.currentDirection, this.currentMotion});
-}
-
 // Sender Requests Authorization
 class Request extends SonarEvent {
   final String id;
@@ -117,4 +108,13 @@ class Refresh extends SonarEvent {
   final Direction newDirection;
 
   Refresh({this.newDirection});
+}
+
+// Update Event
+class Update extends SonarEvent {
+  final Circle map;
+  final Motion currentMotion;
+  final Direction currentDirection;
+
+  const Update({this.map, this.currentDirection, this.currentMotion});
 }

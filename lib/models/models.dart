@@ -1,5 +1,4 @@
-export 'client.dart';
+export 'profile.dart';
 export 'direction.dart';
-export 'lobby.dart';
 export 'location.dart';
 export 'motion.dart';

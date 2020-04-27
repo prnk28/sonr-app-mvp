@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/models/client.dart';
+import 'package:sonar_app/models/models.dart';
 
 final _formKey = GlobalKey<FormState>();
 
