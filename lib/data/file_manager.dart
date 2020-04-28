@@ -9,8 +9,6 @@ class FileManager {
   // ** Read Local Data of Assets ***
   // ********************************
   Future<Uint8List> readFileByte(String filePath) async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    // appDir.path + '/' +
     Uri myUri = Uri.parse(filePath);
     File audioFile = new File.fromUri(myUri);
     Uint8List bytes;
@@ -27,7 +25,7 @@ class FileManager {
   // ********************************
   // ** Write Local Data of Assets **
   // ********************************
-  Future<void> writeToFile(ByteData data, String path) async {
+  static Future<void> writeToFile(ByteData data, String path) async {
     final buffer = data.buffer;
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;

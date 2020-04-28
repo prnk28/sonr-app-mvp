@@ -7,6 +7,7 @@ import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:logger/logger.dart';
 import 'package:sensors/sensors.dart';
+import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import 'package:soundpool/soundpool.dart';
@@ -170,11 +171,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
     // ** RTC::Data Message **
     _rtcSignaler.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
-      if (data.isBinary) {
-        logger.i('Got binary [' + data.binary.toString() + ']');
-      } else {
-        logger.i(data.text);
-      }
+      add(Received(data));
     };
 
     // ** Accelerometer Events **
@@ -438,11 +435,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (initialized) {
       // Audio as bytes
-      ByteData asset = await rootBundle.load('assets/audio/truck.mp3');
-      var binary = asset.buffer.asUint8List();
+
+      ByteData bytes = await rootBundle.load('assets/images/headers/1.jpg');
+
       String text = 'Say hello ' + ' times, from [' + socket.id + ']';
       _dataChannel.send(RTCDataChannelMessage(text));
-      _dataChannel.send(RTCDataChannelMessage.fromBinary(binary));
+      _dataChannel
+          .send(RTCDataChannelMessage.fromBinary(bytes.buffer.asUint8List()));
       // Emit Decision to Server
       yield Transferring();
     }
@@ -455,11 +454,15 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (initialized) {
       // Read Data
-      var buffer = receivedEvent.file.buffer;
-      var bdata = new ByteData.view(buffer);
-      int soundId = await _soundpool.load(bdata);
-      _soundpool.play(soundId);
-
+      if (receivedEvent.data.isBinary) {
+        logger.i("Got Binary!" +
+            receivedEvent.data.binary.buffer.lengthInBytes.toString());
+        //var bdata = new ByteData.view(data.binary.buffer);
+        //int soundId = await _soundpool.load(bdata);
+        //_soundpool.play(soundId);
+      } else {
+        logger.i(receivedEvent.data.text);
+      }
       // Emit Completed
       socket.emit(
           "COMPLETE", [_circle.closest()["id"], _circle.closest()["profile"]]);
