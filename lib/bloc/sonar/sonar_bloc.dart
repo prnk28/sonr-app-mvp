@@ -497,6 +497,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       socket.emit("RESET");
       _circle.status = "Default";
 
+      // Reset RTC
+      _rtcSignaler.close();
+
       // Set Delay
       await new Future.delayed(Duration(seconds: resetEvent.secondDelay));
 

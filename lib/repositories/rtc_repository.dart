@@ -139,7 +139,7 @@ class RTCRepository {
     }
   }
 
-  void handleExit(data) {
+  void handleClose(data) {
     var to = data['to'];
     var sessionId = data['session_id'];
     print('bye: ' + sessionId);
@@ -185,8 +185,8 @@ class RTCRepository {
     });
   }
 
-  void exit() {
-    socket.emit('EXIT', {
+  void leave() {
+    socket.emit('LEAVE', {
       'session_id': this._sessionId,
       'from': socket.id,
     });
