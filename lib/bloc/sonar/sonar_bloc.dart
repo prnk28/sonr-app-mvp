@@ -468,7 +468,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           "COMPLETE", [_circle.closest()["id"], _circle.closest()["profile"]]);
 
       // Emit Decision to Server
-      yield Complete();
+      yield Complete("RECEIVER", file: receivedEvent.data.binary);
     }
   }
 
@@ -479,7 +479,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (initialized) {
       // Emit Decision to Server
-      yield Complete();
+      yield Complete("SENDER");
     }
   }
 

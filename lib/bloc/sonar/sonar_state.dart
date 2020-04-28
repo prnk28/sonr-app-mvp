@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
@@ -98,5 +100,9 @@ class Transferring extends SonarState {
 // ** Transfer Succesful ***
 // *************************
 class Complete extends SonarState {
-  const Complete();
+  // Sender/Receiver
+  final String status;
+  final Uint8List file;
+
+  const Complete(this.status, {this.file});
 }
