@@ -515,12 +515,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapUpdateToState(
       Update updateEvent, Direction direction, Motion motion) async* {
-    if (updateEvent.map.status == "Sender") {
-      add(Send(map: updateEvent.map));
-    } else {
-      add(Receive(map: updateEvent.map));
+    if (initialized) {
+      if (updateEvent.map.status == "Sender") {
+        add(Send(map: updateEvent.map));
+      } else {
+        add(Receive(map: updateEvent.map));
+      }
+      yield Loading();
     }
-    yield Loading();
   }
 
 // **************************
