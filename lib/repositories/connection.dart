@@ -16,15 +16,15 @@ class Connection {
   bool offered = false;
 
   // ** Constructer with SonarBloc
-  Connection(SonarBloc bloc, Device device) {
+  Connection(SonarBloc bloc) {
     session = new Session(this, bloc);
-    broadcast = new Broadcast(this, bloc, device);
+    broadcast = new Broadcast(this, bloc);
   }
 
   // ** Broadcast -- Event Extension
   emit(event, {dynamic data}) {
     if (event is SocketEvent) {
-      broadcast.event(event);
+      broadcast.event(event, data: data);
     } else {
       throw ("Not Valid Event to Emit Add to SocketEvent");
     }
@@ -50,7 +50,7 @@ class Connection {
 
   // ** BOOL: Check to see if waiting to Initialize
   bool needSetup() {
-    if (this.initialized) {
+    if (!this.initialized) {
       return true;
     }
     log.e("Already Initialized");

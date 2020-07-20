@@ -17,21 +17,17 @@ enum SocketEvent {
   RESET,
 }
 
-// Socket.io Configuration
-const SOCKET_URL = 'http://match.sonr.io';
-const SOCKET_SETTINGS = <String, dynamic>{
-  'transports': ['websocket'],
-};
-
 // Broadcast Class to Manage Socket.io
 class Broadcast {
   // ** Properties
   Connection _conn;
   Session _session;
-  Socket _socket = io(SOCKET_URL, SOCKET_SETTINGS);
+  Socket _socket = io('http://match.sonr.io', <String, dynamic>{
+    'transports': ['websocket'],
+  });
 
   // ** Constructor
-  Broadcast(Connection conn, SonarBloc bloc, Device device) {
+  Broadcast(Connection conn, SonarBloc bloc) {
     // Set Properties
     _conn = conn;
     _session = _conn.session;
@@ -44,7 +40,8 @@ class Broadcast {
 
     // SOCKET::INFO
     _socket.on('INFO', (data) {
-      bloc.add(Refresh(newDirection: device.lastDirection));
+      _conn.initialized = true;
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
       // Add to Process
       log.v("Lobby Id: " + data);
     });
@@ -52,23 +49,23 @@ class Broadcast {
     // SOCKET::NEW_SENDER
     _socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
-      _socket.emit("RECEIVING", [device.lastDirection.toReceiveMap()]);
-      bloc.add(Refresh(newDirection: device.lastDirection));
+      _socket.emit("RECEIVING", [bloc.device.lastDirection.toReceiveMap()]);
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
       // Add to Process
       log.i("NEW_SENDER: " + data);
     });
 
     // SOCKET::SENDER_UPDATE
     _socket.on('SENDER_UPDATE', (data) {
-      bloc.circle.update(device.lastDirection, data);
-      bloc.add(Refresh(newDirection: device.lastDirection));
+      bloc.circle.update(bloc.device.lastDirection, data);
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
     });
 
     // SOCKET::SENDER_EXIT
     _socket.on('SENDER_EXIT', (id) {
       // Remove Sender from Circle
       bloc.circle.exit(id);
-      bloc.add(Refresh(newDirection: device.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
 
       // Add to Process
       log.w("SENDER_EXIT: " + id);
@@ -77,11 +74,11 @@ class Broadcast {
     // SOCKET::NEW_RECEIVER
     _socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
-      if (device.lastDirection != null) {
-        _socket.emit("SENDING", [device.lastDirection.toReceiveMap()]);
+      if (bloc.device.lastDirection != null) {
+        _socket.emit("SENDING", [bloc.device.lastDirection.toReceiveMap()]);
       }
 
-      bloc.add(Refresh(newDirection: device.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
 
       // Add to Process
       log.i("NEW_RECEIVER: " + data);
@@ -160,7 +157,7 @@ class Broadcast {
     switch (type) {
       case SocketEvent.INITIALIZE:
         // Emit Socket
-        _socket.emit('ANSWER', [data[0], data[1]]);
+        _socket.emit('INITIALIZE', data);
         break;
       case SocketEvent.SENDING:
         _socket.emit('SENDING', data);

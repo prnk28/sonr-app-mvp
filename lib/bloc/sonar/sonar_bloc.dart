@@ -21,7 +21,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   SonarBloc() : super(null) {
-    conn = new Connection(this, device);
+    conn = new Connection(this);
     device = new Device(this, conn);
   }
 
