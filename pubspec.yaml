@@ -20,8 +20,8 @@ dependencies:
 
   # ** - User Defined - **
   # -- BLoC --
-  flutter_bloc: ^4.0.0
-  equatable: ^1.1.1
+  flutter_bloc: ^5.0.0
+  equatable: ^1.2.0
 
   # -- Device --
   flutter_sensor_compass: ^0.1.1
@@ -36,6 +36,7 @@ dependencies:
   intl: ^0.15.8
   image_picker:
   path_provider: ^1.6.5
+  path: ^1.7.0
   sortedmap: ^0.4.2+1
 
   # -- Network --

@@ -7,14 +7,12 @@ import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:logger/logger.dart';
 import 'package:sensors/sensors.dart';
-import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import 'package:soundpool/soundpool.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:path_provider/path_provider.dart';
 
 // *********************
 // ** Initialization ***
@@ -44,7 +42,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   bool offered = false;
 
   // Constructer
-  SonarBloc() {
+  SonarBloc() : super(null) {
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       logger.v("Connected to Socket");
@@ -435,7 +433,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (initialized) {
       // Audio as bytes
-
       ByteData bytes = await rootBundle.load('assets/images/headers/1.jpg');
 
       String text = 'Say hello ' + ' times, from [' + socket.id + ']';
