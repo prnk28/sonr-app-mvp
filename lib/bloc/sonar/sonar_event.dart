@@ -38,9 +38,9 @@ class Receive extends SonarEvent {
 }
 
 // Sender Requests Authorization
-class Request extends SonarEvent {
+class Invite extends SonarEvent {
   final String id;
-  const Request(this.id);
+  const Invite(this.id);
 }
 
 // Receiver Gets Authorization Request

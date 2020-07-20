@@ -24,12 +24,6 @@ enum CompassDesignation {
 // Device Motion Orientation
 enum Orientation { Default, Tilt, LandscapeLeft, LandscapeRight }
 
-// *******************
-// ** Design Enums ***
-// *******************
-// Text Design
-enum TextDesign { MediumText, BigText, NormalText, DescriptionText }
-
 // ****************************
 // ** Enum Centric Methods ****
 // ****************************

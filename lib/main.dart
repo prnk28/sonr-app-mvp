@@ -1,15 +1,9 @@
 // Copyright 2017 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/views/views.dart';
-
-import 'bloc/bloc.dart';
 
 class App extends StatelessWidget {
   @override

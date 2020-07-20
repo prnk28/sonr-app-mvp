@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_app/core/core.dart';
 
+// *******************
+// ** Design Enums ***
+// *******************
+// Text Design
+enum TextDesign { MediumText, BigText, NormalText, DescriptionText }
+
 class Design {
 // **************************
 // *** Primary Theme Data ***
