@@ -153,7 +153,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (conn.ready()) {
       // Create Offer and Emit
-      conn.handle(RTCEvent.Invite, data: circle.closest()["id"]);
+      conn.signal(RTCEvent.Invite, data: circle.closest()["id"]);
 
       // Device Pending State
       yield Pending("SENDER", match: circle.closest());
@@ -183,7 +183,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Yield Receiver Decision
       if (authorizeEvent.decision) {
         // Create Answer
-        conn.handle(RTCEvent.Offer, data: authorizeEvent.offer);
+        conn.signal(RTCEvent.Offer, data: authorizeEvent.offer);
         yield Transferring();
       }
       // Receiver Declined
@@ -200,7 +200,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (conn.initialized) {
-      conn.handle(RTCEvent.Answer, data: acceptedEvent.answer);
+      conn.signal(RTCEvent.Answer, data: acceptedEvent.answer);
 
       // Emit Decision to Server
       yield PreTransfer(
@@ -316,16 +316,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // Check Status
     if (conn.noContact()) {
       // Check State
-      if (device.currentMotion.state == Orientation.Tilt ||
-          device.currentMotion.state == Orientation.LandscapeLeft ||
-          device.currentMotion.state == Orientation.LandscapeRight) {
-        // Check Directions
-        if (device.lastDirection != updateSensors.newDirection) {
-          // Set as new direction
-          device.lastDirection = updateSensors.newDirection;
-        }
+      if (device.isSearching()) {
+        // Update Current Direction
+        device.updateDirection(updateSensors.newDirection);
         // Check State
-        if (device.currentMotion.state == Orientation.Tilt) {
+        if (device.isSending()) {
           // Post Update
           add(Update(
               currentDirection: device.lastDirection,
@@ -333,8 +328,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
               map: circle));
         }
         // Receive State
-        else if (device.currentMotion.state == Orientation.LandscapeLeft ||
-            device.currentMotion.state == Orientation.LandscapeRight) {
+        else if (device.isReceiving()) {
           // Post Update
           add(Update(
               currentDirection: device.lastDirection,

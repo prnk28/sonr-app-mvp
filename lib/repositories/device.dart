@@ -27,7 +27,7 @@ class Device {
             degrees: newData, accelerometerX: currentMotion.accelX);
 
         // Check Sender Threshold
-        if (currentMotion.state == Orientation.Tilt) {
+        if (this.isSending()) {
           // Set Sender
           bloc.circle.status = "Sender";
 
@@ -48,8 +48,7 @@ class Device {
           bloc.add(Refresh(newDirection: newDirection));
         }
         // Check Receiver Threshold
-        else if (currentMotion.state == Orientation.LandscapeLeft ||
-            currentMotion.state == Orientation.LandscapeRight) {
+        else if (this.isReceiving()) {
           // Set Receiver
           bloc.circle.status = "Receiver";
 
@@ -68,5 +67,30 @@ class Device {
         }
       }
     });
+  }
+
+  // Checks if New Direction is Changed and Sets it
+  void updateDirection(Direction newDirection) {
+    if (this.lastDirection != newDirection) {
+      this.lastDirection = newDirection;
+    }
+  }
+
+  // BOOL: Checks if Tilted are Receiving
+  bool isSearching() {
+    return this.currentMotion.state == Orientation.Tilt ||
+        this.currentMotion.state == Orientation.LandscapeLeft ||
+        this.currentMotion.state == Orientation.LandscapeRight;
+  }
+
+  // BOOL: Checks if Tilted
+  bool isSending() {
+    return this.currentMotion.state == Orientation.Tilt;
+  }
+
+  // BOOL: Checks if Landscape
+  bool isReceiving() {
+    return this.currentMotion.state == Orientation.LandscapeLeft ||
+        this.currentMotion.state == Orientation.LandscapeRight;
   }
 }

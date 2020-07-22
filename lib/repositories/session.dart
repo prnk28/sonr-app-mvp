@@ -50,7 +50,7 @@ class Peer {
   // Constructer
   Peer({this.id, this.description, this.sessionId, RTCPeerConnection pc}) {
     this._peerConnection = pc;
-    _peerConnection.createOffer(dcSettings);
+    _peerConnection.createOffer(DC_SETTINGS);
   }
 
   // Extend RTCPeerConnection close
@@ -63,14 +63,14 @@ class Peer {
   // Extend RTCPeerConnection createAnswer
   createAnswer() async {
     if (_peerConnection != null) {
-      RTCSessionDescription s = await _peerConnection.createAnswer(dcSettings);
+      RTCSessionDescription s = await _peerConnection.createAnswer(DC_SETTINGS);
       return s;
     }
   }
 
   createOffer() async {
     if (_peerConnection != null) {
-      RTCSessionDescription s = await _peerConnection.createOffer(dcSettings);
+      RTCSessionDescription s = await _peerConnection.createOffer(DC_SETTINGS);
       return s;
     }
   }
@@ -160,7 +160,7 @@ class Session {
   getCandidate() async {
     // Create Peer Connection
     RTCPeerConnection pc =
-        await createPeerConnection(iceConfiguration, dcSettings);
+        await createPeerConnection(ICE_CONFIG, DC_SETTINGS);
 
     // Initialize Ice Candidate
     pc.onIceCandidate = (candidate) {

@@ -62,7 +62,6 @@ class SonrFile {
       this._isSender = false;
 
       // Set Default Properties
-
       this._name = info._name;
       this._size = info._size;
       this._lastModified = info._lastModified;

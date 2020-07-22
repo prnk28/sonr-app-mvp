@@ -31,7 +31,7 @@ class Connection {
   }
 
   // ** WebRTC -- Handle Extension
-  handle(RTCEvent type, {data}) async {
+  signal(RTCEvent type, {data}) async {
     session.signal(type, data: data);
   }
 
