@@ -24,11 +24,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Motion currentMotion = Motion.create();
   Circle circle;
 
-  // Transfer Variables
-  bool initialized = false;
-  bool requested = false;
-  bool offered = false;
-
   // Constructer
   SonarBloc() : super(null) {
     // ** RTC::Initialization **
@@ -94,13 +89,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapInitializeToState(
       Initialize initializeEvent, Direction direction, Motion motion) async* {
     // Check Status
-    if (!initialized) {
+    if (connection.needSetup()) {
 // Initialize Variables
       Location fakeLocation = Location.fakeLocation();
       // Emit to Socket.io
       socket.emit("INITIALIZE",
           [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
-      initialized = true;
+      connection.initialized = true;
 
       // Device Pending State
       yield Ready();
@@ -113,7 +108,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapSendToState(
       Send sendEvent, Direction direction, Motion motion) async* {
     // Check Init Status
-    if (initialized && !requested) {
+    if (connection.ready()) {
       // Emit Send
       const delay = const Duration(milliseconds: 500);
       new Timer(
@@ -140,7 +135,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapReceiveToState(
       Receive receiveEvent, Direction direction, Motion motion) async* {
     // Check Init Status
-    if (initialized && !offered) {
+    if (connection.ready()) {
       const delay = const Duration(milliseconds: 750);
       new Timer(
           delay,
@@ -166,9 +161,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
   Stream<SonarState> _mapInviteToState(Invite requestEvent) async* {
     // Check Status
-    if (initialized && !requested) {
+    if (connection.ready()) {
       // Emit to Socket.io
-      requested = true;
+      connection.invited = true;
 
       // Create Offer and Emit
       session.invite(circle.closest()["id"]);
@@ -183,9 +178,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
   Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
     // Check Status
-    if (initialized & !offered) {
+    if (connection.ready()) {
       // Set Offered
-      offered = true;
+      connection.offered = true;
 
       // Device Pending State
       yield Pending("RECEIVER",
@@ -200,7 +195,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **********************
   Stream<SonarState> _mapAuthorizeToState(Authorize authorizeEvent) async* {
     // Check Status
-    if (initialized) {
+    if (connection.initialized) {
       // Yield Receiver Decision
       if (authorizeEvent.decision) {
         // Create Answer
@@ -220,7 +215,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **********************
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
-    if (initialized) {
+    if (connection.initialized) {
       session.handleAnswer(acceptedEvent.answer);
       // Emit Decision to Server
       yield PreTransfer(
@@ -233,7 +228,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **********************
   Stream<SonarState> _mapDeclinedToState(Declined declinedEvent) async* {
     // Check Status
-    if (initialized) {
+    if (connection.initialized) {
       // Emit Decision to Server
       yield Failed(
           profile: declinedEvent.profile, matchId: declinedEvent.matchId);
@@ -245,7 +240,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
-    if (initialized) {
+    if (connection.initialized) {
       // Audio as bytes
 
       ByteData bytes = await rootBundle.load('assets/images/headers/1.jpg');
@@ -264,7 +259,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   Stream<SonarState> _mapReceivedToState(Received receivedEvent) async* {
     // Check Status
-    if (initialized) {
+    if (connection.initialized) {
       // Read Data
       if (receivedEvent.data.isBinary) {
         log.i("Got Binary!" +
@@ -289,7 +284,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   Stream<SonarState> _mapCompletedToState(Completed completedEvent) async* {
     // Check Status
-    if (initialized) {
+    if (connection.initialized) {
       // Emit Decision to Server
       yield Complete("SENDER");
     }
@@ -300,14 +295,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
   Stream<SonarState> _mapResetToState(Reset resetEvent) async* {
     // Check Status
-    if (initialized) {
-      // Reset Vars
-      offered = false;
-      requested = false;
-
-      // Reset circle
-      socket.emit("RESET");
-      circle.status = "Default";
+    if (connection.initialized) {
+      // Reset Connection
+      connection.reset();
 
       // Reset RTC
       session.close();
@@ -327,7 +317,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapUpdateToState(
       Update updateEvent, Direction direction, Motion motion) async* {
-    if (initialized) {
+    if (connection.initialized) {
       if (updateEvent.map.status == "Sender") {
         add(Send(map: updateEvent.map));
       } else {
@@ -342,7 +332,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **************************
   Stream<SonarState> _mapRefreshInputToState(Refresh updateSensors) async* {
 // Check Status
-    if (!offered && !requested) {
+    if (connection.noContact()) {
       // Check State
       if (currentMotion.state == Orientation.Tilt ||
           currentMotion.state == Orientation.LandscapeLeft ||

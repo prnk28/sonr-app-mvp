@@ -8,6 +8,7 @@ Socket socket = io('http://match.sonr.io', <String, dynamic>{
 class Connection {
   // Session Properties
   String id;
+  SonarBloc _bloc;
 
   // Transfer Variables
   bool initialized = false;
@@ -16,6 +17,9 @@ class Connection {
 
   // Manages Socket.io Events
   Connection(SonarBloc bloc) {
+    // Initialize
+    _bloc = bloc;
+
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       log.v("Connected to Socket");
@@ -142,9 +146,9 @@ class Connection {
       offered = false;
       invited = false;
 
-      // Reset Socket and Session
-      // session.signal(RTCEvent.Reset);
-      // broadcast.event(SocketEvent.RESET);
+      // Reset circle
+      socket.emit("RESET");
+      _bloc.circle.status = "Default";
     }
   }
 

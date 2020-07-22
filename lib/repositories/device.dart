@@ -13,7 +13,7 @@ class Device {
         .compassUpdates(interval: Duration(milliseconds: 400))
         .listen((newData) {
       // Check Status
-      if (!bloc.offered && !bloc.requested) {
+      if (bloc.connection.noContact()) {
         // Initialize Direction
         var newDirection = Direction.create(
             degrees: newData, accelerometerX: bloc.currentMotion.accelX);
