@@ -6,10 +6,20 @@ Socket socket = io('http://match.sonr.io', <String, dynamic>{
 });
 
 class Connection {
+  // Session Properties
+  String id;
+
+  // Transfer Variables
+  bool initialized = false;
+  bool invited = false;
+  bool offered = false;
+
+  // Manages Socket.io Events
   Connection(SonarBloc bloc) {
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       log.v("Connected to Socket");
+      id = socket.id;
     });
 
     // ** SOCKET::INFO **
@@ -124,14 +134,6 @@ class Connection {
       log.e("ERROR: " + error);
     });
   }
-
-  // Session Properties
-  String id;
-
-  // Transfer Variables
-  bool initialized = false;
-  bool invited = false;
-  bool offered = false;
 
   // ** Reset Connection
   reset() {

@@ -18,10 +18,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   Session session;
   Connection connection;
+  Device device;
   RTCDataChannel _dataChannel;
   Direction lastDirection;
   Motion currentMotion = Motion.create();
-  Circle circle = new Circle();
+  Circle circle;
 
   // Transfer Variables
   bool initialized = false;
@@ -33,6 +34,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // ** RTC::Initialization **
     session = new Session();
     connection = new Connection(this);
+    circle = new Circle();
+    device = new Device(this);
 
     session.onDataChannel = (channel) {
       _dataChannel = channel;
@@ -42,69 +45,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     session.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
       add(Received(data));
     };
-
-    // ** Accelerometer Events **
-    accelerometerEvents.listen((newData) {
-      // Update Motion Var
-      currentMotion = Motion.create(a: newData);
-    });
-
-    // ** Directional Events **
-    Compass()
-        .compassUpdates(interval: Duration(milliseconds: 400))
-        .listen((newData) {
-      // Check Status
-      if (!offered && !requested) {
-        // Initialize Direction
-        var newDirection = Direction.create(
-            degrees: newData, accelerometerX: currentMotion.accelX);
-
-        // Check Sender Threshold
-        if (currentMotion.state == Orientation.Tilt) {
-          // Set Sender
-          circle.status = "Sender";
-
-          // Check Valid
-          if (lastDirection != null) {
-            // Generate Difference
-            var difference = newDirection.degrees - lastDirection.degrees;
-
-            // Threshold
-            if (difference.abs() > 5) {
-              // Modify Circle
-              circle.modify(newDirection);
-
-              // Refresh Inputs
-              add(Refresh(newDirection: newDirection));
-            }
-          }
-          add(Refresh(newDirection: newDirection));
-        }
-        // Check Receiver Threshold
-        else if (currentMotion.state == Orientation.LandscapeLeft ||
-            currentMotion.state == Orientation.LandscapeRight) {
-          // Set Receiver
-          circle.status = "Receiver";
-
-          // Check Valid
-          if (lastDirection != null) {
-            // Generate Difference
-            var difference = newDirection.degrees - lastDirection.degrees;
-            if (difference.abs() > 10) {
-              // Modify Circle
-              circle.modify(newDirection);
-              // Refresh Inputs
-              add(Refresh(newDirection: newDirection));
-            }
-          }
-          add(Refresh(newDirection: newDirection));
-        }
-      }
-    });
   }
 
   // Initial State
-  @override
   SonarState get initialState => Initial();
 // *********************************
 // ** Map Events to State Method ***
