@@ -2,7 +2,6 @@
 export 'motion_util.dart';
 export 'circle.dart';
 export 'design.dart';
-export '../repositories/device.dart';
 export '../repositories/connection.dart';
 
 export 'package:flutter/services.dart';
@@ -18,7 +17,6 @@ export 'package:bloc/bloc.dart';
 
 // Networking Libraries
 export 'package:socket_io_client/socket_io_client.dart';
-export 'package:flutter_webrtc/webrtc.dart';
 
 // Device Libraries
 export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';

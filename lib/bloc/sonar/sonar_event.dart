@@ -37,7 +37,7 @@ class Receive extends SonarEvent {
   const Receive({this.map, this.currentDirection, this.currentMotion});
 }
 
-// Sender Requests Authorization
+// Sender Invites Authorization
 class Invite extends SonarEvent {
   final String id;
   const Invite(this.id);

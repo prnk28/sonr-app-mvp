@@ -1,11 +1,129 @@
-import 'package:sonar_app/repositories/broadcast.dart';
-
 import '../core/core.dart';
 
+// Networking
+Socket socket = io('http://match.sonr.io', <String, dynamic>{
+  'transports': ['websocket'],
+});
+
 class Connection {
-  // Networking
-  Session session;
-  Broadcast broadcast;
+  Connection(SonarBloc bloc) {
+    // ** SOCKET::Connected **
+    socket.on('connect', (_) async {
+      log.v("Connected to Socket");
+    });
+
+    // ** SOCKET::INFO **
+    socket.on('INFO', (data) {
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      // Add to Process
+      log.v("Lobby Id: " + data);
+    });
+
+    // ** SOCKET::NEW_SENDER **
+    socket.on('NEW_SENDER', (data) {
+      // Send Last Recorded Direction to New Sender
+      socket.emit("RECEIVING", [bloc.lastDirection.toReceiveMap()]);
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      // Add to Process
+      log.i("NEW_SENDER: " + data);
+    });
+
+    // ** SOCKET::SENDER_UPDATE **
+    socket.on('SENDER_UPDATE', (data) {
+      bloc.circle.update(bloc.lastDirection, data);
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+    });
+
+    // ** SOCKET::SENDER_EXIT **
+    socket.on('SENDER_EXIT', (id) {
+      // Remove Sender from Circle
+      bloc.circle.exit(id);
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+
+      // Add to Process
+      log.w("SENDER_EXIT: " + id);
+    });
+
+    // ** SOCKET::NEW_RECEIVER **
+    socket.on('NEW_RECEIVER', (data) {
+      // Send Last Recorded Direction to New Receiver
+      if (bloc.lastDirection != null) {
+        socket.emit("SENDING", [bloc.lastDirection.toReceiveMap()]);
+      }
+
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+
+      // Add to Process
+      log.i("NEW_RECEIVER: " + data);
+    });
+
+    // ** SOCKET::RECEIVER_UPDATE **
+    socket.on('RECEIVER_UPDATE', (data) {
+      bloc.circle.update(bloc.lastDirection, data);
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+    });
+
+    // ** SOCKET::RECEIVER_EXIT **
+    socket.on('RECEIVER_EXIT', (id) {
+      // Remove Receiver from Circle
+      bloc.circle.exit(id);
+      bloc.add(Refresh(newDirection: bloc.lastDirection));
+
+      // Add to Process
+      log.w("RECEIVER_EXIT: " + id);
+    });
+
+    // ** SOCKET::SENDER_OFFERED **
+    socket.on('SENDER_OFFERED', (data) async {
+      log.i("SENDER_OFFERED: " + data.toString());
+
+      dynamic _offer = data[0];
+
+      // Remove Sender from Circle
+      bloc.add(Offered(profileData: bloc.circle.closest(), offer: _offer));
+    });
+
+    // ** SOCKET::NEW_CANDIDATE **
+    socket.on('NEW_CANDIDATE', (data) async {
+      log.i("NEW_CANDIDATE: " + data.toString());
+
+      bloc.session.handleCandidate(data);
+    });
+
+    // ** SOCKET::RECEIVER_ANSWERED **
+    socket.on('RECEIVER_ANSWERED', (data) async {
+      log.i("RECEIVER_ANSWERED: " + data.toString());
+
+      dynamic _answer = data[0];
+
+      bloc.add(Accepted(
+          bloc.circle.closest(), bloc.circle.closest()["id"], _answer));
+    });
+
+    // ** SOCKET::RECEIVER_DECLINED **
+    socket.on('RECEIVER_DECLINED', (data) {
+      dynamic matchId = data[0];
+
+      bloc.add(Declined(bloc.circle.closest(), matchId));
+      // Add to Process
+      log.w("RECEIVER_DECLINED: " + data.toString());
+    });
+
+    // ** SOCKET::RECEIVER_COMPLETED **
+    socket.on('RECEIVER_COMPLETED', (data) {
+      dynamic matchId = data[0];
+
+      bloc.add(Completed(bloc.circle.closest(), matchId));
+      // Add to Process
+      log.i("RECEIVER_COMPLETED: " + data.toString());
+    });
+
+    // ** SOCKET::ERROR **
+    socket.on('ERROR', (error) {
+      // Add to Process
+      log.e("ERROR: " + error);
+    });
+  }
 
   // Session Properties
   String id;
@@ -15,26 +133,6 @@ class Connection {
   bool invited = false;
   bool offered = false;
 
-  // ** Constructer with SonarBloc
-  Connection(SonarBloc bloc) {
-    session = new Session(this, bloc);
-    broadcast = new Broadcast(this, bloc);
-  }
-
-  // ** Broadcast -- Event Extension
-  emit(event, {dynamic data}) {
-    if (event is SocketEvent) {
-      broadcast.event(event, data: data);
-    } else {
-      throw ("Not Valid Event to Emit Add to SocketEvent");
-    }
-  }
-
-  // ** WebRTC -- Handle Extension
-  signal(RTCEvent type, {data}) async {
-    session.signal(type, data: data);
-  }
-
   // ** Reset Connection
   reset() {
     if (this.initialized) {
@@ -43,8 +141,8 @@ class Connection {
       invited = false;
 
       // Reset Socket and Session
-      session.signal(RTCEvent.Reset);
-      broadcast.event(SocketEvent.RESET);
+      // session.signal(RTCEvent.Reset);
+      // broadcast.event(SocketEvent.RESET);
     }
   }
 

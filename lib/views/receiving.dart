@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sonar_app/core/core.dart';
 
 class ReceivingView extends StatelessWidget {
-  final state;
+  final Receiving state;
 
   const ReceivingView({Key key, this.state}) : super(key: key);
 

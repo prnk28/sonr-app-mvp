@@ -3,7 +3,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 
 class SendingView extends StatelessWidget {
-  final state;
+  final Sending state;
   final SonarBloc sonarBloc;
 
   SendingView(this.state, this.sonarBloc);

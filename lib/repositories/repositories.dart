@@ -1,6 +1,5 @@
 export 'session.dart';
 export 'connection.dart';
-export 'device.dart';
 
 // Networking Settings
 const ICE_CONFIG = {
