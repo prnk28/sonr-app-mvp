@@ -1,7 +1,13 @@
 import 'package:sonar_app/core/core.dart';
 
 class Device {
+  // References
+  SonarBloc _bloc;
+
   Device(SonarBloc bloc) {
+    // Initialize
+    _bloc = bloc;
+
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
       // Update Motion Var
@@ -60,5 +66,23 @@ class Device {
         }
       }
     });
+  }
+
+  // BOOL: Check if Tilted or Landscape
+  bool isSearching() {
+    return _bloc.currentMotion.state == Orientation.Tilt ||
+        _bloc.currentMotion.state == Orientation.LandscapeLeft ||
+        _bloc.currentMotion.state == Orientation.LandscapeRight;
+  }
+
+  // BOOL: Check if Tilted
+  bool isSending() {
+    return _bloc.currentMotion.state == Orientation.Tilt;
+  }
+
+  // BOOL: Check if Landscape
+  bool isReceiving() {
+    return _bloc.currentMotion.state == Orientation.LandscapeLeft ||
+        _bloc.currentMotion.state == Orientation.LandscapeRight;
   }
 }

@@ -334,16 +334,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // Check Status
     if (connection.noContact()) {
       // Check State
-      if (currentMotion.state == Orientation.Tilt ||
-          currentMotion.state == Orientation.LandscapeLeft ||
-          currentMotion.state == Orientation.LandscapeRight) {
+      if (device.isSearching()) {
         // Check Directions
         if (lastDirection != updateSensors.newDirection) {
           // Set as new direction
           lastDirection = updateSensors.newDirection;
         }
         // Check State
-        if (currentMotion.state == Orientation.Tilt) {
+        if (device.isSending()) {
           // Post Update
           add(Update(
               currentDirection: lastDirection,
@@ -351,8 +349,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
               map: circle));
         }
         // Receive State
-        else if (currentMotion.state == Orientation.LandscapeLeft ||
-            currentMotion.state == Orientation.LandscapeRight) {
+        else if (device.isReceiving()) {
           // Post Update
           add(Update(
               currentDirection: lastDirection,
