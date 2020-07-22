@@ -28,7 +28,7 @@ class Connection {
 
     // ** SOCKET::INFO **
     socket.on('INFO', (data) {
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
       // Add to Process
       log.v("Lobby Id: " + data);
     });
@@ -36,23 +36,23 @@ class Connection {
     // ** SOCKET::NEW_SENDER **
     socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
-      socket.emit("RECEIVING", [bloc.lastDirection.toReceiveMap()]);
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      socket.emit("RECEIVING", [bloc.device.lastDirection.toReceiveMap()]);
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
       // Add to Process
       log.i("NEW_SENDER: " + data);
     });
 
     // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
-      bloc.circle.update(bloc.lastDirection, data);
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      bloc.circle.update(bloc.device.lastDirection, data);
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
     });
 
     // ** SOCKET::SENDER_EXIT **
     socket.on('SENDER_EXIT', (id) {
       // Remove Sender from Circle
       bloc.circle.exit(id);
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
 
       // Add to Process
       log.w("SENDER_EXIT: " + id);
@@ -61,11 +61,11 @@ class Connection {
     // ** SOCKET::NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
-      if (bloc.lastDirection != null) {
-        socket.emit("SENDING", [bloc.lastDirection.toReceiveMap()]);
+      if (bloc.device.lastDirection != null) {
+        socket.emit("SENDING", [bloc.device.lastDirection.toReceiveMap()]);
       }
 
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
 
       // Add to Process
       log.i("NEW_RECEIVER: " + data);
@@ -73,15 +73,15 @@ class Connection {
 
     // ** SOCKET::RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
-      bloc.circle.update(bloc.lastDirection, data);
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      bloc.circle.update(bloc.device.lastDirection, data);
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
     });
 
     // ** SOCKET::RECEIVER_EXIT **
     socket.on('RECEIVER_EXIT', (id) {
       // Remove Receiver from Circle
       bloc.circle.exit(id);
-      bloc.add(Refresh(newDirection: bloc.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
 
       // Add to Process
       log.w("RECEIVER_EXIT: " + id);

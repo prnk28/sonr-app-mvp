@@ -22,19 +22,15 @@ class Initialize extends SonarEvent {
 // Send to Server Sequence
 class Send extends SonarEvent {
   final Circle map;
-  final Motion currentMotion;
-  final Direction currentDirection;
 
-  const Send({this.map, this.currentDirection, this.currentMotion});
+  const Send({this.map});
 }
 
 // Receive to Server Sequence
 class Receive extends SonarEvent {
   final Circle map;
-  final Motion currentMotion;
-  final Direction currentDirection;
 
-  const Receive({this.map, this.currentDirection, this.currentMotion});
+  const Receive({this.map});
 }
 
 // Sender Invites Authorization

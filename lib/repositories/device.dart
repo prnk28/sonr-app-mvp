@@ -3,6 +3,8 @@ import 'package:sonar_app/core/core.dart';
 class Device {
   // References
   SonarBloc _bloc;
+  Direction lastDirection;
+  Motion currentMotion = Motion.create();
 
   Device(SonarBloc bloc) {
     // Initialize
@@ -11,7 +13,7 @@ class Device {
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
       // Update Motion Var
-      bloc.currentMotion = Motion.create(a: newData);
+      currentMotion = Motion.create(a: newData);
     });
 
     // ** Directional Events **
@@ -22,17 +24,17 @@ class Device {
       if (bloc.connection.noContact()) {
         // Initialize Direction
         var newDirection = Direction.create(
-            degrees: newData, accelerometerX: bloc.currentMotion.accelX);
+            degrees: newData, accelerometerX: currentMotion.accelX);
 
         // Check Sender Threshold
-        if (bloc.currentMotion.state == Orientation.Tilt) {
+        if (currentMotion.state == Orientation.Tilt) {
           // Set Sender
           bloc.circle.status = "Sender";
 
           // Check Valid
-          if (bloc.lastDirection != null) {
+          if (lastDirection != null) {
             // Generate Difference
-            var difference = newDirection.degrees - bloc.lastDirection.degrees;
+            var difference = newDirection.degrees - lastDirection.degrees;
 
             // Threshold
             if (difference.abs() > 5) {
@@ -46,15 +48,15 @@ class Device {
           bloc.add(Refresh(newDirection: newDirection));
         }
         // Check Receiver Threshold
-        else if (bloc.currentMotion.state == Orientation.LandscapeLeft ||
-            bloc.currentMotion.state == Orientation.LandscapeRight) {
+        else if (currentMotion.state == Orientation.LandscapeLeft ||
+            currentMotion.state == Orientation.LandscapeRight) {
           // Set Receiver
           bloc.circle.status = "Receiver";
 
           // Check Valid
-          if (bloc.lastDirection != null) {
+          if (lastDirection != null) {
             // Generate Difference
-            var difference = newDirection.degrees - bloc.lastDirection.degrees;
+            var difference = newDirection.degrees - lastDirection.degrees;
             if (difference.abs() > 10) {
               // Modify Circle
               bloc.circle.modify(newDirection);
@@ -70,19 +72,19 @@ class Device {
 
   // BOOL: Check if Tilted or Landscape
   bool isSearching() {
-    return _bloc.currentMotion.state == Orientation.Tilt ||
-        _bloc.currentMotion.state == Orientation.LandscapeLeft ||
-        _bloc.currentMotion.state == Orientation.LandscapeRight;
+    return currentMotion.state == Orientation.Tilt ||
+        currentMotion.state == Orientation.LandscapeLeft ||
+        currentMotion.state == Orientation.LandscapeRight;
   }
 
   // BOOL: Check if Tilted
   bool isSending() {
-    return _bloc.currentMotion.state == Orientation.Tilt;
+    return currentMotion.state == Orientation.Tilt;
   }
 
   // BOOL: Check if Landscape
   bool isReceiving() {
-    return _bloc.currentMotion.state == Orientation.LandscapeLeft ||
-        _bloc.currentMotion.state == Orientation.LandscapeRight;
+    return currentMotion.state == Orientation.LandscapeLeft ||
+        currentMotion.state == Orientation.LandscapeRight;
   }
 }

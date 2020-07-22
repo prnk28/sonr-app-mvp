@@ -20,8 +20,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Connection connection;
   Device device;
   RTCDataChannel _dataChannel;
-  Direction lastDirection;
-  Motion currentMotion = Motion.create();
   Circle circle;
 
   // Constructer
@@ -53,13 +51,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   ) async* {
     // Device Can See Updates
     if (event is Initialize) {
-      yield* _mapInitializeToState(event, lastDirection, currentMotion);
+      yield* _mapInitializeToState(event);
     } else if (event is Send) {
-      yield* _mapSendToState(event, lastDirection, currentMotion);
+      yield* _mapSendToState(event);
     } else if (event is Receive) {
-      yield* _mapReceiveToState(event, lastDirection, currentMotion);
+      yield* _mapReceiveToState(event);
     } else if (event is Update) {
-      yield* _mapUpdateToState(event, lastDirection, currentMotion);
+      yield* _mapUpdateToState(event);
     } else if (event is Refresh) {
       yield* _mapRefreshInputToState(event);
     } else if (event is Invite) {
@@ -86,8 +84,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
 // ** Initialize Event ***
 // ***********************
-  Stream<SonarState> _mapInitializeToState(
-      Initialize initializeEvent, Direction direction, Motion motion) async* {
+  Stream<SonarState> _mapInitializeToState(Initialize initializeEvent) async* {
     // Check Status
     if (connection.needSetup()) {
 // Initialize Variables
@@ -105,8 +102,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *****************
 // ** Send Event ***
 // *****************
-  Stream<SonarState> _mapSendToState(
-      Send sendEvent, Direction direction, Motion motion) async* {
+  Stream<SonarState> _mapSendToState(Send sendEvent) async* {
     // Check Init Status
     if (connection.ready()) {
       // Emit Send
@@ -114,7 +110,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       new Timer(
           delay,
           () => {
-                socket.emit("SENDING", [lastDirection.toSendMap()])
+                socket.emit("SENDING", [device.lastDirection.toSendMap()])
               });
     }
 
@@ -122,18 +118,19 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (sendEvent.map != null) {
       yield Sending(
           matches: sendEvent.map,
-          currentMotion: motion,
-          currentDirection: lastDirection);
+          currentMotion: device.currentMotion,
+          currentDirection: device.lastDirection);
     } else {
-      yield Sending(currentMotion: motion, currentDirection: lastDirection);
+      yield Sending(
+          currentMotion: device.currentMotion,
+          currentDirection: device.lastDirection);
     }
   }
 
 // ********************
 // ** Receive Event ***
 // ********************
-  Stream<SonarState> _mapReceiveToState(
-      Receive receiveEvent, Direction direction, Motion motion) async* {
+  Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
     // Check Init Status
     if (connection.ready()) {
       const delay = const Duration(milliseconds: 750);
@@ -141,7 +138,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           delay,
           () => {
                 // Emit Receive
-                socket.emit("RECEIVING", [lastDirection.toReceiveMap()])
+                socket.emit("RECEIVING", [device.lastDirection.toReceiveMap()])
               });
     }
 
@@ -149,10 +146,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (receiveEvent.map != null) {
       yield Receiving(
           matches: receiveEvent.map,
-          currentMotion: motion,
-          currentDirection: lastDirection);
+          currentMotion: device.currentMotion,
+          currentDirection: device.lastDirection);
     } else {
-      yield Receiving(currentMotion: motion, currentDirection: lastDirection);
+      yield Receiving(
+          currentMotion: device.currentMotion,
+          currentDirection: device.lastDirection);
     }
   }
 
@@ -315,8 +314,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
 // ** Update Event ***
 // ********************
-  Stream<SonarState> _mapUpdateToState(
-      Update updateEvent, Direction direction, Motion motion) async* {
+  Stream<SonarState> _mapUpdateToState(Update updateEvent) async* {
     if (connection.initialized) {
       if (updateEvent.map.status == "Sender") {
         add(Send(map: updateEvent.map));
@@ -336,31 +334,31 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Check State
       if (device.isSearching()) {
         // Check Directions
-        if (lastDirection != updateSensors.newDirection) {
+        if (device.lastDirection != updateSensors.newDirection) {
           // Set as new direction
-          lastDirection = updateSensors.newDirection;
+          device.lastDirection = updateSensors.newDirection;
         }
         // Check State
         if (device.isSending()) {
           // Post Update
           add(Update(
-              currentDirection: lastDirection,
-              currentMotion: currentMotion,
+              currentDirection: device.lastDirection,
+              currentMotion: device.currentMotion,
               map: circle));
         }
         // Receive State
         else if (device.isReceiving()) {
           // Post Update
           add(Update(
-              currentDirection: lastDirection,
-              currentMotion: currentMotion,
+              currentDirection: device.lastDirection,
+              currentMotion: device.currentMotion,
               map: circle));
         }
         // Pending State
       } else {
         yield Ready(
             currentDirection: updateSensors.newDirection,
-            currentMotion: currentMotion);
+            currentMotion: device.currentMotion);
       }
     }
   }
