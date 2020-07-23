@@ -1,26 +1,48 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 import 'package:flutter_webrtc/webrtc.dart';
-import 'package:logger/logger.dart';
-import 'package:sensors/sensors.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repositories/repositories.dart';
 import '../bloc.dart';
 import 'package:sonar_app/core/core.dart';
+import 'dart:io';
+import 'package:chunked_stream/chunked_stream.dart';
 
 // ***********************
 // ** Sonar Bloc Class ***
 // ***********************
+const CHUNK_SIZE = 16000; // Maximum Transmission Unit in Bytes
+const CHUNKS_PER_ACK = 64;
+
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Provider
   Session session;
   Connection connection;
   Device device;
-  RTCDataChannel _dataChannel;
+  RTCDataChannel dataChannel;
   Circle circle;
+
+  // File Properties
+  int _chunksTotal;
+  File _file;
+  Uint8List _block;
+
+  // Transmission Private Properties
+  bool _isComplete;
+  String peerId;
+  int _currentChunkNum;
+
+  // Public Properties
+  int receivedChunkNum;
+  double sendingProgress;
+  double receivingProgress;
+  FileType type;
 
   // Constructer
   SonarBloc() : super(null) {
@@ -31,12 +53,15 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     device = new Device(this);
 
     session.onDataChannel = (channel) {
-      _dataChannel = channel;
+      dataChannel = channel;
     };
 
     // ** RTC::Data Message **
     session.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
-      add(Received(data));
+      if (data.isBinary) {
+        log.i("Received Chunk");
+      }
+      //add(Received(data));
     };
   }
 
@@ -242,12 +267,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (connection.initialized) {
       // Audio as bytes
 
-      ByteData bytes = await rootBundle.load('assets/images/headers/1.jpg');
-
-      String text = 'Say hello ' + ' times, from [' + socket.id + ']';
-      _dataChannel.send(RTCDataChannelMessage(text));
-      _dataChannel
-          .send(RTCDataChannelMessage.fromBinary(bytes.buffer.asUint8List()));
+      //ByteData bytes = await rootBundle.load('assets/images/headers/1.jpg');
+      sendBlock(0);
       // Emit Decision to Server
       yield Transferring();
     }
@@ -261,17 +282,15 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (connection.initialized) {
       // Read Data
       if (receivedEvent.data.isBinary) {
-        log.i("Got Binary!" +
-            receivedEvent.data.binary.buffer.lengthInBytes.toString());
-        //var bdata = new ByteData.view(data.binary.buffer);
-        //int soundId = await _soundpool.load(bdata);
-        //_soundpool.play(soundId);
+        //addChunk(receivedEvent.data.binary.buffer, _currentChunkNum);
+        log.i(receivedEvent.data.binary.buffer.lengthInBytes.toString());
+        print("Received Chunk");
       } else {
+        // Set New Chunk
+        _currentChunkNum = int.parse(receivedEvent.data.text);
         log.i(receivedEvent.data.text);
       }
       // Emit Completed
-      socket.emit(
-          "COMPLETE", [circle.closest()["id"], circle.closest()["profile"]]);
 
       // Emit Decision to Server
       yield Complete("RECEIVER", file: receivedEvent.data.binary);
@@ -360,6 +379,73 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
             currentDirection: updateSensors.newDirection,
             currentMotion: device.currentMotion);
       }
+    }
+  }
+
+  // ** BOOL: Add Chunk received from Sender
+  bool addChunk(ByteBuffer chunk, int receivedChunkNum) {
+    // Verify Receiver
+    // Set Variables
+    // int nextChunkNum = receivedChunkNum + 1;
+    // bool lastChunkInFile = receivedChunkNum == this._chunksTotal - 1;
+    // bool lastChunkInBlock =
+    //     receivedChunkNum > 0 && (receivedChunkNum + 1) % CHUNKS_PER_ACK == 0;
+    // receivedChunkNum = receivedChunkNum + 1;
+
+    // // Add Chunk to Block
+    // _block.addAll(chunk.asInt8List());
+
+    // // Append the File
+    // if (lastChunkInFile || lastChunkInBlock) {
+    //   _fileLocal.writeAsBytes(_block).then((value) => {
+    //         if (lastChunkInFile)
+    //           {_isComplete = true}
+    //         else
+    //           {
+    //             socket.emit("BLOCK_REQUEST", [peerId, nextChunkNum])
+    //           }
+    //       });
+    // }
+
+    throw ("Cannot Add Chunk, User is sender.");
+  }
+
+  // ** BUFFER: Get Next Chunk to send to Receiver
+  Future<void> sendBlock(int beginChunkNum) async {
+    // Set Variables
+    //int remainingChunks = this._chunksTotal - beginChunkNum;
+    //int chunksToSend = [remainingChunks, CHUNKS_PER_ACK].reduce(min);
+    //int endChunkNum = beginChunkNum + chunksToSend - 1;
+    //int blockBegin = beginChunkNum * CHUNK_SIZE;
+    // int blockEnd = (endChunkNum * CHUNK_SIZE) + CHUNK_SIZE;
+
+    // Aids method to convert file from assets into File Object
+    Directory directory = await getApplicationDocumentsDirectory();
+    var dbPath = join(directory.path, "img.jpg");
+    ByteData data = await rootBundle.load("assets/images/headers/4.jpg");
+    List<int> bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    File file = await File(dbPath).writeAsBytes(bytes);
+
+    // Open File in Reader and Send Data pieces as chunks
+    final reader = ChunkedStreamIterator(file.openRead());
+    // While the reader has a next byte
+    while (true) {
+      // read one CHUNK
+      var data = await reader.read(CHUNK_SIZE);
+      var chunk = Uint8List.fromList(data);
+
+      // Send Binary in WebRTC Data Channel
+      dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
+
+      // End of List
+      if (data.length <= 0) {
+        socket.emit("SEND_COMPLETE");
+        _isComplete = true;
+        add(Completed(null, null));
+        break;
+      }
+      print('next byte: ${data[0]}');
     }
   }
 }

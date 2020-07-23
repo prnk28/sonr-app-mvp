@@ -123,6 +123,13 @@ class Connection {
       log.w("RECEIVER_DECLINED: " + data.toString());
     });
 
+    // ** SOCKET::NEXT_CHUNK **
+    socket.on('NEXT_CHUNK', (data) {
+      bloc.sendBlock(data);
+      // Add to Process
+      log.i("RECEIVER_COMPLETED: " + data.toString());
+    });
+
     // ** SOCKET::RECEIVER_COMPLETED **
     socket.on('RECEIVER_COMPLETED', (data) {
       dynamic matchId = data[0];
