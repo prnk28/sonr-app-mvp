@@ -102,7 +102,7 @@ class Transferring extends SonarState {
 class Complete extends SonarState {
   // Sender/Receiver
   final String status;
-  final Uint8List file;
+  final File file;
 
   const Complete(this.status, {this.file});
 }

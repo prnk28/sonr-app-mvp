@@ -1,3 +1,5 @@
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/bloc/sonar/sonar_bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 
@@ -23,12 +25,12 @@ class TransferFile {
     completed = false;
     chunkNum = 0;
     progress = 0.0;
+    block = new BytesBuilder();
 
     // File is being Transmitted
     if (localFile != null) {
       // Set Properties
       file = localFile;
-      block = null;
       type = getFileTypeFromPath(localFile.path);
       name = basename(file.path);
       size = file.lengthSync();
@@ -42,7 +44,6 @@ class TransferFile {
         type = info["type"];
         chunksTotal = info["chunksTotal"];
       }
-      block = new BytesBuilder();
       log.e("No File or Info Provided");
     }
   }
@@ -61,6 +62,16 @@ class TransferFile {
         log.i("Transfer Complete");
       }
     }
+  }
+
+  complete(SonarBloc bloc) async {
+    // Set Completed true
+    completed = true;
+
+    // Convert to Uint8List
+    Uint8List data = block.takeBytes();
+    File file = await writeToFile(data, "file");
+    bloc.add(Received(file));
   }
 
   updateChunkInfo(dynamic chunkInfo) {

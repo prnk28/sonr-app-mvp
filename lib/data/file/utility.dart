@@ -90,13 +90,11 @@ dynamic getFileInfo(File file) async {
   return {"size": size, "name": name, "type": type, "chunksTotal": chunksTotal};
 }
 
-// ********************************
-// ** Write Local Data of Assets **
-// ********************************
-Future<void> writeByteDataToPath(ByteData data, String path) async {
-  final buffer = data.buffer;
+// ***********************************
+// ** Write Uint8List to Local Data **
+// ***********************************
+Future<File> writeToFile(Uint8List data, String path) async {
   Directory tempDir = await getApplicationDocumentsDirectory();
   String tempPath = tempDir.path;
-  return new File(tempPath + "/" + path)
-      .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  return new File(tempPath + "/" + path).writeAsBytes(data);
 }

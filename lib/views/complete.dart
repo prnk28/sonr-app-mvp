@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class CompleteView extends StatelessWidget {
             }),
       ]);
     } else {
-      Uint8List file = sonarBloc.state.file;
+      File file = sonarBloc.state.file;
 
       return Column(children: [
         Text("Complete.",
@@ -34,7 +35,7 @@ class CompleteView extends StatelessWidget {
               fontSize: 40,
               fontWeight: FontWeight.bold,
             )),
-        Image(image: new MemoryImage(file)),
+        Image.file(file),
         FloatingActionButton(
             child: Icon(Icons.done_all),
             onPressed: () {

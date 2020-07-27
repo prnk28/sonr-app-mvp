@@ -78,7 +78,7 @@ class Transfer extends SonarEvent {
 
 // Sender Sent Transfer
 class Received extends SonarEvent {
-  final RTCDataChannelMessage data;
+  final File data;
   const Received(this.data);
 }
 

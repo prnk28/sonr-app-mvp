@@ -260,17 +260,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapReceivedToState(Received receivedEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Read Data
-      if (receivedEvent.data.isBinary) {
-        log.i(receivedEvent.data.binary.buffer.lengthInBytes.toString());
-        print("Received Chunk");
-      } else {
-        log.i(receivedEvent.data.text);
-      }
-      // Emit Completed
-
       // Emit Decision to Server
-      yield Complete("RECEIVER", file: receivedEvent.data.binary);
+      yield Complete("RECEIVER", file: receivedEvent.data);
     }
   }
 

@@ -94,9 +94,8 @@ class FileManager {
     else {
       // Check for Completion Message
       if (message.text == "SEND_COMPLETE") {
-        // Set Completed true
-        transfer.completed = true;
-        transfer.block.takeBytes();
+        // Begin Transfer Receive Complete Sequence
+        transfer.complete(bloc);
       } else {
         // Get ChunkInfo from Text and Update
         transfer.updateChunkInfo(json.decode(message.text));
