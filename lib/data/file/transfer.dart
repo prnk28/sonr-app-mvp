@@ -64,16 +64,6 @@ class TransferFile {
     }
   }
 
-  complete(SonarBloc bloc) async {
-    // Set Completed true
-    completed = true;
-
-    // Convert to Uint8List
-    Uint8List data = block.takeBytes();
-    File file = await writeToFile(data, "file");
-    bloc.add(Received(file));
-  }
-
   updateChunkInfo(dynamic chunkInfo) {
     // Set Chunk Info
     chunkNum = chunkInfo["receivedChunkNum"];
