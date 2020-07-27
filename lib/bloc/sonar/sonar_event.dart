@@ -41,10 +41,9 @@ class Invite extends SonarEvent {
 
 // Receiver Gets Authorization Request
 class Offered extends SonarEvent {
-  final dynamic profileData;
-  final dynamic fileData;
+  final dynamic fileInfo;
   final dynamic offer;
-  const Offered({this.profileData, this.fileData, this.offer});
+  const Offered({this.fileInfo, this.offer});
 }
 
 // Receiver Gets Authorization Request

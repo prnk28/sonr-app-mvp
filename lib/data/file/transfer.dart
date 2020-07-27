@@ -46,14 +46,37 @@ class TransferFile {
     }
   }
 
-  setChunkInfo() {
-    // Update Current Chunk Number and Progress
-    chunkNum = chunkNum += 1;
-    progress = (chunkNum) / chunksTotal;
+  addChunk(Uint8List chunk) {
+    // Check Completed
+    if (!completed) {
+      // Add Chunk to Block
+      block.addAll(chunk);
 
+      // Set Remaining Chunks
+      var remainingChunks = chunksTotal - chunkNum + 1;
+
+      // Set Progress
+      progress = (chunksTotal - remainingChunks) / chunksTotal;
+
+      // Check completed
+      if (remainingChunks == 0) {
+        log.i("Transfer Complete");
+      }
+    }
+  }
+
+  updateChunkInfo(dynamic chunkInfo) {
+    chunkNum = chunkInfo["receivedChunkNum"];
+  }
+
+  getChunkInfo() {
     // Set Variables
     var remainingChunks = chunksTotal - chunkNum;
     var chunksToSend = [remainingChunks, CHUNKS_PER_ACK].reduce(min);
+
+    // Update Current Chunk Number and Progress
+    chunkNum = chunkNum += 1;
+    progress = (chunksTotal - remainingChunks) / chunksTotal;
 
     // Log Progress
     log.i("Send Progress: " + (progress * 100).toString() + "%");
@@ -62,7 +85,8 @@ class TransferFile {
     return {
       "remainingChunks": remainingChunks,
       "chunksToSend": chunksToSend,
-      "progress": progress
+      "progress": progress,
+      "receivedChunkNum": chunkNum
     };
   }
 

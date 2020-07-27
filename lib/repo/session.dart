@@ -162,20 +162,22 @@ class Session {
 // *****************************
 // ** WebRTC Message Sending ***
 // *****************************
-  void invite(String peerId) {
-    this._sessionId = socket.id + '-' + peerId;
+  // Invite Peer
+  void invite(dynamic fileInfo) {
+    this._sessionId = socket.id + '-' + this.peerId();
 
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateNew);
     }
 
-    _createPeerConnection(peerId).then((pc) {
-      _peerConnections[peerId] = pc;
-      _createDataChannel(peerId, pc);
-      _createOffer(peerId, pc);
+    _createPeerConnection(this.peerId()).then((pc) {
+      _peerConnections[this.peerId()] = pc;
+      _createDataChannel(this.peerId(), pc);
+      _createOffer(this.peerId(), fileInfo, pc);
     });
   }
 
+  // Leave Connection
   void leave() {
     // Tell Peers youre leaving
     socket.emit('LEAVE', {
@@ -231,17 +233,21 @@ class Session {
     _addDataChannel(id, channel);
   }
 
-  _createOffer(String id, RTCPeerConnection pc) async {
+  _createOffer(String id, dynamic fileInfo, RTCPeerConnection pc) async {
     try {
       RTCSessionDescription s = await pc.createOffer(DC_SETTINGS);
       pc.setLocalDescription(s);
 
-      socket.emit('OFFER', {
-        'to': id,
-        'from': socket.id,
-        'description': {'sdp': s.sdp, 'type': s.type},
-        'session_id': this._sessionId,
-      });
+      // Send on Socket.io
+      socket.emit('OFFER', [
+        {
+          'to': id,
+          'from': socket.id,
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': this._sessionId,
+        },
+        fileInfo
+      ]);
     } catch (e) {
       print(e.toString());
     }

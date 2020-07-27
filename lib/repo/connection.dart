@@ -85,11 +85,8 @@ class Connection {
     socket.on('SENDER_OFFERED', (data) async {
       log.i("SENDER_OFFERED: " + data.toString());
 
-      dynamic _offer = data[0];
-
-      // Remove Sender from Circle
-      bloc.add(
-          Offered(profileData: bloc.circle.closestProfile(), offer: _offer));
+      // Call offered event
+      bloc.add(Offered(fileInfo: data[1], offer: data[0]));
     });
 
     // ** SOCKET::NEW_CANDIDATE **

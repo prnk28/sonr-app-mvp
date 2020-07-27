@@ -10,43 +10,56 @@ class FileManager {
   RTCDataChannel dataChannel;
 
   // Maps to Track Transfer
-  var _outgoing;
-  var _incoming;
+  var outgoing;
+  var incoming;
 
   // Constructor
   FileManager(this.bloc, this.session) {
     // Initialize Maps
-    _outgoing = new Map<String, TransferFile>();
-    _incoming = new Map<String, TransferFile>();
+    outgoing = new Map<String, TransferFile>();
+    incoming = new Map<String, TransferFile>();
 
+    // Add DataChannel
+    session.onDataChannel = (channel) {
+      dataChannel = channel;
+    };
 
-
-
+    // Handle DataChannel Message
+    session.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
+      this.handleMessage(data);
+    };
   }
 
   // ** VOID: Adds File Metadata to Manager
-  addTransferFile({dynamic info, File file}) {
+  TransferFile queueFile({dynamic info, File file}) {
     if (bloc.device.status == SonarStatus.RECEIVER) {
       // Create File Object
       var incomingFile = new TransferFile(info: info);
 
       // Set File to Incoming Tracker
-      _incoming[bloc.session.peerId()] = incomingFile;
+      incoming[bloc.session.peerId()] = incomingFile;
+
+      // Return File Object
+      return incomingFile;
     } else if (bloc.device.status == SonarStatus.SENDER) {
       // Create File Object
       var outgoingFile = new TransferFile(localFile: file);
 
       // Set File to Outgoing Tracker
-      _outgoing[bloc.session.peerId()] = outgoingFile;
+      outgoing[bloc.session.peerId()] = outgoingFile;
+
+      // Return File Object
+      return outgoingFile;
     } else {
       log.e("User not in either position");
+      return null;
     }
   }
 
   // ** BUFFER: Get Next Chunk to send to Receiver
   send() async {
     // Get File thats being sent to Peer
-    TransferFile transfer = _outgoing[bloc.session.peerId()];
+    TransferFile transfer = outgoing[bloc.session.peerId()];
 
     // Open File in Reader and Send Data pieces as chunks
     final reader = ChunkedStreamIterator(transfer.file.openRead());
@@ -56,9 +69,10 @@ class FileManager {
       // read one CHUNK
       var data = await reader.read(CHUNK_SIZE);
       var chunk = Uint8List.fromList(data);
-      var chunkInfo = transfer.setChunkInfo();
+      var chunkInfo = transfer.getChunkInfo();
 
       // Send ChunkInfo over Channel
+      dataChannel.send(RTCDataChannelMessage(json.encode(chunkInfo)));
 
       // Send Binary in WebRTC Data Channel
       dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
@@ -74,31 +88,22 @@ class FileManager {
     }
   }
 
-  // ** BOOL: Add Chunk received from Sender
-  bool addChunk(ByteBuffer chunk, int receivedChunkNum) {
-    // Verify Receiver
-    // // Set Variables
-    // int nextChunkNum = receivedChunkNum + 1;
-    // bool lastChunkInFile = receivedChunkNum == this._chunksTotal - 1;
-    // bool lastChunkInBlock =
-    //     receivedChunkNum > 0 && (receivedChunkNum + 1) % CHUNKS_PER_ACK == 0;
-    // receivedChunkNum = receivedChunkNum + 1;
+  // Interpret WebRTC Message
+  void handleMessage(RTCDataChannelMessage message) {
+    // Get File Reference
+    var transfer = this.incoming[session.peerId()];
 
-    // // Add Chunk to Block
-    // _block.addAll(chunk.asInt8List());
-
-    // // Append the File
-    // if (lastChunkInFile || lastChunkInBlock) {
-    //   _fileLocal.writeAsBytes(_block).then((value) => {
-    //         if (lastChunkInFile)
-    //           {_isComplete = true}
-    //         else
-    //           {
-    //             socket.emit("BLOCK_REQUEST", [peerId, nextChunkNum])
-    //           }
-    //       });
-    // }
-
-    throw ("Cannot Add Chunk, User is sender.");
+    // Check if Binary
+    if (message.isBinary) {
+      // Add Binary to Transfer
+      transfer.addChunk(message.binary);
+    }
+    // Check if Text
+    else {
+      // Get ChunkInfo from Text and Update
+      transfer.updateChunkInfo(json.decode(message.text));
+      // Log Message
+      log.i(message.text);
+    }
   }
 }

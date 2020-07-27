@@ -21,18 +21,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     connection = new Connection(this);
     device = new Device(this);
     session = new Session(this);
-
-    // Add DataChannel
-    session.onDataChannel = (channel) {
-      session.fileManager.dataChannel = channel;
-    };
-
-    // Handle DataChannel Message
-    session.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
-      if (data.isBinary) {
-        log.v("Received Chunk");
-      }
-    };
   }
 
   // Initial State
@@ -154,11 +142,19 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapInviteToState(Invite requestEvent) async* {
     // Check Status
     if (connection.ready()) {
-      // Emit to Socket.io
+      // Set Invited and Peer
       connection.invited = true;
+      session.setPeer(this.circle.closestProfile());
+
+      // Get Asset File
+      File transferToSend =
+          await getAssetFileByPath("assets/images/headers/4.jpg");
+
+      // Add to Queue
+      var transfer = session.fileManager.queueFile(file: transferToSend);
 
       // Create Offer and Emit
-      session.invite(circle.closestId());
+      session.invite(transfer.getInfo());
 
       // Device Pending State
       yield Pending("SENDER", match: circle.closestProfile());
@@ -174,10 +170,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Set Offered
       connection.offered = true;
 
+      // Add Incoming File Info
+      session.fileManager.queueFile(info: offeredEvent.fileInfo);
+
       // Device Pending State
       yield Pending("RECEIVER",
-          match: offeredEvent.profileData,
-          file: offeredEvent.fileData,
+          match: circle.closestProfile(),
+          file: offeredEvent.fileInfo,
           offer: offeredEvent.offer);
     }
   }
@@ -208,8 +207,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Set Peer and Handle Answer
-      session.setPeer(this.circle.closestProfile());
+      // Handle Answer
       session.handleAnswer(acceptedEvent.answer);
 
       // Emit Decision to Server
@@ -236,13 +234,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Get Asset File
-      File transferToSend =
-          await getAssetFileByPath("assets/images/headers/4.jpg");
-
-      // Add to Queue
-      session.fileManager.addTransferFile(file: transferToSend);
-
       // Begin Sending
       session.fileManager.send();
 
