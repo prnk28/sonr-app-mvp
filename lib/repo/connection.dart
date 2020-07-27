@@ -1,4 +1,6 @@
-import '../core/core.dart';
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/repo/repo.dart';
 
 class Connection {
   // Session Properties
@@ -118,7 +120,7 @@ class Connection {
 
     // ** SOCKET::NEXT_CHUNK **
     socket.on('NEXT_CHUNK', (data) {
-      bloc.session.fileManager.sendBlock(data);
+      //bloc.session.fileManager.sendBlock(data);
       // Add to Process
       log.i("RECEIVER_COMPLETED: " + data.toString());
     });

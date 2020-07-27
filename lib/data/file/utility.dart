@@ -76,6 +76,20 @@ Future<File> getAssetFileByPath(String path) async {
   return await File(dbPath).writeAsBytes(bytes);
 }
 
+// *******************************
+// ** Get File Info from Object **
+// *******************************
+dynamic getFileInfo(File file) async {
+  // Get Properties
+  String type = EnumToString.parse(getFileTypeFromPath(file.path));
+  String name = basename(file.path);
+  int size = await file.length();
+  int chunksTotal = (size / CHUNK_SIZE).ceil();
+
+  // Return as JSON Map
+  return {"size": size, "name": name, "type": type, "chunksTotal": chunksTotal};
+}
+
 // ********************************
 // ** Write Local Data of Assets **
 // ********************************

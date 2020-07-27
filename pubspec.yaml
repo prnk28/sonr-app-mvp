@@ -33,6 +33,8 @@ dependencies:
   uuid: 2.0.0
 
   # -- Extension --
+  characters: ^1.0.0
+  enum_to_string: ^1.0.9
   intl: ^0.15.8
   image_picker:
   path_provider: ^1.6.5

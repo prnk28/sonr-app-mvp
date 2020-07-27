@@ -1,6 +1,7 @@
+import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
-import 'package:sonar_app/repositories/repositories.dart';
+import 'package:sonar_app/repo/repo.dart';
 
 // *******************
 // * Signaling Enum **
@@ -16,26 +17,6 @@ enum SignalingState {
   ConnectionError,
 }
 
-// **********************
-// * Required RTC Maps **
-// **********************
-// ICE RTCConfiguration Map
-final configuration = {
-  'iceServers': [
-    //{"url": "stun:stun.l.google.com:19302"},
-    {'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
-  ]
-};
-
-// Create DC Constraints
-final constraints = {
-  'mandatory': {
-    'OfferToReceiveAudio': false,
-    'OfferToReceiveVideo': false,
-  },
-  'optional': [],
-};
-
 // *********************************
 // * Callbacks for Signaling API. **
 // *********************************
@@ -50,10 +31,11 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 // * Initialization **
 // *******************
 class Session {
-  // WebRTC Variables
-  var _sessionId;
-  var _peerConnections = new Map<String, RTCPeerConnection>();
-  var _dataChannels = new Map<String, RTCDataChannel>();
+  // WebRTC Transfer Variables
+  String _sessionId;
+  dynamic _peer;
+  Map _peerConnections = new Map<String, RTCPeerConnection>();
+  Map _dataChannels = new Map<String, RTCDataChannel>();
   var _remoteCandidates = [];
 
   // Callbacks
@@ -195,18 +177,21 @@ class Session {
   }
 
   void leave() {
+    // Tell Peers youre leaving
     socket.emit('LEAVE', {
       'session_id': this._sessionId,
       'from': socket.id,
     });
+
+    // Reset Current Peer
+    _peer = null;
   }
 
 // ****************************
 // ** WebRTC Helper Methods ***
 // ****************************
   _createPeerConnection(id) async {
-    RTCPeerConnection pc =
-        await createPeerConnection(configuration, constraints);
+    RTCPeerConnection pc = await createPeerConnection(ICE_CONFIG, DC_SETTINGS);
     pc.onIceCandidate = (candidate) {
       socket.emit('CANDIDATE', {
         'to': id,
@@ -248,7 +233,7 @@ class Session {
 
   _createOffer(String id, RTCPeerConnection pc) async {
     try {
-      RTCSessionDescription s = await pc.createOffer(constraints);
+      RTCSessionDescription s = await pc.createOffer(DC_SETTINGS);
       pc.setLocalDescription(s);
 
       socket.emit('OFFER', {
@@ -264,7 +249,7 @@ class Session {
 
   _createAnswer(String id, RTCPeerConnection pc) async {
     try {
-      RTCSessionDescription s = await pc.createAnswer(constraints);
+      RTCSessionDescription s = await pc.createAnswer(DC_SETTINGS);
       pc.setLocalDescription(s);
 
       socket.emit('ANSWER', {
@@ -276,5 +261,29 @@ class Session {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  // **************************
+  // ** Peer Helper Methods ***
+  // **************************
+  peerId() {
+    if (_peer != null) {
+      return this._peer["id"];
+    }
+    log.e("Peer Not Set");
+  }
+
+  peerProfile() {
+    if (_peer != null) {
+      return this._peer;
+    }
+    log.e("Peer Not Set");
+  }
+
+  setPeer(dynamic peer) {
+    if (_peer != null) {
+      log.e("Peer Already Set");
+    }
+    this._peer = peer;
   }
 }

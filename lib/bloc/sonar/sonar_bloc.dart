@@ -1,43 +1,18 @@
-import 'dart:async';
-import 'dart:math';
-import 'dart:typed_data';
-import 'package:bloc/bloc.dart';
+import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/repositories/repositories.dart';
-import '../bloc.dart';
+import 'package:sonar_app/repo/repo.dart';
 import 'package:sonar_app/core/core.dart';
-import 'dart:io';
 
 // ***********************
 // ** Sonar Bloc Class ***
 // ***********************
-const CHUNK_SIZE = 16000; // Maximum Transmission Unit in Bytes
-const CHUNKS_PER_ACK = 64;
-
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
-  // Data Provider
-  Session session;
+  // Data Providers
+  Circle circle;
   Connection connection;
   Device device;
-
-  Circle circle;
-
-  // File Properties
-  int _chunksTotal;
-  File _file;
-  Uint8List _block;
-
-  // Transmission Private Properties
-  bool _isComplete;
-  String peerId;
-  int _currentChunkNum;
-
-  // Public Properties
-  int receivedChunkNum;
-  double sendingProgress;
-  double receivingProgress;
-  FileType type;
+  Session session;
 
   // Constructer
   SonarBloc() : super(null) {
@@ -46,6 +21,18 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     connection = new Connection(this);
     device = new Device(this);
     session = new Session(this);
+
+    // Add DataChannel
+    session.onDataChannel = (channel) {
+      session.fileManager.dataChannel = channel;
+    };
+
+    // Handle DataChannel Message
+    session.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
+      if (data.isBinary) {
+        log.v("Received Chunk");
+      }
+    };
   }
 
   // Initial State
@@ -221,7 +208,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (connection.initialized) {
+      // Set Peer and Handle Answer
+      session.setPeer(this.circle.closestProfile());
       session.handleAnswer(acceptedEvent.answer);
+
       // Emit Decision to Server
       yield PreTransfer(
           profile: acceptedEvent.profile, matchId: acceptedEvent.matchId);
@@ -246,8 +236,15 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Audio as bytes
-      session.fileManager.sendBlock(0);
+      // Get Asset File
+      File transferToSend =
+          await getAssetFileByPath("assets/images/headers/4.jpg");
+
+      // Add to Queue
+      session.fileManager.addTransferFile(file: transferToSend);
+
+      // Begin Sending
+      session.fileManager.send();
 
       // Emit Decision to Server
       yield Transferring();
@@ -262,12 +259,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (connection.initialized) {
       // Read Data
       if (receivedEvent.data.isBinary) {
-        //addChunk(receivedEvent.data.binary.buffer, _currentChunkNum);
         log.i(receivedEvent.data.binary.buffer.lengthInBytes.toString());
         print("Received Chunk");
       } else {
-        // Set New Chunk
-        _currentChunkNum = int.parse(receivedEvent.data.text);
         log.i(receivedEvent.data.text);
       }
       // Emit Completed

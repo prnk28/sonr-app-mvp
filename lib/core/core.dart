@@ -2,17 +2,15 @@
 export 'motion_util.dart';
 export 'circle.dart';
 export 'design.dart';
-export '../repositories/connection.dart';
-
+export 'dart:async';
+export 'dart:io' hide Socket;
+export 'dart:math';
 export 'package:flutter/services.dart';
-
-// Sonar Resources
-export 'package:sonar_app/bloc/bloc.dart';
-export 'package:sonar_app/repositories/repositories.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
 export 'package:bloc/bloc.dart';
+export 'package:enum_to_string/enum_to_string.dart';
 
 // Networking Libraries
 export 'package:socket_io_client/socket_io_client.dart';

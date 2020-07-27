@@ -1,7 +1,7 @@
-import 'dart:io';
-import 'package:flutter_webrtc/rtc_data_channel.dart';
+import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
+import 'package:sonar_app/repo/repo.dart';
 
 class FileManager {
   // Initialization
@@ -9,39 +9,56 @@ class FileManager {
   SonarBloc bloc;
   RTCDataChannel dataChannel;
 
+  // Maps to Track Transfer
+  var _outgoing;
+  var _incoming;
+
   // Constructor
   FileManager(this.bloc, this.session) {
-    session.onDataChannel = (channel) {
-      dataChannel = channel;
-    };
+    // Initialize Maps
+    _outgoing = new Map<String, TransferFile>();
+    _incoming = new Map<String, TransferFile>();
 
-    // ** RTC::Data Message **
-    session.onDataChannelMessage = (dc, RTCDataChannelMessage data) async {
-      if (data.isBinary) {
-        log.i("Received Chunk");
-      }
-    };
+
+
+
+  }
+
+  // ** VOID: Adds File Metadata to Manager
+  addTransferFile({dynamic info, File file}) {
+    if (bloc.device.status == SonarStatus.RECEIVER) {
+      // Create File Object
+      var incomingFile = new TransferFile(info: info);
+
+      // Set File to Incoming Tracker
+      _incoming[bloc.session.peerId()] = incomingFile;
+    } else if (bloc.device.status == SonarStatus.SENDER) {
+      // Create File Object
+      var outgoingFile = new TransferFile(localFile: file);
+
+      // Set File to Outgoing Tracker
+      _outgoing[bloc.session.peerId()] = outgoingFile;
+    } else {
+      log.e("User not in either position");
+    }
   }
 
   // ** BUFFER: Get Next Chunk to send to Receiver
-  Future<void> sendBlock(int beginChunkNum) async {
-    // Set Variables
-    //int remainingChunks = this._chunksTotal - beginChunkNum;
-    //int chunksToSend = [remainingChunks, CHUNKS_PER_ACK].reduce(min);
-    //int endChunkNum = beginChunkNum + chunksToSend - 1;
-    //int blockBegin = beginChunkNum * CHUNK_SIZE;
-    // int blockEnd = (endChunkNum * CHUNK_SIZE) + CHUNK_SIZE;
-
-    // Get Asset File
-    File file = await getAssetFileByPath("assets/images/headers/4.jpg");
+  send() async {
+    // Get File thats being sent to Peer
+    TransferFile transfer = _outgoing[bloc.session.peerId()];
 
     // Open File in Reader and Send Data pieces as chunks
-    final reader = ChunkedStreamIterator(file.openRead());
+    final reader = ChunkedStreamIterator(transfer.file.openRead());
+
     // While the reader has a next byte
     while (true) {
       // read one CHUNK
       var data = await reader.read(CHUNK_SIZE);
       var chunk = Uint8List.fromList(data);
+      var chunkInfo = transfer.setChunkInfo();
+
+      // Send ChunkInfo over Channel
 
       // Send Binary in WebRTC Data Channel
       dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
@@ -58,9 +75,9 @@ class FileManager {
   }
 
   // ** BOOL: Add Chunk received from Sender
-  bool addBlock(ByteBuffer chunk, int receivedChunkNum) {
+  bool addChunk(ByteBuffer chunk, int receivedChunkNum) {
     // Verify Receiver
-    // Set Variables
+    // // Set Variables
     // int nextChunkNum = receivedChunkNum + 1;
     // bool lastChunkInFile = receivedChunkNum == this._chunksTotal - 1;
     // bool lastChunkInBlock =

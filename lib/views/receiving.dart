@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 
 class ReceivingView extends StatelessWidget {
