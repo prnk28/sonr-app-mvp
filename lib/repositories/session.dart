@@ -1,7 +1,6 @@
-import 'package:flutter_webrtc/webrtc.dart';
-import 'package:sonar_app/bloc/bloc.dart';
-
-import 'connection.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/data/data.dart';
+import 'package:sonar_app/repositories/repositories.dart';
 
 // *******************
 // * Signaling Enum **
@@ -40,7 +39,7 @@ final constraints = {
 // *********************************
 // * Callbacks for Signaling API. **
 // *********************************
-typedef void SignalingStateCallback(SignalingState state);
+typedef void OverrideSignalingStateCallback(SignalingState state);
 typedef void StreamStateCallback(MediaStream stream);
 typedef void OtherEventCallback(dynamic event);
 typedef void DataChannelMessageCallback(
@@ -57,7 +56,8 @@ class Session {
   var _dataChannels = new Map<String, RTCDataChannel>();
   var _remoteCandidates = [];
 
-  SignalingStateCallback onStateChange;
+  // Callbacks
+  OverrideSignalingStateCallback onStateChange;
   StreamStateCallback onLocalStream;
   StreamStateCallback onAddRemoteStream;
   StreamStateCallback onRemoveRemoteStream;
@@ -65,7 +65,14 @@ class Session {
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
 
-  Session();
+  // References
+  FileManager fileManager;
+  SonarBloc bloc;
+
+  // Constructor
+  Session(this.bloc) {
+    fileManager = new FileManager(bloc, this);
+  }
 
 // *************************
 // ** Socket.io Handlers ***

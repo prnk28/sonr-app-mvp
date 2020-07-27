@@ -1,10 +1,5 @@
 import '../core/core.dart';
 
-// Networking
-Socket socket = io('http://match.sonr.io', <String, dynamic>{
-  'transports': ['websocket'],
-});
-
 class Connection {
   // Session Properties
   String id;
@@ -125,7 +120,7 @@ class Connection {
 
     // ** SOCKET::NEXT_CHUNK **
     socket.on('NEXT_CHUNK', (data) {
-      bloc.sendBlock(data);
+      bloc.session.fileManager.sendBlock(data);
       // Add to Process
       log.i("RECEIVER_COMPLETED: " + data.toString());
     });

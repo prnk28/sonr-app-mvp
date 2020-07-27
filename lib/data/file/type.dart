@@ -3,10 +3,7 @@
   Utility Class created to take file extension and turn it into Enum Type.
   Information from article: https://www.computerhope.com/issues/ch001789.htm 
 */
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:sonar_app/data/data.dart';
 
 // *********************
 // ** File Type Enum ***
@@ -30,10 +27,22 @@ enum FileType {
   Word
 }
 
+// ***************************
+// ** Asset Directory Enum ***
+// ***************************
+enum AssetDirectory {
+  Animations,
+  Audio,
+  Fonts,
+  RootImages,
+  HeaderImages,
+  SocialImages
+}
+
 // *********************************
 // ** Get File Type by Extension ***
 // *********************************
-FileType getFileType(path) {
+FileType getFileTypeFromPath(path) {
   // Get File Extension
   var kind = extension(path);
 
@@ -245,32 +254,4 @@ FileType getFileType(path) {
   else {
     return FileType.Unknown;
   }
-}
-
-// ********************************
-// ** Read Local Data of Assets ***
-// ********************************
-Future<Uint8List> readFileByte(String filePath) async {
-  Uri myUri = Uri.parse(filePath);
-  File audioFile = new File.fromUri(myUri);
-  Uint8List bytes;
-  await audioFile.readAsBytes().then((value) {
-    bytes = Uint8List.fromList(value);
-    print('reading of bytes is completed');
-  }).catchError((onError) {
-    print(
-        'Exception Error while reading audio from path:' + onError.toString());
-  });
-  return bytes;
-}
-
-// ********************************
-// ** Write Local Data of Assets **
-// ********************************
-Future<void> writeToFile(ByteData data, String path) async {
-  final buffer = data.buffer;
-  Directory tempDir = await getApplicationDocumentsDirectory();
-  String tempPath = tempDir.path;
-  return new File(tempPath + "/" + path)
-      .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
 }
