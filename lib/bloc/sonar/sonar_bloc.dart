@@ -244,7 +244,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       session.fileManager.queueFile(false, file: transferToSend);
 
       // Get File Info
-      var transfer = session.fileManager.outgoing[session.peerId];
+      //var transfer = session.fileManager.outgoing[session.peerId];
 
       // Begin Sending
       session.fileManager.send();
