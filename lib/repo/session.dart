@@ -17,6 +17,26 @@ enum SignalingState {
   ConnectionError,
 }
 
+// **********************
+// * Required RTC Maps **
+// **********************
+// ICE RTCConfiguration Map
+final configuration = {
+  'iceServers': [
+    //{"url": "stun:stun.l.google.com:19302"},
+    {'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
+  ]
+};
+
+// Create DC Constraints
+final constraints = {
+  'mandatory': {
+    'OfferToReceiveAudio': false,
+    'OfferToReceiveVideo': false,
+  },
+  'optional': [],
+};
+
 // *********************************
 // * Callbacks for Signaling API. **
 // *********************************
@@ -33,10 +53,10 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 class Session {
   // WebRTC Transfer Variables
   String _sessionId;
-  dynamic _peer;
   Map _peerConnections = new Map<String, RTCPeerConnection>();
   Map _dataChannels = new Map<String, RTCDataChannel>();
   var _remoteCandidates = [];
+  String peerId;
 
   // Callbacks
   OverrideSignalingStateCallback onStateChange;
@@ -162,22 +182,21 @@ class Session {
 // *****************************
 // ** WebRTC Message Sending ***
 // *****************************
-  // Invite Peer
-  void invite(dynamic fileInfo) {
-    this._sessionId = socket.id + '-' + this.peerId();
+  void invite(String peer, dynamic fileInfo) {
+    peerId = peer;
+    this._sessionId = socket.id + '-' + peerId;
 
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateNew);
     }
 
-    _createPeerConnection(this.peerId()).then((pc) {
-      _peerConnections[this.peerId()] = pc;
-      _createDataChannel(this.peerId(), pc);
-      _createOffer(this.peerId(), fileInfo, pc);
+    _createPeerConnection(peerId).then((pc) {
+      _peerConnections[peerId] = pc;
+      _createDataChannel(peerId, pc);
+      _createOffer(peerId, fileInfo, pc);
     });
   }
 
-  // Leave Connection
   void leave() {
     // Tell Peers youre leaving
     socket.emit('LEAVE', {
@@ -186,14 +205,15 @@ class Session {
     });
 
     // Reset Current Peer
-    _peer = null;
+    peerId = null;
   }
 
 // ****************************
 // ** WebRTC Helper Methods ***
 // ****************************
   _createPeerConnection(id) async {
-    RTCPeerConnection pc = await createPeerConnection(ICE_CONFIG, DC_SETTINGS);
+    RTCPeerConnection pc =
+        await createPeerConnection(configuration, constraints);
     pc.onIceCandidate = (candidate) {
       socket.emit('CANDIDATE', {
         'to': id,
@@ -235,19 +255,16 @@ class Session {
 
   _createOffer(String id, dynamic fileInfo, RTCPeerConnection pc) async {
     try {
-      RTCSessionDescription s = await pc.createOffer(DC_SETTINGS);
+      RTCSessionDescription s = await pc.createOffer(constraints);
       pc.setLocalDescription(s);
 
-      // Send on Socket.io
-      socket.emit('OFFER', [
-        {
-          'to': id,
-          'from': socket.id,
-          'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': this._sessionId,
-        },
-        fileInfo
-      ]);
+      socket.emit('OFFER', {
+        'to': id,
+        'from': socket.id,
+        'description': {'sdp': s.sdp, 'type': s.type},
+        'session_id': this._sessionId,
+        'file_info': fileInfo
+      });
     } catch (e) {
       print(e.toString());
     }
@@ -255,7 +272,7 @@ class Session {
 
   _createAnswer(String id, RTCPeerConnection pc) async {
     try {
-      RTCSessionDescription s = await pc.createAnswer(DC_SETTINGS);
+      RTCSessionDescription s = await pc.createAnswer(constraints);
       pc.setLocalDescription(s);
 
       socket.emit('ANSWER', {
@@ -267,29 +284,5 @@ class Session {
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  // **************************
-  // ** Peer Helper Methods ***
-  // **************************
-  peerId() {
-    if (_peer != null) {
-      return this._peer["id"];
-    }
-    log.e("Peer Not Set");
-  }
-
-  peerProfile() {
-    if (_peer != null) {
-      return this._peer;
-    }
-    log.e("Peer Not Set");
-  }
-
-  setPeer(dynamic peer) {
-    if (_peer != null) {
-      log.e("Peer Already Set");
-    }
-    this._peer = peer;
   }
 }

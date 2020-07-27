@@ -86,7 +86,7 @@ class Connection {
       log.i("SENDER_OFFERED: " + data.toString());
 
       // Call offered event
-      bloc.add(Offered(fileInfo: data[1], offer: data[0]));
+      bloc.add(Offered(offer: data[0], profile: data[1]));
     });
 
     // ** SOCKET::NEW_CANDIDATE **

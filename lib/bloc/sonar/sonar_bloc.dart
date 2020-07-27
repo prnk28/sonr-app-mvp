@@ -72,6 +72,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (connection.needSetup()) {
 // Initialize Variables
       Location fakeLocation = Location.fakeLocation();
+
       // Emit to Socket.io
       socket.emit("INITIALIZE",
           [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
@@ -142,19 +143,14 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapInviteToState(Invite requestEvent) async* {
     // Check Status
     if (connection.ready()) {
-      // Set Invited and Peer
+      // Set Invited
       connection.invited = true;
-      session.setPeer(this.circle.closestProfile());
 
-      // Get Asset File
-      File transferToSend =
-          await getAssetFileByPath("assets/images/headers/4.jpg");
-
-      // Add to Queue
-      var transfer = session.fileManager.queueFile(file: transferToSend);
+      // Set Peer
+      session.peerId = circle.closestId();
 
       // Create Offer and Emit
-      session.invite(transfer.getInfo());
+      session.invite(this.circle.closestId(), {});
 
       // Device Pending State
       yield Pending("SENDER", match: circle.closestProfile());
@@ -167,11 +163,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
     // Check Status
     if (connection.ready()) {
-      // Set Offered
+      // Set Offered and Peer
       connection.offered = true;
+      session.peerId = offeredEvent.profile["id"];
 
       // Add Incoming File Info
-      session.fileManager.queueFile(info: offeredEvent.fileInfo);
+      session.fileManager.queueFile(true, info: offeredEvent.fileInfo);
 
       // Device Pending State
       yield Pending("RECEIVER",
@@ -195,6 +192,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       }
       // Receiver Declined
       else {
+        session.peerId = null;
+
         socket.emit("DECLINE", authorizeEvent.matchId);
         add(Reset(0));
       }
@@ -222,6 +221,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapDeclinedToState(Declined declinedEvent) async* {
     // Check Status
     if (connection.initialized) {
+      // Clear Peer
+      session.peerId = null;
+
       // Emit Decision to Server
       yield Failed(
           profile: declinedEvent.profile, matchId: declinedEvent.matchId);
@@ -234,6 +236,16 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
+      // Get Asset File
+      File transferToSend =
+          await getAssetFileByPath("assets/images/headers/4.jpg");
+
+      // Add to Queue
+      session.fileManager.queueFile(false, file: transferToSend);
+
+      // Get File Info
+      var transfer = session.fileManager.outgoing[session.peerId];
+
       // Begin Sending
       session.fileManager.send();
 

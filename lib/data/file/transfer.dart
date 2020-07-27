@@ -10,7 +10,7 @@ class TransferFile {
 
   // Transfer Variables
   File file;
-  Uint8List block;
+  BytesBuilder block;
 
   // Chunking Variables
   int chunkNum;
@@ -42,6 +42,7 @@ class TransferFile {
         type = info["type"];
         chunksTotal = info["chunksTotal"];
       }
+      block = new BytesBuilder();
       log.e("No File or Info Provided");
     }
   }
@@ -50,13 +51,10 @@ class TransferFile {
     // Check Completed
     if (!completed) {
       // Add Chunk to Block
-      block.addAll(chunk);
+      block.add(chunk);
 
       // Set Remaining Chunks
-      var remainingChunks = chunksTotal - chunkNum + 1;
-
-      // Set Progress
-      progress = (chunksTotal - remainingChunks) / chunksTotal;
+      var remainingChunks = chunksTotal - chunkNum;
 
       // Check completed
       if (remainingChunks == 0) {
@@ -66,7 +64,16 @@ class TransferFile {
   }
 
   updateChunkInfo(dynamic chunkInfo) {
+    // Set Chunk Info
     chunkNum = chunkInfo["receivedChunkNum"];
+    chunksTotal = chunkInfo["chunksTotal"];
+
+    // Log info
+    log.i("Chunk Num: " +
+        chunkNum.toString() +
+        " >-----> " +
+        "Chunk Total: " +
+        chunksTotal.toString());
   }
 
   getChunkInfo() {
@@ -83,6 +90,7 @@ class TransferFile {
 
     // Return JSON
     return {
+      "chunksTotal": chunksTotal,
       "remainingChunks": remainingChunks,
       "chunksToSend": chunksToSend,
       "progress": progress,

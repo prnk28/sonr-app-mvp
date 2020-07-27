@@ -31,35 +31,26 @@ class FileManager {
   }
 
   // ** VOID: Adds File Metadata to Manager
-  TransferFile queueFile({dynamic info, File file}) {
-    if (bloc.device.status == SonarStatus.RECEIVER) {
+  void queueFile(bool receiving, {dynamic info, File file}) {
+    if (receiving) {
       // Create File Object
       var incomingFile = new TransferFile(info: info);
 
       // Set File to Incoming Tracker
-      incoming[bloc.session.peerId()] = incomingFile;
-
-      // Return File Object
-      return incomingFile;
-    } else if (bloc.device.status == SonarStatus.SENDER) {
+      incoming[session.peerId] = incomingFile;
+    } else {
       // Create File Object
       var outgoingFile = new TransferFile(localFile: file);
 
       // Set File to Outgoing Tracker
-      outgoing[bloc.session.peerId()] = outgoingFile;
-
-      // Return File Object
-      return outgoingFile;
-    } else {
-      log.e("User not in either position");
-      return null;
+      outgoing[session.peerId] = outgoingFile;
     }
   }
 
   // ** BUFFER: Get Next Chunk to send to Receiver
   send() async {
     // Get File thats being sent to Peer
-    TransferFile transfer = outgoing[bloc.session.peerId()];
+    TransferFile transfer = outgoing[session.peerId];
 
     // Open File in Reader and Send Data pieces as chunks
     final reader = ChunkedStreamIterator(transfer.file.openRead());
@@ -79,8 +70,9 @@ class FileManager {
 
       // End of List
       if (data.length <= 0) {
-        socket.emit("SEND_COMPLETE");
-        //_isComplete = true;
+        // Send Complete Message on same DC
+        dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
+
         bloc.add(Completed(null, null));
         break;
       }
@@ -91,7 +83,7 @@ class FileManager {
   // Interpret WebRTC Message
   void handleMessage(RTCDataChannelMessage message) {
     // Get File Reference
-    var transfer = this.incoming[session.peerId()];
+    var transfer = this.incoming[session.peerId];
 
     // Check if Binary
     if (message.isBinary) {
@@ -100,10 +92,15 @@ class FileManager {
     }
     // Check if Text
     else {
-      // Get ChunkInfo from Text and Update
-      transfer.updateChunkInfo(json.decode(message.text));
-      // Log Message
-      log.i(message.text);
+      // Check for Completion Message
+      if (message.text == "SEND_COMPLETE") {
+        // Set Completed true
+        transfer.completed = true;
+        transfer.block.takeBytes();
+      } else {
+        // Get ChunkInfo from Text and Update
+        transfer.updateChunkInfo(json.decode(message.text));
+      }
     }
   }
 }
