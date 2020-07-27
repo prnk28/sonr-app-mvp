@@ -42,10 +42,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Constructer
   SonarBloc() : super(null) {
     // ** RTC::Initialization **
-    session = new Session(this);
+    circle = new Circle(this);
     connection = new Connection(this);
-    circle = new Circle();
     device = new Device(this);
+    session = new Session(this);
   }
 
   // Initial State
@@ -118,7 +118,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       new Timer(
           delay,
           () => {
-                socket.emit("SENDING", [device.lastDirection.toSendMap()])
+                socket.emit("SENDING", [device.direction.toSendMap()])
               });
     }
 
@@ -126,12 +126,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (sendEvent.map != null) {
       yield Sending(
           matches: sendEvent.map,
-          currentMotion: device.currentMotion,
-          currentDirection: device.lastDirection);
+          currentMotion: device.motion,
+          currentDirection: device.direction);
     } else {
       yield Sending(
-          currentMotion: device.currentMotion,
-          currentDirection: device.lastDirection);
+          currentMotion: device.motion, currentDirection: device.direction);
     }
   }
 
@@ -146,7 +145,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           delay,
           () => {
                 // Emit Receive
-                socket.emit("RECEIVING", [device.lastDirection.toReceiveMap()])
+                socket.emit("RECEIVING", [device.direction.toReceiveMap()])
               });
     }
 
@@ -154,12 +153,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (receiveEvent.map != null) {
       yield Receiving(
           matches: receiveEvent.map,
-          currentMotion: device.currentMotion,
-          currentDirection: device.lastDirection);
+          currentMotion: device.motion,
+          currentDirection: device.direction);
     } else {
       yield Receiving(
-          currentMotion: device.currentMotion,
-          currentDirection: device.lastDirection);
+          currentMotion: device.motion, currentDirection: device.direction);
     }
   }
 
@@ -173,10 +171,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       connection.invited = true;
 
       // Create Offer and Emit
-      session.invite(circle.closest()["id"]);
+      session.invite(circle.closestId());
 
       // Device Pending State
-      yield Pending("SENDER", match: circle.closest());
+      yield Pending("SENDER", match: circle.closestProfile());
     }
   }
 
@@ -317,7 +315,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapUpdateToState(Update updateEvent) async* {
     if (connection.initialized) {
-      if (updateEvent.map.status == "Sender") {
+      if (device.status == SonarStatus.SENDER) {
         add(Send(map: updateEvent.map));
       } else {
         add(Receive(map: updateEvent.map));
@@ -335,31 +333,31 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Check State
       if (device.isSearching()) {
         // Check Directions
-        if (device.lastDirection != updateSensors.newDirection) {
+        if (device.direction != updateSensors.newDirection) {
           // Set as new direction
-          device.lastDirection = updateSensors.newDirection;
+          device.direction = updateSensors.newDirection;
         }
         // Check State
         if (device.isSending()) {
           // Post Update
           add(Update(
-              currentDirection: device.lastDirection,
-              currentMotion: device.currentMotion,
+              currentDirection: device.direction,
+              currentMotion: device.motion,
               map: circle));
         }
         // Receive State
         else if (device.isReceiving()) {
           // Post Update
           add(Update(
-              currentDirection: device.lastDirection,
-              currentMotion: device.currentMotion,
+              currentDirection: device.direction,
+              currentMotion: device.motion,
               map: circle));
         }
         // Pending State
       } else {
         yield Ready(
             currentDirection: updateSensors.newDirection,
-            currentMotion: device.currentMotion);
+            currentMotion: device.motion);
       }
     }
   }

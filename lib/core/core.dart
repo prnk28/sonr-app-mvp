@@ -8,7 +8,6 @@ export 'package:flutter/services.dart';
 
 // Sonar Resources
 export 'package:sonar_app/bloc/bloc.dart';
-export 'package:sonar_app/models/models.dart';
 export 'package:sonar_app/repositories/repositories.dart';
 
 // Dev Libraries

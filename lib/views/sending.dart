@@ -16,7 +16,7 @@ class SendingView extends StatelessWidget {
       // new Timer(
       //     twentySeconds,
       //     () =>
-      sonarBloc.add(Invite(state.matches.closest()["id"]));
+      sonarBloc.add(Invite(state.matches.closestProfile()["id"]));
 
       // Return Text Widget
       return Text(
@@ -24,7 +24,7 @@ class SendingView extends StatelessWidget {
             " , " +
             state.currentDirection.degrees.toString() +
             ", Match/Client Difference: " +
-            state.matches.closest()["difference"].toString(),
+            state.matches.closestProfile()["difference"].toString(),
         style: Design.getTextStyle(TextDesign.MediumText),
       );
     } else {

@@ -1,19 +1,20 @@
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
+
+enum SonarStatus { RECEIVER, SENDER, DEFAULT }
 
 class Device {
   // References
-  SonarBloc _bloc;
-  Direction lastDirection;
-  Motion currentMotion = Motion.create();
+  SonarBloc bloc;
+  Direction direction;
+  Motion motion = Motion.create();
+  SonarStatus status;
 
-  Device(SonarBloc bloc) {
-    // Initialize
-    _bloc = bloc;
-
+  Device(this.bloc) {
     // ** Accelerometer Events **
     accelerometerEvents.listen((newData) {
       // Update Motion Var
-      currentMotion = Motion.create(a: newData);
+      motion = Motion.create(a: newData);
     });
 
     // ** Directional Events **
@@ -23,18 +24,18 @@ class Device {
       // Check Status
       if (bloc.connection.noContact()) {
         // Initialize Direction
-        var newDirection = Direction.create(
-            degrees: newData, accelerometerX: currentMotion.accelX);
+        var newDirection =
+            Direction.create(degrees: newData, accelerometerX: motion.accelX);
 
         // Check Sender Threshold
-        if (currentMotion.state == Orientation.Tilt) {
+        if (motion.state == Orientation.Tilt) {
           // Set Sender
-          bloc.circle.status = "Sender";
+          this.status = SonarStatus.SENDER;
 
           // Check Valid
-          if (lastDirection != null) {
+          if (direction != null) {
             // Generate Difference
-            var difference = newDirection.degrees - lastDirection.degrees;
+            var difference = newDirection.degrees - direction.degrees;
 
             // Threshold
             if (difference.abs() > 5) {
@@ -48,15 +49,15 @@ class Device {
           bloc.add(Refresh(newDirection: newDirection));
         }
         // Check Receiver Threshold
-        else if (currentMotion.state == Orientation.LandscapeLeft ||
-            currentMotion.state == Orientation.LandscapeRight) {
+        else if (motion.state == Orientation.LandscapeLeft ||
+            motion.state == Orientation.LandscapeRight) {
           // Set Receiver
-          bloc.circle.status = "Receiver";
+          this.status = SonarStatus.RECEIVER;
 
           // Check Valid
-          if (lastDirection != null) {
+          if (direction != null) {
             // Generate Difference
-            var difference = newDirection.degrees - lastDirection.degrees;
+            var difference = newDirection.degrees - direction.degrees;
             if (difference.abs() > 10) {
               // Modify Circle
               bloc.circle.modify(newDirection);
@@ -72,19 +73,19 @@ class Device {
 
   // BOOL: Check if Tilted or Landscape
   bool isSearching() {
-    return currentMotion.state == Orientation.Tilt ||
-        currentMotion.state == Orientation.LandscapeLeft ||
-        currentMotion.state == Orientation.LandscapeRight;
+    return motion.state == Orientation.Tilt ||
+        motion.state == Orientation.LandscapeLeft ||
+        motion.state == Orientation.LandscapeRight;
   }
 
   // BOOL: Check if Tilted
   bool isSending() {
-    return currentMotion.state == Orientation.Tilt;
+    return motion.state == Orientation.Tilt;
   }
 
   // BOOL: Check if Landscape
   bool isReceiving() {
-    return currentMotion.state == Orientation.LandscapeLeft ||
-        currentMotion.state == Orientation.LandscapeRight;
+    return motion.state == Orientation.LandscapeLeft ||
+        motion.state == Orientation.LandscapeRight;
   }
 }

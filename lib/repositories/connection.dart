@@ -3,7 +3,7 @@ import '../core/core.dart';
 class Connection {
   // Session Properties
   String id;
-  SonarBloc _bloc;
+  SonarBloc bloc;
 
   // Transfer Variables
   bool initialized = false;
@@ -11,10 +11,7 @@ class Connection {
   bool offered = false;
 
   // Manages Socket.io Events
-  Connection(SonarBloc bloc) {
-    // Initialize
-    _bloc = bloc;
-
+  Connection(this.bloc) {
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       log.v("Connected to Socket");
@@ -23,7 +20,7 @@ class Connection {
 
     // ** SOCKET::INFO **
     socket.on('INFO', (data) {
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.direction));
       // Add to Process
       log.v("Lobby Id: " + data);
     });
@@ -31,23 +28,23 @@ class Connection {
     // ** SOCKET::NEW_SENDER **
     socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
-      socket.emit("RECEIVING", [bloc.device.lastDirection.toReceiveMap()]);
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      socket.emit("RECEIVING", [bloc.device.direction.toReceiveMap()]);
+      bloc.add(Refresh(newDirection: bloc.device.direction));
       // Add to Process
       log.i("NEW_SENDER: " + data);
     });
 
     // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
-      bloc.circle.update(bloc.device.lastDirection, data);
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      bloc.circle.update(bloc.device.direction, data);
+      bloc.add(Refresh(newDirection: bloc.device.direction));
     });
 
     // ** SOCKET::SENDER_EXIT **
     socket.on('SENDER_EXIT', (id) {
       // Remove Sender from Circle
       bloc.circle.exit(id);
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.direction));
 
       // Add to Process
       log.w("SENDER_EXIT: " + id);
@@ -56,11 +53,11 @@ class Connection {
     // ** SOCKET::NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
-      if (bloc.device.lastDirection != null) {
-        socket.emit("SENDING", [bloc.device.lastDirection.toReceiveMap()]);
+      if (bloc.device.direction != null) {
+        socket.emit("SENDING", [bloc.device.direction.toReceiveMap()]);
       }
 
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.direction));
 
       // Add to Process
       log.i("NEW_RECEIVER: " + data);
@@ -68,15 +65,15 @@ class Connection {
 
     // ** SOCKET::RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
-      bloc.circle.update(bloc.device.lastDirection, data);
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      bloc.circle.update(bloc.device.direction, data);
+      bloc.add(Refresh(newDirection: bloc.device.direction));
     });
 
     // ** SOCKET::RECEIVER_EXIT **
     socket.on('RECEIVER_EXIT', (id) {
       // Remove Receiver from Circle
       bloc.circle.exit(id);
-      bloc.add(Refresh(newDirection: bloc.device.lastDirection));
+      bloc.add(Refresh(newDirection: bloc.device.direction));
 
       // Add to Process
       log.w("RECEIVER_EXIT: " + id);
@@ -89,7 +86,8 @@ class Connection {
       dynamic _offer = data[0];
 
       // Remove Sender from Circle
-      bloc.add(Offered(profileData: bloc.circle.closest(), offer: _offer));
+      bloc.add(
+          Offered(profileData: bloc.circle.closestProfile(), offer: _offer));
     });
 
     // ** SOCKET::NEW_CANDIDATE **
@@ -105,15 +103,15 @@ class Connection {
 
       dynamic _answer = data[0];
 
-      bloc.add(Accepted(
-          bloc.circle.closest(), bloc.circle.closest()["id"], _answer));
+      bloc.add(Accepted(bloc.circle.closestProfile(),
+          bloc.circle.closestProfile()["id"], _answer));
     });
 
     // ** SOCKET::RECEIVER_DECLINED **
     socket.on('RECEIVER_DECLINED', (data) {
       dynamic matchId = data[0];
 
-      bloc.add(Declined(bloc.circle.closest(), matchId));
+      bloc.add(Declined(bloc.circle.closestProfile(), matchId));
       // Add to Process
       log.w("RECEIVER_DECLINED: " + data.toString());
     });
@@ -129,7 +127,7 @@ class Connection {
     socket.on('RECEIVER_COMPLETED', (data) {
       dynamic matchId = data[0];
 
-      bloc.add(Completed(bloc.circle.closest(), matchId));
+      bloc.add(Completed(bloc.circle.closestProfile(), matchId));
       // Add to Process
       log.i("RECEIVER_COMPLETED: " + data.toString());
     });
@@ -150,7 +148,7 @@ class Connection {
 
       // Reset circle
       socket.emit("RESET");
-      _bloc.circle.status = "Default";
+      bloc.device.status = SonarStatus.DEFAULT;
     }
   }
 

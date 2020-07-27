@@ -13,12 +13,12 @@ class ReceivingView extends StatelessWidget {
       var tweenValue;
 
       // Withing Threshold
-      if (state.matches.closest()["difference"] <= 30) {
+      if (state.matches.closestProfile()["difference"] <= 30) {
         tweenValue = 0.0;
       }
       // Close to threshold
-      else if (state.matches.closest()["difference"] <= 160) {
-        tweenValue = state.matches.closest()["difference"];
+      else if (state.matches.closestProfile()["difference"] <= 160) {
+        tweenValue = state.matches.closestProfile()["difference"];
       }
       // Not in threshold
       else {
@@ -36,7 +36,7 @@ class ReceivingView extends StatelessWidget {
               state.currentDirection.degrees.toString() +
               " , " +
               ", Match/Client Difference: " +
-              state.matches.closest()["difference"].toString(),
+              state.matches.closestProfile()["difference"].toString(),
           style: TextStyle(
             color: colorTween,
             fontSize: 40,

@@ -1,3 +1,4 @@
+import 'package:sonar_app/core/core.dart';
 import 'package:sortedmap/sortedmap.dart';
 
 class Circle {
@@ -6,9 +7,9 @@ class Circle {
   // *******************
   SortedMap differences;
   Map matches;
-  String status = "Default";
+  SonarBloc bloc;
 
-  Circle() {
+  Circle(this.bloc) {
     differences = new SortedMap(Ordering.byValue());
     matches = new Map();
   }
@@ -17,25 +18,29 @@ class Circle {
   // ** Update Circle Due to Incoming Data **
   // ****************************************
   void update(currentDirection, data) {
-    // Find Difference, Check Sender
-    if (this.status == "Sender") {
-      // Get Sender Difference
-      var difference = currentDirection.degrees - data["antipodal_degrees"];
-      this.differences[data["id"]] = difference.abs();
-      data["difference"] = difference.abs();
+    switch (bloc.device.status) {
+      // Find Difference, Check Sender
+      case SonarStatus.RECEIVER:
+        // Get Receiver Difference
+        var difference = currentDirection.antipodalDegrees - data["degrees"];
+        this.differences[data["id"]] = difference.abs();
+        data["difference"] = difference.abs();
 
-      // Add/Replace to matches object
-      this.matches[data["id"]] = data;
-    } else if (this.status == "Receiver") {
-      // Get Receiver Difference
-      var difference = currentDirection.antipodalDegrees - data["degrees"];
-      this.differences[data["id"]] = difference.abs();
-      data["difference"] = difference.abs();
+        // Add/Replace to matches object
+        this.matches[data["id"]] = data;
+        break;
+      case SonarStatus.SENDER:
+        // Get Sender Difference
+        var difference = currentDirection.degrees - data["antipodal_degrees"];
+        this.differences[data["id"]] = difference.abs();
+        data["difference"] = difference.abs();
 
-      // Add/Replace to matches object
-      this.matches[data["id"]] = data;
-    } else {
-      TypeError();
+        // Add/Replace to matches object
+        this.matches[data["id"]] = data;
+        break;
+      default:
+        log.e("Not Receiver nor Sender");
+        TypeError();
     }
   }
 
@@ -55,23 +60,28 @@ class Circle {
   // *******************************************
   void modify(currentDirection) {
     if (this.valid()) {
-      dynamic closest = this.closest();
-      if (this.status == "Sender") {
-        // Get Sender Difference
-        var difference =
-            currentDirection.degrees - closest["antipodal_degrees"];
-        this.differences[closest["id"]] = difference.abs();
-        closest["difference"] = difference.abs();
+      dynamic closest = this.closestProfile();
+      switch (bloc.device.status) {
+        case SonarStatus.RECEIVER:
+          // Get Receiver Difference
+          var difference =
+              currentDirection.antipodalDegrees - closest["degrees"];
+          this.differences[closest["id"]] = difference.abs();
+          closest["difference"] = difference.abs();
+          break;
+        case SonarStatus.SENDER:
+          // Get Sender Difference
+          var difference =
+              currentDirection.degrees - closest["antipodal_degrees"];
+          this.differences[closest["id"]] = difference.abs();
+          closest["difference"] = difference.abs();
 
-        // Log
-        print("Difference: " + closest["difference"].toString());
-      } else if (this.status == "Receiver") {
-        // Get Receiver Difference
-        var difference = currentDirection.antipodalDegrees - closest["degrees"];
-        this.differences[closest["id"]] = difference.abs();
-        closest["difference"] = difference.abs();
-      } else {
-        TypeError();
+          // Log
+          print("Difference: " + closest["difference"].toString());
+          break;
+        default:
+          log.e("Not Receiver nor Sender");
+          TypeError();
       }
     }
   }
@@ -92,7 +102,7 @@ class Circle {
   // ***************************************
   bool withinThreshold() {
     if (this.valid()) {
-      if (this.closest()["difference"] <= 30) {
+      if (this.closestProfile()["difference"] <= 30) {
         return true;
       } else {
         return false;
@@ -102,13 +112,18 @@ class Circle {
     }
   }
 
-  // *************
-  // ** Closest **
-  // *************
-  dynamic closest() {
+  // **************************
+  // ** Closest Peer Methods **
+  // **************************
+  String closestId() {
+    return this.closestProfile()["id"];
+  }
+
+  dynamic closestProfile() {
     if (this.valid()) {
       return this.matches[this.differences.keys.first];
     } else {
+      log.e("There is no closest Peer");
       return null;
     }
   }
