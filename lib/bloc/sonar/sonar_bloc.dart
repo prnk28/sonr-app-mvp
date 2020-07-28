@@ -172,12 +172,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Set Peer
       session.peerId = circle.closestId();
 
-      TransferFile transfer = session.fileManager.outgoing.first;
-
-      log.i(transfer.getInfo().toString());
-
       // Create Offer and Emit
-      session.invite(this.circle.closestId(), {});
+      session.invite(this.circle.closestId(),
+          session.fileManager.outgoing.first.getInfo());
 
       // Device Pending State
       yield Pending("SENDER", match: circle.closestProfile());
@@ -195,7 +192,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       session.peerId = offeredEvent.profile["id"];
 
       // Add Incoming File Info
-      session.fileManager.queueFile(true, info: offeredEvent.fileInfo);
+      session.fileManager
+          .queueFile(true, info: json.decode(offeredEvent.offer["file_info"]));
 
       // Device Pending State
       yield Pending("RECEIVER",
@@ -219,8 +217,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       }
       // Receiver Declined
       else {
-        session.peerId = null;
+        // Reset Peer
+        session.resetPeer();
 
+        // Send Decision
         socket.emit("DECLINE", authorizeEvent.matchId);
         add(Reset(0));
       }
@@ -248,8 +248,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapDeclinedToState(Declined declinedEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Clear Peer
-      session.peerId = null;
+      // Reset Peer
+      session.resetPeer();
 
       // Emit Decision to Server
       yield Failed(

@@ -1,5 +1,3 @@
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/bloc/sonar/sonar_bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 
@@ -43,10 +41,13 @@ class TransferFile {
     else {
       // Info Provided
       if (info != null) {
+        // Set File Properties
         size = info["size"];
         name = info["name"];
-        type = info["type"];
         chunksTotal = info["chunksTotal"];
+
+        // Set Type from String
+        type = FileType.values.firstWhere((e) => e.toString() == info["type"]);
       }
       log.e("No File or Info Provided");
     }
@@ -84,7 +85,7 @@ class TransferFile {
     return {
       "size": size,
       "name": name,
-      "type": type,
+      "type": type.toString(),
       "chunksTotal": chunksTotal
     };
   }

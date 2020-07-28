@@ -179,6 +179,15 @@ class Session {
     });
   }
 
+  void resetPeer() {
+    // Clear Peer
+    this.peerId = null;
+
+    // Clear Incoming/Outcoming
+    fileManager.incoming.clear();
+    fileManager.outgoing.clear();
+  }
+
 // *****************************
 // ** WebRTC Message Sending ***
 // *****************************
@@ -193,7 +202,7 @@ class Session {
     _createPeerConnection(peerId).then((pc) {
       _peerConnections[peerId] = pc;
       _createDataChannel(peerId, pc);
-      _createOffer(peerId, fileInfo, pc);
+      _createOffer(peerId, json.encode(fileInfo), pc);
     });
   }
 
