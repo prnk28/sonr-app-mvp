@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
+import 'package:sonar_app/data/file/file.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
 
@@ -62,7 +63,7 @@ class Receiving extends SonarState {
 // **********************************************
 class Pending extends SonarState {
   final dynamic match;
-  final dynamic file;
+  final TransferFile file;
   final dynamic offer;
 
   // Sender/Receiver
@@ -93,7 +94,8 @@ class Failed extends SonarState {
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
 class Transferring extends SonarState {
-  const Transferring();
+  final double progress;
+  const Transferring({this.progress});
 }
 
 // *************************

@@ -73,7 +73,7 @@ class FileManager {
         dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
         // Remove from Outgoing
-        outgoing.remove(session.peerId);
+        outgoing.removeAt(0);
 
         // Call Bloc Event
         bloc.add(Completed(null, null));
@@ -97,12 +97,11 @@ class FileManager {
     else {
       // Check for Completion Message
       if (message.text == "SEND_COMPLETE") {
-        // Convert Uint8List to File
-        Uint8List data = transfer.block.takeBytes();
-        File file = await writeToFile(data, "file");
+        // Write File to Disk
+        File file = await transfer.writeToDisk();
 
         // Remove from Incoming
-        incoming.remove(session.peerId);
+        incoming.removeAt(0);
 
         // Call Bloc Event
         bloc.add(Received(file));

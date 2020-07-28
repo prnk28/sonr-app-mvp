@@ -18,7 +18,7 @@ class TransferFile {
   double progress;
 
   // Constructor
-  TransferFile({dynamic info, File localFile}) {
+  TransferFile({String info, File localFile}) {
     // Initialize
     currentChunkNum = 0;
     progress = 0.0;
@@ -41,13 +41,17 @@ class TransferFile {
     else {
       // Info Provided
       if (info != null) {
+        // Convert to Map
+        var infoData = json.decode(info);
+
         // Set File Properties
-        size = info["size"];
-        name = info["name"];
-        chunksTotal = info["chunksTotal"];
+        size = infoData["size"];
+        name = infoData["name"];
+        chunksTotal = infoData["chunksTotal"];
 
         // Set Type from String
-        type = FileType.values.firstWhere((e) => e.toString() == info["type"]);
+        type =
+            FileType.values.firstWhere((e) => e.toString() == infoData["type"]);
       }
       log.e("No File or Info Provided");
     }
@@ -80,13 +84,25 @@ class TransferFile {
     log.i("Send Progress: " + (progress * 100).toString() + "%");
   }
 
+  writeToDisk() async {
+    // Convert Uint8List to File
+    Uint8List data = block.takeBytes();
+
+    // Get App Directory
+    Directory tempDir = await getApplicationDocumentsDirectory();
+
+    // Save File at Path
+    return new File(tempDir.path + this.type.toString() + this.name)
+        .writeAsBytes(data);
+  }
+
   getInfo() {
     // Return as JSON Map
-    return {
+    return json.encode({
       "size": size,
       "name": name,
       "type": type.toString(),
       "chunksTotal": chunksTotal
-    };
+    });
   }
 }

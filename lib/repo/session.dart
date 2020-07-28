@@ -191,7 +191,7 @@ class Session {
 // *****************************
 // ** WebRTC Message Sending ***
 // *****************************
-  void invite(String peer, dynamic fileInfo) {
+  void invite(String peer, String fileInfo) {
     peerId = peer;
     this._sessionId = socket.id + '-' + peerId;
 
@@ -202,7 +202,7 @@ class Session {
     _createPeerConnection(peerId).then((pc) {
       _peerConnections[peerId] = pc;
       _createDataChannel(peerId, pc);
-      _createOffer(peerId, json.encode(fileInfo), pc);
+      _createOffer(peerId, fileInfo, pc);
     });
   }
 
@@ -262,7 +262,7 @@ class Session {
     _addDataChannel(id, channel);
   }
 
-  _createOffer(String id, dynamic fileInfo, RTCPeerConnection pc) async {
+  _createOffer(String id, String fileInfo, RTCPeerConnection pc) async {
     try {
       RTCSessionDescription s = await pc.createOffer(constraints);
       pc.setLocalDescription(s);

@@ -193,12 +193,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       // Add Incoming File Info
       session.fileManager
-          .queueFile(true, info: json.decode(offeredEvent.offer["file_info"]));
+          .queueFile(true, info: offeredEvent.offer["file_info"]);
 
       // Device Pending State
       yield Pending("RECEIVER",
           match: circle.closestProfile(),
-          file: offeredEvent.fileInfo,
+          file: session.fileManager.incoming.first,
           offer: offeredEvent.offer);
     }
   }
@@ -263,8 +263,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Get File Info
-
       // Begin Sending
       session.fileManager.send();
 
@@ -306,6 +304,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       // Reset RTC
       session.close();
+      session.resetPeer();
+
+      // Reset Circle
+      circle.reset();
 
       // Set Delay
       await new Future.delayed(Duration(seconds: resetEvent.secondDelay));

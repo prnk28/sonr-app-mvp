@@ -57,6 +57,15 @@ class Circle {
     this.matches.remove(id);
   }
 
+  // ******************
+  // ** Reset Circle **
+  // ******************
+  void reset() {
+    // Clear Maps
+    this.differences.clear();
+    this.matches.clear();
+  }
+
   // *******************************************
   // ** Modify Circle Due to Directional Data **
   // *******************************************
