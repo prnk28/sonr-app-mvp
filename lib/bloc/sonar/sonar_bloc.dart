@@ -172,6 +172,10 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Set Peer
       session.peerId = circle.closestId();
 
+      TransferFile transfer = session.fileManager.outgoing.first;
+
+      log.i(transfer.getInfo().toString());
+
       // Create Offer and Emit
       session.invite(this.circle.closestId(), {});
 
@@ -260,7 +264,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (connection.initialized) {
       // Get File Info
-      //var transfer = session.fileManager.outgoing[session.peerId];
 
       // Begin Sending
       session.fileManager.send();

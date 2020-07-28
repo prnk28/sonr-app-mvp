@@ -44,6 +44,7 @@ class TransferFile {
       // Info Provided
       if (info != null) {
         size = info["size"];
+        name = info["name"];
         type = info["type"];
         chunksTotal = info["chunksTotal"];
       }
