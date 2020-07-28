@@ -62,7 +62,7 @@ class FileManager {
       var chunk = Uint8List.fromList(data);
 
       // Update Chunk Info
-      transfer.updateChunkInfo();
+      transfer.updateChunkInfo(bloc);
 
       // Send Binary in WebRTC Data Channel
       dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
@@ -91,7 +91,7 @@ class FileManager {
     // Check if Binary
     if (message.isBinary) {
       // Add Binary to Transfer
-      transfer.addChunk(message.binary);
+      transfer.addChunk(message.binary, bloc);
     }
     // Check if Text
     else {

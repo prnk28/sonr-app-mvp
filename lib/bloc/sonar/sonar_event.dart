@@ -77,8 +77,13 @@ class Declined extends SonarEvent {
 
 // Sender Begins Transfer
 class Transfer extends SonarEvent {
-  final String fileType;
-  const Transfer(this.fileType);
+  const Transfer();
+}
+
+// Sender Begins Transfer
+class Progress extends SonarEvent {
+  final double currentProgress;
+  const Progress(this.currentProgress);
 }
 
 // Sender Sent Transfer

@@ -1,3 +1,5 @@
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/bloc/sonar/sonar_bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/data/data.dart';
 
@@ -57,7 +59,7 @@ class TransferFile {
     }
   }
 
-  addChunk(Uint8List chunk) {
+  addChunk(Uint8List chunk, SonarBloc bloc) {
     // Add Chunk to Block
     block.add(chunk);
 
@@ -70,9 +72,12 @@ class TransferFile {
 
     // Log Progress
     log.i("Receive Progress: " + (progress * 100).toString() + "%");
+
+    // Update Progress UI
+    //bloc.add(Progress(progress));
   }
 
-  updateChunkInfo() {
+  updateChunkInfo(SonarBloc bloc) {
     // Set Variables
     currentChunkNum = currentChunkNum += 1;
     remainingChunks = chunksTotal - currentChunkNum;
@@ -82,6 +87,9 @@ class TransferFile {
 
     // Log Progress
     log.i("Send Progress: " + (progress * 100).toString() + "%");
+
+    // Update Progress UI
+    // bloc.add(Progress(progress));
   }
 
   writeToDisk() async {

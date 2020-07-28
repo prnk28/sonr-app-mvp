@@ -5,6 +5,7 @@ export 'receiving.dart';
 export 'sending.dart';
 export 'failed.dart';
 export 'complete.dart';
+export 'transferring.dart';
 
 // Packages
 export 'package:flutter/material.dart';

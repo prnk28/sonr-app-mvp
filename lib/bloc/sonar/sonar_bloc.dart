@@ -57,7 +57,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapDeclinedToState(event);
     } else if (event is Transfer) {
       yield* _mapTransferToState(event);
-    } else if (event is Received) {
+    }
+    //  else if (event is Progress) {
+    //   yield* _mapProgressToState(event);
+    // }
+    else if (event is Received) {
       yield* _mapReceivedToState(event);
     } else if (event is Completed) {
       yield* _mapCompletedToState(event);
@@ -270,6 +274,17 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield Transferring();
     }
   }
+
+// *********************
+// ** Progress Event ***
+// *********************
+  // Stream<SonarState> _mapProgressToState(Progress progressEvent) async* {
+  //   // Check Status
+  //   if (connection.initialized) {
+  //     // Update Transferring with New Progress
+  //     yield Transferring(progress: progressEvent.currentProgress);
+  //   }
+  // }
 
 // *********************
 // ** Received Event ***

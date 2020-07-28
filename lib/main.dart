@@ -41,7 +41,9 @@ class App extends StatelessWidget {
                               sonarBloc: BlocProvider.of<SonarBloc>(context),
                               state: state);
                         } else if (state is Transferring) {
-                          return SpinKitRing(color: Colors.white);
+                          return TransferView(
+                              sonarBloc: BlocProvider.of<SonarBloc>(context),
+                              state: state);
                         } else if (state is Complete) {
                           return CompleteView(
                               sonarBloc: BlocProvider.of<SonarBloc>(context));
