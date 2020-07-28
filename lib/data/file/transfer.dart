@@ -15,15 +15,14 @@ class TransferFile {
   BytesBuilder block;
 
   // Chunking Variables
-  int chunkNum;
+  int currentChunkNum;
+  int remainingChunks;
   double progress;
-  bool completed;
 
   // Constructor
   TransferFile({dynamic info, File localFile}) {
     // Initialize
-    completed = false;
-    chunkNum = 0;
+    currentChunkNum = 0;
     progress = 0.0;
     block = new BytesBuilder();
 
@@ -34,7 +33,11 @@ class TransferFile {
       type = getFileTypeFromPath(localFile.path);
       name = basename(file.path);
       size = file.lengthSync();
-      chunksTotal = (size / CHUNK_SIZE).ceil();
+
+      // Set Total Chunks
+      var temp = size / CHUNK_SIZE;
+      chunksTotal = temp.ceil();
+      remainingChunks = chunksTotal;
     }
     // File is being Received
     else {
@@ -49,54 +52,30 @@ class TransferFile {
   }
 
   addChunk(Uint8List chunk) {
-    // Check Completed
-    if (!completed) {
-      // Add Chunk to Block
-      block.add(chunk);
+    // Add Chunk to Block
+    block.add(chunk);
 
-      // Set Remaining Chunks
-      var remainingChunks = chunksTotal - chunkNum;
+    // Update Chunks
+    currentChunkNum += 1;
+    remainingChunks = chunksTotal - currentChunkNum;
 
-      // Check completed
-      if (remainingChunks == 0) {
-        log.i("Transfer Complete");
-      }
-    }
+    // Update Progress
+    progress = (chunksTotal - remainingChunks) / chunksTotal;
+
+    // Log Progress
+    log.i("Receive Progress: " + (progress * 100).toString() + "%");
   }
 
-  updateChunkInfo(dynamic chunkInfo) {
-    // Set Chunk Info
-    chunkNum = chunkInfo["receivedChunkNum"];
-    chunksTotal = chunkInfo["chunksTotal"];
-
-    // Log info
-    log.i("Chunk Num: " +
-        chunkNum.toString() +
-        " >-----> " +
-        "Chunk Total: " +
-        chunksTotal.toString());
-  }
-
-  getChunkInfo() {
+  updateChunkInfo() {
     // Set Variables
-    var remainingChunks = chunksTotal - chunkNum;
-    var chunksToSend = [remainingChunks, CHUNKS_PER_ACK].reduce(min);
+    currentChunkNum = currentChunkNum += 1;
+    remainingChunks = chunksTotal - currentChunkNum;
 
-    // Update Current Chunk Number and Progress
-    chunkNum = chunkNum += 1;
+    // Update Progress
     progress = (chunksTotal - remainingChunks) / chunksTotal;
 
     // Log Progress
     log.i("Send Progress: " + (progress * 100).toString() + "%");
-
-    // Return JSON
-    return {
-      "chunksTotal": chunksTotal,
-      "remainingChunks": remainingChunks,
-      "chunksToSend": chunksToSend,
-      "progress": progress,
-      "receivedChunkNum": chunkNum
-    };
   }
 
   getInfo() {

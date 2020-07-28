@@ -60,10 +60,9 @@ class FileManager {
       // read one CHUNK
       var data = await reader.read(CHUNK_SIZE);
       var chunk = Uint8List.fromList(data);
-      var chunkInfo = transfer.getChunkInfo();
 
-      // Send ChunkInfo over Channel
-      dataChannel.send(RTCDataChannelMessage(json.encode(chunkInfo)));
+      // Update Chunk Info
+      transfer.updateChunkInfo();
 
       // Send Binary in WebRTC Data Channel
       dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
@@ -98,9 +97,6 @@ class FileManager {
     else {
       // Check for Completion Message
       if (message.text == "SEND_COMPLETE") {
-        // Set Completed true
-        transfer.completed = true;
-
         // Convert to Uint8List
         Uint8List data = transfer.block.takeBytes();
         File file = await writeToFile(data, "file");
@@ -109,8 +105,7 @@ class FileManager {
         // Remove from Incoming
         incoming.remove(session.peerId);
       } else {
-        // Get ChunkInfo from Text and Update
-        transfer.updateChunkInfo(json.decode(message.text));
+        log.v(message.text);
       }
     }
   }
