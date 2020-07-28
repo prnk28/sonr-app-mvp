@@ -35,6 +35,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Device Can See Updates
     if (event is Initialize) {
       yield* _mapInitializeToState(event);
+    } else if (event is Select) {
+      yield* _mapSelectToState(event);
     } else if (event is Send) {
       yield* _mapSendToState(event);
     } else if (event is Receive) {
@@ -77,6 +79,27 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       socket.emit("INITIALIZE",
           [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
       connection.initialized = true;
+
+      // Fake Select File
+      add(Select());
+
+      // Device Pending State
+      yield Ready();
+    }
+  }
+
+// *****************
+// ** Select Event ***
+// *****************
+  Stream<SonarState> _mapSelectToState(Select selectEvent) async* {
+    // Check Init Status
+    if (connection.ready()) {
+      // Get Dummy Asset File
+      File transferToSend =
+          await getAssetFileByPath("assets/images/fat_test.jpg");
+
+      // Add to Queue
+      session.fileManager.queueFile(false, file: transferToSend);
 
       // Device Pending State
       yield Ready();
@@ -236,13 +259,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Get Asset File
-      File transferToSend =
-          await getAssetFileByPath("assets/images/fat_test.jpg");
-
-      // Add to Queue
-      session.fileManager.queueFile(false, file: transferToSend);
-
       // Get File Info
       //var transfer = session.fileManager.outgoing[session.peerId];
 

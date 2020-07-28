@@ -10,14 +10,14 @@ class FileManager {
   RTCDataChannel dataChannel;
 
   // Maps to Track Transfer
-  var outgoing;
-  var incoming;
+  List<TransferFile> outgoing;
+  List<TransferFile> incoming;
 
   // Constructor
   FileManager(this.bloc, this.session) {
     // Initialize Maps
-    outgoing = new Map<String, TransferFile>();
-    incoming = new Map<String, TransferFile>();
+    outgoing = List<TransferFile>();
+    incoming = List<TransferFile>();
 
     // Add DataChannel
     session.onDataChannel = (channel) {
@@ -37,20 +37,20 @@ class FileManager {
       var incomingFile = new TransferFile(info: info);
 
       // Set File to Incoming Tracker
-      incoming[session.peerId] = incomingFile;
+      incoming.add(incomingFile);
     } else {
       // Create File Object
       var outgoingFile = new TransferFile(localFile: file);
 
       // Set File to Outgoing Tracker
-      outgoing[session.peerId] = outgoingFile;
+      outgoing.add(outgoingFile);
     }
   }
 
   // ** BUFFER: Get Next Chunk to send to Receiver
   send() async {
     // Get File thats being sent to Peer
-    TransferFile transfer = outgoing[session.peerId];
+    TransferFile transfer = outgoing.first;
 
     // Open File in Reader and Send Data pieces as chunks
     final reader = ChunkedStreamIterator(transfer.file.openRead());
@@ -86,7 +86,7 @@ class FileManager {
   // Interpret WebRTC Message
   handleMessage(RTCDataChannelMessage message) async {
     // Get File Reference
-    var transfer = this.incoming[session.peerId];
+    var transfer = incoming.first;
 
     // Check if Binary
     if (message.isBinary) {

@@ -19,6 +19,13 @@ class Initialize extends SonarEvent {
 }
 
 // Send to Server Sequence
+class Select extends SonarEvent {
+  final File file;
+
+  const Select({this.file});
+}
+
+// Send to Server Sequence
 class Send extends SonarEvent {
   final Circle map;
 
