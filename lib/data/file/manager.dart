@@ -72,11 +72,11 @@ class FileManager {
         // Send Complete Message on same DC
         dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
-        // Bloc Event
-        bloc.add(Completed(null, null));
-
         // Remove from Outgoing
         outgoing.remove(session.peerId);
+
+        // Call Bloc Event
+        bloc.add(Completed(null, null));
         break;
       }
       print('next byte: ${data[0]}');
@@ -84,7 +84,7 @@ class FileManager {
   }
 
   // Interpret WebRTC Message
-  Future<void> handleMessage(RTCDataChannelMessage message) async {
+  handleMessage(RTCDataChannelMessage message) async {
     // Get File Reference
     var transfer = this.incoming[session.peerId];
 
@@ -97,13 +97,15 @@ class FileManager {
     else {
       // Check for Completion Message
       if (message.text == "SEND_COMPLETE") {
-        // Convert to Uint8List
+        // Convert Uint8List to File
         Uint8List data = transfer.block.takeBytes();
         File file = await writeToFile(data, "file");
-        bloc.add(Received(file));
 
         // Remove from Incoming
         incoming.remove(session.peerId);
+
+        // Call Bloc Event
+        bloc.add(Received(file));
       } else {
         log.v(message.text);
       }
