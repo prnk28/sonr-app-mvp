@@ -238,7 +238,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (connection.initialized) {
       // Get Asset File
       File transferToSend =
-          await getAssetFileByPath("assets/images/headers/4.jpg");
+          await getAssetFileByPath("assets/images/fat_test.jpg");
 
       // Add to Queue
       session.fileManager.queueFile(false, file: transferToSend);
