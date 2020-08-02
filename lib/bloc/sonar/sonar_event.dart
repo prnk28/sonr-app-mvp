@@ -80,10 +80,17 @@ class Transfer extends SonarEvent {
   const Transfer();
 }
 
-// Sender Begins Transfer
-class Progress extends SonarEvent {
-  final double currentProgress;
-  const Progress(this.currentProgress);
+// Update Progress
+class ProgressCubit extends Cubit<double> {
+  ProgressCubit() : super(0);
+
+  void increment(double increase) {
+    // Modify State Double
+    emit(state + increase);
+
+    // Log Progress
+    log.i("Send Progress: " + (state * 100).toString() + "%");
+  }
 }
 
 // Sender Sent Transfer

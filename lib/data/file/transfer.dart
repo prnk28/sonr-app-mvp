@@ -18,12 +18,14 @@ class TransferFile {
   int currentChunkNum;
   int remainingChunks;
   double progress;
+  double lastProgress;
 
   // Constructor
   TransferFile({String info, File localFile}) {
     // Initialize
     currentChunkNum = 0;
     progress = 0.0;
+    lastProgress = 0.0;
     block = new BytesBuilder();
 
     // File is being Transmitted
@@ -85,11 +87,13 @@ class TransferFile {
     // Update Progress
     progress = (chunksTotal - remainingChunks) / chunksTotal;
 
-    // Log Progress
-    log.i("Send Progress: " + (progress * 100).toString() + "%");
+    // Update Progress Cubit
+    ProgressCubit()
+      ..increment(progress - lastProgress)
+      ..close();
 
-    // Update Progress UI
-    // bloc.add(Progress(progress));
+    // Update Last Progress
+    lastProgress = progress;
   }
 
   writeToDisk() async {
