@@ -89,7 +89,7 @@ class ProgressCubit extends Cubit<double> {
     emit(state + increase);
 
     // Log Progress
-    log.i("Send Progress: " + (state * 100).toString() + "%");
+    //log.i("Send Progress: " + (state * 100).toString() + "%");
   }
 }
 

@@ -16,10 +16,10 @@ class TransferView extends StatelessWidget {
       children: [
         SpinKitRing(color: Colors.white),
         Divider(),
-        Text(
-          "Receive Progress: " + (state.progress * 100).toString() + "%",
-          style: Design.getTextStyle(TextDesign.DescriptionText),
-        )
+        // Text(
+        //   "Receive Progress: " + (state.progress * 100).toString() + "%",
+        //   style: Design.getTextStyle(TextDesign.DescriptionText),
+        // )
       ],
     );
   }
