@@ -48,6 +48,7 @@ dependencies:
   http: ^0.12.0+4
 
   # -- UI/UX --
+  boxicons_flutter: ^1.1.0
   logger: ^0.8.3
   rflutter_alert: ^1.0.2
   flutter_neumorphic: ^3.0.2
@@ -73,12 +74,7 @@ flutter:
     - assets/audio/
 
   # -- Fonts --
-  fonts:
-    - family: Boxicons
-      fonts:
-        - asset: assets/fonts/boxicons.ttf
-          weight: 400
-          
+  fonts:   
     - family: GT-Pressura
       fonts:
         - asset: assets/fonts/GT-Pressura/GT-Pressura-Regular.ttf

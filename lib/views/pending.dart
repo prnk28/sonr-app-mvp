@@ -1,17 +1,19 @@
+import 'package:sonar_app/repository/device.dart';
 import 'package:sonar_app/views/views.dart';
 
 class PendingView extends StatelessWidget {
-  final state;
+  final Pending state;
+  final SonarBloc sonarBloc;
 
-  const PendingView({Key key, this.state}) : super(key: key);
+  const PendingView({Key key, this.state, this.sonarBloc}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (state.deviceStatus == "SENDER") {
+    if (sonarBloc.device.status == SonarStatus.SENDER) {
       return Text(
           "Pending Authorization from " +
               state.match["profile"]["first_name"].toString(),
           style: Design.text.header());
-    } else if (state.deviceStatus == "RECEIVER") {
+    } else if (sonarBloc.device.status == SonarStatus.RECEIVER) {
       Vibration.vibrate();
       print("Pending approval");
       return Column(
