@@ -87,9 +87,7 @@ class TransferFile {
     progress = (chunksTotal - remainingChunks) / chunksTotal;
 
     // Update Progress Cubit
-    ProgressCubit()
-      ..increment(progress - lastProgress)
-      ..close();
+    bloc.add(Progress(progress));
 
     // Update Last Progress
     lastProgress = progress;

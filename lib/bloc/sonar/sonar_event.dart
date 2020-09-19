@@ -79,16 +79,9 @@ class Transfer extends SonarEvent {
 }
 
 // Update Progress
-class ProgressCubit extends Cubit<double> {
-  ProgressCubit() : super(0);
-
-  void increment(double increase) {
-    // Modify State Double
-    emit(state + increase);
-
-    // Log Progress
-    //log.i("Send Progress: " + (state * 100).toString() + "%");
-  }
+class Progress extends SonarEvent {
+  final double percentage;
+  const Progress(this.percentage);
 }
 
 // Sender Sent Transfer
