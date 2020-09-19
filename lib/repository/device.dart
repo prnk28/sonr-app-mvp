@@ -2,14 +2,66 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
-enum SonarStatus { RECEIVER, SENDER, DEFAULT }
+// *******************
+// ** Motion Enums ***
+// *******************
+enum PositionStatus { RECEIVER, SENDER, DEFAULT }
+enum Orientation { Default, Tilt, LandscapeLeft, LandscapeRight }
+enum CompassDesignation {
+  N,
+  NNE,
+  NE,
+  ENE,
+  E,
+  ESE,
+  SE,
+  SSE,
+  S,
+  SSW,
+  SW,
+  WSW,
+  W,
+  WNW,
+  NW,
+  NNW
+}
 
+// ****************************
+// ** Enum Centric Methods ****
+// ****************************
+// Used by Direction Model
+CompassDesignation getCompassDesignationFromDegrees(double degrees) {
+  var compassValue = ((degrees / 22.5) + 0.5).toInt();
+
+  return CompassDesignation.values[(compassValue % 16)];
+}
+
+// Used in Motion Model
+Orientation getOrientationFromAccelerometer(double x, double y) {
+  // Set Sonar State by Accelerometer
+  if (x > 7.5) {
+    return Orientation.LandscapeLeft;
+  } else if (x < -7.5) {
+    return Orientation.LandscapeRight;
+  } else {
+    // Detect Position for Default and Tilt
+    if (y > 4.1) {
+      return Orientation.Default;
+    } else {
+      return Orientation.Tilt;
+    }
+  }
+}
+
+// ********************************************
+// ** Handles Geospatial/Accelerometer Data ***
+// ********************************************
 class Device {
   // References
   SonarBloc bloc;
   Direction direction;
   Motion motion = Motion.create();
-  SonarStatus status;
+  PositionStatus status;
 
   Device(this.bloc) {
     // ** Accelerometer Events **
@@ -31,7 +83,7 @@ class Device {
         // Check Sender Threshold
         if (motion.state == Orientation.Tilt) {
           // Set Sender
-          this.status = SonarStatus.SENDER;
+          this.status = PositionStatus.SENDER;
 
           // Check Valid
           if (direction != null) {
@@ -53,7 +105,7 @@ class Device {
         else if (motion.state == Orientation.LandscapeLeft ||
             motion.state == Orientation.LandscapeRight) {
           // Set Receiver
-          this.status = SonarStatus.RECEIVER;
+          this.status = PositionStatus.RECEIVER;
 
           // Check Valid
           if (direction != null) {

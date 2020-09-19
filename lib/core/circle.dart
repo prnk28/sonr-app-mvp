@@ -22,7 +22,7 @@ class Circle {
   void update(currentDirection, data) {
     switch (bloc.device.status) {
       // Find Difference, Check Sender
-      case SonarStatus.RECEIVER:
+      case PositionStatus.RECEIVER:
         // Get Receiver Difference
         var difference = currentDirection.antipodalDegrees - data["degrees"];
         this.differences[data["id"]] = difference.abs();
@@ -31,7 +31,7 @@ class Circle {
         // Add/Replace to matches object
         this.matches[data["id"]] = data;
         break;
-      case SonarStatus.SENDER:
+      case PositionStatus.SENDER:
         // Get Sender Difference
         var difference = currentDirection.degrees - data["antipodal_degrees"];
         this.differences[data["id"]] = difference.abs();
@@ -73,14 +73,14 @@ class Circle {
     if (this.valid()) {
       dynamic closest = this.closestProfile();
       switch (bloc.device.status) {
-        case SonarStatus.RECEIVER:
+        case PositionStatus.RECEIVER:
           // Get Receiver Difference
           var difference =
               currentDirection.antipodalDegrees - closest["degrees"];
           this.differences[closest["id"]] = difference.abs();
           closest["difference"] = difference.abs();
           break;
-        case SonarStatus.SENDER:
+        case PositionStatus.SENDER:
           // Get Sender Difference
           var difference =
               currentDirection.degrees - closest["antipodal_degrees"];

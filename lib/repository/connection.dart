@@ -147,7 +147,7 @@ class Connection {
 
       // Reset circle
       socket.emit("RESET");
-      bloc.device.status = SonarStatus.DEFAULT;
+      bloc.device.status = PositionStatus.DEFAULT;
     }
   }
 

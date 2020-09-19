@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/repository/repository.dart';
 
 class Direction extends Equatable {
   // *******************
@@ -16,8 +17,7 @@ class Direction extends Equatable {
   // ** Constructor Var **
   // *********************
   const Direction(
-      {
-      this.id,
+      {this.id,
       this.degrees,
       this.antipodalDegrees,
       this.compassDesignation,

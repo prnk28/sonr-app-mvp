@@ -342,7 +342,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
   Stream<SonarState> _mapUpdateToState(Update updateEvent) async* {
     if (connection.initialized) {
-      if (device.status == SonarStatus.SENDER) {
+      if (device.status == PositionStatus.SENDER) {
         add(Send(map: updateEvent.map));
       } else {
         add(Receive(map: updateEvent.map));

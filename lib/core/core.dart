@@ -1,5 +1,4 @@
 // Core
-export 'motion_util.dart';
 export 'circle.dart';
 export 'dart:async';
 export 'dart:convert';

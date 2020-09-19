@@ -8,12 +8,12 @@ class PendingView extends StatelessWidget {
   const PendingView({Key key, this.state, this.sonarBloc}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (sonarBloc.device.status == SonarStatus.SENDER) {
+    if (sonarBloc.device.status == PositionStatus.SENDER) {
       return Text(
           "Pending Authorization from " +
               state.match["profile"]["first_name"].toString(),
           style: Design.text.header());
-    } else if (sonarBloc.device.status == SonarStatus.RECEIVER) {
+    } else if (sonarBloc.device.status == PositionStatus.RECEIVER) {
       Vibration.vibrate();
       print("Pending approval");
       return Column(
