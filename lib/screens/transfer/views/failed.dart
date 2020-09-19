@@ -1,4 +1,4 @@
-import 'package:sonar_app/views/views.dart';
+import 'package:sonar_app/screens/screens.dart';
 
 class FailedView extends StatelessWidget {
   final SonarBloc sonarBloc;

@@ -3,6 +3,7 @@ export 'home/home.dart';
 export 'register/register.dart';
 export 'splash/splash.dart';
 export 'transfer/transfer.dart';
+export 'settings/settings.dart';
 
 // Packages
 export 'package:flutter/material.dart';

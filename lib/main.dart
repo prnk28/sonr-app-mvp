@@ -4,8 +4,6 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/screens/screens.dart';
-import 'package:sonar_app/screens/settings/settings.dart';
-import 'package:sonar_app/views/views.dart';
 
 void main() {
   // We can set a Bloc's observer to an instance of `SimpleBlocObserver`.

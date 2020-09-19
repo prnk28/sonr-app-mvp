@@ -1,4 +1,4 @@
-import 'package:sonar_app/views/views.dart';
+import 'package:sonar_app/screens/screens.dart';
 
 class PreTransferView extends StatelessWidget {
   final state;

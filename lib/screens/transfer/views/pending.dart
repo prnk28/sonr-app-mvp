@@ -1,5 +1,5 @@
-import 'package:sonar_app/repository/device.dart';
-import 'package:sonar_app/views/views.dart';
+import 'package:sonar_app/repository/repository.dart';
+import 'package:sonar_app/screens/screens.dart';
 
 class PendingView extends StatelessWidget {
   final Pending state;

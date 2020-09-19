@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:sonar_app/views/views.dart';
+import 'package:sonar_app/screens/screens.dart';
 import 'package:boxicons_flutter/boxicons_flutter.dart';
 
 // Imports

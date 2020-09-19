@@ -1,4 +1,4 @@
-import 'package:sonar_app/views/views.dart';
+import 'package:sonar_app/screens/screens.dart';
 
 final _formKey = GlobalKey<FormState>();
 

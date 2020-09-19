@@ -1,4 +1,5 @@
 import 'package:sonar_app/screens/screens.dart';
+export 'views/views.dart';
 
 class TransferScreen extends StatelessWidget {
   @override
