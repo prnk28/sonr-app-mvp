@@ -1,8 +1,8 @@
-export 'detail.dart';
-export 'home.dart';
-export 'register.dart';
-export 'splash.dart';
-export 'transfer.dart';
+export 'detail/detail.dart';
+export 'home/home.dart';
+export 'register/register.dart';
+export 'splash/splash.dart';
+export 'transfer/transfer.dart';
 
 // Packages
 export 'package:flutter/material.dart';
