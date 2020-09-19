@@ -1,7 +1,7 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/repo/repo.dart';
+import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 
 // ***********************
@@ -181,7 +181,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           session.fileManager.outgoing.first.getInfo());
 
       // Device Pending State
-      yield Pending("SENDER", match: circle.closestProfile());
+      yield Pending(match: circle.closestProfile());
     }
   }
 
@@ -200,7 +200,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           .queueFile(true, info: offeredEvent.offer["file_info"]);
 
       // Device Pending State
-      yield Pending("RECEIVER",
+      yield Pending(
           match: circle.closestProfile(),
           file: session.fileManager.incoming.first,
           offer: offeredEvent.offer);

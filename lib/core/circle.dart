@@ -1,6 +1,6 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/repo/repo.dart';
+import 'package:sonar_app/repository/repository.dart';
 import 'package:sortedmap/sortedmap.dart';
 
 class Circle {

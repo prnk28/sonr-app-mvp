@@ -8,7 +8,7 @@ class CompleteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (sonarBloc.state.status == "SENDER") {
+    if (sonarBloc.state.deviceStatus == "SENDER") {
       return Column(children: [
         Text("Complete.",
             style: TextStyle(

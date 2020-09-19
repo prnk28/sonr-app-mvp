@@ -98,8 +98,12 @@ class _InitializeViewState extends State<InitializeView> {
             child: Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: NeumorphicButton(
-                style:
-                    NeumorphicStyle(depth: 4, shape: NeumorphicShape.concave),
+                margin: EdgeInsets.only(top: 12),
+                style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(8)),
+                ),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     // Process data.
@@ -108,7 +112,8 @@ class _InitializeViewState extends State<InitializeView> {
                             this._firstName, this._lastName, null)));
                   }
                 },
-                child: Text('Submit'),
+                child: Text('Submit',
+                    style: TextStyle(color: Design.findTextColor(context))),
               ),
             ),
           )

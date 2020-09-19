@@ -4,3 +4,4 @@ export 'sonar/sonar_event.dart';
 export 'sonar/sonar_state.dart';
 
 export 'package:bloc/bloc.dart';
+export 'observer.dart';

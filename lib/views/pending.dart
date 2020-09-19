@@ -6,12 +6,12 @@ class PendingView extends StatelessWidget {
   const PendingView({Key key, this.state}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (state.status == "SENDER") {
+    if (state.deviceStatus == "SENDER") {
       return Text(
           "Pending Authorization from " +
               state.match["profile"]["first_name"].toString(),
           style: Design.text.header());
-    } else if (state.status == "RECEIVER") {
+    } else if (state.deviceStatus == "RECEIVER") {
       Vibration.vibrate();
       print("Pending approval");
       return Column(

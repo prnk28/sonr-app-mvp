@@ -5,10 +5,24 @@ import 'package:sonar_app/data/file/file.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
 
+enum SonarBlocStatus {
+  Initial,
+  Ready,
+  Loading,
+  Sending,
+  Receiving,
+  Pending,
+  PreTransfer,
+  Failed,
+  Transferring,
+  Complete
+}
+
 abstract class SonarState extends Equatable {
-  const SonarState();
+  const SonarState({this.status});
+  final SonarBlocStatus status;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status];
 }
 
 // ********************
@@ -17,7 +31,10 @@ abstract class SonarState extends Equatable {
 class Initial extends SonarState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Initial({this.currentMotion, this.currentDirection});
+  const Initial(
+      {this.currentMotion,
+      this.currentDirection,
+      status: SonarBlocStatus.Initial});
 }
 
 // ****************************
@@ -26,7 +43,10 @@ class Initial extends SonarState {
 class Ready extends SonarState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Ready({this.currentMotion, this.currentDirection});
+  const Ready(
+      {this.currentMotion,
+      this.currentDirection,
+      status: SonarBlocStatus.Ready});
 }
 
 // ********************************
@@ -35,7 +55,10 @@ class Ready extends SonarState {
 class Loading extends SonarState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Loading({this.currentMotion, this.currentDirection});
+  const Loading(
+      {this.currentMotion,
+      this.currentDirection,
+      status: SonarBlocStatus.Loading});
 }
 
 // **************************
@@ -45,7 +68,11 @@ class Sending extends SonarState {
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Sending({this.matches, this.currentMotion, this.currentDirection});
+  const Sending(
+      {this.matches,
+      this.currentMotion,
+      this.currentDirection,
+      status: SonarBlocStatus.Sending});
 }
 
 // ****************************
@@ -55,7 +82,11 @@ class Receiving extends SonarState {
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Receiving({this.matches, this.currentMotion, this.currentDirection});
+  const Receiving(
+      {this.matches,
+      this.currentMotion,
+      this.currentDirection,
+      status: SonarBlocStatus.Receiving});
 }
 
 // **********************************************
@@ -66,10 +97,8 @@ class Pending extends SonarState {
   final TransferFile file;
   final dynamic offer;
 
-  // Sender/Receiver
-  final String status;
-
-  const Pending(this.status, {this.match, this.file, this.offer});
+  const Pending(
+      {this.match, this.file, this.offer, status: SonarBlocStatus.Pending});
 }
 
 // *******************************************
@@ -78,7 +107,8 @@ class Pending extends SonarState {
 class PreTransfer extends SonarState {
   final dynamic profile;
   final String matchId;
-  const PreTransfer({this.profile, this.matchId});
+  const PreTransfer(
+      {this.profile, this.matchId, status: SonarBlocStatus.PreTransfer});
 }
 
 // *******************************************
@@ -87,7 +117,7 @@ class PreTransfer extends SonarState {
 class Failed extends SonarState {
   final dynamic profile;
   final String matchId;
-  const Failed({this.profile, this.matchId});
+  const Failed({this.profile, this.matchId, status: SonarBlocStatus.Failed});
 }
 
 // *********************************************
@@ -95,7 +125,7 @@ class Failed extends SonarState {
 // *********************************************
 class Transferring extends SonarState {
   final double progress;
-  const Transferring({this.progress});
+  const Transferring({this.progress, status: SonarBlocStatus.Transferring});
 }
 
 // *************************
@@ -103,8 +133,9 @@ class Transferring extends SonarState {
 // *************************
 class Complete extends SonarState {
   // Sender/Receiver
-  final String status;
+  final String deviceStatus;
   final File file;
 
-  const Complete(this.status, {this.file});
+  const Complete(this.deviceStatus,
+      {this.file, status: SonarBlocStatus.Complete});
 }
