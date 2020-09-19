@@ -1,7 +1,8 @@
 // Sonar
 export 'sonar/sonar_bloc.dart';
-export 'sonar/sonar_event.dart';
-export 'sonar/sonar_state.dart';
+
+// Account
+export 'account/account_bloc.dart';
 
 export 'package:bloc/bloc.dart';
 export 'observer.dart';

@@ -3,6 +3,10 @@ import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:equatable/equatable.dart';
+
+part 'sonar_event.dart';
+part 'sonar_state.dart';
 
 // ***********************
 // ** Sonar Bloc Class ***

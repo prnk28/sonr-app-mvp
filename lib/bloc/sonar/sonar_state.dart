@@ -1,9 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:equatable/equatable.dart';
-import 'package:sonar_app/data/file/file.dart';
-import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/core/core.dart';
+part of 'sonar_bloc.dart';
 
 enum SonarBlocStatus {
   Initial,
