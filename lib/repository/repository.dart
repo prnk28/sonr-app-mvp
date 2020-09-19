@@ -2,6 +2,7 @@
 export 'session.dart';
 export 'connection.dart';
 export 'device.dart';
+export 'local_data.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
 
