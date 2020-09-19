@@ -35,6 +35,8 @@ dependencies:
   # -- Extension --
   characters: ^1.0.0
   enum_to_string: ^1.0.9
+  hive: ^1.4.4
+  hive_flutter: ^0.3.1
   intl: ^0.15.8
   image_picker:
   path_provider: ^1.6.5
@@ -55,6 +57,9 @@ dependencies:
 
 # ** -- TEST -- **
 dev_dependencies:
+  hive_generator: ^0.7.1
+  build_runner: ^1.10.2
+  
   flutter_test:
     sdk: flutter
 

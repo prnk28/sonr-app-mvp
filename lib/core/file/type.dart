@@ -3,11 +3,12 @@
   Utility Class created to take file extension and turn it into Enum Type.
   Information from article: https://www.computerhope.com/issues/ch001789.htm 
 */
-import 'package:sonar_app/data/data.dart';
 
 // *********************
 // ** File Type Enum ***
 // *********************
+import 'file.dart';
+
 enum FileType {
   Audio,
   Compressed,

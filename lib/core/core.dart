@@ -5,6 +5,7 @@ export 'dart:async';
 export 'dart:convert';
 export 'dart:io' hide Socket;
 export 'dart:math';
+export 'file/file.dart';
 export 'package:flutter/services.dart';
 
 // Dev Libraries
