@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/views/views.dart';
 
 class ReceivingView extends StatelessWidget {
   final Receiving state;
@@ -38,22 +36,14 @@ class ReceivingView extends StatelessWidget {
               " , " +
               ", Match/Client Difference: " +
               state.matches.closestProfile()["difference"].toString(),
-          style: TextStyle(
-            color: colorTween,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ));
+          style: Design.text.header());
     } else {
       // Return Text Widget
       return Text(
           state.currentMotion.state.toString() +
               " No Senders, " +
               state.currentDirection.degrees.toString(),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ));
+          style: Design.text.header());
     }
   }
 }

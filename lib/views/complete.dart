@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
-import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/views/views.dart';
 
 class CompleteView extends StatelessWidget {
   final dynamic sonarBloc;
@@ -29,12 +26,7 @@ class CompleteView extends StatelessWidget {
       File file = sonarBloc.state.file;
 
       return Column(children: [
-        Text("Complete.",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            )),
+        Text("Complete.", style: Design.text.header()),
         Image.file(file),
         FloatingActionButton(
             child: Icon(Icons.done_all),

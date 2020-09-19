@@ -1,7 +1,6 @@
 // Core
 export 'motion_util.dart';
 export 'circle.dart';
-export 'design.dart';
 export 'dart:async';
 export 'dart:convert';
 export 'dart:io' hide Socket;

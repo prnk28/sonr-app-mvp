@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:vibration/vibration.dart';
+import 'package:sonar_app/views/views.dart';
 
 class PendingView extends StatelessWidget {
   final state;
@@ -13,11 +10,7 @@ class PendingView extends StatelessWidget {
       return Text(
           "Pending Authorization from " +
               state.match["profile"]["first_name"].toString(),
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ));
+          style: Design.text.header());
     } else if (state.status == "RECEIVER") {
       Vibration.vibrate();
       print("Pending approval");
@@ -28,11 +21,7 @@ class PendingView extends StatelessWidget {
             Text(
                 "Request from " +
                     state.match["profile"]["first_name"].toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                )),
+                style: Design.text.header()),
             Divider(),
             FloatingActionButton(
                 child: Icon(Icons.check),

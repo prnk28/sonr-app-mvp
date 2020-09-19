@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/views/views.dart';
 
 class SendingView extends StatelessWidget {
   final Sending state;
@@ -25,7 +23,7 @@ class SendingView extends StatelessWidget {
             state.currentDirection.degrees.toString() +
             ", Match/Client Difference: " +
             state.matches.closestProfile()["difference"].toString(),
-        style: Design.getTextStyle(TextStyleType.MediumText),
+        style: Design.text.medium(),
       );
     } else {
       // Return Text Widget
@@ -33,7 +31,7 @@ class SendingView extends StatelessWidget {
           state.currentMotion.state.toString() +
               " No Receivers, " +
               state.currentDirection.degrees.toString(),
-          style: Design.getTextStyle(TextStyleType.HeaderText));
+          style: Design.text.header());
     }
   }
 }

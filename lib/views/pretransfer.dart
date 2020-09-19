@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:vibration/vibration.dart';
+import 'package:sonar_app/views/views.dart';
 
 class PreTransferView extends StatelessWidget {
   final state;
@@ -13,11 +10,7 @@ class PreTransferView extends StatelessWidget {
     Vibration.vibrate();
     return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Text(state.profile["profile"]["first_name"].toString() + " has Accepted.",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          )),
+          style: Design.text.header()),
       Divider(),
       FloatingActionButton(
           child: Icon(Icons.image),

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/views/views.dart';
 
 class TransferView extends StatelessWidget {

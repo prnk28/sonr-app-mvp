@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/views/views.dart';
 
 class FailedView extends StatelessWidget {
   final SonarBloc sonarBloc;
@@ -15,10 +14,6 @@ class FailedView extends StatelessWidget {
     // Yield Decline Result
     return Text(
         state.profile["profile"]["first_name"].toString() + " has Declined.",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 40,
-          fontWeight: FontWeight.bold,
-        ));
+        style: Design.text.header());
   }
 }

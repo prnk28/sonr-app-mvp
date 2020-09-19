@@ -78,3 +78,12 @@ flutter:
       fonts:
         - asset: assets/fonts/boxicons.ttf
           weight: 400
+          
+    - family: GT-Pressura
+      fonts:
+        - asset: assets/fonts/GT-Pressura/GT-Pressura-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/GT-Pressura/GT-Pressura-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/GT-Pressura/GT-Pressura-Light.ttf
+          weight: 300

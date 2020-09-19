@@ -11,8 +11,20 @@ class App extends StatelessWidget {
     return NeumorphicApp(
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
-        theme: Design.lightData,
-        darkTheme: Design.darkData,
+        theme: NeumorphicThemeData(
+          baseColor: Color(0xffDDDDDD),
+          accentColor: Colors.cyan,
+          lightSource: LightSource.topLeft,
+          depth: 6,
+          intensity: 0.5,
+        ),
+        darkTheme: NeumorphicThemeData(
+          baseColor: Color(0xff333333),
+          accentColor: Colors.green,
+          lightSource: LightSource.topLeft,
+          depth: 4,
+          intensity: 0.3,
+        ),
         home: MultiBlocProvider(
             providers: [
               // Sonar Communication
@@ -25,11 +37,9 @@ class App extends StatelessWidget {
                 title: NeumorphicText("Sonr",
                     style: NeumorphicStyle(
                       depth: 4, //customize depth here
-                      color: Colors.black54, //customize color here
+                      color: Colors.white, //customize color here
                     ),
-                    textStyle: NeumorphicTextStyle(
-                      fontSize: 18,
-                    ),
+                    textStyle: Design.text.logo(),
                     textAlign: TextAlign.center),
               ),
               backgroundColor: NeumorphicTheme.baseColor(context),
