@@ -1,40 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:sonar_app/core/core.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 // *******************
 // ** Design Enums ***
 // *******************
 // Text Design
-enum TextDesign { MediumText, BigText, NormalText, DescriptionText }
+enum TextStyleType {
+  MediumText,
+  HeaderText, //
+  DescriptionText,
+  HintText // Above Input Fields
+}
 
 class Design {
-// **************************
-// *** Primary Theme Data ***
-// **************************
-  static ThemeData data = ThemeData(
-    primaryColor: Color.fromRGBO(109, 234, 255, 1),
-    accentColor: Color.fromRGBO(72, 74, 126, 1),
-    brightness: Brightness.dark,
+// ******************
+// *** Theme Data ***
+// ******************
+  static NeumorphicThemeData lightData = NeumorphicThemeData(
+    baseColor: Color(0xFFFFFFFF),
+    lightSource: LightSource.topLeft,
+    depth: 10,
   );
 
-// *******************
-// *** Text Styles ***
-// *******************
+  static NeumorphicThemeData darkData = NeumorphicThemeData(
+    baseColor: Color(0xFF3E3E3E),
+    lightSource: LightSource.topLeft,
+    depth: 6,
+  );
 
-  static getTextStyle(TextDesign design) {
+// ************
+// *** Text ***
+// ************
+  // Text Styles
+  static getTextStyle(TextStyleType design) {
     switch (design) {
-      case TextDesign.MediumText:
+      case TextStyleType.MediumText:
         return TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.bold,
         );
-      case TextDesign.BigText:
+      case TextStyleType.HeaderText:
         return TextStyle(
           color: Colors.white,
           fontSize: 40,
           fontWeight: FontWeight.bold,
         );
+      case TextStyleType.HintText:
+        return TextStyle(
+          color: Colors.black87,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        );
       default:
     }
   }
+
+  // Text Field Style
+  static NeumorphicStyle textFieldStyle = NeumorphicStyle(
+      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(45)),
+      depth: -4,
+      lightSource: LightSource.top,
+      color: Colors.transparent);
+
+// ***************
+// *** Buttons ***
+// ***************
+
 }

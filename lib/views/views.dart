@@ -11,4 +11,4 @@ export 'transferring.dart';
 export 'package:flutter/material.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter/widgets.dart';
-export 'package:flutter_spinkit/flutter_spinkit.dart';
+export 'package:flutter_neumorphic/flutter_neumorphic.dart';

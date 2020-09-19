@@ -48,9 +48,9 @@ dependencies:
   http: ^0.12.0+4
 
   # -- UI/UX --
-  flutter_spinkit: "^3.1.0"
   logger: ^0.8.3
   rflutter_alert: ^1.0.2
+  flutter_neumorphic: ^3.0.2
 
 # ** -- TEST -- **
 dev_dependencies:

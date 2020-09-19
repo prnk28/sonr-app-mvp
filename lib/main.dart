@@ -8,9 +8,11 @@ import 'package:sonar_app/views/views.dart';
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: Design.data,
-        title: 'Sonar',
+    return NeumorphicApp(
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        theme: Design.lightData,
+        darkTheme: Design.darkData,
         home: MultiBlocProvider(
             providers: [
               // Sonar Communication
@@ -19,7 +21,18 @@ class App extends StatelessWidget {
               ),
             ],
             child: Scaffold(
-              appBar: AppBar(title: Text('Sonar Demo')),
+              appBar: NeumorphicAppBar(
+                title: NeumorphicText("Sonr",
+                    style: NeumorphicStyle(
+                      depth: 4, //customize depth here
+                      color: Colors.black54, //customize color here
+                    ),
+                    textStyle: NeumorphicTextStyle(
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center),
+              ),
+              backgroundColor: NeumorphicTheme.baseColor(context),
               body: Column(
                 children: <Widget>[
                   Padding(

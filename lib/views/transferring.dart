@@ -14,7 +14,7 @@ class TransferView extends StatelessWidget {
     // Yield Decline Result
     return Column(
       children: [
-        SpinKitRing(color: Colors.white),
+        NeumorphicProgressIndeterminate(),
         Divider(),
         // Text(
         //   "Receive Progress: " + (state.progress * 100).toString() + "%",

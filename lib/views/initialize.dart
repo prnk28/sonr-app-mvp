@@ -6,7 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/views/views.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -42,32 +44,46 @@ class _InitializeViewState extends State<InitializeView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter your first name',
-              ),
-              validator: (value) {
+          // First Name Label
+          Text("First Name",
+              style: Design.getTextStyle(TextStyleType.HintText)),
+
+          // First Name Input
+          Neumorphic(
+              child: TextFormField(
+                  // decoration: const InputDecoration(
+                  //   floatingLabelBehavior: FloatingLabelBehavior.always,
+                  //   hintText: 'Enter your first name',
+                  // ),
+                  validator: (value) {
                 if (value.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Please enter valid First Name';
                 }
                 return null;
-              },
-              onChanged: (String value) {
+              }, onChanged: (String value) {
                 this._firstName = value;
               }),
-          TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter your last name',
-              ),
-              validator: (value) {
+              style: Design.textFieldStyle),
+
+          // Last Name Label
+          Text("Last Name", style: Design.getTextStyle(TextStyleType.HintText)),
+
+          // Last Name Input
+          Neumorphic(
+              child: TextFormField(
+                  // decoration: const InputDecoration(
+                  //   floatingLabelBehavior: FloatingLabelBehavior.always,
+                  //   hintText: 'Enter your last name',
+                  // ),
+                  validator: (value) {
                 if (value.isEmpty) {
-                  return 'Please enter some text';
+                  return 'Please enter valid Last Name';
                 }
                 return null;
-              },
-              onChanged: (String value) {
+              }, onChanged: (String value) {
                 this._lastName = value;
               }),
+              style: Design.textFieldStyle),
           RaisedButton(
             onPressed: getImage,
             child: Icon(Icons.add_a_photo),

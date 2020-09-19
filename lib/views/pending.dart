@@ -47,6 +47,8 @@ class PendingView extends StatelessWidget {
                       .add(Authorize(false, state.match["id"], state.offer));
                 }),
           ]);
+    } else {
+      return Container();
     }
   }
 }
