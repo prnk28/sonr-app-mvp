@@ -2,6 +2,11 @@ import 'package:sonar_app/screens/screens.dart';
 export 'views/views.dart';
 
 class SplashScreen extends StatelessWidget {
+  final AccountBloc accountBloc;
+  final DataBloc dataBloc;
+
+  const SplashScreen({Key key, this.accountBloc, this.dataBloc})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return NeumorphicTheme(

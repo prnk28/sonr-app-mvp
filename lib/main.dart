@@ -6,9 +6,10 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/screens/screens.dart';
 
 void main() {
-  // We can set a Bloc's observer to an instance of `SimpleBlocObserver`.
-  // This will allow us to handle all transitions and errors in SimpleBlocObserver.
+  // Set bloc observer to observe transitions
   Bloc.observer = SimpleBlocObserver();
+
+  // Run App with BLoC Providers
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<SonarBloc>(
@@ -37,7 +38,9 @@ class App extends StatelessWidget {
       routes: {
         // Splash Screen
         '/': (context) {
-          return SplashScreen();
+          return SplashScreen(
+              accountBloc: BlocProvider.of<AccountBloc>(context),
+              dataBloc: BlocProvider.of<DataBloc>(context));
         },
 
         // Home Screen
