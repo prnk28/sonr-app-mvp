@@ -8,7 +8,7 @@ part 'data_event.dart';
 part 'data_state.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
-  DataBloc() : super(Unavailable());
+  DataBloc() : super(null);
 
   @override
   Stream<DataState> mapEventToState(

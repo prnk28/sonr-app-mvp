@@ -11,7 +11,7 @@ part 'account_event.dart';
 part 'account_state.dart';
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
-  AccountBloc() : super(Offline());
+  AccountBloc() : super(null);
 
   @override
   Stream<AccountState> mapEventToState(
