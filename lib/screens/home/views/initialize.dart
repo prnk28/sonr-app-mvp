@@ -108,7 +108,7 @@ class _InitializeViewState extends State<InitializeView> {
                   if (_formKey.currentState.validate()) {
                     // Process data.
                     widget.sonarBloc.add(Initialize(
-                        userProfile: new Profile(
+                        userProfile: Profile.fromValues(
                             this._firstName, this._lastName, null)));
                   }
                 },

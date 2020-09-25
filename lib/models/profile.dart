@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:sonar_app/models/models.dart';
 
 // Device Connected to WS
@@ -92,30 +93,45 @@ class Match extends Equatable {
 }
 
 // Basic Profile Class for Client
-class Profile {
+class Profile extends HiveObject {
   // *******************
   // ** Class Values ***
   // *******************
-  final String firstName;
-  final String lastName;
-  final List<int> profilePicture;
-
-  // *****************
-  // ** Constructor **
-  // *****************
-  Profile(this.firstName, this.lastName, this.profilePicture);
+  @HiveField(0)
+  String firstName;
+  @HiveField(1)
+  String lastName;
+  @HiveField(2)
+  List<int> profilePicture;
 
   // ***********************
   // ** Object Generation **
   // ***********************
   // Fake Data Method
   static Profile fakeProfile() {
-    return Profile("Napoleon", "Braxton", new List<int>());
+    Profile fake = Profile();
+    fake.firstName = "Name";
+    fake.lastName = "Brax";
+    fake.profilePicture = new List<int>();
+    return fake;
   }
 
   // Create Object from Events
   static Profile fromMap(Map data) {
-    return Profile(data["first_name"], data["last_name"], data["profile_pic"]);
+    Profile map = Profile();
+    map.firstName = data["first_name"];
+    map.lastName = data["last_name"];
+    map.profilePicture = data["profile_pic"];
+    return map;
+  }
+
+    // Create Object from Events
+  static Profile fromValues(String first, String last, pic) {
+    Profile values = Profile();
+    values.firstName = first;
+    values.lastName = last;
+    values.profilePicture = pic;
+    return values;
   }
 
   // *********************
@@ -127,5 +143,20 @@ class Profile {
       'last_name': lastName,
       'profile_picture': profilePicture
     };
+  }
+}
+
+class PersonAdapter extends TypeAdapter<Profile> {
+  @override
+  final typeId = 0;
+
+  @override
+  Profile read(BinaryReader reader) {
+    return Profile()..firstName = reader.read();
+  }
+
+  @override
+  void write(BinaryWriter writer, Profile obj) {
+    writer.write(obj.firstName);
   }
 }
