@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:sonar_app/models/models.dart';
 
 class LocalData {
   // ** -- Class Constants -- **
@@ -8,7 +9,9 @@ class LocalData {
   static const String PROFILE_BOX = "profileBox";
 
   // ** -- Class Constructer -- **
-  LocalData();
+  LocalData() {
+    Hive.registerAdapter(ProfileAdapter());
+  }
 
   // ******************************** //
   // ** Add/Update Persistent Data ** //
@@ -43,7 +46,7 @@ class LocalData {
     await box.close();
   }
 
-  Future<void> updateProfile(Map profile) async {
+  Future<void> updateProfile(Profile profile) async {
     var box = await Hive.openBox(PROFILE_BOX);
 
     box.put("profile", profile);

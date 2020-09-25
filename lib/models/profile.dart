@@ -117,6 +117,7 @@ class Profile extends HiveObject {
   }
 
   // Create Object from Events
+  @HiveType()
   static Profile fromMap(Map data) {
     Profile map = Profile();
     map.firstName = data["first_name"];
@@ -125,7 +126,7 @@ class Profile extends HiveObject {
     return map;
   }
 
-    // Create Object from Events
+  // Create Object from Events
   static Profile fromValues(String first, String last, pic) {
     Profile values = Profile();
     values.firstName = first;
@@ -146,7 +147,7 @@ class Profile extends HiveObject {
   }
 }
 
-class PersonAdapter extends TypeAdapter<Profile> {
+class ProfileAdapter extends TypeAdapter<Profile> {
   @override
   final typeId = 0;
 
