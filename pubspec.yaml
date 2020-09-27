@@ -80,11 +80,50 @@ flutter:
 
   # -- Fonts --
   fonts:   
-    - family: GT-Pressura
+    - family: Raleway
       fonts:
-        - asset: assets/fonts/GT-Pressura/GT-Pressura-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/GT-Pressura/GT-Pressura-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/GT-Pressura/GT-Pressura-Light.ttf
+        - asset: assets/fonts/raleway/Raleway-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/raleway/Raleway-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/raleway/Raleway-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-Light.ttf
           weight: 300
+        - asset: assets/fonts/raleway/Raleway-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/raleway/Raleway-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/raleway/Raleway-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/raleway/Raleway-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/raleway/Raleway-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/raleway/Raleway-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/raleway/Raleway-Black.ttf
+          weight: 900
+        - asset: assets/fonts/raleway/Raleway-BlackItalic.ttf
+          weight: 900
+          style: italic
