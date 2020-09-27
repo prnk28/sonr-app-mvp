@@ -49,7 +49,7 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 // *******************
 // * Initialization **
 // *******************
-class Session {
+class RTCSession {
   // WebRTC Transfer Variables
   String _sessionId;
   Map _peerConnections = new Map<String, RTCPeerConnection>();
@@ -68,11 +68,11 @@ class Session {
 
   // References
   FileManager fileManager;
-  SonarBloc bloc;
+  //SonarBloc bloc;
 
   // Constructor
-  Session(this.bloc) {
-    fileManager = new FileManager(bloc, this);
+  RTCSession() {
+    fileManager = new FileManager(this);
   }
 
 // *************************
@@ -183,8 +183,8 @@ class Session {
     this.peerId = null;
 
     // Clear Incoming/Outcoming
-    fileManager.incoming.clear();
-    fileManager.outgoing.clear();
+    //fileManager.incoming.clear();
+    //fileManager.outgoing.clear();
   }
 
 // *****************************

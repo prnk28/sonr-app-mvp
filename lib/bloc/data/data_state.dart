@@ -1,12 +1,12 @@
 part of 'data_bloc.dart';
 
 enum DataBlocStatus {
-  Unavailable,
   Standby,
-  Saving,
+  Transferring,
   Updating,
+  Saving,
   Selected,
-  Finding,
+  Searching,
   Done,
   ViewingImage,
   ViewingVideo,
@@ -21,24 +21,9 @@ abstract class DataState extends Equatable {
   List<Object> get props => [];
 }
 
-// No Local Account
-class Unavailable extends DataState {
-  Unavailable({status: DataBlocStatus.Unavailable});
-}
-
-// On Standby Essentially
+// Ready to Perform Action
 class Standby extends DataState {
   Standby({status: DataBlocStatus.Standby});
-}
-
-// Saving to disk
-class Saving extends DataState {
-  Saving({status: DataBlocStatus.Saving});
-}
-
-// Saving Preferances/Settings
-class Updating extends DataState {
-  Updating({status: DataBlocStatus.Updating});
 }
 
 // File ready to transfer
@@ -46,9 +31,35 @@ class Selected extends DataState {
   Selected({status: DataBlocStatus.Selected});
 }
 
+// Sending to peer w/ Progress and Chunks
+class Transferring extends DataState {
+  // Progress Variables
+  final TransferFile transferFile;
+  final double progress;
+
+  // State Class
+  Transferring(
+      {this.transferFile, this.progress, status: DataBlocStatus.Transferring});
+}
+
+// Saving to disk w/ Progress and Chunks
+class Saving extends DataState {
+  // Progress Variables
+  final TransferFile transferFile;
+  final double progress;
+
+  // State Class
+  Saving({this.transferFile, this.progress, status: DataBlocStatus.Saving});
+}
+
+// Saving Between Chunks
+class Updating extends DataState {
+  Updating({status: DataBlocStatus.Updating});
+}
+
 // Searching for a file
-class Finding extends DataState {
-  Finding({status: DataBlocStatus.Finding});
+class Searching extends DataState {
+  Searching({status: DataBlocStatus.Searching});
 }
 
 // Post saving, updating, or finding

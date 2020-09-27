@@ -1,4 +1,4 @@
-export 'manager.dart';
+export '../../repository/file_manager.dart';
 export 'transfer.dart';
 export 'type.dart';
 export 'utility.dart';

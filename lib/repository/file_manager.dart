@@ -4,7 +4,7 @@ import 'package:sonar_app/repository/repository.dart';
 
 class FileManager {
   // Initialization
-  Session session;
+  RTCSession session;
   SonarBloc bloc;
   RTCDataChannel dataChannel;
 
@@ -13,7 +13,7 @@ class FileManager {
   List<TransferFile> incoming;
 
   // Constructor
-  FileManager(this.bloc, this.session) {
+  FileManager(this.session) {
     // Initialize Maps
     outgoing = List<TransferFile>();
     incoming = List<TransferFile>();
@@ -90,7 +90,7 @@ class FileManager {
     // Check if Binary
     if (message.isBinary) {
       // Add Binary to Transfer
-      transfer.addChunk(message.binary, bloc);
+      transfer.addChunk(message.binary);
     }
     // Check if Text
     else {

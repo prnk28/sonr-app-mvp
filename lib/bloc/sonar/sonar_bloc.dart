@@ -13,17 +13,17 @@ part 'sonar_state.dart';
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Providers
   Circle circle;
-  Connection connection;
+  SocketConnection connection;
   Device device;
-  Session session;
+  RTCSession session;
 
   // Constructer
   SonarBloc() : super(null) {
     // ** RTC::Initialization **
     circle = new Circle(this);
-    connection = new Connection(this);
+    connection = new SocketConnection(this);
     device = new Device(this);
-    session = new Session(this);
+    session = new RTCSession();
   }
 
   // Initial State
@@ -60,11 +60,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       yield* _mapDeclinedToState(event);
     } else if (event is Transfer) {
       yield* _mapTransferToState(event);
-    }
-    //  else if (event is Progress) {
-    //   yield* _mapProgressToState(event);
-    // }
-    else if (event is Received) {
+    } else if (event is Received) {
       yield* _mapReceivedToState(event);
     } else if (event is Completed) {
       yield* _mapCompletedToState(event);
@@ -220,7 +216,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       if (authorizeEvent.decision) {
         // Create Answer
         session.handleOffer(authorizeEvent.offer);
-        yield Transferring();
+        yield InProgress();
       }
       // Receiver Declined
       else {
@@ -274,20 +270,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       session.fileManager.send();
 
       // Emit Decision to Server
-      yield Transferring();
+      yield InProgress();
     }
   }
-
-// *********************
-// ** Progress Event ***
-// *********************
-  // Stream<SonarState> _mapProgressToState(Progress progressEvent) async* {
-  //   // Check Status
-  //   if (connection.initialized) {
-  //     // Update Transferring with New Progress
-  //     yield Transferring(progress: progressEvent.currentProgress);
-  //   }
-  // }
 
 // *********************
 // ** Received Event ***

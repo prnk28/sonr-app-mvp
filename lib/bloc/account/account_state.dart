@@ -19,7 +19,9 @@ class Offline extends AccountState {
 }
 
 class Online extends AccountState {
-  Online({status: AccountBlocStatus.Online});
+  final Profile profile;
+
+  Online(this.profile, {status: AccountBlocStatus.Online});
 }
 
 class Unregistered extends AccountState {

@@ -23,8 +23,8 @@ class TransferFile {
   TransferFile({String info, File localFile}) {
     // Initialize
     currentChunkNum = 0;
-    progress = 0.0;
     lastProgress = 0.0;
+    progress = 0.0;
     block = new BytesBuilder();
 
     // File is being Transmitted
@@ -60,7 +60,7 @@ class TransferFile {
     }
   }
 
-  addChunk(Uint8List chunk, SonarBloc bloc) {
+  addChunk(Uint8List chunk) {
     // Add Chunk to Block
     block.add(chunk);
 
@@ -73,9 +73,6 @@ class TransferFile {
 
     // Log Progress
     log.i("Receive Progress: " + (progress * 100).toString() + "%");
-
-    // Update Progress UI
-    //bloc.add(Progress(progress));
   }
 
   updateChunkInfo(SonarBloc bloc) {

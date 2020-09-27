@@ -22,7 +22,18 @@ class ChangePreferences extends AccountEvent {
   const ChangePreferences();
 }
 
-// Get online account status
-class CheckOnlineStatus extends AccountEvent {
-  const CheckOnlineStatus();
+// Get online/local account status
+class CheckStatus extends AccountEvent {
+  const CheckStatus();
+}
+
+// Update Profile/Contact Info
+class UpdateProfile extends AccountEvent {
+  final Profile data;
+  const UpdateProfile(this.data);
+}
+
+// Update Account Settings
+class UpdateAccount extends AccountEvent {
+  const UpdateAccount();
 }

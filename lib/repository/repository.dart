@@ -1,6 +1,6 @@
 // Directory Exports
-export 'session.dart';
-export 'connection.dart';
+export 'rtcsession.dart';
+export 'socketconnection.dart';
 export 'device.dart';
 export 'local_data.dart';
 export "package:flutter_webrtc/webrtc.dart";

@@ -9,7 +9,7 @@ enum SonarBlocStatus {
   Pending,
   PreTransfer,
   Failed,
-  Transferring,
+  InProgress,
   Complete
 }
 
@@ -118,9 +118,9 @@ class Failed extends SonarState {
 // *********************************************
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
-class Transferring extends SonarState {
+class InProgress extends SonarState {
   final double progress;
-  const Transferring({this.progress, status: SonarBlocStatus.Transferring});
+  const InProgress({this.progress, status: SonarBlocStatus.InProgress});
 }
 
 // *************************

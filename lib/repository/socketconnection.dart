@@ -2,7 +2,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
 
-class Connection {
+class SocketConnection {
   // Session Properties
   String id;
   SonarBloc bloc;
@@ -13,7 +13,7 @@ class Connection {
   bool offered = false;
 
   // Manages Socket.io Events
-  Connection(this.bloc) {
+  SocketConnection(this.bloc) {
     // ** SOCKET::Connected **
     socket.on('connect', (_) async {
       log.v("Connected to Socket");

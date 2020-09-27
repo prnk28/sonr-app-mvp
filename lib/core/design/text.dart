@@ -2,9 +2,18 @@ import 'design.dart';
 
 class DesignText {
   // App Bar Logo Text
-  NeumorphicTextStyle logo() {
+  NeumorphicTextStyle neuLogo() {
     return NeumorphicTextStyle(
         fontFamily: "Raleway", fontWeight: FontWeight.w300, fontSize: 36);
+  }
+
+  // Header Text
+  NeumorphicTextStyle neuBarTitle({Color setColor}) {
+    return NeumorphicTextStyle(
+      fontFamily: "Raleway",
+      fontWeight: FontWeight.w400,
+      fontSize: 28,
+    );
   }
 
   // Medium Text

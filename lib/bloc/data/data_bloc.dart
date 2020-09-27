@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:sonar_app/core/file/file.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
@@ -13,22 +14,19 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
   // Initialize Repositories
   LocalData localData = new LocalData();
+  BytesBuilder block = new BytesBuilder();
 
-  // Initialize References
-  Profile currentProfile;
-
+  // Map Methods
   @override
   Stream<DataState> mapEventToState(
     DataEvent event,
   ) async* {
-    if (event is UpdateProfile) {
-      yield* _mapUpdateProfileState(event);
-    } else if (event is UpdateAccount) {
-      yield* _mapUpdateAccountState(event);
-    } else if (event is CheckLocalStatus) {
-      yield* _mapCheckLocalStatusState(event);
-    } else if (event is SaveFile) {
-      yield* _mapSaveFileState(event);
+    if (event is AddChunk) {
+      yield* _mapAddChunkState(event);
+    } else if (event is UpdateProgress) {
+      yield* _mapUpdateProgressState(event);
+    } else if (event is WriteFile) {
+      yield* _mapWriteFileState(event);
     } else if (event is SelectFile) {
       yield* _mapSelectFileState(event);
     } else if (event is FindFile) {
@@ -38,69 +36,31 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
   }
 
-// ***********************
-// ** UpdateProfile Event **
-// *************************
-  Stream<DataState> _mapUpdateProfileState(
-      UpdateProfile updateProfileEvent) async* {
-    // Save to Box
-    await localData.updateProfile(updateProfileEvent.data);
-
-    // Update Reference
-    this.currentProfile = updateProfileEvent.data;
-
-    // Profile Ready
-    yield Standby();
-  }
-
-// ***********************
-// ** UpdateAccount Event **
-// *************************
-  Stream<DataState> _mapUpdateAccountState(
-      UpdateAccount updateAccountEvent) async* {
+// ********************
+// ** AddChunk Event **
+// ********************
+  Stream<DataState> _mapAddChunkState(AddChunk addChunkEvent) async* {
     // Check Status
   }
 
-// ****************************
-// ** CheckLocalStatus Event **
-// ****************************
-  Stream<DataState> _mapCheckLocalStatusState(
-      CheckLocalStatus checkLocalStatusEvent) async* {
+// ********************
+// ** UpdateProgress Event **
+// ********************
+  Stream<DataState> _mapUpdateProgressState(UpdateProgress updateEvent) async* {
     // Check Status
-    var profile = await localData.getProfile();
-
-    // Create Delay
-    await Future.delayed(const Duration(milliseconds: 1500));
-
-    // No Profile
-    if (profile == null) {
-      // Update Reference
-      this.currentProfile = null;
-
-      // Change State
-      yield Unavailable();
-    }
-    // Profile Found
-    else {
-      // Update Reference
-      this.currentProfile = profile;
-
-      // Profile Ready
-      yield Standby();
-    }
   }
 
-// ********************
-// ** SaveFile Event **
-// ********************
-  Stream<DataState> _mapSaveFileState(SaveFile saveFileEvent) async* {
+// *********************
+// ** WriteFile Event **
+// *********************
+  Stream<DataState> _mapWriteFileState(WriteFile writeFileEvent) async* {
     // Check Status
   }
 
 // **********************
 // ** SelectFile Event **
 // **********************
-  Stream<DataState> _mapSelectFileState(SelectFile selectFileEvent) async* {
+  Stream<DataState> _mapSelectFileState(SelectFile saveFileEvent) async* {
     // Check Status
   }
 

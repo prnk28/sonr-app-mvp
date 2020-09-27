@@ -7,25 +7,20 @@ abstract class DataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Update Profile/Contact Info
-class UpdateProfile extends DataEvent {
-  final Profile data;
-  const UpdateProfile(this.data);
+// Add File Chunk from Transfer
+class AddChunk extends DataEvent {
+  final Uint8List chunk;
+  const AddChunk(this.chunk);
 }
 
-// Update Account Settings
-class UpdateAccount extends DataEvent {
-  const UpdateAccount();
+// Add File Chunk from Transfer
+class UpdateProgress extends DataEvent {
+  const UpdateProgress();
 }
 
-// Check Status of local account
-class CheckLocalStatus extends DataEvent {
-  const CheckLocalStatus();
-}
-
-// Post Transfer from Peer
-class SaveFile extends DataEvent {
-  const SaveFile();
+// Write Completed File to Disk
+class WriteFile extends DataEvent {
+  const WriteFile();
 }
 
 // Pick file to transfer to peer

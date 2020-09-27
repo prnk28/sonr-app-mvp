@@ -35,6 +35,33 @@ class Design {
     intensity: 0.3,
   );
 
+  // ***************** **
+  // ** -- App Bars -- **
+  // ***************** **
+  static NeumorphicAppBar logoAppBar = NeumorphicAppBar(
+    title: NeumorphicText("Sonr",
+        style: NeumorphicStyle(
+          depth: 4, //customize depth here
+          color: Colors.white, //customize color here
+        ),
+        textStyle: Design.text.neuLogo(),
+        textAlign: TextAlign.center),
+  );
+
+  static NeumorphicAppBar screenAppBar(
+    String title,
+  ) {
+    return NeumorphicAppBar(
+      title: NeumorphicText(title,
+          style: NeumorphicStyle(
+            depth: 2, //customize depth here
+            color: Colors.white, //customize color here
+          ),
+          textStyle: Design.text.neuBarTitle(),
+          textAlign: TextAlign.center),
+    );
+  }
+
   // ********************* **
   // ** -- Element Data -- **
   // ********************* **

@@ -4,16 +4,10 @@ export 'views/views.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TransferArguments args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
-      appBar: NeumorphicAppBar(
-        title: NeumorphicText("Sonr",
-            style: NeumorphicStyle(
-              depth: 4, //customize depth here
-              color: Colors.white, //customize color here
-            ),
-            textStyle: Design.text.logo(),
-            textAlign: TextAlign.center),
-      ),
+      appBar: Design.screenAppBar("Transfer"),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: Column(
         children: <Widget>[
@@ -36,7 +30,7 @@ class TransferScreen extends StatelessWidget {
                   return FailedView(
                       sonarBloc: BlocProvider.of<SonarBloc>(context),
                       state: state);
-                } else if (state is Transferring) {
+                } else if (state is InProgress) {
                   return TransferView(
                       sonarBloc: BlocProvider.of<SonarBloc>(context),
                       state: state);
@@ -44,6 +38,9 @@ class TransferScreen extends StatelessWidget {
                   return CompleteView(
                       sonarBloc: BlocProvider.of<SonarBloc>(context));
                 } else {
+                  // Initialize Client
+                  BlocProvider.of<SonarBloc>(context)
+                      .add(Initialize(userProfile: args.currentProfile));
                   return NeumorphicProgressIndeterminate();
                 }
               },
@@ -53,4 +50,10 @@ class TransferScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+// ** Arguments to Pass Data to TransferScreen **
+class TransferArguments {
+  final Profile currentProfile;
+  TransferArguments(this.currentProfile);
 }

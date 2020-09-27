@@ -104,7 +104,7 @@ class _InitializeViewState extends State<InitializeView> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     // Process data.
-                    BlocProvider.of<DataBloc>(context).add(UpdateProfile(
+                    BlocProvider.of<AccountBloc>(context).add(UpdateProfile(
                         Profile.fromValues(
                             this._firstName, this._lastName, null)));
                   }

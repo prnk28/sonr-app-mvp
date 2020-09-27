@@ -1,14 +1,7 @@
 import 'package:sonar_app/screens/screens.dart';
 export 'views/views.dart';
 
-class SplashScreen extends StatefulWidget {
-  SplashScreen({Key key}) : super(key: key);
-
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Return
@@ -17,24 +10,24 @@ class _SplashScreenState extends State<SplashScreen> {
       darkTheme: Design.darkTheme,
       child: Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
-        // Launch Second Screen
-        body: BlocBuilder<DataBloc, DataState>(buildWhen: (prev, curr) {
+        // Non Build States
+        body: BlocBuilder<AccountBloc, AccountState>(buildWhen: (prev, curr) {
           // Home Screen
-          if (curr is Standby) {
-            Navigator.pushReplacementNamed(context, "/home");
+          if (curr is Online) {
+            Navigator.pushReplacementNamed(context, "/home",
+                arguments: HomeArguments(curr.profile));
             return false;
           }
           // Register Screen
-          else if (curr is Unavailable) {
+          else if (curr is Offline) {
             Navigator.pushReplacementNamed(context, "/register");
             return false;
-            // Default
-          } else {
-            return true;
           }
+          // Default
+          return true;
         }, builder: (context, state) {
           // Begin Local Status Check
-          BlocProvider.of<DataBloc>(context).add(CheckLocalStatus());
+          BlocProvider.of<AccountBloc>(context).add(CheckStatus());
 
           // Return Loading
           return Center(child: NeumorphicProgressIndeterminate());

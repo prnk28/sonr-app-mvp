@@ -56,7 +56,7 @@ class App extends StatelessWidget {
           case '/transfer':
             return PageTransition(
                 child: TransferScreen(),
-                type: PageTransitionType.size,
+                type: PageTransitionType.fade,
                 settings: settings);
             break;
           case '/detail':

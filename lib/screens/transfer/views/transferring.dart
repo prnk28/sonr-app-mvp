@@ -2,7 +2,7 @@ import 'package:sonar_app/screens/screens.dart';
 
 class TransferView extends StatelessWidget {
   final SonarBloc sonarBloc;
-  final Transferring state;
+  final InProgress state;
 
   const TransferView({Key key, this.sonarBloc, this.state}) : super(key: key);
 
