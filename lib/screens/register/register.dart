@@ -26,11 +26,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: BlocBuilder<SonarBloc, SonarState>(
-              builder: (context, state) {
+            child: BlocBuilder<DataBloc, DataState>(buildWhen: (prev, curr) {
+              if (curr is Standby) {
+                Navigator.pushReplacementNamed(context, "/home");
+                return false;
+              }
+              // Register Screen
+              else if (curr is Unavailable) {
+                return true;
+                // Default
+              } else {
+                return false;
+              }
+            }, builder: (context, state) {
+              // Display Login/Signup View
+              if (state is Unavailable) {
                 return InitializeView();
-              },
-            ),
+              }
+              // On Error
+              else {
+                // Log
+                log.e("User shouldnt be stuck at register page");
+
+                // Dummy Widget
+                return Center(child: NeumorphicProgressIndeterminate());
+              }
+            }),
           ),
         ],
       ),

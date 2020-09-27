@@ -14,6 +14,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   // Initialize Repositories
   LocalData localData = new LocalData();
 
+  // Initialize References
+  Profile currentProfile;
+
   @override
   Stream<DataState> mapEventToState(
     DataEvent event,
@@ -40,7 +43,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // *************************
   Stream<DataState> _mapUpdateProfileState(
       UpdateProfile updateProfileEvent) async* {
-    // Check Status
+    // Save to Box
+    await localData.updateProfile(updateProfileEvent.data);
+
+    // Update Reference
+    this.currentProfile = updateProfileEvent.data;
+
+    // Profile Ready
+    yield Standby();
   }
 
 // ***********************
@@ -62,11 +72,19 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
 
-    // Return Status by Profile
+    // No Profile
     if (profile == null) {
-      // No Profile Found
+      // Update Reference
+      this.currentProfile = null;
+
+      // Change State
       yield Unavailable();
-    } else {
+    }
+    // Profile Found
+    else {
+      // Update Reference
+      this.currentProfile = profile;
+
       // Profile Ready
       yield Standby();
     }

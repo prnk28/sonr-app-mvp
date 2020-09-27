@@ -9,8 +9,8 @@ abstract class DataEvent extends Equatable {
 
 // Update Profile/Contact Info
 class UpdateProfile extends DataEvent {
-  final Profile userProfile;
-  const UpdateProfile({this.userProfile});
+  final Profile data;
+  const UpdateProfile(this.data);
 }
 
 // Update Account Settings

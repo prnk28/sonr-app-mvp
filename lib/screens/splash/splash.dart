@@ -18,14 +18,14 @@ class _SplashScreenState extends State<SplashScreen> {
       child: Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Launch Second Screen
-        body: BlocBuilder<DataBloc, DataState>(buildWhen: (previous, current) {
+        body: BlocBuilder<DataBloc, DataState>(buildWhen: (prev, curr) {
           // Home Screen
-          if (current is Standby) {
+          if (curr is Standby) {
             Navigator.pushReplacementNamed(context, "/home");
             return false;
           }
           // Register Screen
-          else if (current is Unavailable) {
+          else if (curr is Unavailable) {
             Navigator.pushReplacementNamed(context, "/register");
             return false;
             // Default

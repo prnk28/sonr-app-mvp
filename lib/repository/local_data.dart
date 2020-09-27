@@ -21,25 +21,25 @@ class LocalData {
   // ******************************** //
   // ** Add/Update Persistent Data ** //
   // ******************************** //
-  Future<void> addContact(Map contact) async {
+  Future<void> addContact(Contact contact) async {
     var box = await Hive.openBox(CONTACT_BOX);
 
-    box.put(contact["id"], contact);
+    box.put(contact.id, contact);
 
-    print('Contact: ${box.get(contact["id"])}');
+    print('Contact: ${box.get(contact.id)}');
 
     await box.close();
   }
 
-  Future<void> addFileMetadata(Map fileMetadata, FileType type) async {
+  Future<void> addFileMetadata(Metadata fileMetadata, FileType type) async {
     var box = await Hive.openBox(FILE_BOX);
     var fileBox = await Hive.openBox(type.toString());
 
     // Put in All Files and File Type
-    box.put(fileMetadata["id"], fileMetadata);
-    fileBox.put(fileMetadata["id"], fileMetadata);
+    box.put(fileMetadata.id, fileMetadata);
+    fileBox.put(fileMetadata.id, fileMetadata);
 
-    print('FileMetadata: ${box.get(fileMetadata["id"])}');
+    print('FileMetadata: ${box.get(fileMetadata.id)}');
 
     await box.close();
     await fileBox.close();
@@ -68,7 +68,7 @@ class LocalData {
   // ****************************** //
   // ** Retrieve Persistent Data ** //
   // ****************************** //
-  Future<Map> getContact(String id) async {
+  Future<Contact> getContact(String id) async {
     var box = await Hive.openBox(CONTACT_BOX);
     final contact = box.get(id);
 
@@ -76,7 +76,7 @@ class LocalData {
     return contact;
   }
 
-  Future<Map> getFileMetadata(String id) async {
+  Future<Metadata> getFileMetadata(String id) async {
     var box = await Hive.openBox(FILE_BOX);
     final file = box.get(id);
     await box.close();
@@ -84,7 +84,7 @@ class LocalData {
     return file;
   }
 
-  Future<Iterable> getAllFileMetadata(String id) async {
+  Future<Iterable<Metadata>> getAllFileMetadata(String id) async {
     var box = await Hive.openBox(FILE_BOX);
     final fileList = box.values;
     await box.close();
@@ -92,7 +92,7 @@ class LocalData {
     return fileList;
   }
 
-  Future<Iterable> getFileMetadataByType(FileType type) async {
+  Future<Iterable<Metadata>> getFileMetadataByType(FileType type) async {
     var box = await Hive.openBox(type.toString());
     final fileList = box.values;
     await box.close();
@@ -102,15 +102,15 @@ class LocalData {
 
   Future<Map> getPreferences() async {
     var box = await Hive.openBox(PREFERENCES_BOX);
-    final preferences = box.get("preferences", defaultValue: null);
+    final preferences = box.get("preferences");
     await box.close();
 
     return preferences;
   }
 
-  Future<Map> getProfile() async {
+  Future<Profile> getProfile() async {
     var box = await Hive.openBox(PROFILE_BOX);
-    final profile = box.get("profile", defaultValue: null);
+    final profile = box.get("profile");
     await box.close();
 
     return profile;
