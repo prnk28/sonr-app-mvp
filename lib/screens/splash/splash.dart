@@ -9,6 +9,9 @@ class SplashScreen extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // Begin Local Status Check
+    dataBloc.add(CheckLocalStatus());
+
     return NeumorphicTheme(
       theme: Design.lightTheme,
       darkTheme: Design.darkTheme,
@@ -16,19 +19,15 @@ class SplashScreen extends StatelessWidget {
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Launch Second Screen
         body: Center(
-          child: NeumorphicButton(
-            margin: EdgeInsets.only(top: 12),
-            style: NeumorphicStyle(
-              shape: NeumorphicShape.flat,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8)),
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, "/register");
-            },
-            child: Text('Launch Home',
-                style: TextStyle(color: Design.findTextColor(context))),
-          ),
-        ),
+            child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
+          if (state is Standby) {
+            Navigator.pushNamed(context, '/home');
+          } else if (state is Unavailable) {
+            Navigator.pushNamed(context, '/register');
+          } else {
+            return NeumorphicProgressIndeterminate();
+          }
+        })),
       ),
     );
   }

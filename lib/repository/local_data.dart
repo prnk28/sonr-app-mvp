@@ -102,7 +102,7 @@ class LocalData {
 
   Future<Map> getPreferences() async {
     var box = await Hive.openBox(PREFERENCES_BOX);
-    final preferences = box.get("preferences", defaultValue: {});
+    final preferences = box.get("preferences", defaultValue: null);
     await box.close();
 
     return preferences;
@@ -110,7 +110,7 @@ class LocalData {
 
   Future<Map> getProfile() async {
     var box = await Hive.openBox(PROFILE_BOX);
-    final profile = box.get("profile", defaultValue: {});
+    final profile = box.get("profile", defaultValue: null);
     await box.close();
 
     return profile;

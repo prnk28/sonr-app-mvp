@@ -54,6 +54,7 @@ dependencies:
   logger: ^0.8.3
   rflutter_alert: ^1.0.2
   flutter_neumorphic: ^3.0.2
+  page_transition: ^1.1.6
 
 # ** -- TEST -- **
 dev_dependencies:

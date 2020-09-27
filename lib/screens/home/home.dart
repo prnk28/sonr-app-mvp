@@ -10,7 +10,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Center(
         child: RaisedButton(
-          child: Text('Launch screen'),
+          child: Text('Begin Sonr'),
           onPressed: () {
             // Navigate to the second screen when tapped.
           },
