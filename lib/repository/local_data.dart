@@ -1,16 +1,21 @@
 import 'package:hive/hive.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
 class LocalData {
   // ** -- Class Constants -- **
   static const String CONTACT_BOX = "contactBox";
-  static const String FILE_BOX = "fileBox";
   static const String PREFERENCES_BOX = "preferencesBox";
   static const String PROFILE_BOX = "profileBox";
+
+  // File Box's
+  static const String FILE_BOX = "fileBox";
 
   // ** -- Class Constructer -- **
   LocalData() {
     Hive.registerAdapter(ProfileAdapter());
+    Hive.registerAdapter(MetadataAdapter());
+    Hive.registerAdapter(ContactAdapter());
   }
 
   // ******************************** //
@@ -26,14 +31,18 @@ class LocalData {
     await box.close();
   }
 
-  Future<void> addFileMetadata(Map fileMetadata) async {
+  Future<void> addFileMetadata(Map fileMetadata, FileType type) async {
     var box = await Hive.openBox(FILE_BOX);
+    var fileBox = await Hive.openBox(type.toString());
 
+    // Put in All Files and File Type
     box.put(fileMetadata["id"], fileMetadata);
+    fileBox.put(fileMetadata["id"], fileMetadata);
 
     print('FileMetadata: ${box.get(fileMetadata["id"])}');
 
     await box.close();
+    await fileBox.close();
   }
 
   Future<void> updatePreferences(Map preferences) async {
@@ -61,26 +70,50 @@ class LocalData {
   // ****************************** //
   Future<Map> getContact(String id) async {
     var box = await Hive.openBox(CONTACT_BOX);
+    final contact = box.get(id);
 
-    return box.get(id);
+    await box.close();
+    return contact;
   }
 
   Future<Map> getFileMetadata(String id) async {
     var box = await Hive.openBox(FILE_BOX);
+    final file = box.get(id);
+    await box.close();
 
-    return box.get(id);
+    return file;
+  }
+
+  Future<Iterable> getAllFileMetadata(String id) async {
+    var box = await Hive.openBox(FILE_BOX);
+    final fileList = box.values;
+    await box.close();
+
+    return fileList;
+  }
+
+  Future<Iterable> getFileMetadataByType(FileType type) async {
+    var box = await Hive.openBox(type.toString());
+    final fileList = box.values;
+    await box.close();
+
+    return fileList;
   }
 
   Future<Map> getPreferences() async {
     var box = await Hive.openBox(PREFERENCES_BOX);
+    final preferences = box.get("preferences", defaultValue: {});
+    await box.close();
 
-    return box.get("preferences", defaultValue: {});
+    return preferences;
   }
 
   Future<Map> getProfile() async {
     var box = await Hive.openBox(PROFILE_BOX);
+    final profile = box.get("profile", defaultValue: {});
+    await box.close();
 
-    return box.get("profile", defaultValue: {});
+    return profile;
   }
 
   // **************************** //

@@ -149,7 +149,7 @@ class Profile extends HiveObject {
 
 class ProfileAdapter extends TypeAdapter<Profile> {
   @override
-  final typeId = 0;
+  final typeId = 3;
 
   @override
   Profile read(BinaryReader reader) {
