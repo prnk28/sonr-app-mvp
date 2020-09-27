@@ -44,8 +44,7 @@ class TransferScreen extends StatelessWidget {
                   return CompleteView(
                       sonarBloc: BlocProvider.of<SonarBloc>(context));
                 } else {
-                  return InitializeView(
-                      sonarBloc: BlocProvider.of<SonarBloc>(context));
+                  return NeumorphicProgressIndeterminate();
                 }
               },
             ),

@@ -3,10 +3,7 @@ import 'package:sonar_app/screens/screens.dart';
 final _formKey = GlobalKey<FormState>();
 
 class InitializeView extends StatefulWidget {
-  // Form Image Data
-  final Bloc sonarBloc;
-
-  InitializeView({Key key, this.sonarBloc}) : super(key: key);
+  InitializeView({Key key}) : super(key: key);
 
   @override
   _InitializeViewState createState() => _InitializeViewState();
@@ -107,7 +104,7 @@ class _InitializeViewState extends State<InitializeView> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     // Process data.
-                    widget.sonarBloc.add(Initialize(
+                    BlocProvider.of<SonarBloc>(context).add(Initialize(
                         userProfile: Profile.fromValues(
                             this._firstName, this._lastName, null)));
                   }

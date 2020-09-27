@@ -1,7 +1,14 @@
 import 'package:sonar_app/screens/screens.dart';
 export 'views/views.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  RegisterScreen({Key key}) : super(key: key);
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +28,7 @@ class RegisterScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: BlocBuilder<SonarBloc, SonarState>(
               builder: (context, state) {
-                return InitializeView(
-                    sonarBloc: BlocProvider.of<SonarBloc>(context));
+                return InitializeView();
               },
             ),
           ),

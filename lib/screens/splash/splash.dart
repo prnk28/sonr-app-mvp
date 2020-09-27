@@ -1,33 +1,44 @@
 import 'package:sonar_app/screens/screens.dart';
 export 'views/views.dart';
 
-class SplashScreen extends StatelessWidget {
-  final AccountBloc accountBloc;
-  final DataBloc dataBloc;
+class SplashScreen extends StatefulWidget {
+  SplashScreen({Key key}) : super(key: key);
 
-  const SplashScreen({Key key, this.accountBloc, this.dataBloc})
-      : super(key: key);
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    // Begin Local Status Check
-    dataBloc.add(CheckLocalStatus());
-
+    // Return
     return NeumorphicTheme(
       theme: Design.lightTheme,
       darkTheme: Design.darkTheme,
       child: Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Launch Second Screen
-        body: Center(
-            child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-          if (state is Standby) {
-            Navigator.pushNamed(context, '/home');
-          } else if (state is Unavailable) {
-            Navigator.pushNamed(context, '/register');
-          } else {
-            return NeumorphicProgressIndeterminate();
+        body: BlocBuilder<DataBloc, DataState>(buildWhen: (previous, current) {
+          // Home Screen
+          if (current is Standby) {
+            Navigator.pushReplacementNamed(context, "/home");
+            return false;
           }
-        })),
+          // Register Screen
+          else if (current is Unavailable) {
+            Navigator.pushReplacementNamed(context, "/register");
+            return false;
+            // Default
+          } else {
+            return true;
+          }
+        }, builder: (context, state) {
+          // Begin Local Status Check
+          BlocProvider.of<DataBloc>(context).add(CheckLocalStatus());
+
+          // Return Loading
+          return Center(child: NeumorphicProgressIndeterminate());
+        }),
       ),
     );
   }

@@ -59,6 +59,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Check Status
     var profile = await localData.getProfile();
 
+    // Create Delay
+    await Future.delayed(const Duration(milliseconds: 1500));
+
     // Return Status by Profile
     if (profile == null) {
       // No Profile Found
