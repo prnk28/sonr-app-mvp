@@ -1,6 +1,6 @@
 // Directory Exports
 export 'rtcsession.dart';
-export 'socketconnection.dart';
+export 'connection.dart';
 export 'device.dart';
 export 'localdata.dart';
 export "package:flutter_webrtc/webrtc.dart";
@@ -27,5 +27,4 @@ Socket socket = io('http://match.sonr.io', <String, dynamic>{
 
 // Initialize WebRTC Client
 RTCSession rtcSession = new RTCSession();
-
 LocalData localData = new LocalData();

@@ -24,7 +24,7 @@ class Connection {
     socket.on('INFO', (data) {
       bloc.add(Refresh(newDirection: bloc.device.direction));
       // Add to Process
-      log.v("Lobby Id: " + data);
+      //log.v("Lobby Id: " + data);
     });
 
     // ** SOCKET::NEW_SENDER **
@@ -33,7 +33,7 @@ class Connection {
       socket.emit("RECEIVING", [bloc.device.direction.toReceiveMap()]);
       bloc.add(Refresh(newDirection: bloc.device.direction));
       // Add to Process
-      log.i("NEW_SENDER: " + data);
+      //log.i("NEW_SENDER: " + data);
     });
 
     // ** SOCKET::SENDER_UPDATE **
@@ -49,7 +49,7 @@ class Connection {
       bloc.add(Refresh(newDirection: bloc.device.direction));
 
       // Add to Process
-      log.w("SENDER_EXIT: " + id);
+      //log.w("SENDER_EXIT: " + id);
     });
 
     // ** SOCKET::NEW_RECEIVER **
@@ -62,7 +62,7 @@ class Connection {
       bloc.add(Refresh(newDirection: bloc.device.direction));
 
       // Add to Process
-      log.i("NEW_RECEIVER: " + data);
+      //log.i("NEW_RECEIVER: " + data);
     });
 
     // ** SOCKET::RECEIVER_UPDATE **
@@ -78,12 +78,12 @@ class Connection {
       bloc.add(Refresh(newDirection: bloc.device.direction));
 
       // Add to Process
-      log.w("RECEIVER_EXIT: " + id);
+      //log.w("RECEIVER_EXIT: " + id);
     });
 
     // ** SOCKET::SENDER_OFFERED **
     socket.on('SENDER_OFFERED', (data) async {
-      log.i("SENDER_OFFERED: " + data.toString());
+      //log.i("SENDER_OFFERED: " + data.toString());
 
       // Call offered event
       bloc.add(Offered(offer: data[0], profile: data[1]));
@@ -91,14 +91,14 @@ class Connection {
 
     // ** SOCKET::NEW_CANDIDATE **
     socket.on('NEW_CANDIDATE', (data) async {
-      log.i("NEW_CANDIDATE: " + data.toString());
+      //log.i("NEW_CANDIDATE: " + data.toString());
 
       rtcSession.handleCandidate(data);
     });
 
     // ** SOCKET::RECEIVER_ANSWERED **
     socket.on('RECEIVER_ANSWERED', (data) async {
-      log.i("RECEIVER_ANSWERED: " + data.toString());
+      //log.i("RECEIVER_ANSWERED: " + data.toString());
 
       dynamic _answer = data[0];
 
@@ -112,14 +112,14 @@ class Connection {
 
       bloc.add(Declined(bloc.circle.closestProfile(), matchId));
       // Add to Process
-      log.w("RECEIVER_DECLINED: " + data.toString());
+      //log.w("RECEIVER_DECLINED: " + data.toString());
     });
 
     // ** SOCKET::NEXT_CHUNK **
     socket.on('NEXT_CHUNK', (data) {
       //bloc.session.fileManager.sendBlock(data);
       // Add to Process
-      log.i("RECEIVER_COMPLETED: " + data.toString());
+      //log.i("RECEIVER_COMPLETED: " + data.toString());
     });
 
     // ** SOCKET::RECEIVER_COMPLETED **
@@ -128,7 +128,7 @@ class Connection {
 
       bloc.add(Completed(bloc.circle.closestProfile(), matchId));
       // Add to Process
-      log.i("RECEIVER_COMPLETED: " + data.toString());
+      //log.i("RECEIVER_COMPLETED: " + data.toString());
     });
 
     // ** SOCKET::ERROR **

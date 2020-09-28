@@ -12,7 +12,6 @@ class FileTransfer {
 
   // Transfer Variables
   File file;
-  BytesBuilder block;
 
   // Chunking Variables
   int chunksTotal;
@@ -27,7 +26,6 @@ class FileTransfer {
     currentChunkNum = 0;
     lastProgress = 0.0;
     progress = 0.0;
-    block = new BytesBuilder();
 
     // File is being Transmitted
     if (localFile != null) {
@@ -41,6 +39,8 @@ class FileTransfer {
       var temp = size / CHUNK_SIZE;
       chunksTotal = temp.ceil();
       remainingChunks = chunksTotal;
+
+      log.i("FileTransfer Created");
     }
     // File is being Received
     else {

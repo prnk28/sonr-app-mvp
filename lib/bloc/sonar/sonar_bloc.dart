@@ -37,8 +37,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Device Can See Updates
     if (event is Initialize) {
       yield* _mapInitializeToState(event);
-    } else if (event is Select) {
-      yield* _mapSelectToState(event);
     } else if (event is Send) {
       yield* _mapSendToState(event);
     } else if (event is Receive) {
@@ -82,20 +80,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
           [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
       connection.initialized = true;
 
-      // Fake Select File
-      add(Select());
+      // Fake Select File in Queue
+      File transferToSend =
+          await localData.getAssetFileByPath("assets/images/fat_test.jpg");
+      dataBloc.add(QueueFile(receiving: false, file: transferToSend));
 
-      // Device Pending State
-      yield Ready();
-    }
-  }
-
-// *****************
-// ** Select Event ***
-// *****************
-  Stream<SonarState> _mapSelectToState(Select selectEvent) async* {
-    // Check Init Status
-    if (connection.ready()) {
       // Device Pending State
       yield Ready();
     }
@@ -169,7 +158,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
       // Create Offer and Emit
       rtcSession.invite(
-          this.circle.closestId(), dataBloc.outgoing.first.getInfo());
+          this.circle.closestId(), dataBloc.outgoing.first.toString());
 
       // Device Pending State
       yield Pending(match: circle.closestProfile());
@@ -187,13 +176,12 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       rtcSession.peerId = offeredEvent.profile["id"];
 
       // Add Incoming File Info
-      dataBloc.add(QueueFile());
+      dataBloc.add(QueueFile(
+        receiving: true,
+      ));
 
       // Device Pending State
-      yield Pending(
-          match: circle.closestProfile(),
-          file: dataBloc.incoming.first,
-          offer: offeredEvent.offer);
+      yield Pending(match: circle.closestProfile(), offer: offeredEvent.offer);
     }
   }
 
@@ -257,6 +245,9 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
+      // Begin Transfer
+      dataBloc.add(SendChunks());
+
       // Emit Decision to Server
       yield InProgress();
     }

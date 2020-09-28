@@ -2,7 +2,7 @@ part of 'data_bloc.dart';
 
 enum DataBlocStatus {
   Standby,
-  Transferring,
+  Transmitting,
   Updating,
   Saving,
   Selected,
@@ -32,13 +32,13 @@ class Selected extends DataState {
 }
 
 // Sending to peer w/ Progress and Chunks
-class Transferring extends DataState {
+class Transmitting extends DataState {
   // Progress Variables
   final FileTransfer file;
   final double progress;
 
   // State Class
-  Transferring({this.file, this.progress, status: DataBlocStatus.Transferring});
+  Transmitting({this.file, this.progress, status: DataBlocStatus.Transmitting});
 }
 
 // Saving to disk w/ Progress and Chunks

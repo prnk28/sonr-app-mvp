@@ -13,9 +13,6 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(null);
 
-  // Initialize Repositories
-  LocalData localData = new LocalData();
-
   // Initialize References
   Profile currentProfile;
 
@@ -27,9 +24,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapUpdateProfileState(event);
     } else if (event is CheckStatus) {
       yield* _mapCheckStatusState(event);
-    } else if (event is UpdateProgress) {
-      yield* _mapCheckStatusState(event);
-    } else if (event is WriteFile) {}
+    }
   }
 
 // ***********************

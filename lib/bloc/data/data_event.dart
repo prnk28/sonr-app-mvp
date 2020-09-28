@@ -13,20 +13,20 @@ class AddChunk extends DataEvent {
   const AddChunk(this.chunk);
 }
 
+// Update Progress
+class Progress extends DataEvent {
+  const Progress();
+}
+
 // Add File Chunk from Transfer
 class SendChunks extends DataEvent {
   const SendChunks();
 }
 
-// Add File Chunk from Transfer
-class UpdateProgress extends DataEvent {
-  const UpdateProgress();
-}
-
 // Write Completed File to Disk
 class WriteFile extends DataEvent {
   final File file;
-  const WriteFile(this.file);
+  const WriteFile({this.file});
 }
 
 // Pick file to transfer to peer

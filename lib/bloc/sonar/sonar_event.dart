@@ -78,12 +78,6 @@ class Transfer extends SonarEvent {
   const Transfer();
 }
 
-// Update Progress
-class Progress extends SonarEvent {
-  final double percentage;
-  const Progress(this.percentage);
-}
-
 // Sender Sent Transfer
 class Received extends SonarEvent {
   final File data;
