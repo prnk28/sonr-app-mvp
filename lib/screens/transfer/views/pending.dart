@@ -3,7 +3,7 @@ import 'package:sonar_app/screens/screens.dart';
 
 class PendingView extends StatelessWidget {
   final Pending state;
-  final SonarBloc sonarBloc;
+  final WebBloc sonarBloc;
 
   const PendingView({Key key, this.state, this.sonarBloc}) : super(key: key);
   @override
@@ -28,13 +28,13 @@ class PendingView extends StatelessWidget {
             FloatingActionButton(
                 child: Icon(Icons.check),
                 onPressed: () {
-                  BlocProvider.of<SonarBloc>(context)
+                  BlocProvider.of<WebBloc>(context)
                       .add(Authorize(true, state.match["id"], state.offer));
                 }),
             FloatingActionButton(
                 child: Icon(Icons.close),
                 onPressed: () {
-                  BlocProvider.of<SonarBloc>(context)
+                  BlocProvider.of<WebBloc>(context)
                       .add(Authorize(false, state.match["id"], state.offer));
                 }),
           ]);

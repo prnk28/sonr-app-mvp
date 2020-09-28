@@ -58,7 +58,7 @@ Orientation getOrientationFromAccelerometer(double x, double y) {
 // ********************************************
 class Device {
   // References
-  SonarBloc bloc;
+  WebBloc bloc;
   Direction direction;
   Motion motion = Motion.create();
   PositionStatus status;

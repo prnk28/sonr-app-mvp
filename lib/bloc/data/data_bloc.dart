@@ -93,20 +93,20 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ********************
   Stream<DataState> _mapProgressState(Progress event) async* {
     // Get File thats being sent to Peer
-    FileTransfer incomingFile = incoming.first;
+    // FileTransfer incomingFile = incoming.first;
 
-    // Update Chunks
-    incomingFile.currentChunkNum += 1;
-    incomingFile.remainingChunks =
-        incomingFile.chunksTotal - incomingFile.currentChunkNum;
+    // // Update Chunks
+    // incomingFile.currentChunkNum += 1;
+    // incomingFile.remainingChunks =
+    //     incomingFile.chunksTotal - incomingFile.currentChunkNum;
 
-    // Update Progress
-    double progress =
-        (incomingFile.chunksTotal - incomingFile.remainingChunks) /
-            incomingFile.chunksTotal;
+    // // Update Progress
+    // double progress =
+    //     (incomingFile.chunksTotal - incomingFile.remainingChunks) /
+    //         incomingFile.chunksTotal;
 
     //Log Progress
-    log.i("Receive Progress: " + (progress * 100).toString() + "%");
+    log.i("Receiving Chunk");
 
     //Yield Progress
     yield Updating();
@@ -184,10 +184,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     Directory tempDir = await getApplicationDocumentsDirectory();
 
     // Generate File Path
-    String filePath = tempDir.path + "/Images/" + "example";
+    String filePath = tempDir.path + "/Images/" + "example.jpg";
 
     // Save File at Path
-    File rawFile = await new File(filePath).writeAsBytes(data);
+    File rawFile = File(filePath);
+    rawFile.writeAsBytes(data);
 
     // Create MetaData
     // Metadata meta = new Metadata();

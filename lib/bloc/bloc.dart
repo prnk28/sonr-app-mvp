@@ -1,5 +1,5 @@
-// Sonar
-export 'sonar/sonar_bloc.dart';
+// Networking Communication
+export 'web/web_bloc.dart';
 
 // User
 export 'user/user_bloc.dart';

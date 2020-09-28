@@ -13,33 +13,33 @@ class TransferScreen extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: BlocBuilder<SonarBloc, SonarState>(
+            child: BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
                 if (state is Sending) {
                   return SendingView(
-                      state, BlocProvider.of<SonarBloc>(context));
+                      state, BlocProvider.of<WebBloc>(context));
                 } else if (state is Receiving) {
                   return ReceivingView(state: state);
                 } else if (state is Pending) {
                   return PendingView(
                       state: state,
-                      sonarBloc: BlocProvider.of<SonarBloc>(context));
+                      sonarBloc: BlocProvider.of<WebBloc>(context));
                 } else if (state is PreTransfer) {
                   return PreTransferView(state: state);
                 } else if (state is Failed) {
                   return FailedView(
-                      sonarBloc: BlocProvider.of<SonarBloc>(context),
+                      sonarBloc: BlocProvider.of<WebBloc>(context),
                       state: state);
                 } else if (state is InProgress) {
                   return TransferView(
-                      sonarBloc: BlocProvider.of<SonarBloc>(context),
+                      sonarBloc: BlocProvider.of<WebBloc>(context),
                       state: state);
                 } else if (state is Complete) {
                   return CompleteView(
-                      sonarBloc: BlocProvider.of<SonarBloc>(context));
+                      sonarBloc: BlocProvider.of<WebBloc>(context));
                 } else {
                   // Initialize Client
-                  BlocProvider.of<SonarBloc>(context)
+                  BlocProvider.of<WebBloc>(context)
                       .add(Initialize(userProfile: args.currentProfile));
                   return NeumorphicProgressIndeterminate();
                 }

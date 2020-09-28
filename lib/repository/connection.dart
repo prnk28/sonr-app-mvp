@@ -5,7 +5,7 @@ import 'package:sonar_app/repository/repository.dart';
 class Connection {
   // Session Properties
   String id;
-  SonarBloc bloc;
+  WebBloc bloc;
 
   // Transfer Variables
   bool initialized = false;

@@ -4,13 +4,13 @@ import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:equatable/equatable.dart';
 
-part 'sonar_event.dart';
-part 'sonar_state.dart';
+part 'web_event.dart';
+part 'web_state.dart';
 
 // ***********************
 // ** Sonar Bloc Class ***
 // ***********************
-class SonarBloc extends Bloc<SonarEvent, SonarState> {
+class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   Circle circle;
   Connection connection;
@@ -18,7 +18,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 
   // Constructer
   final DataBloc dataBloc;
-  SonarBloc(this.dataBloc) : super(null) {
+  WebBloc(this.dataBloc) : super(null) {
     // ** RTC::Initialization **
     circle = new Circle(this);
     connection = new Connection(this);
@@ -26,13 +26,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   }
 
   // Initial State
-  SonarState get initialState => Initial();
+  WebState get initialState => Initial();
 // *********************************
 // ** Map Events to State Method ***
 // *********************************
   @override
-  Stream<SonarState> mapEventToState(
-    SonarEvent event,
+  Stream<WebState> mapEventToState(
+    WebEvent event,
   ) async* {
     // Device Can See Updates
     if (event is Initialize) {
@@ -69,7 +69,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
 // ** Initialize Event ***
 // ***********************
-  Stream<SonarState> _mapInitializeToState(Initialize initializeEvent) async* {
+  Stream<WebState> _mapInitializeToState(Initialize initializeEvent) async* {
     // Check Status
     if (connection.needSetup()) {
 // Initialize Variables
@@ -93,7 +93,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *****************
 // ** Send Event ***
 // *****************
-  Stream<SonarState> _mapSendToState(Send sendEvent) async* {
+  Stream<WebState> _mapSendToState(Send sendEvent) async* {
     // Check Init Status
     if (connection.ready()) {
       // Emit Send
@@ -120,7 +120,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
 // ** Receive Event ***
 // ********************
-  Stream<SonarState> _mapReceiveToState(Receive receiveEvent) async* {
+  Stream<WebState> _mapReceiveToState(Receive receiveEvent) async* {
     // Check Init Status
     if (connection.ready()) {
       const delay = const Duration(milliseconds: 750);
@@ -147,7 +147,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
 // ** Invite Event ***
 // ***********************
-  Stream<SonarState> _mapInviteToState(Invite requestEvent) async* {
+  Stream<WebState> _mapInviteToState(Invite requestEvent) async* {
     // Check Status
     if (connection.ready()) {
       // Set Invited
@@ -168,7 +168,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ***********************
 // ** Offered Event ***
 // ***********************
-  Stream<SonarState> _mapOfferedToState(Offered offeredEvent) async* {
+  Stream<WebState> _mapOfferedToState(Offered offeredEvent) async* {
     // Check Status
     if (connection.ready()) {
       // Set Offered and Peer
@@ -188,7 +188,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **********************
 // ** Authorize Event ***
 // **********************
-  Stream<SonarState> _mapAuthorizeToState(Authorize authorizeEvent) async* {
+  Stream<WebState> _mapAuthorizeToState(Authorize authorizeEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Yield Receiver Decision
@@ -212,7 +212,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **********************
 // ** Accepted Event ***
 // **********************
-  Stream<SonarState> _mapAcceptedToState(Accepted acceptedEvent) async* {
+  Stream<WebState> _mapAcceptedToState(Accepted acceptedEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Handle Answer
@@ -227,7 +227,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **********************
 // ** Declined Event ***
 // **********************
-  Stream<SonarState> _mapDeclinedToState(Declined declinedEvent) async* {
+  Stream<WebState> _mapDeclinedToState(Declined declinedEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Reset Peer
@@ -242,7 +242,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
 // ** Transfer Event ***
 // *********************
-  Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
+  Stream<WebState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Begin Transfer
@@ -256,7 +256,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
 // ** Received Event ***
 // *********************
-  Stream<SonarState> _mapReceivedToState(Received receivedEvent) async* {
+  Stream<WebState> _mapReceivedToState(Received receivedEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Emit Decision to Server
@@ -267,7 +267,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
 // ** Completed Event ***
 // *********************
-  Stream<SonarState> _mapCompletedToState(Completed completedEvent) async* {
+  Stream<WebState> _mapCompletedToState(Completed completedEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Emit Decision to Server
@@ -278,7 +278,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // *********************
 // ** Reset Event ***
 // *********************
-  Stream<SonarState> _mapResetToState(Reset resetEvent) async* {
+  Stream<WebState> _mapResetToState(Reset resetEvent) async* {
     // Check Status
     if (connection.initialized) {
       // Reset Connection
@@ -304,7 +304,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // ********************
 // ** Update Event ***
 // ********************
-  Stream<SonarState> _mapUpdateToState(Update updateEvent) async* {
+  Stream<WebState> _mapUpdateToState(Update updateEvent) async* {
     if (connection.initialized) {
       if (device.status == PositionStatus.SENDER) {
         add(Send(map: updateEvent.map));
@@ -318,7 +318,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
 // **************************
 // ** Refresh Input Event ***
 // **************************
-  Stream<SonarState> _mapRefreshInputToState(Refresh updateSensors) async* {
+  Stream<WebState> _mapRefreshInputToState(Refresh updateSensors) async* {
 // Check Status
     if (connection.noContact()) {
       // Check State

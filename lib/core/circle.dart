@@ -9,7 +9,7 @@ class Circle {
   // *******************
   SortedMap differences;
   Map matches;
-  SonarBloc bloc;
+  WebBloc bloc;
 
   Circle(this.bloc) {
     differences = new SortedMap(Ordering.byValue());

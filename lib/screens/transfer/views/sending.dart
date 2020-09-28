@@ -2,7 +2,7 @@ import 'package:sonar_app/screens/screens.dart';
 
 class SendingView extends StatelessWidget {
   final Sending state;
-  final SonarBloc sonarBloc;
+  final WebBloc sonarBloc;
 
   SendingView(this.state, this.sonarBloc);
   @override

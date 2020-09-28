@@ -22,8 +22,8 @@ Future<void> main() async {
       BlocProvider<DataBloc>(
         create: (context) => DataBloc(),
       ),
-      BlocProvider<SonarBloc>(
-        create: (context) => SonarBloc(BlocProvider.of<DataBloc>(context)),
+      BlocProvider<WebBloc>(
+        create: (context) => WebBloc(BlocProvider.of<DataBloc>(context)),
       ),
     ],
     child: App(),
