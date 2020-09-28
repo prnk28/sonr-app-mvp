@@ -192,4 +192,13 @@ class LocalData {
     // Return File Object
     return await File(dbPath).writeAsBytes(bytes);
   }
+
+// **************************
+// ** Write File to a Path **
+// **************************
+  Future<File> writeToFile(Uint8List data, String path) {
+    final buffer = data.buffer;
+    return new File(path).writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
 }

@@ -177,18 +177,15 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // FileTransfer incomingFile = incoming.first;
     // log.i(incomingFile.name);
 
-    // Convert Uint8List to File
-    Uint8List data = block.takeBytes();
-
     // Get App Directory
-    Directory tempDir = await getApplicationDocumentsDirectory();
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
 
     // Generate File Path
-    String filePath = tempDir.path + "/Images/" + "example.jpg";
+    var filePath = tempPath + '/file_01.tmp';
 
-    // Save File at Path
-    File rawFile = File(filePath);
-    rawFile.writeAsBytes(data);
+    // Save File to Disk
+    File rawFile = await localData.writeToFile(block.takeBytes(), filePath);
 
     // Create MetaData
     // Metadata meta = new Metadata();
