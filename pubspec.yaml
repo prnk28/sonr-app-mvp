@@ -35,6 +35,7 @@ dependencies:
   # -- Extension --
   characters: ^1.0.0
   enum_to_string: ^1.0.9
+  graph_collection: ^1.1.2
   hive: ^1.4.4
   hive_flutter: ^0.3.1
   intl: ^0.15.8
@@ -50,12 +51,12 @@ dependencies:
   http: ^0.12.0+4
 
   # -- UI/UX --
-  boxicons_flutter: ^1.1.0
-  logger: ^0.8.3
-  rflutter_alert: ^1.0.2
-  flutter_neumorphic: ^3.0.2
   animations: ^1.1.2
+  boxicons_flutter: ^1.1.0
+  flutter_neumorphic: ^3.0.2
+  logger: ^0.8.3
   page_transition: ^1.1.6
+  rflutter_alert: ^1.0.2
 
 # ** -- TEST -- **
 dev_dependencies:

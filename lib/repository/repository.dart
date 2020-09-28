@@ -1,5 +1,5 @@
 // Directory Exports
-export 'rtcsession.dart';
+export 'session.dart';
 export 'connection.dart';
 export 'device.dart';
 export 'localdata.dart';
@@ -12,7 +12,7 @@ export 'package:path_provider/path_provider.dart';
 
 // Socket.io Client
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:sonar_app/repository/rtcsession.dart';
+import 'package:sonar_app/repository/session.dart';
 
 import 'localdata.dart';
 

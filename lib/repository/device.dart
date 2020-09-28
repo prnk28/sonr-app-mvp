@@ -7,35 +7,10 @@ import 'package:sonar_app/models/models.dart';
 // *******************
 enum PositionStatus { RECEIVER, SENDER, DEFAULT }
 enum Orientation { Default, Tilt, LandscapeLeft, LandscapeRight }
-enum CompassDesignation {
-  N,
-  NNE,
-  NE,
-  ENE,
-  E,
-  ESE,
-  SE,
-  SSE,
-  S,
-  SSW,
-  SW,
-  WSW,
-  W,
-  WNW,
-  NW,
-  NNW
-}
 
 // ****************************
 // ** Enum Centric Methods ****
 // ****************************
-// Used by Direction Model
-CompassDesignation getCompassDesignationFromDegrees(double degrees) {
-  var compassValue = ((degrees / 22.5) + 0.5).toInt();
-
-  return CompassDesignation.values[(compassValue % 16)];
-}
-
 // Used in Motion Model
 Orientation getOrientationFromAccelerometer(double x, double y) {
   // Set Sonar State by Accelerometer
@@ -64,12 +39,6 @@ class Device {
   PositionStatus status;
 
   Device(this.bloc) {
-    // ** Accelerometer Events **
-    accelerometerEvents.listen((newData) {
-      // Update Motion Var
-      motion = Motion.create(a: newData);
-    });
-
     // ** Directional Events **
     Compass()
         .compassUpdates(interval: Duration(milliseconds: 400))
@@ -96,10 +65,10 @@ class Device {
               bloc.circle.modify(newDirection);
 
               // Refresh Inputs
-              bloc.add(Refresh(newDirection: newDirection));
+              bloc.add(Reload(newDirection: newDirection));
             }
           }
-          bloc.add(Refresh(newDirection: newDirection));
+          bloc.add(Reload(newDirection: newDirection));
         }
         // Check Receiver Threshold
         else if (motion.state == Orientation.LandscapeLeft ||
@@ -115,10 +84,10 @@ class Device {
               // Modify Circle
               bloc.circle.modify(newDirection);
               // Refresh Inputs
-              bloc.add(Refresh(newDirection: newDirection));
+              bloc.add(Reload(newDirection: newDirection));
             }
           }
-          bloc.add(Refresh(newDirection: newDirection));
+          bloc.add(Reload(newDirection: newDirection));
         }
       }
     });

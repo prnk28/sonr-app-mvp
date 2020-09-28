@@ -35,10 +35,10 @@ class Initial extends WebState {
 // ****************************
 // ** Connected to Lobby/WS ***
 // ****************************
-class Ready extends WebState {
+class Connected extends WebState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Ready(
+  const Connected(
       {this.currentMotion, this.currentDirection, status: WebBlocStatus.Ready});
 }
 

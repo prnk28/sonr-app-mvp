@@ -8,7 +8,6 @@ class Direction extends Equatable {
   // *******************
   final double degrees;
   final double antipodalDegrees;
-  final CompassDesignation compassDesignation;
   final DateTime lastUpdated;
 
   final String id;
@@ -17,18 +16,13 @@ class Direction extends Equatable {
   // ** Constructor Var **
   // *********************
   const Direction(
-      {this.id,
-      this.degrees,
-      this.antipodalDegrees,
-      this.compassDesignation,
-      this.lastUpdated});
+      {this.id, this.degrees, this.antipodalDegrees, this.lastUpdated});
 
   // **************************
   // ** Class Implementation **
   // **************************
   @override
-  List<Object> get props =>
-      [degrees, antipodalDegrees, compassDesignation, lastUpdated, id];
+  List<Object> get props => [degrees, antipodalDegrees, lastUpdated, id];
 
   // ***********************
   // ** Object Generation **
@@ -39,13 +33,9 @@ class Direction extends Equatable {
       return Direction(
           degrees: degrees,
           antipodalDegrees: _getAntipodalDegrees(degrees, accelerometerX),
-          compassDesignation: getCompassDesignationFromDegrees(degrees),
           lastUpdated: DateTime.now());
     } else {
-      return Direction(
-          degrees: degrees,
-          compassDesignation: getCompassDesignationFromDegrees(degrees),
-          lastUpdated: DateTime.now());
+      return Direction(degrees: degrees, lastUpdated: DateTime.now());
     }
     // Both Events Provided
   }
@@ -55,14 +45,12 @@ class Direction extends Equatable {
       return Direction(
         id: data["id"],
         degrees: data["degrees"],
-        compassDesignation: data["compass_designation"],
       );
     } else {
       return Direction(
         id: data["id"],
         degrees: data["degrees"],
         antipodalDegrees: data["antipodal_degrees"],
-        compassDesignation: data["compass_designation"],
       );
     }
   }
@@ -128,14 +116,12 @@ class Direction extends Equatable {
     return {
       'degrees': degrees,
       'antipodal_degrees': antipodalDegrees,
-      'compass_designation': compassDesignation.toString(),
     };
   }
 
   toSendMap() {
     return {
       'degrees': degrees,
-      'compass_designation': compassDesignation.toString(),
     };
   }
 }

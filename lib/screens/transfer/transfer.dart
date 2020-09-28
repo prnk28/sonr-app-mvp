@@ -40,7 +40,7 @@ class TransferScreen extends StatelessWidget {
                 } else {
                   // Initialize Client
                   BlocProvider.of<WebBloc>(context)
-                      .add(Initialize(userProfile: args.currentProfile));
+                      .add(Connect(userProfile: args.currentProfile));
                   return NeumorphicProgressIndeterminate();
                 }
               },

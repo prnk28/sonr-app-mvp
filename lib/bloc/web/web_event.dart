@@ -11,9 +11,9 @@ abstract class WebEvent extends Equatable {
 // ** Single Events ****
 // *********************
 // Connect to WS, Join/Create Lobby
-class Initialize extends WebEvent {
+class Connect extends WebEvent {
   final Profile userProfile;
-  const Initialize({this.userProfile});
+  const Connect({this.userProfile});
 }
 
 // Send to Server Sequence
@@ -98,10 +98,10 @@ class Reset extends WebEvent {
 }
 
 // Update Sensory Input
-class Refresh extends WebEvent {
+class Reload extends WebEvent {
   final Direction newDirection;
 
-  Refresh({this.newDirection});
+  Reload({this.newDirection});
 }
 
 // Update Event

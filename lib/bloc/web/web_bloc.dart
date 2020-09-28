@@ -3,6 +3,7 @@ import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:equatable/equatable.dart';
+import 'package:graph_collection/graph.dart';
 
 part 'web_event.dart';
 part 'web_state.dart';
@@ -15,14 +16,16 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Circle circle;
   Connection connection;
   Device device;
+  Graph graph;
 
   // Constructer
   final DataBloc dataBloc;
   WebBloc(this.dataBloc) : super(null) {
-    // ** RTC::Initialization **
+    // ** Repo Initialization **
     circle = new Circle(this);
     connection = new Connection(this);
     device = new Device(this);
+    graph = new Graph();
   }
 
   // Initial State
@@ -35,15 +38,15 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     WebEvent event,
   ) async* {
     // Device Can See Updates
-    if (event is Initialize) {
-      yield* _mapInitializeToState(event);
+    if (event is Connect) {
+      yield* _mapConnectToState(event);
     } else if (event is Send) {
       yield* _mapSendToState(event);
     } else if (event is Receive) {
       yield* _mapReceiveToState(event);
     } else if (event is Update) {
       yield* _mapUpdateToState(event);
-    } else if (event is Refresh) {
+    } else if (event is Reload) {
       yield* _mapRefreshInputToState(event);
     } else if (event is Invite) {
       yield* _mapInviteToState(event);
@@ -66,10 +69,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-// ***********************
-// ** Initialize Event ***
-// ***********************
-  Stream<WebState> _mapInitializeToState(Initialize initializeEvent) async* {
+// ********************
+// ** Connect Event ***
+// ********************
+  Stream<WebState> _mapConnectToState(Connect initializeEvent) async* {
     // Check Status
     if (connection.needSetup()) {
 // Initialize Variables
@@ -86,7 +89,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       dataBloc.add(QueueFile(receiving: false, file: transferToSend));
 
       // Device Pending State
-      yield Ready();
+      yield Connected();
     }
   }
 
@@ -295,9 +298,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       await new Future.delayed(Duration(seconds: resetEvent.secondDelay));
 
       // Yield Ready
-      yield Ready();
+      yield Connected();
     } else {
-      add(Initialize());
+      add(Connect());
     }
   }
 
@@ -318,7 +321,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // **************************
 // ** Refresh Input Event ***
 // **************************
-  Stream<WebState> _mapRefreshInputToState(Refresh updateSensors) async* {
+  Stream<WebState> _mapRefreshInputToState(Reload updateSensors) async* {
 // Check Status
     if (connection.noContact()) {
       // Check State
@@ -346,7 +349,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         }
         // Pending State
       } else {
-        yield Ready(
+        yield Connected(
             currentDirection: updateSensors.newDirection,
             currentMotion: device.motion);
       }

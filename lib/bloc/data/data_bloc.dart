@@ -179,10 +179,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
     // Get App Directory
     Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
 
     // Generate File Path
-    var filePath = tempPath + '/file_01.tmp';
+    var filePath = tempDir.path + '/file_01.tmp';
 
     // Save File to Disk
     File rawFile = await localData.writeToFile(block.takeBytes(), filePath);
