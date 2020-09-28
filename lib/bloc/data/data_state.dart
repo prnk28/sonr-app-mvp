@@ -57,8 +57,8 @@ class Updating extends DataState {
 }
 
 // Searching for a file
-class Searching extends DataState {
-  Searching({status: DataBlocStatus.Searching});
+class FindingFile extends DataState {
+  FindingFile({status: DataBlocStatus.Searching});
 }
 
 // Post saving, updating, or finding
