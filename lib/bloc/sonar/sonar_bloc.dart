@@ -13,17 +13,16 @@ part 'sonar_state.dart';
 class SonarBloc extends Bloc<SonarEvent, SonarState> {
   // Data Providers
   Circle circle;
-  SocketConnection connection;
+  Connection connection;
   Device device;
-  RTCSession session;
 
   // Constructer
-  SonarBloc() : super(null) {
+  final DataBloc dataBloc;
+  SonarBloc(this.dataBloc) : super(null) {
     // ** RTC::Initialization **
     circle = new Circle(this);
-    connection = new SocketConnection(this);
+    connection = new Connection(this);
     device = new Device(this);
-    session = new RTCSession();
   }
 
   // Initial State
@@ -97,13 +96,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapSelectToState(Select selectEvent) async* {
     // Check Init Status
     if (connection.ready()) {
-      // Get Dummy Asset File
-      File transferToSend =
-          await getAssetFileByPath("assets/images/fat_test.jpg");
-
-      // Add to Queue
-      session.fileManager.queueFile(false, file: transferToSend);
-
       // Device Pending State
       yield Ready();
     }
@@ -173,11 +165,11 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       connection.invited = true;
 
       // Set Peer
-      session.peerId = circle.closestId();
+      rtcSession.peerId = circle.closestId();
 
       // Create Offer and Emit
-      session.invite(this.circle.closestId(),
-          session.fileManager.outgoing.first.getInfo());
+      rtcSession.invite(
+          this.circle.closestId(), dataBloc.outgoing.first.getInfo());
 
       // Device Pending State
       yield Pending(match: circle.closestProfile());
@@ -192,16 +184,15 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     if (connection.ready()) {
       // Set Offered and Peer
       connection.offered = true;
-      session.peerId = offeredEvent.profile["id"];
+      rtcSession.peerId = offeredEvent.profile["id"];
 
       // Add Incoming File Info
-      session.fileManager
-          .queueFile(true, info: offeredEvent.offer["file_info"]);
+      dataBloc.add(QueueFile());
 
       // Device Pending State
       yield Pending(
           match: circle.closestProfile(),
-          file: session.fileManager.incoming.first,
+          file: dataBloc.incoming.first,
           offer: offeredEvent.offer);
     }
   }
@@ -215,13 +206,13 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       // Yield Receiver Decision
       if (authorizeEvent.decision) {
         // Create Answer
-        session.handleOffer(authorizeEvent.offer);
+        rtcSession.handleOffer(authorizeEvent.offer);
         yield InProgress();
       }
       // Receiver Declined
       else {
         // Reset Peer
-        session.resetPeer();
+        rtcSession.resetPeer();
 
         // Send Decision
         socket.emit("DECLINE", authorizeEvent.matchId);
@@ -237,7 +228,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (connection.initialized) {
       // Handle Answer
-      session.handleAnswer(acceptedEvent.answer);
+      rtcSession.handleAnswer(acceptedEvent.answer);
 
       // Emit Decision to Server
       yield PreTransfer(
@@ -252,7 +243,7 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
     // Check Status
     if (connection.initialized) {
       // Reset Peer
-      session.resetPeer();
+      rtcSession.resetPeer();
 
       // Emit Decision to Server
       yield Failed(
@@ -266,9 +257,6 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
   Stream<SonarState> _mapTransferToState(Transfer transferEvent) async* {
     // Check Status
     if (connection.initialized) {
-      // Begin Sending
-      session.fileManager.send();
-
       // Emit Decision to Server
       yield InProgress();
     }
@@ -306,8 +294,8 @@ class SonarBloc extends Bloc<SonarEvent, SonarState> {
       connection.reset();
 
       // Reset RTC
-      session.close();
-      session.resetPeer();
+      rtcSession.close();
+      rtcSession.resetPeer();
 
       // Reset Circle
       circle.reset();

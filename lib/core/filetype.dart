@@ -7,7 +7,7 @@
 // *********************
 // ** File Type Enum ***
 // *********************
-import 'file.dart';
+import 'package:path/path.dart';
 
 enum FileType {
   Audio,

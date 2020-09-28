@@ -16,7 +16,7 @@ class Metadata extends HiveObject {
   String type;
 
   @HiveField(4)
-  String location;
+  String path;
 
   @HiveField(5)
   Map sender;

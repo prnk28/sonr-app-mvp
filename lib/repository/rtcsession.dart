@@ -1,4 +1,3 @@
-import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
 
@@ -65,15 +64,6 @@ class RTCSession {
   OtherEventCallback onPeersUpdate;
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
-
-  // References
-  FileManager fileManager;
-  //SonarBloc bloc;
-
-  // Constructor
-  RTCSession() {
-    fileManager = new FileManager(this);
-  }
 
 // *************************
 // ** Socket.io Handlers ***

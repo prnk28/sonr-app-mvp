@@ -34,22 +34,21 @@ class Selected extends DataState {
 // Sending to peer w/ Progress and Chunks
 class Transferring extends DataState {
   // Progress Variables
-  final TransferFile transferFile;
+  final FileTransfer file;
   final double progress;
 
   // State Class
-  Transferring(
-      {this.transferFile, this.progress, status: DataBlocStatus.Transferring});
+  Transferring({this.file, this.progress, status: DataBlocStatus.Transferring});
 }
 
 // Saving to disk w/ Progress and Chunks
 class Saving extends DataState {
   // Progress Variables
-  final TransferFile transferFile;
+  final FileTransfer file;
   final double progress;
 
   // State Class
-  Saving({this.transferFile, this.progress, status: DataBlocStatus.Saving});
+  Saving({this.file, this.progress, status: DataBlocStatus.Saving});
 }
 
 // Saving Between Chunks
@@ -64,7 +63,9 @@ class Searching extends DataState {
 
 // Post saving, updating, or finding
 class Done extends DataState {
-  Done({status: DataBlocStatus.Done});
+  final File rawFile;
+  final Metadata metadata;
+  Done({this.rawFile, this.metadata, status: DataBlocStatus.Done});
 }
 
 // *************************** //

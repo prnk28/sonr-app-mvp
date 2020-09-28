@@ -1,39 +1,39 @@
-part of 'account_bloc.dart';
+part of 'user_bloc.dart';
 
-abstract class AccountEvent extends Equatable {
-  const AccountEvent();
+abstract class UserEvent extends Equatable {
+  const UserEvent();
 
   @override
   List<Object> get props => [];
 }
 
 // Login to account save info data bloc
-class Login extends AccountEvent {
+class Login extends UserEvent {
   const Login();
 }
 
 // Register for new account, save info
-class SignUp extends AccountEvent {
+class SignUp extends UserEvent {
   const SignUp();
 }
 
 // Register for new account, save info
-class ChangePreferences extends AccountEvent {
+class ChangePreferences extends UserEvent {
   const ChangePreferences();
 }
 
 // Get online/local account status
-class CheckStatus extends AccountEvent {
+class CheckStatus extends UserEvent {
   const CheckStatus();
 }
 
 // Update Profile/Contact Info
-class UpdateProfile extends AccountEvent {
+class UpdateProfile extends UserEvent {
   final Profile data;
   const UpdateProfile(this.data);
 }
 
 // Update Account Settings
-class UpdateAccount extends AccountEvent {
+class UpdateAccount extends UserEvent {
   const UpdateAccount();
 }

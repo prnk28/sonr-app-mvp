@@ -89,7 +89,7 @@ class Receiving extends SonarState {
 // **********************************************
 class Pending extends SonarState {
   final dynamic match;
-  final TransferFile file;
+  final FileTransfer file;
   final dynamic offer;
 
   const Pending(

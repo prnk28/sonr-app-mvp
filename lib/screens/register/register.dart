@@ -7,7 +7,7 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       appBar: Design.logoAppBar,
       backgroundColor: NeumorphicTheme.baseColor(context),
-      body: BlocBuilder<AccountBloc, AccountState>(buildWhen: (prev, curr) {
+      body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
         if (curr is Online) {
           // Push to Home with Profile
           Navigator.pushReplacementNamed(context, "/home",

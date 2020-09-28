@@ -7,11 +7,11 @@ import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 
-part 'account_event.dart';
-part 'account_state.dart';
+part 'user_event.dart';
+part 'user_state.dart';
 
-class AccountBloc extends Bloc<AccountEvent, AccountState> {
-  AccountBloc() : super(null);
+class UserBloc extends Bloc<UserEvent, UserState> {
+  UserBloc() : super(null);
 
   // Initialize Repositories
   LocalData localData = new LocalData();
@@ -20,8 +20,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   Profile currentProfile;
 
   @override
-  Stream<AccountState> mapEventToState(
-    AccountEvent event,
+  Stream<UserState> mapEventToState(
+    UserEvent event,
   ) async* {
     if (event is UpdateProfile) {
       yield* _mapUpdateProfileState(event);
@@ -35,7 +35,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 // ***********************
 // ** UpdateProfile Event **
 // *************************
-  Stream<AccountState> _mapUpdateProfileState(
+  Stream<UserState> _mapUpdateProfileState(
       UpdateProfile updateProfileEvent) async* {
     // Save to Box
     await localData.updateProfile(updateProfileEvent.data);
@@ -50,7 +50,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 // ***********************
 // ** CheckStatus Event **
 // ***********************
-  Stream<AccountState> _mapCheckStatusState(
+  Stream<UserState> _mapCheckStatusState(
       CheckStatus checkLocalStatusEvent) async* {
     // Check Status
     var profile = await localData.getProfile();

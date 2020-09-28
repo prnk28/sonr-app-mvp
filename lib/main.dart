@@ -16,15 +16,15 @@ Future<void> main() async {
   // Run App with BLoC Providers
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider<SonarBloc>(
-        create: (context) => SonarBloc(),
-      ),
-      BlocProvider<AccountBloc>(
-        create: (context) => AccountBloc(),
+      BlocProvider<UserBloc>(
+        create: (context) => UserBloc(),
       ),
       BlocProvider<DataBloc>(
         create: (context) => DataBloc(),
-      )
+      ),
+      BlocProvider<SonarBloc>(
+        create: (context) => SonarBloc(BlocProvider.of<DataBloc>(context)),
+      ),
     ],
     child: App(),
   ));

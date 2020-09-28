@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Non Build States
-        body: BlocBuilder<AccountBloc, AccountState>(buildWhen: (prev, curr) {
+        body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
           // Home Screen
           if (curr is Online) {
             Navigator.pushReplacementNamed(context, "/home",
@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
           return true;
         }, builder: (context, state) {
           // Begin Local Status Check
-          BlocProvider.of<AccountBloc>(context).add(CheckStatus());
+          BlocProvider.of<UserBloc>(context).add(CheckStatus());
 
           // Return Loading
           return Center(child: NeumorphicProgressIndeterminate());
