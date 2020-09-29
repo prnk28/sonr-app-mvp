@@ -9,6 +9,7 @@ export 'package:flutter/services.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
+import 'package:logger/logger.dart';
 export 'package:bloc/bloc.dart';
 export 'package:enum_to_string/enum_to_string.dart';
 
@@ -20,15 +21,19 @@ export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 export 'package:sensors/sensors.dart';
 export 'package:soundpool/soundpool.dart';
 
-// ** Global
-import 'package:logger/logger.dart';
-
+// **************************** //
+// ** Global Logging Package ** //
+// **************************** //
 Logger log = Logger();
 
-// ** Enum Methods
-String enumValueToString(Object o) => o.toString().split('.').last;
+// ****************** //
+// ** Enum Methods ** //
+// ****************** //
+// Enum Value Converstion to String
+String enumAsString(Object o) => o.toString().split('.').last;
 
-T enumValueFromString<T>(String key, Iterable<T> values) => values.firstWhere(
-      (v) => v != null && key == enumValueToString(v),
+// String Conversion to Enum Value
+T enumFromString<T>(String key, Iterable<T> values) => values.firstWhere(
+      (v) => v != null && key == enumAsString(v),
       orElse: () => null,
     );

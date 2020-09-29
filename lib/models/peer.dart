@@ -25,13 +25,15 @@ enum PeerStatus {
 // ** Class for Node in Graph ** //
 // ***************************** //
 class Peer {
-  // Bools for Graph
-  bool isSearching;
-  bool isBusy;
-
   // Management
-  DateTime lastUpdated;
+  String _socketId;
   Profile profile;
+  DateTime lastUpdated;
+
+  // Socket Id Getter
+  String get id {
+    return _socketId;
+  }
 
   // Accelerometer Variables - Get/Set
   AccelerometerEvent _motion;
@@ -79,8 +81,6 @@ class Peer {
     this.longitude = -120;
 
     // Default Object Variables
-    this.isSearching = false;
-    this.isBusy = false;
     this.status = PeerStatus.Inactive;
   }
 
@@ -131,6 +131,15 @@ class Peer {
     }
   }
 
+  // -- Setter for ID --
+  set id(String givenId) {
+    // Update Value
+    _socketId = givenId;
+
+    // Update Status
+    this.status = PeerStatus.Ready;
+  }
+
   // -- Setter to Update Motion --
   set motion(AccelerometerEvent newMotion) {
     // Set New Motion Variables
@@ -168,26 +177,6 @@ class Peer {
 
   // -- Setter Method to Update Status --
   set status(PeerStatus givenStatus) {
-    // Searching for Peer
-    if (givenStatus == PeerStatus.Sending ||
-        givenStatus == PeerStatus.Receiving) {
-      // Change Bools
-      this.isSearching = true;
-      this.isBusy = false;
-    }
-    // Busy interacting with peer
-    else if (givenStatus == PeerStatus.Busy) {
-      // Change Bools
-      this.isSearching = false;
-      this.isBusy = true;
-    }
-    // Default
-    else {
-      // Change Bools
-      this.isSearching = false;
-      this.isBusy = false;
-    }
-
     // Update to Given Status
     _status = givenStatus;
 
@@ -219,7 +208,7 @@ class Peer {
     newPeer.longitude = map["location"]["longitude"];
 
     // Set Status from String
-    newPeer.status = enumValueFromString(map["status"], PeerStatus.values);
+    newPeer.status = enumFromString(map["status"], PeerStatus.values);
 
     return newPeer;
   }
@@ -235,7 +224,7 @@ class Peer {
     this.antipodalDirection = map["compass"]["antipodalDegress"];
 
     // Set Status from String
-    this.status = enumValueFromString(map["status"], PeerStatus.values);
+    this.status = enumFromString(map["status"], PeerStatus.values);
   }
 
   // -- Export Peer to Map for Communication --
@@ -251,7 +240,7 @@ class Peer {
       "x": this.motion.x,
       "y": this.motion.y,
       "z": this.motion.z,
-      "orientation": enumValueToString(this.orientation)
+      "orientation": enumAsString(this.orientation)
     };
 
     // Create Location Map
@@ -267,7 +256,7 @@ class Peer {
       'motion': motion,
       'compass': compass,
       'location': loaction,
-      'status': enumValueToString(this.status),
+      'status': enumAsString(this.status),
       'profile': this.profile.toMap()
     };
   }
@@ -286,7 +275,7 @@ class Peer {
       "x": this.motion.x,
       "y": this.motion.y,
       "z": this.motion.z,
-      "orientation": enumValueToString(this.orientation)
+      "orientation": enumAsString(this.orientation)
     };
   }
 

@@ -13,8 +13,9 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(null);
 
-  // Initialize References
-  Profile currentProfile;
+  // Initialize
+  Profile profile;
+  Peer node;
 
   @override
   Stream<UserState> mapEventToState(
@@ -36,10 +37,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     await localData.updateProfile(updateProfileEvent.data);
 
     // Update Reference
-    this.currentProfile = updateProfileEvent.data;
+    this.profile = updateProfileEvent.data;
 
     // Profile Ready
-    yield Online(currentProfile);
+    yield Online(profile);
   }
 
 // ***********************
@@ -48,15 +49,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapCheckStatusState(
       CheckStatus checkLocalStatusEvent) async* {
     // Check Status
-    var profile = await localData.getProfile();
+    var profileData = await localData.getProfile();
 
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
 
     // No Profile
-    if (profile == null) {
+    if (profileData == null) {
       // Update Reference
-      this.currentProfile = null;
+      this.profile = null;
 
       // Change State
       yield Offline();
@@ -64,10 +65,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Profile Found
     else {
       // Update Reference
-      this.currentProfile = profile;
+      this.profile = profileData;
+
+      // Initialize User Node
+      node = new Peer(profile);
 
       // Profile Ready
-      yield Online(currentProfile);
+      yield Online(profile);
     }
   }
 }

@@ -11,10 +11,10 @@ part 'device_state.dart';
 
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
-  Peer user;
+  final UserBloc user;
 
   // Constructer
-  DeviceBloc() : super(null) {
+  DeviceBloc(this.user) : super(null) {
     // ** Accelerometer Events **
     accelerometerEvents.listen((AccelerometerEvent newMotion) {
       // Update Motion Var
@@ -34,33 +34,13 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   Stream<DeviceState> mapEventToState(
     DeviceEvent event,
   ) async* {
-    if (event is Initialize) {
-      yield* _mapInitializeState(event);
-    } else if (event is Refresh) {
+    if (event is Refresh) {
       yield* _mapRefreshState(event);
     } else if (event is Update) {
       yield* _mapUpdateState(event);
     } else if (event is GetLocation) {
       yield* _mapGetLocationState(event);
     }
-  }
-
-// **********************
-// ** Initialize Event **
-// **********************
-  Stream<DeviceState> _mapInitializeState(Initialize event) async* {
-    // Check Status
-    var profile = await localData.getProfile();
-
-    // No Profile
-    if (profile != null) {
-      // Set Peer Node
-      user = new Peer(profile);
-
-      // Device Ready
-      yield Ready();
-    }
-    yield Inactive();
   }
 
 // ***********************
@@ -76,22 +56,22 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // *******************
   Stream<DeviceState> _mapRefreshState(Refresh event) async* {
     // Check if User Active
-    if (user != null && !user.isBusy) {
+    if (user.node != null && user.node.status != PeerStatus.Busy) {
       // Check if Direction Provided
-      if (event.direction != null && user != null) {
-        user.direction = event.direction;
+      if (event.direction != null && user.node != null) {
+        user.node.direction = event.direction;
       }
 
       // Check if Motion Provided
       if (event.motion != null) {
-        user.motion = event.motion;
+        user.node.motion = event.motion;
       }
 
       // Update State
       add(Update());
       yield Refreshing();
     }
-    //yield Inactive();
+    yield Inactive();
   }
 
 // *******************
@@ -99,13 +79,13 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // *******************
   Stream<DeviceState> _mapUpdateState(Update event) async* {
     // Yield State by Peer Status
-    if (user.status == PeerStatus.Ready) {
+    if (user.node.status == PeerStatus.Ready) {
       yield Ready();
-    } else if (user.status == PeerStatus.Sending) {
+    } else if (user.node.status == PeerStatus.Sending) {
       yield Sending();
-    } else if (user.status == PeerStatus.Receiving) {
+    } else if (user.node.status == PeerStatus.Receiving) {
       yield Receiving();
-    } else if (user.status == PeerStatus.Busy) {
+    } else if (user.node.status == PeerStatus.Busy) {
       yield Busy();
     }
     yield Inactive();

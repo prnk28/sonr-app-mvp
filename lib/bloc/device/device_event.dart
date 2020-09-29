@@ -7,11 +7,6 @@ abstract class DeviceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Setup Peer Node
-class Initialize extends DeviceEvent {
-  const Initialize();
-}
-
 // Refresh while updating sensors
 class Refresh extends DeviceEvent {
   final double direction;

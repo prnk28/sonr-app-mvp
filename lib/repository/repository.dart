@@ -1,6 +1,5 @@
 // Directory Exports
 export 'session.dart';
-export 'connection.dart';
 export 'localdata.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';

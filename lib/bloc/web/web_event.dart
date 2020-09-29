@@ -17,9 +17,9 @@ class Connect extends WebEvent {
 }
 
 // Send Realtime Peer Data to Server
-class SendSearch extends WebEvent {
-  final Peer peer;
-  const SendSearch({this.peer});
+class RequestSearch extends WebEvent {
+  final Peer userNode;
+  const RequestSearch({this.userNode});
 }
 
 // Update Graph with Peer Values
