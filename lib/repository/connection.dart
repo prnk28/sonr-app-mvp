@@ -22,7 +22,7 @@ class Connection {
 
     // ** SOCKET::INFO **
     socket.on('INFO', (data) {
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
       // Add to Process
       //log.v("Lobby Id: " + data);
     });
@@ -31,7 +31,7 @@ class Connection {
     socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
       socket.emit("RECEIVING", [bloc.device.direction.toReceiveMap()]);
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
       // Add to Process
       //log.i("NEW_SENDER: " + data);
     });
@@ -39,14 +39,14 @@ class Connection {
     // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
       bloc.circle.update(bloc.device.direction, data);
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
     });
 
     // ** SOCKET::SENDER_EXIT **
     socket.on('SENDER_EXIT', (id) {
       // Remove Sender from Circle
       bloc.circle.exit(id);
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
 
       // Add to Process
       //log.w("SENDER_EXIT: " + id);
@@ -59,7 +59,7 @@ class Connection {
         socket.emit("SENDING", [bloc.device.direction.toReceiveMap()]);
       }
 
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
 
       // Add to Process
       //log.i("NEW_RECEIVER: " + data);
@@ -68,14 +68,14 @@ class Connection {
     // ** SOCKET::RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
       bloc.circle.update(bloc.device.direction, data);
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
     });
 
     // ** SOCKET::RECEIVER_EXIT **
     socket.on('RECEIVER_EXIT', (id) {
       // Remove Receiver from Circle
       bloc.circle.exit(id);
-      bloc.add(Reload(newDirection: bloc.device.direction));
+      //bloc.add(Reload(newDirection: bloc.device.direction));
 
       // Add to Process
       //log.w("RECEIVER_EXIT: " + id);
@@ -147,7 +147,6 @@ class Connection {
 
       // Reset circle
       socket.emit("RESET");
-      bloc.device.status = PositionStatus.DEFAULT;
     }
   }
 
