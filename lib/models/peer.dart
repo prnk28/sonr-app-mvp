@@ -69,12 +69,7 @@ class Peer {
   // ** Constructer ** //
   // ***************** //
   Peer(this.profile) {
-    // Default Compass Variables
-    this.direction = 0;
-    this.antipodalDirection = 0;
-
     // Defualt Motion Variables
-    this.orientation = OrientationType.Portrait;
     this.motion = new AccelerometerEvent(0, 0, 0);
 
     // Default Location Variables
@@ -107,6 +102,13 @@ class Peer {
         } else {
           adjusted = this.direction - 90;
         }
+
+        // Get Reciprocal of Adjusted
+        if (adjusted < 180) {
+          this.antipodalDirection = adjusted + 180;
+        } else {
+          this.antipodalDirection = adjusted - 180;
+        }
         break;
       case OrientationType.LandscapeRight:
         // Set Adjusted
@@ -115,17 +117,17 @@ class Peer {
         } else {
           adjusted = this.direction - 270;
         }
+
+        // Get Reciprocal of Adjusted
+        if (adjusted < 180) {
+          this.antipodalDirection = adjusted + 180;
+        } else {
+          this.antipodalDirection = adjusted - 180;
+        }
         break;
       default:
         this.antipodalDirection = -1;
         break;
-    }
-
-    // Get Reciprocal of Adjusted
-    if (adjusted < 180) {
-      this.antipodalDirection = adjusted + 180;
-    } else {
-      this.antipodalDirection = adjusted - 180;
     }
   }
 
@@ -232,12 +234,6 @@ class Peer {
     this.direction = map["compass"]["direction"];
     this.antipodalDirection = map["compass"]["antipodalDegress"];
 
-    // Add Location Data from Map
-    this.accuracy = map["location"]["accuracy"];
-    this.altitude = map["location"]["altitude"];
-    this.latitude = map["location"]["latitude"];
-    this.longitude = map["location"]["longitude"];
-
     // Set Status from String
     this.status = enumValueFromString(map["status"], PeerStatus.values);
   }
@@ -284,7 +280,7 @@ class Peer {
     };
   }
 
-    // -- Export ONLY Motion Data --
+  // -- Export ONLY Motion Data --
   motionToMap() {
     return {
       "x": this.motion.x,

@@ -9,10 +9,10 @@ abstract class WebState extends Equatable {
 // ********************
 // ** Preload State ***
 // ********************
-class Initial extends WebState {
+class Disconnected extends WebState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Initial({
+  const Disconnected({
     this.currentMotion,
     this.currentDirection,
   });
@@ -36,32 +36,23 @@ class Loading extends WebState {
   const Loading({this.currentMotion, this.currentDirection});
 }
 
-// **************************
-// ** In Sending Position ***
-// **************************
-class SendingPosition extends WebState {
-  final Circle matches;
+// **********************************
+// ** On Socket Event from Server ***
+// **********************************
+class HandleSocketEvent extends WebState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const SendingPosition({
-    this.matches,
-    this.currentMotion,
-    this.currentDirection,
-  });
+  const HandleSocketEvent({this.currentMotion, this.currentDirection});
 }
 
-// ****************************
-// ** In Receiving Position ***
-// ****************************
-class ReceivingPosition extends WebState {
+// *****************************************
+// ** Searching for Peer Sender/Receiver ***
+// *****************************************
+class Searching extends WebState {
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const ReceivingPosition({
-    this.matches,
-    this.currentMotion,
-    this.currentDirection,
-  });
+  const Searching({this.matches, this.currentMotion, this.currentDirection});
 }
 
 // **********************************************

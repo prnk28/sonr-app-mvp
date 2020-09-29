@@ -29,13 +29,13 @@ class PendingView extends StatelessWidget {
                 child: Icon(Icons.check),
                 onPressed: () {
                   BlocProvider.of<WebBloc>(context)
-                      .add(Authorize(true, state.match["id"], state.offer));
+                      .add(SendAuthorization(true, state.match["id"], state.offer));
                 }),
             FloatingActionButton(
                 child: Icon(Icons.close),
                 onPressed: () {
                   BlocProvider.of<WebBloc>(context)
-                      .add(Authorize(false, state.match["id"], state.offer));
+                      .add(SendAuthorization(false, state.match["id"], state.offer));
                 }),
           ]);
     } else {

@@ -1,7 +1,6 @@
 // Directory Exports
 export 'session.dart';
 export 'connection.dart';
-export 'device.dart';
 export 'localdata.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
@@ -20,13 +19,11 @@ import 'localdata.dart';
 const CHUNK_SIZE = 16000; // MTU in Bytes
 const CHUNKS_PER_ACK = 64;
 
-const Map<String,dynamic> SOCKET_TRANSPORT = <String, dynamic>{
+const Map<String, dynamic> SOCKET_TRANSPORT = <String, dynamic>{
   'transports': ['websocket'],
-}
+};
 
-// Initialize SocketIO Client
+// Initialize Repositories
 Socket socket = io('http://match.sonr.io', SOCKET_TRANSPORT);
-
-// Initialize WebRTC Client
 RTCSession rtcSession = new RTCSession();
 LocalData localData = new LocalData();

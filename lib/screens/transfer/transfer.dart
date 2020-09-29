@@ -15,9 +15,8 @@ class TransferScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
-                if (state is SendingPosition){
-                  return SendingView(
-                      state, BlocProvider.of<WebBloc>(context));
+                if (state is SendingPosition) {
+                  return SendingView(state, BlocProvider.of<WebBloc>(context));
                 } else if (state is ReceivingPosition) {
                   return ReceivingView(state: state);
                 } else if (state is Pending) {
@@ -39,8 +38,7 @@ class TransferScreen extends StatelessWidget {
                       sonarBloc: BlocProvider.of<WebBloc>(context));
                 } else {
                   // Initialize Client
-                  BlocProvider.of<WebBloc>(context)
-                      .add(Connect(userProfile: args.currentProfile));
+                  BlocProvider.of<WebBloc>(context).add(Connect());
                   return NeumorphicProgressIndeterminate();
                 }
               },

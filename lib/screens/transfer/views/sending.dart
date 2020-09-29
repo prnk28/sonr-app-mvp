@@ -14,7 +14,7 @@ class SendingView extends StatelessWidget {
       // new Timer(
       //     twentySeconds,
       //     () =>
-      sonarBloc.add(Invite(state.matches.closestProfile()["id"]));
+      sonarBloc.add(SendInvite(state.matches.closestProfile()["id"]));
 
       // Return Text Widget
       return Text(

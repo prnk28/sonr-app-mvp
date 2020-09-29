@@ -22,11 +22,9 @@ Future<void> main() async {
       ),
 
       // Local Data/Transfer Logic
-      BlocProvider<DataBloc>(
-        create: (context) => DataBloc(),
-      ),
+      BlocProvider<DataBloc>(create: (context) => DataBloc()),
 
-      //Sensory Input Logic
+      // Device Input Logic
       BlocProvider<DeviceBloc>(
         create: (context) => DeviceBloc(),
       ),
@@ -82,8 +80,6 @@ class App extends StatelessWidget {
                 type: PageTransitionType.upToDown,
                 settings: settings);
             break;
-          default:
-            return null;
         }
       },
     );

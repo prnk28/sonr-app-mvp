@@ -49,18 +49,24 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ** Initialize Event **
 // **********************
   Stream<DeviceState> _mapInitializeState(Initialize event) async* {
-    // Get Profile from Box
-    user = new Peer(await localData.getProfile());
+    // Check Status
+    var profile = await localData.getProfile();
 
-    // Profile Ready
-    yield Ready();
+    // No Profile
+    if (profile != null) {
+      // Set Peer Node
+      user = new Peer(profile);
+
+      // Device Ready
+      yield Ready();
+    }
+    yield Inactive();
   }
 
 // ***********************
 // ** GetLocation Event **
 // ***********************
   Stream<DeviceState> _mapGetLocationState(GetLocation event) async* {
-
     // Location Available
     yield Ready();
   }
@@ -85,7 +91,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       add(Update());
       yield Refreshing();
     }
-    yield Inactive();
+    //yield Inactive();
   }
 
 // *******************

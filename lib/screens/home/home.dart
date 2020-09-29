@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 } else if (state is Refreshing) {
                   return Text("DeviceBloc State: Refreshing");
                 }
-                return Text("DeviceBloc State: Inactive");
+                return Container();
               },
             ),
             // Button to Go to Transfer

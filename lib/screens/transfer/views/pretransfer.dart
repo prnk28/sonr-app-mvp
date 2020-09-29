@@ -15,12 +15,12 @@ class PreTransferView extends StatelessWidget {
       FloatingActionButton(
           child: Icon(Icons.image),
           onPressed: () {
-            BlocProvider.of<WebBloc>(context).add(Transfer());
+            BlocProvider.of<WebBloc>(context).add(BeginTransfer());
           }),
       FloatingActionButton(
           child: Icon(Icons.surround_sound),
           onPressed: () {
-            BlocProvider.of<WebBloc>(context).add(Transfer());
+            BlocProvider.of<WebBloc>(context).add(BeginTransfer());
           }),
     ]);
   }

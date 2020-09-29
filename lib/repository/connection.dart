@@ -86,7 +86,7 @@ class Connection {
       //log.i("SENDER_OFFERED: " + data.toString());
 
       // Call offered event
-      bloc.add(Offered(offer: data[0], profile: data[1]));
+      bloc.add(HandleOffer(offer: data[0], profile: data[1]));
     });
 
     // ** SOCKET::NEW_CANDIDATE **
@@ -102,7 +102,7 @@ class Connection {
 
       dynamic _answer = data[0];
 
-      bloc.add(Accepted(bloc.circle.closestProfile(),
+      bloc.add(HandleAccept(bloc.circle.closestProfile(),
           bloc.circle.closestProfile()["id"], _answer));
     });
 
@@ -110,7 +110,7 @@ class Connection {
     socket.on('RECEIVER_DECLINED', (data) {
       dynamic matchId = data[0];
 
-      bloc.add(Declined(bloc.circle.closestProfile(), matchId));
+      bloc.add(HandleDecline(bloc.circle.closestProfile(), matchId));
       // Add to Process
       //log.w("RECEIVER_DECLINED: " + data.toString());
     });
@@ -126,7 +126,7 @@ class Connection {
     socket.on('RECEIVER_COMPLETED', (data) {
       dynamic matchId = data[0];
 
-      bloc.add(Completed(bloc.circle.closestProfile(), matchId));
+      bloc.add(HandleComplete(bloc.circle.closestProfile(), matchId));
       // Add to Process
       //log.i("RECEIVER_COMPLETED: " + data.toString());
     });
