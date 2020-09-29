@@ -20,20 +20,6 @@ class Connected extends WebState {
   const Connected();
 }
 
-// ********************************
-// ** Between Reads from Server ***
-// ********************************
-class Loading extends WebState {
-  const Loading();
-}
-
-// **********************************
-// ** On Socket Event from Server ***
-// **********************************
-class HandleSocketEvent extends WebState {
-  const HandleSocketEvent();
-}
-
 // *****************************************
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
@@ -57,18 +43,6 @@ class Pending extends WebState {
 }
 
 // *******************************************
-// ** Post Authorization Receiver Accepted ***
-// *******************************************
-class PreTransfer extends WebState {
-  final dynamic profile;
-  final String matchId;
-  const PreTransfer({
-    this.profile,
-    this.matchId,
-  });
-}
-
-// *******************************************
 // ** Post Authorization Receiver Declined ***
 // *******************************************
 class Failed extends WebState {
@@ -83,11 +57,8 @@ class Failed extends WebState {
 // *********************************************
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
-class InProgress extends WebState {
-  final double progress;
-  const InProgress({
-    this.progress,
-  });
+class Transferring extends WebState {
+  const Transferring();
 }
 
 // *************************

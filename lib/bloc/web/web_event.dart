@@ -16,10 +16,16 @@ class Connect extends WebEvent {
   const Connect({this.userProfile});
 }
 
-// Send Peer Data to Socket.io
-class SendPeer extends WebEvent {
+// Send Realtime Peer Data to Server
+class SendSearch extends WebEvent {
   final Peer peer;
-  const SendPeer({this.peer});
+  const SendSearch({this.peer});
+}
+
+// Update Graph with Peer Values
+class HandlePeers extends WebEvent {
+  final Peer peer;
+  const HandlePeers({this.peer});
 }
 
 // Sender Invites Authorization
@@ -44,11 +50,11 @@ class SendAuthorization extends WebEvent {
 }
 
 // Receiver has Accepted
-class HandleAccept extends WebEvent {
+class HandleAnswer extends WebEvent {
   final dynamic profile;
   final dynamic answer;
   final String matchId;
-  const HandleAccept(this.profile, this.matchId, this.answer);
+  const HandleAnswer(this.profile, this.matchId, this.answer);
 }
 
 // Receiver has Declined
@@ -78,6 +84,5 @@ class HandleComplete extends WebEvent {
 
 // Reset UI
 class Reset extends WebEvent {
-  final int secondDelay;
-  const Reset(this.secondDelay);
+  const Reset();
 }

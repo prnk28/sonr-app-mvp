@@ -37,7 +37,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       }
       // Device is Tilted or Landscape
       else if (currDeviceState is Sending || currDeviceState is Receiving) {
-        add(SendPeer(peer: currDeviceState.user));
+        add(SendSearch(peer: currDeviceState.user));
       }
       // Interacting with another Peer
       else if (currDeviceState is Busy) {
@@ -77,7 +77,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Device Can See Updates
     if (event is Connect) {
       yield* _mapConnectToState(event);
-    } else if (event is SendPeer) {
+    } else if (event is SendSearch) {
       yield* _mapSendPeerToState(event);
     } else if (event is SendInvite) {
       yield* _mapInviteToState(event);
@@ -85,7 +85,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapOfferedToState(event);
     } else if (event is SendAuthorization) {
       yield* _mapAuthorizeToState(event);
-    } else if (event is HandleAccept) {
+    } else if (event is HandleAnswer) {
       yield* _mapAcceptedToState(event);
     } else if (event is HandleDecline) {
       yield* _mapDeclinedToState(event);
@@ -121,10 +121,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-// *********************
-// ** SendPeer Event ***
-// *********************
-  Stream<WebState> _mapSendPeerToState(SendPeer sendEvent) async* {
+// **************************
+// ** SendSearching Event ***
+// **************************
+  Stream<WebState> _mapSendPeerToState(SendSearch event) async* {
     // Check Init Status
     if (connection.ready()) {
       // Emit Send
@@ -137,9 +137,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // ***********************
-// ** Invite Event ***
+// ** SendInvite Event ***
 // ***********************
-  Stream<WebState> _mapInviteToState(SendInvite requestEvent) async* {
+  Stream<WebState> _mapInviteToState(SendInvite event) async* {
     // Check Status
     if (connection.ready()) {
       // Set Invited
@@ -157,15 +157,15 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-// ***********************
+// ********************
 // ** Offered Event ***
-// ***********************
-  Stream<WebState> _mapOfferedToState(HandleOffer offeredEvent) async* {
+// ********************
+  Stream<WebState> _mapOfferedToState(HandleOffer event) async* {
     // Check Status
     if (connection.ready()) {
       // Set Offered and Peer
       connection.offered = true;
-      rtcSession.peerId = offeredEvent.profile["id"];
+      rtcSession.peerId = event.profile["id"];
 
       // Add Incoming File Info
       dataBloc.add(QueueFile(
@@ -173,22 +173,21 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       ));
 
       // Device Pending State
-      yield Pending(match: circle.closestProfile(), offer: offeredEvent.offer);
+      yield Pending(match: circle.closestProfile(), offer: event.offer);
     }
   }
 
-// **********************
-// ** Authorize Event ***
-// **********************
-  Stream<WebState> _mapAuthorizeToState(
-      SendAuthorization authorizeEvent) async* {
+// ******************************
+// ** SendAuthorization Event ***
+// ******************************
+  Stream<WebState> _mapAuthorizeToState(SendAuthorization event) async* {
     // Check Status
     if (connection.initialized) {
       // Yield Receiver Decision
-      if (authorizeEvent.decision) {
+      if (event.decision) {
         // Create Answer
-        rtcSession.handleOffer(authorizeEvent.offer);
-        yield InProgress();
+        rtcSession.handleOffer(event.offer);
+        yield Transferring();
       }
       // Receiver Declined
       else {
@@ -196,71 +195,70 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         rtcSession.resetPeer();
 
         // Send Decision
-        socket.emit("DECLINE", authorizeEvent.matchId);
-        add(Reset(0));
+        socket.emit("DECLINE", event.matchId);
+        add(Reset());
       }
     }
   }
 
-// **********************
-// ** Accepted Event ***
-// **********************
-  Stream<WebState> _mapAcceptedToState(HandleAccept acceptedEvent) async* {
+// *************************
+// ** HandleAnswer Event ***
+// *************************
+  Stream<WebState> _mapAcceptedToState(HandleAnswer event) async* {
     // Check Status
     if (connection.initialized) {
       // Handle Answer
-      rtcSession.handleAnswer(acceptedEvent.answer);
+      rtcSession.handleAnswer(event.answer);
 
-      // Emit Decision to Server
-      yield PreTransfer(
-          profile: acceptedEvent.profile, matchId: acceptedEvent.matchId);
+      // Begin Transfer
+
+      yield Transferring();
     }
   }
 
-// **********************
-// ** Declined Event ***
-// **********************
-  Stream<WebState> _mapDeclinedToState(HandleDecline declinedEvent) async* {
+// **************************
+// ** HandleDecline Event ***
+// **************************
+  Stream<WebState> _mapDeclinedToState(HandleDecline event) async* {
     // Check Status
     if (connection.initialized) {
       // Reset Peer
       rtcSession.resetPeer();
 
       // Emit Decision to Server
-      yield Failed(
-          profile: declinedEvent.profile, matchId: declinedEvent.matchId);
+      yield Failed(profile: event.profile, matchId: event.matchId);
     }
   }
 
 // *********************
 // ** Transfer Event ***
 // *********************
-  Stream<WebState> _mapTransferToState(BeginTransfer transferEvent) async* {
+  Stream<WebState> _mapTransferToState(BeginTransfer event) async* {
     // Check Status
     if (connection.initialized) {
       // Begin Transfer
       dataBloc.add(SendChunks());
 
       // Emit Decision to Server
-      yield InProgress();
+      yield Transferring();
     }
   }
 
 // *********************
 // ** Received Event ***
 // *********************
-  Stream<WebState> _mapReceivedToState(HandleReceived receivedEvent) async* {
+  Stream<WebState> _mapReceivedToState(HandleReceived event) async* {
     // Check Status
     if (connection.initialized) {
       // Emit Decision to Server
-      yield Complete("RECEIVER", file: receivedEvent.data);
+      yield Complete("RECEIVER", file: event.data);
     }
   }
 
 // *********************
 // ** Completed Event ***
 // *********************
-  Stream<WebState> _mapCompletedToState(HandleComplete completedEvent) async* {
+  Stream<WebState> _mapCompletedToState(HandleComplete event) async* {
     // Check Status
     if (connection.initialized) {
       // Emit Decision to Server
@@ -271,7 +269,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *********************
 // ** Reset Event ***
 // *********************
-  Stream<WebState> _mapResetToState(Reset resetEvent) async* {
+  Stream<WebState> _mapResetToState(Reset event) async* {
     // Check Status
     if (connection.initialized) {
       // Reset Connection
@@ -285,7 +283,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       circle.reset();
 
       // Set Delay
-      await new Future.delayed(Duration(seconds: resetEvent.secondDelay));
+      await new Future.delayed(Duration(seconds: 1));
 
       // Yield Ready
       yield Connected();

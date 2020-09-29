@@ -20,20 +20,40 @@ class Selected extends DataState {
 class Transmitting extends DataState {
   // Progress Variables
   final FileTransfer file;
+  final int chunksTotal;
+  final int currentChunkNum;
+  final int remainingChunks;
+  final double lastProgress;
   final double progress;
 
   // State Class
-  Transmitting({this.file, this.progress});
+  Transmitting(
+      {this.chunksTotal,
+      this.currentChunkNum,
+      this.remainingChunks,
+      this.lastProgress,
+      this.file,
+      this.progress});
 }
 
 // Saving to disk w/ Progress and Chunks
 class Saving extends DataState {
   // Progress Variables
   final FileTransfer file;
+  final int chunksTotal;
+  final int currentChunkNum;
+  final int remainingChunks;
+  final double lastProgress;
   final double progress;
 
   // State Class
-  Saving({this.file, this.progress});
+  Saving(
+      {this.chunksTotal,
+      this.currentChunkNum,
+      this.remainingChunks,
+      this.lastProgress,
+      this.file,
+      this.progress});
 }
 
 // Saving Between Chunks

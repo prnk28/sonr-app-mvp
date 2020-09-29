@@ -102,7 +102,7 @@ class Connection {
 
       dynamic _answer = data[0];
 
-      bloc.add(HandleAccept(bloc.circle.closestProfile(),
+      bloc.add(HandleAnswer(bloc.circle.closestProfile(),
           bloc.circle.closestProfile()["id"], _answer));
     });
 
