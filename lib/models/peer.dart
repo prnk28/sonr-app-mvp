@@ -14,6 +14,7 @@ enum OrientationType {
 }
 
 enum PeerStatus {
+  Inactive,
   Ready,
   Sending,
   Receiving,
@@ -58,7 +59,11 @@ class Peer {
     return _status;
   }
 
-  // TODO: Location Variables
+  // Location Variables
+  double accuracy;
+  double altitude;
+  double latitude;
+  double longitude;
 
   // ***************** //
   // ** Constructer ** //
@@ -70,11 +75,18 @@ class Peer {
 
     // Defualt Motion Variables
     this.orientation = OrientationType.Portrait;
+    this.motion = new AccelerometerEvent(0, 0, 0);
+
+    // Default Location Variables
+    this.accuracy = 12345;
+    this.altitude = 123;
+    this.latitude = 45;
+    this.longitude = -120;
 
     // Default Object Variables
     this.isSearching = false;
     this.isBusy = false;
-    this.status = PeerStatus.Ready;
+    this.status = PeerStatus.Inactive;
   }
 
   // ****************************** //
@@ -198,6 +210,12 @@ class Peer {
     newPeer.direction = map["compass"]["direction"];
     newPeer.antipodalDirection = map["compass"]["antipodalDegress"];
 
+    // Add Location Data from Map
+    newPeer.accuracy = map["location"]["accuracy"];
+    newPeer.altitude = map["location"]["altitude"];
+    newPeer.latitude = map["location"]["latitude"];
+    newPeer.longitude = map["location"]["longitude"];
+
     // Set Status from String
     newPeer.status = enumValueFromString(map["status"], PeerStatus.values);
 
@@ -213,6 +231,12 @@ class Peer {
     // Add Compass Data from Map
     this.direction = map["compass"]["direction"];
     this.antipodalDirection = map["compass"]["antipodalDegress"];
+
+    // Add Location Data from Map
+    this.accuracy = map["location"]["accuracy"];
+    this.altitude = map["location"]["altitude"];
+    this.latitude = map["location"]["latitude"];
+    this.longitude = map["location"]["longitude"];
 
     // Set Status from String
     this.status = enumValueFromString(map["status"], PeerStatus.values);
@@ -234,12 +258,49 @@ class Peer {
       "orientation": enumValueToString(this.orientation)
     };
 
+    // Create Location Map
+    var loaction = {
+      'accuracy': this.accuracy,
+      'altitude': this.altitude,
+      'latitude': this.latitude,
+      'longitude': this.longitude,
+    };
+
     // Combine into Map
     return {
       'motion': motion,
       'compass': compass,
+      'location': loaction,
       'status': enumValueToString(this.status),
       'profile': this.profile.toMap()
+    };
+  }
+
+  // -- Export ONLY Compass Data --
+  compassToMap() {
+    return {
+      "direction": this.direction,
+      "antipodalDegrees": this.antipodalDirection
+    };
+  }
+
+    // -- Export ONLY Motion Data --
+  motionToMap() {
+    return {
+      "x": this.motion.x,
+      "y": this.motion.y,
+      "z": this.motion.z,
+      "orientation": enumValueToString(this.orientation)
+    };
+  }
+
+  // -- Export ONLY Location Data --
+  locationToMap() {
+    return {
+      'accuracy': this.accuracy,
+      'altitude': this.altitude,
+      'latitude': this.latitude,
+      'longitude': this.longitude,
     };
   }
 }

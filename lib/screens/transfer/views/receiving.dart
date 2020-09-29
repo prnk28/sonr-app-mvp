@@ -1,7 +1,7 @@
 import 'package:sonar_app/screens/screens.dart';
 
 class ReceivingView extends StatelessWidget {
-  final Receiving state;
+  final ReceivingPosition state;
 
   const ReceivingView({Key key, this.state}) : super(key: key);
 
@@ -32,7 +32,7 @@ class ReceivingView extends StatelessWidget {
       return Text(
           state.currentMotion.state.toString() +
               " , " +
-              state.currentDirection.direction.toString() +
+              state.currentDirection.degrees.toString() +
               " , " +
               ", Match/Client Difference: " +
               state.matches.closestProfile()["difference"].toString(),
@@ -42,7 +42,7 @@ class ReceivingView extends StatelessWidget {
       return Text(
           state.currentMotion.state.toString() +
               " No Senders, " +
-              state.currentDirection.direction.toString(),
+              state.currentDirection.degrees.toString(),
           style: Design.text.header());
     }
   }

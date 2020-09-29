@@ -111,10 +111,10 @@ class Reload extends WebEvent {
 }
 
 // Update Event
-class Update extends WebEvent {
+class UpdateOld extends WebEvent {
   final Circle map;
   final Motion currentMotion;
   final Direction currentDirection;
 
-  const Update({this.map, this.currentDirection, this.currentMotion});
+  const UpdateOld({this.map, this.currentDirection, this.currentMotion});
 }

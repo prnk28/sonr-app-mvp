@@ -33,7 +33,8 @@ Future<void> main() async {
 
       // Networking Logic
       BlocProvider<WebBloc>(
-        create: (context) => WebBloc(BlocProvider.of<DataBloc>(context)),
+        create: (context) => WebBloc(BlocProvider.of<DataBloc>(context),
+            BlocProvider.of<DeviceBloc>(context)),
       ),
     ],
     child: App(),

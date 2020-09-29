@@ -14,7 +14,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   Peer user;
 
   // Constructer
-  DeviceBloc() : super(Inactive()) {
+  DeviceBloc() : super(null) {
     // ** Accelerometer Events **
     accelerometerEvents.listen((AccelerometerEvent newMotion) {
       // Update Motion Var
@@ -40,6 +40,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       yield* _mapRefreshState(event);
     } else if (event is Update) {
       yield* _mapUpdateState(event);
+    } else if (event is GetLocation) {
+      yield* _mapGetLocationState(event);
     }
   }
 
@@ -54,24 +56,36 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     yield Ready();
   }
 
+// ***********************
+// ** GetLocation Event **
+// ***********************
+  Stream<DeviceState> _mapGetLocationState(GetLocation event) async* {
+
+    // Location Available
+    yield Ready();
+  }
+
 // *******************
 // ** Refresh Event **
 // *******************
   Stream<DeviceState> _mapRefreshState(Refresh event) async* {
-    // Check if Direction Provided
-    if (event.direction != null) {
-      user.direction = event.direction;
+    // Check if User Active
+    if (user != null && !user.isBusy) {
+      // Check if Direction Provided
+      if (event.direction != null && user != null) {
+        user.direction = event.direction;
+      }
+
+      // Check if Motion Provided
+      if (event.motion != null) {
+        user.motion = event.motion;
+      }
+
+      // Update State
+      add(Update());
+      yield Refreshing();
     }
-
-    // Check if Motion Provided
-    if (event.motion != null) {
-      user.motion = event.motion;
-    }
-
-    // Update State
-    add(Update());
-
-    yield Refreshing();
+    yield Inactive();
   }
 
 // *******************

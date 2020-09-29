@@ -20,12 +20,32 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
   // Required Blocs
   final DataBloc dataBloc;
-  //final DeviceBloc deviceBloc;
+  final DeviceBloc deviceBloc;
+
+  // Device State Subscription
+  StreamSubscription deviceSubscription;
 
   // Constructer
-  WebBloc(
-    this.dataBloc,
-  ) : super(null) {
+  WebBloc(this.dataBloc, this.deviceBloc) : super(null) {
+    // ** Verify Both Blocs Connected
+    if (deviceBloc == null || dataBloc == null) return;
+
+    // ** Initialize with Device Bloc
+    deviceSubscription = deviceBloc.listen((DeviceState currDeviceState) {
+      // Device can Record Data/ Portrait
+      if (currDeviceState is Ready) {
+      }
+      // Device is Tilted
+      else if (currDeviceState is Sending) {
+      }
+      // Device is Landscape
+      else if (currDeviceState is Receiving) {
+      }
+      // Interacting with another Peer
+      else if (currDeviceState is Busy) {
+      }
+    });
+
     // ** Repo Initialization **
     circle = new Circle(this);
     connection = new Connection(this);
@@ -35,6 +55,12 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
   // Initial State
   WebState get initialState => Initial();
+
+  // On Bloc Close
+  void dispose() {
+    deviceSubscription.cancel();
+  }
+
 // *********************************
 // ** Map Events to State Method ***
 // *********************************
@@ -49,7 +75,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapSendToState(event);
     } else if (event is Receive) {
       yield* _mapReceiveToState(event);
-    } else if (event is Update) {
+    } else if (event is UpdateOld) {
       yield* _mapUpdateToState(event);
     } else if (event is Reload) {
       yield* _mapRefreshInputToState(event);
@@ -80,12 +106,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapConnectToState(Connect initializeEvent) async* {
     // Check Status
     if (connection.needSetup()) {
-// Initialize Variables
-      Location fakeLocation = Location.fakeLocation();
-
-      // Emit to Socket.io
+      // Emit to Socket.io from User Peer Node
       socket.emit("INITIALIZE",
-          [fakeLocation.toMap(), initializeEvent.userProfile.toMap()]);
+          [deviceBloc.user.locationToMap(), deviceBloc.user.toMap()]);
       connection.initialized = true;
 
       // Fake Select File in Queue
@@ -312,7 +335,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ********************
 // ** Update Event ***
 // ********************
-  Stream<WebState> _mapUpdateToState(Update updateEvent) async* {
+  Stream<WebState> _mapUpdateToState(UpdateOld updateEvent) async* {
     if (connection.initialized) {
       if (device.status == PositionStatus.SENDER) {
         add(Send(map: updateEvent.map));
@@ -339,7 +362,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Check State
         if (device.isSending()) {
           // Post Update
-          add(Update(
+          add(UpdateOld(
               currentDirection: device.direction,
               currentMotion: device.motion,
               map: circle));
@@ -347,7 +370,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Receive State
         else if (device.isReceiving()) {
           // Post Update
-          add(Update(
+          add(UpdateOld(
               currentDirection: device.direction,
               currentMotion: device.motion,
               map: circle));

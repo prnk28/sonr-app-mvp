@@ -1,7 +1,7 @@
 import 'package:sonar_app/screens/screens.dart';
 
 class SendingView extends StatelessWidget {
-  final Sending state;
+  final SendingPosition state;
   final WebBloc sonarBloc;
 
   SendingView(this.state, this.sonarBloc);
@@ -20,7 +20,7 @@ class SendingView extends StatelessWidget {
       return Text(
         state.currentMotion.state.toString() +
             " , " +
-            state.currentDirection.direction.toString() +
+            state.currentDirection.degrees.toString() +
             ", Match/Client Difference: " +
             state.matches.closestProfile()["difference"].toString(),
         style: Design.text.medium(),
@@ -30,7 +30,7 @@ class SendingView extends StatelessWidget {
       return Text(
           state.currentMotion.state.toString() +
               " No Receivers, " +
-              state.currentDirection.direction.toString(),
+              state.currentDirection.degrees.toString(),
           style: Design.text.header());
     }
   }

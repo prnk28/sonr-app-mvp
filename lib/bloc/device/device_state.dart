@@ -10,7 +10,7 @@ abstract class DeviceState extends Equatable {
 // ** Prior to Load or on Standby **
 class Inactive extends DeviceState {}
 
-// ** Can Record Data **
+// ** Device can Record Data/ Portrait **
 class Ready extends DeviceState {
   final Peer user;
   const Ready({this.user});
