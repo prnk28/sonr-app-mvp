@@ -32,21 +32,21 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ****************************** //
     // ** Device BLoC Subscription ** //
     // ****************************** //
-    deviceSubscription = device.listen((DeviceState currDeviceState) {
+    deviceSubscription = device.listen((DeviceState deviceState) {
       // Device can Record Data/ Portrait
-      if (currDeviceState is Ready) {
+      if (deviceState is Ready) {
         log.i("DeviceBloc State: Ready <- from WebBloc");
       }
       // Device is Tilted or Landscape
-      else if (currDeviceState is Sending || currDeviceState is Receiving) {
-        add(RequestSearch(userNode: currDeviceState.user));
+      else if (deviceState is Sending || deviceState is Receiving) {
+        add(RequestSearch(userNode: user.node));
       }
       // Interacting with another Peer
-      else if (currDeviceState is Busy) {
+      else if (deviceState is Busy) {
         log.i("DeviceBloc State: Busy <- from WebBloc");
       }
       // Refreshing Sensors
-      else if (currDeviceState is Refreshing) {
+      else if (deviceState is Refreshing) {
         log.i("DeviceBloc State: Refreshing <- from WebBloc");
       }
       // Inactive
