@@ -4,6 +4,9 @@ export 'views/views.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Initialize Device Sensors
+    //BlocProvider.of<DeviceBloc>(context).add(Initialize());
+
     // Extract Arguments
     final HomeArguments args = ModalRoute.of(context).settings.arguments;
 

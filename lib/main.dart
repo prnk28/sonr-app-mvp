@@ -16,12 +16,22 @@ Future<void> main() async {
   // Run App with BLoC Providers
   runApp(MultiBlocProvider(
     providers: [
+      // User Data Logic
       BlocProvider<UserBloc>(
         create: (context) => UserBloc(),
       ),
+
+      // Local Data/Transfer Logic
       BlocProvider<DataBloc>(
         create: (context) => DataBloc(),
       ),
+
+      // Sensory Input Logic
+      // BlocProvider<DeviceBloc>(
+      //   create: (context) => DeviceBloc(),
+      // ),
+
+      // Networking Logic
       BlocProvider<WebBloc>(
         create: (context) => WebBloc(BlocProvider.of<DataBloc>(context)),
       ),

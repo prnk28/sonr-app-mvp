@@ -17,6 +17,8 @@ class Peer {
   OrientationType orientation;
   Status status;
 
+  // Location Variables
+
   // Object Variables
   DateTime lastUpdated;
   final Profile profile;
@@ -49,17 +51,19 @@ class Peer {
     // Set Status from String
     newPeer.status =
         Status.values.firstWhere((e) => e.toString() == data["status"]);
+
+    return newPeer;
   }
 
   // ** Method to Update Direction **
-  updateDirection(double newDegrees) {
+  setDirection(double newDegrees) {
     this.degrees = newDegrees;
     this.antipodalDegress = getAntipodalDegrees(this.degrees, this.accelX);
     this.lastUpdated = DateTime.now();
   }
 
   // ** Method to Update Motion **
-  updateMotion(double newX, double newY, newZ) {
+  setMotion(double newX, double newY, newZ) {
     // Set Class Variables
     this.accelX = newX;
     this.accelY = newY;

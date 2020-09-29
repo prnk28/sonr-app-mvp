@@ -14,21 +14,20 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   Peer user;
 
   // Constructer
-  final WebBloc webBloc;
-  DeviceBloc(this.webBloc) : super(Inactive()) {
-    // ** Accelerometer Events **
-    accelerometerEvents.listen((AccelerometerEvent newData) {
-      // Update Motion Var
-      add(UpdateMotion(newData));
-    });
+  DeviceBloc() : super(Inactive()) {
+    // // ** Accelerometer Events **
+    // accelerometerEvents.listen((AccelerometerEvent newData) {
+    //   // Update Motion Var
+    //   add(UpdateMotion(newData));
+    // });
 
-    // ** Directional Events **
-    Compass()
-        .compassUpdates(interval: Duration(milliseconds: 400))
-        .listen((double newData) {
-      // Update Direction Var
-      add(UpdateDirection(newData));
-    });
+    // // ** Directional Events **
+    // Compass()
+    //     .compassUpdates(interval: Duration(milliseconds: 400))
+    //     .listen((newData) {
+    //   // Update Direction Var
+    //   // add(UpdateDirection(newData));
+    // });
   }
 
   @override
@@ -60,7 +59,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ***************************
   Stream<DeviceState> _mapUpdateDirectionState(UpdateDirection event) async* {
     // Update Peer Direction
-    user.updateDirection(event.data);
+    user.setDirection(event.data);
 
     // Profile Ready
     yield Ready();
@@ -71,7 +70,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ************************
   Stream<DeviceState> _mapUpdateMotionState(UpdateMotion event) async* {
     // Update Peer Motion
-    user.updateMotion(event.data.x, event.data.y, event.data.z);
+    user.setMotion(event.data.x, event.data.y, event.data.z);
 
     // Profile Ready
     yield Ready();

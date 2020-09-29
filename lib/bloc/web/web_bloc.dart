@@ -18,9 +18,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Device device;
   Graph graph;
 
-  // Constructer
+  // Required Blocs
   final DataBloc dataBloc;
-  WebBloc(this.dataBloc) : super(null) {
+  //final DeviceBloc deviceBloc;
+
+  // Constructer
+  WebBloc(
+    this.dataBloc,
+  ) : super(null) {
     // ** Repo Initialization **
     circle = new Circle(this);
     connection = new Connection(this);
