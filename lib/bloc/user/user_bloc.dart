@@ -28,14 +28,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-// ***********************
+  // ***********************
 // ** Initialize Event **
 // ***********************
   Stream<UserState> _mapInitializeState(Initialize event) async* {
     // Retrieve Profile
-    var box = await Hive.openBox(PROFILE_BOX);
-    final profileData = box.get("profile");
-    await box.close();
+    var profileData = await localData.getProfile();
 
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
@@ -66,16 +64,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // *************************
   Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
     // Save to Box
-    var box = await Hive.openBox(PROFILE_BOX);
-    box.put("profile", profile);
-    print('Profile: ${box.get("profile")}');
-    await box.close();
-
-    // Recreate Node
-    node = new Peer(profile);
+    await localData.updateProfile(event.data);
 
     // Update Reference
     this.profile = event.data;
+
+      // Reinitialize User Node
+      node = new Peer(profile);
 
     // Profile Ready
     yield Online(profile);
