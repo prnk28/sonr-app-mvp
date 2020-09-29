@@ -30,7 +30,7 @@ class Connection {
     // ** SOCKET::NEW_SENDER **
     socket.on('NEW_SENDER', (data) {
       // Send Last Recorded Direction to New Sender
-      socket.emit("RECEIVING", [bloc.device.direction.toReceiveMap()]);
+      //socket.emit("RECEIVING", [bloc.device.direction.toReceiveMap()]);
       //bloc.add(Reload(newDirection: bloc.device.direction));
       // Add to Process
       //log.i("NEW_SENDER: " + data);
@@ -38,7 +38,7 @@ class Connection {
 
     // ** SOCKET::SENDER_UPDATE **
     socket.on('SENDER_UPDATE', (data) {
-      bloc.circle.update(bloc.device.direction, data);
+      //bloc.circle.update(bloc.device.direction, data);
       //bloc.add(Reload(newDirection: bloc.device.direction));
     });
 
@@ -55,9 +55,9 @@ class Connection {
     // ** SOCKET::NEW_RECEIVER **
     socket.on('NEW_RECEIVER', (data) {
       // Send Last Recorded Direction to New Receiver
-      if (bloc.device.direction != null) {
-        socket.emit("SENDING", [bloc.device.direction.toReceiveMap()]);
-      }
+      //if (bloc.device.direction != null) {
+      //  socket.emit("SENDING", [bloc.device.direction.toReceiveMap()]);
+     // }
 
       //bloc.add(Reload(newDirection: bloc.device.direction));
 
@@ -67,7 +67,7 @@ class Connection {
 
     // ** SOCKET::RECEIVER_UPDATE **
     socket.on('RECEIVER_UPDATE', (data) {
-      bloc.circle.update(bloc.device.direction, data);
+     // bloc.circle.update(bloc.device.direction, data);
       //bloc.add(Reload(newDirection: bloc.device.direction));
     });
 

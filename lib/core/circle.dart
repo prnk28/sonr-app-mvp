@@ -20,30 +20,28 @@ class Circle {
   // ** Update Circle Due to Incoming Data **
   // ****************************************
   void update(currentDirection, data) {
-    switch (bloc.device.status) {
-      // Find Difference, Check Sender
-      case PositionStatus.RECEIVER:
-        // Get Receiver Difference
-        var difference = currentDirection.antipodalDirection - data["degrees"];
-        this.differences[data["id"]] = difference.abs();
-        data["difference"] = difference.abs();
+    // // Find Difference, Check Sender
+    // case PositionStatus.RECEIVER:
+    //   // Get Receiver Difference
+    //   var difference = currentDirection.antipodalDirection - data["degrees"];
+    //   this.differences[data["id"]] = difference.abs();
+    //   data["difference"] = difference.abs();
 
-        // Add/Replace to matches object
-        this.matches[data["id"]] = data;
-        break;
-      case PositionStatus.SENDER:
-        // Get Sender Difference
-        var difference = currentDirection.direction - data["antipodal_degrees"];
-        this.differences[data["id"]] = difference.abs();
-        data["difference"] = difference.abs();
+    //   // Add/Replace to matches object
+    //   this.matches[data["id"]] = data;
+    //   break;
+    // case PositionStatus.SENDER:
+    //   // Get Sender Difference
+    //   var difference = currentDirection.direction - data["antipodal_degrees"];
+    //   this.differences[data["id"]] = difference.abs();
+    //   data["difference"] = difference.abs();
 
-        // Add/Replace to matches object
-        this.matches[data["id"]] = data;
-        break;
-      default:
-        log.e("Not Receiver nor Sender");
-        TypeError();
-    }
+    //   // Add/Replace to matches object
+    //   this.matches[data["id"]] = data;
+    //   break;
+    // default:
+    //   log.e("Not Receiver nor Sender");
+    //   TypeError();
   }
 
   // ****************************************************
@@ -70,31 +68,31 @@ class Circle {
   // ** Modify Circle Due to Directional Data **
   // *******************************************
   void modify(currentDirection) {
-    if (this.valid()) {
-      dynamic closest = this.closestProfile();
-      switch (bloc.device.status) {
-        case PositionStatus.RECEIVER:
-          // Get Receiver Difference
-          var difference =
-              currentDirection.antipodalDirection - closest["degrees"];
-          this.differences[closest["id"]] = difference.abs();
-          closest["difference"] = difference.abs();
-          break;
-        case PositionStatus.SENDER:
-          // Get Sender Difference
-          var difference =
-              currentDirection.direction - closest["antipodal_degrees"];
-          this.differences[closest["id"]] = difference.abs();
-          closest["difference"] = difference.abs();
+    // if (this.valid()) {
+    //   dynamic closest = this.closestProfile();
+    //   switch (bloc.device.status) {
+    //     case PositionStatus.RECEIVER:
+    //       // Get Receiver Difference
+    //       var difference =
+    //           currentDirection.antipodalDirection - closest["degrees"];
+    //       this.differences[closest["id"]] = difference.abs();
+    //       closest["difference"] = difference.abs();
+    //       break;
+    //     case PositionStatus.SENDER:
+    //       // Get Sender Difference
+    //       var difference =
+    //           currentDirection.direction - closest["antipodal_degrees"];
+    //       this.differences[closest["id"]] = difference.abs();
+    //       closest["difference"] = difference.abs();
 
-          // Log
-          print("Difference: " + closest["difference"].toString());
-          break;
-        default:
-          log.e("Not Receiver nor Sender");
-          TypeError();
-      }
-    }
+    //       // Log
+    //       print("Difference: " + closest["difference"].toString());
+    //       break;
+    //     default:
+    //       log.e("Not Receiver nor Sender");
+    //       TypeError();
+    //   }
+    // }
   }
 
   // *******************************************

@@ -15,7 +15,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   Circle circle;
   Connection connection;
-  Device device;
   Graph graph;
 
   // Required Blocs
@@ -63,10 +62,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Initial State
   WebState get initialState => Disconnected();
 
-  // // On Bloc Close
-  // void dispose() {
-  //   deviceSubscription.cancel();
-  // }
+  // On Bloc Close
+  void dispose() {
+    deviceSubscription.cancel();
+  }
 
 // *********************************
 // ** Map Events to State Method ***
@@ -122,24 +121,19 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-// *****************
+// *********************
 // ** SendPeer Event ***
-// *****************
+// *********************
   Stream<WebState> _mapSendPeerToState(SendPeer sendEvent) async* {
     // Check Init Status
     if (connection.ready()) {
       // Emit Send
       const delay = const Duration(milliseconds: 500);
-      new Timer(
-          delay,
-          () => {
-                socket.emit("SENDING", [device.direction.toSendMap()])
-              });
+      new Timer(delay, () => {socket.emit("SENDING", [])});
     }
 
     // Set Suspend state with lastState
-    yield Searching(
-        currentMotion: device.motion, currentDirection: device.direction);
+    yield Searching();
   }
 
 // ***********************

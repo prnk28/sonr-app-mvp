@@ -15,32 +15,9 @@ class TransferScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
-                if (state is SendingPosition) {
-                  return SendingView(state, BlocProvider.of<WebBloc>(context));
-                } else if (state is ReceivingPosition) {
-                  return ReceivingView(state: state);
-                } else if (state is Pending) {
-                  return PendingView(
-                      state: state,
-                      sonarBloc: BlocProvider.of<WebBloc>(context));
-                } else if (state is PreTransfer) {
-                  return PreTransferView(state: state);
-                } else if (state is Failed) {
-                  return FailedView(
-                      sonarBloc: BlocProvider.of<WebBloc>(context),
-                      state: state);
-                } else if (state is InProgress) {
-                  return TransferView(
-                      sonarBloc: BlocProvider.of<WebBloc>(context),
-                      state: state);
-                } else if (state is Complete) {
-                  return CompleteView(
-                      sonarBloc: BlocProvider.of<WebBloc>(context));
-                } else {
-                  // Initialize Client
-                  BlocProvider.of<WebBloc>(context).add(Connect());
-                  return NeumorphicProgressIndeterminate();
-                }
+                // Initialize Client
+                BlocProvider.of<WebBloc>(context).add(Connect());
+                return NeumorphicProgressIndeterminate();
               },
             ),
           ),
