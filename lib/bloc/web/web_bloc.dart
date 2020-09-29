@@ -16,11 +16,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Circle circle;
   Graph graph;
 
-  // Socket Communication Booleans
-  bool initialized = false;
-  bool invited = false;
-  bool offered = false;
-
   // Required Blocs
   final DataBloc data;
   final DeviceBloc device;
@@ -230,53 +225,20 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-  // ** BOOL: Check to see if waiting to Initialize
-  bool needSetup() {
-    if (!this.initialized) {
-      return true;
-    }
-    log.e("Already Initialized");
-    return false;
-  }
-
-  // ** BOOL: Check to see if ready to Invite/Offer/Send/Receive
-  bool ready() {
-    if (initialized && !invited) {
-      return true;
-    } else if (initialized && !offered) {
-      return true;
-    } else {
-      log.e("Not Ready to Send/Receive/Invite/Offer");
-      return false;
-    }
-  }
-
-  // ** BOOL: Check to see if nobody invited/offered
-  bool noContact() {
-    if (!offered && !invited) {
-      return true;
-    }
-    return false;
-  }
-
 // ********************
 // ** Connect Event ***
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
-    // Check Status
-    if (needSetup()) {
-      // Emit to Socket.io from User Peer Node
-      socket.emit("CONNECT", [user.node.locationToMap(), user.profile.toMap()]);
-      initialized = true;
+    // Emit to Socket.io from User Peer Node
+    socket.emit("CONNECT", [user.node.locationToMap(), user.profile.toMap()]);
 
-      // Fake Select File in Queue
-      File transferToSend =
-          await getAssetFileByPath("assets/images/fat_test.jpg");
-      data.add(QueueFile(receiving: false, file: transferToSend));
+    // Fake Select File in Queue
+    File transferToSend =
+        await getAssetFileByPath("assets/images/fat_test.jpg");
+    data.add(QueueFile(receiving: false, file: transferToSend));
 
-      // Device Pending State
-      yield Connected();
-    }
+    // Device Pending State
+    yield Connected();
   }
 
 // **************************
@@ -284,16 +246,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // **************************
   Stream<WebState> _mapSendPeerToState(RequestSearch event) async* {
     // Check Init Status
-    if (ready()) {
-      // Get Peer Map
-      Map peerMap = event.userNode.toMap();
+    Map peerMap = event.userNode.toMap();
 
-      // Set Delay
-      await new Future.delayed(Duration(milliseconds: 500));
+    // Set Delay
+    await new Future.delayed(Duration(milliseconds: 500));
 
-      // Send to Server
-      socket.emit("REQUEST_SEARCH", peerMap);
-    }
+    // Send to Server
+    socket.emit("REQUEST_SEARCH", peerMap);
 
     // Set Suspend state with lastState
     yield Searching();
@@ -303,64 +262,50 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** SendInvite Event ***
 // ***********************
   Stream<WebState> _mapInviteToState(SendOffer event) async* {
-    // Check Status
-    if (ready()) {
-      // Set Invited
-      invited = true;
+    // Set Peer
+    rtcSession.peerId = circle.closestId();
 
-      // Set Peer
-      rtcSession.peerId = circle.closestId();
+    // Create Offer and Emit
+    rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
 
-      // Create Offer and Emit
-      rtcSession.invite(
-          this.circle.closestId(), data.outgoing.first.toString());
-
-      // Device Pending State
-      yield Pending(match: circle.closestProfile());
-    }
+    // Device Pending State
+    yield Pending(match: circle.closestProfile());
   }
 
 // ********************
 // ** Offered Event ***
 // ********************
   Stream<WebState> _mapOfferedToState(HandleOffer event) async* {
-    // Check Status
-    if (ready()) {
-      // Set Offered and Peer
-      offered = true;
-      rtcSession.peerId = event.profile["id"];
+    // Set Offered and Peer
+    rtcSession.peerId = event.profile["id"];
 
-      // Add Incoming File Info
-      data.add(QueueFile(
-        receiving: true,
-      ));
+    // Add Incoming File Info
+    data.add(QueueFile(
+      receiving: true,
+    ));
 
-      // Device Pending State
-      yield Pending(match: circle.closestProfile(), offer: event.offer);
-    }
+    // Device Pending State
+    yield Pending(match: circle.closestProfile(), offer: event.offer);
   }
 
 // ******************************
 // ** SendAuthorization Event ***
 // ******************************
   Stream<WebState> _mapAuthorizeToState(SendAuthorization event) async* {
-    // Check Status
-    if (initialized) {
-      // Yield Receiver Decision
-      if (event.decision) {
-        // Create Answer
-        rtcSession.handleOffer(event.offer);
-        yield Transferring();
-      }
-      // Receiver Declined
-      else {
-        // Reset Peer
-        rtcSession.resetPeer();
+    // Yield Receiver Decision
+    if (event.decision) {
+      // Create Answer
+      rtcSession.handleOffer(event.offer);
+      yield Transferring();
+    }
+    // Receiver Declined
+    else {
+      // Reset Peer
+      rtcSession.resetPeer();
 
-        // Send Decision
-        socket.emit("DECLINE", event.matchId);
-        add(Reset());
-      }
+      // Send Decision
+      socket.emit("DECLINE", event.matchId);
+      add(Reset());
     }
   }
 
@@ -368,90 +313,69 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** HandleAnswer Event ***
 // *************************
   Stream<WebState> _mapAcceptedToState(HandleAnswer event) async* {
-    // Check Status
-    if (initialized) {
-      // Handle Answer
-      rtcSession.handleAnswer(event.answer);
+    // Handle Answer
+    rtcSession.handleAnswer(event.answer);
 
-      // Begin Transfer
-
-      yield Transferring();
-    }
+    // Begin Transfer
+    yield Transferring();
   }
 
 // **************************
 // ** HandleDecline Event ***
 // **************************
   Stream<WebState> _mapDeclinedToState(HandleDecline event) async* {
-    // Check Status
-    if (initialized) {
-      // Reset Peer
-      rtcSession.resetPeer();
+    // Reset Peer
+    rtcSession.resetPeer();
 
-      // Emit Decision to Server
-      yield Failed(profile: event.profile, matchId: event.matchId);
-    }
+    // Emit Decision to Server
+    yield Failed(profile: event.profile, matchId: event.matchId);
   }
 
 // *********************
 // ** Transfer Event ***
 // *********************
   Stream<WebState> _mapTransferToState(BeginTransfer event) async* {
-    // Check Status
-    if (initialized) {
-      // Begin Transfer
-      data.add(SendChunks());
+    // Begin Transfer
+    data.add(SendChunks());
 
-      // Emit Decision to Server
-      yield Transferring();
-    }
+    // Emit Decision to Server
+    yield Transferring();
   }
 
 // *********************
 // ** Received Event ***
 // *********************
   Stream<WebState> _mapReceivedToState(HandleReceived event) async* {
-    // Check Status
-    if (initialized) {
-      // Emit Decision to Server
-      yield Complete("RECEIVER", file: event.data);
-    }
+    // Emit Decision to Server
+    yield Complete("RECEIVER", file: event.data);
   }
 
 // *********************
 // ** Completed Event ***
 // *********************
   Stream<WebState> _mapCompletedToState(HandleComplete event) async* {
-    // Check Status
-    if (initialized) {
-      // Emit Decision to Server
-      yield Complete("SENDER");
-    }
+    // Emit Decision to Server
+    yield Complete("SENDER");
   }
 
 // *********************
 // ** Reset Event ***
 // *********************
   Stream<WebState> _mapResetToState(Reset event) async* {
-    // Check Status
-    if (initialized) {
-      // Reset Connection
-      socket.emit("RESET");
+    // Reset Connection
+    socket.emit("RESET");
 
-      // Reset RTC
-      rtcSession.close();
-      rtcSession.resetPeer();
+    // Reset RTC
+    rtcSession.close();
+    rtcSession.resetPeer();
 
-      // Reset Circle
-      circle.reset();
+    // Reset Circle
+    circle.reset();
 
-      // Set Delay
-      await new Future.delayed(Duration(seconds: 1));
+    // Set Delay
+    await new Future.delayed(Duration(seconds: 1));
 
-      // Yield Ready
-      yield Connected();
-    } else {
-      add(Connect());
-    }
+    // Yield Ready
+    yield Connected();
   }
 }

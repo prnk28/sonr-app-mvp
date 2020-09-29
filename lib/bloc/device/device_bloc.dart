@@ -43,14 +43,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     }
   }
 
-// ***********************
-// ** GetLocation Event **
-// ***********************
-  Stream<DeviceState> _mapGetLocationState(GetLocation event) async* {
-    // Location Available
-    yield Ready();
-  }
-
 // *******************
 // ** Refresh Event **
 // *******************
@@ -78,16 +70,31 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ** Update Event **
 // *******************
   Stream<DeviceState> _mapUpdateState(Update event) async* {
-    // Yield State by Peer Status
-    if (user.node.status == PeerStatus.Ready) {
-      yield Ready();
-    } else if (user.node.status == PeerStatus.Sending) {
-      yield Sending();
-    } else if (user.node.status == PeerStatus.Receiving) {
-      yield Receiving();
-    } else if (user.node.status == PeerStatus.Busy) {
-      yield Busy();
+    // Yield State by Orientation Status
+    switch (user.node.orientation) {
+      case OrientationType.Portrait:
+        yield Ready();
+        break;
+      case OrientationType.Tilted:
+        yield Sending();
+        break;
+      case OrientationType.LandscapeLeft:
+        yield Receiving();
+        break;
+      case OrientationType.LandscapeRight:
+        yield Receiving();
+        break;
+      case OrientationType.Suspended:
+        yield Busy();
+        break;
     }
-    yield Inactive();
+  }
+
+// ***********************
+// ** GetLocation Event **
+// ***********************
+  Stream<DeviceState> _mapGetLocationState(GetLocation event) async* {
+    // Location Available
+    yield Ready();
   }
 }
