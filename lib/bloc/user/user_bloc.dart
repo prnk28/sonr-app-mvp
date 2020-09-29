@@ -21,35 +21,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
-    if (event is UpdateProfile) {
+    if (event is Initialize) {
+      yield* _mapInitializeState(event);
+    } else if (event is UpdateProfile) {
       yield* _mapUpdateProfileState(event);
-    } else if (event is CheckStatus) {
-      yield* _mapCheckStatusState(event);
     }
   }
 
-// *************************
-// ** UpdateProfile Event **
-// *************************
-  Stream<UserState> _mapUpdateProfileState(
-      UpdateProfile updateProfileEvent) async* {
-    // Save to Box
-    await localData.updateProfile(updateProfileEvent.data);
-
-    // Update Reference
-    this.profile = updateProfileEvent.data;
-
-    // Profile Ready
-    yield Online(profile);
-  }
-
 // ***********************
-// ** CheckStatus Event **
+// ** Initialize Event **
 // ***********************
-  Stream<UserState> _mapCheckStatusState(
-      CheckStatus checkLocalStatusEvent) async* {
-    // Check Status
-    var profileData = await localData.getProfile();
+  Stream<UserState> _mapInitializeState(Initialize event) async* {
+    // Retrieve Profile
+    var box = await Hive.openBox(PROFILE_BOX);
+    final profileData = box.get("profile");
+    await box.close();
 
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
@@ -73,5 +59,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       // Profile Ready
       yield Online(profile);
     }
+  }
+
+// *************************
+// ** UpdateProfile Event **
+// *************************
+  Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
+    // Save to Box
+    var box = await Hive.openBox(PROFILE_BOX);
+    box.put("profile", profile);
+    print('Profile: ${box.get("profile")}');
+    await box.close();
+
+    // Recreate Node
+    node = new Peer(profile);
+
+    // Update Reference
+    this.profile = event.data;
+
+    // Profile Ready
+    yield Online(profile);
   }
 }

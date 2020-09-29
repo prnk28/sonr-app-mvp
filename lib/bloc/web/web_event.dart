@@ -23,15 +23,15 @@ class RequestSearch extends WebEvent {
 }
 
 // Update Graph with Peer Values
-class HandlePeers extends WebEvent {
+class UpdateGraph extends WebEvent {
   final Peer peer;
-  const HandlePeers({this.peer});
+  const UpdateGraph({this.peer});
 }
 
-// Sender Invites Authorization
-class SendInvite extends WebEvent {
+// Sender Offfers Invite for Authorization
+class SendOffer extends WebEvent {
   final String id;
-  const SendInvite(this.id);
+  const SendOffer(this.id);
 }
 
 // Receiver Gets Authorization Request
@@ -82,7 +82,7 @@ class HandleComplete extends WebEvent {
   const HandleComplete(this.profile, this.matchId);
 }
 
-// Reset UI
+// Reset Connection
 class Reset extends WebEvent {
   const Reset();
 }

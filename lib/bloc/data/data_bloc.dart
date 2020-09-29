@@ -184,7 +184,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     var filePath = tempDir.path + '/file_01.tmp';
 
     // Save File to Disk
-    File rawFile = await localData.writeToFile(block.takeBytes(), filePath);
+    File rawFile = await writeToFile(block.takeBytes(), filePath);
 
     // Create MetaData
     // Metadata meta = new Metadata();

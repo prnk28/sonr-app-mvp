@@ -14,13 +14,22 @@ import 'package:sonar_app/repository/session.dart';
 
 import 'localdata.dart';
 
-// Constants for WebRTC
+// ** Constants for WebRTC **
 const CHUNK_SIZE = 16000; // MTU in Bytes
 const CHUNKS_PER_ACK = 64;
 
+// ** Socket Transport Settings **
 const Map<String, dynamic> SOCKET_TRANSPORT = <String, dynamic>{
   'transports': ['websocket'],
 };
+
+// ** HiveDB Box Names **
+const String CONTACT_BOX = "contactBox";
+const String PREFERENCES_BOX = "preferencesBox";
+const String PROFILE_BOX = "profileBox";
+
+// File Box's
+const String FILE_BOX = "fileBox";
 
 // Initialize Repositories
 Socket socket = io('http://match.sonr.io', SOCKET_TRANSPORT);

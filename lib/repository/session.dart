@@ -1,4 +1,3 @@
-import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 // *******************
@@ -58,9 +57,6 @@ class RTCSession {
 
   // Callbacks
   OverrideSignalingStateCallback onStateChange;
-  StreamStateCallback onLocalStream;
-  StreamStateCallback onAddRemoteStream;
-  StreamStateCallback onRemoveRemoteStream;
   OtherEventCallback onPeersUpdate;
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;

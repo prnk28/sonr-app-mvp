@@ -209,7 +209,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapConnectToState(event);
     } else if (event is RequestSearch) {
       yield* _mapSendPeerToState(event);
-    } else if (event is SendInvite) {
+    } else if (event is SendOffer) {
       yield* _mapInviteToState(event);
     } else if (event is HandleOffer) {
       yield* _mapOfferedToState(event);
@@ -271,7 +271,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
       // Fake Select File in Queue
       File transferToSend =
-          await localData.getAssetFileByPath("assets/images/fat_test.jpg");
+          await getAssetFileByPath("assets/images/fat_test.jpg");
       data.add(QueueFile(receiving: false, file: transferToSend));
 
       // Device Pending State
@@ -302,7 +302,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ***********************
 // ** SendInvite Event ***
 // ***********************
-  Stream<WebState> _mapInviteToState(SendInvite event) async* {
+  Stream<WebState> _mapInviteToState(SendOffer event) async* {
     // Check Status
     if (ready()) {
       // Set Invited

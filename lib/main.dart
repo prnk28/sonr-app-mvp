@@ -10,6 +10,11 @@ Future<void> main() async {
   // Set bloc observer to observe transitions
   Bloc.observer = SimpleBlocObserver();
 
+  // Initialize Hive Adapters
+  Hive.registerAdapter(ProfileAdapter());
+  Hive.registerAdapter(MetadataAdapter());
+  Hive.registerAdapter(ContactAdapter());
+
   // Initialize HiveDB
   await Hive.initFlutter();
 
@@ -24,15 +29,19 @@ Future<void> main() async {
       // Local Data/Transfer Logic
       BlocProvider<DataBloc>(create: (context) => DataBloc()),
 
-      // Device Input Logic
+      // Device Sensors Logic
       BlocProvider<DeviceBloc>(
-        create: (context) => DeviceBloc(),
+        create: (context) => DeviceBloc(
+          BlocProvider.of<UserBloc>(context),
+        ),
       ),
 
       // Networking Logic
       BlocProvider<WebBloc>(
-        create: (context) => WebBloc(BlocProvider.of<DataBloc>(context),
-            BlocProvider.of<DeviceBloc>(context)),
+        create: (context) => WebBloc(
+            BlocProvider.of<DataBloc>(context),
+            BlocProvider.of<DeviceBloc>(context),
+            BlocProvider.of<UserBloc>(context)),
       ),
     ],
     child: App(),

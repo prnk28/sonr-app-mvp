@@ -27,7 +27,7 @@ class SplashScreen extends StatelessWidget {
           return true;
         }, builder: (context, state) {
           // Begin Local Status Check
-          BlocProvider.of<UserBloc>(context).add(CheckStatus());
+          BlocProvider.of<UserBloc>(context).add(Initialize());
 
           // Return Loading
           return Center(child: NeumorphicProgressIndeterminate());

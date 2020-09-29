@@ -7,9 +7,6 @@ class HomeScreen extends StatelessWidget {
     // Extract Arguments
     final HomeArguments args = ModalRoute.of(context).settings.arguments;
 
-    // Initialize Device Sensors
-    BlocProvider.of<DeviceBloc>(context).add(Initialize());
-
     // Build View
     return Scaffold(
         appBar: Design.screenAppBar("Home"),

@@ -7,6 +7,11 @@ abstract class UserEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// Get User Ready on Device 
+class Initialize extends UserEvent {
+  const Initialize();
+}
+
 // Login to account save info data bloc
 class Login extends UserEvent {
   const Login();
@@ -20,11 +25,6 @@ class SignUp extends UserEvent {
 // Register for new account, save info
 class ChangePreferences extends UserEvent {
   const ChangePreferences();
-}
-
-// Get online/local account status
-class CheckStatus extends UserEvent {
-  const CheckStatus();
 }
 
 // Update Profile/Contact Info
