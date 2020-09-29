@@ -15,19 +15,19 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
   // Constructer
   DeviceBloc() : super(Inactive()) {
-    // // ** Accelerometer Events **
-    // accelerometerEvents.listen((AccelerometerEvent newData) {
-    //   // Update Motion Var
-    //   add(UpdateMotion(newData));
-    // });
+    // ** Accelerometer Events **
+    accelerometerEvents.listen((AccelerometerEvent newMotion) {
+      // Update Motion Var
+      add(Refresh(motion: newMotion));
+    });
 
-    // // ** Directional Events **
-    // Compass()
-    //     .compassUpdates(interval: Duration(milliseconds: 400))
-    //     .listen((newData) {
-    //   // Update Direction Var
-    //   // add(UpdateDirection(newData));
-    // });
+    // ** Directional Events **
+    Compass()
+        .compassUpdates(interval: Duration(milliseconds: 400))
+        .listen((newDegrees) {
+      // Update Degrees Var
+      add(Refresh(direction: newDegrees));
+    });
   }
 
   @override
@@ -36,10 +36,10 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   ) async* {
     if (event is Initialize) {
       yield* _mapInitializeState(event);
-    } else if (event is UpdateDirection) {
-      yield* _mapUpdateDirectionState(event);
-    } else if (event is UpdateMotion) {
-      yield* _mapUpdateMotionState(event);
+    } else if (event is Refresh) {
+      yield* _mapRefreshState(event);
+    } else if (event is Update) {
+      yield* _mapUpdateState(event);
     }
   }
 
@@ -54,25 +54,40 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     yield Ready();
   }
 
-// ***************************
-// ** UpdateDirection Event **
-// ***************************
-  Stream<DeviceState> _mapUpdateDirectionState(UpdateDirection event) async* {
-    // Update Peer Direction
-    user.setDirection(event.data);
+// *******************
+// ** Refresh Event **
+// *******************
+  Stream<DeviceState> _mapRefreshState(Refresh event) async* {
+    // Check if Direction Provided
+    if (event.direction != null) {
+      user.direction = event.direction;
+    }
 
-    // Profile Ready
-    yield Ready();
+    // Check if Motion Provided
+    if (event.motion != null) {
+      user.motion = event.motion;
+    }
+
+    // Update State
+    add(Update());
+
+    yield Refreshing();
   }
 
-// ************************
-// ** UpdateMotion Event **
-// ************************
-  Stream<DeviceState> _mapUpdateMotionState(UpdateMotion event) async* {
-    // Update Peer Motion
-    user.setMotion(event.data.x, event.data.y, event.data.z);
-
-    // Profile Ready
-    yield Ready();
+// *******************
+// ** Update Event **
+// *******************
+  Stream<DeviceState> _mapUpdateState(Update event) async* {
+    // Yield State by Peer Status
+    if (user.status == PeerStatus.Ready) {
+      yield Ready();
+    } else if (user.status == PeerStatus.Sending) {
+      yield Sending();
+    } else if (user.status == PeerStatus.Receiving) {
+      yield Receiving();
+    } else if (user.status == PeerStatus.Busy) {
+      yield Busy();
+    }
+    yield Inactive();
   }
 }

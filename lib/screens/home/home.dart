@@ -12,20 +12,34 @@ class HomeScreen extends StatelessWidget {
 
     // Build View
     return Scaffold(
-      appBar: Design.screenAppBar("Home"),
-      body: Center(
-          child: NeumorphicButton(
-              margin: EdgeInsets.only(top: 12),
-              style: NeumorphicStyle(
-                  shape: NeumorphicShape.flat,
-                  boxShape: NeumorphicBoxShape.stadium()),
-              child: Icon(Icons.star_outline_rounded),
-              onPressed: () {
-                // Change View
-                Navigator.pushNamed(context, "/transfer",
-                    arguments: TransferArguments(args.currentProfile));
-              })),
-    );
+        appBar: Design.screenAppBar("Home"),
+        body: Column(
+          children: [
+            // Bloc Builder to View Device info
+            BlocBuilder<DeviceBloc, DeviceState>(
+              builder: (context, state) {
+                if (state is Inactive) {
+                } else if (state is Ready) {
+                } else if (state is Sending) {
+                } else if (state is Receiving) {
+                } else if (state is Sending) {}
+              },
+            ),
+            // Button to Go to Transfer
+            Center(
+                child: NeumorphicButton(
+                    margin: EdgeInsets.only(top: 12),
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.flat,
+                        boxShape: NeumorphicBoxShape.stadium()),
+                    child: Icon(Icons.star_outline_rounded),
+                    onPressed: () {
+                      // Change View
+                      Navigator.pushNamed(context, "/transfer",
+                          arguments: TransferArguments(args.currentProfile));
+                    })),
+          ],
+        ));
   }
 }
 

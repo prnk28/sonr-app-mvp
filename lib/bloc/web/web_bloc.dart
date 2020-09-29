@@ -115,12 +115,12 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // Set Suspend state with lastState
     if (sendEvent.map != null) {
-      yield Sending(
+      yield SendingPosition(
           matches: sendEvent.map,
           currentMotion: device.motion,
           currentDirection: device.direction);
     } else {
-      yield Sending(
+      yield SendingPosition(
           currentMotion: device.motion, currentDirection: device.direction);
     }
   }
@@ -142,12 +142,12 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // Set Suspend state with lastState
     if (receiveEvent.map != null) {
-      yield Receiving(
+      yield ReceivingPosition(
           matches: receiveEvent.map,
           currentMotion: device.motion,
           currentDirection: device.direction);
     } else {
-      yield Receiving(
+      yield ReceivingPosition(
           currentMotion: device.motion, currentDirection: device.direction);
     }
   }

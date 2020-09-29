@@ -24,7 +24,7 @@ class Circle {
       // Find Difference, Check Sender
       case PositionStatus.RECEIVER:
         // Get Receiver Difference
-        var difference = currentDirection.antipodalDegrees - data["degrees"];
+        var difference = currentDirection.antipodalDirection - data["degrees"];
         this.differences[data["id"]] = difference.abs();
         data["difference"] = difference.abs();
 
@@ -33,7 +33,7 @@ class Circle {
         break;
       case PositionStatus.SENDER:
         // Get Sender Difference
-        var difference = currentDirection.degrees - data["antipodal_degrees"];
+        var difference = currentDirection.direction - data["antipodal_degrees"];
         this.differences[data["id"]] = difference.abs();
         data["difference"] = difference.abs();
 
@@ -76,14 +76,14 @@ class Circle {
         case PositionStatus.RECEIVER:
           // Get Receiver Difference
           var difference =
-              currentDirection.antipodalDegrees - closest["degrees"];
+              currentDirection.antipodalDirection - closest["degrees"];
           this.differences[closest["id"]] = difference.abs();
           closest["difference"] = difference.abs();
           break;
         case PositionStatus.SENDER:
           // Get Sender Difference
           var difference =
-              currentDirection.degrees - closest["antipodal_degrees"];
+              currentDirection.direction - closest["antipodal_degrees"];
           this.differences[closest["id"]] = difference.abs();
           closest["difference"] = difference.abs();
 

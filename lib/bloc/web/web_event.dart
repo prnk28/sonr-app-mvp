@@ -37,6 +37,12 @@ class Receive extends WebEvent {
   const Receive({this.map});
 }
 
+// Send Peer Data to Socket.io
+class EmitPeer extends WebEvent {
+  final Peer peer;
+  const EmitPeer({this.peer});
+}
+
 // Sender Invites Authorization
 class Invite extends WebEvent {
   final String id;

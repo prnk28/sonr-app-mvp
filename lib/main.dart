@@ -26,10 +26,10 @@ Future<void> main() async {
         create: (context) => DataBloc(),
       ),
 
-      // Sensory Input Logic
-      // BlocProvider<DeviceBloc>(
-      //   create: (context) => DeviceBloc(),
-      // ),
+      //Sensory Input Logic
+      BlocProvider<DeviceBloc>(
+        create: (context) => DeviceBloc(),
+      ),
 
       // Networking Logic
       BlocProvider<WebBloc>(

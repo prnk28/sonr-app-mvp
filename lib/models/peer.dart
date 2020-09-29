@@ -1,203 +1,244 @@
+import 'package:sonar_app/core/core.dart';
+
 import 'models.dart';
 
-// Peer Enums
-enum OrientationType { Default, Tilt, LandscapeLeft, LandscapeRight }
+// ********************** //
+// ** Enums for Object ** //
+// ********************** //
+enum OrientationType {
+  Portrait,
+  Tilted,
+  LandscapeLeft,
+  LandscapeRight,
+  Suspended
+}
 
-enum Status { Standby, Sending, Receiving }
+enum PeerStatus {
+  Ready,
+  Sending,
+  Receiving,
+  Busy,
+}
 
+// ***************************** //
+// ** Class for Node in Graph ** //
+// ***************************** //
 class Peer {
-  // Compass Variables
-  double degrees;
-  double antipodalDegress;
+  // Bools for Graph
+  bool isSearching;
+  bool isBusy;
 
-  // Accelerometer Variables
-  double accelX;
-  double accelY;
-  double accelZ;
-  OrientationType orientation;
-  Status status;
-
-  // Location Variables
-
-  // Object Variables
+  // Management
   DateTime lastUpdated;
-  final Profile profile;
+  Profile profile;
 
-  // ** Constructer **
-  Peer(this.profile) {
-    this.lastUpdated = DateTime.now();
-    this.status = Status.Standby;
+  // Accelerometer Variables - Get/Set
+  AccelerometerEvent _motion;
+  OrientationType orientation;
+
+  // Motion Getter
+  AccelerometerEvent get motion {
+    return _motion;
   }
 
-  // ** Generate Peer from Map **
-  static Peer fromMap({Map data}) {
+  // Compass Variables - Get/Set
+  double _direction;
+  double antipodalDirection;
+
+  // Degrees Getter
+  double get direction {
+    return _direction;
+  }
+
+  // Enum Private Variables - Get/Set
+  PeerStatus _status;
+
+  // Status Getter
+  PeerStatus get status {
+    return _status;
+  }
+
+  // TODO: Location Variables
+
+  // ***************** //
+  // ** Constructer ** //
+  // ***************** //
+  Peer(this.profile) {
+    // Default Compass Variables
+    this.direction = 0;
+    this.antipodalDirection = 0;
+
+    // Defualt Motion Variables
+    this.orientation = OrientationType.Portrait;
+
+    // Default Object Variables
+    this.isSearching = false;
+    this.isBusy = false;
+    this.status = PeerStatus.Ready;
+  }
+
+  // ****************************** //
+  // ** Setters to Update Values ** //
+  // ****************************** //
+  // -- Setter to Update Direction --
+  set direction(double newDegrees) {
+    // Set New Direction
+    _direction = newDegrees;
+
+    // Find Antipodal Degrees
+    var adjusted;
+    switch (orientation) {
+      case OrientationType.LandscapeLeft:
+        // Set Adjusted
+        if (this.direction < 90) {
+          adjusted = 270 - this.direction;
+        } else {
+          adjusted = this.direction - 90;
+        }
+        break;
+      case OrientationType.LandscapeRight:
+        // Set Adjusted
+        if (this.direction < 270) {
+          adjusted = direction + 90;
+        } else {
+          adjusted = this.direction - 270;
+        }
+        break;
+      default:
+        this.antipodalDirection = -1;
+        break;
+    }
+
+    // Get Reciprocal of Adjusted
+    if (adjusted < 180) {
+      this.antipodalDirection = adjusted + 180;
+    } else {
+      this.antipodalDirection = adjusted - 180;
+    }
+  }
+
+  // -- Setter to Update Motion --
+  set motion(AccelerometerEvent newMotion) {
+    // Set New Motion Variables
+    _motion = newMotion;
+
+    // Detect if Landscape - Left
+    if (this.motion.x > 7.5) {
+      // Update Orientation
+      this.orientation = OrientationType.LandscapeLeft;
+      // Set Status
+      this.status = PeerStatus.Receiving;
+    }
+    // Detect if Landscape - Right
+    else if (this.motion.x < -7.5) {
+      // Update Orientation
+      this.orientation = OrientationType.LandscapeRight;
+      // Set Status
+      this.status = PeerStatus.Receiving;
+    }
+    // Detect if Tilted
+    else {
+      if (this.motion.y > 4.1) {
+        // Update Orientation
+        this.orientation = OrientationType.Portrait;
+        // Set Status
+        this.status = PeerStatus.Ready;
+      } else {
+        // Update Orientation
+        this.orientation = OrientationType.Tilted;
+        // Set Status
+        this.status = PeerStatus.Sending;
+      }
+    }
+  }
+
+  // -- Setter Method to Update Status --
+  set status(PeerStatus givenStatus) {
+    // Searching for Peer
+    if (givenStatus == PeerStatus.Sending ||
+        givenStatus == PeerStatus.Receiving) {
+      // Change Bools
+      this.isSearching = true;
+      this.isBusy = false;
+    }
+    // Busy interacting with peer
+    else if (givenStatus == PeerStatus.Busy) {
+      // Change Bools
+      this.isSearching = false;
+      this.isBusy = true;
+    }
+    // Default
+    else {
+      // Change Bools
+      this.isSearching = false;
+      this.isBusy = false;
+    }
+
+    // Update to Given Status
+    _status = givenStatus;
+
+    // Change Last Updated
+    this.lastUpdated = DateTime.now();
+  }
+
+  // *********************** //
+  // ** Object Generation ** //
+  // *********************** //
+  // -- Generate Peer from Map --
+  static Peer fromMap({Map map}) {
     // Extract Profile and Create Peer
-    Profile profile = Profile.fromMap(data["profile"]);
+    Profile profile = Profile.fromMap(map["profile"]);
     Peer newPeer = new Peer(profile);
 
-    // Add Direction from Data
-    newPeer.degrees = data["direction"]["degrees"];
-    newPeer.antipodalDegress = data["direction"]["antipodalDegress"];
+    // Add Motion from Map
+    newPeer.motion = new AccelerometerEvent(
+        map["motion"]["x"], map["motion"]["y"], map["motion"]["z"]);
 
-    // Add Motion from Data
-    newPeer.accelX = data["motion"]["accelX"];
-    newPeer.accelY = data["motion"]["accelY"];
-    newPeer.accelZ = data["motion"]["accelZ"];
-
-    // Set Orientation from String
-    newPeer.orientation = OrientationType.values
-        .firstWhere((e) => e.toString() == data["motion"]["orientation"]);
+    // Add Compass Data from Map
+    newPeer.direction = map["compass"]["direction"];
+    newPeer.antipodalDirection = map["compass"]["antipodalDegress"];
 
     // Set Status from String
-    newPeer.status =
-        Status.values.firstWhere((e) => e.toString() == data["status"]);
+    newPeer.status = enumValueFromString(map["status"], PeerStatus.values);
 
     return newPeer;
   }
 
-  // ** Method to Update Direction **
-  setDirection(double newDegrees) {
-    this.degrees = newDegrees;
-    this.antipodalDegress = getAntipodalDegrees(this.degrees, this.accelX);
-    this.lastUpdated = DateTime.now();
+  // -- Update Existing Peer with Map Data --
+  update({Map map}) {
+    // Add Motion from Data
+    this.motion = new AccelerometerEvent(
+        map["motion"]["x"], map["motion"]["y"], map["motion"]["z"]);
+
+    // Add Compass Data from Map
+    this.direction = map["compass"]["direction"];
+    this.antipodalDirection = map["compass"]["antipodalDegress"];
+
+    // Set Status from String
+    this.status = enumValueFromString(map["status"], PeerStatus.values);
   }
 
-  // ** Method to Update Motion **
-  setMotion(double newX, double newY, newZ) {
-    // Set Class Variables
-    this.accelX = newX;
-    this.accelY = newY;
-    this.accelZ = newZ;
-    this.orientation =
-        getOrientationFromAccelerometer(this.accelX, this.accelY);
-    this.lastUpdated = DateTime.now();
-
-    // Determine Status
-    if (this.isReceiving()) {
-      this.status = Status.Receiving;
-    } else if (this.isSending()) {
-      this.status = Status.Sending;
-    } else {
-      this.status = Status.Standby;
-    }
-  }
-
-  // ** Method to Get Antipodal Degrees **
-  getAntipodalDegrees(double degrees, double accelerometerX) {
-    // Verify Peer is Receiver
-    if (this.orientation == OrientationType.LandscapeLeft ||
-        this.orientation == OrientationType.LandscapeRight) {
-      // Right Tilt
-      if (accelerometerX < 0) {
-        // Adjust by Degrees
-        if (degrees < 270) {
-          // Get Temp Value
-          var temp = degrees + 90;
-
-          // Get Reciprocal of Adjusted
-          if (temp < 180) {
-            return temp + 180;
-          } else {
-            return temp - 180;
-          }
-        } else {
-          // Get Temp Value
-          var temp = degrees - 270;
-
-          // Get Reciprocal of Adjusted
-          if (temp < 180) {
-            return temp + 180;
-          } else {
-            return temp - 180;
-          }
-        }
-      }
-      // Left Tilt
-      else {
-        // Adjust by Degrees
-        if (degrees < 90) {
-          // Get Temp Value
-          var temp = 270 - degrees;
-
-          // Get Reciprocal of Adjusted
-          if (temp < 180) {
-            return temp + 180;
-          } else {
-            return temp - 180;
-          }
-        } else {
-          // Get Temp Value
-          var temp = degrees - 90;
-
-          // Get Reciprocal of Adjusted
-          if (temp < 180) {
-            return temp + 180;
-          } else {
-            return temp - 180;
-          }
-        }
-      }
-    } else {
-      return -1;
-    }
-  }
-
-  // ** Method to get Device Orientation **
-  getOrientationFromAccelerometer(double x, double y) {
-    // Set Sonar State by Accelerometer
-    if (x > 7.5) {
-      return OrientationType.LandscapeLeft;
-    } else if (x < -7.5) {
-      return OrientationType.LandscapeRight;
-    } else {
-      // Detect Position for Default and Tilt
-      if (y > 4.1) {
-        return OrientationType.Default;
-      } else {
-        return OrientationType.Tilt;
-      }
-    }
-  }
-
-  // ** BOOL: Check if Tilted or Landscape **
-  bool isSearching() {
-    return this.orientation == OrientationType.Tilt ||
-        this.orientation == OrientationType.LandscapeLeft ||
-        this.orientation == OrientationType.LandscapeRight;
-  }
-
-  // ** BOOL: Check if Tilted **
-  bool isSending() {
-    return this.orientation == OrientationType.Tilt;
-  }
-
-  // ** BOOL: Check if Landscape **
-  bool isReceiving() {
-    return this.orientation == OrientationType.LandscapeLeft ||
-        this.orientation == OrientationType.LandscapeRight;
-  }
-
-  // ** Export Peer to Map for Communication
+  // -- Export Peer to Map for Communication --
   toMap() {
     // Create Direction Map
-    var direction = {
-      "degrees": this.degrees,
-      "antipodalDegrees": this.antipodalDegress
+    var compass = {
+      "direction": this.direction,
+      "antipodalDegrees": this.antipodalDirection
     };
 
     // Create Motion Map
     var motion = {
-      "accelX": this.accelX,
-      "accelY": this.accelY,
-      "accelZ": this.accelZ,
-      "orientation": this.orientation.toString()
+      "x": this.motion.x,
+      "y": this.motion.y,
+      "z": this.motion.z,
+      "orientation": enumValueToString(this.orientation)
     };
 
     // Combine into Map
     return {
       'motion': motion,
-      'direction': direction,
-      'status': this.status.toString(),
+      'compass': compass,
+      'status': enumValueToString(this.status),
       'profile': this.profile.toMap()
     };
   }

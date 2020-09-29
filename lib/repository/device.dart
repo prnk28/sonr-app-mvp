@@ -39,6 +39,12 @@ class Device {
   PositionStatus status;
 
   Device(this.bloc) {
+    // ** Accelerometer Events **
+    accelerometerEvents.listen((newData) {
+      // Update Motion Var
+      motion = Motion.create(a: newData);
+    });
+
     // ** Directional Events **
     Compass()
         .compassUpdates(interval: Duration(milliseconds: 400))

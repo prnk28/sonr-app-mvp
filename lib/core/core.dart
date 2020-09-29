@@ -24,3 +24,11 @@ export 'package:soundpool/soundpool.dart';
 import 'package:logger/logger.dart';
 
 Logger log = Logger();
+
+// ** Enum Methods
+String enumValueToString(Object o) => o.toString().split('.').last;
+
+T enumValueFromString<T>(String key, Iterable<T> values) => values.firstWhere(
+      (v) => v != null && key == enumValueToString(v),
+      orElse: () => null,
+    );

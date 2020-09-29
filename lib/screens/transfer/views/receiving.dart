@@ -32,7 +32,7 @@ class ReceivingView extends StatelessWidget {
       return Text(
           state.currentMotion.state.toString() +
               " , " +
-              state.currentDirection.degrees.toString() +
+              state.currentDirection.direction.toString() +
               " , " +
               ", Match/Client Difference: " +
               state.matches.closestProfile()["difference"].toString(),
@@ -42,7 +42,7 @@ class ReceivingView extends StatelessWidget {
       return Text(
           state.currentMotion.state.toString() +
               " No Senders, " +
-              state.currentDirection.degrees.toString(),
+              state.currentDirection.direction.toString(),
           style: Design.text.header());
     }
   }

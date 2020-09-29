@@ -1,23 +1,9 @@
 part of 'web_bloc.dart';
 
-enum WebBlocStatus {
-  Initial,
-  Ready,
-  Loading,
-  Sending,
-  Receiving,
-  Pending,
-  PreTransfer,
-  Failed,
-  InProgress,
-  Complete
-}
-
 abstract class WebState extends Equatable {
-  const WebState({this.status});
-  final WebBlocStatus status;
+  const WebState();
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [];
 }
 
 // ********************
@@ -26,10 +12,10 @@ abstract class WebState extends Equatable {
 class Initial extends WebState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Initial(
-      {this.currentMotion,
-      this.currentDirection,
-      status: WebBlocStatus.Initial});
+  const Initial({
+    this.currentMotion,
+    this.currentDirection,
+  });
 }
 
 // ****************************
@@ -38,8 +24,7 @@ class Initial extends WebState {
 class Connected extends WebState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Connected(
-      {this.currentMotion, this.currentDirection, status: WebBlocStatus.Ready});
+  const Connected({this.currentMotion, this.currentDirection});
 }
 
 // ********************************
@@ -48,38 +33,35 @@ class Connected extends WebState {
 class Loading extends WebState {
   final Motion currentMotion;
   final Direction currentDirection;
-  const Loading(
-      {this.currentMotion,
-      this.currentDirection,
-      status: WebBlocStatus.Loading});
+  const Loading({this.currentMotion, this.currentDirection});
 }
 
 // **************************
 // ** In Sending Position ***
 // **************************
-class Sending extends WebState {
+class SendingPosition extends WebState {
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Sending(
-      {this.matches,
-      this.currentMotion,
-      this.currentDirection,
-      status: WebBlocStatus.Sending});
+  const SendingPosition({
+    this.matches,
+    this.currentMotion,
+    this.currentDirection,
+  });
 }
 
 // ****************************
 // ** In Receiving Position ***
 // ****************************
-class Receiving extends WebState {
+class ReceivingPosition extends WebState {
   final Circle matches;
   final Motion currentMotion;
   final Direction currentDirection;
-  const Receiving(
-      {this.matches,
-      this.currentMotion,
-      this.currentDirection,
-      status: WebBlocStatus.Receiving});
+  const ReceivingPosition({
+    this.matches,
+    this.currentMotion,
+    this.currentDirection,
+  });
 }
 
 // **********************************************
@@ -90,8 +72,11 @@ class Pending extends WebState {
   final FileTransfer file;
   final dynamic offer;
 
-  const Pending(
-      {this.match, this.file, this.offer, status: WebBlocStatus.Pending});
+  const Pending({
+    this.match,
+    this.file,
+    this.offer,
+  });
 }
 
 // *******************************************
@@ -100,8 +85,10 @@ class Pending extends WebState {
 class PreTransfer extends WebState {
   final dynamic profile;
   final String matchId;
-  const PreTransfer(
-      {this.profile, this.matchId, status: WebBlocStatus.PreTransfer});
+  const PreTransfer({
+    this.profile,
+    this.matchId,
+  });
 }
 
 // *******************************************
@@ -110,7 +97,10 @@ class PreTransfer extends WebState {
 class Failed extends WebState {
   final dynamic profile;
   final String matchId;
-  const Failed({this.profile, this.matchId, status: WebBlocStatus.Failed});
+  const Failed({
+    this.profile,
+    this.matchId,
+  });
 }
 
 // *********************************************
@@ -118,7 +108,9 @@ class Failed extends WebState {
 // *********************************************
 class InProgress extends WebState {
   final double progress;
-  const InProgress({this.progress, status: WebBlocStatus.InProgress});
+  const InProgress({
+    this.progress,
+  });
 }
 
 // *************************
@@ -129,6 +121,8 @@ class Complete extends WebState {
   final String deviceStatus;
   final File file;
 
-  const Complete(this.deviceStatus,
-      {this.file, status: WebBlocStatus.Complete});
+  const Complete(
+    this.deviceStatus, {
+    this.file,
+  });
 }

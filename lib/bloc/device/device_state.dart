@@ -11,16 +11,31 @@ abstract class DeviceState extends Equatable {
 class Inactive extends DeviceState {}
 
 // ** Can Record Data **
-class Ready extends DeviceState {}
-
-// ** Looking for Peers in General **
-class Searching extends DeviceState {}
+class Ready extends DeviceState {
+  final Peer user;
+  const Ready({this.user});
+}
 
 // ** Device is Tilted **
-class SendingPosition extends DeviceState {}
+class Sending extends DeviceState {
+  final Peer user;
+  const Sending({this.user});
+}
 
 // ** Device is Landscape **
-class ReceivingPosition extends DeviceState {}
+class Receiving extends DeviceState {
+  final Peer user;
+  const Receiving({this.user});
+}
+
+// ** Interacting with another Peer**
+class Busy extends DeviceState {
+  final Peer user;
+  const Busy({this.user});
+}
 
 // ** Device Refreshing Sensors **
-class Refreshing extends DeviceState {}
+class Refreshing extends DeviceState {
+  final Peer user;
+  const Refreshing({this.user});
+}
