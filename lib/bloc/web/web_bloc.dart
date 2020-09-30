@@ -13,7 +13,6 @@ part 'web_state.dart';
 // ***********************
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
-  Circle circle;
   Graph graph;
   StreamSubscription deviceSubscription;
 
@@ -26,7 +25,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   WebBloc(this.data, this.device, this.user) : super(null) {
     // ** Initialization
     graph = new Graph();
-    circle = new Circle(this);
 
     // ****************************** //
     // ** Device BLoC Subscription ** //
@@ -38,7 +36,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       }
       // Device is Tilted or Landscape
       else if (deviceState is Sending || deviceState is Receiving) {
-        add(RequestSearch(userNode: user.node));
+        add(UpdateNode());
       }
       // Interacting with another Peer
       else if (deviceState is Busy) {
@@ -58,17 +56,20 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // -- NODE APPEARED IN LOBBY --
     socket.on('NODE_ENTER', (data) {
-      //bloc.add(Reload(newDirection: bloc.device.
+      Peer peer = Peer.fromMap(data);
+      add(UpdateGraph(GraphUpdate.ENTER, peer));
     });
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('NODE_UPDATE', (data) {
-      //bloc.add(Reload(newDirection: bloc.device.
+      Peer peer = Peer.fromMap(data);
+      add(UpdateGraph(GraphUpdate.UPDATE, peer));
     });
 
     // -- NODE EXITED LOBBY --
     socket.on('NODE_EXIT', (data) {
-      //bloc.add(Reload(newDirection: bloc.device.
+      Peer peer = Peer.fromMap(data);
+      add(UpdateGraph(GraphUpdate.EXIT, peer));
     });
 
     // -- OFFER REQUEST --
@@ -122,8 +123,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Device Can See Updates
     if (event is Connect) {
       yield* _mapConnectToState(event);
-    } else if (event is RequestSearch) {
-      yield* _mapRequestSearchToState(event);
+    } else if (event is UpdateNode) {
+      yield* _mapUpdateNodeToState(event);
     } else if (event is UpdateGraph) {
       yield* _mapUpdateGraphToState(event);
     } else if (event is SendOffer) {
@@ -152,7 +153,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
     // Emit to Socket.io from User Peer Node
-    socket.emit("CONNECT", [user.node.locationToMap(), user.profile.toMap()]);
+    socket.emit("CONNECT", user.node.toMap());
 
     // Fake Select File in Queue
     File transferToSend =
@@ -163,18 +164,15 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Connected();
   }
 
-// **************************
-// ** RequestSearch Event ***
-// **************************
-  Stream<WebState> _mapRequestSearchToState(RequestSearch event) async* {
-    // Check Init Status
-    Map peerMap = user.node.toMap();
-
+// ***********************
+// ** UpdateNode Event ***
+// ***********************
+  Stream<WebState> _mapUpdateNodeToState(UpdateNode event) async* {
     // Set Delay
     await new Future.delayed(Duration(milliseconds: 500));
 
     // Send to Server
-    socket.emit("REQUEST_SEARCH", peerMap);
+    socket.emit("UPDATE", user.node.toMap());
 
     // Set Suspend state with lastState
     yield Searching();
@@ -184,16 +182,66 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** UpdateGraph Event ***
 // ************************
   Stream<WebState> _mapUpdateGraphToState(UpdateGraph event) async* {
-    // Modify Graph Relations
+    // -- Modify Graph Relations --
     switch (event.updateType) {
+      // -- Peer has Appeared --
       case GraphUpdate.ENTER:
-        // TODO: Handle this case.
+        // Check Node Status: Senders are From
+        if (user.node.status == PeerStatus.Sending &&
+            event.peer.status == PeerStatus.Receiving) {
+          // Calculate Difference
+          double difference =
+              user.node.direction - event.peer.antipodalDirection;
+
+          // Create Edge
+          graph.setToBy(user.node, event.peer, difference);
+        }
+        // Check Node Status: Receivers are To
+        else if (user.node.status == PeerStatus.Receiving &&
+            event.peer.status == PeerStatus.Sending) {
+          // Calculate Difference
+          double difference =
+              user.node.antipodalDirection - event.peer.direction;
+
+          // Create Edge
+          graph.setToBy(event.peer, user.node, difference);
+        }
         break;
+
+      // -- Peer Updated Sensory Input --
       case GraphUpdate.UPDATE:
-        // TODO: Handle this case.
+        // Check Node Status: Senders are From
+        if (user.node.status == PeerStatus.Sending &&
+            event.peer.status == PeerStatus.Receiving) {
+          // Calculate Difference
+          double difference =
+              user.node.direction - event.peer.antipodalDirection;
+
+          // Remove Peer Node
+          graph.remove(event.peer);
+
+          // Create Edge
+          graph.setToBy(user.node, event.peer, difference);
+        }
+        // Check Node Status: Receivers are To
+        else if (user.node.status == PeerStatus.Receiving &&
+            event.peer.status == PeerStatus.Sending) {
+          // Calculate Difference
+          double difference =
+              user.node.antipodalDirection - event.peer.direction;
+
+          // Remove Peer Node
+          graph.remove(event.peer);
+
+          // Create Edge
+          graph.setToBy(event.peer, user.node, difference);
+        }
         break;
+
+      // Peer Left Lobby
       case GraphUpdate.EXIT:
-        // TODO: Handle this case.
+        // Remove Edge and Object
+        graph.remove(event.peer);
         break;
     }
 
@@ -205,28 +253,36 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** SendOffer Event ***
 // ***********************
   Stream<WebState> _mapSendOfferToState(SendOffer event) async* {
-    // Set Peer
-    rtcSession.matchId = circle.closestId();
+    // Update Node
+    user.node.status = PeerStatus.Busy;
+    add(UpdateNode());
+
+    // Set Match
+    // rtcSession.matchId = circle.closestId();
 
     // Create Offer and Emit
-    rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
+    // rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
 
     // Device Pending State
-    yield Pending(match: circle.closestProfile());
+    // yield Pending(match: circle.closestProfile());
   }
 
 // ***********************
 // ** Authorize Event ***
 // ***********************
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
+    // Update Node
+    user.node.status = PeerStatus.Busy;
+    add(UpdateNode());
+
     // Set Peer
-    rtcSession.matchId = circle.closestId();
+    //rtcSession.matchId = circle.closestId();
 
     // Create Offer and Emit
-    rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
+    //rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
 
     // Device Pending State
-    yield Pending(match: circle.closestProfile());
+    //yield Pending(match: circle.closestProfile());
   }
 
 // *********************** //
@@ -236,7 +292,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // User ACCEPTED Transfer Request
     if (event.decision) {
       // Set Offered and Peer
-      rtcSession.matchId = event.profile["id"];
+      rtcSession.matchId = event.match.id;
 
       // Add Incoming File Info
       data.add(QueueFile(
@@ -253,7 +309,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       rtcSession.matchId = null;
 
       // Send Decision
-      socket.emit("DECLINE", event.matchId);
+      socket.emit("DECLINE", event.match.id);
       add(Complete(resetSession: true));
     }
   }
@@ -277,7 +333,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     rtcSession.matchId = null;
 
     // Emit Decision to Server
-    yield Failed(profile: event.profile, matchId: event.matchId);
+    yield Failed(profile: event.match.profile, matchId: event.match.id);
   }
 
 // *********************
@@ -305,7 +361,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapCompleteToState(Complete event) async* {
     // Check Reset Connection
     if (event.resetConnection) {
-      socket.emit("RESET");
+      socket.emit("CLOSE", user.node.toMap());
     }
 
     // Check Reset RTC Session
@@ -314,8 +370,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       rtcSession.matchId = null;
     }
 
-    // Reset Graph
-    circle.reset();
+    // Reset Node
+    user.node.status = PeerStatus.Ready;
+    add(UpdateNode());
 
     // Set Delay
     await new Future.delayed(Duration(seconds: 1));
@@ -338,9 +395,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       rtcSession.close();
       rtcSession.matchId = null;
     }
-
-    // Reset Graph
-    circle.reset();
 
     // Set Delay
     await new Future.delayed(Duration(seconds: 1));

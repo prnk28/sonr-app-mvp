@@ -32,6 +32,16 @@ class Metadata extends HiveObject {
     var uuid = Uuid();
     id = uuid.v1();
   }
+
+  // Send with Offer
+  toFileInfo(chunksTotal) {
+    return {
+      "name": name,
+      "size": size,
+      "type": type,
+      "chunks_total": chunksTotal
+    };
+  }
 }
 
 class MetadataAdapter extends TypeAdapter<Metadata> {

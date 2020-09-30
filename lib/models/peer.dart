@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/core/core.dart';
 
 import 'models.dart';
@@ -62,6 +63,7 @@ class Peer {
   }
 
   // Location Variables
+  Position location;
   double accuracy;
   double altitude;
   double latitude;
@@ -188,10 +190,11 @@ class Peer {
   // ** Object Generation ** //
   // *********************** //
   // -- Generate Peer from Map --
-  static Peer fromMap({Map map}) {
+  static Peer fromMap(Map map) {
     // Extract Profile and Create Peer
     Profile profile = Profile.fromMap(map["profile"]);
     Peer newPeer = new Peer(profile);
+    newPeer.id = map["id"];
 
     // Add Motion from Map
     newPeer.motion = new AccelerometerEvent(
@@ -214,17 +217,16 @@ class Peer {
   }
 
   // -- Update Existing Peer with Map Data --
-  update({Map map}) {
+  update({Map motion, Map compass, String status}) {
     // Add Motion from Data
-    this.motion = new AccelerometerEvent(
-        map["motion"]["x"], map["motion"]["y"], map["motion"]["z"]);
+    this.motion = new AccelerometerEvent(motion["x"], motion["y"], motion["z"]);
 
     // Add Compass Data from Map
-    this.direction = map["compass"]["direction"];
-    this.antipodalDirection = map["compass"]["antipodalDegress"];
+    this.direction = compass["direction"];
+    this.antipodalDirection = compass["antipodalDegress"];
 
     // Set Status from String
-    this.status = enumFromString(map["status"], PeerStatus.values);
+    this.status = enumFromString(status, PeerStatus.values);
   }
 
   // -- Export Peer to Map for Communication --
@@ -253,39 +255,12 @@ class Peer {
 
     // Combine into Map
     return {
+      'id': id,
       'motion': motion,
       'compass': compass,
       'location': loaction,
       'status': enumAsString(this.status),
       'profile': this.profile.toMap()
-    };
-  }
-
-  // -- Export ONLY Compass Data --
-  compassToMap() {
-    return {
-      "direction": this.direction,
-      "antipodalDegrees": this.antipodalDirection
-    };
-  }
-
-  // -- Export ONLY Motion Data --
-  motionToMap() {
-    return {
-      "x": this.motion.x,
-      "y": this.motion.y,
-      "z": this.motion.z,
-      "orientation": enumAsString(this.orientation)
-    };
-  }
-
-  // -- Export ONLY Location Data --
-  locationToMap() {
-    return {
-      'accuracy': this.accuracy,
-      'altitude': this.altitude,
-      'latitude': this.latitude,
-      'longitude': this.longitude,
     };
   }
 }

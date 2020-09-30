@@ -19,22 +19,22 @@ class Connect extends WebEvent {
 }
 
 // Send Realtime Peer Data to Server
-class RequestSearch extends WebEvent {
-  final Peer userNode;
-  const RequestSearch({this.userNode});
+class UpdateNode extends WebEvent {
+  const UpdateNode();
 }
 
 // Update Graph with Peer Values
 class UpdateGraph extends WebEvent {
   final GraphUpdate updateType;
   final Peer peer;
-  const UpdateGraph(this.updateType, {this.peer});
+
+  const UpdateGraph(this.updateType, this.peer);
 }
 
 // Sender Offers Invite for Authorization
 class SendOffer extends WebEvent {
-  final String id;
-  const SendOffer(this.id);
+  final Peer match;
+  const SendOffer(this.match);
 }
 
 // Receiver is Presented with Authorization
@@ -46,25 +46,22 @@ class Authorize extends WebEvent {
 // Receiver Gets Authorization Request
 class HandleOffer extends WebEvent {
   final bool decision;
-  final String matchId;
+  final Peer match;
   final dynamic offer;
-  final dynamic profile;
-  const HandleOffer(this.decision, {this.matchId, this.offer, this.profile});
+  const HandleOffer(this.decision, {this.match, this.offer});
 }
 
 // Receiver has Accepted
 class HandleAnswer extends WebEvent {
-  final dynamic profile;
+  final Peer match;
   final dynamic answer;
-  final String matchId;
-  const HandleAnswer(this.profile, this.matchId, this.answer);
+  const HandleAnswer(this.match, this.answer);
 }
 
 // Receiver has Declined
 class HandleDecline extends WebEvent {
-  final String matchId;
-  final dynamic profile;
-  const HandleDecline(this.profile, this.matchId);
+  final Peer match;
+  const HandleDecline(this.match);
 }
 
 // Sender Begins Transfer
@@ -74,17 +71,17 @@ class BeginTransfer extends WebEvent {
 
 // On Transfer Complete
 class HandleComplete extends WebEvent {
-  final String matchId;
-  final dynamic profile;
-  const HandleComplete(this.profile, this.matchId);
+  final Peer match;
+  const HandleComplete(this.match);
 }
 
 // Complete: Reset Connection - With Options
 class Complete extends WebEvent {
+  final Peer match;
   final bool resetSession;
   final bool resetConnection;
   final bool exit;
-  const Complete({this.resetConnection, this.resetSession, this.exit});
+  const Complete({this.match, this.resetConnection, this.resetSession, this.exit});
 }
 
 // Failed: Internal or Cancelled

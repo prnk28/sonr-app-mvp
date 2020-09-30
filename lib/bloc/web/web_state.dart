@@ -24,7 +24,8 @@ class Connected extends WebState {
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
 class Searching extends WebState {
-  const Searching();
+  final Peer closest;
+  const Searching({this.closest});
 }
 
 // **********************************************
@@ -61,12 +62,7 @@ class Offered extends WebState {
 // ** Post Authorization Receiver Declined ***
 // *******************************************
 class Failed extends WebState {
-  final dynamic profile;
-  final String matchId;
-  const Failed({
-    this.profile,
-    this.matchId,
-  });
+  const Failed();
 }
 
 // *********************************************
