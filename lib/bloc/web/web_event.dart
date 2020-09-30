@@ -34,19 +34,19 @@ class SendOffer extends WebEvent {
   const SendOffer(this.id);
 }
 
-// Receiver Gets Authorization Request
-class HandleOffer extends WebEvent {
-  final dynamic offer;
-  final dynamic profile;
-  const HandleOffer({this.offer, this.profile});
+// Populate Connections with Peers
+class HandlePeerUpdate extends WebEvent {
+  final List<dynamic> peers;
+  const HandlePeerUpdate(this.peers);
 }
 
 // Receiver Gets Authorization Request
-class SendAuthorization extends WebEvent {
+class HandleOffer extends WebEvent {
   final bool decision;
   final String matchId;
   final dynamic offer;
-  const SendAuthorization(this.decision, this.matchId, this.offer);
+  final dynamic profile;
+  const HandleOffer(this.decision, {this.matchId, this.offer, this.profile});
 }
 
 // Receiver has Accepted
@@ -55,6 +55,24 @@ class HandleAnswer extends WebEvent {
   final dynamic answer;
   final String matchId;
   const HandleAnswer(this.profile, this.matchId, this.answer);
+}
+
+// Add Ice Candidates
+class HandleCandidate extends WebEvent {
+  final dynamic data;
+  const HandleCandidate(this.data);
+}
+
+// Peer Connection has Left RTC Session
+class HandleLeave extends WebEvent {
+  final dynamic data;
+  const HandleLeave(this.data);
+}
+
+// Peer Connection has Closed RTC Session
+class HandleClose extends WebEvent {
+  final dynamic data;
+  const HandleClose(this.data);
 }
 
 // Receiver has Declined
@@ -69,12 +87,6 @@ class BeginTransfer extends WebEvent {
   const BeginTransfer();
 }
 
-// Sender Sent Transfer
-class HandleReceived extends WebEvent {
-  final File data;
-  const HandleReceived(this.data);
-}
-
 // On Transfer Complete
 class HandleComplete extends WebEvent {
   final String matchId;
@@ -82,7 +94,10 @@ class HandleComplete extends WebEvent {
   const HandleComplete(this.profile, this.matchId);
 }
 
-// Reset Connection
-class Reset extends WebEvent {
-  const Reset();
+// Complete: Reset Connection - With Options
+class Complete extends WebEvent {
+  final bool resetSession;
+  final bool resetConnection;
+  final bool exit;
+  const Complete({this.resetConnection, this.resetSession, this.exit});
 }

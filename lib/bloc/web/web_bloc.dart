@@ -15,19 +15,18 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   Circle circle;
   Graph graph;
+  StreamSubscription deviceSubscription;
 
   // Required Blocs
   final DataBloc data;
   final DeviceBloc device;
   final UserBloc user;
 
-  // Device State Subscription
-  StreamSubscription deviceSubscription;
-
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
     // ** Initialization
     graph = new Graph();
+    circle = new Circle(this);
 
     // ****************************** //
     // ** Device BLoC Subscription ** //
@@ -43,16 +42,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       }
       // Interacting with another Peer
       else if (deviceState is Busy) {
-        log.i("DeviceBloc State: Busy <- from WebBloc");
-      }
-      // Refreshing Sensors
-      else if (deviceState is Refreshing) {
-        log.i("DeviceBloc State: Refreshing <- from WebBloc");
       }
       // Inactive
-      else {
-        log.i("DeviceBloc State: Inactive <- from WebBloc");
-      }
+      else {}
     });
 
     // ***************************** //
@@ -64,124 +56,57 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       user.node.id = socket.id;
     });
 
-    // -- SOCKET::INFO --
-    socket.on('INFO', (data) {
-      //bloc.add(Reload(newDirection: bloc.device.direction));
-      // Add to Process
-      //log.v("Lobby Id: " + data);
+    // -- USER CONNECTED TO SOCKET SERVER --
+    socket.on('CONNECTED', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.
     });
 
-    // ** SOCKET::NEW_SENDER **
-    socket.on('NEW_SENDER', (data) {
-      // Send Last Recorded Direction to New Sender
-      //socket.emit("RECEIVING", [bloc.device.direction.toReceiveMap()]);
-      //bloc.add(Reload(newDirection: bloc.device.direction));
-      // Add to Process
-      //log.i("NEW_SENDER: " + data);
+    // -- NODE APPEARED IN LOBBY --
+    socket.on('NODE_ENTER', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.
     });
 
-    // ** SOCKET::SENDER_UPDATE **
-    socket.on('SENDER_UPDATE', (data) {
-      //bloc.circle.update(bloc.device.direction, data);
-      //bloc.add(Reload(newDirection: bloc.device.direction));
+    // -- UPDATE TO A NODE IN LOBBY --
+    socket.on('NODE_UPDATE', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.
     });
 
-    // ** SOCKET::SENDER_EXIT **
-    socket.on('SENDER_EXIT', (id) {
-      // Remove Sender from Circle
-      //bloc.circle.exit(id);
-      //bloc.add(Reload(newDirection: bloc.device.direction));
-
-      // Add to Process
-      //log.w("SENDER_EXIT: " + id);
+    // -- NODE EXITED LOBBY --
+    socket.on('NODE_EXIT', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.
     });
 
-    // ** SOCKET::NEW_RECEIVER **
-    socket.on('NEW_RECEIVER', (data) {
-      // Send Last Recorded Direction to New Receiver
-      //if (bloc.device.direction != null) {
-      //  socket.emit("SENDING", [bloc.device.direction.toReceiveMap()]);
-      // }
-
-      //bloc.add(Reload(newDirection: bloc.device.direction));
-
-      // Add to Process
-      //log.i("NEW_RECEIVER: " + data);
-    });
-
-    // ** SOCKET::RECEIVER_UPDATE **
-    socket.on('RECEIVER_UPDATE', (data) {
-      // bloc.circle.update(bloc.device.direction, data);
-      //bloc.add(Reload(newDirection: bloc.device.direction));
-    });
-
-    // ** SOCKET::RECEIVER_EXIT **
-    socket.on('RECEIVER_EXIT', (id) {
-      // Remove Receiver from Circle
-      //bloc.circle.exit(id);
-      //bloc.add(Reload(newDirection: bloc.device.direction));
-
-      // Add to Process
-      //log.w("RECEIVER_EXIT: " + id);
-    });
-
-    // ** SOCKET::SENDER_OFFERED **
-    socket.on('SENDER_OFFERED', (data) async {
-      //log.i("SENDER_OFFERED: " + data.toString());
-
-      // Call offered event
+    // -- OFFER REQUEST --
+    socket.on('PEER_OFFERED', (data) {
       //bloc.add(HandleOffer(offer: data[0], profile: data[1]));
     });
 
-    // ** SOCKET::NEW_CANDIDATE **
-    socket.on('NEW_CANDIDATE', (data) async {
-      //log.i("NEW_CANDIDATE: " + data.toString());
+    // -- MATCH ACCEPTED REQUEST --
+    socket.on('PEER_ANSWERED', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.
+    });
 
+    // -- MATCH DECLINED REQUEST --
+    socket.on('PEER_DECLINED', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.direction));
+    });
+
+    // -- MATCH ICE CANDIDATES --
+    socket.on('PEER_CANDIDATE', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.
       rtcSession.handleCandidate(data);
     });
 
-    // ** SOCKET::RECEIVER_ANSWERED **
-    socket.on('RECEIVER_ANSWERED', (data) async {
-      //log.i("RECEIVER_ANSWERED: " + data.toString());
-
-      dynamic _answer = data[0];
-
-      //bloc.add(HandleAnswer(bloc.circle.closestProfile(),
-      //bloc.circle.closestProfile()["id"], _answer));
+    // -- MATCH RECEIVED FILE --
+    socket.on('COMPLETE', (data) {
+      //bloc.add(Reload(newDirection: bloc.device.direction));
     });
 
-    // ** SOCKET::RECEIVER_DECLINED **
-    socket.on('RECEIVER_DECLINED', (data) {
-      dynamic matchId = data[0];
-
-      //bloc.add(HandleDecline(bloc.circle.closestProfile(), matchId));
-      // Add to Process
-      //log.w("RECEIVER_DECLINED: " + data.toString());
-    });
-
-    // ** SOCKET::NEXT_CHUNK **
-    socket.on('NEXT_CHUNK', (data) {
-      //bloc.session.fileManager.sendBlock(data);
-      // Add to Process
-      //log.i("RECEIVER_COMPLETED: " + data.toString());
-    });
-
-    // ** SOCKET::RECEIVER_COMPLETED **
-    socket.on('RECEIVER_COMPLETED', (data) {
-      dynamic matchId = data[0];
-
-      //bloc.add(HandleComplete(bloc.circle.closestProfile(), matchId));
-      // Add to Process
-      //log.i("RECEIVER_COMPLETED: " + data.toString());
-    });
-
-    // ** SOCKET::ERROR **
+    // -- ERROR OCCURRED (Cancelled, Internal) --
     socket.on('ERROR', (error) {
       // Add to Process
       log.e("ERROR: " + error);
     });
-
-    circle = new Circle(this);
   }
 
   // Initial State
@@ -208,19 +133,15 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapInviteToState(event);
     } else if (event is HandleOffer) {
       yield* _mapOfferedToState(event);
-    } else if (event is SendAuthorization) {
-      yield* _mapAuthorizeToState(event);
     } else if (event is HandleAnswer) {
       yield* _mapAcceptedToState(event);
     } else if (event is HandleDecline) {
       yield* _mapDeclinedToState(event);
     } else if (event is BeginTransfer) {
       yield* _mapTransferToState(event);
-    } else if (event is HandleReceived) {
-      yield* _mapReceivedToState(event);
     } else if (event is HandleComplete) {
       yield* _mapCompletedToState(event);
-    } else if (event is Reset) {
+    } else if (event is Complete) {
       yield* _mapResetToState(event);
     }
   }
@@ -246,7 +167,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // **************************
   Stream<WebState> _mapSendPeerToState(RequestSearch event) async* {
     // Check Init Status
-    Map peerMap = event.userNode.toMap();
+    Map peerMap = user.node.toMap();
 
     // Set Delay
     await new Future.delayed(Duration(milliseconds: 500));
@@ -259,11 +180,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // ***********************
-// ** SendInvite Event ***
+// ** SendOffer Event ***
 // ***********************
   Stream<WebState> _mapInviteToState(SendOffer event) async* {
     // Set Peer
-    rtcSession.peerId = circle.closestId();
+    rtcSession.matchId = circle.closestId();
 
     // Create Offer and Emit
     rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
@@ -272,40 +193,32 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Pending(match: circle.closestProfile());
   }
 
-// ********************
-// ** Offered Event ***
-// ********************
+// *********************** //
+// ** HandleOffer Event ** //
+// *********************** //
   Stream<WebState> _mapOfferedToState(HandleOffer event) async* {
-    // Set Offered and Peer
-    rtcSession.peerId = event.profile["id"];
-
-    // Add Incoming File Info
-    data.add(QueueFile(
-      receiving: true,
-    ));
-
-    // Device Pending State
-    yield Pending(match: circle.closestProfile(), offer: event.offer);
-  }
-
-// ******************************
-// ** SendAuthorization Event ***
-// ******************************
-  Stream<WebState> _mapAuthorizeToState(SendAuthorization event) async* {
-    // Yield Receiver Decision
+    // User ACCEPTED Transfer Request
     if (event.decision) {
+      // Set Offered and Peer
+      rtcSession.matchId = event.profile["id"];
+
+      // Add Incoming File Info
+      data.add(QueueFile(
+        receiving: true,
+      ));
+
       // Create Answer
       rtcSession.handleOffer(event.offer);
       yield Transferring();
     }
-    // Receiver Declined
+    // User DECLINED Transfer Request
     else {
       // Reset Peer
-      rtcSession.resetPeer();
+      rtcSession.matchId = null;
 
       // Send Decision
       socket.emit("DECLINE", event.matchId);
-      add(Reset());
+      add(Complete(resetSession: true));
     }
   }
 
@@ -325,7 +238,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // **************************
   Stream<WebState> _mapDeclinedToState(HandleDecline event) async* {
     // Reset Peer
-    rtcSession.resetPeer();
+    rtcSession.matchId = null;
 
     // Emit Decision to Server
     yield Failed(profile: event.profile, matchId: event.matchId);
@@ -343,33 +256,29 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // *********************
-// ** Received Event ***
-// *********************
-  Stream<WebState> _mapReceivedToState(HandleReceived event) async* {
-    // Emit Decision to Server
-    yield Complete("RECEIVER", file: event.data);
-  }
-
-// *********************
 // ** Completed Event ***
 // *********************
   Stream<WebState> _mapCompletedToState(HandleComplete event) async* {
     // Emit Decision to Server
-    yield Complete("SENDER");
+    yield Completed("SENDER");
   }
 
 // *********************
 // ** Reset Event ***
 // *********************
-  Stream<WebState> _mapResetToState(Reset event) async* {
-    // Reset Connection
-    socket.emit("RESET");
+  Stream<WebState> _mapResetToState(Complete event) async* {
+    // Check Reset Connection
+    if (event.resetConnection) {
+      socket.emit("RESET");
+    }
 
-    // Reset RTC
-    rtcSession.close();
-    rtcSession.resetPeer();
+    // Check Reset RTC Session
+    if (event.resetSession) {
+      rtcSession.close();
+      rtcSession.matchId = null;
+    }
 
-    // Reset Circle
+    // Reset Graph
     circle.reset();
 
     // Set Delay

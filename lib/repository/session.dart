@@ -5,7 +5,6 @@ import 'package:sonar_app/repository/repository.dart';
 // *******************
 enum SignalingState {
   CallStateNew,
-  CallStateRinging,
   CallStateInvite,
   CallStateConnected,
   CallStateBye,
@@ -13,26 +12,6 @@ enum SignalingState {
   ConnectionClosed,
   ConnectionError,
 }
-
-// **********************
-// * Required RTC Maps **
-// **********************
-// ICE RTCConfiguration Map
-final configuration = {
-  'iceServers': [
-    //{"url": "stun:stun.l.google.com:19302"},
-    {'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
-  ]
-};
-
-// Create DC Constraints
-final constraints = {
-  'mandatory': {
-    'OfferToReceiveAudio': false,
-    'OfferToReceiveVideo': false,
-  },
-  'optional': [],
-};
 
 // *********************************
 // * Callbacks for Signaling API. **
@@ -48,12 +27,14 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 // * Initialization **
 // *******************
 class RTCSession {
-  // WebRTC Transfer Variables
-  String _sessionId;
-  Map _peerConnections = new Map<String, RTCPeerConnection>();
-  Map _dataChannels = new Map<String, RTCDataChannel>();
-  var _remoteCandidates = [];
-  String peerId;
+  // Management
+  String sessionId;
+  String matchId;
+
+  // WebRTC
+  Map peerConnections = new Map<String, RTCPeerConnection>();
+  Map dataChannels = new Map<String, RTCDataChannel>();
+  var remoteCandidates = [];
 
   // Callbacks
   OverrideSignalingStateCallback onStateChange;
@@ -78,22 +59,22 @@ class RTCSession {
     var id = data['from'];
     var description = data['description'];
     var sessionId = data['session_id'];
-    this._sessionId = sessionId;
+    this.sessionId = sessionId;
 
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateNew);
     }
 
-    var pc = await _createPeerConnection(id);
-    _peerConnections[id] = pc;
+    var pc = await initPeerConnection(id);
+    peerConnections[id] = pc;
     await pc.setRemoteDescription(
         new RTCSessionDescription(description['sdp'], description['type']));
-    await _createAnswer(id, pc);
-    if (this._remoteCandidates.length > 0) {
-      _remoteCandidates.forEach((candidate) async {
+    await createAnswer(id, pc);
+    if (this.remoteCandidates.length > 0) {
+      remoteCandidates.forEach((candidate) async {
         await pc.addCandidate(candidate);
       });
-      _remoteCandidates.clear();
+      remoteCandidates.clear();
     }
   }
 
@@ -101,7 +82,7 @@ class RTCSession {
     var id = data['from'];
     var description = data['description'];
 
-    var pc = _peerConnections[id];
+    var pc = peerConnections[id];
     if (pc != null) {
       await pc.setRemoteDescription(
           new RTCSessionDescription(description['sdp'], description['type']));
@@ -111,25 +92,25 @@ class RTCSession {
   void handleCandidate(data) async {
     var id = data['from'];
     var candidateMap = data['candidate'];
-    var pc = _peerConnections[id];
+    var pc = peerConnections[id];
     RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
         candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
     if (pc != null) {
       await pc.addCandidate(candidate);
     } else {
-      _remoteCandidates.add(candidate);
+      remoteCandidates.add(candidate);
     }
   }
 
   void handleLeave(data) {
     var id = data;
-    var pc = _peerConnections.remove(id);
-    _dataChannels.remove(id);
+    var pc = peerConnections.remove(id);
+    dataChannels.remove(id);
 
     if (pc != null) {
       pc.close();
     }
-    this._sessionId = null;
+    this.sessionId = null;
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateBye);
     }
@@ -137,77 +118,67 @@ class RTCSession {
 
   void handleClose(data) {
     var to = data['to'];
-    var sessionId = data['session_id'];
-    print('bye: ' + sessionId);
 
-    var pc = _peerConnections[to];
+    var pc = peerConnections[to];
     if (pc != null) {
       pc.close();
-      _peerConnections.remove(to);
+      peerConnections.remove(to);
     }
 
-    var dc = _dataChannels[to];
+    var dc = dataChannels[to];
     if (dc != null) {
       dc.close();
-      _dataChannels.remove(to);
+      dataChannels.remove(to);
     }
 
-    this._sessionId = null;
+    this.sessionId = null;
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateBye);
     }
   }
 
   void close() {
-    _peerConnections.forEach((key, pc) {
+    peerConnections.forEach((key, pc) {
       pc.close();
     });
+    matchId = null;
   }
 
-  void resetPeer() {
-    // Clear Peer
-    this.peerId = null;
-
-    // Clear Incoming/Outcoming
-    //fileManager.incoming.clear();
-    //fileManager.outgoing.clear();
-  }
-
-// *****************************
-// ** WebRTC Message Sending ***
-// *****************************
+// *********************
+// ** WebRTC Methods ***
+// *********************
   void invite(String peer, String fileInfo) {
-    peerId = peer;
-    this._sessionId = socket.id + '-' + peerId;
+    matchId = peer;
+    this.sessionId = socket.id + '-' + matchId;
 
     if (this.onStateChange != null) {
       this.onStateChange(SignalingState.CallStateNew);
     }
 
-    _createPeerConnection(peerId).then((pc) {
-      _peerConnections[peerId] = pc;
-      _createDataChannel(peerId, pc);
-      _createOffer(peerId, fileInfo, pc);
+    initPeerConnection(matchId).then((pc) {
+      peerConnections[matchId] = pc;
+      createDataChannel(matchId, pc);
+      createOffer(matchId, fileInfo, pc);
     });
   }
 
   void leave() {
     // Tell Peers youre leaving
     socket.emit('LEAVE', {
-      'session_id': this._sessionId,
+      'session_id': this.sessionId,
       'from': socket.id,
     });
 
     // Reset Current Peer
-    peerId = null;
+    matchId = null;
   }
 
 // ****************************
 // ** WebRTC Helper Methods ***
 // ****************************
-  _createPeerConnection(id) async {
+  initPeerConnection(id) async {
     RTCPeerConnection pc =
-        await createPeerConnection(configuration, constraints);
+        await createPeerConnection(RTC_CONFIG, RTC_CONSTRAINTS);
     pc.onIceCandidate = (candidate) {
       socket.emit('CANDIDATE', {
         'to': id,
@@ -217,46 +188,46 @@ class RTCSession {
           'sdpMid': candidate.sdpMid,
           'candidate': candidate.candidate,
         },
-        'session_id': this._sessionId,
+        'session_id': this.sessionId,
       });
     };
 
     pc.onIceConnectionState = (state) {};
 
     pc.onDataChannel = (channel) {
-      _addDataChannel(id, channel);
+      addDataChannel(id, channel);
     };
 
     return pc;
   }
 
-  _addDataChannel(id, RTCDataChannel channel) {
+  addDataChannel(id, RTCDataChannel channel) {
     channel.onDataChannelState = (e) {};
     channel.onMessage = (RTCDataChannelMessage data) {
       if (this.onDataChannelMessage != null)
         this.onDataChannelMessage(channel, data);
     };
-    _dataChannels[id] = channel;
+    dataChannels[id] = channel;
 
     if (this.onDataChannel != null) this.onDataChannel(channel);
   }
 
-  _createDataChannel(id, RTCPeerConnection pc, {label: 'fileTransfer'}) async {
+  createDataChannel(id, RTCPeerConnection pc, {label: 'fileTransfer'}) async {
     RTCDataChannelInit dataChannelDict = new RTCDataChannelInit();
     RTCDataChannel channel = await pc.createDataChannel(label, dataChannelDict);
-    _addDataChannel(id, channel);
+    addDataChannel(id, channel);
   }
 
-  _createOffer(String id, String fileInfo, RTCPeerConnection pc) async {
+  createOffer(String id, String fileInfo, RTCPeerConnection pc) async {
     try {
-      RTCSessionDescription s = await pc.createOffer(constraints);
+      RTCSessionDescription s = await pc.createOffer(RTC_CONSTRAINTS);
       pc.setLocalDescription(s);
 
       socket.emit('OFFER', {
         'to': id,
         'from': socket.id,
         'description': {'sdp': s.sdp, 'type': s.type},
-        'session_id': this._sessionId,
+        'session_id': this.sessionId,
         'file_info': fileInfo
       });
     } catch (e) {
@@ -264,16 +235,16 @@ class RTCSession {
     }
   }
 
-  _createAnswer(String id, RTCPeerConnection pc) async {
+  createAnswer(String id, RTCPeerConnection pc) async {
     try {
-      RTCSessionDescription s = await pc.createAnswer(constraints);
+      RTCSessionDescription s = await pc.createAnswer(RTC_CONSTRAINTS);
       pc.setLocalDescription(s);
 
       socket.emit('ANSWER', {
         'to': id,
         'from': socket.id,
         'description': {'sdp': s.sdp, 'type': s.type},
-        'session_id': this._sessionId,
+        'session_id': this.sessionId,
       });
     } catch (e) {
       print(e.toString());

@@ -23,6 +23,24 @@ const Map<String, dynamic> SOCKET_TRANSPORT = <String, dynamic>{
   'transports': ['websocket'],
 };
 
+// ** WebRTC Transport Settings **
+// ICE RTCConfiguration Map
+const RTC_CONFIG = {
+  'iceServers': [
+    //{"url": "stun:stun.l.google.com:19302"},
+    {'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
+  ]
+};
+
+// Create DC Constraints
+const RTC_CONSTRAINTS = {
+  'mandatory': {
+    'OfferToReceiveAudio': false,
+    'OfferToReceiveVideo': false,
+  },
+  'optional': [],
+};
+
 // ** HiveDB Box Names **
 const String CONTACT_BOX = "contactBox";
 const String PREFERENCES_BOX = "preferencesBox";

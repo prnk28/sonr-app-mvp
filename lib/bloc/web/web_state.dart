@@ -42,6 +42,21 @@ class Pending extends WebState {
   });
 }
 
+// ***************************************
+// ** Receiver has been offered a file ***
+// ***************************************
+class Offered extends WebState {
+  final dynamic matchId;
+  final Profile matchProfile;
+  final dynamic offer;
+
+  const Offered({
+    this.matchId,
+    this.matchProfile,
+    this.offer,
+  });
+}
+
 // *******************************************
 // ** Post Authorization Receiver Declined ***
 // *******************************************
@@ -64,12 +79,12 @@ class Transferring extends WebState {
 // *************************
 // ** Transfer Succesful ***
 // *************************
-class Complete extends WebState {
+class Completed extends WebState {
   // Sender/Receiver
   final String deviceStatus;
   final File file;
 
-  const Complete(
+  const Completed(
     this.deviceStatus, {
     this.file,
   });

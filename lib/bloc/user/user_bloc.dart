@@ -28,7 +28,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  // ***********************
+// ***********************
 // ** Initialize Event **
 // ***********************
   Stream<UserState> _mapInitializeState(Initialize event) async* {
@@ -69,8 +69,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Update Reference
     this.profile = event.data;
 
-      // Reinitialize User Node
-      node = new Peer(profile);
+    // Reinitialize User Node
+    node = new Peer(profile);
 
     // Profile Ready
     yield Online(profile);
