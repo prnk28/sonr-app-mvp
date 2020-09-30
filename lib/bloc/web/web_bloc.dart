@@ -333,7 +333,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     rtcSession.matchId = null;
 
     // Emit Decision to Server
-    yield Failed(profile: event.match.profile, matchId: event.match.id);
+    yield Failed();
   }
 
 // *********************
