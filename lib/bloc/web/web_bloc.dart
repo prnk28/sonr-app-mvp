@@ -133,6 +133,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapUpdateGraphToState(event);
     } else if (event is SendOffer) {
       yield* _mapSendOfferToState(event);
+    } else if (event is Authorize) {
+      yield* _mapAuthorizeToState(event);
     } else if (event is HandleOffer) {
       yield* _mapOfferedToState(event);
     } else if (event is HandleAnswer) {
@@ -144,7 +146,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     } else if (event is HandleComplete) {
       yield* _mapHandleCompleteToState(event);
     } else if (event is Complete) {
-      yield* _mapResetToState(event);
+      yield* _mapCompleteToState(event);
+    } else if (event is Fail) {
+      yield* _mapFailToState(event);
     }
   }
 
@@ -202,6 +206,20 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** SendOffer Event ***
 // ***********************
   Stream<WebState> _mapSendOfferToState(SendOffer event) async* {
+    // Set Peer
+    rtcSession.matchId = circle.closestId();
+
+    // Create Offer and Emit
+    rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
+
+    // Device Pending State
+    yield Pending(match: circle.closestProfile());
+  }
+
+// ***********************
+// ** Authorize Event ***
+// ***********************
+  Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
     // Set Peer
     rtcSession.matchId = circle.closestId();
 
@@ -283,9 +301,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // *********************
-// ** Reset Event ***
+// ** Complete Event ***
 // *********************
-  Stream<WebState> _mapResetToState(Complete event) async* {
+  Stream<WebState> _mapCompleteToState(Complete event) async* {
     // Check Reset Connection
     if (event.resetConnection) {
       socket.emit("RESET");
@@ -305,5 +323,30 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // Yield Ready
     yield Connected();
+  }
+
+  // *********************
+// ** Fail Event ***
+// *********************
+  Stream<WebState> _mapFailToState(Fail event) async* {
+    // Check Reset Connection
+    if (event.resetConnection) {
+      socket.emit("RESET");
+    }
+
+    // Check Reset RTC Session
+    if (event.resetSession) {
+      rtcSession.close();
+      rtcSession.matchId = null;
+    }
+
+    // Reset Graph
+    circle.reset();
+
+    // Set Delay
+    await new Future.delayed(Duration(seconds: 1));
+
+    // Yield Ready
+    yield Failed();
   }
 }

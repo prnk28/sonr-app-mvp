@@ -28,10 +28,16 @@ class UpdateGraph extends WebEvent {
   const UpdateGraph({this.peer});
 }
 
-// Sender Offfers Invite for Authorization
+// Sender Offers Invite for Authorization
 class SendOffer extends WebEvent {
   final String id;
   const SendOffer(this.id);
+}
+
+// Receiver is Presented with Authorization
+class Authorize extends WebEvent {
+  final bool decision;
+  const Authorize(this.decision);
 }
 
 // Receiver Gets Authorization Request
@@ -76,4 +82,12 @@ class Complete extends WebEvent {
   final bool resetConnection;
   final bool exit;
   const Complete({this.resetConnection, this.resetSession, this.exit});
+}
+
+// Failed: Internal or Cancelled
+class Fail extends WebEvent {
+  final bool resetSession;
+  final bool resetConnection;
+  final bool exit;
+  const Failed({this.resetConnection, this.resetSession, this.exit});
 }

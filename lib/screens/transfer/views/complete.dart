@@ -19,7 +19,7 @@ class CompleteView extends StatelessWidget {
         FloatingActionButton(
             child: Icon(Icons.done_all),
             onPressed: () {
-              sonarBloc.add(Reset());
+              sonarBloc.add(Complete());
             }),
       ]);
     } else {
@@ -31,7 +31,7 @@ class CompleteView extends StatelessWidget {
         FloatingActionButton(
             child: Icon(Icons.done_all),
             onPressed: () {
-              sonarBloc.add(Reset());
+              sonarBloc.add(Complete());
             }),
       ]);
     }
