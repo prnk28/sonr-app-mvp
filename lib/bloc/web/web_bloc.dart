@@ -128,19 +128,29 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     if (event is Connect) {
       yield* _mapConnectToState(event);
     } else if (event is RequestSearch) {
-      yield* _mapSendPeerToState(event);
+      yield* _mapRequestSearchToState(event);
+    } else if (event is UpdateGraph) {
+      yield* _mapUpdateGraphToState(event);
     } else if (event is SendOffer) {
-      yield* _mapInviteToState(event);
+      yield* _mapSendOfferToState(event);
+    } else if (event is HandlePeerUpdate) {
+      yield* _mapHandlePeerUpdateToState(event);
     } else if (event is HandleOffer) {
       yield* _mapOfferedToState(event);
     } else if (event is HandleAnswer) {
       yield* _mapAcceptedToState(event);
+    } else if (event is HandleCandidate) {
+      yield* _mapHandleCandidateToState(event);
+    } else if (event is HandleLeave) {
+      yield* _mapHandleLeaveToState(event);
+    } else if (event is HandleClose) {
+      yield* _mapHandleCloseToState(event);
     } else if (event is HandleDecline) {
       yield* _mapDeclinedToState(event);
     } else if (event is BeginTransfer) {
-      yield* _mapTransferToState(event);
+      yield* _mapBeginTransferToState(event);
     } else if (event is HandleComplete) {
-      yield* _mapCompletedToState(event);
+      yield* _mapHandleCompleteToState(event);
     } else if (event is Complete) {
       yield* _mapResetToState(event);
     }
@@ -165,7 +175,24 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // **************************
 // ** RequestSearch Event ***
 // **************************
-  Stream<WebState> _mapSendPeerToState(RequestSearch event) async* {
+  Stream<WebState> _mapRequestSearchToState(RequestSearch event) async* {
+    // Check Init Status
+    Map peerMap = user.node.toMap();
+
+    // Set Delay
+    await new Future.delayed(Duration(milliseconds: 500));
+
+    // Send to Server
+    socket.emit("REQUEST_SEARCH", peerMap);
+
+    // Set Suspend state with lastState
+    yield Searching();
+  }
+
+  // **************************
+// ** UpdateGraph Event ***
+// **************************
+  Stream<WebState> _mapUpdateGraphToState(UpdateGraph event) async* {
     // Check Init Status
     Map peerMap = user.node.toMap();
 
@@ -182,7 +209,21 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ***********************
 // ** SendOffer Event ***
 // ***********************
-  Stream<WebState> _mapInviteToState(SendOffer event) async* {
+  Stream<WebState> _mapSendOfferToState(SendOffer event) async* {
+    // Set Peer
+    rtcSession.matchId = circle.closestId();
+
+    // Create Offer and Emit
+    rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
+
+    // Device Pending State
+    yield Pending(match: circle.closestProfile());
+  }
+
+// *****************************
+// ** HandlePeerUpdate Event ***
+// *****************************
+  Stream<WebState> _mapHandlePeerUpdateToState(HandlePeerUpdate event) async* {
     // Set Peer
     rtcSession.matchId = circle.closestId();
 
@@ -233,6 +274,39 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Transferring();
   }
 
+// *************************
+// ** HandleCandidate Event ***
+// *************************
+  Stream<WebState> _mapHandleCandidateToState(HandleCandidate event) async* {
+    // Handle Answer
+    //rtcSession.handleAnswer(event.answer);
+
+    // Begin Transfer
+    yield Transferring();
+  }
+
+// *************************
+// ** HandleLeave Event ***
+// *************************
+  Stream<WebState> _mapHandleLeaveToState(HandleLeave event) async* {
+    // Handle Answer
+    //rtcSession.handleAnswer(event.answer);
+
+    // Begin Transfer
+    yield Transferring();
+  }
+
+// *************************
+// ** HandleClose Event ***
+// *************************
+  Stream<WebState> _mapHandleCloseToState(HandleClose event) async* {
+    // Handle Answer
+    //rtcSession.handleAnswer(event.answer);
+
+    // Begin Transfer
+    yield Transferring();
+  }
+
 // **************************
 // ** HandleDecline Event ***
 // **************************
@@ -245,9 +319,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // *********************
-// ** Transfer Event ***
+// ** BeginTransfer Event ***
 // *********************
-  Stream<WebState> _mapTransferToState(BeginTransfer event) async* {
+  Stream<WebState> _mapBeginTransferToState(BeginTransfer event) async* {
     // Begin Transfer
     data.add(SendChunks());
 
@@ -256,9 +330,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // *********************
-// ** Completed Event ***
+// ** HandleComplete Event ***
 // *********************
-  Stream<WebState> _mapCompletedToState(HandleComplete event) async* {
+  Stream<WebState> _mapHandleCompleteToState(HandleComplete event) async* {
     // Emit Decision to Server
     yield Completed("SENDER");
   }
