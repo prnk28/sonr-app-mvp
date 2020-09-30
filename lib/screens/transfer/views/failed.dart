@@ -9,7 +9,7 @@ class FailedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Set Display Timer
-    sonarBloc.add(Reset());
+    sonarBloc.add(Fail());
 
     // Yield Decline Result
     return Text(

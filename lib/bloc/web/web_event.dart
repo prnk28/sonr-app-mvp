@@ -1,5 +1,7 @@
 part of 'web_bloc.dart';
 
+enum GraphUpdate { ENTER, UPDATE, EXIT }
+
 abstract class WebEvent extends Equatable {
   const WebEvent();
 
@@ -24,8 +26,9 @@ class RequestSearch extends WebEvent {
 
 // Update Graph with Peer Values
 class UpdateGraph extends WebEvent {
+  final GraphUpdate updateType;
   final Peer peer;
-  const UpdateGraph({this.peer});
+  const UpdateGraph(this.updateType, {this.peer});
 }
 
 // Sender Offers Invite for Authorization
@@ -89,5 +92,5 @@ class Fail extends WebEvent {
   final bool resetSession;
   final bool resetConnection;
   final bool exit;
-  const Failed({this.resetConnection, this.resetSession, this.exit});
+  const Fail({this.resetConnection, this.resetSession, this.exit});
 }

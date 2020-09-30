@@ -50,14 +50,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ***************************** //
     // ** Socket Message Listener ** //
     // ***************************** //
-    // -- Connected --
-    socket.on('connect', (_) async {
-      log.v("Connected to Socket");
-      user.node.id = socket.id;
-    });
-
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
+      user.node.id = socket.id;
       //bloc.add(Reload(newDirection: bloc.device.
     });
 
@@ -185,18 +180,22 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Searching();
   }
 
-  // **************************
+// ************************
 // ** UpdateGraph Event ***
-// **************************
+// ************************
   Stream<WebState> _mapUpdateGraphToState(UpdateGraph event) async* {
-    // Check Init Status
-    Map peerMap = user.node.toMap();
-
-    // Set Delay
-    await new Future.delayed(Duration(milliseconds: 500));
-
-    // Send to Server
-    socket.emit("REQUEST_SEARCH", peerMap);
+    // Modify Graph Relations
+    switch (event.updateType) {
+      case GraphUpdate.ENTER:
+        // TODO: Handle this case.
+        break;
+      case GraphUpdate.UPDATE:
+        // TODO: Handle this case.
+        break;
+      case GraphUpdate.EXIT:
+        // TODO: Handle this case.
+        break;
+    }
 
     // Set Suspend state with lastState
     yield Searching();
