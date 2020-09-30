@@ -34,12 +34,6 @@ class SendOffer extends WebEvent {
   const SendOffer(this.id);
 }
 
-// Populate Connections with Peers
-class HandlePeerUpdate extends WebEvent {
-  final List<dynamic> peers;
-  const HandlePeerUpdate(this.peers);
-}
-
 // Receiver Gets Authorization Request
 class HandleOffer extends WebEvent {
   final bool decision;
@@ -55,24 +49,6 @@ class HandleAnswer extends WebEvent {
   final dynamic answer;
   final String matchId;
   const HandleAnswer(this.profile, this.matchId, this.answer);
-}
-
-// Add Ice Candidates
-class HandleCandidate extends WebEvent {
-  final dynamic data;
-  const HandleCandidate(this.data);
-}
-
-// Peer Connection has Left RTC Session
-class HandleLeave extends WebEvent {
-  final dynamic data;
-  const HandleLeave(this.data);
-}
-
-// Peer Connection has Closed RTC Session
-class HandleClose extends WebEvent {
-  final dynamic data;
-  const HandleClose(this.data);
 }
 
 // Receiver has Declined

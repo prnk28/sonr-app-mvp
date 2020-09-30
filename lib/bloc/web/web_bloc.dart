@@ -133,18 +133,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapUpdateGraphToState(event);
     } else if (event is SendOffer) {
       yield* _mapSendOfferToState(event);
-    } else if (event is HandlePeerUpdate) {
-      yield* _mapHandlePeerUpdateToState(event);
     } else if (event is HandleOffer) {
       yield* _mapOfferedToState(event);
     } else if (event is HandleAnswer) {
       yield* _mapAcceptedToState(event);
-    } else if (event is HandleCandidate) {
-      yield* _mapHandleCandidateToState(event);
-    } else if (event is HandleLeave) {
-      yield* _mapHandleLeaveToState(event);
-    } else if (event is HandleClose) {
-      yield* _mapHandleCloseToState(event);
     } else if (event is HandleDecline) {
       yield* _mapDeclinedToState(event);
     } else if (event is BeginTransfer) {
@@ -220,20 +212,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Pending(match: circle.closestProfile());
   }
 
-// *****************************
-// ** HandlePeerUpdate Event ***
-// *****************************
-  Stream<WebState> _mapHandlePeerUpdateToState(HandlePeerUpdate event) async* {
-    // Set Peer
-    rtcSession.matchId = circle.closestId();
-
-    // Create Offer and Emit
-    rtcSession.invite(this.circle.closestId(), data.outgoing.first.toString());
-
-    // Device Pending State
-    yield Pending(match: circle.closestProfile());
-  }
-
 // *********************** //
 // ** HandleOffer Event ** //
 // *********************** //
@@ -269,39 +247,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapAcceptedToState(HandleAnswer event) async* {
     // Handle Answer
     rtcSession.handleAnswer(event.answer);
-
-    // Begin Transfer
-    yield Transferring();
-  }
-
-// *************************
-// ** HandleCandidate Event ***
-// *************************
-  Stream<WebState> _mapHandleCandidateToState(HandleCandidate event) async* {
-    // Handle Answer
-    //rtcSession.handleAnswer(event.answer);
-
-    // Begin Transfer
-    yield Transferring();
-  }
-
-// *************************
-// ** HandleLeave Event ***
-// *************************
-  Stream<WebState> _mapHandleLeaveToState(HandleLeave event) async* {
-    // Handle Answer
-    //rtcSession.handleAnswer(event.answer);
-
-    // Begin Transfer
-    yield Transferring();
-  }
-
-// *************************
-// ** HandleClose Event ***
-// *************************
-  Stream<WebState> _mapHandleCloseToState(HandleClose event) async* {
-    // Handle Answer
-    //rtcSession.handleAnswer(event.answer);
 
     // Begin Transfer
     yield Transferring();
