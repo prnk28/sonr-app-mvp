@@ -2,7 +2,7 @@ import 'repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
-class HiveManager {
+class HiveProvider {
   // ******************************** //
   // ** Add/Update Persistent Data ** //
   // ******************************** //

@@ -1,6 +1,6 @@
 // Directory Exports
 export 'session.dart';
-export 'hivemanager.dart';
+export 'hiveprovider.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
 export 'dart:typed_data';
@@ -12,7 +12,7 @@ export 'package:path_provider/path_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:sonar_app/repository/session.dart';
 
-import 'hivemanager.dart';
+import 'hiveprovider.dart';
 
 // ** Constants for WebRTC **
 const CHUNK_SIZE = 16000; // MTU in Bytes
@@ -52,4 +52,4 @@ const String FILE_BOX = "fileBox";
 // Initialize Repositories
 Socket socket = io('http://match.sonr.io', SOCKET_TRANSPORT);
 RTCSession rtcSession = new RTCSession();
-HiveManager localData = new HiveManager();
+HiveProvider localData = new HiveProvider();

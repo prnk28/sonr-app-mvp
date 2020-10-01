@@ -17,15 +17,6 @@ class Profile extends HiveObject {
   // ***********************
   // ** Object Generation **
   // ***********************
-  // Fake Data Method
-  static Profile fakeProfile() {
-    Profile fake = Profile();
-    fake.firstName = "Name";
-    fake.lastName = "Brax";
-    fake.profilePicture = new List<int>();
-    return fake;
-  }
-
   // Create Object from Events
   @HiveType()
   static Profile fromMap(Map data) {
