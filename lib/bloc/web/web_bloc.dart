@@ -245,8 +245,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         break;
     }
 
+    // Update Closest Neighbor
+    PathFinder finder = new PathFinder(graph, user.node);
+
     // Set Suspend state with lastState
-    yield Searching();
+    yield Searching(closest: finder.closestNeighbor);
   }
 
 // ***********************
