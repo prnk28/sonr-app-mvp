@@ -60,7 +60,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     }
 
     // Update State
-    add(Update());
+    add(Update(false));
     yield Refreshing();
   }
 

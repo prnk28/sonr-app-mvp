@@ -1,5 +1,12 @@
 import 'package:sonar_app/screens/screens.dart';
-export 'views/views.dart';
+
+// Views in Screen
+part 'complete.dart';
+part 'confirm.dart';
+part 'progress.dart';
+part 'receiving.dart';
+part 'sending.dart';
+part 'waiting.dart';
 
 class TransferScreen extends StatelessWidget {
   @override
@@ -16,6 +23,12 @@ class TransferScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
+                // -- Searching State--
+                if (state is Searching) {
+                  // Check if Receiver
+                  if (state.isReceiver) {
+                  } else {}
+                }
                 // Initialize Client
                 return NeumorphicProgressIndeterminate();
               },

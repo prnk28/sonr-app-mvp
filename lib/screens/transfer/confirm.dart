@@ -1,11 +1,10 @@
-import 'package:sonar_app/repository/repository.dart';
-import 'package:sonar_app/screens/screens.dart';
+part of 'transfer.dart';
 
-class PendingView extends StatelessWidget {
+class ConfirmView extends StatelessWidget {
   final Pending state;
   final WebBloc sonarBloc;
 
-  const PendingView({Key key, this.state, this.sonarBloc}) : super(key: key);
+  const ConfirmView({Key key, this.state, this.sonarBloc}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // if (sonarBloc.device.status == PositionStatus.SENDER) {

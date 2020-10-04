@@ -1,7 +1,7 @@
 part of 'web_bloc.dart';
 
 enum GraphUpdate { ENTER, UPDATE, EXIT }
-enum HandleType { OFFER, ANSWER, DECLINED, COMPLETE }
+enum MessageKind { OFFER, ANSWER, DECLINED, COMPLETE, LEAVE, CLOSE }
 
 abstract class WebEvent extends Equatable {
   const WebEvent();
@@ -49,7 +49,7 @@ class Authorize extends WebEvent {
 
 // Create Offer/Answer/Decline
 class Create extends WebEvent {
-  final HandleType type;
+  final MessageKind type;
   final RTCPeerConnection pc;
   final Peer match;
   final Metadata metadata;
@@ -59,7 +59,7 @@ class Create extends WebEvent {
 
 // Handle Offer/Answer/Decline
 class Handle extends WebEvent {
-  final HandleType type;
+  final MessageKind type;
   final Peer match;
   final dynamic message;
   const Handle(this.type, {this.match, this.message});

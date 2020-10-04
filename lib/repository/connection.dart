@@ -13,8 +13,7 @@ class Connection {
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
       user.node.id = socket.id;
-      log.i(socket.id.toString());
-      
+      log.i(data.toString());
     });
 
     // -- NODE APPEARED IN LOBBY --
@@ -38,19 +37,19 @@ class Connection {
 
     // -- OFFER REQUEST --
     socket.on('PEER_OFFERED', (data) {
-      web.add(Handle(HandleType.OFFER,
+      web.add(Handle(MessageKind.OFFER,
           match: Peer.fromMap(data["from"]), message: data));
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('PEER_ANSWERED', (data) {
-      web.add(Handle(HandleType.ANSWER,
+      web.add(Handle(MessageKind.ANSWER,
           match: Peer.fromMap(data["from"]), message: data));
     });
 
     // -- MATCH DECLINED REQUEST --
     socket.on('PEER_DECLINED', (data) {
-      web.add(Handle(HandleType.DECLINED));
+      web.add(Handle(MessageKind.DECLINED));
     });
 
     // -- MATCH ICE CANDIDATES --
@@ -60,7 +59,7 @@ class Connection {
 
     // -- MATCH RECEIVED FILE --
     socket.on('COMPLETE', (data) {
-      web.add(Handle(HandleType.COMPLETE,
+      web.add(Handle(MessageKind.COMPLETE,
           match: Peer.fromMap(data["from"]), message: data));
     });
 

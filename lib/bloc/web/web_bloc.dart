@@ -32,12 +32,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ** Device BLoC Subscription ** //
     // ****************************** //
     deviceSubscription = device.listen((DeviceState deviceState) {
-      // Device can Record Data/ Portrait
-      if (deviceState is Ready) {
-        log.i("DeviceBloc State: Ready <- from WebBloc");
-      }
       // Device is Tilted or Landscape
-      else if (deviceState is Sending || deviceState is Receiving) {
+      if (deviceState is Sending || deviceState is Receiving) {
         add(SendNode());
       }
       // Interacting with another Peer
@@ -112,7 +108,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     socket.emit("UPDATE", user.node.toMap());
 
     // Yield Searching with Closest Neighbor
-    yield Searching(closest: new PathFinder(graph, user.node).closestNeighbor);
+    if (user.node.status == PeerStatus.Sending) {
+      yield Searching(false,
+          closest: new PathFinder(graph, user.node).closestNeighbor);
+    } else if (user.node.status == PeerStatus.Receiving) {
+      yield Searching(true,
+          closest: new PathFinder(graph, user.node).closestNeighbor);
+    }
   }
 
 // ************************
@@ -165,7 +167,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
 
     // Yield Searching with Closest Neighbor
-    yield Searching(closest: new PathFinder(graph, user.node).closestNeighbor);
+    if (user.node.status == PeerStatus.Sending) {
+      yield Searching(false,
+          closest: new PathFinder(graph, user.node).closestNeighbor);
+    } else if (user.node.status == PeerStatus.Receiving) {
+      yield Searching(true,
+          closest: new PathFinder(graph, user.node).closestNeighbor);
+    }
   }
 
 // *******************
@@ -173,7 +181,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapInviteToState(Invite event) async* {
     // Update Node and Device State
-    device.add(Update(isNowBusy: true));
+    device.add(Update(true));
     add(SendNode());
 
     // Set Session Id
@@ -188,7 +196,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       session.createDataChannel(event.match.id, pc);
 
       // Emit Offer
-      add(Create(HandleType.OFFER,
+      add(Create(MessageKind.OFFER,
           metadata: event.metadata, pc: pc, match: event.match));
     });
 
@@ -225,7 +233,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       await pc.setRemoteDescription(
           new RTCSessionDescription(description['sdp'], description['type']));
 
-      add(Create(HandleType.ANSWER, pc: pc, match: event.match));
+      add(Create(MessageKind.ANSWER, pc: pc, match: event.match));
 
       yield Transferring();
     }
@@ -243,7 +251,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapCreateToState(Create event) async* {
     // Check Event Type
     switch (event.type) {
-      case HandleType.OFFER:
+      case MessageKind.OFFER:
         try {
           // Create Session Description and Set
           RTCSessionDescription s = await event.pc.createOffer(RTC_CONSTRAINTS);
@@ -261,7 +269,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
           print(e.toString());
         }
         break;
-      case HandleType.ANSWER:
+      case MessageKind.ANSWER:
         try {
           // Create Session Description and Set
           RTCSessionDescription s =
@@ -303,9 +311,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // Check Event Type
     switch (event.type) {
-      case HandleType.OFFER:
+      case MessageKind.OFFER:
         // Update Device Status
-        device.add(Update(isNowBusy: true));
+        device.add(Update(true));
 
         // Send Node
         add(SendNode());
@@ -314,7 +322,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
           match: event.match,
         );
         break;
-      case HandleType.ANSWER:
+      case MessageKind.ANSWER:
         // Handle Answer
         var id = msg['from'];
         var description = msg['description'];
@@ -329,11 +337,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         data.add(SendChunks());
         yield Transferring();
         break;
-      case HandleType.DECLINED:
+      case MessageKind.DECLINED:
         add(Fail());
         break;
-      case HandleType.COMPLETE:
+      case MessageKind.COMPLETE:
         add(Complete());
+        break;
+      default:
         break;
     }
   }

@@ -22,5 +22,5 @@ class GetLocation extends DeviceEvent {
 // Updates to State based on Refreshed Data
 class Update extends DeviceEvent {
   final bool isNowBusy;
-  const Update({this.isNowBusy});
+  const Update(this.isNowBusy);
 }

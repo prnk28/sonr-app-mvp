@@ -25,7 +25,8 @@ class Connected extends WebState {
 // *****************************************
 class Searching extends WebState {
   final Peer closest;
-  const Searching({this.closest});
+  final bool isReceiver;
+  const Searching(this.isReceiver, {this.closest});
 }
 
 // **********************************************

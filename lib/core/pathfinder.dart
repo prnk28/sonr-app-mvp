@@ -25,7 +25,7 @@ class PathFinder {
     // Utilizes Froms
     if (userNode.status == PeerStatus.Receiving) {
       // Get Senders
-      Iterable<Peer> senders = _graph.linkFroms(userNode);
+      var senders = _graph.linkFroms(userNode);
 
       // Iterate
       for (Peer sender in senders) {
@@ -42,7 +42,7 @@ class PathFinder {
     // Utilizes Tos
     else if (userNode.status == PeerStatus.Sending) {
       // Get Receivers
-      Iterable<Peer> receivers = _graph.linkTos(userNode);
+      var receivers = _graph.linkTos(userNode);
 
       // Iterate
       for (Peer receiver in receivers) {

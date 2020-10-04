@@ -1,5 +1,4 @@
-import 'dart:io';
-import 'package:sonar_app/screens/screens.dart';
+part of 'transfer.dart';
 
 class CompleteView extends StatelessWidget {
   final dynamic sonarBloc;

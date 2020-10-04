@@ -1,4 +1,4 @@
-import 'package:sonar_app/screens/screens.dart';
+part of 'transfer.dart';
 
 class SendingView extends StatelessWidget {
   SendingView();

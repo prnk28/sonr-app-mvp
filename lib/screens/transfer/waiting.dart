@@ -1,10 +1,10 @@
-import 'package:sonar_app/screens/screens.dart';
+part of 'transfer.dart';
 
-class TransferView extends StatelessWidget {
+class WaitingView extends StatelessWidget {
   final WebBloc sonarBloc;
   final Transferring state;
 
-  const TransferView({Key key, this.sonarBloc, this.state}) : super(key: key);
+  const WaitingView({Key key, this.sonarBloc, this.state}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

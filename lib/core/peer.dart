@@ -22,6 +22,7 @@ class Peer {
   // Management
   Profile profile;
   DateTime lastUpdated;
+  String lobbyId;
   String _socketId;
 
   // Socket Id Getter
