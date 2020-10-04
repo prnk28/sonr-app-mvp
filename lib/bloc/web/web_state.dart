@@ -32,29 +32,16 @@ class Searching extends WebState {
 // ** After Request Pending Receiver Decision ***
 // **********************************************
 class Pending extends WebState {
-  final dynamic match;
-  final FileTransfer file;
+  final Peer match;
+  final Metadata fileMeta;
   final dynamic offer;
+  final bool isReceiver;
 
-  const Pending({
+  const Pending(
+    this.isReceiver, {
+    this.offer,
     this.match,
-    this.file,
-    this.offer,
-  });
-}
-
-// ***************************************
-// ** Receiver has been offered a file ***
-// ***************************************
-class Offered extends WebState {
-  final dynamic matchId;
-  final Profile matchProfile;
-  final dynamic offer;
-
-  const Offered({
-    this.matchId,
-    this.matchProfile,
-    this.offer,
+    this.fileMeta,
   });
 }
 

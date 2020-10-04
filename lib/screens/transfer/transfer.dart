@@ -5,6 +5,7 @@ class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TransferArguments args = ModalRoute.of(context).settings.arguments;
+    BlocProvider.of<WebBloc>(context).add(Connect());
 
     return Scaffold(
       appBar: Design.screenAppBar("Transfer"),
@@ -16,7 +17,6 @@ class TransferScreen extends StatelessWidget {
             child: BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
                 // Initialize Client
-                BlocProvider.of<WebBloc>(context).add(Connect());
                 return NeumorphicProgressIndeterminate();
               },
             ),

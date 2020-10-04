@@ -11,49 +11,30 @@ class Standby extends DataState {
   Standby();
 }
 
-// File ready to transfer
-class Selected extends DataState {
-  Selected();
+// File ready to transfer or receive
+class Queued extends DataState {
+  final Tuple2<Metadata, File> file;
+  Queued(this.file);
 }
 
 // Sending to peer w/ Progress and Chunks
 class Transmitting extends DataState {
   // Progress Variables
-  final FileTransfer file;
-  final int chunksTotal;
-  final int currentChunkNum;
-  final int remainingChunks;
-  final double lastProgress;
+  final Tuple2<Metadata, File> file;
   final double progress;
 
   // State Class
-  Transmitting(
-      {this.chunksTotal,
-      this.currentChunkNum,
-      this.remainingChunks,
-      this.lastProgress,
-      this.file,
-      this.progress});
+  Transmitting({this.file, this.progress});
 }
 
 // Saving to disk w/ Progress and Chunks
 class Saving extends DataState {
   // Progress Variables
-  final FileTransfer file;
-  final int chunksTotal;
-  final int currentChunkNum;
-  final int remainingChunks;
-  final double lastProgress;
+  final Tuple2<Metadata, File> file;
   final double progress;
 
   // State Class
-  Saving(
-      {this.chunksTotal,
-      this.currentChunkNum,
-      this.remainingChunks,
-      this.lastProgress,
-      this.file,
-      this.progress});
+  Saving({this.file, this.progress});
 }
 
 // Saving Between Chunks
@@ -68,9 +49,8 @@ class FindingFile extends DataState {
 
 // Post saving, updating, or finding
 class Done extends DataState {
-  final File rawFile;
-  final Metadata metadata;
-  Done({this.rawFile, this.metadata});
+  final Tuple2<Metadata, File> file;
+  Done({this.file});
 }
 
 // *************************** //

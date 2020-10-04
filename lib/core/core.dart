@@ -9,6 +9,8 @@ export 'package:flutter/services.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
+export 'peer.dart';
+export 'package:tuple/tuple.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -17,7 +19,6 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 export 'package:bloc/bloc.dart';
-export 'package:enum_to_string/enum_to_string.dart';
 
 // Networking Libraries
 export 'package:socket_io_client/socket_io_client.dart';

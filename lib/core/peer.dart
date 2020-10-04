@@ -1,18 +1,11 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/core/core.dart';
-
-import 'models.dart';
+import 'package:sonar_app/models/models.dart';
 
 // ********************** //
 // ** Enums for Object ** //
 // ********************** //
-enum OrientationType {
-  Portrait,
-  Tilted,
-  LandscapeLeft,
-  LandscapeRight,
-  Suspended
-}
+enum OrientationType { Portrait, Tilted, LandscapeLeft, LandscapeRight }
 
 enum PeerStatus {
   Inactive,
@@ -27,9 +20,9 @@ enum PeerStatus {
 // ***************************** //
 class Peer {
   // Management
-  String _socketId;
   Profile profile;
   DateTime lastUpdated;
+  String _socketId;
 
   // Socket Id Getter
   String get id {
@@ -87,7 +80,7 @@ class Peer {
   }
 
   // ****************************** //
-  // ** Setters to Update Values ** //
+  // ** Methods to Update Values ** //
   // ****************************** //
   // -- Setter to Update Direction --
   set direction(double newDegrees) {
@@ -186,6 +179,35 @@ class Peer {
     this.lastUpdated = DateTime.now();
   }
 
+  // Method to Calculate Difference with another Peer
+  double getDifference(Peer peer) {
+    // Check Node Status: Senders are From
+    if (this.status == PeerStatus.Sending &&
+        peer.status == PeerStatus.Receiving) {
+      // Calculate Difference
+      return this.direction - peer.antipodalDirection;
+    }
+    // Check Node Status: Receivers are To
+    else if (this.status == PeerStatus.Receiving &&
+        peer.status == PeerStatus.Sending) {
+      // Calculate Difference
+      return this.antipodalDirection - peer.direction;
+    }
+    return null;
+  }
+
+  // Checker Method: If Peer can Send to Peer
+  bool canSendTo(Peer peer) {
+    return this.status == PeerStatus.Sending &&
+        peer.status == PeerStatus.Receiving;
+  }
+
+  // Checker Method: If Peer can Receive from Peer
+  bool canReceiveFrom(Peer peer) {
+    return this.status == PeerStatus.Receiving &&
+        peer.status == PeerStatus.Sending;
+  }
+
   // *********************** //
   // ** Object Generation ** //
   // *********************** //
@@ -214,19 +236,6 @@ class Peer {
     newPeer.status = enumFromString(map["status"], PeerStatus.values);
 
     return newPeer;
-  }
-
-  // -- Update Existing Peer with Map Data --
-  update({Map motion, Map compass, String status}) {
-    // Add Motion from Data
-    this.motion = new AccelerometerEvent(motion["x"], motion["y"], motion["z"]);
-
-    // Add Compass Data from Map
-    this.direction = compass["direction"];
-    this.antipodalDirection = compass["antipodalDegress"];
-
-    // Set Status from String
-    this.status = enumFromString(status, PeerStatus.values);
   }
 
   // -- Export Peer to Map for Communication --
@@ -262,5 +271,11 @@ class Peer {
       'status': enumAsString(this.status),
       'profile': this.profile.toMap()
     };
+  }
+
+  // -- Read the Data in this Object --
+  read() {
+    log.i("Peer #" + this.id);
+    print(this.toMap().toString());
   }
 }

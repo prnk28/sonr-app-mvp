@@ -59,7 +59,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-// *************************
+  // *************************
 // ** UpdateProfile Event **
 // *************************
   Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {

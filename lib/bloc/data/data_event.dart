@@ -31,10 +31,9 @@ class WriteFile extends DataEvent {
 
 // Pick file to transfer to peer
 class QueueFile extends DataEvent {
-  final bool receiving;
-  final dynamic info;
+  final Map info;
   final File file;
-  const QueueFile({this.receiving, this.info, this.file});
+  const QueueFile({this.info, this.file});
 }
 
 // Search for a file

@@ -1,6 +1,7 @@
 part of 'web_bloc.dart';
 
 enum GraphUpdate { ENTER, UPDATE, EXIT }
+enum HandleType { OFFER, ANSWER, DECLINED, COMPLETE }
 
 abstract class WebEvent extends Equatable {
   const WebEvent();
@@ -19,8 +20,8 @@ class Connect extends WebEvent {
 }
 
 // Send Realtime Peer Data to Server
-class UpdateNode extends WebEvent {
-  const UpdateNode();
+class SendNode extends WebEvent {
+  const SendNode();
 }
 
 // Update Graph with Peer Values
@@ -32,47 +33,36 @@ class UpdateGraph extends WebEvent {
 }
 
 // Sender Offers Invite for Authorization
-class SendOffer extends WebEvent {
+class Invite extends WebEvent {
   final Peer match;
-  const SendOffer(this.match);
+  final Metadata metadata;
+  const Invite(this.match, this.metadata);
 }
 
 // Receiver is Presented with Authorization
 class Authorize extends WebEvent {
   final bool decision;
-  const Authorize(this.decision);
-}
-
-// Receiver Gets Authorization Request
-class HandleOffer extends WebEvent {
-  final bool decision;
   final Peer match;
-  final dynamic offer;
-  const HandleOffer(this.decision, {this.match, this.offer});
+  final dynamic message;
+  const Authorize(this.decision, this.match, this.message);
 }
 
-// Receiver has Accepted
-class HandleAnswer extends WebEvent {
+// Create Offer/Answer/Decline
+class Create extends WebEvent {
+  final HandleType type;
+  final RTCPeerConnection pc;
   final Peer match;
-  final dynamic answer;
-  const HandleAnswer(this.match, this.answer);
+  final Metadata metadata;
+
+  const Create(this.type, {this.match, this.metadata, this.pc});
 }
 
-// Receiver has Declined
-class HandleDecline extends WebEvent {
+// Handle Offer/Answer/Decline
+class Handle extends WebEvent {
+  final HandleType type;
   final Peer match;
-  const HandleDecline(this.match);
-}
-
-// Sender Begins Transfer
-class BeginTransfer extends WebEvent {
-  const BeginTransfer();
-}
-
-// On Transfer Complete
-class HandleComplete extends WebEvent {
-  final Peer match;
-  const HandleComplete(this.match);
+  final dynamic message;
+  const Handle(this.type, {this.match, this.message});
 }
 
 // Complete: Reset Connection - With Options
@@ -81,7 +71,8 @@ class Complete extends WebEvent {
   final bool resetSession;
   final bool resetConnection;
   final bool exit;
-  const Complete({this.match, this.resetConnection, this.resetSession, this.exit});
+  const Complete(
+      {this.match, this.resetConnection, this.resetSession, this.exit});
 }
 
 // Failed: Internal or Cancelled

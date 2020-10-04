@@ -16,23 +16,23 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   RTCDataChannel dataChannel;
 
   // Traffic Handling Maps
-  List<FileTransfer> outgoing;
-  List<FileTransfer> incoming;
+  List<Metadata> incoming;
+  Map<Metadata, File> outgoing;
+  Tuple2<Metadata, File> currentFile;
 
   // Constructers
   DataBloc() : super(null) {
     // Initialize Maps
-    outgoing = new List<FileTransfer>();
-    incoming = new List<FileTransfer>();
+    incoming = new List<Metadata>();
+    outgoing = new Map<Metadata, File>();
 
     // Add DataChannel
-    rtcSession.onDataChannel = (channel) {
+    session.onDataChannel = (channel) {
       dataChannel = channel;
     };
 
     // Handle DataChannel Message
-    rtcSession.onDataChannelMessage =
-        (dc, RTCDataChannelMessage message) async {
+    session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
       // Check if Binary
       if (message.isBinary) {
         // Add Binary to Transfer
@@ -74,39 +74,72 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
   }
 
+// **********************
+// ** QueueFile Event **
+// **********************
+  Stream<DataState> _mapQueueFileState(QueueFile event) async* {
+    // Check if Queue is Incoming
+    if (event.info != null) {
+      // Create Metadata
+      var incomingMeta = new Metadata(map: event.info);
+
+      // Add File to Incoming Tracker
+      incoming.add(incomingMeta);
+
+      // Set Current File
+      currentFile = Tuple2<Metadata, File>(incomingMeta, null);
+
+      yield Queued(currentFile);
+    }
+
+    // Check if Queue is Outgoing
+    if (event.file != null) {
+      // Create Metadata
+      var outgoingMeta = new Metadata(file: event.file);
+
+      // Add to Outgoing File Map
+      outgoing[outgoingMeta] = event.file;
+
+      // Set Current File
+      currentFile = Tuple2<Metadata, File>(outgoingMeta, event.file);
+
+      yield Queued(currentFile);
+    }
+  }
+
 // ********************
 // ** AddChunk Event **
 // ********************
-  Stream<DataState> _mapAddChunkState(AddChunk addEvent) async* {
+  Stream<DataState> _mapAddChunkState(AddChunk event) async* {
     // Add Chunk to Block
-    block.add(addEvent.chunk);
+    block.add(event.chunk);
 
     // Update Progress
     add(Progress());
 
     // Yield Progress
-    yield Saving(file: incoming.first);
+    yield Saving(file: this.currentFile, progress: currentFile.item1.progress);
   }
 
 // ********************
 // ** Progress Event **
 // ********************
   Stream<DataState> _mapProgressState(Progress event) async* {
-    // Get File thats being sent to Peer
-    // FileTransfer incomingFile = incoming.first;
+    // Get Metadata
+    Metadata currMeta = currentFile.item1;
 
-    // // Update Chunks
-    // incomingFile.currentChunkNum += 1;
-    // incomingFile.remainingChunks =
-    //     incomingFile.chunksTotal - incomingFile.currentChunkNum;
+    // Update Chunks
+    currMeta.currentChunkNum += 1;
+    currMeta.remainingChunks = currMeta.chunksTotal - currMeta.currentChunkNum;
 
-    // // Update Progress
-    // double progress =
-    //     (incomingFile.chunksTotal - incomingFile.remainingChunks) /
-    //         incomingFile.chunksTotal;
+    // Update Progress
+    currMeta.progress = (currMeta.chunksTotal - currMeta.remainingChunks) /
+        currMeta.chunksTotal;
 
     //Log Progress
-    log.i("Receiving Chunk");
+    log.i("File Progress: " +
+        (currentFile.item1.progress * 100).toString() +
+        "%");
 
     //Yield Progress
     yield Updating();
@@ -115,12 +148,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **********************
 // ** SendChunks Event **
 // **********************
-  Stream<DataState> _mapSendChunksState(SendChunks sendChunkEvent) async* {
-    // Get File thats being sent to Peer
-    FileTransfer transfer = outgoing.first;
-
+  Stream<DataState> _mapSendChunksState(SendChunks event) async* {
     // Open File in Reader and Send Data pieces as chunks
-    final reader = ChunkedStreamIterator(transfer.file.openRead());
+    final reader = ChunkedStreamIterator(currentFile.item2.openRead());
 
     // While the reader has a next byte
     while (true) {
@@ -133,9 +163,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Send Complete Message on same DC
         dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
-        // Remove from Outgoing
-        log.i("Completed Transfer");
-        outgoing.removeAt(0);
+        // Update Traffic Variables
+        outgoing.remove(currentFile.item1);
+        currentFile = null;
+        log.i("Completed Transmission");
 
         // Call Bloc Event
         yield Done();
@@ -145,26 +176,13 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       else {
         // Send Binary in WebRTC Data Channel
         dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
-        log.i("Sent Chunk");
-
-        // Get File thats being sent to Peer
-        FileTransfer outgoingFile = outgoing.first;
-
-        // Set Variables
-        outgoingFile.currentChunkNum = outgoingFile.currentChunkNum += 1;
-        outgoingFile.remainingChunks =
-            outgoingFile.chunksTotal - outgoingFile.currentChunkNum;
 
         // Update Progress
-        double progress =
-            (outgoingFile.chunksTotal - outgoingFile.remainingChunks) /
-                outgoingFile.chunksTotal;
-
-        // Log Progress
-        log.i("Send Progress: " + (progress * 100).toString() + "%");
+        add(Progress());
 
         // Yield Progress
-        yield Transmitting(file: outgoingFile, progress: progress);
+        yield Transmitting(
+            file: this.currentFile, progress: currentFile.item1.progress);
       }
     }
   }
@@ -173,10 +191,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** WriteFile Event **
 // *********************
   Stream<DataState> _mapWriteFileState(WriteFile writeEvent) async* {
-    // Get File thats being sent to Peer
-    // FileTransfer incomingFile = incoming.first;
-    // log.i(incomingFile.name);
-
     // Get App Directory
     Directory tempDir = await getTemporaryDirectory();
 
@@ -186,46 +200,12 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Save File to Disk
     File rawFile = await writeToFile(block.takeBytes(), filePath);
 
-    // Create MetaData
-    // Metadata meta = new Metadata();
-    // meta.name = incomingFile.name;
-    // meta.size = incomingFile.size;
-    // meta.type = incomingFile.type.toString();
-    // meta.path = filePath;
-    // meta.received = DateTime.now();
-
-    // // Save File Metadata
-    // localData.addFileMetadata(meta, incomingFile.type);
-
     // Remove from Incoming
     incoming.removeAt(0);
-
     log.i("File Saved");
 
     // Yield Complete
-    yield Done(rawFile: rawFile);
-  }
-
-// **********************
-// ** QueueFile Event **
-// **********************
-  Stream<DataState> _mapQueueFileState(QueueFile queueEvent) async* {
-    if (queueEvent.receiving) {
-      // Create File Object
-      var incomingFile = new FileTransfer();
-
-      // Set File to Incoming Tracker
-      incoming.add(incomingFile);
-      log.i("File added to incoming");
-    } else {
-      // Create File Object
-      var outgoingFile = new FileTransfer(localFile: queueEvent.file);
-
-      // Set File to Outgoing Tracker
-      outgoing.add(outgoingFile);
-      log.i("File added to outgoing");
-      yield Selected();
-    }
+    yield Done(file: Tuple2<Metadata, File>(currentFile.item1, rawFile));
   }
 
 // ********************

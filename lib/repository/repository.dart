@@ -1,5 +1,6 @@
 // Directory Exports
 export 'session.dart';
+export 'connection.dart';
 export 'hiveprovider.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
@@ -17,11 +18,6 @@ import 'hiveprovider.dart';
 // ** Constants for WebRTC **
 const CHUNK_SIZE = 16000; // MTU in Bytes
 const CHUNKS_PER_ACK = 64;
-
-// ** Socket Transport Settings **
-const Map<String, dynamic> SOCKET_TRANSPORT = <String, dynamic>{
-  'transports': ['websocket'],
-};
 
 // ** WebRTC Transport Settings **
 // ICE RTCConfiguration Map
@@ -50,6 +46,8 @@ const String PROFILE_BOX = "profileBox";
 const String FILE_BOX = "fileBox";
 
 // Initialize Repositories
-Socket socket = io('http://match.sonr.io', SOCKET_TRANSPORT);
-RTCSession rtcSession = new RTCSession();
+Socket socket = io('http://match.sonr.io', <String, dynamic>{
+  'transports': ['websocket'],
+});
+RTCSession session = new RTCSession();
 HiveProvider localData = new HiveProvider();

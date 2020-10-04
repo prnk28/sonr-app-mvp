@@ -24,8 +24,11 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     Compass()
         .compassUpdates(interval: Duration(milliseconds: 400))
         .listen((newDegrees) {
-      // Update Degrees Var
-      add(Refresh(direction: newDegrees));
+      // Check if User Active
+      if (user.node != null && user.node.status != PeerStatus.Busy) {
+        // Update Degrees Var
+        add(Refresh(direction: newDegrees));
+      }
     });
   }
 
@@ -46,46 +49,45 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ** Refresh Event **
 // *******************
   Stream<DeviceState> _mapRefreshState(Refresh event) async* {
-    // Check if User Active
-    if (user.node != null && user.node.status != PeerStatus.Busy) {
-      // Check if Direction Provided
-      if (event.direction != null && user.node != null) {
-        user.node.direction = event.direction;
-      }
-
-      // Check if Motion Provided
-      if (event.motion != null) {
-        user.node.motion = event.motion;
-      }
-
-      // Update State
-      add(Update());
-      yield Refreshing();
+    // Check if Direction Provided
+    if (event.direction != null && user.node != null) {
+      user.node.direction = event.direction;
     }
-    yield Inactive();
+
+    // Check if Motion Provided
+    if (event.motion != null) {
+      user.node.motion = event.motion;
+    }
+
+    // Update State
+    add(Update());
+    yield Refreshing();
   }
 
 // *******************
 // ** Update Event **
 // *******************
   Stream<DeviceState> _mapUpdateState(Update event) async* {
-    // Yield State by Orientation Status
-    switch (user.node.orientation) {
-      case OrientationType.Portrait:
-        yield Ready();
-        break;
-      case OrientationType.Tilted:
-        yield Sending();
-        break;
-      case OrientationType.LandscapeLeft:
-        yield Receiving();
-        break;
-      case OrientationType.LandscapeRight:
-        yield Receiving();
-        break;
-      case OrientationType.Suspended:
-        yield Busy();
-        break;
+    // Update if now busy
+    if (!event.isNowBusy) {
+      // Yield State by Orientation Status
+      switch (user.node.orientation) {
+        case OrientationType.Portrait:
+          yield Ready();
+          break;
+        case OrientationType.Tilted:
+          yield Sending();
+          break;
+        case OrientationType.LandscapeLeft:
+          yield Receiving();
+          break;
+        case OrientationType.LandscapeRight:
+          yield Receiving();
+          break;
+      }
+    } else {
+      user.node.status = PeerStatus.Busy;
+      yield Busy();
     }
   }
 
