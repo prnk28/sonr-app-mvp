@@ -125,7 +125,7 @@ class Peer {
         }
         break;
       default:
-        this.antipodalDirection = -0.1; 
+        this.antipodalDirection = -1.0;
         break;
     }
   }
@@ -230,7 +230,6 @@ class Peer {
     // Add Compass Data from Map
     var compass = map["compass"];
     newPeer.direction = compass["direction"];
-    newPeer.antipodalDirection = compass["antipodalDirection"];
 
     // Add Location Data from Map
     var location = map["location"];
@@ -246,24 +245,24 @@ class Peer {
   toMap() {
     // Create Direction Map
     var compass = {
-      "direction": this.direction,
-      "antipodalDirection": this.antipodalDirection
+      "direction": this.direction.toDouble(),
+      "antipodalDirection": this.antipodalDirection.toDouble()
     };
 
     // Create Motion Map
     var motion = {
-      "x": this.motion.x,
-      "y": this.motion.y,
-      "z": this.motion.z,
+      "x": this.motion.x.toDouble(),
+      "y": this.motion.y.toDouble(),
+      "z": this.motion.z.toDouble(),
       "orientation": enumAsString(this.orientation)
     };
 
     // Create Location Map
     var loaction = {
-      'accuracy': this.accuracy,
-      'altitude': this.altitude,
-      'latitude': this.latitude,
-      'longitude': this.longitude,
+      'accuracy': this.accuracy.toDouble(),
+      'altitude': this.altitude.toDouble(),
+      'latitude': this.latitude.toDouble(),
+      'longitude': this.longitude.toDouble(),
     };
 
     // Combine into Map

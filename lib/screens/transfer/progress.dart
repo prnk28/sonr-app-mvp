@@ -1,23 +1,25 @@
 part of 'transfer.dart';
 
 class ProgressView extends StatelessWidget {
-  final WebBloc sonarBloc;
-  final Transferring state;
+  final WebBloc web;
 
-  const ProgressView({Key key, this.sonarBloc, this.state}) : super(key: key);
+  const ProgressView({this.web});
 
   @override
   Widget build(BuildContext context) {
     // Yield Decline Result
-    return Column(
-      children: [
+    return BlocBuilder<DataBloc, DataState>(
+        // Set Build Requirements
+        buildWhen: (prev, curr) {
+      if (curr is Updating) {
+        return false;
+      }
+      return true;
+    }, builder: (context, state) {
+      return Column(children: [
         NeumorphicProgressIndeterminate(),
         Divider(),
-        // Text(
-        //   "Receive Progress: " + (state.progress * 100).toString() + "%",
-        //   style: Design.getTextStyle(TextDesign.DescriptionText),
-        // )
-      ],
-    );
+      ]);
+    });
   }
 }

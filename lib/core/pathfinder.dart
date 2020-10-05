@@ -13,8 +13,58 @@ class PathFinder {
   // Reference Variables
   DirectedValueGraph _graph;
   Map<Peer, double> costs;
+  bool isEmpty;
 
-  // Class Variables
+  // ** Constructer: Calculates Costs for Each Node **
+  PathFinder(this._graph, Peer userNode) {
+    // Initialize Costs Map
+    costs = new Map<Peer, double>();
+
+    // Utilizes Froms
+    if (userNode.status == PeerStatus.Receiving) {
+      // Get Senders
+      var senders = _graph.linkFroms(userNode);
+
+      // Set isEmpty
+      if (senders.length > 0) {
+        isEmpty = false;
+      } else {
+        isEmpty = true;
+      }
+
+      // Iterate
+      for (Peer sender in senders) {
+        // Get Cost
+        var cost = _graph.getBy<double>(sender, userNode);
+
+        // Place in Map
+        costs[sender] = cost.val as double;
+      }
+    }
+    // Utilizes Tos
+    else {
+      // Get Receivers
+      var receivers = _graph.linkTos(userNode);
+
+      // Set isEmpty
+      if (receivers.length > 0) {
+        isEmpty = false;
+      } else {
+        isEmpty = true;
+      }
+
+      // Iterate
+      for (Peer receiver in receivers) {
+        // Get Cost
+        var cost = _graph.getBy<double>(userNode, receiver);
+
+        // Place in Map
+        costs[receiver] = cost.val as double;
+      }
+    }
+  }
+
+  // Method to Get Closest Peer
   Peer getClosestNeighbor() {
     // Initial Closest Peer
     Peer currentClosestPeer;
@@ -28,54 +78,11 @@ class PathFinder {
       if (cost < currentLowestCost) {
         // Update Cost, Closest Neighbor
         currentLowestCost = cost;
-        currentClosestPeer = currentClosestPeer;
+        currentClosestPeer = peer;
       }
     });
 
     // Return Peer
     return currentClosestPeer;
-  }
-
-  // ** Constructer: Calculates Costs for Each Node **
-  PathFinder(this._graph, Peer userNode) {
-    // Initialize Costs Map
-    costs = new Map<Peer, double>();
-
-    // Utilizes Froms
-    if (userNode.status == PeerStatus.Receiving) {
-      // Get Senders
-      var senders = _graph.linkFroms(userNode);
-      log.i("Sender Count: " + senders.length.toString());
-
-      // Iterate
-      for (Peer sender in senders) {
-        // Get Cost
-        var cost = _graph.getBy<double>(sender, userNode);
-
-        // Place in Map
-        log.i("Cost: " + cost.val.toString());
-        costs[sender] = cost.val as double;
-      }
-    }
-    // Utilizes Tos
-    else if (userNode.status == PeerStatus.Sending) {
-      // Get Receivers
-      var receivers = _graph.linkTos(userNode);
-      log.i("Receiver Count: " + receivers.length.toString());
-
-      // Iterate
-      for (Peer receiver in receivers) {
-        // Get Cost
-        var cost = _graph.getBy<double>(userNode, receiver);
-
-        // Place in Map
-        log.i("Cost: " + cost.val.toString());
-        costs[receiver] = cost.val as double;
-      }
-    }
-    // Error
-    else {
-      log.e("Invalid Peer Status during PathFinding");
-    }
   }
 }

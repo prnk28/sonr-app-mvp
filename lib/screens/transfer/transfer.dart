@@ -23,6 +23,13 @@ class TransferScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: BlocBuilder<WebBloc, WebState>(
+              // Set Build Requirements
+              buildWhen: (prev, curr) {
+                if (curr is Loading) {
+                  return false;
+                }
+                return true;
+              },
               builder: (context, state) {
                 // -- Searching State--
                 if (state is Searching) {
@@ -30,11 +37,19 @@ class TransferScreen extends StatelessWidget {
                   if (BlocProvider.of<UserBloc>(context).node.status ==
                       PeerStatus.Receiving) {
                     return ReceivingView(
-                        state.pathfinder, BlocProvider.of<UserBloc>(context));
-                  } else {
-                    return SendingView(
-                        state.pathfinder, BlocProvider.of<UserBloc>(context));
+                        pathfinder: state.pathfinder,
+                        user: BlocProvider.of<UserBloc>(context));
                   }
+                  // Check if Sender
+                  else if (BlocProvider.of<UserBloc>(context).node.status ==
+                      PeerStatus.Sending) {
+                    return SendingView(
+                        pathfinder: state.pathfinder,
+                        user: BlocProvider.of<UserBloc>(context));
+                  }
+                  // Log Error
+                  log.e("Invalid PeerStatus in Searching State");
+                  return Container();
                 }
 
                 // -- Pending State--
@@ -43,25 +58,25 @@ class TransferScreen extends StatelessWidget {
                   if (BlocProvider.of<UserBloc>(context).node.status ==
                       PeerStatus.Receiving) {
                     return ConfirmView();
-                  } else {
+                  } 
+                  // Check if Sender
+                  else if (BlocProvider.of<UserBloc>(context).node.status ==
+                      PeerStatus.Sending) {
                     return WaitingView();
                   }
                 }
 
                 // -- Transferring State--
                 else if (state is Transferring) {
-                  return ProgressView();
+                  return ProgressView(
+                      web: BlocProvider.of<WebBloc>(context));
                 }
 
                 // -- Completed State--
                 else if (state is Completed) {
                   return CompleteView();
                 }
-
-                return Text(BlocProvider.of<UserBloc>(context)
-                    .node
-                    .direction
-                    .toString());
+                return Container();
               },
             ),
           ),

@@ -153,8 +153,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
           // Find Previous Node
-          var previousNode =
-              graph.singleWhere((element) => element.id == event.peer.id,
+          var previousNode = graph.singleWhere(
+              (element) => element.id == event.peer.id,
               orElse: () => null);
 
           // Remove Peer Node
@@ -183,8 +183,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       case GraphUpdate.EXIT:
         log.i("Peer exited Graph");
         // Find Previous Node
-        var previousNode =
-            graph.singleWhere((element) => element.id == event.peer.id);
+        var previousNode = graph.singleWhere(
+            (element) => element.id == event.peer.id,
+            orElse: () => null);
 
         // Remove Peer Node
         graph.remove(previousNode);
@@ -194,10 +195,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Initialize Pathfinder
     PathFinder pathFinder = new PathFinder(graph, user.node);
 
-    log.i("Closest Neighbor" +
-        pathFinder.getClosestNeighbor().toMap().toString());
-
-    // Yield Searching with Closest Neighbor
+    // Yield Searching
     yield Searching(pathfinder: pathFinder);
   }
 
