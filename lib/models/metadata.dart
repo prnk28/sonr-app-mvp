@@ -1,35 +1,19 @@
 import 'dart:io';
 
-import 'package:hive/hive.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:uuid/uuid.dart';
 
 @HiveType()
-class Metadata extends HiveObject {
-  // -- Stored Metadata --
-  @HiveField(0)
+class Metadata {
+  // -- SQL Fields --
   String id;
-
-  @HiveField(1)
   String name;
-
-  @HiveField(2)
   int size;
-
-  @HiveField(3)
   FileType type;
-
-  @HiveField(4)
   String path;
-
-  @HiveField(5)
   Map sender;
-
-  @HiveField(6)
   DateTime received;
-
-  @HiveField(7)
   DateTime lastOpened;
 
   // -- Chunking Progress Variables --
@@ -81,26 +65,5 @@ class Metadata extends HiveObject {
       "chunks_total": this.chunksTotal,
       "type": enumAsString(this.type)
     };
-  }
-
-  // ** Method to Print Model **
-   read() {
-    log.i("Metadata #" + this.id);
-    print(this.toMap().toString());
-  }
-}
-
-class MetadataAdapter extends TypeAdapter<Metadata> {
-  @override
-  final typeId = 1;
-
-  @override
-  Metadata read(BinaryReader reader) {
-    return Metadata()..id = reader.read();
-  }
-
-  @override
-  void write(BinaryWriter writer, Metadata obj) {
-    writer.write(obj.id);
   }
 }
