@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
-import 'package:sonar_app/models/models.dart';
 
 // Basic Profile Class for Client
 class Profile extends HiveObject {

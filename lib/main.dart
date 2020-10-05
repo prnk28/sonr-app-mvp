@@ -12,7 +12,6 @@ Future<void> main() async {
 
   // Initialize Hive Adapters
   Hive.registerAdapter(ProfileAdapter());
-  Hive.registerAdapter(MetadataAdapter());
   Hive.registerAdapter(ContactAdapter());
 
   // Initialize HiveDB
@@ -90,6 +89,7 @@ class App extends StatelessWidget {
                 settings: settings);
             break;
         }
+        return null;
       },
     );
   }

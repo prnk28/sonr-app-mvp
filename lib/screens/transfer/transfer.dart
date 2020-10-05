@@ -12,7 +12,6 @@ part 'waiting.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final TransferArguments args = ModalRoute.of(context).settings.arguments;
     BlocProvider.of<WebBloc>(context).add(Connect());
 
     return Scaffold(
@@ -58,7 +57,7 @@ class TransferScreen extends StatelessWidget {
                   if (BlocProvider.of<UserBloc>(context).node.status ==
                       PeerStatus.Receiving) {
                     return ConfirmView();
-                  } 
+                  }
                   // Check if Sender
                   else if (BlocProvider.of<UserBloc>(context).node.status ==
                       PeerStatus.Sending) {
@@ -68,8 +67,7 @@ class TransferScreen extends StatelessWidget {
 
                 // -- Transferring State--
                 else if (state is Transferring) {
-                  return ProgressView(
-                      web: BlocProvider.of<WebBloc>(context));
+                  return ProgressView(web: BlocProvider.of<WebBloc>(context));
                 }
 
                 // -- Completed State--
@@ -84,10 +82,4 @@ class TransferScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-// ** Arguments to Pass Data to TransferScreen **
-class TransferArguments {
-  final Profile currentProfile;
-  TransferArguments(this.currentProfile);
 }
