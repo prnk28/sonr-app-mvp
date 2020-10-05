@@ -38,8 +38,7 @@ class HomeScreen extends StatelessWidget {
                     child: Icon(Icons.star_outline_rounded),
                     onPressed: () {
                       // Change View
-                      Navigator.pushNamed(context, "/transfer",
-                          arguments: TransferArguments(args.currentProfile));
+                      Navigator.pushNamed(context, "/transfer");
                     })),
           ],
         ));
