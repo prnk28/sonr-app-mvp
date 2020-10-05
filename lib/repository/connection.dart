@@ -13,13 +13,13 @@ class Connection {
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
       user.node.id = socket.id;
-      log.i(data.toString());
+      user.node.lobbyId = data["lobbyId"];
+      log.i(data["lobbyId"].toString());
     });
 
     // -- NODE APPEARED IN LOBBY --
     socket.on('NODE_ENTER', (data) {
       Peer peer = Peer.fromMap(data);
-      log.i(data.toString());
       web.add(UpdateGraph(GraphUpdate.ENTER, peer));
     });
 
@@ -37,28 +37,33 @@ class Connection {
 
     // -- OFFER REQUEST --
     socket.on('PEER_OFFERED', (data) {
+      log.i(data.toString());
       web.add(Handle(MessageKind.OFFER,
           match: Peer.fromMap(data["from"]), message: data));
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('PEER_ANSWERED', (data) {
+      log.i(data.toString());
       web.add(Handle(MessageKind.ANSWER,
           match: Peer.fromMap(data["from"]), message: data));
     });
 
     // -- MATCH DECLINED REQUEST --
     socket.on('PEER_DECLINED', (data) {
+      log.i(data.toString());
       web.add(Handle(MessageKind.DECLINED));
     });
 
     // -- MATCH ICE CANDIDATES --
     socket.on('PEER_CANDIDATE', (data) {
+      log.i(data.toString());
       session.handleCandidate(data);
     });
 
     // -- MATCH RECEIVED FILE --
     socket.on('COMPLETE', (data) {
+      log.i(data.toString());
       web.add(Handle(MessageKind.COMPLETE,
           match: Peer.fromMap(data["from"]), message: data));
     });

@@ -62,6 +62,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Device Can See Updates
     if (event is Connect) {
       yield* _mapConnectToState(event);
+    } else if (event is Load) {
+      yield* _mapLoadToState(event);
     } else if (event is SendNode) {
       yield* _mapSendNodeToState(event);
     } else if (event is UpdateGraph) {
@@ -97,23 +99,29 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Connected();
   }
 
+// *****************
+// ** Load Event ***
+// *****************
+  Stream<WebState> _mapLoadToState(Load event) async* {
+    // Device Pending State
+    yield Loading();
+  }
+
 // *********************
 // ** SendNode Event ***
 // *********************
   Stream<WebState> _mapSendNodeToState(SendNode event) async* {
-    // Set Delay
-    await new Future.delayed(Duration(milliseconds: 500));
+    // Load
+    add(Load());
 
     // Send to Server
     socket.emit("UPDATE", user.node.toMap());
 
     // Yield Searching with Closest Neighbor
     if (user.node.status == PeerStatus.Sending) {
-      yield Searching(false,
-          closest: new PathFinder(graph, user.node).closestNeighbor);
+      yield Searching(false, pathfinder: new PathFinder(graph, user.node));
     } else if (user.node.status == PeerStatus.Receiving) {
-      yield Searching(true,
-          closest: new PathFinder(graph, user.node).closestNeighbor);
+      yield Searching(true, pathfinder: new PathFinder(graph, user.node));
     }
   }
 
@@ -121,33 +129,38 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** UpdateGraph Event ***
 // ************************
   Stream<WebState> _mapUpdateGraphToState(UpdateGraph event) async* {
+    // Load
+    add(Load());
+
     // -- Modify Graph Relations --
     switch (event.updateType) {
       // -- Peer has Appeared --
       case GraphUpdate.ENTER:
+        log.i("Peer entered Graph");
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
           // Calculate Difference and Create Edge
-          graph.setToBy(
-              user.node, event.peer, user.node.getDifference(event.peer));
+          graph.setToBy<double>(
+              user.node, event.peer, Peer.getDifference(user.node, event.peer));
         }
         // Check Node Status: Receivers are To
         else if (user.node.canReceiveFrom(event.peer)) {
           // Calculate Difference and Create Edge
-          graph.setToBy(
-              event.peer, user.node, user.node.getDifference(event.peer));
+          graph.setToBy<double>(
+              event.peer, user.node, Peer.getDifference(event.peer, user.node));
         }
         break;
       // -- Peer Updated Sensory Input --
       case GraphUpdate.UPDATE:
+        log.i("Peer updated Graph");
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
           // Remove Peer Node
           graph.remove(event.peer);
 
           // Calculate Difference and Create Edge
-          graph.setToBy(
-              user.node, event.peer, user.node.getDifference(event.peer));
+          graph.setToBy<double>(
+              user.node, event.peer, Peer.getDifference(user.node, event.peer));
         }
         // Check Node Status: Receivers are To
         else if (user.node.canReceiveFrom(event.peer)) {
@@ -155,12 +168,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
           graph.remove(event.peer);
 
           // Calculate Difference and Create Edge
-          graph.setToBy(
-              event.peer, user.node, user.node.getDifference(event.peer));
+          graph.setToBy<double>(
+              event.peer, user.node, Peer.getDifference(event.peer, user.node));
         }
         break;
       // Peer Left Lobby
       case GraphUpdate.EXIT:
+        log.i("Peer exited Graph");
         // Remove Edge and Object
         graph.remove(event.peer);
         break;
@@ -168,11 +182,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // Yield Searching with Closest Neighbor
     if (user.node.status == PeerStatus.Sending) {
-      yield Searching(false,
-          closest: new PathFinder(graph, user.node).closestNeighbor);
+      yield Searching(false, pathfinder: new PathFinder(graph, user.node));
     } else if (user.node.status == PeerStatus.Receiving) {
-      yield Searching(true,
-          closest: new PathFinder(graph, user.node).closestNeighbor);
+      yield Searching(true, pathfinder: new PathFinder(graph, user.node));
     }
   }
 

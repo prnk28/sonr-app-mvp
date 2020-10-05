@@ -1,3 +1,4 @@
+import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/screens/screens.dart';
 
 // Views in Screen
@@ -27,9 +28,33 @@ class TransferScreen extends StatelessWidget {
                 if (state is Searching) {
                   // Check if Receiver
                   if (state.isReceiver) {
-                  } else {}
+                    return ReceivingView(state.pathfinder);
+                  } else {
+                    return SendingView(
+                        state.pathfinder, BlocProvider.of<UserBloc>(context));
+                  }
                 }
-                // Initialize Client
+
+                // -- Pending State--
+                else if (state is Pending) {
+                  // Check if Receiver
+                  if (state.isReceiver) {
+                    return ConfirmView();
+                  } else {
+                    return WaitingView();
+                  }
+                }
+
+                // -- Transferring State--
+                else if (state is Transferring) {
+                  return ProgressView();
+                }
+
+                // -- Completed State--
+                else if (state is Completed) {
+                  return CompleteView();
+                }
+
                 return NeumorphicProgressIndeterminate();
               },
             ),

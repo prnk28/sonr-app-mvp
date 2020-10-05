@@ -20,13 +20,20 @@ class Connected extends WebState {
   const Connected();
 }
 
+// ***************************
+// ** Between Server Reads ***
+// ***************************
+class Loading extends WebState {
+  const Loading();
+}
+
 // *****************************************
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
 class Searching extends WebState {
-  final Peer closest;
+  final PathFinder pathfinder;
   final bool isReceiver;
-  const Searching(this.isReceiver, {this.closest});
+  const Searching(this.isReceiver, {this.pathfinder});
 }
 
 // **********************************************
@@ -44,13 +51,6 @@ class Pending extends WebState {
     this.match,
     this.fileMeta,
   });
-}
-
-// *******************************************
-// ** Post Authorization Receiver Declined ***
-// *******************************************
-class Failed extends WebState {
-  const Failed();
 }
 
 // *********************************************
@@ -72,4 +72,11 @@ class Completed extends WebState {
     this.deviceStatus, {
     this.file,
   });
+}
+
+// *******************************************
+// ** Post Authorization Receiver Declined ***
+// *******************************************
+class Failed extends WebState {
+  const Failed();
 }

@@ -19,6 +19,11 @@ class Connect extends WebEvent {
   const Connect({this.userProfile});
 }
 
+// Between Server Reads
+class Load extends WebEvent {
+  const Load();
+}
+
 // Send Realtime Peer Data to Server
 class SendNode extends WebEvent {
   const SendNode();

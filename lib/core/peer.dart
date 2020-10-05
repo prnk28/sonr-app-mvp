@@ -58,10 +58,10 @@ class Peer {
 
   // Location Variables
   Position location;
-  double accuracy;
-  double altitude;
-  double latitude;
-  double longitude;
+  int accuracy;
+  int altitude;
+  int latitude;
+  int longitude;
 
   // ***************** //
   // ** Constructer ** //
@@ -93,7 +93,7 @@ class Peer {
     switch (orientation) {
       case OrientationType.LandscapeLeft:
         // Set Adjusted
-        if (this.direction < 90) {
+        if (_direction < 90) {
           adjusted = 270 - this.direction;
         } else {
           adjusted = this.direction - 90;
@@ -108,10 +108,10 @@ class Peer {
         break;
       case OrientationType.LandscapeRight:
         // Set Adjusted
-        if (this.direction < 270) {
+        if (_direction < 270) {
           adjusted = direction + 90;
         } else {
-          adjusted = this.direction - 270;
+          adjusted = _direction - 270;
         }
 
         // Get Reciprocal of Adjusted
@@ -180,23 +180,6 @@ class Peer {
     this.lastUpdated = DateTime.now();
   }
 
-  // Method to Calculate Difference with another Peer
-  double getDifference(Peer peer) {
-    // Check Node Status: Senders are From
-    if (this.status == PeerStatus.Sending &&
-        peer.status == PeerStatus.Receiving) {
-      // Calculate Difference
-      return this.direction - peer.antipodalDirection;
-    }
-    // Check Node Status: Receivers are To
-    else if (this.status == PeerStatus.Receiving &&
-        peer.status == PeerStatus.Sending) {
-      // Calculate Difference
-      return this.antipodalDirection - peer.direction;
-    }
-    return null;
-  }
-
   // Checker Method: If Peer can Send to Peer
   bool canSendTo(Peer peer) {
     return this.status == PeerStatus.Sending &&
@@ -209,6 +192,21 @@ class Peer {
         peer.status == PeerStatus.Sending;
   }
 
+  // Method to Calculate Difference between two Peers
+  static double getDifference(Peer sender, Peer receiver) {
+    // Check Node Status: Senders are From
+    if (sender.status == PeerStatus.Sending &&
+        receiver.status == PeerStatus.Receiving) {
+      // Calculate Difference
+      var diff = sender.direction - receiver.antipodalDirection;
+
+      // Log and Get difference
+      log.i("Difference: " + diff.toString());
+      return diff;
+    }
+    return -1;
+  }
+
   // *********************** //
   // ** Object Generation ** //
   // *********************** //
@@ -219,22 +217,25 @@ class Peer {
     Peer newPeer = new Peer(profile);
     newPeer.id = map["id"];
 
-    // Add Motion from Map
-    newPeer.motion = new AccelerometerEvent(
-        map["motion"]["x"], map["motion"]["y"], map["motion"]["z"]);
-
-    // Add Compass Data from Map
-    newPeer.direction = map["compass"]["direction"];
-    newPeer.antipodalDirection = map["compass"]["antipodalDegress"];
-
-    // Add Location Data from Map
-    newPeer.accuracy = map["location"]["accuracy"];
-    newPeer.altitude = map["location"]["altitude"];
-    newPeer.latitude = map["location"]["latitude"];
-    newPeer.longitude = map["location"]["longitude"];
-
     // Set Status from String
     newPeer.status = enumFromString(map["status"], PeerStatus.values);
+
+    // Add Motion from Map
+    var motion = map["motion"];
+    newPeer.motion =
+        new AccelerometerEvent(motion["x"], motion["y"], motion["z"]);
+
+    // Add Compass Data from Map
+    var compass = map["compass"];
+    newPeer._direction = compass["direction"];
+    newPeer.antipodalDirection = compass["antipodalDegrees"];
+
+    // Add Location Data from Map
+    var location = map["location"];
+    newPeer.accuracy = location["accuracy"];
+    newPeer.altitude = location["altitude"];
+    newPeer.latitude = location["latitude"];
+    newPeer.longitude = location["longitude"];
 
     return newPeer;
   }
@@ -272,11 +273,5 @@ class Peer {
       'status': enumAsString(this.status),
       'profile': this.profile.toMap()
     };
-  }
-
-  // -- Read the Data in this Object --
-  read() {
-    log.i("Peer #" + this.id);
-    print(this.toMap().toString());
   }
 }

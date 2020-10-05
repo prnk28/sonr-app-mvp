@@ -12,15 +12,34 @@ import 'core.dart';
 class PathFinder {
   // Reference Variables
   Graph _graph;
-  Map<Peer, double> _costs;
+  Map<Peer, double> costs;
 
   // Class Variables
-  Peer closestNeighbor;
+  Peer get closestNeighbor {
+    // Initial Closest Peer
+    Peer currentClosestPeer;
+
+    // Initial lowest cost with arbitray high value
+    double currentLowestCost = 10000;
+
+    // Iterate
+    costs.forEach((peer, cost) {
+      // Check Cost
+      if (cost < currentLowestCost) {
+        // Update Cost, Closest Neighbor
+        currentLowestCost = cost;
+        currentClosestPeer = currentClosestPeer;
+      }
+    });
+
+    // Return Peer
+    return currentClosestPeer;
+  }
 
   // ** Constructer: Calculates Costs for Each Node **
   PathFinder(this._graph, Peer userNode) {
     // Initialize Costs Map
-    _costs = new Map<Peer, double>();
+    costs = new Map<Peer, double>();
 
     // Utilizes Froms
     if (userNode.status == PeerStatus.Receiving) {
@@ -33,11 +52,11 @@ class PathFinder {
         var cost = _graph.getBy<double>(sender, userNode);
 
         // Place in Map
-        _costs[sender] = cost as double;
+        cost.some((val) => () {
+              log.i("Cost: " + val.toString());
+              costs[sender] = cost as double;
+            });
       }
-
-      // Find Closest Neighbor
-      closestNeighbor = _findClosestNeighbor();
     }
     // Utilizes Tos
     else if (userNode.status == PeerStatus.Sending) {
@@ -50,37 +69,15 @@ class PathFinder {
         var cost = _graph.getBy<double>(userNode, receiver);
 
         // Place in Map
-        _costs[receiver] = cost as double;
+        cost.some((val) => () {
+              log.i("Cost: " + val.toString());
+              costs[receiver] = cost as double;
+            });
       }
-
-      // Find Closest Neighbor
-      closestNeighbor = _findClosestNeighbor();
     }
     // Error
     else {
       log.e("Invalid Peer Status during PathFinding");
     }
-  }
-
-  // ** Returns Closest Node **
-  Peer _findClosestNeighbor() {
-    // Initial Closest Peer
-    Peer currentClosestPeer;
-
-    // Initial lowest cost with arbitray high value
-    double currentLowestCost = 10000;
-
-    // Iterate
-    _costs.forEach((peer, cost) {
-      // Check Cost
-      if (cost < currentLowestCost) {
-        // Update Cost, Closest Neighbor
-        currentLowestCost = cost;
-        currentClosestPeer = currentClosestPeer;
-      }
-    });
-
-    // Return Peer
-    return currentClosestPeer;
   }
 }
