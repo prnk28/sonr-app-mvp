@@ -117,12 +117,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Send to Server
     socket.emit("UPDATE", user.node.toMap());
 
+    // Initialize Pathfinder
+    PathFinder pathFinder = new PathFinder(graph, user.node);
+
     // Yield Searching with Closest Neighbor
-    if (user.node.status == PeerStatus.Sending) {
-      yield Searching(false, pathfinder: new PathFinder(graph, user.node));
-    } else if (user.node.status == PeerStatus.Receiving) {
-      yield Searching(true, pathfinder: new PathFinder(graph, user.node));
-    }
+    yield Searching(pathfinder: pathFinder);
   }
 
 // ************************
@@ -153,8 +152,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       case GraphUpdate.UPDATE:
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
+          // Find Previous Node
+          var previousNode =
+              graph.singleWhere((element) => element.id == event.peer.id,
+              orElse: () => null);
+
           // Remove Peer Node
-          graph.remove(event.peer);
+          graph.remove(previousNode);
 
           // Calculate Difference and Create Edge
           graph.setToBy<double>(
@@ -162,8 +166,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         }
         // Check Node Status: Receivers are To
         else if (user.node.canReceiveFrom(event.peer)) {
+          // Find Previous Node
+          var previousNode = graph.singleWhere(
+              (element) => element.id == event.peer.id,
+              orElse: () => null);
+
           // Remove Peer Node
-          graph.remove(event.peer);
+          graph.remove(previousNode);
 
           // Calculate Difference and Create Edge
           graph.setToBy<double>(
@@ -173,17 +182,23 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Peer Left Lobby
       case GraphUpdate.EXIT:
         log.i("Peer exited Graph");
-        // Remove Edge and Object
-        graph.remove(event.peer);
+        // Find Previous Node
+        var previousNode =
+            graph.singleWhere((element) => element.id == event.peer.id);
+
+        // Remove Peer Node
+        graph.remove(previousNode);
         break;
     }
 
+    // Initialize Pathfinder
+    PathFinder pathFinder = new PathFinder(graph, user.node);
+
+    log.i("Closest Neighbor" +
+        pathFinder.getClosestNeighbor().toMap().toString());
+
     // Yield Searching with Closest Neighbor
-    if (user.node.status == PeerStatus.Sending) {
-      yield Searching(false, pathfinder: new PathFinder(graph, user.node));
-    } else if (user.node.status == PeerStatus.Receiving) {
-      yield Searching(true, pathfinder: new PathFinder(graph, user.node));
-    }
+    yield Searching(pathfinder: pathFinder);
   }
 
 // *******************
@@ -211,7 +226,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     });
 
     // Device Pending State
-    yield Pending(false, match: event.match);
+    yield Pending(match: event.match);
   }
 
 // ***********************
@@ -328,7 +343,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Send Node
         add(SendNode());
         yield Pending(
-          true,
           match: event.match,
         );
         break;

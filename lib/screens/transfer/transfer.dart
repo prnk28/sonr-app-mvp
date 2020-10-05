@@ -27,7 +27,8 @@ class TransferScreen extends StatelessWidget {
                 // -- Searching State--
                 if (state is Searching) {
                   // Check if Receiver
-                  if (state.isReceiver) {
+                  if (BlocProvider.of<UserBloc>(context).node.status ==
+                      PeerStatus.Receiving) {
                     return ReceivingView(
                         state.pathfinder, BlocProvider.of<UserBloc>(context));
                   } else {
@@ -39,7 +40,8 @@ class TransferScreen extends StatelessWidget {
                 // -- Pending State--
                 else if (state is Pending) {
                   // Check if Receiver
-                  if (state.isReceiver) {
+                  if (BlocProvider.of<UserBloc>(context).node.status ==
+                      PeerStatus.Receiving) {
                     return ConfirmView();
                   } else {
                     return WaitingView();

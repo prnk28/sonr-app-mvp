@@ -45,6 +45,7 @@ class PathFinder {
     if (userNode.status == PeerStatus.Receiving) {
       // Get Senders
       var senders = _graph.linkFroms(userNode);
+      log.i("Sender Count: " + senders.length.toString());
 
       // Iterate
       for (Peer sender in senders) {
@@ -52,16 +53,15 @@ class PathFinder {
         var cost = _graph.getBy<double>(sender, userNode);
 
         // Place in Map
-        cost.some((val) => () {
-              log.i("Cost: " + val.toString());
-              costs[sender] = cost as double;
-            });
+        log.i("Cost: " + cost.val.toString());
+        costs[sender] = cost.val as double;
       }
     }
     // Utilizes Tos
     else if (userNode.status == PeerStatus.Sending) {
       // Get Receivers
       var receivers = _graph.linkTos(userNode);
+      log.i("Receiver Count: " + receivers.length.toString());
 
       // Iterate
       for (Peer receiver in receivers) {
@@ -69,10 +69,8 @@ class PathFinder {
         var cost = _graph.getBy<double>(userNode, receiver);
 
         // Place in Map
-        cost.some((val) => () {
-              log.i("Cost: " + val.toString());
-              costs[receiver] = cost as double;
-            });
+        log.i("Cost: " + cost.val.toString());
+        costs[receiver] = cost.val as double;
       }
     }
     // Error

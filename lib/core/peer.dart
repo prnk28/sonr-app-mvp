@@ -68,10 +68,10 @@ class Peer {
   // ***************** //
   Peer(this.profile) {
     // Defualt Motion Variables
-    this.motion = new AccelerometerEvent(0, 0, 0);
+    this.motion = new AccelerometerEvent(0.01, 0.01, 0.01);
 
     // Default Direction Variables
-    this.direction = 0.1;
+    this.direction = 0.01;
 
     // Default Location Variables
     this.accuracy = 12345;
@@ -125,7 +125,7 @@ class Peer {
         }
         break;
       default:
-        this.antipodalDirection = -1;
+        this.antipodalDirection = -0.1; 
         break;
     }
   }
@@ -230,6 +230,7 @@ class Peer {
     // Add Compass Data from Map
     var compass = map["compass"];
     newPeer.direction = compass["direction"];
+    newPeer.antipodalDirection = compass["antipodalDirection"];
 
     // Add Location Data from Map
     var location = map["location"];
@@ -246,7 +247,7 @@ class Peer {
     // Create Direction Map
     var compass = {
       "direction": this.direction,
-      "antipodalDegrees": this.antipodalDirection
+      "antipodalDirection": this.antipodalDirection
     };
 
     // Create Motion Map

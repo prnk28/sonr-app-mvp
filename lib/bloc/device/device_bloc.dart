@@ -22,7 +22,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
     // ** Directional Events **
     Compass()
-        .compassUpdates(interval: Duration(milliseconds: 400))
+        .compassUpdates(interval: Duration(milliseconds: 1000))
         .listen((newDegrees) {
       // Check if User Active
       if (user.node != null && user.node.status != PeerStatus.Busy) {

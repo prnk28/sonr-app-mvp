@@ -32,8 +32,7 @@ class Loading extends WebState {
 // *****************************************
 class Searching extends WebState {
   final PathFinder pathfinder;
-  final bool isReceiver;
-  const Searching(this.isReceiver, {this.pathfinder});
+  const Searching({this.pathfinder});
 }
 
 // **********************************************
@@ -43,10 +42,8 @@ class Pending extends WebState {
   final Peer match;
   final Metadata fileMeta;
   final dynamic offer;
-  final bool isReceiver;
 
-  const Pending(
-    this.isReceiver, {
+  const Pending({
     this.offer,
     this.match,
     this.fileMeta,

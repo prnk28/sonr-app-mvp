@@ -61,20 +61,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  // *************************
+// *************************
 // ** UpdateProfile Event **
 // *************************
   Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
-    // Find Box
+    // Update Profile in Hive
     var box = await Hive.openBox(PROFILE_BOX);
-
-    // Put in Box
     box.put("profile", profile);
-
-    // Log
-    print('Profile: ${box.get("profile")}');
-
-    // Close Box
     await box.close();
 
     // Update Reference
