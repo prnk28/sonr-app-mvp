@@ -1,5 +1,4 @@
 import 'package:sonar_app/screens/screens.dart';
-export 'views/views.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override

@@ -2,19 +2,20 @@ part of 'transfer.dart';
 
 class ReceivingView extends StatelessWidget {
   final PathFinder pathfinder;
-  const ReceivingView(this.pathfinder);
+  final UserBloc user;
+  const ReceivingView(this.pathfinder, this.user);
 
   @override
   Widget build(BuildContext context) {
-    if (pathfinder.closestNeighbor != null) {
+    if (pathfinder.getClosestNeighbor() != null) {
       return Column(
         children: [
-          Text(pathfinder.closestNeighbor.profile.firstName),
+          Text(pathfinder.getClosestNeighbor().profile.firstName),
           //Text(closest.profile.lastName),
           //Container();
         ],
       );
     }
-    return Container();
+    return Text(user.node.direction.toString());
   }
 }

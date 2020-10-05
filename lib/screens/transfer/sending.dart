@@ -7,10 +7,12 @@ class SendingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (pathfinder.closestNeighbor != null) {
+    log.i("Closest Neighbor" +
+        pathfinder.getClosestNeighbor().toMap().toString());
+    if (pathfinder.getClosestNeighbor() != null) {
       return Column(
         children: [
-          Text(pathfinder.closestNeighbor.profile.firstName),
+          Text(pathfinder.getClosestNeighbor().profile.firstName),
           //Text(closest.profile.lastName),
           //Container();
         ],

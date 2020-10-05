@@ -13,7 +13,7 @@ part 'web_state.dart';
 // ***********************
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
-  Graph graph;
+  DirectedValueGraph graph;
   Connection connection;
   StreamSubscription deviceSubscription;
 
@@ -25,7 +25,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
     // ** Initialization
-    graph = new Graph();
+    graph = new DirectedValueGraph();
     connection = new Connection(this, this.user);
 
     // ****************************** //
@@ -136,7 +136,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     switch (event.updateType) {
       // -- Peer has Appeared --
       case GraphUpdate.ENTER:
-        log.i("Peer entered Graph");
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
           // Calculate Difference and Create Edge
@@ -152,7 +151,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         break;
       // -- Peer Updated Sensory Input --
       case GraphUpdate.UPDATE:
-        log.i("Peer updated Graph");
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
           // Remove Peer Node

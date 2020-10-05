@@ -70,6 +70,9 @@ class Peer {
     // Defualt Motion Variables
     this.motion = new AccelerometerEvent(0, 0, 0);
 
+    // Default Direction Variables
+    this.direction = 0.1;
+
     // Default Location Variables
     this.accuracy = 12345;
     this.altitude = 123;
@@ -93,7 +96,7 @@ class Peer {
     switch (orientation) {
       case OrientationType.LandscapeLeft:
         // Set Adjusted
-        if (_direction < 90) {
+        if (this.direction < 90) {
           adjusted = 270 - this.direction;
         } else {
           adjusted = this.direction - 90;
@@ -108,10 +111,10 @@ class Peer {
         break;
       case OrientationType.LandscapeRight:
         // Set Adjusted
-        if (_direction < 270) {
-          adjusted = direction + 90;
+        if (newDegrees < 270) {
+          adjusted = this.direction + 90;
         } else {
-          adjusted = _direction - 270;
+          adjusted = this.direction - 270;
         }
 
         // Get Reciprocal of Adjusted
@@ -201,7 +204,6 @@ class Peer {
       var diff = sender.direction - receiver.antipodalDirection;
 
       // Log and Get difference
-      log.i("Difference: " + diff.toString());
       return diff;
     }
     return -1;
@@ -227,8 +229,7 @@ class Peer {
 
     // Add Compass Data from Map
     var compass = map["compass"];
-    newPeer._direction = compass["direction"];
-    newPeer.antipodalDirection = compass["antipodalDegrees"];
+    newPeer.direction = compass["direction"];
 
     // Add Location Data from Map
     var location = map["location"];

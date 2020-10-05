@@ -1,4 +1,4 @@
-import 'package:sonar_app/screens/screens.dart';
+part of 'register.dart';
 
 final _formKey = GlobalKey<FormState>();
 

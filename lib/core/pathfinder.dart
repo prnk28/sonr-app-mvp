@@ -11,11 +11,11 @@ import 'core.dart';
 
 class PathFinder {
   // Reference Variables
-  Graph _graph;
+  DirectedValueGraph _graph;
   Map<Peer, double> costs;
 
   // Class Variables
-  Peer get closestNeighbor {
+  Peer getClosestNeighbor() {
     // Initial Closest Peer
     Peer currentClosestPeer;
 

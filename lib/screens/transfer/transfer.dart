@@ -28,7 +28,8 @@ class TransferScreen extends StatelessWidget {
                 if (state is Searching) {
                   // Check if Receiver
                   if (state.isReceiver) {
-                    return ReceivingView(state.pathfinder);
+                    return ReceivingView(
+                        state.pathfinder, BlocProvider.of<UserBloc>(context));
                   } else {
                     return SendingView(
                         state.pathfinder, BlocProvider.of<UserBloc>(context));
@@ -55,7 +56,10 @@ class TransferScreen extends StatelessWidget {
                   return CompleteView();
                 }
 
-                return NeumorphicProgressIndeterminate();
+                return Text(BlocProvider.of<UserBloc>(context)
+                    .node
+                    .direction
+                    .toString());
               },
             ),
           ),

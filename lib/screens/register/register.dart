@@ -1,5 +1,6 @@
 import 'package:sonar_app/screens/screens.dart';
-export 'views/views.dart';
+
+part 'initialize.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
