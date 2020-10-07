@@ -1,4 +1,3 @@
-import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/screens/screens.dart';
 
 // Views in Screen

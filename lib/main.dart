@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/screens/home/clock/clock_sample.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:page_transition/page_transition.dart';
@@ -52,15 +53,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return NeumorphicApp(
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
       theme: Design.lightTheme,
       darkTheme: Design.darkTheme,
+      themeMode: ThemeMode.light,
       home: SplashScreen(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/home':
             return PageTransition(
-                child: HomeScreen(),
+                child: ClockSample(),
                 type: PageTransitionType.fade,
                 settings: settings);
             break;

@@ -6,6 +6,7 @@ export 'dart:io' hide Socket;
 export 'dart:math';
 export 'filetype.dart';
 export 'package:flutter/services.dart';
+export 'design/design.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:math';
 export 'package:bloc/bloc.dart';
 
 // Networking Libraries
@@ -90,4 +92,8 @@ Future<File> writeToFile(Uint8List data, String path) {
   final buffer = data.buffer;
   return new File(path)
       .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+}
+
+num degreesToRads(num deg) {
+  return (deg * pi) / 180.0;
 }

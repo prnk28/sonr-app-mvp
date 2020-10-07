@@ -13,8 +13,7 @@ class SplashScreen extends StatelessWidget {
         body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
           // Home Screen
           if (curr is Online) {
-            Navigator.pushReplacementNamed(context, "/home",
-                arguments: HomeArguments(curr.profile));
+            Navigator.pushReplacementNamed(context, "/home");
             return false;
           }
           // Register Screen

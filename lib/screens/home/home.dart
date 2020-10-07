@@ -1,11 +1,10 @@
 import 'package:sonar_app/screens/screens.dart';
 
+import 'clock/clock_sample.dart';
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Extract Arguments
-    final HomeArguments args = ModalRoute.of(context).settings.arguments;
-
     // Build View
     return Scaffold(
         appBar: Design.screenAppBar("Home"),
@@ -15,7 +14,7 @@ class HomeScreen extends StatelessWidget {
             BlocBuilder<DeviceBloc, DeviceState>(
               builder: (context, state) {
                 if (state is Ready) {
-                  return Text("DeviceBloc State: Ready");
+                  return ClockSample();
                 } else if (state is Sending) {
                   return Text("DeviceBloc State: Sending");
                 } else if (state is Receiving) {
@@ -43,10 +42,4 @@ class HomeScreen extends StatelessWidget {
           ],
         ));
   }
-}
-
-// ** Arguments to Pass Data to HomeScreen **
-class HomeArguments {
-  final Profile currentProfile;
-  HomeArguments(this.currentProfile);
 }
