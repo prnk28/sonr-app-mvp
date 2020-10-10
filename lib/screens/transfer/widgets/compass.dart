@@ -1,6 +1,8 @@
 import 'package:sonar_app/screens/screens.dart';
 
 class CompassView extends StatelessWidget {
+  final UserBloc user;
+  const CompassView({Key key, this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Expanded(
@@ -45,59 +47,49 @@ class CompassView extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Stack(
                     children: <Widget>[
-                      //those childs are not "good" for a real clock, but will fork for a sample
-                      Align(
-                        alignment: Alignment(-0.7, -0.7),
-                        child: _createDot(context),
-                      ),
-                      Align(
-                        alignment: Alignment(0.7, -0.7),
-                        child: _createDot(context),
-                      ),
-                      Align(
-                        alignment: Alignment(-0.7, 0.7),
-                        child: _createDot(context),
-                      ),
-                      Align(
-                        alignment: Alignment(0.7, 0.7),
-                        child: _createDot(context),
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: _buildLine(
-                          context: context,
-                          angle: degreesToRads(90),
-                          width: 15,
-                          gradient: FlutterGradients.ripeMalinka(),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: _buildLine(
-                          context: context,
-                          angle: degreesToRads(180),
-                          width: 15,
-                          gradient: FlutterGradients.malibuBeach(),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: _buildLine(
-                          context: context,
+                      // ** <East> **//
+                      _buildMajorSpoke(
                           angle: degreesToRads(0),
-                          width: 15,
+                          spokeWidth: 15,
                           gradient: FlutterGradients.malibuBeach(),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: _buildLine(
-                          context: context,
+                          alignment: Alignment.centerRight,
+                          textColor: Colors.black54,
+                          textValue: "E",
+                          textPadding: EdgeInsets.only(top: 40)),
+                      // ** </East> **//
+
+                      // ** <North> **//
+                      _buildMajorSpoke(
+                          angle: degreesToRads(90),
+                          spokeWidth: 15,
+                          gradient: FlutterGradients.ripeMalinka(),
+                          alignment: Alignment.topCenter,
+                          textColor: Colors.red[900],
+                          textValue: "N",
+                          textPadding: EdgeInsets.only(bottom: 20)),
+                      // ** </North> **//
+
+                      // ** <West> **//
+                      _buildMajorSpoke(
+                          angle: degreesToRads(180),
+                          spokeWidth: 15,
+                          gradient: FlutterGradients.malibuBeach(),
+                          alignment: Alignment.centerLeft,
+                          textColor: Colors.black54,
+                          textValue: "W",
+                          textPadding: EdgeInsets.only(top: 40)),
+                      // ** </West> **//
+
+                      // ** <South> **//
+                      _buildMajorSpoke(
                           angle: degreesToRads(270),
-                          width: 15,
+                          spokeWidth: 15,
                           gradient: FlutterGradients.malibuBeach(),
-                        ),
-                      ),
+                          alignment: Alignment.bottomCenter,
+                          textColor: Colors.black54,
+                          textValue: "S",
+                          textPadding: EdgeInsets.only(bottom: 20)),
+                      // ** </South> **//
                     ],
                   ),
                 ),
@@ -109,12 +101,47 @@ class CompassView extends StatelessWidget {
     );
   }
 
-  Widget _buildLine(
-      {BuildContext context,
-      double angle,
-      double width,
-      double height = 6,
-      Gradient gradient}) {
+  Widget _buildMajorSpoke(
+      {double angle,
+      double spokeWidth,
+      Gradient gradient,
+      Color textColor,
+      String textValue,
+      EdgeInsets textPadding,
+      Alignment alignment}) {
+    return Align(
+        alignment: alignment,
+        child: Stack(
+          alignment: alignment,
+          children: [
+            // Create Spoke
+            Transform.rotate(
+                angle: angle,
+                child: Padding(
+                    padding: EdgeInsets.only(left: spokeWidth),
+                    child: Neumorphic(
+                      style: NeumorphicStyle(
+                        depth: 20,
+                      ),
+                      child: Container(
+                        width: spokeWidth,
+                        height: 3,
+                        decoration: BoxDecoration(gradient: gradient),
+                      ),
+                    ))),
+            // Create Text
+            Transform.rotate(
+                angle: angle + degreesToRads(90),
+                child: Padding(
+                    padding: textPadding,
+                    child: Text(textValue,
+                        style: Design.text.hint(setColor: textColor)))),
+          ],
+        ));
+  }
+
+  Widget _buildMinorSpoke(
+      {double angle, double width, double height = 3, Gradient gradient}) {
     return Transform.rotate(
       angle: angle,
       child: Padding(
@@ -129,19 +156,6 @@ class CompassView extends StatelessWidget {
             decoration: BoxDecoration(gradient: gradient),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _createDot(BuildContext context) {
-    return Neumorphic(
-      style: NeumorphicStyle(
-        depth: -10,
-        boxShape: NeumorphicBoxShape.circle(),
-      ),
-      child: SizedBox(
-        height: 10,
-        width: 10,
       ),
     );
   }

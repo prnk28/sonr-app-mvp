@@ -22,7 +22,7 @@ class _SendingViewState extends State<SendingView> {
         children: <Widget>[
           Align(
             alignment: Alignment.bottomCenter,
-            child: Flexible(child: CompassView()),
+            child: Flexible(child: CompassView(user: widget.user)),
           ),
         ],
       ),
