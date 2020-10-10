@@ -17,68 +17,61 @@ class TransferScreen extends StatelessWidget {
     return Scaffold(
       appBar: Design.screenAppBar("Transfer"),
       backgroundColor: NeumorphicTheme.baseColor(context),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: BlocBuilder<WebBloc, WebState>(
-              // Set Build Requirements
-              buildWhen: (prev, curr) {
-                if (curr is Loading) {
-                  return false;
-                }
-                return true;
-              },
-              builder: (context, state) {
-                // -- Searching State--
-                if (state is Searching) {
-                  // Check if Receiver
-                  if (BlocProvider.of<UserBloc>(context).node.status ==
-                      PeerStatus.Receiving) {
-                    return ReceivingView(
-                        pathfinder: state.pathfinder,
-                        user: BlocProvider.of<UserBloc>(context));
-                  }
-                  // Check if Sender
-                  else if (BlocProvider.of<UserBloc>(context).node.status ==
-                      PeerStatus.Sending) {
-                    return SendingView(
-                        pathfinder: state.pathfinder,
-                        user: BlocProvider.of<UserBloc>(context));
-                  }
-                  // Log Error
-                  log.e("Invalid PeerStatus in Searching State");
-                  return Container();
-                }
+      body: BlocBuilder<WebBloc, WebState>(
+        // Set Build Requirements
+        buildWhen: (prev, curr) {
+          if (curr is Loading) {
+            return false;
+          }
+          return true;
+        },
+        builder: (context, state) {
+          // -- Searching State--
+          if (state is Searching) {
+            // Check if Receiver
+            if (BlocProvider.of<UserBloc>(context).node.status ==
+                PeerStatus.Receiving) {
+              return ReceivingView(
+                  pathfinder: state.pathfinder,
+                  user: BlocProvider.of<UserBloc>(context));
+            }
+            // Check if Sender
+            else if (BlocProvider.of<UserBloc>(context).node.status ==
+                PeerStatus.Sending) {
+              return SendingView(
+                  pathfinder: state.pathfinder,
+                  user: BlocProvider.of<UserBloc>(context));
+            }
+            // Log Error
+            log.e("Invalid PeerStatus in Searching State");
+            return Container();
+          }
 
-                // -- Pending State--
-                else if (state is Pending) {
-                  // Check if Receiver
-                  if (BlocProvider.of<UserBloc>(context).node.status ==
-                      PeerStatus.Receiving) {
-                    return ConfirmView();
-                  }
-                  // Check if Sender
-                  else if (BlocProvider.of<UserBloc>(context).node.status ==
-                      PeerStatus.Sending) {
-                    return WaitingView();
-                  }
-                }
+          // -- Pending State--
+          else if (state is Pending) {
+            // Check if Receiver
+            if (BlocProvider.of<UserBloc>(context).node.status ==
+                PeerStatus.Receiving) {
+              return ConfirmView();
+            }
+            // Check if Sender
+            else if (BlocProvider.of<UserBloc>(context).node.status ==
+                PeerStatus.Sending) {
+              return WaitingView();
+            }
+          }
 
-                // -- Transferring State--
-                else if (state is Transferring) {
-                  return ProgressView(web: BlocProvider.of<WebBloc>(context));
-                }
+          // -- Transferring State--
+          else if (state is Transferring) {
+            return ProgressView(web: BlocProvider.of<WebBloc>(context));
+          }
 
-                // -- Completed State--
-                else if (state is Completed) {
-                  return CompleteView();
-                }
-                return Container();
-              },
-            ),
-          ),
-        ],
+          // -- Completed State--
+          else if (state is Completed) {
+            return CompleteView();
+          }
+          return Container();
+        },
       ),
     );
   }

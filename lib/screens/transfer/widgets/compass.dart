@@ -3,6 +3,13 @@ import 'package:sonar_app/screens/screens.dart';
 class CompassView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Expanded(
+        child: new Align(
+            alignment: Alignment.bottomCenter,
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[new Icon(Icons.star), new Text("Bottom Text")],
+            )));
     return AspectRatio(
       aspectRatio: 1,
       child: Neumorphic(
