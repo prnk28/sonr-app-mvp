@@ -37,9 +37,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     final profileData = box.get("profile");
     await box.close();
 
-    // Create Delay
-    await Future.delayed(const Duration(milliseconds: 1500));
-
     // No Profile
     if (profileData == null) {
       // Update Reference

@@ -96,27 +96,3 @@ Future<File> writeToFile(Uint8List data, String path) {
   return new File(path)
       .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
 }
-
-// ********************
-// ** Math Functions **
-// ********************
-num directionToRads(num deg) {
-  return (directionToDegrees(deg) * pi) / 180.0;
-}
-
-Alignment directionToAlignment(double r, double deg) {
-  // Calculate radians
-  double radAngle = directionToRads(deg);
-
-  double x = cos(radAngle) * r;
-  double y = sin(radAngle) * r;
-  return Alignment(x, y);
-}
-
-double directionToDegrees(double degrees) {
-  if (degrees + 90 > 360) {
-    return degrees - 270;
-  } else {
-    return degrees + 90;
-  }
-}

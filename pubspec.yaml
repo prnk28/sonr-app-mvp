@@ -39,7 +39,7 @@ dependencies:
   hive_flutter: ^0.3.1
   intl: ^0.15.8
   image_picker:
-    logger: ^0.8.3
+  logger: ^0.8.3
   path_provider: ^1.6.5
   path: ^1.7.0
   tuple: ^1.0.3

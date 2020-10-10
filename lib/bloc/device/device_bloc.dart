@@ -11,6 +11,7 @@ part 'device_state.dart';
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
   final UserBloc user;
+  double currentDirection = 0;
 
   // Constructer
   DeviceBloc(this.user) : super(null) {
@@ -22,16 +23,16 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
     // ** Directional Events **
     Compass()
-        .compassUpdates(interval: Duration(milliseconds: 1000))
+        .compassUpdates(interval: Duration(milliseconds: 100))
         .listen((newDegrees) {
       // Check if User Active
       if (user.node != null && user.node.status != PeerStatus.Busy) {
         // Update Degrees Var
         add(Refresh(direction: newDegrees));
+        currentDirection = newDegrees;
       }
     });
   }
-
   @override
   Stream<DeviceState> mapEventToState(
     DeviceEvent event,
