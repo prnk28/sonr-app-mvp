@@ -1,7 +1,5 @@
 import 'package:sonar_app/screens/screens.dart';
 
-import 'clock/clock_sample.dart';
-
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,7 +12,7 @@ class HomeScreen extends StatelessWidget {
             BlocBuilder<DeviceBloc, DeviceState>(
               builder: (context, state) {
                 if (state is Ready) {
-                  return ClockSample();
+                  return Text("DeviceBloc State: Ready");
                 } else if (state is Sending) {
                   return Text("DeviceBloc State: Sending");
                 } else if (state is Receiving) {

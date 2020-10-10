@@ -7,18 +7,16 @@ class SendingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!pathfinder.isEmpty) {
-      // Get Closest Peer
-      Peer closest = pathfinder.getClosestNeighbor();
+    //if (!pathfinder.isEmpty) {
+    // Get Closest Peer
+    //Peer closest = pathfinder.getClosestNeighbor();
 
-      // Build
-      return Column(
-        children: [
-          Text(closest.profile.firstName),
-          //Container();
-        ],
-      );
-    }
-    return Text(user.node.direction.toString());
+    // Build
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [CompassView()],
+    );
   }
 }

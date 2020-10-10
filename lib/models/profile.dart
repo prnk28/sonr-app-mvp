@@ -52,11 +52,7 @@ class ProfileAdapter extends TypeAdapter<Profile> {
 
   @override
   Profile read(BinaryReader reader) {
-    var temp = new Profile();
-    temp..firstName = reader.read(0);
-    temp..lastName = reader.read(1);
-    temp..profilePicture = reader.read(2);
-    return temp;
+    return Profile()..firstName = reader.read();
   }
 
   @override

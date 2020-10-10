@@ -1,49 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/screens/home/clock/top_bar.dart';
+import 'package:sonar_app/screens/screens.dart';
 
-class ClockSample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return NeumorphicTheme(
-      theme: Design.lightTheme,
-      darkTheme: Design.darkTheme,
-      themeMode: ThemeMode.light,
-      child: Material(
-        child: NeumorphicBackground(
-          child: _ClockFirstPage(),
-        ),
-      ),
-    );
-  }
-}
-
-class _ClockFirstPage extends StatefulWidget {
-  @override
-  createState() => _ClockFirstPageState();
-}
-
-class _ClockFirstPageState extends State<_ClockFirstPage> {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 9.0),
-            child: TopBar(),
-          ),
-          Padding(padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 200.0)),
-          Flexible(child: NeumorphicClock()),
-        ],
-      ),
-    );
-  }
-}
-
-class NeumorphicClock extends StatelessWidget {
+class CompassView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -104,7 +61,7 @@ class NeumorphicClock extends StatelessWidget {
                           context: context,
                           angle: degreesToRads(90),
                           width: 15,
-                          color: NeumorphicTheme.accentColor(context),
+                          gradient: FlutterGradients.ripeMalinka(),
                         ),
                       ),
                       Align(
@@ -113,7 +70,7 @@ class NeumorphicClock extends StatelessWidget {
                           context: context,
                           angle: degreesToRads(180),
                           width: 15,
-                          color: NeumorphicTheme.accentColor(context),
+                          gradient: FlutterGradients.malibuBeach(),
                         ),
                       ),
                       Align(
@@ -122,7 +79,7 @@ class NeumorphicClock extends StatelessWidget {
                           context: context,
                           angle: degreesToRads(0),
                           width: 15,
-                          color: NeumorphicTheme.accentColor(context),
+                          gradient: FlutterGradients.malibuBeach(),
                         ),
                       ),
                       Align(
@@ -131,7 +88,7 @@ class NeumorphicClock extends StatelessWidget {
                           context: context,
                           angle: degreesToRads(270),
                           width: 15,
-                          color: NeumorphicTheme.accentColor(context),
+                          gradient: FlutterGradients.malibuBeach(),
                         ),
                       ),
                     ],
@@ -150,7 +107,7 @@ class NeumorphicClock extends StatelessWidget {
       double angle,
       double width,
       double height = 6,
-      Color color}) {
+      Gradient gradient}) {
     return Transform.rotate(
       angle: angle,
       child: Padding(
@@ -162,7 +119,7 @@ class NeumorphicClock extends StatelessWidget {
           child: Container(
             width: width,
             height: height,
-            color: color,
+            decoration: BoxDecoration(gradient: gradient),
           ),
         ),
       ),

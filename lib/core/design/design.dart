@@ -5,6 +5,7 @@ import 'package:boxicons_flutter/boxicons_flutter.dart';
 // Imports
 import 'package:sonar_app/core/design/textField.dart';
 import 'package:sonar_app/core/design/text.dart';
+import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:sonar_app/core/design/button.dart';
 
 // Exports
@@ -14,6 +15,7 @@ export 'package:sonar_app/core/design/button.dart';
 export 'package:sonar_app/core/design/text.dart';
 export 'package:sonar_app/core/design/textField.dart';
 export 'package:boxicons_flutter/boxicons_flutter.dart';
+export 'package:flutter_gradients/flutter_gradients.dart';
 
 class Design {
   // ******************* **

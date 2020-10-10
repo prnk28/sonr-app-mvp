@@ -1,4 +1,5 @@
 import 'package:sonar_app/screens/screens.dart';
+import 'widgets/compass.dart';
 
 // Views in Screen
 part 'complete.dart';
