@@ -43,13 +43,8 @@ class CompassView extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     // Center Circle
-                    Neumorphic(
-                      style: NeumorphicStyle(
-                        depth: -3,
-                        boxShape: NeumorphicBoxShape.circle(),
-                      ),
-                      margin: EdgeInsets.all(70),
-                    ),
+                    _buildCenterBulb(this.direction),
+
                     // Spokes
                     Transform.rotate(
                         angle: ((this.direction ?? 0) * (math.pi / 180) * -2),

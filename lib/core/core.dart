@@ -22,7 +22,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/core/design/design.dart';
 import 'dart:math';
 
-import 'package:tuple/tuple.dart';
 export 'package:bloc/bloc.dart';
 
 // Networking Libraries
@@ -95,4 +94,56 @@ Future<File> writeToFile(Uint8List data, String path) {
   final buffer = data.buffer;
   return new File(path)
       .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+}
+
+// ********************
+// ** Math Functions **
+// ********************
+num directionToRads(num deg) {
+  return (directionToDegrees(deg) * pi) / 180.0;
+}
+
+Alignment directionToAlignment(double r, double deg) {
+  // Calculate radians
+  double radAngle = directionToRads(deg);
+
+  double x = cos(radAngle) * r;
+  double y = sin(radAngle) * r;
+  return Alignment(x, y);
+}
+
+double directionToDegrees(double direction) {
+  if (direction + 90 > 360) {
+    return direction - 270;
+  } else {
+    return direction + 90;
+  }
+}
+
+// ********************************
+// ** Compass Designation Finder **
+// ********************************
+enum CompassDesignation {
+  N,
+  NNE,
+  NE,
+  ENE,
+  E,
+  ESE,
+  SE,
+  SSE,
+  S,
+  SSW,
+  SW,
+  WSW,
+  W,
+  WNW,
+  NW,
+  NNW
+}
+
+CompassDesignation getCompassDesignationFromDegrees(double degrees) {
+  var compassValue = ((degrees / 22.5) + 0.5).toInt();
+
+  return CompassDesignation.values[(compassValue % 16)];
 }

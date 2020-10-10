@@ -90,26 +90,26 @@ Widget _buildMinorSpoke(double direction) {
       ));
 }
 
-// ********************
-// ** Math Functions **
-// ********************
-num directionToRads(num deg) {
-  return (directionToDegrees(deg) * pi) / 180.0;
-}
-
-Alignment directionToAlignment(double r, double deg) {
-  // Calculate radians
-  double radAngle = directionToRads(deg);
-
-  double x = cos(radAngle) * r;
-  double y = sin(radAngle) * r;
-  return Alignment(x, y);
-}
-
-double directionToDegrees(double direction) {
-  if (direction + 90 > 360) {
-    return direction - 270;
-  } else {
-    return direction + 90;
-  }
+Widget _buildCenterBulb(double direction) {
+  return Neumorphic(
+    style: NeumorphicStyle(
+      depth: -3,
+      boxShape: NeumorphicBoxShape.circle(),
+    ),
+    margin: EdgeInsets.all(70),
+    child: Neumorphic(
+      style: NeumorphicStyle(
+        depth: 10,
+        boxShape: NeumorphicBoxShape.circle(),
+      ),
+      margin: EdgeInsets.all(5),
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: FlutterGradients.angelCare(type: GradientType.radial)),
+        child: Column(
+          children: [Text(direction.toString())],
+        ),
+      ),
+    ),
+  );
 }
