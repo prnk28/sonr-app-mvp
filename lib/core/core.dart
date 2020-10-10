@@ -110,12 +110,6 @@ Alignment directionToAlignment(double r, double deg) {
 
   double x = cos(radAngle) * r;
   double y = sin(radAngle) * r;
-  log.i("Angle: " +
-      directionToDegrees(deg).toString() +
-      " x: " +
-      x.toString() +
-      " y: " +
-      y.toString());
   return Alignment(x, y);
 }
 

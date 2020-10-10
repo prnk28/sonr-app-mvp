@@ -58,7 +58,5 @@ class ProfileAdapter extends TypeAdapter<Profile> {
   @override
   void write(BinaryWriter writer, Profile obj) {
     writer.write(obj.firstName);
-    writer.write(obj.lastName);
-    writer.write(obj.profilePicture);
   }
 }

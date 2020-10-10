@@ -58,13 +58,20 @@ class CompassView extends StatelessWidget {
                               EdgeInsets.only(bottom: _K_MAJOR_BOTTOM_PADDING)),
                       // ** </North> **//
 
-                      // <NorthByEast> //
+                      // <MinorSpokes> //
                       _buildMinorSpoke(11.25),
-                      // </NorthByEast> //
-
-                      // <NorthByNorthEast> //
                       _buildMinorSpoke(22.5),
-                      // </NorthByNorthEast> //
+                      _buildMinorSpoke(33.75),
+                      // </MinorSpokes> //
+
+                      // NorthEast
+                      _buildAuxiliarySpoke(45),
+
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(56.25),
+                      _buildMinorSpoke(67.5),
+                      _buildMinorSpoke(78.75),
+                      // </MinorSpokes> //
 
                       // ** <East> **//
                       _buildMajorSpoke(90,
@@ -72,6 +79,21 @@ class CompassView extends StatelessWidget {
                           textPadding:
                               EdgeInsets.only(top: _K_MAJOR_TOP_PADDING)),
                       // ** </East> **//
+
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(101.25),
+                      _buildMinorSpoke(112.5),
+                      _buildMinorSpoke(123.75),
+                      // </MinorSpokes> //
+
+                      // SouthEast
+                      _buildAuxiliarySpoke(135),
+
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(146.25),
+                      _buildMinorSpoke(157.5),
+                      _buildMinorSpoke(168.75),
+                      // </MinorSpokes> //
 
                       // ** <South> **//
                       _buildMajorSpoke(180,
@@ -81,12 +103,42 @@ class CompassView extends StatelessWidget {
                               EdgeInsets.only(bottom: _K_MAJOR_BOTTOM_PADDING)),
                       // ** </South> **//
 
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(191.25),
+                      _buildMinorSpoke(202.5),
+                      _buildMinorSpoke(213.75),
+                      // </MinorSpokes> //
+
+                      // SouthWest
+                      _buildAuxiliarySpoke(225),
+
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(236.25),
+                      _buildMinorSpoke(247.5),
+                      _buildMinorSpoke(258.75),
+                      // </MinorSpokes> //
+
                       // ** <West> **//
                       _buildMajorSpoke(270,
                           textValue: "E",
                           textPadding:
                               EdgeInsets.only(top: _K_MAJOR_TOP_PADDING)),
                       // ** </West> **//
+
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(281.25),
+                      _buildMinorSpoke(292.5),
+                      _buildMinorSpoke(303.75),
+                      // </MinorSpokes> //
+
+                      // NorthWest
+                      _buildAuxiliarySpoke(315),
+
+                      // <MinorSpokes> //
+                      _buildMinorSpoke(326.25),
+                      _buildMinorSpoke(337.5),
+                      _buildMinorSpoke(348.75),
+                      // </MinorSpokes> //
                     ],
                   ),
                 ),
@@ -141,6 +193,27 @@ class CompassView extends StatelessWidget {
                     child: Text(textValue,
                         style: Design.text.hint(setColor: textColor)))),
           ],
+        ));
+  }
+
+  Widget _buildAuxiliarySpoke(double direction) {
+    return Align(
+        alignment: directionToAlignment(-1, direction),
+        child: Transform.rotate(
+          angle: directionToRads(direction),
+          child: Padding(
+            padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
+            child: Neumorphic(
+              style: NeumorphicStyle(
+                depth: 20,
+              ),
+              child: Container(
+                width: 15,
+                height: 1.35,
+                decoration: BoxDecoration(color: Colors.grey),
+              ),
+            ),
+          ),
         ));
   }
 
