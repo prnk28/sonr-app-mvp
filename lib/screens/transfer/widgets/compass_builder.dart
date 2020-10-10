@@ -1,5 +1,13 @@
 part of 'compass.dart';
 
+// Major Constants
+const double _K_MAJOR_SPOKE_WIDTH = 18; // Spoke Length
+const double _K_MAJOR_TOP_PADDING = 45; // West, East
+const double _K_MAJOR_BOTTOM_PADDING = 20; // North, South
+
+// Minor Constants
+const double _K_MINOR_SPOKE_WIDTH = 12;
+
 Widget _buildMajorSpoke(
   double direction, {
   bool isNegativeAlignment = false,

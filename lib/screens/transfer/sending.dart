@@ -20,6 +20,16 @@ class _SendingViewState extends State<SendingView> {
     return SafeArea(
       child: Stack(
         children: <Widget>[
+          // Bubble View
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Flexible(
+                child: CompassView(
+                    direction:
+                        BlocProvider.of<DeviceBloc>(context).currentDirection)),
+          ),
+
+          // Compass View
           Align(
             alignment: Alignment.bottomCenter,
             child: Flexible(

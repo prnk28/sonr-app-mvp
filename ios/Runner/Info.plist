@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    	<string>App needs location permissions to scan nearby beacons.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Required for the App</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

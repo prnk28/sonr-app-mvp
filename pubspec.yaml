@@ -45,6 +45,8 @@ dependencies:
   tuple: ^1.0.3
 
   # -- Network --
+  beacon_broadcast: ^0.2.1
+  beacons_plugin: ^1.0.17
   chunked_stream: ^1.1.0
   flutter_webrtc: ^0.2.6
   socket_io_client: ^0.9.1

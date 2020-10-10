@@ -1,6 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:uuid/uuid.dart';
 
 // ********************** //
 // ** Enums for Object ** //
@@ -20,15 +21,10 @@ enum PeerStatus {
 // ***************************** //
 class Peer {
   // Management
+  String id;
   Profile profile;
   DateTime lastUpdated;
   String lobbyId;
-  String _socketId;
-
-  // Socket Id Getter
-  String get id {
-    return _socketId;
-  }
 
   // Accelerometer Variables - Get/Set
   AccelerometerEvent _motion;
@@ -67,6 +63,10 @@ class Peer {
   // ** Constructer ** //
   // ***************** //
   Peer(this.profile) {
+    // Set Id
+    var uuid = Uuid();
+    this.id = uuid.v1();
+
     // Defualt Motion Variables
     this.motion = new AccelerometerEvent(0.01, 0.01, 0.01);
 
@@ -128,15 +128,6 @@ class Peer {
         this.antipodalDirection = -1.0;
         break;
     }
-  }
-
-  // -- Setter for ID --
-  set id(String givenId) {
-    // Update Value
-    _socketId = givenId;
-
-    // Update Status
-    this.status = PeerStatus.Ready;
   }
 
   // -- Setter to Update Motion --

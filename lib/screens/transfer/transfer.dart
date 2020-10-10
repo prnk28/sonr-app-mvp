@@ -12,8 +12,6 @@ part 'waiting.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<WebBloc>(context).add(Connect());
-
     return Scaffold(
       appBar: Design.leadingAppBar("/home", context, Icons.close,
           shouldPopScreen: true),

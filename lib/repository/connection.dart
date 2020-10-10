@@ -12,9 +12,8 @@ class Connection {
     // ***************************** //
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
-      user.node.id = socket.id;
       user.node.lobbyId = data["lobbyId"];
-      log.i(data["lobbyId"].toString());
+      user.node.status = PeerStatus.Ready;
     });
 
     // -- NODE APPEARED IN LOBBY --

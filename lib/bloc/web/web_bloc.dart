@@ -1,3 +1,4 @@
+import 'package:beacons_plugin/beacons_plugin.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
@@ -15,7 +16,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   DirectedValueGraph graph;
   Connection connection;
+  BeaconsProvider beaconsProvider;
   StreamSubscription deviceSubscription;
+  StreamController<String> beaconEventsController;
 
   // Required Blocs
   final DataBloc data;
@@ -27,6 +30,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ** Initialization
     graph = new DirectedValueGraph();
     connection = new Connection(this, this.user);
+    beaconsProvider = new BeaconsProvider();
+    beaconsProvider.initialize(user.node.id);
+    beaconEventsController = StreamController<String>.broadcast();
+    BeaconsPlugin.listenToBeacons(beaconEventsController);
 
     // ****************************** //
     // ** Device BLoC Subscription ** //
@@ -42,6 +49,20 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Inactive
       else {}
     });
+
+    // ************************** //
+    // ** Beacons Subscription ** //
+    // ************************** //
+    beaconEventsController.stream.listen(
+        (data) {
+          if (data.isNotEmpty) {
+            log.i("Beacons DataReceived: " + data);
+          }
+        },
+        onDone: () {},
+        onError: (error) {
+          print("Error: $error");
+        });
   }
 
   // Initial State
@@ -50,6 +71,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // On Bloc Close
   void dispose() {
     deviceSubscription.cancel();
+    beaconEventsController.close();
   }
 
 // *********************************
