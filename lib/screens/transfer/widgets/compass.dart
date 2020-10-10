@@ -1,5 +1,13 @@
 import 'package:sonar_app/screens/screens.dart';
 
+// Major Constants
+const double _K_MAJOR_SPOKE_WIDTH = 18; // Spoke Length
+const double _K_MAJOR_TOP_PADDING = 45; // West, East
+const double _K_MAJOR_BOTTOM_PADDING = 20; // North, South
+
+// Minor Constants
+const double _K_MINOR_SPOKE_WIDTH = 12; // Spoke Length
+
 class CompassView extends StatelessWidget {
   final UserBloc user;
   const CompassView({Key key, this.user}) : super(key: key);
@@ -35,61 +43,62 @@ class CompassView extends StatelessWidget {
               fit: StackFit.expand,
               alignment: Alignment.center,
               children: [
-                //the click center
+                // Center Circle
                 Neumorphic(
                   style: NeumorphicStyle(
-                    depth: -1,
+                    depth: -3,
                     boxShape: NeumorphicBoxShape.circle(),
                   ),
-                  margin: EdgeInsets.all(65),
+                  margin: EdgeInsets.all(70),
                 ),
+                // Spokes
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Stack(
                     children: <Widget>[
-                      // ** <East> **//
-                      _buildMajorSpoke(
-                          angle: degreesToRads(0),
-                          spokeWidth: 15,
-                          gradient: FlutterGradients.malibuBeach(),
-                          alignment: Alignment.centerRight,
-                          textColor: Colors.black54,
-                          textValue: "E",
-                          textPadding: EdgeInsets.only(top: 40)),
-                      // ** </East> **//
-
                       // ** <North> **//
                       _buildMajorSpoke(
                           angle: degreesToRads(90),
-                          spokeWidth: 15,
-                          gradient: FlutterGradients.ripeMalinka(),
                           alignment: Alignment.topCenter,
                           textColor: Colors.red[900],
                           textValue: "N",
-                          textPadding: EdgeInsets.only(bottom: 20)),
+                          textPadding:
+                              EdgeInsets.only(bottom: _K_MAJOR_BOTTOM_PADDING)),
                       // ** </North> **//
 
-                      // ** <West> **//
+                      // ** <NorthByEast> **//
+                      _buildMinorSpoke(
+                        angle: degreesToRads(101.25),
+                        alignmentValues: degreesToRectangular(1, 11.25),
+                      ),
+                      // ** </NorthByEast> **//
+
+                      // ** <East> **//
                       _buildMajorSpoke(
-                          angle: degreesToRads(180),
-                          spokeWidth: 15,
-                          gradient: FlutterGradients.malibuBeach(),
-                          alignment: Alignment.centerLeft,
-                          textColor: Colors.black54,
-                          textValue: "W",
-                          textPadding: EdgeInsets.only(top: 40)),
-                      // ** </West> **//
+                          angle: degreesToRads(0),
+                          alignment: Alignment.centerRight,
+                          textValue: "E",
+                          textPadding:
+                              EdgeInsets.only(top: _K_MAJOR_TOP_PADDING)),
+                      // ** </East> **//
 
                       // ** <South> **//
                       _buildMajorSpoke(
                           angle: degreesToRads(270),
-                          spokeWidth: 15,
-                          gradient: FlutterGradients.malibuBeach(),
                           alignment: Alignment.bottomCenter,
-                          textColor: Colors.black54,
                           textValue: "S",
-                          textPadding: EdgeInsets.only(bottom: 20)),
+                          textPadding:
+                              EdgeInsets.only(bottom: _K_MAJOR_BOTTOM_PADDING)),
                       // ** </South> **//
+
+                      // ** <West> **//
+                      _buildMajorSpoke(
+                          angle: degreesToRads(180),
+                          alignment: Alignment.centerLeft,
+                          textValue: "W",
+                          textPadding:
+                              EdgeInsets.only(top: _K_MAJOR_TOP_PADDING)),
+                      // ** </West> **//
                     ],
                   ),
                 ),
@@ -103,9 +112,7 @@ class CompassView extends StatelessWidget {
 
   Widget _buildMajorSpoke(
       {double angle,
-      double spokeWidth,
-      Gradient gradient,
-      Color textColor,
+      Color textColor = Colors.black54,
       String textValue,
       EdgeInsets textPadding,
       Alignment alignment}) {
@@ -118,15 +125,15 @@ class CompassView extends StatelessWidget {
             Transform.rotate(
                 angle: angle,
                 child: Padding(
-                    padding: EdgeInsets.only(left: spokeWidth),
+                    padding: EdgeInsets.only(left: _K_MAJOR_SPOKE_WIDTH),
                     child: Neumorphic(
                       style: NeumorphicStyle(
                         depth: 20,
                       ),
                       child: Container(
-                        width: spokeWidth,
-                        height: 3,
-                        decoration: BoxDecoration(gradient: gradient),
+                        width: _K_MAJOR_SPOKE_WIDTH,
+                        height: 1.5,
+                        decoration: BoxDecoration(color: Colors.grey[700]),
                       ),
                     ))),
             // Create Text
@@ -141,22 +148,24 @@ class CompassView extends StatelessWidget {
   }
 
   Widget _buildMinorSpoke(
-      {double angle, double width, double height = 3, Gradient gradient}) {
-    return Transform.rotate(
-      angle: angle,
-      child: Padding(
-        padding: EdgeInsets.only(left: width),
-        child: Neumorphic(
-          style: NeumorphicStyle(
-            depth: 20,
+      {double angle, Tuple2<double, double> alignmentValues}) {
+    return Align(
+        alignment: Alignment(alignmentValues.item1, alignmentValues.item2),
+        child: Transform.rotate(
+          angle: angle,
+          child: Padding(
+            padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
+            child: Neumorphic(
+              style: NeumorphicStyle(
+                depth: 20,
+              ),
+              child: Container(
+                width: _K_MINOR_SPOKE_WIDTH,
+                height: 1,
+                decoration: BoxDecoration(color: Colors.grey),
+              ),
+            ),
           ),
-          child: Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(gradient: gradient),
-          ),
-        ),
-      ),
-    );
+        ));
   }
 }

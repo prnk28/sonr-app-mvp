@@ -20,6 +20,8 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:math';
+
+import 'package:tuple/tuple.dart';
 export 'package:bloc/bloc.dart';
 
 // Networking Libraries
@@ -94,6 +96,16 @@ Future<File> writeToFile(Uint8List data, String path) {
       .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
 }
 
+// ********************
+// ** Math Functions **
+// ********************
 num degreesToRads(num deg) {
   return (deg * pi) / 180.0;
+}
+
+Tuple2<double, double> degreesToRectangular(double r, double angle) {
+  // Calculate X, Y
+  double x = r * cos(angle);
+  double y = r * sin(angle);
+  return Tuple2<double, double>(x, y);
 }
