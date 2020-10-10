@@ -47,7 +47,7 @@ class CompassView extends StatelessWidget {
 
                     // Spokes
                     Transform.rotate(
-                        angle: ((this.direction ?? 0) * (math.pi / 180) * -2),
+                        angle: ((this.direction ?? 0) * (math.pi / 180) * -1),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Stack(

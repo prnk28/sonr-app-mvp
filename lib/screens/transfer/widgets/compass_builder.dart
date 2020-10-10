@@ -93,23 +93,94 @@ Widget _buildMinorSpoke(double direction) {
 Widget _buildCenterBulb(double direction) {
   return Neumorphic(
     style: NeumorphicStyle(
-      depth: -3,
+      depth: -5,
       boxShape: NeumorphicBoxShape.circle(),
     ),
-    margin: EdgeInsets.all(70),
+    margin: EdgeInsets.all(65),
     child: Neumorphic(
       style: NeumorphicStyle(
         depth: 10,
+        shape: NeumorphicShape.concave,
         boxShape: NeumorphicBoxShape.circle(),
       ),
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.all(7.5),
       child: Container(
         decoration: BoxDecoration(
             gradient: FlutterGradients.angelCare(type: GradientType.radial)),
         child: Column(
-          children: [Text(direction.toString())],
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: AlignmentDirectional.topEnd,
+              clipBehavior: Clip.none,
+              overflow: Overflow.visible,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(left: 0, top: 5),
+                    child: Text(
+                      "°",
+                      style: Design.text.bulbValue(),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: Text(
+                      _getDirectionString(direction),
+                      style: Design.text.bulbValue(),
+                    )),
+              ],
+            ),
+            Padding(
+                padding: EdgeInsets.only(right: 6),
+                child: Text(
+                  _getCompassDesignation(direction),
+                  style: Design.text.bulbDesignation(),
+                )),
+          ],
         ),
       ),
     ),
   );
+}
+
+// ********************************
+// ** Compass Designation Finder **
+// ********************************
+enum CompassDesignation {
+  N,
+  NNE,
+  NE,
+  ENE,
+  E,
+  ESE,
+  SE,
+  SSE,
+  S,
+  SSW,
+  SW,
+  WSW,
+  W,
+  WNW,
+  NW,
+  NNW
+}
+
+String _getCompassDesignation(double degrees) {
+  var compassValue = ((degrees / 22.5) + 0.5).toInt();
+
+  var compassEnum = CompassDesignation.values[(compassValue % 16)];
+  return enumAsString(compassEnum);
+}
+
+String _getDirectionString(double degrees) {
+  // Round
+  var adjustedDegrees = degrees.round();
+
+  // Add 0 for Aesthetic
+  if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
+    return "0" + "0" + adjustedDegrees.toString();
+  } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
+    return "0" + adjustedDegrees.toString();
+  } else {
+    return adjustedDegrees.toString();
+  }
 }

@@ -119,31 +119,3 @@ double directionToDegrees(double direction) {
     return direction + 90;
   }
 }
-
-// ********************************
-// ** Compass Designation Finder **
-// ********************************
-enum CompassDesignation {
-  N,
-  NNE,
-  NE,
-  ENE,
-  E,
-  ESE,
-  SE,
-  SSE,
-  S,
-  SSW,
-  SW,
-  WSW,
-  W,
-  WNW,
-  NW,
-  NNW
-}
-
-CompassDesignation getCompassDesignationFromDegrees(double degrees) {
-  var compassValue = ((degrees / 22.5) + 0.5).toInt();
-
-  return CompassDesignation.values[(compassValue % 16)];
-}

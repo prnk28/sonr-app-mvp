@@ -35,6 +35,26 @@ class DesignText {
     );
   }
 
+  // Bulb Direction
+  TextStyle bulbValue({Color setColor}) {
+    return TextStyle(
+      fontFamily: "Raleway",
+      fontWeight: FontWeight.bold,
+      fontSize: 46,
+      color: setColor ?? Colors.white,
+    );
+  }
+
+  // Bulb Designation
+  TextStyle bulbDesignation({Color setColor}) {
+    return TextStyle(
+      fontFamily: "Raleway",
+      fontWeight: FontWeight.bold,
+      fontSize: 18,
+      color: setColor ?? Colors.white,
+    );
+  }
+
   // Hint Text
   TextStyle hint({Color setColor}) {
     return TextStyle(
