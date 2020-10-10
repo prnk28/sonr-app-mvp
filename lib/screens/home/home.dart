@@ -34,8 +34,13 @@ class HomeScreen extends StatelessWidget {
                         boxShape: NeumorphicBoxShape.stadium()),
                     child: Icon(Icons.star_outline_rounded),
                     onPressed: () {
-                      // Change View
-                      Navigator.pushNamed(context, "/transfer");
+                      // Change View as Modal
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TransferScreen(),
+                            fullscreenDialog: true),
+                      );
                     })),
           ],
         ));

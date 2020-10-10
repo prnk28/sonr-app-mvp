@@ -11,6 +11,7 @@ export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter/widgets.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:vibration/vibration.dart';
+export 'package:flutter/material.dart';
 
 // Sonr Classes
 export 'package:sonar_app/bloc/bloc.dart';

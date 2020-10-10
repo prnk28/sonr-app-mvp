@@ -15,7 +15,8 @@ class TransferScreen extends StatelessWidget {
     BlocProvider.of<WebBloc>(context).add(Connect());
 
     return Scaffold(
-      appBar: Design.screenAppBar("Transfer"),
+      appBar: Design.leadingAppBar("/home", context, Icons.close,
+          shouldPopScreen: true),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: BlocBuilder<WebBloc, WebState>(
         // Set Build Requirements

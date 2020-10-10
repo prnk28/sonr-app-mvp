@@ -61,6 +61,33 @@ class Design {
           ),
           textStyle: Design.text.neuBarTitle(),
           textAlign: TextAlign.center),
+      leading: Container(),
+    );
+  }
+
+  static NeumorphicAppBar leadingAppBar(
+    String destination,
+    BuildContext context,
+    IconData iconData, {
+    bool shouldPopScreen,
+    String title,
+  }) {
+    return NeumorphicAppBar(
+      leading: Stack(
+        alignment: Alignment.center,
+        children: [
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Design.button.appBarLeadingButton(iconData, onPressed: () {
+                // Check if Bool Provided or False
+                if (shouldPopScreen == null || !shouldPopScreen) {
+                  Navigator.pushNamed(context, destination);
+                } else {
+                  Navigator.pop(context);
+                }
+              }, context: context)),
+        ],
+      ),
     );
   }
 

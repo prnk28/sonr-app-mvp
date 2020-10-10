@@ -1,8 +1,8 @@
 import 'design.dart';
 
 class DesignButton {
-  NeumorphicButton appBarLeadingButton(
-      {Function() onPressed, Icon icon, BuildContext context}) {
+  NeumorphicButton appBarLeadingButton(IconData iconData,
+      {Function() onPressed, BuildContext context}) {
     return NeumorphicButton(
       padding: EdgeInsets.all(18),
       style: NeumorphicStyle(
@@ -10,7 +10,7 @@ class DesignButton {
         shape: NeumorphicShape.flat,
       ),
       child: Icon(
-        Icons.arrow_back,
+        iconData,
         color: NeumorphicTheme.isUsingDark(context)
             ? Colors.white70
             : Colors.black87,
