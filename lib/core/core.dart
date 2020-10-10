@@ -19,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sonar_app/core/design/design.dart';
 import 'dart:math';
 
 import 'package:tuple/tuple.dart';
@@ -99,13 +100,29 @@ Future<File> writeToFile(Uint8List data, String path) {
 // ********************
 // ** Math Functions **
 // ********************
-num degreesToRads(num deg) {
-  return (deg * pi) / 180.0;
+num directionToRads(num deg) {
+  return (directionToDegrees(deg) * pi) / 180.0;
 }
 
-Tuple2<double, double> degreesToRectangular(double r, double angle) {
-  // Calculate X, Y
-  double x = r * cos(angle);
-  double y = r * sin(angle);
-  return Tuple2<double, double>(x, y);
+Alignment directionToAlignment(double r, double deg) {
+  // Calculate radians
+  double radAngle = directionToRads(deg);
+
+  double x = cos(radAngle) * r;
+  double y = sin(radAngle) * r;
+  log.i("Angle: " +
+      directionToDegrees(deg).toString() +
+      " x: " +
+      x.toString() +
+      " y: " +
+      y.toString());
+  return Alignment(x, y);
+}
+
+double directionToDegrees(double degrees) {
+  if (degrees + 90 > 360) {
+    return degrees - 270;
+  } else {
+    return degrees + 90;
+  }
 }

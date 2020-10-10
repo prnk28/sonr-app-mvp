@@ -13,13 +13,6 @@ class CompassView extends StatelessWidget {
   const CompassView({Key key, this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Expanded(
-        child: new Align(
-            alignment: Alignment.bottomCenter,
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[new Icon(Icons.star), new Text("Bottom Text")],
-            )));
     return AspectRatio(
       aspectRatio: 1,
       child: Neumorphic(
@@ -57,45 +50,40 @@ class CompassView extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       // ** <North> **//
-                      _buildMajorSpoke(
-                          angle: degreesToRads(90),
-                          alignment: Alignment.topCenter,
+                      _buildMajorSpoke(0,
+                          isNegativeAlignment: true,
                           textColor: Colors.red[900],
                           textValue: "N",
                           textPadding:
                               EdgeInsets.only(bottom: _K_MAJOR_BOTTOM_PADDING)),
                       // ** </North> **//
 
-                      // ** <NorthByEast> **//
-                      _buildMinorSpoke(
-                        angle: degreesToRads(101.25),
-                        alignmentValues: degreesToRectangular(1, 11.25),
-                      ),
-                      // ** </NorthByEast> **//
+                      // <NorthByEast> //
+                      _buildMinorSpoke(11.25),
+                      // </NorthByEast> //
+
+                      // <NorthByNorthEast> //
+                      _buildMinorSpoke(22.5),
+                      // </NorthByNorthEast> //
 
                       // ** <East> **//
-                      _buildMajorSpoke(
-                          angle: degreesToRads(0),
-                          alignment: Alignment.centerRight,
-                          textValue: "E",
+                      _buildMajorSpoke(90,
+                          textValue: "W",
                           textPadding:
                               EdgeInsets.only(top: _K_MAJOR_TOP_PADDING)),
                       // ** </East> **//
 
                       // ** <South> **//
-                      _buildMajorSpoke(
-                          angle: degreesToRads(270),
-                          alignment: Alignment.bottomCenter,
+                      _buildMajorSpoke(180,
+                          isNegativeAlignment: true,
                           textValue: "S",
                           textPadding:
                               EdgeInsets.only(bottom: _K_MAJOR_BOTTOM_PADDING)),
                       // ** </South> **//
 
                       // ** <West> **//
-                      _buildMajorSpoke(
-                          angle: degreesToRads(180),
-                          alignment: Alignment.centerLeft,
-                          textValue: "W",
+                      _buildMajorSpoke(270,
+                          textValue: "E",
                           textPadding:
                               EdgeInsets.only(top: _K_MAJOR_TOP_PADDING)),
                       // ** </West> **//
@@ -111,19 +99,28 @@ class CompassView extends StatelessWidget {
   }
 
   Widget _buildMajorSpoke(
-      {double angle,
-      Color textColor = Colors.black54,
-      String textValue,
-      EdgeInsets textPadding,
-      Alignment alignment}) {
+    double direction, {
+    bool isNegativeAlignment = false,
+    Color textColor = Colors.black54,
+    String textValue,
+    EdgeInsets textPadding,
+  }) {
+    // Check Negative Alignment
+    double multiplier;
+    if (isNegativeAlignment) {
+      multiplier = -1;
+    } else {
+      multiplier = 1;
+    }
+    // Build Major Spoke
     return Align(
-        alignment: alignment,
+        alignment: directionToAlignment(multiplier * 1, direction),
         child: Stack(
-          alignment: alignment,
+          alignment: directionToAlignment(multiplier * 1, direction),
           children: [
             // Create Spoke
             Transform.rotate(
-                angle: angle,
+                angle: directionToRads(direction),
                 child: Padding(
                     padding: EdgeInsets.only(left: _K_MAJOR_SPOKE_WIDTH),
                     child: Neumorphic(
@@ -138,7 +135,7 @@ class CompassView extends StatelessWidget {
                     ))),
             // Create Text
             Transform.rotate(
-                angle: angle + degreesToRads(90),
+                angle: directionToRads(direction + 90),
                 child: Padding(
                     padding: textPadding,
                     child: Text(textValue,
@@ -147,12 +144,11 @@ class CompassView extends StatelessWidget {
         ));
   }
 
-  Widget _buildMinorSpoke(
-      {double angle, Tuple2<double, double> alignmentValues}) {
+  Widget _buildMinorSpoke(double direction) {
     return Align(
-        alignment: Alignment(alignmentValues.item1, alignmentValues.item2),
+        alignment: directionToAlignment(-1, direction),
         child: Transform.rotate(
-          angle: angle,
+          angle: directionToRads(direction),
           child: Padding(
             padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
             child: Neumorphic(
