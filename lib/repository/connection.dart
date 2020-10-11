@@ -23,6 +23,7 @@ class Connection {
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('NODE_UPDATE', (data) {
       Peer peer = Peer.fromMap(data);
+      log.i("Update Node");
       web.add(UpdateGraph(GraphUpdate.UPDATE, peer));
     });
 

@@ -5,7 +5,6 @@ import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:graph_collection/graph.dart';
-import 'package:wifi_info_plugin/wifi_info_plugin.dart';
 
 part 'web_event.dart';
 part 'web_state.dart';
@@ -45,12 +44,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       }
       // Inactive
       else {}
-    });
-
-    // Listen To Stream
-    flutterBeacon.monitoring(regions).listen((MonitoringResult result) {
-      // result contains a region, event type and event state
-      log.i(result.toJson());
     });
   }
 
@@ -154,7 +147,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
           // Add Beacon
           beaconsProvider.addRegion(
-              id: event.peer.id, proximityUUID: previousNode.lobbyId);
+              id: event.peer.id, proximityUUID: event.peer.lobbyId);
 
           // Remove Peer Node
           graph.remove(previousNode);
@@ -335,7 +328,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     switch (event.type) {
       case MessageKind.CONNECTED:
         // Setup Beacons
-        await beaconsProvider.setup(user.node.id, user.node.lobbyId);
+        await beaconsProvider.initScanBeacon(user.node.id, user.node.lobbyId);
         add(SendNode());
         break;
       case MessageKind.OFFER:

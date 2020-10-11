@@ -1,7 +1,7 @@
 import 'package:sonar_app/screens/screens.dart';
 import 'dart:math' as math;
 
-part 'compass_builder.dart';// Spoke Length
+part 'compass_builder.dart'; // Spoke Length
 
 class CompassView extends StatelessWidget {
   final double direction;

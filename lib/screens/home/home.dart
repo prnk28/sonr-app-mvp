@@ -22,11 +22,14 @@ class HomeScreen extends StatelessWidget {
             BlocBuilder<DeviceBloc, DeviceState>(
               builder: (context, state) {
                 if (state is Ready) {
-                  return Text("DeviceBloc State: Ready");
+                  return Text("Ready: " +
+                      BlocProvider.of<UserBloc>(context).node.id.toString());
                 } else if (state is Sending) {
-                  return Text("DeviceBloc State: Sending");
+                  return Text("Sending: " +
+                      BlocProvider.of<UserBloc>(context).node.id.toString());
                 } else if (state is Receiving) {
-                  return Text("DeviceBloc State: Receiving");
+                  return Text("Receiving: " +
+                      BlocProvider.of<UserBloc>(context).node.id.toString());
                 } else if (state is Busy) {
                   return Text("DeviceBloc State: Busy");
                 } else if (state is Refreshing) {
