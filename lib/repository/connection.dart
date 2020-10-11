@@ -1,5 +1,6 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
+import 'dart:io' show Platform;
 import 'repository.dart';
 
 class Connection {
@@ -12,14 +13,11 @@ class Connection {
     // ***************************** //
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
+      // Set Lobby Id
       user.node.lobbyId = data["lobbyId"];
       user.node.status = PeerStatus.Ready;
-    });
-
-    // -- NODE APPEARED IN LOBBY --
-    socket.on('NODE_ENTER', (data) {
-      Peer peer = Peer.fromMap(data);
-      web.add(UpdateGraph(GraphUpdate.ENTER, peer));
+      // Update Beacon Settings
+      web.add(Handle(MessageKind.CONNECTED));
     });
 
     // -- UPDATE TO A NODE IN LOBBY --

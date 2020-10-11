@@ -52,7 +52,7 @@ class ProfileAdapter extends TypeAdapter<Profile> {
 
   @override
   Profile read(BinaryReader reader) {
-    return Profile()..firstName = reader.read();
+    return Profile()..firstName = reader.read(0);
   }
 
   @override

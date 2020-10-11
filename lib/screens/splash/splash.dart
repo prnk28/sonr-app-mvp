@@ -3,9 +3,6 @@ import 'package:sonar_app/screens/screens.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Begin Local Status Check
-    BlocProvider.of<UserBloc>(context).add(Initialize());
-
     // Return
     return NeumorphicTheme(
       theme: Design.lightTheme,

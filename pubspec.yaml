@@ -46,11 +46,11 @@ dependencies:
 
   # -- Network --
   beacon_broadcast: ^0.2.1
-  beacons_plugin: ^1.0.17
+  flutter_beacon: ^0.3.0
   chunked_stream: ^1.1.0
   flutter_webrtc: ^0.2.6
-  socket_io_client: ^0.9.1
   http: ^0.12.0+4
+  socket_io_client: ^0.9.1
 
   # -- UI/UX --
   animations: ^1.1.2

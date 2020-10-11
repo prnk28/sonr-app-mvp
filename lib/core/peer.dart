@@ -39,6 +39,10 @@ class Peer {
   double _direction;
   double antipodalDirection;
 
+  // Proximity Variables
+  double distance;
+  double proximity;
+
   // Degrees Getter
   double get direction {
     return _direction;

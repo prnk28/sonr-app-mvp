@@ -1,9 +1,17 @@
+import 'package:beacon_broadcast/beacon_broadcast.dart';
+import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/screens/screens.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<WebBloc>(context).add(Connect());
+    beaconBroadcast
+        .checkTransmissionSupported()
+        .then((BeaconStatus isTransmissionSupported) {
+      if (isTransmissionSupported == BeaconStatus.SUPPORTED) {
+        BlocProvider.of<WebBloc>(context).add(Connect());
+      }
+    });
 
     // Build View
     return Scaffold(

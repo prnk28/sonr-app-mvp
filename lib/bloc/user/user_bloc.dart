@@ -35,13 +35,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Retrieve Profile
     var box = await Hive.openBox(PROFILE_BOX);
     final profileData = box.get("profile");
-    await box.close();
 
     // No Profile
     if (profileData == null) {
       // Update Reference
       this.profile = null;
-
+      await box.close();
       // Change State
       yield Offline();
     }
@@ -52,7 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
       // Initialize User Node
       node = new Peer(profile);
-
+      await box.close();
       // Profile Ready
       yield Online(profile);
     }
@@ -65,7 +64,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Update Profile in Hive
     var box = await Hive.openBox(PROFILE_BOX);
     box.put("profile", profile);
-    await box.close();
 
     // Update Reference
     this.profile = event.data;
@@ -74,6 +72,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     node = new Peer(profile);
 
     // Profile Ready
+    await box.close();
     yield Online(profile);
   }
 }

@@ -1,7 +1,7 @@
 part of 'web_bloc.dart';
 
-enum GraphUpdate { ENTER, UPDATE, EXIT }
-enum MessageKind { OFFER, ANSWER, DECLINED, COMPLETE, LEAVE, CLOSE }
+enum GraphUpdate { UPDATE, EXIT }
+enum MessageKind { CONNECTED, OFFER, ANSWER, DECLINED, COMPLETE, LEAVE, CLOSE }
 
 abstract class WebEvent extends Equatable {
   const WebEvent();

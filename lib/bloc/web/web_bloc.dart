@@ -1,10 +1,11 @@
-import 'package:beacons_plugin/beacons_plugin.dart';
+import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:graph_collection/graph.dart';
+import 'package:wifi_info_plugin/wifi_info_plugin.dart';
 
 part 'web_event.dart';
 part 'web_state.dart';
@@ -18,7 +19,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Connection connection;
   BeaconsProvider beaconsProvider;
   StreamSubscription deviceSubscription;
-  StreamController<String> beaconEventsController;
 
   // Required Blocs
   final DataBloc data;
@@ -31,9 +31,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     graph = new DirectedValueGraph();
     connection = new Connection(this, this.user);
     beaconsProvider = new BeaconsProvider();
-    beaconsProvider.initialize(user.node.id);
-    beaconEventsController = StreamController<String>.broadcast();
-    BeaconsPlugin.listenToBeacons(beaconEventsController);
 
     // ****************************** //
     // ** Device BLoC Subscription ** //
@@ -50,19 +47,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       else {}
     });
 
-    // ************************** //
-    // ** Beacons Subscription ** //
-    // ************************** //
-    beaconEventsController.stream.listen(
-        (data) {
-          if (data.isNotEmpty) {
-            log.i("Beacons DataReceived: " + data);
-          }
-        },
-        onDone: () {},
-        onError: (error) {
-          print("Error: $error");
-        });
+    // Listen To Stream
+    flutterBeacon.monitoring(regions).listen((MonitoringResult result) {
+      // result contains a region, event type and event state
+      log.i(result.toJson());
+    });
   }
 
   // Initial State
@@ -71,7 +60,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // On Bloc Close
   void dispose() {
     deviceSubscription.cancel();
-    beaconEventsController.close();
   }
 
 // *********************************
@@ -155,29 +143,18 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // -- Modify Graph Relations --
     switch (event.updateType) {
-      // -- Peer has Appeared --
-      case GraphUpdate.ENTER:
-        // Check Node Status: Senders are From
-        if (user.node.canSendTo(event.peer)) {
-          // Calculate Difference and Create Edge
-          graph.setToBy<double>(
-              user.node, event.peer, Peer.getDifference(user.node, event.peer));
-        }
-        // Check Node Status: Receivers are To
-        else if (user.node.canReceiveFrom(event.peer)) {
-          // Calculate Difference and Create Edge
-          graph.setToBy<double>(
-              event.peer, user.node, Peer.getDifference(event.peer, user.node));
-        }
-        break;
       // -- Peer Updated Sensory Input --
       case GraphUpdate.UPDATE:
         // Check Node Status: Senders are From
         if (user.node.canSendTo(event.peer)) {
           // Find Previous Node
-          var previousNode = graph.singleWhere(
+          Peer previousNode = graph.singleWhere(
               (element) => element.id == event.peer.id,
               orElse: () => null);
+
+          // Add Beacon
+          beaconsProvider.addRegion(
+              id: event.peer.id, proximityUUID: previousNode.lobbyId);
 
           // Remove Peer Node
           graph.remove(previousNode);
@@ -356,6 +333,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // Check Event Type
     switch (event.type) {
+      case MessageKind.CONNECTED:
+        // Setup Beacons
+        await beaconsProvider.setup(user.node.id, user.node.lobbyId);
+        add(SendNode());
+        break;
       case MessageKind.OFFER:
         // Update Device Status
         device.add(Update(true));

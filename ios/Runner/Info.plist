@@ -2,22 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    	<string>App needs location permissions to scan nearby beacons.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Required for the App</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Requried for the App</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Requried for the App</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Requried for the App</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Requried for the App</string>
-	<key>NSMotionUsageDescription</key>
-<string>A reason to get the permission</string>
-	<key>LSApplicationCategoryType</key>
-	<string>Privacy - Location When In Use Usage Description</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>For Beacons usage</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -36,8 +22,24 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationCategoryType</key>
+	<string>Privacy - Location When In Use Usage Description</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Requried for the App</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App needs location permissions to scan nearby beacons.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Required for the App</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Requried for the App</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Requried for the App</string>
+	<key>NSMotionUsageDescription</key>
+	<string>A reason to get the permission</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Requried for the App</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
