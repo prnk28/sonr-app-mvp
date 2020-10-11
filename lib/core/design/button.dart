@@ -6,9 +6,9 @@ class DesignButton {
     return NeumorphicButton(
       padding: EdgeInsets.all(18),
       style: NeumorphicStyle(
-        boxShape: NeumorphicBoxShape.circle(),
-        shape: NeumorphicShape.flat,
-      ),
+          boxShape: NeumorphicBoxShape.circle(),
+          shape: NeumorphicShape.convex,
+          depth: 5),
       child: Icon(
         iconData,
         color: NeumorphicTheme.isUsingDark(context)
