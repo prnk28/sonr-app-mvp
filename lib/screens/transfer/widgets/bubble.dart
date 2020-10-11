@@ -24,11 +24,9 @@ class BubbleView extends StatelessWidget {
               child: Container(),
             )),
         Padding(
-            padding: EdgeInsets.only(bottom: 575),
-            child: CustomPaint(
-              foregroundPainter: CurvePainter(4),
-              child: Container(),
-            )),
+          padding: EdgeInsets.only(bottom: 575),
+          child: CustomPaint(painter: CurvePainter(4), child: Container()),
+        ),
       ],
     );
   }
