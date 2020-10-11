@@ -229,8 +229,6 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
 				"${PODS_ROOT}/../Flutter/Flutter.framework",
 				"${PODS_ROOT}/GoogleWebRTC/Frameworks/frameworks/WebRTC.framework",
-				"${BUILT_PRODUCTS_DIR}/beacon_broadcast/beacon_broadcast.framework",
-				"${BUILT_PRODUCTS_DIR}/flutter_beacon/flutter_beacon.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_sensor_compass/flutter_sensor_compass.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_sensors/flutter_sensors.framework",
 				"${BUILT_PRODUCTS_DIR}/geolocator/geolocator.framework",
@@ -244,8 +242,6 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flutter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/beacon_broadcast.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_beacon.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_sensor_compass.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_sensors.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/geolocator.framework",

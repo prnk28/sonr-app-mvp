@@ -45,8 +45,6 @@ dependencies:
   tuple: ^1.0.3
 
   # -- Network --
-  beacon_broadcast: ^0.2.1
-  flutter_beacon: ^0.3.0
   chunked_stream: ^1.1.0
   flutter_webrtc: ^0.2.6
   http: ^0.12.0+4
@@ -58,6 +56,7 @@ dependencies:
   flutter_gradients: ^1.0.0+2
   flutter_neumorphic: ^3.0.2
   page_transition: ^1.1.6
+  path_drawing: ^0.4.1+1
 
 # ** -- TEST -- **
 dev_dependencies:

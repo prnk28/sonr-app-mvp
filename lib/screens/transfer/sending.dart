@@ -21,13 +21,10 @@ class _SendingViewState extends State<SendingView> {
       child: Stack(
         children: <Widget>[
           // Bubble View
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Flexible(
-          //       child: CompassView(
-          //           direction:
-          //               BlocProvider.of<DeviceBloc>(context).currentDirection)),
-          // ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: BubbleView(),
+          ),
 
           // Compass View
           Align(

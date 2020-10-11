@@ -3,7 +3,6 @@ export 'session.dart';
 export 'connection.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
-export 'beaconsprovider.dart';
 export 'dart:typed_data';
 export 'package:hive/hive.dart';
 export 'package:path/path.dart';

@@ -1,4 +1,3 @@
-import 'package:flutter_beacon/flutter_beacon.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
@@ -16,7 +15,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   DirectedValueGraph graph;
   Connection connection;
-  BeaconsProvider beaconsProvider;
   StreamSubscription deviceSubscription;
 
   // Required Blocs
@@ -29,7 +27,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ** Initialization
     graph = new DirectedValueGraph();
     connection = new Connection(this, this.user);
-    beaconsProvider = new BeaconsProvider();
 
     // ****************************** //
     // ** Device BLoC Subscription ** //
@@ -144,10 +141,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
           Peer previousNode = graph.singleWhere(
               (element) => element.id == event.peer.id,
               orElse: () => null);
-
-          // Add Beacon
-          beaconsProvider.addRegion(
-              id: event.peer.id, proximityUUID: event.peer.lobbyId);
 
           // Remove Peer Node
           graph.remove(previousNode);
@@ -328,7 +321,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     switch (event.type) {
       case MessageKind.CONNECTED:
         // Setup Beacons
-        await beaconsProvider.initScanBeacon(user.node.id, user.node.lobbyId);
         add(SendNode());
         break;
       case MessageKind.OFFER:

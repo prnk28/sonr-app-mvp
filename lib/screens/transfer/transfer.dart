@@ -1,5 +1,6 @@
 import 'package:sonar_app/screens/screens.dart';
 import 'widgets/compass.dart';
+import 'widgets/bubble.dart';
 
 // Views in Screen
 part 'complete.dart';
