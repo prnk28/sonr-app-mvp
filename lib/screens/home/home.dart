@@ -7,6 +7,21 @@ class HomeScreen extends StatelessWidget {
     // Build View
     return Scaffold(
         appBar: Design.screenAppBar("Home"),
+        floatingActionButton: NeumorphicButton(
+            style: NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.circle(),
+                shape: NeumorphicShape.convex,
+                depth: 5),
+            child: Icon(Icons.star_outline_rounded),
+            onPressed: () {
+              // Change View as Modal
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TransferScreen(),
+                    fullscreenDialog: true),
+              );
+            }),
         body: Column(
           children: [
             // Bloc Builder to View Device info
@@ -30,22 +45,6 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             // Button to Go to Transfer
-            Center(
-                child: NeumorphicButton(
-                    margin: EdgeInsets.only(top: 12),
-                    style: NeumorphicStyle(
-                        shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.stadium()),
-                    child: Icon(Icons.star_outline_rounded),
-                    onPressed: () {
-                      // Change View as Modal
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TransferScreen(),
-                            fullscreenDialog: true),
-                      );
-                    })),
           ],
         ));
   }

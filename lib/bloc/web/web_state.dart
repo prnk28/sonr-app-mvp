@@ -27,6 +27,13 @@ class Loading extends WebState {
   const Loading();
 }
 
+// ***************************
+// ** Active for Receiving ***
+// ***************************
+class Active extends WebState {
+  const Active();
+}
+
 // *****************************************
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************

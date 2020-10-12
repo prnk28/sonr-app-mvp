@@ -1,5 +1,4 @@
 import 'package:sonar_app/screens/screens.dart';
-import 'dart:math' as math;
 
 import 'curve_painter.dart';
 

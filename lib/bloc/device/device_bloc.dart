@@ -72,20 +72,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     // Update if now busy
     if (!event.isNowBusy) {
       // Yield State by Orientation Status
-      switch (user.node.orientation) {
-        case OrientationType.Portrait:
-          yield Ready();
-          break;
-        case OrientationType.Tilted:
-          yield Sending();
-          break;
-        case OrientationType.LandscapeLeft:
-          yield Receiving();
-          break;
-        case OrientationType.LandscapeRight:
-          yield Receiving();
-          break;
-      }
     } else {
       user.node.status = PeerStatus.Busy;
       yield Busy();
