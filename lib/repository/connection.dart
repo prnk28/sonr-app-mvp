@@ -15,7 +15,6 @@ class Connection {
     socket.on('CONNECTED', (data) {
       // Set Lobby Id
       user.node.lobbyId = data["lobbyId"];
-      user.node.status = PeerStatus.Active;
       // Update Beacon Settings
       web.add(Handle(MessageKind.CONNECTED));
     });

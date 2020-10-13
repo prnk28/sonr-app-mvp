@@ -12,7 +12,6 @@ Future<void> main() async {
 
   // Initialize Hive Adapters
   Hive.registerAdapter(ProfileAdapter());
-  Hive.registerAdapter(ContactAdapter());
 
   // Initialize HiveDB
   await Hive.initFlutter();
@@ -59,6 +58,10 @@ class App extends StatelessWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/home':
+            // Update Status
+            BlocProvider.of<WebBloc>(context)
+                .add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
+
             // Initialize
             BlocProvider.of<WebBloc>(context).add(Connect());
             return PageTransition(
@@ -73,8 +76,9 @@ class App extends StatelessWidget {
                 settings: settings);
             break;
           case '/transfer':
-            // Search
-            BlocProvider.of<WebBloc>(context).add(Search());
+            // Update Status
+            BlocProvider.of<WebBloc>(context).add(
+                Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
             return PageTransition(
                 child: TransferScreen(),
                 type: PageTransitionType.fade,

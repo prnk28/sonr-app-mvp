@@ -16,6 +16,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   DirectedValueGraph graph;
   Connection connection;
   StreamSubscription directionSubscription;
+  double _lastDirection;
 
   // Required Blocs
   final DataBloc data;
@@ -32,17 +33,21 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ** Device BLoC Subscription ** //
     // ****************************** //
     directionSubscription = device.directionCubit.listen((direction) {
-      // Device is Ready to Send
-      if (this.state is Searching) {
-        add(Search());
-      }
-      // Send with 500ms delay
-      else if (this.state is Active) {
-        add(Update(UpdateType.NODE));
-      }
-      // Inactive
-      else {
-        //add(Load());
+      // Check Diff Direction
+      if (direction != _lastDirection && this.state is! Loading) {
+        // Device is Ready to Send
+        if (this.state is Searching) {
+          add(Search());
+        }
+        // Send with 500ms delay
+        if (this.state is Active) {
+          add(Update(UpdateType.NODE));
+        }
+        // Inactive
+        else {
+          //add(Load());
+        }
+        _lastDirection = direction;
       }
     });
   }
@@ -93,9 +98,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Emit to Socket.io from User Peer Node
     socket.emit("CONNECT", user.node.toMap());
 
-    // Update Status
-    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
-
     // Device Pending State
     yield Active();
   }
@@ -112,11 +114,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Search Event ***
 // *********************
   Stream<WebState> _mapSearchToState(Search event) async* {
-    // // Add Delay
-    // await Future.delayed(const Duration(milliseconds: 250));
-
     // Update Status
     add(Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
+
+    // Add Delay
+    // Future.delayed(const Duration(milliseconds: 250));
 
     // Send to Server
     socket.emit("UPDATE", user.node.toMap());
@@ -132,12 +134,15 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Update Event ***
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
-    // Load
-    //add(Load());
-
     // By Event Type
     switch (event.type) {
       case UpdateType.NODE:
+// Add Delay
+        // await Future.delayed(const Duration(milliseconds: 500));
+
+// Change status
+        add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
+
         // Send to Server
         socket.emit("UPDATE", user.node.toMap());
 
@@ -197,6 +202,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(pathfinder: pathFinder);
         break;
       case UpdateType.STATUS:
+        //add(Load());
         user.node.status = event.newStatus;
         break;
     }
@@ -339,7 +345,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     switch (event.type) {
       case MessageKind.CONNECTED:
         // Setup Beacons
-        add(Search());
+        add(Update(UpdateType.NODE));
         break;
       case MessageKind.OFFER:
         // Update Device Status

@@ -70,6 +70,7 @@ class Design {
     BuildContext context,
     IconData iconData, {
     bool shouldPopScreen,
+    bool shouldRevertToActive,
     String title,
   }) {
     return NeumorphicAppBar(
@@ -83,6 +84,14 @@ class Design {
                 if (shouldPopScreen == null || !shouldPopScreen) {
                   Navigator.pushNamed(context, destination);
                 } else {
+                  if (shouldRevertToActive) {
+                    BlocProvider.of<WebBloc>(context).add(Update(
+                        UpdateType.STATUS,
+                        newStatus: PeerStatus.Active));
+
+                    BlocProvider.of<WebBloc>(context)
+                        .add(Update(UpdateType.NODE));
+                  }
                   Navigator.pop(context);
                 }
               }, context: context)),

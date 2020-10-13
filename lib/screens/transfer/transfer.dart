@@ -15,10 +15,13 @@ class TransferScreen extends StatelessWidget {
     // Fake Select File in Queue
     BlocProvider.of<DataBloc>(context).add(QueueFile());
 
+    // Search
+    BlocProvider.of<WebBloc>(context).add(Search());
+
     // Return Widget
     return Scaffold(
       appBar: Design.leadingAppBar("/home", context, Icons.close,
-          shouldPopScreen: true),
+          shouldPopScreen: true, shouldRevertToActive: true),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: BlocBuilder<WebBloc, WebState>(
         // Set Build Requirements
