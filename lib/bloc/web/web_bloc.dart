@@ -35,17 +35,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     directionSubscription = device.directionCubit.listen((direction) {
       // Check Diff Direction
       if (direction != _lastDirection && this.state is! Loading) {
-        // Device is Ready to Send
+        // Device is Searching
         if (this.state is Searching) {
           add(Search());
         }
         // Send with 500ms delay
-        if (this.state is Active) {
+        else if (this.state is Active) {
           add(Update(UpdateType.NODE));
-        }
-        // Inactive
-        else {
-          //add(Load());
         }
         _lastDirection = direction;
       }

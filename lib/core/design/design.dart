@@ -82,16 +82,21 @@ class Design {
               child: Design.button.appBarLeadingButton(iconData, onPressed: () {
                 // Check if Bool Provided or False
                 if (shouldPopScreen == null || !shouldPopScreen) {
+                  // Shift Screen
                   Navigator.pushNamed(context, destination);
                 } else {
                   if (shouldRevertToActive) {
+                    // Change Status
                     BlocProvider.of<WebBloc>(context).add(Update(
                         UpdateType.STATUS,
                         newStatus: PeerStatus.Active));
 
+                    // Update Node
                     BlocProvider.of<WebBloc>(context)
                         .add(Update(UpdateType.NODE));
                   }
+
+                  // Pop Navigation
                   Navigator.pop(context);
                 }
               }, context: context)),

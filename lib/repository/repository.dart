@@ -1,6 +1,7 @@
 // Directory Exports
 export 'session.dart';
 export 'connection.dart';
+export 'localdata.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
 export 'dart:typed_data';
@@ -10,6 +11,7 @@ export 'package:path_provider/path_provider.dart';
 
 // Socket.io Client
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:sonar_app/repository/localdata.dart';
 import 'package:sonar_app/repository/session.dart';
 
 // ** Constants for WebRTC **
@@ -47,3 +49,4 @@ Socket socket = io('http://match.sonr.io', <String, dynamic>{
   'transports': ['websocket'],
 });
 RTCSession session = new RTCSession();
+LocalData localData = new LocalData();
