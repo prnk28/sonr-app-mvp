@@ -15,7 +15,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   DirectedValueGraph graph;
   Connection connection;
-  StreamSubscription deviceSubscription;
+  StreamSubscription directionSubscription;
 
   // Required Blocs
   final DataBloc data;
@@ -31,13 +31,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ****************************** //
     // ** Device BLoC Subscription ** //
     // ****************************** //
-    deviceSubscription = device.listen((DeviceState deviceState) {
+    directionSubscription = device.directionCubit.listen((direction) {
       // Device is Ready to Send
-      if (deviceState is Sending) {
+      if (this.state is Searching) {
         add(Search());
       }
       // Send with 500ms delay
-      else if (deviceState is Ready) {
+      else if (this.state is Active) {
         add(Update(UpdateType.NODE));
       }
       // Inactive
@@ -52,7 +52,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
   // On Bloc Close
   void dispose() {
-    deviceSubscription.cancel();
+    directionSubscription.cancel();
   }
 
 // *********************************
@@ -117,11 +117,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Search Event ***
 // *********************
   Stream<WebState> _mapSearchToState(Search event) async* {
-    // Add Delay
-    await Future.delayed(const Duration(milliseconds: 250));
+    // // Add Delay
+    // await Future.delayed(const Duration(milliseconds: 250));
 
     // Load
-    add(Load());
+    //add(Load());
 
     // Send to Server
     socket.emit("UPDATE", user.node.toMap());
@@ -137,9 +137,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Update Event ***
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
-    // Add Delay
-    await Future.delayed(const Duration(milliseconds: 500));
-
     // Load
     add(Load());
 
@@ -150,7 +147,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         socket.emit("UPDATE", user.node.toMap());
 
         // Yield Searching with Closest Neighbor
-        yield Active();
+        //yield Active();
         break;
       case UpdateType.GRAPH:
         // -- Modify Graph Relations --

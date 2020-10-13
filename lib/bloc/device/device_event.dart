@@ -7,18 +7,18 @@ abstract class DeviceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Refresh while updating sensors
-class Refresh extends DeviceEvent {
-  final double direction;
-  const Refresh({this.direction});
-}
-
 // Get Current Peer Location
 class GetLocation extends DeviceEvent {
   const GetLocation();
 }
 
-// Updates to State based on Refreshed Data
-class ChangeStatus extends DeviceEvent {
-  const ChangeStatus();
+// *********************
+// ** Direction Cubit **
+// *********************
+class DirectionCubit extends Cubit<double> {
+  DirectionCubit() : super(0);
+
+  void update(double newValue) {
+    emit(newValue);
+  }
 }

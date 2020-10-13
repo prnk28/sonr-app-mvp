@@ -11,7 +11,7 @@ part 'device_state.dart';
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
   final UserBloc user;
-  double currentDirection = 0;
+  DirectionCubit directionCubit = new DirectionCubit();
 
   // Constructer
   DeviceBloc(this.user) : super(null) {
@@ -19,57 +19,16 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     Compass()
         .compassUpdates(interval: Duration(milliseconds: 100))
         .listen((newDegrees) {
-      // Check if User Active
-      if (user.node != null && user.node.status != PeerStatus.Busy) {
-        // Update Degrees Var
-        add(Refresh(direction: newDegrees));
-        currentDirection = newDegrees;
-      }
+      // Update Degrees Var
+      directionCubit.update(newDegrees);
     });
   }
   @override
   Stream<DeviceState> mapEventToState(
     DeviceEvent event,
   ) async* {
-    if (event is Refresh) {
-      yield* _mapRefreshState(event);
-    } else if (event is ChangeStatus) {
-      yield* _mapChangeStatusState(event);
-    } else if (event is GetLocation) {
+    if (event is GetLocation) {
       yield* _mapGetLocationState(event);
-    }
-  }
-
-// *******************
-// ** Refresh Event **
-// *******************
-  Stream<DeviceState> _mapRefreshState(Refresh event) async* {
-    // Check if Direction Provided
-    if (event.direction != null && user.node != null) {
-      user.node.direction = event.direction;
-    }
-    add(ChangeStatus());
-    // Update State
-    yield Refreshing();
-  }
-
-// ************************
-// ** ChangeStatus Event **
-// ************************
-  Stream<DeviceState> _mapChangeStatusState(ChangeStatus event) async* {
-    switch (user.node.status) {
-      case PeerStatus.Inactive:
-        yield Inactive();
-        break;
-      case PeerStatus.Active:
-        yield Ready();
-        break;
-      case PeerStatus.Searching:
-        yield Sending();
-        break;
-      case PeerStatus.Busy:
-        yield Busy();
-        break;
     }
   }
 

@@ -30,8 +30,9 @@ class _SearchingViewState extends State<SearchingView> {
           Align(
               alignment: Alignment.bottomCenter,
               child: CompassView(
-                  direction:
-                      BlocProvider.of<DeviceBloc>(context).currentDirection)),
+                  direction: BlocProvider.of<DeviceBloc>(context)
+                      .directionCubit
+                      .state))
         ],
       ),
     );

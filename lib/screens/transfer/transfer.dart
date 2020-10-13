@@ -21,8 +21,6 @@ class TransferScreen extends StatelessWidget {
         buildWhen: (prev, curr) {
           if (curr is Loading) {
             return false;
-          } else if (curr is Refreshing) {
-            return false;
           }
           return true;
         },

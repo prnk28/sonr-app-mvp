@@ -17,18 +17,8 @@ class Ready extends DeviceState {
   const Ready({this.user});
 }
 
-class Sending extends DeviceState {
-  const Sending();
-}
-
 // ** Interacting with another Peer**
 class Busy extends DeviceState {
   final Peer user;
   const Busy({this.user});
-}
-
-// ** Device Refreshing Sensors **
-class Refreshing extends DeviceState {
-  final Peer user;
-  const Refreshing({this.user});
 }
