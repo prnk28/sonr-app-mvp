@@ -26,13 +26,15 @@ class _SearchingViewState extends State<SearchingView> {
             child: BubbleView(),
           ),
 
+          BlocBuilder<DirectionCubit, double>(
+            cubit: BlocProvider.of<DeviceBloc>(context).directionCubit,
+            builder: (context, state) {
+              return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CompassView(direction: state));
+            },
+          )
           // Compass View
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: CompassView(
-                  direction: BlocProvider.of<DeviceBloc>(context)
-                      .directionCubit
-                      .state))
         ],
       ),
     );

@@ -12,6 +12,10 @@ part 'waiting.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Fake Select File in Queue
+    BlocProvider.of<DataBloc>(context).add(QueueFile());
+
+    // Return Widget
     return Scaffold(
       appBar: Design.leadingAppBar("/home", context, Icons.close,
           shouldPopScreen: true),

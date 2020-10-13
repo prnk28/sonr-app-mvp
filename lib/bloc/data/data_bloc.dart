@@ -94,14 +94,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
     // Check if Queue is Outgoing
     if (event.file != null) {
+      // Current Fake File
+      File transferToSend =
+          await getAssetFileByPath("assets/images/fat_test.jpg");
+
       // Create Metadata
-      var outgoingMeta = new Metadata(file: event.file);
+      var outgoingMeta = new Metadata(file: transferToSend);
 
       // Add to Outgoing File Map
-      outgoing[outgoingMeta] = event.file;
+      outgoing[outgoingMeta] = transferToSend;
 
       // Set Current File
-      currentFile = Tuple2<Metadata, File>(outgoingMeta, event.file);
+      currentFile = Tuple2<Metadata, File>(outgoingMeta, transferToSend);
 
       yield Queued(currentFile);
     }

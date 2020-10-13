@@ -61,8 +61,6 @@ class App extends StatelessWidget {
           case '/home':
             // Initialize
             BlocProvider.of<WebBloc>(context).add(Connect());
-            BlocProvider.of<WebBloc>(context)
-                .add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
             return PageTransition(
                 child: HomeScreen(),
                 type: PageTransitionType.fade,
@@ -75,9 +73,8 @@ class App extends StatelessWidget {
                 settings: settings);
             break;
           case '/transfer':
-            // Set to Search
-            BlocProvider.of<WebBloc>(context).add(
-                Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
+            // Search
+            BlocProvider.of<WebBloc>(context).add(Search());
             return PageTransition(
                 child: TransferScreen(),
                 type: PageTransitionType.fade,

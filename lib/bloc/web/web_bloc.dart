@@ -93,11 +93,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Emit to Socket.io from User Peer Node
     socket.emit("CONNECT", user.node.toMap());
 
-    // Fake Select File in Queue
-    File transferToSend =
-        await getAssetFileByPath("assets/images/fat_test.jpg");
-    data.add(QueueFile(file: transferToSend));
-
     // Update Status
     add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
 
@@ -120,8 +115,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // // Add Delay
     // await Future.delayed(const Duration(milliseconds: 250));
 
-    // Load
-    //add(Load());
+    // Update Status
+    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
 
     // Send to Server
     socket.emit("UPDATE", user.node.toMap());
@@ -138,7 +133,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
     // Load
-    add(Load());
+    //add(Load());
 
     // By Event Type
     switch (event.type) {
@@ -147,7 +142,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         socket.emit("UPDATE", user.node.toMap());
 
         // Yield Searching with Closest Neighbor
-        //yield Active();
+        yield Active();
         break;
       case UpdateType.GRAPH:
         // -- Modify Graph Relations --
