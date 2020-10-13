@@ -1,16 +1,16 @@
 part of 'transfer.dart';
 
-class SendingView extends StatefulWidget {
+class SearchingView extends StatefulWidget {
   final PathFinder pathfinder;
   final UserBloc user;
 
-  SendingView({this.pathfinder, this.user});
+  SearchingView({this.pathfinder, this.user});
 
   @override
-  _SendingViewState createState() => _SendingViewState();
+  _SearchingViewState createState() => _SearchingViewState();
 }
 
-class _SendingViewState extends State<SendingView> {
+class _SearchingViewState extends State<SearchingView> {
   @override
   Widget build(BuildContext context) {
     //if (!pathfinder.isEmpty) {

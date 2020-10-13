@@ -21,7 +21,7 @@ class PathFinder {
     costs = new Map<Peer, double>();
 
     // Utilizes Froms
-    if (userNode.status == PeerStatus.Receiving) {
+    if (userNode.status == PeerStatus.Active) {
       // Get Senders
       var senders = _graph.linkFroms(userNode);
 
@@ -42,7 +42,7 @@ class PathFinder {
       }
     }
     // Utilizes Tos
-    else {
+    else if (userNode.status == PeerStatus.Searching) {
       // Get Receivers
       var receivers = _graph.linkTos(userNode);
 

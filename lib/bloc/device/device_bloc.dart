@@ -15,12 +15,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
   // Constructer
   DeviceBloc(this.user) : super(null) {
-    // ** Accelerometer Events **
-    accelerometerEvents.listen((AccelerometerEvent newMotion) {
-      // Update Motion Var
-      add(Refresh(motion: newMotion));
-    });
-
     // ** Directional Events **
     Compass()
         .compassUpdates(interval: Duration(milliseconds: 100))
@@ -39,8 +33,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   ) async* {
     if (event is Refresh) {
       yield* _mapRefreshState(event);
-    } else if (event is Update) {
-      yield* _mapUpdateState(event);
+    } else if (event is ChangeStatus) {
+      yield* _mapChangeStatusState(event);
     } else if (event is GetLocation) {
       yield* _mapGetLocationState(event);
     }
@@ -54,27 +48,28 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     if (event.direction != null && user.node != null) {
       user.node.direction = event.direction;
     }
-
-    // Check if Motion Provided
-    if (event.motion != null) {
-      user.node.motion = event.motion;
-    }
-
+    add(ChangeStatus());
     // Update State
-    add(Update(false));
     yield Refreshing();
   }
 
-// *******************
-// ** Update Event **
-// *******************
-  Stream<DeviceState> _mapUpdateState(Update event) async* {
-    // Update if now busy
-    if (!event.isNowBusy) {
-      // Yield State by Orientation Status
-    } else {
-      user.node.status = PeerStatus.Busy;
-      yield Busy();
+// ************************
+// ** ChangeStatus Event **
+// ************************
+  Stream<DeviceState> _mapChangeStatusState(ChangeStatus event) async* {
+    switch (user.node.status) {
+      case PeerStatus.Inactive:
+        yield Inactive();
+        break;
+      case PeerStatus.Active:
+        yield Ready();
+        break;
+      case PeerStatus.Searching:
+        yield Sending();
+        break;
+      case PeerStatus.Busy:
+        yield Busy();
+        break;
     }
   }
 

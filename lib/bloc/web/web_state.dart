@@ -13,13 +13,6 @@ class Disconnected extends WebState {
   const Disconnected();
 }
 
-// ****************************
-// ** Connected to Lobby/WS ***
-// ****************************
-class Connected extends WebState {
-  const Connected();
-}
-
 // ***************************
 // ** Between Server Reads ***
 // ***************************

@@ -10,8 +10,7 @@ abstract class DeviceEvent extends Equatable {
 // Refresh while updating sensors
 class Refresh extends DeviceEvent {
   final double direction;
-  final AccelerometerEvent motion;
-  const Refresh({this.direction, this.motion});
+  const Refresh({this.direction});
 }
 
 // Get Current Peer Location
@@ -20,7 +19,6 @@ class GetLocation extends DeviceEvent {
 }
 
 // Updates to State based on Refreshed Data
-class Update extends DeviceEvent {
-  final bool isNowBusy;
-  const Update(this.isNowBusy);
+class ChangeStatus extends DeviceEvent {
+  const ChangeStatus();
 }

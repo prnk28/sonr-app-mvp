@@ -6,8 +6,7 @@ import 'widgets/bubble.dart';
 part 'complete.dart';
 part 'confirm.dart';
 part 'progress.dart';
-part 'receiving.dart';
-part 'sending.dart';
+part 'searching.dart';
 part 'waiting.dart';
 
 class TransferScreen extends StatelessWidget {
@@ -22,41 +21,29 @@ class TransferScreen extends StatelessWidget {
         buildWhen: (prev, curr) {
           if (curr is Loading) {
             return false;
+          } else if (curr is Refreshing) {
+            return false;
           }
           return true;
         },
         builder: (context, state) {
           // -- Searching State--
           if (state is Searching) {
-            // Check if Receiver
-            if (BlocProvider.of<UserBloc>(context).node.status ==
-                PeerStatus.Receiving) {
-              return ReceivingView(
-                  pathfinder: state.pathfinder,
-                  user: BlocProvider.of<UserBloc>(context));
-            }
-            // Check if Sender
-            else if (BlocProvider.of<UserBloc>(context).node.status ==
-                PeerStatus.Sending) {
-              return SendingView(
-                  pathfinder: state.pathfinder,
-                  user: BlocProvider.of<UserBloc>(context));
-            }
-            // Log Error
-            log.e("Invalid PeerStatus in Searching State");
-            return Container();
+            return SearchingView(
+                pathfinder: state.pathfinder,
+                user: BlocProvider.of<UserBloc>(context));
           }
 
           // -- Pending State--
           else if (state is Pending) {
             // Check if Receiver
             if (BlocProvider.of<UserBloc>(context).node.status ==
-                PeerStatus.Receiving) {
+                PeerStatus.Searching) {
               return ConfirmView();
             }
             // Check if Sender
             else if (BlocProvider.of<UserBloc>(context).node.status ==
-                PeerStatus.Sending) {
+                PeerStatus.Active) {
               return WaitingView();
             }
           }

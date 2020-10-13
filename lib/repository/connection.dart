@@ -15,7 +15,7 @@ class Connection {
     socket.on('CONNECTED', (data) {
       // Set Lobby Id
       user.node.lobbyId = data["lobbyId"];
-      user.node.status = PeerStatus.Ready;
+      user.node.status = PeerStatus.Active;
       // Update Beacon Settings
       web.add(Handle(MessageKind.CONNECTED));
     });
@@ -24,13 +24,15 @@ class Connection {
     socket.on('NODE_UPDATE', (data) {
       Peer peer = Peer.fromMap(data);
       log.i("Update Node");
-      web.add(UpdateGraph(GraphUpdate.UPDATE, peer));
+      web.add(Update(UpdateType.GRAPH,
+          graphUpdate: GraphUpdate.UPDATE, peer: peer));
     });
 
     // -- NODE EXITED LOBBY --
     socket.on('NODE_EXIT', (data) {
       Peer peer = Peer.fromMap(data);
-      web.add(UpdateGraph(GraphUpdate.EXIT, peer));
+      web.add(
+          Update(UpdateType.GRAPH, graphUpdate: GraphUpdate.EXIT, peer: peer));
     });
 
     // -- OFFER REQUEST --

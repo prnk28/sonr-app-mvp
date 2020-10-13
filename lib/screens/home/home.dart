@@ -25,23 +25,17 @@ class HomeScreen extends StatelessWidget {
         body: Column(
           children: [
             // Bloc Builder to View Device info
-            BlocBuilder<DeviceBloc, DeviceState>(
+            BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
-                if (state is Ready) {
-                  return Text("Ready: " +
-                      BlocProvider.of<UserBloc>(context).node.id.toString());
-                } else if (state is Sending) {
-                  return Text("Sending: " +
-                      BlocProvider.of<UserBloc>(context).node.id.toString());
-                } else if (state is Receiving) {
-                  return Text("Receiving: " +
-                      BlocProvider.of<UserBloc>(context).node.id.toString());
-                } else if (state is Busy) {
-                  return Text("DeviceBloc State: Busy");
-                } else if (state is Refreshing) {
-                  return Text("DeviceBloc State: Refreshing");
-                }
-                return Text("DeviceBloc State: Inactive");
+                // if (state is Ready) {
+                //   return Text("Ready: " +
+                //       BlocProvider.of<UserBloc>(context).node.id.toString());
+                // } else if (state is Busy) {
+                //   return Text("DeviceBloc State: Busy");
+                // } else if (state is Refreshing) {
+                //   return Text("DeviceBloc State: Refreshing");
+                // }
+                return Text("WebBloc");
               },
             ),
             // Button to Go to Transfer

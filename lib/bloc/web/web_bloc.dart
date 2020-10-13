@@ -32,15 +32,18 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ** Device BLoC Subscription ** //
     // ****************************** //
     deviceSubscription = device.listen((DeviceState deviceState) {
-      // Device is Tilted or Landscape
-      if (deviceState is Sending || deviceState is Receiving) {
-        add(SendNode());
+      // Device is Ready to Send
+      if (deviceState is Sending) {
+        add(Search());
       }
-      // Interacting with another Peer
-      else if (deviceState is Busy) {
+      // Send with 500ms delay
+      else if (deviceState is Ready) {
+        add(Update(UpdateType.NODE));
       }
       // Inactive
-      else {}
+      else {
+        //add(Load());
+      }
     });
   }
 
@@ -64,10 +67,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapConnectToState(event);
     } else if (event is Load) {
       yield* _mapLoadToState(event);
-    } else if (event is SendNode) {
-      yield* _mapSendNodeToState(event);
-    } else if (event is UpdateGraph) {
-      yield* _mapUpdateGraphToState(event);
+    } else if (event is Search) {
+      yield* _mapSearchToState(event);
+    } else if (event is Update) {
+      yield* _mapUpdateToState(event);
     } else if (event is Invite) {
       yield* _mapInviteToState(event);
     } else if (event is Authorize) {
@@ -95,8 +98,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         await getAssetFileByPath("assets/images/fat_test.jpg");
     data.add(QueueFile(file: transferToSend));
 
+    // Update Status
+    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
+
     // Device Pending State
-    yield Connected();
+    yield Active();
   }
 
 // *****************
@@ -108,9 +114,12 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   }
 
 // *********************
-// ** SendNode Event ***
+// ** Search Event ***
 // *********************
-  Stream<WebState> _mapSendNodeToState(SendNode event) async* {
+  Stream<WebState> _mapSearchToState(Search event) async* {
+    // Add Delay
+    await Future.delayed(const Duration(milliseconds: 250));
+
     // Load
     add(Load());
 
@@ -124,64 +133,81 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Searching(pathfinder: pathFinder);
   }
 
-// ************************
-// ** UpdateGraph Event ***
-// ************************
-  Stream<WebState> _mapUpdateGraphToState(UpdateGraph event) async* {
+// *******************
+// ** Update Event ***
+// *******************
+  Stream<WebState> _mapUpdateToState(Update event) async* {
+    // Add Delay
+    await Future.delayed(const Duration(milliseconds: 500));
+
     // Load
     add(Load());
 
-    // -- Modify Graph Relations --
-    switch (event.updateType) {
-      // -- Peer Updated Sensory Input --
-      case GraphUpdate.UPDATE:
-        // Check Node Status: Senders are From
-        if (user.node.canSendTo(event.peer)) {
-          // Find Previous Node
-          Peer previousNode = graph.singleWhere(
-              (element) => element.id == event.peer.id,
-              orElse: () => null);
+    // By Event Type
+    switch (event.type) {
+      case UpdateType.NODE:
+        // Send to Server
+        socket.emit("UPDATE", user.node.toMap());
 
-          // Remove Peer Node
-          graph.remove(previousNode);
-
-          // Calculate Difference and Create Edge
-          graph.setToBy<double>(
-              user.node, event.peer, Peer.getDifference(user.node, event.peer));
-        }
-        // Check Node Status: Receivers are To
-        else if (user.node.canReceiveFrom(event.peer)) {
-          // Find Previous Node
-          var previousNode = graph.singleWhere(
-              (element) => element.id == event.peer.id,
-              orElse: () => null);
-
-          // Remove Peer Node
-          graph.remove(previousNode);
-
-          // Calculate Difference and Create Edge
-          graph.setToBy<double>(
-              event.peer, user.node, Peer.getDifference(event.peer, user.node));
-        }
+        // Yield Searching with Closest Neighbor
+        yield Active();
         break;
-      // Peer Left Lobby
-      case GraphUpdate.EXIT:
-        log.i("Peer exited Graph");
-        // Find Previous Node
-        var previousNode = graph.singleWhere(
-            (element) => element.id == event.peer.id,
-            orElse: () => null);
+      case UpdateType.GRAPH:
+        // -- Modify Graph Relations --
+        switch (event.graphUpdate) {
+// -- Peer Updated Sensory Input --
+          case GraphUpdate.UPDATE:
+            // Check Node Status: Senders are From
+            if (user.node.canSendTo(event.peer)) {
+              // Find Previous Node
+              Peer previousNode = graph.singleWhere(
+                  (element) => element.id == event.peer.id,
+                  orElse: () => null);
 
-        // Remove Peer Node
-        graph.remove(previousNode);
+              // Remove Peer Node
+              graph.remove(previousNode);
+
+              // Calculate Difference and Create Edge
+              graph.setToBy<double>(user.node, event.peer,
+                  Peer.getDifference(user.node, event.peer));
+            }
+            // Check Node Status: Receivers are To
+            else if (user.node.canReceiveFrom(event.peer)) {
+              // Find Previous Node
+              var previousNode = graph.singleWhere(
+                  (element) => element.id == event.peer.id,
+                  orElse: () => null);
+
+              // Remove Peer Node
+              graph.remove(previousNode);
+
+              // Calculate Difference and Create Edge
+              graph.setToBy<double>(event.peer, user.node,
+                  Peer.getDifference(event.peer, user.node));
+            }
+            break;
+          // Peer Left Lobby
+          case GraphUpdate.EXIT:
+            log.i("Peer exited Graph");
+            // Find Previous Node
+            var previousNode = graph.singleWhere(
+                (element) => element.id == event.peer.id,
+                orElse: () => null);
+
+            // Remove Peer Node
+            graph.remove(previousNode);
+            break;
+        }
+// Initialize Pathfinder
+        PathFinder pathFinder = new PathFinder(graph, user.node);
+
+        // Yield Searching
+        yield Searching(pathfinder: pathFinder);
+        break;
+      case UpdateType.STATUS:
+        user.node.status = event.newStatus;
         break;
     }
-
-    // Initialize Pathfinder
-    PathFinder pathFinder = new PathFinder(graph, user.node);
-
-    // Yield Searching
-    yield Searching(pathfinder: pathFinder);
   }
 
 // *******************
@@ -189,8 +215,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapInviteToState(Invite event) async* {
     // Update Node and Device State
-    device.add(Update(true));
-    add(SendNode());
+    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Busy));
+    add(Search());
 
     // Set Session Id
     session.id = user.node.id + "-" + event.match.id;
@@ -305,7 +331,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Transferring();
         break;
       default:
-        yield Connected();
+        yield Active();
         break;
     }
   }
@@ -321,14 +347,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     switch (event.type) {
       case MessageKind.CONNECTED:
         // Setup Beacons
-        add(SendNode());
+        add(Search());
         break;
       case MessageKind.OFFER:
         // Update Device Status
-        device.add(Update(true));
+        add(Update(UpdateType.STATUS, newStatus: PeerStatus.Busy));
 
         // Send Node
-        add(SendNode());
+        add(Search());
         yield Pending(
           match: event.match,
         );
@@ -374,14 +400,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
 
     // Reset Node
-    user.node.status = PeerStatus.Ready;
-    add(SendNode());
+    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
+    add(Update(UpdateType.NODE));
 
     // Set Delay
     await new Future.delayed(Duration(seconds: 1));
 
     // Yield Ready
-    yield Connected();
+    yield Active();
   }
 
 // *********************

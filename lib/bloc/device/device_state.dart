@@ -17,16 +17,8 @@ class Ready extends DeviceState {
   const Ready({this.user});
 }
 
-// ** Device is Tilted **
 class Sending extends DeviceState {
-  final Peer user;
-  const Sending({this.user});
-}
-
-// ** Device is Landscape **
-class Receiving extends DeviceState {
-  final Peer user;
-  const Receiving({this.user});
+  const Sending();
 }
 
 // ** Interacting with another Peer**

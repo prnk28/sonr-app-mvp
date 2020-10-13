@@ -6,13 +6,10 @@ import 'package:uuid/uuid.dart';
 // ********************** //
 // ** Enums for Object ** //
 // ********************** //
-enum OrientationType { Portrait, Tilted, LandscapeLeft, LandscapeRight }
-
 enum PeerStatus {
   Inactive,
-  Ready,
-  Sending,
-  Receiving,
+  Active,
+  Searching,
   Busy,
 }
 
@@ -25,15 +22,6 @@ class Peer {
   Profile profile;
   DateTime lastUpdated;
   String lobbyId;
-
-  // Accelerometer Variables - Get/Set
-  AccelerometerEvent _motion;
-  OrientationType orientation;
-
-  // Motion Getter
-  AccelerometerEvent get motion {
-    return _motion;
-  }
 
   // Compass Variables - Get/Set
   double _direction;
@@ -71,9 +59,6 @@ class Peer {
     var uuid = Uuid();
     this.id = uuid.v1();
 
-    // Defualt Motion Variables
-    this.motion = new AccelerometerEvent(0.01, 0.01, 0.01);
-
     // Default Direction Variables
     this.direction = 0.01;
 
@@ -97,76 +82,41 @@ class Peer {
 
     // Find Antipodal Degrees
     var adjusted;
-    switch (orientation) {
-      case OrientationType.LandscapeLeft:
-        // Set Adjusted
-        if (this.direction < 90) {
-          adjusted = 270 - this.direction;
-        } else {
-          adjusted = this.direction - 90;
-        }
+    // switch (orientation) {
+    //   case OrientationType.LandscapeLeft:
+    //     // Set Adjusted
+    //     if (this.direction < 90) {
+    //       adjusted = 270 - this.direction;
+    //     } else {
+    //       adjusted = this.direction - 90;
+    //     }
 
-        // Get Reciprocal of Adjusted
-        if (adjusted < 180) {
-          this.antipodalDirection = adjusted + 180;
-        } else {
-          this.antipodalDirection = adjusted - 180;
-        }
-        break;
-      case OrientationType.LandscapeRight:
-        // Set Adjusted
-        if (newDegrees < 270) {
-          adjusted = this.direction + 90;
-        } else {
-          adjusted = this.direction - 270;
-        }
+    //     // Get Reciprocal of Adjusted
+    //     if (adjusted < 180) {
+    //       this.antipodalDirection = adjusted + 180;
+    //     } else {
+    //       this.antipodalDirection = adjusted - 180;
+    //     }
+    //     break;
+    //   case OrientationType.LandscapeRight:
+    //     // Set Adjusted
+    //     if (newDegrees < 270) {
+    //       adjusted = this.direction + 90;
+    //     } else {
+    //       adjusted = this.direction - 270;
+    //     }
 
-        // Get Reciprocal of Adjusted
-        if (adjusted < 180) {
-          this.antipodalDirection = adjusted + 180;
-        } else {
-          this.antipodalDirection = adjusted - 180;
-        }
-        break;
-      default:
-        this.antipodalDirection = -1.0;
-        break;
-    }
-  }
-
-  // -- Setter to Update Motion --
-  set motion(AccelerometerEvent newMotion) {
-    // Set New Motion Variables
-    _motion = newMotion;
-
-    // Detect if Landscape - Left
-    if (this.motion.x > 7.5) {
-      // Update Orientation
-      this.orientation = OrientationType.LandscapeLeft;
-      // Set Status
-      this.status = PeerStatus.Receiving;
-    }
-    // Detect if Landscape - Right
-    else if (this.motion.x < -7.5) {
-      // Update Orientation
-      this.orientation = OrientationType.LandscapeRight;
-      // Set Status
-      this.status = PeerStatus.Receiving;
-    }
-    // Detect if Tilted
-    else {
-      if (this.motion.y > 4.1) {
-        // Update Orientation
-        this.orientation = OrientationType.Portrait;
-        // Set Status
-        this.status = PeerStatus.Ready;
-      } else {
-        // Update Orientation
-        this.orientation = OrientationType.Tilted;
-        // Set Status
-        this.status = PeerStatus.Sending;
-      }
-    }
+    //     // Get Reciprocal of Adjusted
+    //     if (adjusted < 180) {
+    //       this.antipodalDirection = adjusted + 180;
+    //     } else {
+    //       this.antipodalDirection = adjusted - 180;
+    //     }
+    //     break;
+    //   default:
+    //     this.antipodalDirection = -1.0;
+    //     break;
+    // }
   }
 
   // -- Setter Method to Update Status --
@@ -180,21 +130,21 @@ class Peer {
 
   // Checker Method: If Peer can Send to Peer
   bool canSendTo(Peer peer) {
-    return this.status == PeerStatus.Sending &&
-        peer.status == PeerStatus.Receiving;
+    return this.status == PeerStatus.Searching &&
+        peer.status == PeerStatus.Active;
   }
 
   // Checker Method: If Peer can Receive from Peer
   bool canReceiveFrom(Peer peer) {
-    return this.status == PeerStatus.Receiving &&
-        peer.status == PeerStatus.Sending;
+    return this.status == PeerStatus.Searching &&
+        peer.status == PeerStatus.Active;
   }
 
   // Method to Calculate Difference between two Peers
   static double getDifference(Peer sender, Peer receiver) {
     // Check Node Status: Senders are From
-    if (sender.status == PeerStatus.Sending &&
-        receiver.status == PeerStatus.Receiving) {
+    if (sender.status == PeerStatus.Searching &&
+        receiver.status == PeerStatus.Active) {
       // Calculate Difference
       var diff = sender.direction - receiver.antipodalDirection;
 
@@ -217,11 +167,6 @@ class Peer {
     // Set Status from String
     newPeer.status = enumFromString(map["status"], PeerStatus.values);
 
-    // Add Motion from Map
-    var motion = map["motion"];
-    newPeer.motion =
-        new AccelerometerEvent(motion["x"], motion["y"], motion["z"]);
-
     // Add Compass Data from Map
     var compass = map["compass"];
     newPeer.direction = compass["direction"];
@@ -241,15 +186,6 @@ class Peer {
     // Create Direction Map
     var compass = {
       "direction": this.direction.toDouble(),
-      "antipodalDirection": this.antipodalDirection.toDouble()
-    };
-
-    // Create Motion Map
-    var motion = {
-      "x": this.motion.x.toDouble(),
-      "y": this.motion.y.toDouble(),
-      "z": this.motion.z.toDouble(),
-      "orientation": enumAsString(this.orientation)
     };
 
     // Create Location Map
@@ -263,7 +199,6 @@ class Peer {
     // Combine into Map
     return {
       'id': id,
-      'motion': motion,
       'compass': compass,
       'location': loaction,
       'status': enumAsString(this.status),

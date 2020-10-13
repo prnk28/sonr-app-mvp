@@ -1,7 +1,17 @@
 part of 'web_bloc.dart';
 
 enum GraphUpdate { UPDATE, EXIT }
-enum MessageKind { CONNECTED, OFFER, ANSWER, DECLINED, COMPLETE, LEAVE, CLOSE }
+enum UpdateType { NODE, GRAPH, STATUS }
+enum MessageKind {
+  CONNECTED,
+  SET_ACTIVE,
+  OFFER,
+  ANSWER,
+  DECLINED,
+  COMPLETE,
+  LEAVE,
+  CLOSE
+}
 
 abstract class WebEvent extends Equatable {
   const WebEvent();
@@ -24,17 +34,17 @@ class Load extends WebEvent {
   const Load();
 }
 
-// Send Realtime Peer Data to Server
-class SendNode extends WebEvent {
-  const SendNode();
+// Find Active Nodes
+class Search extends WebEvent {
+  const Search();
 }
 
-// Update Graph with Peer Values
-class UpdateGraph extends WebEvent {
-  final GraphUpdate updateType;
+class Update extends WebEvent {
+  final UpdateType type;
+  final GraphUpdate graphUpdate;
+  final PeerStatus newStatus;
   final Peer peer;
-
-  const UpdateGraph(this.updateType, this.peer);
+  const Update(this.type, {this.newStatus, this.graphUpdate, this.peer});
 }
 
 // Sender Offers Invite for Authorization
