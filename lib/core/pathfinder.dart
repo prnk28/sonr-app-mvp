@@ -93,7 +93,7 @@ class PathFinder {
       near[peer] = peer.direction;
     }
     // Far
-    else if (cost >= 60 && cost < 120) {
+    else if (cost >= 120 && cost < 180) {
       far[peer] = peer.direction;
     }
     // Distant
