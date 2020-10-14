@@ -12,6 +12,13 @@ enum PeerStatus {
   Busy,
 }
 
+enum ProximityStatus {
+  Immediate,
+  Near,
+  Far,
+  Distant,
+}
+
 // ***************************** //
 // ** Class for Node in Graph ** //
 // ***************************** //
@@ -30,10 +37,8 @@ class Peer {
   // Location Variables
   Position location;
 
-  // Enum Private Variables - Get/Set
+  // Status Variables - Get/Set
   PeerStatus _status;
-
-  // Status Getter
   PeerStatus get status {
     return _status;
   }
@@ -56,9 +61,9 @@ class Peer {
     this.status = PeerStatus.Inactive;
   }
 
-  // ****************************** //
-  // ** Methods to Update Values ** //
-  // ****************************** //
+  // **************************** //
+  // ** Methods to Update Node ** //
+  // **************************** //
   // -- Setter Method to Update Status --
   set status(PeerStatus givenStatus) {
     // Update to Given Status
@@ -68,6 +73,9 @@ class Peer {
     this.lastUpdated = DateTime.now();
   }
 
+  // ************************ //
+  // ** Comparison Methods ** //
+  // ************************ //
   // Checker Method: If Peer can Send to Peer
   bool canSendTo(Peer peer) {
     return this.status == PeerStatus.Searching &&
