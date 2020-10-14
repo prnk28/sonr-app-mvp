@@ -12,13 +12,25 @@ import 'core.dart';
 class PathFinder {
   // Reference Variables
   DirectedValueGraph _graph;
-  Map<Peer, double> costs;
+  Map<Peer, double> _costs;
   bool isEmpty;
+
+  // Public Lists by Proximity
+  Map<Peer, double> immediate;
+  Map<Peer, double> near;
+  Map<Peer, double> far;
+  Map<Peer, double> distant;
 
   // ** Constructer: Calculates Costs for Each Node **
   PathFinder(this._graph, Peer userNode) {
     // Initialize Costs Map
-    costs = new Map<Peer, double>();
+    _costs = new Map<Peer, double>();
+
+    // Initialize Proximity Maps
+    immediate = new Map<Peer, double>();
+    near = new Map<Peer, double>();
+    far = new Map<Peer, double>();
+    distant = new Map<Peer, double>();
 
     // Utilizes Froms
     if (userNode.status == PeerStatus.Active) {
@@ -38,7 +50,10 @@ class PathFinder {
         var cost = _graph.getBy<double>(sender, userNode);
 
         // Place in Map
-        costs[sender] = cost.val as double;
+        _costs[sender] = cost.val as double;
+
+        // Assign
+        _assignToList(sender, cost.val);
       }
     }
     // Utilizes Tos
@@ -59,8 +74,31 @@ class PathFinder {
         var cost = _graph.getBy<double>(userNode, receiver);
 
         // Place in Map
-        costs[receiver] = cost.val as double;
+        _costs[receiver] = cost.val as double;
+
+        // Assign
+        _assignToList(receiver, cost.val);
       }
+    }
+  }
+
+  // Method to Assign Peer to List
+  void _assignToList(Peer peer, double cost) {
+    // Immediate
+    if (cost < 60) {
+      immediate[peer] = peer.direction;
+    }
+    // Near
+    else if (cost >= 60 && cost < 120) {
+      near[peer] = peer.direction;
+    }
+    // Far
+    else if (cost >= 60 && cost < 120) {
+      far[peer] = peer.direction;
+    }
+    // Distant
+    else {
+      distant[peer] = peer.direction;
     }
   }
 
@@ -73,7 +111,7 @@ class PathFinder {
     double currentLowestCost = 10000;
 
     // Iterate
-    costs.forEach((peer, cost) {
+    _costs.forEach((peer, cost) {
       // Check Cost
       if (cost < currentLowestCost) {
         // Update Cost, Closest Neighbor

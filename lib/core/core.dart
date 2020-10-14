@@ -22,6 +22,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/core/design/design.dart';
 import 'dart:math';
 
+import 'package:uuid/uuid.dart';
+
 export 'package:bloc/bloc.dart';
 
 // Networking Libraries
@@ -32,10 +34,11 @@ export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 export 'package:sensors/sensors.dart';
 export 'package:soundpool/soundpool.dart';
 
-// **************************** //
-// ** Global Logging Package ** //
-// **************************** //
+// ******************************* //
+// ** Global Package References ** //
+// ******************************* //
 Logger log = Logger();
+Uuid uuid = Uuid();
 
 // ****************** //
 // ** Enum Methods ** //

@@ -26,6 +26,8 @@ class _SearchingViewState extends State<SearchingView> {
             child: BubbleView(),
           ),
 
+          // Have BLoC Builder Retrieve Directly from
+          // Cubit to Avoid Delays
           BlocBuilder<DirectionCubit, double>(
             cubit: BlocProvider.of<DeviceBloc>(context).directionCubit,
             builder: (context, state) {
