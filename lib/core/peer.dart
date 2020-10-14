@@ -19,6 +19,8 @@ enum ProximityStatus {
   Distant,
 }
 
+enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
+
 // ***************************** //
 // ** Class for Node in Graph ** //
 // ***************************** //
@@ -28,6 +30,7 @@ class Peer {
   String lobbyId;
   Profile profile;
   DateTime lastUpdated;
+  DeviceType device;
 
   // Proximity Variables
   double direction;
@@ -59,6 +62,10 @@ class Peer {
 
     // Default Object Variables
     this.status = PeerStatus.Inactive;
+
+    // Set Device
+    this.device = enumFromString(
+        Platform.operatingSystem.toUpperCase(), DeviceType.values);
   }
 
   // **************************** //
@@ -112,8 +119,9 @@ class Peer {
     Peer newPeer = new Peer(profile);
     newPeer.id = map["id"];
 
-    // Set Status from String
+    // Set Status and Device
     newPeer.status = enumFromString(map["status"], PeerStatus.values);
+    newPeer.device = enumFromString(map["device"], DeviceType.values);
 
     // Add Direction Data from Map
     newPeer.direction = map["direction"];
@@ -142,7 +150,8 @@ class Peer {
     // Combine into Map
     return {
       'id': id,
-      "direction": this.direction.toDouble(),
+      'device': enumAsString(this.device),
+      'direction': this.direction.toDouble(),
       'location': loaction,
       'status': enumAsString(this.status),
       'profile': this.profile.toMap()
