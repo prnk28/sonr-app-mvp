@@ -13,18 +13,16 @@ class SearchingView extends StatefulWidget {
 class _SearchingViewState extends State<SearchingView> {
   @override
   Widget build(BuildContext context) {
-    //if (!pathfinder.isEmpty) {
-    // Get Closest Peer
-    //Peer closest = pathfinder.getClosestNeighbor();
+    // Get Screen Size
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    Size screenSize = Size(width, height);
 
     return SafeArea(
       child: Stack(
         children: <Widget>[
           // Bubble View
-          Align(
-            alignment: Alignment.topCenter,
-            child: BubbleView(),
-          ),
+          BubbleView(widget.pathfinder, screenSize),
 
           // Have BLoC Builder Retrieve Directly from
           // Cubit to Avoid Delays
