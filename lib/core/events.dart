@@ -91,7 +91,6 @@ emitWebBlocEvent(WebEventType event, BuildContext context,
       BlocProvider.of<WebBloc>(context).add(Active());
       break;
     case WebEventType.Invite:
-      BlocProvider.of<WebBloc>(context).add(Invite(match, metaData));
       break;
     case WebEventType.Authorize:
       BlocProvider.of<WebBloc>(context)

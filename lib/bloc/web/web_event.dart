@@ -30,34 +30,11 @@ class Active extends WebEvent {
   const Active();
 }
 
-// Handle Offer/Answer/Decline
-class Handle extends WebEvent {
-  final dynamic message;
-  const Handle(this.message);
-}
-
-// Sender Offers Invite for Authorization
-class Invite extends WebEvent {
-  final Peer match;
-  final Metadata metadata;
-  const Invite(this.match, this.metadata);
-}
-
 // Receiver is Presented with Authorization
 class Authorize extends WebEvent {
   final bool decision;
   final dynamic message;
   const Authorize(this.decision, this.message);
-}
-
-// Create Offer/Answer/Decline
-class Create extends WebEvent {
-  final OutgoingMessage type;
-  final RTCPeerConnection pc;
-  final Peer match;
-  final Metadata metadata;
-
-  const Create(this.type, {this.match, this.metadata, this.pc});
 }
 
 // Complete: Reset Connection - With Options

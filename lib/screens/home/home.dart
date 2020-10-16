@@ -5,10 +5,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Update Node
-    BlocProvider.of<WebBloc>(context).add(Updated(UpdateType.NODE));
-
-    // Update Node
-    BlocProvider.of<WebBloc>(context).add(Updated(UpdateType.NODE));
+    emitWebBlocEvent(WebEventType.Active, context);
 
     // Build View
     return Scaffold(

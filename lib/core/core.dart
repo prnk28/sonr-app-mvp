@@ -44,18 +44,11 @@ part 'events.dart';
 // ******************************* //
 // ** Global Package References ** //
 // ******************************* //
+enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
+
 Logger log = Logger();
 Uuid uuid = Uuid();
 Size screenSize;
-
-checkNull(data, {String name, String method}) {
-  if (data == null) {
-    log.e(name + " is not provided in method " + name);
-    return false;
-  } else {
-    return true;
-  }
-}
 
 getPlatform() {
   return enumFromString(

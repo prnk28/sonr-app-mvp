@@ -26,30 +26,30 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     incoming = new List<Metadata>();
     outgoing = new Map<Metadata, File>();
 
-    // Add DataChannel
-    session.onDataChannel = (channel) {
-      dataChannel = channel;
-    };
+    // // Add DataChannel
+    // session.onDataChannel = (channel) {
+    //   dataChannel = channel;
+    // };
 
-    // Handle DataChannel Message
-    session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
-      // Check if Binary
-      if (message.isBinary) {
-        // Add Binary to Transfer
-        add(AddChunk(message.binary));
-      }
-      // Check if Text
-      else {
-        // Check for Completion Message
-        if (message.text == "SEND_COMPLETE") {
-          log.i("Send is Done");
-          // Call Bloc Event
-          add(WriteFile());
-        } else {
-          log.v(message.text);
-        }
-      }
-    };
+    // // Handle DataChannel Message
+    // session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
+    //   // Check if Binary
+    //   if (message.isBinary) {
+    //     // Add Binary to Transfer
+    //     add(AddChunk(message.binary));
+    //   }
+    //   // Check if Text
+    //   else {
+    //     // Check for Completion Message
+    //     if (message.text == "SEND_COMPLETE") {
+    //       log.i("Send is Done");
+    //       // Call Bloc Event
+    //       add(WriteFile());
+    //     } else {
+    //       log.v(message.text);
+    //     }
+    //   }
+    // };
   }
 
   // Map Methods

@@ -34,6 +34,9 @@ const RTC_CONSTRAINTS = {
   'optional': [],
 };
 
+// Handler type for handling the event emitted by an
+typedef dynamic EventHandler<T>(T data);
+
 // Chunking Constants
 const CHUNK_SIZE = 16000;
 const CHUNKS_PER_ACK = 64;

@@ -1,17 +1,8 @@
 part of 'peer.dart';
 
-enum OutgoingMessage {
-  Connect,
-  Update,
-  Offer,
-  Answer,
-  Decline,
-  Candidate,
-  Complete,
-  Failed,
-  Exit,
-}
-
+// ******************************** //
+// ** SocketClient Event Sending ** //
+// ******************************** //
 extension SocketEmitter on Peer {
   // ** Emit Event/Data Message via Sockets ** //
   void emit(OutgoingMessage msg, {dynamic data}) {
@@ -27,6 +18,9 @@ extension SocketEmitter on Peer {
   }
 }
 
+// ************************** //
+// ** WebRTC Event Sending ** //
+// ************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
   void invite(Peer match, Metadata meta) async {

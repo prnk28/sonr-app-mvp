@@ -4,7 +4,7 @@ import 'package:sonar_app/repository/repository.dart';
 
 part 'emitter.dart';
 part 'circle.dart';
-part 'manager.dart';
+part 'handler.dart';
 
 // ********************** //
 // ** Enums for Object ** //
@@ -16,7 +16,6 @@ enum PeerStatus {
   Busy, // Pending Auth/Waiting Auth/Transferring
 }
 enum ProximityStatus { Immediate, Near, Far, Away }
-enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
 
 // ***************************** //
 // ** Class for Node in Graph ** //
@@ -77,10 +76,8 @@ class Peer {
     activePeers = new List<Peer>();
 
     // Initialize Providers
+    this._connection = new Connection(this);
     this._session = new RTCSession();
-    this._connection = io('http://match.sonr.io', <String, dynamic>{
-      'transports': ['websocket'],
-    });
   }
 
   // **************************** //
