@@ -81,7 +81,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
     // Check if Peer Node exists
-    if (user.node != null) {
+    if (_node != null) {
       // Emit Peer Node
       _node.emit(OutgoingMessage.Connect);
 
@@ -108,10 +108,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapActiveToState(Active event) async* {
     // Update Status
-    user.node.status = PeerStatus.Active;
+    _node.status = PeerStatus.Active;
 
     // Add Delay
     // await Future.delayed(const Duration(milliseconds: 500));
+
+    // Emit to Server
+    _node.emit(OutgoingMessage.Update);
 
     // Yield Searching with Closest Neighbor
     yield Available();
@@ -127,8 +130,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Add Delay
     // Future.delayed(const Duration(milliseconds: 250));
 
+    // Emit to Server
+    _node.emit(OutgoingMessage.Update);
+
     // Yield Searching with Closest Neighbor
-    yield Searching(activePeers: user.node.getZonedPeers());
+    yield Searching(activePeers: _node.getZonedPeers());
   }
 
 // ***************************************** //
@@ -259,7 +265,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
 
     // Reset Node
-    user.node.status = PeerStatus.Active;
+    _node.status = PeerStatus.Active;
 
     // Set Delay
     await new Future.delayed(Duration(seconds: 1));

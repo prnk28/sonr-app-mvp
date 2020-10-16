@@ -32,7 +32,7 @@ extension SocketHandler on Peer {
   // -- OFFER REQUEST --
   eventPeerOffered(dynamic data) {
     // Set Status
-    this.status = PeerStatus.Busy;
+    this.status = PeerStatus.Requested;
 
     // Handle Offer
     this.handleOffer(data);
@@ -40,6 +40,9 @@ extension SocketHandler on Peer {
 
   // -- MATCH ACCEPTED REQUEST --
   eventPeerAnswered(dynamic data) {
+    // Set Status
+    this.status = PeerStatus.Transferring;
+
     this.handleAnswer(data);
   }
 
@@ -47,7 +50,9 @@ extension SocketHandler on Peer {
   eventPeerDeclined(dynamic data) {}
 
   // -- MATCH ICE CANDIDATES --
-  eventPeerCandidate(dynamic data) {}
+  eventPeerCandidate(dynamic data) {
+    _session.handleCandidate(data);
+  }
 
   // -- MATCH RECEIVED FILE --
   eventPeerCompleted(dynamic data) {}

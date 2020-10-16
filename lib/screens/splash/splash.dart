@@ -4,7 +4,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Set Screen Size
-    setScreenSize(context);
+    context.setScreenSize();
 
     // Return
     return NeumorphicTheme(
@@ -16,20 +16,19 @@ class SplashScreen extends StatelessWidget {
         body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
           // Home Screen
           if (curr is Online) {
-            BlocProvider.of<WebBloc>(context).add(Connect());
-            Navigator.pushReplacementNamed(context, "/home");
+            context.goHome(initial: true);
             return false;
           }
           // Register Screen
           else if (curr is Offline) {
-            Navigator.pushReplacementNamed(context, "/register");
+            context.goRegister();
             return false;
           }
           // Default
           return true;
         }, builder: (context, state) {
           // Begin Local Status Check
-          BlocProvider.of<UserBloc>(context).add(Initialize());
+          context.emitUserBlocEvent(UserEventType.Initialize);
 
           // Return Loading
           return Center(child: NeumorphicProgressIndeterminate());

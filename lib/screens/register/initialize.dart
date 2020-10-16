@@ -103,10 +103,13 @@ class _InitializeViewState extends State<InitializeView> {
                 ),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
+                    // Get Profile from Values
+                    var profile = Profile.fromValues(
+                        this._firstName, this._lastName, null);
+
                     // Process data.
-                    BlocProvider.of<UserBloc>(context).add(UpdateProfile(
-                        Profile.fromValues(
-                            this._firstName, this._lastName, null)));
+                    context.emitUserBlocEvent(UserEventType.UpdateProfile,
+                        newProfile: profile);
                   }
                 },
                 child: Text('Submit',

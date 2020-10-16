@@ -1,11 +1,13 @@
-import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/screens/screens.dart';
+
+part 'requested.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Update Node
-    emitWebBlocEvent(WebEventType.Active, context);
+    context.emitUserBlocEvent(UserEventType.SetStatus,
+        newStatus: PeerStatus.Active);
 
     // Build View
     return Scaffold(
@@ -17,20 +19,18 @@ class HomeScreen extends StatelessWidget {
                 depth: 5),
             child: Icon(Icons.star_outline_rounded),
             onPressed: () {
-              // Change View as Modal
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => TransferScreen(),
-                    fullscreenDialog: true),
-              );
+              context.pushTransfer();
             }),
         body: Column(
           children: [
             // Bloc Builder to View Device info
             BlocBuilder<WebBloc, WebState>(
               builder: (context, state) {
-                return Text("WebBloc " + (state).toString());
+                if (state is Requested) {
+                  return RequestedView();
+                } else {
+                  return Text("WebBloc " + (state).toString());
+                }
               },
             ),
             // Button to Go to Transfer

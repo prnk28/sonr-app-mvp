@@ -53,10 +53,10 @@ NeumorphicAppBar leadingAppBar(
               } else {
                 if (shouldRevertToActive) {
                   // Change Status
-                  emitUserBlocEvent(UserEventType.SetStatus, context);
+                  context.emitUserBlocEvent(UserEventType.SetStatus);
 
                   // Update Node
-                  emitWebBlocEvent(WebEventType.Active, context);
+                  context.emitWebBlocEvent(WebEventType.Active);
                 }
 
                 // Pop Navigation

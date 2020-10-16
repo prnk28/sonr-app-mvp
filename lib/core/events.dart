@@ -1,8 +1,6 @@
 part of 'core.dart';
 
-// ******************************** //
 // ** Frontend BLoC Event Enums ** //
-// ******************************* //
 // Data Event Enum
 enum DataEventType { QueueFile, FindFile, OpenFile }
 
@@ -15,118 +13,117 @@ enum UserEventType { Initialize, Register, SetStatus, UpdateProfile }
 // Web Event Enum
 enum WebEventType { Connect, Search, Active, Invite, Authorize }
 
-// ********************************************* //
+// BLoC/Cubit Name Enum
+enum CubitType { Direction }
+enum BlocType { Data, Device, User, Web }
+
+extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
-// ********************************************* //
-// Method to Emit Data Event
-emitDataBlocEvent(DataEventType event, BuildContext context) {
-  // Switch by Event
-  switch (event) {
-    case DataEventType.QueueFile:
-      BlocProvider.of<DataBloc>(context).add(QueueFile());
-      break;
-    case DataEventType.FindFile:
-      BlocProvider.of<DataBloc>(context).add(FindFile());
-      break;
-    case DataEventType.OpenFile:
-      BlocProvider.of<DataBloc>(context).add(OpenFile());
-      break;
+  emitDataBlocEvent(DataEventType event) {
+    // Switch by Event
+    switch (event) {
+      case DataEventType.QueueFile:
+        BlocProvider.of<DataBloc>(this).add(QueueFile());
+        break;
+      case DataEventType.FindFile:
+        BlocProvider.of<DataBloc>(this).add(FindFile());
+        break;
+      case DataEventType.OpenFile:
+        BlocProvider.of<DataBloc>(this).add(OpenFile());
+        break;
+    }
   }
-}
 
-// *********************************************** //
 // ** DeviceBLoC Applicable Events for Frontend ** //
-// *********************************************** //
-
-// Method to Emit Device Event
-emitDeviceBlocEvent(DeviceEventType event, BuildContext context) {
-  switch (event) {
-    case DeviceEventType.GetLocation:
-      BlocProvider.of<DeviceBloc>(context).add(GetLocation());
-      break;
+  emitDeviceBlocEvent(DeviceEventType event) {
+    switch (event) {
+      case DeviceEventType.GetLocation:
+        BlocProvider.of<DeviceBloc>(this).add(GetLocation());
+        break;
+    }
   }
-}
 
-// ********************************************* //
 // ** UserBLoC Applicable Events for Frontend ** //
-// ********************************************* //
-
-// Method to Emit User Event
-emitUserBlocEvent(UserEventType event, BuildContext context,
-    {Profile newData, PeerStatus newStatus}) {
-  switch (event) {
-    case UserEventType.Initialize:
-      BlocProvider.of<UserBloc>(context).add(Initialize());
-      break;
-    case UserEventType.Register:
-      BlocProvider.of<UserBloc>(context).add(Register());
-      break;
-    case UserEventType.UpdateProfile:
-      if (newData != null) {
-        BlocProvider.of<UserBloc>(context).add(UpdateProfile(newData));
-      } else {
-        log.e("Profile Data not provided for UserBloc:UpdateProfile Event");
-      }
-      break;
-    case UserEventType.SetStatus:
-      BlocProvider.of<UserBloc>(context).node.status = newStatus;
-      break;
+  emitUserBlocEvent(UserEventType event,
+      {Profile newProfile, PeerStatus newStatus}) {
+    switch (event) {
+      case UserEventType.Initialize:
+        BlocProvider.of<UserBloc>(this).add(Initialize());
+        break;
+      case UserEventType.Register:
+        BlocProvider.of<UserBloc>(this).add(Register());
+        break;
+      case UserEventType.UpdateProfile:
+        if (newProfile != null) {
+          BlocProvider.of<UserBloc>(this).add(UpdateProfile(newProfile));
+        } else {
+          log.e("Profile Data not provided for UserBloc:UpdateProfile Event");
+        }
+        break;
+      case UserEventType.SetStatus:
+        BlocProvider.of<UserBloc>(this).node.status = newStatus;
+        break;
+    }
   }
-}
 
-// ******************************************** //
 // ** WebBLoC Applicable Events for Frontend ** //
-// ******************************************** //
-// Method to Emit Web Event
-emitWebBlocEvent(WebEventType event, BuildContext context,
-    {bool authDecision, dynamic webMessage, Peer match, Metadata metaData}) {
-  switch (event) {
-    case WebEventType.Connect:
-      BlocProvider.of<WebBloc>(context).add(Connect());
-      break;
-    case WebEventType.Search:
-      BlocProvider.of<WebBloc>(context).add(Search());
-      break;
-    case WebEventType.Active:
-      BlocProvider.of<WebBloc>(context).add(Active());
-      break;
-    case WebEventType.Invite:
-      break;
-    case WebEventType.Authorize:
-      BlocProvider.of<WebBloc>(context)
-          .add(Authorize(authDecision, webMessage));
-      break;
+  emitWebBlocEvent(WebEventType event,
+      {bool authDecision, dynamic webMessage, Peer match, Metadata metaData}) {
+    switch (event) {
+      case WebEventType.Connect:
+        BlocProvider.of<WebBloc>(this).add(Connect());
+        break;
+      case WebEventType.Search:
+        BlocProvider.of<WebBloc>(this).add(Search());
+        break;
+      case WebEventType.Active:
+        BlocProvider.of<WebBloc>(this).add(Active());
+        break;
+      case WebEventType.Invite:
+        break;
+      case WebEventType.Authorize:
+        //BlocProvider.of<WebBloc>(this)
+        //    .add(Authorize(authDecision, webMessage));
+        break;
+    }
   }
-}
 
 // *********************** //
 // ** Retrieval Methods ** //
 // *********************** //
-enum CubitType { Direction }
-enum BlocType { Data, Device, User, Web }
-
-getCubit(CubitType type, BuildContext context) {
-  switch (type) {
-    case CubitType.Direction:
-      return BlocProvider.of<DeviceBloc>(context).directionCubit;
-      break;
+  getCubit(CubitType type) {
+    switch (type) {
+      case CubitType.Direction:
+        return BlocProvider.of<DeviceBloc>(this).directionCubit;
+        break;
+    }
+    return null;
   }
-  return null;
-}
 
-getBloc(BlocType type, BuildContext context) {
-  switch (type) {
-    case BlocType.Data:
-      return BlocProvider.of<DataBloc>(context);
-      break;
-    case BlocType.Device:
-      return BlocProvider.of<DeviceBloc>(context);
-      break;
-    case BlocType.User:
-      return BlocProvider.of<UserBloc>(context);
-      break;
-    case BlocType.Web:
-      return BlocProvider.of<WebBloc>(context);
-      break;
+  getBloc(BlocType type) {
+    switch (type) {
+      case BlocType.Data:
+        return BlocProvider.of<DataBloc>(this);
+        break;
+      case BlocType.Device:
+        return BlocProvider.of<DeviceBloc>(this);
+        break;
+      case BlocType.User:
+        return BlocProvider.of<UserBloc>(this);
+        break;
+      case BlocType.Web:
+        return BlocProvider.of<WebBloc>(this);
+        break;
+    }
+  }
+
+// ******************* //
+// ** Miscellaneous ** //
+// ******************* //
+  setScreenSize() {
+    // Get Screen Size
+    double width = MediaQuery.of(this).size.width;
+    double height = MediaQuery.of(this).size.height;
+    screenSize = Size(width, height);
   }
 }

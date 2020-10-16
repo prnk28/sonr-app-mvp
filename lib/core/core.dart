@@ -55,13 +55,6 @@ getPlatform() {
       Platform.operatingSystem.toUpperCase(), DeviceType.values);
 }
 
-setScreenSize(BuildContext context) {
-  // Get Screen Size
-  double width = MediaQuery.of(context).size.width;
-  double height = MediaQuery.of(context).size.height;
-  screenSize = Size(width, height);
-}
-
 // ****************** //
 // ** Enum Methods ** //
 // ****************** //

@@ -13,7 +13,9 @@ enum PeerStatus {
   Inactive,
   Active,
   Searching,
-  Busy, // Pending Auth/Waiting Auth/Transferring
+  Pending,
+  Requested,
+  Transferring
 }
 enum ProximityStatus { Immediate, Near, Far, Away }
 
@@ -90,13 +92,6 @@ class Peer {
 
     // Change Last Updated
     this.lastUpdated = DateTime.now();
-
-    // Check if Updating Status
-    if (givenStatus == PeerStatus.Active ||
-        givenStatus == PeerStatus.Searching) {
-      // Emit to Server
-      this.emit(OutgoingMessage.Update);
-    }
   }
 
   // ** Checker Method: If Peer can Send to Peer **

@@ -4,7 +4,6 @@ import 'widgets/bubble.dart';
 
 // Views in Screen
 part 'complete.dart';
-part 'confirm.dart';
 part 'progress.dart';
 part 'searching.dart';
 part 'waiting.dart';
@@ -13,10 +12,10 @@ class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fake Select File in Queue
-    BlocProvider.of<DataBloc>(context).add(QueueFile());
+    context.emitDataBlocEvent(DataEventType.QueueFile);
 
     // Search
-    BlocProvider.of<WebBloc>(context).add(Search());
+    context.emitWebBlocEvent(WebEventType.Search);
 
     // Return Widget
     return Scaffold(
@@ -36,21 +35,12 @@ class TransferScreen extends StatelessWidget {
           if (state is Searching) {
             return SearchingView(
                 activePeers: state.activePeers,
-                user: BlocProvider.of<UserBloc>(context));
+                user: context.getBloc(BlocType.User));
           }
 
           // -- Pending State--
           else if (state is Pending) {
-            // Check if Receiver
-            if (BlocProvider.of<UserBloc>(context).node.status ==
-                PeerStatus.Searching) {
-              return ConfirmView();
-            }
-            // Check if Sender
-            else if (BlocProvider.of<UserBloc>(context).node.status ==
-                PeerStatus.Active) {
-              return WaitingView();
-            }
+            return WaitingView();
           }
 
           // -- Transferring State--

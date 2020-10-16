@@ -6,9 +6,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 // ** Main Method ** //
 void main() async {
-  // Set bloc observer to observe transitions
-  Bloc.observer = SimpleBlocObserver();
-
   // Initialize HiveDB
   await Hive.initFlutter();
 
@@ -29,7 +26,7 @@ class App extends StatelessWidget {
       darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       home: SplashScreen(),
-      onGenerateRoute: getRouting(context),
+      onGenerateRoute: context.getRouting(),
     );
   }
 }

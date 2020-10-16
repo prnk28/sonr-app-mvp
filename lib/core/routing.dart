@@ -1,52 +1,87 @@
 part of 'core.dart';
 
-Function(RouteSettings) getRouting(BuildContext context) {
-  return (settings) {
-    switch (settings.name) {
-      case '/home':
-        // Update Status
-        emitWebBlocEvent(WebEventType.Active, context);
-
-        // Initialize
-        BlocProvider.of<WebBloc>(context).add(Connect());
-        return PageTransition(
-            child: HomeScreen(),
-            type: PageTransitionType.fade,
-            settings: settings);
-        break;
-      case '/register':
-        return PageTransition(
-            child: RegisterScreen(),
-            type: PageTransitionType.rightToLeftWithFade,
-            settings: settings);
-        break;
-      case '/transfer':
-        // Update Status
-        emitWebBlocEvent(WebEventType.Search, context);
-
-        return PageTransition(
-            child: TransferScreen(),
-            type: PageTransitionType.fade,
-            settings: settings);
-        break;
-      case '/detail':
-        return PageTransition(
-            child: DetailScreen(),
-            type: PageTransitionType.scale,
-            settings: settings);
-        break;
-      case '/settings':
-        return PageTransition(
-            child: SettingsScreen(),
-            type: PageTransitionType.upToDown,
-            settings: settings);
-        break;
+// ******************* //
+// ** Build Routing ** //
+// ******************* //
+extension Routing on BuildContext {
+  // ** Navigator Methods **
+  goHome({bool initial: false}) {
+    // Connect First
+    if (initial) {
+      this.emitWebBlocEvent(WebEventType.Connect);
     }
-    return null;
-  };
+
+    // Push
+    Navigator.pushReplacementNamed(this, "/home");
+  }
+
+  goRegister() {
+    Navigator.pushReplacementNamed(this, "/register");
+  }
+
+  // Display Transfer as Modal
+  pushTransfer() {
+    // Change View as Modal
+    Navigator.push(
+      this,
+      MaterialPageRoute(
+          builder: (context) => TransferScreen(), fullscreenDialog: true),
+    );
+  }
+
+  // ** Get Routing Information **
+  Function(RouteSettings) getRouting() {
+    return (settings) {
+      switch (settings.name) {
+        case '/home':
+          // Update Status
+          emitWebBlocEvent(WebEventType.Active);
+          return PageTransition(
+              child: HomeScreen(),
+              type: PageTransitionType.fade,
+              settings: settings);
+          break;
+        case '/register':
+          return PageTransition(
+              child: RegisterScreen(),
+              type: PageTransitionType.rightToLeftWithFade,
+              settings: settings);
+          break;
+        case '/transfer':
+          // Update Status
+          emitWebBlocEvent(WebEventType.Search);
+
+          return PageTransition(
+              child: TransferScreen(),
+              type: PageTransitionType.fade,
+              settings: settings);
+          break;
+        case '/detail':
+          return PageTransition(
+              child: DetailScreen(),
+              type: PageTransitionType.scale,
+              settings: settings);
+          break;
+        case '/settings':
+          return PageTransition(
+              child: SettingsScreen(),
+              type: PageTransitionType.upToDown,
+              settings: settings);
+          break;
+      }
+      return null;
+    };
+  }
 }
 
-MultiBlocProvider initializeBloc(Widget appWidget) {
+// *********************** //
+// ** Build BLoC System ** //
+// *********************** //
+MultiBlocProvider initializeBloc(Widget app) {
+  // Set bloc observer to observe transitions
+  Bloc.observer = SimpleBlocObserver();
+
+  // Return Provider
   return MultiBlocProvider(
     providers: [
       // User Data Logic
@@ -72,6 +107,6 @@ MultiBlocProvider initializeBloc(Widget appWidget) {
             BlocProvider.of<UserBloc>(context)),
       ),
     ],
-    child: appWidget,
+    child: app,
   );
 }

@@ -50,6 +50,21 @@ class Pending extends WebState {
   });
 }
 
+// **********************************************
+// ** After Request Pending Receiver Decision ***
+// **********************************************
+class Requested extends WebState {
+  final Peer match;
+  final Metadata fileMeta;
+  final dynamic offer;
+
+  const Requested({
+    this.offer,
+    this.match,
+    this.fileMeta,
+  });
+}
+
 // *********************************************
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
