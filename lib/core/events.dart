@@ -45,7 +45,7 @@ extension Events on BuildContext {
 
 // ** UserBLoC Applicable Events for Frontend ** //
   emitUserBlocEvent(UserEventType event,
-      {Profile newProfile, PeerStatus newStatus}) {
+      {Profile newProfile, Status newStatus}) {
     switch (event) {
       case UserEventType.Initialize:
         BlocProvider.of<UserBloc>(this).add(Initialize());

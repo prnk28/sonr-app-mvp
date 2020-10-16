@@ -3,19 +3,23 @@ part of 'bubble.dart';
 // *************************** //
 // ** Build Bubbles in List ** //
 // *************************** //
-Stack buildStackView(List<Peer> peers, Animation animation) {
-  // Initialize Widget List with Range Lines
-  List<Widget> stackWidgets = new List<Widget>();
-  stackWidgets.add(_buildRangeLines());
+buildStackView(List<Peer> peers, Animation animation) {
+  // Check if null
+  if (peers.isNotEmpty) {
+// Initialize Widget List with Range Lines
+    List<Widget> stackWidgets = new List<Widget>();
+    stackWidgets.add(_buildRangeLines());
 
-  // Create Bubbles
-  for (Peer peer in peers) {
-    Widget bubble = _buildBubble(animation.value, peer);
-    stackWidgets.add(bubble);
+    // Create Bubbles
+    for (Peer peer in peers) {
+      Widget bubble = _buildBubble(animation.value, peer);
+      stackWidgets.add(bubble);
+    }
+
+    // Return View
+    return Stack(children: stackWidgets);
   }
-
-  // Return View
-  return Stack(children: stackWidgets);
+  return Container();
 }
 
 // ************************************** //

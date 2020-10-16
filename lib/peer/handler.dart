@@ -32,7 +32,7 @@ extension SocketHandler on Peer {
   // -- OFFER REQUEST --
   eventPeerOffered(dynamic data) {
     // Set Status
-    this.status = PeerStatus.Requested;
+    this.status = Status.Requested;
 
     // Handle Offer
     this.handleOffer(data);
@@ -41,7 +41,7 @@ extension SocketHandler on Peer {
   // -- MATCH ACCEPTED REQUEST --
   eventPeerAnswered(dynamic data) {
     // Set Status
-    this.status = PeerStatus.Transferring;
+    this.status = Status.Transferring;
 
     this.handleAnswer(data);
   }
@@ -96,8 +96,8 @@ extension RTCHandler on Peer {
     // Initialize RTC Receiver Connection
     _session.initializePeer(true, pc, match, description: data['description']);
 
-    // Create Answer
-    await this.createAnswer(match.id, pc);
+    // TODO: Send Answer on Auth
+    // await this.createAnswer(match.id, pc);
 
     // Set Candidates
     await _session.setRemoteCandidates(pc);

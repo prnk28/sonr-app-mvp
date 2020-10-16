@@ -9,15 +9,7 @@ part 'handler.dart';
 // ********************** //
 // ** Enums for Object ** //
 // ********************** //
-enum PeerStatus {
-  Inactive,
-  Active,
-  Searching,
-  Pending,
-  Requested,
-  Transferring
-}
-enum ProximityStatus { Immediate, Near, Far, Away }
+enum Status { Inactive, Active, Searching, Pending, Requested, Transferring }
 
 // ***************************** //
 // ** Class for Node in Graph ** //
@@ -31,12 +23,11 @@ class Peer {
   DeviceType device;
 
   // Graph
-  bool isGraphEmpty;
   DirectedValueGraph graph;
   List<Peer> activePeers;
 
   // Networking
-  Connection _connection;
+
   RTCSession _session;
 
   // Proximity Variables
@@ -48,8 +39,8 @@ class Peer {
   Position location;
 
   // Status Variables - Get/Set
-  PeerStatus _status;
-  PeerStatus get status {
+  Status _status;
+  Status get status {
     return _status;
   }
 
@@ -68,7 +59,7 @@ class Peer {
         accuracy: 12345, altitude: 123, latitude: 45, longitude: -120);
 
     // Default Object Variables
-    this.status = PeerStatus.Inactive;
+    this.status = Status.Inactive;
 
     // Set Device
     this.device = getPlatform();
@@ -78,7 +69,6 @@ class Peer {
     activePeers = new List<Peer>();
 
     // Initialize Providers
-    this._connection = new Connection(this);
     this._session = new RTCSession();
   }
 
@@ -86,7 +76,7 @@ class Peer {
   // ** Methods to Update Node ** //
   // **************************** //
   // -- Setter Method to Update Status --
-  set status(PeerStatus givenStatus) {
+  set status(Status givenStatus) {
     // Update to Given Status
     _status = givenStatus;
 
@@ -96,21 +86,13 @@ class Peer {
 
   // ** Checker Method: If Peer can Send to Peer **
   bool canSendTo(Peer peer) {
-    return this.status == PeerStatus.Searching &&
-        peer.status == PeerStatus.Active;
-  }
-
-  // ** Checker Method: If Peer can Receive from Peer **
-  bool canReceiveFrom(Peer peer) {
-    return this.status == PeerStatus.Searching &&
-        peer.status == PeerStatus.Active;
+    return this.status == Status.Searching && peer.status == Status.Active;
   }
 
   // ** Method to Get Difference when User is Searching **
   double getDifference(Peer receiver) {
     // Check Node Status: Senders are From
-    if (this.status == PeerStatus.Searching &&
-        receiver.status == PeerStatus.Active) {
+    if (this.status == Status.Searching && receiver.status == Status.Active) {
       // Calculate Difference
       var diff = this.direction - receiver.direction;
 
@@ -131,7 +113,7 @@ class Peer {
     newPeer.id = map["id"];
 
     // Set Status and Device
-    newPeer.status = enumFromString(map["status"], PeerStatus.values);
+    newPeer.status = enumFromString(map["status"], Status.values);
     newPeer.device = enumFromString(map["device"], DeviceType.values);
 
     // Add Direction Data from Map

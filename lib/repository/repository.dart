@@ -8,6 +8,7 @@ export 'dart:typed_data';
 export 'package:hive/hive.dart';
 
 // Socket.io Client
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/localdata.dart';
 
 // ** HiveDB Box Names **
@@ -34,12 +35,12 @@ const RTC_CONSTRAINTS = {
   'optional': [],
 };
 
-// Handler type for handling the event emitted by an
-typedef dynamic EventHandler<T>(T data);
-
 // Chunking Constants
 const CHUNK_SIZE = 16000;
 const CHUNKS_PER_ACK = 64;
 
-// Initialize Repo
+// Initialize Repos
 LocalData localData = new LocalData();
+Socket socket = io('http://match.sonr.io', <String, dynamic>{
+  'transports': ['websocket'],
+});

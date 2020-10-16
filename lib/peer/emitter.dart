@@ -1,11 +1,23 @@
 part of 'peer.dart';
 
+enum OutgoingMessage {
+  Connect,
+  Update,
+  Offer,
+  Answer,
+  Decline,
+  Candidate,
+  Complete,
+  Failed,
+  Exit,
+}
+
 // ******************************** //
 // ** SocketClient Event Sending ** //
 // ******************************** //
 extension SocketEmitter on Peer {
   // ** Emit Event/Data Message via Sockets ** //
-  void emit(OutgoingMessage msg, {dynamic data}) {
+  void send(OutgoingMessage msg, {dynamic data}) {
     // Check if Null
     if (data == null) data = {};
 
@@ -13,8 +25,10 @@ extension SocketEmitter on Peer {
     String event = enumAsString(msg).toUpperCase();
     data['from'] = this.toMap();
 
+    log.i("Event: " + event + " | Data: " + data.toString());
+
     // Emit Message
-    _connection.emit(event, data);
+    socket.emit(event, data);
   }
 }
 
@@ -46,7 +60,7 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      this.emit(OutgoingMessage.Offer, data: {
+      this.send(OutgoingMessage.Offer, data: {
         'to': id,
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': _session.id,
@@ -63,7 +77,7 @@ extension RTCEmitter on Peer {
       RTCSessionDescription s = await pc.createAnswer(RTC_CONSTRAINTS);
       pc.setLocalDescription(s);
 
-      this.emit(OutgoingMessage.Answer, data: {
+      this.send(OutgoingMessage.Answer, data: {
         'to': id,
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': _session.id,
@@ -81,7 +95,7 @@ extension RTCEmitter on Peer {
 
     // Send ICE Message
     pc.onIceCandidate = (candidate) {
-      this.emit(OutgoingMessage.Candidate, data: {
+      this.send(OutgoingMessage.Candidate, data: {
         'to': id,
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,

@@ -35,9 +35,9 @@ class Searching extends WebState {
   const Searching({this.activePeers});
 }
 
-// **********************************************
-// ** After Request Pending Receiver Decision ***
-// **********************************************
+// ********************************
+// ** Pending Receiver Decision ***
+// ********************************
 class Pending extends WebState {
   final Peer match;
   final Metadata fileMeta;
@@ -50,9 +50,9 @@ class Pending extends WebState {
   });
 }
 
-// **********************************************
-// ** After Request Pending Receiver Decision ***
-// **********************************************
+// *******************************
+// ** Received Offer from Peer ***
+// *******************************
 class Requested extends WebState {
   final Peer match;
   final Metadata fileMeta;

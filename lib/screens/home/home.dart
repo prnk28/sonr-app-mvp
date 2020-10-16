@@ -7,7 +7,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Update Node
     context.emitUserBlocEvent(UserEventType.SetStatus,
-        newStatus: PeerStatus.Active);
+        newStatus: Status.Active);
 
     // Build View
     return Scaffold(

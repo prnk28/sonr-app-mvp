@@ -13,7 +13,7 @@ part 'web_state.dart';
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   StreamSubscription directionSubscription;
-  double _lastDirection;
+  Connection connection;
 
   // Required Blocs
   final DataBloc data;
@@ -23,22 +23,25 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
+    // Initialize Objects
     _node = user.node;
+    this.connection = new Connection(_node);
+
     // ****************************** //
     // ** Device BLoC Subscription ** //
     // ****************************** //
     directionSubscription = device.directionCubit.listen((direction) {
       // Check Diff Direction
-      if (direction != _lastDirection && this.state is! Loading) {
+      if (direction != _node.direction && this.state is! Loading) {
         // Device is Searching
         if (this.state is Searching) {
           add(Search());
         }
         // Send with 500ms delay
-        else if (this.state is Active) {
+        else if (this.state is Available) {
           add(Active());
         }
-        _lastDirection = direction;
+        _node.direction = direction;
       }
     });
   }
@@ -83,7 +86,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Check if Peer Node exists
     if (_node != null) {
       // Emit Peer Node
-      _node.emit(OutgoingMessage.Connect);
+      _node.send(OutgoingMessage.Connect);
 
       // Device Pending State
       yield Available();
@@ -108,13 +111,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapActiveToState(Active event) async* {
     // Update Status
-    _node.status = PeerStatus.Active;
+    _node.status = Status.Active;
 
     // Add Delay
     // await Future.delayed(const Duration(milliseconds: 500));
 
     // Emit to Server
-    _node.emit(OutgoingMessage.Update);
+    _node.send(OutgoingMessage.Update);
 
     // Yield Searching with Closest Neighbor
     yield Available();
@@ -125,13 +128,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *********************
   Stream<WebState> _mapSearchToState(Search event) async* {
     // Update Status
-    _node.status = PeerStatus.Searching;
+    _node.status = Status.Searching;
 
     // Add Delay
     // Future.delayed(const Duration(milliseconds: 250));
 
     // Emit to Server
-    _node.emit(OutgoingMessage.Update);
+    _node.send(OutgoingMessage.Update);
 
     // Yield Searching with Closest Neighbor
     yield Searching(activePeers: _node.getZonedPeers());
@@ -265,7 +268,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
 
     // Reset Node
-    _node.status = PeerStatus.Active;
+    _node.status = Status.Active;
 
     // Set Delay
     await new Future.delayed(Duration(seconds: 1));
