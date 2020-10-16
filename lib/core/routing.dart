@@ -5,8 +5,7 @@ Function(RouteSettings) getRouting(BuildContext context) {
     switch (settings.name) {
       case '/home':
         // Update Status
-        BlocProvider.of<WebBloc>(context)
-            .add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
+        emitWebBlocEvent(WebEventType.Active, context);
 
         // Initialize
         BlocProvider.of<WebBloc>(context).add(Connect());
@@ -23,8 +22,8 @@ Function(RouteSettings) getRouting(BuildContext context) {
         break;
       case '/transfer':
         // Update Status
-        BlocProvider.of<WebBloc>(context)
-            .add(Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
+        emitWebBlocEvent(WebEventType.Search, context);
+
         return PageTransition(
             child: TransferScreen(),
             type: PageTransitionType.fade,

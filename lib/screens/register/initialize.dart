@@ -36,7 +36,7 @@ class _InitializeViewState extends State<InitializeView> {
               child: TextFormField(
                   // Align Inner Text
                   textAlign: TextAlign.left,
-                  decoration: Design.textField.decoration(),
+                  decoration: textFieldDecoration(),
 
                   // Validate Entry
                   validator: (value) {
@@ -52,7 +52,7 @@ class _InitializeViewState extends State<InitializeView> {
                   }),
 
               // Obtain Style
-              style: Design.textField.style()),
+              style: textFieldStyle()),
 
           // ***************** //
           // ** <Last Name> ** //
@@ -70,7 +70,7 @@ class _InitializeViewState extends State<InitializeView> {
               child: TextFormField(
                   // Align Inner Text
                   textAlign: TextAlign.left,
-                  decoration: Design.textField.decoration(),
+                  decoration: textFieldDecoration(),
 
                   // Validate Entry
                   validator: (value) {
@@ -86,7 +86,7 @@ class _InitializeViewState extends State<InitializeView> {
                   }),
 
               // Obtain Style
-              style: Design.textField.style()),
+              style: textFieldStyle()),
 
           // ********************* //
           // ** <Submit Button> ** //
@@ -110,7 +110,7 @@ class _InitializeViewState extends State<InitializeView> {
                   }
                 },
                 child: Text('Submit',
-                    style: TextStyle(color: Design.findTextColor(context))),
+                    style: TextStyle(color: findTextColor(context))),
               ),
             ),
           )

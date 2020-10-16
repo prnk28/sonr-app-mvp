@@ -1,5 +1,6 @@
+import 'repository.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/repository/repository.dart';
+import 'package:sonar_app/models/models.dart';
 
 // *******************
 // * Signaling Enum **
@@ -28,12 +29,12 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 // * Initialization **
 // *******************
 class RTCSession {
-  // Management
+  // Session Id
   String id;
 
   // WebRTC
   Map peerConnections = new Map<String, RTCPeerConnection>();
-  Map dataChannels = new Map<String, RTCDataChannel>();
+  Map _dataChannels = new Map<String, RTCDataChannel>();
   var remoteCandidates = [];
 
   // Callbacks
@@ -45,20 +46,13 @@ class RTCSession {
 // *************************
 // ** Socket.io Handlers ***
 // *************************
-  void handlePeerUpdate(data) {
-    List<dynamic> peers = data;
-    if (this.onPeersUpdate != null) {
-      Map<String, dynamic> event = new Map<String, dynamic>();
-      event['self'] = socket.id;
-      event['peers'] = peers;
-      this.onPeersUpdate(event);
-    }
-  }
-
   void handleCandidate(data) async {
-    var id = data['from'];
+    // Get Match Node
+    Peer match = Peer.fromMap(data["from"]);
     var candidateMap = data['candidate'];
-    var pc = peerConnections[id];
+    var pc = peerConnections[match.id];
+
+    // Setup Candidate
     RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
         candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
     if (pc != null) {
@@ -71,7 +65,7 @@ class RTCSession {
   void handleLeave(data) {
     var id = data;
     var pc = peerConnections.remove(id);
-    dataChannels.remove(id);
+    _dataChannels.remove(id);
 
     if (pc != null) {
       pc.close();
@@ -82,19 +76,21 @@ class RTCSession {
     }
   }
 
-  void handleClose(data) {
+  void handleExit(data) {
     var to = data['to'];
+    var sessionId = data['session_id'];
+    print('bye: ' + sessionId);
 
-    var pc = peerConnections[to];
+    var pc = this.peerConnections[to];
     if (pc != null) {
       pc.close();
-      peerConnections.remove(to);
+      this.peerConnections.remove(to);
     }
 
-    var dc = dataChannels[to];
+    var dc = _dataChannels[to];
     if (dc != null) {
       dc.close();
-      dataChannels.remove(to);
+      _dataChannels.remove(to);
     }
 
     this.id = null;
@@ -103,60 +99,22 @@ class RTCSession {
     }
   }
 
-  void close() {
+  void exit() {
     peerConnections.forEach((key, pc) {
       pc.close();
-    });
-  }
-
-// *********************
-// ** WebRTC Methods ***
-// *********************
-  void leave() {
-    // Tell Peers youre leaving
-    socket.emit('LEAVE', {
-      'session_id': this.id,
-      'from': socket.id,
     });
   }
 
 // ****************************
 // ** WebRTC Helper Methods ***
 // ****************************
-  initPeerConnection(id) async {
-    RTCPeerConnection pc =
-        await createPeerConnection(RTC_CONFIG, RTC_CONSTRAINTS);
-    pc.onIceCandidate = (candidate) {
-      socket.emit('CANDIDATE', {
-        'to': id,
-        'from': socket.id,
-        'candidate': {
-          'sdpMLineIndex': candidate.sdpMlineIndex,
-          'sdpMid': candidate.sdpMid,
-          'candidate': candidate.candidate,
-        },
-        'session_id': this.id,
-      });
-    };
-
-    pc.onIceConnectionState = (state) {};
-
-    pc.onDataChannel = (channel) {
-      addDataChannel(id, channel);
-    };
-
-    // Add Peer Connection
-    peerConnections[id] = pc;
-    return pc;
-  }
-
   addDataChannel(id, RTCDataChannel channel) {
     channel.onDataChannelState = (e) {};
     channel.onMessage = (RTCDataChannelMessage data) {
       if (this.onDataChannelMessage != null)
         this.onDataChannelMessage(channel, data);
     };
-    dataChannels[id] = channel;
+    _dataChannels[id] = channel;
 
     if (this.onDataChannel != null) this.onDataChannel(channel);
   }
@@ -165,5 +123,59 @@ class RTCSession {
     RTCDataChannelInit dataChannelDict = new RTCDataChannelInit();
     RTCDataChannel channel = await pc.createDataChannel(label, dataChannelDict);
     addDataChannel(id, channel);
+  }
+
+  initializePeer(bool isReceiver, RTCPeerConnection pc, Peer match,
+      {dynamic description}) async {
+    // Listen to ICE Connection
+    pc.onIceConnectionState = (state) {};
+
+    // Add Data Channel
+    pc.onDataChannel = (channel) {
+      this.addDataChannel(id, channel);
+    };
+
+    // Set Values
+    this.peerConnections[match.id] = pc;
+
+    // Check if Receiving
+    if (isReceiver) {
+      // Validate Description Data
+      if (description != null) {
+        // Set Remote Description
+        await pc.setRemoteDescription(
+            new RTCSessionDescription(description['sdp'], description['type']));
+      } else {
+        log.e("Description Data not Provided for Receiver");
+      }
+    }
+    // Peer is Sending
+    else {
+      // Create New DataChannel
+      this.createDataChannel(match.id, pc);
+    }
+  }
+
+  setRemoteCandidates(RTCPeerConnection pc) async {
+    if (this.remoteCandidates.length > 0) {
+      this.remoteCandidates.forEach((candidate) async {
+        await pc.addCandidate(candidate);
+      });
+      this.remoteCandidates.clear();
+    }
+  }
+
+  updateState(SignalingState state, {String newId}) {
+    // Validate Existence
+    if (this.onStateChange != null) {
+      // Check if New Call
+      if (state == SignalingState.CallStateNew) {
+        // Set Session Id
+        this.id = newId;
+      }
+
+      // Set New State
+      this.onStateChange(state);
+    }
   }
 }

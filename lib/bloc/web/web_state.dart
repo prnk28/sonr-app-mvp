@@ -23,16 +23,16 @@ class Loading extends WebState {
 // ***************************
 // ** Active for Receiving ***
 // ***************************
-class Active extends WebState {
-  const Active();
+class Available extends WebState {
+  const Available();
 }
 
 // *****************************************
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
 class Searching extends WebState {
-  final PathFinder pathfinder;
-  const Searching({this.pathfinder});
+  final List<Peer> activePeers;
+  const Searching({this.activePeers});
 }
 
 // **********************************************

@@ -5,14 +5,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Update Node
-    BlocProvider.of<WebBloc>(context).add(Update(UpdateType.NODE));
+    BlocProvider.of<WebBloc>(context).add(Updated(UpdateType.NODE));
 
     // Update Node
-    BlocProvider.of<WebBloc>(context).add(Update(UpdateType.NODE));
+    BlocProvider.of<WebBloc>(context).add(Updated(UpdateType.NODE));
 
     // Build View
     return Scaffold(
-        appBar: Design.screenAppBar("Home"),
+        appBar: screenAppBar("Home"),
         floatingActionButton: NeumorphicButton(
             style: NeumorphicStyle(
                 boxShape: NeumorphicBoxShape.circle(),

@@ -22,7 +22,7 @@ class _SearchingViewState extends State<SearchingView> {
           // Have BLoC Builder Retrieve Directly from
           // Cubit to Avoid Delays
           BlocBuilder<DirectionCubit, double>(
-            cubit: BlocProvider.of<DeviceBloc>(context).directionCubit,
+            cubit: getCubit(CubitType.Direction, context),
             builder: (context, state) {
               return Align(
                   alignment: Alignment.bottomCenter,

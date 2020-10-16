@@ -12,11 +12,16 @@ export 'package:bloc/bloc.dart';
 
 // Networking Libraries
 export 'package:socket_io_client/socket_io_client.dart';
+export 'package:sonar_app/peer/peer.dart';
 
 // Device Libraries
 export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 export 'package:sensors/sensors.dart';
+export 'package:geolocator/geolocator.dart' hide Codec;
 export 'package:soundpool/soundpool.dart';
+export 'package:graph_collection/graph.dart';
+export 'package:path/path.dart';
+export 'package:path_provider/path_provider.dart';
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -29,14 +34,12 @@ import 'dart:math';
 import 'package:uuid/uuid.dart';
 import 'package:graph_collection/graph.dart';
 import 'package:sonar_app/models/models.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/peer/peer.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sonar_app/screens/screens.dart';
 
-part 'pathfinder.dart';
-part 'peer.dart';
 part 'routing.dart';
 part 'events.dart';
 
@@ -46,6 +49,20 @@ part 'events.dart';
 Logger log = Logger();
 Uuid uuid = Uuid();
 Size screenSize;
+
+checkNull(data, {String name, String method}) {
+  if (data == null) {
+    log.e(name + " is not provided in method " + name);
+    return false;
+  } else {
+    return true;
+  }
+}
+
+getPlatform() {
+  return enumFromString(
+      Platform.operatingSystem.toUpperCase(), DeviceType.values);
+}
 
 setScreenSize(BuildContext context) {
   // Get Screen Size

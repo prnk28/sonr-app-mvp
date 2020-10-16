@@ -6,7 +6,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Design.logoAppBar,
+      appBar: logoAppBar(),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
         if (curr is Online) {

@@ -1,4 +1,10 @@
-part of 'core.dart';
+import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/repository/repository.dart';
+
+part 'emitter.dart';
+part 'circle.dart';
+part 'manager.dart';
 
 // ********************** //
 // ** Enums for Object ** //
@@ -9,7 +15,6 @@ enum PeerStatus {
   Searching,
   Busy, // Pending Auth/Waiting Auth/Transferring
 }
-
 enum ProximityStatus { Immediate, Near, Far, Away }
 enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
 
@@ -23,6 +28,15 @@ class Peer {
   Profile profile;
   DateTime lastUpdated;
   DeviceType device;
+
+  // Graph
+  bool isGraphEmpty;
+  DirectedValueGraph graph;
+  List<Peer> activePeers;
+
+  // Networking
+  Connection _connection;
+  RTCSession _session;
 
   // Proximity Variables
   double direction;
@@ -56,8 +70,17 @@ class Peer {
     this.status = PeerStatus.Inactive;
 
     // Set Device
-    this.device = enumFromString(
-        Platform.operatingSystem.toUpperCase(), DeviceType.values);
+    this.device = getPlatform();
+
+    // Initialize Graph
+    graph = new DirectedValueGraph();
+    activePeers = new List<Peer>();
+
+    // Initialize Providers
+    this._session = new RTCSession();
+    this._connection = io('http://match.sonr.io', <String, dynamic>{
+      'transports': ['websocket'],
+    });
   }
 
   // **************************** //
@@ -70,30 +93,34 @@ class Peer {
 
     // Change Last Updated
     this.lastUpdated = DateTime.now();
+
+    // Check if Updating Status
+    if (givenStatus == PeerStatus.Active ||
+        givenStatus == PeerStatus.Searching) {
+      // Emit to Server
+      this.emit(OutgoingMessage.Update);
+    }
   }
 
-  // ************************ //
-  // ** Comparison Methods ** //
-  // ************************ //
-  // Checker Method: If Peer can Send to Peer
+  // ** Checker Method: If Peer can Send to Peer **
   bool canSendTo(Peer peer) {
     return this.status == PeerStatus.Searching &&
         peer.status == PeerStatus.Active;
   }
 
-  // Checker Method: If Peer can Receive from Peer
+  // ** Checker Method: If Peer can Receive from Peer **
   bool canReceiveFrom(Peer peer) {
     return this.status == PeerStatus.Searching &&
         peer.status == PeerStatus.Active;
   }
 
-  // Method to Calculate Difference between two Peers
-  static double getDifference(Peer sender, Peer receiver) {
+  // ** Method to Get Difference when User is Searching **
+  double getDifference(Peer receiver) {
     // Check Node Status: Senders are From
-    if (sender.status == PeerStatus.Searching &&
+    if (this.status == PeerStatus.Searching &&
         receiver.status == PeerStatus.Active) {
       // Calculate Difference
-      var diff = sender.direction - receiver.direction;
+      var diff = this.direction - receiver.direction;
 
       // Log and Get difference
       return diff;

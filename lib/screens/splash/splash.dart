@@ -8,8 +8,8 @@ class SplashScreen extends StatelessWidget {
 
     // Return
     return NeumorphicTheme(
-      theme: Design.lightTheme,
-      darkTheme: Design.darkTheme,
+      theme: lightTheme(),
+      darkTheme: darkTheme(),
       child: Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Non Build States

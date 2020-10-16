@@ -1,74 +1,53 @@
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
-import 'dart:io' show Platform;
 import 'repository.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
 
-class Connection {
-  WebBloc web;
-  UserBloc user;
-
-  Connection(this.web, this.user) {
-    // ***************************** //
-    // ** Socket Message Listener ** //
-    // ***************************** //
+// Connection Object
+class Connection extends Socket {
+  Connection() : super(null, '', null) {
     // -- USER CONNECTED TO SOCKET SERVER --
-    socket.on('CONNECTED', (data) {
-      // Set Lobby Id
-      user.node.lobbyId = data["lobbyId"];
+    this.on('CONNECTED', (data) {
       // Update Beacon Settings
-      web.add(Handle(MessageKind.CONNECTED));
+      // _web.add(Handle(IncomingMessage.Connected, data));
     });
 
     // -- UPDATE TO A NODE IN LOBBY --
-    socket.on('NODE_UPDATE', (data) {
-      Peer peer = Peer.fromMap(data);
-      log.i("Update Node");
-      web.add(Update(UpdateType.GRAPH,
-          graphUpdate: GraphUpdate.UPDATE, peer: peer));
+    this.on('NODE_UPDATE', (data) {
+      //_web.add(Handle(IncomingMessage.Updated, data));
     });
 
     // -- NODE EXITED LOBBY --
-    socket.on('NODE_EXIT', (data) {
-      Peer peer = Peer.fromMap(data);
-      web.add(
-          Update(UpdateType.GRAPH, graphUpdate: GraphUpdate.EXIT, peer: peer));
+    this.on('NODE_EXIT', (data) {
+      //_web.add(Handle(IncomingMessage.Exited, data));
     });
 
     // -- OFFER REQUEST --
-    socket.on('PEER_OFFERED', (data) {
-      log.i(data.toString());
-      web.add(Handle(MessageKind.OFFER,
-          match: Peer.fromMap(data["from"]), message: data));
+    this.on('PEER_OFFERED', (data) {
+      //_web.add(Handle(IncomingMessage.Offered, data));
     });
 
     // -- MATCH ACCEPTED REQUEST --
-    socket.on('PEER_ANSWERED', (data) {
-      log.i(data.toString());
-      web.add(Handle(MessageKind.ANSWER,
-          match: Peer.fromMap(data["from"]), message: data));
+    this.on('PEER_ANSWERED', (data) {
+      //_web.add(Handle(IncomingMessage.Answered, data));
     });
 
     // -- MATCH DECLINED REQUEST --
-    socket.on('PEER_DECLINED', (data) {
-      log.i(data.toString());
-      web.add(Handle(MessageKind.DECLINED));
+    this.on('PEER_DECLINED', (data) {
+      //_web.add(Handle(IncomingMessage.Declined, data));
     });
 
     // -- MATCH ICE CANDIDATES --
-    socket.on('PEER_CANDIDATE', (data) {
-      log.i(data.toString());
-      session.handleCandidate(data);
+    this.on('PEER_CANDIDATE', (data) {
+      //_user.update(Action.AddCandidate, data: data);
     });
 
     // -- MATCH RECEIVED FILE --
-    socket.on('COMPLETE', (data) {
-      log.i(data.toString());
-      web.add(Handle(MessageKind.COMPLETE,
-          match: Peer.fromMap(data["from"]), message: data));
+    this.on('COMPLETE', (data) {
+      //_web.add(Handle(IncomingMessage.Completed, data));
     });
 
     // -- ERROR OCCURRED (Cancelled, Internal) --
-    socket.on('ERROR', (error) {
+    this.on('ERROR', (error) {
       // Add to Process
       log.e("ERROR: " + error);
     });

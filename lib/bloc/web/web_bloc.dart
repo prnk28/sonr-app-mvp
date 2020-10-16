@@ -3,7 +3,6 @@ import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:equatable/equatable.dart';
-import 'package:graph_collection/graph.dart';
 
 part 'web_event.dart';
 part 'web_state.dart';
@@ -13,8 +12,6 @@ part 'web_state.dart';
 // ***********************
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
-  DirectedValueGraph graph;
-  Connection connection;
   StreamSubscription directionSubscription;
   double _lastDirection;
 
@@ -25,10 +22,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
-    // ** Initialization
-    graph = new DirectedValueGraph();
-    connection = new Connection(this, this.user);
-
     // ****************************** //
     // ** Device BLoC Subscription ** //
     // ****************************** //
@@ -41,7 +34,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         }
         // Send with 500ms delay
         else if (this.state is Active) {
-          add(Update(UpdateType.NODE));
+          add(Active());
         }
         _lastDirection = direction;
       }
@@ -68,18 +61,18 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapConnectToState(event);
     } else if (event is Load) {
       yield* _mapLoadToState(event);
+    } else if (event is Active) {
+      yield* _mapActiveToState(event);
     } else if (event is Search) {
       yield* _mapSearchToState(event);
-    } else if (event is Update) {
-      yield* _mapUpdateToState(event);
+    } else if (event is Handle) {
+      yield* _mapHandleToState(event);
     } else if (event is Invite) {
       yield* _mapInviteToState(event);
     } else if (event is Authorize) {
       yield* _mapAuthorizeToState(event);
     } else if (event is Create) {
       yield* _mapCreateToState(event);
-    } else if (event is Handle) {
-      yield* _mapHandleToState(event);
     } else if (event is Complete) {
       yield* _mapCompleteToState(event);
     } else if (event is Fail) {
@@ -91,11 +84,19 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Connect Event ***
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
-    // Emit to Socket.io from User Peer Node
-    socket.emit("CONNECT", user.node.toMap());
+    // Check if Peer Node exists
+    if (user.node != null) {
+      // Emit Peer Node
+      user.node.emit(OutgoingMessage.Connect);
 
-    // Device Pending State
-    yield Active();
+      // Device Pending State
+      yield Available();
+    }
+    // No Peer Node in User Bloc
+    else {
+      log.e("Node Data not provided for WebBloc:Connect Event");
+      yield Disconnected();
+    }
   }
 
 // *****************
@@ -106,100 +107,140 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Loading();
   }
 
+// *******************
+// ** Active Event ***
+// *******************
+  Stream<WebState> _mapActiveToState(Active event) async* {
+    // Update Status
+    user.node.status = PeerStatus.Active;
+
+    // Add Delay
+    // await Future.delayed(const Duration(milliseconds: 500));
+
+    // Yield Searching with Closest Neighbor
+    yield Available();
+  }
+
 // *********************
 // ** Search Event ***
 // *********************
   Stream<WebState> _mapSearchToState(Search event) async* {
     // Update Status
-    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
+    user.node.status = PeerStatus.Searching;
 
     // Add Delay
     // Future.delayed(const Duration(milliseconds: 250));
 
-    // Send to Server
-    socket.emit("UPDATE", user.node.toMap());
-
-    // Initialize Pathfinder
-    PathFinder pathFinder = new PathFinder(graph, user.node);
-
     // Yield Searching with Closest Neighbor
-    yield Searching(pathfinder: pathFinder);
+    yield Searching(activePeers: user.node.getZonedPeers());
   }
 
-// *******************
-// ** Update Event ***
-// *******************
-  Stream<WebState> _mapUpdateToState(Update event) async* {
-    // By Event Type
+// ***************************************** //
+// ** Handle Event = OFFER/ANSWER/DECLINE ** //
+// ***************************************** //
+  Stream<WebState> _mapHandleToState(Handle event) async* {
+    // Get Message
+    var msg = event.message;
+
+    // Log Message
+    log.i(enumAsString(event.type) + ": " + msg.toString());
+
+    // Check Event Type
     switch (event.type) {
-      case UpdateType.NODE:
-// Add Delay
-        // await Future.delayed(const Duration(milliseconds: 500));
-
-// Change status
-        add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
-
-        // Send to Server
-        socket.emit("UPDATE", user.node.toMap());
-
-        // Yield Searching with Closest Neighbor
-        yield Active();
+      case IncomingMessage.Connected:
+        // Set Lobby Id
+        user.node.lobbyId = msg["lobbyId"];
+        add(Active());
         break;
-      case UpdateType.GRAPH:
-        // -- Modify Graph Relations --
-        switch (event.graphUpdate) {
-// -- Peer Updated Sensory Input --
-          case GraphUpdate.UPDATE:
-            // Check Node Status: Senders are From
-            if (user.node.canSendTo(event.peer)) {
-              // Find Previous Node
-              Peer previousNode = graph.singleWhere(
-                  (element) => element.id == event.peer.id,
-                  orElse: () => null);
+      case IncomingMessage.Updated:
+        // Get Peer
+        Peer peer = Peer.fromMap(msg);
 
-              // Remove Peer Node
-              graph.remove(previousNode);
+        // Check Node Status: Senders are From
+        if (user.node.canSendTo(peer)) {
+          // Find Previous Node
+          Peer previousNode = graph.singleWhere(
+              (element) => element.session_id == peer.id,
+              orElse: () => null);
 
-              // Calculate Difference and Create Edge
-              graph.setToBy<double>(user.node, event.peer,
-                  Peer.getDifference(user.node, event.peer));
-            }
-            // Check Node Status: Receivers are To
-            else if (user.node.canReceiveFrom(event.peer)) {
-              // Find Previous Node
-              var previousNode = graph.singleWhere(
-                  (element) => element.id == event.peer.id,
-                  orElse: () => null);
+          // Remove Peer Node
+          graph.remove(previousNode);
 
-              // Remove Peer Node
-              graph.remove(previousNode);
-
-              // Calculate Difference and Create Edge
-              graph.setToBy<double>(event.peer, user.node,
-                  Peer.getDifference(event.peer, user.node));
-            }
-            break;
-          // Peer Left Lobby
-          case GraphUpdate.EXIT:
-            log.i("Peer exited Graph");
-            // Find Previous Node
-            var previousNode = graph.singleWhere(
-                (element) => element.id == event.peer.id,
-                orElse: () => null);
-
-            // Remove Peer Node
-            graph.remove(previousNode);
-            break;
+          // Calculate Difference and Create Edge
+          graph.setToBy<double>(
+              user.node, peer, Peer.getDifference(user.node, peer));
         }
-// Initialize Pathfinder
+        // Check Node Status: Receivers are To
+        else if (user.node.canReceiveFrom(peer)) {
+          // Find Previous Node
+          var previousNode = graph.singleWhere(
+              (element) => element.session_id == peer.id,
+              orElse: () => null);
+
+          // Remove Peer Node
+          graph.remove(previousNode);
+
+          // Calculate Difference and Create Edge
+          graph.setToBy<double>(
+              peer, user.node, Peer.getDifference(peer, user.node));
+        }
+
+        // Initialize Pathfinder
         PathFinder pathFinder = new PathFinder(graph, user.node);
 
         // Yield Searching
         yield Searching(pathfinder: pathFinder);
         break;
-      case UpdateType.STATUS:
-        //add(Load());
-        user.node.status = event.newStatus;
+      case IncomingMessage.Exit:
+        // Get Peer
+        Peer peer = Peer.fromMap(msg);
+
+        // Find Previous Node
+        var previousNode = graph.singleWhere(
+            (element) => element.session_id == peer.id,
+            orElse: () => null);
+
+        // Remove Peer Node
+        graph.remove(previousNode);
+
+        // Initialize Pathfinder
+        PathFinder pathFinder = new PathFinder(graph, user.node);
+
+        // Yield Searching
+        yield Searching(pathfinder: pathFinder);
+        break;
+      case IncomingMessage.Offered:
+        // Get Peer
+        Peer peer = Peer.fromMap(msg["from"]);
+
+        // Update Device Status
+        user.node.status = PeerStatus.Busy;
+        yield Pending();
+        break;
+      case IncomingMessage.Answered:
+        // Get Peer
+        Peer match = Peer.fromMap(msg["from"]);
+
+        // Handle Answer
+        var description = msg['description'];
+
+        // Update Session Info
+        var pc = session._peerConnections[match.id];
+        if (pc != null) {
+          await pc.setRemoteDescription(new RTCSessionDescription(
+              description['sdp'], description['type']));
+        }
+        // Begin Transfer
+        data.add(SendChunks());
+        yield Transferring();
+        break;
+      case IncomingMessage.Declined:
+        add(Fail());
+        break;
+      case IncomingMessage.Completed:
+        add(Complete());
+        break;
+      default:
         break;
     }
   }
@@ -209,19 +250,19 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapInviteToState(Invite event) async* {
     // Update Node and Device State
-    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Busy));
+    user.node.status = PeerStatus.Busy;
     add(Search());
 
     // Set Session Id
-    session.id = user.node.id + "-" + event.match.id;
+    session.session_id = user.node.id + "-" + event.match.id;
 
     // Initialize RTC Peer Connection
-    session.initPeerConnection(event.match.id).then((pc) {
+    session._createPeerConnection(event.match.id).then((pc) {
       // Set Peer Connection
-      session.peerConnections[event.match.id] = pc;
+      session._peerConnections[event.match.id] = pc;
 
       // Create DataChannel
-      session.createDataChannel(event.match.id, pc);
+      session._createDataChannel(event.match.id, pc);
 
       // Emit Offer
       add(Create(MessageKind.OFFER,
@@ -236,20 +277,22 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Authorize Event ***
 // ***********************
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
+    // Get Message
+    var msg = event.message;
+
+    // Get Peer
+    Peer match = Peer.fromMap(msg["from"]);
+
     // User ACCEPTED Transfer Request
     if (event.decision) {
-      // Get Message
-      var msg = event.message;
-
       // Add Incoming File Info
       data.add(QueueFile(
         info: msg["file_info"],
       ));
 
       // Extract Message Info
-      var id = msg['from'];
       var description = msg['description'];
-      session.id = msg["session_id"];
+      session.session_id = msg["session_id"];
 
       // Set New State Change
       if (session.onStateChange != null) {
@@ -257,18 +300,18 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       }
 
       // Initialize Peer Connection
-      var pc = await session.initPeerConnection(id);
+      var pc = await session._createPeerConnection(match.id);
       await pc.setRemoteDescription(
           new RTCSessionDescription(description['sdp'], description['type']));
 
-      add(Create(MessageKind.ANSWER, pc: pc, match: event.match));
+      add(Create(MessageKind.ANSWER, pc: pc, match: match));
 
       yield Transferring();
     }
     // User DECLINED Transfer Request
     else {
       // Send Decision
-      socket.emit("DECLINE", event.match.id);
+      socket.emit("DECLINE", match.id);
       add(Complete(resetSession: true));
     }
   }
@@ -290,7 +333,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
             'to': event.match.id,
             'from': user.node.toMap(),
             'description': {'sdp': s.sdp, 'type': s.type},
-            'session_id': session.id,
+            'session_id': session.session_id,
             'file_info': event.metadata.toMap()
           });
         } catch (e) {
@@ -309,72 +352,23 @@ class WebBloc extends Bloc<WebEvent, WebState> {
             'to': event.match.id,
             'from': user.node.toMap(),
             'description': {'sdp': s.sdp, 'type': s.type},
-            'session_id': session.id,
+            'session_id': session.session_id,
           });
         } catch (e) {
           print(e.toString());
         }
 
         // Add Candidates to PC
-        if (session.remoteCandidates.length > 0) {
-          session.remoteCandidates.forEach((candidate) async {
+        if (session._remoteCandidates.length > 0) {
+          session._remoteCandidates.forEach((candidate) async {
             await event.pc.addCandidate(candidate);
           });
-          session.remoteCandidates.clear();
+          session._remoteCandidates.clear();
         }
         yield Transferring();
         break;
       default:
-        yield Active();
-        break;
-    }
-  }
-
-// ***************************************** //
-// ** Handle Event = OFFER/ANSWER/DECLINE ** //
-// ***************************************** //
-  Stream<WebState> _mapHandleToState(Handle event) async* {
-    // Get Message
-    var msg = event.message;
-
-    // Check Event Type
-    switch (event.type) {
-      case MessageKind.CONNECTED:
-        // Setup Beacons
-        add(Update(UpdateType.NODE));
-        break;
-      case MessageKind.OFFER:
-        // Update Device Status
-        add(Update(UpdateType.STATUS, newStatus: PeerStatus.Busy));
-
-        // Send Node
-        add(Search());
-        yield Pending(
-          match: event.match,
-        );
-        break;
-      case MessageKind.ANSWER:
-        // Handle Answer
-        var id = msg['from'];
-        var description = msg['description'];
-
-        // Update Session Info
-        var pc = session.peerConnections[id];
-        if (pc != null) {
-          await pc.setRemoteDescription(new RTCSessionDescription(
-              description['sdp'], description['type']));
-        }
-        // Begin Transfer
-        data.add(SendChunks());
-        yield Transferring();
-        break;
-      case MessageKind.DECLINED:
-        add(Fail());
-        break;
-      case MessageKind.COMPLETE:
-        add(Complete());
-        break;
-      default:
+        yield Available();
         break;
     }
   }
@@ -394,14 +388,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
 
     // Reset Node
-    add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
-    add(Update(UpdateType.NODE));
+    user.node.status = PeerStatus.Active;
 
     // Set Delay
     await new Future.delayed(Duration(seconds: 1));
 
     // Yield Ready
-    yield Active();
+    add(Active());
   }
 
 // *********************

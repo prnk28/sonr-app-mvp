@@ -53,12 +53,10 @@ NeumorphicAppBar leadingAppBar(
               } else {
                 if (shouldRevertToActive) {
                   // Change Status
-                  BlocProvider.of<WebBloc>(context).add(
-                      Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
+                  emitUserBlocEvent(UserEventType.SetStatus, context);
 
                   // Update Node
-                  BlocProvider.of<WebBloc>(context)
-                      .add(Update(UpdateType.NODE));
+                  emitWebBlocEvent(WebEventType.Active, context);
                 }
 
                 // Pop Navigation

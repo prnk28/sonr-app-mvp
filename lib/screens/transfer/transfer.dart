@@ -20,7 +20,7 @@ class TransferScreen extends StatelessWidget {
 
     // Return Widget
     return Scaffold(
-      appBar: Design.leadingAppBar("/home", context, Icons.close,
+      appBar: leadingAppBar("/home", context, Icons.close,
           shouldPopScreen: true, shouldRevertToActive: true),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: BlocBuilder<WebBloc, WebState>(

@@ -1,24 +1,22 @@
 // Directory Exports
+export 'localdata.dart';
 export 'session.dart';
 export 'connection.dart';
-export 'localdata.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
 export 'dart:typed_data';
 export 'package:hive/hive.dart';
-export 'package:path/path.dart';
-export 'package:path_provider/path_provider.dart';
 
 // Socket.io Client
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:sonar_app/repository/localdata.dart';
-import 'package:sonar_app/repository/session.dart';
 
-// ** Constants for WebRTC **
-const CHUNK_SIZE = 16000; // MTU in Bytes
-const CHUNKS_PER_ACK = 64;
+// ** HiveDB Box Names **
+const String PREFERENCES_BOX = "preferencesBox";
+const String PROFILE_BOX = "profileBox";
 
-// ** WebRTC Transport Settings **
+// ***********************
+// * Transport Settings **
+// ***********************
 // ICE RTCConfiguration Map
 const RTC_CONFIG = {
   'iceServers': [
@@ -36,17 +34,9 @@ const RTC_CONSTRAINTS = {
   'optional': [],
 };
 
-// ** HiveDB Box Names **
-const String CONTACT_BOX = "contactBox";
-const String PREFERENCES_BOX = "preferencesBox";
-const String PROFILE_BOX = "profileBox";
+// Chunking Constants
+const CHUNK_SIZE = 16000;
+const CHUNKS_PER_ACK = 64;
 
-// File Box's
-const String FILE_BOX = "fileBox";
-
-// Initialize Repositories
-Socket socket = io('http://match.sonr.io', <String, dynamic>{
-  'transports': ['websocket'],
-});
-RTCSession session = new RTCSession();
+// Initialize Repo
 LocalData localData = new LocalData();
