@@ -1,55 +1,57 @@
-import 'package:flutter/material.dart';
-import 'dart:math' as math;
-import 'package:path_drawing/path_drawing.dart';
-import 'package:sonar_app/core/core.dart';
+part of 'design.dart';
 
+// Constants
 const double K_ANGLE = math.pi;
 
-class CurvePainter extends CustomPainter {
-  final double multiplier;
-
-  CurvePainter(this.multiplier);
+class ZonePainter extends CustomPainter {
+  // Size Reference
+  var _currentSize;
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Initialize
+    _currentSize = size;
+
     // Setup Paint
     var paint = Paint();
     paint.color = Colors.grey[400];
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 1;
 
-    // Initialize Default Arc Angles
-    final useCenter = false;
+    // Draw Zone Arcs
+    canvas.drawArc(
+        _rectByZone(ProximityStatus.Immediate), K_ANGLE, K_ANGLE, false, paint);
 
-    // Draw Arc
-    canvas.drawArc(Rect.fromLTRB(0, 175, size.width, 400), K_ANGLE, K_ANGLE,
-        useCenter, paint);
+    canvas.drawArc(
+        _rectByZone(ProximityStatus.Near), K_ANGLE, K_ANGLE, false, paint);
 
-    canvas.drawArc(Rect.fromLTRB(0, 100, size.width, 300), K_ANGLE, K_ANGLE,
-        useCenter, paint);
-
-    canvas.drawArc(Rect.fromLTRB(0, 25, size.width, 200), K_ANGLE, K_ANGLE,
-        useCenter, paint);
+    canvas.drawArc(
+        _rectByZone(ProximityStatus.Far), K_ANGLE, K_ANGLE, false, paint);
   }
 
-  Rect _getRectForZone(ProximityStatus proximity) {
+  Rect _rectByZone(ProximityStatus proximity) {
     switch (proximity) {
       case ProximityStatus.Immediate:
-        // TODO: Handle this case.
+        return Rect.fromLTRB(0, 175, _currentSize.width, 400);
         break;
       case ProximityStatus.Near:
-        // TODO: Handle this case.
+        return Rect.fromLTRB(0, 100, _currentSize.width, 300);
         break;
       case ProximityStatus.Far:
-        // TODO: Handle this case.
+        return Rect.fromLTRB(0, 25, _currentSize.width, 200);
         break;
-      case ProximityStatus.Away:
-        // TODO: Handle this case.
+      default:
+        return null;
         break;
     }
   }
 
-  static Path getAnimationPath(double sizeWidth, ProximityStatus proximity) {
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+
+  static Path getBubblePath(double sizeWidth, ProximityStatus proximity) {
     // Check Proximity Status
     switch (proximity) {
       case ProximityStatus.Immediate:
@@ -67,14 +69,9 @@ class CurvePainter extends CustomPainter {
         path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 200), K_ANGLE, K_ANGLE);
         return path;
         break;
-      case ProximityStatus.Away:
+      default:
         return null;
         break;
     }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }

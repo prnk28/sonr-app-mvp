@@ -26,7 +26,7 @@ Widget _buildRangeLines() {
       padding: EdgeInsets.only(bottom: 75),
       child: CustomPaint(
         size: screenSize,
-        painter: CurvePainter(1),
+        painter: ZonePainter(),
         child: Container(),
       ));
 }
@@ -52,7 +52,7 @@ Widget _buildBubble(double value, Peer node) {
 // ** Calculate Offset from Line ** //
 // ******************************** //
 Offset calculateOffset(double value, ProximityStatus proximity) {
-  Path path = CurvePainter.getAnimationPath(screenSize.width, proximity);
+  Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
   PathMetrics pathMetrics = path.computeMetrics();
   PathMetric pathMetric = pathMetrics.elementAt(0);
   value = pathMetric.length * value;

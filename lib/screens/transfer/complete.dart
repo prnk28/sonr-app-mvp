@@ -25,7 +25,7 @@ class CompleteView extends StatelessWidget {
       File file = sonarBloc.state.file;
 
       return Column(children: [
-        Text("Complete.", style: Design.text.header()),
+        Text("Complete.", style: headerTextStyle()),
         Image.file(file),
         FloatingActionButton(
             child: Icon(Icons.done_all),

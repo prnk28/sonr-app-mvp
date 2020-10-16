@@ -1,6 +1,5 @@
-import 'design.dart';
+part of 'design.dart';
 
-class DesignTextField {
   // Text Field Decoration
   InputDecoration decoration() {
     return new InputDecoration(
@@ -12,7 +11,7 @@ class DesignTextField {
         disabledBorder: InputBorder.none,
 
         // Input Text Style
-        hintStyle: Design.text.input(),
+        hintStyle: inputTextStyle(),
 
         // Pad for Border
         contentPadding: const EdgeInsets.only(left: 20.0, bottom: 7.5));
@@ -26,4 +25,3 @@ class DesignTextField {
         lightSource: LightSource.topLeft,
         color: Colors.transparent);
   }
-}

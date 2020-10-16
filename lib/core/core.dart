@@ -4,7 +4,6 @@ export 'dart:convert';
 export 'dart:io' hide Socket;
 export 'dart:math';
 export 'package:flutter/services.dart';
-export 'design/design.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
@@ -25,7 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sonar_app/core/design/design.dart';
+import 'package:sonar_app/design/design.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
 import 'package:graph_collection/graph.dart';

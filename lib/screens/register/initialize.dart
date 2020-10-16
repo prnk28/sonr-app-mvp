@@ -26,7 +26,7 @@ class _InitializeViewState extends State<InitializeView> {
           // Label
           Padding(
             padding: EdgeInsets.only(left: 22),
-            child: Text("First Name", style: Design.text.hint()),
+            child: Text("First Name", style: hintTextStyle()),
           ),
 
           // Input
@@ -60,7 +60,7 @@ class _InitializeViewState extends State<InitializeView> {
           // Label
           Padding(
             padding: EdgeInsets.only(left: 22, top: 30),
-            child: Text("Last Name", style: Design.text.hint()),
+            child: Text("Last Name", style: hintTextStyle()),
           ),
 
           // Input

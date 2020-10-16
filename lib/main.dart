@@ -25,8 +25,8 @@ class App extends StatelessWidget {
     // Setup Neumorphic Application
     return NeumorphicApp(
       debugShowCheckedModeBanner: false,
-      theme: Design.lightTheme,
-      darkTheme: Design.darkTheme,
+      theme: lightTheme(),
+      darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       home: SplashScreen(),
       onGenerateRoute: getRouting(context),

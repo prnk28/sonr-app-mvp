@@ -16,5 +16,5 @@ export 'package:flutter/material.dart';
 // Sonr Classes
 export 'package:sonar_app/bloc/bloc.dart';
 export 'package:sonar_app/models/models.dart';
-export 'package:sonar_app/core/design/design.dart';
+export 'package:sonar_app/design/design.dart';
 export 'package:sonar_app/core/core.dart';

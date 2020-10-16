@@ -51,7 +51,7 @@ Widget _buildMajorSpoke(
               child: Padding(
                   padding: textPadding,
                   child: Text(textValue,
-                      style: Design.text.hint(setColor: textColor)))),
+                      style: hintTextStyle(setColor: textColor)))),
         ],
       ));
 }
@@ -127,13 +127,13 @@ Widget _buildCenterBulb(double direction) {
                     padding: EdgeInsets.only(left: 0, top: 5),
                     child: Text(
                       "°",
-                      style: Design.text.bulbValue(),
+                      style: bulbValueTextStyle(),
                     )),
                 Padding(
                     padding: EdgeInsets.only(right: 12),
                     child: Text(
                       _getDirectionString(direction),
-                      style: Design.text.bulbValue(),
+                      style: bulbValueTextStyle(),
                     )),
               ],
             ),
@@ -141,7 +141,7 @@ Widget _buildCenterBulb(double direction) {
                 padding: EdgeInsets.only(right: 6),
                 child: Text(
                   _getCompassDesignation(direction),
-                  style: Design.text.bulbDesignation(),
+                  style: bulbDesignationTextStyle(),
                 )),
           ],
         ),
