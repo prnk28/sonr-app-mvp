@@ -12,7 +12,7 @@ export 'package:bloc/bloc.dart';
 
 // Networking Libraries
 export 'package:socket_io_client/socket_io_client.dart';
-export 'package:sonar_app/peer/peer.dart';
+export 'peer/peer.dart';
 
 // Device Libraries
 export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
@@ -32,10 +32,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/design/design.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
-import 'package:graph_collection/graph.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/peer/peer.dart';
+import 'peer/peer.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sonar_app/screens/screens.dart';
