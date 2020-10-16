@@ -4,8 +4,8 @@ import 'package:sonar_app/screens/screens.dart';
 part 'bubble_builder.dart';
 
 class BubbleView extends StatefulWidget {
-  final PathFinder pathFinder;
-  BubbleView(this.pathFinder);
+  final List<Peer> activePeers;
+  BubbleView(this.activePeers);
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +37,7 @@ class _BubbleAnimationState extends State<BubbleView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: buildStackView(widget.pathFinder.activePeers, _animation),
+      body: buildStackView(widget.activePeers, _animation),
     );
   }
 

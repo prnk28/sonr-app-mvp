@@ -35,7 +35,7 @@ class TransferScreen extends StatelessWidget {
           // -- Searching State--
           if (state is Searching) {
             return SearchingView(
-                pathfinder: state.pathfinder,
+                activePeers: state.activePeers,
                 user: BlocProvider.of<UserBloc>(context));
           }
 

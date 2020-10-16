@@ -1,10 +1,10 @@
 part of 'transfer.dart';
 
 class SearchingView extends StatefulWidget {
-  final PathFinder pathfinder;
+  final List<Peer> activePeers;
   final UserBloc user;
 
-  SearchingView({this.pathfinder, this.user});
+  SearchingView({this.activePeers, this.user});
 
   @override
   _SearchingViewState createState() => _SearchingViewState();
@@ -17,7 +17,7 @@ class _SearchingViewState extends State<SearchingView> {
       child: Stack(
         children: <Widget>[
           // Bubble View
-          BubbleView(widget.pathfinder),
+          BubbleView(widget.activePeers),
 
           // Have BLoC Builder Retrieve Directly from
           // Cubit to Avoid Delays
