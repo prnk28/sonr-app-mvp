@@ -10,6 +10,7 @@ import 'package:sonar_app/core/design/button.dart';
 
 // Exports
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
+export 'curve_painter.dart';
 export 'package:animations/animations.dart';
 export 'package:sonar_app/core/design/button.dart';
 export 'package:sonar_app/core/design/text.dart';

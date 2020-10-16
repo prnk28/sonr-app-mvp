@@ -3,11 +3,7 @@
 // 3. Iterate through Tos/froms and use getBy<double> to assign edge value
 // 4. Iterate through Map<Peer, double> by double value once and compare current node edge value to current lowest node edge value
 // 5. Set closestNeighbor as node with lowest value at end of iteration
-
-import 'package:graph_collection/graph.dart';
-import 'package:sonar_app/models/models.dart';
-
-import 'core.dart';
+part of 'core.dart';
 
 class PathFinder {
   // Reference Variables
@@ -16,10 +12,7 @@ class PathFinder {
   bool isEmpty;
 
   // Public Lists by Proximity
-  Map<Peer, double> immediate;
-  Map<Peer, double> near;
-  Map<Peer, double> far;
-  Map<Peer, double> distant;
+  List<Peer> activePeers;
 
   // ** Constructer: Calculates Costs for Each Node **
   PathFinder(this._graph, Peer userNode) {
@@ -27,10 +20,7 @@ class PathFinder {
     _costs = new Map<Peer, double>();
 
     // Initialize Proximity Maps
-    immediate = new Map<Peer, double>();
-    near = new Map<Peer, double>();
-    far = new Map<Peer, double>();
-    distant = new Map<Peer, double>();
+    activePeers = new List<Peer>();
 
     // Utilizes Froms
     if (userNode.status == PeerStatus.Active) {
@@ -51,9 +41,6 @@ class PathFinder {
 
         // Place in Map
         _costs[sender] = cost.val as double;
-
-        // Assign
-        _assignToList(sender, cost.val);
       }
     }
     // Utilizes Tos
@@ -76,29 +63,23 @@ class PathFinder {
         // Place in Map
         _costs[receiver] = cost.val as double;
 
-        // Assign
-        _assignToList(receiver, cost.val);
+        // Assign active to list
+        _assignActivePeer(receiver, cost.val);
       }
     }
   }
 
   // Method to Assign Peer to List
-  void _assignToList(Peer peer, double cost) {
-    // Immediate
-    if (cost < 60) {
-      immediate[peer] = peer.direction;
-    }
-    // Near
-    else if (cost >= 60 && cost < 120) {
-      near[peer] = peer.direction;
-    }
-    // Far
-    else if (cost >= 120 && cost < 180) {
-      far[peer] = peer.direction;
-    }
-    // Distant
-    else {
-      distant[peer] = peer.direction;
+  void _assignActivePeer(Peer peer, double difference, {double proximity}) {
+    // Check if off Screen
+    if (difference > 180 && difference != -1) {
+      // Set as off screen
+      peer.proximity = ProximityStatus.Away;
+    } else {
+      // TODO: Assign by UltraSonic Proximity
+      // Update Proximity to Temp Value
+      peer.proximity = ProximityStatus.Near;
+      activePeers.add(peer);
     }
   }
 

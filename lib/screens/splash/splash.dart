@@ -3,6 +3,9 @@ import 'package:sonar_app/screens/screens.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Set Screen Size
+    setScreenSize(context);
+
     // Return
     return NeumorphicTheme(
       theme: Design.lightTheme,

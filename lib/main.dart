@@ -1,104 +1,35 @@
 import 'package:hive/hive.dart';
-import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:page_transition/page_transition.dart';
 
 // ** Main Method ** //
 void main() async {
   // Set bloc observer to observe transitions
   Bloc.observer = SimpleBlocObserver();
-// Initialize HiveDB
+
+  // Initialize HiveDB
   await Hive.initFlutter();
 
   // Initialize Hive Adapters
   Hive.registerAdapter(ProfileAdapter());
 
   // Run App with BLoC Providers
-  runApp(MultiBlocProvider(
-    providers: [
-      // User Data Logic
-      BlocProvider<UserBloc>(
-        create: (context) => UserBloc(),
-      ),
-
-      // Local Data/Transfer Logic
-      BlocProvider<DataBloc>(create: (context) => DataBloc()),
-
-      // Device Sensors Logic
-      BlocProvider<DeviceBloc>(
-        create: (context) => DeviceBloc(
-          BlocProvider.of<UserBloc>(context),
-        ),
-      ),
-
-      // Networking Logic
-      BlocProvider<WebBloc>(
-        create: (context) => WebBloc(
-            BlocProvider.of<DataBloc>(context),
-            BlocProvider.of<DeviceBloc>(context),
-            BlocProvider.of<UserBloc>(context)),
-      ),
-    ],
-    child: App(),
-  ));
+  runApp(initializeBloc(App()));
 }
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Setup Neumorphic Application
     return NeumorphicApp(
       debugShowCheckedModeBanner: false,
       theme: Design.lightTheme,
       darkTheme: Design.darkTheme,
       themeMode: ThemeMode.light,
       home: SplashScreen(),
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case '/home':
-            // Update Status
-            BlocProvider.of<WebBloc>(context)
-                .add(Update(UpdateType.STATUS, newStatus: PeerStatus.Active));
-
-            // Initialize
-            BlocProvider.of<WebBloc>(context).add(Connect());
-            return PageTransition(
-                child: HomeScreen(),
-                type: PageTransitionType.fade,
-                settings: settings);
-            break;
-          case '/register':
-            return PageTransition(
-                child: RegisterScreen(),
-                type: PageTransitionType.rightToLeftWithFade,
-                settings: settings);
-            break;
-          case '/transfer':
-            // Update Status
-            BlocProvider.of<WebBloc>(context).add(
-                Update(UpdateType.STATUS, newStatus: PeerStatus.Searching));
-            return PageTransition(
-                child: TransferScreen(),
-                type: PageTransitionType.fade,
-                settings: settings);
-            break;
-          case '/detail':
-            return PageTransition(
-                child: DetailScreen(),
-                type: PageTransitionType.scale,
-                settings: settings);
-            break;
-          case '/settings':
-            return PageTransition(
-                child: SettingsScreen(),
-                type: PageTransitionType.upToDown,
-                settings: settings);
-            break;
-        }
-        return null;
-      },
+      onGenerateRoute: getRouting(context),
     );
   }
 }

@@ -1,6 +1,4 @@
-import 'package:geolocator/geolocator.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
+part of 'core.dart';
 
 // ********************** //
 // ** Enums for Object ** //
@@ -9,16 +7,10 @@ enum PeerStatus {
   Inactive,
   Active,
   Searching,
-  Busy,
+  Busy, // Pending Auth/Waiting Auth/Transferring
 }
 
-enum ProximityStatus {
-  Immediate,
-  Near,
-  Far,
-  Distant,
-}
-
+enum ProximityStatus { Immediate, Near, Far, Away }
 enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
 
 // ***************************** //
@@ -35,7 +27,7 @@ class Peer {
   // Proximity Variables
   double direction;
   double distance;
-  double proximity;
+  ProximityStatus proximity;
 
   // Location Variables
   Position location;

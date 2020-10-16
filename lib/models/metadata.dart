@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
-import 'package:uuid/uuid.dart';
 
 @HiveType()
 class Metadata {
@@ -24,7 +23,6 @@ class Metadata {
 
   Metadata({File file, Map map}) {
     // Set Id
-    var uuid = Uuid();
     this.id = uuid.v1();
 
     // If File Provided

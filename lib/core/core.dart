@@ -1,29 +1,14 @@
 // Core
-export 'pathfinder.dart';
 export 'dart:async';
 export 'dart:convert';
 export 'dart:io' hide Socket;
 export 'dart:math';
-export 'filetype.dart';
 export 'package:flutter/services.dart';
 export 'design/design.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
-export 'peer.dart';
 export 'package:tuple/tuple.dart';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sonar_app/core/design/design.dart';
-import 'dart:math';
-
-import 'package:uuid/uuid.dart';
-
 export 'package:bloc/bloc.dart';
 
 // Networking Libraries
@@ -34,11 +19,41 @@ export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 export 'package:sensors/sensors.dart';
 export 'package:soundpool/soundpool.dart';
 
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sonar_app/core/design/design.dart';
+import 'dart:math';
+import 'package:uuid/uuid.dart';
+import 'package:graph_collection/graph.dart';
+import 'package:sonar_app/models/models.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:sonar_app/screens/screens.dart';
+
+part 'pathfinder.dart';
+part 'peer.dart';
+part 'routing.dart';
+part 'events.dart';
+
 // ******************************* //
 // ** Global Package References ** //
 // ******************************* //
 Logger log = Logger();
 Uuid uuid = Uuid();
+Size screenSize;
+
+setScreenSize(BuildContext context) {
+  // Get Screen Size
+  double width = MediaQuery.of(context).size.width;
+  double height = MediaQuery.of(context).size.height;
+  screenSize = Size(width, height);
+}
 
 // ****************** //
 // ** Enum Methods ** //
