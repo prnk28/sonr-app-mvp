@@ -1,15 +1,15 @@
 part of 'peer.dart';
 
-enum OutgoingMessage {
-  Connect,
-  Update,
-  Offer,
-  Answer,
-  Decline,
-  Candidate,
-  Complete,
-  Failed,
-  Exit,
+enum OutgoingEvent {
+  CONNECT,
+  UPDATE,
+  OFFER,
+  ANSWER,
+  DECLINE,
+  CANDIDATE,
+  COMPLETE,
+  FAILED,
+  EXIT,
 }
 
 // ******************************** //
@@ -17,18 +17,18 @@ enum OutgoingMessage {
 // ******************************** //
 extension SocketEmitter on Peer {
   // ** Emit Event/Data Message via Sockets ** //
-  void send(OutgoingMessage msg, {dynamic data}) {
+  void send(OutgoingEvent type, {dynamic data}) {
     // Check if Null
     if (data == null) data = {};
 
     // Initialize Parameters
-    String event = enumAsString(msg).toUpperCase();
     data['from'] = this.toMap();
 
-    log.i("Event: " + event + " | Data: " + data.toString());
+    // Log
+    log.i("Event: " + enumAsString(type) + " | Data: " + data.toString());
 
     // Emit Message
-    socket.emit(event, data);
+    socket.emit(enumAsString(type), data);
   }
 }
 
@@ -37,7 +37,7 @@ extension SocketEmitter on Peer {
 // ************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
-  void invite(Peer match, Metadata meta) async {
+  invite(Peer match, Metadata meta) async {
     // Change Session State
     _session.updateState(SignalingState.CallStateNew,
         newId: this.id + '-' + match.id);
@@ -60,7 +60,7 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      this.send(OutgoingMessage.Offer, data: {
+      this.send(OutgoingEvent.OFFER, data: {
         'to': id,
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': _session.id,
@@ -77,7 +77,7 @@ extension RTCEmitter on Peer {
       RTCSessionDescription s = await pc.createAnswer(RTC_CONSTRAINTS);
       pc.setLocalDescription(s);
 
-      this.send(OutgoingMessage.Answer, data: {
+      this.send(OutgoingEvent.ANSWER, data: {
         'to': id,
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': _session.id,
@@ -95,7 +95,7 @@ extension RTCEmitter on Peer {
 
     // Send ICE Message
     pc.onIceCandidate = (candidate) {
-      this.send(OutgoingMessage.Candidate, data: {
+      this.send(OutgoingEvent.CANDIDATE, data: {
         'to': id,
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,
@@ -106,5 +106,12 @@ extension RTCEmitter on Peer {
       });
     };
     return pc;
+  }
+
+  // ** Exit the RTCSession ** //
+  sendExit() {
+    _session.peerConnections.forEach((key, pc) {
+      pc.close();
+    });
   }
 }

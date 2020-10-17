@@ -1,65 +1,70 @@
 part of 'peer.dart';
 
+enum IncomingEvent {
+  CONNECTED,
+  NODE_UPDATE,
+  NODE_EXIT,
+  PEER_OFFERED,
+  PEER_ANSWERED,
+  PEER_DECLINED,
+  PEER_CANDIDATE,
+  COMPLETED,
+  ERROR
+}
+
 // ********************************* //
 // ** SocketClient Event Handling ** //
 // ********************************* //
 extension SocketHandler on Peer {
   // ** Initialize SocketClient Connection ** //
-  // -- USER CONNECTED TO SOCKET SERVER --
-  eventConnected(dynamic data) {
-    // Update Beacon Settings
-    this.lobbyId = data["lobbyId"];
-  }
+  handleEvent(IncomingEvent event, dynamic data) {
+    switch (event) {
+      case IncomingEvent.CONNECTED:
+        // Set LobbyId
+        this.lobbyId = data["lobbyId"];
+        break;
+      case IncomingEvent.NODE_UPDATE:
+        // Get Peer
+        Peer peer = Peer.fromMap(data["from"]);
 
-  // -- UPDATE TO A NODE IN LOBBY --
-  eventNodeUpdate(dynamic data) {
-    // Get Peer
-    Peer peer = Peer.fromMap(data["from"]);
+        // Update Graph
+        this.updateGraph(peer);
+        break;
+      case IncomingEvent.NODE_EXIT:
+        // Get Peer
+        Peer peer = Peer.fromMap(data["from"]);
 
-    // Update Graph
-    this.updateGraph(peer);
-  }
+        // Update Graph
+        this.exitGraph(peer);
+        break;
+      case IncomingEvent.PEER_OFFERED:
+        // Set Status
+        this.status = Status.Requested;
 
-  // -- NODE EXITED LOBBY --
-  eventNodeExit(dynamic data) {
-    // Get Peer
-    Peer peer = Peer.fromMap(data["from"]);
+        // Handle Offer
+        this.handleOffer(data);
+        break;
+      case IncomingEvent.PEER_ANSWERED:
+        // Set Status
+        this.status = Status.Transferring;
 
-    // Update Graph
-    this.exitGraph(peer);
-  }
-
-  // -- OFFER REQUEST --
-  eventPeerOffered(dynamic data) {
-    // Set Status
-    this.status = Status.Requested;
-
-    // Handle Offer
-    this.handleOffer(data);
-  }
-
-  // -- MATCH ACCEPTED REQUEST --
-  eventPeerAnswered(dynamic data) {
-    // Set Status
-    this.status = Status.Transferring;
-
-    this.handleAnswer(data);
-  }
-
-  // -- MATCH DECLINED REQUEST --
-  eventPeerDeclined(dynamic data) {}
-
-  // -- MATCH ICE CANDIDATES --
-  eventPeerCandidate(dynamic data) {
-    _session.handleCandidate(data);
-  }
-
-  // -- MATCH RECEIVED FILE --
-  eventPeerCompleted(dynamic data) {}
-
-  // -- ERROR OCCURRED (Cancelled, Internal) --
-  eventError(dynamic error) {
-    log.e("ERROR: " + error);
+        // Handle Answer
+        this.handleAnswer(data);
+        break;
+      case IncomingEvent.PEER_DECLINED:
+        // TODO: Handle this case.
+        break;
+      case IncomingEvent.PEER_CANDIDATE:
+        // Handle Candidate
+        this.handleCandidate(data);
+        break;
+      case IncomingEvent.COMPLETED:
+        // TODO: Handle this case.
+        break;
+      case IncomingEvent.ERROR:
+        log.e("ERROR: " + data.toString());
+        break;
+    }
   }
 }
 
@@ -68,7 +73,7 @@ extension SocketHandler on Peer {
 // *************************** //
 extension RTCHandler on Peer {
   // ** Handle Peer Authorization ** //
-  void handleAnswer(dynamic msg) async {
+  handleAnswer(dynamic msg) async {
     // Get Match Node
     Peer match = Peer.fromMap(msg["from"]);
     var description = msg['description'];
@@ -82,7 +87,7 @@ extension RTCHandler on Peer {
   }
 
   // ** Peer Requested User ** //
-  void handleOffer(dynamic data) async {
+  handleOffer(dynamic data) async {
     // Get Peer
     Peer match = Peer.fromMap(data["from"]);
 
@@ -103,8 +108,25 @@ extension RTCHandler on Peer {
     await _session.setRemoteCandidates(pc);
   }
 
+  // ** Handle ICE Candidate Received ** //
+  void handleCandidate(data) async {
+    // Get Match Node
+    Peer match = Peer.fromMap(data["from"]);
+    var candidateMap = data['candidate'];
+    var pc = _session.peerConnections[match.id];
+
+    // Setup Candidate
+    RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
+        candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
+    if (pc != null) {
+      await pc.addCandidate(candidate);
+    } else {
+      _session.remoteCandidates.add(candidate);
+    }
+  }
+
   // ** Handle Peer Change ** //
-  void handlePeerUpdate(data) {
+  handlePeerUpdate(data) {
     List<dynamic> peers = data;
     if (_session.onPeersUpdate != null) {
       Map<String, dynamic> event = new Map<String, dynamic>();
@@ -112,5 +134,29 @@ extension RTCHandler on Peer {
       event['peers'] = peers;
       _session.onPeersUpdate(event);
     }
+  }
+
+  // ** Handle Peer Exit from RTC Session ** //
+  handleExit(data) {
+    // Retrieve Data
+    Peer match = Peer.fromMap(data["from"]);
+    var sessionId = data['session_id'];
+
+    // Remove RTC Connection
+    var pc = _session.peerConnections[match.id];
+    if (pc != null) {
+      pc.close();
+      _session.peerConnections.remove(match.id);
+    }
+
+    // Remove DataChannels
+    var dc = _session.dataChannels[match.id];
+    if (dc != null) {
+      dc.close();
+      _session.dataChannels.remove(match.id);
+    }
+
+    // Reset Status
+    _session.updateState(SignalingState.CallStateBye);
   }
 }

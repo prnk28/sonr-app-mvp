@@ -1,7 +1,6 @@
 // Directory Exports
 export 'localdata.dart';
 export 'session.dart';
-export 'connection.dart';
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
 export 'dart:typed_data';
@@ -35,11 +34,15 @@ const RTC_CONSTRAINTS = {
   'optional': [],
 };
 
-// Chunking Constants
+// ***********************
+// * Chunking Constants **
+// ***********************
 const CHUNK_SIZE = 16000;
 const CHUNKS_PER_ACK = 64;
 
-// Initialize Repos
+// ***********************
+// * Start Repositories **
+// ***********************
 LocalData localData = new LocalData();
 Socket socket = io('http://match.sonr.io', <String, dynamic>{
   'transports': ['websocket'],

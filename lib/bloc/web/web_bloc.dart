@@ -13,7 +13,6 @@ part 'web_state.dart';
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   StreamSubscription directionSubscription;
-  Connection connection;
 
   // Required Blocs
   final DataBloc data;
@@ -25,7 +24,62 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   WebBloc(this.data, this.device, this.user) : super(null) {
     // Initialize Objects
     _node = user.node;
-    this.connection = new Connection(_node);
+
+    // ************************************* //
+    // ** SocketClient Event Subscription ** //
+    // ************************************* //
+    // -- USER CONNECTED TO SOCKET SERVER --
+    socket.on('CONNECTED', (data) {
+      log.i("CONNECTED: " + data.toString());
+      _node.handleEvent(IncomingEvent.CONNECTED, data);
+    });
+
+    // -- UPDATE TO A NODE IN LOBBY --
+    socket.on('NODE_UPDATE', (data) {
+      log.i("NODE_UPDATE: " + data.toString());
+      _node.handleEvent(IncomingEvent.NODE_UPDATE, data);
+    });
+
+    // -- NODE EXITED LOBBY --
+    socket.on('NODE_EXIT', (data) {
+      log.i("NODE_EXIT: " + data.toString());
+      _node.handleEvent(IncomingEvent.NODE_EXIT, data);
+    });
+
+    // -- OFFER REQUEST --
+    socket.on('PEER_OFFERED', (data) {
+      log.i("PEER_OFFERED: " + data.toString());
+      _node.handleEvent(IncomingEvent.PEER_OFFERED, data);
+    });
+
+    // -- MATCH ACCEPTED REQUEST --
+    socket.on('PEER_ANSWERED', (data) {
+      log.i("PEER_ANSWERED: " + data.toString());
+      _node.handleEvent(IncomingEvent.PEER_ANSWERED, data);
+    });
+
+    // -- MATCH DECLINED REQUEST --
+    socket.on('PEER_DECLINED', (data) {
+      log.i("PEER_DECLINED: " + data.toString());
+      _node.handleEvent(IncomingEvent.PEER_DECLINED, data);
+    });
+
+    // -- MATCH ICE CANDIDATES --
+    socket.on('PEER_CANDIDATE', (data) {
+      log.i("PEER_CANDIDATE: " + data.toString());
+      _node.handleEvent(IncomingEvent.PEER_CANDIDATE, data);
+    });
+
+    // -- MATCH RECEIVED FILE --
+    socket.on('COMPLETED', (data) {
+      log.i("COMPLETED: " + data.toString());
+      _node.handleEvent(IncomingEvent.COMPLETED, data);
+    });
+
+    // -- ERROR OCCURRED (Cancelled, Internal) --
+    socket.on('ERROR', (error) {
+      _node.handleEvent(IncomingEvent.ERROR, data);
+    });
 
     // ****************************** //
     // ** Device BLoC Subscription ** //
@@ -86,7 +140,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Check if Peer Node exists
     if (_node != null) {
       // Emit Peer Node
-      _node.send(OutgoingMessage.Connect);
+      _node.send(OutgoingEvent.CONNECT);
 
       // Device Pending State
       yield Available();
@@ -117,7 +171,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // await Future.delayed(const Duration(milliseconds: 500));
 
     // Emit to Server
-    _node.send(OutgoingMessage.Update);
+    _node.send(OutgoingEvent.UPDATE);
 
     // Yield Searching with Closest Neighbor
     yield Available();
@@ -134,124 +188,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Future.delayed(const Duration(milliseconds: 250));
 
     // Emit to Server
-    _node.send(OutgoingMessage.Update);
+    _node.send(OutgoingEvent.UPDATE);
 
     // Yield Searching with Closest Neighbor
     yield Searching(activePeers: _node.getZonedPeers());
   }
-
-// ***************************************** //
-// ** Handle Event = OFFER/ANSWER/DECLINE ** //
-// ***************************************** //
-  // Stream<WebState> _mapHandleToState(Handle event) async* {
-  //   // Get Message
-  //   var msg = event.message;
-
-  //   // Log Message
-  //   log.i(enumAsString(event.type) + ": " + msg.toString());
-
-  //   // Check Event Type
-  //   switch (event.type) {
-  //     case IncomingMessage.Connected:
-  //       // Set Lobby Id
-  //       _node.lobbyId = msg["lobbyId"];
-  //       add(Active());
-  //       break;
-  //     case IncomingMessage.Updated:
-  //       // Initialize Pathfinder
-  //       PathFinder pathFinder = new PathFinder(graph, user.node);
-
-  //       // Yield Searching
-  //       yield Searching(pathfinder: pathFinder);
-  //       break;
-  //     case IncomingMessage.Exit:
-
-  //       // Initialize Pathfinder
-  //       PathFinder pathFinder = new PathFinder(graph, user.node);
-
-  //       // Yield Searching
-  //       yield Searching(pathfinder: pathFinder);
-  //       break;
-  //     case IncomingMessage.Offered:
-  //       // Get Peer
-  //       Peer peer = Peer.fromMap(msg["from"]);
-
-  //       // Update Device Status
-  //       user.node.status = PeerStatus.Busy;
-  //       yield Pending();
-  //       break;
-  //     case IncomingMessage.Answered:
-  //       data.add(SendChunks());
-  //       yield Transferring();
-  //       break;
-  //     case IncomingMessage.Declined:
-  //       add(Fail());
-  //       break;
-  //     case IncomingMessage.Completed:
-  //       add(Complete());
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-
-// *******************
-// ** Invite Event ***
-// *******************
-  // Stream<WebState> _mapInviteToState(Invite event) async* {
-  //   // Update Node and Device State
-  //   _node.status = PeerStatus.Busy;
-  //   add(Search());
-
-  //   // Send Invite
-  //   _node.invite(event.match, event.metadata);
-
-  //   // Device Pending State
-  //   yield Pending(match: event.match);
-  // }
-
-// ***********************
-// ** Authorize Event ***
-// ***********************
-  // Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
-  //   // Get Message
-  //   var msg = event.message;
-
-  //   // Get Peer
-  //   Peer match = Peer.fromMap(msg["from"]);
-
-  //   // User ACCEPTED Transfer Request
-  //   if (event.decision) {
-  //     // Add Incoming File Info
-  //     data.add(QueueFile(
-  //       info: msg["file_info"],
-  //     ));
-
-  //     // Extract Message Info
-  //     var description = msg['description'];
-  //     session.session_id = msg["session_id"];
-
-  //     // Set New State Change
-  //     if (session.onStateChange != null) {
-  //       session.onStateChange(SignalingState.CallStateNew);
-  //     }
-
-  //     // Initialize Peer Connection
-  //     var pc = await session._createPeerConnection(match.id);
-  //     await pc.setRemoteDescription(
-  //         new RTCSessionDescription(description['sdp'], description['type']));
-
-  //     add(Create(MessageKind.ANSWER, pc: pc, match: match));
-
-  //     yield Transferring();
-  //   }
-  //   // User DECLINED Transfer Request
-  //   else {
-  //     // Send Decision
-  //     socket.emit("DECLINE", match.id);
-  //     add(Complete(resetSession: true));
-  //   }
-  // }
 
 // *********************
 // ** Complete Event ***

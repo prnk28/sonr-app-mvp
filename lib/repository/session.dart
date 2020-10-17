@@ -34,7 +34,7 @@ class RTCSession {
 
   // WebRTC
   Map peerConnections = new Map<String, RTCPeerConnection>();
-  Map _dataChannels = new Map<String, RTCDataChannel>();
+  Map dataChannels = new Map<String, RTCDataChannel>();
   var remoteCandidates = [];
 
   // Callbacks
@@ -43,70 +43,8 @@ class RTCSession {
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
 
-// *************************
-// ** Socket.io Handlers ***
-// *************************
-  void handleCandidate(data) async {
-    // Get Match Node
-    Peer match = Peer.fromMap(data["from"]);
-    var candidateMap = data['candidate'];
-    var pc = peerConnections[match.id];
-
-    // Setup Candidate
-    RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
-        candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
-    if (pc != null) {
-      await pc.addCandidate(candidate);
-    } else {
-      remoteCandidates.add(candidate);
-    }
-  }
-
-  void handleLeave(data) {
-    var id = data;
-    var pc = peerConnections.remove(id);
-    _dataChannels.remove(id);
-
-    if (pc != null) {
-      pc.close();
-    }
-    this.id = null;
-    if (this.onStateChange != null) {
-      this.onStateChange(SignalingState.CallStateBye);
-    }
-  }
-
-  void handleExit(data) {
-    var to = data['to'];
-    var sessionId = data['session_id'];
-    print('bye: ' + sessionId);
-
-    var pc = this.peerConnections[to];
-    if (pc != null) {
-      pc.close();
-      this.peerConnections.remove(to);
-    }
-
-    var dc = _dataChannels[to];
-    if (dc != null) {
-      dc.close();
-      _dataChannels.remove(to);
-    }
-
-    this.id = null;
-    if (this.onStateChange != null) {
-      this.onStateChange(SignalingState.CallStateBye);
-    }
-  }
-
-  void exit() {
-    peerConnections.forEach((key, pc) {
-      pc.close();
-    });
-  }
-
 // ****************************
-// ** WebRTC Helper Methods ***
+// ** WebRTC Object Methods ***
 // ****************************
   addDataChannel(id, RTCDataChannel channel) {
     channel.onDataChannelState = (e) {};
@@ -114,7 +52,7 @@ class RTCSession {
       if (this.onDataChannelMessage != null)
         this.onDataChannelMessage(channel, data);
     };
-    _dataChannels[id] = channel;
+    dataChannels[id] = channel;
 
     if (this.onDataChannel != null) this.onDataChannel(channel);
   }
@@ -132,7 +70,7 @@ class RTCSession {
 
     // Add Data Channel
     pc.onDataChannel = (channel) {
-      this.addDataChannel(id, channel);
+      this.addDataChannel(match.id, channel);
     };
 
     // Set Values
@@ -145,9 +83,9 @@ class RTCSession {
         // Set Remote Description
         await pc.setRemoteDescription(
             new RTCSessionDescription(description['sdp'], description['type']));
-      } else {
-        log.e("Description Data not Provided for Receiver");
       }
+      // Log Error
+      log.e("Description Data not Provided for Receiver");
     }
     // Peer is Sending
     else {
@@ -172,6 +110,10 @@ class RTCSession {
       if (state == SignalingState.CallStateNew) {
         // Set Session Id
         this.id = newId;
+      }
+      // Check if End Call
+      else if (state == SignalingState.CallStateBye) {
+        this.id = null;
       }
 
       // Set New State
