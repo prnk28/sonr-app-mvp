@@ -33,9 +33,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Initialize Objects
     _node = user.node;
 
-    // ************************************* //
     // ** SocketClient Event Subscription ** //
-    // ************************************* //
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
       // Log Event
@@ -120,9 +118,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       log.e("ERROR: " + data.toString());
     });
 
-    // ****************************** //
     // ** Device BLoC Subscription ** //
-    // ****************************** //
     directionSubscription = device.directionCubit.listen((direction) {
       // Check Diff Direction
       if (direction != _node.direction && this.state is! Loading) {
@@ -153,7 +149,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     } else if (event is Update) {
       yield* _mapUpdateToState(event);
     } else if (event is Authorize) {
-      //yield* _mapAuthorizeToState(event);
+      yield* _mapAuthorizeToState(event);
     } else if (event is End) {
       yield* _mapEndToState(event);
     }
@@ -178,6 +174,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
+// *****************
+// ** Load Event ***
+// *****************
+  Stream<WebState> _mapLoadToState(Load event) async* {
+    // Device Pending State
+    yield Loading();
+  }
+
 // *******************
 // ** Update Event ***
 // *******************
@@ -185,19 +189,43 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Update Status
     _node.status = event.newStatus;
 
-    // Add Delay
-    // Future.delayed(const Duration(milliseconds: 250));
-
     // Emit to Server
     _node.send(OutgoingEvent.UPDATE);
 
-    // Yield Searching
-    if (_node.status == Status.Searching) {
-      yield Searching(_node, activePeers: _node.getZonedPeers());
+    // Action by Status
+    switch (_node.status) {
+      case Status.Disconnected:
+        yield Disconnected();
+        break;
+      case Status.Active:
+        yield Available(_node);
+        break;
+      case Status.Searching:
+        yield Searching(_node);
+        break;
+      case Status.Pending:
+        yield Pending();
+        break;
+      case Status.Requested:
+        yield Requested();
+        break;
+      case Status.Transferring:
+        yield Transferring();
+        break;
     }
-    // Yield Available
-    else if (_node.status == Status.Active) {
-      yield Available(_node);
+  }
+
+// **********************
+// ** Authorize Event ***
+// **********************
+  Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
+    // User Agreed
+    if (event.decision) {
+      await _node.createAnswer(event.match.id, event.peerConnection);
+    }
+    // User Declined
+    else {
+      _node.send(OutgoingEvent.DECLINE);
     }
   }
 
@@ -205,20 +233,21 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** End Event: Cancel/Complete/Exit/Fail ***
 // *******************************************
   Stream<WebState> _mapEndToState(End event) async* {
+    // TODO: Check Reset Connection
+    //socket.emit("RESET");
+
+    // TODO: Check Reset RTC Session
+    //session.close();
+
     // Action By Type
     switch (event.type) {
-      // Cancel in Transfer
+      // ** Cancel in Transfer **
       case EndType.Cancel:
-        // TODO: Handle this case.
+        log.i("Cancelled");
         break;
-      // Transfer is Finished
+
+      // ** Transfer is Finished **
       case EndType.Complete:
-        // TODO: Check Reset Connection
-        //socket.emit("RESET");
-
-        // TODO: Check Reset RTC Session
-        //session.close();
-
         // Reset Node
         _node.status = Status.Active;
 
@@ -228,17 +257,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Yield Ready
         yield Completed(_node);
         break;
-      // Exit Graph
+
+      // ** Exit Graph **
       case EndType.Exit:
+        log.i("Exited");
         break;
-      // Internal Fail
+
+      // ** Internal Fail **
       case EndType.Fail:
-        // TODO: Check Reset Connection
-        //socket.emit("RESET");
-
-        // TODO: Check Reset RTC Session
-        //session.close();
-
         // Set Delay
         await new Future.delayed(Duration(seconds: 1));
 
@@ -246,13 +272,5 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Failed();
         break;
     }
-  }
-
-  // *****************
-  // ** Load Event ***
-  // *****************
-  Stream<WebState> _mapLoadToState(Load event) async* {
-    // Device Pending State
-    yield Loading();
   }
 }

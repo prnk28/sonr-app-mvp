@@ -33,15 +33,12 @@ extension RTCHandler on Peer {
     // Initialize RTC Receiver Connection
     _session.initializePeer(true, pc, match, description: data['description']);
 
-    // TODO: Send Answer on Auth
-    // await this.createAnswer(match.id, pc);
-
     // Set Candidates
     await _session.setRemoteCandidates(pc);
   }
 
   // ** Handle ICE Candidate Received ** //
-  void handleCandidate(data) async {
+  handleCandidate(data) async {
     // Get Match Node
     Peer match = Peer.fromMap(data["from"]);
     var candidateMap = data['candidate'];
@@ -69,7 +66,7 @@ extension RTCHandler on Peer {
   }
 
   // ** Handle Peer Exit from RTC Session ** //
-  handleExit(data) {
+  handleCancel(data) {
     // Retrieve Data
     Peer match = Peer.fromMap(data["from"]);
 

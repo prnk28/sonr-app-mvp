@@ -21,25 +21,18 @@ class Queued extends DataState {
 class Transmitting extends DataState {
   // Progress Variables
   final Tuple2<Metadata, File> file;
-  final double progress;
 
   // State Class
-  Transmitting({this.file, this.progress});
+  Transmitting({this.file});
 }
 
 // Saving to disk w/ Progress and Chunks
 class Saving extends DataState {
   // Progress Variables
   final Tuple2<Metadata, File> file;
-  final double progress;
 
   // State Class
-  Saving({this.file, this.progress});
-}
-
-// Saving Between Chunks
-class Updating extends DataState {
-  Updating();
+  Saving({this.file});
 }
 
 // Searching for a file

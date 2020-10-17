@@ -33,8 +33,7 @@ class Available extends WebState {
 // *****************************************
 class Searching extends WebState {
   final Peer userNode;
-  final List<Peer> activePeers;
-  const Searching(this.userNode, {this.activePeers});
+  const Searching(this.userNode);
 }
 
 // ********************************
@@ -42,13 +41,9 @@ class Searching extends WebState {
 // ********************************
 class Pending extends WebState {
   final Peer match;
-  final Metadata fileMeta;
-  final dynamic offer;
 
   const Pending({
-    this.offer,
     this.match,
-    this.fileMeta,
   });
 }
 
@@ -57,13 +52,13 @@ class Pending extends WebState {
 // *******************************
 class Requested extends WebState {
   final Peer match;
-  final Metadata fileMeta;
-  final dynamic offer;
+  final RTCPeerConnection peerConnection;
+  final Metadata metadata;
 
   const Requested({
-    this.offer,
+    this.peerConnection,
     this.match,
-    this.fileMeta,
+    this.metadata,
   });
 }
 

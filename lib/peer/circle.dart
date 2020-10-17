@@ -4,46 +4,47 @@ enum ProximityStatus { Immediate, Near, Far, Away }
 
 extension Circle on Peer {
   // ** Exit Graph from Peer **
-  void exitGraph(Peer peer) {
-    var previousNode = graph.singleWhere(
+  exitGraph(Peer peer) {
+    var previousNode = _graph.singleWhere(
         (element) => element.session_id == peer.id,
         orElse: () => null);
 
     // Remove Peer Node
-    graph.remove(previousNode);
+    _graph.remove(previousNode);
   }
 
   // ** Update Graph with new Value **
-  void updateGraph(Peer peer) {
+  updateGraph(Peer peer) {
     // Check Node Status: Senders are From
-    if (this.canSendTo(peer)) {
+    if (this._canSendTo(peer)) {
       // Find Previous Node
-      Peer previousNode = graph.singleWhere(
+      Peer previousNode = _graph.singleWhere(
           (element) => element.session_id == peer.id,
           orElse: () => null);
 
       // Remove Peer Node
-      graph.remove(previousNode);
+      _graph.remove(previousNode);
 
       // Calculate Difference and Create Edge
-      graph.setToBy<double>(this, peer, this.getDifference(peer));
+      _graph.setToBy<double>(this, peer, this._getDifference(peer));
     }
   }
 
   // ** Calculates Costs forEach, Node Placed in Zone **
-  List<Peer> getZonedPeers() {
+  getZonedPeers() {
     Map<Peer, double> costs = new Map<Peer, double>();
+    List<Peer> activePeers = new List<Peer>();
     // Utilizes Tos
     if (this.status == Status.Searching) {
       // Check then Iterate
       if (!isGraphEmpty()) {
         // Get Receivers
-        var receivers = graph.linkTos(this);
+        var receivers = _graph.linkTos(this);
 
         // Iterate Receivers
         for (Peer receiver in receivers) {
           // Get Cost
-          var cost = graph.getBy<double>(this, receiver);
+          var cost = _graph.getBy<double>(this, receiver);
 
           // Place in Map
           costs[receiver] = cost.val as double;
@@ -65,10 +66,28 @@ extension Circle on Peer {
     return activePeers;
   }
 
+  // ** Checker Method: If Peer can Send to Peer **
+  _canSendTo(Peer peer) {
+    return this.status == Status.Searching && peer.status == Status.Active;
+  }
+
+  // ** Get Difference When User is Searching **
+  _getDifference(Peer receiver) {
+    // Check Node Status: Senders are From
+    if (this.status == Status.Searching && receiver.status == Status.Active) {
+      // Calculate Difference
+      var diff = this.direction - receiver.direction;
+
+      // Log and Get difference
+      return diff.abs();
+    }
+    return -1;
+  }
+
   // ** Checker for if Graph Empty **
-  bool isGraphEmpty() {
+  isGraphEmpty() {
     // Get Receivers
-    var receivers = graph.linkTos(this);
+    var receivers = _graph.linkTos(this);
 
     // Set isEmpty
     if (receivers.length > 0) {

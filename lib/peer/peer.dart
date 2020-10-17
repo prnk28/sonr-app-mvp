@@ -1,4 +1,3 @@
-import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
@@ -7,10 +6,15 @@ part 'emitter.dart';
 part 'circle.dart';
 part 'handler.dart';
 
-// ********************** //
-// ** Enums for Object ** //
-// ********************** //
-enum Status { Inactive, Active, Searching, Pending, Requested, Transferring }
+// ** Status Enum ** //
+enum Status {
+  Disconnected,
+  Active,
+  Searching,
+  Pending,
+  Requested,
+  Transferring
+}
 
 // ***************************** //
 // ** Class for Node in Graph ** //
@@ -22,21 +26,15 @@ class Peer {
   DateTime lastUpdated;
   DeviceType device;
 
-  // Graph
-  DirectedValueGraph graph;
-  List<Peer> activePeers;
-
-  // Networking
-
-  RTCSession _session;
-
-  // Proximity Variables
+  // Sensory Variables
   double direction;
   double distance;
   ProximityStatus proximity;
-
-  // Location Variables
   Position location;
+
+  // Dependencies
+  DirectedValueGraph _graph;
+  RTCSession _session;
 
   // Status Variables - Get/Set
   Status _status;
@@ -59,17 +57,14 @@ class Peer {
         accuracy: 12345, altitude: 123, latitude: 45, longitude: -120);
 
     // Default Object Variables
-    this.status = Status.Inactive;
+    this.status = Status.Disconnected;
 
     // Set Device
     this.device = getPlatform();
 
-    // Initialize Graph
-    graph = new DirectedValueGraph();
-    activePeers = new List<Peer>();
-
-    // Initialize Providers
-    this._session = new RTCSession();
+    // Initialize Dependencies
+    _graph = new DirectedValueGraph();
+    _session = new RTCSession();
   }
 
   // **************************** //
@@ -84,22 +79,9 @@ class Peer {
     this.lastUpdated = DateTime.now();
   }
 
-  // ** Checker Method: If Peer can Send to Peer **
-  bool canSendTo(Peer peer) {
-    return this.status == Status.Searching && peer.status == Status.Active;
-  }
-
-  // ** Method to Get Difference when User is Searching **
-  double getDifference(Peer receiver) {
-    // Check Node Status: Senders are From
-    if (this.status == Status.Searching && receiver.status == Status.Active) {
-      // Calculate Difference
-      var diff = this.direction - receiver.direction;
-
-      // Log and Get difference
-      return diff;
-    }
-    return -1;
+  // ** Reset Networking and Node itself **
+  void reset() {
+    log.i("Work in Progress");
   }
 
   // *********************** //
@@ -112,42 +94,39 @@ class Peer {
     Peer newPeer = new Peer(profile);
     newPeer.id = map["id"];
 
-    // Set Status and Device
-    newPeer.status = enumFromString(map["status"], Status.values);
-    newPeer.device = enumFromString(map["device"], DeviceType.values);
-
-    // Add Direction Data from Map
+    // Set Direction
     newPeer.direction = map["direction"];
 
-    // Add Location Data from Map
-    var location = map["location"];
+    // Set Device
+    newPeer.device = enumFromString(map["device"], DeviceType.values);
+
+    // Set Location
     newPeer.location = new Position(
-        accuracy: location["accuracy"],
-        altitude: location["altitude"],
-        latitude: location["latitude"],
-        longitude: location["longitude"]);
+        accuracy: map["location"]["accuracy"],
+        altitude: map["location"]["altitude"],
+        latitude: map["location"]["latitude"],
+        longitude: map["location"]["longitude"]);
+
+    // Set Status
+    newPeer.status = enumFromString(map["status"], Status.values);
 
     return newPeer;
   }
 
   // -- Export Peer to Map for Communication --
   toMap() {
-    // Create Location Map
-    var loaction = {
-      'accuracy': this.location.accuracy.toDouble(),
-      'altitude': this.location.altitude.toDouble(),
-      'latitude': this.location.latitude.toDouble(),
-      'longitude': this.location.longitude.toDouble(),
-    };
-
-    // Combine into Map
     return {
       'id': id,
       'device': enumAsString(this.device),
       'direction': this.direction.toDouble(),
-      'location': loaction,
-      'status': enumAsString(this.status),
-      'profile': this.profile.toMap()
+      'location': {
+        'accuracy': this.location.accuracy.toDouble(),
+        'altitude': this.location.altitude.toDouble(),
+        'latitude': this.location.latitude.toDouble(),
+        'longitude': this.location.longitude.toDouble()
+      },
+      'profile': this.profile.toMap(),
+      'status': enumAsString(this.status)
     };
   }
 }

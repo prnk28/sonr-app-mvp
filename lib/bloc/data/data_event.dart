@@ -13,9 +13,17 @@ class AddChunk extends DataEvent {
   const AddChunk(this.chunk);
 }
 
-// Update Progress
-class Progress extends DataEvent {
-  const Progress();
+// Progress Cubit
+class ProgressCubit extends Cubit<double> {
+  ProgressCubit() : super(0);
+
+  void update(double newValue) {
+    //Log Progress
+    log.i("Progress: " + (newValue * 100).toString() + "%");
+
+    // Change Value
+    emit(newValue);
+  }
 }
 
 // Add File Chunk from Transfer

@@ -19,6 +19,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   List<Metadata> incoming;
   Map<Metadata, File> outgoing;
   Tuple2<Metadata, File> currentFile;
+  ProgressCubit progressCubit = new ProgressCubit();
 
   // Constructers
   DataBloc() : super(null) {
@@ -59,8 +60,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   ) async* {
     if (event is AddChunk) {
       yield* _mapAddChunkState(event);
-    } else if (event is Progress) {
-      yield* _mapProgressState(event);
     } else if (event is SendChunks) {
       yield* _mapSendChunksState(event);
     } else if (event is WriteFile) {
@@ -118,17 +117,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Add Chunk to Block
     block.add(event.chunk);
 
-    // Update Progress
-    add(Progress());
-
-    // Yield Progress
-    yield Saving(file: this.currentFile, progress: currentFile.item1.progress);
-  }
-
-// ********************
-// ** Progress Event **
-// ********************
-  Stream<DataState> _mapProgressState(Progress event) async* {
     // Get Metadata
     Metadata currMeta = currentFile.item1;
 
@@ -137,16 +125,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     currMeta.remainingChunks = currMeta.chunksTotal - currMeta.currentChunkNum;
 
     // Update Progress
-    currMeta.progress = (currMeta.chunksTotal - currMeta.remainingChunks) /
-        currMeta.chunksTotal;
+    progressCubit.update((currMeta.chunksTotal - currMeta.remainingChunks) /
+        currMeta.chunksTotal);
 
-    //Log Progress
-    log.i("File Progress: " +
-        (currentFile.item1.progress * 100).toString() +
-        "%");
-
-    //Yield Progress
-    yield Updating();
+    // Yield Progress
+    yield Saving(file: this.currentFile);
   }
 
 // **********************
@@ -181,12 +164,21 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Send Binary in WebRTC Data Channel
         dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
+        // Get Metadata
+        Metadata currMeta = currentFile.item1;
+
+        // Update Chunks
+        currMeta.currentChunkNum += 1;
+        currMeta.remainingChunks =
+            currMeta.chunksTotal - currMeta.currentChunkNum;
+
         // Update Progress
-        add(Progress());
+        progressCubit.update((currMeta.chunksTotal - currMeta.remainingChunks) /
+            currMeta.chunksTotal);
 
         // Yield Progress
         yield Transmitting(
-            file: this.currentFile, progress: currentFile.item1.progress);
+            file: this.currentFile);
       }
     }
   }

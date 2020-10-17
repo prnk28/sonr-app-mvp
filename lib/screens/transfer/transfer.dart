@@ -33,9 +33,7 @@ class TransferScreen extends StatelessWidget {
         builder: (context, state) {
           // -- Searching State--
           if (state is Searching) {
-            return SearchingView(
-                activePeers: state.activePeers,
-                user: BlocProvider.of<UserBloc>(context));
+            return SearchingView(userNode: state.userNode);
           }
 
           // -- Pending State--

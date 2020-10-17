@@ -3,13 +3,14 @@ part of 'peer.dart';
 enum OutgoingEvent {
   CONNECT,
   UPDATE,
+  EXIT,
   OFFER,
   ANSWER,
   DECLINE,
   CANDIDATE,
   COMPLETE,
   FAILED,
-  EXIT,
+  CANCEL
 }
 
 // ******************************** //
