@@ -1,5 +1,12 @@
 part of 'web_bloc.dart';
 
+enum EndType {
+  Cancel,
+  Complete,
+  Exit,
+  Fail,
+}
+
 abstract class WebEvent extends Equatable {
   const WebEvent();
 
@@ -20,14 +27,10 @@ class Load extends WebEvent {
   const Load();
 }
 
-// Find Active Nodes
-class Search extends WebEvent {
-  const Search();
-}
-
-// Send Active Node Data
-class Active extends WebEvent {
-  const Active();
+// Send Node Data
+class Update extends WebEvent {
+  final Status newStatus;
+  const Update(this.newStatus);
 }
 
 // Receiver is Presented with Authorization
@@ -37,20 +40,8 @@ class Authorize extends WebEvent {
   const Authorize(this.decision, this.message);
 }
 
-// Complete: Reset Connection - With Options
-class Complete extends WebEvent {
+class End extends WebEvent {
+  final EndType type;
   final Peer match;
-  final bool resetSession;
-  final bool resetConnection;
-  final bool exit;
-  const Complete(
-      {this.match, this.resetConnection, this.resetSession, this.exit});
-}
-
-// Failed: Internal or Cancelled
-class Fail extends WebEvent {
-  final bool resetSession;
-  final bool resetConnection;
-  final bool exit;
-  const Fail({this.resetConnection, this.resetSession, this.exit});
+  const End(this.type, {this.match});
 }

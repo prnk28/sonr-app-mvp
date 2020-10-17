@@ -24,15 +24,17 @@ class Loading extends WebState {
 // ** Active for Receiving ***
 // ***************************
 class Available extends WebState {
-  const Available();
+  final Peer userNode;
+  const Available(this.userNode);
 }
 
 // *****************************************
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
 class Searching extends WebState {
+  final Peer userNode;
   final List<Peer> activePeers;
-  const Searching({this.activePeers});
+  const Searching(this.userNode, {this.activePeers});
 }
 
 // ********************************
@@ -76,12 +78,11 @@ class Transferring extends WebState {
 // ** Transfer Succesful ***
 // *************************
 class Completed extends WebState {
-  // Sender/Receiver
-  final String deviceStatus;
+  final Peer userNode;
   final File file;
 
   const Completed(
-    this.deviceStatus, {
+    this.userNode, {
     this.file,
   });
 }

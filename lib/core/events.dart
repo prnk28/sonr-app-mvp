@@ -100,23 +100,6 @@ extension Events on BuildContext {
     return null;
   }
 
-  getBloc(BlocType type) {
-    switch (type) {
-      case BlocType.Data:
-        return BlocProvider.of<DataBloc>(this);
-        break;
-      case BlocType.Device:
-        return BlocProvider.of<DeviceBloc>(this);
-        break;
-      case BlocType.User:
-        return BlocProvider.of<UserBloc>(this);
-        break;
-      case BlocType.Web:
-        return BlocProvider.of<WebBloc>(this);
-        break;
-    }
-  }
-
 // ******************* //
 // ** Miscellaneous ** //
 // ******************* //

@@ -1,3 +1,4 @@
+import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
@@ -17,7 +18,6 @@ enum Status { Inactive, Active, Searching, Pending, Requested, Transferring }
 class Peer {
   // Management
   String id;
-  String lobbyId;
   Profile profile;
   DateTime lastUpdated;
   DeviceType device;

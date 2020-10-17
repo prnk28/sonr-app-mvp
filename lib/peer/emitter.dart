@@ -24,9 +24,6 @@ extension SocketEmitter on Peer {
     // Initialize Parameters
     data['from'] = this.toMap();
 
-    // Log
-    log.i("Event: " + enumAsString(type) + " | Data: " + data.toString());
-
     // Emit Message
     socket.emit(enumAsString(type), data);
   }

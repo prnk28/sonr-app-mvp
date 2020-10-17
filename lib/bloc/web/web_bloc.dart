@@ -20,6 +20,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   final UserBloc user;
   Peer _node;
 
+  // Initial State
+  WebState get initialState => Disconnected();
+
+  // On Bloc Close
+  void dispose() {
+    directionSubscription.cancel();
+  }
+
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
     // Initialize Objects
@@ -30,55 +38,86 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // ************************************* //
     // -- USER CONNECTED TO SOCKET SERVER --
     socket.on('CONNECTED', (data) {
-      log.i("CONNECTED: " + data.toString());
-      _node.handleEvent(IncomingEvent.CONNECTED, data);
+      // Log Event
+      log.i("CONNECTED");
+
+      // Update Status
+      add(Update(Status.Active));
     });
 
     // -- UPDATE TO A NODE IN LOBBY --
-    socket.on('NODE_UPDATE', (data) {
-      log.i("NODE_UPDATE: " + data.toString());
-      _node.handleEvent(IncomingEvent.NODE_UPDATE, data);
+    socket.on('UPDATED', (data) {
+      // Log Event
+      log.i("UPDATED: " + data.toString());
+
+      // Get Peer
+      Peer peer = Peer.fromMap(data["from"]);
+
+      // Update Graph
+      _node.updateGraph(peer);
     });
 
     // -- NODE EXITED LOBBY --
-    socket.on('NODE_EXIT', (data) {
-      log.i("NODE_EXIT: " + data.toString());
-      _node.handleEvent(IncomingEvent.NODE_EXIT, data);
+    socket.on('EXITED', (data) {
+      // Log Event
+      log.i("EXITED: " + data.toString());
+
+      // Get Peer
+      Peer peer = Peer.fromMap(data["from"]);
+
+      // Update Graph
+      _node.exitGraph(peer);
     });
 
     // -- OFFER REQUEST --
-    socket.on('PEER_OFFERED', (data) {
-      log.i("PEER_OFFERED: " + data.toString());
-      _node.handleEvent(IncomingEvent.PEER_OFFERED, data);
+    socket.on('OFFERED', (data) {
+      // Log Event
+      log.i("OFFERED: " + data.toString());
+
+      // Set Status
+      _node.status = Status.Requested;
+
+      // Handle Offer
+      _node.handleOffer(data);
     });
 
     // -- MATCH ACCEPTED REQUEST --
-    socket.on('PEER_ANSWERED', (data) {
-      log.i("PEER_ANSWERED: " + data.toString());
-      _node.handleEvent(IncomingEvent.PEER_ANSWERED, data);
+    socket.on('ANSWERED', (data) {
+      // Log Event
+      log.i("ANSWERED: " + data.toString());
+
+      // Set Status
+      _node.status = Status.Transferring;
+
+      // Handle Answer
+      _node.handleAnswer(data);
     });
 
     // -- MATCH DECLINED REQUEST --
-    socket.on('PEER_DECLINED', (data) {
-      log.i("PEER_DECLINED: " + data.toString());
-      _node.handleEvent(IncomingEvent.PEER_DECLINED, data);
+    socket.on('DECLINED', (data) {
+      // Log Event
+      log.i("DECLINED: " + data.toString());
     });
 
     // -- MATCH ICE CANDIDATES --
-    socket.on('PEER_CANDIDATE', (data) {
-      log.i("PEER_CANDIDATE: " + data.toString());
-      _node.handleEvent(IncomingEvent.PEER_CANDIDATE, data);
+    socket.on('CANDIDATE', (data) {
+      // Log Event
+      log.i("CANDIDATE: " + data.toString());
+
+      // Handle Candidate
+      _node.handleCandidate(data);
     });
 
     // -- MATCH RECEIVED FILE --
     socket.on('COMPLETED', (data) {
+      // Log Event
       log.i("COMPLETED: " + data.toString());
-      _node.handleEvent(IncomingEvent.COMPLETED, data);
     });
 
     // -- ERROR OCCURRED (Cancelled, Internal) --
     socket.on('ERROR', (error) {
-      _node.handleEvent(IncomingEvent.ERROR, data);
+      // Log Event
+      log.e("ERROR: " + data.toString());
     });
 
     // ****************************** //
@@ -89,23 +128,15 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       if (direction != _node.direction && this.state is! Loading) {
         // Device is Searching
         if (this.state is Searching) {
-          add(Search());
+          add(Update(Status.Searching));
         }
         // Send with 500ms delay
         else if (this.state is Available) {
-          add(Active());
+          add(Update(Status.Active));
         }
         _node.direction = direction;
       }
     });
-  }
-
-  // Initial State
-  WebState get initialState => Disconnected();
-
-  // On Bloc Close
-  void dispose() {
-    directionSubscription.cancel();
   }
 
 // *********************************
@@ -115,21 +146,16 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> mapEventToState(
     WebEvent event,
   ) async* {
-    // Device Can See Updates
     if (event is Connect) {
       yield* _mapConnectToState(event);
     } else if (event is Load) {
       yield* _mapLoadToState(event);
-    } else if (event is Active) {
-      yield* _mapActiveToState(event);
-    } else if (event is Search) {
-      yield* _mapSearchToState(event);
+    } else if (event is Update) {
+      yield* _mapUpdateToState(event);
     } else if (event is Authorize) {
       //yield* _mapAuthorizeToState(event);
-    } else if (event is Complete) {
-      yield* _mapCompleteToState(event);
-    } else if (event is Fail) {
-      yield* _mapFailToState(event);
+    } else if (event is End) {
+      yield* _mapEndToState(event);
     }
   }
 
@@ -143,7 +169,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       _node.send(OutgoingEvent.CONNECT);
 
       // Device Pending State
-      yield Available();
+      add(Load());
     }
     // No Peer Node in User Bloc
     else {
@@ -152,37 +178,12 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-// *****************
-// ** Load Event ***
-// *****************
-  Stream<WebState> _mapLoadToState(Load event) async* {
-    // Device Pending State
-    yield Loading();
-  }
-
 // *******************
-// ** Active Event ***
+// ** Update Event ***
 // *******************
-  Stream<WebState> _mapActiveToState(Active event) async* {
+  Stream<WebState> _mapUpdateToState(Update event) async* {
     // Update Status
-    _node.status = Status.Active;
-
-    // Add Delay
-    // await Future.delayed(const Duration(milliseconds: 500));
-
-    // Emit to Server
-    _node.send(OutgoingEvent.UPDATE);
-
-    // Yield Searching with Closest Neighbor
-    yield Available();
-  }
-
-// *********************
-// ** Search Event ***
-// *********************
-  Stream<WebState> _mapSearchToState(Search event) async* {
-    // Update Status
-    _node.status = Status.Searching;
+    _node.status = event.newStatus;
 
     // Add Delay
     // Future.delayed(const Duration(milliseconds: 250));
@@ -190,52 +191,68 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Emit to Server
     _node.send(OutgoingEvent.UPDATE);
 
-    // Yield Searching with Closest Neighbor
-    yield Searching(activePeers: _node.getZonedPeers());
+    // Yield Searching
+    if (_node.status == Status.Searching) {
+      yield Searching(_node, activePeers: _node.getZonedPeers());
+    }
+    // Yield Available
+    else if (_node.status == Status.Active) {
+      yield Available(_node);
+    }
   }
 
-// *********************
-// ** Complete Event ***
-// *********************
-  Stream<WebState> _mapCompleteToState(Complete event) async* {
-    // Check Reset Connection
-    if (event.resetConnection) {
-      //socket.emit("CLOSE", user.node.toMap());
+// *******************************************
+// ** End Event: Cancel/Complete/Exit/Fail ***
+// *******************************************
+  Stream<WebState> _mapEndToState(End event) async* {
+    // Action By Type
+    switch (event.type) {
+      // Cancel in Transfer
+      case EndType.Cancel:
+        // TODO: Handle this case.
+        break;
+      // Transfer is Finished
+      case EndType.Complete:
+        // TODO: Check Reset Connection
+        //socket.emit("RESET");
+
+        // TODO: Check Reset RTC Session
+        //session.close();
+
+        // Reset Node
+        _node.status = Status.Active;
+
+        // Set Delay
+        await new Future.delayed(Duration(seconds: 1));
+
+        // Yield Ready
+        yield Completed(_node);
+        break;
+      // Exit Graph
+      case EndType.Exit:
+        break;
+      // Internal Fail
+      case EndType.Fail:
+        // TODO: Check Reset Connection
+        //socket.emit("RESET");
+
+        // TODO: Check Reset RTC Session
+        //session.close();
+
+        // Set Delay
+        await new Future.delayed(Duration(seconds: 1));
+
+        // Yield Ready
+        yield Failed();
+        break;
     }
-
-    // Check Reset RTC Session
-    if (event.resetSession) {
-      //session.close();
-    }
-
-    // Reset Node
-    _node.status = Status.Active;
-
-    // Set Delay
-    await new Future.delayed(Duration(seconds: 1));
-
-    // Yield Ready
-    add(Active());
   }
 
-// *********************
-// ** Fail Event ***
-// *********************
-  Stream<WebState> _mapFailToState(Fail event) async* {
-    // Check Reset Connection
-    if (event.resetConnection) {
-      //socket.emit("RESET");
-    }
-
-    // Check Reset RTC Session
-    if (event.resetSession) {
-      //session.close();
-    }
-
-    // Set Delay
-    await new Future.delayed(Duration(seconds: 1));
-
-    // Yield Ready
-    yield Failed();
+  // *****************
+  // ** Load Event ***
+  // *****************
+  Stream<WebState> _mapLoadToState(Load event) async* {
+    // Device Pending State
+    yield Loading();
   }
 }

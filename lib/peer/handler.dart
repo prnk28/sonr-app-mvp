@@ -1,73 +1,5 @@
 part of 'peer.dart';
 
-enum IncomingEvent {
-  CONNECTED,
-  NODE_UPDATE,
-  NODE_EXIT,
-  PEER_OFFERED,
-  PEER_ANSWERED,
-  PEER_DECLINED,
-  PEER_CANDIDATE,
-  COMPLETED,
-  ERROR
-}
-
-// ********************************* //
-// ** SocketClient Event Handling ** //
-// ********************************* //
-extension SocketHandler on Peer {
-  // ** Initialize SocketClient Connection ** //
-  handleEvent(IncomingEvent event, dynamic data) {
-    switch (event) {
-      case IncomingEvent.CONNECTED:
-        // Set LobbyId
-        this.lobbyId = data["lobbyId"];
-        break;
-      case IncomingEvent.NODE_UPDATE:
-        // Get Peer
-        Peer peer = Peer.fromMap(data["from"]);
-
-        // Update Graph
-        this.updateGraph(peer);
-        break;
-      case IncomingEvent.NODE_EXIT:
-        // Get Peer
-        Peer peer = Peer.fromMap(data["from"]);
-
-        // Update Graph
-        this.exitGraph(peer);
-        break;
-      case IncomingEvent.PEER_OFFERED:
-        // Set Status
-        this.status = Status.Requested;
-
-        // Handle Offer
-        this.handleOffer(data);
-        break;
-      case IncomingEvent.PEER_ANSWERED:
-        // Set Status
-        this.status = Status.Transferring;
-
-        // Handle Answer
-        this.handleAnswer(data);
-        break;
-      case IncomingEvent.PEER_DECLINED:
-        // TODO: Handle this case.
-        break;
-      case IncomingEvent.PEER_CANDIDATE:
-        // Handle Candidate
-        this.handleCandidate(data);
-        break;
-      case IncomingEvent.COMPLETED:
-        // TODO: Handle this case.
-        break;
-      case IncomingEvent.ERROR:
-        log.e("ERROR: " + data.toString());
-        break;
-    }
-  }
-}
-
 // *************************** //
 // ** WebRTC Event Handling ** //
 // *************************** //
@@ -140,7 +72,6 @@ extension RTCHandler on Peer {
   handleExit(data) {
     // Retrieve Data
     Peer match = Peer.fromMap(data["from"]);
-    var sessionId = data['session_id'];
 
     // Remove RTC Connection
     var pc = _session.peerConnections[match.id];
