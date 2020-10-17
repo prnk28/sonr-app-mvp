@@ -10,9 +10,13 @@ export 'package:hive/hive.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/localdata.dart';
 
-// ** HiveDB Box Names **
-const String PREFERENCES_BOX = "preferencesBox";
-const String PROFILE_BOX = "profileBox";
+// ** HiveDB Box Constants **
+const PREFERENCES_BOX = "preferencesBox";
+const PROFILE_BOX = "profileBox";
+
+// * Chunking Constants **
+const CHUNK_SIZE = 16000;
+const CHUNKS_PER_ACK = 64;
 
 // ***********************
 // * Transport Settings **
@@ -33,12 +37,6 @@ const RTC_CONSTRAINTS = {
   },
   'optional': [],
 };
-
-// ***********************
-// * Chunking Constants **
-// ***********************
-const CHUNK_SIZE = 16000;
-const CHUNKS_PER_ACK = 64;
 
 // ***********************
 // * Start Repositories **

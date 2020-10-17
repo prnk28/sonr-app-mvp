@@ -5,8 +5,7 @@ enum ProximityStatus { Immediate, Near, Far, Away }
 extension Circle on Peer {
   // ** Exit Graph from Peer **
   exitGraph(Peer peer) {
-    var previousNode = _graph.singleWhere(
-        (element) => element.session_id == peer.id,
+    var previousNode = _graph.singleWhere((element) => element.id == peer.id,
         orElse: () => null);
 
     // Remove Peer Node
@@ -18,8 +17,7 @@ extension Circle on Peer {
     // Check Node Status: Senders are From
     if (this._canSendTo(peer)) {
       // Find Previous Node
-      Peer previousNode = _graph.singleWhere(
-          (element) => element.session_id == peer.id,
+      Peer previousNode = _graph.singleWhere((element) => element.id == peer.id,
           orElse: () => null);
 
       // Remove Peer Node

@@ -11,9 +11,6 @@ class ProgressView extends StatelessWidget {
     return BlocBuilder<DataBloc, DataState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-      if (curr is Updating) {
-        return false;
-      }
       return true;
     }, builder: (context, state) {
       return Column(children: [

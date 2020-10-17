@@ -5,10 +5,6 @@ part 'requested.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Update Node
-    context.emitUserBlocEvent(UserEventType.SetStatus,
-        newStatus: Status.Active);
-
     // Build View
     return Scaffold(
       appBar: screenAppBar("Home"),

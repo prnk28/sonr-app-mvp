@@ -54,7 +54,7 @@ class Peer {
 
     // Default Location Variables
     this.location = new Position(
-        accuracy: 12345, altitude: 123, latitude: 45, longitude: -120);
+        accuracy: 12345.1, altitude: 123.1, latitude: 45.1, longitude: -120.1);
 
     // Default Object Variables
     this.status = Status.Disconnected;
@@ -90,8 +90,7 @@ class Peer {
   // -- Generate Peer from Map --
   static Peer fromMap(Map map) {
     // Extract Profile and Create Peer
-    Profile profile = Profile.fromMap(map["profile"]);
-    Peer newPeer = new Peer(profile);
+    Peer newPeer = new Peer(Profile.fromMap(map["profile"]));
     newPeer.id = map["id"];
 
     // Set Direction
@@ -102,10 +101,10 @@ class Peer {
 
     // Set Location
     newPeer.location = new Position(
-        accuracy: map["location"]["accuracy"],
-        altitude: map["location"]["altitude"],
-        latitude: map["location"]["latitude"],
-        longitude: map["location"]["longitude"]);
+        accuracy: map["location"]["accuracy"].toDouble(),
+        altitude: map["location"]["altitude"].toDouble(),
+        latitude: map["location"]["latitude"].toDouble(),
+        longitude: map["location"]["longitude"].toDouble());
 
     // Set Status
     newPeer.status = enumFromString(map["status"], Status.values);
@@ -116,17 +115,17 @@ class Peer {
   // -- Export Peer to Map for Communication --
   toMap() {
     return {
-      'id': id,
+      'id': this.id,
       'device': enumAsString(this.device),
       'direction': this.direction.toDouble(),
+      'profile': this.profile.toMap(),
+      'status': enumAsString(this.status),
       'location': {
         'accuracy': this.location.accuracy.toDouble(),
         'altitude': this.location.altitude.toDouble(),
         'latitude': this.location.latitude.toDouble(),
         'longitude': this.location.longitude.toDouble()
-      },
-      'profile': this.profile.toMap(),
-      'status': enumAsString(this.status)
+      }
     };
   }
 }

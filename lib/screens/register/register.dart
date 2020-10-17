@@ -11,7 +11,7 @@ class RegisterScreen extends StatelessWidget {
       body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
         if (curr is Online) {
           // Push to Home with Profile
-          context.goHome();
+          context.goHome(initial: true);
           return false;
         }
         // Register Screen

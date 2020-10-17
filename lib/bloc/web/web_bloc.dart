@@ -34,25 +34,37 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     _node = user.node;
 
     // ** SocketClient Event Subscription ** //
-    // -- USER CONNECTED TO SOCKET SERVER --
-    socket.on('CONNECTED', (data) {
+    // -- USER RECEIVED LOBBY INFO --
+    socket.on('LOBBY', (data) {
       // Log Event
-      log.i("CONNECTED");
+      log.i("LOBBY: " + data.toString());
 
-      // Update Status
+      // Join Lobby
+      socket.emit("JOIN", data);
+    });
+
+    // -- USER RECEIVED LOBBY INFO --
+    socket.on('READY', (data) {
+      // Log Event
+      log.i("READY");
+
+      // Change Status
       add(Update(Status.Active));
     });
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
-      // Log Event
-      log.i("UPDATED: " + data.toString());
+      // Check if Peer is Self
+      if (data['id'] != _node.id) {
+        // Get Peer
+        Peer peer = Peer.fromMap(data);
 
-      // Get Peer
-      Peer peer = Peer.fromMap(data["from"]);
+        // Log Event
+        //log.i("UPDATED: " + data.toString());
 
-      // Update Graph
-      _node.updateGraph(peer);
+        // Update Graph
+        _node.updateGraph(peer);
+      }
     });
 
     // -- NODE EXITED LOBBY --
@@ -162,15 +174,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Check if Peer Node exists
     if (_node != null) {
       // Emit Peer Node
-      _node.send(OutgoingEvent.CONNECT);
+      socket.emit("INITIALIZE", _node.toMap());
 
       // Device Pending State
       add(Load());
-    }
-    // No Peer Node in User Bloc
-    else {
-      log.e("Node Data not provided for WebBloc:Connect Event");
-      yield Disconnected();
     }
   }
 
@@ -178,7 +185,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Load Event ***
 // *****************
   Stream<WebState> _mapLoadToState(Load event) async* {
-    // Device Pending State
     yield Loading();
   }
 
@@ -190,7 +196,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     _node.status = event.newStatus;
 
     // Emit to Server
-    _node.send(OutgoingEvent.UPDATE);
+    socket.emit("UPDATING", _node.toMap());
 
     // Action by Status
     switch (_node.status) {
@@ -225,7 +231,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
     // User Declined
     else {
-      _node.send(OutgoingEvent.DECLINE);
+      socket.emit("DECLINE");
     }
   }
 

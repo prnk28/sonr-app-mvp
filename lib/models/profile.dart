@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:sonar_app/core/core.dart';
 
 // Basic Profile Class for Client
 class Profile extends HiveObject {
@@ -34,9 +33,9 @@ class Profile extends HiveObject {
   // *********************
   toMap() {
     return {
-      'first_name': firstName,
-      'last_name': lastName,
-      'profile_picture': profilePicture
+      'first_name': this.firstName,
+      'last_name': this.lastName,
+      'profile_picture': this.profilePicture
     };
   }
 }

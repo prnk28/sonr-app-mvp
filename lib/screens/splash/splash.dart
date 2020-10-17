@@ -27,6 +27,9 @@ class SplashScreen extends StatelessWidget {
           // Default
           return true;
         }, builder: (context, state) {
+          // Get PlaceId
+          context.emitDeviceBlocEvent(DeviceEventType.GetLocation);
+
           // Begin Local Status Check
           context.emitUserBlocEvent(UserEventType.Initialize);
 
