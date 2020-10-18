@@ -39,7 +39,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Profile Found
     else {
       // Initialize User Node
-      node = new Peer(profile: profile);
+      node = new Peer(profile);
 
       // Set Node Location
       await node.setLocation();
@@ -58,7 +58,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     await updateProfile(event.newProfile);
 
     // Reinitialize User Node
-    node = new Peer(profile: event.newProfile);
+    node = new Peer(event.newProfile);
 
     // Set Node Location
     await node.setLocation();

@@ -23,6 +23,7 @@ class Peer {
   Device device;
   Profile profile;
   DateTime lastUpdated;
+  Status _status;
 
   // Sensory Variables
   double direction;
@@ -33,40 +34,27 @@ class Peer {
   DirectedValueGraph _graph;
   RTCSession _session;
 
-  // -- Status --
-  Status _status;
-
 // ** Constructer **
-  Peer({this.profile, Map map}) {
-    // ******************* //
-    // ** Neigbhor Peer ** //
-    // ******************* //
-    if (map != null && this.profile == null) {
-      // Set Variables from Map
-      this.id = map['id'];
-      this.profile.fromMap(map['profile']);
-      this.device.fromString(map["device"]);
-      this.status.fromString(map["status"]);
-      this.direction = map['direction'];
+  Peer(this.profile) {
+    // Set Default Variables
+    this.id = uuid.v1();
+    this.direction = 0.01;
+    this.status = Status.Offline;
+    this.device.getPlatform();
 
-      // Deactivate Dependencies
-      _graph = null;
-      _session = null;
-    }
-    // *************** //
-    // ** User Peer ** //
-    // *************** //
-    else {
-      // Set Default Variables
-      this.id = uuid.v1();
-      this.direction = 0.01;
-      this.status = Status.Offline;
-      this.device.getPlatform();
+    // Initialize Dependencies
+    _graph = new DirectedValueGraph();
+    _session = new RTCSession();
+  }
 
-      // Initialize Dependencies
-      _graph = new DirectedValueGraph();
-      _session = new RTCSession();
-    }
+// ** Build Neighbor from Map **
+  static Peer fromMap(Map map) {
+    Peer neighbor = new Peer(Profile.fromMap(map['profile']));
+    neighbor.id = map['id'];
+    neighbor.device.fromString(map["device"]);
+    neighbor.status.fromString(map["status"]);
+    neighbor.direction = map['direction'];
+    return neighbor;
   }
 
 // ** Reset Networking and Node itself **

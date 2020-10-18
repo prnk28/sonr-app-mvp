@@ -47,7 +47,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       log.i("Neighbor Entered Room");
 
       // Get Peer
-      Peer neighbor = new Peer(map: data);
+      Peer neighbor = Peer.fromMap(data);
 
       // Update Graph
       _node.updateGraph(neighbor);
@@ -59,7 +59,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Check if Peer is Self
       if (data['id'] != _node.id) {
         // Get Peer
-        Peer neighbor = new Peer(map: data);
+        Peer neighbor = Peer.fromMap(data);
 
         // Update Graph
         _node.updateGraph(neighbor);
@@ -72,7 +72,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       log.i("EXITED: " + data.toString());
 
       // Get Peer
-      Peer neighbor = new Peer(map: data['from']);
+      Peer neighbor = Peer.fromMap(data['from']);
 
       // Update Graph
       _node.exitGraph(neighbor);

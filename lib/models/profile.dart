@@ -15,10 +15,9 @@ class Profile extends HiveObject {
   Profile(this.firstName, this.lastName, this.profilePicture);
 
   // ** Set From Map **
-  fromMap(Map data) {
-    this.firstName = data["first_name"];
-    this.lastName = data["last_name"];
-    this.profilePicture = data["profile_picture"];
+  static Profile fromMap(Map data) {
+    return Profile(
+        data["first_name"], data["last_name"], data["profile_picture"]);
   }
 
   // ** Convert Object to Map **

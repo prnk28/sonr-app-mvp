@@ -7,7 +7,7 @@ extension RTCHandler on Peer {
   // ** Handle Peer Authorization ** //
   handleAnswer(dynamic data) async {
     // Get Match Node
-    Peer match = new Peer(map: data["from"]);
+    Peer match = Peer.fromMap(data['from']);
     var description = data['description'];
 
     // Add Peer Connection
@@ -21,7 +21,7 @@ extension RTCHandler on Peer {
   // ** Peer Requested User ** //
   handleOffer(dynamic data) async {
     // Get Peer
-    Peer match = new Peer(map: data["from"]);
+    Peer match = Peer.fromMap(data['from']);
 
     // Update Signalling State
     _session.updateState(SignalingState.CallStateNew,
@@ -40,7 +40,7 @@ extension RTCHandler on Peer {
   // ** Handle ICE Candidate Received ** //
   handleCandidate(data) async {
     // Get Match Node
-    Peer match = new Peer(map: data["from"]);
+    Peer match = Peer.fromMap(data['from']);
     var candidateMap = data['candidate'];
     var pc = _session.peerConnections[match.id];
 
@@ -68,7 +68,7 @@ extension RTCHandler on Peer {
   // ** Handle Peer Exit from RTC Session ** //
   handleCancel(data) {
     // Retrieve Data
-    Peer match = new Peer(map: data["from"]);
+    Peer match = Peer.fromMap(data['from']);
 
     // Remove RTC Connection
     var pc = _session.peerConnections[match.id];
