@@ -5,11 +5,11 @@ import 'package:sonar_app/repository/repository.dart';
 // ********************************** //
 // ** Socket.io Event Subscription ** //
 // ********************************** //
-class SocketSubscription {
+class SocketSubscriber {
   final Peer _node;
   final WebBloc _web;
 
-  SocketSubscription(this._node, this._web) {
+  SocketSubscriber(this._node, this._web) {
     // ** SocketClient Event Subscription ** //
     // -- USER CONNECTED TO SERVER --
     socket.on('READY', (data) {

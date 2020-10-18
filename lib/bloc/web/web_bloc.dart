@@ -12,7 +12,7 @@ part 'web_state.dart';
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
   StreamSubscription directionSub;
-  SocketSubscription socketSub;
+  SocketSubscriber socketSub;
 
   // Required Blocs
   final DataBloc data;
@@ -25,7 +25,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
     // ** Initialize ** //
-    socketSub = new SocketSubscription(user.node, this);
+    socketSub = new SocketSubscriber(user.node, this);
 
     // ** Device BLoC Subscription ** //
     directionSub = device.directionCubit.listen((direction) {

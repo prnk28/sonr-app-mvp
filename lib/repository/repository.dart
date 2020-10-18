@@ -7,7 +7,7 @@ export 'package:socket_io_client/socket_io_client.dart';
 
 export 'peer.dart';
 export 'session.dart';
-export 'subscription.dart';
+export 'subscriber.dart';
 
 // Clients
 import 'package:socket_io_client/socket_io_client.dart';
