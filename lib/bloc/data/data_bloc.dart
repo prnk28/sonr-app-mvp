@@ -177,8 +177,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
             currMeta.chunksTotal);
 
         // Yield Progress
-        yield Transmitting(
-            file: this.currentFile);
+        yield Transmitting(file: this.currentFile);
       }
     }
   }
@@ -186,15 +185,20 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // *********************
 // ** WriteFile Event **
 // *********************
-  Stream<DataState> _mapWriteFileState(WriteFile writeEvent) async* {
+  Stream<DataState> _mapWriteFileState(WriteFile event) async* {
     // Get App Directory
     Directory tempDir = await getTemporaryDirectory();
 
     // Generate File Path
     var filePath = tempDir.path + '/file_01.tmp';
 
+    // Get Data
+    Uint8List data = block.takeBytes();
+    final buffer = data.buffer;
+
     // Save File to Disk
-    File rawFile = await writeToFile(block.takeBytes(), filePath);
+    File rawFile = await new File(filePath).writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
 
     // Remove from Incoming
     incoming.removeAt(0);
@@ -207,14 +211,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ********************
 // ** FindFile Event **
 // ********************
-  Stream<DataState> _mapFindFileState(FindFile findFileEvent) async* {
+  Stream<DataState> _mapFindFileState(FindFile event) async* {
     // Check Status
   }
 
 // ********************
 // ** OpenFile Event **
 // ********************
-  Stream<DataState> _mapOpenFileState(OpenFile openFileEvent) async* {
-    // Check Status
+  Stream<DataState> _mapOpenFileState(OpenFile event) async* {
+    await event.meta.getBytes();
   }
 }

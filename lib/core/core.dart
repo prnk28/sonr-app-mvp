@@ -38,8 +38,6 @@ part 'olc.dart';
 // ******************************* //
 // ** Global Package References ** //
 // ******************************* //
-enum Device { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
-
 Logger log = Logger();
 Uuid uuid = Uuid();
 Size screenSize;
@@ -68,28 +66,30 @@ Alignment directionToAlignment(double r, double deg) {
   return Alignment(x, y);
 }
 
+// ****************************************
+// ** Get File Object from Assets Folder **
+// ****************************************
+Future<File> getAssetFileByPath(String path) async {
+  // Get Application Directory
+  Directory directory = await getApplicationDocumentsDirectory();
+
+  // Get File Extension and Set Temp DB Extenstion
+  var dbPath = join(directory.path, "temp" + extension(path));
+
+  // Get Byte Data
+  ByteData data = await rootBundle.load(path);
+
+  // Get Bytes as Int
+  List<int> bytes =
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+  // Return File Object
+  return await File(dbPath).writeAsBytes(bytes);
+}
+
 // ********************* //
 // ** Enum Extensions ** //
 // ********************* //
-extension DeviceExtension on Device {
-  asString() {
-    this.toString().split('.').last;
-  }
-
-  Device fromString(key) {
-    return Device.values.firstWhere(
-      (v) => v != null && key == v.asString(),
-      orElse: () => null,
-    );
-  }
-
-  Device getPlatform() {
-    Device device;
-    device.fromString(Platform.operatingSystem.toUpperCase());
-    return device;
-  }
-}
-
 extension FileTypeExtension on FileType {
   asString() {
     this.toString().split('.').last;

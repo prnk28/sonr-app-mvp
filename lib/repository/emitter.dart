@@ -40,7 +40,7 @@ extension SocketEmitter on Peer {
     this.status = newStatus;
 
     // Emit to Server
-    socket.emit("UPDATE", this.toMap());
+    socket.emit("UPDATE", {'node': this.toMap(), 'to': this.olc});
   }
 }
 

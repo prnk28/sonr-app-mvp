@@ -51,5 +51,6 @@ class FindFile extends DataEvent {
 
 // Opens a file in appropriate viewer
 class OpenFile extends DataEvent {
-  const OpenFile();
+  final Metadata meta;
+  const OpenFile(this.meta);
 }

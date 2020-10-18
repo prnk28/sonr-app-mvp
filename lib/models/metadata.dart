@@ -20,6 +20,7 @@ class Metadata {
   int currentChunkNum;
   int remainingChunks;
 
+  // ** Constructor **
   Metadata({File file, Map map}) {
     // Set Id
     this.id = uuid.v1();
@@ -53,7 +54,22 @@ class Metadata {
     }
   }
 
-  // Send with Offer
+  // ** Read Bytes from Metadata Path **
+  Future<Uint8List> getBytes() async {
+    Uri myUri = Uri.parse(this.path);
+    File audioFile = new File.fromUri(myUri);
+    Uint8List bytes;
+    await audioFile.readAsBytes().then((value) {
+      bytes = Uint8List.fromList(value);
+      log.i('reading of bytes is completed');
+    }).catchError((onError) {
+      log.w('Exception Error while reading audio from path:' +
+          onError.toString());
+    });
+    return bytes;
+  }
+
+  // ** Convert to Map **
   toMap() {
     return {
       "name": this.name,

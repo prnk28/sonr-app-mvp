@@ -11,128 +11,26 @@ part 'web_state.dart';
 // ***********************
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
-  StreamSubscription directionSubscription;
+  StreamSubscription directionSub;
+  SocketSubscription socketSub;
 
   // Required Blocs
   final DataBloc data;
   final DeviceBloc device;
   final UserBloc user;
-  Peer _node;
 
   // Initial State
   WebState get initialState => Disconnected();
 
-  // On Bloc Close
-  void dispose() {
-    directionSubscription.cancel();
-  }
-
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
-    // Initialize Objects
-    _node = user.node;
-
-    // ** SocketClient Event Subscription ** //
-    // -- USER CONNECTED TO SERVER --
-    socket.on('READY', (data) {
-      // Log Event
-      log.i("READY");
-
-      // Change Status
-      add(Update(Status.Available));
-    });
-
-    // -- UPDATE TO A NODE IN LOBBY --
-    socket.on('ENTERED', (data) {
-      log.i("Neighbor Entered Room");
-
-      // Get Peer
-      Peer neighbor = Peer.fromMap(data);
-
-      // Update Graph
-      _node.updateGraph(neighbor);
-    });
-
-    // -- UPDATE TO A NODE IN LOBBY --
-    socket.on('UPDATED', (data) {
-      log.i(data.toString());
-      // Check if Peer is Self
-      if (data['id'] != _node.id) {
-        // Get Peer
-        Peer neighbor = Peer.fromMap(data);
-
-        // Update Graph
-        _node.updateGraph(neighbor);
-      }
-    });
-
-    // -- NODE EXITED LOBBY --
-    socket.on('EXITED', (data) {
-      // Log Event
-      log.i("EXITED: " + data.toString());
-
-      // Get Peer
-      Peer neighbor = Peer.fromMap(data['from']);
-
-      // Update Graph
-      _node.exitGraph(neighbor);
-    });
-
-    // -- OFFER REQUEST --
-    socket.on('OFFERED', (data) {
-      // Log Event
-      log.i("OFFERED: " + data.toString());
-
-      // Set Status
-      _node.status = Status.Requested;
-
-      // Handle Offer
-      _node.handleOffer(data);
-    });
-
-    // -- MATCH ACCEPTED REQUEST --
-    socket.on('ANSWERED', (data) {
-      // Log Event
-      log.i("ANSWERED: " + data.toString());
-
-      // Set Status
-      _node.status = Status.Transferring;
-
-      // Handle Answer
-      _node.handleAnswer(data);
-    });
-
-    // -- MATCH DECLINED REQUEST --
-    socket.on('DECLINED', (data) {
-      // Log Event
-      log.i("DECLINED: " + data.toString());
-    });
-
-    // -- MATCH ICE CANDIDATES --
-    socket.on('CANDIDATE', (data) {
-      // Log Event
-      log.i("CANDIDATE: " + data.toString());
-
-      // Handle Candidate
-      _node.handleCandidate(data);
-    });
-
-    // -- MATCH RECEIVED FILE --
-    socket.on('COMPLETED', (data) {
-      // Log Event
-      log.i("COMPLETED: " + data.toString());
-    });
-
-    // -- ERROR OCCURRED (Cancelled, Internal) --
-    socket.on('ERROR', (error) {
-      // Log Event
-      log.e("ERROR: " + data.toString());
-    });
+    // ** Initialize ** //
+    socketSub = new SocketSubscription(user.node, this);
 
     // ** Device BLoC Subscription ** //
-    directionSubscription = device.directionCubit.listen((direction) {
+    directionSub = device.directionCubit.listen((direction) {
       // Check Diff Direction
-      if (direction != _node.direction && this.state is! Loading) {
+      if (direction != user.node.direction && this.state is! Loading) {
         // Device is Searching
         if (this.state is Searching) {
           // Update WebBloc State
@@ -147,6 +45,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     });
   }
 
+  // On Bloc Close
+  void dispose() {
+    directionSub.cancel();
+  }
+
 // *********************************
 // ** Map Events to State Method ***
 // *********************************
@@ -156,8 +59,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   ) async* {
     if (event is Connect) {
       yield* _mapConnectToState(event);
-    } else if (event is Load) {
-      yield* _mapLoadToState(event);
     } else if (event is Update) {
       yield* _mapUpdateToState(event);
     } else if (event is Authorize) {
@@ -172,17 +73,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
     // Check if Peer Located
-    if (_node.connect()) {
+    if (user.node.connect()) {
       // Wait for Server
-      add(Load());
+      yield Loading();
     }
-  }
-
-// *****************
-// ** Load Event ***
-// *****************
-  Stream<WebState> _mapLoadToState(Load event) async* {
-    yield Loading();
   }
 
 // *******************
@@ -190,18 +84,18 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
     // Update User Peer Node
-    _node.update(Status.Available, newDirection: event.newDirection);
+    user.node.update(Status.Available, newDirection: event.newDirection);
 
     // Action by Status
-    switch (_node.status) {
+    switch (user.node.status) {
       case Status.Offline:
         yield Disconnected();
         break;
       case Status.Available:
-        yield Available(_node);
+        yield Available(user.node);
         break;
       case Status.Searching:
-        yield Searching(_node);
+        yield Searching(user.node);
         break;
       case Status.Pending:
         yield Pending();
@@ -213,7 +107,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Transferring();
         break;
       default:
-        add(Load());
+        yield Loading();
         break;
     }
   }
@@ -224,11 +118,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
     // User Agreed
     if (event.decision) {
-      await _node.answer(event.match, event.peerConnection);
+      await user.node.answer(event.match, event.peerConnection);
     }
     // User Declined
     else {
-      _node.decline(event.match);
+      user.node.decline(event.match);
     }
   }
 
@@ -252,13 +146,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // ** Transfer is Finished **
       case EndType.Complete:
         // Reset Node
-        _node.status = Status.Available;
+        user.node.status = Status.Available;
 
         // Set Delay
         await new Future.delayed(Duration(seconds: 1));
 
         // Yield Ready
-        yield Completed(_node);
+        yield Completed(user.node);
         break;
 
       // ** Exit Graph **

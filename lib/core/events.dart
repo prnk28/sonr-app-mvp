@@ -18,7 +18,7 @@ enum CubitType { Direction, Progress }
 
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
-  emitDataBlocEvent(DataEventType event) {
+  emitDataBlocEvent(DataEventType event, {Metadata file}) {
     // Switch by Event
     switch (event) {
       case DataEventType.QueueFile:
@@ -28,7 +28,7 @@ extension Events on BuildContext {
         BlocProvider.of<DataBloc>(this).add(FindFile());
         break;
       case DataEventType.OpenFile:
-        BlocProvider.of<DataBloc>(this).add(OpenFile());
+        BlocProvider.of<DataBloc>(this).add(OpenFile(file));
         break;
     }
   }

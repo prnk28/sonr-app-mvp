@@ -40,7 +40,7 @@ class Peer {
     this.id = uuid.v1();
     this.direction = 0.01;
     this.status = Status.Offline;
-    this.device.getPlatform();
+    this.setDevice();
 
     // Initialize Dependencies
     _graph = new DirectedValueGraph();
@@ -51,9 +51,9 @@ class Peer {
   static Peer fromMap(Map map) {
     Peer neighbor = new Peer(Profile.fromMap(map['profile']));
     neighbor.id = map['id'];
-    neighbor.device.fromString(map["device"]);
-    neighbor.status.fromString(map["status"]);
     neighbor.direction = map['direction'];
+    neighbor.status.fromString(map["status"]);
+    neighbor.setDevice(device: (map["device"]));
     return neighbor;
   }
 
@@ -67,7 +67,7 @@ class Peer {
   toMap() {
     return {
       'id': this.id,
-      'device': this.device.asString(),
+      'device': this.device.toString(),
       'direction': this.direction.toDouble(),
       'profile': this.profile.toMap(),
       'status': this.status.asString()

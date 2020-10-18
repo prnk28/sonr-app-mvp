@@ -92,6 +92,8 @@ extension RTCHandler on Peer {
 // ************************** //
 // ** Peer Status Handling ** //
 // ************************** //
+enum Device { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
+
 extension StatusHandler on Peer {
   // ** Get Private Status **
   Status get status {
@@ -116,6 +118,19 @@ extension StatusHandler on Peer {
     log.i("Current Position: " + position.toString());
 
     // Encode OLC
-    this.olc = OLC.encode(position.latitude, position.longitude);
+    this.olc = OLC.encode(position.latitude, position.longitude, codeLength: 8);
+  }
+
+  // ** Set Device / Find if not Provided **
+  setDevice({String device}) {
+    // From String
+    if (device != null) {
+      this.device =
+          Device.values.firstWhere((e) => e.toString() == 'Device.' + device);
+    }
+    // Find from Platform
+    String os = Platform.operatingSystem.toUpperCase();
+    this.device =
+        Device.values.firstWhere((e) => e.toString() == 'Device.' + os);
   }
 }

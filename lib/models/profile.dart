@@ -1,12 +1,10 @@
 import 'package:hive/hive.dart';
 
-// ** HiveDB Box Name ** //
+// HiveDB Box Name
 const PROFILE_BOX = "profileBox";
 
-// ************************
-// ** User Profile Model **
-// ************************
 class Profile extends HiveObject {
+  // Variables
   @HiveField(0)
   String firstName;
   @HiveField(1)

@@ -6,12 +6,11 @@ export 'package:hive/hive.dart';
 export 'package:socket_io_client/socket_io_client.dart';
 
 export 'peer.dart';
-export 'localdata.dart';
 export 'session.dart';
+export 'subscription.dart';
 
 // Clients
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:sonar_app/repository/localdata.dart';
 
 // * Chunking Constants **
 const CHUNK_SIZE = 16000;

@@ -21,6 +21,8 @@ class HomeScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is Requested) {
             return RequestedView();
+          } else if (state is Available) {
+            return Text("OLC " + state.userNode.olc);
           } else {
             return Text("WebBloc " + (state).toString());
           }
