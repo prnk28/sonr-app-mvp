@@ -19,6 +19,6 @@ class Register extends UserEvent {
 
 // Update Profile/Contact Info
 class UpdateProfile extends UserEvent {
-  final Profile data;
-  const UpdateProfile(this.data);
+  final Profile newProfile;
+  const UpdateProfile(this.newProfile);
 }

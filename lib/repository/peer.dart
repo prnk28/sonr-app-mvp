@@ -6,116 +6,97 @@ part 'emitter.dart';
 part 'graphing.dart';
 part 'handler.dart';
 
-// ***************************** //
-// ** Class for Node in Graph ** //
-// ***************************** //
+enum Status {
+  Offline, // Initial Status
+  Standby, // Device Located ready to connect
+  Available, // Ready to Receive
+  Searching, // Looking for Peers
+  Pending, // Waiting for Confirmation
+  Requested, // Offered Transfer
+  Transferring // In Transfer
+}
+
 class Peer {
   // Management
   String id;
   Profile profile;
   DateTime lastUpdated;
-  DeviceType device;
+  Device device;
 
   // Sensory Variables
   double direction;
   double distance;
   ProximityStatus proximity;
-  Position location;
+  Location location;
 
   // Dependencies
   DirectedValueGraph _graph;
   RTCSession _session;
 
-  // Status Variables - Get/Set
+  // -- Status --
   Status _status;
+
+  // Getter
   Status get status {
     return _status;
   }
 
-  // ***************** //
-  // ** Constructer ** //
-  // ***************** //
-  Peer(this.profile) {
-    // Set Id
-    this.id = uuid.v1();
-
-    // Default Direction Variables
-    this.direction = 0.01;
-
-    // Default Location Variables
-    this.location = new Position(
-        accuracy: 12345.1, altitude: 123.1, latitude: 45.1, longitude: -120.1);
-
-    // Default Object Variables
-    this.status = Status.Disconnected;
-
-    // Set Device
-    this.device = getPlatform();
-
-    // Initialize Dependencies
-    _graph = new DirectedValueGraph();
-    _session = new RTCSession();
-  }
-
-  // **************************** //
-  // ** Methods to Update Node ** //
-  // **************************** //
-  // -- Setter Method to Update Status --
-  set status(Status givenStatus) {
+  // Setter
+  set status(Status status) {
     // Update to Given Status
-    _status = givenStatus;
+    _status = status;
 
     // Change Last Updated
     this.lastUpdated = DateTime.now();
   }
 
-  // ** Reset Networking and Node itself **
+// ** Constructer **
+  Peer({this.profile, Map map}) {
+    // ******************* //
+    // ** Neigbhor Peer ** //
+    // ******************* //
+    if (map != null && this.profile == null) {
+      // Set Variables from Map
+      this.id = map['id'];
+      this.profile.fromMap(map['profile']);
+      this.device.fromString(map["device"]);
+      this.status.fromString(map["status"]);
+      this.direction = map['direction'];
+
+      // Deactivate Dependencies
+      _graph = null;
+      _session = null;
+    }
+    // *************** //
+    // ** User Peer ** //
+    // *************** //
+    else {
+      // Set Default Variables
+      this.id = uuid.v1();
+      this.direction = 0.01;
+      this.status = Status.Offline;
+      this.device = getPlatform();
+
+      // Initialize Dependencies
+      _graph = new DirectedValueGraph();
+      _session = new RTCSession();
+    }
+  }
+
+// ** Reset Networking and Node itself **
   void reset() {
     log.i("Work in Progress");
   }
 
-  // *********************** //
-  // ** Object Generation ** //
-  // *********************** //
-  // -- Generate Peer from Map --
-  static Peer fromMap(Map map) {
-    // Extract Profile and Create Peer
-    Peer newPeer = new Peer(Profile.fromMap(map["profile"]));
-    newPeer.id = map["id"];
-
-    // Set Direction
-    newPeer.direction = map["direction"];
-
-    // Set Device
-    newPeer.device = enumFromString(map["device"], DeviceType.values);
-
-    // Set Location
-    newPeer.location = new Position(
-        accuracy: map["location"]["accuracy"].toDouble(),
-        altitude: map["location"]["altitude"].toDouble(),
-        latitude: map["location"]["latitude"].toDouble(),
-        longitude: map["location"]["longitude"].toDouble());
-
-    // Set Status
-    newPeer.status = enumFromString(map["status"], Status.values);
-
-    return newPeer;
-  }
-
+// ** Convert Object to Map **
   // -- Export Peer to Map for Communication --
   toMap() {
     return {
       'id': this.id,
-      'device': enumAsString(this.device),
+      'device': this.device.asString(),
       'direction': this.direction.toDouble(),
       'profile': this.profile.toMap(),
-      'status': enumAsString(this.status),
-      'location': {
-        'accuracy': this.location.accuracy.toDouble(),
-        'altitude': this.location.altitude.toDouble(),
-        'latitude': this.location.latitude.toDouble(),
-        'longitude': this.location.longitude.toDouble()
-      }
+      'status': this.status.asString()
     };
   }
 }

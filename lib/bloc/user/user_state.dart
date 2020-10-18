@@ -13,17 +13,9 @@ class Offline extends UserState {
 
 // User can communicate to server
 class Online extends UserState {
-  final Profile profile;
+  final Peer user;
 
-  Online(this.profile);
-}
-
-// User is matched with a peer
-class Paired extends UserState {
-  final Peer match;
-  final RTCPeerConnection peerConnection;
-
-  Paired(this.match, this.peerConnection);
+  Online(this.user);
 }
 
 class Unregistered extends UserState {

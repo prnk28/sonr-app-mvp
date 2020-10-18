@@ -41,10 +41,14 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       // Get Location
-      Location loc = await Location.initialize();
+      Location currentLocation = await Location.initialize();
+
+      // Set Node Location
+      user.node.location = currentLocation;
+      user.node.status = Status.Standby;
 
       // Location Available
-      yield Located(loc);
+      yield Located(currentLocation);
     } else {
       // Permission Denied
       yield Denied();

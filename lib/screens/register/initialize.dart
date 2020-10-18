@@ -104,8 +104,8 @@ class _InitializeViewState extends State<InitializeView> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     // Get Profile from Values
-                    var profile = Profile.fromValues(
-                        this._firstName, this._lastName, null);
+                    var profile =
+                        new Profile(this._firstName, this._lastName, null);
 
                     // Process data.
                     context.emitUserBlocEvent(UserEventType.UpdateProfile,

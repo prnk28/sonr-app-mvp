@@ -1,6 +1,5 @@
 import 'repository.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 
 // *******************
 // * Signaling Enum **

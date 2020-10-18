@@ -33,22 +33,24 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     _node = user.node;
 
     // ** SocketClient Event Subscription ** //
-    // -- USER RECEIVED LOBBY INFO --
-    socket.on('LOBBY', (data) {
-      // Log Event
-      log.i("LOBBY: " + data.toString());
-
-      // Join Lobby
-      socket.emit("JOIN", data);
-    });
-
-    // -- USER RECEIVED LOBBY INFO --
+    // -- USER CONNECTED TO SERVER --
     socket.on('READY', (data) {
       // Log Event
       log.i("READY");
 
       // Change Status
-      add(Update(Status.Active));
+      add(Update(Status.Available));
+    });
+
+    // -- UPDATE TO A NODE IN LOBBY --
+    socket.on('ENTERED', (data) {
+      log.i("Neighbor Entered Room");
+
+      // Get Peer
+      Peer neighbor = new Peer(map: data);
+
+      // Update Graph
+      _node.updateGraph(neighbor);
     });
 
     // -- UPDATE TO A NODE IN LOBBY --
@@ -56,13 +58,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Check if Peer is Self
       if (data['id'] != _node.id) {
         // Get Peer
-        Peer peer = Peer.fromMap(data);
-
-        // Log Event
-        //log.i("UPDATED: " + data.toString());
+        Peer neighbor = new Peer(map: data);
 
         // Update Graph
-        _node.updateGraph(peer);
+        _node.updateGraph(neighbor);
       }
     });
 
@@ -72,10 +71,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       log.i("EXITED: " + data.toString());
 
       // Get Peer
-      Peer peer = Peer.fromMap(data["from"]);
+      Peer neighbor = new Peer(map: data['from']);
 
       // Update Graph
-      _node.exitGraph(peer);
+      _node.exitGraph(neighbor);
     });
 
     // -- OFFER REQUEST --
@@ -139,7 +138,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         }
         // Send with 500ms delay
         else if (this.state is Available) {
-          add(Update(Status.Active));
+          add(Update(Status.Available));
         }
         _node.direction = direction;
       }
@@ -170,10 +169,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Connect Event ***
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
-    // Check if Peer Node exists
-    if (_node != null) {
-      // Emit Peer Node
-      socket.emit("INITIALIZE", _node.toMap());
+    // Check if Peer Located
+    if (_node.status == Status.Standby) {
+      // Set Headers
+      _node.connect();
 
       // Device Pending State
       add(Load());
@@ -195,14 +194,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     _node.status = event.newStatus;
 
     // Emit to Server
-    socket.emit("UPDATING", _node.toMap());
+    socket.emit("UPDATE", _node.toMap());
 
     // Action by Status
     switch (_node.status) {
-      case Status.Disconnected:
+      case Status.Offline:
         yield Disconnected();
         break;
-      case Status.Active:
+      case Status.Available:
         yield Available(_node);
         break;
       case Status.Searching:
@@ -216,6 +215,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         break;
       case Status.Transferring:
         yield Transferring();
+        break;
+      default:
+        add(Load());
         break;
     }
   }
@@ -254,7 +256,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // ** Transfer is Finished **
       case EndType.Complete:
         // Reset Node
-        _node.status = Status.Active;
+        _node.status = Status.Available;
 
         // Set Delay
         await new Future.delayed(Duration(seconds: 1));

@@ -67,7 +67,10 @@ extension Events on BuildContext {
 
 // ** WebBLoC Applicable Events for Frontend ** //
   emitWebBlocEvent(WebEventType event,
-      {bool authDecision, dynamic webMessage, Peer match, Metadata metaData}) {
+      {bool authDecision,
+      Peer match,
+      Metadata metaData,
+      RTCPeerConnection offerConnection}) {
     switch (event) {
       case WebEventType.Connect:
         BlocProvider.of<WebBloc>(this).add(Connect());
@@ -76,13 +79,12 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Update(Status.Searching));
         break;
       case WebEventType.Active:
-        BlocProvider.of<WebBloc>(this).add(Update(Status.Active));
+        BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
         break;
       case WebEventType.Invite:
         break;
       case WebEventType.Authorize:
-        //BlocProvider.of<WebBloc>(this)
-        //    .add(Authorize(authDecision, webMessage));
+        BlocProvider.of<WebBloc>(this).add(Authorize(authDecision, match, offerConnection));
         break;
     }
   }

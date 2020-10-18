@@ -1,10 +1,9 @@
 import 'package:hive/hive.dart';
 
-// Basic Profile Class for Client
+// ************************
+// ** User Profile Model **
+// ************************
 class Profile extends HiveObject {
-  // *******************
-  // ** Class Values ***
-  // *******************
   @HiveField(0)
   String firstName;
   @HiveField(1)
@@ -12,25 +11,17 @@ class Profile extends HiveObject {
   @HiveField(2)
   String profilePicture;
 
+  // ** Constructer **
   Profile(this.firstName, this.lastName, this.profilePicture);
 
-  // ***********************
-  // ** Object Generation **
-  // ***********************
-  // Create Object from Events
-  @HiveType()
-  static Profile fromMap(Map data) {
-    return Profile(data["first_name"], data["last_name"], data["profile_pic"]);
+  // ** Set From Map **
+  fromMap(Map data) {
+    this.firstName = data["first_name"];
+    this.lastName = data["last_name"];
+    this.profilePicture = data["profile_picture"];
   }
 
-  // Create Object from Events
-  static Profile fromValues(String first, String last, pic) {
-    return Profile(first, last, pic);
-  }
-
-  // *********************
-  // ** JSON Conversion **
-  // *********************
+  // ** Convert Object to Map **
   toMap() {
     return {
       'first_name': this.firstName,
@@ -40,6 +31,9 @@ class Profile extends HiveObject {
   }
 }
 
+// ******************
+// ** Hive Adapter **
+// ******************
 class ProfileAdapter extends TypeAdapter<Profile> {
   @override
   final typeId = 1;

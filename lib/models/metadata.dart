@@ -3,7 +3,6 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
-@HiveType()
 class Metadata {
   // -- SQL Fields --
   String id;

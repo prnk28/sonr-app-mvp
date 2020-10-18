@@ -42,37 +42,46 @@ part 'olc.dart';
 // ******************************* //
 // ** Global Package References ** //
 // ******************************* //
-enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
-
-enum Status {
-  Disconnected,
-  Active,
-  Searching,
-  Pending,
-  Requested,
-  Transferring
-}
+enum Device { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
 
 Logger log = Logger();
 Uuid uuid = Uuid();
 Size screenSize;
 
-getPlatform() {
-  return enumFromString(
-      Platform.operatingSystem.toUpperCase(), DeviceType.values);
+Device getPlatform() {
+  Device device;
+  device.fromString(Platform.operatingSystem.toUpperCase());
+  return device;
 }
 
 // ****************** //
 // ** Enum Methods ** //
 // ****************** //
-// Enum Value Converstion to String
-String enumAsString(Object o) => o.toString().split('.').last;
-
-// String Conversion to Enum Value
-T enumFromString<T>(String key, Iterable<T> values) => values.firstWhere(
-      (v) => v != null && key == enumAsString(v),
+extension StatusExtension on Status {
+  Status fromString(key) {
+    return Status.values.firstWhere(
+      (v) => v != null && key == v.asString(),
       orElse: () => null,
     );
+  }
+
+  asString() {
+    this.toString().split('.').last;
+  }
+}
+
+extension DeviceExtension on Device {
+  Device fromString(key) {
+    return Device.values.firstWhere(
+      (v) => v != null && key == v.asString(),
+      orElse: () => null,
+    );
+  }
+
+  asString() {
+    this.toString().split('.').last;
+  }
+}
 
 // ********************************
 // ** Read Local Data of Assets ***

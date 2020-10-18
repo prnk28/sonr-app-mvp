@@ -3,15 +3,11 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
-
 part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(null);
-
-  // Initialize
-  Profile profile;
   Peer node;
 
   @override
@@ -30,27 +26,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // ***********************
   Stream<UserState> _mapInitializeState(Initialize event) async* {
     // Retrieve Profile
-    var profileData = await localData.getProfile();
+    var profile = await localData.getProfile();
 
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
 
     // No Profile
-    if (profileData == null) {
-      // Update Reference
-      this.profile = null;
+    if (profile == null) {
       // Change State
       yield Offline();
     }
     // Profile Found
     else {
-      // Update Reference
-      this.profile = profileData;
-
       // Initialize User Node
-      node = new Peer(profile);
+      node = new Peer(profile: profile);
+
       // Profile Ready
-      yield Online(profile);
+      yield Online(node);
     }
   }
 
@@ -59,15 +51,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // *************************
   Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
     // Save to Box
-    await localData.updateProfile(event.data);
-
-    // Update Reference
-    this.profile = event.data;
+    await localData.updateProfile(event.newProfile);
 
     // Reinitialize User Node
-    node = new Peer(profile);
+    node = new Peer(profile: event.newProfile);
 
     // Profile Ready
-    yield Online(profile);
+    yield Online(node);
   }
 }

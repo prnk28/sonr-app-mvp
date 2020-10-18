@@ -1,8 +1,28 @@
 part of 'peer.dart';
 
-// ************************** //
-// ** WebRTC Event Sending ** //
-// ************************** //
+// ******************************* //
+// ** Socket.io Event Messaging ** //
+// ******************************* //
+extension SocketEmitter on Peer {
+  connect() {
+    // Get Headers
+    var headers = {
+      'id': this.id, // Update Socket ID
+      'lobby': this.location.olc, // RoomId from Location
+      'node': this.toMap() // Node Info
+    };
+
+    // Set on Socket
+    socket.io.options['extraHeaders'] = headers;
+
+    // Connect to Socket
+    socket.connect();
+  }
+}
+
+// **************************** //
+// ** WebRTC Event Messaging ** //
+// **************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
   invite(Peer match, Metadata meta) async {

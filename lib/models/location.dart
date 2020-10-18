@@ -1,11 +1,13 @@
 import 'package:sonar_app/core/core.dart';
 
 class Location {
-  // ** Class Variables **
-  Position position;
-  String olc;
+  String olc; // Open Location Code
+  Position position; // From Geolocator
 
-  // ** Faux Constructor **
+  // ** Constructer **
+  Location(this.olc, this.position);
+
+  // ** Create Location **
   static initialize() async {
     Location loc;
     // Get Current Position
@@ -16,7 +18,24 @@ class Location {
     loc.olc = OLC.encode(loc.position.latitude, loc.position.longitude);
   }
 
-  // ** Method to Create Map **
+  // ** Return Location from Map **
+  static Location fromMap(Map data) {
+    // Check if Not Empty
+    if (data != null) {
+      return new Location(
+          data['olc'],
+          new Position(
+              accuracy: data['accuracy'].toDouble(),
+              altitude: data['altitude'].toDouble(),
+              latitude: data['latitude'].toDouble(),
+              longitude: data['longitude'].toDouble()));
+    }
+    // Location not in map
+    log.e("Location: No data in map");
+    return null;
+  }
+
+  // ** Convert Object to Map **
   toMap() {
     // Check if Not Empty
     if (this.olc != null && this.position != null) {
@@ -30,5 +49,6 @@ class Location {
     }
     // Location isnt Initialized
     log.e("Location: Position and OLC not set");
+    return null;
   }
 }
