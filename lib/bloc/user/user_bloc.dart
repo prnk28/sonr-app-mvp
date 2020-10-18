@@ -26,7 +26,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // ***********************
   Stream<UserState> _mapCheckProfileState(CheckProfile event) async* {
     // Retrieve Profile
-    var profile = await getProfile();
+    var profile = await Profile.retrieve();
 
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
@@ -55,7 +55,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // *************************
   Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
     // Save to Box
-    await updateProfile(event.newProfile);
+    await Profile.update(event.newProfile);
 
     // Reinitialize User Node
     node = new Peer(event.newProfile);

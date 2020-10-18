@@ -1,5 +1,8 @@
 import 'package:hive/hive.dart';
 
+// ** HiveDB Box Name ** //
+const PROFILE_BOX = "profileBox";
+
 // ************************
 // ** User Profile Model **
 // ************************
@@ -27,6 +30,36 @@ class Profile extends HiveObject {
       'last_name': this.lastName,
       'profile_picture': this.profilePicture
     };
+  }
+
+  // ** HiveDB Direct Method: (Update) **
+  static Future<void> update(Profile profile) async {
+    var box = await Hive.openBox(PROFILE_BOX);
+
+    box.put("profile", profile);
+
+    print('Profile: ${box.get("profile")}');
+
+    await box.close();
+  }
+
+  // ** HiveDB Direct Method: (Retrieve) **
+  static Future<Profile> retrieve() async {
+    var box = await Hive.openBox(PROFILE_BOX);
+    final profile = box.get("profile");
+    await box.close();
+
+    return profile;
+  }
+
+  // ** HiveDB Direct Method: (Clear) **
+  static Future<void> clear() async {
+    var box = await Hive.openBox(PROFILE_BOX);
+
+    // Clear Existing Profile
+    box.delete("profile");
+
+    await box.close();
   }
 }
 

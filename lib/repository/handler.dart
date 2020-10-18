@@ -68,7 +68,7 @@ extension RTCHandler on Peer {
   // ** Handle Peer Exit from RTC Session ** //
   handleCancel(data) {
     // Retrieve Data
-    Peer match = Peer.fromMap(data['from']);
+    Peer match = Peer.fromMap(data["from"]);
 
     // Remove RTC Connection
     var pc = _session.peerConnections[match.id];
