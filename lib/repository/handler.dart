@@ -96,20 +96,6 @@ extension RTCHandler on Peer {
 // ** Peer Status Handling ** //
 // ************************** //
 extension StatusHandler on Peer {
-  // ** Get Private Status **
-  Status get status {
-    return _status;
-  }
-
-  // ** Set Status/ Change LastUpdated **
-  set status(Status status) {
-    // Update to Given Status
-    _status = status;
-
-    // Change Last Updated
-    this.lastUpdated = DateTime.now();
-  }
-
   // ** Set OLC from Current Location **
   setLocation() async {
     // Get Location

@@ -50,7 +50,7 @@ class Metadata {
 
       // Set File Info from Map
       this.name = map["name"];
-      this.type.fromString(map["type"]);
+      this.type = enumFromString(map["type"], FileType.values);
     }
   }
 
@@ -76,7 +76,7 @@ class Metadata {
       "size": this.size,
       "path": this.path,
       "chunks_total": this.chunksTotal,
-      "type": this.type.asString()
+      "type": enumAsString(this.type)
     };
   }
 }

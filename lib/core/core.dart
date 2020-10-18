@@ -90,28 +90,11 @@ Future<File> getAssetFileByPath(String path) async {
 // ********************* //
 // ** Enum Extensions ** //
 // ********************* //
-extension FileTypeExtension on FileType {
-  asString() {
-    this.toString().split('.').last;
-  }
+// Enum Value Converstion to String
+String enumAsString(Object o) => o.toString().split('.').last;
 
-  FileType fromString(key) {
-    return FileType.values.firstWhere(
-      (v) => v != null && key == v.asString(),
+// String Conversion to Enum Value
+T enumFromString<T>(String key, Iterable<T> values) => values.firstWhere(
+      (v) => v != null && key == enumAsString(v),
       orElse: () => null,
     );
-  }
-}
-
-extension StatusExtension on Status {
-  asString() {
-    this.toString().split('.').last;
-  }
-
-  Status fromString(key) {
-    return Status.values.firstWhere(
-      (v) => v != null && key == v.asString(),
-      orElse: () => null,
-    );
-  }
-}

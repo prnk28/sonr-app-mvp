@@ -34,7 +34,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Device is Searching
         if (this.state is Searching) {
           // Update WebBloc State
-          add(Update(Status.Available, newDirection: direction));
+          add(Update(Status.Searching, newDirection: direction));
         }
         // Send with 500ms delay
         else if (this.state is Available) {
@@ -84,7 +84,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
     // Update User Peer Node
-    user.node.update(Status.Available, newDirection: event.newDirection);
+    user.node.update(event.newStatus, newDirection: event.newDirection);
 
     // Action by Status
     switch (user.node.status) {

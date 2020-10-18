@@ -30,16 +30,16 @@ extension SocketEmitter on Peer {
 
   // ** Node has Updated ** //
   update(Status newStatus, {double newDirection}) {
+    // Update Status
+    this.status = newStatus;
+
     // Update Direction
     if (newDirection != null) {
       this.direction = newDirection;
     }
 
-    // Update Status
-    this.status = newStatus;
-
     // Emit to Server
-    socket.emit("UPDATE", [this.toMap(), this.olc]);
+    socket.emit("UPDATE", this.toMap());
   }
 }
 

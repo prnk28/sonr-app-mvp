@@ -24,6 +24,18 @@ class Peer {
   Profile profile;
   DateTime lastUpdated;
   Status _status;
+  Status get status {
+    return _status;
+  }
+
+  // ** Set Status/ Change LastUpdated **
+  set status(Status status) {
+    // Update to Given Status
+    _status = status;
+
+    // Change Last Updated
+    this.lastUpdated = DateTime.now();
+  }
 
   // Sensory Variables
   double direction;
@@ -53,7 +65,7 @@ class Peer {
     neighbor.id = map['id'];
     neighbor.device = map["device"];
     neighbor.direction = map['direction'];
-    neighbor.status.fromString(map["status"]);
+    neighbor.status = enumFromString(map["status"], Status.values);
     return neighbor;
   }
 
@@ -70,7 +82,7 @@ class Peer {
       'device': this.device,
       'direction': this.direction.toDouble(),
       'profile': this.profile.toMap(),
-      'status': this.status.asString()
+      'status': enumAsString(this.status)
     };
   }
 }

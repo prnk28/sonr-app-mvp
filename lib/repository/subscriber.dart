@@ -23,17 +23,14 @@ class SocketSubscriber {
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
-      // Check if Peer is Self
-      if (data['id'] != socket.id) {
-        // Neighbor
-        log.i(data.toString());
+      // Neighbor
+      log.i(data.toString());
 
-        // Get Data
-        Peer from = Peer.fromMap(data);
+      // Get Data
+      Peer from = Peer.fromMap(data);
 
-        // Update Graph
-        _user.node.updateGraph(from);
-      }
+      // Update Graph
+      _user.node.updateGraph(from);
     });
 
     // -- NODE EXITED LOBBY --
