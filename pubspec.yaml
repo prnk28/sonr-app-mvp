@@ -25,7 +25,7 @@ dependencies:
 
   # -- Device --
   flutter_sensor_compass: ^0.1.1
-  geolocator: ^5.3.1
+  geolocator: ^6.0.0+4
   permission_handler: ^5.0.0+hotfix.3
   sensors: ^0.4.1+1
   soundpool: ^1.0.1

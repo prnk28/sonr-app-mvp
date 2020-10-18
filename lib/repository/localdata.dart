@@ -2,11 +2,14 @@ import 'repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
+// ** HiveDB Box Constants **
+const PREFERENCES_BOX = "preferencesBox";
+const PROFILE_BOX = "profileBox";
+
 class LocalData {
   // ******************************** //
   // ** Add/Update Persistent Data ** //
   // ******************************** //
-
   Future<void> updatePreferences(Map preferences) async {
     var box = await Hive.openBox(PREFERENCES_BOX);
 

@@ -1,11 +1,8 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
-import 'package:sonar_app/core/core.dart';
+
 
 part 'user_event.dart';
 part 'user_state.dart';

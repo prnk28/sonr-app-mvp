@@ -1,12 +1,7 @@
 import 'dart:ui';
+import 'package:sonar_app/repository/repository.dart';
 import 'package:sonar_app/screens/screens.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'dart:math' as math;
 import 'package:sonar_app/core/core.dart';
-
-// Imports
-//import 'package:flutter_gradients/flutter_gradients.dart';
 
 // Exports
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';

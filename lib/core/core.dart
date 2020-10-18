@@ -10,10 +10,6 @@ export 'package:logger/logger.dart';
 export 'package:tuple/tuple.dart';
 export 'package:bloc/bloc.dart';
 
-// Networking Libraries
-export 'package:socket_io_client/socket_io_client.dart';
-export 'package:sonar_app/peer/peer.dart';
-
 // Device Libraries
 export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 export 'package:sensors/sensors.dart';
@@ -30,6 +26,7 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/design/design.dart';
+import 'package:sonar_app/repository/repository.dart';
 import 'dart:math';
 import 'package:uuid/uuid.dart';
 import 'package:sonar_app/models/models.dart';
@@ -40,11 +37,21 @@ import 'package:sonar_app/screens/screens.dart';
 
 part 'routing.dart';
 part 'events.dart';
+part 'olc.dart';
 
 // ******************************* //
 // ** Global Package References ** //
 // ******************************* //
 enum DeviceType { ANDROID, FUCHSIA, IOS, LINUX, MACOS, WINDOWS }
+
+enum Status {
+  Disconnected,
+  Active,
+  Searching,
+  Pending,
+  Requested,
+  Transferring
+}
 
 Logger log = Logger();
 Uuid uuid = Uuid();

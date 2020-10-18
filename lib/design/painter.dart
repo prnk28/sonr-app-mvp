@@ -1,7 +1,7 @@
 part of 'design.dart';
 
 // Constants
-const double K_ANGLE = math.pi;
+const double K_ANGLE = pi;
 
 class ZonePainter extends CustomPainter {
   // Size Reference

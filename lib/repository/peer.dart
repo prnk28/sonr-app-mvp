@@ -3,18 +3,8 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 part 'emitter.dart';
-part 'circle.dart';
+part 'graphing.dart';
 part 'handler.dart';
-
-// ** Status Enum ** //
-enum Status {
-  Disconnected,
-  Active,
-  Searching,
-  Pending,
-  Requested,
-  Transferring
-}
 
 // ***************************** //
 // ** Class for Node in Graph ** //

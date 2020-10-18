@@ -11,14 +11,13 @@ abstract class DeviceState extends Equatable {
 // ** Prior to Load or on Standby **
 class Inactive extends DeviceState {}
 
-// ** Device can Record Data/ Portrait **
-class Ready extends DeviceState {
-  final Peer user;
-  const Ready({this.user});
+// ** Device Received Location **
+class Located extends DeviceState {
+  final Location location;
+  const Located(this.location);
 }
 
-// ** Interacting with another Peer**
-class Busy extends DeviceState {
-  final Peer user;
-  const Busy({this.user});
+// ** Device Received Location **
+class Denied extends DeviceState {
+  const Denied();
 }

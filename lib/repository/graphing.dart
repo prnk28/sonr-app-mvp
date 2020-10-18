@@ -1,8 +1,10 @@
 part of 'peer.dart';
 
+// ** Proximity Enum ** //
 enum ProximityStatus { Immediate, Near, Far, Away }
 
-extension Circle on Peer {
+// ** Modify Graph Values ** //
+extension Graphing on Peer {
   // ** Exit Graph from Peer **
   exitGraph(Peer peer) {
     var previousNode = _graph.singleWhere((element) => element.id == peer.id,
