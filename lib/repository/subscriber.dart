@@ -24,13 +24,14 @@ class SocketSubscriber {
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
       // Neighbor
-      log.i(data.toString());
+      //log.i(data.toString());
 
       // Get Data
       Peer from = Peer.fromMap(data);
 
       // Update Graph
       _user.node.updateGraph(from);
+      _web.add(Update(_user.node.status));
     });
 
     // -- NODE EXITED LOBBY --
@@ -45,6 +46,7 @@ class SocketSubscriber {
 
         // Update Graph
         _user.node.exitGraph(from);
+        _web.add(Update(_user.node.status));
       }
     });
 

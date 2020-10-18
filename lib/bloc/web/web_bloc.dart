@@ -61,6 +61,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapConnectToState(event);
     } else if (event is Update) {
       yield* _mapUpdateToState(event);
+    } else if (event is Load) {
+      yield* _mapLoadToState(event);
     } else if (event is Authorize) {
       yield* _mapAuthorizeToState(event);
     } else if (event is End) {
@@ -77,6 +79,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Wait for Server
       yield Loading();
     }
+  }
+
+// *****************
+// ** Load Event ***
+// *****************
+  Stream<WebState> _mapLoadToState(Load event) async* {
+    // Wait for Server
+    yield Loading();
   }
 
 // *******************
