@@ -55,6 +55,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
+      log.i(data.toString());
       // Check if Peer is Self
       if (data['id'] != _node.id) {
         // Get Peer
@@ -134,19 +135,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       if (direction != _node.direction && this.state is! Loading) {
         // Device is Searching
         if (this.state is Searching) {
-          // Update User Peer Node
-          _node.update(Status.Searching, newDirection: direction);
-
           // Update WebBloc State
-          add(Update(Status.Searching));
+          add(Update(Status.Available, newDirection: direction));
         }
         // Send with 500ms delay
         else if (this.state is Available) {
-          // Update User Peer Node
-          _node.update(Status.Available, newDirection: direction);
-
           // Update WebBloc State
-          add(Update(Status.Available));
+          add(Update(Status.Available, newDirection: direction));
         }
       }
     });
@@ -194,6 +189,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Update Event ***
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
+    // Update User Peer Node
+    _node.update(Status.Available, newDirection: event.newDirection);
+
     // Action by Status
     switch (_node.status) {
       case Status.Offline:

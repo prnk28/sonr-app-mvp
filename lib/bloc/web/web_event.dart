@@ -30,12 +30,13 @@ class Load extends WebEvent {
 // Send Node Data
 class Update extends WebEvent {
   final Status newStatus;
+  final double newDirection;
   final Peer match;
   final Metadata metadata;
   final RTCPeerConnection senderPeerConnection;
 
   const Update(this.newStatus,
-      {this.match, this.metadata, this.senderPeerConnection});
+      {this.newDirection, this.match, this.metadata, this.senderPeerConnection});
 }
 
 // Receiver is Presented with Authorization
