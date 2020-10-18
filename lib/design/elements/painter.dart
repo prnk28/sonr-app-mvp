@@ -1,4 +1,4 @@
-part of 'design.dart';
+part of 'elements.dart';
 
 // Constants
 const double K_ANGLE = pi;

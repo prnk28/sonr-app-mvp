@@ -1,4 +1,4 @@
-part of 'bubble.dart';
+part of 'widgets.dart';
 
 // *************************** //
 // ** Build Bubbles in List ** //
@@ -8,11 +8,11 @@ buildStackView(List<Peer> peers, Animation animation) {
   if (peers.isNotEmpty) {
 // Initialize Widget List with Range Lines
     List<Widget> stackWidgets = new List<Widget>();
-    stackWidgets.add(_buildRangeLines());
+    stackWidgets.add(buildRangeLines());
 
     // Create Bubbles
     for (Peer peer in peers) {
-      Widget bubble = _buildBubble(animation.value, peer);
+      Widget bubble = buildBubble(animation.value, peer);
       stackWidgets.add(bubble);
     }
 
@@ -25,7 +25,7 @@ buildStackView(List<Peer> peers, Animation animation) {
 // ************************************** //
 // ** Build Bubble Widget Requirements ** //
 // ************************************** //
-Widget _buildRangeLines() {
+Widget buildRangeLines() {
   return Padding(
       padding: EdgeInsets.only(bottom: 75),
       child: CustomPaint(
@@ -35,7 +35,7 @@ Widget _buildRangeLines() {
       ));
 }
 
-Widget _buildBubble(double value, Peer node) {
+Widget buildBubble(double value, Peer node) {
   return Positioned(
       top: calculateOffset(value, node.proximity).dy,
       left: calculateOffset(value, node.proximity).dx,

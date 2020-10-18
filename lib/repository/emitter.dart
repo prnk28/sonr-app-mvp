@@ -10,9 +10,8 @@ extension SocketEmitter on Peer {
     if (this.status == Status.Standby) {
       // Get Headers
       var headers = {
-        'id': this.id, // Update Socket ID
+        'deviceId': this.id,
         'lobby': this.olc, // RoomId from Location
-        'node': this.toMap() // Node Info
       };
 
       // Set on Socket
@@ -40,7 +39,7 @@ extension SocketEmitter on Peer {
     this.status = newStatus;
 
     // Emit to Server
-    socket.emit("UPDATE", {'node': this.toMap(), 'to': this.olc});
+    socket.emit("UPDATE", [this.toMap(), this.olc]);
   }
 }
 
@@ -66,13 +65,15 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      socket.emit("OFFER", {
-        'to': match.id,
-        'from': this.toMap(),
-        'description': {'sdp': s.sdp, 'type': s.type},
-        'session_id': _session.id,
-        'file_info': meta.toMap()
-      });
+      socket.emit("OFFER", [
+        this.toMap(),
+        match.id,
+        {
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': _session.id,
+          'metadata': meta.toMap()
+        }
+      ]);
     } catch (e) {
       print(e.toString());
     }
@@ -86,12 +87,14 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      socket.emit("ANSWER", {
-        'to': match.id,
-        'from': this.toMap(),
-        'description': {'sdp': s.sdp, 'type': s.type},
-        'session_id': _session.id,
-      });
+      socket.emit("ANSWER", [
+        this.toMap(),
+        match.id,
+        {
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': _session.id,
+        }
+      ]);
     } catch (e) {
       print(e.toString());
     }
@@ -101,7 +104,7 @@ extension RTCEmitter on Peer {
     // TODO: Reset User Connection
 
     // Emit to Socket.io
-    socket.emit("DECLINE");
+    socket.emit("DECLINE", [this.toMap(), match.id]);
   }
 
   // ** Create new RTCPeerConnection ** //
@@ -112,15 +115,18 @@ extension RTCEmitter on Peer {
 
     // Send ICE Message
     pc.onIceCandidate = (candidate) {
-      socket.emit("CANDIDATE", {
-        'to': id,
-        'candidate': {
-          'sdpMLineIndex': candidate.sdpMlineIndex,
-          'sdpMid': candidate.sdpMid,
-          'candidate': candidate.candidate,
-        },
-        'session_id': this.id,
-      });
+      socket.emit("CANDIDATE", [
+        this.toMap(),
+        id,
+        {
+          'candidate': {
+            'sdpMLineIndex': candidate.sdpMlineIndex,
+            'sdpMid': candidate.sdpMid,
+            'candidate': candidate.candidate,
+          },
+          'session_id': this.id,
+        }
+      ]);
     };
     return pc;
   }

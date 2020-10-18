@@ -1,14 +1,14 @@
-part of 'compass.dart';
+part of 'widgets.dart';
 
 // Major Constants
 const double _K_MAJOR_SPOKE_WIDTH = 18; // Spoke Length
-const double _K_MAJOR_TOP_PADDING = 45; // West, East
-const double _K_MAJOR_BOTTOM_PADDING = 20; // North, South
+const double K_MAJOR_TOP_PADDING = 45; // West, East
+const double K_MAJOR_BOTTOM_PADDING = 20; // North, South
 
 // Minor Constants
 const double _K_MINOR_SPOKE_WIDTH = 12;
 
-Widget _buildMajorSpoke(
+Widget buildMajorSpoke(
   double direction, {
   bool isNegativeAlignment = false,
   Color textColor = Colors.black54,
@@ -56,7 +56,7 @@ Widget _buildMajorSpoke(
       ));
 }
 
-Widget _buildAuxiliarySpoke(double direction) {
+Widget buildAuxiliarySpoke(double direction) {
   return Align(
       alignment: directionToAlignment(-1, direction),
       child: RotationTransition(
@@ -77,7 +77,7 @@ Widget _buildAuxiliarySpoke(double direction) {
       ));
 }
 
-Widget _buildMinorSpoke(double direction) {
+Widget buildMinorSpoke(double direction) {
   return Align(
       alignment: directionToAlignment(-1, direction),
       child: RotationTransition(
@@ -98,7 +98,7 @@ Widget _buildMinorSpoke(double direction) {
       ));
 }
 
-Widget _buildCenterBulb(double direction) {
+Widget buildCenterBulb(double direction) {
   return Neumorphic(
     style: NeumorphicStyle(
       depth: -5,

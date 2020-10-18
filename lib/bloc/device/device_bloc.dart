@@ -37,7 +37,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   Stream<DeviceState> mapInitializeState(Initialize event) async* {
     // Check Permissions
     LocationPermission permission = await checkPermission();
-    log.i("LocationPermission:" + permission.toString());
 
     // Permission by Case
     if (permission == LocationPermission.whileInUse ||

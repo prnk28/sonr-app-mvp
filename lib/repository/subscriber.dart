@@ -1,20 +1,21 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 // ********************************** //
 // ** Socket.io Event Subscription ** //
 // ********************************** //
 class SocketSubscriber {
-  final Peer _node;
+  final UserBloc _user;
   final WebBloc _web;
 
-  SocketSubscriber(this._node, this._web) {
+  SocketSubscriber(this._user, this._web) {
     // ** SocketClient Event Subscription ** //
     // -- USER CONNECTED TO SERVER --
-    socket.on('READY', (data) {
-      // Log Event
-      log.i("READY");
+    socket.on('connect', (_) {
+      // Get/Set Socket Id
+      _user.node.id = socket.id;
 
       // Change Status
       _web.add(Update(Status.Available));
@@ -22,51 +23,67 @@ class SocketSubscriber {
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
-      log.i(data.toString());
       // Check if Peer is Self
-      if (data['id'] != _node.id) {
-        // Get Peer
-        Peer neighbor = Peer.fromMap(data);
+      if (data['id'] != socket.id) {
+        // Neighbor
+        log.i(data.toString());
+
+        // Get Data
+        Peer from = Peer.fromMap(data);
 
         // Update Graph
-        _node.updateGraph(neighbor);
+        _user.node.updateGraph(from);
       }
     });
 
     // -- NODE EXITED LOBBY --
     socket.on('EXITED', (data) {
-      // Log Event
-      log.i("EXITED: " + data.toString());
+      // Get Data
+      Peer from = Peer.fromMap(data);
 
-      // Get Peer
-      Peer neighbor = Peer.fromMap(data['from']);
+      // Check if Peer is Self
+      if (from.id != _user.node.id) {
+        // Neighbor
+        log.i(data.toString());
 
-      // Update Graph
-      _node.exitGraph(neighbor);
+        // Update Graph
+        _user.node.exitGraph(from);
+      }
     });
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
+      // Get Data
+      Peer from = Peer.fromMap(data[0]);
+      dynamic offer = data[1];
+
+      // Get Metadata
+      Metadata meta = new Metadata(map: offer['metadata']);
+
       // Log Event
       log.i("OFFERED: " + data.toString());
 
       // Set Status
-      _node.status = Status.Requested;
+      _user.node.status = Status.Requested;
 
       // Handle Offer
-      _node.handleOffer(data);
+      _user.node.handleOffer(offer);
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
+      // Get Data
+      Peer from = Peer.fromMap(data[0]);
+      dynamic answer = data[1];
+
       // Log Event
       log.i("ANSWERED: " + data.toString());
 
       // Set Status
-      _node.status = Status.Transferring;
+      _user.node.status = Status.Transferring;
 
       // Handle Answer
-      _node.handleAnswer(data);
+      _user.node.handleAnswer(answer);
     });
 
     // -- MATCH DECLINED REQUEST --
@@ -81,7 +98,7 @@ class SocketSubscriber {
       log.i("CANDIDATE: " + data.toString());
 
       // Handle Candidate
-      _node.handleCandidate(data);
+      _user.node.handleCandidate(data);
     });
 
     // -- MATCH RECEIVED FILE --

@@ -25,7 +25,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // Constructer
   WebBloc(this.data, this.device, this.user) : super(null) {
     // ** Initialize ** //
-    socketSub = new SocketSubscriber(user.node, this);
+    socketSub = new SocketSubscriber(user, this);
 
     // ** Device BLoC Subscription ** //
     directionSub = device.directionCubit.listen((direction) {

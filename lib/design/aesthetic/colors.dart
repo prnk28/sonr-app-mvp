@@ -1,4 +1,4 @@
-part of 'design.dart';
+part of 'aesthetic.dart';
 
 // ********************** **
 // ** -- Color Methods -- **

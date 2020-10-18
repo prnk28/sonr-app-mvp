@@ -22,7 +22,10 @@ class HomeScreen extends StatelessWidget {
           if (state is Requested) {
             return RequestedView();
           } else if (state is Available) {
-            return Text("OLC " + state.userNode.olc);
+            return Column(children: [
+              Text("OLC " + state.userNode.olc),
+              Text("ID " + state.userNode.id)
+            ]);
           } else {
             return Text("WebBloc " + (state).toString());
           }

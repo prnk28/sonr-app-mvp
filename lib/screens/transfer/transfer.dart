@@ -1,11 +1,10 @@
 import 'package:sonar_app/screens/screens.dart';
-import 'widgets/compass.dart';
-import 'widgets/bubble.dart';
-
+import 'dart:math' as math;
 // Views in Screen
+part 'bubbles.dart';
+part 'compass.dart';
 part 'complete.dart';
 part 'progress.dart';
-part 'searching.dart';
 part 'waiting.dart';
 
 class TransferScreen extends StatelessWidget {
@@ -33,7 +32,26 @@ class TransferScreen extends StatelessWidget {
         builder: (context, state) {
           // -- Searching State--
           if (state is Searching) {
-            return SearchingView(userNode: state.userNode);
+            return SafeArea(
+              child: Stack(
+                children: <Widget>[
+                  // Bubble View
+                  BubbleView(state.userNode.getZonedPeers()),
+
+                  // Have BLoC Builder Retrieve Directly from
+                  // Cubit to Avoid Delays
+                  BlocBuilder<DirectionCubit, double>(
+                    cubit: context.getCubit(CubitType.Direction),
+                    builder: (context, state) {
+                      return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: CompassView(direction: state));
+                    },
+                  )
+                  // Compass View
+                ],
+              ),
+            );
           }
 
           // -- Pending State--

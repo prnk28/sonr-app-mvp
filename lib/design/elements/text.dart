@@ -1,4 +1,4 @@
-part of 'design.dart';
+part of 'elements.dart';
 
 // App Bar Logo Text
 NeumorphicTextStyle neuLogoTextStyle() {

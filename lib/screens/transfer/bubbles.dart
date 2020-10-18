@@ -1,7 +1,4 @@
-import 'dart:ui';
-import 'package:sonar_app/screens/screens.dart';
-
-part 'bubble_builder.dart';
+part of 'transfer.dart';
 
 class BubbleView extends StatefulWidget {
   final List<Peer> activePeers;

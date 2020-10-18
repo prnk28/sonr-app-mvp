@@ -48,9 +48,6 @@ extension Routing on BuildContext {
               settings: settings);
           break;
         case '/transfer':
-          // Update Status
-          emitWebBlocEvent(WebEventType.Search);
-
           return PageTransition(
               child: TransferScreen(),
               type: PageTransitionType.fade,
