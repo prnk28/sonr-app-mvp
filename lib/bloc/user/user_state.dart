@@ -21,7 +21,3 @@ class Online extends UserState {
 class Unregistered extends UserState {
   Unregistered();
 }
-
-class Waiting extends UserState {
-  Waiting();
-}

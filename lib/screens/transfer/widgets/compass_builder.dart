@@ -172,11 +172,24 @@ enum CompassDesignation {
   NNW
 }
 
+extension CompassDesignationExt on CompassDesignation {
+  asString() {
+    this.toString().split('.').last;
+  }
+
+  CompassDesignation fromString(key) {
+    return CompassDesignation.values.firstWhere(
+      (v) => v != null && key == v.asString(),
+      orElse: () => null,
+    );
+  }
+}
+
 String _getCompassDesignation(double degrees) {
   var compassValue = ((degrees / 22.5) + 0.5).toInt();
 
   var compassEnum = CompassDesignation.values[(compassValue % 16)];
-  return enumAsString(compassEnum);
+  return compassEnum.asString();
 }
 
 String _getDirectionString(double degrees) {

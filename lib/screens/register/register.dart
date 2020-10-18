@@ -15,7 +15,7 @@ class RegisterScreen extends StatelessWidget {
           return false;
         }
         // Register Screen
-        else if (curr is Offline) {
+        else if (curr is Unregistered) {
           return true;
           // Default
         } else {
@@ -23,7 +23,7 @@ class RegisterScreen extends StatelessWidget {
         }
       }, builder: (context, state) {
         // Display Login/Signup View
-        if (state is Offline) {
+        if (state is Unregistered) {
           return Column(children: <Widget>[
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),

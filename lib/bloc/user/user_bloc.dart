@@ -14,19 +14,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
-    if (event is Initialize) {
-      yield* _mapInitializeState(event);
+    if (event is CheckProfile) {
+      yield* _mapCheckProfileState(event);
     } else if (event is UpdateProfile) {
       yield* _mapUpdateProfileState(event);
     }
   }
 
 // ***********************
-// ** Initialize Event **
+// ** CheckProfile Event **
 // ***********************
-  Stream<UserState> _mapInitializeState(Initialize event) async* {
+  Stream<UserState> _mapCheckProfileState(CheckProfile event) async* {
     // Retrieve Profile
-    var profile = await localData.getProfile();
+    var profile = await getProfile();
 
     // Create Delay
     await Future.delayed(const Duration(milliseconds: 1500));
@@ -34,12 +34,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // No Profile
     if (profile == null) {
       // Change State
-      yield Offline();
+      yield Unregistered();
     }
     // Profile Found
     else {
       // Initialize User Node
       node = new Peer(profile: profile);
+
+      // Set Node Location
+      await node.setLocation();
+      node.status = Status.Standby;
 
       // Profile Ready
       yield Online(node);
@@ -51,10 +55,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // *************************
   Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
     // Save to Box
-    await localData.updateProfile(event.newProfile);
+    await updateProfile(event.newProfile);
 
     // Reinitialize User Node
     node = new Peer(profile: event.newProfile);
+
+    // Set Node Location
+    await node.setLocation();
+    node.status = Status.Standby;
 
     // Profile Ready
     yield Online(node);

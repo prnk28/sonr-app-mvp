@@ -88,3 +88,34 @@ extension RTCHandler on Peer {
     _session.updateState(SignalingState.CallStateBye);
   }
 }
+
+// ************************** //
+// ** Peer Status Handling ** //
+// ************************** //
+extension StatusHandler on Peer {
+  // ** Get Private Status **
+  Status get status {
+    return _status;
+  }
+
+  // ** Set Status/ Change LastUpdated **
+  set status(Status status) {
+    // Update to Given Status
+    _status = status;
+
+    // Change Last Updated
+    this.lastUpdated = DateTime.now();
+  }
+
+  // ** Set OLC from Current Location **
+  setLocation() async {
+    // Get Location
+    Position position =
+        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    log.i("Current Position: " + position.toString());
+
+    // Encode OLC
+    this.olc = OLC.encode(position.latitude, position.longitude);
+  }
+}

@@ -19,15 +19,15 @@ enum Status {
 class Peer {
   // Management
   String id;
+  String olc;
+  Device device;
   Profile profile;
   DateTime lastUpdated;
-  Device device;
 
   // Sensory Variables
   double direction;
   double distance;
   ProximityStatus proximity;
-  Location location;
 
   // Dependencies
   DirectedValueGraph _graph;
@@ -35,20 +35,6 @@ class Peer {
 
   // -- Status --
   Status _status;
-
-  // Getter
-  Status get status {
-    return _status;
-  }
-
-  // Setter
-  set status(Status status) {
-    // Update to Given Status
-    _status = status;
-
-    // Change Last Updated
-    this.lastUpdated = DateTime.now();
-  }
 
 // ** Constructer **
   Peer({this.profile, Map map}) {
@@ -75,7 +61,7 @@ class Peer {
       this.id = uuid.v1();
       this.direction = 0.01;
       this.status = Status.Offline;
-      this.device = getPlatform();
+      this.device.getPlatform();
 
       // Initialize Dependencies
       _graph = new DirectedValueGraph();

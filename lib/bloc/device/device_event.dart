@@ -8,8 +8,8 @@ abstract class DeviceEvent extends Equatable {
 }
 
 // Get Current Peer Location
-class GetLocation extends DeviceEvent {
-  const GetLocation();
+class Initialize extends DeviceEvent {
+  const Initialize();
 }
 
 // *********************

@@ -2,6 +2,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'device_event.dart';
 part 'device_state.dart';
@@ -25,33 +26,31 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   Stream<DeviceState> mapEventToState(
     DeviceEvent event,
   ) async* {
-    if (event is GetLocation) {
-      yield* mapGetLocationState(event);
+    if (event is Initialize) {
+      yield* mapInitializeState(event);
     }
   }
 
 // ***********************
-// ** GetLocation Event **
+// ** Initialize Event **
 // ***********************
-  Stream<DeviceState> mapGetLocationState(GetLocation event) async* {
+  Stream<DeviceState> mapInitializeState(Initialize event) async* {
     // Check Permissions
     LocationPermission permission = await checkPermission();
+    log.i("LocationPermission:" + permission.toString());
 
     // Permission by Case
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
-      // Get Location
-      Location currentLocation = await Location.initialize();
-
-      // Set Node Location
-      user.node.location = currentLocation;
-      user.node.status = Status.Standby;
-
-      // Location Available
-      yield Located(currentLocation);
+      // Begin User Setup
+      user.add(CheckProfile());
     } else {
-      // Permission Denied
-      yield Denied();
+      if (await Permission.locationWhenInUse.request().isGranted) {
+        add(Initialize());
+      } else {
+        // Permission Denied
+        yield Denied();
+      }
     }
   }
 }

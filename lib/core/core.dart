@@ -20,11 +20,7 @@ export 'package:path/path.dart';
 export 'package:path_provider/path_provider.dart';
 
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/design/design.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'dart:math';
@@ -48,93 +44,19 @@ Logger log = Logger();
 Uuid uuid = Uuid();
 Size screenSize;
 
-Device getPlatform() {
-  Device device;
-  device.fromString(Platform.operatingSystem.toUpperCase());
-  return device;
-}
-
-// ****************** //
-// ** Enum Methods ** //
-// ****************** //
-extension StatusExtension on Status {
-  Status fromString(key) {
-    return Status.values.firstWhere(
-      (v) => v != null && key == v.asString(),
-      orElse: () => null,
-    );
-  }
-
-  asString() {
-    this.toString().split('.').last;
-  }
-}
-
-extension DeviceExtension on Device {
-  Device fromString(key) {
-    return Device.values.firstWhere(
-      (v) => v != null && key == v.asString(),
-      orElse: () => null,
-    );
-  }
-
-  asString() {
-    this.toString().split('.').last;
-  }
-}
-
-// ********************************
-// ** Read Local Data of Assets ***
-// ********************************
-Future<Uint8List> getBytesFromPath(String path) async {
-  Uri myUri = Uri.parse(path);
-  File audioFile = new File.fromUri(myUri);
-  Uint8List bytes;
-  await audioFile.readAsBytes().then((value) {
-    bytes = Uint8List.fromList(value);
-    log.i('reading of bytes is completed');
-  }).catchError((onError) {
-    log.w(
-        'Exception Error while reading audio from path:' + onError.toString());
-  });
-  return bytes;
-}
-
-// ****************************************
-// ** Get File Object from Assets Folder **
-// ****************************************
-Future<File> getAssetFileByPath(String path) async {
-  // Get Application Directory
-  Directory directory = await getApplicationDocumentsDirectory();
-
-  // Get File Extension and Set Temp DB Extenstion
-  var dbPath = join(directory.path, "temp" + extension(path));
-
-  // Get Byte Data
-  ByteData data = await rootBundle.load(path);
-
-  // Get Bytes as Int
-  List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-
-  // Return File Object
-  return await File(dbPath).writeAsBytes(bytes);
-}
-
-// **************************
-// ** Write File to a Path **
-// **************************
-Future<File> writeToFile(Uint8List data, String path) {
-  final buffer = data.buffer;
-  return new File(path)
-      .writeAsBytes(buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-}
-
 // ********************
 // ** Math Functions **
 // ********************
 num directionToRads(num deg) {
   return (directionToDegrees(deg) * pi) / 180.0;
+}
+
+double directionToDegrees(double direction) {
+  if (direction + 90 > 360) {
+    return direction - 270;
+  } else {
+    return direction + 90;
+  }
 }
 
 Alignment directionToAlignment(double r, double deg) {
@@ -146,10 +68,50 @@ Alignment directionToAlignment(double r, double deg) {
   return Alignment(x, y);
 }
 
-double directionToDegrees(double direction) {
-  if (direction + 90 > 360) {
-    return direction - 270;
-  } else {
-    return direction + 90;
+// ********************* //
+// ** Enum Extensions ** //
+// ********************* //
+extension DeviceExtension on Device {
+  asString() {
+    this.toString().split('.').last;
+  }
+
+  Device fromString(key) {
+    return Device.values.firstWhere(
+      (v) => v != null && key == v.asString(),
+      orElse: () => null,
+    );
+  }
+
+  Device getPlatform() {
+    Device device;
+    device.fromString(Platform.operatingSystem.toUpperCase());
+    return device;
+  }
+}
+
+extension FileTypeExtension on FileType {
+  asString() {
+    this.toString().split('.').last;
+  }
+
+  FileType fromString(key) {
+    return FileType.values.firstWhere(
+      (v) => v != null && key == v.asString(),
+      orElse: () => null,
+    );
+  }
+}
+
+extension StatusExtension on Status {
+  asString() {
+    this.toString().split('.').last;
+  }
+
+  Status fromString(key) {
+    return Status.values.firstWhere(
+      (v) => v != null && key == v.asString(),
+      orElse: () => null,
+    );
   }
 }

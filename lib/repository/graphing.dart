@@ -68,13 +68,14 @@ extension Graphing on Peer {
 
   // ** Checker Method: If Peer can Send to Peer **
   _canSendTo(Peer peer) {
-    return this.status == Status.Searching && peer.status == Status.Active;
+    return this.status == Status.Searching && peer.status == Status.Available;
   }
 
   // ** Get Difference When User is Searching **
   _getDifference(Peer receiver) {
     // Check Node Status: Senders are From
-    if (this.status == Status.Searching && receiver.status == Status.Active) {
+    if (this.status == Status.Searching &&
+        receiver.status == Status.Available) {
       // Calculate Difference
       var diff = this.direction - receiver.direction;
 

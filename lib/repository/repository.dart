@@ -35,8 +35,7 @@ const RTC_CONSTRAINTS = {
   'optional': [],
 };
 
-// ** Start Repositories **
-LocalData localData = new LocalData();
+// ** Start Socket **
 Socket socket = io('http://match.sonr.io', <String, dynamic>{
   'transports': ['websocket'],
   'autoConnect': false

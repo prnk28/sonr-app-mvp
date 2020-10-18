@@ -20,18 +20,15 @@ class SplashScreen extends StatelessWidget {
             return false;
           }
           // Register Screen
-          else if (curr is Offline) {
+          else if (curr is Unregistered) {
             context.goRegister();
             return false;
           }
           // Default
           return true;
         }, builder: (context, state) {
-          // Get Location
-          context.emitDeviceBlocEvent(DeviceEventType.GetLocation);
-
-          // Begin Local Status Check
-          context.emitUserBlocEvent(UserEventType.Initialize);
+          // Initialize Device
+          context.emitDeviceBlocEvent(DeviceEventType.Initialize);
 
           // Return Loading
           return Center(child: NeumorphicProgressIndeterminate());

@@ -8,8 +8,8 @@ abstract class UserEvent extends Equatable {
 }
 
 // Get User Ready on Device
-class Initialize extends UserEvent {
-  const Initialize();
+class CheckProfile extends UserEvent {
+  const CheckProfile();
 }
 
 // Login/Signup to account save info data bloc

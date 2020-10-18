@@ -5,10 +5,10 @@ part of 'core.dart';
 enum DataEventType { QueueFile, FindFile, OpenFile }
 
 // Device Event Enum
-enum DeviceEventType { GetLocation }
+enum DeviceEventType { Initialize }
 
 // User Event Enum
-enum UserEventType { Initialize, Register, SetStatus, UpdateProfile }
+enum UserEventType { CheckProfile, Register, SetStatus, UpdateProfile }
 
 // Web Event Enum
 enum WebEventType { Connect, Search, Active, Invite, Authorize }
@@ -36,8 +36,8 @@ extension Events on BuildContext {
 // ** DeviceBLoC Applicable Events for Frontend ** //
   emitDeviceBlocEvent(DeviceEventType event) {
     switch (event) {
-      case DeviceEventType.GetLocation:
-        BlocProvider.of<DeviceBloc>(this).add(GetLocation());
+      case DeviceEventType.Initialize:
+        BlocProvider.of<DeviceBloc>(this).add(Initialize());
         break;
     }
   }
@@ -46,8 +46,8 @@ extension Events on BuildContext {
   emitUserBlocEvent(UserEventType event,
       {Profile newProfile, Status newStatus}) {
     switch (event) {
-      case UserEventType.Initialize:
-        BlocProvider.of<UserBloc>(this).add(Initialize());
+      case UserEventType.CheckProfile:
+        BlocProvider.of<UserBloc>(this).add(CheckProfile());
         break;
       case UserEventType.Register:
         BlocProvider.of<UserBloc>(this).add(Register());
@@ -84,7 +84,8 @@ extension Events on BuildContext {
       case WebEventType.Invite:
         break;
       case WebEventType.Authorize:
-        BlocProvider.of<WebBloc>(this).add(Authorize(authDecision, match, offerConnection));
+        BlocProvider.of<WebBloc>(this)
+            .add(Authorize(authDecision, match, offerConnection));
         break;
     }
   }

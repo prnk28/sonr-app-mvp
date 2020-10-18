@@ -13,8 +13,7 @@ class Inactive extends DeviceState {}
 
 // ** Device Received Location **
 class Located extends DeviceState {
-  final Location location;
-  const Located(this.location);
+  const Located();
 }
 
 // ** Device Received Location **

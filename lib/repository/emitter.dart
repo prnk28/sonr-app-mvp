@@ -4,19 +4,43 @@ part of 'peer.dart';
 // ** Socket.io Event Messaging ** //
 // ******************************* //
 extension SocketEmitter on Peer {
-  connect() {
-    // Get Headers
-    var headers = {
-      'id': this.id, // Update Socket ID
-      'lobby': this.location.olc, // RoomId from Location
-      'node': this.toMap() // Node Info
-    };
+  // ** Node Attempting to Connect ** //
+  bool connect() {
+    // Check if Peer Located
+    if (this.status == Status.Standby) {
+      // Get Headers
+      var headers = {
+        'id': this.id, // Update Socket ID
+        'lobby': this.olc, // RoomId from Location
+        'node': this.toMap() // Node Info
+      };
 
-    // Set on Socket
-    socket.io.options['extraHeaders'] = headers;
+      // Set on Socket
+      socket.io.options['extraHeaders'] = headers;
 
-    // Connect to Socket
-    socket.connect();
+      // Connect to Socket
+      socket.connect();
+      return true;
+    }
+    // Incorrect status
+    else {
+      log.e("User node not located");
+      return false;
+    }
+  }
+
+  // ** Node has Updated ** //
+  update(Status newStatus, {double newDirection}) {
+    // Update Direction
+    if (newDirection != null) {
+      this.direction = newDirection;
+    }
+
+    // Update Status
+    this.status = newStatus;
+
+    // Emit to Server
+    socket.emit("UPDATE", this.toMap());
   }
 }
 
@@ -25,7 +49,7 @@ extension SocketEmitter on Peer {
 // **************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
-  invite(Peer match, Metadata meta) async {
+  offer(Peer match, Metadata meta) async {
     // Change Session State
     _session.updateState(SignalingState.CallStateNew,
         newId: this.id + '-' + match.id);
@@ -36,23 +60,18 @@ extension RTCEmitter on Peer {
     // Initialize RTC Sender Connection
     _session.initializePeer(false, pc, match);
 
-    // Send Offer
-    this.createOffer(match.id, meta.toMap(), pc);
-  }
-
-  // ** Create WebRTC Offer ** //
-  createOffer(String id, dynamic fileInfo, RTCPeerConnection pc) async {
     try {
-      // Create Session Description
+      // Create Offer Description
       RTCSessionDescription s = await pc.createOffer(RTC_CONSTRAINTS);
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
       socket.emit("OFFER", {
-        'to': id,
+        'to': match.id,
+        'from': this.toMap(),
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': _session.id,
-        'file_info': fileInfo
+        'file_info': meta.toMap()
       });
     } catch (e) {
       print(e.toString());
@@ -60,19 +79,29 @@ extension RTCEmitter on Peer {
   }
 
   // ** Create WebRTC Answer (Post Authentication) ** //
-  createAnswer(String id, RTCPeerConnection pc) async {
+  answer(Peer match, RTCPeerConnection pc) async {
     try {
+      // Create Answer Description
       RTCSessionDescription s = await pc.createAnswer(RTC_CONSTRAINTS);
       pc.setLocalDescription(s);
 
+      // Emit to Socket.io
       socket.emit("ANSWER", {
-        'to': id,
+        'to': match.id,
+        'from': this.toMap(),
         'description': {'sdp': s.sdp, 'type': s.type},
         'session_id': _session.id,
       });
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  decline(Peer match) {
+    // TODO: Reset User Connection
+
+    // Emit to Socket.io
+    socket.emit("DECLINE");
   }
 
   // ** Create new RTCPeerConnection ** //
@@ -97,7 +126,7 @@ extension RTCEmitter on Peer {
   }
 
   // ** Exit the RTCSession ** //
-  sendExit() {
+  exit() {
     _session.peerConnections.forEach((key, pc) {
       pc.close();
     });

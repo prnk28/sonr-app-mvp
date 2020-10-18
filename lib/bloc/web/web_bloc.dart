@@ -134,13 +134,20 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       if (direction != _node.direction && this.state is! Loading) {
         // Device is Searching
         if (this.state is Searching) {
+          // Update User Peer Node
+          _node.update(Status.Searching, newDirection: direction);
+
+          // Update WebBloc State
           add(Update(Status.Searching));
         }
         // Send with 500ms delay
         else if (this.state is Available) {
+          // Update User Peer Node
+          _node.update(Status.Available, newDirection: direction);
+
+          // Update WebBloc State
           add(Update(Status.Available));
         }
-        _node.direction = direction;
       }
     });
   }
@@ -170,11 +177,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ********************
   Stream<WebState> _mapConnectToState(Connect event) async* {
     // Check if Peer Located
-    if (_node.status == Status.Standby) {
-      // Set Headers
-      _node.connect();
-
-      // Device Pending State
+    if (_node.connect()) {
+      // Wait for Server
       add(Load());
     }
   }
@@ -190,12 +194,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Update Event ***
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
-    // Update Status
-    _node.status = event.newStatus;
-
-    // Emit to Server
-    socket.emit("UPDATE", _node.toMap());
-
     // Action by Status
     switch (_node.status) {
       case Status.Offline:
@@ -228,11 +226,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
     // User Agreed
     if (event.decision) {
-      await _node.createAnswer(event.match.id, event.peerConnection);
+      await _node.answer(event.match, event.peerConnection);
     }
     // User Declined
     else {
-      socket.emit("DECLINE");
+      _node.decline(event.match);
     }
   }
 
