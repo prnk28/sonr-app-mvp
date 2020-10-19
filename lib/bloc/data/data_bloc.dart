@@ -78,7 +78,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **********************
   Stream<DataState> _mapQueueFileState(QueueFile event) async* {
     // Check if Queue is Incoming
-    if (event.info != null) {
+    if (event.info != null && event.file == null) {
       // Create Metadata
       var incomingMeta = new Metadata(map: event.info);
 
@@ -92,19 +92,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
 
     // Check if Queue is Outgoing
-    if (event.file != null) {
+    else {
       // Current Fake File
-      File transferToSend =
-          await getAssetFileByPath("assets/images/fat_test.jpg");
+      File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
       // Create Metadata
-      var outgoingMeta = new Metadata(file: transferToSend);
+      var outgoingMeta = new Metadata(file: dummyFile);
 
       // Add to Outgoing File Map
-      outgoing[outgoingMeta] = transferToSend;
+      outgoing[outgoingMeta] = dummyFile;
 
       // Set Current File
-      currentFile = Tuple2<Metadata, File>(outgoingMeta, transferToSend);
+      currentFile = Tuple2<Metadata, File>(outgoingMeta, dummyFile);
 
       yield Queued(currentFile);
     }

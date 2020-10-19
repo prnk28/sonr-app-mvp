@@ -84,7 +84,9 @@ class RTCSession {
             new RTCSessionDescription(description['sdp'], description['type']));
       }
       // Log Error
-      log.e("Description Data not Provided for Receiver");
+      else {
+        log.e("Description Data not Provided for Receiver");
+      }
     }
     // Peer is Sending
     else {

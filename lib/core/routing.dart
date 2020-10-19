@@ -20,12 +20,24 @@ extension Routing on BuildContext {
   }
 
   // Display Transfer as Modal
+  pushRequested(Metadata meta, Peer match) {
+    showDialog(
+        barrierDismissible: false,
+        context: this,
+        builder: (BuildContext context) {
+          return RequestedView(meta, match);
+        });
+  }
+
+  // Display Transfer as Modal
   pushTransfer() {
     // Change View as Modal
     Navigator.push(
       this,
       MaterialPageRoute(
-          builder: (context) => TransferScreen(), fullscreenDialog: true),
+          maintainState: false,
+          builder: (context) => TransferScreen(),
+          fullscreenDialog: true),
     );
   }
 

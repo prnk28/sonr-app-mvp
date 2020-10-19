@@ -66,7 +66,8 @@ class SocketSubscriber {
       _user.node.status = Status.Requested;
 
       // Handle Offer
-      _user.node.handleOffer(offer);
+      _user.node.handleOffer(from, offer);
+      _web.add(Update(Status.Requested, match: from, metadata: meta));
     });
 
     // -- MATCH ACCEPTED REQUEST --
@@ -82,7 +83,7 @@ class SocketSubscriber {
       _user.node.status = Status.Transferring;
 
       // Handle Answer
-      _user.node.handleAnswer(answer);
+      _user.node.handleAnswer(from, answer);
     });
 
     // -- MATCH DECLINED REQUEST --
@@ -93,11 +94,12 @@ class SocketSubscriber {
 
     // -- MATCH ICE CANDIDATES --
     socket.on('CANDIDATE', (data) {
-      // Log Event
-      log.i("CANDIDATE: " + data.toString());
+      // Get Data
+      Peer from = Peer.fromMap(data[0]);
+      dynamic candidate = data[1];
 
       // Handle Candidate
-      _user.node.handleCandidate(data);
+      _user.node.handleCandidate(from, candidate);
     });
 
     // -- MATCH RECEIVED FILE --

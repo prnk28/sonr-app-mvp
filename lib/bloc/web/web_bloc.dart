@@ -108,10 +108,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(user.node);
         break;
       case Status.Pending:
+        user.node.offer(event.match, data.currentFile.item1);
         yield Pending();
         break;
       case Status.Requested:
-        yield Requested();
+        yield Requested(match: event.match, metadata: event.metadata);
         break;
       case Status.Transferring:
         yield Transferring();

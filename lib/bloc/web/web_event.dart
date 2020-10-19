@@ -36,7 +36,10 @@ class Update extends WebEvent {
   final RTCPeerConnection senderPeerConnection;
 
   const Update(this.newStatus,
-      {this.newDirection, this.match, this.metadata, this.senderPeerConnection});
+      {this.newDirection,
+      this.match,
+      this.metadata,
+      this.senderPeerConnection});
 }
 
 // Receiver is Presented with Authorization

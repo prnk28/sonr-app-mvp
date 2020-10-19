@@ -52,11 +52,9 @@ class Pending extends WebState {
 // *******************************
 class Requested extends WebState {
   final Peer match;
-  final RTCPeerConnection peerConnection;
   final Metadata metadata;
 
   const Requested({
-    this.peerConnection,
     this.match,
     this.metadata,
   });

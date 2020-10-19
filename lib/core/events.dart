@@ -18,7 +18,7 @@ enum CubitType { Direction, Progress }
 
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
-  emitDataBlocEvent(DataEventType event, {Metadata file}) {
+  emitDataBlocEvent(DataEventType event, {Metadata file}) async {
     // Switch by Event
     switch (event) {
       case DataEventType.QueueFile:
@@ -82,6 +82,8 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
         break;
       case WebEventType.Invite:
+        BlocProvider.of<WebBloc>(this)
+            .add(Update(Status.Pending, match: match));
         break;
       case WebEventType.Authorize:
         BlocProvider.of<WebBloc>(this)

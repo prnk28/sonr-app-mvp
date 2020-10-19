@@ -19,7 +19,7 @@ buildStackView(List<Peer> peers) {
     current += 1;
 
     // Place Bubble
-    Widget bubble = buildBubble(current * mean, peer);
+    Widget bubble = new Bubble(current * mean, peer);
     stackWidgets.add(bubble);
   }
 
@@ -38,39 +38,4 @@ Widget buildRangeLines() {
         painter: ZonePainter(),
         child: Container(),
       ));
-}
-
-Widget buildBubble(double value, Peer node) {
-  return Positioned(
-      top: calculateOffset(value, node.proximity).dy,
-      left: calculateOffset(value, node.proximity).dx,
-      child: Neumorphic(
-          style: NeumorphicStyle(
-              shape: NeumorphicShape.flat,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
-              depth: 10,
-              lightSource: LightSource.topLeft,
-              color: Colors.grey[300]),
-          child: Container(
-            width: 80,
-            height: 80,
-            child: Column(
-              children: [
-                Text(node.profile.firstName),
-                Text(node.device),
-              ],
-            ),
-          )));
-}
-
-// ******************************** //
-// ** Calculate Offset from Line ** //
-// ******************************** //
-Offset calculateOffset(double value, ProximityStatus proximity) {
-  Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
-  PathMetrics pathMetrics = path.computeMetrics();
-  PathMetric pathMetric = pathMetrics.elementAt(0);
-  value = pathMetric.length * value;
-  Tangent pos = pathMetric.getTangentForOffset(value);
-  return pos.position;
 }

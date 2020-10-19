@@ -5,9 +5,8 @@ part of 'peer.dart';
 // *************************** //
 extension RTCHandler on Peer {
   // ** Handle Peer Authorization ** //
-  handleAnswer(dynamic data) async {
+  handleAnswer(Peer match, dynamic data) async {
     // Get Match Node
-    Peer match = Peer.fromMap(data['from']);
     var description = data['description'];
 
     // Add Peer Connection
@@ -19,13 +18,7 @@ extension RTCHandler on Peer {
   }
 
   // ** Peer Requested User ** //
-  handleOffer(dynamic data) async {
-    // Get Peer
-    Peer match = Peer.fromMap(data['from']);
-
-    // Get Metadata
-    Metadata meta = new Metadata(map: data['metadata']);
-
+  handleOffer(Peer match, dynamic data) async {
     // Update Signalling State
     _session.updateState(SignalingState.CallStateNew,
         newId: data['session_id']);
@@ -41,9 +34,8 @@ extension RTCHandler on Peer {
   }
 
   // ** Handle ICE Candidate Received ** //
-  handleCandidate(data) async {
+  handleCandidate(Peer match, dynamic data) async {
     // Get Match Node
-    Peer match = Peer.fromMap(data['from']);
     var candidateMap = data['candidate'];
     var pc = _session.peerConnections[match.id];
 
