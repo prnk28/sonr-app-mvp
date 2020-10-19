@@ -58,49 +58,39 @@ class SocketSubscriber {
 
       // Get Metadata
       Metadata meta = new Metadata(map: offer['metadata']);
-      log.i("Received Metadata: " + meta.toMap().toString());
 
       // Log Event
       log.i("OFFERED: " + data.toString());
 
-      // Set Status
-      _user.node.status = Status.Requested;
-
-      // Handle Offer
+      // Inform WebBloc
       _web.add(
-          Update(Status.Requested, match: from, metadata: meta, offer: offer));
+          Update(Status.Requested, from: from, metadata: meta, offer: offer));
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
-      // Get Data
-      Peer from = Peer.fromMap(data[0]);
-      dynamic answer = data[1];
-
       // Log Event
       log.i("ANSWERED: " + data.toString());
 
-      // Set Status
-      _user.node.status = Status.Transferring;
-
-      // Handle Answer
-      _user.node.handleAnswer(from, answer);
+      // Inform WebBloc
+      _web.add(Update(Status.Answered,
+          decision: true, from: Peer.fromMap(data[0]), answer: data[1]));
     });
 
     // -- MATCH DECLINED REQUEST --
     socket.on('DECLINED', (data) {
       // Log Event
       log.i("DECLINED: " + data.toString());
+
+      // Inform Bloc
+      _web.add(
+          Update(Status.Answered, decision: false, from: Peer.fromMap(data)));
     });
 
     // -- MATCH ICE CANDIDATES --
     socket.on('CANDIDATE', (data) {
-      // Get Data
-      Peer from = Peer.fromMap(data[0]);
-      dynamic candidate = data[1];
-
       // Handle Candidate
-      _user.node.handleCandidate(from, candidate);
+      _user.node.handleCandidate(Peer.fromMap(data[0]), data[1]);
     });
 
     // -- MATCH RECEIVED FILE --

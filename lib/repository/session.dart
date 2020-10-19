@@ -46,13 +46,23 @@ class RTCSession {
 // ** WebRTC Object Methods ***
 // ****************************
   addDataChannel(id, RTCDataChannel channel) {
-    channel.onDataChannelState = (e) {};
+    // Send Callback to DataBloc
+    channel.onDataChannelState = (e) {
+      if (e == RTCDataChannelState.RTCDataChannelClosed) {
+        this.onDataChannel(null);
+      }
+    };
+
+    // Add Message as Callback
     channel.onMessage = (RTCDataChannelMessage data) {
       if (this.onDataChannelMessage != null)
         this.onDataChannelMessage(channel, data);
     };
+
+    // Add Channel to List
     dataChannels[id] = channel;
 
+    // Subscribe to Callback
     if (this.onDataChannel != null) this.onDataChannel(channel);
   }
 

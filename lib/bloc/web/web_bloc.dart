@@ -63,8 +63,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapUpdateToState(event);
     } else if (event is Load) {
       yield* _mapLoadToState(event);
-    } else if (event is Authorize) {
-      yield* _mapAuthorizeToState(event);
     } else if (event is End) {
       yield* _mapEndToState(event);
     }
@@ -108,12 +106,51 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(user.node);
         break;
       case Status.Pending:
-        user.node.offer(event.match, data.currentFile.item1);
-        yield Pending();
+        user.node.offer(event.from, data.currentFile.item1);
+        yield Pending(match: event.from);
         break;
       case Status.Requested:
         yield Requested(
-            match: event.match, metadata: event.metadata, offer: event.offer);
+            match: event.from, metadata: event.metadata, offer: event.offer);
+        break;
+      case Status.Authorized:
+        // Peer accepted request
+        if (event.decision) {
+          // Handle Offer from Requested Peer
+          await user.node.handleOffer(event.from, event.offer);
+
+          // Change State
+          add(Update(Status.Transferring));
+        }
+        // Peer Declined Request
+        else {
+          // Emit Decline
+          user.node.decline(event.from);
+
+          // Change State
+          add(Update(Status.Available));
+        }
+        break;
+      case Status.Answered:
+        // Peer accepted request
+        if (event.decision) {
+          // Handle Answer from Answered Peer
+          await user.node.handleAnswer(event.from, event.answer);
+
+          // Begin Transfer
+          data.add(BeginTransfer());
+
+          // Change State
+          add(Update(Status.Transferring));
+        }
+        // Peer Declined Request
+        else {
+          // Reset Connection
+          user.node.reset(match: event.from);
+
+          // Change State
+          add(Update(Status.Searching));
+        }
         break;
       case Status.Transferring:
         yield Transferring();
@@ -121,20 +158,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       default:
         yield Loading();
         break;
-    }
-  }
-
-// **********************
-// ** Authorize Event ***
-// **********************
-  Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
-    // User Agreed
-    if (event.decision) {
-      await user.node.handleOffer(event.match, event.offer);
-    }
-    // User Declined
-    else {
-      user.node.decline(event.match);
     }
   }
 

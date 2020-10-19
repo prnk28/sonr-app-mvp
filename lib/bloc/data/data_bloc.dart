@@ -11,10 +11,13 @@ part 'data_event.dart';
 part 'data_state.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
-  // Initialize Repositories
+  // Repositories
   final UserBloc user;
-  BytesBuilder block = new BytesBuilder();
+
+  // Data Channel
+  bool isDataChannelActive;
   RTCDataChannel dataChannel;
+  BytesBuilder block = new BytesBuilder();
 
   // Traffic Handling Maps
   List<Metadata> incoming;
@@ -30,7 +33,15 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
     // Add DataChannel
     user.node.session.onDataChannel = (channel) {
-      dataChannel = channel;
+      // Check Channel Status
+      if (channel == null) {
+        isDataChannelActive = false;
+      }
+      // Channel Provided
+      else {
+        dataChannel = channel;
+        isDataChannelActive = true;
+      }
     };
 
     // Handle DataChannel Message
@@ -62,8 +73,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   ) async* {
     if (event is AddChunk) {
       yield* _mapAddChunkState(event);
-    } else if (event is SendChunks) {
-      yield* _mapSendChunksState(event);
+    } else if (event is BeginTransfer) {
+      yield* _mapBeginTransferState(event);
     } else if (event is WriteFile) {
       yield* _mapWriteFileState(event);
     } else if (event is QueueFile) {
@@ -133,54 +144,60 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     yield Saving(file: this.currentFile);
   }
 
-// **********************
-// ** SendChunks Event **
-// **********************
-  Stream<DataState> _mapSendChunksState(SendChunks event) async* {
-    // Open File in Reader and Send Data pieces as chunks
-    final reader = ChunkedStreamIterator(currentFile.item2.openRead());
+// *************************
+// ** BeginTransfer Event **
+// *************************
+  Stream<DataState> _mapBeginTransferState(BeginTransfer event) async* {
+    // Check if DataChannel is Open
+    if (isDataChannelActive) {
+      // Open File in Reader and Send Data pieces as chunks
+      final reader = ChunkedStreamIterator(currentFile.item2.openRead());
 
-    // While the reader has a next byte
-    while (true) {
-      // read one CHUNK
-      var data = await reader.read(CHUNK_SIZE);
-      var chunk = Uint8List.fromList(data);
+      // While the reader has a next byte
+      while (true) {
+        // read one CHUNK
+        var data = await reader.read(CHUNK_SIZE);
+        var chunk = Uint8List.fromList(data);
 
-      // End of List
-      if (data.length <= 0) {
-        // Send Complete Message on same DC
-        dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
+        // End of List
+        if (data.length <= 0) {
+          // Send Complete Message on same DC
+          dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
-        // Update Traffic Variables
-        outgoing.remove(currentFile.item1);
-        currentFile = null;
-        log.i("Completed Transmission");
+          // Update Traffic Variables
+          outgoing.remove(currentFile.item1);
+          currentFile = null;
+          log.i("Completed Transmission");
 
-        // Call Bloc Event
-        yield Done();
-        break;
-      }
-      // Send Current Chunk
-      else {
-        // Send Binary in WebRTC Data Channel
-        dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
+          // Call Bloc Event
+          yield Done();
+          break;
+        }
+        // Send Current Chunk
+        else {
+          // Send Binary in WebRTC Data Channel
+          dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
-        // Get Metadata
-        Metadata currMeta = currentFile.item1;
+          // Get Metadata
+          Metadata currMeta = currentFile.item1;
 
-        // Update Chunks
-        currMeta.currentChunkNum += 1;
-        currMeta.remainingChunks =
-            currMeta.chunksTotal - currMeta.currentChunkNum;
+          // Update Chunks
+          currMeta.currentChunkNum += 1;
+          currMeta.remainingChunks =
+              currMeta.chunksTotal - currMeta.currentChunkNum;
 
-        // Update Progress
-        progressCubit.update((currMeta.chunksTotal - currMeta.remainingChunks) /
-            currMeta.chunksTotal);
+          // Update Progress
+          progressCubit.update(
+              (currMeta.chunksTotal - currMeta.remainingChunks) /
+                  currMeta.chunksTotal);
 
-        // Yield Progress
-        yield Transmitting(file: this.currentFile);
+          // Yield Progress
+          yield Transmitting(file: this.currentFile);
+        }
       }
     }
+    // Logging
+    log.e("Data Channel is not open");
   }
 
 // *********************

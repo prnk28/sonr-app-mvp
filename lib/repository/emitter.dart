@@ -101,8 +101,6 @@ extension RTCEmitter on Peer {
   }
 
   decline(Peer match) {
-    // TODO: Reset User Connection
-
     // Emit to Socket.io
     socket.emit("DECLINE", [this.toMap(), match.id]);
   }

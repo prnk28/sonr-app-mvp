@@ -13,6 +13,8 @@ enum Status {
   Searching, // Looking for Peers
   Pending, // Waiting for Confirmation
   Requested, // Offered Transfer
+  Authorized, // Receiver Made Decision
+  Answered, // Sender Responded to Offer
   Transferring // In Transfer
 }
 
@@ -70,8 +72,20 @@ class Peer {
   }
 
 // ** Reset Networking and Node itself **
-  void reset() {
-    log.i("Work in Progress");
+  void reset({Peer match}) {
+    // Check if Match Provided
+    if (match != null) {
+      // Close Connection and DataChannel
+      session.peerConnections[match.id].close();
+      session.dataChannels[match.id].close();
+
+      // Remove from Connection and DataChannel
+      session.peerConnections[match.id].remove();
+      session.dataChannels[match.id].remove();
+
+      // Clear Session ID
+      session.id = null;
+    }
   }
 
 // ** Convert Object to Map **

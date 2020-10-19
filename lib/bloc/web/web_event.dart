@@ -29,25 +29,26 @@ class Load extends WebEvent {
 
 // Send Node Data
 class Update extends WebEvent {
+  // Status Variables
   final Status newStatus;
   final double newDirection;
-  final Peer match;
+
+  // User Variables
+  final Peer from;
   final Metadata metadata;
+  final bool decision;
+
+  // RTC Variables
   final dynamic offer;
+  final dynamic answer;
 
   const Update(this.newStatus,
       {this.newDirection,
-      this.match,
+      this.from,
       this.metadata,
-      this.offer});
-}
-
-// Receiver is Presented with Authorization
-class Authorize extends WebEvent {
-  final bool decision;
-  final Peer match;
-  final dynamic offer;
-  const Authorize(this.decision, this.match, this.offer);
+      this.offer,
+      this.answer,
+      this.decision});
 }
 
 class End extends WebEvent {

@@ -32,6 +32,13 @@ class RequestedView extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: GestureDetector(
                                 onTap: () {
+                                  // Update WebBloc to Inform User Accepted
+                                  context.emitWebBlocEvent(
+                                      WebEventType.Authorize,
+                                      match: match,
+                                      decision: false);
+
+                                  // Pop Window
                                   Navigator.pop(context);
                                 },
                                 child: Padding(
@@ -73,7 +80,9 @@ class RequestedView extends StatelessWidget {
   NeumorphicButton _buildAuthButton(BuildContext context) {
     return NeumorphicButton(
         onPressed: () {
-          context.emitWebBlocEvent(WebEventType.Authorize);
+          // Update WebBloc to Inform User Accepted
+          context.emitWebBlocEvent(WebEventType.Authorize,
+              offer: offer, match: match, decision: true);
         },
         style: NeumorphicStyle(
             depth: 8,

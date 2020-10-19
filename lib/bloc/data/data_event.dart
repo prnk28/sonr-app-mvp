@@ -26,9 +26,9 @@ class ProgressCubit extends Cubit<double> {
   }
 }
 
-// Add File Chunk from Transfer
-class SendChunks extends DataEvent {
-  const SendChunks();
+// Send Transfer over DataChannel to Peer
+class BeginTransfer extends DataEvent {
+  const BeginTransfer();
 }
 
 // Write Completed File to Disk
