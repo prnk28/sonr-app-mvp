@@ -20,12 +20,12 @@ extension Routing on BuildContext {
   }
 
   // Display Transfer as Modal
-  pushRequested(Metadata meta, Peer match) {
+  pushRequested(Metadata meta, Peer match, dynamic offer) {
     showDialog(
         barrierDismissible: false,
         context: this,
         builder: (BuildContext context) {
-          return RequestedView(meta, match);
+          return RequestedView(meta, match, offer);
         });
   }
 

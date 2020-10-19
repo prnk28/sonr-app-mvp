@@ -3,6 +3,9 @@ part of 'elements.dart';
 // Constants
 const double K_ANGLE = pi;
 
+// *********************** //
+// ** Paints Zone Lines ** //
+// *********************** //
 class ZonePainter extends CustomPainter {
   // Size Reference
   var _currentSize;
@@ -73,5 +76,25 @@ class ZonePainter extends CustomPainter {
         return null;
         break;
     }
+  }
+}
+
+// ******************** //
+// ** Paints Cross X ** //
+// ******************** //
+class CrossPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint();
+    paint.color = Colors.red;
+    canvas.drawLine(
+        new Offset(0, 0), new Offset(size.width, size.height), paint);
+    canvas.drawLine(
+        new Offset(size.width, 0), new Offset(0, size.height), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

@@ -112,7 +112,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Pending();
         break;
       case Status.Requested:
-        yield Requested(match: event.match, metadata: event.metadata);
+        yield Requested(
+            match: event.match, metadata: event.metadata, offer: event.offer);
         break;
       case Status.Transferring:
         yield Transferring();
@@ -129,7 +130,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
     // User Agreed
     if (event.decision) {
-      await user.node.answer(event.match, event.peerConnection);
+      await user.node.handleOffer(event.match, event.offer);
     }
     // User Declined
     else {

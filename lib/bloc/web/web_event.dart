@@ -33,21 +33,21 @@ class Update extends WebEvent {
   final double newDirection;
   final Peer match;
   final Metadata metadata;
-  final RTCPeerConnection senderPeerConnection;
+  final dynamic offer;
 
   const Update(this.newStatus,
       {this.newDirection,
       this.match,
       this.metadata,
-      this.senderPeerConnection});
+      this.offer});
 }
 
 // Receiver is Presented with Authorization
 class Authorize extends WebEvent {
   final bool decision;
   final Peer match;
-  final RTCPeerConnection peerConnection;
-  const Authorize(this.decision, this.match, this.peerConnection);
+  final dynamic offer;
+  const Authorize(this.decision, this.match, this.offer);
 }
 
 class End extends WebEvent {

@@ -19,6 +19,7 @@ export 'package:graph_collection/graph.dart';
 export 'package:path/path.dart';
 export 'package:path_provider/path_provider.dart';
 
+import 'dart:ffi';
 import 'dart:io';
 import 'package:logger/logger.dart';
 import 'package:sonar_app/design/design.dart';

@@ -3,7 +3,8 @@ part of 'home.dart';
 class RequestedView extends StatelessWidget {
   final Metadata metadata;
   final Peer match;
-  const RequestedView(this.metadata, this.match);
+  final dynamic offer;
+  const RequestedView(this.metadata, this.match, this.offer);
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -71,7 +72,9 @@ class RequestedView extends StatelessWidget {
 
   NeumorphicButton _buildAuthButton(BuildContext context) {
     return NeumorphicButton(
-        onPressed: () {},
+        onPressed: () {
+          context.emitWebBlocEvent(WebEventType.Authorize);
+        },
         style: NeumorphicStyle(
             depth: 8,
             shape: NeumorphicShape.concave,

@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
           body: BlocBuilder<WebBloc, WebState>(
             buildWhen: (past, curr) {
               if (curr is Requested) {
-                context.pushRequested(curr.metadata, curr.match);
+                context.pushRequested(curr.metadata, curr.match, curr.offer);
                 return false;
               }
               return true;

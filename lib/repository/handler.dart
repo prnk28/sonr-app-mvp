@@ -31,6 +31,9 @@ extension RTCHandler on Peer {
 
     // Set Candidates
     await session.setRemoteCandidates(pc);
+
+    // Send Answer After
+    await answer(match, pc);
   }
 
   // ** Handle ICE Candidate Received ** //

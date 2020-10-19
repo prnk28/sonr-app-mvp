@@ -67,8 +67,8 @@ class SocketSubscriber {
       _user.node.status = Status.Requested;
 
       // Handle Offer
-      _user.node.handleOffer(from, offer);
-      _web.add(Update(Status.Requested, match: from, metadata: meta));
+      _web.add(
+          Update(Status.Requested, match: from, metadata: meta, offer: offer));
     });
 
     // -- MATCH ACCEPTED REQUEST --
