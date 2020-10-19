@@ -141,7 +141,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         currMeta.chunksTotal);
 
     // Yield Progress
-    yield Saving(file: this.currentFile);
+    yield Receiving();
   }
 
 // *************************
@@ -170,7 +170,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
           log.i("Completed Transmission");
 
           // Call Bloc Event
-          yield Done();
+          yield Done(PeerRole.Sender);
           break;
         }
         // Send Current Chunk
@@ -192,7 +192,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
                   currMeta.chunksTotal);
 
           // Yield Progress
-          yield Transmitting(file: this.currentFile);
+          yield Sending();
         }
       }
     }
@@ -223,7 +223,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     log.i("File Saved");
 
     // Yield Complete
-    yield Done(file: Tuple2<Metadata, File>(currentFile.item1, rawFile));
+    yield Done(PeerRole.Receiver,
+        file: Tuple2<Metadata, File>(currentFile.item1, rawFile));
   }
 
 // ********************

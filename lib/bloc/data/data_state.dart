@@ -1,5 +1,8 @@
 part of 'data_bloc.dart';
 
+// Role in DataChannel
+enum PeerRole { Sender, Receiver }
+
 abstract class DataState extends Equatable {
   const DataState();
   @override
@@ -18,49 +21,25 @@ class Queued extends DataState {
 }
 
 // Sending to peer w/ Progress and Chunks
-class Transmitting extends DataState {
-  // Progress Variables
-  final Tuple2<Metadata, File> file;
+class Sending extends DataState {
+  Sending();
+}
 
+// Receiving Data from Peer
+class Receiving extends DataState {
   // State Class
-  Transmitting({this.file});
+  Receiving();
 }
 
-// Saving to disk w/ Progress and Chunks
-class Saving extends DataState {
-  // Progress Variables
-  final Tuple2<Metadata, File> file;
-
-  // State Class
-  Saving({this.file});
-}
-
-// Searching for a file
-class FindingFile extends DataState {
-  FindingFile();
-}
-
-// Post saving, updating, or finding
+// Post Sending, Receiving
 class Done extends DataState {
+  final PeerRole role;
   final Tuple2<Metadata, File> file;
-  Done({this.file});
+  Done(this.role, {this.file});
 }
 
-// *************************** //
-// ** Viewing File by Type **
-// *************************** //
-class ViewingImage extends DataState {
-  ViewingImage();
-}
-
-class ViewingVideo extends DataState {
-  ViewingVideo();
-}
-
-class ViewingAudio extends DataState {
-  ViewingAudio();
-}
-
-class ViewingContact extends DataState {
-  ViewingContact();
+// Viewing Saved File
+class Viewing extends DataState {
+  final Metadata metadata;
+  Viewing(this.metadata);
 }

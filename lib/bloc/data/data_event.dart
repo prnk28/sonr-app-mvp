@@ -18,9 +18,6 @@ class ProgressCubit extends Cubit<double> {
   ProgressCubit() : super(0);
 
   void update(double newValue) {
-    //Log Progress
-    log.i("Progress: " + (newValue * 100).toString() + "%");
-
     // Change Value
     emit(newValue);
   }
