@@ -22,12 +22,10 @@ extension Events on BuildContext {
     // Switch by Event
     switch (event) {
       case DataEventType.QueueIncomingFile:
-        BlocProvider.of<DataBloc>(this)
-            .add(Queue(QueueType.IncomingFile, match: match));
+        BlocProvider.of<DataBloc>(this).add(Queue(QueueType.IncomingFile));
         break;
       case DataEventType.QueueOutgoingFile:
-        BlocProvider.of<DataBloc>(this)
-            .add(Queue(QueueType.OutgoingFile, match: match));
+        BlocProvider.of<DataBloc>(this).add(Queue(QueueType.OutgoingFile));
         break;
       case DataEventType.FindFile:
         BlocProvider.of<DataBloc>(this).add(FindFile());

@@ -9,5 +9,5 @@ export 'package:animations/animations.dart';
 export 'package:boxicons_flutter/boxicons_flutter.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
-part 'bubble.dart';
+part 'zone.dart';
 part 'compass.dart';

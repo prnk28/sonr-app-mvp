@@ -52,14 +52,19 @@ class SocketSubscriber {
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
+      // Get Data
+      Peer from = Peer.fromMap(data[0]);
+      dynamic offer = data[1];
+
+      // Get Metadata
+      Metadata meta = Metadata.fromMap(data[1]['metadata']);
+
       // Log Event
       log.i("OFFERED: " + data.toString());
 
       // Inform WebBloc
-      _web.add(Update(Status.Requested,
-          from: Peer.fromMap(data[0]),
-          metadata: Metadata.fromMap(data[1]['metadata']),
-          offer: data[1]));
+      _web.add(
+          Update(Status.Requested, from: from, metadata: meta, offer: offer));
     });
 
     // -- MATCH ACCEPTED REQUEST --

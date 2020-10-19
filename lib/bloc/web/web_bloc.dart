@@ -106,7 +106,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(user.node);
         break;
       case Status.Pending:
-        await user.node.offer(event.from, data.traffic.toInfoMap());
+        await user.node.offer(event.from, data.traffic.current);
+
         yield Pending(match: event.from);
         break;
       case Status.Requested:
@@ -118,6 +119,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         if (event.decision) {
           // Handle Offer from Requested Peer
           await user.node.handleOffer(event.from, event.offer);
+
+          // Add File to Queue
+          data.add(
+              Queue(QueueType.IncomingFile, info: event.offer['metadata']));
 
           // Change State
           add(Update(Status.Transferring));

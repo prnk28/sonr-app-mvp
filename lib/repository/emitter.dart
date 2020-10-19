@@ -48,7 +48,7 @@ extension SocketEmitter on Peer {
 // **************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
-  offer(Peer match, dynamic fileInfo) async {
+  offer(Peer match, SonrFile file) async {
     // Change Session State
     session.updateState(SignalingState.CallStateNew,
         newId: this.id + '-' + match.id);
@@ -71,7 +71,7 @@ extension RTCEmitter on Peer {
         {
           'description': {'sdp': s.sdp, 'type': s.type},
           'session_id': session.id,
-          'metadata': fileInfo
+          'metadata': file.metadata.toMap()
         }
       ]);
     } catch (e) {

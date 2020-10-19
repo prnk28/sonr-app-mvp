@@ -15,8 +15,8 @@ class Traffic {
   final RTCSession _session;
 
   // Traffic Maps - MatchId/File
-  Map<String, SonrFile> _incoming;
-  Map<String, SonrFile> _outgoing;
+  List<SonrFile> _incoming;
+  List<SonrFile> _outgoing;
   SonrFile current;
 
   // DataChannel
@@ -26,8 +26,8 @@ class Traffic {
   // ** Constructer ** //
   Traffic(this._data, this._session) {
     // Initialize Maps
-    _incoming = new Map<String, SonrFile>();
-    _outgoing = new Map<String, SonrFile>();
+    _incoming = new List<SonrFile>();
+    _outgoing = new List<SonrFile>();
 
     // Listen to DataChannel Status
     _session.onDataChannel = (channel) {
@@ -53,28 +53,29 @@ class Traffic {
   }
 
   // ** Add File to Incoming/Outgoing ** //
-  addFile(TrafficDirection direction, {File file, Peer match, Map info}) {
+  addFile(TrafficDirection direction, {File file, Map info}) {
     // Check Incoming/Outgoing
     switch (direction) {
       case TrafficDirection.Incoming:
         // Create and Add to Incoming map
-        _incoming[match.id] = new SonrFile(Role.Receiver, info: info);
+        _incoming.add(new SonrFile(Role.Receiver, info: info));
 
         // Set as current
-        current = _incoming.values.last;
+        current = _incoming.first;
         break;
       case TrafficDirection.Outgoing:
         // Create and Add to Outgoing File Map
-        _outgoing[match.id] = new SonrFile(Role.Sender, file: file);
+        _outgoing.add(new SonrFile(Role.Sender, file: file));
 
         // Set as current
-        current = _outgoing.values.last;
+        current = _outgoing.first;
         break;
     }
   }
 
-  toInfoMap(){
-    if(this.current != null){
+  // ** Return Current File Metadata as Map ** //
+  toInfoMap() {
+    if (this.current != null) {
       return this.current.metadata.toMap();
     }
   }
@@ -85,7 +86,7 @@ class Traffic {
     _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
     // Update Progress
-    _data.progress.update(current.progress());
+    _data.progress.update(current.metadata.addProgress(Role.Sender));
   }
 
   // ** Clear a Map ** //
@@ -129,7 +130,7 @@ class SonrFile {
     if (info != null && this.file == null) {
       metadata = Metadata.fromMap(info);
     } else {
-      new Metadata(this.file);
+      metadata = new Metadata(this.file);
     }
   }
 
@@ -140,17 +141,11 @@ class SonrFile {
     File rawFile = await new File(path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
 
-    
     return SonrFile(Role.Viewer, file: rawFile);
   }
 
-  // ** Get File Stream ** //
-  readFile() {
-    return file.openRead();
-  }
-
   // ** Progress Forward Metadata ** //
-  progress() {
+  addProgress() {
     return this.metadata.addProgress(role);
   }
 

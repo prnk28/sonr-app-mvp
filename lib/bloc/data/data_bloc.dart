@@ -56,8 +56,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     switch (event.type) {
       case QueueType.IncomingFile:
         // Add to Incoming
-        traffic.addFile(TrafficDirection.Incoming,
-            match: event.match, info: event.info);
+        traffic.addFile(TrafficDirection.Incoming, info: event.info);
 
         // Set as Queued
         yield Queued(traffic.current);
@@ -67,8 +66,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
         // Create Metadata
-        traffic.addFile(TrafficDirection.Outgoing,
-            match: event.match, file: dummyFile);
+        traffic.addFile(TrafficDirection.Outgoing, file: dummyFile);
 
         yield Queued(traffic.current);
         break;
@@ -86,7 +84,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     block.add(event.chunk);
 
     // Update Progress in Current MetaData
-    progress.update(traffic.current.progress());
+    progress.update(traffic.current.addProgress());
 
     // Yield Progress
     yield Receiving();
@@ -99,7 +97,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Check if DataChannel is Open
     if (traffic.isChannelActive) {
       // Open File in Reader and Send Data pieces as chunks
-      final reader = ChunkedStreamIterator(traffic.current.readFile());
+      final reader = ChunkedStreamIterator(traffic.current.file.openRead());
 
       // While the reader has a next byte
       while (true) {
@@ -164,7 +162,5 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ********************
 // ** OpenFile Event **
 // ********************
-  Stream<DataState> _mapOpenFileState(OpenFile event) async* {
-    await event.meta.getBytes();
-  }
+  Stream<DataState> _mapOpenFileState(OpenFile event) async* {}
 }

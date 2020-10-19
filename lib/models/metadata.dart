@@ -21,13 +21,13 @@ class Metadata {
 
   // ** Constructor **
   Metadata(File file) {
-    // Set Default Variables
-    this.id = uuid.v1();
-    this.currentChunkNum = 0;
-    this.progress = 0.0;
-
     // Check if File Provided
     if (file != null) {
+      // Set Default Variables
+      this.id = uuid.v1();
+      this.currentChunkNum = 0;
+      this.progress = 0.0;
+
       // Calculate File Info
       this.size = file.lengthSync();
       this.chunksTotal = (this.size / CHUNK_SIZE).ceil();
@@ -43,6 +43,11 @@ class Metadata {
   static fromMap(Map map) {
     // Init Metadata Object
     Metadata meta = new Metadata(null);
+
+    // Set Default Variables
+    meta.id = uuid.v1();
+    meta.currentChunkNum = 0;
+    meta.progress = 0.0;
 
     // Set from Map
     meta.size = map["size"];
@@ -72,7 +77,8 @@ class Metadata {
         ". Remaining= " +
         remainingChunks.toString() +
         "-- " +
-        this.progress.toString());
+        (this.progress * 100).toString() +
+        "%");
 
     // Return
     return this.progress;
