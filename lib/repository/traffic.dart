@@ -1,0 +1,168 @@
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/repository/repository.dart';
+
+// ** Enum for Traffic Management ** //
+enum TrafficDirection { Incoming, Outgoing }
+
+// *********************************** //
+// ** Data Transfer Traffic Manager ** //
+// *********************************** //
+class Traffic {
+  // Dependencies
+  final DataBloc _data;
+  final RTCSession _session;
+
+  // Traffic Maps - MatchId/File
+  Map<String, SonrFile> _incoming;
+  Map<String, SonrFile> _outgoing;
+  SonrFile current;
+
+  // DataChannel
+  bool isChannelActive;
+  RTCDataChannel _dataChannel;
+
+  // ** Constructer ** //
+  Traffic(this._data, this._session) {
+    // Initialize Maps
+    _incoming = new Map<String, SonrFile>();
+    _outgoing = new Map<String, SonrFile>();
+
+    // Listen to DataChannel Status
+    _session.onDataChannel = (channel) {
+      // Check Channel Status
+      if (channel == null) {
+        isChannelActive = false;
+      }
+      // Channel Provided
+      else {
+        _dataChannel = channel;
+        isChannelActive = true;
+      }
+    };
+
+    // Handle DataChannel Message
+    _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
+      // Check if Binary
+      if (message.isBinary) {
+        // Add Binary to Transfer
+        _data.add(AddChunk(message.binary));
+      }
+    };
+  }
+
+  // ** Add File to Incoming/Outgoing ** //
+  addFile(TrafficDirection direction, {File file, Peer match, Map info}) {
+    // Check Incoming/Outgoing
+    switch (direction) {
+      case TrafficDirection.Incoming:
+        // Create and Add to Incoming map
+        _incoming[match.id] = new SonrFile(Role.Receiver, info: info);
+
+        // Set as current
+        current = _incoming.values.last;
+        break;
+      case TrafficDirection.Outgoing:
+        // Create and Add to Outgoing File Map
+        _outgoing[match.id] = new SonrFile(Role.Sender, file: file);
+
+        // Set as current
+        current = _outgoing.values.last;
+        break;
+    }
+  }
+
+  toInfoMap(){
+    if(this.current != null){
+      return this.current.metadata.toMap();
+    }
+  }
+
+  // ** Send Chunk on Channel ** //
+  transmit(Uint8List chunk) {
+    // Send on Channel
+    _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
+
+    // Update Progress
+    _data.progress.update(current.progress());
+  }
+
+  // ** Clear a Map ** //
+  clear(TrafficDirection direction, {String matchId}) {
+    switch (direction) {
+      case TrafficDirection.Incoming:
+        // Clear All
+        if (matchId == null) {
+          _incoming.clear();
+        }
+
+        // Clear One
+        _incoming.remove(matchId);
+        current = null;
+        break;
+      case TrafficDirection.Outgoing:
+        // Clear All
+        if (matchId == null) {
+          _outgoing.clear();
+        }
+
+        // Clear One
+        _outgoing.remove(matchId);
+        current = null;
+        break;
+    }
+  }
+}
+
+// **************************** //
+// ** Holds Metadata and Raw ** //
+// **************************** //
+class SonrFile {
+  final Role role;
+  final File file;
+  Metadata metadata;
+
+  // ** Constructer ** //
+  SonrFile(this.role, {this.file, Map info}) {
+    // Check what kind of data provided
+    if (info != null && this.file == null) {
+      metadata = Metadata.fromMap(info);
+    } else {
+      new Metadata(this.file);
+    }
+  }
+
+  // ** Build from Bytes ** //
+  static fromBytes(Uint8List data, String path) async {
+    final buffer = data.buffer;
+
+    File rawFile = await new File(path).writeAsBytes(
+        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+
+    
+    return SonrFile(Role.Viewer, file: rawFile);
+  }
+
+  // ** Get File Stream ** //
+  readFile() {
+    return file.openRead();
+  }
+
+  // ** Progress Forward Metadata ** //
+  progress() {
+    return this.metadata.addProgress(role);
+  }
+
+  // ** Convert to Map ** //
+  toMap() {
+    return {
+      'role': enumAsString(this.role),
+      'file': {
+        'name': this.metadata.name,
+        'type': enumAsString(this.metadata.type),
+        'size': this.metadata.size
+      }
+    };
+  }
+}

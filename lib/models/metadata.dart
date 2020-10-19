@@ -18,51 +18,64 @@ class Metadata {
   int chunksTotal;
   double progress;
   int currentChunkNum;
-  int remainingChunks;
 
   // ** Constructor **
-  Metadata({File file, Map map}) {
-    // Set Id
+  Metadata(File file) {
+    // Set Default Variables
     this.id = uuid.v1();
+    this.currentChunkNum = 0;
+    this.progress = 0.0;
 
-    // If File Provided
+    // Check if File Provided
     if (file != null) {
       // Calculate File Info
-      this.progress = 0.0;
       this.size = file.lengthSync();
       this.chunksTotal = (this.size / CHUNK_SIZE).ceil();
-      this.currentChunkNum = 0;
-      this.remainingChunks = this.chunksTotal;
 
       // Set File Info
       this.path = file.path;
       this.type = getFileTypeFromPath(this.path);
       this.name = basename(this.path);
     }
+  }
 
-    // If Map Provided
-    if (map != null) {
-      // Set Chunking Info from Map
-      this.progress = 0.0;
-      this.size = map["size"];
-      this.chunksTotal = map["chunks_total"];
-      this.currentChunkNum = 0;
-      this.remainingChunks = this.chunksTotal;
+  // ** Build Metadata from Map **
+  static fromMap(Map map) {
+    // Init Metadata Object
+    Metadata meta = new Metadata(null);
 
-      // Set File Info from Map
-      this.name = map["name"];
-      this.type = enumFromString(map["type"], FileType.values);
-    }
+    // Set from Map
+    meta.size = map["size"];
+    meta.chunksTotal = map["chunks_total"];
+    meta.name = map["name"];
+    meta.type = enumFromString(map["type"], FileType.values);
+
+    // Return
+    return meta;
   }
 
   // ** Update Progress
-  double addProgress() {
+  double addProgress(Role role) {
     // Increase Current Chunk
     this.currentChunkNum += 1;
-    this.remainingChunks = this.chunksTotal - this.currentChunkNum;
 
-    // Return Progress
-    return (this.chunksTotal - this.remainingChunks) / this.chunksTotal;
+    // Find Remaining
+    var remainingChunks = this.chunksTotal - this.currentChunkNum;
+
+    // Calculate Progress
+    this.progress = (this.chunksTotal - remainingChunks) / this.chunksTotal;
+
+    // Logging
+    log.i(enumAsString(role) +
+        "Current= " +
+        this.currentChunkNum.toString() +
+        ". Remaining= " +
+        remainingChunks.toString() +
+        "-- " +
+        this.progress.toString());
+
+    // Return
+    return this.progress;
   }
 
   // ** Read Bytes from Metadata Path **

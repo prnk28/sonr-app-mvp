@@ -13,7 +13,7 @@ class Standby extends DataState {
 
 // File ready to transfer or receive
 class Queued extends DataState {
-  final Tuple2<Metadata, File> file;
+  final SonrFile file;
   Queued(this.file);
 }
 
@@ -24,19 +24,17 @@ class Sending extends DataState {
 
 // Receiving Data from Peer
 class Receiving extends DataState {
-  // State Class
   Receiving();
 }
 
 // Post Sending, Receiving
 class Done extends DataState {
-  final Role role;
-  final Tuple2<Metadata, File> file;
-  Done(this.role, {this.file});
+  final SonrFile file;
+  Done({this.file});
 }
 
 // Viewing Saved File
 class Viewing extends DataState {
-  final Metadata metadata;
-  Viewing(this.metadata);
+  final SonrFile file;
+  Viewing(this.file);
 }

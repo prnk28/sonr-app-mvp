@@ -48,7 +48,7 @@ extension SocketEmitter on Peer {
 // **************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
-  offer(Peer match, Metadata meta) async {
+  offer(Peer match, dynamic fileInfo) async {
     // Change Session State
     session.updateState(SignalingState.CallStateNew,
         newId: this.id + '-' + match.id);
@@ -71,7 +71,7 @@ extension RTCEmitter on Peer {
         {
           'description': {'sdp': s.sdp, 'type': s.type},
           'session_id': session.id,
-          'metadata': meta.toMap()
+          'metadata': fileInfo
         }
       ]);
     } catch (e) {
@@ -100,18 +100,9 @@ extension RTCEmitter on Peer {
     }
   }
 
-  complete(Peer match, Role role, Metadata meta) {
-    // Construct Message
-    var data = {
-      'role': enumAsString(role),
-      'file': {
-        'name': meta.name,
-        'type': enumAsString(meta.type),
-        'size': meta.size
-      }
-    };
+  complete(Peer match, SonrFile file) {
     // Emit to Socket.io
-    socket.emit("COMPLETE", [this.toMap(), match.id, data]);
+    socket.emit("COMPLETE", [this.toMap(), match.id, file.toMap()]);
   }
 
   decline(Peer match) {

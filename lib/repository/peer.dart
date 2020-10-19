@@ -7,7 +7,7 @@ part 'graphing.dart';
 part 'handler.dart';
 
 // Role in DataChannel
-enum Role { Sender, Receiver }
+enum Role { Sender, Receiver, Viewer }
 
 // Status of Node
 enum Status {
@@ -65,7 +65,7 @@ class Peer {
     session = new RTCSession();
   }
 
-// ** Build Neighbor from Map **
+// ** Build Peer from Map **
   static Peer fromMap(Map map) {
     Peer neighbor = new Peer(Profile.fromMap(map['profile']));
     neighbor.id = map['id'];

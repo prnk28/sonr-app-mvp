@@ -2,7 +2,7 @@ part of 'core.dart';
 
 // ** Frontend BLoC Event Enums ** //
 // Data Event Enum
-enum DataEventType { QueueFile, FindFile, OpenFile }
+enum DataEventType { QueueIncomingFile, QueueOutgoingFile, FindFile, OpenFile }
 
 // Device Event Enum
 enum DeviceEventType { Initialize }
@@ -18,17 +18,22 @@ enum CubitType { Direction, Progress }
 
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
-  emitDataBlocEvent(DataEventType event, {Metadata file}) async {
+  emitDataBlocEvent(DataEventType event, {Metadata info, Peer match}) async {
     // Switch by Event
     switch (event) {
-      case DataEventType.QueueFile:
-        BlocProvider.of<DataBloc>(this).add(QueueFile());
+      case DataEventType.QueueIncomingFile:
+        BlocProvider.of<DataBloc>(this)
+            .add(Queue(QueueType.IncomingFile, match: match));
+        break;
+      case DataEventType.QueueOutgoingFile:
+        BlocProvider.of<DataBloc>(this)
+            .add(Queue(QueueType.OutgoingFile, match: match));
         break;
       case DataEventType.FindFile:
         BlocProvider.of<DataBloc>(this).add(FindFile());
         break;
       case DataEventType.OpenFile:
-        BlocProvider.of<DataBloc>(this).add(OpenFile(file));
+        // TODO: BlocProvider.of<DataBloc>(this).add(OpenFile(file));
         break;
     }
   }
@@ -79,8 +84,7 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
         break;
       case WebEventType.Invite:
-        BlocProvider.of<WebBloc>(this)
-            .add(Update(Status.Pending, from: match));
+        BlocProvider.of<WebBloc>(this).add(Update(Status.Pending, from: match));
         break;
       case WebEventType.Authorize:
         BlocProvider.of<WebBloc>(this).add(Update(Status.Authorized,
@@ -98,7 +102,7 @@ extension Events on BuildContext {
         return BlocProvider.of<DeviceBloc>(this).directionCubit;
         break;
       case CubitType.Progress:
-        return BlocProvider.of<DataBloc>(this).progressCubit;
+        return BlocProvider.of<DataBloc>(this).progress;
         break;
     }
     return null;

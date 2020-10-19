@@ -25,6 +25,10 @@ class _BubbleState extends State<Bubble> {
                 color: Colors.grey[300]),
             child: GestureDetector(
                 onTap: () {
+                  // Fake Select File in Queue
+                  context.emitDataBlocEvent(DataEventType.QueueFile);
+
+                  // Invite Peer
                   context.emitWebBlocEvent(WebEventType.Invite,
                       match: widget.node);
                 },

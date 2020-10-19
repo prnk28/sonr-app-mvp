@@ -106,7 +106,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(user.node);
         break;
       case Status.Pending:
-        await user.node.offer(event.from, data.currentFile.item1);
+        await user.node.offer(event.from, data.traffic.toInfoMap());
         yield Pending(match: event.from);
         break;
       case Status.Requested:
