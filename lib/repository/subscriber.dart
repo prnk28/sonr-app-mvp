@@ -58,6 +58,7 @@ class SocketSubscriber {
 
       // Get Metadata
       Metadata meta = new Metadata(map: offer['metadata']);
+      log.i("Received Metadata: " + meta.toMap().toString());
 
       // Log Event
       log.i("OFFERED: " + data.toString());

@@ -9,65 +9,75 @@ class RequestedView extends StatelessWidget {
     return Dialog(
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: Neumorphic(
-            style: NeumorphicStyle(
-                shape: NeumorphicShape.flat,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                depth: 8,
-                lightSource: LightSource.topLeft,
-                color: Colors.grey),
-            child: Container(
-                color: NeumorphicTheme.baseColor(context),
-                height: MediaQuery.of(context).size.height / 3,
-                width: MediaQuery.of(context).size.width / 2,
-                child: Row(children: [
-                  NeumorphicButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: NeumorphicStyle(
-                        depth: 8,
-                        shape: NeumorphicShape.concave,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(8))),
-                    padding: const EdgeInsets.all(12.0),
-                    child: Icon(
-                      Icons.close,
-                      color: _iconsColor(context),
-                    ),
-                  ),
-                  NeumorphicButton(
-                      margin: EdgeInsets.only(top: 12),
-                      onPressed: () {},
-                      style: NeumorphicStyle(
-                          depth: 8,
-                          shape: NeumorphicShape.concave,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(8))),
-                      padding: const EdgeInsets.all(12.0),
-                      child: Icon(
-                        Icons.check,
-                        color: _iconsColor(context),
-                      )),
-                ]) // FlatButton// Container
-                )));
+        child: NeumorphicTheme(
+            theme: lightTheme(),
+            darkTheme: darkTheme(),
+            child: Neumorphic(
+                style: NeumorphicStyle(
+                    shape: NeumorphicShape.flat,
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                    depth: 8,
+                    lightSource: LightSource.topLeft,
+                    color: Colors.blueGrey[50]),
+                child: Container(
+                    color: NeumorphicTheme.baseColor(context),
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Column(
+                      children: [
+                        // Top Right Close/Cancel Button
+                        Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 10, right: 10),
+                                    child: Icon(
+                                      Icons.close_rounded,
+                                      size: 35,
+                                      color: Colors.grey[700],
+                                    )))),
+
+                        // Build Item from Metadata and Peer
+                        _buildItem(context, metadata, match),
+                        Padding(padding: EdgeInsets.only(top: 25)),
+
+                        // Build Auth Action
+                        _buildAuthButton(context)
+                      ],
+                    )))));
   }
 
-  Color _iconsColor(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-    if (theme.isUsingDark) {
-      return theme.current.accentColor;
-    } else {
-      return null;
-    }
+  Row _buildItem(BuildContext context, Metadata metadata, Peer match) {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(Icons.image, size: 100),
+      Column(
+        children: [
+          Text(match.profile.firstName, style: headerTextStyle()),
+          Text(match.device,
+              style: TextStyle(
+                  fontFamily: "Raleway",
+                  fontWeight: FontWeight.w500,
+                  fontSize: 22,
+                  color: Colors.black54))
+        ],
+      ),
+    ]); // FlatButton// Container
   }
 
-  Color _textColor(BuildContext context) {
-    if (NeumorphicTheme.isUsingDark(context)) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
+  NeumorphicButton _buildAuthButton(BuildContext context) {
+    return NeumorphicButton(
+        onPressed: () {},
+        style: NeumorphicStyle(
+            depth: 8,
+            shape: NeumorphicShape.concave,
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
+        padding: const EdgeInsets.all(12.0),
+        child:
+            Text("Accept", style: smallTextStyle())); // FlatButton// Container
   }
 }

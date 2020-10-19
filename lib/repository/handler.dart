@@ -5,12 +5,12 @@ part of 'peer.dart';
 // *************************** //
 extension RTCHandler on Peer {
   // ** Handle Peer Authorization ** //
-  handleAnswer(Peer match, dynamic data) async {
+  handleAnswer(Peer match, dynamic answer) async {
     // Get Match Node
-    var description = data['description'];
+    var description = answer['description'];
 
     // Add Peer Connection
-    var pc = _session.peerConnections[match.id];
+    var pc = session.peerConnections[match.id];
     if (pc != null) {
       await pc.setRemoteDescription(
           new RTCSessionDescription(description['sdp'], description['type']));
@@ -18,26 +18,26 @@ extension RTCHandler on Peer {
   }
 
   // ** Peer Requested User ** //
-  handleOffer(Peer match, dynamic data) async {
+  handleOffer(Peer match, dynamic offer) async {
     // Update Signalling State
-    _session.updateState(SignalingState.CallStateNew,
-        newId: data['session_id']);
+    session.updateState(SignalingState.CallStateNew,
+        newId: offer['session_id']);
 
     // Create Peer Connection
     var pc = await this.newPeerConnection(match.id);
 
     // Initialize RTC Receiver Connection
-    _session.initializePeer(true, pc, match, description: data['description']);
+    session.initializePeer(true, pc, match, description: offer['description']);
 
     // Set Candidates
-    await _session.setRemoteCandidates(pc);
+    await session.setRemoteCandidates(pc);
   }
 
   // ** Handle ICE Candidate Received ** //
   handleCandidate(Peer match, dynamic data) async {
     // Get Match Node
     var candidateMap = data['candidate'];
-    var pc = _session.peerConnections[match.id];
+    var pc = session.peerConnections[match.id];
 
     // Setup Candidate
     RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
@@ -45,18 +45,18 @@ extension RTCHandler on Peer {
     if (pc != null) {
       await pc.addCandidate(candidate);
     } else {
-      _session.remoteCandidates.add(candidate);
+      session.remoteCandidates.add(candidate);
     }
   }
 
   // ** Handle Peer Change ** //
   handlePeerUpdate(data) {
     List<dynamic> peers = data;
-    if (_session.onPeersUpdate != null) {
+    if (session.onPeersUpdate != null) {
       Map<String, dynamic> event = new Map<String, dynamic>();
       event['self'] = this.id;
       event['peers'] = peers;
-      _session.onPeersUpdate(event);
+      session.onPeersUpdate(event);
     }
   }
 
@@ -66,21 +66,21 @@ extension RTCHandler on Peer {
     Peer match = Peer.fromMap(data["from"]);
 
     // Remove RTC Connection
-    var pc = _session.peerConnections[match.id];
+    var pc = session.peerConnections[match.id];
     if (pc != null) {
       pc.close();
-      _session.peerConnections.remove(match.id);
+      session.peerConnections.remove(match.id);
     }
 
     // Remove DataChannels
-    var dc = _session.dataChannels[match.id];
+    var dc = session.dataChannels[match.id];
     if (dc != null) {
       dc.close();
-      _session.dataChannels.remove(match.id);
+      session.dataChannels.remove(match.id);
     }
 
     // Reset Status
-    _session.updateState(SignalingState.CallStateBye);
+    session.updateState(SignalingState.CallStateBye);
   }
 }
 

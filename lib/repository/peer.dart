@@ -43,8 +43,8 @@ class Peer {
   ProximityStatus proximity;
 
   // Dependencies
+  RTCSession session;
   DirectedValueGraph _graph;
-  RTCSession _session;
 
 // ** Constructer **
   Peer(this.profile) {
@@ -56,7 +56,7 @@ class Peer {
 
     // Initialize Dependencies
     _graph = new DirectedValueGraph();
-    _session = new RTCSession();
+    session = new RTCSession();
   }
 
 // ** Build Neighbor from Map **

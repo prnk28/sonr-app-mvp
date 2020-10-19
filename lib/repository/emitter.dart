@@ -50,14 +50,14 @@ extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
   offer(Peer match, Metadata meta) async {
     // Change Session State
-    _session.updateState(SignalingState.CallStateNew,
+    session.updateState(SignalingState.CallStateNew,
         newId: this.id + '-' + match.id);
 
     // Add Peer Connection
     RTCPeerConnection pc = await this.newPeerConnection(match.id);
 
     // Initialize RTC Sender Connection
-    _session.initializePeer(false, pc, match);
+    session.initializePeer(false, pc, match);
 
     try {
       // Create Offer Description
@@ -70,7 +70,7 @@ extension RTCEmitter on Peer {
         match.id,
         {
           'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': _session.id,
+          'session_id': session.id,
           'metadata': meta.toMap()
         }
       ]);
@@ -92,7 +92,7 @@ extension RTCEmitter on Peer {
         match.id,
         {
           'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': _session.id,
+          'session_id': session.id,
         }
       ]);
     } catch (e) {
@@ -133,7 +133,7 @@ extension RTCEmitter on Peer {
 
   // ** Exit the RTCSession ** //
   exit() {
-    _session.peerConnections.forEach((key, pc) {
+    session.peerConnections.forEach((key, pc) {
       pc.close();
     });
   }

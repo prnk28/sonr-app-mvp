@@ -46,6 +46,7 @@ class Metadata {
       this.progress = 0.0;
       this.size = map["size"];
       this.chunksTotal = map["chunks_total"];
+      this.currentChunkNum = 0;
       this.remainingChunks = this.chunksTotal;
 
       // Set File Info from Map

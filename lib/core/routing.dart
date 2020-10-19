@@ -99,7 +99,8 @@ MultiBlocProvider initializeBloc(Widget app) {
       ),
 
       // Local Data/Transfer Logic
-      BlocProvider<DataBloc>(create: (context) => DataBloc()),
+      BlocProvider<DataBloc>(
+          create: (context) => DataBloc(BlocProvider.of<UserBloc>(context))),
 
       // Device Sensors Logic
       BlocProvider<DeviceBloc>(

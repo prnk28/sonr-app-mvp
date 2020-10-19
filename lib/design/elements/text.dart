@@ -15,6 +15,15 @@ NeumorphicTextStyle neuBarTitleTextStyle({Color setColor}) {
   );
 }
 
+// Small Text
+TextStyle smallTextStyle({Color setColor}) {
+  return TextStyle(
+      fontFamily: "Raleway",
+      fontWeight: FontWeight.w500,
+      fontSize: 16,
+      color: setColor ?? Colors.black54);
+}
+
 // Medium Text
 TextStyle mediumTextStyle({Color setColor}) {
   return TextStyle(
