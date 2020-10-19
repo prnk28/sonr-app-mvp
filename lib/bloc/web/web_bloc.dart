@@ -106,7 +106,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(user.node);
         break;
       case Status.Pending:
-        user.node.offer(event.from, data.currentFile.item1);
+        await user.node.offer(event.from, data.currentFile.item1);
         yield Pending(match: event.from);
         break;
       case Status.Requested:
@@ -138,7 +138,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
           await user.node.handleAnswer(event.from, event.answer);
 
           // Begin Transfer
-          data.add(BeginTransfer());
+          data.add(Transfer(event.from));
 
           // Change State
           add(Update(Status.Transferring));

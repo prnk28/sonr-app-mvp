@@ -1,8 +1,5 @@
 part of 'data_bloc.dart';
 
-// Role in DataChannel
-enum PeerRole { Sender, Receiver }
-
 abstract class DataState extends Equatable {
   const DataState();
   @override
@@ -33,7 +30,7 @@ class Receiving extends DataState {
 
 // Post Sending, Receiving
 class Done extends DataState {
-  final PeerRole role;
+  final Role role;
   final Tuple2<Metadata, File> file;
   Done(this.role, {this.file});
 }

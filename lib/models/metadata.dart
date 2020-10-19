@@ -55,6 +55,16 @@ class Metadata {
     }
   }
 
+  // ** Update Progress
+  double addProgress() {
+    // Increase Current Chunk
+    this.currentChunkNum += 1;
+    this.remainingChunks = this.chunksTotal - this.currentChunkNum;
+
+    // Return Progress
+    return (this.chunksTotal - this.remainingChunks) / this.chunksTotal;
+  }
+
   // ** Read Bytes from Metadata Path **
   Future<Uint8List> getBytes() async {
     Uri myUri = Uri.parse(this.path);

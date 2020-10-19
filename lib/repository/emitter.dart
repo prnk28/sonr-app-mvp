@@ -100,6 +100,20 @@ extension RTCEmitter on Peer {
     }
   }
 
+  complete(Peer match, Role role, Metadata meta) {
+    // Construct Message
+    var data = {
+      'role': enumAsString(role),
+      'file': {
+        'name': meta.name,
+        'type': enumAsString(meta.type),
+        'size': meta.size
+      }
+    };
+    // Emit to Socket.io
+    socket.emit("COMPLETE", [this.toMap(), match.id, data]);
+  }
+
   decline(Peer match) {
     // Emit to Socket.io
     socket.emit("DECLINE", [this.toMap(), match.id]);

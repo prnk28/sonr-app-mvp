@@ -6,6 +6,10 @@ part 'emitter.dart';
 part 'graphing.dart';
 part 'handler.dart';
 
+// Role in DataChannel
+enum Role { Sender, Receiver }
+
+// Status of Node
 enum Status {
   Offline, // Initial Status
   Standby, // Device Located ready to connect

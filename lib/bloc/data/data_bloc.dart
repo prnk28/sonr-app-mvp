@@ -73,8 +73,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   ) async* {
     if (event is AddChunk) {
       yield* _mapAddChunkState(event);
-    } else if (event is BeginTransfer) {
-      yield* _mapBeginTransferState(event);
+    } else if (event is Transfer) {
+      yield* _mapTransferState(event);
     } else if (event is WriteFile) {
       yield* _mapWriteFileState(event);
     } else if (event is QueueFile) {
@@ -132,22 +132,17 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Get Metadata
     Metadata currMeta = currentFile.item1;
 
-    // Update Chunks
-    currMeta.currentChunkNum += 1;
-    currMeta.remainingChunks = currMeta.chunksTotal - currMeta.currentChunkNum;
-
     // Update Progress
-    progressCubit.update((currMeta.chunksTotal - currMeta.remainingChunks) /
-        currMeta.chunksTotal);
+    progressCubit.update(currMeta.addProgress());
 
     // Yield Progress
     yield Receiving();
   }
 
-// *************************
-// ** BeginTransfer Event **
-// *************************
-  Stream<DataState> _mapBeginTransferState(BeginTransfer event) async* {
+// ********************
+// ** Transfer Event **
+// ********************
+  Stream<DataState> _mapTransferState(Transfer event) async* {
     // Check if DataChannel is Open
     if (isDataChannelActive) {
       // Open File in Reader and Send Data pieces as chunks
@@ -162,15 +157,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // End of List
         if (data.length <= 0) {
           // Send Complete Message on same DC
-          dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
+          user.node.complete(event.match, Role.Sender, currentFile.item1);
 
           // Update Traffic Variables
           outgoing.remove(currentFile.item1);
           currentFile = null;
-          log.i("Completed Transmission");
 
           // Call Bloc Event
-          yield Done(PeerRole.Sender);
+          yield Done(Role.Sender);
           break;
         }
         // Send Current Chunk
@@ -181,15 +175,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
           // Get Metadata
           Metadata currMeta = currentFile.item1;
 
-          // Update Chunks
-          currMeta.currentChunkNum += 1;
-          currMeta.remainingChunks =
-              currMeta.chunksTotal - currMeta.currentChunkNum;
-
           // Update Progress
-          progressCubit.update(
-              (currMeta.chunksTotal - currMeta.remainingChunks) /
-                  currMeta.chunksTotal);
+          progressCubit.update(currMeta.addProgress());
 
           // Yield Progress
           yield Sending();
@@ -223,7 +210,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     log.i("File Saved");
 
     // Yield Complete
-    yield Done(PeerRole.Receiver,
+    yield Done(Role.Receiver,
         file: Tuple2<Metadata, File>(currentFile.item1, rawFile));
   }
 
