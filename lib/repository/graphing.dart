@@ -16,15 +16,15 @@ extension Graphing on Peer {
 
   // ** Update Graph with new Value **
   updateGraph(Peer peer) {
+    // Find Previous Node
+    Peer previousNode = _graph.singleWhere((element) => element.id == peer.id,
+        orElse: () => null);
+
+    // Remove Peer Node
+    _graph.remove(previousNode);
+
     // Check Node Status: Senders are From
     if (this._canSendTo(peer)) {
-      // Find Previous Node
-      Peer previousNode = _graph.singleWhere((element) => element.id == peer.id,
-          orElse: () => null);
-
-      // Remove Peer Node
-      _graph.remove(previousNode);
-
       // Calculate Difference and Create Edge
       _graph.setToBy<double>(this, peer, this._getDifference(peer));
     }

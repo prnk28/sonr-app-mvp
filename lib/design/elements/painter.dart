@@ -32,13 +32,13 @@ class ZonePainter extends CustomPainter {
   Rect _rectByZone(ProximityStatus proximity) {
     switch (proximity) {
       case ProximityStatus.Immediate:
-        return Rect.fromLTRB(0, 175, _currentSize.width, 400);
+        return Rect.fromLTRB(0, 200, _currentSize.width, 400);
         break;
       case ProximityStatus.Near:
         return Rect.fromLTRB(0, 100, _currentSize.width, 300);
         break;
       case ProximityStatus.Far:
-        return Rect.fromLTRB(0, 25, _currentSize.width, 200);
+        return Rect.fromLTRB(0, 0, _currentSize.width, 150);
         break;
       default:
         return null;
@@ -56,17 +56,17 @@ class ZonePainter extends CustomPainter {
     switch (proximity) {
       case ProximityStatus.Immediate:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 150, sizeWidth, 400), K_ANGLE, K_ANGLE);
+        path.addArc(Rect.fromLTRB(0, 120, sizeWidth, 400), K_ANGLE, K_ANGLE);
         return path;
         break;
       case ProximityStatus.Near:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 75, sizeWidth, 300), K_ANGLE, K_ANGLE);
+        path.addArc(Rect.fromLTRB(0, 50, sizeWidth, 220), K_ANGLE, K_ANGLE);
         return path;
         break;
       case ProximityStatus.Far:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 200), K_ANGLE, K_ANGLE);
+        path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 150), K_ANGLE, K_ANGLE);
         return path;
         break;
       default:

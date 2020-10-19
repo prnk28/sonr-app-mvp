@@ -1,7 +1,6 @@
 import 'package:sonar_app/screens/screens.dart';
 import 'dart:math' as math;
 // Views in Screen
-part 'bubbles.dart';
 part 'compass.dart';
 part 'complete.dart';
 part 'progress.dart';
@@ -36,7 +35,7 @@ class TransferScreen extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   // Bubble View
-                  BubbleView(state.userNode.getZonedPeers()),
+                  buildStackView(state.userNode.getZonedPeers()),
 
                   // Have BLoC Builder Retrieve Directly from
                   // Cubit to Avoid Delays

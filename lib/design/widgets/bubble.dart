@@ -3,23 +3,28 @@ part of 'widgets.dart';
 // *************************** //
 // ** Build Bubbles in List ** //
 // *************************** //
-buildStackView(List<Peer> peers, Animation animation) {
-  // Check if null
-  if (peers.isNotEmpty) {
-// Initialize Widget List with Range Lines
-    List<Widget> stackWidgets = new List<Widget>();
-    stackWidgets.add(buildRangeLines());
+buildStackView(List<Peer> peers) {
+  // Initialize Widget List with Range Lines
+  List<Widget> stackWidgets = new List<Widget>();
+  stackWidgets.add(buildRangeLines());
 
-    // Create Bubbles
-    for (Peer peer in peers) {
-      Widget bubble = buildBubble(animation.value, peer);
-      stackWidgets.add(bubble);
-    }
+  // Init Stack Vars
+  int total = peers.length + 1;
+  int current = 0;
+  double mean = 1.0 / total;
 
-    // Return View
-    return Stack(children: stackWidgets);
+  // Create Bubbles
+  for (Peer peer in peers) {
+    // Increase Count
+    current += 1;
+
+    // Place Bubble
+    Widget bubble = buildBubble(current * mean, peer);
+    stackWidgets.add(bubble);
   }
-  return Container();
+
+  // Return View
+  return Stack(children: stackWidgets);
 }
 
 // ************************************** //
@@ -27,7 +32,7 @@ buildStackView(List<Peer> peers, Animation animation) {
 // ************************************** //
 Widget buildRangeLines() {
   return Padding(
-      padding: EdgeInsets.only(bottom: 75),
+      padding: EdgeInsets.only(bottom: 5),
       child: CustomPaint(
         size: screenSize,
         painter: ZonePainter(),
@@ -42,13 +47,19 @@ Widget buildBubble(double value, Peer node) {
       child: Neumorphic(
           style: NeumorphicStyle(
               shape: NeumorphicShape.flat,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(25)),
+              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
               depth: 10,
               lightSource: LightSource.topLeft,
               color: Colors.grey[300]),
           child: Container(
-            width: 50,
-            height: 50,
+            width: 80,
+            height: 80,
+            child: Column(
+              children: [
+                Text(node.profile.firstName),
+                Text(node.device),
+              ],
+            ),
           )));
 }
 
