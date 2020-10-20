@@ -186,7 +186,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Pending(match: event.match);
         break;
       case Status.Offered:
-        user.node.role = Role.Receiver;
         yield Requested(offer: event.offer);
         break;
       case Status.Answered:

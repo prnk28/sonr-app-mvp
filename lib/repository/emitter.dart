@@ -100,7 +100,18 @@ extension RTCEmitter on Peer {
 
     // Send ICE Message
     pc.onIceCandidate = (candidate) {
-      socket.emit("CANDIDATE", Candidate.create(this, id, candidate));
+      socket.emit("CANDIDATE", [
+        this.toMap(),
+        id,
+        {
+          'candidate': {
+            'sdpMLineIndex': candidate.sdpMlineIndex,
+            'sdpMid': candidate.sdpMid,
+            'candidate': candidate.candidate,
+          },
+          'session_id': this.id,
+        }
+      ]);
     };
     return pc;
   }

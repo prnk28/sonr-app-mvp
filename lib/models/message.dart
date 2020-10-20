@@ -93,36 +93,3 @@ class Answer {
     ];
   }
 }
-
-// *********************** //
-// ** CANDIDATE Message ** //
-// *********************** //
-class Candidate {
-  Peer from;
-  RTCIceCandidate candidate;
-  String sessionId;
-
-  // ** Constructer from Map Data **
-  Candidate(dynamic data) {
-    from = Peer.fromMap(data[0]);
-    sessionId = data[1]['session_id'];
-    candidate = new RTCIceCandidate(
-        data[1]['candidate'], data[1]['sdpMid'], data[1]['sdpMLineIndex']);
-  }
-
-  // ** Method to return map **
-  static create(Peer from, String to, RTCIceCandidate c) {
-    return [
-      from.toMap(),
-      to,
-      {
-        'candidate': {
-          'sdpMLineIndex': c.sdpMlineIndex,
-          'sdpMid': c.sdpMid,
-          'candidate': c.candidate,
-        },
-        'session_id': from.session.id,
-      }
-    ];
-  }
-}

@@ -5,12 +5,7 @@ Widget buildAuthenticationView(BuildContext context, Offer offer) {
       theme: lightTheme(),
       darkTheme: darkTheme(),
       child: Neumorphic(
-          style: NeumorphicStyle(
-              shape: NeumorphicShape.flat,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-              depth: 8,
-              lightSource: LightSource.topLeft,
-              color: Colors.blueGrey[50]),
+          style: windowStyle(),
           child: Container(
               color: NeumorphicTheme.baseColor(context),
               height: MediaQuery.of(context).size.height / 3,

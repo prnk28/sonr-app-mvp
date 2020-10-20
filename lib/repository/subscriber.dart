@@ -50,7 +50,7 @@ class SocketSubscriber {
     // -- MATCH ICE CANDIDATES --
     socket.on('CANDIDATE', (data) {
       // Handle Candidate
-      _user.node.handleCandidate(Candidate(data));
+      _user.node.handleCandidate(Peer.fromMap(data[0]), data[1]);
     });
 
     // -- MATCH RECEIVED FILE --

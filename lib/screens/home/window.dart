@@ -13,7 +13,9 @@ class WindowView extends StatelessWidget {
           if (state is Requested) {
             return buildAuthenticationView(context, state.offer);
           }
-          return Container();
+          return Container(color: NeumorphicTheme.baseColor(context),
+              height: MediaQuery.of(context).size.height / 3,
+              width: MediaQuery.of(context).size.width / 2,);
         }));
   }
 }
