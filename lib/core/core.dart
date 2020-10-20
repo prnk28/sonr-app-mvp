@@ -13,13 +13,13 @@ export 'package:bloc/bloc.dart';
 // Device Libraries
 export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
 export 'package:sensors/sensors.dart';
-export 'package:geolocator/geolocator.dart' hide Codec;
+export 'package:geolocator/geolocator.dart';
 export 'package:soundpool/soundpool.dart';
 export 'package:graph_collection/graph.dart';
 export 'package:path/path.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:posthog_flutter/posthog_flutter.dart';
 
-import 'dart:ffi';
 import 'dart:io';
 import 'package:logger/logger.dart';
 import 'package:sonar_app/design/design.dart';

@@ -2,6 +2,7 @@ part of 'window.dart';
 
 Widget buildAuthenticationView(
     BuildContext context, dynamic offer, Peer match) {
+  log.i("AuthWindow match" + match.toString());
   return NeumorphicTheme(
       theme: lightTheme(),
       darkTheme: darkTheme(),
@@ -49,13 +50,13 @@ Row _buildItem(BuildContext context, Peer match) {
     Icon(Icons.image, size: 100),
     Column(
       children: [
-        Text(match.profile.firstName, style: headerTextStyle()),
-        Text(match.device,
-            style: TextStyle(
-                fontFamily: "Raleway",
-                fontWeight: FontWeight.w500,
-                fontSize: 22,
-                color: Colors.black54))
+        //Text(match.profile.firstName, style: headerTextStyle()),
+        // Text(match.device,
+        //     style: TextStyle(
+        //         fontFamily: "Raleway",
+        //         fontWeight: FontWeight.w500,
+        //         fontSize: 22,
+        //         color: Colors.black54))
       ],
     ),
   ]); // FlatButton// Container
@@ -66,7 +67,7 @@ NeumorphicButton _buildAuthButton(
   return NeumorphicButton(
       onPressed: () {
         // Update WebBloc to Inform User Accepted
-        context.getBloc(BlocType.Web).Authorize(offer, match, false);
+        //context.getBloc(BlocType.Web).Authorize(offer, match, false);
       },
       style: NeumorphicStyle(
           depth: 8,
