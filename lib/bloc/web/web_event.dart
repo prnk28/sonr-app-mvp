@@ -31,9 +31,9 @@ class Load extends WebEvent {
 // Invite Peer
 class Invite extends WebEvent {
   final Peer to;
-  final Metadata meta;
+  final SonrFile file;
 
-  const Invite(this.to, this.meta);
+  const Invite(this.to, this.file);
 }
 
 // Authorize Offer

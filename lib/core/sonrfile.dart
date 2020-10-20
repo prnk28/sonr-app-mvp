@@ -18,15 +18,23 @@ class SonrFile {
 
   // ** Constructer ** //
   SonrFile({this.metadata, this.file}) {
+    // Generate MetaData from Raw File
+    if (this.file != null) {
+      this.metadata = new Metadata();
+      // Calculate File Info
+      this.metadata.size = file.lengthSync();
+      this.metadata.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
+
+      // Set File Info
+      this.metadata.path = file.path;
+      this.metadata.name = basename(this.metadata.path);
+      this.metadata.type = getFileTypeFromPath(this.metadata.path);
+    }
+
     // Set Progress Variables
     this._progress = 0.0;
     this._currentChunkNum = 0;
     this._remainingChunks = this.metadata.chunksTotal;
-
-    // Generate MetaData from Raw File
-    if (this.file != null) {
-      this.metadata = Metadata.fromFile(file);
-    }
   }
 
   // ** Update Progress ** //
@@ -41,22 +49,15 @@ class SonrFile {
     // Calculate Progress
     this._progress = (total - this._remainingChunks) / total;
 
-    // Logging
-    log.i(enumAsString(role) +
-        "Current= " +
-        this._currentChunkNum.toString() +
-        ". Remaining= " +
-        this._remainingChunks.toString() +
-        "-- " +
-        (this._progress * 100).toString() +
-        "%");
-
     // Update Cubit
     d.progress.update(this._progress);
   }
 
   // ** Save Bytes to File ** //
   save(Uint8List data, String path) async {
+    // Set Path
+    this.metadata.path = path;
+
     // Get Buffer
     final buffer = data.buffer;
 

@@ -44,9 +44,10 @@ extension SocketEmitter on Peer {
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
   offer(Peer to, Metadata meta) async {
+    session.id = this.id + '-' + to.id;
+
     // Change Session State
-    session.updateState(SignalingState.CallStateNew,
-        newId: this.id + '-' + to.id);
+    session.updateState(SignalingState.CallStateNew);
 
     // Add Peer Connection
     RTCPeerConnection pc = await this.newPeerConnection(to.id);

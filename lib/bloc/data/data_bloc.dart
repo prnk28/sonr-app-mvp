@@ -64,14 +64,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         traffic.addFile(TrafficDirection.Incoming, file);
         break;
       case QueueType.OutgoingFile:
-        // Create SonrFile
-        SonrFile file = new SonrFile(file: event.rawFile);
+        // Get Data
+        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
-        // Set Current File
+        SonrFile file = new SonrFile(file: dummyFile);
         currentFile = file;
 
         // Add to Outgoing
-        traffic.addFile(TrafficDirection.Outgoing, file);
+        traffic.addFile(TrafficDirection.Outgoing, currentFile);
         break;
       case QueueType.Offer:
         print("Not done yet");

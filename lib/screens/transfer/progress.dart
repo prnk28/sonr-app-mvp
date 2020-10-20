@@ -8,15 +8,17 @@ class ProgressView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Yield Decline Result
-    return BlocBuilder<DataBloc, DataState>(
+    return BlocBuilder<ProgressCubit, double>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-      return true;
-    }, builder: (context, state) {
-      return Column(children: [
-        NeumorphicProgressIndeterminate(),
-        Divider(),
-      ]);
-    });
+          return true;
+        },
+        cubit: context.getCubit(CubitType.Progress),
+        builder: (context, state) {
+          return Column(children: [
+            NeumorphicProgress(percent: state),
+            Divider(),
+          ]);
+        });
   }
 }

@@ -11,6 +11,9 @@ part 'progress.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Queue File
+    BlocProvider.of<DataBloc>(context).add(Queue(QueueType.OutgoingFile));
+
     // Search
     context.emitWebBlocEvent(WebEventType.Search);
 

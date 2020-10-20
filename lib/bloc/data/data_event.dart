@@ -13,9 +13,9 @@ enum QueueType { IncomingFile, OutgoingFile, Offer }
 class Queue extends DataEvent {
   final QueueType type;
   final Peer match;
-  final File rawFile;
+  final SonrFile file;
   final Metadata metadata;
-  const Queue(this.type, {this.match, this.rawFile, this.metadata});
+  const Queue(this.type, {this.match, this.file, this.metadata});
 }
 
 // Send Transfer over DataChannel to Peer
@@ -35,6 +35,9 @@ class ProgressCubit extends Cubit<double> {
   ProgressCubit() : super(0);
 
   void update(double newValue) {
+    // Logging
+    log.i((newValue * 100).toString() + "%");
+
     // Change Value
     emit(newValue);
   }

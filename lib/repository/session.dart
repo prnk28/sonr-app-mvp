@@ -119,13 +119,11 @@ class RTCSession {
     }
   }
 
-  updateState(SignalingState state, {String newId}) {
+  updateState(SignalingState state) {
     // Validate Existence
     if (this.onStateChange != null) {
       // Check if New Call
       if (state == SignalingState.CallStateNew) {
-        // Set Session Id
-        this.id = newId;
       }
       // Check if End Call
       else if (state == SignalingState.CallStateBye) {

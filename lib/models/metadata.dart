@@ -29,26 +29,11 @@ class Metadata {
     return temp;
   }
 
-  // ** Constructer: Get MetaData from File ** //
-  static Metadata fromFile(File file) {
-    Metadata temp = new Metadata();
-    // Calculate File Info
-    temp.size = file.lengthSync();
-    temp.chunksTotal = (temp.size / CHUNK_SIZE).ceil();
-    temp.type = getFileTypeFromPath(temp.path);
-
-    // Set File Info
-    temp.path = file.path;
-    temp.name = basename(temp.path);
-    return temp;
-  }
-
   // ** Convert to Map **
   toMap() {
     return {
       "name": this.name,
       "size": this.size,
-      "path": this.path,
       "chunks_total": this.chunksTotal,
       "type": enumAsString(this.type)
     };

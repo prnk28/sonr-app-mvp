@@ -19,14 +19,16 @@ enum CubitType { Direction, Progress }
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
   emitDataBlocEvent(DataEventType event,
-      {Metadata meta, File rawFile, Peer match}) async {
+      {Metadata meta, SonrFile file, Peer match}) async {
     // Switch by Event
     switch (event) {
       case DataEventType.QueueIncomingFile:
-        BlocProvider.of<DataBloc>(this).add(Queue(QueueType.IncomingFile));
+        BlocProvider.of<DataBloc>(this)
+            .add(Queue(QueueType.IncomingFile, metadata: meta));
         break;
       case DataEventType.QueueOutgoingFile:
-        BlocProvider.of<DataBloc>(this).add(Queue(QueueType.OutgoingFile));
+        BlocProvider.of<DataBloc>(this)
+            .add(Queue(QueueType.OutgoingFile, file: file));
         break;
       case DataEventType.FindFile:
         BlocProvider.of<DataBloc>(this).add(FindFile());
@@ -71,7 +73,7 @@ extension Events on BuildContext {
 
 // ** WebBLoC Applicable Events for Frontend ** //
   emitWebBlocEvent(WebEventType event,
-      {bool decision, Peer match, Metadata meta, Offer offer}) {
+      {bool decision, Peer match, SonrFile file, Offer offer}) {
     switch (event) {
       case WebEventType.Connect:
         BlocProvider.of<WebBloc>(this).add(Connect());
@@ -83,7 +85,7 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
         break;
       case WebEventType.Invite:
-        BlocProvider.of<WebBloc>(this).add(Invite(match, meta));
+        BlocProvider.of<WebBloc>(this).add(Invite(match, file));
         break;
       case WebEventType.Authorize:
         BlocProvider.of<WebBloc>(this).add(Authorize(decision, offer));

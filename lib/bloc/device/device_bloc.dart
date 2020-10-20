@@ -35,6 +35,9 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ** Initialize Event **
 // ***********************
   Stream<DeviceState> mapInitializeState(Initialize event) async* {
+    // Intialize FileType
+    await initFileType();
+
     // Check Permissions
     LocationPermission permission = await checkPermission();
 

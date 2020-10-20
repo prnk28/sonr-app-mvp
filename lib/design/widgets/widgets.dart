@@ -10,4 +10,4 @@ export 'package:boxicons_flutter/boxicons_flutter.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
 part 'zone.dart';
-part 'compass.dart';
+part 'spokes.dart';
