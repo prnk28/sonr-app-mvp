@@ -17,8 +17,7 @@ enum Status {
   Searching, // Looking for Peers
   Pending, // Waiting for Confirmation
   Requested, // Offered Transfer
-  Authorized, // Receiver Made Decision
-  Answered, // Sender Responded to Offer
+  Answered, // Handle Receiver Authorization
   Transferring // In Transfer
 }
 

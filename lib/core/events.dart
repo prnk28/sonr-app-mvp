@@ -82,11 +82,10 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
         break;
       case WebEventType.Invite:
-        BlocProvider.of<WebBloc>(this).add(Update(Status.Pending, from: match));
+        BlocProvider.of<WebBloc>(this).add(Invite(match));
         break;
       case WebEventType.Authorize:
-        BlocProvider.of<WebBloc>(this).add(Update(Status.Authorized,
-            decision: decision, from: match, offer: offer));
+        BlocProvider.of<WebBloc>(this).add(Authorize(match, decision, offer));
         break;
     }
   }

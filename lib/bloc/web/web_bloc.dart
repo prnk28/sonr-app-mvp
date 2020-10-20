@@ -61,6 +61,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapConnectToState(event);
     } else if (event is Update) {
       yield* _mapUpdateToState(event);
+    } else if (event is Invite) {
+      yield* _mapInviteToState(event);
+    } else if (event is Authorize) {
+      yield* _mapAuthorizeToState(event);
     } else if (event is Load) {
       yield* _mapLoadToState(event);
     } else if (event is End) {
@@ -87,6 +91,43 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     yield Loading();
   }
 
+// *****************
+// ** Invite Event ***
+// *****************
+  Stream<WebState> _mapInviteToState(Invite event) async* {
+    // Get Data
+    File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
+    Metadata meta = new Metadata(file: dummyFile);
+
+    // Create SonrFile
+    SonrFile file = new SonrFile(meta, raw: dummyFile);
+
+    // Queue File
+    data.add(Queue(QueueType.OutgoingFile, file: file));
+    await user.node.offer(event.to, file);
+
+    // Change Status
+    add(Update(Status.Pending, from: event.to));
+  }
+
+// **********************
+// ** Authorize Event ***
+// **********************
+  Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
+    if (event.decision) {
+      // Handle Offer from Requested Peer
+      await user.node.handleOffer(event.to, event.offer);
+
+      // Change State
+      user.node.status = Status.Transferring;
+      add(Update(Status.Transferring, from: event.to));
+    } else {
+      user.node.decline(event.to);
+      user.node.status = Status.Available;
+      add(Update(Status.Available));
+    }
+  }
+
 // *******************
 // ** Update Event ***
 // *******************
@@ -106,24 +147,17 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Searching(user.node);
         break;
       case Status.Pending:
-        await user.node.offer(event.from, data.traffic.current);
-
         yield Pending(match: event.from);
         break;
       case Status.Requested:
+        // Create SonrFile
+        SonrFile file = new SonrFile(event.metadata);
+
         // Add File to Queue
-        data.add(Queue(QueueType.IncomingFile, metadata: event.metadata));
+        data.add(Queue(QueueType.IncomingFile, file: file));
 
         yield Requested(
             match: event.from, metadata: event.metadata, offer: event.offer);
-        break;
-      case Status.Authorized:
-        // Handle Offer from Requested Peer
-        await user.node.handleOffer(event.from, event.offer);
-
-        // Change State
-        user.node.status = Status.Transferring;
-        yield Transferring();
         break;
       case Status.Answered:
         // Handle Answer from Answered Peer
@@ -134,6 +168,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
         // Change State
         user.node.status = Status.Transferring;
+        yield Transferring();
+        break;
+      case Status.Transferring:
         yield Transferring();
         break;
       default:

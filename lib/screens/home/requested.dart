@@ -55,7 +55,7 @@ class RequestedView extends StatelessWidget {
                         Padding(padding: EdgeInsets.only(top: 25)),
 
                         // Build Auth Action
-                        _buildAuthButton(context, this.offer, this.match)
+                        _buildAuthButton(context)
                       ],
                     )))));
   }
@@ -77,12 +77,12 @@ class RequestedView extends StatelessWidget {
     ]); // FlatButton// Container
   }
 
-  NeumorphicButton _buildAuthButton(BuildContext context, dynamic o, Peer m) {
+  NeumorphicButton _buildAuthButton(BuildContext context) {
     return NeumorphicButton(
         onPressed: () {
           // Update WebBloc to Inform User Accepted
           context.emitWebBlocEvent(WebEventType.Authorize,
-              offer: o, match: m, decision: true);
+              offer: this.offer, match: this.match, decision: true);
         },
         style: NeumorphicStyle(
             depth: 8,

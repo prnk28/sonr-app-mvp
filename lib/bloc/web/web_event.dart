@@ -27,6 +27,22 @@ class Load extends WebEvent {
   const Load();
 }
 
+// Invite Peer
+class Invite extends WebEvent {
+  final Peer to;
+
+  const Invite(this.to);
+}
+
+// Authorize Offer
+class Authorize extends WebEvent {
+  final Peer to;
+  final bool decision;
+  final dynamic offer;
+
+  const Authorize(this.to, this.decision, this.offer);
+}
+
 // Send Node Data
 class Update extends WebEvent {
   // Status Variables
@@ -36,21 +52,22 @@ class Update extends WebEvent {
   // User Variables
   final Peer from;
   final Metadata metadata;
-  final bool decision;
 
   // RTC Variables
-  final dynamic offer;
   final dynamic answer;
+  final dynamic offer;
 
-  const Update(this.newStatus,
-      {this.newDirection,
-      this.from,
-      this.metadata,
-      this.offer,
-      this.answer,
-      this.decision});
+  const Update(
+    this.newStatus, {
+    this.newDirection,
+    this.from,
+    this.metadata,
+    this.answer,
+    this.offer,
+  });
 }
 
+// Sequence Finished
 class End extends WebEvent {
   final EndType type;
   final Peer match;

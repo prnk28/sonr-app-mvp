@@ -15,6 +15,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   final UserBloc user;
   ProgressCubit progress;
   Traffic traffic;
+  SonrFile currentFile;
 
   // Data Channel
   BytesBuilder block = new BytesBuilder();
@@ -52,23 +53,23 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** QueueFile Event **
 // **********************
   Stream<DataState> _mapQueueFileState(Queue event) async* {
+    // Set Current File
+    currentFile = event.file;
+
     // Check Queue Type
     switch (event.type) {
       case QueueType.IncomingFile:
         // Add to Incoming
-        traffic.addFile(TrafficDirection.Incoming, meta: event.metadata);
+        traffic.addFile(TrafficDirection.Incoming, event.file);
 
         // Set as Queued
-        yield Queued(traffic.current);
+        yield Queued(currentFile);
         break;
       case QueueType.OutgoingFile:
-        // Current Fake File
-        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-
         // Create Metadata
-        traffic.addFile(TrafficDirection.Outgoing, file: dummyFile);
+        traffic.addFile(TrafficDirection.Outgoing, event.file);
 
-        yield Queued(traffic.current);
+        yield Queued(currentFile);
         break;
       case QueueType.Offer:
         print("Not done yet");
@@ -84,7 +85,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     block.add(event.chunk);
 
     // Update Progress in Current MetaData
-    progress.update(traffic.current.addProgress());
+    progress.update(currentFile.addProgress());
 
     // Yield Progress
     yield Receiving();
@@ -95,7 +96,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ********************
   Stream<DataState> _mapTransferState(Transfer event) async* {
     // Open File in Reader and Send Data pieces as chunks
-    final reader = ChunkedStreamIterator(traffic.current.file.openRead());
+    final reader = ChunkedStreamIterator(currentFile.raw.openRead());
 
     // While the reader has a next byte
     while (true) {
@@ -106,7 +107,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // End of List
       if (data.length <= 0) {
         // Send Complete Message on same DC
-        user.node.complete(event.match, traffic.current);
+        user.node.complete(event.match, currentFile);
+        currentFile = null;
 
         // Clear outgoing traffic
         traffic.clear(TrafficDirection.Outgoing);
@@ -118,7 +120,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Send Current Chunk
       else {
         // Sends and Updates Progress
-        traffic.transmit(chunk);
+        traffic.transmit(currentFile, chunk);
 
         // Yield Progress
         yield Sending();

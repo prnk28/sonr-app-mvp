@@ -17,7 +17,6 @@ class Traffic {
   // Traffic Maps - MatchId/File
   List<SonrFile> _incoming;
   List<SonrFile> _outgoing;
-  SonrFile current;
 
   // DataChannel
   bool isChannelActive;
@@ -46,40 +45,26 @@ class Traffic {
   }
 
   // ** Add File to Incoming/Outgoing ** //
-  addFile(TrafficDirection direction, {File file, Metadata meta}) {
+  addFile(TrafficDirection direction, SonrFile file) {
     // Check Incoming/Outgoing
     switch (direction) {
       case TrafficDirection.Incoming:
-        // Create and Add to Incoming map
-        _incoming.add(new SonrFile(Role.Receiver, metadata: meta));
-
-        // Set as current
-        current = _incoming.first;
+        _incoming.add(file);
         break;
       case TrafficDirection.Outgoing:
-        // Create and Add to Outgoing File Map
-        _outgoing.add(new SonrFile(Role.Sender, file: file));
-
-        // Set as current
-        current = _outgoing.first;
+        // Add to Outgoing File Map
+        _outgoing.add(file);
         break;
-    }
-  }
-
-  // ** Return Current File Metadata as Map ** //
-  toInfoMap() {
-    if (this.current != null) {
-      return this.current.metadata.toMap();
     }
   }
 
   // ** Send Chunk on Channel ** //
-  transmit(Uint8List chunk) {
+  transmit(SonrFile file, Uint8List chunk) {
     // Send on Channel
     _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
     // Update Progress
-    _data.progress.update(current.metadata.addProgress(Role.Sender));
+    _data.progress.update(file.metadata.addProgress(Role.Sender));
   }
 
   // ** Clear a Map ** //
@@ -93,7 +78,6 @@ class Traffic {
 
         // Clear One
         _incoming.remove(matchId);
-        current = null;
         break;
       case TrafficDirection.Outgoing:
         // Clear All
@@ -103,7 +87,6 @@ class Traffic {
 
         // Clear One
         _outgoing.remove(matchId);
-        current = null;
         break;
     }
   }
@@ -113,17 +96,11 @@ class Traffic {
 // ** Holds Metadata and Raw ** //
 // **************************** //
 class SonrFile {
-  final Role role;
-  final File file;
-  Metadata metadata;
+  final File raw;
+  final Metadata metadata;
 
   // ** Constructer ** //
-  SonrFile(this.role, {this.file, this.metadata}) {
-    // Check what kind of data provided
-    if (this.file != null) {
-      this.metadata = new Metadata(file: this.file);
-    }
-  }
+  SonrFile(this.metadata, {this.raw});
 
   // ** Build from Bytes ** //
   static fromBytes(Uint8List data, String path) async {
@@ -132,18 +109,18 @@ class SonrFile {
     File rawFile = await new File(path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
 
-    return SonrFile(Role.Viewer, file: rawFile);
+    var meta = new Metadata(file: rawFile);
+    return SonrFile(meta, raw: rawFile);
   }
 
-  // ** Progress Forward Metadata ** //
-  addProgress() {
-    return this.metadata.addProgress(role);
+  // ** Check if Both Fields Provided ** //
+  bool isComplete() {
+    return raw != null && metadata != null;
   }
 
   // ** Convert to Map ** //
   toMap() {
     return {
-      'role': enumAsString(this.role),
       'file': {
         'name': this.metadata.name,
         'type': enumAsString(this.metadata.type),

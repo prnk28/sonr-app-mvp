@@ -11,9 +11,6 @@ part 'progress.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Fake Select File in Queue
-    context.emitDataBlocEvent(DataEventType.QueueOutgoingFile);
-
     // Search
     context.emitWebBlocEvent(WebEventType.Search);
 
