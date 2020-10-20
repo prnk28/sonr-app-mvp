@@ -16,9 +16,6 @@ class Metadata {
 
   // -- Chunking Progress Variables --
   int chunksTotal;
-  int currentChunkNum;
-  int remainingChunks;
-  double progress;
 
   // ** Constructor **
   Metadata({File file, Map map}) {
@@ -28,26 +25,19 @@ class Metadata {
     // If File Provided
     if (file != null) {
       // Calculate File Info
-      this.progress = 0.0;
       this.size = file.lengthSync();
       this.chunksTotal = (this.size / CHUNK_SIZE).ceil();
-      this.currentChunkNum = 0;
-      this.remainingChunks = this.chunksTotal;
 
       // Set File Info
       this.path = file.path;
-      this.type = getFileTypeFromPath(this.path);
       this.name = basename(this.path);
     }
 
     // If Map Provided
     if (map != null) {
       // Set Chunking Info from Map
-      this.progress = 0.0;
       this.size = map["size"];
       this.chunksTotal = map["chunks_total"];
-      this.currentChunkNum = 0;
-      this.remainingChunks = this.chunksTotal;
 
       // Set File Info from Map
       this.name = map["name"];
@@ -55,29 +45,9 @@ class Metadata {
     }
   }
 
-  // ** Update Progress
-  double addProgress(Role role) {
-    // Increase Current Chunk
-    this.currentChunkNum += 1;
-
-    // Find Remaining
-    this.remainingChunks = this.chunksTotal - this.currentChunkNum;
-
-    // Calculate Progress
-    this.progress = (this.chunksTotal - remainingChunks) / this.chunksTotal;
-
-    // Logging
-    log.i(enumAsString(role) +
-        "Current= " +
-        this.currentChunkNum.toString() +
-        ". Remaining= " +
-        remainingChunks.toString() +
-        "-- " +
-        (this.progress * 100).toString() +
-        "%");
-
-    // Return
-    return this.progress;
+  initialize() async {
+    this.type = await getFileTypeFromPath(this.path);
+    log.i("FileType: " + this.type.toString());
   }
 
   // ** Read Bytes from Metadata Path **

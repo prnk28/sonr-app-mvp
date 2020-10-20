@@ -25,8 +25,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Initialize Repositories
     progress = new ProgressCubit();
     traffic = new Traffic(this, user.node.session);
-
-    // Add DataChannel
   }
 
   // Map Methods
@@ -61,20 +59,17 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       case QueueType.IncomingFile:
         // Add to Incoming
         traffic.addFile(TrafficDirection.Incoming, event.file);
-
-        // Set as Queued
-        yield Queued(currentFile);
         break;
       case QueueType.OutgoingFile:
         // Create Metadata
         traffic.addFile(TrafficDirection.Outgoing, event.file);
-
-        yield Queued(currentFile);
         break;
       case QueueType.Offer:
         print("Not done yet");
         break;
     }
+
+    yield Queued(currentFile);
   }
 
 // ********************
@@ -85,7 +80,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     block.add(event.chunk);
 
     // Update Progress in Current MetaData
-    progress.update(currentFile.addProgress());
+    traffic.addProgress(currentFile, Role.Receiver);
 
     // Yield Progress
     yield Receiving();
@@ -108,7 +103,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       if (data.length <= 0) {
         // Send Complete Message on same DC
         user.node.complete(event.match, currentFile);
-        currentFile = null;
+        //currentFile = null;
 
         // Clear outgoing traffic
         traffic.clear(TrafficDirection.Outgoing);

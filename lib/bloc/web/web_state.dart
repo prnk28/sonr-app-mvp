@@ -52,12 +52,12 @@ class Pending extends WebState {
 // *******************************
 class Requested extends WebState {
   final Peer match;
-  final Metadata metadata;
+  final SonrFile file;
   final dynamic offer;
 
   const Requested({
     this.match,
-    this.metadata,
+    this.file,
     this.offer,
   });
 }

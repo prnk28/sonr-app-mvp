@@ -64,7 +64,7 @@ class Traffic {
     _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
     // Update Progress
-    _data.progress.update(file.metadata.addProgress(Role.Sender));
+    addProgress(file, Role.Sender);
   }
 
   // ** Clear a Map ** //
@@ -90,6 +90,32 @@ class Traffic {
         break;
     }
   }
+
+  // ** Update Progress ** //
+  addProgress(SonrFile file, Role role) {
+    // Increase Current Chunk
+    file.currentChunkNum += 1;
+    var total = file.metadata.chunksTotal;
+
+    // Find Remaining
+    file.remainingChunks = total - file.currentChunkNum;
+
+    // Calculate Progress
+    file.progress = (total - file.remainingChunks) / total;
+
+    // Logging
+    log.i(enumAsString(role) +
+        "Current= " +
+        file.currentChunkNum.toString() +
+        ". Remaining= " +
+        file.remainingChunks.toString() +
+        "-- " +
+        (file.progress * 100).toString() +
+        "%");
+
+    // Update Cubit
+    _data.progress.update(file.progress);
+  }
 }
 
 // **************************** //
@@ -99,8 +125,17 @@ class SonrFile {
   final File raw;
   final Metadata metadata;
 
+  // Progress Variables
+  int remainingChunks;
+  int currentChunkNum;
+  double progress;
+
   // ** Constructer ** //
-  SonrFile(this.metadata, {this.raw});
+  SonrFile(this.metadata, {this.raw}) {
+    this.progress = 0.0;
+    this.currentChunkNum = 0;
+    this.remainingChunks = this.metadata.chunksTotal;
+  }
 
   // ** Build from Bytes ** //
   static fromBytes(Uint8List data, String path) async {

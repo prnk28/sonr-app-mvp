@@ -76,10 +76,12 @@ flutter:
   # -- Media --
   assets:
     - assets/animations/
+    - assets/audio/
+    - assets/data/
     - assets/images/
     - assets/images/social/
     - assets/images/headers/
-    - assets/audio/
+
 
   # -- Fonts --
   fonts:   

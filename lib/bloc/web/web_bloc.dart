@@ -99,6 +99,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
     Metadata meta = new Metadata(file: dummyFile);
 
+    // Get FileType
+    await meta.initialize();
+
     // Create SonrFile
     SonrFile file = new SonrFile(meta, raw: dummyFile);
 
@@ -149,15 +152,17 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       case Status.Pending:
         yield Pending(match: event.from);
         break;
-      case Status.Requested:
+      case Status.Offered:
+        // Get FileType
+        await event.metadata.initialize();
+
         // Create SonrFile
         SonrFile file = new SonrFile(event.metadata);
 
         // Add File to Queue
         data.add(Queue(QueueType.IncomingFile, file: file));
 
-        yield Requested(
-            match: event.from, metadata: event.metadata, offer: event.offer);
+        yield Requested(match: event.from, file: file, offer: event.offer);
         break;
       case Status.Answered:
         // Handle Answer from Answered Peer

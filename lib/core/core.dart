@@ -99,3 +99,47 @@ T enumFromString<T>(String key, Iterable<T> values) => values.firstWhere(
       (v) => v != null && key == enumAsString(v),
       orElse: () => null,
     );
+
+// ************************* //
+// ** FileType Extensions ** //
+// ************************* //
+// -- FileType Enum --
+enum FileType {
+  Audio,
+  Compressed,
+  Data,
+  Image,
+  Presentation,
+  Spreadsheet,
+  Unknown,
+  Video,
+  Word
+}
+
+// -- Directory Enum --
+enum AssetDirectory {
+  Animations,
+  Audio,
+  Fonts,
+  RootImages,
+  HeaderImages,
+  SocialImages
+}
+
+// -- Get FileType Method --
+Future<FileType> getFileTypeFromPath(path) async {
+  // Get File Extension
+  var kind = extension(path);
+
+  // Load Json from Assets
+  var json = await rootBundle.loadString("assets/data/filetype.json");
+  Map fileTypes = jsonDecode(json);
+
+  // Iterate
+  fileTypes.forEach((key, value) {
+    if (key == kind) {
+      return enumFromString(value, FileType.values);
+    }
+  });
+  return FileType.Unknown;
+}

@@ -64,7 +64,7 @@ class SocketSubscriber {
 
       // Inform WebBloc
       _web.add(
-          Update(Status.Requested, from: from, metadata: meta, offer: offer));
+          Update(Status.Offered, from: from, metadata: meta, offer: offer));
     });
 
     // -- MATCH ACCEPTED REQUEST --

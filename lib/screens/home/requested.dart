@@ -1,10 +1,10 @@
 part of 'home.dart';
 
 class RequestedView extends StatelessWidget {
-  final Metadata metadata;
+  final SonrFile file;
   final Peer match;
   final dynamic offer;
-  const RequestedView(this.metadata, this.match, this.offer);
+  const RequestedView(this.file, this.match, this.offer);
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -51,7 +51,7 @@ class RequestedView extends StatelessWidget {
                                     )))),
 
                         // Build Item from Metadata and Peer
-                        _buildItem(context, this.metadata, this.match),
+                        _buildItem(context, this.file, this.match),
                         Padding(padding: EdgeInsets.only(top: 25)),
 
                         // Build Auth Action
@@ -60,7 +60,7 @@ class RequestedView extends StatelessWidget {
                     )))));
   }
 
-  Row _buildItem(BuildContext context, Metadata metadata, Peer match) {
+  Row _buildItem(BuildContext context, SonrFile file, Peer match) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Icon(Icons.image, size: 100),
       Column(
