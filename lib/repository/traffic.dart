@@ -59,9 +59,9 @@ class Traffic {
   }
 
   // ** Add File to Incoming ** //
-  addIncoming(String senderId, Metadata meta) {
+  addIncoming( Metadata meta) {
     // Create SonrFile
-    SonrFile file = new SonrFile(senderId, metadata: meta);
+    SonrFile file = new SonrFile(metadata: meta);
 
     // Add To Incoming
     _incoming.add(file);
@@ -71,12 +71,12 @@ class Traffic {
   }
 
   // ** Add File to Outgoing ** //
-  addOutgoing(String userId, {File rawFile}) async {
+  addOutgoing({File rawFile}) async {
     // Get Dummy RawFile
     File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
     // Create SonrFile
-    SonrFile file = new SonrFile(userId, file: dummyFile);
+    SonrFile file = new SonrFile(file: dummyFile);
 
     // Add to Outgoing
     _outgoing.add(file);

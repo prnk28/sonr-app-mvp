@@ -100,24 +100,28 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Update Graph
       user.node.updateGraph(load.from);
       add(Update(user.node.status));
+      yield Loading();
     } else if (load.event == 'EXITED') {
       // Update Graph
       user.node.exitGraph(load.from);
       add(Update(user.node.status));
+      yield Loading();
     } else if (load.event == 'DECLINED') {
       // Reset Connection
       user.node.reset(match: load.from);
       add(Update(user.node.status));
+      yield Loading();
     } else if (load.event == 'COMPLETED') {
       user.node.role = Role.Zero;
       log.i("COMPLETED: " + data.toString());
       data.add(WriteFile());
       add(End(EndType.Complete));
+      yield Loading();
     } else if (load.event == 'ERROR') {
       user.node.role = Role.Zero;
       log.e("ERROR: " + load.error.toString());
+      yield Loading();
     }
-    // Wait for Server
     yield Loading();
   }
 
@@ -141,7 +145,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       await user.node.handleOffer(event.to, event.offer);
 
       // Add File to Queue
-      data.traffic.addIncoming(event.offer.from.id, event.offer.metadata);
+      data.traffic.addIncoming(event.offer.metadata);
 
       // Change State
       user.node.status = Status.Transferring;

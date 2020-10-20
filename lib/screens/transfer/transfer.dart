@@ -12,10 +12,10 @@ class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Queue File
-    context.emitDataBlocEvent(DataEventType.QueueOutgoingFile);
+    context.getBloc(BlocType.Data).traffic.addOutgoing();
 
     // Search
-    context.getBloc(BlocType.Web).Update(Status.Searching);
+    context.getBloc(BlocType.Web).add(Update(Status.Searching));
 
     // Return Widget
     return NeumorphicTheme(

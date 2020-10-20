@@ -95,11 +95,6 @@ extension RTCEmitter on Peer {
     }
   }
 
-  complete(SonrFile file) {
-    // Emit to Socket.io
-    socket.emit("COMPLETE", [this.toMap(), file.ownerId]);
-  }
-
   decline(Peer match) {
     // Emit to Socket.io
     socket.emit("DECLINE", [this.toMap(), match.id]);

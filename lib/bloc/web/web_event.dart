@@ -35,7 +35,7 @@ class Invite extends WebEvent {
   final Peer to;
   final SonrFile file;
 
-  const Invite(this.to, this.file);
+  const Invite(this.to, {this.file});
 }
 
 // Authorize Offer

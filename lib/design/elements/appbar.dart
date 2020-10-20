@@ -52,9 +52,6 @@ NeumorphicAppBar leadingAppBar(
                 Navigator.pushNamed(context, destination);
               } else {
                 if (shouldRevertToActive) {
-                  // Change Status
-                  context.emitUserBlocEvent(UserEventType.SetStatus);
-
                   // Update Node
                   context.getBloc(BlocType.Web).add(Update(Status.Available));
                 }

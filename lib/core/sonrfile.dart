@@ -10,7 +10,6 @@ class SonrFile {
   // Accessor Methods
   File file;
   Metadata metadata;
-  String ownerId;
 
   // Progress Variables
   int _remainingChunks;
@@ -18,7 +17,7 @@ class SonrFile {
   double progress;
 
   // ** Constructer ** //
-  SonrFile(ownerId, {this.metadata, this.file}) {
+  SonrFile({this.metadata, this.file}) {
     // Generate MetaData from Raw File
     if (this.file != null) {
       this.metadata = new Metadata();

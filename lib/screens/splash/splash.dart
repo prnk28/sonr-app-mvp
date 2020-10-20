@@ -28,7 +28,7 @@ class SplashScreen extends StatelessWidget {
           return true;
         }, builder: (context, state) {
           // Initialize Device
-          context.emitDeviceBlocEvent(DeviceEventType.Initialize);
+          context.getBloc(BlocType.Device).add(Initialize());
 
           // Return Loading
           return Center(child: NeumorphicProgressIndeterminate());

@@ -18,60 +18,6 @@ enum CubitType { Direction, Progress }
 enum BlocType { Data, Device, User, Web }
 
 extension Events on BuildContext {
-// ** DataBLoC Applicable Events for Frontend ** //
-  emitDataBlocEvent(DataEventType event,
-      {Metadata meta, File raw, String senderId}) async {
-    // Switch by Event
-    switch (event) {
-      case DataEventType.QueueIncomingFile:
-        BlocProvider.of<DataBloc>(this).traffic.addIncoming(senderId, meta);
-        break;
-      case DataEventType.QueueOutgoingFile:
-        await BlocProvider.of<DataBloc>(this)
-            .traffic
-            .addOutgoing(BlocProvider.of<UserBloc>(this).node.id);
-        break;
-      case DataEventType.FindFile:
-        BlocProvider.of<DataBloc>(this).add(FindFile());
-        break;
-      case DataEventType.OpenFile:
-        // In Progress
-        break;
-    }
-  }
-
-// ** DeviceBLoC Applicable Events for Frontend ** //
-  emitDeviceBlocEvent(DeviceEventType event) {
-    switch (event) {
-      case DeviceEventType.Initialize:
-        BlocProvider.of<DeviceBloc>(this).add(Initialize());
-        break;
-    }
-  }
-
-// ** UserBLoC Applicable Events for Frontend ** //
-  emitUserBlocEvent(UserEventType event,
-      {Profile newProfile, Status newStatus}) {
-    switch (event) {
-      case UserEventType.CheckProfile:
-        BlocProvider.of<UserBloc>(this).add(CheckProfile());
-        break;
-      case UserEventType.Register:
-        BlocProvider.of<UserBloc>(this).add(Register());
-        break;
-      case UserEventType.UpdateProfile:
-        if (newProfile != null) {
-          BlocProvider.of<UserBloc>(this).add(UpdateProfile(newProfile));
-        } else {
-          log.e("Profile Data not provided for UserBloc:UpdateProfile Event");
-        }
-        break;
-      case UserEventType.SetStatus:
-        BlocProvider.of<UserBloc>(this).node.status = newStatus;
-        break;
-    }
-  }
-
 // *********************** //
 // ** Retrieval Methods ** //
 // *********************** //
