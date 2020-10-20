@@ -22,29 +22,33 @@ class SocketSubscriber {
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
-      _web.add(Load(event: General(data, 'UPDATED')));
+      _web.add(Load('UPDATED', from: Peer.fromMap(data)));
     });
 
     // -- NODE EXITED LOBBY --
     socket.on('EXITED', (data) {
-      _web.add(Load(event: General(data, 'EXITED')));
+      _web.add(Load('EXITED', from: Peer.fromMap(data)));
     });
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
       // Inform WebBloc
-      _web.add(Update(Status.Offered, offer: Offer(data)));
+      _web.add(Update(Status.Offered,
+          from: Peer.fromMap(data[0]),
+          metadata: Metadata.fromMap(data[1]['metadata']),
+          offer: data[1]));
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
       // Inform WebBloc
-      _web.add(Update(Status.Answered, answer: Answer(data)));
+      _web.add(Update(Status.Answered,
+          from: Peer.fromMap(data[0]), answer: data[1]));
     });
 
     // -- MATCH DECLINED REQUEST --
     socket.on('DECLINED', (data) {
-      _web.add(Load(event: General(data, 'DECLINED')));
+      _web.add(Load('DECLINED', from: Peer.fromMap(data)));
     });
 
     // -- MATCH ICE CANDIDATES --
@@ -55,12 +59,12 @@ class SocketSubscriber {
 
     // -- MATCH RECEIVED FILE --
     socket.on('COMPLETED', (data) {
-      _web.add(Load(event: General(data, 'COMPLETED')));
+      _web.add(Load('COMPLETED', from: Peer.fromMap(data)));
     });
 
     // -- ERROR OCCURRED (Cancelled, Internal) --
     socket.on('ERROR', (error) {
-      _web.add(Load(event: General(error, 'ERROR')));
+      _web.add(Load('ERROR', error: error));
     });
   }
 }

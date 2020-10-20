@@ -15,7 +15,7 @@ class TransferScreen extends StatelessWidget {
     context.emitDataBlocEvent(DataEventType.QueueOutgoingFile);
 
     // Search
-    context.emitWebBlocEvent(WebEventType.Search);
+    context.getBloc(BlocType.Web).Update(Status.Searching);
 
     // Return Widget
     return NeumorphicTheme(

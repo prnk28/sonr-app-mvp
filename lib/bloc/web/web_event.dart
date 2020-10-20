@@ -24,8 +24,10 @@ class Connect extends WebEvent {
 
 // Between Server Reads
 class Load extends WebEvent {
-  final General event;
-  const Load({this.event});
+  final String event;
+  final Peer from;
+  final dynamic error;
+  const Load(this.event, {this.from, this.error});
 }
 
 // Invite Peer
@@ -38,25 +40,30 @@ class Invite extends WebEvent {
 
 // Authorize Offer
 class Authorize extends WebEvent {
-  final Offer offer;
+  final dynamic offer;
+  final Peer to;
   final bool decision;
 
-  const Authorize(this.decision, this.offer);
+  const Authorize(this.decision, this.to, this.offer);
 }
 
 // Send Node Data
 class Update extends WebEvent {
   // References
   final Status newStatus;
-  final Peer match;
+  final Peer from;
+  final Peer to;
 
   // Messages
-  final Answer answer;
-  final Offer offer;
+  final Metadata metadata;
+  final dynamic answer;
+  final dynamic offer;
 
   const Update(
     this.newStatus, {
-    this.match,
+    this.metadata,
+    this.from,
+    this.to,
     this.answer,
     this.offer,
   });

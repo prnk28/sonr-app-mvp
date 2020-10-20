@@ -51,11 +51,11 @@ class Pending extends WebState {
 // ** Received Offer from Peer ***
 // *******************************
 class Requested extends WebState {
-  final Offer offer;
+  final dynamic offer;
+  final Metadata metadata;
+  final Peer from;
 
-  const Requested({
-    this.offer,
-  });
+  const Requested(this.offer, this.metadata, this.from);
 }
 
 // *********************************************

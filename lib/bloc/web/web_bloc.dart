@@ -96,34 +96,26 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *****************
   Stream<WebState> _mapLoadToState(Load load) async* {
     // Check General Message
-    if (load.event != null) {
-      switch (load.event.subject) {
-        case GeneralMessage.UPDATED:
-          // Update Graph
-          user.node.updateGraph(load.event.from);
-          add(Update(user.node.status));
-          break;
-        case GeneralMessage.EXITED:
-          // Update Graph
-          user.node.exitGraph(load.event.from);
-          add(Update(user.node.status));
-          break;
-        case GeneralMessage.DECLINED:
-          // Reset Connection
-          user.node.reset(match: load.event.from);
-          add(Update(user.node.status));
-          break;
-        case GeneralMessage.COMPLETED:
-          user.node.role = Role.Zero;
-          log.i("COMPLETED: " + data.toString());
-          data.add(WriteFile());
-          add(End(EndType.Complete));
-          break;
-        case GeneralMessage.ERROR:
-          user.node.role = Role.Zero;
-          log.e("ERROR: " + load.event.error.toString());
-          break;
-      }
+    if (load.event == 'UPDATED') {
+      // Update Graph
+      user.node.updateGraph(load.from);
+      add(Update(user.node.status));
+    } else if (load.event == 'EXITED') {
+      // Update Graph
+      user.node.exitGraph(load.from);
+      add(Update(user.node.status));
+    } else if (load.event == 'DECLINED') {
+      // Reset Connection
+      user.node.reset(match: load.from);
+      add(Update(user.node.status));
+    } else if (load.event == 'COMPLETED') {
+      user.node.role = Role.Zero;
+      log.i("COMPLETED: " + data.toString());
+      data.add(WriteFile());
+      add(End(EndType.Complete));
+    } else if (load.event == 'ERROR') {
+      user.node.role = Role.Zero;
+      log.e("ERROR: " + load.error.toString());
     }
     // Wait for Server
     yield Loading();
@@ -137,7 +129,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     await user.node.offer(event.to, data.currentFile.metadata);
 
     // Change Status
-    add(Update(Status.Pending, match: event.to));
+    add(Update(Status.Pending, to: event.to));
   }
 
 // **********************
@@ -146,14 +138,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
     if (event.decision) {
       // Handle Offer from Requested Peer
-      await user.node.handleOffer(event.offer);
+      await user.node.handleOffer(event.to, event.offer);
 
       // Add File to Queue
       data.traffic.addIncoming(event.offer.from.id, event.offer.metadata);
 
       // Change State
       user.node.status = Status.Transferring;
-      add(Update(Status.Transferring, match: event.offer.from));
+      add(Update(Status.Transferring, from: event.offer.from));
     } else {
       user.node.decline(event.offer.from);
       user.node.status = Status.Available;
@@ -183,25 +175,25 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         break;
       case Status.Pending:
         user.node.role = Role.Sender;
-        yield Pending(match: event.match);
+        yield Pending(match: event.to);
         break;
       case Status.Offered:
-        yield Requested(offer: event.offer);
+        yield Requested(event.offer, event.metadata, event.from);
         break;
       case Status.Answered:
         user.node.role = Role.Sender;
         // Handle Answer from Answered Peer
-        await user.node.handleAnswer(event.answer);
+        await user.node.handleAnswer(event.from, event.answer);
 
         // Begin Transfer
-        data.add(Transfer(event.match));
+        data.add(Transfer(event.from));
 
         // Change State
         user.node.status = Status.Transferring;
-        yield Transferring(event.match);
+        yield Transferring(event.from);
         break;
       case Status.Transferring:
-        yield Transferring(event.match);
+        yield Transferring(event.from);
         break;
       default:
         yield Loading();

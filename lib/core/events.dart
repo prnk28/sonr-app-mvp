@@ -15,6 +15,7 @@ enum WebEventType { Connect, Search, Active, Invite, Authorize }
 
 // Cubit Name Enum
 enum CubitType { Direction, Progress }
+enum BlocType { Data, Device, User, Web }
 
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
@@ -71,31 +72,27 @@ extension Events on BuildContext {
     }
   }
 
-// ** WebBLoC Applicable Events for Frontend ** //
-  emitWebBlocEvent(WebEventType event,
-      {bool decision, Peer match, SonrFile file, Offer offer}) {
-    switch (event) {
-      case WebEventType.Connect:
-        BlocProvider.of<WebBloc>(this).add(Connect());
-        break;
-      case WebEventType.Search:
-        BlocProvider.of<WebBloc>(this).add(Update(Status.Searching));
-        break;
-      case WebEventType.Active:
-        BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
-        break;
-      case WebEventType.Invite:
-        BlocProvider.of<WebBloc>(this).add(Invite(match, file));
-        break;
-      case WebEventType.Authorize:
-        BlocProvider.of<WebBloc>(this).add(Authorize(decision, offer));
-        break;
-    }
-  }
-
 // *********************** //
 // ** Retrieval Methods ** //
 // *********************** //
+  getBloc(BlocType type) {
+    switch (type) {
+      case BlocType.Data:
+        return BlocProvider.of<DataBloc>(this);
+        break;
+      case BlocType.Device:
+        return BlocProvider.of<DeviceBloc>(this);
+        break;
+      case BlocType.User:
+        return BlocProvider.of<UserBloc>(this);
+        break;
+      case BlocType.Web:
+        return BlocProvider.of<WebBloc>(this);
+        break;
+    }
+    return null;
+  }
+
   getCubit(CubitType type) {
     switch (type) {
       case CubitType.Direction:

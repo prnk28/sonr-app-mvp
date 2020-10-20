@@ -5,28 +5,36 @@ part of 'peer.dart';
 // *************************** //
 extension RTCHandler on Peer {
   // ** Handle Peer Authorization ** //
-  handleAnswer(Answer answer) async {
+  handleAnswer(Peer match, dynamic answer) async {
+    // Get Match Node
+    var description = answer['description'];
+
     // Add Peer Connection
-    var pc = session.peerConnections[answer.from.id];
+    var pc = session.peerConnections[match.id];
     if (pc != null) {
-      await pc.setRemoteDescription(answer.description);
+      await pc.setRemoteDescription(
+          new RTCSessionDescription(description['sdp'], description['type']));
     }
   }
 
   // ** Peer Requested User ** //
-  handleOffer(Offer offer) async {
+  handleOffer(Peer match, dynamic offer) async {
+    // Update Signalling State
+    session.id = offer['session_id'];
+    session.updateState(SignalingState.CallStateNew);
+
     // Create Peer Connection
-    var pc = await this.newPeerConnection(offer.from.id);
+    var pc = await this.newPeerConnection(match.id);
 
     // Initialize RTC Receiver Connection
-    session.initializePeer(this.role, pc, offer.from,
-        description: offer.description);
+    session.initializePeer(Role.Receiver, pc, match,
+        description: offer['description']);
 
     // Set Candidates
     await session.setRemoteCandidates(pc);
 
     // Send Answer After
-    await answer(offer.from, pc);
+    await answer(match, pc);
   }
 
   // ** Handle ICE Candidate Received ** //

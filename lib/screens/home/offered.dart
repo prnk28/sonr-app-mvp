@@ -1,6 +1,7 @@
 part of 'window.dart';
 
-Widget buildAuthenticationView(BuildContext context, Offer offer) {
+Widget buildAuthenticationView(
+    BuildContext context, dynamic offer, Peer match) {
   return NeumorphicTheme(
       theme: lightTheme(),
       darkTheme: darkTheme(),
@@ -17,9 +18,10 @@ Widget buildAuthenticationView(BuildContext context, Offer offer) {
                       alignment: Alignment.topRight,
                       child: GestureDetector(
                           onTap: () {
-                            // Update WebBloc to Inform User Accepted
-                            context.emitWebBlocEvent(WebEventType.Authorize,
-                                match: offer.from, decision: false);
+                            // Update WebBloc to Inform User Declined
+                            context
+                                .getBloc(BlocType.Web)
+                                .Authorize(offer, match, false);
 
                             // Pop Window
                             Navigator.pop(context);
@@ -37,18 +39,18 @@ Widget buildAuthenticationView(BuildContext context, Offer offer) {
                   Padding(padding: EdgeInsets.only(top: 25)),
 
                   // Build Auth Action
-                  _buildAuthButton(context, offer)
+                  _buildAuthButton(context, offer, match)
                 ],
               ))));
 }
 
-Row _buildItem(BuildContext context, Offer offer) {
+Row _buildItem(BuildContext context, Peer match) {
   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
     Icon(Icons.image, size: 100),
     Column(
       children: [
-        Text(offer.from.profile.firstName, style: headerTextStyle()),
-        Text(offer.from.device,
+        Text(match.profile.firstName, style: headerTextStyle()),
+        Text(match.device,
             style: TextStyle(
                 fontFamily: "Raleway",
                 fontWeight: FontWeight.w500,
@@ -59,12 +61,12 @@ Row _buildItem(BuildContext context, Offer offer) {
   ]); // FlatButton// Container
 }
 
-NeumorphicButton _buildAuthButton(BuildContext context, Offer offer) {
+NeumorphicButton _buildAuthButton(
+    BuildContext context, dynamic offer, Peer match) {
   return NeumorphicButton(
       onPressed: () {
         // Update WebBloc to Inform User Accepted
-        context.emitWebBlocEvent(WebEventType.Authorize,
-            offer: offer, decision: true);
+        context.getBloc(BlocType.Web).Authorize(offer, match, false);
       },
       style: NeumorphicStyle(
           depth: 8,

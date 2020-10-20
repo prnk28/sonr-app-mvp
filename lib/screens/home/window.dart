@@ -11,11 +11,13 @@ class WindowView extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: BlocBuilder<WebBloc, WebState>(builder: (context, state) {
           if (state is Requested) {
-            return buildAuthenticationView(context, state.offer);
+            return buildAuthenticationView(context, state.offer, state.from);
           }
-          return Container(color: NeumorphicTheme.baseColor(context),
-              height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width / 2,);
+          return Container(
+            color: NeumorphicTheme.baseColor(context),
+            height: MediaQuery.of(context).size.height / 3,
+            width: MediaQuery.of(context).size.width / 2,
+          );
         }));
   }
 }

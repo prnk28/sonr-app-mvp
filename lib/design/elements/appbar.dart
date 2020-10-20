@@ -56,7 +56,7 @@ NeumorphicAppBar leadingAppBar(
                   context.emitUserBlocEvent(UserEventType.SetStatus);
 
                   // Update Node
-                  context.emitWebBlocEvent(WebEventType.Active);
+                  context.getBloc(BlocType.Web).add(Update(Status.Available));
                 }
 
                 // Pop Navigation

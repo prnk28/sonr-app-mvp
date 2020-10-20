@@ -43,17 +43,16 @@ extension SocketEmitter on Peer {
 // **************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
-  offer(Peer to, Metadata meta) async {
-    session.id = this.id + '-' + to.id;
-
+  offer(Peer match, dynamic fileInfo) async {
     // Change Session State
+    session.id = this.id + '-' + match.id;
     session.updateState(SignalingState.CallStateNew);
 
     // Add Peer Connection
-    RTCPeerConnection pc = await this.newPeerConnection(to.id);
+    RTCPeerConnection pc = await this.newPeerConnection(match.id);
 
     // Initialize RTC Sender Connection
-    session.initializePeer(this.role, pc, to);
+    session.initializePeer(Role.Sender, pc, match);
 
     try {
       // Create Offer Description
@@ -61,8 +60,15 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      socket.emit("OFFER", Offer.create(this, to, meta, s));
-      log.i("OFFER: " + Offer.create(this, to, meta, s));
+      socket.emit("OFFER", [
+        this.toMap(),
+        match.id,
+        {
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': session.id,
+          'metadata': fileInfo
+        }
+      ]);
     } catch (e) {
       print(e.toString());
     }
@@ -76,7 +82,14 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      socket.emit("ANSWER", Answer.create(this, match, s));
+      socket.emit("ANSWER", [
+        this.toMap(),
+        match.id,
+        {
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': session.id,
+        }
+      ]);
     } catch (e) {
       print(e.toString());
     }
