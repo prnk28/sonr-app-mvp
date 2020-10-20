@@ -20,16 +20,6 @@ extension Routing on BuildContext {
   }
 
   // Display Transfer as Modal
-  pushRequested(Offer offer) {
-    showDialog(
-        barrierDismissible: false,
-        context: this,
-        builder: (BuildContext context) {
-          return RequestedView(offer);
-        });
-  }
-
-  // Display Transfer as Modal
   pushTransfer() {
     // Change View as Modal
     Navigator.push(

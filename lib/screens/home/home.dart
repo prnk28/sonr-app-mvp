@@ -1,8 +1,6 @@
 import 'package:http/http.dart';
 import 'package:sonar_app/screens/screens.dart';
 
-part 'requested.dart';
-
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,7 +19,12 @@ class HomeScreen extends StatelessWidget {
           body: BlocBuilder<WebBloc, WebState>(
             buildWhen: (past, curr) {
               if (curr is Requested) {
-                context.pushRequested(curr.offer);
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return WindowView();
+                    });
                 return false;
               } else if (curr is Loading) {
                 return false;
