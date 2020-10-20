@@ -6,9 +6,6 @@ part 'emitter.dart';
 part 'graphing.dart';
 part 'handler.dart';
 
-// Role in DataChannel
-enum Role { Sender, Receiver, Zero }
-
 // Status of Node
 enum Status {
   Offline, // Initial Status
@@ -28,7 +25,6 @@ class Peer {
   String device;
   Profile profile;
   DateTime lastUpdated;
-  Role role;
   Status _status;
   Status get status {
     return _status;
@@ -57,7 +53,6 @@ class Peer {
     // Set Default Variables
     this.id = "";
     this.direction = 0.01;
-    this.role = Role.Zero;
     this.status = Status.Offline;
     this.device = Platform.operatingSystem.toUpperCase();
 

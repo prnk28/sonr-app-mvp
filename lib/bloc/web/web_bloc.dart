@@ -84,8 +84,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapConnectToState(Connect event) async* {
     // Check if Peer Located
     if (user.node.connect()) {
-      user.node.role = Role.Zero;
-
       // Wait for Server
       yield Loading();
     }
@@ -112,13 +110,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       add(Update(user.node.status));
       yield Loading();
     } else if (load.event == 'COMPLETED') {
-      user.node.role = Role.Zero;
       log.i("COMPLETED: " + data.toString());
       data.add(WriteFile());
       add(End(EndType.Complete));
       yield Loading();
     } else if (load.event == 'ERROR') {
-      user.node.role = Role.Zero;
       log.e("ERROR: " + load.error.toString());
       yield Loading();
     }
@@ -161,31 +157,35 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Update Event ***
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
-    // Update User Peer Node
-    user.node.update(event.newStatus);
-
     // Action by Status
-    switch (user.node.status) {
+    switch (event.newStatus) {
       case Status.Offline:
+        // Update User Peer Node
+        user.node.update(event.newStatus);
         yield Disconnected();
         break;
       case Status.Available:
-        user.node.role = Role.Receiver;
+        // Update User Peer Node
+        user.node.update(event.newStatus);
         yield Available(user.node);
         break;
       case Status.Searching:
-        user.node.role = Role.Sender;
+        // Update User Peer Node
+        user.node.update(event.newStatus);
         yield Searching(user.node);
         break;
       case Status.Pending:
-        user.node.role = Role.Sender;
+        // Update User Peer Node
+        user.node.update(event.newStatus);
         yield Pending(match: event.to);
         break;
       case Status.Offered:
-        yield Requested(event.offer, event.metadata, event.from);
+        // Update User Peer Node
+        user.node.update(event.newStatus);
+        yield Requested(
+            offer: event.offer, metadata: event.metadata, from: event.from);
         break;
       case Status.Answered:
-        user.node.role = Role.Sender;
         // Handle Answer from Answered Peer
         await user.node.handleAnswer(event.from, event.answer);
 
@@ -197,6 +197,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Transferring(event.from);
         break;
       case Status.Transferring:
+        // Update User Peer Node
+        user.node.update(event.newStatus);
         yield Transferring(event.from);
         break;
       default:

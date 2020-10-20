@@ -6,6 +6,9 @@ import 'package:sonar_app/repository/repository.dart';
 // ** Enum for Traffic Management ** //
 enum TrafficDirection { Incoming, Outgoing }
 
+// Role in DataChannel
+enum Role { Sender, Receiver, Zero }
+
 // *********************************** //
 // ** Data Transfer Traffic Manager ** //
 // *********************************** //
@@ -59,7 +62,7 @@ class Traffic {
   }
 
   // ** Add File to Incoming ** //
-  addIncoming( Metadata meta) {
+  addIncoming(Metadata meta) {
     // Create SonrFile
     SonrFile file = new SonrFile(metadata: meta);
 

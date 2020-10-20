@@ -1,4 +1,5 @@
 import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
@@ -32,18 +33,19 @@ class SocketSubscriber {
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
+      log.i("Offered: " + data.toString());
+      Peer peer = Peer.fromMap(data[0]);
+      Metadata metadata = Metadata.fromMap(data[1]['metadata']);
       // Inform WebBloc
       _web.add(Update(Status.Offered,
-          from: Peer.fromMap(data[0]),
-          metadata: Metadata.fromMap(data[1]['metadata']),
-          offer: data[1]));
+          from: peer, metadata: metadata, offer: data[1]));
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
+      Peer peer = Peer.fromMap(data[0]);
       // Inform WebBloc
-      _web.add(Update(Status.Answered,
-          from: Peer.fromMap(data[0]), answer: data[1]));
+      _web.add(Update(Status.Answered, from: peer, answer: data[1]));
     });
 
     // -- MATCH DECLINED REQUEST --

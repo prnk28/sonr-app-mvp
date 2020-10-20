@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) {
-                      return WindowView();
+                      return WindowView(curr.offer, curr.from);
                     });
                 return false;
               } else if (curr is Loading) {

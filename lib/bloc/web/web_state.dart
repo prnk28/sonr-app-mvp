@@ -55,7 +55,7 @@ class Requested extends WebState {
   final Metadata metadata;
   final Peer from;
 
-  const Requested(this.offer, this.metadata, this.from);
+  const Requested({this.offer, this.metadata, this.from});
 }
 
 // *********************************************
