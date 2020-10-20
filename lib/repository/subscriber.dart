@@ -57,7 +57,7 @@ class SocketSubscriber {
       dynamic offer = data[1];
 
       // Get Metadata
-      Metadata meta = Metadata.fromMap(data[1]['metadata']);
+      Metadata meta = new Metadata(map: offer['metadata']);
 
       // Log Event
       log.i("OFFERED: " + data.toString());
@@ -69,12 +69,15 @@ class SocketSubscriber {
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
+      // Get Data
+      Peer from = Peer.fromMap(data[0]);
+      dynamic answer = data[1];
+
       // Log Event
       log.i("ANSWERED: " + data.toString());
 
       // Inform WebBloc
-      _web.add(Update(Status.Answered,
-          decision: true, from: Peer.fromMap(data[0]), answer: data[1]));
+      _web.add(Update(Status.Answered, from: from, answer: answer));
     });
 
     // -- MATCH DECLINED REQUEST --
@@ -82,9 +85,11 @@ class SocketSubscriber {
       // Log Event
       log.i("DECLINED: " + data.toString());
 
-      // Inform Bloc
-      _web.add(
-          Update(Status.Answered, decision: false, from: Peer.fromMap(data)));
+      // Reset Connection
+      _user.node.reset(match: data);
+
+      // Change BLoC State
+      _web.add(Update(Status.Searching));
     });
 
     // -- MATCH ICE CANDIDATES --

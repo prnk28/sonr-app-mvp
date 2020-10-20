@@ -32,14 +32,7 @@ class Traffic {
     // Listen to DataChannel Status
     _session.onDataChannel = (channel) {
       // Check Channel Status
-      if (channel == null) {
-        isChannelActive = false;
-      }
-      // Channel Provided
-      else {
-        _dataChannel = channel;
-        isChannelActive = true;
-      }
+      _dataChannel = channel;
     };
 
     // Handle DataChannel Message
@@ -53,12 +46,12 @@ class Traffic {
   }
 
   // ** Add File to Incoming/Outgoing ** //
-  addFile(TrafficDirection direction, {File file, Map info}) {
+  addFile(TrafficDirection direction, {File file, Metadata meta}) {
     // Check Incoming/Outgoing
     switch (direction) {
       case TrafficDirection.Incoming:
         // Create and Add to Incoming map
-        _incoming.add(new SonrFile(Role.Receiver, info: info));
+        _incoming.add(new SonrFile(Role.Receiver, metadata: meta));
 
         // Set as current
         current = _incoming.first;
@@ -125,12 +118,10 @@ class SonrFile {
   Metadata metadata;
 
   // ** Constructer ** //
-  SonrFile(this.role, {this.file, Map info}) {
+  SonrFile(this.role, {this.file, this.metadata}) {
     // Check what kind of data provided
-    if (info != null && this.file == null) {
-      metadata = Metadata.fromMap(info);
-    } else {
-      metadata = new Metadata(this.file);
+    if (this.file != null) {
+      this.metadata = new Metadata(file: this.file);
     }
   }
 

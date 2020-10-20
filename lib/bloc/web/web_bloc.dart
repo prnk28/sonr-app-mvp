@@ -111,53 +111,29 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Pending(match: event.from);
         break;
       case Status.Requested:
+        // Add File to Queue
+        data.add(Queue(QueueType.IncomingFile, metadata: event.metadata));
+
         yield Requested(
             match: event.from, metadata: event.metadata, offer: event.offer);
         break;
       case Status.Authorized:
-        // Peer accepted request
-        if (event.decision) {
-          // Handle Offer from Requested Peer
-          await user.node.handleOffer(event.from, event.offer);
+        // Handle Offer from Requested Peer
+        await user.node.handleOffer(event.from, event.offer);
 
-          // Add File to Queue
-          data.add(
-              Queue(QueueType.IncomingFile, info: event.offer['metadata']));
-
-          // Change State
-          add(Update(Status.Transferring));
-        }
-        // Peer Declined Request
-        else {
-          // Emit Decline
-          user.node.decline(event.from);
-
-          // Change State
-          add(Update(Status.Available));
-        }
+        // Change State
+        user.node.status = Status.Transferring;
+        yield Transferring();
         break;
       case Status.Answered:
-        // Peer accepted request
-        if (event.decision) {
-          // Handle Answer from Answered Peer
-          await user.node.handleAnswer(event.from, event.answer);
+        // Handle Answer from Answered Peer
+        await user.node.handleAnswer(event.from, event.answer);
 
-          // Begin Transfer
-          data.add(Transfer(event.from));
+        // Begin Transfer
+        data.add(Transfer(event.from));
 
-          // Change State
-          add(Update(Status.Transferring));
-        }
-        // Peer Declined Request
-        else {
-          // Reset Connection
-          user.node.reset(match: event.from);
-
-          // Change State
-          add(Update(Status.Searching));
-        }
-        break;
-      case Status.Transferring:
+        // Change State
+        user.node.status = Status.Transferring;
         yield Transferring();
         break;
       default:

@@ -16,47 +16,43 @@ class Metadata {
 
   // -- Chunking Progress Variables --
   int chunksTotal;
-  double progress;
   int currentChunkNum;
+  int remainingChunks;
+  double progress;
 
   // ** Constructor **
-  Metadata(File file) {
-    // Check if File Provided
-    if (file != null) {
-      // Set Default Variables
-      this.id = uuid.v1();
-      this.currentChunkNum = 0;
-      this.progress = 0.0;
+  Metadata({File file, Map map}) {
+    // Set Id
+    this.id = uuid.v1();
 
+    // If File Provided
+    if (file != null) {
       // Calculate File Info
+      this.progress = 0.0;
       this.size = file.lengthSync();
       this.chunksTotal = (this.size / CHUNK_SIZE).ceil();
+      this.currentChunkNum = 0;
+      this.remainingChunks = this.chunksTotal;
 
       // Set File Info
       this.path = file.path;
       this.type = getFileTypeFromPath(this.path);
       this.name = basename(this.path);
     }
-  }
 
-  // ** Build Metadata from Map **
-  static fromMap(Map map) {
-    // Init Metadata Object
-    Metadata meta = new Metadata(null);
+    // If Map Provided
+    if (map != null) {
+      // Set Chunking Info from Map
+      this.progress = 0.0;
+      this.size = map["size"];
+      this.chunksTotal = map["chunks_total"];
+      this.currentChunkNum = 0;
+      this.remainingChunks = this.chunksTotal;
 
-    // Set Default Variables
-    meta.id = uuid.v1();
-    meta.currentChunkNum = 0;
-    meta.progress = 0.0;
-
-    // Set from Map
-    meta.size = map["size"];
-    meta.chunksTotal = map["chunks_total"];
-    meta.name = map["name"];
-    meta.type = enumFromString(map["type"], FileType.values);
-
-    // Return
-    return meta;
+      // Set File Info from Map
+      this.name = map["name"];
+      this.type = enumFromString(map["type"], FileType.values);
+    }
   }
 
   // ** Update Progress
@@ -65,7 +61,7 @@ class Metadata {
     this.currentChunkNum += 1;
 
     // Find Remaining
-    var remainingChunks = this.chunksTotal - this.currentChunkNum;
+    this.remainingChunks = this.chunksTotal - this.currentChunkNum;
 
     // Calculate Progress
     this.progress = (this.chunksTotal - remainingChunks) / this.chunksTotal;

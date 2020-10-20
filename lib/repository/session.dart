@@ -47,11 +47,7 @@ class RTCSession {
 // ****************************
   addDataChannel(id, RTCDataChannel channel) {
     // Send Callback to DataBloc
-    channel.onDataChannelState = (e) {
-      if (e == RTCDataChannelState.RTCDataChannelClosed) {
-        this.onDataChannel(null);
-      }
-    };
+    channel.onDataChannelState = (e) {};
 
     // Add Message as Callback
     channel.onMessage = (RTCDataChannelMessage data) {
@@ -102,6 +98,16 @@ class RTCSession {
     else {
       // Create New DataChannel
       this.createDataChannel(match.id, pc);
+    }
+  }
+
+  peersUpdated(data) {
+    List<dynamic> peers = data;
+    if (this.onPeersUpdate != null) {
+      Map<String, dynamic> event = new Map<String, dynamic>();
+      event['self'] = this.id;
+      event['peers'] = peers;
+      this.onPeersUpdate(event);
     }
   }
 

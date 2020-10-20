@@ -92,7 +92,6 @@ extension RTCEmitter on Peer {
         match.id,
         {
           'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': session.id,
         }
       ]);
     } catch (e) {

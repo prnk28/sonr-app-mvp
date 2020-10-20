@@ -56,7 +56,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     switch (event.type) {
       case QueueType.IncomingFile:
         // Add to Incoming
-        traffic.addFile(TrafficDirection.Incoming, info: event.info);
+        traffic.addFile(TrafficDirection.Incoming, meta: event.metadata);
 
         // Set as Queued
         yield Queued(traffic.current);
@@ -94,41 +94,36 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** Transfer Event **
 // ********************
   Stream<DataState> _mapTransferState(Transfer event) async* {
-    // Check if DataChannel is Open
-    if (traffic.isChannelActive) {
-      // Open File in Reader and Send Data pieces as chunks
-      final reader = ChunkedStreamIterator(traffic.current.file.openRead());
+    // Open File in Reader and Send Data pieces as chunks
+    final reader = ChunkedStreamIterator(traffic.current.file.openRead());
 
-      // While the reader has a next byte
-      while (true) {
-        // read one CHUNK
-        var data = await reader.read(CHUNK_SIZE);
-        var chunk = Uint8List.fromList(data);
+    // While the reader has a next byte
+    while (true) {
+      // read one CHUNK
+      var data = await reader.read(CHUNK_SIZE);
+      var chunk = Uint8List.fromList(data);
 
-        // End of List
-        if (data.length <= 0) {
-          // Send Complete Message on same DC
-          user.node.complete(event.match, traffic.current);
+      // End of List
+      if (data.length <= 0) {
+        // Send Complete Message on same DC
+        user.node.complete(event.match, traffic.current);
 
-          // Clear outgoing traffic
-          traffic.clear(TrafficDirection.Outgoing);
+        // Clear outgoing traffic
+        traffic.clear(TrafficDirection.Outgoing);
 
-          // Call Bloc Event
-          yield Done();
-          break;
-        }
-        // Send Current Chunk
-        else {
-          // Sends and Updates Progress
-          traffic.transmit(chunk);
+        // Call Bloc Event
+        yield Done();
+        break;
+      }
+      // Send Current Chunk
+      else {
+        // Sends and Updates Progress
+        traffic.transmit(chunk);
 
-          // Yield Progress
-          yield Sending();
-        }
+        // Yield Progress
+        yield Sending();
       }
     }
-    // Logging
-    log.e("Data Channel is not open");
   }
 
 // *********************

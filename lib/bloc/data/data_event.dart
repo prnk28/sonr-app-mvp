@@ -13,9 +13,9 @@ enum QueueType { IncomingFile, OutgoingFile, Offer }
 class Queue extends DataEvent {
   final QueueType type;
   final Peer match;
-  final Map info;
+  final Metadata metadata;
   final File file;
-  const Queue(this.type, {this.match, this.info, this.file});
+  const Queue(this.type, {this.match, this.metadata, this.file});
 }
 
 // Send Transfer over DataChannel to Peer

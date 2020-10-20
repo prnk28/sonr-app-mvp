@@ -19,9 +19,6 @@ extension RTCHandler on Peer {
 
   // ** Peer Requested User ** //
   handleOffer(Peer match, dynamic offer) async {
-    // Update Signalling State
-    session.updateState(SignalingState.CallStateNew,
-        newId: offer['session_id']);
 
     // Create Peer Connection
     var pc = await this.newPeerConnection(match.id);
@@ -49,17 +46,6 @@ extension RTCHandler on Peer {
       await pc.addCandidate(candidate);
     } else {
       session.remoteCandidates.add(candidate);
-    }
-  }
-
-  // ** Handle Peer Change ** //
-  handlePeerUpdate(data) {
-    List<dynamic> peers = data;
-    if (session.onPeersUpdate != null) {
-      Map<String, dynamic> event = new Map<String, dynamic>();
-      event['self'] = this.id;
-      event['peers'] = peers;
-      session.onPeersUpdate(event);
     }
   }
 
