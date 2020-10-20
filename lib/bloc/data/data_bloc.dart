@@ -47,22 +47,31 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
   }
 
-// **********************
-// ** QueueFile Event **
-// **********************
+// *****************
+// ** Queue Event **
+// *****************
   Stream<DataState> _mapQueueFileState(Queue event) async* {
-    // Set Current File
-    currentFile = event.file;
-
     // Check Queue Type
     switch (event.type) {
       case QueueType.IncomingFile:
+        // Create SonrFile
+        SonrFile file = new SonrFile(metadata: event.metadata);
+
+        // Set Current File
+        currentFile = file;
+
         // Add to Incoming
-        traffic.addFile(TrafficDirection.Incoming, event.file);
+        traffic.addFile(TrafficDirection.Incoming, file);
         break;
       case QueueType.OutgoingFile:
-        // Create Metadata
-        traffic.addFile(TrafficDirection.Outgoing, event.file);
+        // Create SonrFile
+        SonrFile file = new SonrFile(file: event.rawFile);
+
+        // Set Current File
+        currentFile = file;
+
+        // Add to Outgoing
+        traffic.addFile(TrafficDirection.Outgoing, file);
         break;
       case QueueType.Offer:
         print("Not done yet");
@@ -80,7 +89,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     block.add(event.chunk);
 
     // Update Progress in Current MetaData
-    traffic.addProgress(currentFile, Role.Receiver);
+    currentFile.addProgress(this, Role.Receiver);
 
     // Yield Progress
     yield Receiving();
@@ -91,7 +100,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ********************
   Stream<DataState> _mapTransferState(Transfer event) async* {
     // Open File in Reader and Send Data pieces as chunks
-    final reader = ChunkedStreamIterator(currentFile.raw.openRead());
+    final reader = ChunkedStreamIterator(currentFile.file.openRead());
 
     // While the reader has a next byte
     while (true) {
@@ -102,7 +111,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // End of List
       if (data.length <= 0) {
         // Send Complete Message on same DC
-        user.node.complete(event.match, currentFile);
+        user.node.complete(event.match);
         //currentFile = null;
 
         // Clear outgoing traffic
@@ -131,11 +140,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     Directory tempDir = await getTemporaryDirectory();
     var filePath = tempDir.path + '/file_01.tmp';
 
-    // Generate SonrFile
-    SonrFile file = await SonrFile.fromBytes(block.takeBytes(), filePath);
-
-    // Log
-    log.i(file.metadata.name + " saved");
+    // Save File
+    SonrFile file = await currentFile.save(block.takeBytes(), filePath);
 
     // Clear incoming traffic
     traffic.clear(TrafficDirection.Incoming);

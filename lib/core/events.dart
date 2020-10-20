@@ -13,7 +13,7 @@ enum UserEventType { CheckProfile, Register, SetStatus, UpdateProfile }
 // Web Event Enum
 enum WebEventType { Connect, Search, Active, Invite, Authorize }
 
-// BLoC/Cubit Name Enum
+// Cubit Name Enum
 enum CubitType { Direction, Progress }
 
 extension Events on BuildContext {
@@ -31,7 +31,7 @@ extension Events on BuildContext {
         BlocProvider.of<DataBloc>(this).add(FindFile());
         break;
       case DataEventType.OpenFile:
-        // TODO: BlocProvider.of<DataBloc>(this).add(OpenFile(file));
+        // In Progress
         break;
     }
   }
@@ -70,7 +70,7 @@ extension Events on BuildContext {
 
 // ** WebBLoC Applicable Events for Frontend ** //
   emitWebBlocEvent(WebEventType event,
-      {bool decision, Peer match, dynamic offer, dynamic answer}) {
+      {bool decision, Peer match, Offer offer}) {
     switch (event) {
       case WebEventType.Connect:
         BlocProvider.of<WebBloc>(this).add(Connect());
@@ -85,7 +85,7 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Invite(match));
         break;
       case WebEventType.Authorize:
-        BlocProvider.of<WebBloc>(this).add(Authorize(match, decision, offer));
+        BlocProvider.of<WebBloc>(this).add(Authorize(decision, offer));
         break;
     }
   }

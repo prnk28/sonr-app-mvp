@@ -1,68 +1,46 @@
-import 'dart:io';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 class Metadata {
-  // -- SQL Fields --
-  String id;
+  // Reference to JSON Map
+  static Map fileTypes;
+
+  // -- Properties --
+  String id = uuid.v1();
   String name;
   int size;
+  int chunksTotal;
   FileType type;
   String path;
   Map sender;
   DateTime received;
   DateTime lastOpened;
 
-  // -- Chunking Progress Variables --
-  int chunksTotal;
+  // ** Constructer: Get MetaData from Map ** //
+  static Metadata fromMap(Map map) {
+    Metadata temp = new Metadata();
+    // Set Chunking Info from Map
+    temp.size = map["size"];
+    temp.chunksTotal = map["chunks_total"];
 
-  // ** Constructor **
-  Metadata({File file, Map map}) {
-    // Set Id
-    this.id = uuid.v1();
-
-    // If File Provided
-    if (file != null) {
-      // Calculate File Info
-      this.size = file.lengthSync();
-      this.chunksTotal = (this.size / CHUNK_SIZE).ceil();
-
-      // Set File Info
-      this.path = file.path;
-      this.name = basename(this.path);
-    }
-
-    // If Map Provided
-    if (map != null) {
-      // Set Chunking Info from Map
-      this.size = map["size"];
-      this.chunksTotal = map["chunks_total"];
-
-      // Set File Info from Map
-      this.name = map["name"];
-      this.type = enumFromString(map["type"], FileType.values);
-    }
+    // Set File Info from Map
+    temp.name = map["name"];
+    temp.type = enumFromString(map["type"], FileType.values);
+    return temp;
   }
 
-  initialize() async {
-    this.type = await getFileTypeFromPath(this.path);
-    log.i("FileType: " + this.type.toString());
-  }
+  // ** Constructer: Get MetaData from File ** //
+  static Metadata fromFile(File file) {
+    Metadata temp = new Metadata();
+    // Calculate File Info
+    temp.size = file.lengthSync();
+    temp.chunksTotal = (temp.size / CHUNK_SIZE).ceil();
+    temp.type = getFileTypeFromPath(temp.path);
 
-  // ** Read Bytes from Metadata Path **
-  Future<Uint8List> getBytes() async {
-    Uri myUri = Uri.parse(this.path);
-    File audioFile = new File.fromUri(myUri);
-    Uint8List bytes;
-    await audioFile.readAsBytes().then((value) {
-      bytes = Uint8List.fromList(value);
-      log.i('reading of bytes is completed');
-    }).catchError((onError) {
-      log.w('Exception Error while reading audio from path:' +
-          onError.toString());
-    });
-    return bytes;
+    // Set File Info
+    temp.path = file.path;
+    temp.name = basename(temp.path);
+    return temp;
   }
 
   // ** Convert to Map **
@@ -75,4 +53,38 @@ class Metadata {
       "type": enumAsString(this.type)
     };
   }
+}
+
+// ******************** //
+// ** FileType Enum ** //
+// ******************** //
+// -- FileType Enum --
+enum FileType {
+  Audio,
+  Compressed,
+  Data,
+  Image,
+  Presentation,
+  Spreadsheet,
+  Unknown,
+  Video,
+  Word
+}
+
+// -- Get FileType Method --
+getFileTypeFromPath(path) {
+  // Get File Extension
+  var kind = extension(path);
+  log.i(kind);
+
+  // Init Type
+  FileType type = FileType.Unknown;
+
+  // Iterate
+  Metadata.fileTypes.forEach((key, value) {
+    if (key == kind) {
+      type = enumFromString(value, FileType.values);
+    }
+  });
+  return type;
 }

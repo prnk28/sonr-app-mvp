@@ -1,10 +1,8 @@
 part of 'home.dart';
 
 class RequestedView extends StatelessWidget {
-  final SonrFile file;
-  final Peer match;
-  final dynamic offer;
-  const RequestedView(this.file, this.match, this.offer);
+  final Offer offer;
+  const RequestedView(this.offer);
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -35,7 +33,7 @@ class RequestedView extends StatelessWidget {
                                   // Update WebBloc to Inform User Accepted
                                   context.emitWebBlocEvent(
                                       WebEventType.Authorize,
-                                      match: this.match,
+                                      match: this.offer.from,
                                       decision: false);
 
                                   // Pop Window
@@ -51,7 +49,7 @@ class RequestedView extends StatelessWidget {
                                     )))),
 
                         // Build Item from Metadata and Peer
-                        _buildItem(context, this.file, this.match),
+                        _buildItem(context),
                         Padding(padding: EdgeInsets.only(top: 25)),
 
                         // Build Auth Action
@@ -60,13 +58,13 @@ class RequestedView extends StatelessWidget {
                     )))));
   }
 
-  Row _buildItem(BuildContext context, SonrFile file, Peer match) {
+  Row _buildItem(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Icon(Icons.image, size: 100),
       Column(
         children: [
-          Text(match.profile.firstName, style: headerTextStyle()),
-          Text(match.device,
+          Text(offer.from.profile.firstName, style: headerTextStyle()),
+          Text(offer.from.device,
               style: TextStyle(
                   fontFamily: "Raleway",
                   fontWeight: FontWeight.w500,
@@ -82,7 +80,7 @@ class RequestedView extends StatelessWidget {
         onPressed: () {
           // Update WebBloc to Inform User Accepted
           context.emitWebBlocEvent(WebEventType.Authorize,
-              offer: this.offer, match: this.match, decision: true);
+              offer: this.offer, decision: true);
         },
         style: NeumorphicStyle(
             depth: 8,

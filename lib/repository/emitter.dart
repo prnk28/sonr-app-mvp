@@ -29,14 +29,9 @@ extension SocketEmitter on Peer {
   }
 
   // ** Node has Updated ** //
-  update(Status newStatus, {double newDirection}) {
+  update(Status newStatus) {
     // Update Status
     this.status = newStatus;
-
-    // Update Direction
-    if (newDirection != null) {
-      this.direction = newDirection;
-    }
 
     // Emit to Server
     socket.emit("UPDATE", this.toMap());
@@ -48,16 +43,16 @@ extension SocketEmitter on Peer {
 // **************************** //
 extension RTCEmitter on Peer {
   // ** Invite Peer to Transfer ** //
-  offer(Peer match, SonrFile file) async {
+  offer(Peer to, Metadata meta) async {
     // Change Session State
     session.updateState(SignalingState.CallStateNew,
-        newId: this.id + '-' + match.id);
+        newId: this.id + '-' + to.id);
 
     // Add Peer Connection
-    RTCPeerConnection pc = await this.newPeerConnection(match.id);
+    RTCPeerConnection pc = await this.newPeerConnection(to.id);
 
     // Initialize RTC Sender Connection
-    session.initializePeer(false, pc, match);
+    session.initializePeer(this.role, pc, to);
 
     try {
       // Create Offer Description
@@ -65,15 +60,7 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      socket.emit("OFFER", [
-        this.toMap(),
-        match.id,
-        {
-          'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': session.id,
-          'metadata': file.metadata.toMap()
-        }
-      ]);
+      socket.emit("OFFER", Offer.create(this, to, meta, s));
     } catch (e) {
       print(e.toString());
     }
@@ -87,21 +74,15 @@ extension RTCEmitter on Peer {
       pc.setLocalDescription(s);
 
       // Emit to Socket.io
-      socket.emit("ANSWER", [
-        this.toMap(),
-        match.id,
-        {
-          'description': {'sdp': s.sdp, 'type': s.type},
-        }
-      ]);
+      socket.emit("ANSWER", Answer.create(this, match, s));
     } catch (e) {
       print(e.toString());
     }
   }
 
-  complete(Peer match, SonrFile file) {
+  complete(Peer match) {
     // Emit to Socket.io
-    socket.emit("COMPLETE", [this.toMap(), match.id, file.toMap()]);
+    socket.emit("COMPLETE", [this.toMap(), match.id]);
   }
 
   decline(Peer match) {
@@ -117,18 +98,7 @@ extension RTCEmitter on Peer {
 
     // Send ICE Message
     pc.onIceCandidate = (candidate) {
-      socket.emit("CANDIDATE", [
-        this.toMap(),
-        id,
-        {
-          'candidate': {
-            'sdpMLineIndex': candidate.sdpMlineIndex,
-            'sdpMid': candidate.sdpMid,
-            'candidate': candidate.candidate,
-          },
-          'session_id': this.id,
-        }
-      ]);
+      socket.emit("CANDIDATE", Candidate.create(this, id, candidate));
     };
     return pc;
   }

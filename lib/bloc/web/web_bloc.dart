@@ -28,18 +28,24 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     socketSub = new SocketSubscriber(user, this);
 
     // ** Device BLoC Subscription ** //
-    directionSub = device.directionCubit.listen((direction) {
+    directionSub = device.directionCubit.listen((newDir) {
       // Check Diff Direction
-      if (direction != user.node.direction && this.state is! Loading) {
+      if (newDir != user.node.direction && this.state is! Loading) {
         // Device is Searching
         if (this.state is Searching) {
+          // Update Direction
+          user.node.direction = newDir;
+
           // Update WebBloc State
-          add(Update(Status.Searching, newDirection: direction));
+          add(Update(Status.Searching));
         }
         // Send with 500ms delay
         else if (this.state is Available) {
+          // Update Direction
+          user.node.direction = newDir;
+
           // Update WebBloc State
-          add(Update(Status.Available, newDirection: direction));
+          add(Update(Status.Available));
         }
       }
     });
@@ -78,6 +84,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapConnectToState(Connect event) async* {
     // Check if Peer Located
     if (user.node.connect()) {
+      user.node.role = Role.Zero;
+
       // Wait for Server
       yield Loading();
     }
@@ -86,9 +94,38 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *****************
 // ** Load Event ***
 // *****************
-  Stream<WebState> _mapLoadToState(Load event) async* {
+  Stream<WebState> _mapLoadToState(Load load) async* {
+    // Check General Message
+    if (load.event != null) {
+      switch (load.event.subject) {
+        case GeneralMessage.UPDATED:
+          // Update Graph
+          user.node.updateGraph(load.event.from);
+          add(Update(user.node.status));
+          break;
+        case GeneralMessage.EXITED:
+          // Update Graph
+          user.node.exitGraph(load.event.from);
+          add(Update(user.node.status));
+          break;
+        case GeneralMessage.DECLINED:
+          // Reset Connection
+          user.node.reset(match: load.event.from);
+          add(Update(user.node.status));
+          break;
+        case GeneralMessage.COMPLETED:
+          user.node.role = Role.Zero;
+          log.i("COMPLETED: " + data.toString());
+          add(End(EndType.Complete));
+          break;
+        case GeneralMessage.ERROR:
+          user.node.role = Role.Zero;
+          log.e("ERROR: " + load.event.error.toString());
+          break;
+      }
+    }
     // Wait for Server
-    yield Loading();
+    //yield Loading();
   }
 
 // *****************
@@ -97,20 +134,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapInviteToState(Invite event) async* {
     // Get Data
     File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-    Metadata meta = new Metadata(file: dummyFile);
-
-    // Get FileType
-    await meta.initialize();
-
-    // Create SonrFile
-    SonrFile file = new SonrFile(meta, raw: dummyFile);
 
     // Queue File
-    data.add(Queue(QueueType.OutgoingFile, file: file));
-    await user.node.offer(event.to, file);
+    data.add(Queue(QueueType.OutgoingFile, rawFile: dummyFile));
+    await user.node.offer(event.to, Metadata.fromFile(dummyFile));
 
     // Change Status
-    add(Update(Status.Pending, from: event.to));
+    add(Update(Status.Pending, match: event.to));
   }
 
 // **********************
@@ -119,13 +149,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
     if (event.decision) {
       // Handle Offer from Requested Peer
-      await user.node.handleOffer(event.to, event.offer);
+      await user.node.handleOffer(event.offer);
 
       // Change State
       user.node.status = Status.Transferring;
-      add(Update(Status.Transferring, from: event.to));
+      add(Update(Status.Transferring, match: event.offer.from));
     } else {
-      user.node.decline(event.to);
+      user.node.decline(event.offer.from);
       user.node.status = Status.Available;
       add(Update(Status.Available));
     }
@@ -136,7 +166,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************
   Stream<WebState> _mapUpdateToState(Update event) async* {
     // Update User Peer Node
-    user.node.update(event.newStatus, newDirection: event.newDirection);
+    user.node.update(event.newStatus);
 
     // Action by Status
     switch (user.node.status) {
@@ -144,39 +174,38 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         yield Disconnected();
         break;
       case Status.Available:
+        user.node.role = Role.Receiver;
         yield Available(user.node);
         break;
       case Status.Searching:
+        user.node.role = Role.Sender;
         yield Searching(user.node);
         break;
       case Status.Pending:
-        yield Pending(match: event.from);
+        user.node.role = Role.Sender;
+        yield Pending(match: event.match);
         break;
       case Status.Offered:
-        // Get FileType
-        await event.metadata.initialize();
-
-        // Create SonrFile
-        SonrFile file = new SonrFile(event.metadata);
-
+        user.node.role = Role.Receiver;
         // Add File to Queue
-        data.add(Queue(QueueType.IncomingFile, file: file));
+        data.add(Queue(QueueType.IncomingFile, metadata: event.offer.metadata));
 
-        yield Requested(match: event.from, file: file, offer: event.offer);
+        yield Requested(offer: event.offer);
         break;
       case Status.Answered:
+        user.node.role = Role.Sender;
         // Handle Answer from Answered Peer
-        await user.node.handleAnswer(event.from, event.answer);
+        await user.node.handleAnswer(event.answer);
 
         // Begin Transfer
-        data.add(Transfer(event.from));
+        data.add(Transfer(event.match));
 
         // Change State
         user.node.status = Status.Transferring;
-        yield Transferring();
+        yield Transferring(event.match);
         break;
       case Status.Transferring:
-        yield Transferring();
+        yield Transferring(event.match);
         break;
       default:
         yield Loading();

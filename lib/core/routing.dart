@@ -20,12 +20,12 @@ extension Routing on BuildContext {
   }
 
   // Display Transfer as Modal
-  pushRequested(SonrFile file, Peer match, dynamic offer) {
+  pushRequested(Offer offer) {
     showDialog(
         barrierDismissible: false,
         context: this,
         builder: (BuildContext context) {
-          return RequestedView(file, match, offer);
+          return RequestedView(offer);
         });
   }
 

@@ -32,6 +32,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sonar_app/screens/screens.dart';
 
+export 'sonrfile.dart';
 part 'routing.dart';
 part 'events.dart';
 part 'olc.dart';
@@ -91,6 +92,12 @@ Future<File> getAssetFileByPath(String path) async {
 // ********************* //
 // ** Enum Extensions ** //
 // ********************* //
+// Initialize FileTypes
+initFileType() async {
+  var json = await rootBundle.loadString("assets/data/filetype.json");
+  Metadata.fileTypes = jsonDecode(json);
+}
+
 // Enum Value Converstion to String
 String enumAsString(Object o) => o.toString().split('.').last;
 
@@ -99,47 +106,3 @@ T enumFromString<T>(String key, Iterable<T> values) => values.firstWhere(
       (v) => v != null && key == enumAsString(v),
       orElse: () => null,
     );
-
-// ************************* //
-// ** FileType Extensions ** //
-// ************************* //
-// -- FileType Enum --
-enum FileType {
-  Audio,
-  Compressed,
-  Data,
-  Image,
-  Presentation,
-  Spreadsheet,
-  Unknown,
-  Video,
-  Word
-}
-
-// -- Directory Enum --
-enum AssetDirectory {
-  Animations,
-  Audio,
-  Fonts,
-  RootImages,
-  HeaderImages,
-  SocialImages
-}
-
-// -- Get FileType Method --
-Future<FileType> getFileTypeFromPath(path) async {
-  // Get File Extension
-  var kind = extension(path);
-
-  // Load Json from Assets
-  var json = await rootBundle.loadString("assets/data/filetype.json");
-  Map fileTypes = jsonDecode(json);
-
-  // Iterate
-  fileTypes.forEach((key, value) {
-    if (key == kind) {
-      return enumFromString(value, FileType.values);
-    }
-  });
-  return FileType.Unknown;
-}

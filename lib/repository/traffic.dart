@@ -1,6 +1,5 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 // ** Enum for Traffic Management ** //
@@ -64,7 +63,7 @@ class Traffic {
     _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
     // Update Progress
-    addProgress(file, Role.Sender);
+    file.addProgress(_data, Role.Sender);
   }
 
   // ** Clear a Map ** //
@@ -89,78 +88,5 @@ class Traffic {
         _outgoing.remove(matchId);
         break;
     }
-  }
-
-  // ** Update Progress ** //
-  addProgress(SonrFile file, Role role) {
-    // Increase Current Chunk
-    file.currentChunkNum += 1;
-    var total = file.metadata.chunksTotal;
-
-    // Find Remaining
-    file.remainingChunks = total - file.currentChunkNum;
-
-    // Calculate Progress
-    file.progress = (total - file.remainingChunks) / total;
-
-    // Logging
-    log.i(enumAsString(role) +
-        "Current= " +
-        file.currentChunkNum.toString() +
-        ". Remaining= " +
-        file.remainingChunks.toString() +
-        "-- " +
-        (file.progress * 100).toString() +
-        "%");
-
-    // Update Cubit
-    _data.progress.update(file.progress);
-  }
-}
-
-// **************************** //
-// ** Holds Metadata and Raw ** //
-// **************************** //
-class SonrFile {
-  final File raw;
-  final Metadata metadata;
-
-  // Progress Variables
-  int remainingChunks;
-  int currentChunkNum;
-  double progress;
-
-  // ** Constructer ** //
-  SonrFile(this.metadata, {this.raw}) {
-    this.progress = 0.0;
-    this.currentChunkNum = 0;
-    this.remainingChunks = this.metadata.chunksTotal;
-  }
-
-  // ** Build from Bytes ** //
-  static fromBytes(Uint8List data, String path) async {
-    final buffer = data.buffer;
-
-    File rawFile = await new File(path).writeAsBytes(
-        buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-
-    var meta = new Metadata(file: rawFile);
-    return SonrFile(meta, raw: rawFile);
-  }
-
-  // ** Check if Both Fields Provided ** //
-  bool isComplete() {
-    return raw != null && metadata != null;
-  }
-
-  // ** Convert to Map ** //
-  toMap() {
-    return {
-      'file': {
-        'name': this.metadata.name,
-        'type': enumAsString(this.metadata.type),
-        'size': this.metadata.size
-      }
-    };
   }
 }

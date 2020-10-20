@@ -5,45 +5,38 @@ part of 'peer.dart';
 // *************************** //
 extension RTCHandler on Peer {
   // ** Handle Peer Authorization ** //
-  handleAnswer(Peer match, dynamic answer) async {
-    // Get Match Node
-    var description = answer['description'];
-
+  handleAnswer(Answer answer) async {
     // Add Peer Connection
-    var pc = session.peerConnections[match.id];
+    var pc = session.peerConnections[answer.from.id];
     if (pc != null) {
-      await pc.setRemoteDescription(
-          new RTCSessionDescription(description['sdp'], description['type']));
+      await pc.setRemoteDescription(answer.description);
     }
   }
 
   // ** Peer Requested User ** //
-  handleOffer(Peer match, dynamic offer) async {
-
+  handleOffer(Offer offer) async {
     // Create Peer Connection
-    var pc = await this.newPeerConnection(match.id);
+    var pc = await this.newPeerConnection(offer.from.id);
 
     // Initialize RTC Receiver Connection
-    session.initializePeer(true, pc, match, description: offer['description']);
+    session.initializePeer(this.role, pc, offer.from,
+        description: offer.description);
 
     // Set Candidates
     await session.setRemoteCandidates(pc);
 
     // Send Answer After
-    await answer(match, pc);
+    await answer(offer.from, pc);
   }
 
   // ** Handle ICE Candidate Received ** //
-  handleCandidate(Peer match, dynamic data) async {
+  handleCandidate(Candidate candidate) async {
     // Get Match Node
-    var candidateMap = data['candidate'];
-    var pc = session.peerConnections[match.id];
+    var pc = session.peerConnections[candidate.from.id];
 
     // Setup Candidate
-    RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
-        candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
     if (pc != null) {
-      await pc.addCandidate(candidate);
+      await pc.addCandidate(candidate.candidate);
     } else {
       session.remoteCandidates.add(candidate);
     }

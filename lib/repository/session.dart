@@ -68,8 +68,8 @@ class RTCSession {
     addDataChannel(id, channel);
   }
 
-  initializePeer(bool isReceiver, RTCPeerConnection pc, Peer match,
-      {dynamic description}) async {
+  initializePeer(Role role, RTCPeerConnection pc, Peer match,
+      {RTCSessionDescription description}) async {
     // Listen to ICE Connection
     pc.onIceConnectionState = (state) {};
 
@@ -82,12 +82,11 @@ class RTCSession {
     this.peerConnections[match.id] = pc;
 
     // Check if Receiving
-    if (isReceiver) {
+    if (role == Role.Receiver) {
       // Validate Description Data
       if (description != null) {
         // Set Remote Description
-        await pc.setRemoteDescription(
-            new RTCSessionDescription(description['sdp'], description['type']));
+        await pc.setRemoteDescription(description);
       }
       // Log Error
       else {

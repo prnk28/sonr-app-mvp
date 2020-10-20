@@ -51,13 +51,9 @@ class Pending extends WebState {
 // ** Received Offer from Peer ***
 // *******************************
 class Requested extends WebState {
-  final Peer match;
-  final SonrFile file;
-  final dynamic offer;
+  final Offer offer;
 
   const Requested({
-    this.match,
-    this.file,
     this.offer,
   });
 }
@@ -66,7 +62,9 @@ class Requested extends WebState {
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
 class Transferring extends WebState {
-  const Transferring();
+  final Peer match;
+
+  const Transferring(this.match);
 }
 
 // *************************

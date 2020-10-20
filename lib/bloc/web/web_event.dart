@@ -24,7 +24,8 @@ class Connect extends WebEvent {
 
 // Between Server Reads
 class Load extends WebEvent {
-  const Load();
+  final General event;
+  const Load({this.event});
 }
 
 // Invite Peer
@@ -36,32 +37,25 @@ class Invite extends WebEvent {
 
 // Authorize Offer
 class Authorize extends WebEvent {
-  final Peer to;
+  final Offer offer;
   final bool decision;
-  final dynamic offer;
 
-  const Authorize(this.to, this.decision, this.offer);
+  const Authorize(this.decision, this.offer);
 }
 
 // Send Node Data
 class Update extends WebEvent {
-  // Status Variables
+  // References
   final Status newStatus;
-  final double newDirection;
+  final Peer match;
 
-  // User Variables
-  final Peer from;
-  final Metadata metadata;
-
-  // RTC Variables
-  final dynamic answer;
-  final dynamic offer;
+  // Messages
+  final Answer answer;
+  final Offer offer;
 
   const Update(
     this.newStatus, {
-    this.newDirection,
-    this.from,
-    this.metadata,
+    this.match,
     this.answer,
     this.offer,
   });
