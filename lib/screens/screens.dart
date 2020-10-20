@@ -1,10 +1,10 @@
 export 'detail/detail.dart';
 export 'home/home.dart';
 export 'register/register.dart';
+export 'settings/settings.dart';
 export 'splash/splash.dart';
 export 'transfer/transfer.dart';
-export 'settings/settings.dart';
-export 'home/window.dart';
+export 'window/window.dart';
 
 // Packages
 export 'package:flutter/material.dart';
