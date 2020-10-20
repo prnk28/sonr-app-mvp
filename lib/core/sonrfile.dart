@@ -10,6 +10,7 @@ class SonrFile {
   // Accessor Methods
   File file;
   Metadata metadata;
+  String ownerId;
 
   // Progress Variables
   int _remainingChunks;
@@ -17,7 +18,7 @@ class SonrFile {
   double progress;
 
   // ** Constructer ** //
-  SonrFile({this.metadata, this.file}) {
+  SonrFile(ownerId, {this.metadata, this.file}) {
     // Generate MetaData from Raw File
     if (this.file != null) {
       this.metadata = new Metadata();
@@ -57,6 +58,7 @@ class SonrFile {
   save(Uint8List data, String path) async {
     // Set Path
     this.metadata.path = path;
+    this.metadata.received = DateTime.now();
 
     // Get Buffer
     final buffer = data.buffer;

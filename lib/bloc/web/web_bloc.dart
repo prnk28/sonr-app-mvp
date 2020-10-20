@@ -133,12 +133,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Invite Event **
 // ******************
   Stream<WebState> _mapInviteToState(Invite event) async* {
-    // Get Data
-    File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-
-    SonrFile file = new SonrFile(file: dummyFile);
-
-    await user.node.offer(event.to, file.metadata);
+    // Send Offer
+    await user.node.offer(event.to, data.currentFile.metadata);
 
     // Change Status
     add(Update(Status.Pending, match: event.to));
@@ -152,7 +148,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Handle Offer from Requested Peer
       await user.node.handleOffer(event.offer);
 
-      data.currentFile = new SonrFile(metadata: event.offer.metadata);
+      // Add File to Queue
+      data.traffic.addIncoming(event.offer.from.id, event.offer.metadata);
 
       // Change State
       user.node.status = Status.Transferring;
@@ -190,9 +187,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         break;
       case Status.Offered:
         user.node.role = Role.Receiver;
-        // Add File to Queue
-        data.traffic.addIncoming(event.offer.metadata);
-
         yield Requested(offer: event.offer);
         break;
       case Status.Answered:

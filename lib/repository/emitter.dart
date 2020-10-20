@@ -82,9 +82,9 @@ extension RTCEmitter on Peer {
     }
   }
 
-  complete(Peer match) {
+  complete(SonrFile file) {
     // Emit to Socket.io
-    socket.emit("COMPLETE", [this.toMap(), match.id]);
+    socket.emit("COMPLETE", [this.toMap(), file.ownerId]);
   }
 
   decline(Peer match) {

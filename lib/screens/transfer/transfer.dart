@@ -12,7 +12,7 @@ class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Queue File
-    BlocProvider.of<DataBloc>(context).add(Queue(QueueType.OutgoingFile));
+    context.emitDataBlocEvent(DataEventType.QueueOutgoingFile);
 
     // Search
     context.emitWebBlocEvent(WebEventType.Search);

@@ -11,7 +11,6 @@ enum TrafficDirection { Incoming, Outgoing }
 // *********************************** //
 class Traffic {
   // Dependencies
-  final DataBloc _data;
   final RTCSession _session;
 
   // Traffic Maps - MatchId/File
@@ -24,9 +23,11 @@ class Traffic {
 
   // Callbacks
   void Function(SonrFile) onAddFile;
+  void Function(Uint8List) onBinaryChunk;
+  void Function() onTransferComplete;
 
   // ** Constructer ** //
-  Traffic(this._data, this._session) {
+  Traffic(this._session) {
     // Initialize Maps
     _incoming = new List<SonrFile>();
     _outgoing = new List<SonrFile>();
@@ -41,16 +42,26 @@ class Traffic {
     _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
       // Check if Binary
       if (message.isBinary) {
-        // Add Binary to Transfer
-        _data.add(AddChunk(message.binary));
+        // Send CallBack
+        if (onBinaryChunk != null) onBinaryChunk(message.binary);
+      }
+      // Check if Text
+      else {
+        // Check for Completion Message
+        if (message.text == "SEND_COMPLETE") {
+          // Send CallBack
+          if (onTransferComplete != null) onTransferComplete();
+        } else {
+          log.v(message.text);
+        }
       }
     };
   }
 
   // ** Add File to Incoming ** //
-  addIncoming(Metadata meta) {
+  addIncoming(String senderId, Metadata meta) {
     // Create SonrFile
-    SonrFile file = new SonrFile(metadata: meta);
+    SonrFile file = new SonrFile(senderId, metadata: meta);
 
     // Add To Incoming
     _incoming.add(file);
@@ -60,12 +71,12 @@ class Traffic {
   }
 
   // ** Add File to Outgoing ** //
-  addOutgoing({File rawFile}) async {
+  addOutgoing(String userId, {File rawFile}) async {
     // Get Dummy RawFile
     File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
     // Create SonrFile
-    SonrFile file = new SonrFile(file: dummyFile);
+    SonrFile file = new SonrFile(userId, file: dummyFile);
 
     // Add to Outgoing
     _outgoing.add(file);
@@ -74,13 +85,22 @@ class Traffic {
     if (onAddFile != null) onAddFile(file);
   }
 
+  // ** Sender Completed Sending ** //
+  complete(SonrFile file) {
+    // Send Complete Message on same DC
+    _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
+
+    // Clear outgoing traffic
+    this.clear(TrafficDirection.Outgoing);
+  }
+
   // ** Send Chunk on Channel ** //
   transmit(SonrFile file, Uint8List chunk) {
-    // Send on Channel
-    _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
-
-    // Update Progress
-    file.addProgress(_data);
+    // Check Progress
+    if (file.progress.round() != 100) {
+      // Send on Channel
+      _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
+    }
   }
 
   // ** Clear a Map ** //
@@ -90,6 +110,9 @@ class Traffic {
         // Clear All
         if (matchId == null) {
           _incoming.clear();
+
+          // Clear Current File
+          onAddFile(null);
         }
 
         // Clear One
@@ -99,6 +122,9 @@ class Traffic {
         // Clear All
         if (matchId == null) {
           _outgoing.clear();
+
+          // Clear Current File
+          onAddFile(null);
         }
 
         // Clear One

@@ -24,11 +24,22 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   DataBloc(this.user) : super(null) {
     // Initialize Repositories
     progress = new ProgressCubit();
-    traffic = new Traffic(this, user.node.session);
+    traffic = new Traffic(user.node.session);
 
     // Set Current File
     traffic.onAddFile = (file) {
       currentFile = file;
+    };
+
+    // Add Binary Chunk
+    traffic.onBinaryChunk = (chunk) {
+      add(AddChunk(chunk));
+    };
+
+    // On Transfer Complete
+    traffic.onTransferComplete = () {
+      // Write Current File
+      add(WriteFile());
     };
   }
 
@@ -79,12 +90,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
       // End of List
       if (data.length <= 0) {
-        // Send Complete Message on same DC
-        user.node.complete(event.match);
-        //currentFile = null;
-
-        // Clear outgoing traffic
-        traffic.clear(TrafficDirection.Outgoing);
+        // Complete Tranfer
+        traffic.complete(currentFile);
 
         // Call Bloc Event
         yield Done();
@@ -94,6 +101,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       else {
         // Sends and Updates Progress
         traffic.transmit(currentFile, chunk);
+
+        // Update Progress
+        currentFile.addProgress(this);
 
         // Yield Progress
         yield Sending();

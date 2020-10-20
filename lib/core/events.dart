@@ -19,14 +19,16 @@ enum CubitType { Direction, Progress }
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
   emitDataBlocEvent(DataEventType event,
-      {Metadata meta, File raw, Peer match}) async {
+      {Metadata meta, File raw, String senderId}) async {
     // Switch by Event
     switch (event) {
       case DataEventType.QueueIncomingFile:
-        BlocProvider.of<DataBloc>(this).traffic.addIncoming(meta);
+        BlocProvider.of<DataBloc>(this).traffic.addIncoming(senderId, meta);
         break;
       case DataEventType.QueueOutgoingFile:
-        await BlocProvider.of<DataBloc>(this).traffic.addOutgoing();
+        await BlocProvider.of<DataBloc>(this)
+            .traffic
+            .addOutgoing(BlocProvider.of<UserBloc>(this).node.id);
         break;
       case DataEventType.FindFile:
         BlocProvider.of<DataBloc>(this).add(FindFile());

@@ -1,5 +1,4 @@
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/repository/repository.dart';
 
 class Metadata {
   // Reference to JSON Map
@@ -12,7 +11,6 @@ class Metadata {
   int chunksTotal;
   FileType type;
   String path;
-  Map sender;
   DateTime received;
   DateTime lastOpened;
 
