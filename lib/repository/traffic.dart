@@ -63,7 +63,7 @@ class Traffic {
     _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
     // Update Progress
-    file.addProgress(_data, Role.Sender);
+    file.addProgress(_data);
   }
 
   // ** Clear a Map ** //

@@ -89,7 +89,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     block.add(event.chunk);
 
     // Update Progress in Current MetaData
-    currentFile.addProgress(this, Role.Receiver);
+    currentFile.addProgress(this);
 
     // Yield Progress
     yield Receiving();

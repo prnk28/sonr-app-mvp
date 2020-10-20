@@ -152,6 +152,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // Handle Offer from Requested Peer
       await user.node.handleOffer(event.offer);
 
+      data.currentFile = new SonrFile(metadata: event.offer.metadata);
+
       // Change State
       user.node.status = Status.Transferring;
       add(Update(Status.Transferring, match: event.offer.from));
@@ -199,11 +201,11 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         await user.node.handleAnswer(event.answer);
 
         // Begin Transfer
-        data.add(Transfer(event.answer.from));
+        data.add(Transfer(event.match));
 
         // Change State
         user.node.status = Status.Transferring;
-        yield Transferring(event.answer.from);
+        yield Transferring(event.match);
         break;
       case Status.Transferring:
         yield Transferring(event.match);

@@ -32,8 +32,11 @@ class SocketSubscriber {
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
+      // Get Offer from Data
+      var offer = Offer(data);
+
       // Inform WebBloc
-      _web.add(Update(Status.Offered, offer: Offer(data)));
+      _web.add(Update(Status.Offered, offer: offer));
     });
 
     // -- MATCH ACCEPTED REQUEST --
