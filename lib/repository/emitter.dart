@@ -61,6 +61,7 @@ extension RTCEmitter on Peer {
 
       // Emit to Socket.io
       socket.emit("OFFER", Offer.create(this, to, meta, s));
+      log.i("OFFER: " + Offer.create(this, to, meta, s));
     } catch (e) {
       print(e.toString());
     }

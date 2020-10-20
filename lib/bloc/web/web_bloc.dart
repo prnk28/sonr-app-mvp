@@ -116,6 +116,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         case GeneralMessage.COMPLETED:
           user.node.role = Role.Zero;
           log.i("COMPLETED: " + data.toString());
+          data.add(WriteFile());
           add(End(EndType.Complete));
           break;
         case GeneralMessage.ERROR:
@@ -125,19 +126,14 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       }
     }
     // Wait for Server
-    //yield Loading();
+    yield Loading();
   }
 
-// *****************
-// ** Invite Event ***
-// *****************
+// ******************
+// ** Invite Event **
+// ******************
   Stream<WebState> _mapInviteToState(Invite event) async* {
-    // Get Data
-    File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-
-    // Queue File
-    data.add(Queue(QueueType.OutgoingFile, rawFile: dummyFile));
-    await user.node.offer(event.to, Metadata.fromFile(dummyFile));
+    await user.node.offer(event.to, event.meta);
 
     // Change Status
     add(Update(Status.Pending, match: event.to));

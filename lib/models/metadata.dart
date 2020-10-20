@@ -75,7 +75,6 @@ enum FileType {
 getFileTypeFromPath(path) {
   // Get File Extension
   var kind = extension(path);
-  log.i(kind);
 
   // Init Type
   FileType type = FileType.Unknown;

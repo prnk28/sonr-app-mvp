@@ -62,7 +62,6 @@ extension Graphing on Peer {
         }
       }
     }
-    log.i(activePeers.toString());
     // Return Peers
     return activePeers;
   }

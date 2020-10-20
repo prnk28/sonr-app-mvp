@@ -24,10 +24,8 @@ class _BubbleState extends State<Bubble> {
                 lightSource: LightSource.topLeft,
                 color: Colors.grey[300]),
             child: GestureDetector(
-                onTap: () {
-                  // Invite Peer
-                  context.emitWebBlocEvent(WebEventType.Invite,
-                      match: widget.node);
+                onTap: () async {
+                  await _sendInvite(context, widget.node);
                 },
                 child: Container(
                   width: 80,
@@ -40,6 +38,21 @@ class _BubbleState extends State<Bubble> {
                     ],
                   ),
                 ))));
+  }
+
+  _sendInvite(BuildContext context, Peer to) async {
+    // Get Data
+    File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
+
+    // Queue File
+    context.emitDataBlocEvent(DataEventType.QueueOutgoingFile,
+        rawFile: dummyFile);
+
+    // Create Meta
+    Metadata meta = Metadata.fromFile(dummyFile);
+
+    // Invite Peer
+    context.emitWebBlocEvent(WebEventType.Invite, match: to, meta: meta);
   }
 
   _getIconByDevice(String device) {

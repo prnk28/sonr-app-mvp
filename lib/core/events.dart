@@ -18,7 +18,8 @@ enum CubitType { Direction, Progress }
 
 extension Events on BuildContext {
 // ** DataBLoC Applicable Events for Frontend ** //
-  emitDataBlocEvent(DataEventType event, {Metadata info, Peer match}) async {
+  emitDataBlocEvent(DataEventType event,
+      {Metadata meta, File rawFile, Peer match}) async {
     // Switch by Event
     switch (event) {
       case DataEventType.QueueIncomingFile:
@@ -70,7 +71,7 @@ extension Events on BuildContext {
 
 // ** WebBLoC Applicable Events for Frontend ** //
   emitWebBlocEvent(WebEventType event,
-      {bool decision, Peer match, Offer offer}) {
+      {bool decision, Peer match, Metadata meta, Offer offer}) {
     switch (event) {
       case WebEventType.Connect:
         BlocProvider.of<WebBloc>(this).add(Connect());
@@ -82,7 +83,7 @@ extension Events on BuildContext {
         BlocProvider.of<WebBloc>(this).add(Update(Status.Available));
         break;
       case WebEventType.Invite:
-        BlocProvider.of<WebBloc>(this).add(Invite(match));
+        BlocProvider.of<WebBloc>(this).add(Invite(match, meta));
         break;
       case WebEventType.Authorize:
         BlocProvider.of<WebBloc>(this).add(Authorize(decision, offer));
