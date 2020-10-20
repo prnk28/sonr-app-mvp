@@ -2,46 +2,57 @@ import 'package:http/http.dart';
 import 'package:sonar_app/screens/screens.dart';
 
 class HomeScreen extends StatelessWidget {
+  HomeScreen({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // Build View
-    return NeumorphicTheme(
-        theme: lightTheme(),
-        darkTheme: darkTheme(),
-        child: Scaffold(
-          backgroundColor: NeumorphicTheme.baseColor(context),
-          appBar: screenAppBar("Home"),
-          floatingActionButton: NeumorphicFloatingActionButton(
-              child: Icon(Icons.star, size: 30),
-              onPressed: () {
-                context.pushTransfer();
-              }),
-          body: BlocBuilder<WebBloc, WebState>(
-            buildWhen: (past, curr) {
-              if (curr is Requested) {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return WindowView(curr.offer, curr.from);
-                    });
-                return false;
-              } else if (curr is Loading) {
-                return false;
-              }
-              return true;
-            },
-            builder: (context, state) {
-              if (state is Available) {
-                return Column(children: [
-                  Text("OLC " + state.userNode.olc),
-                  Text("ID " + state.userNode.id),
-                ]);
-              } else {
-                return Text("WebBloc " + (state).toString());
-              }
-            },
-          ),
-        ));
+    return Scaffold(
+        backgroundColor: NeumorphicTheme.baseColor(context),
+        appBar: screenAppBar("Home"),
+        floatingActionButton: NeumorphicFloatingActionButton(
+            child: Icon(Icons.star, size: 30),
+            onPressed: () {
+              context.pushTransfer();
+            }),
+        body: _HomeView());
+  }
+}
+
+class _HomeView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<WebBloc, WebState>(
+      listenWhen: (previousState, state) {
+        if (state is Requested) {
+          return true;
+        }
+        return false;
+      },
+      listener: (past, curr) {
+        if (curr is Requested) {
+          // Display Bottom Sheet
+          Scaffold.of(context).showBottomSheet<void>((BuildContext context) {
+            return Window.showAuth(context, curr);
+          });
+        }
+      },
+      buildWhen: (previous, current) {
+        if (current is Loading) {
+          return false;
+        } else if (current is Requested) {
+          return false;
+        }
+        return true;
+      },
+      builder: (context, state) {
+        if (state is Available) {
+          return Column(children: [
+            Text("OLC " + state.userNode.olc),
+            Text("ID " + state.userNode.id),
+          ]);
+        }
+        return Center(child: Text("WebBloc State: " + (state).toString()));
+      },
+    );
   }
 }

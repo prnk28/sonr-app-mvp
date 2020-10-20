@@ -18,58 +18,55 @@ class TransferScreen extends StatelessWidget {
     context.getBloc(BlocType.Web).add(Update(Status.Searching));
 
     // Return Widget
-    return NeumorphicTheme(
-        theme: lightTheme(),
-        darkTheme: darkTheme(),
-        child: Scaffold(
-          appBar: leadingAppBar("/home", context, Icons.close,
-              shouldPopScreen: true, shouldRevertToActive: true),
-          backgroundColor: NeumorphicTheme.baseColor(context),
-          body: BlocBuilder<WebBloc, WebState>(
-            // Set Build Requirements
-            buildWhen: (prev, curr) {
-              if (curr is Loading) {
-                return false;
-              }
-              return true;
-            },
-            builder: (context, state) {
-              // -- Searching State--
-              if (state is Searching) {
-                return SafeArea(
-                  child: Stack(
-                    children: <Widget>[
-                      // Bubble View
-                      buildStackView(state.userNode.getZonedPeers()),
+    return Scaffold(
+      appBar: leadingAppBar("/home", context, Icons.close,
+          shouldPopScreen: true, shouldRevertToActive: true),
+      backgroundColor: NeumorphicTheme.baseColor(context),
+      body: BlocBuilder<WebBloc, WebState>(
+        // Set Build Requirements
+        buildWhen: (prev, curr) {
+          if (curr is Loading) {
+            return false;
+          }
+          return true;
+        },
+        builder: (context, state) {
+          // -- Searching State--
+          if (state is Searching) {
+            return SafeArea(
+              child: Stack(
+                children: <Widget>[
+                  // Bubble View
+                  buildStackView(state.userNode.getZonedPeers()),
 
-                      // Have BLoC Builder Retrieve Directly from
-                      // Cubit to Avoid Delays
-                      BlocBuilder<DirectionCubit, double>(
-                        cubit: context.getCubit(CubitType.Direction),
-                        builder: (context, state) {
-                          return Align(
-                              alignment: Alignment.bottomCenter,
-                              child: CompassView(direction: state));
-                        },
-                      )
-                      // Compass View
-                    ],
-                  ),
-                );
-              }
+                  // Have BLoC Builder Retrieve Directly from
+                  // Cubit to Avoid Delays
+                  BlocBuilder<DirectionCubit, double>(
+                    cubit: context.getCubit(CubitType.Direction),
+                    builder: (context, state) {
+                      return Align(
+                          alignment: Alignment.bottomCenter,
+                          child: CompassView(direction: state));
+                    },
+                  )
+                  // Compass View
+                ],
+              ),
+            );
+          }
 
-              // -- Transferring State--
-              else if (state is Transferring) {
-                return ProgressView(web: BlocProvider.of<WebBloc>(context));
-              }
+          // -- Transferring State--
+          else if (state is Transferring) {
+            return ProgressView(web: BlocProvider.of<WebBloc>(context));
+          }
 
-              // -- Completed State--
-              else if (state is Completed) {
-                return CompleteView();
-              }
-              return Container();
-            },
-          ),
-        ));
+          // -- Completed State--
+          else if (state is Completed) {
+            return CompleteView();
+          }
+          return Container();
+        },
+      ),
+    );
   }
 }

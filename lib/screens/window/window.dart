@@ -1,16 +1,17 @@
 import 'package:sonar_app/screens/screens.dart';
 
-part 'offered.dart';
+part 'auth.dart';
 
-class WindowView extends StatelessWidget {
-  final dynamic offer;
-  final Peer from;
-  const WindowView(this.offer, this.from);
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: buildAuthenticationView(context, this.offer, this.from));
+class Window {
+  static Widget showAuth(BuildContext context, Requested state) {
+    return Container(
+        color: NeumorphicTheme.baseColor(context),
+        height: MediaQuery.of(context).size.height / 3,
+        width: MediaQuery.of(context).size.width / 2,
+        child: buildAuthenticationView(context, state.offer, state.from));
   }
+
+  static Widget showLoading(BuildContext) {}
+
+  static Widget popupComplete() {}
 }
