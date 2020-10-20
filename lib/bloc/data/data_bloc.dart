@@ -25,6 +25,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Initialize Repositories
     progress = new ProgressCubit();
     traffic = new Traffic(this, user.node.session);
+
+    // Set Current File
+    traffic.onAddFile = (file) {
+      currentFile = file;
+    };
   }
 
   // Map Methods
@@ -38,47 +43,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield* _mapTransferState(event);
     } else if (event is WriteFile) {
       yield* _mapWriteFileState(event);
-    } else if (event is Queue) {
-      yield* _mapQueueFileState(event);
     } else if (event is FindFile) {
       yield* _mapFindFileState(event);
     } else if (event is OpenFile) {
       yield* _mapOpenFileState(event);
     }
-  }
-
-// *****************
-// ** Queue Event **
-// *****************
-  Stream<DataState> _mapQueueFileState(Queue event) async* {
-    // Check Queue Type
-    switch (event.type) {
-      case QueueType.IncomingFile:
-        // Create SonrFile
-        SonrFile file = new SonrFile(metadata: event.metadata);
-
-        // Set Current File
-        currentFile = file;
-
-        // Add to Incoming
-        traffic.addFile(TrafficDirection.Incoming, file);
-        break;
-      case QueueType.OutgoingFile:
-        // Get Data
-        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-
-        SonrFile file = new SonrFile(file: dummyFile);
-        currentFile = file;
-
-        // Add to Outgoing
-        traffic.addFile(TrafficDirection.Outgoing, currentFile);
-        break;
-      case QueueType.Offer:
-        print("Not done yet");
-        break;
-    }
-
-    yield Queued(currentFile);
   }
 
 // ********************

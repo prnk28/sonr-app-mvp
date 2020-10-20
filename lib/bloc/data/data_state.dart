@@ -11,12 +11,6 @@ class Standby extends DataState {
   Standby();
 }
 
-// File ready to transfer or receive
-class Queued extends DataState {
-  final SonrFile file;
-  Queued(this.file);
-}
-
 // Sending to peer w/ Progress and Chunks
 class Sending extends DataState {
   Sending();

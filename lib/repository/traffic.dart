@@ -1,5 +1,6 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 // ** Enum for Traffic Management ** //
@@ -20,6 +21,9 @@ class Traffic {
   // DataChannel
   bool isChannelActive;
   RTCDataChannel _dataChannel;
+
+  // Callbacks
+  void Function(SonrFile) onAddFile;
 
   // ** Constructer ** //
   Traffic(this._data, this._session) {
@@ -43,18 +47,31 @@ class Traffic {
     };
   }
 
-  // ** Add File to Incoming/Outgoing ** //
-  addFile(TrafficDirection direction, SonrFile file) {
-    // Check Incoming/Outgoing
-    switch (direction) {
-      case TrafficDirection.Incoming:
-        _incoming.add(file);
-        break;
-      case TrafficDirection.Outgoing:
-        // Add to Outgoing File Map
-        _outgoing.add(file);
-        break;
-    }
+  // ** Add File to Incoming ** //
+  addIncoming(Metadata meta) {
+    // Create SonrFile
+    SonrFile file = new SonrFile(metadata: meta);
+
+    // Add To Incoming
+    _incoming.add(file);
+
+    // Send CallBack
+    if (onAddFile != null) onAddFile(file);
+  }
+
+  // ** Add File to Outgoing ** //
+  addOutgoing({File rawFile}) async {
+    // Get Dummy RawFile
+    File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
+
+    // Create SonrFile
+    SonrFile file = new SonrFile(file: dummyFile);
+
+    // Add to Outgoing
+    _outgoing.add(file);
+
+    // Send CallBack
+    if (onAddFile != null) onAddFile(file);
   }
 
   // ** Send Chunk on Channel ** //

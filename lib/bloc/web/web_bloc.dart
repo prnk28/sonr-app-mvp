@@ -191,7 +191,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       case Status.Offered:
         user.node.role = Role.Receiver;
         // Add File to Queue
-        data.add(Queue(QueueType.IncomingFile, metadata: event.offer.metadata));
+        data.traffic.addIncoming(event.offer.metadata);
 
         yield Requested(offer: event.offer);
         break;

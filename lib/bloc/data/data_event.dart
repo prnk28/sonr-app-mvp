@@ -7,17 +7,6 @@ abstract class DataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-enum QueueType { IncomingFile, OutgoingFile, Offer }
-
-// Pick file to transfer to peer
-class Queue extends DataEvent {
-  final QueueType type;
-  final Peer match;
-  final SonrFile file;
-  final Metadata metadata;
-  const Queue(this.type, {this.match, this.file, this.metadata});
-}
-
 // Send Transfer over DataChannel to Peer
 class Transfer extends DataEvent {
   final Peer match;
