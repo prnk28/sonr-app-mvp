@@ -26,13 +26,14 @@ class Sheet {
   }
 }
 
-class Window extends StatelessWidget {
-  final Widget view;
+// TODO: Turn into a Full
+class Window {
+  Widget baseWindow;
+  Widget view;
 
-  const Window({Key key, this.view}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Neumorphic(
+  Window(BuildContext screenContext) {
+    // Create Box Window
+    baseWindow = Neumorphic(
         style: NeumorphicStyle(
             shape: NeumorphicShape.flat,
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
@@ -40,8 +41,22 @@ class Window extends StatelessWidget {
             lightSource: LightSource.topLeft,
             color: Colors.blueGrey[50]),
         child: Container(
-            color: NeumorphicTheme.baseColor(context),
-            height: MediaQuery.of(context).size.height / 3,
+            color: NeumorphicTheme.baseColor(screenContext),
+            height: MediaQuery.of(screenContext).size.height / 3,
             child: view));
+  }
+
+  Widget build(BuildContext context, WebState state) {
+    if (state is Requested) {
+      Requested reqState = state;
+      view = buildAuthenticationView(context, reqState);
+    } else if (state is Transferring) {
+      view = buildProgressView(context);
+    } else if (state is Completed) {
+      Completed compState = state;
+      view = buildCompleteView(context, compState);
+    }
+
+    return baseWindow;
   }
 }
