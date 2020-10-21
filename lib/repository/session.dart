@@ -69,7 +69,7 @@ class RTCSession {
   }
 
   initializePeer(Role role, RTCPeerConnection pc, Peer match,
-      {RTCSessionDescription description}) async {
+      {dynamic description}) async {
     // Listen to ICE Connection
     pc.onIceConnectionState = (state) {};
 
@@ -86,7 +86,8 @@ class RTCSession {
       // Validate Description Data
       if (description != null) {
         // Set Remote Description
-        await pc.setRemoteDescription(description);
+        await pc.setRemoteDescription(
+            new RTCSessionDescription(description['sdp'], description['type']));
       }
       // Log Error
       else {

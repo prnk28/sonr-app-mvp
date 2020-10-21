@@ -29,24 +29,21 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // ** Device BLoC Subscription ** //
     directionSub = device.directionCubit.listen((newDir) {
-      // Check Diff Direction
-      if (newDir != user.node.direction && this.state is! Loading) {
-        // Device is Searching
-        if (this.state is Searching) {
-          // Update Direction
-          user.node.direction = newDir;
+      // Device is Searching
+      if (this.state is Searching) {
+        // Update Direction
+        user.node.direction = newDir;
 
-          // Update WebBloc State
-          add(Update(Status.Searching));
-        }
-        // Send with 500ms delay
-        else if (this.state is Available) {
-          // Update Direction
-          user.node.direction = newDir;
+        // Update WebBloc State
+        add(Update(Status.Searching));
+      }
+      // Send with 500ms delay
+      else if (this.state is Available) {
+        // Update Direction
+        user.node.direction = newDir;
 
-          // Update WebBloc State
-          add(Update(Status.Available));
-        }
+        // Update WebBloc State
+        add(Update(Status.Available));
       }
     });
   }
@@ -67,6 +64,8 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapConnectToState(event);
     } else if (event is Update) {
       yield* _mapUpdateToState(event);
+    } else if (event is Handle) {
+      yield* _mapHandleToState(event);
     } else if (event is Invite) {
       yield* _mapInviteToState(event);
     } else if (event is Authorize) {
@@ -86,70 +85,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     if (user.node.connect()) {
       // Wait for Server
       yield Loading();
-    }
-  }
-
-// *****************
-// ** Load Event ***
-// *****************
-  Stream<WebState> _mapLoadToState(Load load) async* {
-    // Check General Message
-    if (load.event == 'UPDATED') {
-      // Update Graph
-      user.node.updateGraph(load.from);
-      add(Update(user.node.status));
-      yield Loading();
-    } else if (load.event == 'EXITED') {
-      // Update Graph
-      user.node.exitGraph(load.from);
-      add(Update(user.node.status));
-      yield Loading();
-    } else if (load.event == 'DECLINED') {
-      // Reset Connection
-      user.node.reset(match: load.from);
-      add(Update(user.node.status));
-      yield Loading();
-    } else if (load.event == 'COMPLETED') {
-      log.i("COMPLETED: " + data.toString());
-      data.add(WriteFile());
-      add(End(EndType.Complete));
-      yield Loading();
-    } else if (load.event == 'ERROR') {
-      log.e("ERROR: " + load.error.toString());
-      yield Loading();
-    }
-    yield Loading();
-  }
-
-// ******************
-// ** Invite Event **
-// ******************
-  Stream<WebState> _mapInviteToState(Invite event) async* {
-    // Send Offer
-    await user.node.offer(event.to, data.currentFile.metadata);
-
-    // Change Status
-    add(Update(Status.Pending, to: event.to));
-  }
-
-// **********************
-// ** Authorize Event ***
-// **********************
-  Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
-    if (event.decision) {
-      // Handle Offer from Requested Peer
-      await user.node.handleOffer(event.to, event.offer);
-
-      // Add File to Queue
-      data.traffic.addIncoming(event.offer.metadata);
-
-      // Change State
-      user.node.status = Status.Transferring;
-      add(Update(Status.Transferring, from: event.offer.from));
-    } else {
-      user.node.decline(event.offer.from);
-      user.node.status = Status.Available;
-      add(Update(Status.Available));
     }
   }
 
@@ -179,32 +114,119 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         user.node.update(event.newStatus);
         yield Pending(match: event.to);
         break;
-      case Status.Offered:
-        // Update User Peer Node
-        user.node.update(event.newStatus);
-        yield Requested(
-            offer: event.offer, metadata: event.metadata, from: event.from);
-        break;
-      case Status.Answered:
-        // Handle Answer from Answered Peer
-        await user.node.handleAnswer(event.from, event.answer);
-
-        // Begin Transfer
-        data.add(Transfer(event.from));
-
-        // Change State
-        user.node.status = Status.Transferring;
-        yield Transferring(event.from);
-        break;
-      case Status.Transferring:
-        // Update User Peer Node
-        user.node.update(event.newStatus);
-        yield Transferring(event.from);
-        break;
       default:
-        yield Loading();
+        log.i("User-Node = " + user.node.status.toString());
         break;
     }
+  }
+
+// *******************
+// ** Handle Event ***
+// *******************
+  Stream<WebState> _mapHandleToState(Handle event) async* {
+    // Handle Offer
+    if (event.offerData != null) {
+      // Get Objects
+      Peer from = Peer.fromMap(event.offerData[0]);
+      dynamic offer = event.offerData[1];
+      Metadata meta = Metadata.fromMap(offer['metadata']);
+
+      // Update User Peer Node
+      user.node.update(Status.Offered);
+      yield Requested(from, offer, meta);
+    }
+
+    // Handle Answer
+    if (event.answerData != null) {
+      // Get Objects
+      Peer from = Peer.fromMap(event.answerData[0]);
+      dynamic answer = event.answerData[1];
+
+      // Handle Answer from Answered Peer
+      await user.node.handleAnswer(from, answer);
+
+      // Change Status
+      user.node.update(Status.Transferring);
+
+      // Begin Transfer
+      data.add(Transfer(from));
+      yield Transferring(from);
+    }
+  }
+
+// ******************
+// ** Invite Event **
+// ******************
+  Stream<WebState> _mapInviteToState(Invite event) async* {
+    // Send Offer
+    await user.node.offer(event.to, data.currentFile.metadata);
+
+    // Change Status
+    add(Update(Status.Pending, to: event.to));
+  }
+
+// **********************
+// ** Authorize Event ***
+// **********************
+  Stream<WebState> _mapAuthorizeToState(Authorize event) async* {
+    if (event.decision) {
+      // Handle Offer from Requested Peer
+      await user.node.handleOffer(event.match, event.offer);
+
+      // Add File to Queue
+      data.traffic.addIncoming(event.metadata);
+
+      // Update User Peer Node
+      user.node.update(Status.Transferring);
+      yield Transferring(event.match);
+    } else {
+      // Send Decline
+      user.node.decline(event.match);
+
+      // Change Status
+      add(Update(Status.Available));
+    }
+  }
+
+// *****************
+// ** Load Event ***
+// *****************
+  Stream<WebState> _mapLoadToState(Load load) async* {
+    // Check General Message
+    if (load.event == 'UPDATED') {
+      // Check if Node is Busy
+      if (user.node.isNotBusy()) {
+        // Update Graph
+        user.node.updateGraph(load.from);
+        add(Update(user.node.status));
+        yield Loading();
+      }
+      // Otherwise Ignore
+    } else if (load.event == 'EXITED') {
+      // Check if Node is Busy
+      if (user.node.isNotBusy()) {
+        // Update Graph
+        user.node.exitGraph(load.from);
+        add(Update(user.node.status));
+        yield Loading();
+      }
+      // Otherwise Ignore
+    } else if (load.event == 'DECLINED') {
+      // Reset Connection
+      user.node.reset(match: load.from);
+      add(Update(Status.Searching));
+      yield Loading();
+    } else if (load.event == 'COMPLETED') {
+      log.i("COMPLETED: " + data.toString());
+      data.add(WriteFile());
+      add(End(EndType.Complete));
+      yield Loading();
+    } else if (load.event == 'ERROR') {
+      log.e("ERROR: " + load.error.toString());
+      add(End(EndType.Fail));
+      yield Loading();
+    }
+    yield Loading();
   }
 
 // *******************************************
@@ -227,10 +249,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // ** Transfer is Finished **
       case EndType.Complete:
         // Reset Node
-        user.node.status = Status.Available;
-
-        // Set Delay
-        await new Future.delayed(Duration(seconds: 1));
+        add(Update(Status.Available));
 
         // Yield Ready
         yield Completed(user.node);
@@ -243,9 +262,6 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
       // ** Internal Fail **
       case EndType.Fail:
-        // Set Delay
-        await new Future.delayed(Duration(seconds: 1));
-
         // Yield Ready
         yield Failed();
         break;

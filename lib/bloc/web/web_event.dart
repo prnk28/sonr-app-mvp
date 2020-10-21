@@ -41,10 +41,23 @@ class Invite extends WebEvent {
 // Authorize Offer
 class Authorize extends WebEvent {
   final dynamic offer;
-  final Peer to;
+  final Metadata metadata;
+  final Peer match;
   final bool decision;
 
-  const Authorize(this.decision, this.to, this.offer);
+  const Authorize(this.decision, this.match, this.offer, this.metadata);
+}
+
+// Receive Data
+class Handle extends WebEvent {
+  // Messages
+  final dynamic answerData;
+  final dynamic offerData;
+
+  const Handle({
+    this.answerData,
+    this.offerData,
+  });
 }
 
 // Send Node Data
@@ -54,18 +67,10 @@ class Update extends WebEvent {
   final Peer from;
   final Peer to;
 
-  // Messages
-  final Metadata metadata;
-  final dynamic answer;
-  final dynamic offer;
-
   const Update(
     this.newStatus, {
-    this.metadata,
     this.from,
     this.to,
-    this.answer,
-    this.offer,
   });
 }
 

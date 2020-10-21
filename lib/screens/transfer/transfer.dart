@@ -6,7 +6,7 @@ import 'dart:math' as math;
 part 'bubble.dart';
 part 'compass.dart';
 part 'complete.dart';
-part 'progress.dart';
+part 'transmit.dart';
 
 class TransferScreen extends StatelessWidget {
   @override
@@ -19,8 +19,7 @@ class TransferScreen extends StatelessWidget {
 
     // Return Widget
     return Scaffold(
-      appBar: leadingAppBar("/home", context, Icons.close,
-          shouldPopScreen: true, shouldRevertToActive: true),
+      appBar: leadingAppBar("/home", context, Icons.close),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: BlocBuilder<WebBloc, WebState>(
         // Set Build Requirements

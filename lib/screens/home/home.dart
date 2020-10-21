@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
         floatingActionButton: NeumorphicFloatingActionButton(
             child: Icon(Icons.star, size: 30),
             onPressed: () {
-              context.pushTransfer();
+              Navigator.pushReplacementNamed(context, "/transfer");
             }),
         body: _HomeView());
   }
@@ -23,17 +23,26 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<WebBloc, WebState>(
       listenWhen: (previousState, state) {
-        if (state is Requested) {
-          return true;
+        if (state is Loading) {
+          return false;
         }
-        return false;
+        return true;
       },
       listener: (past, curr) {
         if (curr is Requested) {
           // Display Bottom Sheet
-          Scaffold.of(context).showBottomSheet<void>((BuildContext context) {
-            return Window.showAuth(context, curr);
-          });
+          showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return Window.showAuth(context, curr);
+              });
+        } else if (curr is Transferring) {
+          // Display Bottom Sheet
+          showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return Window.showTransferring(context);
+              });
         }
       },
       buildWhen: (previous, current) {

@@ -23,6 +23,7 @@ class SocketSubscriber {
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
+      // Check if Peer is Busy
       _web.add(Load('UPDATED', from: Peer.fromMap(data)));
     });
 
@@ -33,19 +34,14 @@ class SocketSubscriber {
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
-      log.i("Offered: " + data.toString());
-      Peer peer = Peer.fromMap(data[0]);
-      Metadata metadata = Metadata.fromMap(data[1]['metadata']);
       // Inform WebBloc
-      _web.add(Update(Status.Offered,
-          from: peer, metadata: metadata, offer: data[1]));
+      _web.add(Handle(offerData: data));
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
-      Peer peer = Peer.fromMap(data[0]);
       // Inform WebBloc
-      _web.add(Update(Status.Answered, from: peer, answer: data[1]));
+      _web.add(Handle(answerData: data));
     });
 
     // -- MATCH DECLINED REQUEST --

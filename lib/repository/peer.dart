@@ -80,12 +80,17 @@ class Peer {
       session.dataChannels[match.id].close();
 
       // Remove from Connection and DataChannel
-      session.peerConnections[match.id].remove();
-      session.dataChannels[match.id].remove();
+      session.peerConnections.remove(match.id);
+      session.dataChannels.remove(match.id);
 
       // Clear Session ID
       session.id = null;
     }
+  }
+
+// ** Checker for Status **
+  bool isNotBusy() {
+    return (this.status == Status.Available || this.status == Status.Searching);
   }
 
 // ** Convert Object to Map **
