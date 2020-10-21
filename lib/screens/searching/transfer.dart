@@ -5,7 +5,6 @@ import 'dart:math' as math;
 // Views in Screen
 part 'bubble.dart';
 part 'compass.dart';
-part 'complete.dart';
 part 'transmit.dart';
 
 class TransferScreen extends StatelessWidget {
@@ -57,11 +56,6 @@ class TransferScreen extends StatelessWidget {
           // -- Transferring State--
           else if (state is Transferring) {
             return ProgressView(web: BlocProvider.of<WebBloc>(context));
-          }
-
-          // -- Completed State--
-          else if (state is Completed) {
-            return CompleteView();
           }
           return Container();
         },

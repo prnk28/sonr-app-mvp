@@ -78,5 +78,6 @@ class Update extends WebEvent {
 class End extends WebEvent {
   final EndType type;
   final Peer match;
-  const End(this.type, {this.match});
+  final SonrFile file;
+  const End(this.type, {this.match, this.file});
 }

@@ -10,3 +10,7 @@ part 'painter.dart';
 part 'text.dart';
 part 'textField.dart';
 
+// ** Constant For Show Modal ** //
+RoundedRectangleBorder windowBorder() {
+  return RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0));
+}

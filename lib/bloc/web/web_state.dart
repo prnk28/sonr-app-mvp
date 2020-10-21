@@ -72,7 +72,7 @@ class Transferring extends WebState {
 // *************************
 class Completed extends WebState {
   final Peer userNode;
-  final File file;
+  final SonrFile file;
 
   const Completed(
     this.userNode, {

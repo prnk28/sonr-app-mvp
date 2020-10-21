@@ -11,6 +11,7 @@ part 'web_state.dart';
 // ***********************
 class WebBloc extends Bloc<WebEvent, WebState> {
   // Data Providers
+  StreamSubscription dataSub;
   StreamSubscription directionSub;
   SocketSubscriber socketSub;
 
@@ -26,6 +27,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   WebBloc(this.data, this.device, this.user) : super(null) {
     // ** Initialize ** //
     socketSub = new SocketSubscriber(user, this);
+
+    // ** Data BLoC Subscription ** //
+    dataSub = data.listen((DataState state) {
+      if (state is Done) {
+        add(End(EndType.Complete, file: state.file));
+      }
+    });
 
     // ** Device BLoC Subscription ** //
     directionSub = device.directionCubit.listen((newDir) {
@@ -252,7 +260,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         add(Update(Status.Available));
 
         // Yield Ready
-        yield Completed(user.node);
+        yield Completed(user.node, file: event.file);
         break;
 
       // ** Exit Graph **

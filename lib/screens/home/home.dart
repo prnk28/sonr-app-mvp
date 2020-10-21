@@ -23,10 +23,10 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<WebBloc, WebState>(
       listenWhen: (previousState, state) {
-        if (state is Loading) {
-          return false;
+        if (state is Requested) {
+          return true;
         }
-        return true;
+        return false;
       },
       listener: (past, curr) {
         if (curr is Requested) {
@@ -34,7 +34,21 @@ class _HomeView extends StatelessWidget {
           showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
-                return Window();
+                return Sheet.showAuth(context, curr);
+              });
+        } else if (curr is Transferring) {
+          // Display Bottom Sheet
+          showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return Sheet.showTransferring(context);
+              });
+        } else if (curr is Completed) {
+          // Display Bottom Sheet
+          showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return Sheet.showComplete(context, curr);
               });
         }
       },
