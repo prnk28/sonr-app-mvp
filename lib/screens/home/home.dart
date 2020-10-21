@@ -34,14 +34,7 @@ class _HomeView extends StatelessWidget {
           showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
-                return Window.showAuth(context, curr);
-              });
-        } else if (curr is Transferring) {
-          // Display Bottom Sheet
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Window.showTransferring(context);
+                return Window();
               });
         }
       },

@@ -3,20 +3,27 @@ import 'package:sonar_app/screens/screens.dart';
 part 'auth.dart';
 part 'download.dart';
 
-class Window {
-  static Widget showAuth(BuildContext context, Requested state) {
+class Window extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
         color: NeumorphicTheme.baseColor(context),
         height: MediaQuery.of(context).size.height / 3,
-        child: buildAuthenticationView(context, state));
+        child: BlocBuilder<WebBloc, WebState>(
+            // Set Build Requirements
+            buildWhen: (prev, curr) {
+          if (curr is Loading) {
+            return false;
+          }
+          return true;
+        }, builder: (context, state) {
+          if (state is Requested) {
+            return buildAuthenticationView(context, state);
+          } else if (state is Transferring) {
+            return buildProgressView(context);
+          } else if (state is Completed) {}
+          Navigator.pop(context);
+          return Container();
+        }));
   }
-
-  static Widget showTransferring(BuildContext context) {
-    return Container(
-        color: NeumorphicTheme.baseColor(context),
-        height: MediaQuery.of(context).size.height / 3,
-        child: buildProgressView(context));
-  }
-
-  static Widget popupComplete() {}
 }

@@ -68,7 +68,17 @@ extension Graphing on Peer {
 
   // ** Checker Method: If Peer can Send to Peer **
   _canSendTo(Peer peer) {
-    return this.status == Status.Searching && peer.status == Status.Available;
+    // Verify Status
+    bool statusCheck;
+    statusCheck =
+        this.status == Status.Searching && peer.status == Status.Available;
+
+    // Check Id
+    bool idCheck;
+    idCheck = this.id != null && peer.id != null;
+
+    // Validate
+    return statusCheck && idCheck;
   }
 
   // ** Get Difference When User is Searching **

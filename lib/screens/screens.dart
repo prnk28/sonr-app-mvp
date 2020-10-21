@@ -1,9 +1,9 @@
 export 'detail/detail.dart';
 export 'home/home.dart';
 export 'register/register.dart';
-export 'settings/settings.dart';
+export 'home/settings.dart';
 export 'splash/splash.dart';
-export 'transfer/transfer.dart';
+export 'searching/transfer.dart';
 export 'window/window.dart';
 
 // Packages

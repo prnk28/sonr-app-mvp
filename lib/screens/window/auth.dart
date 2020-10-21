@@ -55,10 +55,13 @@ NeumorphicButton _buildAuthButton(
     BuildContext context, Peer match, dynamic offer, Metadata metadata) {
   return NeumorphicButton(
       onPressed: () {
-// Update WebBloc to Inform User Accepted
+        // Update WebBloc to Inform User Accepted
         context
             .getBloc(BlocType.Web)
             .add(Authorize(true, match, offer, metadata));
+
+        // Delayed pop
+        Navigator.pop(context);
       },
       style: NeumorphicStyle(
           depth: 8,

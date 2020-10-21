@@ -74,6 +74,15 @@ extension Routing on BuildContext {
 }
 
 // *********************** //
+// ** Navigator Utility ** //
+// *********************** //
+extension Utility on Navigator {
+  popDelayed(BuildContext context, {int milliseconds}) async {
+
+  }
+}
+
+// *********************** //
 // ** Build BLoC System ** //
 // *********************** //
 MultiBlocProvider initializeBloc(Widget app) {
