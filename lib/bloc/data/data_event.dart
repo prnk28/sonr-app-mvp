@@ -7,17 +7,6 @@ abstract class DataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Send Transfer over DataChannel to Peer
-class Transfer extends DataEvent {
-  final Peer match;
-  const Transfer(this.match);
-}
-
-// Add File Chunk from Transfer
-class AddChunk extends DataEvent {
-  final Uint8List chunk;
-  const AddChunk(this.chunk);
-}
 
 // Progress Cubit
 class ProgressCubit extends Cubit<double> {
@@ -32,19 +21,31 @@ class ProgressCubit extends Cubit<double> {
   }
 }
 
+// Send Transfer over DataChannel to Peer
+class PeerSentChunk extends DataEvent {
+  final Peer match;
+  const PeerSentChunk(this.match);
+}
+
+// Add File Chunk from Transfer
+class PeerAddedChunk extends DataEvent {
+  final Uint8List chunk;
+  const PeerAddedChunk(this.chunk);
+}
+
 // Write Completed File to Disk
-class WriteFile extends DataEvent {
+class PeerReceiveCompleted extends DataEvent {
   final File file;
-  const WriteFile({this.file});
+  const PeerReceiveCompleted({this.file});
 }
 
 // Search for a file
-class FindFile extends DataEvent {
-  const FindFile();
+class UserSearchedFile extends DataEvent {
+  const UserSearchedFile();
 }
 
 // Opens a file in appropriate viewer
-class OpenFile extends DataEvent {
+class UserOpenedFile extends DataEvent {
   final Metadata meta;
-  const OpenFile(this.meta);
+  const UserOpenedFile(this.meta);
 }

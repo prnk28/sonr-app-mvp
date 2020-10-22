@@ -30,7 +30,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // ** Data BLoC Subscription ** //
     dataSub = data.listen((DataState state) {
-      if (state is Done) {
+      if (state is PeerSendComplete) {
         add(End(EndType.Complete, file: state.file));
       }
     });
@@ -75,7 +75,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       yield* _mapUpdateToState(event);
     } else if (event is Handle) {
       yield* _mapHandleToState(event);
-    } else if (event is Invite) {
+    } else if (event is PeerInvited) {
       yield* _mapInviteToState(event);
     } else if (event is Authorize) {
       yield* _mapAuthorizeToState(event);
@@ -158,7 +158,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       user.node.update(Status.Transferring);
 
       // Begin Transfer
-      data.add(Transfer(from));
+      data.add(PeerSentChunk(from));
       yield Transferring(from);
     }
   }
@@ -166,7 +166,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ******************
 // ** Invite Event **
 // ******************
-  Stream<WebState> _mapInviteToState(Invite event) async* {
+  Stream<WebState> _mapInviteToState(PeerInvited event) async* {
     // Send Offer
     await user.node.offer(event.to, data.currentFile.metadata);
 

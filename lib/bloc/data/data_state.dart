@@ -7,24 +7,29 @@ abstract class DataState extends Equatable {
 }
 
 // Ready to Perform Action
-class Standby extends DataState {
-  Standby();
+class PeerInitial extends DataState {
+  PeerInitial();
 }
 
 // Sending to peer w/ Progress and Chunks
-class Sending extends DataState {
-  Sending();
+class PeerSendInProgress extends DataState {
+  PeerSendInProgress();
 }
 
 // Receiving Data from Peer
-class Receiving extends DataState {
-  Receiving();
+class PeerReceiveInProgress extends DataState {
+  PeerReceiveInProgress();
 }
 
-// Post Sending, Receiving
-class Done extends DataState {
+// Sending Complete
+class PeerSendComplete extends DataState {
+  PeerSendComplete();
+}
+
+// Receiving Complete
+class PeerReceiveComplete extends DataState {
   final SonrFile file;
-  Done({this.file});
+  PeerReceiveComplete({this.file});
 }
 
 // Viewing Saved File

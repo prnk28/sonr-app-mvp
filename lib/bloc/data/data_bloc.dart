@@ -33,13 +33,13 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
     // Add Binary Chunk
     traffic.onBinaryChunk = (chunk) {
-      add(AddChunk(chunk));
+      add(PeerAddedChunk(chunk));
     };
 
     // On Transfer Complete
     traffic.onTransferComplete = () {
       // Write Current File
-      add(WriteFile());
+      add(PeerReceiveCompleted());
     };
   }
 
@@ -48,37 +48,50 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   Stream<DataState> mapEventToState(
     DataEvent event,
   ) async* {
-    if (event is AddChunk) {
-      yield* _mapAddChunkState(event);
-    } else if (event is Transfer) {
-      yield* _mapTransferState(event);
-    } else if (event is WriteFile) {
-      yield* _mapWriteFileState(event);
-    } else if (event is FindFile) {
+    if (event is PeerAddedChunk) {
+      yield* _mapPeerAddedChunkState(event);
+    } else if (event is PeerSentChunk) {
+      yield* _mapPeerSentChunkState(event);
+    } else if (event is PeerReceiveCompleted) {
+      yield* _mapPeerReceiveCompletedState(event);
+    } else if (event is UserSearchedFile) {
       yield* _mapFindFileState(event);
-    } else if (event is OpenFile) {
+    } else if (event is UserOpenedFile) {
       yield* _mapOpenFileState(event);
     }
   }
 
-// ********************
-// ** AddChunk Event **
-// ********************
-  Stream<DataState> _mapAddChunkState(AddChunk event) async* {
+// **************************
+// ** PeerAddedChunk Event **
+// **************************
+  Stream<DataState> _mapPeerAddedChunkState(PeerAddedChunk event) async* {
     // Add Chunk to Block
     block.add(event.chunk);
 
     // Update Progress in Current MetaData
     currentFile.addProgress(this);
 
+    // Check if Receive is Done
+    if (currentFile.isProgressComplete()) {
+      // Save File
+      SonrFile file = await currentFile.save(block.takeBytes());
+
+      // Clear incoming traffic
+      traffic.clear(TrafficDirection.Incoming);
+
+      // Yield Complete
+      yield PeerReceiveComplete(file: file);
+    }
     // Yield Progress
-    yield Receiving();
+    else {
+      yield PeerReceiveInProgress();
+    }
   }
 
-// ********************
-// ** Transfer Event **
-// ********************
-  Stream<DataState> _mapTransferState(Transfer event) async* {
+// *************************
+// ** PeerSentChunk Event **
+// *************************
+  Stream<DataState> _mapPeerSentChunkState(PeerSentChunk event) async* {
     // Open File in Reader and Send Data pieces as chunks
     final reader = ChunkedStreamIterator(currentFile.file.openRead());
 
@@ -94,7 +107,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         traffic.complete(currentFile);
 
         // Call Bloc Event
-        yield Done();
+        yield PeerSendComplete();
         break;
       }
       // Send Current Chunk
@@ -106,7 +119,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         currentFile.addProgress(this);
 
         // Yield Progress
-        yield Sending();
+        yield PeerSendInProgress();
       }
     }
   }
@@ -114,30 +127,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // *********************
 // ** WriteFile Event **
 // *********************
-  Stream<DataState> _mapWriteFileState(WriteFile event) async* {
-    // Get FilePath
-    Directory tempDir = await getTemporaryDirectory();
-    var filePath = tempDir.path + '/file_01.tmp';
-
-    // Save File
-    SonrFile file = await currentFile.save(block.takeBytes(), filePath);
-
-    // Clear incoming traffic
-    traffic.clear(TrafficDirection.Incoming);
-
-    // Yield Complete
-    yield Done(file: file);
-  }
+  Stream<DataState> _mapPeerReceiveCompletedState(
+      PeerReceiveCompleted event) async* {}
 
 // ********************
 // ** FindFile Event **
 // ********************
-  Stream<DataState> _mapFindFileState(FindFile event) async* {
+  Stream<DataState> _mapFindFileState(UserSearchedFile event) async* {
     // Check Status
   }
 
 // ********************
 // ** OpenFile Event **
 // ********************
-  Stream<DataState> _mapOpenFileState(OpenFile event) async* {}
+  Stream<DataState> _mapOpenFileState(UserOpenedFile event) async* {}
 }

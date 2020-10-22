@@ -54,7 +54,11 @@ class SonrFile {
   }
 
   // ** Save Bytes to File ** //
-  save(Uint8List data, String path) async {
+  save(Uint8List data) async {
+    // Get FilePath
+    Directory tempDir = await getTemporaryDirectory();
+    var path = tempDir.path + '/file_01.tmp';
+
     // Set Path
     this.metadata.path = path;
     this.metadata.received = DateTime.now();
@@ -81,8 +85,11 @@ class SonrFile {
     return bytes;
   }
 
-  // ** Check if Both Fields Provided ** //
-  bool isComplete() {
-    return file != null && metadata != null;
+  // ** Check if Progress Complete **
+  bool isProgressComplete() {
+    if (this.progress.round() == 100) {
+      return true;
+    }
+    return false;
   }
 }
