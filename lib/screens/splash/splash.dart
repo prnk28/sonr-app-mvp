@@ -24,11 +24,11 @@ class _SplashView extends StatelessWidget {
     return BlocListener<UserBloc, UserState>(
         listener: (past, curr) {
           // Home Screen
-          if (curr is Online) {
+          if (curr is UserLoadSuccess) {
             context.goHome(initial: true);
           }
           // Register Screen
-          else if (curr is Unregistered) {
+          else if (curr is UserLoadFailure) {
             context.goRegister();
           }
         },

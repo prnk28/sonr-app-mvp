@@ -14,17 +14,17 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> mapEventToState(
     UserEvent event,
   ) async* {
-    if (event is CheckProfile) {
-      yield* _mapCheckProfileState(event);
-    } else if (event is UpdateProfile) {
-      yield* _mapUpdateProfileState(event);
+    if (event is UserStarted) {
+      yield* _mapUserStartedState(event);
+    } else if (event is ProfileUpdated) {
+      yield* _mapProfileUpdatedState(event);
     }
   }
 
 // ***********************
-// ** CheckProfile Event **
+// ** UserStarted Event **
 // ***********************
-  Stream<UserState> _mapCheckProfileState(CheckProfile event) async* {
+  Stream<UserState> _mapUserStartedState(UserStarted event) async* {
     // Retrieve Profile
     var profile = await Profile.retrieve();
 
@@ -34,7 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // No Profile
     if (profile == null) {
       // Change State
-      yield Unregistered();
+      yield UserLoadFailure();
     }
     // Profile Found
     else {
@@ -46,14 +46,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       node.status = Status.Standby;
 
       // Profile Ready
-      yield Online(node);
+      yield UserLoadSuccess(node);
     }
   }
 
-// *************************
-// ** UpdateProfile Event **
-// *************************
-  Stream<UserState> _mapUpdateProfileState(UpdateProfile event) async* {
+// **************************
+// ** ProfileUpdated Event **
+// **************************
+  Stream<UserState> _mapProfileUpdatedState(ProfileUpdated event) async* {
     // Save to Box
     await Profile.update(event.newProfile);
 
@@ -65,6 +65,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     node.status = Status.Standby;
 
     // Profile Ready
-    yield Online(node);
+    yield UserLoadSuccess(node);
   }
 }

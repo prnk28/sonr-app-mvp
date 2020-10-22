@@ -108,7 +108,7 @@ class _InitializeViewState extends State<InitializeView> {
                         new Profile(this._firstName, this._lastName, null);
 
                     // Process data.
-                    context.getBloc(BlocType.User).add(UpdateProfile(profile));
+                    context.getBloc(BlocType.User).add(ProfileUpdated(profile));
                   }
                 },
                 child: Text('Submit',

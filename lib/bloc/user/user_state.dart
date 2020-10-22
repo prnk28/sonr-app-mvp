@@ -7,17 +7,13 @@ abstract class UserState extends Equatable {
 }
 
 // User cannot communicate to server
-class Offline extends UserState {
-  Offline();
+class UserLoadFailure extends UserState {
+  UserLoadFailure();
 }
 
 // User can communicate to server
-class Online extends UserState {
+class UserLoadSuccess extends UserState {
   final Peer user;
 
-  Online(this.user);
-}
-
-class Unregistered extends UserState {
-  Unregistered();
+  UserLoadSuccess(this.user);
 }

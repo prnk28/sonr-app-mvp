@@ -8,17 +8,12 @@ abstract class UserEvent extends Equatable {
 }
 
 // Get User Ready on Device
-class CheckProfile extends UserEvent {
-  const CheckProfile();
-}
-
-// Login/Signup to account save info data bloc
-class Register extends UserEvent {
-  const Register();
+class UserStarted extends UserEvent {
+  const UserStarted();
 }
 
 // Update Profile/Contact Info
-class UpdateProfile extends UserEvent {
+class ProfileUpdated extends UserEvent {
   final Profile newProfile;
-  const UpdateProfile(this.newProfile);
+  const ProfileUpdated(this.newProfile);
 }
