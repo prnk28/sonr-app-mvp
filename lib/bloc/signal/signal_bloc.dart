@@ -39,7 +39,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     socket.on('UPDATED', (data) {
       // Get Peer Data
       Peer from = Peer.fromMap(data);
-      log.i("UPDATED: " + data);
+      log.i("UPDATED: " + data.toString());
 
       // Update Graph
       user.add(GraphUpdated(from));
@@ -95,26 +95,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     socket.on('ERROR', (data) {
       // Log Error
       log.e("ERROR: " + data.toString());
-    });
-
-    // ** Device BLoC Subscription ** //
-    directionSub = device.directionCubit.listen((newDir) {
-      // Device is Searching
-      if (user.node.status == Status.Searching) {
-        // Update Direction
-        user.node.direction = newDir;
-
-        // Update WebBloc State
-        user.add(NodeSearch());
-      }
-      // Send with 500ms delay
-      else if (user.node.status == Status.Available) {
-        // Update Direction
-        user.node.direction = newDir;
-
-        // Update WebBloc State
-        user.add(NodeSearch());
-      }
     });
   }
 

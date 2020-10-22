@@ -7,16 +7,14 @@ part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  Peer node;
-
   // Data Providers
+  Peer node;
+  Circle circle;
   RTCSession session;
-  DirectedValueGraph _graph;
 
   UserBloc() : super(null) {
-    // Initialize Providers
+    circle = new Circle();
     session = new RTCSession();
-    _graph = new DirectedValueGraph();
   }
 
   @override
@@ -120,24 +118,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // **********************
 // [Peer] has updated Information
   Stream<UserState> _mapGraphUpdatedState(GraphUpdated event) async* {
-    // Get Data
-    Peer peer = event.from;
-
     // Check User Status
     if (node.status != Status.Busy) {
-      // Find Previous Node
-      Peer previousNode = _graph.singleWhere((element) => element.id == peer.id,
-          orElse: () => null);
-
-      // Remove Peer Node
-      _graph.remove(previousNode);
-
-      // Check Node Status: Senders are From
-      if (node.canSendTo(event.from)) {
-        // Calculate Difference and Create Edge
-        _graph.setToBy<double>(
-            node.id, event.from, node.getDifference(event.from));
-      }
+      // Update Circle
+      circle.updateGraph(node, event.from);
 
       // Update Active Peers
       add(GraphZonedPeers());
@@ -147,17 +131,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // [Peer] exited Pool of Neighbors
   Stream<UserState> _mapGraphExitedState(GraphExited event) async* {
-    // Get Data
-    Peer peer = event.from;
-
     // Check User Status
     if (node.status != Status.Busy) {
-      // Find Previous Node
-      var previousNode = _graph.singleWhere((element) => element.id == peer.id,
-          orElse: () => null);
-
-      // Remove Peer Node
-      _graph.remove(previousNode);
+      // Update Circle
+      circle.exitGraph(event.from);
 
       // Update Active Peers
       add(GraphZonedPeers());
@@ -167,37 +144,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // Retrieve All Peers by Zone
   Stream<UserState> _mapGraphZonedPeersState(GraphZonedPeers event) async* {
-    // Initialize Data Objects
-    Map<Peer, double> costs = new Map<Peer, double>();
-    List<Peer> activePeers = new List<Peer>();
-
-    // Get Receivers
-    var receivers = _graph.linkTos(this);
+    // Get Peer List
+    List<Peer> activePeers = circle.getZonedPeers(node);
 
     // Check then Iterate
-    if (receivers.length > 0) {
-      // Get Receivers
-      var receivers = _graph.linkTos(this);
-
-      // Iterate Receivers
-      for (Peer receiver in receivers) {
-        // Get Cost
-        var cost = _graph.getBy<double>(this, receiver);
-
-        // Place in Map
-        costs[receiver] = cost.val as double;
-
-        // ** Assign active to list **
-        // Check if off Screen
-        if (cost.val > 180 && cost.val != -1) {
-          // Set as off screen
-          receiver.proximity = Proximity.Away;
-        } else {
-          // TODO: Assign by UltraSonic Proximity
-          receiver.proximity = Proximity.Near;
-          activePeers.add(receiver);
-        }
-      }
+    if (activePeers.length > 0) {
       // Yield Active Peers
       yield NodeSearchSuccess(node, activePeers);
     }

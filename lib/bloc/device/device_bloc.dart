@@ -18,8 +18,28 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     Compass()
         .compassUpdates(interval: Duration(milliseconds: 100))
         .listen((newDegrees) {
-      // Update Degrees Var
+      // Update Direction Cubit
       directionCubit.update(newDegrees);
+
+      // Check if User Node Exists
+      if (user.node != null) {
+// User is Searching
+        if (user.node.status == Status.Searching) {
+          // Update Direction
+          user.node.direction = newDegrees;
+
+          // Update WebBloc State
+          user.add(NodeSearch());
+        }
+        // User with 500ms delay
+        else if (user.node.status == Status.Available) {
+          // Update Direction
+          user.node.direction = newDegrees;
+
+          // Update WebBloc State
+          user.add(NodeAvailable());
+        }
+      }
     });
   }
   @override
