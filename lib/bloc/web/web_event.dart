@@ -1,12 +1,5 @@
 part of 'web_bloc.dart';
 
-enum LoadType {
-  Updated,
-  Exited,
-  Declined,
-  Error,
-}
-
 enum EndType {
   Cancel,
   Complete,
@@ -24,20 +17,42 @@ abstract class WebEvent extends Equatable {
 // *********************
 // ** Single Events ****
 // *********************
-// Connect to WS, Join/Create Lobby
-class Connect extends WebEvent {
-  const Connect();
+// Connect to Socket
+class SocketStarted extends WebEvent {
+  const SocketStarted();
 }
 
-// Between Server Reads
-class Load extends WebEvent {
-  final LoadType type;
+// Socket received event
+class SocketEmission extends WebEvent {
+  final Incoming event;
+  final dynamic data;
+  const SocketEmission(this.event, this.data);
+}
+
+// Socket sending message
+class SocketEmit extends WebEvent {
+  // Required Fields
+  final Outgoing event;
   final Peer from;
-  final dynamic error;
-  const Load(this.type, {this.from, this.error});
+
+  // Optional
+  final Status status; // In Status Change
+  final String to; // When Transfer Handshake
+  final Metadata metadata; // Attached to Offer
+  final RTCIceCandidate candidate; // On Peer Connection
+  final RTCSessionDescription session; // On Offer/Answer
+  final String sessionId;
+
+  const SocketEmit(this.event, this.from,
+      {this.status,
+      this.to,
+      this.metadata,
+      this.session,
+      this.candidate,
+      this.sessionId});
 }
 
-// Invite Peer
+// Peer Sent Invite
 class PeerInvited extends WebEvent {
   final Peer to;
   final SonrFile file;
@@ -45,36 +60,30 @@ class PeerInvited extends WebEvent {
   const PeerInvited(this.to, {this.file});
 }
 
-// Authorize Offer
-class Authorize extends WebEvent {
+// Peer Authorized Offer
+class PeerAuthorized extends WebEvent {
   final dynamic offer;
   final Metadata metadata;
   final Peer match;
-  final bool decision;
 
-  const Authorize(this.decision, this.match, this.offer, this.metadata);
+  const PeerAuthorized(this.match, this.offer, this.metadata);
 }
 
-// Receive Data
-class Handle extends WebEvent {
-  // Messages
-  final dynamic answerData;
-  final dynamic offerData;
+// Peer Authorized Offer
+class PeerDeclined extends WebEvent {
+  final Peer match;
 
-  const Handle({
-    this.answerData,
-    this.offerData,
-  });
+  const PeerDeclined(this.match);
 }
 
 // Send Node Data
-class Update extends WebEvent {
+class PeerUpdated extends WebEvent {
   // References
   final Status newStatus;
   final Peer from;
   final Peer to;
 
-  const Update(
+  const PeerUpdated(
     this.newStatus, {
     this.from,
     this.to,

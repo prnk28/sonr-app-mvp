@@ -1,63 +1,83 @@
-import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
+
+// **************************** //
+// ** Socket Messaging Enums ** //
+// **************************** //
+enum Incoming {
+  Connected,
+  Disconnected,
+  Updated,
+  Exited,
+  Offered,
+  Answered,
+  Declined,
+  Candidate,
+  Error
+}
+
+enum Outgoing {
+  Status,
+  Offer,
+  Answer,
+  Decline,
+  Candidate,
+  Exited,
+}
 
 // ********************************** //
 // ** Socket.io Event Subscription ** //
 // ********************************** //
 class SocketSubscriber {
-  final UserBloc _user;
-  final WebBloc _web;
+  final void Function(Incoming, dynamic) onSocketMessage;
 
-  SocketSubscriber(this._user, this._web) {
+  SocketSubscriber(this.onSocketMessage) {
     // ** SocketClient Event Subscription ** //
     // -- USER CONNECTED TO SERVER --
     socket.on('connect', (_) {
-      // Get/Set Socket Id
-      _user.node.id = socket.id;
-
-      // Change Status
-      _web.add(Update(Status.Available));
+      // Send Callback
+      onSocketMessage(Incoming.Connected, socket.id);
     });
 
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
-      // Check if Peer is Busy
-      _web.add(Load(LoadType.Updated, from: Peer.fromMap(data)));
+      // Send Callback
+      onSocketMessage(Incoming.Updated, data);
     });
 
     // -- NODE EXITED LOBBY --
     socket.on('EXITED', (data) {
-      _web.add(Load(LoadType.Exited, from: Peer.fromMap(data)));
+      // Send Callback
+      onSocketMessage(Incoming.Exited, data);
     });
 
     // -- OFFER REQUEST --
     socket.on('OFFERED', (data) {
-      // Inform WebBloc
-      _web.add(Handle(offerData: data));
+      // Send Callback
+      onSocketMessage(Incoming.Offered, data);
     });
 
     // -- MATCH ACCEPTED REQUEST --
     socket.on('ANSWERED', (data) {
-      // Inform WebBloc
-      _web.add(Handle(answerData: data));
+      // Send Callback
+      onSocketMessage(Incoming.Answered, data);
     });
 
     // -- MATCH DECLINED REQUEST --
     socket.on('DECLINED', (data) {
-      _web.add(Load(LoadType.Declined, from: Peer.fromMap(data)));
+      // Send Callback
+      onSocketMessage(Incoming.Declined, data);
     });
 
     // -- MATCH ICE CANDIDATES --
     socket.on('CANDIDATE', (data) {
-      // Handle Candidate
-      _user.node.handleCandidate(Peer.fromMap(data[0]), data[1]);
+      // Send Callback
+      onSocketMessage(Incoming.Candidate, data);
     });
 
     // -- ERROR OCCURRED (Cancelled, Internal) --
-    socket.on('ERROR', (error) {
-      _web.add(Load(LoadType.Error, error: error));
+    socket.on('ERROR', (data) {
+      // Send Callback
+      onSocketMessage(Incoming.Error, data);
     });
   }
 }

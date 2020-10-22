@@ -4,30 +4,6 @@ part of 'peer.dart';
 // ** Socket.io Event Messaging ** //
 // ******************************* //
 extension SocketEmitter on Peer {
-  // ** Node Attempting to Connect ** //
-  bool connect() {
-    // Check if Peer Located
-    if (this.status == Status.Standby) {
-      // Get Headers
-      var headers = {
-        'deviceId': this.id,
-        'lobby': this.olc, // RoomId from Location
-      };
-
-      // Set on Socket
-      socket.io.options['extraHeaders'] = headers;
-
-      // Connect to Socket
-      socket.connect();
-      return true;
-    }
-    // Incorrect status
-    else {
-      log.e("User node not located");
-      return false;
-    }
-  }
-
   // ** Node has Updated ** //
   update(Status newStatus) {
     // Update Status

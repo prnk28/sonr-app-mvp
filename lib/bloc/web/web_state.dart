@@ -9,15 +9,15 @@ abstract class WebState extends Equatable {
 // ********************
 // ** Preload State ***
 // ********************
-class Disconnected extends WebState {
-  const Disconnected();
+class SocketInitial extends WebState {
+  const SocketInitial();
 }
 
 // ***************************
 // ** Between Server Reads ***
 // ***************************
-class Loading extends WebState {
-  const Loading();
+class SocketLoadInProgress extends WebState {
+  const SocketLoadInProgress();
 }
 
 // ***************************

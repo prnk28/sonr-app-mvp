@@ -14,7 +14,7 @@ class TransferScreen extends StatelessWidget {
     context.getBloc(BlocType.Data).traffic.addOutgoing();
 
     // Search
-    context.getBloc(BlocType.Web).add(Update(Status.Searching));
+    context.getBloc(BlocType.Web).add(PeerUpdated(Status.Searching));
 
     // Return Widget
     return Scaffold(
@@ -23,7 +23,7 @@ class TransferScreen extends StatelessWidget {
       body: BlocBuilder<WebBloc, WebState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-          if (curr is Loading) {
+          if (curr is SocketLoadInProgress) {
             return false;
           }
           return true;

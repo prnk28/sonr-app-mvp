@@ -23,7 +23,7 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<WebBloc, WebState>(
       listenWhen: (previousState, state) {
-        if (state is Loading) {
+        if (state is SocketLoadInProgress) {
           return false;
         }
         return true;
@@ -53,7 +53,7 @@ class _HomeView extends StatelessWidget {
         }
       },
       buildWhen: (previous, current) {
-        if (current is Loading) {
+        if (current is SocketLoadInProgress) {
           return false;
         } else if (current is Requested) {
           return false;
