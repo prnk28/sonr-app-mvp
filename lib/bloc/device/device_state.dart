@@ -12,11 +12,11 @@ abstract class DeviceState extends Equatable {
 class Inactive extends DeviceState {}
 
 // ** Device Received Location **
-class Located extends DeviceState {
-  const Located();
+class LocationPermissionSuccess extends DeviceState {
+  const LocationPermissionSuccess();
 }
 
 // ** Device Received Location **
-class Denied extends DeviceState {
-  const Denied();
+class LocationPermissionFailure extends DeviceState {
+  const LocationPermissionFailure();
 }

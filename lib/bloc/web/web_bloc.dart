@@ -30,7 +30,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 
     // ** Data BLoC Subscription ** //
     dataSub = data.listen((DataState state) {
-      if (state is PeerSendComplete) {
+      if (state is PeerReceiveComplete) {
         add(End(EndType.Complete, file: state.file));
       }
     });

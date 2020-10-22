@@ -7,9 +7,14 @@ abstract class DeviceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Get Current Peer Location
-class Initialize extends DeviceEvent {
-  const Initialize();
+// Check Location Permission
+class LocationPermissionCheck extends DeviceEvent {
+  const LocationPermissionCheck();
+}
+
+// Request Location Permission
+class LocationPermissionRequested extends DeviceEvent {
+  const LocationPermissionRequested();
 }
 
 // *********************
