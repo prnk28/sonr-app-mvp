@@ -22,13 +22,6 @@ class SocketStarted extends SignalEvent {
   const SocketStarted();
 }
 
-// Socket received event
-class SocketEmission extends SignalEvent {
-  final Incoming event;
-  final dynamic data;
-  const SocketEmission(this.event, this.data);
-}
-
 // Sequence Finished
 class End extends SignalEvent {
   final EndType type;

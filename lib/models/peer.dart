@@ -1,10 +1,8 @@
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/repository/repository.dart';
 
-part 'emitter.dart';
-part 'graphing.dart';
-part 'handler.dart';
+// ** Proximity Enum ** //
+enum Proximity { Immediate, Near, Far, Away }
 
 // Status of Node
 enum Status {
@@ -12,10 +10,6 @@ enum Status {
   Available, // Ready to Receive
   Searching, // Looking for Peers
   Busy, // Pending/Waiting/Transferring
-  Pending, // Waiting for Confirmation
-  Offered, // Offered Transfer
-  Answered, // Handle Receiver Authorization
-  Transferring // In Transfer
 }
 
 class Peer {
@@ -42,11 +36,7 @@ class Peer {
   // Sensory Variables
   double direction;
   double distance;
-  ProximityStatus proximity;
-
-  // Dependencies
-  RTCSession session;
-  DirectedValueGraph _graph;
+  Proximity proximity;
 
 // ** Constructer **
   Peer(this.profile) {
@@ -54,10 +44,6 @@ class Peer {
     this.id = "";
     this.direction = 0.01;
     this.device = Platform.operatingSystem.toUpperCase();
-
-    // Initialize Dependencies
-    _graph = new DirectedValueGraph();
-    session = new RTCSession();
   }
 
 // ** Build Peer from Map **
@@ -68,23 +54,6 @@ class Peer {
     neighbor.direction = map['direction'];
     neighbor.status = enumFromString(map["status"], Status.values);
     return neighbor;
-  }
-
-// ** Reset Networking and Node itself **
-  void reset({Peer match}) {
-    // Check if Match Provided
-    if (match != null) {
-      // Close Connection and DataChannel
-      session.peerConnections[match.id].close();
-      session.dataChannels[match.id].close();
-
-      // Remove from Connection and DataChannel
-      session.peerConnections.remove(match.id);
-      session.dataChannels.remove(match.id);
-
-      // Clear Session ID
-      session.id = null;
-    }
   }
 
   // ** Checker Method: If Peer can Send to Peer **
@@ -114,6 +83,16 @@ class Peer {
       return diff.abs();
     }
     return -1;
+  }
+
+  // ** Set OLC from Current Location **
+  setLocation() async {
+    // Get Location
+    Position position =
+        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    // Encode OLC
+    this.olc = OLC.encode(position.latitude, position.longitude, codeLength: 8);
   }
 
 // ** Checker for Status **

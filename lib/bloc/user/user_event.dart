@@ -51,6 +51,17 @@ class NodeBusy extends UserEvent {
   NodeBusy();
 }
 
+class NodeCancel extends UserEvent {
+  final Peer match;
+  NodeCancel(this.match);
+}
+
+// [User] is Reset
+class NodeReset extends UserEvent {
+  final Peer match;
+  NodeReset({this.match});
+}
+
 // [User] Send Offer to another peer
 class NodeOffered extends UserEvent {
   final Peer to;

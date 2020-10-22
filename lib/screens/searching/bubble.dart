@@ -69,7 +69,7 @@ class _BubbleState extends State<Bubble> {
 // ******************************** //
 // ** Calculate Offset from Line ** //
 // ******************************** //
-  Offset _calculateOffset(double value, ProximityStatus proximity) {
+  Offset _calculateOffset(double value, Proximity proximity) {
     Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
     PathMetrics pathMetrics = path.computeMetrics();
     PathMetric pathMetric = pathMetrics.elementAt(0);

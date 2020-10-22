@@ -10,13 +10,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Peer node;
 
   // Data Providers
-  RTCSession _session;
+  RTCSession session;
   DirectedValueGraph _graph;
 
   UserBloc() : super(null) {
     // Initialize Providers
+    session = new RTCSession();
     _graph = new DirectedValueGraph();
-    _session = new RTCSession();
   }
 
   @override
@@ -44,6 +44,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapNodeAvailableState(event);
     } else if (event is NodeBusy) {
       yield* _mapNodeBusyState(event);
+    } else if (event is NodeReset) {
+      yield* _mapNodeResetState(event);
+    } else if (event is NodeCancel) {
+      yield* _mapNodeCancelState(event);
 
       // Node - Sender
     } else if (event is NodeOffered) {
@@ -116,11 +120,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // **********************
 // [Peer] has updated Information
   Stream<UserState> _mapGraphUpdatedState(GraphUpdated event) async* {
+    // Get Data
+    Peer peer = event.from;
+
     // Check User Status
     if (node.isNotBusy()) {
       // Find Previous Node
-      Peer previousNode = _graph.singleWhere(
-          (element) => element.id == event.from.id,
+      Peer previousNode = _graph.singleWhere((element) => element.id == peer.id,
           orElse: () => null);
 
       // Remove Peer Node
@@ -130,7 +136,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (node.canSendTo(event.from)) {
         // Calculate Difference and Create Edge
         _graph.setToBy<double>(
-            this, event.from, node.getDifference(event.from));
+            node.id, event.from, node.getDifference(event.from));
       }
 
       // Update Active Peers
@@ -141,10 +147,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // [Peer] exited Pool of Neighbors
   Stream<UserState> _mapGraphExitedState(GraphExited event) async* {
+    // Get Data
+    Peer peer = event.from;
+
+    // Check User Status
     if (node.isNotBusy()) {
       // Find Previous Node
-      var previousNode = _graph.singleWhere(
-          (element) => element.id == event.from.id,
+      var previousNode = _graph.singleWhere((element) => element.id == peer.id,
           orElse: () => null);
 
       // Remove Peer Node
@@ -182,10 +191,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         // Check if off Screen
         if (cost.val > 180 && cost.val != -1) {
           // Set as off screen
-          receiver.proximity = ProximityStatus.Away;
+          receiver.proximity = Proximity.Away;
         } else {
           // TODO: Assign by UltraSonic Proximity
-          receiver.proximity = ProximityStatus.Near;
+          receiver.proximity = Proximity.Near;
           activePeers.add(receiver);
         }
       }
@@ -228,20 +237,63 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     socket.emit("UPDATE", node.toMap());
   }
 
+  // [User] is Reset
+  Stream<UserState> _mapNodeResetState(NodeReset event) async* {
+    // Get Data
+    var match = event.match;
+
+    // Check if Match Provided
+    if (match != null) {
+      // Close Connection and DataChannel
+      session.peerConnections[match.id].close();
+      session.dataChannels[match.id].close();
+
+      // Remove from Connection and DataChannel
+      session.peerConnections.remove(match.id);
+      session.dataChannels.remove(match.id);
+
+      // Clear Session ID
+      session.id = null;
+    }
+  }
+
+  // [Peer] has Cancelled
+  Stream<UserState> _mapNodeCancelState(NodeCancel event) async* {
+    // Get Data
+    var match = event.match;
+
+    // Remove RTC Connection
+    var pc = session.peerConnections[match.id];
+    if (pc != null) {
+      pc.close();
+      session.peerConnections.remove(match.id);
+    }
+
+    // Remove DataChannels
+    var dc = session.dataChannels[match.id];
+    if (dc != null) {
+      dc.close();
+      session.dataChannels.remove(match.id);
+    }
+
+    // Reset Status
+    session.updateState(SignalingState.CallStateBye);
+  }
+
 // ***************************
 // ** Node Emitter - Sender **
 // ***************************
 // [User] Send Offer to another peer
   Stream<UserState> _mapNodeOfferedState(NodeOffered event) async* {
     // Change Session State
-    _session.id = node.id + '-' + event.to.id;
-    _session.updateState(SignalingState.CallStateNew);
+    session.id = node.id + '-' + event.to.id;
+    session.updateState(SignalingState.CallStateNew);
 
     // Add Peer Connection
-    RTCPeerConnection pc = await _session.newPeerConnection(event.to.id, node);
+    RTCPeerConnection pc = await session.newPeerConnection(event.to.id, node);
 
     // Initialize RTC Sender Connection
-    _session.initializePeer(Role.Sender, pc, event.to);
+    session.initializePeer(Role.Sender, pc, event.to);
 
     try {
       // Create Offer Description
@@ -254,7 +306,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         event.to.id,
         {
           'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': _session.id,
+          'session_id': session.id,
           'metadata': event.file.metadata.toMap()
         }
       ]);
@@ -273,7 +325,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     var description = event.answer['description'];
 
     // Add Peer Connection
-    var pc = _session.peerConnections[event.match.id];
+    var pc = session.peerConnections[event.match.id];
     if (pc != null) {
       await pc.setRemoteDescription(
           new RTCSessionDescription(description['sdp'], description['type']));
@@ -307,18 +359,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     var metadata = event.metadata;
 
     // Update Signalling State
-    _session.id = offer['session_id'];
-    _session.updateState(SignalingState.CallStateNew);
+    session.id = offer['session_id'];
+    session.updateState(SignalingState.CallStateNew);
 
     // Create Peer Connection
-    var pc = await _session.newPeerConnection(match.id, node);
+    var pc = await session.newPeerConnection(match.id, node);
 
     // Initialize RTC Receiver Connection
-    _session.initializePeer(Role.Receiver, pc, match,
+    session.initializePeer(Role.Receiver, pc, match,
         description: offer['description']);
 
     // Set Candidates
-    await _session.setRemoteCandidates(pc);
+    await session.setRemoteCandidates(pc);
 
     // Emit Answer
     try {
@@ -332,7 +384,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         match.id,
         {
           'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': _session.id,
+          'session_id': session.id,
         }
       ]);
     } catch (e) {
@@ -347,7 +399,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   // [Peer] Has Sent Candidate
   Stream<UserState> _mapNodeCandidateState(NodeCandidate event) async* {
     // Emit to Socket.io
-    _session.handleCandidate(event.match, event.candidate);
+    session.handleCandidate(event.match, event.candidate);
   }
 
 // [User] Rejected Offer

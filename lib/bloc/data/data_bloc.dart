@@ -24,7 +24,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   DataBloc(this.user) : super(null) {
     // Initialize Repositories
     progress = new ProgressCubit();
-    traffic = new Traffic(user.node.session);
+    traffic = new Traffic(user.session);
 
     // Set Current File
     traffic.onAddFile = (file) {

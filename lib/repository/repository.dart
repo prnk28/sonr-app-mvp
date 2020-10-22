@@ -5,9 +5,7 @@ export 'dart:typed_data';
 export 'package:hive/hive.dart';
 export 'package:socket_io_client/socket_io_client.dart';
 
-export 'peer.dart';
 export 'session.dart';
-export 'subscriber.dart';
 export 'traffic.dart';
 
 // Clients

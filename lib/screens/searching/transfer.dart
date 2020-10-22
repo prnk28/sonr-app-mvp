@@ -32,7 +32,7 @@ class TransferScreen extends StatelessWidget {
               child: Stack(
                 children: <Widget>[
                   // Bubble View
-                  buildStackView(state.userNode.getZonedPeers()),
+                  //buildStackView(state.userNode.getZonedPeers()),
 
                   // Have BLoC Builder Retrieve Directly from
                   // Cubit to Avoid Delays

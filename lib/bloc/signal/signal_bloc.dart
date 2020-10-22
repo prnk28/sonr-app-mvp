@@ -13,7 +13,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
   // Data Providers
   StreamSubscription dataSub;
   StreamSubscription directionSub;
-  SocketSubscriber socketSub;
 
   // Required Blocs
   final DataBloc data;
@@ -25,16 +24,85 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
   // Constructer
   SignalBloc(this.data, this.device, this.user) : super(null) {
-    // ** Listen to CallBack on SocketSubscriber ** //
-    socketSub = new SocketSubscriber((Incoming event, dynamic data) {
-      add(SocketEmission(event, data));
-    });
-
     // ** Data BLoC Subscription ** //
     dataSub = data.listen((DataState state) {
       if (state is PeerReceiveComplete) {
         add(End(EndType.Complete, file: state.file));
       }
+    });
+
+    // ** Socket.io Event Subscription ** //
+    // ** ======================================= ** //
+    socket.on('connect', (_) {
+      // Get/Set Socket Id
+      user.node.id = socket.id;
+
+      // Change Status
+      user.add(NodeAvailable());
+    });
+
+    // ** ======================================= ** //
+    socket.on('UPDATED', (data) {
+      // Get Peer Data
+      Peer from = Peer.fromMap(data);
+
+      // Update Graph
+      user.add(GraphUpdated(from));
+    });
+
+    // ** ======================================= ** //
+    socket.on('EXITED', (data) {
+      // Get Peer Data
+      Peer from = Peer.fromMap(data);
+
+      // Exit Graph Graph
+      user.add(GraphExited(from));
+    });
+
+    // ** ======================================= ** //
+    socket.on('OFFERED', (data) {
+      // Get Objects
+      Peer from = Peer.fromMap(data[0]);
+      dynamic offer = data[1];
+      Metadata meta = Metadata.fromMap(offer['metadata']);
+
+      // Handle Offer
+      user.add(NodeRequested(from, offer, meta));
+    });
+
+    // ** ======================================= ** //
+    socket.on('ANSWERED', (data) {
+      // Get Objects
+      Peer from = Peer.fromMap(data[0]);
+      dynamic answer = data[1];
+
+      // Handle Answer from Peer
+      user.add(NodeAuthorized(from, answer));
+
+      // Begin Transfer
+      data.add(PeerSentChunk(from));
+    });
+
+    // ** ======================================= ** //
+    socket.on('DECLINED', (data) {
+      // Handle Rejection
+      user.add(NodeRejected());
+    });
+
+    // ** ======================================= ** //
+    socket.on('CANDIDATE', (data) {
+      // Get Objects
+      Peer from = Peer.fromMap(data[0]);
+      dynamic candidate = data[1];
+
+      // Add Ice Candidate
+      user.add(NodeCandidate(from, candidate));
+    });
+
+    // ** ======================================= ** //
+    socket.on('ERROR', (data) {
+      // Log Error
+      log.e("ERROR: " + data.toString());
     });
 
     // ** Device BLoC Subscription ** //
@@ -73,9 +141,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
   ) async* {
     if (event is SocketStarted) {
       yield* _mapSocketStartedToState(event);
-    } else if (event is SocketEmission) {
-      yield* _mapSocketEmissionToState(event);
-    } else if (event is End) {
+    }else if (event is End) {
       yield* _mapEndToState(event);
     }
   }
@@ -101,99 +167,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // Incorrect status
     else {
       log.e("User node not located");
-    }
-  }
-
-// ***************************
-// ** SocketEmission Event ***
-// ***************************
-  Stream<SignalState> _mapSocketEmissionToState(SocketEmission message) async* {
-    switch (message.event) {
-      // ** ======================================= ** //
-      case Incoming.Connected:
-        // Get/Set Socket Id
-        user.node.id = message.data;
-
-        // Change Status
-        user.add(NodeAvailable());
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Disconnected:
-        // Todo: Handle Disconnection
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Updated:
-        // Get Peer Data
-        Peer from = Peer.fromMap(message.data);
-
-        // Update Graph
-        user.add(GraphUpdated(from));
-        yield SocketLoadInProgress();
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Exited:
-        // Get Peer Data
-        Peer from = Peer.fromMap(message.data);
-
-        // Exit Graph Graph
-        user.add(GraphExited(from));
-        yield SocketLoadInProgress();
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Offered:
-        // Get Objects
-        Peer from = Peer.fromMap(message.data[0]);
-        dynamic offer = message.data[1];
-        Metadata meta = Metadata.fromMap(offer['metadata']);
-
-        // Handle Offer
-        user.add(NodeRequested(from, offer, meta));
-
-        // Yield State
-        yield SocketLoadInProgress();
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Answered:
-        // Get Objects
-        Peer from = Peer.fromMap(message.data[0]);
-        dynamic answer = message.data[1];
-
-        // Handle Answer from Peer
-        user.add(NodeAuthorized(from, answer));
-
-        // Begin Transfer
-        data.add(PeerSentChunk(from));
-        yield Transferring(from);
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Declined:
-        // Handle Rejection
-        user.add(NodeRejected());
-        yield SocketLoadInProgress();
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Candidate:
-        // Get Objects
-        Peer from = Peer.fromMap(message.data[0]);
-        dynamic candidate = message.data[1];
-
-        // Add Ice Candidate
-        user.add(NodeCandidate(from, candidate));
-        break;
-
-      // ** ======================================= ** //
-      case Incoming.Error:
-        // Log Error
-        log.e("ERROR: " + message.data.toString());
-        yield SocketLoadInProgress();
-        break;
     }
   }
 

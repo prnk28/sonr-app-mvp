@@ -23,24 +23,22 @@ class ZonePainter extends CustomPainter {
 
     // Draw Zone Arcs
     canvas.drawArc(
-        _rectByZone(ProximityStatus.Immediate), K_ANGLE, K_ANGLE, false, paint);
+        _rectByZone(Proximity.Immediate), K_ANGLE, K_ANGLE, false, paint);
 
-    canvas.drawArc(
-        _rectByZone(ProximityStatus.Near), K_ANGLE, K_ANGLE, false, paint);
+    canvas.drawArc(_rectByZone(Proximity.Near), K_ANGLE, K_ANGLE, false, paint);
 
-    canvas.drawArc(
-        _rectByZone(ProximityStatus.Far), K_ANGLE, K_ANGLE, false, paint);
+    canvas.drawArc(_rectByZone(Proximity.Far), K_ANGLE, K_ANGLE, false, paint);
   }
 
-  Rect _rectByZone(ProximityStatus proximity) {
+  Rect _rectByZone(Proximity proximity) {
     switch (proximity) {
-      case ProximityStatus.Immediate:
+      case Proximity.Immediate:
         return Rect.fromLTRB(0, 200, _currentSize.width, 400);
         break;
-      case ProximityStatus.Near:
+      case Proximity.Near:
         return Rect.fromLTRB(0, 100, _currentSize.width, 300);
         break;
-      case ProximityStatus.Far:
+      case Proximity.Far:
         return Rect.fromLTRB(0, 0, _currentSize.width, 150);
         break;
       default:
@@ -54,20 +52,20 @@ class ZonePainter extends CustomPainter {
     return false;
   }
 
-  static Path getBubblePath(double sizeWidth, ProximityStatus proximity) {
+  static Path getBubblePath(double sizeWidth, Proximity proximity) {
     // Check Proximity Status
     switch (proximity) {
-      case ProximityStatus.Immediate:
+      case Proximity.Immediate:
         Path path = new Path();
         path.addArc(Rect.fromLTRB(0, 120, sizeWidth, 400), K_ANGLE, K_ANGLE);
         return path;
         break;
-      case ProximityStatus.Near:
+      case Proximity.Near:
         Path path = new Path();
         path.addArc(Rect.fromLTRB(0, 50, sizeWidth, 220), K_ANGLE, K_ANGLE);
         return path;
         break;
-      case ProximityStatus.Far:
+      case Proximity.Far:
         Path path = new Path();
         path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 150), K_ANGLE, K_ANGLE);
         return path;
