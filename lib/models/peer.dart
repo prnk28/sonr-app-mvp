@@ -95,11 +95,6 @@ class Peer {
     this.olc = OLC.encode(position.latitude, position.longitude, codeLength: 8);
   }
 
-// ** Checker for Status **
-  bool isNotBusy() {
-    return (this.status == Status.Available || this.status == Status.Searching);
-  }
-
 // ** Convert Object to Map **
   // -- Export Peer to Map for Communication --
   toMap() {

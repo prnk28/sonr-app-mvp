@@ -124,7 +124,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     Peer peer = event.from;
 
     // Check User Status
-    if (node.isNotBusy()) {
+    if (node.status != Status.Busy) {
       // Find Previous Node
       Peer previousNode = _graph.singleWhere((element) => element.id == peer.id,
           orElse: () => null);
@@ -151,7 +151,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     Peer peer = event.from;
 
     // Check User Status
-    if (node.isNotBusy()) {
+    if (node.status != Status.Busy) {
       // Find Previous Node
       var previousNode = _graph.singleWhere((element) => element.id == peer.id,
           orElse: () => null);
@@ -331,7 +331,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           new RTCSessionDescription(description['sdp'], description['type']));
     }
 
-    yield NodeRequestFailure();
+    // DataBloc is Waiting for this State
+    yield NodeTransferInProgress(event.match);
   }
 
   // [Peer] Rejected Offer

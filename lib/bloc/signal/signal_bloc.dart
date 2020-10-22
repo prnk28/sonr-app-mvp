@@ -24,18 +24,12 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
   // Constructer
   SignalBloc(this.data, this.device, this.user) : super(null) {
-    // ** Data BLoC Subscription ** //
-    dataSub = data.listen((DataState state) {
-      if (state is PeerReceiveComplete) {
-        add(End(EndType.Complete, file: state.file));
-      }
-    });
-
-    // ** Socket.io Event Subscription ** //
+    // ** Socket Event Subscription ** //
     // ** ======================================= ** //
     socket.on('connect', (_) {
       // Get/Set Socket Id
       user.node.id = socket.id;
+      log.i("CONNECTED");
 
       // Change Status
       user.add(NodeAvailable());
@@ -45,6 +39,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     socket.on('UPDATED', (data) {
       // Get Peer Data
       Peer from = Peer.fromMap(data);
+      log.i("UPDATED: " + data);
 
       // Update Graph
       user.add(GraphUpdated(from));
@@ -78,9 +73,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
       // Handle Answer from Peer
       user.add(NodeAuthorized(from, answer));
-
-      // Begin Transfer
-      data.add(PeerSentChunk(from));
     });
 
     // ** ======================================= ** //
@@ -108,7 +100,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** Device BLoC Subscription ** //
     directionSub = device.directionCubit.listen((newDir) {
       // Device is Searching
-      if (this.state is Searching) {
+      if (user.node.status == Status.Searching) {
         // Update Direction
         user.node.direction = newDir;
 
@@ -116,7 +108,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         user.add(NodeSearch());
       }
       // Send with 500ms delay
-      else if (this.state is Available) {
+      else if (user.node.status == Status.Available) {
         // Update Direction
         user.node.direction = newDir;
 
@@ -141,7 +133,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
   ) async* {
     if (event is SocketStarted) {
       yield* _mapSocketStartedToState(event);
-    }else if (event is End) {
+    } else if (event is End) {
       yield* _mapEndToState(event);
     }
   }
@@ -163,10 +155,12 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
       // Connect to Socket
       socket.connect();
+      yield SocketSuccess();
     }
     // Incorrect status
     else {
       log.e("User node not located");
+      yield SocketFailure();
     }
   }
 
@@ -191,9 +185,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       case EndType.Complete:
         // Reset Node
         user.add(NodeAvailable());
-
-        // Yield Ready
-        yield Completed(user.node, file: event.file);
         break;
 
       // ** Exit Graph **
@@ -203,8 +194,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
       // ** Internal Fail **
       case EndType.Fail:
-        // Yield Ready
-        yield Failed();
         break;
     }
   }

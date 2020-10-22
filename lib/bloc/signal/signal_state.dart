@@ -14,17 +14,14 @@ class SocketInitial extends SignalState {
 }
 
 // ***************************
-// ** Between Server Reads ***
-// ***************************
-class SocketLoadInProgress extends SignalState {
-  const SocketLoadInProgress();
-}
-
-// ***************************
 // ** After Handling Event ***
 // ***************************
-class SocketLoadSuccess extends SignalState {
-  const SocketLoadSuccess();
+class SocketSuccess extends SignalState {
+  const SocketSuccess();
+}
+
+class SocketFailure extends SignalState {
+  const SocketFailure();
 }
 
 // ***************************

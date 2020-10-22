@@ -11,6 +11,9 @@ part 'data_event.dart';
 part 'data_state.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
+  // Subscription
+  StreamSubscription userSub;
+
   // Repositories
   final UserBloc user;
   ProgressCubit progress;
@@ -22,6 +25,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
   // Constructers
   DataBloc(this.user) : super(null) {
+    // ** Data BLoC Subscription ** //
+    userSub = user.listen((UserState state) {
+      // Begin Transfer
+      if (state is NodeTransferInProgress) {
+        add(PeerSentChunk(state.match));
+      }
+    });
+
     // Initialize Repositories
     progress = new ProgressCubit();
     traffic = new Traffic(user.session);

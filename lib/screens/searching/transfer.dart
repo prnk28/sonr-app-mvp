@@ -20,7 +20,7 @@ class TransferScreen extends StatelessWidget {
       body: BlocBuilder<SignalBloc, SignalState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-          if (curr is SocketLoadInProgress) {
+          if (curr is SocketInitial) {
             return false;
           }
           return true;

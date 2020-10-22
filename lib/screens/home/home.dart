@@ -27,7 +27,7 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<SignalBloc, SignalState>(
       listenWhen: (previousState, state) {
-        if (state is SocketLoadInProgress) {
+        if (state is SocketInitial) {
           return false;
         }
         return true;
@@ -57,7 +57,7 @@ class _HomeView extends StatelessWidget {
         }
       },
       buildWhen: (previous, current) {
-        if (current is SocketLoadInProgress) {
+        if (current is SocketInitial) {
           return false;
         } else if (current is Requested) {
           return false;
