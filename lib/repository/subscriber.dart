@@ -24,12 +24,12 @@ class SocketSubscriber {
     // -- UPDATE TO A NODE IN LOBBY --
     socket.on('UPDATED', (data) {
       // Check if Peer is Busy
-      _web.add(Load('UPDATED', from: Peer.fromMap(data)));
+      _web.add(Load(LoadType.Updated, from: Peer.fromMap(data)));
     });
 
     // -- NODE EXITED LOBBY --
     socket.on('EXITED', (data) {
-      _web.add(Load('EXITED', from: Peer.fromMap(data)));
+      _web.add(Load(LoadType.Exited, from: Peer.fromMap(data)));
     });
 
     // -- OFFER REQUEST --
@@ -46,7 +46,7 @@ class SocketSubscriber {
 
     // -- MATCH DECLINED REQUEST --
     socket.on('DECLINED', (data) {
-      _web.add(Load('DECLINED', from: Peer.fromMap(data)));
+      _web.add(Load(LoadType.Declined, from: Peer.fromMap(data)));
     });
 
     // -- MATCH ICE CANDIDATES --
@@ -55,14 +55,9 @@ class SocketSubscriber {
       _user.node.handleCandidate(Peer.fromMap(data[0]), data[1]);
     });
 
-    // -- MATCH RECEIVED FILE --
-    socket.on('COMPLETED', (data) {
-      _web.add(Load('COMPLETED', from: Peer.fromMap(data)));
-    });
-
     // -- ERROR OCCURRED (Cancelled, Internal) --
     socket.on('ERROR', (error) {
-      _web.add(Load('ERROR', error: error));
+      _web.add(Load(LoadType.Error, error: error));
     });
   }
 }

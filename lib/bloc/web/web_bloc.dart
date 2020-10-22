@@ -59,6 +59,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   // On Bloc Close
   void dispose() {
     directionSub.cancel();
+    dataSub.cancel();
   }
 
 // *********************************
@@ -200,41 +201,37 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Load Event ***
 // *****************
   Stream<WebState> _mapLoadToState(Load load) async* {
-    // Check General Message
-    if (load.event == 'UPDATED') {
-      // Check if Node is Busy
-      if (user.node.isNotBusy()) {
-        // Update Graph
-        user.node.updateGraph(load.from);
-        add(Update(user.node.status));
+    // Check Type of Load
+    switch (load.type) {
+      case LoadType.Updated:
+        if (user.node.isNotBusy()) {
+          // Update Graph
+          user.node.updateGraph(load.from);
+          add(Update(user.node.status));
+          yield Loading();
+        }
+        break;
+      case LoadType.Exited:
+        // Check if Node is Busy
+        if (user.node.isNotBusy()) {
+          // Update Graph
+          user.node.exitGraph(load.from);
+          add(Update(user.node.status));
+          yield Loading();
+        }
+        break;
+      case LoadType.Declined:
+        // Reset Connection
+        user.node.reset(match: load.from);
+        add(Update(Status.Searching));
         yield Loading();
-      }
-      // Otherwise Ignore
-    } else if (load.event == 'EXITED') {
-      // Check if Node is Busy
-      if (user.node.isNotBusy()) {
-        // Update Graph
-        user.node.exitGraph(load.from);
-        add(Update(user.node.status));
+        break;
+      case LoadType.Error:
+        log.e("ERROR: " + load.error.toString());
+        add(End(EndType.Fail));
         yield Loading();
-      }
-      // Otherwise Ignore
-    } else if (load.event == 'DECLINED') {
-      // Reset Connection
-      user.node.reset(match: load.from);
-      add(Update(Status.Searching));
-      yield Loading();
-    } else if (load.event == 'COMPLETED') {
-      log.i("COMPLETED: " + data.toString());
-      data.add(WriteFile());
-      add(End(EndType.Complete));
-      yield Loading();
-    } else if (load.event == 'ERROR') {
-      log.e("ERROR: " + load.error.toString());
-      add(End(EndType.Fail));
-      yield Loading();
+        break;
     }
-    yield Loading();
   }
 
 // *******************************************

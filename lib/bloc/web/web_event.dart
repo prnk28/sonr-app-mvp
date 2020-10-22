@@ -1,5 +1,12 @@
 part of 'web_bloc.dart';
 
+enum LoadType {
+  Updated,
+  Exited,
+  Declined,
+  Error,
+}
+
 enum EndType {
   Cancel,
   Complete,
@@ -24,10 +31,10 @@ class Connect extends WebEvent {
 
 // Between Server Reads
 class Load extends WebEvent {
-  final String event;
+  final LoadType type;
   final Peer from;
   final dynamic error;
-  const Load(this.event, {this.from, this.error});
+  const Load(this.type, {this.from, this.error});
 }
 
 // Invite Peer

@@ -23,10 +23,10 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<WebBloc, WebState>(
       listenWhen: (previousState, state) {
-        if (state is Requested) {
-          return true;
+        if (state is Loading) {
+          return false;
         }
-        return false;
+        return true;
       },
       listener: (past, curr) {
         if (curr is Requested) {
