@@ -12,6 +12,10 @@ class HomeScreen extends StatelessWidget {
         floatingActionButton: NeumorphicFloatingActionButton(
             child: Icon(Icons.star, size: 30),
             onPressed: () {
+              // Queue File
+              context.getBloc(BlocType.Data).traffic.addOutgoing();
+
+              // Push to Transfer Screen
               Navigator.pushReplacementNamed(context, "/transfer");
             }),
         body: _HomeView());

@@ -60,11 +60,11 @@ class NodeSearchFailure extends UserState {
 // *********************************
 // User has been offered
 class NodeRequestInitial extends UserState {
+  final Peer from;
   final dynamic offer;
   final Metadata metadata;
-  final Peer from;
 
-  NodeRequestInitial(this.offer, this.metadata, this.from);
+  NodeRequestInitial(this.from, this.offer, this.metadata);
 }
 
 // User has sent offer to [Peer]

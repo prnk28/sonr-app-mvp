@@ -41,8 +41,11 @@ class _BubbleState extends State<Bubble> {
   }
 
   _sendInvite(BuildContext context, Peer to) async {
+    // Get Current File
+    SonrFile file = context.getBloc(BlocType.Data).currentFile;
+
     // Invite Peer
-    context.getBloc(BlocType.Signal).add(PeerInvited(to));
+    context.getBloc(BlocType.User).add(NodeOffered(to, file: file));
   }
 
   _getIconByDevice(String device) {

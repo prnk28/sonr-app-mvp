@@ -10,11 +10,8 @@ part 'transmit.dart';
 class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Queue File
-    context.getBloc(BlocType.Data).traffic.addOutgoing();
-
     // Search
-    context.getBloc(BlocType.Signal).add(PeerUpdated(Status.Searching));
+    context.getBloc(BlocType.User).add(NodeSearch());
 
     // Return Widget
     return Scaffold(

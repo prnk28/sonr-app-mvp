@@ -59,6 +59,15 @@ class NodeOffered extends UserEvent {
   const NodeOffered(this.to, {this.file});
 }
 
+// [Peer] A Request Has Been Given
+class NodeRequested extends UserEvent {
+  final Peer from;
+  final dynamic offer;
+  final Metadata metadata;
+
+  const NodeRequested(this.from, this.offer, this.metadata);
+}
+
 // [User] Accepted Offer
 class NodeAccepted extends UserEvent {
   final Peer match;

@@ -54,6 +54,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapNodeRejectedState(event);
 
       // Node - Receiver
+    } else if (event is NodeRequested) {
+      yield* _mapNodeRequestedState(event);
     } else if (event is NodeAccepted) {
       yield* _mapNodeAcceptedState(event);
     } else if (event is NodeDeclined) {
@@ -114,38 +116,44 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // **********************
 // [Peer] has updated Information
   Stream<UserState> _mapGraphUpdatedState(GraphUpdated event) async* {
-    // Find Previous Node
-    Peer previousNode = _graph.singleWhere(
-        (element) => element.id == event.from.id,
-        orElse: () => null);
+    // Check User Status
+    if (node.isNotBusy()) {
+      // Find Previous Node
+      Peer previousNode = _graph.singleWhere(
+          (element) => element.id == event.from.id,
+          orElse: () => null);
 
-    // Remove Peer Node
-    _graph.remove(previousNode);
+      // Remove Peer Node
+      _graph.remove(previousNode);
 
-    // Check Node Status: Senders are From
-    if (node.canSendTo(event.from)) {
-      // Calculate Difference and Create Edge
-      _graph.setToBy<double>(this, event.from, node.getDifference(event.from));
+      // Check Node Status: Senders are From
+      if (node.canSendTo(event.from)) {
+        // Calculate Difference and Create Edge
+        _graph.setToBy<double>(
+            this, event.from, node.getDifference(event.from));
+      }
+
+      // Update Active Peers
+      add(GraphZonedPeers());
+      yield NodeSearchInProgress(node);
     }
-
-    // Update Active Peers
-    add(GraphZonedPeers());
-    yield NodeSearchInProgress(node);
   }
 
   // [Peer] exited Pool of Neighbors
   Stream<UserState> _mapGraphExitedState(GraphExited event) async* {
-    // Find Previous Node
-    var previousNode = _graph.singleWhere(
-        (element) => element.id == event.from.id,
-        orElse: () => null);
+    if (node.isNotBusy()) {
+      // Find Previous Node
+      var previousNode = _graph.singleWhere(
+          (element) => element.id == event.from.id,
+          orElse: () => null);
 
-    // Remove Peer Node
-    _graph.remove(previousNode);
+      // Remove Peer Node
+      _graph.remove(previousNode);
 
-    // Update Active Peers
-    add(GraphZonedPeers());
-    yield NodeSearchInProgress(node);
+      // Update Active Peers
+      add(GraphZonedPeers());
+      yield NodeSearchInProgress(node);
+    }
   }
 
   // Retrieve All Peers by Zone
@@ -285,6 +293,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // *****************************
 // ** Node Emitter - Receiver **
 // *****************************
+  // [Peer] Has Sent Request
+  Stream<UserState> _mapNodeRequestedState(NodeRequested event) async* {
+    // Change State
+    yield NodeRequestInitial(event.from, event.offer, event.metadata);
+  }
+
   // [User] Authorized Offer
   Stream<UserState> _mapNodeAcceptedState(NodeAccepted event) async* {
     // Get Data

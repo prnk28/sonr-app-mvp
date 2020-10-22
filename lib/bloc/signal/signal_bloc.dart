@@ -45,7 +45,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         user.node.direction = newDir;
 
         // Update WebBloc State
-        add(PeerUpdated(Status.Searching));
+        user.add(NodeSearch());
       }
       // Send with 500ms delay
       else if (this.state is Available) {
@@ -53,7 +53,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         user.node.direction = newDir;
 
         // Update WebBloc State
-        add(PeerUpdated(Status.Available));
+        user.add(NodeSearch());
       }
     });
   }
@@ -75,14 +75,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       yield* _mapSocketStartedToState(event);
     } else if (event is SocketEmission) {
       yield* _mapSocketEmissionToState(event);
-    } else if (event is PeerUpdated) {
-      yield* _mapPeerUpdatedToState(event);
-    } else if (event is PeerInvited) {
-      yield* _mapPeerInvitedToState(event);
-    } else if (event is PeerAuthorized) {
-      yield* _mapPeerAuthorizedToState(event);
-    } else if (event is PeerDeclined) {
-      yield* _mapPeerDeclinedToState(event);
     } else if (event is End) {
       yield* _mapEndToState(event);
     }
@@ -123,7 +115,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         user.node.id = message.data;
 
         // Change Status
-        add(PeerUpdated(Status.Available));
+        user.add(NodeAvailable());
         break;
 
       // ** ======================================= ** //
@@ -136,13 +128,9 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         // Get Peer Data
         Peer from = Peer.fromMap(message.data);
 
-        // Check User Status
-        if (user.node.isNotBusy()) {
-          // Update Graph
-          user.node.updateGraph(from);
-          add(PeerUpdated(user.node.status));
-          yield SocketLoadInProgress();
-        }
+        // Update Graph
+        user.add(GraphUpdated(from));
+        yield SocketLoadInProgress();
         break;
 
       // ** ======================================= ** //
@@ -150,13 +138,9 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         // Get Peer Data
         Peer from = Peer.fromMap(message.data);
 
-        // Check if Node is Busy
-        if (user.node.isNotBusy()) {
-          // Update Graph
-          user.node.exitGraph(from);
-          add(PeerUpdated(user.node.status));
-          yield SocketLoadInProgress();
-        }
+        // Exit Graph Graph
+        user.add(GraphExited(from));
+        yield SocketLoadInProgress();
         break;
 
       // ** ======================================= ** //
@@ -166,11 +150,11 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         dynamic offer = message.data[1];
         Metadata meta = Metadata.fromMap(offer['metadata']);
 
-        // Change/Send Status Update
-        add(SocketEmit(Outgoing.Update, user.node, status: Status.Offered));
+        // Handle Offer
+        user.add(NodeRequested(from, offer, meta));
 
         // Yield State
-        yield Requested(from, offer, meta);
+        yield SocketLoadInProgress();
         break;
 
       // ** ======================================= ** //
@@ -179,12 +163,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         Peer from = Peer.fromMap(message.data[0]);
         dynamic answer = message.data[1];
 
-        // Handle Answer from Answered Peer
-        await user.node.handleAnswer(from, answer);
-
-        // Change/Send Status Update
-        add(SocketEmit(Outgoing.Update, user.node,
-            status: Status.Transferring));
+        // Handle Answer from Peer
+        user.add(NodeAuthorized(from, answer));
 
         // Begin Transfer
         data.add(PeerSentChunk(from));
@@ -193,14 +173,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
       // ** ======================================= ** //
       case Incoming.Declined:
-        // Get Peer Data
-        // Peer from = Peer.fromMap(message.data);
-
-        // Reset Connection
-        //user.node.reset(match: from);
-
-        // Change/Send Status Update
-        add(SocketEmit(Outgoing.Update, user.node, status: Status.Searching));
+        // Handle Rejection
+        user.add(NodeRejected());
         yield SocketLoadInProgress();
         break;
 
@@ -211,82 +185,16 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
         dynamic candidate = message.data[1];
 
         // Add Ice Candidate
-        user.node.session.handleCandidate(from, candidate);
+        user.add(NodeCandidate(from, candidate));
         break;
 
       // ** ======================================= ** //
       case Incoming.Error:
         // Log Error
         log.e("ERROR: " + message.data.toString());
-        add(End(EndType.Fail));
         yield SocketLoadInProgress();
         break;
     }
-  }
-
-// ************************
-// ** PeerUpdated Event ***
-// ************************
-  Stream<SignalState> _mapPeerUpdatedToState(PeerUpdated event) async* {
-    // Action by Status
-    switch (event.newStatus) {
-      case Status.Available:
-        // Change/Send Status Update
-        user.node.update(event.newStatus);
-        yield Available(user.node);
-        break;
-      case Status.Searching:
-        // Change/Send Status Update
-        user.node.update(event.newStatus);
-        yield Searching(user.node);
-        break;
-      default:
-        log.i("User-Node = " + user.node.status.toString());
-        break;
-    }
-  }
-
-// ***********************
-// ** PeerInvited Event **
-// ***********************
-  Stream<SignalState> _mapPeerInvitedToState(PeerInvited event) async* {
-    // Send Offer
-    await user.node.offer(event.to, data.currentFile.metadata);
-
-    // Change/Send Status Update
-    add(SocketEmit(Outgoing.Update, user.node, status: Status.Pending));
-    yield Pending(match: event.to);
-  }
-
-// ***************************
-// ** PeerAuthorized Event ***
-// ***************************
-  Stream<SignalState> _mapPeerAuthorizedToState(PeerAuthorized event) async* {
-    // Handle Offer from Requested Peer
-    await user.node.handleOffer(event.match, event.offer);
-
-    // Add File to Queue
-    data.traffic.addIncoming(event.metadata);
-
-    // Change/Send Status Update
-    add(SocketEmit(Outgoing.Update, user.node, status: Status.Transferring));
-
-    // Yield State
-    yield Transferring(event.match);
-  }
-
-// *************************
-// ** PeerDeclined Event ***
-// *************************
-  Stream<SignalState> _mapPeerDeclinedToState(PeerDeclined event) async* {
-    // Send Decline
-    user.node.decline(event.match);
-
-    // Change/Send Status Update
-    add(SocketEmit(Outgoing.Update, user.node, status: Status.Available));
-
-    // Yield State
-    yield Available(user.node);
   }
 
 // *******************************************
@@ -309,7 +217,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       // ** Transfer is Finished **
       case EndType.Complete:
         // Reset Node
-        add(PeerUpdated(Status.Available));
+        user.add(NodeAvailable());
 
         // Yield Ready
         yield Completed(user.node, file: event.file);

@@ -1,26 +1,11 @@
 part of 'core.dart';
 
-// ** Frontend BLoC Event Enums ** //
-// Data Event Enum
-enum DataEventType { QueueIncomingFile, QueueOutgoingFile, FindFile, OpenFile }
-
-// Device Event Enum
-enum DeviceEventType { Initialize }
-
-// User Event Enum
-enum UserEventType { CheckProfile, Register, SetStatus, UpdateProfile }
-
-// Web Event Enum
-enum WebEventType { Connect, Search, Active, Invite, Authorize }
-
 // Cubit Name Enum
 enum CubitType { Direction, Progress }
 enum BlocType { Data, Device, User, Signal }
 
 extension Events on BuildContext {
-// *********************** //
-// ** Retrieval Methods ** //
-// *********************** //
+  // -- Retrieval Methods --
   getBloc(BlocType type) {
     switch (type) {
       case BlocType.Data:
@@ -51,9 +36,7 @@ extension Events on BuildContext {
     return null;
   }
 
-// ******************* //
-// ** Miscellaneous ** //
-// ******************* //
+// -- Global Screen Size --
   setScreenSize() {
     // Get Screen Size
     double width = MediaQuery.of(this).size.width;

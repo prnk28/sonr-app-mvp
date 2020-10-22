@@ -37,7 +37,7 @@ extension Routing on BuildContext {
       switch (settings.name) {
         case '/home':
           // Update Status
-          getBloc(BlocType.Signal).add(PeerUpdated(Status.Available));
+          getBloc(BlocType.User).add(NodeAvailable());
           return PageTransition(
               child: HomeScreen(),
               type: PageTransitionType.fade,
@@ -50,6 +50,8 @@ extension Routing on BuildContext {
               settings: settings);
           break;
         case '/transfer':
+        // Update Status
+          getBloc(BlocType.User).add(NodeSearch());
           return PageTransition(
               child: TransferScreen(),
               type: PageTransitionType.fade,
@@ -77,9 +79,7 @@ extension Routing on BuildContext {
 // ** Navigator Utility ** //
 // *********************** //
 extension Utility on Navigator {
-  popDelayed(BuildContext context, {int milliseconds}) async {
-
-  }
+  popDelayed(BuildContext context, {int milliseconds}) async {}
 }
 
 // *********************** //
