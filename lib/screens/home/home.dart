@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WebBloc, WebState>(
+    return BlocConsumer<SignalBloc, SignalState>(
       listenWhen: (previousState, state) {
         if (state is SocketLoadInProgress) {
           return false;

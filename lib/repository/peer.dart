@@ -9,9 +9,9 @@ part 'handler.dart';
 // Status of Node
 enum Status {
   Offline, // Initial Status
-  Standby, // Device Located ready to connect
   Available, // Ready to Receive
   Searching, // Looking for Peers
+  Busy, // Pending/Waiting/Transferring
   Pending, // Waiting for Confirmation
   Offered, // Offered Transfer
   Answered, // Handle Receiver Authorization
@@ -53,7 +53,6 @@ class Peer {
     // Set Default Variables
     this.id = "";
     this.direction = 0.01;
-    this.status = Status.Offline;
     this.device = Platform.operatingSystem.toUpperCase();
 
     // Initialize Dependencies
@@ -86,6 +85,35 @@ class Peer {
       // Clear Session ID
       session.id = null;
     }
+  }
+
+  // ** Checker Method: If Peer can Send to Peer **
+  canSendTo(Peer peer) {
+    // Verify Status
+    bool statusCheck;
+    statusCheck =
+        this.status == Status.Searching && peer.status == Status.Available;
+
+    // Check Id
+    bool idCheck;
+    idCheck = this.id != null && peer.id != null;
+
+    // Validate
+    return statusCheck && idCheck;
+  }
+
+  // ** Get Difference When User is Searching **
+  getDifference(Peer receiver) {
+    // Check Node Status: Senders are From
+    if (this.status == Status.Searching &&
+        receiver.status == Status.Available) {
+      // Calculate Difference
+      var diff = this.direction - receiver.direction;
+
+      // Log and Get difference
+      return diff.abs();
+    }
+    return -1;
   }
 
 // ** Checker for Status **

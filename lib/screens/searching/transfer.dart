@@ -14,13 +14,13 @@ class TransferScreen extends StatelessWidget {
     context.getBloc(BlocType.Data).traffic.addOutgoing();
 
     // Search
-    context.getBloc(BlocType.Web).add(PeerUpdated(Status.Searching));
+    context.getBloc(BlocType.Signal).add(PeerUpdated(Status.Searching));
 
     // Return Widget
     return Scaffold(
       appBar: leadingAppBar("/home", context, Icons.close),
       backgroundColor: NeumorphicTheme.baseColor(context),
-      body: BlocBuilder<WebBloc, WebState>(
+      body: BlocBuilder<SignalBloc, SignalState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
           if (curr is SocketLoadInProgress) {
@@ -55,7 +55,7 @@ class TransferScreen extends StatelessWidget {
 
           // -- Transferring State--
           else if (state is Transferring) {
-            return ProgressView(web: BlocProvider.of<WebBloc>(context));
+            return ProgressView(web: BlocProvider.of<SignalBloc>(context));
           }
           return Container();
         },

@@ -68,6 +68,21 @@ class RTCSession {
     addDataChannel(id, channel);
   }
 
+  handleCandidate(Peer match, dynamic data) async {
+    // Get Match Node
+    var candidateMap = data['candidate'];
+    var pc = this.peerConnections[match.id];
+
+    // Setup Candidate
+    RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
+        candidateMap['sdpMid'], candidateMap['sdpMLineIndex']);
+    if (pc != null) {
+      await pc.addCandidate(candidate);
+    } else {
+      this.remoteCandidates.add(candidate);
+    }
+  }
+
   initializePeer(Role role, RTCPeerConnection pc, Peer match,
       {dynamic description}) async {
     // Listen to ICE Connection
@@ -99,6 +114,29 @@ class RTCSession {
       // Create New DataChannel
       this.createDataChannel(match.id, pc);
     }
+  }
+
+  newPeerConnection(id, Peer user) async {
+    // Create New RTC Peer Connection
+    RTCPeerConnection pc =
+        await createPeerConnection(RTC_CONFIG, RTC_CONSTRAINTS);
+
+    // Send ICE Message
+    pc.onIceCandidate = (candidate) {
+      socket.emit("CANDIDATE", [
+        user.toMap(),
+        id,
+        {
+          'candidate': {
+            'sdpMLineIndex': candidate.sdpMlineIndex,
+            'sdpMid': candidate.sdpMid,
+            'candidate': candidate.candidate,
+          },
+          'session_id': this.id,
+        }
+      ]);
+    };
+    return pc;
   }
 
   peersUpdated(data) {

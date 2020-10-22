@@ -46,7 +46,7 @@ class Window {
             child: view));
   }
 
-  Widget build(BuildContext context, WebState state) {
+  Widget build(BuildContext context, SignalState state) {
     if (state is Requested) {
       Requested reqState = state;
       view = buildAuthenticationView(context, reqState);

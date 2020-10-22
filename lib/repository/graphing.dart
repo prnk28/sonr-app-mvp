@@ -24,9 +24,9 @@ extension Graphing on Peer {
     _graph.remove(previousNode);
 
     // Check Node Status: Senders are From
-    if (this._canSendTo(peer)) {
+    if (this.canSendTo(peer)) {
       // Calculate Difference and Create Edge
-      _graph.setToBy<double>(this, peer, this._getDifference(peer));
+      _graph.setToBy<double>(this, peer, this.getDifference(peer));
     }
   }
 
@@ -64,35 +64,6 @@ extension Graphing on Peer {
     }
     // Return Peers
     return activePeers;
-  }
-
-  // ** Checker Method: If Peer can Send to Peer **
-  _canSendTo(Peer peer) {
-    // Verify Status
-    bool statusCheck;
-    statusCheck =
-        this.status == Status.Searching && peer.status == Status.Available;
-
-    // Check Id
-    bool idCheck;
-    idCheck = this.id != null && peer.id != null;
-
-    // Validate
-    return statusCheck && idCheck;
-  }
-
-  // ** Get Difference When User is Searching **
-  _getDifference(Peer receiver) {
-    // Check Node Status: Senders are From
-    if (this.status == Status.Searching &&
-        receiver.status == Status.Available) {
-      // Calculate Difference
-      var diff = this.direction - receiver.direction;
-
-      // Log and Get difference
-      return diff.abs();
-    }
-    return -1;
   }
 
   // ** Checker for if Graph Empty **

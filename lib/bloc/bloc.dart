@@ -1,5 +1,5 @@
-// Networking Communication
-export 'web/web_bloc.dart';
+// Signalling
+export 'signal/signal_bloc.dart';
 
 // User
 export 'user/user_bloc.dart';

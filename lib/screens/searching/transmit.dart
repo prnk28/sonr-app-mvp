@@ -1,7 +1,7 @@
 part of 'transfer.dart';
 
 class ProgressView extends StatelessWidget {
-  final WebBloc web;
+  final SignalBloc web;
 
   const ProgressView({this.web});
 

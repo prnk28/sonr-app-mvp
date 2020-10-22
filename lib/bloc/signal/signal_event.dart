@@ -1,4 +1,4 @@
-part of 'web_bloc.dart';
+part of 'signal_bloc.dart';
 
 enum EndType {
   Cancel,
@@ -7,8 +7,8 @@ enum EndType {
   Fail,
 }
 
-abstract class WebEvent extends Equatable {
-  const WebEvent();
+abstract class SignalEvent extends Equatable {
+  const SignalEvent();
 
   @override
   List<Object> get props => [];
@@ -18,19 +18,19 @@ abstract class WebEvent extends Equatable {
 // ** Single Events ****
 // *********************
 // Connect to Socket
-class SocketStarted extends WebEvent {
+class SocketStarted extends SignalEvent {
   const SocketStarted();
 }
 
 // Socket received event
-class SocketEmission extends WebEvent {
+class SocketEmission extends SignalEvent {
   final Incoming event;
   final dynamic data;
   const SocketEmission(this.event, this.data);
 }
 
 // Socket sending message
-class SocketEmit extends WebEvent {
+class SocketEmit extends SignalEvent {
   // Required Fields
   final Outgoing event;
   final Peer from;
@@ -53,7 +53,7 @@ class SocketEmit extends WebEvent {
 }
 
 // Peer Sent Invite
-class PeerInvited extends WebEvent {
+class PeerInvited extends SignalEvent {
   final Peer to;
   final SonrFile file;
 
@@ -61,7 +61,7 @@ class PeerInvited extends WebEvent {
 }
 
 // Peer Authorized Offer
-class PeerAuthorized extends WebEvent {
+class PeerAuthorized extends SignalEvent {
   final dynamic offer;
   final Metadata metadata;
   final Peer match;
@@ -69,29 +69,27 @@ class PeerAuthorized extends WebEvent {
   const PeerAuthorized(this.match, this.offer, this.metadata);
 }
 
-// Peer Authorized Offer
-class PeerDeclined extends WebEvent {
+// Peer Rejected Offer
+class PeerDeclined extends SignalEvent {
   final Peer match;
 
   const PeerDeclined(this.match);
 }
 
 // Send Node Data
-class PeerUpdated extends WebEvent {
+class PeerUpdated extends SignalEvent {
   // References
   final Status newStatus;
   final Peer from;
-  final Peer to;
 
   const PeerUpdated(
     this.newStatus, {
     this.from,
-    this.to,
   });
 }
 
 // Sequence Finished
-class End extends WebEvent {
+class End extends SignalEvent {
   final EndType type;
   final Peer match;
   final SonrFile file;

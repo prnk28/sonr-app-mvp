@@ -3,13 +3,13 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
-part 'web_event.dart';
-part 'web_state.dart';
+part 'signal_event.dart';
+part 'signal_state.dart';
 
 // ***********************
 // ** Sonar Bloc Class ***
 // ***********************
-class WebBloc extends Bloc<WebEvent, WebState> {
+class SignalBloc extends Bloc<SignalEvent, SignalState> {
   // Data Providers
   StreamSubscription dataSub;
   StreamSubscription directionSub;
@@ -21,10 +21,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
   final UserBloc user;
 
   // Initial State
-  WebState get initialState => SocketInitial();
+  SignalState get initialState => SocketInitial();
 
   // Constructer
-  WebBloc(this.data, this.device, this.user) : super(null) {
+  SignalBloc(this.data, this.device, this.user) : super(null) {
     // ** Listen to CallBack on SocketSubscriber ** //
     socketSub = new SocketSubscriber((Incoming event, dynamic data) {
       add(SocketEmission(event, data));
@@ -68,15 +68,13 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ** Map Events to State Method ***
 // *********************************
   @override
-  Stream<WebState> mapEventToState(
-    WebEvent event,
+  Stream<SignalState> mapEventToState(
+    SignalEvent event,
   ) async* {
     if (event is SocketStarted) {
       yield* _mapSocketStartedToState(event);
     } else if (event is SocketEmission) {
       yield* _mapSocketEmissionToState(event);
-    } else if (event is SocketEmit) {
-      yield* _mapSocketEmitToState(event);
     } else if (event is PeerUpdated) {
       yield* _mapPeerUpdatedToState(event);
     } else if (event is PeerInvited) {
@@ -93,9 +91,9 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // **************************
 // ** SocketStarted Event ***
 // **************************
-  Stream<WebState> _mapSocketStartedToState(SocketStarted event) async* {
+  Stream<SignalState> _mapSocketStartedToState(SocketStarted event) async* {
     // Check if Peer Located
-    if (user.node.status == Status.Standby) {
+    if (user.node.olc != null) {
       // Get Headers
       var headers = {
         'deviceId': user.node.id,
@@ -117,7 +115,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ***************************
 // ** SocketEmission Event ***
 // ***************************
-  Stream<WebState> _mapSocketEmissionToState(SocketEmission message) async* {
+  Stream<SignalState> _mapSocketEmissionToState(SocketEmission message) async* {
     switch (message.event) {
       // ** ======================================= ** //
       case Incoming.Connected:
@@ -196,10 +194,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
       // ** ======================================= ** //
       case Incoming.Declined:
         // Get Peer Data
-        Peer from = Peer.fromMap(message.data);
+        // Peer from = Peer.fromMap(message.data);
 
         // Reset Connection
-        user.node.reset(match: from);
+        //user.node.reset(match: from);
 
         // Change/Send Status Update
         add(SocketEmit(Outgoing.Update, user.node, status: Status.Searching));
@@ -213,7 +211,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         dynamic candidate = message.data[1];
 
         // Add Ice Candidate
-        user.node.handleCandidate(from, candidate);
+        user.node.session.handleCandidate(from, candidate);
         break;
 
       // ** ======================================= ** //
@@ -226,109 +224,20 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     }
   }
 
-// ***********************
-// ** SocketEmit Event ***
-// ***********************
-  Stream<WebState> _mapSocketEmitToState(SocketEmit message) async* {
-    // Get Subject
-    String subject = enumAsString(message.event).toUpperCase();
-    dynamic data;
-
-    // Send Message by Outgoing event
-    switch (message.event) {
-      // ** ======================================= ** //
-      case Outgoing.Update:
-        // Update Status
-        message.from.status = message.status;
-
-        // Set Data
-        data = message.from.toMap();
-        break;
-
-      // ** ======================================= ** //
-      case Outgoing.Offer:
-        // Get Fields
-        var s = message.session;
-
-        // Create Data Map
-        var from = message.from.toMap();
-        var offer = {
-          'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': message.sessionId,
-          'metadata': message.metadata.toMap()
-        };
-
-        // Set Data
-        data = [from, message.to, offer];
-        break;
-
-      // ** ======================================= ** //
-      case Outgoing.Answer:
-        // Get Fields
-        var s = message.session;
-
-        // Create Data Map
-        var from = message.from.toMap();
-        var answer = {
-          'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': message.sessionId,
-        };
-
-        // Set Data
-        data = [from, message.to, answer];
-        break;
-
-      // ** ======================================= ** //
-      case Outgoing.Decline:
-        // Set Data
-        data = [message.from.toMap(), message.to];
-        break;
-
-      // ** ======================================= ** //
-      case Outgoing.Candidate:
-        // Get Fields
-        var c = message.candidate;
-
-        // Create Data Map
-        var from = message.from.toMap();
-        var candidate = {
-          'candidate': {
-            'sdpMLineIndex': c.sdpMlineIndex,
-            'sdpMid': c.sdpMid,
-            'candidate': c.candidate,
-          },
-          'session_id': message.sessionId,
-        };
-
-        // Set Data
-        data = [from, message.to, candidate];
-        break;
-
-      // ** ======================================= ** //
-      case Outgoing.Exited:
-        // Set Data
-        data = message.from.toMap();
-        break;
-    }
-
-    // ** Send to Socket Server ** //
-    socket.emit(subject, data);
-  }
-
 // ************************
 // ** PeerUpdated Event ***
 // ************************
-  Stream<WebState> _mapPeerUpdatedToState(PeerUpdated event) async* {
+  Stream<SignalState> _mapPeerUpdatedToState(PeerUpdated event) async* {
     // Action by Status
     switch (event.newStatus) {
       case Status.Available:
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Update, user.node, status: Status.Available));
+        user.node.update(event.newStatus);
         yield Available(user.node);
         break;
       case Status.Searching:
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Update, user.node, status: Status.Searching));
+        user.node.update(event.newStatus);
         yield Searching(user.node);
         break;
       default:
@@ -340,7 +249,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ***********************
 // ** PeerInvited Event **
 // ***********************
-  Stream<WebState> _mapPeerInvitedToState(PeerInvited event) async* {
+  Stream<SignalState> _mapPeerInvitedToState(PeerInvited event) async* {
     // Send Offer
     await user.node.offer(event.to, data.currentFile.metadata);
 
@@ -352,7 +261,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // ***************************
 // ** PeerAuthorized Event ***
 // ***************************
-  Stream<WebState> _mapPeerAuthorizedToState(PeerAuthorized event) async* {
+  Stream<SignalState> _mapPeerAuthorizedToState(PeerAuthorized event) async* {
     // Handle Offer from Requested Peer
     await user.node.handleOffer(event.match, event.offer);
 
@@ -369,7 +278,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *************************
 // ** PeerDeclined Event ***
 // *************************
-  Stream<WebState> _mapPeerDeclinedToState(PeerDeclined event) async* {
+  Stream<SignalState> _mapPeerDeclinedToState(PeerDeclined event) async* {
     // Send Decline
     user.node.decline(event.match);
 
@@ -383,7 +292,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
 // *******************************************
 // ** End Event: Cancel/Complete/Exit/Fail ***
 // *******************************************
-  Stream<WebState> _mapEndToState(End event) async* {
+  Stream<SignalState> _mapEndToState(End event) async* {
     // TODO: Check Reset Connection
     //socket.emit("RESET");
 

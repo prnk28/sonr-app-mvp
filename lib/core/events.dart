@@ -15,7 +15,7 @@ enum WebEventType { Connect, Search, Active, Invite, Authorize }
 
 // Cubit Name Enum
 enum CubitType { Direction, Progress }
-enum BlocType { Data, Device, User, Web }
+enum BlocType { Data, Device, User, Signal }
 
 extension Events on BuildContext {
 // *********************** //
@@ -32,8 +32,8 @@ extension Events on BuildContext {
       case BlocType.User:
         return BlocProvider.of<UserBloc>(this);
         break;
-      case BlocType.Web:
-        return BlocProvider.of<WebBloc>(this);
+      case BlocType.Signal:
+        return BlocProvider.of<SignalBloc>(this);
         break;
     }
     return null;

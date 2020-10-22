@@ -42,7 +42,7 @@ class _BubbleState extends State<Bubble> {
 
   _sendInvite(BuildContext context, Peer to) async {
     // Invite Peer
-    context.getBloc(BlocType.Web).add(PeerInvited(to));
+    context.getBloc(BlocType.Signal).add(PeerInvited(to));
   }
 
   _getIconByDevice(String device) {

@@ -1,7 +1,7 @@
-part of 'web_bloc.dart';
+part of 'signal_bloc.dart';
 
-abstract class WebState extends Equatable {
-  const WebState();
+abstract class SignalState extends Equatable {
+  const SignalState();
   @override
   List<Object> get props => [];
 }
@@ -9,21 +9,28 @@ abstract class WebState extends Equatable {
 // ********************
 // ** Preload State ***
 // ********************
-class SocketInitial extends WebState {
+class SocketInitial extends SignalState {
   const SocketInitial();
 }
 
 // ***************************
 // ** Between Server Reads ***
 // ***************************
-class SocketLoadInProgress extends WebState {
+class SocketLoadInProgress extends SignalState {
   const SocketLoadInProgress();
+}
+
+// ***************************
+// ** After Handling Event ***
+// ***************************
+class SocketLoadSuccess extends SignalState {
+  const SocketLoadSuccess();
 }
 
 // ***************************
 // ** Active for Receiving ***
 // ***************************
-class Available extends WebState {
+class Available extends SignalState {
   final Peer userNode;
   const Available(this.userNode);
 }
@@ -31,7 +38,7 @@ class Available extends WebState {
 // *****************************************
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
-class Searching extends WebState {
+class Searching extends SignalState {
   final Peer userNode;
   const Searching(this.userNode);
 }
@@ -39,7 +46,7 @@ class Searching extends WebState {
 // ********************************
 // ** Pending Receiver Decision ***
 // ********************************
-class Pending extends WebState {
+class Pending extends SignalState {
   final Peer match;
 
   const Pending({
@@ -50,7 +57,7 @@ class Pending extends WebState {
 // *******************************
 // ** Received Offer from Peer ***
 // *******************************
-class Requested extends WebState {
+class Requested extends SignalState {
   final dynamic offer;
   final Metadata metadata;
   final Peer from;
@@ -61,7 +68,7 @@ class Requested extends WebState {
 // *********************************************
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
-class Transferring extends WebState {
+class Transferring extends SignalState {
   final Peer match;
 
   const Transferring(this.match);
@@ -70,7 +77,7 @@ class Transferring extends WebState {
 // *************************
 // ** Transfer Succesful ***
 // *************************
-class Completed extends WebState {
+class Completed extends SignalState {
   final Peer userNode;
   final SonrFile file;
 
@@ -83,6 +90,6 @@ class Completed extends WebState {
 // *******************************************
 // ** Post Authorization Receiver Declined ***
 // *******************************************
-class Failed extends WebState {
+class Failed extends SignalState {
   const Failed();
 }

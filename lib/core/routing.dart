@@ -8,7 +8,7 @@ extension Routing on BuildContext {
   goHome({bool initial: false}) {
     // Connect First
     if (initial) {
-      getBloc(BlocType.Web).add(SocketStarted());
+      getBloc(BlocType.Signal).add(SocketStarted());
     }
 
     // Push
@@ -37,7 +37,7 @@ extension Routing on BuildContext {
       switch (settings.name) {
         case '/home':
           // Update Status
-          getBloc(BlocType.Web).add(PeerUpdated(Status.Available));
+          getBloc(BlocType.Signal).add(PeerUpdated(Status.Available));
           return PageTransition(
               child: HomeScreen(),
               type: PageTransitionType.fade,
@@ -109,8 +109,8 @@ MultiBlocProvider initializeBloc(Widget app) {
       ),
 
       // Networking Logic
-      BlocProvider<WebBloc>(
-        create: (context) => WebBloc(
+      BlocProvider<SignalBloc>(
+        create: (context) => SignalBloc(
             BlocProvider.of<DataBloc>(context),
             BlocProvider.of<DeviceBloc>(context),
             BlocProvider.of<UserBloc>(context)),

@@ -9,7 +9,7 @@ Widget buildAuthenticationView(BuildContext context, Requested state) {
           child: GestureDetector(
               onTap: () {
                 // Update WebBloc to Inform User Declined
-                context.getBloc(BlocType.Web).add(PeerDeclined(state.from));
+                context.getBloc(BlocType.Signal).add(PeerDeclined(state.from));
 
                 // Pop Window
                 Navigator.pop(context);
@@ -55,7 +55,7 @@ NeumorphicButton _buildAuthButton(
       onPressed: () {
 // Update WebBloc to Inform User Accepted
         context
-            .getBloc(BlocType.Web)
+            .getBloc(BlocType.Signal)
             .add(PeerAuthorized(match, offer, metadata));
       },
       style: NeumorphicStyle(

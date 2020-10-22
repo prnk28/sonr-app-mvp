@@ -53,7 +53,7 @@ NeumorphicAppBar leadingAppBar(
               } else {
                 if (shouldRevertToActive) {
                   // Update Node
-                  context.getBloc(BlocType.Web).add(PeerUpdated(Status.Available));
+                  context.getBloc(BlocType.Signal).add(PeerUpdated(Status.Available));
                 }
 
                 // Pop Navigation
