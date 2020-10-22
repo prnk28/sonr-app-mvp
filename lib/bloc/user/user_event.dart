@@ -76,6 +76,14 @@ class NodeAuthorized extends UserEvent {
   const NodeAuthorized(this.match, this.answer);
 }
 
+// [Peer] has sent a candidate
+class NodeCandidate extends UserEvent {
+  final Peer match;
+  final dynamic candidate;
+
+  const NodeCandidate(this.match, this.candidate);
+}
+
 // [User] Rejected Offer
 class NodeDeclined extends UserEvent {
   final Peer to;
