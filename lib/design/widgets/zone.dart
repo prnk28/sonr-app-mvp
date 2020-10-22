@@ -3,7 +3,7 @@ part of 'widgets.dart';
 // *************************** //
 // ** Build Bubbles in List ** //
 // *************************** //
-buildStackView(List<Peer> peers) {
+buildStackView(List<Node> peers) {
   // Initialize Widget List with Range Lines
   List<Widget> stackWidgets = new List<Widget>();
   stackWidgets.add(buildRangeLines());
@@ -14,7 +14,7 @@ buildStackView(List<Peer> peers) {
   double mean = 1.0 / total;
 
   // Create Bubbles
-  for (Peer peer in peers) {
+  for (Node peer in peers) {
     // Increase Count
     current += 1;
 

@@ -23,7 +23,7 @@ class ProgressCubit extends Cubit<double> {
 
 // Send Transfer over DataChannel to Peer
 class PeerSentChunk extends DataEvent {
-  final Peer match;
+  final Node match;
   const PeerSentChunk(this.match);
 }
 

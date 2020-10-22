@@ -10,7 +10,7 @@ class Circle {
   }
 
   // ** Exit Graph from Peer **
-  exitGraph(Peer peer) {
+  exitGraph(Node peer) {
     var previousNode = _graph.singleWhere((element) => element.id == peer.id,
         orElse: () => null);
 
@@ -19,9 +19,9 @@ class Circle {
   }
 
   // ** Update Graph with new Value **
-  updateGraph(Peer sender, Peer receiver) {
+  updateGraph(Node sender, Node receiver) {
     // Find Previous Node
-    Peer previousNode = _graph.singleWhere(
+    Node previousNode = _graph.singleWhere(
         (element) => element.id == receiver.id,
         orElse: () => null);
 
@@ -37,9 +37,9 @@ class Circle {
   }
 
   // ** Calculates Costs forEach, Node Placed in Zone **
-  List<Peer> getZonedPeers(Peer user) {
-    Map<Peer, double> costs = new Map<Peer, double>();
-    List<Peer> activePeers = new List<Peer>();
+  List<Node> getZonedPeers(Node user) {
+    Map<Node, double> costs = new Map<Node, double>();
+    List<Node> activePeers = new List<Node>();
     // Utilizes Tos
     if (user.status == Status.Searching) {
       // Check then Iterate
@@ -48,7 +48,7 @@ class Circle {
         var receivers = _graph.linkTos(this);
 
         // Iterate Receivers
-        for (Peer receiver in receivers) {
+        for (Node receiver in receivers) {
           // Get Cost
           var cost = _graph.getBy<double>(this, receiver);
 
@@ -73,7 +73,7 @@ class Circle {
   }
 
   // ** Get Difference When User is Searching **
-  _getDifference(Peer sender, Peer receiver) {
+  _getDifference(Node sender, Node receiver) {
     // Check Node Status: Senders are From
     if (sender.status == Status.Searching &&
         receiver.status == Status.Available) {

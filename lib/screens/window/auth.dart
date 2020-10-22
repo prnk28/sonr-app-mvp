@@ -32,7 +32,7 @@ Widget buildAuthenticationView(BuildContext context, Requested state) {
   );
 }
 
-Row _buildItem(BuildContext context, Peer match) {
+Row _buildItem(BuildContext context, Node match) {
   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
     Icon(Icons.image, size: 100),
     Column(
@@ -50,7 +50,7 @@ Row _buildItem(BuildContext context, Peer match) {
 }
 
 NeumorphicButton _buildAuthButton(
-    BuildContext context, Peer match, dynamic offer, Metadata metadata) {
+    BuildContext context, Node match, dynamic offer, Metadata metadata) {
   return NeumorphicButton(
       onPressed: () {
 // Update WebBloc to Inform User Accepted

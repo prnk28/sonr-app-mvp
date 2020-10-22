@@ -69,7 +69,7 @@ class RTCSession {
     addDataChannel(id, channel);
   }
 
-  handleCandidate(Peer match, dynamic data) async {
+  handleCandidate(Node match, dynamic data) async {
     // Get Match Node
     var candidateMap = data['candidate'];
     var pc = this.peerConnections[match.id];
@@ -84,7 +84,7 @@ class RTCSession {
     }
   }
 
-  initializePeer(Role role, RTCPeerConnection pc, Peer match,
+  initializePeer(Role role, RTCPeerConnection pc, Node match,
       {dynamic description}) async {
     // Listen to ICE Connection
     pc.onIceConnectionState = (state) {};
@@ -117,7 +117,7 @@ class RTCSession {
     }
   }
 
-  newPeerConnection(id, Peer user) async {
+  newPeerConnection(id, Node user) async {
     // Create New RTC Peer Connection
     RTCPeerConnection pc =
         await createPeerConnection(RTC_CONFIG, RTC_CONSTRAINTS);

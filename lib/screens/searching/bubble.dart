@@ -2,7 +2,7 @@ part of 'transfer.dart';
 
 class Bubble extends StatefulWidget {
   final double value;
-  final Peer node;
+  final Node node;
 
   const Bubble(this.value, this.node, {Key key}) : super(key: key);
   @override
@@ -40,7 +40,7 @@ class _BubbleState extends State<Bubble> {
                 ))));
   }
 
-  _sendInvite(BuildContext context, Peer to) async {
+  _sendInvite(BuildContext context, Node to) async {
     // Get Current File
     SonrFile file = context.getBloc(BlocType.Data).currentFile;
 

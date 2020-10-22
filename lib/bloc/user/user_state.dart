@@ -16,7 +16,7 @@ class ProfileLoadFailure extends UserState {
 
 // Profile has been found
 class ProfileLoadSuccess extends UserState {
-  final Peer user;
+  final Node user;
 
   ProfileLoadSuccess(this.user);
 }
@@ -26,7 +26,7 @@ class ProfileLoadSuccess extends UserState {
 // ********************************
 // Ready to Transfer
 class NodeAvailableInProgress extends UserState {
-  final Peer userNode;
+  final Node userNode;
 
   NodeAvailableInProgress(this.userNode);
 }
@@ -36,22 +36,22 @@ class NodeAvailableInProgress extends UserState {
 // **************************************
 // Updating Graph
 class NodeSearchInProgress extends UserState {
-  final Peer userNode;
+  final Node userNode;
 
   NodeSearchInProgress(this.userNode);
 }
 
 // Found Neighbors
 class NodeSearchSuccess extends UserState {
-  final Peer userNode;
-  final List<Peer> activePeers;
+  final Node userNode;
+  final List<Node> activePeers;
 
   NodeSearchSuccess(this.userNode, this.activePeers);
 }
 
 // No Neighbors
 class NodeSearchFailure extends UserState {
-  final Peer userNode;
+  final Node userNode;
   NodeSearchFailure(this.userNode);
 }
 
@@ -60,7 +60,7 @@ class NodeSearchFailure extends UserState {
 // *********************************
 // User has been offered
 class NodeRequestInitial extends UserState {
-  final Peer from;
+  final Node from;
   final dynamic offer;
   final Metadata metadata;
 
@@ -69,13 +69,13 @@ class NodeRequestInitial extends UserState {
 
 // User has sent offer to [Peer]
 class NodeRequestInProgress extends UserState {
-  final Peer match;
+  final Node match;
   NodeRequestInProgress(this.match);
 }
 
 // [Peer] has accepted offer
 class NodeRequestSuccess extends UserState {
-  final Peer match;
+  final Node match;
   NodeRequestSuccess(this.match);
 }
 
@@ -88,21 +88,21 @@ class NodeRequestFailure extends UserState {}
 // User waiting for first chunk
 class NodeTransferInitial extends UserState {
   final Metadata metadata;
-  final Peer match;
+  final Node match;
 
   NodeTransferInitial(this.metadata, this.match);
 }
 
 // User/[Peer] sending/receving chunks
 class NodeTransferInProgress extends UserState {
-  final Peer match;
+  final Node match;
 
   NodeTransferInProgress(this.match);
 }
 
 // User/[Peer] have completed transfer
 class NodeTransferSuccess extends UserState {
-  final Peer match;
+  final Node match;
   final SonrFile file;
 
   NodeTransferSuccess(this.match, {this.file});
@@ -110,7 +110,7 @@ class NodeTransferSuccess extends UserState {
 
 // User/[Peer] have failed to transfer
 class NodeTransferFailure extends UserState {
-  final Peer match;
+  final Node match;
 
   NodeTransferFailure(this.match);
 }

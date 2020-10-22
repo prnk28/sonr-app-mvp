@@ -28,7 +28,7 @@ class SocketFailure extends SignalState {
 // ** Active for Receiving ***
 // ***************************
 class Available extends SignalState {
-  final Peer userNode;
+  final Node userNode;
   const Available(this.userNode);
 }
 
@@ -36,7 +36,7 @@ class Available extends SignalState {
 // ** Searching for Peer Sender/Receiver ***
 // *****************************************
 class Searching extends SignalState {
-  final Peer userNode;
+  final Node userNode;
   const Searching(this.userNode);
 }
 
@@ -44,7 +44,7 @@ class Searching extends SignalState {
 // ** Pending Receiver Decision ***
 // ********************************
 class Pending extends SignalState {
-  final Peer match;
+  final Node match;
 
   const Pending({
     this.match,
@@ -57,7 +57,7 @@ class Pending extends SignalState {
 class Requested extends SignalState {
   final dynamic offer;
   final Metadata metadata;
-  final Peer from;
+  final Node from;
 
   const Requested(this.from, this.offer, this.metadata);
 }
@@ -66,7 +66,7 @@ class Requested extends SignalState {
 // ** In WebRTC Transfer or Contact Transfer ***
 // *********************************************
 class Transferring extends SignalState {
-  final Peer match;
+  final Node match;
 
   const Transferring(this.match);
 }
@@ -75,7 +75,7 @@ class Transferring extends SignalState {
 // ** Transfer Succesful ***
 // *************************
 class Completed extends SignalState {
-  final Peer userNode;
+  final Node userNode;
   final SonrFile file;
 
   const Completed(

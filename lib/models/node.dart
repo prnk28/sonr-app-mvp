@@ -13,7 +13,7 @@ enum Status {
   Busy, // Pending/Waiting/Transferring
 }
 
-class Peer {
+class Node {
   // Management
   String id;
   String olc;
@@ -40,7 +40,7 @@ class Peer {
   Proximity proximity;
 
 // ** Constructer **
-  Peer(this.profile) {
+  Node(this.profile) {
     // Set Default Variables
     this.id = "";
     this._status = Status.Initial;
@@ -49,8 +49,8 @@ class Peer {
   }
 
 // ** Build Peer from Map **
-  static Peer fromMap(Map map) {
-    Peer neighbor = new Peer(Profile.fromMap(map['profile']));
+  static Node fromMap(Map map) {
+    Node neighbor = new Node(Profile.fromMap(map['profile']));
     neighbor.id = map['id'];
     neighbor.device = map["device"];
     neighbor.direction = map['direction'];
@@ -59,7 +59,7 @@ class Peer {
   }
 
   // ** Checker Method: If Peer can Send to Peer **
-  canSendTo(Peer peer) {
+  canSendTo(Node peer) {
     // Verify Status
     bool statusCheck;
     statusCheck =
@@ -74,7 +74,7 @@ class Peer {
   }
 
   // ** Get Difference When User is Searching **
-  getDifference(Peer receiver) {
+  getDifference(Node receiver) {
     // Check Node Status: Senders are From
     if (this.status == Status.Searching &&
         receiver.status == Status.Available) {

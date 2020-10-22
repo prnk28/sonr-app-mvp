@@ -1,7 +1,7 @@
 part of 'device_bloc.dart';
 
 abstract class DeviceState extends Equatable {
-  final Peer user;
+  final Node user;
   const DeviceState({this.user});
 
   @override

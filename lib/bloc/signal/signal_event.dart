@@ -25,7 +25,7 @@ class SocketStarted extends SignalEvent {
 // Sequence Finished
 class End extends SignalEvent {
   final EndType type;
-  final Peer match;
+  final Node match;
   final SonrFile file;
   const End(this.type, {this.match, this.file});
 }

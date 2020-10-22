@@ -36,8 +36,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** ======================================= ** //
     socket.on('UPDATED', (data) {
       // Get Peer Data
-      Peer from = Peer.fromMap(data);
-      
+      Node from = Node.fromMap(data);
+
       // Update Graph
       user.add(GraphUpdated(from));
     });
@@ -45,7 +45,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** ======================================= ** //
     socket.on('EXITED', (data) {
       // Get Peer Data
-      Peer from = Peer.fromMap(data);
+      Node from = Node.fromMap(data);
 
       // Exit Graph Graph
       user.add(GraphExited(from));
@@ -54,7 +54,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** ======================================= ** //
     socket.on('OFFERED', (data) {
       // Get Objects
-      Peer from = Peer.fromMap(data[0]);
+      Node from = Node.fromMap(data[0]);
       dynamic offer = data[1];
       Metadata meta = Metadata.fromMap(offer['metadata']);
 
@@ -65,7 +65,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** ======================================= ** //
     socket.on('ANSWERED', (data) {
       // Get Objects
-      Peer from = Peer.fromMap(data[0]);
+      Node from = Node.fromMap(data[0]);
       dynamic answer = data[1];
 
       // Handle Answer from Peer
@@ -81,7 +81,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** ======================================= ** //
     socket.on('CANDIDATE', (data) {
       // Get Objects
-      Peer from = Peer.fromMap(data[0]);
+      Node from = Node.fromMap(data[0]);
       dynamic candidate = data[1];
 
       // Add Ice Candidate

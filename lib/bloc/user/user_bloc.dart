@@ -8,7 +8,7 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   // Data Providers
-  Peer node;
+  Node node;
   Circle circle;
   RTCSession session;
 
@@ -86,7 +86,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Profile Found
     else {
       // Initialize User Node
-      node = new Peer(profile);
+      node = new Node(profile);
 
       // Set Node Location
       await node.setLocation();
@@ -103,7 +103,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     await Profile.update(event.newProfile);
 
     // Reinitialize User Node
-    node = new Peer(event.newProfile);
+    node = new Node(event.newProfile);
 
     // Set Node Location
     await node.setLocation();
@@ -145,7 +145,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   // Retrieve All Peers by Zone
   Stream<UserState> _mapGraphZonedPeersState(GraphZonedPeers event) async* {
     // Get Peer List
-    List<Peer> activePeers = circle.getZonedPeers(node);
+    List<Node> activePeers = circle.getZonedPeers(node);
 
     // Check then Iterate
     if (activePeers.length > 0) {

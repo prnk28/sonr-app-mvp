@@ -22,13 +22,13 @@ class ProfileUpdated extends UserEvent {
 // ** === Graph Management === ** //
 // [Peer] has updated Information
 class GraphUpdated extends UserEvent {
-  final Peer from;
+  final Node from;
   GraphUpdated(this.from);
 }
 
 // [Peer] exited Pool of Neighbors
 class GraphExited extends UserEvent {
-  final Peer from;
+  final Node from;
   GraphExited(this.from);
 }
 
@@ -52,19 +52,19 @@ class NodeBusy extends UserEvent {
 }
 
 class NodeCancel extends UserEvent {
-  final Peer match;
+  final Node match;
   NodeCancel(this.match);
 }
 
 // [User] is Reset
 class NodeReset extends UserEvent {
-  final Peer match;
+  final Node match;
   NodeReset({this.match});
 }
 
 // [User] Send Offer to another peer
 class NodeOffered extends UserEvent {
-  final Peer to;
+  final Node to;
   final SonrFile file;
 
   const NodeOffered(this.to, {this.file});
@@ -72,7 +72,7 @@ class NodeOffered extends UserEvent {
 
 // [Peer] A Request Has Been Given
 class NodeRequested extends UserEvent {
-  final Peer from;
+  final Node from;
   final dynamic offer;
   final Metadata metadata;
 
@@ -81,7 +81,7 @@ class NodeRequested extends UserEvent {
 
 // [User] Accepted Offer
 class NodeAccepted extends UserEvent {
-  final Peer match;
+  final Node match;
   final dynamic offer;
   final Metadata metadata;
 
@@ -90,7 +90,7 @@ class NodeAccepted extends UserEvent {
 
 // [Peer] Authorized Offer Request
 class NodeAuthorized extends UserEvent {
-  final Peer match;
+  final Node match;
   final dynamic answer;
 
   const NodeAuthorized(this.match, this.answer);
@@ -98,7 +98,7 @@ class NodeAuthorized extends UserEvent {
 
 // [Peer] has sent a candidate
 class NodeCandidate extends UserEvent {
-  final Peer match;
+  final Node match;
   final dynamic candidate;
 
   const NodeCandidate(this.match, this.candidate);
@@ -106,7 +106,7 @@ class NodeCandidate extends UserEvent {
 
 // [User] Rejected Offer
 class NodeDeclined extends UserEvent {
-  final Peer to;
+  final Node to;
   const NodeDeclined(this.to);
 }
 
