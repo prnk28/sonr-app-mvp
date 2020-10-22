@@ -9,7 +9,7 @@ abstract class DeviceState extends Equatable {
 }
 
 // ** Prior to Load or on Standby **
-class Inactive extends DeviceState {}
+class LocationPermissionInitial extends DeviceState {}
 
 // ** Device Received Location **
 class LocationPermissionSuccess extends DeviceState {

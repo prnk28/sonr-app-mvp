@@ -6,14 +6,14 @@ abstract class UserState extends Equatable {
   List<Object> get props => [];
 }
 
-// User cannot communicate to server
-class UserLoadFailure extends UserState {
-  UserLoadFailure();
+// No Profile Found
+class ProfileLoadFailure extends UserState {
+  ProfileLoadFailure();
 }
 
-// User can communicate to server
-class UserLoadSuccess extends UserState {
+// Profile has been found
+class ProfileLoadSuccess extends UserState {
   final Peer user;
 
-  UserLoadSuccess(this.user);
+  ProfileLoadSuccess(this.user);
 }

@@ -166,10 +166,10 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         // Get Objects
         Peer from = Peer.fromMap(message.data[0]);
         dynamic offer = message.data[1];
-        Metadata meta = Metadata.fromMap(message.data['metadata']);
+        Metadata meta = Metadata.fromMap(offer['metadata']);
 
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Status, user.node, status: Status.Offered));
+        add(SocketEmit(Outgoing.Update, user.node, status: Status.Offered));
 
         // Yield State
         yield Requested(from, offer, meta);
@@ -185,7 +185,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         await user.node.handleAnswer(from, answer);
 
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Status, user.node,
+        add(SocketEmit(Outgoing.Update, user.node,
             status: Status.Transferring));
 
         // Begin Transfer
@@ -202,7 +202,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
         user.node.reset(match: from);
 
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Status, user.node, status: Status.Searching));
+        add(SocketEmit(Outgoing.Update, user.node, status: Status.Searching));
         yield SocketLoadInProgress();
         break;
 
@@ -237,7 +237,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     // Send Message by Outgoing event
     switch (message.event) {
       // ** ======================================= ** //
-      case Outgoing.Status:
+      case Outgoing.Update:
         // Update Status
         message.from.status = message.status;
 
@@ -323,12 +323,12 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     switch (event.newStatus) {
       case Status.Available:
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Status, user.node, status: Status.Available));
+        add(SocketEmit(Outgoing.Update, user.node, status: Status.Available));
         yield Available(user.node);
         break;
       case Status.Searching:
         // Change/Send Status Update
-        add(SocketEmit(Outgoing.Status, user.node, status: Status.Searching));
+        add(SocketEmit(Outgoing.Update, user.node, status: Status.Searching));
         yield Searching(user.node);
         break;
       default:
@@ -345,7 +345,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     await user.node.offer(event.to, data.currentFile.metadata);
 
     // Change/Send Status Update
-    add(SocketEmit(Outgoing.Status, user.node, status: Status.Pending));
+    add(SocketEmit(Outgoing.Update, user.node, status: Status.Pending));
     yield Pending(match: event.to);
   }
 
@@ -360,7 +360,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     data.traffic.addIncoming(event.metadata);
 
     // Change/Send Status Update
-    add(SocketEmit(Outgoing.Status, user.node, status: Status.Transferring));
+    add(SocketEmit(Outgoing.Update, user.node, status: Status.Transferring));
 
     // Yield State
     yield Transferring(event.match);
@@ -374,7 +374,7 @@ class WebBloc extends Bloc<WebEvent, WebState> {
     user.node.decline(event.match);
 
     // Change/Send Status Update
-    add(SocketEmit(Outgoing.Status, user.node, status: Status.Available));
+    add(SocketEmit(Outgoing.Update, user.node, status: Status.Available));
 
     // Yield State
     yield Available(user.node);

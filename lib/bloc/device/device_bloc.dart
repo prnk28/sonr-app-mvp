@@ -27,16 +27,17 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     DeviceEvent event,
   ) async* {
     if (event is LocationPermissionCheck) {
-      yield* mapPermissionsCheckState(event);
+      yield* _mapLocationPermissionCheckState(event);
     } else if (event is LocationPermissionRequested) {
-      yield* mapPermissionsRequestedState(event);
+      yield* _mapLocationPermissionRequestedState(event);
     }
   }
 
-// ****************************
-// ** PermissionsCheck Event **
-// ****************************
-  Stream<DeviceState> mapPermissionsCheckState(LocationPermissionCheck event) async* {
+// ***********************************
+// ** LocationPermissionCheck Event **
+// ***********************************
+  Stream<DeviceState> _mapLocationPermissionCheckState(
+      LocationPermissionCheck event) async* {
     // Intialize FileType
     await initFileType();
 
@@ -56,10 +57,10 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     }
   }
 
-// ******************************
-// ** PermissionsRequest Event **
-// ******************************
-  Stream<DeviceState> mapPermissionsRequestedState(
+// ***************************************
+// ** LocationPermissionRequested Event **
+// ***************************************
+  Stream<DeviceState> _mapLocationPermissionRequestedState(
       LocationPermissionRequested event) async* {
     // Ask for Locations Permission
     if (await Permission.locationWhenInUse.request().isGranted) {

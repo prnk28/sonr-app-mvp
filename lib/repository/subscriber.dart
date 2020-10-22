@@ -16,7 +16,7 @@ enum Incoming {
 }
 
 enum Outgoing {
-  Status,
+  Update,
   Offer,
   Answer,
   Decline,

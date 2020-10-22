@@ -34,7 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // No Profile
     if (profile == null) {
       // Change State
-      yield UserLoadFailure();
+      yield ProfileLoadFailure();
     }
     // Profile Found
     else {
@@ -46,7 +46,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       node.status = Status.Standby;
 
       // Profile Ready
-      yield UserLoadSuccess(node);
+      yield ProfileLoadSuccess(node);
     }
   }
 
@@ -65,6 +65,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     node.status = Status.Standby;
 
     // Profile Ready
-    yield UserLoadSuccess(node);
+    yield ProfileLoadSuccess(node);
   }
 }

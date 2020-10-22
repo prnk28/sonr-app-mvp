@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
     context.setScreenSize();
 
     // Initialize Device
-    context.getBloc(BlocType.Device).add(LocationPermissionRequested());
+    context.getBloc(BlocType.Device).add(LocationPermissionCheck());
 
     // Return
     return Scaffold(
@@ -24,11 +24,11 @@ class _SplashView extends StatelessWidget {
     return BlocListener<UserBloc, UserState>(
         listener: (past, curr) {
           // Home Screen
-          if (curr is UserLoadSuccess) {
+          if (curr is ProfileLoadSuccess) {
             context.goHome(initial: true);
           }
           // Register Screen
-          else if (curr is UserLoadFailure) {
+          else if (curr is ProfileLoadFailure) {
             context.goRegister();
           }
         },

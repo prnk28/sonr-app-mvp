@@ -9,13 +9,13 @@ class RegisterScreen extends StatelessWidget {
       appBar: logoAppBar(),
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
-        if (curr is UserLoadSuccess) {
+        if (curr is ProfileLoadSuccess) {
           // Push to Home with Profile
           context.goHome(initial: true);
           return false;
         }
         // Register Screen
-        else if (curr is UserLoadFailure) {
+        else if (curr is ProfileLoadFailure) {
           return true;
           // Default
         } else {
@@ -23,7 +23,7 @@ class RegisterScreen extends StatelessWidget {
         }
       }, builder: (context, state) {
         // Display Login/Signup View
-        if (state is UserLoadFailure) {
+        if (state is ProfileLoadFailure) {
           return Column(children: <Widget>[
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
