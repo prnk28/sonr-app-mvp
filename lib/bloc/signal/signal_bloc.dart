@@ -29,8 +29,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     socket.on('connect', (_) {
       // Get/Set Socket Id
       user.node.id = socket.id;
-      log.i("CONNECTED");
-
       // Change Status
       user.add(NodeAvailable());
     });
@@ -39,8 +37,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     socket.on('UPDATED', (data) {
       // Get Peer Data
       Peer from = Peer.fromMap(data);
-      log.i("UPDATED: " + data.toString());
-
+      
       // Update Graph
       user.add(GraphUpdated(from));
     });
