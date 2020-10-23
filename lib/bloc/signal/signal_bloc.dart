@@ -10,10 +10,6 @@ part 'signal_state.dart';
 // ** Sonar Bloc Class ***
 // ***********************
 class SignalBloc extends Bloc<SignalEvent, SignalState> {
-  // Data Providers
-  StreamSubscription dataSub;
-  StreamSubscription directionSub;
-
   // Required Blocs
   final DataBloc data;
   final DeviceBloc device;
@@ -90,12 +86,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       // Log Error
       log.e("ERROR: " + data.toString());
     });
-  }
-
-  // On Bloc Close
-  void dispose() {
-    directionSub.cancel();
-    dataSub.cancel();
   }
 
 // *********************************

@@ -27,8 +27,12 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   DataBloc(this.user) : super(null) {
     // ** Data BLoC Subscription ** //
     userSub = user.listen((UserState state) {
+      // Queue Incoming Transfer
+      if (state is NodeTransferInitial) {
+        traffic.addIncoming(state.metadata);
+      }
       // Begin Transfer
-      if (state is NodeTransferInProgress) {
+      else if (state is NodeTransferInProgress) {
         add(PeerSentChunk(state.match));
       }
     });
@@ -52,6 +56,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Write Current File
       add(PeerReceiveCompleted());
     };
+  }
+
+  // On Bloc Close
+  void dispose() {
+    userSub.cancel();
   }
 
   // Map Methods

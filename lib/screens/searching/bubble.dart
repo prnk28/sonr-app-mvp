@@ -31,10 +31,16 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
     return BlocBuilder<UserBloc, UserState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-      if (curr is NodeSearchInProgress) {
-        return false;
+      if (curr is NodeSearchSuccess) {
+        return true;
+      } else if (curr is NodeRequestInProgress) {
+        return true;
+      } else if (curr is NodeRequestFailure) {
+        return true;
+      } else if (curr is NodeTransferInProgress) {
+        return true;
       }
-      return true;
+      return false;
     }, builder: (context, state) {
       // Create Active Node Bubble
       if (state is NodeSearchSuccess) {
@@ -100,20 +106,22 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
                   top: _calculateOffset(widget.value, widget.peer.proximity).dy,
                   left:
                       _calculateOffset(widget.value, widget.peer.proximity).dx,
-                  child: Stack(children: [
+                  child:
+                      Stack(alignment: AlignmentDirectional.center, children: [
                     Neumorphic(
                         style: NeumorphicStyle(
                             depth: 10, boxShape: NeumorphicBoxShape.circle()),
                         child: SizedBox(
                           child: CircularProgressIndicator(
-                              value: state, strokeWidth: 5),
-                          height: 88.0,
-                          width: 88.0,
+                              value: state, strokeWidth: 6),
+                          height: 86.0,
+                          width: 86.0,
                         )),
                     _getBubble(widget.peer),
                   ]));
             });
       }
+      return Container();
     });
   }
 
