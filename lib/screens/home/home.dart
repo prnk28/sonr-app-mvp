@@ -69,7 +69,7 @@ class _HomeView extends StatelessWidget {
             Text("ID " + state.userNode.id),
           ]);
         }
-        return Center(child: Text("WebBloc State: " + (state).toString()));
+        return Center(child: Text("UserBloc State: " + (state).toString()));
       },
     );
   }
