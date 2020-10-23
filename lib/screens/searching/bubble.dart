@@ -39,6 +39,8 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
         return true;
       } else if (curr is NodeTransferInProgress) {
         return true;
+      } else if (curr is NodeTransferSuccess) {
+        return true;
       }
       return false;
     }, builder: (context, state) {
@@ -95,8 +97,10 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
               child: Container(
                 width: 80,
                 height: 80,
-                child: FlareActor("assets/animations/red_cross.flr",
-                    alignment: Alignment.center, fit: BoxFit.contain),
+                child: FlareActor("assets/animations/denied.flr",
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: "animate"),
               ),
             )));
       }
@@ -124,6 +128,29 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
                     _getBubble(widget.peer),
                   ]));
             });
+      }
+      // ** Peer has Declined **
+      else if (state is NodeTransferSuccess) {
+        return Positioned(
+            top: _calculateOffset(widget.value, widget.peer.proximity).dy,
+            left: _calculateOffset(widget.value, widget.peer.proximity).dx,
+            child: Container(
+                child: Neumorphic(
+              style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: 10,
+                  lightSource: LightSource.topLeft,
+                  color: Colors.grey[300]),
+              child: Container(
+                width: 80,
+                height: 80,
+                child: FlareActor("assets/animations/complete.flr",
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: "Untitled"),
+              ),
+            )));
       }
       return Container();
     });

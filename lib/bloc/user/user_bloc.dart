@@ -298,9 +298,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // [Peer] Rejected Offer
   Stream<UserState> _mapNodeRejectedState(NodeRejected event) async* {
-    // Update Status
-    add(NodeSearch());
-
     yield NodeRequestFailure();
   }
 
