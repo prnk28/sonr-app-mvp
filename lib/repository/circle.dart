@@ -3,35 +3,34 @@ import 'package:sonar_app/models/models.dart';
 
 // ** Modify Graph Values ** //
 class Circle {
-  DirectedValueGraph _graph;
+  DirectedValueGraph graph;
 
   Circle() {
-    _graph = new DirectedValueGraph();
+    graph = new DirectedValueGraph();
   }
 
   // ** Exit Graph from Peer **
   exitGraph(Node peer) {
-    var previousNode = _graph.singleWhere((element) => element.id == peer.id,
+    var previousNode = graph.singleWhere((element) => element.id == peer.id,
         orElse: () => null);
 
     // Remove Peer Node
-    _graph.remove(previousNode);
+    graph.remove(previousNode);
   }
 
   // ** Update Graph with new Value **
   updateGraph(Node sender, Node receiver) {
     // Find Previous Node
-    Node previousNode = _graph.singleWhere(
-        (element) => element.id == receiver.id,
+    var previousNode = graph.singleWhere((element) => element.id == receiver.id,
         orElse: () => null);
 
     // Remove Peer Node
-    _graph.remove(previousNode);
+    graph.remove(previousNode);
 
     // Check Node Status: Senders are From
     if (sender.canSendTo(receiver)) {
       // Calculate Difference and Create Edge
-      _graph.setToBy<double>(
+      graph.setToBy<double>(
           sender, receiver, this._getDifference(sender, receiver));
     }
   }
@@ -43,14 +42,14 @@ class Circle {
     // Utilizes Tos
     if (user.status == Status.Searching) {
       // Check then Iterate
-      if (!isGraphEmpty()) {
+      if (!isGraphEmpty(user)) {
         // Get Receivers
-        var receivers = _graph.linkTos(this);
+        var receivers = graph.linkTos(user);
 
         // Iterate Receivers
         for (Node receiver in receivers) {
           // Get Cost
-          var cost = _graph.getBy<double>(this, receiver);
+          var cost = graph.getBy<double>(user, receiver);
 
           // Place in Map
           costs[receiver] = cost.val as double;
@@ -87,9 +86,9 @@ class Circle {
   }
 
   // ** Checker for if Graph Empty **
-  isGraphEmpty() {
+  isGraphEmpty(Node user) {
     // Get Receivers
-    var receivers = _graph.linkTos(this);
+    var receivers = graph.linkTos(user);
 
     // Set isEmpty
     if (receivers.length > 0) {

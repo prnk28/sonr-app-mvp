@@ -6,7 +6,6 @@ enum Proximity { Immediate, Near, Far, Away }
 
 // Status of Node
 enum Status {
-  Initial,
   Offline, // Offline Status
   Available, // Ready to Receive
   Searching, // Looking for Peers
@@ -43,7 +42,7 @@ class Node {
   Node(this.profile) {
     // Set Default Variables
     this.id = "";
-    this._status = Status.Initial;
+    this._status = Status.Offline;
     this.direction = 0.01;
     this.device = Platform.operatingSystem.toUpperCase();
   }

@@ -17,43 +17,42 @@ class TransferScreen extends StatelessWidget {
     return Scaffold(
       appBar: leadingAppBar("/home", context, Icons.close),
       backgroundColor: NeumorphicTheme.baseColor(context),
-      body: BlocBuilder<SignalBloc, SignalState>(
+      body: BlocBuilder<UserBloc, UserState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-          if (curr is SocketInitial) {
+          if (curr is NodeSearchInProgress) {
             return false;
           }
           return true;
         },
         builder: (context, state) {
           // -- Searching State--
-          if (state is Searching) {
+          if (state is NodeSearchSuccess) {
             return SafeArea(
               child: Stack(
                 children: <Widget>[
                   // Bubble View
-                  //buildStackView(state.userNode.getZonedPeers()),
+                  buildStackView(state.activePeers),
 
                   // Have BLoC Builder Retrieve Directly from
                   // Cubit to Avoid Delays
-                  BlocBuilder<DirectionCubit, double>(
-                    cubit: context.getCubit(CubitType.Direction),
-                    builder: (context, state) {
-                      return Align(
-                          alignment: Alignment.bottomCenter,
-                          child: CompassView(direction: state));
-                    },
-                  )
                   // Compass View
+                  BlocBuilder<DirectionCubit, double>(
+                      cubit: context.getCubit(CubitType.Direction),
+                      builder: (context, state) {
+                        return Align(
+                            alignment: Alignment.bottomCenter,
+                            child: CompassView(direction: state));
+                      })
                 ],
               ),
             );
           }
 
           // -- Transferring State--
-          else if (state is Transferring) {
-            return ProgressView(web: BlocProvider.of<SignalBloc>(context));
-          }
+          // else if (state is Transferring) {
+          //   return ProgressView(web: BlocProvider.of<SignalBloc>(context));
+          // }
           return Container();
         },
       ),

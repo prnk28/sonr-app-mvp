@@ -35,11 +35,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
     // ** ======================================= ** //
     socket.on('UPDATED', (data) {
-      // Get Peer Data
-      Node from = Node.fromMap(data);
-
       // Update Graph
-      user.add(GraphUpdated(from));
+      user.add(GraphUpdated(Node.fromMap(data)));
     });
 
     // ** ======================================= ** //

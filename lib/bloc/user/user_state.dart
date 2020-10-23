@@ -31,6 +31,12 @@ class NodeAvailableInProgress extends UserState {
   NodeAvailableInProgress(this.userNode);
 }
 
+class NodeAvailableSuccess extends UserState {
+  final Node userNode;
+
+  NodeAvailableSuccess(this.userNode);
+}
+
 // **************************************
 // ** Searching for Available Devices ***
 // **************************************

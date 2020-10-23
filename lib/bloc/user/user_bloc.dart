@@ -119,20 +119,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // [Peer] has updated Information
   Stream<UserState> _mapGraphUpdatedState(GraphUpdated event) async* {
     // Check User Status
-    if (node.status != Status.Busy) {
+    if (node.status == Status.Searching) {
       // Update Circle
       circle.updateGraph(node, event.from);
 
       // Update Active Peers
       add(GraphZonedPeers());
-      yield NodeSearchInProgress(node);
+    }
+    // If User is just active
+    else if (node.status == Status.Available) {
+      yield NodeAvailableSuccess(node);
     }
   }
 
   // [Peer] exited Pool of Neighbors
   Stream<UserState> _mapGraphExitedState(GraphExited event) async* {
     // Check User Status
-    if (node.status != Status.Busy) {
+    if (node.status != Status.Searching) {
       // Update Circle
       circle.exitGraph(event.from);
 
@@ -140,20 +143,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       add(GraphZonedPeers());
       yield NodeSearchInProgress(node);
     }
+    // If User is just active
+    else if (node.status == Status.Available) {
+      yield NodeAvailableInProgress(node);
+    }
   }
 
   // Retrieve All Peers by Zone
   Stream<UserState> _mapGraphZonedPeersState(GraphZonedPeers event) async* {
-    // Get Peer List
-    List<Node> activePeers = circle.getZonedPeers(node);
-
-    // Check then Iterate
-    if (activePeers.length > 0) {
-      // Yield Active Peers
-      yield NodeSearchSuccess(node, activePeers);
-    }
-    // Yield No Peers Found
-    yield NodeSearchFailure(node);
+    // Yield Active Peers
+    yield NodeSearchSuccess(node, circle.getZonedPeers(node));
   }
 
 // ***************************
@@ -167,6 +166,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Emit to Server
     socket.emit("UPDATE", node.toMap());
     add(GraphZonedPeers());
+    yield NodeSearchInProgress(node);
   }
 
   // [User] is Available
