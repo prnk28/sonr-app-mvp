@@ -145,14 +145,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
     // If User is just active
     else if (node.status == Status.Available) {
-      yield NodeAvailableInProgress(node);
+      yield NodeAvailableSuccess(node);
     }
   }
 
   // Retrieve All Peers by Zone
   Stream<UserState> _mapGraphZonedPeersState(GraphZonedPeers event) async* {
-    // Yield Active Peers
-    yield NodeSearchSuccess(node, circle.getZonedPeers(node));
+    // Check User Status
+    if (node.status == Status.Searching) {
+      // Yield Active Peers
+      yield NodeSearchSuccess(node, circle.getZonedPeers(node));
+    }
+    // If User is just active
+    else if (node.status == Status.Available) {
+      yield NodeAvailableSuccess(node);
+    }
   }
 
 // ***************************
@@ -176,6 +183,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     // Emit to Server
     socket.emit("UPDATE", node.toMap());
+    add(GraphZonedPeers());
     yield NodeAvailableInProgress(node);
   }
 
