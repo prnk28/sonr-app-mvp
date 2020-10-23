@@ -109,7 +109,7 @@ class NodeCompleted extends UserEvent {
   final Node match;
   final SonrFile file;
 
-  const NodeCompleted(this.match, this.file);
+  const NodeCompleted(this.match, {this.file});
 }
 
 // [User] Rejected Offer

@@ -22,6 +22,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
   // Data Channel
   BytesBuilder block = new BytesBuilder();
+  Node _match;
 
   // Constructers
   DataBloc(this.user) : super(null) {
@@ -29,6 +30,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     userSub = user.listen((UserState state) {
       // Queue Incoming Transfer
       if (state is NodeTransferInitial) {
+        _match = state.match;
         traffic.addIncoming(state.metadata);
       }
       // Begin Transfer
@@ -96,11 +98,12 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Save File
       SonrFile file = await currentFile.save(block.takeBytes());
 
+      // Yield Complete
+      user.add(NodeCompleted(_match, file: file));
+
       // Clear incoming traffic
       traffic.clear(TrafficDirection.Incoming);
-
-      // Yield Complete
-      yield PeerReceiveComplete(file: file);
+      _match = null;
     }
     // Yield Progress
     else {
@@ -123,11 +126,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
       // End of List
       if (data.length <= 0) {
+        // Call Bloc Event
+        user.add(NodeCompleted(event.match));
+
         // Complete Tranfer
         traffic.complete(currentFile);
-
-        // Call Bloc Event
-        yield PeerSendComplete();
         break;
       }
       // Send Current Chunk

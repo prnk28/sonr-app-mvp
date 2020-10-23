@@ -12,8 +12,8 @@ class SonrFile {
   Metadata metadata;
 
   // Progress Variables
-  int _remainingChunks;
-  int _currentChunkNum;
+  int remainingChunks;
+  int currentChunkNum;
   double progress;
 
   // ** Constructer ** //
@@ -33,21 +33,21 @@ class SonrFile {
 
     // Set Progress Variables
     this.progress = 0.0;
-    this._currentChunkNum = 0;
-    this._remainingChunks = this.metadata.chunksTotal;
+    this.currentChunkNum = 0;
+    this.remainingChunks = this.metadata.chunksTotal;
   }
 
   // ** Update Progress ** //
   addProgress(DataBloc d) {
     // Increase Current Chunk
     var total = this.metadata.chunksTotal;
-    this._currentChunkNum += 1;
+    this.currentChunkNum += 1;
 
     // Find Remaining
-    this._remainingChunks = total - this._currentChunkNum;
+    this.remainingChunks = total - this.currentChunkNum;
 
     // Calculate Progress
-    this.progress = (total - this._remainingChunks) / total;
+    this.progress = (total - this.remainingChunks) / total;
 
     // Update Cubit
     d.progress.update(this.progress);

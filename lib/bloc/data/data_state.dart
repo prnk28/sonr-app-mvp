@@ -21,17 +21,6 @@ class PeerReceiveInProgress extends DataState {
   PeerReceiveInProgress();
 }
 
-// Sending Complete
-class PeerSendComplete extends DataState {
-  PeerSendComplete();
-}
-
-// Receiving Complete
-class PeerReceiveComplete extends DataState {
-  final SonrFile file;
-  PeerReceiveComplete({this.file});
-}
-
 // Viewing Saved File
 class Viewing extends DataState {
   final SonrFile file;

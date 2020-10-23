@@ -7,7 +7,6 @@ abstract class DataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-
 // Progress Cubit
 class ProgressCubit extends Cubit<double> {
   ProgressCubit() : super(0);
