@@ -1,7 +1,10 @@
 import 'package:sonar_app/screens/screens.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sonar_app/bloc/bloc.dart';
 
 part 'auth.dart';
 part 'download.dart';
+part 'popup.dart';
 
 class Window {
   static Widget showAuth(BuildContext context, NodeRequestInitial state) {
@@ -28,3 +31,18 @@ class Window {
 }
 
 // TODO: Turn into a Full Method of Extending Modal BottomSheet
+class WindowSheet extends StatefulWidget {
+  final UserState userState;
+  WindowSheet({this.userState});
+  _WindowSheetState createState() => _WindowSheetState();
+}
+
+class _WindowSheetState extends State<WindowSheet> {
+  var heightOfModalBottomSheet = 100.0;
+  Widget build(BuildContext context) {
+    return Container(
+        color: NeumorphicTheme.baseColor(context),
+        height: MediaQuery.of(context).size.height / 3,
+        child: buildAuthenticationView(context, widget.userState));
+  }
+}
