@@ -30,7 +30,9 @@ Widget buildProgressView(BuildContext context) {
   );
 }
 
-Widget buildCompleteView(BuildContext context, NodeTransferSuccess state) {
+Widget buildCompleteView(BuildContext context, NodeTransferSuccess state,
+    void Function() onWindowTransferComplete) {
+  if (onWindowTransferComplete != null) onWindowTransferComplete();
   return Column(
     children: [
       // Top Right Close/Cancel Button

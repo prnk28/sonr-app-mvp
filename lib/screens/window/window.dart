@@ -3,7 +3,7 @@ import 'package:sonar_app/screens/screens.dart';
 part 'auth.dart';
 part 'download.dart';
 
-class Sheet {
+class Window {
   static Widget showAuth(BuildContext context, NodeRequestInitial state) {
     return Container(
         color: NeumorphicTheme.baseColor(context),
@@ -18,11 +18,12 @@ class Sheet {
         child: buildProgressView(context));
   }
 
-  static Widget showComplete(BuildContext context, NodeTransferSuccess state) {
+  static Widget showComplete(BuildContext context, NodeTransferSuccess state,
+      void Function() onWindowTransferComplete) {
     return Container(
         color: NeumorphicTheme.baseColor(context),
         height: MediaQuery.of(context).size.height / 3,
-        child: buildCompleteView(context, state));
+        child: buildCompleteView(context, state, onWindowTransferComplete));
   }
 }
 

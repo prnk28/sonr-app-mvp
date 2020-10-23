@@ -55,7 +55,7 @@ class Traffic {
           // Send CallBack
           if (onTransferComplete != null) onTransferComplete();
         } else if (message.text == "NEXT_CHUNK") {
-          if (onTransferComplete != null) onNextChunk();
+          if (onNextChunk != null) onNextChunk();
         }
       }
     };

@@ -25,52 +25,52 @@ class HomeScreen extends StatelessWidget {
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserBloc, UserState>(
-      listenWhen: (previousState, state) {
-        if (state is SocketInitial) {
+    // Popup Callback
+    onWindowTransferComplete() {
+      Future.delayed(const Duration(seconds: 1), () {
+        print('Transfer Was Completed, Present Popup');
+      });
+    }
+
+    // Build Home Screen
+    return BlocListener<UserBloc, UserState>(
+        listenWhen: (previousState, state) {
+          if (state is NodeRequestInitial) {
+            return true;
+          } else if (state is NodeTransferInProgress) {
+            return true;
+          } else if (state is NodeTransferSuccess) {
+            return true;
+          }
           return false;
-        }
-        return true;
-      },
-      listener: (past, curr) {
-        if (curr is NodeRequestInitial) {
-          // Display Bottom Sheet
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Sheet.showAuth(context, curr);
-              });
-        } else if (curr is NodeTransferInitial) {
-          // Display Bottom Sheet
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Sheet.showTransferring(context);
-              });
-        } else if (curr is NodeTransferSuccess) {
-          // Display Bottom Sheet
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Sheet.showComplete(context, curr);
-              });
-        }
-      },
-      buildWhen: (previous, current) {
-        if (current is NodeAvailableInProgress) {
-          return false;
-        }
-        return true;
-      },
-      builder: (context, state) {
-        if (state is NodeAvailableSuccess) {
-          return Column(children: [
-            Text("OLC " + state.userNode.olc),
-            Text("ID " + state.userNode.id),
-          ]);
-        }
-        return Center(child: Text("UserBloc State: " + (state).toString()));
-      },
-    );
+        },
+        listener: (context, state) {
+          if (state is NodeRequestInitial) {
+            // Display Bottom Sheet
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return Window.showAuth(context, state);
+                });
+          } else if (state is NodeTransferInProgress) {
+            // Display Bottom Sheet
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return Window.showTransferring(
+                    context,
+                  );
+                });
+          } else if (state is NodeTransferSuccess) {
+            // Display Bottom Sheet
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return Window.showComplete(
+                      context, state, onWindowTransferComplete);
+                });
+          }
+        },
+        child: Center(child: Text("Mega Hellope")));
   }
 }
