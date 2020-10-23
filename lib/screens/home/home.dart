@@ -59,8 +59,6 @@ class _HomeView extends StatelessWidget {
       buildWhen: (previous, current) {
         if (current is NodeAvailableInProgress) {
           return false;
-        } else if (current is Requested) {
-          return false;
         }
         return true;
       },
