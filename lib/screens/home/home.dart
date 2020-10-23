@@ -25,6 +25,17 @@ class HomeScreen extends StatelessWidget {
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PersistentBottomSheetController _controller;
+    final _scaffoldKey = GlobalKey<ScaffoldState>(); //
+    void _changeSheetState() {
+      _controller.setState(() {});
+    }
+
+    _createBottomSheet() async {
+      _controller =
+          _scaffoldKey.currentState.showBottomSheet((context) => WindowSheet());
+    }
+
     // Popup Callback
     onWindowTransferComplete() {
       Future.delayed(const Duration(seconds: 1), () {

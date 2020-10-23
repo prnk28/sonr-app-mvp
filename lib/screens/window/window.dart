@@ -46,3 +46,5 @@ class _WindowSheetState extends State<WindowSheet> {
         child: buildAuthenticationView(context, widget.userState));
   }
 }
+
+class WindowBottomSheet {}
