@@ -104,6 +104,14 @@ class NodeCandidate extends UserEvent {
   const NodeCandidate(this.match, this.candidate);
 }
 
+// User/Peer have completed transfer
+class NodeCompleted extends UserEvent {
+  final Node match;
+  final SonrFile file;
+
+  const NodeCompleted(this.match, this.file);
+}
+
 // [User] Rejected Offer
 class NodeDeclined extends UserEvent {
   final Node to;

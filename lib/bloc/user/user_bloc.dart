@@ -64,6 +64,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapNodeDeclinedState(event);
     } else if (event is NodeCandidate) {
       yield* _mapNodeCandidateState(event);
+    } else if (event is NodeCompleted) {
+      yield* _mapNodeCompletedState(event);
     }
   }
 
@@ -360,6 +362,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapNodeCandidateState(NodeCandidate event) async* {
     // Emit to Socket.io
     session.handleCandidate(event.match, event.candidate);
+  }
+
+  // User/[Peer] have completed transfer
+  Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
+    yield NodeTransferSuccess(event.match, file: event.file);
   }
 
 // [User] Rejected Offer

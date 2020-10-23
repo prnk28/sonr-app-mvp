@@ -42,7 +42,7 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
       }
       return false;
     }, builder: (context, state) {
-      // Create Active Node Bubble
+      // ** Create Active Node Bubble ** 
       if (state is NodeSearchSuccess) {
         // BLoC References
         final data = context.getBloc(BlocType.Data);
@@ -59,7 +59,8 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
                 },
                 child: _getBubble(widget.peer)));
       }
-      // Create Requested Node Bubble
+
+      // ** Create Requested Node Bubble **
       else if (state is NodeRequestInProgress) {
         return Positioned(
             top: _calculateOffset(widget.value, widget.peer.proximity).dy,
@@ -78,7 +79,7 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             ));
       }
 
-      // Peer has Declined
+      // ** Peer has Declined **
       else if (state is NodeRequestFailure) {
         return Positioned(
             top: _calculateOffset(widget.value, widget.peer.proximity).dy,
@@ -97,7 +98,7 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             ));
       }
 
-      // Peer Accepted: Transfer is in Progress
+      // ** Peer Accepted: Transfer is in Progress ** 
       else if (state is NodeTransferInProgress) {
         return BlocBuilder<ProgressCubit, double>(
             cubit: context.getCubit(CubitType.Progress),
