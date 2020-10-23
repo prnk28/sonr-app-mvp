@@ -26,6 +26,7 @@ class Traffic {
   // Callbacks
   void Function(SonrFile) onAddFile;
   void Function(Uint8List) onBinaryChunk;
+  void Function() onNextChunk;
   void Function() onTransferComplete;
 
   // ** Constructer ** //
@@ -53,8 +54,8 @@ class Traffic {
         if (message.text == "SEND_COMPLETE") {
           // Send CallBack
           if (onTransferComplete != null) onTransferComplete();
-        } else {
-          log.v(message.text);
+        } else if (message.text == "NEXT_CHUNK") {
+          if (onTransferComplete != null) onNextChunk();
         }
       }
     };
@@ -97,12 +98,15 @@ class Traffic {
   }
 
   // ** Send Chunk on Channel ** //
+  nextChunk() {
+    // Send on Channel
+    _dataChannel.send(RTCDataChannelMessage("NEXT_CHUNK"));
+  }
+
+  // ** Send Chunk on Channel ** //
   transmit(SonrFile file, Uint8List chunk) {
-    // Check Progress
-    if (file.progress.round() != 100) {
-      // Send on Channel
-      _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
-    }
+    // Send on Channel
+    _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
   }
 
   // ** Clear a Map ** //

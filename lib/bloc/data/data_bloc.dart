@@ -21,7 +21,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   SonrFile currentFile;
 
   // Data Channel
-  BytesBuilder block = new BytesBuilder();
+  BytesBuilder _block = new BytesBuilder();
   Node _match;
 
   // Constructers
@@ -35,6 +35,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       }
       // Begin Transfer
       else if (state is NodeTransferInProgress) {
+        // Create Data Stream
+        _match = state.match;
+
+        // Send Chunk
         add(PeerSentChunk(state.match));
       }
     });
@@ -51,6 +55,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Add Binary Chunk
     traffic.onBinaryChunk = (chunk) {
       add(PeerAddedChunk(chunk));
+    };
+
+    // SendNextChunk
+    traffic.onNextChunk = () {
+      add(PeerSentChunk(_match));
     };
 
     // On Transfer Complete
@@ -88,7 +97,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **************************
   Stream<DataState> _mapPeerAddedChunkState(PeerAddedChunk event) async* {
     // Add Chunk to Block
-    block.add(event.chunk);
+    _block.add(event.chunk);
 
     // Update Progress in Current MetaData
     currentFile.addProgress(this);
@@ -96,7 +105,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Check if Receive is Done
     if (currentFile.isProgressComplete()) {
       // Save File
-      SonrFile file = await currentFile.save(block.takeBytes());
+      SonrFile file = await currentFile.save(_block.takeBytes());
 
       // Yield Complete
       user.add(NodeCompleted(_match, file: file));
@@ -107,6 +116,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
     // Yield Progress
     else {
+      // Request Next Chunk
+      traffic.nextChunk();
       yield PeerReceiveInProgress();
     }
   }
@@ -115,10 +126,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** PeerSentChunk Event **
 // *************************
   Stream<DataState> _mapPeerSentChunkState(PeerSentChunk event) async* {
-    // Open File in Reader and Send Data pieces as chunks
+    // Find Start/End Bytes
+    // int start = currentFile.currentChunkNum * CHUNK_SIZE;
+    // int end = start + CHUNK_SIZE;
+
+    // Open Reader with Offset
     final reader = ChunkedStreamIterator(currentFile.file.openRead());
 
-    // While the reader has a next byte
+    // While Reader Has Values
     while (true) {
       // read one CHUNK
       var data = await reader.read(CHUNK_SIZE);
