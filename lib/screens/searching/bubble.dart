@@ -42,7 +42,7 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
       }
       return false;
     }, builder: (context, state) {
-      // ** Create Active Node Bubble ** 
+      // ** Create Active Node Bubble **
       if (state is NodeSearchSuccess) {
         // BLoC References
         final data = context.getBloc(BlocType.Data);
@@ -85,20 +85,23 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             top: _calculateOffset(widget.value, widget.peer.proximity).dy,
             left: _calculateOffset(widget.value, widget.peer.proximity).dx,
             child: Container(
-              child: _getBubble(widget.peer),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 27, 28, 30),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(130, 237, 125, 58),
-                        blurRadius: _animation.value,
-                        spreadRadius: _animation.value)
-                  ]),
-            ));
+                child: Neumorphic(
+              style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: 10,
+                  lightSource: LightSource.topLeft,
+                  color: Colors.grey[300]),
+              child: Container(
+                width: 80,
+                height: 80,
+                child: FlareActor("assets/animations/red_cross.flr",
+                    alignment: Alignment.center, fit: BoxFit.contain),
+              ),
+            )));
       }
 
-      // ** Peer Accepted: Transfer is in Progress ** 
+      // ** Peer Accepted: Transfer is in Progress **
       else if (state is NodeTransferInProgress) {
         return BlocBuilder<ProgressCubit, double>(
             cubit: context.getCubit(CubitType.Progress),

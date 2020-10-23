@@ -49,6 +49,8 @@ class SonrFile {
     // Calculate Progress
     this.progress = (total - this.remainingChunks) / total;
 
+    log.i("Remaining Chunks: " + this.remainingChunks.toString());
+
     // Update Cubit
     d.progress.update(this.progress);
   }
@@ -87,7 +89,7 @@ class SonrFile {
 
   // ** Check if Progress Complete **
   bool isProgressComplete() {
-    if (this.progress.round() == 100) {
+    if (this.remainingChunks == 0) {
       return true;
     }
     return false;
