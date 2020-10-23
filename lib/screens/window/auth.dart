@@ -1,6 +1,6 @@
 part of 'window.dart';
 
-Widget buildAuthenticationView(BuildContext context, Requested state) {
+Widget buildAuthenticationView(BuildContext context, NodeRequestInitial state) {
   return Column(
     children: [
       // Top Right Close/Cancel Button

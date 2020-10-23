@@ -30,7 +30,7 @@ Widget buildProgressView(BuildContext context) {
   );
 }
 
-Widget buildCompleteView(BuildContext context, Completed state) {
+Widget buildCompleteView(BuildContext context, NodeTransferSuccess state) {
   return Column(
     children: [
       // Top Right Close/Cancel Button

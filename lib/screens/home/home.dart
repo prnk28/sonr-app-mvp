@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SignalBloc, SignalState>(
+    return BlocConsumer<UserBloc, UserState>(
       listenWhen: (previousState, state) {
         if (state is SocketInitial) {
           return false;
@@ -33,21 +33,21 @@ class _HomeView extends StatelessWidget {
         return true;
       },
       listener: (past, curr) {
-        if (curr is Requested) {
+        if (curr is NodeRequestInitial) {
           // Display Bottom Sheet
           showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
                 return Sheet.showAuth(context, curr);
               });
-        } else if (curr is Transferring) {
+        } else if (curr is NodeTransferInitial) {
           // Display Bottom Sheet
           showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
                 return Sheet.showTransferring(context);
               });
-        } else if (curr is Completed) {
+        } else if (curr is NodeTransferSuccess) {
           // Display Bottom Sheet
           showModalBottomSheet<void>(
               context: context,
@@ -57,7 +57,7 @@ class _HomeView extends StatelessWidget {
         }
       },
       buildWhen: (previous, current) {
-        if (current is SocketInitial) {
+        if (current is NodeAvailableInProgress) {
           return false;
         } else if (current is Requested) {
           return false;
@@ -65,7 +65,7 @@ class _HomeView extends StatelessWidget {
         return true;
       },
       builder: (context, state) {
-        if (state is Available) {
+        if (state is NodeAvailableSuccess) {
           return Column(children: [
             Text("OLC " + state.userNode.olc),
             Text("ID " + state.userNode.id),
