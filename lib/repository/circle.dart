@@ -1,5 +1,6 @@
 import 'package:graph_collection/graph.dart';
 import 'package:sonar_app/models/models.dart';
+import 'package:vector_math/vector_math.dart';
 
 // ** Modify Graph Values ** //
 class Circle {
@@ -76,13 +77,29 @@ class Circle {
     // Check Node Status: Senders are From
     if (sender.status == Status.Searching &&
         receiver.status == Status.Available) {
-      // Calculate Difference
-      var diff = sender.direction - receiver.direction;
+      // Get Receiver Antipodal Degrees
+      double receiverAntipodal = _getAntipodal(receiver.direction);
+
+      // Difference between angles
+      double theta;
+      if (receiverAntipodal > sender.direction) {
+        theta = receiverAntipodal - sender.direction;
+      } else {
+        theta = sender.direction - receiverAntipodal;
+      }
 
       // Log and Get difference
-      return diff.abs();
+      return radians(theta);
     }
     return -1;
+  }
+
+  _getAntipodal(double degrees) {
+    if (degrees > 180) {
+      return degrees - 180;
+    } else {
+      return degrees + 180;
+    }
   }
 
   // ** Checker for if Graph Empty **

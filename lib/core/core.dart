@@ -7,7 +7,6 @@ export 'package:flutter/services.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
-export 'package:tuple/tuple.dart';
 export 'package:bloc/bloc.dart';
 
 // Device Libraries

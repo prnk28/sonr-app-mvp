@@ -355,6 +355,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     yield NodeTransferInitial(metadata, match);
   }
 
+// [User] Rejected Offer
+  Stream<UserState> _mapNodeDeclinedState(NodeDeclined event) async* {
+    // Emit to Socket.io
+    socket.emit("DECLINE", [node.toMap(), event.to.id]);
+
+    // Update Status
+    add(NodeAvailable());
+  }
+
   // [Peer] Has Sent Candidate
   Stream<UserState> _mapNodeCandidateState(NodeCandidate event) async* {
     // Emit to Socket.io
@@ -364,14 +373,5 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   // User/[Peer] have completed transfer
   Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
     yield NodeTransferSuccess(event.match, file: event.file);
-  }
-
-// [User] Rejected Offer
-  Stream<UserState> _mapNodeDeclinedState(NodeDeclined event) async* {
-    // Emit to Socket.io
-    socket.emit("DECLINE", [node.toMap(), event.to.id]);
-
-    // Update Status
-    add(NodeAvailable());
   }
 }
