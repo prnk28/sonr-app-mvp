@@ -108,10 +108,9 @@ class NodeTransferInProgress extends UserState {
 
 // User/[Peer] have completed transfer
 class NodeTransferSuccess extends UserState {
-  final Node match;
   final SonrFile file;
 
-  NodeTransferSuccess(this.match, {this.file});
+  NodeTransferSuccess({this.file});
 }
 
 // User/[Peer] have failed to transfer

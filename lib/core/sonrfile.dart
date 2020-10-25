@@ -1,4 +1,3 @@
-import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
@@ -29,8 +28,17 @@ class SonrFile {
   SonrFile(this.owner, {this.metadata, this.file}) {
     // Generate MetaData from Raw File
     if (this.file != null) {
-      // Get Metadata
-      this.metadata = new Metadata(file: file);
+      // Init Metadata
+      this.metadata = new Metadata();
+
+      // Calculate File Info
+      this.metadata.size = file.lengthSync();
+      this.metadata.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
+
+      // Set File Info
+      this.metadata.path = file.path;
+      this.metadata.name = basename(this.metadata.path);
+      this.metadata.type = getFileTypeFromPath(this.metadata.path);
     } else {
       // Initialize Writer for File
       _writer = new BytesBuilder();
@@ -41,31 +49,10 @@ class SonrFile {
     this.remainingChunks = this.metadata.chunksTotal;
   }
 
-  // ** Chunk Receiver from Data Channel ** //
-  double addChunk(Uint8List chunk) {
+  // ** Chunk Received from Data Channel ** //
+  addChunk(Uint8List chunk) {
     // Add to Builder and Update Progress
     _writer.add(chunk);
-    var currProgress = progress();
-
-    // Return Progress
-    return currProgress;
-  }
-
-  // ** Chunk Receiver from Data Channel ** //
-  Future<double> sendChunk(RTCDataChannel channel) async {
-    // End Of List
-    if (remainingChunks > 0) {
-      // Read Specified Bytes
-      RandomAccessFile raf = file.openSync(mode: FileMode.read);
-      raf.setPositionSync(currentChunkNum * CHUNK_SIZE);
-      Uint8List chunk = raf.readSync(currentChunkNum * (2 * CHUNK_SIZE));
-
-      // Send on Channel
-      channel.send(RTCDataChannelMessage.fromBinary(chunk));
-    }
-
-    // Update Progress
-    return progress();
   }
 
   // ** Update Progress ** //
@@ -76,9 +63,6 @@ class SonrFile {
 
     // Find Remaining
     this.remainingChunks = total - this.currentChunkNum;
-
-    // Log Chunks Remaining
-    log.i("Remaining Chunks: " + this.remainingChunks.toString());
 
     // Calculate Progress
     return (total - this.remainingChunks) / total;

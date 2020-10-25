@@ -337,6 +337,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // User/[Peer] have completed transfer
   Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
-    yield NodeTransferSuccess(event.match, file: event.file);
+    yield NodeTransferSuccess(file: event.file);
   }
 }

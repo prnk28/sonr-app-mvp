@@ -15,20 +15,6 @@ class Metadata {
   DateTime received;
   DateTime lastOpened;
 
-  // ** Constructer: Get MetaData from File ** //
-  Metadata({File file}) {
-    if (file != null) {
-      // Calculate File Info
-      this.size = file.lengthSync();
-      this.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
-
-      // Set File Info
-      this.path = file.path;
-      this.name = basename(this.path);
-      this.type = getFileTypeFromPath(this.path);
-    }
-  }
-
   // ** Constructer: Get MetaData from Map ** //
   static Metadata fromMap(Map map) {
     Metadata temp = new Metadata();

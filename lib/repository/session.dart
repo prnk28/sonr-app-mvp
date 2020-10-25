@@ -27,6 +27,7 @@ typedef void OtherEventCallback(dynamic event);
 typedef void DataChannelMessageCallback(
     RTCDataChannel dc, RTCDataChannelMessage data);
 typedef void DataChannelCallback(RTCDataChannel dc);
+typedef void DataChannelState(RTCDataChannel channel, RTCDataChannelState dc);
 
 // *******************
 // * Initialization **
@@ -45,6 +46,7 @@ class RTCSession {
   OtherEventCallback onPeersUpdate;
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
+  DataChannelState onDataChannelState;
 
 // ****************************
 // ** WebRTC Object Methods ***
@@ -52,31 +54,30 @@ class RTCSession {
   addDataChannel(id, RTCDataChannel channel) {
     // Send Callback to DataBloc
     channel.onDataChannelState = (e) {
-      log.i("DataChannel State:" + e.toString());
+      if (this.onDataChannelMessage != null) {
+        this.onDataChannelState(channel, e);
+      }
     };
 
     // Add Message as Callback
     channel.onMessage = (RTCDataChannelMessage data) {
-      if (this.onDataChannelMessage != null)
+      if (this.onDataChannelMessage != null) {
         this.onDataChannelMessage(channel, data);
+      }
     };
 
     // Add Channel to List
     dataChannels[id] = channel;
 
     // Subscribe to Callback
-    if (this.onDataChannel != null) this.onDataChannel(channel);
+    if (this.onDataChannel != null) {
+      this.onDataChannel(channel);
+    }
   }
 
   createDataChannel(id, RTCPeerConnection pc, {label: 'fileTransfer'}) async {
     // Setup Data Channel
     RTCDataChannelInit dataChannelDict = RTCDataChannelInit();
-    dataChannelDict.id = 1;
-    dataChannelDict.ordered = true;
-    dataChannelDict.maxRetransmitTime = -1;
-    dataChannelDict.maxRetransmits = -1;
-    dataChannelDict.protocol = 'sctp';
-    dataChannelDict.negotiated = true;
 
     // Create and Add Data Channel
     RTCDataChannel channel = await pc.createDataChannel(label, dataChannelDict);

@@ -22,8 +22,7 @@ class PeerReceiveInProgress extends DataState {
 }
 
 // Default State
-class PeerReady extends DataState {
-}
+class PeerReady extends DataState {}
 
 // Viewing Saved File
 class Viewing extends DataState {

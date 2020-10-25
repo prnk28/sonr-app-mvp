@@ -47,7 +47,7 @@ dependencies:
 
   # -- Network --
   chunked_stream: ^1.1.0
-  flutter_webrtc: ^0.4.0
+  flutter_webrtc: ^0.2.6
   http: ^0.12.0+4
   socket_io_client: ^0.9.11
 
