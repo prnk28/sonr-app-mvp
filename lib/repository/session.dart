@@ -183,7 +183,7 @@ class RTCSession {
       // Clear Session ID
       this.id = null;
     }
-    
+
     // Change State
     updateState(null);
   }

@@ -25,9 +25,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     socket.on('connect', (_) {
       // Get/Set Socket Id
       user.node.id = socket.id;
-
-      // Establish Emitter
-      user.emitter = new Emitter(user.node, user.session);
+      log.i("Connected");
 
       // Change Status
       user.add(NodeAvailable());

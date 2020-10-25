@@ -1,18 +1,30 @@
-import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
+// ** Message Socket **
 class Emitter {
   // References
   final Node user;
+  final Node match;
   final RTCSession session;
 
   // Upon RTC Connection
-  Node match;
   RTCDataChannel dataChannel;
 
   // ** Constructer **
-  Emitter(this.user, this.session);
+  Emitter(this.user, this.match, this.session, {var offer}) {
+    // Set Session id
+    if (offer == null) {
+      session.id = user.id + '-' + match.id;
+    }
+    // Get Session Id
+    else {
+      session.id = offer['session_id'];
+    }
+
+    // Update Session State
+    session.updateState(SignalingState.CallStateNew);
+  }
 
   // Signal Accepted to Peer
   answer(Node match, String sessionId, RTCPeerConnection pc) async {

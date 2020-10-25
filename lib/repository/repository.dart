@@ -10,7 +10,6 @@ export 'emitter.dart';
 export 'session.dart';
 export 'traffic.dart';
 
-// Clients
 import 'package:socket_io_client/socket_io_client.dart';
 
 // * Chunking Constants **
@@ -35,8 +34,7 @@ const RTC_CONSTRAINTS = {
   'optional': [],
 };
 
-// ** Start Socket **
-Socket socket = io('http://signal.sonr.io', <String, dynamic>{
+Socket socket = io('https://sonr-match.herokuapp.com/', <String, dynamic>{
   'transports': ['websocket'],
   'autoConnect': false
 });

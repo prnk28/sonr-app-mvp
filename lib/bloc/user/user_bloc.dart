@@ -226,9 +226,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // ***************************
 // [User] Send Offer to another peer
   Stream<UserState> _mapNodeOfferedState(NodeOffered event) async* {
-    // Change Session State
-    session.id = node.id + '-' + event.to.id;
-    session.updateState(SignalingState.CallStateNew);
+    // Start Session by Creating Emitter
+    emitter = new Emitter(node, event.to, session);
 
     // Add Peer Connection
     RTCPeerConnection pc = await session.newPeerConnection(event.to.id, node);
@@ -281,9 +280,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     var match = event.match;
     var metadata = event.metadata;
 
-    // Update Signalling State
-    session.id = offer['session_id'];
-    session.updateState(SignalingState.CallStateNew);
+    // Start Session by Creating Emitter
+    emitter = new Emitter(node, match, session, offer: offer);
 
     // Create Peer Connection
     var pc = await session.newPeerConnection(match.id, node);

@@ -34,8 +34,7 @@ class Circle {
     // Check Node Status: Senders are From
     if (_canSendTo(sender, receiver)) {
       // Calculate Difference and Create Edge
-      graph.setToBy<double>(
-          sender, receiver, this._getDifference(sender, receiver));
+      graph.setToBy<double>(sender, receiver, _getDifference(sender, receiver));
     }
   }
 
@@ -92,24 +91,19 @@ class Circle {
 
   // ** Get Difference When User is Searching **
   _getDifference(Node sender, Node receiver) {
-    // Check Node Status: Senders are From
-    if (sender.status == Status.Searching &&
-        receiver.status == Status.Available) {
-      // Get Receiver Antipodal Degrees
-      double receiverAntipodal = _getAntipodal(receiver.direction);
+    // Get Receiver Antipodal Degrees
+    double receiverAntipodal = _getAntipodal(receiver.direction);
 
-      // Difference between angles
-      double theta;
-      if (receiverAntipodal > sender.direction) {
-        theta = receiverAntipodal - sender.direction;
-      } else {
-        theta = sender.direction - receiverAntipodal;
-      }
-
-      // Log and Get difference
-      return radians(theta);
+    // Difference between angles
+    double theta;
+    if (receiverAntipodal > sender.direction) {
+      theta = receiverAntipodal - sender.direction;
+    } else {
+      theta = sender.direction - receiverAntipodal;
     }
-    return -1;
+
+    // Log and Get difference
+    return radians(theta);
   }
 
   _getAntipodal(double degrees) {
