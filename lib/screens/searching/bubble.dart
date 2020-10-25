@@ -57,7 +57,9 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             child: GestureDetector(
                 onTap: () async {
                   // Send Offer to Bubble
-                  user.add(NodeOffered(widget.peer, file: data.currentFile));
+                  user.add(NodeOffered(
+                      context.getBloc(BlocType.Data), widget.peer,
+                      file: data.currentFile));
                 },
                 child: _getBubble(widget.peer)));
       }

@@ -9,7 +9,9 @@ abstract class DeviceEvent extends Equatable {
 
 // Check Location Permission
 class LocationPermissionCheck extends DeviceEvent {
-  const LocationPermissionCheck();
+  final DataBloc data;
+  final SignalBloc signal;
+  const LocationPermissionCheck(this.data, this.signal);
 }
 
 // Request Location Permission

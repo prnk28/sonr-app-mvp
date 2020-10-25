@@ -79,8 +79,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       Node from = Node.fromMap(data[0]);
       dynamic candidate = data[1];
 
-      // Add Ice Candidate
-      user.add(NodeCandidate(from, candidate));
+      // Session Handles Candidate
+      user.session.handleCandidate(from, candidate);
     });
 
     // ** ======================================= ** //
@@ -126,6 +126,52 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     else {
       log.e("User node not located");
       yield SocketFailure();
+    }
+  }
+
+// **************************
+// ** PeerInvited Event ***
+// **************************
+  Stream<SignalState> _mapPeerInvitedToState(PeerInvited event) async* {
+    try {
+      // Create Answer Description
+      RTCSessionDescription s = await event.pc.createAnswer(RTC_CONSTRAINTS);
+      event.pc.setLocalDescription(s);
+
+      // Emit to Socket.io
+      socket.emit("ANSWER", [
+        user.node.toMap(),
+        event.match.id,
+        {
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': event.sessionId,
+        }
+      ]);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+// **************************
+// ** PeerAnswered Event ***
+// **************************
+  Stream<SignalState> _mapPeerAnsweredToState(PeerAnswered event) async* {
+    try {
+      // Create Answer Description
+      RTCSessionDescription s = await event.pc.createAnswer(RTC_CONSTRAINTS);
+      event.pc.setLocalDescription(s);
+
+      // Emit to Socket.io
+      socket.emit("ANSWER", [
+        user.node.toMap(),
+        event.match.id,
+        {
+          'description': {'sdp': s.sdp, 'type': s.type},
+          'session_id': event.sessionId,
+        }
+      ]);
+    } catch (e) {
+      print(e.toString());
     }
   }
 

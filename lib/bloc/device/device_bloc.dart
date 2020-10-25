@@ -68,7 +68,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       // Begin User Setup
-      user.add(UserStarted());
+      user.add(UserStarted(event.data, event.signal));
       yield LocationPermissionSuccess();
     } else {
       // Permission Denied

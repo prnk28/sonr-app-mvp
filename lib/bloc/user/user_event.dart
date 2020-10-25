@@ -10,7 +10,9 @@ abstract class UserEvent extends Equatable {
 // ** === Profile Management === ** //
 // Get User Ready on Device
 class UserStarted extends UserEvent {
-  const UserStarted();
+  final DataBloc data;
+  final SignalBloc signal;
+  const UserStarted(this.data, this.signal);
 }
 
 // Update Profile/Contact Info
@@ -64,10 +66,11 @@ class NodeReset extends UserEvent {
 
 // [User] Send Offer to another peer
 class NodeOffered extends UserEvent {
+  final DataBloc data;
   final Node to;
   final SonrFile file;
 
-  const NodeOffered(this.to, {this.file});
+  const NodeOffered(this.data, this.to, {this.file});
 }
 
 // [Peer] A Request Has Been Given
@@ -94,14 +97,6 @@ class NodeAuthorized extends UserEvent {
   final dynamic answer;
 
   const NodeAuthorized(this.match, this.answer);
-}
-
-// [Peer] has sent a candidate
-class NodeCandidate extends UserEvent {
-  final Node match;
-  final dynamic candidate;
-
-  const NodeCandidate(this.match, this.candidate);
 }
 
 // User/Peer have completed transfer

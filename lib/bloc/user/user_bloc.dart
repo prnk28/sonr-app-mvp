@@ -7,6 +7,10 @@ part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
+  // References
+  SignalBloc signal;
+  DataBloc data;
+
   // Data Providers
   Circle circle;
   Emitter emitter;
@@ -63,8 +67,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapNodeAcceptedState(event);
     } else if (event is NodeDeclined) {
       yield* _mapNodeDeclinedState(event);
-    } else if (event is NodeCandidate) {
-      yield* _mapNodeCandidateState(event);
     } else if (event is NodeCompleted) {
       yield* _mapNodeCompletedState(event);
     }
@@ -75,6 +77,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // ************************
 // Get User Ready on Device
   Stream<UserState> _mapUserStartedState(UserStarted event) async* {
+    // Set References
+    data = event.data;
+    signal = event.signal;
+
     // Retrieve Profile
     var profile = await Profile.retrieve();
 
@@ -247,6 +253,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // ***************************
 // [User] Send Offer to another peer
   Stream<UserState> _mapNodeOfferedState(NodeOffered event) async* {
+    // Queue File
+    event.data.add(PeerQueuedFile(TrafficDirection.Outgoing));
+
     // Start Session by Creating Emitter
     emitter = new Emitter(node, event.to, session);
 
@@ -257,7 +266,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     session.initializePeer(Role.Sender, pc, event.to);
 
     // Invite Peer
-    await emitter.invite(event.to, session.id, pc, event.file.metadata);
+    await emitter.invite(
+        event.to, session.id, pc, event.data.currentFile.metadata);
 
     // Change Status
     add(NodeBusy());
@@ -329,12 +339,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     // Update Status
     add(NodeAvailable());
-  }
-
-  // [Peer] Has Sent Candidate
-  Stream<UserState> _mapNodeCandidateState(NodeCandidate event) async* {
-    // Emit to Socket.io
-    session.handleCandidate(event.match, event.candidate);
   }
 
   // User/[Peer] have completed transfer

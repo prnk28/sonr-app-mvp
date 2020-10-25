@@ -7,7 +7,8 @@ class SplashScreen extends StatelessWidget {
     context.setScreenSize();
 
     // Initialize Device
-    context.getBloc(BlocType.Device).add(LocationPermissionCheck());
+    context.getBloc(BlocType.Device).add(LocationPermissionCheck(
+        context.getBloc(BlocType.Data), context.getBloc(BlocType.Signal)));
 
     // Return
     return Scaffold(

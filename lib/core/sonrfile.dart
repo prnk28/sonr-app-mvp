@@ -23,11 +23,10 @@ class SonrFile {
   int currentChunkNum;
 
   // Transmission
-  final RTCDataChannel _channel;
   BytesBuilder _writer;
 
   // ** Constructer ** //
-  SonrFile(this._channel, this.owner, {this.metadata, this.file}) {
+  SonrFile(this.owner, {this.metadata, this.file}) {
     // Generate MetaData from Raw File
     if (this.file != null) {
       // Get Metadata
@@ -48,34 +47,21 @@ class SonrFile {
     _writer.add(chunk);
     var currProgress = progress();
 
-    // Check if Complete
-    if (this.isComplete()) {
-      // Request next chunk
-      _channel.send(RTCDataChannelMessage("NEXT_CHUNK"));
-    } else {
-      // Tell Sender Complete
-      _channel.send(RTCDataChannelMessage("SEND_COMPLETE"));
-    }
-
     // Return Progress
     return currProgress;
   }
 
   // ** Chunk Receiver from Data Channel ** //
-  Future<double> sendChunk() async {
-    // Get Start/End Byte Number
-    int start = currentChunkNum * CHUNK_SIZE;
-    int end = start + CHUNK_SIZE;
-
+  Future<double> sendChunk(RTCDataChannel channel) async {
     // End Of List
     if (remainingChunks > 0) {
       // Read Specified Bytes
       RandomAccessFile raf = file.openSync(mode: FileMode.read);
-      raf.setPositionSync(start);
-      Uint8List chunk = raf.readSync(end);
+      raf.setPositionSync(currentChunkNum * CHUNK_SIZE);
+      Uint8List chunk = raf.readSync(currentChunkNum * (2 * CHUNK_SIZE));
 
       // Send on Channel
-      _channel.send(RTCDataChannelMessage.fromBinary(chunk));
+      channel.send(RTCDataChannelMessage.fromBinary(chunk));
     }
 
     // Update Progress

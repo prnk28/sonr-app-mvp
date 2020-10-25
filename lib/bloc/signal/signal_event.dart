@@ -22,6 +22,23 @@ class SocketStarted extends SignalEvent {
   const SocketStarted();
 }
 
+class PeerInvited extends SignalEvent {
+  final Node match;
+  final String sessionId;
+  final RTCPeerConnection pc;
+  final Metadata metadata;
+
+  PeerInvited(this.match, this.sessionId, this.pc, this.metadata);
+}
+
+class PeerAnswered extends SignalEvent {
+  final Node match;
+  final String sessionId;
+  final RTCPeerConnection pc;
+
+  PeerAnswered(this.match, this.sessionId, this.pc);
+}
+
 // Sequence Finished
 class End extends SignalEvent {
   final EndType type;

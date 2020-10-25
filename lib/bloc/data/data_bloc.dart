@@ -105,8 +105,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     switch (event.direction) {
       case TrafficDirection.Incoming:
         // Create SonrFile
-        SonrFile file =
-            new SonrFile(_dataChannel, event.sender, metadata: event.metadata);
+        SonrFile file = new SonrFile(event.sender, metadata: event.metadata);
 
         // Add To Incoming
         _incoming.add(file);
@@ -119,7 +118,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
         // Create SonrFile
-        SonrFile file = new SonrFile(_dataChannel, user.node, file: dummyFile);
+        SonrFile file = new SonrFile(user.node, file: dummyFile);
 
         // Add to Outgoing
         _outgoing.add(file);
@@ -134,14 +133,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** PeerAddedChunk Event **
 // **************************
   Stream<DataState> _mapPeerAddedChunkState(PeerAddedChunk event) async* {
-    // Add Chunk to SonrFile
-    double currProgress = currentFile.addChunk(event.chunk);
-
-    // Update Progress
-    progress.update(currProgress);
-
     // Check if Receive is Done
     if (currentFile.isComplete()) {
+      // Tell Sender Complete
+      _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
+
       // Save File
       SonrFile file = await currentFile.save();
 
@@ -156,6 +152,19 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
     // Yield Progress
     else {
+      // Add Chunk to SonrFile
+      double currProgress = currentFile.addChunk(event.chunk);
+
+      // Check if Complete
+      if (currentFile.remainingChunks > 0) {
+        // Request next chunk
+        _dataChannel.send(RTCDataChannelMessage("NEXT_CHUNK"));
+      }
+
+      // Update Progress
+      progress.update(currProgress);
+
+      // Change State
       yield PeerReceiveInProgress();
     }
   }
@@ -177,7 +186,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Send Current Chunk
     else {
       // Sends and Updates Progress
-      var currProgress = await currentFile.sendChunk();
+      var currProgress = await currentFile.sendChunk(_dataChannel);
 
       // Update Progress
       progress.update(currProgress);
