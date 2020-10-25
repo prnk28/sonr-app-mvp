@@ -172,7 +172,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapNodeSearchState(NodeSearch event) async* {
     // Update Status
     if (node != null) {
-      node.update(Status.Searching);
+      // Update Status
+      node.status = Status.Searching;
+
+      // Emit to Server
+      socket.emit("UPDATE", node.toMap());
+
+      // Change LastUpdated
+      node.lastUpdated = DateTime.now();
     } else {
       log.e("Node not active");
     }
@@ -186,7 +193,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapNodeAvailableState(NodeAvailable event) async* {
     // Update Status
     if (node != null) {
-      node.update(Status.Available);
+      // Update Status
+      node.status = Status.Available;
+
+      // Emit to Server
+      socket.emit("UPDATE", node.toMap());
+
+      // Change LastUpdated
+      node.lastUpdated = DateTime.now();
     } else {
       log.e("Node not active");
     }
@@ -200,7 +214,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapNodeBusyState(NodeBusy event) async* {
     // Update Status
     if (node != null) {
-      node.update(Status.Busy);
+      // Update Status
+      node.status = Status.Busy;
+
+      // Emit to Server
+      socket.emit("UPDATE", node.toMap());
+
+      // Change LastUpdated
+      node.lastUpdated = DateTime.now();
     } else {
       log.e("Node not active");
     }

@@ -1,5 +1,8 @@
 part of 'data_bloc.dart';
 
+// ** Enum for Traffic Management ** //
+enum TrafficDirection { Incoming, Outgoing }
+
 abstract class DataEvent extends Equatable {
   const DataEvent();
 
@@ -21,9 +24,8 @@ class ProgressCubit extends Cubit<double> {
 }
 
 // Send Transfer over DataChannel to Peer
-class PeerSentChunk extends DataEvent {
-  final Node match;
-  const PeerSentChunk(this.match);
+class PeerSendingChunk extends DataEvent {
+  const PeerSendingChunk();
 }
 
 // Add File Chunk from Transfer
@@ -32,10 +34,19 @@ class PeerAddedChunk extends DataEvent {
   const PeerAddedChunk(this.chunk);
 }
 
-// Write Completed File to Disk
-class PeerReceiveCompleted extends DataEvent {
-  final File file;
-  const PeerReceiveCompleted({this.file});
+class PeerQueuedFile extends DataEvent {
+  final Metadata metadata;
+  final File rawFile;
+  final Node sender;
+  final TrafficDirection direction;
+
+  PeerQueuedFile(this.direction, {this.sender, this.metadata, this.rawFile});
+}
+
+class PeerClearedQueue extends DataEvent {
+  final String matchId;
+  final TrafficDirection direction;
+  PeerClearedQueue(this.direction, {this.matchId});
 }
 
 // Search for a file

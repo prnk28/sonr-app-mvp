@@ -15,6 +15,9 @@ enum SignalingState {
   ConnectionError,
 }
 
+// Role in Transfer
+enum Role { Sender, Receiver, Zero }
+
 // *********************************
 // * Callbacks for Signaling API. **
 // *********************************

@@ -21,6 +21,10 @@ class PeerReceiveInProgress extends DataState {
   PeerReceiveInProgress();
 }
 
+// Default State
+class PeerReady extends DataState {
+}
+
 // Viewing Saved File
 class Viewing extends DataState {
   final SonrFile file;

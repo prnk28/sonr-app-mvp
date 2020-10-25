@@ -64,19 +64,13 @@ dependencies:
 dev_dependencies:
   hive_generator: ^0.7.1
   build_runner: ^1.10.2
-  flutter_launcher_icons: "^0.7.0"
 
 flutter_test:
   sdk: flutter
+  
 # ** ================== **
 # **   FLUTTER BUILD    **
 # ** ================== **
-flutter_icons:
-  ios: true
-  android: true
-  image_path_ios: "assets/launcher/icon/ios.png"
-  image_path_android: "assets/launcher/icon/android.png"
-  
 flutter:
   # -- Theme/Colors --
   uses-material-design: true

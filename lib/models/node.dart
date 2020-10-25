@@ -55,18 +55,6 @@ class Node {
     };
   }
 
-  // Update Status and Signal Changes
-  update(Status newStatus) {
-    // Update Status
-    this.status = newStatus;
-
-    // Emit to Server
-    socket.emit("UPDATE", this.toMap());
-
-    // Change LastUpdated
-    this.lastUpdated = DateTime.now();
-  }
-
   // ************
   // ** Device **
   // ************

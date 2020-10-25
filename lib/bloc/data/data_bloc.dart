@@ -12,66 +12,69 @@ part 'data_state.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
   // Subscription
-  StreamSubscription userSub;
-
-  // Repositories
-  final UserBloc user;
+  StreamSubscription _userSub;
+  RTCSession _session;
+  RTCDataChannel _dataChannel;
   ProgressCubit progress;
-  Traffic traffic;
+
+  // Traffic Maps - MatchId/File
+  List<SonrFile> _incoming;
+  List<SonrFile> _outgoing;
   SonrFile currentFile;
 
-  // Data Channel
-  BytesBuilder _block = new BytesBuilder();
-  Node _match;
+  // References
+  final UserBloc user;
 
   // Constructers
   DataBloc(this.user) : super(null) {
+    // ** Initialization ** //
+    // Traffic Maps
+    _incoming = new List<SonrFile>();
+    _outgoing = new List<SonrFile>();
+    _session = user.session;
+
+    // Progress
+    progress = new ProgressCubit();
+
     // ** Data BLoC Subscription ** //
-    userSub = user.listen((UserState state) {
+    _userSub = user.listen((UserState state) {
       // Queue Incoming Transfer
       if (state is NodeTransferInitial) {
-        _match = state.match;
-        traffic.addIncoming(state.metadata);
+        add(PeerQueuedFile(TrafficDirection.Incoming,
+            metadata: state.metadata));
       }
       // Begin Transfer
       else if (state is NodeTransferInProgress) {
-        // Create Data Stream
-        _match = state.match;
-
         // Send Chunk
-        add(PeerSentChunk(state.match));
+        add(PeerSendingChunk());
       }
     });
 
-    // Initialize Repositories
-    progress = new ProgressCubit();
-    traffic = new Traffic(user.session);
-
-    // Set Current File
-    traffic.onAddFile = (file) {
-      currentFile = file;
+    // ** RTCSession Subscription ** //
+    _session.onDataChannel = (channel) {
+      // Check Channel Status
+      _dataChannel = channel;
     };
 
-    // Add Binary Chunk
-    traffic.onBinaryChunk = (chunk) {
-      add(PeerAddedChunk(chunk));
-    };
-
-    // SendNextChunk
-    traffic.onNextChunk = () {
-      add(PeerSentChunk(_match));
-    };
-
-    // On Transfer Complete
-    traffic.onTransferComplete = () {
-      // Write Current File
-      add(PeerReceiveCompleted());
+    // Handle DataChannel Message
+    _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
+      // Check if Binary
+      if (message.isBinary) {
+        add(PeerAddedChunk(message.binary));
+      }
+      // Check if Text
+      else {
+        // Check for Completion Message
+        if (message.text == "NEXT_CHUNK") {
+          add(PeerSendingChunk());
+        }
+      }
     };
   }
 
   // On Bloc Close
   void dispose() {
-    userSub.cancel();
+    _userSub.cancel();
   }
 
   // Map Methods
@@ -79,12 +82,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   Stream<DataState> mapEventToState(
     DataEvent event,
   ) async* {
-    if (event is PeerAddedChunk) {
+    if (event is PeerQueuedFile) {
+      yield* _mapPeerQueuedFileState(event);
+    } else if (event is PeerClearedQueue) {
+      yield* _mapPeerClearedQueueState(event);
+    } else if (event is PeerAddedChunk) {
       yield* _mapPeerAddedChunkState(event);
-    } else if (event is PeerSentChunk) {
+    } else if (event is PeerSendingChunk) {
       yield* _mapPeerSentChunkState(event);
-    } else if (event is PeerReceiveCompleted) {
-      yield* _mapPeerReceiveCompletedState(event);
     } else if (event is UserSearchedFile) {
       yield* _mapFindFileState(event);
     } else if (event is UserOpenedFile) {
@@ -93,31 +98,64 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   }
 
 // **************************
+// ** PeerQueuedFile Event **
+// **************************
+  Stream<DataState> _mapPeerQueuedFileState(PeerQueuedFile event) async* {
+    // Queue by direction
+    switch (event.direction) {
+      case TrafficDirection.Incoming:
+        // Create SonrFile
+        SonrFile file =
+            new SonrFile(_dataChannel, event.sender, metadata: event.metadata);
+
+        // Add To Incoming
+        _incoming.add(file);
+
+        // Set Current
+        currentFile = file;
+        break;
+      case TrafficDirection.Outgoing:
+        // Get Dummy RawFile
+        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
+
+        // Create SonrFile
+        SonrFile file = new SonrFile(_dataChannel, user.node, file: dummyFile);
+
+        // Add to Outgoing
+        _outgoing.add(file);
+
+        // Set Current
+        currentFile = file;
+        break;
+    }
+  }
+
+// **************************
 // ** PeerAddedChunk Event **
 // **************************
   Stream<DataState> _mapPeerAddedChunkState(PeerAddedChunk event) async* {
-    // Add Chunk to Block
-    _block.add(event.chunk);
+    // Add Chunk to SonrFile
+    double currProgress = currentFile.addChunk(event.chunk);
 
-    // Update Progress in Current MetaData
-    currentFile.addProgress(this);
+    // Update Progress
+    progress.update(currProgress);
 
     // Check if Receive is Done
-    if (currentFile.isProgressComplete()) {
+    if (currentFile.isComplete()) {
       // Save File
-      SonrFile file = await currentFile.save(_block.takeBytes());
-
-      // Yield Complete
-      user.add(NodeCompleted(_match, file: file));
+      SonrFile file = await currentFile.save();
 
       // Clear incoming traffic
-      traffic.clear(TrafficDirection.Incoming);
-      _match = null;
+      add(PeerClearedQueue(TrafficDirection.Incoming));
+
+      // Yield Complete
+      user.add(NodeCompleted(file.owner, file: file));
+
+      // Change State
+      yield PeerReady();
     }
     // Yield Progress
     else {
-      // Request Next Chunk
-      traffic.nextChunk();
       yield PeerReceiveInProgress();
     }
   }
@@ -125,48 +163,62 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // *************************
 // ** PeerSentChunk Event **
 // *************************
-  Stream<DataState> _mapPeerSentChunkState(PeerSentChunk event) async* {
-    // Find Start/End Bytes
-    // int start = currentFile.currentChunkNum * CHUNK_SIZE;
-    // int end = start + CHUNK_SIZE;
+  Stream<DataState> _mapPeerSentChunkState(PeerSendingChunk event) async* {
+    // End of List
+    if (currentFile.isComplete()) {
+      // Call Bloc Event
+      user.add(NodeCompleted(currentFile.owner));
 
-    // Open Reader with Offset
-    final reader = ChunkedStreamIterator(currentFile.file.openRead());
+      // TODO: Complete Tranfer end Session
 
-    // While Reader Has Values
-    while (true) {
-      // read one CHUNK
-      var data = await reader.read(CHUNK_SIZE);
-      var chunk = Uint8List.fromList(data);
+      // Change State
+      yield PeerReady();
+    }
+    // Send Current Chunk
+    else {
+      // Sends and Updates Progress
+      var currProgress = await currentFile.sendChunk();
 
-      // End of List
-      if (data.length <= 0) {
-        // Call Bloc Event
-        user.add(NodeCompleted(event.match));
+      // Update Progress
+      progress.update(currProgress);
 
-        // Complete Tranfer
-        traffic.complete(currentFile);
-        break;
-      }
-      // Send Current Chunk
-      else {
-        // Sends and Updates Progress
-        traffic.transmit(currentFile, chunk);
-
-        // Update Progress
-        currentFile.addProgress(this);
-
-        // Yield Progress
-        yield PeerSendInProgress();
-      }
+      // Yield Progress
+      yield PeerSendInProgress();
     }
   }
 
-// *********************
-// ** WriteFile Event **
-// *********************
-  Stream<DataState> _mapPeerReceiveCompletedState(
-      PeerReceiveCompleted event) async* {}
+// **************************
+// ** PeerClearedQueue Event **
+// **************************
+  Stream<DataState> _mapPeerClearedQueueState(PeerClearedQueue event) async* {
+    // Clear by Direction
+    switch (event.direction) {
+      case TrafficDirection.Incoming:
+        // Clear All
+        if (event.matchId == null) {
+          _incoming.clear();
+
+          // Clear Current File
+          currentFile = null;
+        }
+
+        // Clear One
+        _incoming.remove(event.matchId);
+        break;
+      case TrafficDirection.Outgoing:
+        // Clear All
+        if (event.matchId == null) {
+          _outgoing.clear();
+
+          // Clear Current File
+          currentFile = null;
+        }
+
+        // Clear One
+        _outgoing.remove(event.matchId);
+        break;
+    }
+  }
 
 // ********************
 // ** FindFile Event **

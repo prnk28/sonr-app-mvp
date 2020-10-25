@@ -2,6 +2,11 @@ import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 
 // ** Message Socket **
+Socket socket = io('https://sonr-match.herokuapp.com/', <String, dynamic>{
+  'transports': ['websocket'],
+  'autoConnect': false
+});
+
 class Emitter {
   // References
   final Node user;

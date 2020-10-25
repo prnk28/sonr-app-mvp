@@ -8,13 +8,6 @@ export 'package:socket_io_client/socket_io_client.dart';
 export 'circle.dart';
 export 'emitter.dart';
 export 'session.dart';
-export 'traffic.dart';
-
-import 'package:socket_io_client/socket_io_client.dart';
-
-// * Chunking Constants **
-const CHUNK_SIZE = 16000;
-const CHUNKS_PER_ACK = 64;
 
 // * WebRTC Settings **
 // ICE RTCConfiguration Map
@@ -33,8 +26,3 @@ const RTC_CONSTRAINTS = {
   },
   'optional': [],
 };
-
-Socket socket = io('https://sonr-match.herokuapp.com/', <String, dynamic>{
-  'transports': ['websocket'],
-  'autoConnect': false
-});
