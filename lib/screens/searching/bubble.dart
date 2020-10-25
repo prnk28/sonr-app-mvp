@@ -16,7 +16,8 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _animationController = AnimationController(duration: Duration(seconds: 2));
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animationController.repeat(reverse: true);
     _animation = Tween(begin: 1.0, end: 16.0).animate(_animationController)
       ..addListener(() {

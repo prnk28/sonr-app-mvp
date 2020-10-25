@@ -6,6 +6,7 @@ export 'package:hive/hive.dart';
 export 'package:socket_io_client/socket_io_client.dart';
 
 export 'circle.dart';
+export 'emitter.dart';
 export 'session.dart';
 export 'traffic.dart';
 

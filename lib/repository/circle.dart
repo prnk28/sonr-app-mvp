@@ -2,6 +2,9 @@ import 'package:graph_collection/graph.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:vector_math/vector_math.dart';
 
+// ** Proximity Enum ** //
+enum Proximity { Immediate, Near, Far, Away }
+
 // ** Modify Graph Values ** //
 class Circle {
   DirectedValueGraph graph;
@@ -29,7 +32,7 @@ class Circle {
     graph.remove(previousNode);
 
     // Check Node Status: Senders are From
-    if (sender.canSendTo(receiver)) {
+    if (_canSendTo(sender, receiver)) {
       // Calculate Difference and Create Edge
       graph.setToBy<double>(
           sender, receiver, this._getDifference(sender, receiver));
@@ -70,6 +73,21 @@ class Circle {
     }
     // Return Peers
     return activePeers;
+  }
+
+  // ** Checker Method: If Peer can Send to Peer **
+  _canSendTo(Node sender, Node receiver) {
+    // Verify Status
+    bool statusCheck;
+    statusCheck = sender.status == Status.Searching &&
+        receiver.status == Status.Available;
+
+    // Check Id
+    bool idCheck;
+    idCheck = sender.id != null && receiver.id != null;
+
+    // Validate
+    return statusCheck && idCheck;
   }
 
   // ** Get Difference When User is Searching **

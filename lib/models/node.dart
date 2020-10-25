@@ -1,10 +1,8 @@
-import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
+import 'package:sonar_app/repository/repository.dart';
 
-// ** Proximity Enum ** //
-enum Proximity { Immediate, Near, Far, Away }
-
-// Status of Node
+// ** Status of Node **
 enum Status {
   Offline, // Offline Status
   Available, // Ready to Receive
@@ -15,39 +13,28 @@ enum Status {
 class Node {
   // Management
   String id;
-  String socketId;
   String olc;
   String device;
   Profile profile;
+  Status status;
   DateTime lastUpdated;
-  Status _status;
-  Status get status {
-    return _status;
-  }
-
-  // ** Set Status/ Change LastUpdated **
-  set status(Status status) {
-    // Update to Given Status
-    _status = status;
-
-    // Change Last Updated
-    this.lastUpdated = DateTime.now();
-  }
 
   // Sensory Variables
   double direction;
   double distance;
   Proximity proximity;
 
-// ** Constructer **
+  // ************
+  // ** Object **
+  // *************
   Node(this.profile) {
     // Set Default Variables
-    this._status = Status.Offline;
-    this.direction = 0.01;
+    this.status = Status.Offline;
     this.device = Platform.operatingSystem.toUpperCase();
+    this.direction = 0.01;
   }
 
-// ** Build Peer from Map **
+  // Build Peer from Map
   static Node fromMap(Map map) {
     Node neighbor = new Node(Profile.fromMap(map['profile']));
     neighbor.id = map['id'];
@@ -57,47 +44,7 @@ class Node {
     return neighbor;
   }
 
-  // ** Checker Method: If Peer can Send to Peer **
-  canSendTo(Node peer) {
-    // Verify Status
-    bool statusCheck;
-    statusCheck =
-        this.status == Status.Searching && peer.status == Status.Available;
-
-    // Check Id
-    bool idCheck;
-    idCheck = this.id != null && peer.id != null;
-
-    // Validate
-    return statusCheck && idCheck;
-  }
-
-  // ** Get Difference When User is Searching **
-  getDifference(Node receiver) {
-    // Check Node Status: Senders are From
-    if (this.status == Status.Searching &&
-        receiver.status == Status.Available) {
-      // Calculate Difference
-      var diff = this.direction - receiver.direction;
-
-      // Log and Get difference
-      return diff.abs();
-    }
-    return -1;
-  }
-
-  // ** Set OLC from Current Location **
-  setLocation() async {
-    // Get Location
-    Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    // Encode OLC
-    this.olc = OLC.encode(position.latitude, position.longitude, codeLength: 8);
-  }
-
-// ** Convert Object to Map **
-  // -- Export Peer to Map for Communication --
+  //  Convert Object to Map
   toMap() {
     return {
       'id': this.id,
@@ -106,5 +53,30 @@ class Node {
       'profile': this.profile.toMap(),
       'status': enumAsString(this.status)
     };
+  }
+
+  // Update Status and Signal Changes
+  update(Status newStatus) {
+    // Update Status
+    this.status = newStatus;
+
+    // Emit to Server
+    socket.emit("UPDATE", this.toMap());
+
+    // Change LastUpdated
+    this.lastUpdated = DateTime.now();
+  }
+
+  // ************
+  // ** Device **
+  // ************
+  // Set Node Current Location as OLC
+  setLocation() async {
+    // Get Location
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    // Encode OLC
+    this.olc = OLC.encode(position.latitude, position.longitude, codeLength: 8);
   }
 }

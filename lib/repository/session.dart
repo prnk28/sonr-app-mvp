@@ -69,6 +69,25 @@ class RTCSession {
     addDataChannel(id, channel);
   }
 
+  cancel(Node match) {
+    // Remove RTC Connection
+    var pc = this.peerConnections[match.id];
+    if (pc != null) {
+      pc.close();
+      this.peerConnections.remove(match.id);
+    }
+
+    // Remove DataChannel
+    var dc = this.dataChannels[match.id];
+    if (dc != null) {
+      dc.close();
+      this.dataChannels.remove(match.id);
+    }
+
+    // Change Status
+    this.updateState(SignalingState.CallStateBye);
+  }
+
   handleCandidate(Node match, dynamic data) async {
     // Get Match Node
     var candidateMap = data['candidate'];
@@ -148,6 +167,25 @@ class RTCSession {
       event['peers'] = peers;
       this.onPeersUpdate(event);
     }
+  }
+
+  reset({Node match}) {
+    // Check if Match Provided
+    if (match != null) {
+      // Close Connection and DataChannel
+      this.peerConnections[match.id].close();
+      this.dataChannels[match.id].close();
+
+      // Remove from Connection and DataChannel
+      this.peerConnections.remove(match.id);
+      this.dataChannels.remove(match.id);
+
+      // Clear Session ID
+      this.id = null;
+    }
+    
+    // Change State
+    updateState(null);
   }
 
   setRemoteCandidates(RTCPeerConnection pc) async {

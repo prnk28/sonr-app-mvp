@@ -17,7 +17,6 @@ export 'package:soundpool/soundpool.dart';
 export 'package:graph_collection/graph.dart';
 export 'package:path/path.dart';
 export 'package:path_provider/path_provider.dart';
-export 'package:posthog_flutter/posthog_flutter.dart';
 
 import 'dart:io';
 import 'package:logger/logger.dart';

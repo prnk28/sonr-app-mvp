@@ -8,8 +8,9 @@ part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   // Data Providers
-  Node node;
   Circle circle;
+  Emitter emitter;
+  Node node;
   RTCSession session;
 
   UserBloc() : super(null) {
@@ -170,10 +171,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // [User] is Searching
   Stream<UserState> _mapNodeSearchState(NodeSearch event) async* {
     // Update Status
-    node.status = Status.Searching;
+    if (node != null) {
+      node.update(Status.Searching);
+    } else {
+      log.e("Node not active");
+    }
 
-    // Emit to Server
-    socket.emit("UPDATE", node.toMap());
+    // Update Peers
     add(GraphZonedPeers());
     yield NodeSearchInProgress(node);
   }
@@ -181,64 +185,40 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   // [User] is Available
   Stream<UserState> _mapNodeAvailableState(NodeAvailable event) async* {
     // Update Status
-    node.status = Status.Available;
+    if (node != null) {
+      node.update(Status.Available);
+    } else {
+      log.e("Node not active");
+    }
 
-    // Emit to Server
-    socket.emit("UPDATE", node.toMap());
+    // Update Peers
     add(GraphZonedPeers());
     yield NodeAvailableInProgress(node);
   }
 
-// [User] is Busy
+  // [User] is Busy
   Stream<UserState> _mapNodeBusyState(NodeBusy event) async* {
     // Update Status
-    node.status = Status.Busy;
-
-    // Emit to Server
-    socket.emit("UPDATE", node.toMap());
+    if (node != null) {
+      node.update(Status.Busy);
+    } else {
+      log.e("Node not active");
+    }
   }
 
   // [User] is Reset
   Stream<UserState> _mapNodeResetState(NodeReset event) async* {
-    // Get Data
-    var match = event.match;
-
-    // Check if Match Provided
-    if (match != null) {
-      // Close Connection and DataChannel
-      session.peerConnections[match.id].close();
-      session.dataChannels[match.id].close();
-
-      // Remove from Connection and DataChannel
-      session.peerConnections.remove(match.id);
-      session.dataChannels.remove(match.id);
-
-      // Clear Session ID
-      session.id = null;
-    }
+    // Reset Session
+    session.reset(match: event.match);
   }
 
   // [Peer] has Cancelled
   Stream<UserState> _mapNodeCancelState(NodeCancel event) async* {
-    // Get Data
-    var match = event.match;
+    // Cancel Transfer
+    session.cancel(event.match);
 
-    // Remove RTC Connection
-    var pc = session.peerConnections[match.id];
-    if (pc != null) {
-      pc.close();
-      session.peerConnections.remove(match.id);
-    }
-
-    // Remove DataChannels
-    var dc = session.dataChannels[match.id];
-    if (dc != null) {
-      dc.close();
-      session.dataChannels.remove(match.id);
-    }
-
-    // Reset Status
-    session.updateState(SignalingState.CallStateBye);
+    // Change State
+    yield NodeTransferFailure(event.match);
   }
 
 // ***************************
@@ -256,24 +236,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Initialize RTC Sender Connection
     session.initializePeer(Role.Sender, pc, event.to);
 
-    try {
-      // Create Offer Description
-      RTCSessionDescription s = await pc.createOffer(RTC_CONSTRAINTS);
-      pc.setLocalDescription(s);
-
-      // Emit to Socket.io
-      socket.emit("OFFER", [
-        node.toMap(),
-        event.to.id,
-        {
-          'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': session.id,
-          'metadata': event.file.metadata.toMap()
-        }
-      ]);
-    } catch (e) {
-      print(e.toString());
-    }
+    // Invite Peer
+    await emitter.invite(event.to, session.id, pc, event.file.metadata);
 
     // Change Status
     add(NodeBusy());
@@ -331,24 +295,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Set Candidates
     await session.setRemoteCandidates(pc);
 
-    // Emit Answer
-    try {
-      // Create Answer Description
-      RTCSessionDescription s = await pc.createAnswer(RTC_CONSTRAINTS);
-      pc.setLocalDescription(s);
-
-      // Emit to Socket.io
-      socket.emit("ANSWER", [
-        node.toMap(),
-        match.id,
-        {
-          'description': {'sdp': s.sdp, 'type': s.type},
-          'session_id': session.id,
-        }
-      ]);
-    } catch (e) {
-      print(e.toString());
-    }
+    // Send Answer
+    await emitter.answer(match, session.id, pc);
 
     // Change Status
     add(NodeBusy());
