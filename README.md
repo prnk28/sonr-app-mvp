@@ -10,7 +10,7 @@
 App utilizes Libp2p, WebRTC, OLC to be able to send any file to a nearby person. Also has robust contact sharing feature.
 
 ## Who is this for?
-Anyone with an Instagram Account with a keen interest on tracking their optimal likes.
+Anyone with multiple devices not running in the same ecosystem.
 
 ## Technologies
 * [Flutter](https://github.com/flutter/flutter)
