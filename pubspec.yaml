@@ -30,7 +30,7 @@ dependencies:
   sensors: ^0.4.1+1
   soundpool: ^1.0.1
   vibration: ^1.2.4
-  uuid: 2.0.0
+  uuid: ^2.0.0
 
   # -- Extension --
   characters: ^1.0.0

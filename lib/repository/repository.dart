@@ -35,7 +35,7 @@ const RTC_CONSTRAINTS = {
 };
 
 // ** Start Socket **
-Socket socket = io('http://match.sonr.io', <String, dynamic>{
+Socket socket = io('http://signal.sonr.io', <String, dynamic>{
   'transports': ['websocket'],
   'autoConnect': false
 });

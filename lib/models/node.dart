@@ -15,6 +15,7 @@ enum Status {
 class Node {
   // Management
   String id;
+  String socketId;
   String olc;
   String device;
   Profile profile;
@@ -41,7 +42,6 @@ class Node {
 // ** Constructer **
   Node(this.profile) {
     // Set Default Variables
-    this.id = "";
     this._status = Status.Offline;
     this.direction = 0.01;
     this.device = Platform.operatingSystem.toUpperCase();

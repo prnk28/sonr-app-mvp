@@ -24,7 +24,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     // ** ======================================= ** //
     socket.on('connect', (_) {
       // Get/Set Socket Id
-      user.node.id = socket.id;
+      user.node.socketId = socket.id;
+
       // Change Status
       user.add(NodeAvailable());
     });
@@ -108,9 +109,12 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
   Stream<SignalState> _mapSocketStartedToState(SocketStarted event) async* {
     // Check if Peer Located
     if (user.node.olc != null) {
+      // Set Id
+      user.node.id = uuid.v5(user.node.olc, user.node.profile.firstName);
+
       // Get Headers
       var headers = {
-        'deviceId': user.node.id,
+        'sonrId': user.node.id,
         'lobby': user.node.olc, // RoomId from Location
       };
 

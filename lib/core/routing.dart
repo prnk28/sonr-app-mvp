@@ -50,7 +50,7 @@ extension Routing on BuildContext {
               settings: settings);
           break;
         case '/transfer':
-        // Update Status
+          // Update Status
           getBloc(BlocType.User).add(NodeSearch());
           return PageTransition(
               child: SearchScreen(),
@@ -66,7 +66,7 @@ extension Routing on BuildContext {
         case '/settings':
           return PageTransition(
               child: SettingsScreen(),
-              type: PageTransitionType.upToDown,
+              type: PageTransitionType.topToBottom,
               settings: settings);
           break;
       }
