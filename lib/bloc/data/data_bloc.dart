@@ -114,11 +114,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         currentFile = file;
         break;
       case TrafficDirection.Outgoing:
-        // Get Dummy RawFile
-        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-
         // Create SonrFile
-        SonrFile file = new SonrFile(user.node, file: dummyFile);
+        SonrFile file = new SonrFile(user.node, file: event.rawFile);
 
         // Add to Outgoing
         _outgoing.add(file);

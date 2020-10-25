@@ -30,7 +30,7 @@ class GraphUpdated extends UserEvent {
 
 // [Peer] exited Pool of Neighbors
 class GraphExited extends UserEvent {
-  final Node from;
+  final String from;
   GraphExited(this.from);
 }
 

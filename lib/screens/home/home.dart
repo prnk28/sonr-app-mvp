@@ -11,7 +11,16 @@ class HomeScreen extends StatelessWidget {
         appBar: screenAppBar("Home"),
         floatingActionButton: NeumorphicFloatingActionButton(
             child: Icon(Icons.star, size: 30),
-            onPressed: () {
+            onPressed: () async {
+              // Get Dummy RawFile
+              File dummyFile =
+                  await getAssetFileByPath("assets/images/fat_test.jpg");
+
+              // Queue File
+              context.getBloc(BlocType.Data).add(PeerQueuedFile(
+                  TrafficDirection.Outgoing,
+                  rawFile: dummyFile));
+
               // Push to Transfer Screen
               Navigator.pushReplacementNamed(context, "/transfer");
             }),

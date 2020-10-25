@@ -14,9 +14,9 @@ class Circle {
   }
 
   // ** Exit Graph from Peer **
-  exitGraph(Node peer) {
-    var previousNode = graph.singleWhere((element) => element.id == peer.id,
-        orElse: () => null);
+  exitGraph(String peer) {
+    var previousNode =
+        graph.singleWhere((element) => element.id == peer, orElse: () => null);
 
     // Remove Peer Node
     graph.remove(previousNode);

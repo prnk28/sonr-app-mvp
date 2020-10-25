@@ -84,9 +84,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Retrieve Profile
     var profile = await Profile.retrieve();
 
-    // Create Delay
-    await Future.delayed(const Duration(milliseconds: 1500));
-
     // No Profile
     if (profile == null) {
       // Change State
@@ -253,9 +250,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 // ***************************
 // [User] Send Offer to another peer
   Stream<UserState> _mapNodeOfferedState(NodeOffered event) async* {
-    // Queue File
-    event.data.add(PeerQueuedFile(TrafficDirection.Outgoing));
-
     // Start Session by Creating Emitter
     emitter = new Emitter(node, event.to, session);
 

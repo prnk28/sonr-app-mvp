@@ -39,11 +39,8 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
 
     // ** ======================================= ** //
     socket.on('EXITED', (data) {
-      // Get Peer Data
-      Node from = Node.fromMap(data);
-
       // Exit Graph Graph
-      user.add(GraphExited(from));
+      user.add(GraphExited(data));
     });
 
     // ** ======================================= ** //
