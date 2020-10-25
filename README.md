@@ -1,4 +1,4 @@
-# Sonr App
+# Sonr.io
 <div align="center">
     <img src="logos/header.png" alt="Sonr-Temp-Header"/>
   <br>
