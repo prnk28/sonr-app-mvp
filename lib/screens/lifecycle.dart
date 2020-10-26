@@ -22,7 +22,16 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state = $state');
+    switch (state) {
+      case AppLifecycleState.inactive:
+        socket.emit("EXIT");
+        break;
+      case AppLifecycleState.paused:
+        socket.emit("EXIT");
+        break;
+      default:
+        break;
+    }
   }
 
   @override

@@ -65,13 +65,6 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
     });
 
     // ** ======================================= ** //
-    socket.on('NEXT_CHUNK', (data) {
-      log.i('Next Chunk');
-      // Handle Request
-      data.add(PeerSendingChunk());
-    });
-
-    // ** ======================================= ** //
     socket.on('DECLINED', (data) {
       // Handle Rejection
       user.add(NodeRejected());
