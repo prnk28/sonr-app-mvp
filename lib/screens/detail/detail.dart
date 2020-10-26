@@ -2,23 +2,32 @@ import 'package:sonar_app/screens/screens.dart';
 
 part 'image.dart';
 
+// ********************************** //
+// ** Screen Class for File Detail ** //
+// ********************************** //
 class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Setup App Bar
       appBar: leadingAppBar(context, Icons.arrow_back, onPressed: () {
-        // Update Node
-        context.getBloc(BlocType.User).add(NodeAvailable());
-
-        // Pop Navigation
-        Navigator.pop(context);
+        // Push Replacement
+        Navigator.pushReplacementNamed(context, "/home");
       }),
       backgroundColor: NeumorphicTheme.baseColor(context),
 
       // Setup Body
-      body: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-        if (state is UserViewingFile) {
+      body: BlocBuilder<DataBloc, DataState>(
+          // Set Build Requirements
+          buildWhen: (previous, current) {
+        if (current is UserViewingFileInProgress) {
+          return true;
+        }
+        return false;
+      },
+          // Build By State
+          builder: (context, state) {
+        if (state is UserViewingFileInProgress) {
           // Get File
           var file = state.file;
           // Check Files Count
@@ -52,10 +61,9 @@ class DetailScreen extends StatelessWidget {
           else {
             return Center(child: Text("Mega Hellope: Couldnt Load File"));
           }
-        } else {
-          log.e("Incorrect State in Detail Screen");
-          return Center(child: Text("Mega Hellope"));
         }
+        log.e("Incorrect State in Detail Screen");
+        return Center(child: Text("Mega Hellope"));
       }),
     );
   }

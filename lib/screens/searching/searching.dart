@@ -10,17 +10,11 @@ part 'compass.dart';
 class SearchingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Search
-    context.getBloc(BlocType.User).add(NodeSearch());
-
     // Return Widget
     return Scaffold(
-        appBar: leadingAppBar(context, Icons.arrow_back, onPressed: () {
-          // Update Node
-          context.getBloc(BlocType.User).add(NodeAvailable());
-
+        appBar: leadingAppBar(context, Icons.close, onPressed: () {
           // Pop Navigation
-          Navigator.pushNamed(context, "/home");
+          Navigator.pushReplacementNamed(context, "/home");
         }),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: SafeArea(

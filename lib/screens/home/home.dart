@@ -1,28 +1,60 @@
-import 'package:http/http.dart';
 import 'package:sonar_app/screens/screens.dart';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
 
-class HomeScreen extends StatelessWidget {
+part 'card.dart';
+part 'floater.dart';
+part 'grid.dart';
+
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    // Load Files
-    context.getBloc(BlocType.Data).add(UserGetAllFiles());
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  // Floating Button Animations
+  Animation<double> _animation;
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    _animationController.dispose(); // you need this
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     // Build View
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         appBar: screenAppBar("Home"),
-        floatingActionButton: NeumorphicFloatingActionButton(
-            child: Icon(Icons.star, size: 30),
-            onPressed: () async {
-              // Queue File
-              context
-                  .getBloc(BlocType.Data)
-                  .add(PeerQueuedFile(TrafficDirection.Outgoing));
-
-              // Push to Transfer Screen
-              Navigator.pushReplacementNamed(context, "/transfer");
-            }),
+        floatingActionButton:
+            FloaterButton(_animation, _animationController, (button) {
+          // File Option
+          if (button == "File") {
+            // Push to Transfer Screen
+            Navigator.pushReplacementNamed(context, "/transfer");
+          }
+          // Contact Option
+          else {
+            log.w("Contact not implemented yet");
+          }
+        }),
         body: _HomeView());
   }
 }
@@ -78,7 +110,7 @@ class _HomeView extends StatelessWidget {
                       context,
                     );
                   });
-            } else if (state is UserViewingFile) {
+            } else if (state is UserViewingFileInProgress) {
               // Push to Detail Screen
               Navigator.pushReplacementNamed(context, "/detail");
             }
@@ -86,55 +118,19 @@ class _HomeView extends StatelessWidget {
         ),
       ],
       child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-        if (state is UserLoadedFiles) {
-          // Check Files Count
-          if (state.files != null) {
-            return ListView(
-                padding: const EdgeInsets.all(8),
-                children: _buildMetadataListCells(context, state.files));
-          }
-          // No Files
-          else {
-            return Center(child: Text("Mega Hellope: No User Files"));
-          }
-        } else {
+        // User Files View
+        if (state is UserLoadedFilesSuccess) {
+          return FileGrid(state.files);
+        }
+        // No Files View
+        else if (state is UserLoadedFilesFailure) {
+          return Center(child: Text("No User Files"));
+        }
+        // Arbitrary View
+        else {
           return Center(child: Text("Mega Hellope"));
         }
       }),
     );
-  }
-
-  _buildMetadataListCells(BuildContext context, List<Metadata> allFiles) {
-    // Initialize
-    List<Widget> cells = new List<Widget>();
-
-    // Iterate Through Files
-    allFiles.forEach((metadata) {
-      // Generate Cell
-      var cell = GestureDetector(
-          onTap: () async {
-            // Load Files
-            context.getBloc(BlocType.Data).add(UserGetFile(meta: metadata));
-          },
-          child: Container(
-            height: 75,
-            color: Colors.amber[100],
-            child: Center(
-                child: Column(children: [
-              Text(metadata.name),
-              Text(enumAsString(metadata.type)),
-              Text("Owner: " +
-                  metadata.owner.firstName +
-                  " " +
-                  metadata.owner.lastName),
-            ])),
-          ));
-
-      // Add Cell to List
-      cells.add(cell);
-    });
-
-    // Return Cells
-    return cells;
   }
 }

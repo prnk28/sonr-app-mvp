@@ -1,15 +1,15 @@
 part of 'searching.dart';
 
-class Bubble extends StatefulWidget {
+class PeerBubble extends StatefulWidget {
   final double value;
   final Node peer;
 
-  const Bubble(this.value, this.peer, {Key key}) : super(key: key);
+  const PeerBubble(this.value, this.peer, {Key key}) : super(key: key);
   @override
-  _BubbleState createState() => _BubbleState();
+  _PeerBubbleState createState() => _PeerBubbleState();
 }
 
-class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
+class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
   // Animation
   AnimationController _animationController;
   Animation _animation;
@@ -24,6 +24,12 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
         setState(() {});
       });
     super.initState();
+  }
+
+  @override
+  dispose() {
+    _animationController.dispose(); // you need this
+    super.dispose();
   }
 
   @override

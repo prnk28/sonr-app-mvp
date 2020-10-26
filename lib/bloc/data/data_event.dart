@@ -63,3 +63,8 @@ class UserGetFile extends DataEvent {
   final int fileId;
   const UserGetFile({this.meta, this.fileId});
 }
+
+// User Closed File Viewer
+class UserClosedFile extends DataEvent {
+  const UserClosedFile();
+}

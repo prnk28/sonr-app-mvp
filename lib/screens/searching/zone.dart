@@ -28,7 +28,7 @@ class ZoneView extends StatelessWidget {
           current += 1;
 
           // Place Bubble
-          Widget bubble = new Bubble(current * mean, peer);
+          Widget bubble = new PeerBubble(current * mean, peer);
           stackWidgets.add(bubble);
         }
         // Return View

@@ -6,6 +6,9 @@ abstract class DataState extends Equatable {
   List<Object> get props => [];
 }
 
+// ******************* //
+// ** Data Transfer ** //
+// ******************* //
 // Ready to Perform Action
 class PeerInitial extends DataState {
   PeerInitial();
@@ -21,17 +24,51 @@ class PeerReceiveInProgress extends DataState {
   PeerReceiveInProgress();
 }
 
-// Default State
-class PeerReady extends DataState {}
-
-// Viewing Saved File
-class UserViewingFile extends DataState {
+// ***************** //
+// ** File Access ** //
+// ***************** //
+// Currently Viewing Saved File
+class UserViewingFileInProgress extends DataState {
   final SonrFile file;
-  UserViewingFile(this.file);
+  UserViewingFileInProgress(this.file);
 }
 
-// Viewing Saved File
-class UserLoadedFiles extends DataState {
+// Finished Viewing Saved File
+class UserViewingFileComplete extends DataState {
+  UserViewingFileComplete();
+}
+
+// User Loaded Files
+class UserLoadedFilesSuccess extends DataState {
   final List<Metadata> files;
-  UserLoadedFiles(this.files);
+  UserLoadedFilesSuccess(this.files);
+}
+
+// Couldnt Load Files
+class UserLoadedFilesFailure extends DataState {
+  UserLoadedFilesFailure();
+}
+
+// ***************** //
+// ** File Search ** //
+// ***************** //
+// Added query string for file search
+class UserSearchingFileInitial extends DataState {
+  UserSearchingFileInitial();
+}
+
+// Finding potential file matches
+class UserSearchingFileInProgress extends DataState {
+  UserSearchingFileInProgress();
+}
+
+// Return potential matches
+class UserSearchingFilesSuccess extends DataState {
+  final List<Metadata> files;
+  UserSearchingFilesSuccess(this.files);
+}
+
+// Found no applicable matches
+class UserSearchingFilesFailure extends DataState {
+  UserSearchingFilesFailure();
 }

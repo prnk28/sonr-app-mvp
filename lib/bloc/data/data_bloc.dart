@@ -228,9 +228,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
   }
 
-// ********************
-// ** FindFile Event **
-// ********************
+// ****************************
+// ** UserSearchedFile Event **
+// ****************************
   Stream<DataState> _mapFindFileState(UserSearchedFile event) async* {
     // Check Status
   }
@@ -246,10 +246,12 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Get All Files
     List<Metadata> allFiles = await metadataProvider.getAllFiles();
 
-    log.i(allFiles.toString());
-
     // Change State
-    yield UserLoadedFiles(allFiles);
+    if (allFiles != null) {
+      yield UserLoadedFilesSuccess(allFiles);
+    } else {
+      yield UserLoadedFilesFailure();
+    }
   }
 
 // ***********************
@@ -267,7 +269,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       SonrFile file = SonrFile.fromSaved(metadata);
 
       // Change State
-      yield UserViewingFile(file);
+      yield UserViewingFileInProgress(file);
     }
     // Check if Metadata provided
     else if (event.meta != null && event.fileId == null) {
@@ -275,11 +277,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       SonrFile file = SonrFile.fromSaved(event.meta);
 
       // Change state
-      yield UserViewingFile(file);
+      yield UserViewingFileInProgress(file);
     }
     // Error
     else {
       log.e("UserGetFile Event: Neither Metadata or FileId Provided");
     }
+  }
+
+// ********************
+// ** FindFile Event **
+// ********************
+  Stream<DataState> _mapUserClosedFileState(UserClosedFile event) async* {
+    // Check Status
   }
 }

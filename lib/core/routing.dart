@@ -38,15 +38,22 @@ extension Routing on BuildContext {
         case '/home':
           // Update Status
           getBloc(BlocType.User).add(NodeAvailable());
+
+          // Load Files
+          getBloc(BlocType.Data).add(UserGetAllFiles());
           return PageTransition(
               child: HomeScreen(),
               type: PageTransitionType.fade,
+              ctx: this,
+              inheritTheme: true,
               settings: settings);
           break;
         case '/register':
           return PageTransition(
               child: RegisterScreen(),
               type: PageTransitionType.rightToLeftWithFade,
+              ctx: this,
+              inheritTheme: true,
               settings: settings);
           break;
         case '/transfer':
@@ -55,18 +62,24 @@ extension Routing on BuildContext {
           return PageTransition(
               child: SearchingScreen(),
               type: PageTransitionType.fade,
+              ctx: this,
+              inheritTheme: true,
               settings: settings);
           break;
         case '/detail':
           return PageTransition(
               child: DetailScreen(),
               type: PageTransitionType.scale,
+              ctx: this,
+              inheritTheme: true,
               settings: settings);
           break;
         case '/settings':
           return PageTransition(
               child: SettingsScreen(),
               type: PageTransitionType.topToBottom,
+              ctx: this,
+              inheritTheme: true,
               settings: settings);
           break;
       }
