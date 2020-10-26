@@ -126,6 +126,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Create SonrFile
         SonrFile file = new SonrFile(user.node, raw: dummyFile);
 
+        // Set File Preview
+        await file.setPreview();
+
         // Add to Outgoing
         _outgoing.add(file);
 

@@ -23,22 +23,54 @@ Widget buildAuthenticationView(BuildContext context, NodeRequestInitial state) {
                   )))),
 
       // Build Item from Metadata and Peer
-      _buildItem(context, state.from),
+      _buildItem(context, state),
       Padding(padding: EdgeInsets.only(top: 25)),
 
       // Build Auth Action
-      _buildAuthButton(context, state.from, state.offer, state.metadata)
+      _buildAuthButton(context, state)
     ],
   );
 }
 
-Row _buildItem(BuildContext context, Node match) {
+Row _buildItem(BuildContext context, NodeRequestInitial state) {
+  // Get Data
+  var from = state.from;
+  var metadata = state.metadata;
+
+  // Preview Widget
+  Widget preview;
+  switch (state.metadata.type) {
+    case FileType.Audio:
+      preview = Icon(Icons.audiotrack, size: 100);
+      break;
+    case FileType.Image:
+      if (metadata.thumbnail != null) {
+        preview = Image.memory(metadata.thumbnail);
+      } else {
+        preview = Icon(Icons.image, size: 100);
+      }
+      break;
+    case FileType.Unknown:
+      preview = Icon(Icons.device_unknown, size: 100);
+      break;
+    case FileType.Video:
+      preview = Icon(Icons.video_collection, size: 100);
+      break;
+    case FileType.Word:
+      preview = Icon(Icons.sort_by_alpha, size: 100);
+      break;
+    default:
+      preview = Icon(Icons.storage, size: 100);
+      break;
+  }
+
+  // Build View
   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    Icon(Icons.image, size: 100),
+    preview,
     Column(
       children: [
-        Text(match.profile.firstName, style: headerTextStyle()),
-        Text(match.device,
+        Text(from.profile.firstName, style: headerTextStyle()),
+        Text(from.device,
             style: TextStyle(
                 fontFamily: "Raleway",
                 fontWeight: FontWeight.w500,
@@ -50,13 +82,14 @@ Row _buildItem(BuildContext context, Node match) {
 }
 
 NeumorphicButton _buildAuthButton(
-    BuildContext context, Node match, dynamic offer, Metadata metadata) {
+    BuildContext context, NodeRequestInitial state) {
+  // Build View
   return NeumorphicButton(
       onPressed: () {
-// Update WebBloc to Inform User Accepted
+        // Update WebBloc to Inform User Accepted
         context
             .getBloc(BlocType.User)
-            .add(NodeAccepted(match, offer, metadata));
+            .add(NodeAccepted(state.from, state.offer, state.metadata));
       },
       style: NeumorphicStyle(
           depth: 8,

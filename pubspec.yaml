@@ -33,10 +33,11 @@ dependencies:
   uuid: ^2.0.0
 
   # -- Extension --
-  characters: ^1.0.0
+  file: ^5.2.1
   graph_collection: ^1.1.2
   hive: ^1.4.4
   hive_flutter: ^0.3.1
+  image: ^2.1.18
   intl: ^0.15.8
   image_picker:
   logger: ^0.8.3
@@ -54,7 +55,6 @@ dependencies:
 
   # -- UI/UX --
   animations: ^1.1.2
-  boxicons_flutter: ^1.1.0
   flare_flutter: ^2.0.6
   floating_action_bubble: ^1.0.9
   flutter_gradients: ^1.0.0+2

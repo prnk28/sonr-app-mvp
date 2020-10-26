@@ -1,6 +1,7 @@
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
+import 'package:image/image.dart';
 
 // * Chunking Constants **
 const CHUNK_SIZE = 16000;
@@ -93,6 +94,20 @@ class SonrFile {
     // Save to File
     this.raw = await new File(path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
+
+  setPreview() async {
+    // Compress if Image for Preview
+    if (this.metadata.type == FileType.Image) {
+      // Get Bytes of Preview
+      File thumbFile = Squeeze.imageForBytes(this.raw);
+
+      // Set Thumbnail
+      metadata.thumbnail = await thumbFile.readAsBytes();
+      log.i("Image Compressed");
+    } else {
+      log.w("No compression for non-images yet");
+    }
   }
 
   // ** Read Bytes from SonrFile **

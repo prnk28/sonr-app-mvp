@@ -1,7 +1,6 @@
 // Packages
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:animations/animations.dart';
-export 'package:boxicons_flutter/boxicons_flutter.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
 // Design

@@ -44,3 +44,4 @@ extension Events on BuildContext {
     screenSize = Size(width, height);
   }
 }
+

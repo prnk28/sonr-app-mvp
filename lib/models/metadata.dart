@@ -22,6 +22,8 @@ class Metadata {
   String name;
   int size;
   int chunksTotal;
+  Uint8List thumbnail;
+
   FileType type;
   String path;
   Profile owner;
@@ -49,16 +51,34 @@ class Metadata {
     // Set File Info from Map
     this.name = map["name"];
     this.type = enumFromString(map["type"], FileType.values);
+
+    // Set Preview
+    if (map["thumbnail"] != null) {
+      // Get List of int
+      List<int> thumbList = new List<int>.from(map["thumbnail"]);
+
+      // Convert to Uint8List
+      this.thumbnail = Uint8List.fromList(thumbList);
+    }
   }
 
   // ** Convert to Map **
   toMap() {
-    return {
+    // Initialize Map
+    var map = {
       "name": this.name,
       "size": this.size,
       "chunks_total": this.chunksTotal,
       "type": enumAsString(this.type)
     };
+
+    // Check for preview
+    if (this.thumbnail != null) {
+      map["thumbnail"] = this.thumbnail.toList(growable: false);
+    }
+
+    // Return Map
+    return map;
   }
 
   // ** Constructer: Get MetaData from SQL Map ** //
@@ -100,6 +120,9 @@ class Metadata {
 
     return map;
   }
+
+  // ** Compress if Image ** //
+  void createThumbnail() {}
 }
 
 // ****************** //

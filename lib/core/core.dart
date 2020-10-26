@@ -2,6 +2,7 @@
 export 'dart:async';
 export 'dart:convert';
 export 'dart:io' hide Socket;
+export 'dart:isolate';
 export 'dart:math';
 export 'package:flutter/services.dart';
 export 'package:sqflite/sqflite.dart';
@@ -18,6 +19,7 @@ export 'package:soundpool/soundpool.dart';
 export 'package:graph_collection/graph.dart';
 export 'package:path/path.dart';
 export 'package:path_provider/path_provider.dart';
+export 'squeeze.dart';
 
 import 'dart:io';
 import 'package:logger/logger.dart';
