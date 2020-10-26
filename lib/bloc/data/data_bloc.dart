@@ -66,10 +66,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       if (message.isBinary) {
         add(PeerAddedChunk(message.binary));
       } else {
-        if (message.text == "NEXT_CHUNK") {
-          add(PeerSendingChunk());
+        if (message.text == "SEND_COMPLETE") {
+          user.add(NodeCompleted());
         }
-        //log.i("Message Text: " + message.text);
       }
     };
   }
@@ -139,7 +138,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     currentFile.addChunk(event.chunk);
 
     // Update Progress
-    progress.update(currentFile.progress());
+    var currProgress = currentFile.progress();
 
     // Check if Receive is Done
     if (currentFile.isComplete()) {
@@ -152,6 +151,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Yield Complete
       user.add(NodeCompleted(file: currentFile));
     } else {
+      progress.update(currProgress);
       yield PeerReceiveInProgress();
     }
   }
@@ -169,17 +169,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       var data = await reader.read(CHUNK_SIZE);
       var chunk = Uint8List.fromList(data);
 
-      // End of List
-      if (data.length <= 0) {
-        // Call Bloc Event
-        user.add(NodeCompleted());
-
-        // Complete Tranfer
-        //traffic.complete(currentFile);
-        break;
-      }
       // Send Current Chunk
-      else {
+      if (data.length > 0) {
         // Sends and Updates Progress
         _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
@@ -188,6 +179,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
         // Yield Progress
         yield PeerSendInProgress();
+      }
+      // End of List
+      else {
+        break;
       }
     }
   }
