@@ -5,6 +5,7 @@ export 'home/settings.dart';
 export 'splash/splash.dart';
 export 'searching/search.dart';
 export 'window/window.dart';
+export 'lifecycle.dart';
 
 // Packages
 export 'package:flutter/material.dart';

@@ -19,14 +19,14 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Setup Neumorphic Application
-    return NeumorphicApp(
+    return LifeCycleManager(
+        child: NeumorphicApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       home: SplashScreen(),
       onGenerateRoute: context.getRouting(),
-    );
+    ));
   }
 }

@@ -21,7 +21,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   List<SonrFile> _incoming;
   List<SonrFile> _outgoing;
   SonrFile currentFile;
-  Node _match;
 
   // References
   final UserBloc user;
@@ -67,7 +66,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         add(PeerAddedChunk(message.binary));
       } else {
         if (message.text == "SEND_COMPLETE") {
+          // Change user State
           user.add(NodeCompleted());
+
+          // Clear Outgoing
+          add(PeerClearedQueue(TrafficDirection.Outgoing));
         }
       }
     };
@@ -150,6 +153,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
       // Yield Complete
       user.add(NodeCompleted(file: currentFile));
+
+      // Clear Incoming
+      add(PeerClearedQueue(TrafficDirection.Incoming));
     } else {
       progress.update(currProgress);
       yield PeerReceiveInProgress();

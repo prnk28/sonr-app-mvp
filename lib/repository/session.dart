@@ -194,10 +194,24 @@ class RTCSession {
       // Remove from Connection and DataChannel
       this.peerConnections.remove(match.id);
       this.dataChannels.remove(match.id);
+    } else {
+      // Close all peer connections
+      this.peerConnections.forEach((id, pc) {
+        pc.close();
+      });
 
-      // Clear Session ID
-      this.id = null;
+      // Close all data channels
+      this.dataChannels.forEach((id, dc) {
+        dc.close();
+      });
+
+      // Clear both maps
+      this.peerConnections.clear();
+      this.dataChannels.clear();
     }
+
+    // Clear Session ID
+    this.id = null;
 
     // Change State
     updateState(null);

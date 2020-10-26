@@ -337,6 +337,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // User/[Peer] have completed transfer
   Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
+    // Reset Session
+    session.reset();
+
+    // Set to Search if Applicable
+    if (event.file == null) {
+      add(NodeSearch());
+    }
+
+    // Change State
     yield NodeTransferSuccess(file: event.file);
   }
 }
