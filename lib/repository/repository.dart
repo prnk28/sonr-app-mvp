@@ -8,6 +8,7 @@ export 'package:socket_io_client/socket_io_client.dart';
 export 'circle.dart';
 export 'emitter.dart';
 export 'session.dart';
+export 'sonrfile.dart';
 
 // * WebRTC Settings **
 // ICE RTCConfiguration Map

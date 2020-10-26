@@ -26,7 +26,7 @@ extension Routing on BuildContext {
       this,
       MaterialPageRoute(
           maintainState: false,
-          builder: (context) => SearchScreen(),
+          builder: (context) => SearchingScreen(),
           fullscreenDialog: true),
     );
   }
@@ -53,7 +53,7 @@ extension Routing on BuildContext {
           // Update Status
           getBloc(BlocType.User).add(NodeSearch());
           return PageTransition(
-              child: SearchScreen(),
+              child: SearchingScreen(),
               type: PageTransitionType.fade,
               settings: settings);
           break;

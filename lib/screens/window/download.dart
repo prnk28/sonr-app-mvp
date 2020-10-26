@@ -50,7 +50,7 @@ Widget buildCompleteView(BuildContext context, NodeTransferSuccess state,
                     size: 35,
                     color: Colors.grey[700],
                   )))),
-      Image.file(state.file.file)
+      Image.file(state.file.raw)
     ],
   );
 }

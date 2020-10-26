@@ -3,7 +3,7 @@ export 'home/home.dart';
 export 'register/register.dart';
 export 'home/settings.dart';
 export 'splash/splash.dart';
-export 'searching/search.dart';
+export 'searching/searching.dart';
 export 'window/window.dart';
 export 'lifecycle.dart';
 

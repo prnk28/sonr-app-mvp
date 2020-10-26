@@ -1,4 +1,4 @@
-part of 'search.dart';
+part of 'searching.dart';
 
 // *************************** //
 // ** Build Bubbles in List ** //

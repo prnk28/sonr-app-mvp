@@ -1,31 +1,54 @@
 import 'package:sonar_app/core/core.dart';
+import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
+
+// File Table Fields
+final String _filesTable = "files";
+final String _columnId = '_id';
+final String _columnName = 'name';
+final String _columnSize = 'size';
+final String _columnType = 'type';
+final String _columnPath = 'path';
+final String _columnOwner = 'owner';
+final String _columnReceived = 'received';
+final String _columnLastOpened = 'lastOpened';
 
 class Metadata {
   // Reference to JSON Map
   static Map fileTypes;
 
   // -- Properties --
-  String id = uuid.v1();
+  int id;
   String name;
   int size;
   int chunksTotal;
   FileType type;
   String path;
+  Profile owner;
   DateTime received;
   DateTime lastOpened;
 
+  // ** Constructer: Default ** //
+  Metadata(File file) {
+    // Calculate File Info
+    this.size = file.lengthSync();
+    this.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
+
+    // Set File Info
+    this.path = file.path;
+    this.name = basename(this.path);
+    this.type = getFileTypeFromPath(this.path);
+  }
+
   // ** Constructer: Get MetaData from Map ** //
-  static Metadata fromMap(Map map) {
-    Metadata temp = new Metadata();
+  Metadata.fromMap(Map map) {
     // Set Chunking Info from Map
-    temp.size = map["size"];
-    temp.chunksTotal = map["chunks_total"];
+    this.size = map["size"];
+    this.chunksTotal = map["chunks_total"];
 
     // Set File Info from Map
-    temp.name = map["name"];
-    temp.type = enumFromString(map["type"], FileType.values);
-    return temp;
+    this.name = map["name"];
+    this.type = enumFromString(map["type"], FileType.values);
   }
 
   // ** Convert to Map **
@@ -37,6 +60,143 @@ class Metadata {
       "type": enumAsString(this.type)
     };
   }
+
+  // ** Constructer: Get MetaData from SQL Map ** //
+  Metadata.fromSQL(Map map) {
+    this.id = map[_columnId];
+    this.name = map[_columnName];
+    this.size = map[_columnSize];
+    this.type = enumFromString(map[_columnType], FileType.values);
+    this.path = map[_columnPath];
+    this.owner = Profile.fromString(map[_columnOwner]);
+    this.received = DateTime.fromMillisecondsSinceEpoch(map[_columnReceived]);
+    this.lastOpened =
+        DateTime.fromMillisecondsSinceEpoch(map[_columnLastOpened]);
+  }
+
+  // ** Convert to SQL Map **
+  toSQL() {
+    // Create Map
+    var map = <String, dynamic>{
+      _columnName: this.name,
+      _columnSize: this.size,
+      _columnType: enumAsString(this.type),
+      _columnPath: this.path,
+      _columnOwner: this.owner.toString(),
+      _columnReceived: this.received.millisecondsSinceEpoch
+    };
+
+    // Check if Id Provided
+    if (this.id != null) {
+      map[_columnId] = this.id;
+    }
+
+    // Check if ever opened
+    if (this.lastOpened != null) {
+      map[_columnLastOpened] = this.lastOpened.millisecondsSinceEpoch;
+    } else {
+      map[_columnLastOpened] = DateTime.now().millisecondsSinceEpoch;
+    }
+
+    return map;
+  }
+}
+
+// ****************** //
+// ** SQL Provider ** //
+// ****************** //
+class MetadataProvider {
+  Database db;
+
+  Future open() async {
+    // Get a location using getDatabasesPath
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, DATABASE_PATH);
+
+// Open Database create files table
+    db = await openDatabase(path, version: 1,
+        onCreate: (Database db, int version) async {
+      await db.execute('''
+create table $_filesTable ( 
+  $_columnId integer primary key autoincrement, 
+  $_columnName text not null,
+  $_columnSize integer not null,
+  $_columnType text not null,
+  $_columnPath text not null,
+  $_columnOwner text not null,
+  $_columnReceived integer not null,
+  $_columnLastOpened integer not null)
+''');
+    });
+  }
+
+  Future<Metadata> insert(Metadata metadata) async {
+    metadata.id = await db.insert(_filesTable, metadata.toSQL());
+    return metadata;
+  }
+
+  Future<Metadata> getFile(int id) async {
+    List<Map> maps = await db.query(_filesTable,
+        columns: [
+          _columnId,
+          _columnName,
+          _columnSize,
+          _columnType,
+          _columnPath,
+          _columnOwner,
+          _columnReceived,
+          _columnLastOpened
+        ],
+        where: '$_columnId = ?',
+        whereArgs: [id]);
+    if (maps.length > 0) {
+      return Metadata.fromSQL(maps.first);
+    }
+    return null;
+  }
+
+  Future<List<Metadata>> getAllFiles() async {
+    // Get Records
+    List<Map> records = await db.query(
+      _filesTable,
+      columns: [
+        _columnId,
+        _columnName,
+        _columnSize,
+        _columnType,
+        _columnPath,
+        _columnOwner,
+        _columnReceived,
+        _columnLastOpened
+      ],
+    );
+    if (records.length > 0) {
+      // Init List
+      List<Metadata> files = new List<Metadata>();
+
+      // Convert Each Record into Object
+      records.forEach((element) {
+        Metadata meta = Metadata.fromSQL(element);
+        files.add(meta);
+      });
+
+      // Return List
+      return files;
+    }
+    return null;
+  }
+
+  Future<int> delete(int id) async {
+    return await db
+        .delete(_filesTable, where: '$_columnId = ?', whereArgs: [id]);
+  }
+
+  Future<int> update(Metadata metadata) async {
+    return await db.update(_filesTable, metadata.toMap(),
+        where: '$_columnId = ?', whereArgs: [metadata.id]);
+  }
+
+  Future close() async => db.close();
 }
 
 // ******************** //

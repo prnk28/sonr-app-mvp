@@ -32,35 +32,44 @@ NeumorphicAppBar screenAppBar(
 }
 
 NeumorphicAppBar leadingAppBar(
-  String destination,
   BuildContext context,
   IconData iconData, {
-  bool shouldPopScreen,
-  bool shouldRevertToActive,
-  String title,
+  Function() onPressed,
+  String title: "",
 }) {
+  // Check if OnPressed Provided
+  if (onPressed == null) {
+    onPressed = _defaultOnPressed(context);
+    log.w("OnPressed not assigned for leading app bar, popping screen");
+  }
+
+  // Create App Bar
   return NeumorphicAppBar(
+    title: Text(title),
     leading: Stack(
       alignment: Alignment.center,
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: appBarLeadingButton(iconData, onPressed: () {
-              // Check if Bool Provided or False
-              if (shouldPopScreen == null || !shouldPopScreen) {
-                // Shift Screen
-                Navigator.pushNamed(context, destination);
-              } else {
-                if (shouldRevertToActive) {
-                  // Update Node
-                  context.getBloc(BlocType.User).add(NodeAvailable());
-                }
-
-                // Pop Navigation
-                Navigator.pop(context);
-              }
-            }, context: context)),
+            child: NeumorphicButton(
+              padding: EdgeInsets.all(18),
+              style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                  shape: NeumorphicShape.convex,
+                  depth: 5),
+              child: Icon(
+                iconData,
+                color: NeumorphicTheme.isUsingDark(context)
+                    ? Colors.white70
+                    : Colors.black87,
+              ),
+              onPressed: onPressed,
+            ))
       ],
     ),
   );
+}
+
+_defaultOnPressed(BuildContext context) {
+  Navigator.pop(context);
 }

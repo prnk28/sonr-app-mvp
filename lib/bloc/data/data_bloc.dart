@@ -96,8 +96,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield* _mapPeerSentChunkState(event);
     } else if (event is UserSearchedFile) {
       yield* _mapFindFileState(event);
-    } else if (event is UserOpenedFile) {
-      yield* _mapOpenFileState(event);
+    } else if (event is UserGetAllFiles) {
+      yield* _mapUserGetAllFilesState(event);
+    } else if (event is UserGetFile) {
+      yield* _mapUserGetFileState(event);
     }
   }
 
@@ -122,7 +124,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
         // Create SonrFile
-        SonrFile file = new SonrFile(user.node, file: dummyFile);
+        SonrFile file = new SonrFile(user.node, raw: dummyFile);
 
         // Add to Outgoing
         _outgoing.add(file);
@@ -167,7 +169,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // *************************
   Stream<DataState> _mapPeerSentChunkState(PeerSendingChunk event) async* {
     // Open Reader with Offset
-    final reader = ChunkedStreamIterator(currentFile.file.openRead());
+    final reader = ChunkedStreamIterator(currentFile.raw.openRead());
 
     // While Reader Has Values
     while (true) {
@@ -233,8 +235,51 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Check Status
   }
 
-// ********************
-// ** OpenFile Event **
-// ********************
-  Stream<DataState> _mapOpenFileState(UserOpenedFile event) async* {}
+// ***************************
+// ** UserGetAllFiles Event **
+// ***************************
+  Stream<DataState> _mapUserGetAllFilesState(UserGetAllFiles event) async* {
+    // Open Provider
+    MetadataProvider metadataProvider = new MetadataProvider();
+    await metadataProvider.open();
+
+    // Get All Files
+    List<Metadata> allFiles = await metadataProvider.getAllFiles();
+
+    log.i(allFiles.toString());
+
+    // Change State
+    yield UserLoadedFiles(allFiles);
+  }
+
+// ***********************
+// ** UserGetFile Event **
+// ***********************
+  Stream<DataState> _mapUserGetFileState(UserGetFile event) async* {
+    // Check if File ID provided
+    if (event.fileId != null && event.meta == null) {
+      // Open Provider
+      MetadataProvider metadataProvider = new MetadataProvider();
+      await metadataProvider.open();
+
+      // Get File
+      Metadata metadata = await metadataProvider.getFile(event.fileId);
+      SonrFile file = SonrFile.fromSaved(metadata);
+
+      // Change State
+      yield UserViewingFile(file);
+    }
+    // Check if Metadata provided
+    else if (event.meta != null && event.fileId == null) {
+      // Get File
+      SonrFile file = SonrFile.fromSaved(event.meta);
+
+      // Change state
+      yield UserViewingFile(file);
+    }
+    // Error
+    else {
+      log.e("UserGetFile Event: Neither Metadata or FileId Provided");
+    }
+  }
 }

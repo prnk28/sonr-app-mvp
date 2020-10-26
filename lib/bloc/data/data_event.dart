@@ -48,11 +48,18 @@ class PeerClearedQueue extends DataEvent {
 
 // Search for a file
 class UserSearchedFile extends DataEvent {
-  const UserSearchedFile();
+  final String query;
+  const UserSearchedFile(this.query);
+}
+
+// Retreives all files
+class UserGetAllFiles extends DataEvent {
+  const UserGetAllFiles();
 }
 
 // Opens a file in appropriate viewer
-class UserOpenedFile extends DataEvent {
+class UserGetFile extends DataEvent {
   final Metadata meta;
-  const UserOpenedFile(this.meta);
+  final int fileId;
+  const UserGetFile({this.meta, this.fileId});
 }

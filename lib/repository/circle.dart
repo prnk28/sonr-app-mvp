@@ -63,7 +63,6 @@ class Circle {
             // Set as off screen
             receiver.proximity = Proximity.Away;
           } else {
-            // TODO: Assign by UltraSonic Proximity
             receiver.proximity = Proximity.Near;
             activePeers.add(receiver);
           }

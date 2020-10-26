@@ -1,4 +1,4 @@
-part of 'search.dart';
+part of 'searching.dart';
 
 class CompassView extends StatelessWidget {
   final double direction;

@@ -14,7 +14,7 @@ class SonrFile {
   Node owner;
 
   // Accessor Methods
-  File file;
+  File raw;
   Metadata metadata;
 
   // Progress Variables
@@ -25,20 +25,11 @@ class SonrFile {
   BytesBuilder _writer;
 
   // ** Constructer ** //
-  SonrFile(this.owner, {this.metadata, this.file}) {
+  SonrFile(this.owner, {this.metadata, this.raw}) {
     // Generate MetaData from Raw File
-    if (this.file != null) {
+    if (this.raw != null) {
       // Init Metadata
-      this.metadata = new Metadata();
-
-      // Calculate File Info
-      this.metadata.size = file.lengthSync();
-      this.metadata.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
-
-      // Set File Info
-      this.metadata.path = file.path;
-      this.metadata.name = basename(this.metadata.path);
-      this.metadata.type = getFileTypeFromPath(this.metadata.path);
+      this.metadata = new Metadata(raw);
     } else {
       // Initialize Writer for File
       _writer = new BytesBuilder();
@@ -47,6 +38,15 @@ class SonrFile {
     // Set Progress Variables
     this.currentChunkNum = 0;
     this.remainingChunks = this.metadata.chunksTotal;
+  }
+
+  SonrFile.fromSaved(Metadata meta) {
+    // Set Required Fields
+    this.owner = new Node(meta.owner);
+    this.metadata = meta;
+
+    // Create File from Path
+    this.raw = new File(meta.path);
   }
 
   // ** Chunk Received from Data Channel ** //
@@ -80,19 +80,25 @@ class SonrFile {
     // Set Path
     this.metadata.path = path;
     this.metadata.received = DateTime.now();
+    this.metadata.owner = owner.profile;
+
+    // Save to Database
+    MetadataProvider metadataProvider = new MetadataProvider();
+    await metadataProvider.open();
+    await metadataProvider.insert(this.metadata);
 
     // Get Buffer
     final buffer = data.buffer;
 
     // Save to File
-    this.file = await new File(path).writeAsBytes(
+    this.raw = await new File(path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 
   // ** Read Bytes from SonrFile **
   Future<Uint8List> getBytes() async {
     Uint8List bytes;
-    await this.file.readAsBytes().then((value) {
+    await this.raw.readAsBytes().then((value) {
       bytes = Uint8List.fromList(value);
     }).catchError((onError) {
       log.e("Error Reading Bytes");

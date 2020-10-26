@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:sonar_app/core/core.dart';
 
 // HiveDB Box Name
 const PROFILE_BOX = "profileBox";
@@ -16,9 +17,10 @@ class Profile extends HiveObject {
   Profile(this.firstName, this.lastName, this.profilePicture);
 
   // ** Set From Map **
-  static Profile fromMap(Map data) {
-    return Profile(
-        data["first_name"], data["last_name"], data["profile_picture"]);
+  Profile.fromMap(Map data) {
+    this.firstName = data["first_name"];
+    this.lastName = data["last_name"];
+    this.profilePicture = data["profile_picture"];
   }
 
   // ** Convert Object to Map **
@@ -28,6 +30,19 @@ class Profile extends HiveObject {
       'last_name': this.lastName,
       'profile_picture': this.profilePicture
     };
+  }
+
+  // ** Set From String **
+  Profile.fromString(String json) {
+    var data = jsonDecode(json);
+    this.firstName = data["first_name"];
+    this.lastName = data["last_name"];
+    this.profilePicture = data["profile_picture"];
+  }
+
+  // ** Convert Object to String **
+  toString() {
+    return jsonEncode(this.toMap());
   }
 
   // ** HiveDB Direct Method: (Update) **

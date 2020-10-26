@@ -4,6 +4,7 @@ export 'dart:convert';
 export 'dart:io' hide Socket;
 export 'dart:math';
 export 'package:flutter/services.dart';
+export 'package:sqflite/sqflite.dart';
 
 // Dev Libraries
 export 'package:logger/logger.dart';
@@ -30,7 +31,6 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sonar_app/screens/screens.dart';
 
-export 'sonrfile.dart';
 part 'routing.dart';
 part 'events.dart';
 part 'olc.dart';

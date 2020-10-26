@@ -5,6 +5,9 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // Load Files
+    context.getBloc(BlocType.Data).add(UserGetAllFiles());
+
     // Build View
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
@@ -27,17 +30,6 @@ class HomeScreen extends StatelessWidget {
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    PersistentBottomSheetController _controller;
-    final _scaffoldKey = GlobalKey<ScaffoldState>(); //
-    void _changeSheetState() {
-      _controller.setState(() {});
-    }
-
-    _createBottomSheet() async {
-      _controller =
-          _scaffoldKey.currentState.showBottomSheet((context) => WindowSheet());
-    }
-
     // Popup Callback
     onWindowTransferComplete() {
       Future.delayed(const Duration(seconds: 1), () {
@@ -86,11 +78,63 @@ class _HomeView extends StatelessWidget {
                       context,
                     );
                   });
+            } else if (state is UserViewingFile) {
+              // Push to Detail Screen
+              Navigator.pushReplacementNamed(context, "/detail");
             }
           },
         ),
       ],
-      child: Center(child: Text("Mega Hellope")),
+      child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
+        if (state is UserLoadedFiles) {
+          // Check Files Count
+          if (state.files != null) {
+            return ListView(
+                padding: const EdgeInsets.all(8),
+                children: _buildMetadataListCells(context, state.files));
+          }
+          // No Files
+          else {
+            return Center(child: Text("Mega Hellope: No User Files"));
+          }
+        } else {
+          return Center(child: Text("Mega Hellope"));
+        }
+      }),
     );
+  }
+
+  _buildMetadataListCells(BuildContext context, List<Metadata> allFiles) {
+    // Initialize
+    List<Widget> cells = new List<Widget>();
+
+    // Iterate Through Files
+    allFiles.forEach((metadata) {
+      // Generate Cell
+      var cell = GestureDetector(
+          onTap: () async {
+            // Load Files
+            context.getBloc(BlocType.Data).add(UserGetFile(meta: metadata));
+          },
+          child: Container(
+            height: 75,
+            color: Colors.amber[100],
+            child: Center(
+                child: Column(children: [
+              Text(metadata.name),
+              Text(enumAsString(metadata.type)),
+              Text("Owner: " +
+                  metadata.owner.firstName +
+                  " " +
+                  metadata.owner.lastName),
+            ])),
+          ));
+
+      // Add Cell to List
+      cells.add(cell);
+    });
+
+    // Return Cells
+    return cells;
   }
 }

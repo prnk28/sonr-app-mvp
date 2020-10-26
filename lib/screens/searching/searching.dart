@@ -7,7 +7,7 @@ part 'bubble.dart';
 part 'zone.dart';
 part 'compass.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Search
@@ -15,7 +15,13 @@ class SearchScreen extends StatelessWidget {
 
     // Return Widget
     return Scaffold(
-        appBar: leadingAppBar("/home", context, Icons.close),
+        appBar: leadingAppBar(context, Icons.arrow_back, onPressed: () {
+          // Update Node
+          context.getBloc(BlocType.User).add(NodeAvailable());
+
+          // Pop Navigation
+          Navigator.pushNamed(context, "/home");
+        }),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: SafeArea(
           child: Stack(
