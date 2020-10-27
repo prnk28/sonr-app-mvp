@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -324,11 +325,32 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** UserLoadFile Event **
 // ************************
   Stream<DataState> _mapUserLoadFileState(UserLoadFile event) async* {
-    // Get Bytes
-    Uint8List bytes = await event.file.raw.readAsBytes();
+    // Check if Path exists
+    bool exists = await Directory(event.file.metadata.path).exists();
 
-    // Change State
-    yield UserViewingFileSuccess(bytes, event.file.metadata);
+    // Return Success
+    if (exists) {
+      // Get Bytes
+      Uint8List bytes = await event.file.raw.readAsBytes();
+
+      // Change State
+      yield UserViewingFileSuccess(bytes, event.file.metadata);
+    }
+    // Return Failure
+    else {
+      // Load Provider
+      MetadataProvider metadataProvider = new MetadataProvider();
+      await metadataProvider.open();
+
+      // Remove from DB
+      await metadataProvider.delete(event.file.metadata.id);
+
+      // Reload Files
+      add(UserGetAllFiles());
+
+      // Change State
+      yield UserViewingFileFailure();
+    }
   }
 
   // ************************
@@ -342,9 +364,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Remove From Database
     int count = await metadataProvider.delete(event.meta.id);
     log.i(count.toString() + "Files Removed from database");
-
-    // Close Provider
-    await metadataProvider.close();
 
     // Remove from LocalData
     var ref = File(event.meta.path);

@@ -51,6 +51,10 @@ class UserViewingFileSuccess extends DataState {
   UserViewingFileSuccess(this.bytes, this.metadata);
 }
 
+class UserViewingFileFailure extends DataState {
+  UserViewingFileFailure();
+}
+
 // User Loaded Files
 class UserLoadedFilesSuccess extends DataState {
   final List<Metadata> files;
