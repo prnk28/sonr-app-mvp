@@ -126,7 +126,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       currentFile = file;
 
       // Inform Bloc Queue is Complete
-      add(FileQueuedComplete());
+      add(FileQueuedComplete(Role.Receiver));
 
       // Change State
       yield PeerQueueInProgress();
@@ -155,7 +155,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       currentFile = file;
 
       // Inform Bloc Queue is Complete
-      add(FileQueuedComplete());
+      add(FileQueuedComplete(Role.Sender));
 
       // Change State
       yield PeerQueueInProgress();
@@ -168,7 +168,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   Stream<DataState> _mapFileQueuedCompleteState(
       FileQueuedComplete event) async* {
     // Check for Raw File: Sender Queued
-    if (currentFile.raw != null) {
+    if (event.role == Role.Sender) {
       // Set File Preview
       await currentFile.setPreview();
 
@@ -328,7 +328,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ************************
   Stream<DataState> _mapUserLoadFileState(UserLoadFile event) async* {
     // Get Bytes
-    Uint8List bytes = await event.file.raw.readAsBytes();
+    Uint8List bytes = await event.file.getBytes();
 
     // Check Bytes
     if (bytes != null) {

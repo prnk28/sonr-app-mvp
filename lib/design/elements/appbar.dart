@@ -22,15 +22,15 @@ NeumorphicAppBar titleAppBar(
   String title,
 ) {
   return NeumorphicAppBar(
-    title: Center(
-        child: NeumorphicText(title,
-            style: NeumorphicStyle(
-              depth: 2, //customize depth here
-              color: Colors.white, //customize color here
-            ),
-            textStyle: neuBarTitleTextStyle(),
-            textAlign: TextAlign.center)),
-  );
+      title: Center(
+          child: NeumorphicText(title,
+              style: NeumorphicStyle(
+                depth: 2, //customize depth here
+                color: Colors.white, //customize color here
+              ),
+              textStyle: neuBarTitleTextStyle(),
+              textAlign: TextAlign.center)),
+      leading: null);
 }
 
 NeumorphicAppBar actionSingleAppBar(

@@ -75,10 +75,10 @@ class SonrFile {
     // Get Data
     Uint8List data = _writer.takeBytes();
 
-    // Get Folder
+    // Get Identifier
     String type = '/' + enumAsString(this.metadata.type);
 
-    // Get Directory
+    // Get Directory - Reset when app deleted
     Directory localDir = await getApplicationDocumentsDirectory();
 
     // Set Path
@@ -135,12 +135,23 @@ class SonrFile {
 
   // ** Read Bytes from SonrFile **
   Future<Uint8List> getBytes() async {
+    // Init
     Uint8List bytes;
+
+    // Read Bytes
     await this.raw.readAsBytes().then((value) {
       bytes = Uint8List.fromList(value);
-    }).catchError((onError) {
+    })
+        // Error Reading Bytes
+        .catchError((onError) {
+      // Log
       log.e("Error Reading Bytes");
+
+      // Return Nothing
+      return null;
     });
+
+    // Return Bytes
     return bytes;
   }
 

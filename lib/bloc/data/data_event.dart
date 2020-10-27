@@ -43,7 +43,8 @@ class PeerQueuedFile extends DataEvent {
 
 // Queue has been completed
 class FileQueuedComplete extends DataEvent {
-  const FileQueuedComplete();
+  final Role role;
+  const FileQueuedComplete(this.role);
 }
 
 // User Cleared Queue
