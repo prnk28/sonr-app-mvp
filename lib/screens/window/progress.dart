@@ -1,7 +1,7 @@
 part of 'window.dart';
 
 Widget buildProgressView(Metadata meta) {
-  return IconLiquidFill(iconData: iconDataFromMetadata(meta));
+  return Center(child: IconLiquidFill(iconData: iconDataFromMetadata(meta)));
 }
 
 class IconLiquidFill extends StatefulWidget {
@@ -24,8 +24,8 @@ class IconLiquidFill extends StatefulWidget {
     Key key,
     @required this.iconData,
     this.waveDuration = const Duration(seconds: 2),
-    this.boxHeight = 250,
-    this.boxWidth = 400,
+    this.boxHeight = 200,
+    this.boxWidth = 200,
     this.waveColor = Colors.blueAccent,
   })  : assert(null != iconData),
         assert(null != waveDuration),

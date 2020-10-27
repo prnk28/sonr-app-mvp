@@ -31,11 +31,13 @@ class SplashScreen extends StatelessWidget {
               }
             },
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                     width: screenSize.width / 5,
                     height: screenSize.height / 5,
-                    child: FittedBox(child: Image.asset("images/icon.png"))),
+                    child: FittedBox(
+                        child: Image.asset("assets/images/icon.png"))),
 
                 // Loading
                 Padding(
