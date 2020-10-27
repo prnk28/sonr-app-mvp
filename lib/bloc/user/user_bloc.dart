@@ -67,6 +67,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapNodeAcceptedState(event);
     } else if (event is NodeDeclined) {
       yield* _mapNodeDeclinedState(event);
+    } else if (event is NodeReceived) {
+      yield* _mapNodeReceivedState(event);
     } else if (event is NodeCompleted) {
       yield* _mapNodeCompletedState(event);
     }
@@ -326,6 +328,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     yield NodeTransferInitial(metadata, match);
   }
 
+  // [User] Has ReceivedChunk
+  Stream<UserState> _mapNodeReceivedState(NodeReceived event) async* {
+    // Change State
+    yield NodeReceiveInProgress(event.metadata);
+  }
+
 // [User] Rejected Offer
   Stream<UserState> _mapNodeDeclinedState(NodeDeclined event) async* {
     // Emit to Socket.io
@@ -337,15 +345,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // User/[Peer] have completed transfer
   Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
-    // Reset Session
-    //session.reset();
-
     // Set to Search if Applicable
     if (event.file == null) {
-      add(NodeSearch());
+// Change State
+      yield NodeTransferSuccess();
+    } else {
+      // Change State
+      yield NodeReceiveSuccess(file: event.file);
     }
-
-    // Change State
-    yield NodeTransferSuccess(file: event.file);
   }
 }

@@ -45,3 +45,53 @@ extension Events on BuildContext {
   }
 }
 
+// -- BLoC Retreival Methods -- //
+getRequestListener() {
+  return BlocListener<UserBloc, UserState>(
+    listenWhen: (previousState, state) {
+      // Current States
+      if (state is NodeRequestInitial) {
+        return true;
+      } else if (state is NodeReceiveInProgress) {
+        return true;
+      } else if (state is NodeReceiveSuccess) {
+        return true;
+      }
+      return false;
+    },
+    listener: (context, state) {
+      if (state is NodeRequestInitial) {
+        // Display Bottom Sheet
+        showModalBottomSheet<void>(
+            shape: windowBorder(),
+            barrierColor: Colors.black87,
+            isDismissible: false,
+            context: context,
+            builder: (context) {
+              return Window.showAuth(context, state);
+            });
+      } else if (state is NodeReceiveInProgress) {
+        // Display Bottom Sheet
+        showModalBottomSheet<void>(
+            shape: windowBorder(),
+            barrierColor: Colors.black87,
+            isDismissible: false,
+            context: context,
+            builder: (context) {
+              return Window.showTransferring(context, state);
+            });
+      } else if (state is NodeReceiveSuccess) {
+        // Pop Current View
+        Navigator.pop(context);
+
+        // Show Current View
+        showDialog(
+            barrierColor: Colors.black87,
+            context: context,
+            builder: (context) {
+              return Popup.showImage(context, state);
+            });
+      }
+    },
+  );
+}

@@ -14,7 +14,7 @@ class Window {
   }
 
   static Widget showTransferring(
-      BuildContext context, PeerReceiveInProgress state) {
+      BuildContext context, NodeReceiveInProgress state) {
     return Container(
         decoration: windowDecoration(context),
         height: screenSize.height / 3 + 20,

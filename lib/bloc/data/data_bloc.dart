@@ -167,12 +167,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ******************************
   Stream<DataState> _mapFileQueuedCompleteState(
       FileQueuedComplete event) async* {
-    // Check for Raw File
+    // Check for Raw File: Sender Queued
     if (currentFile.raw != null) {
       // Set File Preview
       await currentFile.setPreview();
+
+      // Change State
+      yield PeerQueueSuccess();
     }
-    yield PeerQueueSuccess();
+    // Receiver has queued
+    else {
+      user.add(NodeReceived(currentFile.metadata));
+    }
   }
 
 // **************************
@@ -200,7 +206,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       add(PeerClearedQueue(TrafficDirection.Incoming));
     } else {
       progress.update(currProgress);
-      yield PeerReceiveInProgress(currentFile.metadata);
     }
   }
 
@@ -224,9 +229,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
         // Update Progress
         progress.update(currentFile.progress());
-
-        // Yield Progress
-        yield PeerSendInProgress();
       }
       // End of List
       else {
@@ -332,7 +334,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     if (bytes != null) {
       // Change State
       yield UserViewingFileSuccess(bytes, event.file.metadata);
-    }else{
+    } else {
       // Send Failure
       yield UserViewingFileFailure();
     }

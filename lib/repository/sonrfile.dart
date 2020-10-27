@@ -106,6 +106,7 @@ class SonrFile {
     this.raw = file;
   }
 
+  // ** Set thumbnail for file ** //
   setPreview() async {
     // Create Receive Port
     ReceivePort receivePort = ReceivePort();

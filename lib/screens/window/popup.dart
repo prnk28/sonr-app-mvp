@@ -4,7 +4,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 
 class Popup {
   // Build
-  static Widget showImage(BuildContext context, NodeTransferSuccess state) {
+  static Widget showImage(BuildContext context, NodeReceiveSuccess state) {
     return Dialog(
         shape: windowBorder(),
         insetAnimationDuration: Duration(seconds: 1),

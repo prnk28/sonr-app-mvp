@@ -7,58 +7,70 @@ part 'image.dart';
 // ** Screen Class for File Detail ** //
 // ********************************** //
 class DetailScreen extends StatelessWidget {
+  DetailScreen({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // Get Passed MetaData
     final Metadata metadata = ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
-      // Setup App Bar
-      appBar: actionSingleAppBar(context, Icons.arrow_back, Icons.delete,
-          onLeadingPressed: () {
-        // Push Replacement
-        Navigator.pushReplacementNamed(context, "/home");
-      }, onActionPressed: () {
-        // show the dialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return detailDeleteDialog(onCancel: () {
-              // Close Window
-              Navigator.pop(context);
-            }, onDelete: () {
-              // Delete File Event
-              context.getBloc(BlocType.Data).add(UserDeleteFile(metadata));
-            });
-          },
-        );
-      }, title: enumAsString(metadata.type)),
-      backgroundColor: NeumorphicTheme.baseColor(context),
-      // Setup Body
-      body: BlocConsumer<DataBloc, DataState>(
+        // Setup App Bar
+        appBar: actionSingleAppBar(context, Icons.arrow_back, Icons.delete,
+            onLeadingPressed: () {
+          // Push Replacement
+          Navigator.pushReplacementNamed(context, "/home");
+        }, onActionPressed: () {
+          // show the dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return detailDeleteDialog(onCancel: () {
+                // Close Window
+                Navigator.pop(context);
+              }, onDelete: () {
+                // Delete File Event
+                context.getBloc(BlocType.Data).add(UserDeleteFile(metadata));
+              });
+            },
+          );
+        }, title: enumAsString(metadata.type)),
+        backgroundColor: NeumorphicTheme.baseColor(context),
+        // Setup Body
+        body: _DetailView());
+  }
+}
+
+class _DetailView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<DataBloc, DataState>(
           // Set Listen Requirements
           listenWhen: (previous, current) {
-        if (current is UserDeletedFileSuccess) {
-          return true;
-        } else if (current is UserViewingFileFailure) {
-          return true;
-        }
-        return false;
-      },
-          // Listen by State
+            if (current is UserDeletedFileSuccess) {
+              return true;
+            } else if (current is UserViewingFileFailure) {
+              return true;
+            }
+            return false;
+          },
           listener: (context, state) {
-        if (state is UserDeletedFileSuccess ||
-            state is UserViewingFileFailure) {
-          // Change Status
-          context.getBloc(BlocType.User).add(NodeAvailable());
+            if (state is UserDeletedFileSuccess ||
+                state is UserViewingFileFailure) {
+              // Change Status
+              context.getBloc(BlocType.User).add(NodeAvailable());
 
-          // Push to Home
-          Navigator.pushReplacementNamed(
-            context,
-            "/home",
-          );
-        }
-      },
+              // Push to Home
+              Navigator.pushReplacementNamed(
+                context,
+                "/home",
+              );
+            }
+          },
+        ),
+        getRequestListener()
+      ],
+      child: BlocBuilder<DataBloc, DataState>(
           // Set Build Requirements
           buildWhen: (previous, current) {
         if (current is UserViewingFileInProgress) {

@@ -24,17 +24,6 @@ class PeerQueueSuccess extends DataState {
   PeerQueueSuccess();
 }
 
-// Sending to peer w/ Progress and Chunks
-class PeerSendInProgress extends DataState {
-  PeerSendInProgress();
-}
-
-// Receiving Data from Peer
-class PeerReceiveInProgress extends DataState {
-  final Metadata metadata;
-  PeerReceiveInProgress(this.metadata);
-}
-
 // ***************** //
 // ** File Access ** //
 // ***************** //

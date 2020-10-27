@@ -70,7 +70,9 @@ class _HomeView extends StatelessWidget {
             // Current States
             if (state is NodeRequestInitial) {
               return true;
-            } else if (state is NodeTransferSuccess) {
+            } else if (state is NodeReceiveInProgress) {
+              return true;
+            } else if (state is NodeReceiveSuccess) {
               return true;
             }
             return false;
@@ -86,7 +88,17 @@ class _HomeView extends StatelessWidget {
                   builder: (context) {
                     return Window.showAuth(context, state);
                   });
-            } else if (state is NodeTransferSuccess) {
+            } else if (state is NodeReceiveInProgress) {
+              // Display Bottom Sheet
+              showModalBottomSheet<void>(
+                  shape: windowBorder(),
+                  barrierColor: Colors.black87,
+                  isDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return Window.showTransferring(context, state);
+                  });
+            } else if (state is NodeReceiveSuccess) {
               // Pop Current View
               Navigator.pop(context);
 
@@ -102,17 +114,7 @@ class _HomeView extends StatelessWidget {
         ),
         BlocListener<DataBloc, DataState>(
           listener: (context, state) {
-            if (state is PeerReceiveInProgress) {
-              // Display Bottom Sheet
-              showModalBottomSheet<void>(
-                  shape: windowBorder(),
-                  barrierColor: Colors.black87,
-                  isDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return Window.showTransferring(context, state);
-                  });
-            } else if (state is UserViewingFileInProgress) {
+            if (state is UserViewingFileInProgress) {
               // Push to Detail Screen
               Navigator.pushReplacementNamed(context, "/detail",
                   arguments: state.metadata);

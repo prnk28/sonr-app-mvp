@@ -99,6 +99,13 @@ class NodeAuthorized extends UserEvent {
   const NodeAuthorized(this.match, this.answer);
 }
 
+// [User] Is receving data chunks
+class NodeReceived extends UserEvent {
+  final Metadata metadata;
+
+  const NodeReceived(this.metadata);
+}
+
 // User/Peer have completed transfer
 class NodeCompleted extends UserEvent {
   final SonrFile file;

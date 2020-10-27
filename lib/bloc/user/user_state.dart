@@ -99,23 +99,40 @@ class NodeTransferInitial extends UserState {
   NodeTransferInitial(this.metadata, this.match);
 }
 
-// User/[Peer] sending/receving chunks
+// User sending chunks
 class NodeTransferInProgress extends UserState {
   final Node match;
 
   NodeTransferInProgress(this.match);
 }
 
-// User/[Peer] have completed transfer
+// User has completed transfer
 class NodeTransferSuccess extends UserState {
-  final SonrFile file;
-
-  NodeTransferSuccess({this.file});
+  NodeTransferSuccess();
 }
 
-// User/[Peer] have failed to transfer
+// User has failed to transfer
 class NodeTransferFailure extends UserState {
   final Node match;
 
   NodeTransferFailure(this.match);
+}
+
+// User sending chunks
+class NodeReceiveInProgress extends UserState {
+  final Metadata metadata;
+
+  NodeReceiveInProgress(this.metadata);
+}
+
+// User has completed transfer
+class NodeReceiveSuccess extends UserState {
+  final SonrFile file;
+  NodeReceiveSuccess({this.file});
+}
+
+// User has failed to transfer
+class NodeReceiveFailure extends UserState {
+  final Node match;
+  NodeReceiveFailure(this.match);
 }
