@@ -8,7 +8,7 @@ Widget buildAuthenticationView(BuildContext context, NodeRequestInitial state) {
 
       // Build Item from Metadata and Peer
       _buildItem(context, state),
-      Padding(padding: EdgeInsets.only(top: 25)),
+      Padding(padding: EdgeInsets.only(top: 8)),
 
       // Build Auth Action
       _buildAuthButton(context, state)
@@ -29,7 +29,15 @@ Row _buildItem(BuildContext context, NodeRequestInitial state) {
       break;
     case FileType.Image:
       if (metadata.thumbnail != null) {
-        preview = Image.memory(metadata.thumbnail);
+        preview = ClipRRect(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+            child: FittedBox(
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.bottomCenter,
+                child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minWidth: 1, minHeight: 1), // here
+                    child: Image.memory(metadata.thumbnail))));
       } else {
         preview = Icon(Icons.image, size: 100);
       }

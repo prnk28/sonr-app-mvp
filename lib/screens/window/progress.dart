@@ -12,7 +12,7 @@ class IconLiquidFill extends StatefulWidget {
   final Duration waveDuration;
 
   /// Set to screen Size
-  final double boxHeight = (screenSize.height / 3) - 20;
+  final double boxHeight = (screenSize.height / 3);
 
   /// By default it is set to 400
   final double boxWidth;

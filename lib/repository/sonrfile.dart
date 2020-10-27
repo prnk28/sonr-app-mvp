@@ -98,9 +98,6 @@ class SonrFile {
     // Save to File
     this.raw = await new File(this.metadata.path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
-
-    // Close Provider
-    await metadataProvider.close();
   }
 
   setPreview() async {

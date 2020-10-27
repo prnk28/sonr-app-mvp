@@ -21,7 +21,16 @@ class Popup {
                 // Some Space
                 Padding(padding: EdgeInsets.all(15)),
 
-                Image.file(state.file.raw),
+                Expanded(
+                  child: FittedBox(
+                      alignment: Alignment.center,
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 1,
+                            minHeight: 1,
+                          ), // here
+                          child: Image.file(state.file.raw))),
+                ),
 
                 FlatButton(
                   onPressed: () {
