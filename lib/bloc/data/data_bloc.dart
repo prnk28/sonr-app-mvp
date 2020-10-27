@@ -88,6 +88,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   ) async* {
     if (event is PeerQueuedFile) {
       yield* _mapPeerQueuedFileState(event);
+    } else if (event is FileQueuedComplete) {
+      yield* _mapFileQueuedCompleteState(event);
     } else if (event is PeerClearedQueue) {
       yield* _mapPeerClearedQueueState(event);
     } else if (event is PeerAddedChunk) {
@@ -108,34 +110,53 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **************************
   Stream<DataState> _mapPeerQueuedFileState(PeerQueuedFile event) async* {
     // Queue by direction
-    switch (event.direction) {
-      case TrafficDirection.Incoming:
-        // Create SonrFile
-        SonrFile file = new SonrFile(event.sender, metadata: event.metadata);
+    if (event.direction == TrafficDirection.Incoming) {
+      // Create SonrFile
+      SonrFile file = new SonrFile(event.sender, metadata: event.metadata);
 
-        // Add To Incoming
-        _incoming.add(file);
+      // Add To Incoming
+      _incoming.add(file);
 
-        // Set Current
-        currentFile = file;
-        break;
-      case TrafficDirection.Outgoing:
-        // Get Dummy RawFile
-        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
+      // Set Current
+      currentFile = file;
 
-        // Create SonrFile
-        SonrFile file = new SonrFile(user.node, raw: dummyFile);
+      // Inform Bloc Queue is Complete
+      add(FileQueuedComplete());
 
-        // Set File Preview
-        await file.setPreview();
+      // Change State
+      yield PeerQueueInProgress();
+    } else {
+      // Get Dummy RawFile
+      File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
 
-        // Add to Outgoing
-        _outgoing.add(file);
+      // Create SonrFile
+      SonrFile file = new SonrFile(user.node, raw: dummyFile);
 
-        // Set Current
-        currentFile = file;
-        break;
+      // Add to Outgoing
+      _outgoing.add(file);
+
+      // Set Current
+      currentFile = file;
+
+      // Inform Bloc Queue is Complete
+      add(FileQueuedComplete());
+
+      // Change State
+      yield PeerQueueInProgress();
     }
+  }
+
+// ******************************
+// ** FileQueuedComplete Event **
+// ******************************
+  Stream<DataState> _mapFileQueuedCompleteState(
+      FileQueuedComplete event) async* {
+    // Check for Raw File
+    if (currentFile.raw != null) {
+      // Set File Preview
+      await currentFile.setPreview();
+    }
+    yield PeerQueueSuccess();
   }
 
 // **************************
@@ -203,32 +224,30 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **************************
   Stream<DataState> _mapPeerClearedQueueState(PeerClearedQueue event) async* {
     // Clear by Direction
-    switch (event.direction) {
-      case TrafficDirection.Incoming:
-        // Clear All
-        if (event.matchId == null) {
-          _incoming.clear();
+    if (event.direction == TrafficDirection.Incoming) {
+      // Clear All
+      if (event.matchId == null) {
+        _incoming.clear();
 
-          // Clear Current File
-          currentFile = null;
-        }
+        // Clear Current File
+        currentFile = null;
+      }
 
-        // Clear One
-        _incoming.remove(event.matchId);
-        break;
-      case TrafficDirection.Outgoing:
-        // Clear All
-        if (event.matchId == null) {
-          _outgoing.clear();
+      // Clear One
+      _incoming.remove(event.matchId);
+    } else {
+      // Clear All
+      if (event.matchId == null) {
+        _outgoing.clear();
 
-          // Clear Current File
-          currentFile = null;
-        }
+        // Clear Current File
+        currentFile = null;
+      }
 
-        // Clear One
-        _outgoing.remove(event.matchId);
-        break;
+      // Clear One
+      _outgoing.remove(event.matchId);
     }
+    yield PeerInitial();
   }
 
 // ****************************

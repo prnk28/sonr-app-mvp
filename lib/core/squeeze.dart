@@ -1,20 +1,22 @@
 import 'package:image/image.dart';
-import 'package:file/memory.dart';
+import 'dart:isolate';
 import 'dart:io';
 
+class SqueezeParam {
+  final File file;
+  final SendPort sendPort;
+  SqueezeParam(this.file, this.sendPort);
+}
+
 class Squeeze {
-  static File imageForBytes(File file) {
+  static void imageForBytes(SqueezeParam param) {
     // Read an image from file
-    Image image = decodeImage(file.readAsBytesSync());
+    Image image = decodeImage(param.file.readAsBytesSync());
 
     // Resize the image to a 120x? thumbnail
     Image thumbnail = copyResize(image, width: 120);
 
-    // Save the thumbnail in memory as a PNG.
-    File thumbFile = MemoryFileSystem().file('thumbnail.png')
-      ..writeAsBytesSync(encodePng(thumbnail));
-
     // Return thumbnail
-    return thumbFile;
+    param.sendPort.send(thumbnail);
   }
 }

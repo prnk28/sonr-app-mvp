@@ -5,6 +5,7 @@ export 'home/settings.dart';
 export 'splash/splash.dart';
 export 'searching/searching.dart';
 export 'window/window.dart';
+export 'window/popup.dart';
 export 'lifecycle.dart';
 
 // Packages

@@ -10,6 +10,7 @@ final String _columnSize = 'size';
 final String _columnType = 'type';
 final String _columnPath = 'path';
 final String _columnOwner = 'owner';
+final String _columnThumbnail = 'thumbnail';
 final String _columnReceived = 'received';
 final String _columnLastOpened = 'lastOpened';
 
@@ -92,6 +93,11 @@ class Metadata {
     this.received = DateTime.fromMillisecondsSinceEpoch(map[_columnReceived]);
     this.lastOpened =
         DateTime.fromMillisecondsSinceEpoch(map[_columnLastOpened]);
+
+    // Set Thumbnail
+    if (map[_columnThumbnail] != null) {
+      this.thumbnail = map[_columnThumbnail];
+    }
   }
 
   // ** Convert to SQL Map **
@@ -111,6 +117,11 @@ class Metadata {
       map[_columnId] = this.id;
     }
 
+    // Check for Thumbnail
+    if (this.thumbnail != null) {
+      map[_columnThumbnail] = this.thumbnail;
+    }
+
     // Check if ever opened
     if (this.lastOpened != null) {
       map[_columnLastOpened] = this.lastOpened.millisecondsSinceEpoch;
@@ -120,9 +131,6 @@ class Metadata {
 
     return map;
   }
-
-  // ** Compress if Image ** //
-  void createThumbnail() {}
 }
 
 // ****************** //
@@ -147,6 +155,7 @@ create table $_filesTable (
   $_columnType text not null,
   $_columnPath text not null,
   $_columnOwner text not null,
+  $_columnThumbnail blob,
   $_columnReceived integer not null,
   $_columnLastOpened integer not null)
 ''');
@@ -167,6 +176,7 @@ create table $_filesTable (
           _columnType,
           _columnPath,
           _columnOwner,
+          _columnThumbnail,
           _columnReceived,
           _columnLastOpened
         ],
@@ -189,6 +199,7 @@ create table $_filesTable (
         _columnType,
         _columnPath,
         _columnOwner,
+        _columnThumbnail,
         _columnReceived,
         _columnLastOpened
       ],

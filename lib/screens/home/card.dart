@@ -1,8 +1,9 @@
 part of 'home.dart';
 
-class FileCard extends StatelessWidget {
+class ImageCard extends StatelessWidget {
+  final Color color;
   final Metadata metadata;
-  FileCard(this.metadata);
+  ImageCard(this.metadata, this.color);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class FileCard extends StatelessWidget {
         },
         child: Container(
           height: 75,
-          color: Colors.amber[100],
+          color: color,
           child: Center(
               child: Column(children: [
             Text(metadata.name),

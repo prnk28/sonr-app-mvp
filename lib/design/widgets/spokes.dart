@@ -115,13 +115,39 @@ Widget buildCenterBulb(double direction) {
       child: Container(
         decoration: BoxDecoration(
             gradient: FlutterGradients.angelCare(type: GradientType.radial)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        child: BlocBuilder<DataBloc, DataState>(
+            // Build Requirements
+            buildWhen: (previous, current) {
+          if (current is PeerQueueInProgress) {
+            return true;
+          } else if (current is PeerQueueSuccess) {
+            return true;
+          }
+          return false;
+        }, builder: (context, state) {
+          // Still Queueing
+          if (state is PeerQueueInProgress) {
+            return Stack(
+              alignment: AlignmentDirectional.center,
+              clipBehavior: Clip.none,
+              children: [
+                CircularProgressIndicator(
+                    strokeWidth: 6, backgroundColor: Colors.white),
+                Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: Text(
+                      "Loading File...",
+                      style: bulbValueTextStyle(),
+                    )),
+              ],
+            );
+          }
+
+          // Finished Queueing
+          return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Stack(
               alignment: AlignmentDirectional.topEnd,
               clipBehavior: Clip.none,
-              overflow: Overflow.visible,
               children: [
                 Padding(
                     padding: EdgeInsets.only(left: 0, top: 5),
@@ -143,8 +169,8 @@ Widget buildCenterBulb(double direction) {
                   _getCompassDesignation(direction),
                   style: bulbDesignationTextStyle(),
                 )),
-          ],
-        ),
+          ]);
+        }),
       ),
     ),
   );

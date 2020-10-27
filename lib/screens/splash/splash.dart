@@ -30,6 +30,18 @@ class SplashScreen extends StatelessWidget {
                 context.goRegister();
               }
             },
-            child: Center(child: NeumorphicProgressIndeterminate())));
+            child: Column(
+              children: [
+                Container(
+                    width: screenSize.width / 5,
+                    height: screenSize.height / 5,
+                    child: FittedBox(child: Image.asset("images/icon.png"))),
+
+                // Loading
+                Padding(
+                    padding: EdgeInsets.only(left: 45, right: 45),
+                    child: NeumorphicProgressIndeterminate())
+              ],
+            )));
   }
 }

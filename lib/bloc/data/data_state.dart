@@ -14,6 +14,16 @@ class PeerInitial extends DataState {
   PeerInitial();
 }
 
+// Peer began queueing file
+class PeerQueueInProgress extends DataState {
+  PeerQueueInProgress();
+}
+
+// Queuing has been successful
+class PeerQueueSuccess extends DataState {
+  PeerQueueSuccess();
+}
+
 // Sending to peer w/ Progress and Chunks
 class PeerSendInProgress extends DataState {
   PeerSendInProgress();

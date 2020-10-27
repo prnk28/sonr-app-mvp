@@ -67,6 +67,7 @@ Row _buildItem(BuildContext context, NodeRequestInitial state) {
   // Build View
   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
     preview,
+    Padding(padding: EdgeInsets.all(8)),
     Column(
       children: [
         Text(from.profile.firstName, style: headerTextStyle()),
@@ -90,6 +91,9 @@ NeumorphicButton _buildAuthButton(
         context
             .getBloc(BlocType.User)
             .add(NodeAccepted(state.from, state.offer, state.metadata));
+
+        // Pop Window
+        Navigator.pop(context);
       },
       style: NeumorphicStyle(
           depth: 8,

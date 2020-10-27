@@ -2,6 +2,7 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:image/image.dart';
+import 'package:file/memory.dart';
 
 // * Chunking Constants **
 const CHUNK_SIZE = 16000;
@@ -99,12 +100,26 @@ class SonrFile {
   setPreview() async {
     // Compress if Image for Preview
     if (this.metadata.type == FileType.Image) {
-      // Get Bytes of Preview
-      File thumbFile = Squeeze.imageForBytes(this.raw);
+      // Create Receive Port
+      ReceivePort receivePort = ReceivePort();
+
+      // Isolate Compression to avoid stalling the main UI
+      await Isolate.spawn(
+          Squeeze.imageForBytes, SqueezeParam(raw, receivePort.sendPort));
+
+      // Get the processed image from the isolate.
+      Image thumbnail = await receivePort.first;
+
+      // Save the thumbnail in memory as a PNG.
+      File thumbFile = MemoryFileSystem().file('thumbnail.jpg')
+        ..writeAsBytesSync(encodeJpg(thumbnail, quality: 75));
+
+      // Logging
+      var kbSize = thumbFile.lengthSync() / 1000;
+      log.i("ThumbNail Size: " + kbSize.toString() + "KB");
 
       // Set Thumbnail
       metadata.thumbnail = await thumbFile.readAsBytes();
-      log.i("Image Compressed");
     } else {
       log.w("No compression for non-images yet");
     }

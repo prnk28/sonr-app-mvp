@@ -31,6 +31,7 @@ class PeerAddedChunk extends DataEvent {
   const PeerAddedChunk(this.chunk);
 }
 
+// User added file to queue
 class PeerQueuedFile extends DataEvent {
   final Metadata metadata;
   final File rawFile;
@@ -40,6 +41,12 @@ class PeerQueuedFile extends DataEvent {
   PeerQueuedFile(this.direction, {this.sender, this.metadata, this.rawFile});
 }
 
+// Queue has been completed
+class FileQueuedComplete extends DataEvent {
+  const FileQueuedComplete();
+}
+
+// User Cleared Queue
 class PeerClearedQueue extends DataEvent {
   final String matchId;
   final TrafficDirection direction;

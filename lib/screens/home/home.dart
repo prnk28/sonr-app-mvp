@@ -62,17 +62,11 @@ class _HomeScreenState extends State<HomeScreen>
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Popup Callback
-    onWindowTransferComplete() {
-      Future.delayed(const Duration(seconds: 1), () {
-        print('Transfer Was Completed, Present Popup');
-      });
-    }
-
     return MultiBlocListener(
       listeners: [
         BlocListener<UserBloc, UserState>(
           listenWhen: (previousState, state) {
+            // Current States
             if (state is NodeRequestInitial) {
               return true;
             } else if (state is NodeTransferSuccess) {
@@ -89,12 +83,14 @@ class _HomeView extends StatelessWidget {
                     return Window.showAuth(context, state);
                   });
             } else if (state is NodeTransferSuccess) {
-              // Display Bottom Sheet
-              showModalBottomSheet<void>(
+              // Pop Current View
+              Navigator.pop(context);
+
+              // Show Current View
+              showDialog(
                   context: context,
                   builder: (context) {
-                    return Window.showComplete(
-                        context, state, onWindowTransferComplete);
+                    return Popup.showImage(context, state);
                   });
             }
           },
@@ -104,6 +100,7 @@ class _HomeView extends StatelessWidget {
             if (state is PeerReceiveInProgress) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
+                  isDismissible: false,
                   context: context,
                   builder: (context) {
                     return Window.showTransferring(
@@ -117,20 +114,7 @@ class _HomeView extends StatelessWidget {
           },
         ),
       ],
-      child: BlocBuilder<DataBloc, DataState>(builder: (context, state) {
-        // User Files View
-        if (state is UserLoadedFilesSuccess) {
-          return FileGrid(state.files);
-        }
-        // No Files View
-        else if (state is UserLoadedFilesFailure) {
-          return Center(child: Text("No User Files"));
-        }
-        // Arbitrary View
-        else {
-          return Center(child: Text("Mega Hellope"));
-        }
-      }),
+      child: ImageGrid(),
     );
   }
 }

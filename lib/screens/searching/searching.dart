@@ -18,24 +18,23 @@ class SearchingScreen extends StatelessWidget {
         }),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: SafeArea(
-          child: Stack(
-            children: <Widget>[
-              // Range Lines
-              rangeLines(),
+            child: Stack(
+          children: <Widget>[
+            // Range Lines
+            rangeLines(),
 
-              // Bubble View
-              ZoneView(),
+            // Bubble View
+            ZoneView(),
 
-              // Have BLoC Builder Retrieve Directly from
-              BlocBuilder<DirectionCubit, double>(
-                  cubit: context.getCubit(CubitType.Direction),
-                  builder: (context, state) {
-                    return Align(
-                        alignment: Alignment.bottomCenter,
-                        child: CompassView(direction: state));
-                  })
-            ],
-          ),
-        ));
+            // Have BLoC Builder Retrieve Directly from
+            BlocBuilder<DirectionCubit, double>(
+                cubit: context.getCubit(CubitType.Direction),
+                builder: (context, state) {
+                  return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: CompassView(direction: state));
+                })
+          ],
+        )));
   }
 }

@@ -20,7 +20,7 @@ class FloaterButton extends StatelessWidget {
           title: "File",
           iconColor: Colors.white,
           bubbleColor: Colors.blue,
-          icon: Icons.settings,
+          icon: Icons.storage,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             // Queue File
@@ -42,7 +42,7 @@ class FloaterButton extends StatelessWidget {
           title: "Contact",
           iconColor: Colors.white,
           bubbleColor: Colors.blue,
-          icon: Icons.people,
+          icon: Icons.person,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             // Wait for Animation to Complete
@@ -60,9 +60,9 @@ class FloaterButton extends StatelessWidget {
       animation: animation,
 
       // On pressed change animation state
-      onPress: animationController.isCompleted
-          ? animationController.reverse
-          : animationController.forward,
+      onPress: () => animationController.isCompleted
+          ? animationController.reverse()
+          : animationController.forward(),
 
       // Floating Action button Icon color
       iconColor: Colors.blue,
