@@ -130,11 +130,22 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Change State
       yield PeerQueueInProgress();
     } else {
-      // Get Dummy RawFile
-      File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
-
       // Create SonrFile
-      SonrFile file = new SonrFile(user.node, raw: dummyFile);
+      SonrFile file;
+
+      // File not Provided
+      if (event.rawFile == null) {
+        // Get Dummy RawFile
+        File dummyFile = await getAssetFileByPath("assets/images/fat_test.jpg");
+
+        // Set SonrFile
+        file = new SonrFile(user.node, raw: dummyFile);
+      }
+      // File Provided
+      else {
+        // Set SonrFile
+        file = new SonrFile(user.node, raw: event.rawFile);
+      }
 
       // Add to Outgoing
       _outgoing.add(file);

@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 

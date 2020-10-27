@@ -11,8 +11,8 @@ class IconLiquidFill extends StatefulWidget {
   // By default it is set to 2 seconds.
   final Duration waveDuration;
 
-  /// By default it is set to 250
-  final double boxHeight;
+  /// Set to screen Size
+  final double boxHeight = (screenSize.height / 3) - 20;
 
   /// By default it is set to 400
   final double boxWidth;
@@ -24,12 +24,10 @@ class IconLiquidFill extends StatefulWidget {
     Key key,
     @required this.iconData,
     this.waveDuration = const Duration(seconds: 2),
-    this.boxHeight = 200,
-    this.boxWidth = 200,
+    this.boxWidth = 225,
     this.waveColor = Colors.blueAccent,
   })  : assert(null != iconData),
         assert(null != waveDuration),
-        assert(null != boxHeight),
         assert(null != boxWidth),
         assert(null != waveColor),
         super(key: key);

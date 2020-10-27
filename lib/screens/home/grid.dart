@@ -7,6 +7,9 @@ class ImageGrid extends StatelessWidget {
   // Build Widget
   @override
   Widget build(BuildContext context) {
+    // Load Files
+    context.getBloc(BlocType.Data).add(UserGetAllFiles());
+    // Build View
     return BlocBuilder<DataBloc, DataState>(
         // Set Build Requirements
         buildWhen: (previous, current) {

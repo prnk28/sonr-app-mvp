@@ -12,12 +12,38 @@ class FloaterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final picker = ImagePicker();
     return FloatingActionBubble(
       // Menu items
       items: <Bubble>[
+        Bubble(
+          title: "Photo",
+          iconColor: Colors.white,
+          bubbleColor: Colors.orange,
+          icon: Icons.photo,
+          titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+          onPress: () async {
+            // Get Photo
+            final pickedFile =
+                await picker.getImage(source: ImageSource.camera);
+
+            // Queue File
+            context.getBloc(BlocType.Data).add(PeerQueuedFile(
+                TrafficDirection.Outgoing,
+                rawFile: File(pickedFile.path)));
+
+            // Wait for Animation to Complete
+            animationController.reverse();
+
+            // Send Callback
+            if (onAnimationComplete != null) {
+              onAnimationComplete("File");
+            }
+          },
+        ),
         // Floating action menu item
         Bubble(
-          title: "File",
+          title: "File (Fat Test)",
           iconColor: Colors.white,
           bubbleColor: Colors.blue,
           icon: Icons.storage,

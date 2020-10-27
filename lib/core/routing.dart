@@ -38,9 +38,6 @@ extension Routing on BuildContext {
         case '/home':
           // Update Status
           getBloc(BlocType.User).add(NodeAvailable());
-
-          // Load Files
-          getBloc(BlocType.Data).add(UserGetAllFiles());
           return PageTransition(
               child: HomeScreen(),
               type: PageTransitionType.fade,
