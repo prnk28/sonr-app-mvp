@@ -62,7 +62,7 @@ dependencies:
   fluttertoast: ^7.1.1
   page_transition: ^1.1.6
   path_drawing: ^0.4.1+1
-  transparent_image: ^1.0.0
+  photo_view: ^0.10.2
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:

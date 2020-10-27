@@ -6,7 +6,16 @@ part of 'searching.dart';
 class ZoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(buildWhen: (past, curr) {
+    return BlocConsumer<UserBloc, UserState>(listenWhen: (previous, current) {
+      if (current is NodeTransferSuccess) {
+        return true;
+      }
+      return false;
+    }, listener: (context, state) {
+      if (state is NodeTransferSuccess) {
+        Navigator.pushReplacementNamed(context, "/home");
+      }
+    }, buildWhen: (past, curr) {
       if (curr is NodeSearchSuccess) {
         return true;
       } else {

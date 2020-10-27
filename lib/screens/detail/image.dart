@@ -1,28 +1,41 @@
 part of 'detail.dart';
 
-Widget buildImageView(
-  Uint8List bytes,
-  Metadata metadata,
-) {
-  return Column(
-    children: [
-      // Image Container
-      Container(
-          width: screenSize.width,
-          child: Center(
-              child: FadeInImage(
-            placeholder: MemoryImage(kTransparentImage),
-            image: MemoryImage(bytes),
-          ))),
+class ImageDetailView extends StatefulWidget {
+  final Uint8List bytes;
+  final Metadata metadata;
 
-      // File Type
-      Text(enumAsString(metadata.type)),
+  const ImageDetailView(this.bytes, this.metadata, {Key key}) : super(key: key);
+  @override
+  _ImageDetailViewState createState() => _ImageDetailViewState();
+}
 
-      // Additional Info
-      _buildInfo(metadata)
-      // Image
-    ],
-  );
+class _ImageDetailViewState extends State<ImageDetailView> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+            child: PhotoView(
+          backgroundDecoration: windowDecoration(context),
+          imageProvider: MemoryImage(widget.bytes),
+          loadingBuilder: (context, progress) => Center(
+            child: Container(
+              width: 20.0,
+              height: 20.0,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          // enableRotation: true,
+        )),
+
+        // Spacing
+        Padding(padding: EdgeInsets.only(top: 20)),
+        // Additional Info
+        _buildInfo(widget.metadata)
+        // Image
+      ],
+    );
+  }
 }
 
 _buildInfo(Metadata metadata) {
@@ -47,7 +60,6 @@ _buildInfo(Metadata metadata) {
 
     // File Info
     Column(children: [
-      Text(metadata.name),
       Text(_convertSize(metadata.size)),
       Text(date),
       Text(time),
@@ -72,12 +84,4 @@ String _convertSize(int size) {
   else {
     return (size / pow(1000, 3)).toStringAsFixed(2) + "GB";
   }
-}
-
-String _convertDate(DateTime date) {
-  // Init Formatters
-  DateFormat formatter = new DateFormat.yMMMMd('en_US').add_jm();
-
-  // Create String
-  return formatter.format(date);
 }

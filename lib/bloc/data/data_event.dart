@@ -76,3 +76,9 @@ class UserLoadFile extends DataEvent {
   final SonrFile file;
   const UserLoadFile(this.file);
 }
+
+// Opens a file in appropriate viewer
+class UserDeleteFile extends DataEvent {
+  final Metadata meta;
+  const UserDeleteFile(this.meta);
+}

@@ -78,7 +78,7 @@ class _HomeView extends StatelessWidget {
             if (state is NodeRequestInitial) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
-                shape: windowBorder(),
+                  shape: windowBorder(),
                   barrierColor: Colors.black87,
                   isDismissible: false,
                   context: context,
@@ -95,7 +95,7 @@ class _HomeView extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return Popup.showImage(context, state);
-                  });
+                });
             }
           },
         ),
@@ -115,7 +115,8 @@ class _HomeView extends StatelessWidget {
                   });
             } else if (state is UserViewingFileInProgress) {
               // Push to Detail Screen
-              Navigator.pushReplacementNamed(context, "/detail");
+              Navigator.pushReplacementNamed(context, "/detail",
+                  arguments: state.metadata);
             }
           },
         ),

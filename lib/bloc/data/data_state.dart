@@ -39,7 +39,8 @@ class PeerReceiveInProgress extends DataState {
 // ***************** //
 // Currently Viewing Saved File
 class UserViewingFileInProgress extends DataState {
-  UserViewingFileInProgress();
+  final Metadata metadata;
+  UserViewingFileInProgress(this.metadata);
 }
 
 // Finished Viewing Saved File
@@ -58,6 +59,11 @@ class UserLoadedFilesSuccess extends DataState {
 // Couldnt Load Files
 class UserLoadedFilesFailure extends DataState {
   UserLoadedFilesFailure();
+}
+
+// Deleted File Succesfully
+class UserDeletedFileSuccess extends DataState {
+  UserDeletedFileSuccess();
 }
 
 // ***************** //

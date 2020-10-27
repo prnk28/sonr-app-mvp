@@ -102,6 +102,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield* _mapUserGetAllFilesState(event);
     } else if (event is UserGetFile) {
       yield* _mapUserGetFileState(event);
+    } else if (event is UserLoadFile) {
+      yield* _mapUserLoadFileState(event);
+    } else if (event is UserDeleteFile) {
+      yield* _mapUserDeleteFileState(event);
     }
   }
 
@@ -280,6 +284,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** UserGetFile Event **
 // ***********************
   Stream<DataState> _mapUserGetFileState(UserGetFile event) async* {
+    // Initialize
+    SonrFile file;
+
     // Check if File ID provided
     if (event.fileId != null && event.meta == null) {
       // Open Provider
@@ -288,21 +295,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
       // Get File
       Metadata metadata = await metadataProvider.getFile(event.fileId);
-      SonrFile file = SonrFile.fromSaved(metadata);
-
-      // Change State
-      add(UserLoadFile(file));
+      file = SonrFile.fromSaved(metadata);
     }
     // Check if Metadata provided
     else if (event.meta != null && event.fileId == null) {
       // Get Data
-      SonrFile file = SonrFile.fromSaved(event.meta);
-
-      // Change State
-      add(UserLoadFile(file));
+      file = SonrFile.fromSaved(event.meta);
     }
+    // Change State
+    add(UserLoadFile(file));
+
     // Change state
-    yield UserViewingFileInProgress();
+    yield UserViewingFileInProgress(file.metadata);
   }
 
 // ************************
@@ -314,5 +318,27 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
     // Change State
     yield UserViewingFileSuccess(bytes, event.file.metadata);
+  }
+
+  // ************************
+// ** UserDeleteFile Event **
+// ************************
+  Stream<DataState> _mapUserDeleteFileState(UserDeleteFile event) async* {
+    // Get Provider
+    MetadataProvider metadataProvider = new MetadataProvider();
+    await metadataProvider.open();
+
+    // Remove From Database
+    int count = await metadataProvider.delete(event.meta.id);
+    log.i(count.toString() + "Files Removed from database");
+
+    // Remove from LocalData
+    var ref = File(event.meta.path);
+    await ref.delete();
+
+    // Reload Files
+    add(UserGetAllFiles());
+
+    yield UserDeletedFileSuccess();
   }
 }
