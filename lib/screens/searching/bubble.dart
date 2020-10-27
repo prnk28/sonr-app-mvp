@@ -13,9 +13,15 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
   // Animation
   AnimationController _animationController;
   Animation _animation;
+  FToast fToast;
 
   @override
   void initState() {
+    super.initState();
+    // Toast Setup
+    fToast = FToast();
+
+    // Animation for Requested
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animationController.repeat(reverse: true);
@@ -23,7 +29,6 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
       ..addListener(() {
         setState(() {});
       });
-    super.initState();
   }
 
   @override
@@ -50,6 +55,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
       }
       return false;
     }, builder: (context, state) {
+      fToast.init(context);
       // ** Create Active Node Bubble **
       if (state is NodeSearchSuccess) {
         // BLoC References
@@ -57,17 +63,45 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
         final user = context.getBloc(BlocType.User);
 
         // Build Active Bubble
-        return Positioned(
-            top: _calculateOffset(widget.value, widget.peer.proximity).dy,
-            left: _calculateOffset(widget.value, widget.peer.proximity).dx,
-            child: GestureDetector(
-                onTap: () async {
-                  // Send Offer to Bubble
-                  user.add(NodeOffered(
-                      context.getBloc(BlocType.Data), widget.peer,
-                      file: data.currentFile));
-                },
-                child: _getBubble(widget.peer)));
+        return BlocConsumer<DataBloc, DataState>(
+            listenWhen: (previous, current) {
+          if (current is PeerQueueSuccess) {
+            return true;
+          }
+          return false;
+        }, listener: (context, state) {
+          if (state is PeerQueueSuccess) {
+            showGreenToast(fToast, "File ready!", Icons.check);
+          }
+        },
+            // Build Requirements
+            buildWhen: (previous, current) {
+          if (current is PeerQueueInProgress) {
+            return true;
+          } else if (current is PeerQueueSuccess) {
+            return true;
+          }
+          return false;
+        }, builder: (context, state) {
+          return Positioned(
+              top: _calculateOffset(widget.value, widget.peer.proximity).dy,
+              left: _calculateOffset(widget.value, widget.peer.proximity).dx,
+              child: GestureDetector(
+                  onTap: () async {
+                    // File not yet loaded
+                    if (state is PeerQueueInProgress) {
+                      showRedToast(fToast, "File isnt ready", Icons.error);
+                    }
+                    // File is Loaded send offer
+                    else if (state is PeerQueueSuccess) {
+                      // Send Offer to Bubble
+                      user.add(NodeOffered(
+                          context.getBloc(BlocType.Data), widget.peer,
+                          file: data.currentFile));
+                    }
+                  },
+                  child: _getBubble(widget.peer)));
+        });
       }
 
       // ** Create Requested Node Bubble **

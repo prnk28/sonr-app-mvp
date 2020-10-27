@@ -76,7 +76,7 @@ Future<File> getAssetFileByPath(String path) async {
   Directory directory = await getApplicationDocumentsDirectory();
 
   // Get File Extension and Set Temp DB Extenstion
-  var dbPath = join(directory.path, "temp" + extension(path));
+  var dbPath = join(directory.path, basename(path));
 
   // Get Byte Data
   ByteData data = await rootBundle.load(path);

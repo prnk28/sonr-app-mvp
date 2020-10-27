@@ -71,7 +71,8 @@ class UserGetFile extends DataEvent {
   const UserGetFile({this.meta, this.fileId});
 }
 
-// User Closed File Viewer
-class UserClosedFile extends DataEvent {
-  const UserClosedFile();
+// Opens a file in appropriate viewer
+class UserLoadFile extends DataEvent {
+  final SonrFile file;
+  const UserLoadFile(this.file);
 }

@@ -14,16 +14,19 @@ class ImageCard extends StatelessWidget {
         },
         child: Container(
           height: 75,
-          color: color,
-          child: Center(
-              child: Column(children: [
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: MemoryImage(metadata.thumbnail), fit: BoxFit.cover)),
+          child:
+              // Image Info
+              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(metadata.name),
             Text(enumAsString(metadata.type)),
             Text("Owner: " +
                 metadata.owner.firstName +
                 " " +
                 metadata.owner.lastName),
-          ])),
+          ]),
         ));
   }
 }

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:sonar_app/screens/screens.dart';
 import 'dart:math' as math;
+import 'package:fluttertoast/fluttertoast.dart';
 
 part 'bubble.dart';
 part 'zone.dart';
@@ -12,7 +13,7 @@ class SearchingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Return Widget
     return Scaffold(
-        appBar: leadingAppBar(context, Icons.close, onPressed: () {
+        appBar: exitAppBar(context, Icons.close, onPressed: () {
           // Pop Navigation
           Navigator.pushReplacementNamed(context, "/home");
         }),

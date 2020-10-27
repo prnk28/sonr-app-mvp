@@ -12,13 +12,6 @@ void main() async {
   // Initialize Hive Adapters
   Hive.registerAdapter(ProfileAdapter());
 
-  // Get a location using getDatabasesPath
-  var databasesPath = await getDatabasesPath();
-  String path = join(databasesPath, DATABASE_PATH);
-
-// Delete the database
-  await deleteDatabase(path);
-
   // Run App with BLoC Providers
   runApp(initializeBloc(App()));
 }

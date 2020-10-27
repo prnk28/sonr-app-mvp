@@ -4,23 +4,7 @@ Widget buildAuthenticationView(BuildContext context, NodeRequestInitial state) {
   return Column(
     children: [
       // Top Right Close/Cancel Button
-      Align(
-          alignment: Alignment.topRight,
-          child: GestureDetector(
-              onTap: () {
-                // Update WebBloc to Inform User Declined
-                context.getBloc(BlocType.User).add(NodeDeclined(state.from));
-
-                // Pop Window
-                Navigator.pop(context);
-              },
-              child: Padding(
-                  padding: EdgeInsets.only(top: 10, right: 10),
-                  child: Icon(
-                    Icons.close_rounded,
-                    size: 35,
-                    color: Colors.grey[700],
-                  )))),
+      getCloseButton(context),
 
       // Build Item from Metadata and Peer
       _buildItem(context, state),

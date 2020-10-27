@@ -127,18 +127,22 @@ Widget buildCenterBulb(double direction) {
         }, builder: (context, state) {
           // Still Queueing
           if (state is PeerQueueInProgress) {
-            return Stack(
-              alignment: AlignmentDirectional.center,
-              clipBehavior: Clip.none,
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(
-                    strokeWidth: 6, backgroundColor: Colors.white),
-                Padding(
-                    padding: EdgeInsets.only(right: 12),
-                    child: Text(
-                      "Loading File...",
-                      style: bulbValueTextStyle(),
-                    )),
+                SizedBox(
+                  child: CircularProgressIndicator(
+                      strokeWidth: 6,
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.white)),
+                  height: 50.0,
+                  width: 50.0,
+                ),
+                Padding(padding: EdgeInsets.only(top: 12)),
+                Text(
+                  "Loading File..",
+                  style: bulbLoadingTextStyle(),
+                ),
               ],
             );
           }

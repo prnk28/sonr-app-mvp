@@ -75,12 +75,14 @@ class SonrFile {
     // Get Data
     Uint8List data = _writer.takeBytes();
 
-    // Get FilePath
-    Directory tempDir = await getTemporaryDirectory();
-    var path = tempDir.path + '/file_01.tmp';
+    // Get Folder
+    String folder = '/' + enumAsString(this.metadata.type);
+
+    // Get Directory
+    Directory localDir = await getApplicationDocumentsDirectory();
 
     // Set Path
-    this.metadata.path = path;
+    this.metadata.path = localDir.path + folder + this.metadata.name;
     this.metadata.received = DateTime.now();
     this.metadata.owner = owner.profile;
 
@@ -93,17 +95,17 @@ class SonrFile {
     final buffer = data.buffer;
 
     // Save to File
-    this.raw = await new File(path).writeAsBytes(
+    this.raw = await new File(this.metadata.path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 
   setPreview() async {
+    // Create Receive Port
+    ReceivePort receivePort = ReceivePort();
+
     // Compress if Image for Preview
     if (this.metadata.type == FileType.Image) {
-      // Create Receive Port
-      ReceivePort receivePort = ReceivePort();
-
-      // Isolate Compression to avoid stalling the main UI
+      // Isolate to avoid stalling the main UI
       await Isolate.spawn(
           Squeeze.imageForBytes, SqueezeParam(raw, receivePort.sendPort));
 
@@ -112,17 +114,15 @@ class SonrFile {
 
       // Save the thumbnail in memory as a PNG.
       File thumbFile = MemoryFileSystem().file('thumbnail.jpg')
-        ..writeAsBytesSync(encodeJpg(thumbnail, quality: 75));
-
-      // Logging
-      var kbSize = thumbFile.lengthSync() / 1000;
-      log.i("ThumbNail Size: " + kbSize.toString() + "KB");
+        ..writeAsBytesSync(encodeJpg(thumbnail, quality: 50));
 
       // Set Thumbnail
       metadata.thumbnail = await thumbFile.readAsBytes();
     } else {
       log.w("No compression for non-images yet");
     }
+    // Close Port
+    receivePort.close();
   }
 
   // ** Read Bytes from SonrFile **

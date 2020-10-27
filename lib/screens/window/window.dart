@@ -4,18 +4,17 @@ import 'package:sonar_app/bloc/bloc.dart';
 
 part 'auth.dart';
 part 'progress.dart';
-
 class Window {
   static Widget showAuth(BuildContext context, NodeRequestInitial state) {
     return Container(
-        color: NeumorphicTheme.baseColor(context),
+        decoration: windowDecoration(context),
         height: screenSize.height / 3,
         child: buildAuthenticationView(context, state));
   }
 
   static Widget showTransferring(BuildContext context) {
     return Container(
-        color: NeumorphicTheme.baseColor(context),
+        decoration: windowDecoration(context),
         height: screenSize.height / 3,
         child: buildProgressView(context));
   }

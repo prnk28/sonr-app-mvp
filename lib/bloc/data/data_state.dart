@@ -39,13 +39,14 @@ class PeerReceiveInProgress extends DataState {
 // ***************** //
 // Currently Viewing Saved File
 class UserViewingFileInProgress extends DataState {
-  final SonrFile file;
-  UserViewingFileInProgress(this.file);
+  UserViewingFileInProgress();
 }
 
 // Finished Viewing Saved File
-class UserViewingFileComplete extends DataState {
-  UserViewingFileComplete();
+class UserViewingFileSuccess extends DataState {
+  final Uint8List bytes;
+  final Metadata metadata;
+  UserViewingFileSuccess(this.bytes, this.metadata);
 }
 
 // User Loaded Files

@@ -63,6 +63,15 @@ TextStyle bulbDesignationTextStyle({Color setColor}) {
   );
 }
 
+TextStyle bulbLoadingTextStyle({Color setColor}) {
+  return TextStyle(
+    fontFamily: "Raleway",
+    fontWeight: FontWeight.normal,
+    fontSize: 15,
+    color: setColor ?? Colors.white,
+  );
+}
+
 // Hint Text
 TextStyle hintTextStyle({Color setColor}) {
   return TextStyle(

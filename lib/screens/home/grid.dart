@@ -1,6 +1,9 @@
 part of 'home.dart';
 
 class ImageGrid extends StatelessWidget {
+  final double itemHeight = (screenSize.height - kToolbarHeight - 24) / 4;
+  final double itemWidth = screenSize.width / 4;
+
   // Build Widget
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,8 @@ class ImageGrid extends StatelessWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             crossAxisCount: 2,
+            // // Change Size With This
+            // childAspectRatio: (itemWidth / itemHeight),
             children: _buildImageCards(state.files));
       }
       // No Files View

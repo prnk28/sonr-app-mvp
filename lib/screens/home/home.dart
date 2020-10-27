@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
     // Build View
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
-        appBar: screenAppBar("Home"),
+        appBar: titleAppBar("Home"),
         floatingActionButton:
             FloaterButton(_animation, _animationController, (button) {
           // File Option
@@ -78,6 +78,9 @@ class _HomeView extends StatelessWidget {
             if (state is NodeRequestInitial) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
+                shape: windowBorder(),
+                  barrierColor: Colors.black87,
+                  isDismissible: false,
                   context: context,
                   builder: (context) {
                     return Window.showAuth(context, state);
@@ -88,6 +91,7 @@ class _HomeView extends StatelessWidget {
 
               // Show Current View
               showDialog(
+                  barrierColor: Colors.black87,
                   context: context,
                   builder: (context) {
                     return Popup.showImage(context, state);
@@ -100,6 +104,8 @@ class _HomeView extends StatelessWidget {
             if (state is PeerReceiveInProgress) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
+                  shape: windowBorder(),
+                  barrierColor: Colors.black87,
                   isDismissible: false,
                   context: context,
                   builder: (context) {

@@ -16,7 +16,7 @@ NeumorphicAppBar logoAppBar({Color setColor}) {
   );
 }
 
-NeumorphicAppBar screenAppBar(
+NeumorphicAppBar titleAppBar(
   String title,
 ) {
   return NeumorphicAppBar(
@@ -31,9 +31,31 @@ NeumorphicAppBar screenAppBar(
   );
 }
 
-NeumorphicAppBar leadingAppBar(
+NeumorphicAppBar actionSingleAppBar(
   BuildContext context,
-  IconData iconData, {
+  IconData leadingIcon,
+  IconData actionIcon, {
+  Function() onLeadingPressed,
+  Function() onActionPressed,
+  String title: "",
+}) {
+  // Check if OnPressed Provided
+  if (onLeadingPressed == null) {
+    onLeadingPressed = _defaultOnPressed(context);
+    log.w("OnPressed not assigned for leading app bar, popping screen");
+  }
+
+  // Create App Bar
+  return NeumorphicAppBar(
+    title: Text(title),
+    leading: getAppBarButton(context, leadingIcon, onLeadingPressed),
+    actions: [getAppBarButton(context, actionIcon, onActionPressed)],
+  );
+}
+
+NeumorphicAppBar exitAppBar(
+  BuildContext context,
+  IconData icon, {
   Function() onPressed,
   String title: "",
 }) {
@@ -45,29 +67,7 @@ NeumorphicAppBar leadingAppBar(
 
   // Create App Bar
   return NeumorphicAppBar(
-    title: Text(title),
-    leading: Stack(
-      alignment: Alignment.center,
-      children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: NeumorphicButton(
-              padding: EdgeInsets.all(18),
-              style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  shape: NeumorphicShape.convex,
-                  depth: 5),
-              child: Icon(
-                iconData,
-                color: NeumorphicTheme.isUsingDark(context)
-                    ? Colors.white70
-                    : Colors.black87,
-              ),
-              onPressed: onPressed,
-            ))
-      ],
-    ),
-  );
+      title: Text(title), leading: getAppBarButton(context, icon, onPressed));
 }
 
 _defaultOnPressed(BuildContext context) {

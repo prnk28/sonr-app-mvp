@@ -291,26 +291,28 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       SonrFile file = SonrFile.fromSaved(metadata);
 
       // Change State
-      yield UserViewingFileInProgress(file);
+      add(UserLoadFile(file));
     }
     // Check if Metadata provided
     else if (event.meta != null && event.fileId == null) {
-      // Get File
+      // Get Data
       SonrFile file = SonrFile.fromSaved(event.meta);
 
-      // Change state
-      yield UserViewingFileInProgress(file);
+      // Change State
+      add(UserLoadFile(file));
     }
-    // Error
-    else {
-      log.e("UserGetFile Event: Neither Metadata or FileId Provided");
-    }
+    // Change state
+    yield UserViewingFileInProgress();
   }
 
-// ********************
-// ** FindFile Event **
-// ********************
-  Stream<DataState> _mapUserClosedFileState(UserClosedFile event) async* {
-    // Check Status
+// ************************
+// ** UserLoadFile Event **
+// ************************
+  Stream<DataState> _mapUserLoadFileState(UserLoadFile event) async* {
+    // Get Bytes
+    Uint8List bytes = await event.file.raw.readAsBytes();
+
+    // Change State
+    yield UserViewingFileSuccess(bytes, event.file.metadata);
   }
 }
