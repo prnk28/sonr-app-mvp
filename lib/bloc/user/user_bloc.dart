@@ -59,6 +59,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapNodeAuthorizedState(event);
     } else if (event is NodeRejected) {
       yield* _mapNodeRejectedState(event);
+    } else if (event is NodeTransmitted) {
+      yield* _mapNodeTransmittedState(event);
 
       // Node - Receiver
     } else if (event is NodeRequested) {
@@ -283,6 +285,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     // DataBloc is Waiting for this State
+    data.add(PeerSendingChunk());
+    yield NodeTransferInitial(event.match);
+  }
+
+  // [User] is Sending Chunks
+  Stream<UserState> _mapNodeTransmittedState(NodeTransmitted event) async* {
+    // Change State
     yield NodeTransferInProgress(event.match);
   }
 
@@ -325,7 +334,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     // Change Status
     add(NodeBusy());
-    yield NodeTransferInitial(metadata, match);
+    yield NodeReceiveInitial(metadata, match);
   }
 
   // [User] Has ReceivedChunk
@@ -351,7 +360,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield NodeTransferSuccess();
     } else {
       // Change State
-      yield NodeReceiveSuccess(file: event.file);
+      yield NodeReceiveSuccess(file: event.file, metadata: event.metadata);
     }
   }
 }

@@ -29,7 +29,7 @@ class Popup {
                             minWidth: 1,
                             minHeight: 1,
                           ), // here
-                          child: Image.file(state.file.raw))),
+                          child: Image.file(state.file))),
                 ),
 
                 FlatButton(
@@ -37,7 +37,7 @@ class Popup {
                     // Move to Page
                     context
                         .getBloc(BlocType.Data)
-                        .add(UserGetFile(meta: state.file.metadata));
+                        .add(UserGetFile(meta: state.metadata));
 
                     // Pop View
                     Navigator.pop(context);

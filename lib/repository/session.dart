@@ -46,18 +46,13 @@ class RTCSession {
   OtherEventCallback onPeersUpdate;
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
-  DataChannelState onDataChannelState;
 
 // ****************************
 // ** WebRTC Object Methods ***
 // ****************************
   addDataChannel(id, RTCDataChannel channel) {
     // Send Callback to DataBloc
-    channel.onDataChannelState = (e) {
-      if (this.onDataChannelMessage != null) {
-        this.onDataChannelState(channel, e);
-      }
-    };
+    channel.onDataChannelState = (e) {};
 
     // Add Message as Callback
     channel.onMessage = (RTCDataChannelMessage data) {

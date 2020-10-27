@@ -100,6 +100,12 @@ class NodeAuthorized extends UserEvent {
 }
 
 // [User] Is receving data chunks
+class NodeTransmitted extends UserEvent {
+  final Node match;
+  const NodeTransmitted(this.match);
+}
+
+// [User] Is receving data chunks
 class NodeReceived extends UserEvent {
   final Metadata metadata;
 
@@ -108,9 +114,10 @@ class NodeReceived extends UserEvent {
 
 // User/Peer have completed transfer
 class NodeCompleted extends UserEvent {
-  final SonrFile file;
+  final File file;
+  final Metadata metadata;
 
-  const NodeCompleted({this.file});
+  const NodeCompleted({this.file, this.metadata});
 }
 
 // [User] Rejected Offer

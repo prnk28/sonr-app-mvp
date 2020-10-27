@@ -14,8 +14,8 @@ export 'sonrfile.dart';
 // ICE RTCConfiguration Map
 const RTC_CONFIG = {
   'iceServers': [
-    //{"url": "stun:stun.l.google.com:19302"},
-    {'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
+    {"urls": "stun:stun.l.google.com:19302"},
+    //{'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
   ]
 };
 

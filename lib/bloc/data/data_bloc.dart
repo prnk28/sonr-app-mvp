@@ -13,10 +13,10 @@ part 'data_state.dart';
 
 class DataBloc extends Bloc<DataEvent, DataState> {
   // Subscription
-  StreamSubscription _userSub;
-  RTCSession _session;
-  RTCDataChannel _dataChannel;
   ProgressCubit progress;
+  RTCDataChannel _dataChannel;
+  RTCSession _session;
+  StreamSubscription _userSub;
 
   // Traffic Maps - MatchId/File
   List<SonrFile> _incoming;
@@ -40,9 +40,16 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // ** User BLoC Subscription ** //
     _userSub = user.listen((UserState state) {
       // Queue Incoming Transfer
-      if (state is NodeTransferInitial) {
+      if (state is NodeReceiveInitial) {
+        // Queue Incoming File
         add(PeerQueuedFile(TrafficDirection.Incoming,
             metadata: state.metadata, sender: state.match));
+      } else if (state is NodeTransferInitial) {
+        // Send First Chunk
+        add(PeerSendingChunk());
+
+        // Change User State
+        user.add(NodeTransmitted(currentFile.owner));
       }
     });
 
@@ -52,26 +59,23 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       _dataChannel = channel;
     };
 
-    _session.onDataChannelState = (channel, e) {
-      // Begin Transfer
-      if (e == RTCDataChannelState.RTCDataChannelOpen) {
-        // Send Chunk
-        add(PeerSendingChunk());
-      }
-    };
-
     // Handle DataChannel Message
     _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
       // Check if Binary
       if (message.isBinary) {
         add(PeerAddedChunk(message.binary));
       } else {
+        // Sending Finished
         if (message.text == "SEND_COMPLETE") {
           // Change user State
           user.add(NodeCompleted());
 
           // Clear Outgoing
           add(PeerClearedQueue(TrafficDirection.Outgoing));
+        }
+        // Send Chunk
+        else if (message.text == "NEXT_CHUNK") {
+          add(PeerSendingChunk());
         }
       }
     };
@@ -170,13 +174,17 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Check for Raw File: Sender Queued
     if (event.role == Role.Sender) {
       // Set File Preview
-      await currentFile.setPreview();
+      await currentFile.initialize(Role.Sender);
 
       // Change State
       yield PeerQueueSuccess();
     }
     // Receiver has queued
     else {
+      // Initialize File
+      await currentFile.initialize(Role.Receiver);
+
+      // Return Current File
       user.add(NodeReceived(currentFile.metadata));
     }
   }
@@ -188,24 +196,30 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Add Chunk to SonrFile
     currentFile.addChunk(event.chunk);
 
-    // Update Progress
-    var currProgress = currentFile.progress();
-
-    // Check if Receive is Done
+    // File Complete
     if (currentFile.isComplete()) {
-      // Tell Sender Complete
+      // Notify Sender
       _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
       // Save File
       await currentFile.save();
 
+      // Get Data
+      var fileRaw = new File(currentFile.metadata.path);
+
       // Yield Complete
-      user.add(NodeCompleted(file: currentFile));
+      user.add(NodeCompleted(file: fileRaw, metadata: currentFile.metadata));
 
       // Clear Incoming
       add(PeerClearedQueue(TrafficDirection.Incoming));
-    } else {
-      progress.update(currProgress);
+    }
+    // File In Progress
+    else {
+      // Request Sender
+      //_dataChannel.send(RTCDataChannelMessage("NEXT_CHUNK"));
+
+      // Update Progress
+      progress.update(currentFile.progress);
     }
   }
 
@@ -213,25 +227,17 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** PeerSentChunk Event **
 // *************************
   Stream<DataState> _mapPeerSentChunkState(PeerSendingChunk event) async* {
-    // Open Reader with Offset
-    final reader = ChunkedStreamIterator(currentFile.raw.openRead());
-
-    // While Reader Has Values
-    while (true) {
-      // read one CHUNK
-      var data = await reader.read(CHUNK_SIZE);
-      var chunk = Uint8List.fromList(data);
-
-      // Send Current Chunk
-      if (data.length > 0) {
+    while (!currentFile.isComplete()) {
+      // Get Chunk
+      var chunk = await currentFile.getChunk();
+      // Send Chunk
+      if (chunk != null) {
         // Sends and Updates Progress
         _dataChannel.send(RTCDataChannelMessage.fromBinary(chunk));
 
         // Update Progress
-        progress.update(currentFile.progress());
-      }
-      // End of List
-      else {
+        progress.update(currentFile.progress);
+      } else {
         break;
       }
     }

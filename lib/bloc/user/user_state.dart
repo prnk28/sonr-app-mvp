@@ -93,10 +93,9 @@ class NodeRequestFailure extends UserState {}
 // **************************
 // User waiting for first chunk
 class NodeTransferInitial extends UserState {
-  final Metadata metadata;
   final Node match;
 
-  NodeTransferInitial(this.metadata, this.match);
+  NodeTransferInitial(this.match);
 }
 
 // User sending chunks
@@ -118,6 +117,14 @@ class NodeTransferFailure extends UserState {
   NodeTransferFailure(this.match);
 }
 
+// Begin Receiving State
+class NodeReceiveInitial extends UserState {
+  final Metadata metadata;
+  final Node match;
+
+  NodeReceiveInitial(this.metadata, this.match);
+}
+
 // User sending chunks
 class NodeReceiveInProgress extends UserState {
   final Metadata metadata;
@@ -127,8 +134,9 @@ class NodeReceiveInProgress extends UserState {
 
 // User has completed transfer
 class NodeReceiveSuccess extends UserState {
-  final SonrFile file;
-  NodeReceiveSuccess({this.file});
+  final File file;
+  final Metadata metadata;
+  NodeReceiveSuccess({this.file, this.metadata});
 }
 
 // User has failed to transfer
