@@ -76,14 +76,14 @@ class SonrFile {
     Uint8List data = _writer.takeBytes();
 
     // Get Folder
-    String folder = '/' + enumAsString(this.metadata.type);
+    String type = '/' + enumAsString(this.metadata.type);
 
     // Get Directory
     Directory localDir = await getApplicationDocumentsDirectory();
 
     // Set Path
     this.metadata.path =
-        localDir.path + folder + uuid.v1() + "_" + this.metadata.name;
+        localDir.path + type + '_' + uuid.v1() + "_" + this.metadata.name;
     this.metadata.received = DateTime.now();
     this.metadata.owner = owner.profile;
 
@@ -95,9 +95,15 @@ class SonrFile {
     // Get Buffer
     final buffer = data.buffer;
 
-    // Save to File
-    this.raw = await new File(this.metadata.path).writeAsBytes(
+    // Create File
+    await new File(this.metadata.path).create(recursive: true);
+
+    // Write to File
+    var file = await new File(this.metadata.path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+
+    // Set File
+    this.raw = file;
   }
 
   setPreview() async {

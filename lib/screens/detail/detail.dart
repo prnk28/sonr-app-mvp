@@ -40,12 +40,15 @@ class DetailScreen extends StatelessWidget {
           listenWhen: (previous, current) {
         if (current is UserDeletedFileSuccess) {
           return true;
+        } else if (current is UserViewingFileFailure) {
+          return true;
         }
         return false;
       },
           // Listen by State
           listener: (context, state) {
-        if (state is UserDeletedFileSuccess) {
+        if (state is UserDeletedFileSuccess ||
+            state is UserViewingFileFailure) {
           // Change Status
           context.getBloc(BlocType.User).add(NodeAvailable());
 

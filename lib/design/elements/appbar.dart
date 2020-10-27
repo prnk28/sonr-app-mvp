@@ -6,13 +6,15 @@ part of 'elements.dart';
 
 NeumorphicAppBar logoAppBar({Color setColor}) {
   return NeumorphicAppBar(
-    title: NeumorphicText("Sonr",
-        style: NeumorphicStyle(
-          depth: 4, //customize depth here
-          color: Colors.white, //customize color here
-        ),
-        textStyle: neuLogoTextStyle(),
-        textAlign: TextAlign.center),
+    title: Center(
+        child: NeumorphicText(
+      "Sonr",
+      style: NeumorphicStyle(
+        depth: 4, //customize depth here
+        color: Colors.white, //customize color here
+      ),
+      textStyle: neuLogoTextStyle(),
+    )),
   );
 }
 
@@ -20,14 +22,14 @@ NeumorphicAppBar titleAppBar(
   String title,
 ) {
   return NeumorphicAppBar(
-    title: NeumorphicText(title,
-        style: NeumorphicStyle(
-          depth: 2, //customize depth here
-          color: Colors.white, //customize color here
-        ),
-        textStyle: neuBarTitleTextStyle(),
-        textAlign: TextAlign.center),
-    leading: Container(),
+    title: Center(
+        child: NeumorphicText(title,
+            style: NeumorphicStyle(
+              depth: 2, //customize depth here
+              color: Colors.white, //customize color here
+            ),
+            textStyle: neuBarTitleTextStyle(),
+            textAlign: TextAlign.center)),
   );
 }
 
@@ -47,7 +49,14 @@ NeumorphicAppBar actionSingleAppBar(
 
   // Create App Bar
   return NeumorphicAppBar(
-    title: Text(title),
+    title: Center(
+        child: NeumorphicText(title,
+            style: NeumorphicStyle(
+              depth: 2, //customize depth here
+              color: Colors.white, //customize color here
+            ),
+            textStyle: neuBarTitleTextStyle(),
+            textAlign: TextAlign.center)),
     leading: getAppBarButton(context, leadingIcon, onLeadingPressed),
     actions: [getAppBarButton(context, actionIcon, onActionPressed)],
   );
@@ -67,7 +76,8 @@ NeumorphicAppBar exitAppBar(
 
   // Create App Bar
   return NeumorphicAppBar(
-      title: Text(title), leading: getAppBarButton(context, icon, onPressed));
+      title: Center(child: Text(title)),
+      leading: getAppBarButton(context, icon, onPressed));
 }
 
 _defaultOnPressed(BuildContext context) {
