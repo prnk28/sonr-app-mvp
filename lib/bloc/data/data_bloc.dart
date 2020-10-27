@@ -188,7 +188,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       add(PeerClearedQueue(TrafficDirection.Incoming));
     } else {
       progress.update(currProgress);
-      yield PeerReceiveInProgress();
+      yield PeerReceiveInProgress(currentFile.metadata);
     }
   }
 

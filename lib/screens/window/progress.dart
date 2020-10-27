@@ -1,17 +1,123 @@
 part of 'window.dart';
 
-Widget buildProgressView(BuildContext context) {
-  return BlocBuilder<ProgressCubit, double>(
-      cubit: context.getCubit(CubitType.Progress),
-      builder: (context, state) {
-        // State as Text
-        String percent = (state * 100).round().toString();
+Widget buildProgressView(Metadata meta) {
+  return IconLiquidFill(iconData: iconDataFromMetadata(meta));
+}
 
-        // Set Progress Indicator
-        return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          NeumorphicProgress(percent: state),
-          Divider(),
-          Text(percent)
-        ]);
-      });
+class IconLiquidFill extends StatefulWidget {
+  // Icon to Fill Up
+  final IconData iconData;
+
+  // By default it is set to 2 seconds.
+  final Duration waveDuration;
+
+  /// By default it is set to 250
+  final double boxHeight;
+
+  /// By default it is set to 400
+  final double boxWidth;
+
+  /// By default it is set to black color
+  final Color boxBackgroundColor;
+
+  /// By default it is set to blueAccent color
+  final Color waveColor;
+
+  IconLiquidFill({
+    Key key,
+    @required this.iconData,
+    this.waveDuration = const Duration(seconds: 2),
+    this.boxHeight = 250,
+    this.boxWidth = 400,
+    this.boxBackgroundColor = Colors.black,
+    this.waveColor = Colors.blueAccent,
+  })  : assert(null != iconData),
+        assert(null != waveDuration),
+        assert(null != boxHeight),
+        assert(null != boxWidth),
+        assert(null != boxBackgroundColor),
+        assert(null != waveColor),
+        super(key: key);
+
+  @override
+  _IconLiquidFillState createState() => _IconLiquidFillState();
+}
+
+class _IconLiquidFillState extends State<IconLiquidFill>
+    with TickerProviderStateMixin {
+  final _iconKey = GlobalKey();
+
+  AnimationController _waveController;
+  double currentProgress;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _waveController = AnimationController(
+      vsync: this,
+      duration: widget.waveDuration,
+    );
+
+    if (currentProgress == 1) {
+      // Stop the repeating wave when the load has completed
+      _waveController.stop();
+    }
+
+    _waveController.repeat();
+  }
+
+  @override
+  void dispose() {
+    _waveController?.stop();
+    _waveController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProgressCubit, double>(
+        cubit: context.getCubit(CubitType.Progress),
+        builder: (context, state) {
+          return Stack(
+            children: <Widget>[
+              SizedBox(
+                height: widget.boxHeight,
+                width: widget.boxWidth,
+                child: AnimatedBuilder(
+                  animation: _waveController,
+                  builder: (BuildContext context, Widget child) {
+                    return CustomPaint(
+                      painter: WavePainter(
+                        iconKey: _iconKey,
+                        waveAnimation: _waveController,
+                        percent: state,
+                        boxHeight: widget.boxHeight,
+                        waveColor: widget.waveColor,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: widget.boxHeight,
+                width: widget.boxWidth,
+                child: ShaderMask(
+                  blendMode: BlendMode.srcOut,
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: [widget.boxBackgroundColor],
+                    stops: [0.0],
+                  ).createShader(bounds),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Icon(widget.iconData, key: _iconKey, size: 140),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        });
+  }
 }

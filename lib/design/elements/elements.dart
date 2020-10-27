@@ -53,6 +53,29 @@ AlertDialog detailDeleteDialog({Function() onCancel, Function() onDelete}) {
   );
 }
 
+IconData iconDataFromMetadata(Metadata metadata) {
+  switch (metadata.type) {
+    case FileType.Audio:
+      return Icons.audiotrack;
+      break;
+    case FileType.Image:
+      return Icons.image;
+      break;
+    case FileType.Unknown:
+      return Icons.device_unknown;
+      break;
+    case FileType.Video:
+      return Icons.video_collection;
+      break;
+    case FileType.Word:
+      return Icons.sort_by_alpha;
+      break;
+    default:
+      return Icons.storage;
+      break;
+  }
+}
+
 showRedToast(FToast fToast, String message, IconData icon) {
   Widget toast = Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),

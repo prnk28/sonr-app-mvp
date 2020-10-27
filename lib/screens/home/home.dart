@@ -95,7 +95,7 @@ class _HomeView extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return Popup.showImage(context, state);
-                });
+                  });
             }
           },
         ),
@@ -109,9 +109,7 @@ class _HomeView extends StatelessWidget {
                   isDismissible: false,
                   context: context,
                   builder: (context) {
-                    return Window.showTransferring(
-                      context,
-                    );
+                    return Window.showTransferring(context, state);
                   });
             } else if (state is UserViewingFileInProgress) {
               // Push to Detail Screen

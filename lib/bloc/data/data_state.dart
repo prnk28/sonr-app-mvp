@@ -31,7 +31,8 @@ class PeerSendInProgress extends DataState {
 
 // Receiving Data from Peer
 class PeerReceiveInProgress extends DataState {
-  PeerReceiveInProgress();
+  final Metadata metadata;
+  PeerReceiveInProgress(this.metadata);
 }
 
 // ***************** //

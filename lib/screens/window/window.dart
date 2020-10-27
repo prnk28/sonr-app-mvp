@@ -4,6 +4,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 
 part 'auth.dart';
 part 'progress.dart';
+
 class Window {
   static Widget showAuth(BuildContext context, NodeRequestInitial state) {
     return Container(
@@ -12,10 +13,11 @@ class Window {
         child: buildAuthenticationView(context, state));
   }
 
-  static Widget showTransferring(BuildContext context) {
+  static Widget showTransferring(
+      BuildContext context, PeerReceiveInProgress state) {
     return Container(
         decoration: windowDecoration(context),
         height: screenSize.height / 3,
-        child: buildProgressView(context));
+        child: buildProgressView(state.metadata));
   }
 }
