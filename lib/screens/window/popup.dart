@@ -21,7 +21,20 @@ class Popup {
                 // Some Space
                 Padding(padding: EdgeInsets.all(15)),
 
-                Image.file(state.file.raw)
+                Image.file(state.file.raw),
+
+                FlatButton(
+                  onPressed: () {
+                    // Move to Page
+                    context
+                        .getBloc(BlocType.Data)
+                        .add(UserGetFile(meta: state.file.metadata));
+
+                    // Pop View
+                    Navigator.pop(context);
+                  },
+                  child: Text("Go There"),
+                )
               ],
             )));
   }

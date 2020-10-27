@@ -332,6 +332,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     int count = await metadataProvider.delete(event.meta.id);
     log.i(count.toString() + "Files Removed from database");
 
+    // Close Provider
+    await metadataProvider.close();
+
     // Remove from LocalData
     var ref = File(event.meta.path);
     await ref.delete();

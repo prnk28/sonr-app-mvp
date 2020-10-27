@@ -17,9 +17,6 @@ class IconLiquidFill extends StatefulWidget {
   /// By default it is set to 400
   final double boxWidth;
 
-  /// By default it is set to black color
-  final Color boxBackgroundColor;
-
   /// By default it is set to blueAccent color
   final Color waveColor;
 
@@ -29,13 +26,11 @@ class IconLiquidFill extends StatefulWidget {
     this.waveDuration = const Duration(seconds: 2),
     this.boxHeight = 250,
     this.boxWidth = 400,
-    this.boxBackgroundColor = Colors.black,
     this.waveColor = Colors.blueAccent,
   })  : assert(null != iconData),
         assert(null != waveDuration),
         assert(null != boxHeight),
         assert(null != boxWidth),
-        assert(null != boxBackgroundColor),
         assert(null != waveColor),
         super(key: key);
 
@@ -105,13 +100,15 @@ class _IconLiquidFillState extends State<IconLiquidFill>
                 child: ShaderMask(
                   blendMode: BlendMode.srcOut,
                   shaderCallback: (bounds) => LinearGradient(
-                    colors: [widget.boxBackgroundColor],
+                    colors: [NeumorphicTheme.baseColor(context)],
                     stops: [0.0],
                   ).createShader(bounds),
                   child: Container(
-                    color: Colors.transparent,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                    ),
                     child: Center(
-                      child: Icon(widget.iconData, key: _iconKey, size: 140),
+                      child: Icon(widget.iconData, key: _iconKey, size: 225),
                     ),
                   ),
                 ),

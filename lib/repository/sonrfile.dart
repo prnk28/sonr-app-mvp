@@ -82,7 +82,8 @@ class SonrFile {
     Directory localDir = await getApplicationDocumentsDirectory();
 
     // Set Path
-    this.metadata.path = localDir.path + folder + this.metadata.name;
+    this.metadata.path =
+        localDir.path + folder + uuid.v1() + "_" + this.metadata.name;
     this.metadata.received = DateTime.now();
     this.metadata.owner = owner.profile;
 
@@ -97,6 +98,9 @@ class SonrFile {
     // Save to File
     this.raw = await new File(this.metadata.path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+
+    // Close Provider
+    await metadataProvider.close();
   }
 
   setPreview() async {

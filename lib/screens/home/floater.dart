@@ -41,7 +41,7 @@ class FloaterButton extends StatelessWidget {
         Bubble(
           title: "Contact",
           iconColor: Colors.white,
-          bubbleColor: Colors.blue,
+          bubbleColor: Colors.brown[300],
           icon: Icons.person,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {

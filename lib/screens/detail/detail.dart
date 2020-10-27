@@ -46,6 +46,9 @@ class DetailScreen extends StatelessWidget {
           // Listen by State
           listener: (context, state) {
         if (state is UserDeletedFileSuccess) {
+          // Change Status
+          context.getBloc(BlocType.User).add(NodeAvailable());
+
           // Push to Home
           Navigator.pushReplacementNamed(
             context,
