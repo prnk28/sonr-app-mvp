@@ -81,9 +81,12 @@ class _DetailView extends StatelessWidget {
       },
           // Build By State
           builder: (context, state) {
+        // * User Opened File
         if (state is UserViewingFileSuccess) {
           return _getViewForFileType(context, state.bytes, state.metadata);
-        } else if (state is UserViewingFileFailure) {
+        }
+        // ! User Couldnt open file
+        else if (state is UserViewingFileFailure) {
           // Show Error Dialog
           showDialog(
             context: context,

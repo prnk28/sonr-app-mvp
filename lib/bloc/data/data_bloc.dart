@@ -211,10 +211,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       await currentFile.save();
 
       // Get Data
-      var fileRaw = new File(currentFile.metadata.path);
+      var file = SonrFile.fromSaved(currentFile.metadata);
 
       // Yield Complete
-      user.add(NodeCompleted(file: fileRaw, metadata: currentFile.metadata));
+      user.add(NodeCompleted(file: file));
 
       // Clear Incoming
       add(PeerClearedQueue(TrafficDirection.Incoming));
@@ -342,7 +342,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** UserLoadFile Event **
 // ************************
   Stream<DataState> _mapUserLoadFileState(UserLoadFile event) async* {
-    // Get Bytes
+    // Get Bytes from SonrFile
     Uint8List bytes = await event.file.getBytes();
 
     // Check Bytes

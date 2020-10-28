@@ -134,9 +134,8 @@ class NodeReceiveInProgress extends UserState {
 
 // User has completed transfer
 class NodeReceiveSuccess extends UserState {
-  final File file;
-  final Metadata metadata;
-  NodeReceiveSuccess({this.file, this.metadata});
+  final SonrFile file;
+  NodeReceiveSuccess(this.file);
 }
 
 // User has failed to transfer

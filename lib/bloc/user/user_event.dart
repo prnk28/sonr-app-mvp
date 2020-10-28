@@ -114,10 +114,8 @@ class NodeReceived extends UserEvent {
 
 // User/Peer have completed transfer
 class NodeCompleted extends UserEvent {
-  final File file;
-  final Metadata metadata;
-
-  const NodeCompleted({this.file, this.metadata});
+  final SonrFile file;
+  const NodeCompleted({this.file});
 }
 
 // [User] Rejected Offer

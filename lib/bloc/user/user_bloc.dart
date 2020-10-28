@@ -76,6 +76,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+  void dispose() {
+    data.close();
+    signal.close();
+  }
+
 // ************************
 // ** Profile Management **
 // ************************
@@ -360,7 +365,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield NodeTransferSuccess();
     } else {
       // Change State
-      yield NodeReceiveSuccess(file: event.file, metadata: event.metadata);
+      yield NodeReceiveSuccess(event.file);
     }
   }
 }
