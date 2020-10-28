@@ -84,10 +84,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Check if Block Complete
         if (currentFile.isBlockComplete()) {
           // Save Block
-          currentFile.saveBlock().then(() {
-            // Request Sender next block
-            _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
-          });
+          currentFile.saveBlock();
+
+          // Request Sender next block
+          _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
         }
 
         // Check if File Complete
@@ -250,7 +250,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // *************************
   Stream<DataState> _mapPeerSentChunkState(UserSendingBlock event) async* {
     // Loop until block complete
-    while (!currentFile.isBlockComplete()) {
+    for (int i = 1; i < currentFile.blockRemainingChunks; i++) {
       // Get Chunk
       var chunk = await currentFile.getChunk();
 
@@ -261,10 +261,6 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
         // Update Progress
         progress.update(currentFile.progress);
-      }
-      // Returns null if no chunk
-      else {
-        break;
       }
     }
   }

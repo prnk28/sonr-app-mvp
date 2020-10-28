@@ -24,6 +24,7 @@ class SonrFile {
   int blockRemainingChunks;
   int blocksRemaining;
   int currentChunkNum;
+  int currentChunkInBlock;
   double progress;
 
   // Transmission
@@ -45,6 +46,7 @@ class SonrFile {
 
     // Set Progress Variables
     this.currentChunkNum = 0;
+    this.currentChunkInBlock = 0;
     this.totalRemainingChunks = this.metadata.chunksTotal;
     this.blocksRemaining = this.metadata.blocksTotal;
     this.blockRemainingChunks = min(totalRemainingChunks, CHUNKS_PER_ACK);
@@ -141,12 +143,9 @@ class SonrFile {
   }
 
   // ** Add current block to File and reset ** //
-  saveBlock() async {
+  saveBlock() {
     // Add to Sink
     _sink.add(_currentBlock);
-
-    // Wait for File to accept data
-    await _sink.flush();
 
     // Reset Current Block
     _currentBlock.clear();
@@ -164,16 +163,19 @@ class SonrFile {
   }
 
   shiftBlock() {
-    // Get Total Blocks
-    var totalBlocks = this.metadata.blocksTotal;
-
     // Update Blocks Remaining
     if (this.isBlockComplete()) {
-      this.blocksRemaining = totalBlocks - 1;
+      this.blocksRemaining = this.metadata.blocksTotal - 1;
     }
 
-    // Reset Remaining Blocks
+    // Reset Block Variables
+    this.currentChunkInBlock = 0;
     this.blockRemainingChunks = min(totalRemainingChunks, CHUNKS_PER_ACK);
+
+    // Logging
+    print("Blocks Remaining: " + this.blocksRemaining.toString());
+    print("Chunks in Block: " + this.blockRemainingChunks.toString());
+    print("Total Progress: " + (this.progress * 100).toString() + "%");
   }
 
   // ** Update Progress ** //
@@ -181,10 +183,11 @@ class SonrFile {
     // Increase Current Chunk
     var totalChunks = this.metadata.chunksTotal;
     this.currentChunkNum += 1;
+    this.currentChunkInBlock += 1;
 
     // Find Block Remaining in Chunk
     this.blockRemainingChunks =
-        this.blockRemainingChunks - this.currentChunkNum;
+        this.blockRemainingChunks - this.currentChunkInBlock;
 
     // Find Total Remaining
     this.totalRemainingChunks = totalChunks - this.currentChunkNum;
@@ -217,7 +220,7 @@ class SonrFile {
 
   // ** Check if File Complete **
   bool isComplete() {
-    return (this.totalRemainingChunks == 0);
+    return (this.totalRemainingChunks == 0 && this.blocksRemaining == 0);
   }
 
   // ** Check if Block Complete **
