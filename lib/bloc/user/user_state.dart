@@ -31,12 +31,6 @@ class NodeAvailableInProgress extends UserState {
   NodeAvailableInProgress(this.userNode);
 }
 
-class NodeAvailableSuccess extends UserState {
-  final Node userNode;
-
-  NodeAvailableSuccess(this.userNode);
-}
-
 // **************************************
 // ** Searching for Available Devices ***
 // **************************************
@@ -45,20 +39,6 @@ class NodeSearchInProgress extends UserState {
   final Node userNode;
 
   NodeSearchInProgress(this.userNode);
-}
-
-// Found Neighbors
-class NodeSearchSuccess extends UserState {
-  final Node userNode;
-  final List<Node> activePeers;
-
-  NodeSearchSuccess(this.userNode, this.activePeers);
-}
-
-// No Neighbors
-class NodeSearchFailure extends UserState {
-  final Node userNode;
-  NodeSearchFailure(this.userNode);
 }
 
 // *********************************
@@ -86,7 +66,10 @@ class NodeRequestSuccess extends UserState {
 }
 
 // [Peer] has rejected offer
-class NodeRequestFailure extends UserState {}
+class NodeRequestFailure extends UserState {
+  final Node rejecter;
+  NodeRequestFailure(this.rejecter);
+}
 
 // **************************
 // ** Transferring a File ***
@@ -101,13 +84,13 @@ class NodeTransferInitial extends UserState {
 // User sending chunks
 class NodeTransferInProgress extends UserState {
   final Node match;
-
   NodeTransferInProgress(this.match);
 }
 
 // User has completed transfer
 class NodeTransferSuccess extends UserState {
-  NodeTransferSuccess();
+  final Node match;
+  NodeTransferSuccess(this.match);
 }
 
 // User has failed to transfer

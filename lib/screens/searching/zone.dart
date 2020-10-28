@@ -6,45 +6,32 @@ part of 'searching.dart';
 class ZoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserBloc, UserState>(listenWhen: (previous, current) {
-      if (current is NodeTransferSuccess) {
-        return true;
-      }
-      return false;
-    }, listener: (context, state) {
-      if (state is NodeTransferSuccess) {
-        Navigator.pushReplacementNamed(context, "/home");
-      }
-    }, buildWhen: (past, curr) {
-      if (curr is NodeSearchSuccess) {
-        return true;
-      } else {
-        return false;
-      }
-    }, builder: (context, state) {
-      if (state is NodeSearchSuccess) {
-        // Initialize Widget List
-        List<Widget> stackWidgets = new List<Widget>();
+    return BlocBuilder<ActivePeersCubit, List<Node>>(
+        cubit: context.getCubit(CubitType.ActivePeers),
+        builder: (context, state) {
+          if (state.length > 0) {
+            // Initialize Widget List
+            List<Widget> stackWidgets = new List<Widget>();
 
-        // Init Stack Vars
-        int total = state.activePeers.length + 1;
-        int current = 0;
-        double mean = 1.0 / total;
+            // Init Stack Vars
+            int total = state.length + 1;
+            int current = 0;
+            double mean = 1.0 / total;
 
-        // Create Bubbles
-        for (Node peer in state.activePeers) {
-          // Increase Count
-          current += 1;
+            // Create Bubbles
+            for (Node peer in state) {
+              // Increase Count
+              current += 1;
 
-          // Place Bubble
-          Widget bubble = new PeerBubble(current * mean, peer);
-          stackWidgets.add(bubble);
-        }
-        // Return View
-        return Stack(children: stackWidgets);
-      }
-      return Container();
-    });
+              // Place Bubble
+              Widget bubble = new PeerBubble(current * mean, peer);
+              stackWidgets.add(bubble);
+            }
+            // Return View
+            return Stack(children: stackWidgets);
+          }
+          return Container();
+        });
   }
 }
 

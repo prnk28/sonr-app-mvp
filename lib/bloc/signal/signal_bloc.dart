@@ -51,7 +51,7 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       Metadata meta = Metadata.fromMap(offer['metadata']);
 
       // Handle Offer
-      user.add(NodeRequested(from, offer, meta));
+      user.add(PeerRequested(from, offer, meta));
     });
 
     // ** ======================================= ** //
@@ -61,13 +61,16 @@ class SignalBloc extends Bloc<SignalEvent, SignalState> {
       dynamic answer = data[1];
 
       // Handle Answer from Peer
-      user.add(NodeAuthorized(from, answer));
+      user.add(PeerAuthorized(from, answer));
     });
 
     // ** ======================================= ** //
     socket.on('DECLINED', (data) {
+      // Get Objects
+      Node from = Node.fromMap(data);
+
       // Handle Rejection
-      user.add(NodeRejected());
+      user.add(PeerRejected(from));
     });
 
     // ** ======================================= ** //

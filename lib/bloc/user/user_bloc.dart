@@ -16,10 +16,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Emitter emitter;
   Node node;
   RTCSession session;
+  ActivePeersCubit activePeers;
 
   UserBloc() : super(null) {
     circle = new Circle();
     session = new RTCSession();
+    activePeers = new ActivePeersCubit();
   }
 
   @override
@@ -37,8 +39,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield* _mapGraphUpdatedState(event);
     } else if (event is GraphExited) {
       yield* _mapGraphExitedState(event);
-    } else if (event is GraphZonedPeers) {
-      yield* _mapGraphZonedPeersState(event);
 
       // Node Emitter - Status
     } else if (event is NodeSearch) {
@@ -55,15 +55,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       // Node - Sender
     } else if (event is NodeOffered) {
       yield* _mapNodeOfferedState(event);
-    } else if (event is NodeAuthorized) {
+    } else if (event is PeerAuthorized) {
       yield* _mapNodeAuthorizedState(event);
-    } else if (event is NodeRejected) {
+    } else if (event is PeerRejected) {
       yield* _mapNodeRejectedState(event);
     } else if (event is NodeTransmitted) {
       yield* _mapNodeTransmittedState(event);
 
       // Node - Receiver
-    } else if (event is NodeRequested) {
+    } else if (event is PeerRequested) {
       yield* _mapNodeRequestedState(event);
     } else if (event is NodeAccepted) {
       yield* _mapNodeAcceptedState(event);
@@ -139,11 +139,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       circle.updateGraph(node, event.from);
 
       // Update Active Peers
-      add(GraphZonedPeers());
+      var peers = circle.getZonedPeers(node);
+      activePeers.update(peers);
     }
     // If User is just active
     else if (node.status == Status.Available) {
-      yield NodeAvailableSuccess(node);
+      yield NodeAvailableInProgress(node);
     }
   }
 
@@ -155,25 +156,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       circle.exitGraph(event.from);
 
       // Update Active Peers
-      add(GraphZonedPeers());
-      yield NodeSearchInProgress(node);
+      var peers = circle.getZonedPeers(node);
+      activePeers.update(peers);
     }
     // If User is just active
     else if (node.status == Status.Available) {
-      yield NodeAvailableSuccess(node);
-    }
-  }
-
-  // Retrieve All Peers by Zone
-  Stream<UserState> _mapGraphZonedPeersState(GraphZonedPeers event) async* {
-    // Check User Status
-    if (node.status == Status.Searching) {
-      // Yield Active Peers
-      yield NodeSearchSuccess(node, circle.getZonedPeers(node));
-    }
-    // If User is just active
-    else if (node.status == Status.Available) {
-      yield NodeAvailableSuccess(node);
+      yield NodeAvailableInProgress(node);
     }
   }
 
@@ -197,7 +185,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     // Update Peers
-    add(GraphZonedPeers());
+    var peers = circle.getZonedPeers(node);
+    activePeers.update(peers);
     yield NodeSearchInProgress(node);
   }
 
@@ -218,7 +207,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     // Update Peers
-    add(GraphZonedPeers());
     yield NodeAvailableInProgress(node);
   }
 
@@ -278,7 +266,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   // [Peer] Authorized Offer
-  Stream<UserState> _mapNodeAuthorizedState(NodeAuthorized event) async* {
+  Stream<UserState> _mapNodeAuthorizedState(PeerAuthorized event) async* {
     // Get Match Node
     var description = event.answer['description'];
 
@@ -290,7 +278,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     // DataBloc is Waiting for this State
-    data.add(PeerSendingChunk());
+    data.add(UserSendingBlock());
     yield NodeTransferInitial(event.match);
   }
 
@@ -301,15 +289,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   // [Peer] Rejected Offer
-  Stream<UserState> _mapNodeRejectedState(NodeRejected event) async* {
-    yield NodeRequestFailure();
+  Stream<UserState> _mapNodeRejectedState(PeerRejected event) async* {
+    yield NodeRequestFailure(event.from);
   }
 
 // *****************************
 // ** Node Emitter - Receiver **
 // *****************************
   // [Peer] Has Sent Request
-  Stream<UserState> _mapNodeRequestedState(NodeRequested event) async* {
+  Stream<UserState> _mapNodeRequestedState(PeerRequested event) async* {
     // Change State
     yield NodeRequestInitial(event.from, event.offer, event.metadata);
   }
@@ -361,8 +349,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
     // Set to Search if Applicable
     if (event.file == null) {
-// Change State
-      yield NodeTransferSuccess();
+      // Change State
+      yield NodeTransferSuccess(event.receiver);
     } else {
       // Change State
       yield NodeReceiveSuccess(event.file);

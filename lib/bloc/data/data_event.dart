@@ -21,24 +21,23 @@ class ProgressCubit extends Cubit<double> {
 }
 
 // Send Transfer over DataChannel to Peer
-class PeerSendingChunk extends DataEvent {
-  const PeerSendingChunk();
+class UserSendingBlock extends DataEvent {
+  const UserSendingBlock();
 }
 
-// Add File Chunk from Transfer
-class PeerAddedChunk extends DataEvent {
-  final Uint8List chunk;
-  const PeerAddedChunk(this.chunk);
+// Complete File Received
+class UserReceivedFile extends DataEvent {
+  const UserReceivedFile();
 }
 
 // User added file to queue
-class PeerQueuedFile extends DataEvent {
+class UserQueuedFile extends DataEvent {
   final Metadata metadata;
   final File rawFile;
   final Node sender;
   final TrafficDirection direction;
 
-  PeerQueuedFile(this.direction, {this.sender, this.metadata, this.rawFile});
+  UserQueuedFile(this.direction, {this.sender, this.metadata, this.rawFile});
 }
 
 // Queue has been completed
@@ -48,10 +47,10 @@ class FileQueuedComplete extends DataEvent {
 }
 
 // User Cleared Queue
-class PeerClearedQueue extends DataEvent {
+class FileQueueCleared extends DataEvent {
   final String matchId;
   final TrafficDirection direction;
-  PeerClearedQueue(this.direction, {this.matchId});
+  FileQueueCleared(this.direction, {this.matchId});
 }
 
 // Search for a file

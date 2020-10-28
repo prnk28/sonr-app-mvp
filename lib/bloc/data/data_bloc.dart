@@ -25,6 +25,8 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
   // References
   final UserBloc user;
+  Node _receiver;
+  Node _sender;
 
   // Constructers
   DataBloc(this.user) : super(null) {
@@ -41,17 +43,25 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     _userSub = user.listen((UserState state) {
       // Queue Incoming Transfer
       if (state is NodeReceiveInitial) {
+        // Reference Sender and Receiver
+        _sender = state.match;
+        _receiver = user.node;
+
         // Queue Incoming File
-        add(PeerQueuedFile(TrafficDirection.Incoming,
-            metadata: state.metadata, sender: state.match));
+        add(UserQueuedFile(TrafficDirection.Incoming,
+            metadata: state.metadata, sender: _sender));
       }
       // Begin Outgoing Transfer
       else if (state is NodeTransferInitial) {
+        // Reference Sender and Receiver
+        _sender = user.node;
+        _receiver = state.match;
+
         // Send First Chunk
-        add(PeerSendingChunk());
+        add(UserSendingBlock());
 
         // Change User State
-        user.add(NodeTransmitted(currentFile.owner));
+        user.add(NodeTransmitted(_receiver));
       }
     });
 
@@ -63,17 +73,37 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
     // Handle DataChannel Message
     _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
-      // Check if Binary
+      // ** Binary Message ** //
       if (message.isBinary) {
-        add(PeerAddedChunk(message.binary));
-      } else {
+        // Add chunk to currentFile
+        currentFile.addChunk(message.binary);
+
+        // Update Progress
+        progress.update(currentFile.progress);
+
+        // Check if Block Complete
+        if (currentFile.isBlockComplete()) {
+          // Save Block
+          currentFile.saveBlock().then(() {
+            // Request Sender next block
+            _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
+          });
+        }
+
+        // Check if File Complete
+        if (currentFile.isComplete()) {
+          add(UserReceivedFile());
+        }
+      }
+      // ** Text Message ** //
+      else {
         // Sending Finished
         if (message.text == "SEND_COMPLETE") {
           // Change user State
-          user.add(NodeCompleted());
+          user.add(NodeCompleted(receiver: _receiver));
 
           // Clear Outgoing
-          add(PeerClearedQueue(TrafficDirection.Outgoing));
+          add(FileQueueCleared(TrafficDirection.Outgoing));
         }
         // Send Chunk
         else if (message.text == "NEXT_BLOCK") {
@@ -81,7 +111,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
           currentFile.shiftBlock();
 
           // Send Block
-          add(PeerSendingChunk());
+          add(UserSendingBlock());
         }
       }
     };
@@ -97,15 +127,15 @@ class DataBloc extends Bloc<DataEvent, DataState> {
   Stream<DataState> mapEventToState(
     DataEvent event,
   ) async* {
-    if (event is PeerQueuedFile) {
+    if (event is UserQueuedFile) {
       yield* _mapPeerQueuedFileState(event);
     } else if (event is FileQueuedComplete) {
       yield* _mapFileQueuedCompleteState(event);
-    } else if (event is PeerClearedQueue) {
+    } else if (event is FileQueueCleared) {
       yield* _mapPeerClearedQueueState(event);
-    } else if (event is PeerAddedChunk) {
-      yield* _mapPeerAddedChunkState(event);
-    } else if (event is PeerSendingChunk) {
+    } else if (event is UserReceivedFile) {
+      yield* _mapUserReceivedFileState(event);
+    } else if (event is UserSendingBlock) {
       yield* _mapPeerSentChunkState(event);
     } else if (event is UserSearchedFile) {
       yield* _mapFindFileState(event);
@@ -123,7 +153,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **************************
 // ** PeerQueuedFile Event **
 // **************************
-  Stream<DataState> _mapPeerQueuedFileState(PeerQueuedFile event) async* {
+  Stream<DataState> _mapPeerQueuedFileState(UserQueuedFile event) async* {
     // Queue by direction
     if (event.direction == TrafficDirection.Incoming) {
       // Create SonrFile
@@ -195,46 +225,31 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     }
   }
 
-// **************************
-// ** PeerAddedChunk Event **
-// **************************
-  Stream<DataState> _mapPeerAddedChunkState(PeerAddedChunk event) async* {
-    // Add Chunk to SonrFile
-    await currentFile.addChunk(event.chunk);
+// ****************************
+// ** UserReceivedFile Event **
+// ****************************
+  Stream<DataState> _mapUserReceivedFileState(UserReceivedFile event) async* {
+    // Notify Sender
+    _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
-    // File Complete
-    if (currentFile.isComplete()) {
-      // Notify Sender
-      _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
+    // Save File
+    await currentFile.saveFile();
 
-      // Save File
-      await currentFile.save();
+    // Get Data
+    var file = SonrFile.fromSaved(currentFile.metadata);
 
-      // Get Data
-      var file = SonrFile.fromSaved(currentFile.metadata);
+    // Yield Complete
+    user.add(NodeCompleted(file: file));
 
-      // Yield Complete
-      user.add(NodeCompleted(file: file));
-
-      // Clear Incoming
-      add(PeerClearedQueue(TrafficDirection.Incoming));
-    }
-    // Block Complete
-    else if (currentFile.isBlockComplete()) {
-      // Request Sender
-      _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
-    }
-    // File In Progress
-    else {
-      // Update Progress
-      progress.update(currentFile.progress);
-    }
+    // Clear Incoming
+    add(FileQueueCleared(TrafficDirection.Incoming));
   }
 
 // *************************
 // ** PeerSentChunk Event **
 // *************************
-  Stream<DataState> _mapPeerSentChunkState(PeerSendingChunk event) async* {
+  Stream<DataState> _mapPeerSentChunkState(UserSendingBlock event) async* {
+    // Loop until block complete
     while (!currentFile.isBlockComplete()) {
       // Get Chunk
       var chunk = await currentFile.getChunk();
@@ -246,7 +261,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
         // Update Progress
         progress.update(currentFile.progress);
-      } else {
+      }
+      // Returns null if no chunk
+      else {
         break;
       }
     }
@@ -255,7 +272,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **************************
 // ** PeerClearedQueue Event **
 // **************************
-  Stream<DataState> _mapPeerClearedQueueState(PeerClearedQueue event) async* {
+  Stream<DataState> _mapPeerClearedQueueState(FileQueueCleared event) async* {
     // Clear by Direction
     if (event.direction == TrafficDirection.Incoming) {
       // Clear All

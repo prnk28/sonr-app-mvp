@@ -28,7 +28,7 @@ class FloaterButton extends StatelessWidget {
                 await picker.getImage(source: ImageSource.camera);
 
             // Queue File
-            context.getBloc(BlocType.Data).add(PeerQueuedFile(
+            context.getBloc(BlocType.Data).add(UserQueuedFile(
                 TrafficDirection.Outgoing,
                 rawFile: File(pickedFile.path)));
 
@@ -52,7 +52,7 @@ class FloaterButton extends StatelessWidget {
             // Queue File
             context
                 .getBloc(BlocType.Data)
-                .add(PeerQueuedFile(TrafficDirection.Outgoing));
+                .add(UserQueuedFile(TrafficDirection.Outgoing));
 
             // Wait for Animation to Complete
             animationController.reverse();

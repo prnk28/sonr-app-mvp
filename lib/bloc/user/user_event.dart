@@ -34,8 +34,15 @@ class GraphExited extends UserEvent {
   GraphExited(this.from);
 }
 
-// Retrieve All Peers by Zone
-class GraphZonedPeers extends UserEvent {}
+// Retrieve All Active Peers
+class ActivePeersCubit extends Cubit<List<Node>> {
+  ActivePeersCubit() : super(null);
+
+  void update(List<Node> newValue) {
+    // Change Value
+    emit(newValue);
+  }
+}
 
 // ** === Node Management === ** //
 // [User] Status has Changed
@@ -53,6 +60,7 @@ class NodeBusy extends UserEvent {
   NodeBusy();
 }
 
+// [User] Cancel Transfer
 class NodeCancel extends UserEvent {
   final Node match;
   NodeCancel(this.match);
@@ -74,12 +82,12 @@ class NodeOffered extends UserEvent {
 }
 
 // [Peer] A Request Has Been Given
-class NodeRequested extends UserEvent {
+class PeerRequested extends UserEvent {
   final Node from;
   final dynamic offer;
   final Metadata metadata;
 
-  const NodeRequested(this.from, this.offer, this.metadata);
+  const PeerRequested(this.from, this.offer, this.metadata);
 }
 
 // [User] Accepted Offer
@@ -92,11 +100,11 @@ class NodeAccepted extends UserEvent {
 }
 
 // [Peer] Authorized Offer Request
-class NodeAuthorized extends UserEvent {
+class PeerAuthorized extends UserEvent {
   final Node match;
   final dynamic answer;
 
-  const NodeAuthorized(this.match, this.answer);
+  const PeerAuthorized(this.match, this.answer);
 }
 
 // [User] Is receving data chunks
@@ -114,8 +122,9 @@ class NodeReceived extends UserEvent {
 
 // User/Peer have completed transfer
 class NodeCompleted extends UserEvent {
+  final Node receiver;
   final SonrFile file;
-  const NodeCompleted({this.file});
+  const NodeCompleted({this.file, this.receiver});
 }
 
 // [User] Rejected Offer
@@ -125,6 +134,7 @@ class NodeDeclined extends UserEvent {
 }
 
 // [Peer] Rejected the Offer
-class NodeRejected extends UserEvent {
-  const NodeRejected();
+class PeerRejected extends UserEvent {
+  final Node from;
+  const PeerRejected(this.from);
 }

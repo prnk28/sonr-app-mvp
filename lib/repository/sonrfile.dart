@@ -27,8 +27,10 @@ class SonrFile {
   double progress;
 
   // Transmission
+
   IOSink _sink;
   ChunkedStreamIterator<int> _reader;
+  List<int> _currentBlock;
 
   // ** Constructer ** //
   SonrFile(this.owner, {this.metadata, this.raw}) {
@@ -57,21 +59,19 @@ class SonrFile {
     this.raw = new File(meta.path);
   }
 
-  // ** Chunk Received from Data Channel ** //
+  // ** Add chunk to current block ** //
   addChunk(Uint8List chunk) async {
     // Get Bytes
     var bytes = chunk.toList();
 
-    // Add to Sink
-    _sink.add(bytes);
+    // Add Bytes to Block
+    _currentBlock.addAll(bytes);
 
     // Progress Forward
     this.progress = _updateProgress();
-
-    // Wait for File to accept data
-    await _sink.flush();
   }
 
+  // ** Setup file for Transfer/Receive ** //
   initialize(Role role) async {
     // ** If Receiver **
     if (role == Role.Receiver) {
@@ -90,8 +90,9 @@ class SonrFile {
       // Create File
       await new File(this.metadata.path).create(recursive: true);
 
-      // Set Sink
+      // Set Sink and Block
       _sink = new File(this.metadata.path).openWrite();
+      _currentBlock = new List<int>();
     }
     // ** If Sender **
     else {
@@ -139,8 +140,20 @@ class SonrFile {
     }
   }
 
+  // ** Add current block to File and reset ** //
+  saveBlock() async {
+    // Add to Sink
+    _sink.add(_currentBlock);
+
+    // Wait for File to accept data
+    await _sink.flush();
+
+    // Reset Current Block
+    _currentBlock.clear();
+  }
+
   // ** Save Bytes to File ** //
-  save() async {
+  saveFile() async {
     // Save to Database
     MetadataProvider metadataProvider = new MetadataProvider();
     await metadataProvider.open();
