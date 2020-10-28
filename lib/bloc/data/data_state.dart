@@ -21,7 +21,9 @@ class PeerQueueInProgress extends DataState {
 
 // Queuing has been successful
 class PeerQueueSuccess extends DataState {
-  PeerQueueSuccess();
+  final Metadata metadata;
+  final File file;
+  PeerQueueSuccess(this.metadata, this.file);
 }
 
 // ***************** //

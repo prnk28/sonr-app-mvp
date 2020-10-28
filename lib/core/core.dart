@@ -106,3 +106,27 @@ T enumFromString<T>(String key, Iterable<T> values) => values.firstWhere(
       (v) => v != null && key == enumAsString(v),
       orElse: () => null,
     );
+
+extension FileExtension on File {
+  // ** Read Bytes from SonrFile **
+  Future<Uint8List> getBytes() async {
+    // Init
+    Uint8List bytes;
+
+    // Read Bytes
+    await this.readAsBytes().then((value) {
+      bytes = Uint8List.fromList(value);
+    })
+        // Error Reading Bytes
+        .catchError((onError) {
+      // Log
+      log.e("Error Reading Bytes");
+
+      // Return Nothing
+      return null;
+    });
+
+    // Return Bytes
+    return bytes;
+  }
+}

@@ -1,4 +1,4 @@
-// Directory Exports
+// Directory Exports}
 export "package:flutter_webrtc/webrtc.dart";
 export 'package:chunked_stream/chunked_stream.dart';
 export 'dart:typed_data';
@@ -8,10 +8,9 @@ export 'package:socket_io_client/socket_io_client.dart';
 export 'circle.dart';
 export 'emitter.dart';
 export 'session.dart';
-export 'sonrfile.dart';
 
 // * WebRTC Settings **
-// ICE RTCConfiguration Map
+
 const RTC_CONFIG = {
   'iceServers': [
     {"urls": "stun:stun.l.google.com:19302"},

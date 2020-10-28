@@ -43,6 +43,6 @@ class PeerAnswered extends SignalEvent {
 class End extends SignalEvent {
   final EndType type;
   final Node match;
-  final SonrFile file;
+  final File file;
   const End(this.type, {this.match, this.file});
 }

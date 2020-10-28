@@ -1,6 +1,8 @@
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
+import 'package:image/image.dart';
+import 'package:file/memory.dart';
 
 // File Table Fields
 final String _filesTable = "files";
@@ -14,6 +16,20 @@ final String _columnThumbnail = 'thumbnail';
 final String _columnReceived = 'received';
 final String _columnLastOpened = 'lastOpened';
 
+// ** FileType Enum ** //
+enum FileType {
+  Audio,
+  Compressed,
+  Data,
+  Image,
+  Presentation,
+  Spreadsheet,
+  Unknown,
+  Video,
+  Word
+}
+
+// ** Metadata Class ** //
 class Metadata {
   // Reference to JSON Map
   static Map fileTypes;
@@ -21,39 +37,52 @@ class Metadata {
   // -- Properties --
   int id;
   String name;
-  int size;
-  int chunksTotal;
-  int blocksTotal;
-  Uint8List thumbnail;
-
-  FileType type;
-  String path;
   Profile owner;
+  int size;
+  Uint8List thumbnail;
+  FileType type = FileType.Unknown;
+
+  // -- Generated --
+  bool isValid;
+  String path;
   DateTime received;
   DateTime lastOpened;
 
   // ** Constructer: Default ** //
-  Metadata(File file) {
-    // Calculate File Info
-    this.size = file.lengthSync();
-    this.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
-    this.blocksTotal = (this.chunksTotal / CHUNKS_PER_ACK).ceil();
-
-    // Set File Info
+  Metadata(Node user, File file) {
+    // Set Properties
+    this.name = basename(file.path);
+    this.owner = user.profile;
     this.path = file.path;
-    this.name = basename(this.path);
-    this.type = getFileTypeFromPath(this.path);
+    this.size = file.lengthSync();
+
+    // Set File Type
+    Metadata.fileTypes.forEach((key, value) {
+      // Find type by extension
+      if (key == extension(file.path)) {
+        this.type = enumFromString(value, FileType.values);
+      }
+    });
+
+    // Check if Valid
+    isValid = (this.name != null &&
+        this.owner != null &&
+        this.size != null &&
+        this.type != null);
   }
 
   // ** Constructer: Get MetaData from Map ** //
   Metadata.fromMap(Map map) {
-    // Set Chunking Info from Map
-    this.size = map["size"];
-    this.chunksTotal = map["chunks_total"];
-
-    // Set File Info from Map
+    this.owner = Profile.fromMap(map["owner"]);
     this.name = map["name"];
+    this.size = map["size"];
     this.type = enumFromString(map["type"], FileType.values);
+
+    // Check if Valid
+    isValid = (this.name != null &&
+        this.owner != null &&
+        this.size != null &&
+        this.type != null);
 
     // Set Preview
     if (map["thumbnail"] != null) {
@@ -65,13 +94,59 @@ class Metadata {
     }
   }
 
+  // ** Creates file at Metadata Path ** //
+  createFile() async {
+    // Check if Properties exist
+    if (this.isValid && this.path == null) {
+      // Get Identifier
+      String type = '/' + enumAsString(this.type);
+
+      // Get Directory - Reset when app deleted
+      Directory localDir = await getApplicationDocumentsDirectory();
+
+      // Set Path
+      this.path = localDir.path + type + '_' + uuid.v1() + "_" + this.name;
+      this.received = DateTime.now();
+
+      // Create File
+      await new File(this.path).create(recursive: true);
+    }
+  }
+
+  // ** Create Thumbnail for File ** //
+  createThumbnail() async {
+    // Create Receive Port
+    ReceivePort receivePort = ReceivePort();
+
+    // Compress if Image for Preview
+    if (this.type == FileType.Image) {
+      // Isolate to avoid stalling the main UI
+      await Isolate.spawn(Squeeze.imageForBytes,
+          SqueezeParam(new File(this.path), receivePort.sendPort));
+
+      // Get the processed image from the isolate.
+      Image thumbnail = await receivePort.first;
+
+      // Save the thumbnail in memory as a PNG.
+      File thumbFile = MemoryFileSystem().file('thumbnail.jpg')
+        ..writeAsBytesSync(encodeJpg(thumbnail, quality: 50));
+
+      // Set Thumbnail
+      this.thumbnail = await thumbFile.readAsBytes();
+    } else {
+      log.w("No compression for non-images yet");
+    }
+    // Close Port
+    receivePort.close();
+  }
+
   // ** Convert to Map **
   toMap() {
     // Initialize Map
     var map = {
       "name": this.name,
       "size": this.size,
-      "chunks_total": this.chunksTotal,
+      "owner": this.owner.toMap(),
       "type": enumAsString(this.type)
     };
 
@@ -233,37 +308,4 @@ create table $_filesTable (
   }
 
   Future close() async => db.close();
-}
-
-// ******************** //
-// ** FileType Enum ** //
-// ******************** //
-// -- FileType Enum --
-enum FileType {
-  Audio,
-  Compressed,
-  Data,
-  Image,
-  Presentation,
-  Spreadsheet,
-  Unknown,
-  Video,
-  Word
-}
-
-// -- Get FileType Method --
-getFileTypeFromPath(path) {
-  // Get File Extension
-  var kind = extension(path);
-
-  // Init Type
-  FileType type = FileType.Unknown;
-
-  // Iterate
-  Metadata.fileTypes.forEach((key, value) {
-    if (key == kind) {
-      type = enumFromString(value, FileType.values);
-    }
-  });
-  return type;
 }

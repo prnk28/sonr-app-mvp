@@ -10,21 +10,6 @@ abstract class DataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Progress Cubit
-class ProgressCubit extends Cubit<double> {
-  ProgressCubit() : super(0);
-
-  void update(double newValue) {
-    // Change Value
-    emit(newValue);
-  }
-}
-
-// Send Transfer over DataChannel to Peer
-class UserSendingBlock extends DataEvent {
-  const UserSendingBlock();
-}
-
 // Complete File Received
 class UserReceivedFile extends DataEvent {
   const UserReceivedFile();
@@ -43,7 +28,8 @@ class UserQueuedFile extends DataEvent {
 // Queue has been completed
 class FileQueuedComplete extends DataEvent {
   final Role role;
-  const FileQueuedComplete(this.role);
+  final Metadata metadata;
+  const FileQueuedComplete(this.role, this.metadata);
 }
 
 // User Cleared Queue
@@ -73,8 +59,9 @@ class UserGetFile extends DataEvent {
 
 // Opens a file in appropriate viewer
 class UserLoadFile extends DataEvent {
-  final SonrFile file;
-  const UserLoadFile(this.file);
+  final Metadata metadata;
+  final File file;
+  const UserLoadFile(this.file, this.metadata);
 }
 
 // Opens a file in appropriate viewer

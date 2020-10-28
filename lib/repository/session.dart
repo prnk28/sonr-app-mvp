@@ -2,6 +2,10 @@ import 'repository.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
+// * Chunking Constants **
+const CHUNK_SIZE = 65536; // 64 KiB
+const CHUNKS_PER_ACK = 64;
+
 // *******************
 // * Signaling Enum **
 // *******************

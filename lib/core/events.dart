@@ -1,7 +1,7 @@
 part of 'core.dart';
 
 // Cubit Name Enum
-enum CubitType { ActivePeers, Direction, Progress }
+enum CubitType { ActivePeers, Direction, Transfer }
 enum BlocType { Data, Device, User, Signal }
 
 extension Events on BuildContext {
@@ -29,8 +29,8 @@ extension Events on BuildContext {
       case CubitType.Direction:
         return BlocProvider.of<DeviceBloc>(this).directionCubit;
         break;
-      case CubitType.Progress:
-        return BlocProvider.of<DataBloc>(this).progress;
+      case CubitType.Transfer:
+        return BlocProvider.of<DataBloc>(this).currentFile;
         break;
       case CubitType.ActivePeers:
         return BlocProvider.of<UserBloc>(this).activePeers;

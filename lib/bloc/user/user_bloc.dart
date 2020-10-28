@@ -257,8 +257,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     session.initializePeer(Role.Sender, pc, event.to);
 
     // Invite Peer
-    await emitter.invite(
-        event.to, session.id, pc, event.data.currentFile.metadata);
+    await emitter.invite(event.to, session.id, pc, event.metadata);
 
     // Change Status
     add(NodeBusy());
@@ -278,7 +277,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
 
     // DataBloc is Waiting for this State
-    data.add(UserSendingBlock());
     yield NodeTransferInitial(event.match);
   }
 
@@ -353,7 +351,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       yield NodeTransferSuccess(event.receiver);
     } else {
       // Change State
-      yield NodeReceiveSuccess(event.file);
+      yield NodeReceiveSuccess(event.file, event.metadata);
     }
   }
 }

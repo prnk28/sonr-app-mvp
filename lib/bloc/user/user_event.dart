@@ -76,9 +76,9 @@ class NodeReset extends UserEvent {
 class NodeOffered extends UserEvent {
   final DataBloc data;
   final Node to;
-  final SonrFile file;
+  final Metadata metadata;
 
-  const NodeOffered(this.data, this.to, {this.file});
+  const NodeOffered(this.data, this.to, {this.metadata});
 }
 
 // [Peer] A Request Has Been Given
@@ -123,8 +123,9 @@ class NodeReceived extends UserEvent {
 // User/Peer have completed transfer
 class NodeCompleted extends UserEvent {
   final Node receiver;
-  final SonrFile file;
-  const NodeCompleted({this.file, this.receiver});
+  final File file;
+  final Metadata metadata;
+  const NodeCompleted({this.file, this.metadata, this.receiver});
 }
 
 // [User] Rejected Offer
