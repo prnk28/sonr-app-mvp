@@ -5,7 +5,7 @@ import 'package:image/image.dart';
 import 'package:file/memory.dart';
 
 // * Chunking Constants **
-const CHUNK_SIZE = 16000;
+const CHUNK_SIZE = 65536; // 64 KiB
 const CHUNKS_PER_ACK = 64;
 
 // **************************** //
@@ -20,7 +20,9 @@ class SonrFile {
   Metadata metadata;
 
   // Progress Variables
-  int remainingChunks;
+  int totalRemainingChunks;
+  int blockRemainingChunks;
+  int blocksRemaining;
   int currentChunkNum;
   double progress;
 
@@ -41,7 +43,9 @@ class SonrFile {
 
     // Set Progress Variables
     this.currentChunkNum = 0;
-    this.remainingChunks = this.metadata.chunksTotal;
+    this.totalRemainingChunks = this.metadata.chunksTotal;
+    this.blocksRemaining = this.metadata.blocksTotal;
+    this.blockRemainingChunks = min(totalRemainingChunks, CHUNKS_PER_ACK);
   }
 
   SonrFile.fromSaved(Metadata meta) {
@@ -62,7 +66,10 @@ class SonrFile {
     _sink.add(bytes);
 
     // Progress Forward
-    this.progress = updateProgress();
+    this.progress = _updateProgress();
+
+    // Wait for File to accept data
+    await _sink.flush();
   }
 
   initialize(Role role) async {
@@ -121,15 +128,12 @@ class SonrFile {
     var chunk = Uint8List.fromList(data);
 
     // Progress Forward
-    this.progress = updateProgress();
+    this.progress = _updateProgress();
 
     // Check if Complete
     if (data.length > 0) {
       return chunk;
     } else {
-      // Close Reader
-      await _reader.cancel();
-
       // Return Nothing
       return null;
     }
@@ -146,17 +150,34 @@ class SonrFile {
     await _sink.close();
   }
 
+  shiftBlock() {
+    // Get Total Blocks
+    var totalBlocks = this.metadata.blocksTotal;
+
+    // Update Blocks Remaining
+    if (this.isBlockComplete()) {
+      this.blocksRemaining = totalBlocks - 1;
+    }
+
+    // Reset Remaining Blocks
+    this.blockRemainingChunks = min(totalRemainingChunks, CHUNKS_PER_ACK);
+  }
+
   // ** Update Progress ** //
-  double updateProgress() {
+  double _updateProgress() {
     // Increase Current Chunk
-    var total = this.metadata.chunksTotal;
+    var totalChunks = this.metadata.chunksTotal;
     this.currentChunkNum += 1;
 
-    // Find Remaining
-    this.remainingChunks = total - this.currentChunkNum;
+    // Find Block Remaining in Chunk
+    this.blockRemainingChunks =
+        this.blockRemainingChunks - this.currentChunkNum;
+
+    // Find Total Remaining
+    this.totalRemainingChunks = totalChunks - this.currentChunkNum;
 
     // Calculate Progress
-    return (total - this.remainingChunks) / total;
+    return (totalChunks - this.totalRemainingChunks) / totalChunks;
   }
 
   // ** Read Bytes from SonrFile **
@@ -181,8 +202,13 @@ class SonrFile {
     return bytes;
   }
 
-  // ** Check if Progress Complete **
+  // ** Check if File Complete **
   bool isComplete() {
-    return (this.remainingChunks == 0);
+    return (this.totalRemainingChunks == 0);
+  }
+
+  // ** Check if Block Complete **
+  bool isBlockComplete() {
+    return (this.blockRemainingChunks == 0);
   }
 }

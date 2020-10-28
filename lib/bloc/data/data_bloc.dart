@@ -44,7 +44,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Queue Incoming File
         add(PeerQueuedFile(TrafficDirection.Incoming,
             metadata: state.metadata, sender: state.match));
-      } else if (state is NodeTransferInitial) {
+      }
+      // Begin Outgoing Transfer
+      else if (state is NodeTransferInitial) {
         // Send First Chunk
         add(PeerSendingChunk());
 
@@ -74,7 +76,11 @@ class DataBloc extends Bloc<DataEvent, DataState> {
           add(PeerClearedQueue(TrafficDirection.Outgoing));
         }
         // Send Chunk
-        else if (message.text == "NEXT_CHUNK") {
+        else if (message.text == "NEXT_BLOCK") {
+          // Move to Next Block
+          currentFile.shiftBlock();
+
+          // Send Block
           add(PeerSendingChunk());
         }
       }
@@ -194,7 +200,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // **************************
   Stream<DataState> _mapPeerAddedChunkState(PeerAddedChunk event) async* {
     // Add Chunk to SonrFile
-    currentFile.addChunk(event.chunk);
+    await currentFile.addChunk(event.chunk);
 
     // File Complete
     if (currentFile.isComplete()) {
@@ -213,11 +219,13 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Clear Incoming
       add(PeerClearedQueue(TrafficDirection.Incoming));
     }
+    // Block Complete
+    else if (currentFile.isBlockComplete()) {
+      // Request Sender
+      _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
+    }
     // File In Progress
     else {
-      // Request Sender
-      //_dataChannel.send(RTCDataChannelMessage("NEXT_CHUNK"));
-
       // Update Progress
       progress.update(currentFile.progress);
     }
@@ -227,9 +235,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 // ** PeerSentChunk Event **
 // *************************
   Stream<DataState> _mapPeerSentChunkState(PeerSendingChunk event) async* {
-    while (!currentFile.isComplete()) {
+    while (!currentFile.isBlockComplete()) {
       // Get Chunk
       var chunk = await currentFile.getChunk();
+
       // Send Chunk
       if (chunk != null) {
         // Sends and Updates Progress
@@ -342,7 +351,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       yield UserViewingFileSuccess(bytes, event.file.metadata);
     } else {
       // Send Failure
-      yield UserViewingFileFailure();
+      yield UserViewingFileFailure(event.file.metadata);
     }
   }
 

@@ -49,14 +49,11 @@ class _DetailView extends StatelessWidget {
           listenWhen: (previous, current) {
             if (current is UserDeletedFileSuccess) {
               return true;
-            } else if (current is UserViewingFileFailure) {
-              return true;
             }
             return false;
           },
           listener: (context, state) {
-            if (state is UserDeletedFileSuccess ||
-                state is UserViewingFileFailure) {
+            if (state is UserDeletedFileSuccess) {
               // Change Status
               context.getBloc(BlocType.User).add(NodeAvailable());
 
@@ -77,6 +74,8 @@ class _DetailView extends StatelessWidget {
           return true;
         } else if (current is UserViewingFileSuccess) {
           return true;
+        } else if (current is UserViewingFileFailure) {
+          return true;
         }
         return false;
       },
@@ -84,6 +83,29 @@ class _DetailView extends StatelessWidget {
           builder: (context, state) {
         if (state is UserViewingFileSuccess) {
           return _getViewForFileType(context, state.bytes, state.metadata);
+        } else if (state is UserViewingFileFailure) {
+          // Show Error Dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return detailDeleteDialog(onCancel: () {
+                // Close Window
+                Navigator.pop(context);
+              }, onDelete: () {
+                // Delete File Event
+                context
+                    .getBloc(BlocType.Data)
+                    .add(UserDeleteFile(state.metadata));
+
+                // Push to Home
+                Navigator.pushReplacementNamed(
+                  context,
+                  "/home",
+                );
+              });
+            },
+          );
+          return Container();
         } else {
           return Center(child: CircularProgressIndicator());
         }

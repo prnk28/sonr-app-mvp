@@ -23,6 +23,7 @@ class Metadata {
   String name;
   int size;
   int chunksTotal;
+  int blocksTotal;
   Uint8List thumbnail;
 
   FileType type;
@@ -36,6 +37,7 @@ class Metadata {
     // Calculate File Info
     this.size = file.lengthSync();
     this.chunksTotal = (file.lengthSync() / CHUNK_SIZE).ceil();
+    this.blocksTotal = (this.chunksTotal / CHUNKS_PER_ACK).ceil();
 
     // Set File Info
     this.path = file.path;

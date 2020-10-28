@@ -41,7 +41,8 @@ class UserViewingFileSuccess extends DataState {
 }
 
 class UserViewingFileFailure extends DataState {
-  UserViewingFileFailure();
+  final Metadata metadata;
+  UserViewingFileFailure(this.metadata);
 }
 
 // User Loaded Files

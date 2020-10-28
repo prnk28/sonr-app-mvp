@@ -53,6 +53,29 @@ AlertDialog detailDeleteDialog({Function() onCancel, Function() onDelete}) {
   );
 }
 
+AlertDialog detailFailureDialog({Function() onCancel, Function() onDelete}) {
+  Widget discardButton = FlatButton(
+    child: Text("Continue", style: TextStyle(color: Colors.red)),
+    onPressed: () {
+      onDelete();
+    },
+  );
+
+  // Create Window
+  return AlertDialog(
+    titlePadding: EdgeInsets.only(left: 35, top: 20),
+    contentPadding: EdgeInsets.only(left: 35, top: 20, right: 24, bottom: 24),
+    actionsPadding: EdgeInsets.only(right: 25),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+    title: Text("File not found", style: TextStyle(color: Colors.black)),
+    content: Text("Discard file and return Home",
+        style: TextStyle(color: Colors.grey[700])),
+    actions: [
+      discardButton,
+    ],
+  );
+}
+
 IconData iconDataFromMetadata(Metadata metadata) {
   switch (metadata.type) {
     case FileType.Audio:
