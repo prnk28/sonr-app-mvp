@@ -2,7 +2,6 @@ part of 'data_bloc.dart';
 
 class TransferFile extends Cubit<double> {
   // Transmission
-  BytesBuilder _block;
   ChunkedStreamIterator<int> _reader;
   IOSink _sink;
 
@@ -52,7 +51,6 @@ class TransferFile extends Cubit<double> {
     if (role == Role.Receiver) {
       // Set Sink and Block
       _sink = new File(path).openWrite();
-      _block = new BytesBuilder();
       return true;
     }
 
@@ -64,36 +62,24 @@ class TransferFile extends Cubit<double> {
     }
     // Cubit only for transfer
     else {
-      // Change State
-      emit(null);
       return false;
     }
   }
 
   // ** Add to Block ** //
-  bool addChunk(Uint8List chunk) {
+  addChunk(Uint8List chunk) async {
     // Add Bytes to Block
-    _block.add(chunk.toList());
+    _sink.add(chunk.toList());
 
-    // Update Pointers
-    _currentChunkNum += 1;
-    _remainingChunksInBlock -= 1;
-
-    // Check if Block Complete
-    if (_remainingChunksInBlock == 0) {
-      return true;
-    } else {
-      // Update State
-      this._update(File(path));
-      return false;
-    }
+    // Update
+    await this._update();
   }
 
   // ** Add current block to File and reset ** //
   saveBlock() {
     // Add to Sink
-    _sink.add(_block.takeBytes());
-    this._updateBlock(File(path), Role.Receiver);
+    //_sink.add(_block.takeBytes());
+    _updateBlock(Role.Receiver);
   }
 
   // ** Send Current Block of Chunks ** //
@@ -107,16 +93,12 @@ class TransferFile extends Cubit<double> {
 
       // Send Chunk
       if (data.length > 0) {
-        // Update Pointers
-        _remainingChunksInBlock -= 1;
-        _currentChunkNum += 1;
-
         // Sends and Updates Progress
         channel
             .send(RTCDataChannelMessage.fromBinary(Uint8List.fromList(data)));
 
         // Update Progress
-        this._update(new File(path));
+        await this._update();
       } else {
         // Return Status
         return false;
@@ -124,22 +106,33 @@ class TransferFile extends Cubit<double> {
     }
 
     // Update Remaining Blocks
-    this._updateBlock(new File(path), Role.Sender);
+    this._updateBlock(Role.Sender);
 
     // Return Status
     return true;
   }
 
   // ** Updates Progress ** //
-  _update(File file) {
+  _update() async {
+    // Update Pointers
+    _currentChunkNum += 1;
+    _remainingChunksInBlock -= 1;
+
     // Find Total Remaining
     _remainingTotalChunks = _totalChunks - _currentChunkNum;
+
+    // Update Checkers
+    isTransferComplete = (_remainingTotalChunks == 0);
+    isBlockComplete = (_remainingChunksInBlock == 0 && !isTransferComplete);
 
     // Calculate Progress
     progress = (_totalChunks - _remainingTotalChunks) / _totalChunks;
 
-    // Update Checkers
-    isTransferComplete = (_remainingTotalChunks == 0);
+    // Close Sink
+    if (isTransferComplete && _sink != null) {
+      // Check if Blocks Complete
+      await _sink.close();
+    }
 
     // Log Info
     log.i(
@@ -150,42 +143,20 @@ class TransferFile extends Cubit<double> {
   }
 
   // ** Update Block Variables ** //
-  _updateBlock(File file, Role type) async {
-    // Check if Block Complete
-    if (_remainingChunksInBlock == 0) {
-      // Update Blocks Remaining
-      _remainingTotalBlocks = _totalBlocks - 1;
+  _updateBlock(Role type) async {
+    // Update Blocks Remaining
+    _remainingTotalBlocks = _totalBlocks - 1;
 
-      // Reset Block Variables
-      _totalChunksInBlock = min(_remainingTotalChunks, CHUNKS_PER_ACK);
-      _remainingChunksInBlock = _totalChunksInBlock;
+    // Reset Block Variables
+    _totalChunksInBlock = min(_remainingTotalChunks, CHUNKS_PER_ACK);
+    _remainingChunksInBlock = _totalChunksInBlock;
 
-      // Logging
-      print("$type -> Blocks Remaining: " + _remainingTotalBlocks.toString());
-      print("$type -> Chunks in Block: " + _totalChunksInBlock.toString());
-      print("$type -> Total Progress: " + (progress * 100).toString() + "%");
+    // Logging
+    print("$type -> Blocks Remaining: " + _remainingTotalBlocks.toString());
+    print("$type -> Chunks in Block: " + _totalChunksInBlock.toString());
+    print("$type -> Total Progress: " + (progress * 100).toString() + "%");
 
-      // Update State
-      emit(progress);
-    }
-
-    // Check if Blocks Complete
-    if (_remainingTotalBlocks == 0) {
-      switch (type) {
-        case Role.Sender:
-          await _reader.cancel();
-          break;
-        case Role.Receiver:
-          await _sink.close();
-          break;
-        case Role.Zero:
-          break;
-      }
-    }
-  }
-
-  // ** Clear the Current File **
-  Future<void> close() async {
-    super.close();
+    // Update State
+    emit(progress);
   }
 }

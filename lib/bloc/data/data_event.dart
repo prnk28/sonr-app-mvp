@@ -12,7 +12,8 @@ abstract class DataEvent extends Equatable {
 
 // Complete File Received
 class UserReceivedFile extends DataEvent {
-  const UserReceivedFile();
+  final Metadata metadata;
+  const UserReceivedFile(this.metadata);
 }
 
 // User added file to queue

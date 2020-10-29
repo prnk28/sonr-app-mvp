@@ -67,13 +67,16 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Check Channel Status
       _dataChannel = channel;
     };
-    
+
     // Handle DataChannel Message
     _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
       // ** Binary Message ** //
       if (message.isBinary) {
         // Add chunk to currentFile
-        if (currentFile.addChunk(message.binary)) {
+        await currentFile.addChunk(message.binary);
+
+        // Check if Block Complete
+        if (currentFile.isBlockComplete) {
           // Save Block
           currentFile.saveBlock();
 
@@ -83,7 +86,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
         // Check if File Complete
         if (currentFile.isTransferComplete) {
-          add(UserReceivedFile());
+          add(UserReceivedFile(currentFile.metadata));
         }
       }
       // ** Text Message ** //
@@ -91,13 +94,10 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Send Chunk
         if (message.text == "NEXT_BLOCK") {
           // Send Block
-          await currentFile.sendBlock(dc);
+          await currentFile.sendBlock(_dataChannel);
 
           // Sending Finished
         } else if (message.text == "SEND_COMPLETE") {
-          // Change user State
-          user.add(NodeCompleted(receiver: _receiver));
-
           // Clear Outgoing
           add(FileQueueCleared(TrafficDirection.Outgoing));
         }
@@ -227,16 +227,14 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Notify Sender
     _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
+    // Yield Complete
+    user.add(NodeCompleted(
+        file: new File(event.metadata.path), metadata: event.metadata));
+
     // Save File
     MetadataProvider metadataProvider = new MetadataProvider();
     await metadataProvider.open();
-    await metadataProvider.insert(currentFile.metadata);
-    File file = new File(currentFile.path);
-
-    // Yield Complete
-    user.add(NodeCompleted(file: file, metadata: currentFile.metadata));
-
-    await currentFile.close();
+    await metadataProvider.insert(event.metadata);
 
     // Clear Incoming
     add(FileQueueCleared(TrafficDirection.Incoming));
@@ -251,10 +249,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Clear All
       if (event.matchId == null) {
         _incoming.clear();
-
-        // Clear Current File
-        currentFile = null;
       }
+      // Clear Current File
+      currentFile = null;
 
       // Clear One
       _incoming.remove(event.matchId);
@@ -262,14 +259,21 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Clear All
       if (event.matchId == null) {
         _outgoing.clear();
-
-        // Clear Current File
-        currentFile = null;
       }
 
       // Clear One
       _outgoing.remove(event.matchId);
+
+      // Clear Current File
+      currentFile = null;
+
+      // Change user State
+      user.add(NodeCompleted(receiver: _receiver));
     }
+    // Reset Sender/Receiver
+    _sender = null;
+    _receiver = null;
+
     yield PeerInitial();
   }
 
