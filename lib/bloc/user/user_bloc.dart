@@ -174,6 +174,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (node != null) {
       // Update Status
       node.status = Status.Searching;
+      node.role = Role.Zero;
 
       // Emit to Server
       socket.emit("UPDATE", node.toMap());
@@ -196,6 +197,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (node != null) {
       // Update Status
       node.status = Status.Available;
+      node.role = Role.Zero;
 
       // Emit to Server
       socket.emit("UPDATE", node.toMap());
@@ -276,6 +278,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           new RTCSessionDescription(description['sdp'], description['type']));
     }
 
+    // Change Role
+    node.role = Role.Sender;
+
     // DataBloc is Waiting for this State
     yield NodeTransferInitial(event.match);
   }
@@ -323,6 +328,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     // Send Answer
     await emitter.answer(match, session.id, pc);
 
+    // Change Role
+    node.role = Role.Receiver;
+
     // Change Status
     add(NodeBusy());
     yield NodeReceiveInitial(metadata, match);
@@ -345,6 +353,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   // User/[Peer] have completed transfer
   Stream<UserState> _mapNodeCompletedState(NodeCompleted event) async* {
+    // Change Role
+    node.role = Role.Zero;
+
+    // Reset Session
+    session.reset();
+
     // Set to Search if Applicable
     if (event.file == null) {
       // Change State

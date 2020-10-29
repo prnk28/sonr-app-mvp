@@ -110,6 +110,8 @@ class Metadata {
 
       // Create File
       await new File(this.path).create(recursive: true);
+    } else {
+      log.e("Error Creating File at Path");
     }
   }
 

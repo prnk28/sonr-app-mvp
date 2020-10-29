@@ -3,7 +3,7 @@ import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
 
 // * Chunking Constants **
-const CHUNK_SIZE = 65536; // 64 KiB
+const CHUNK_SIZE = 64000; // 64 KiB
 const CHUNKS_PER_ACK = 64;
 
 // *******************
@@ -32,6 +32,7 @@ typedef void DataChannelMessageCallback(
     RTCDataChannel dc, RTCDataChannelMessage data);
 typedef void DataChannelCallback(RTCDataChannel dc);
 typedef void DataChannelState(RTCDataChannel channel, RTCDataChannelState dc);
+typedef void IceConnectionState(RTCDataChannel channel, RTCDataChannelState dc);
 
 // *******************
 // * Initialization **
@@ -50,13 +51,18 @@ class RTCSession {
   OtherEventCallback onPeersUpdate;
   DataChannelMessageCallback onDataChannelMessage;
   DataChannelCallback onDataChannel;
+  DataChannelState onDataChannelState;
 
 // ****************************
 // ** WebRTC Object Methods ***
 // ****************************
   addDataChannel(id, RTCDataChannel channel) {
     // Send Callback to DataBloc
-    channel.onDataChannelState = (e) {};
+    channel.onDataChannelState = (e) {
+      if (this.onDataChannelState != null) {
+        this.onDataChannelState(channel, e);
+      }
+    };
 
     // Add Message as Callback
     channel.onMessage = (RTCDataChannelMessage data) {
@@ -77,6 +83,7 @@ class RTCSession {
   createDataChannel(id, RTCPeerConnection pc, {label: 'fileTransfer'}) async {
     // Setup Data Channel
     RTCDataChannelInit dataChannelDict = RTCDataChannelInit();
+    dataChannelDict.negotiated = true;
 
     // Create and Add Data Channel
     RTCDataChannel channel = await pc.createDataChannel(label, dataChannelDict);
@@ -105,7 +112,7 @@ class RTCSession {
   handleCandidate(Node match, dynamic data) async {
     // Get Match Node
     var candidateMap = data['candidate'];
-    var pc = this.peerConnections[match.id];
+    RTCPeerConnection pc = this.peerConnections[match.id];
 
     // Setup Candidate
     RTCIceCandidate candidate = new RTCIceCandidate(candidateMap['candidate'],
@@ -146,7 +153,7 @@ class RTCSession {
     // Peer is Sending
     else {
       // Create New DataChannel
-      this.createDataChannel(match.id, pc);
+      this.createDataChannel(this.id, pc);
     }
   }
 

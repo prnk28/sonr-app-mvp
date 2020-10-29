@@ -16,6 +16,7 @@ class Node {
   String olc;
   String device;
   Profile profile;
+  Role role;
   Status status;
   DateTime lastUpdated;
 
@@ -30,6 +31,7 @@ class Node {
   Node(this.profile) {
     // Set Default Variables
     this.status = Status.Offline;
+    this.role = Role.Zero;
     this.device = Platform.operatingSystem.toUpperCase();
     this.direction = 0.01;
   }

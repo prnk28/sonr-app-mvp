@@ -37,7 +37,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     _session = user.session;
 
     // ** User BLoC Subscription ** //
-    _userSub = user.listen((UserState state) {
+    _userSub = user.listen((UserState state) async {
       // Queue Incoming Transfer
       if (state is NodeReceiveInitial) {
         // Reference Sender and Receiver
@@ -55,12 +55,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         _receiver = state.match;
 
         // Send First Block
-        currentFile.sendBlock(_dataChannel).then((status) {
-          // Check Status
-          if (!status) {
-            log.e("Couldnt send block to peer");
-          }
-        });
+        await currentFile.sendBlock(_dataChannel);
 
         // Change User State
         user.add(NodeTransmitted(_receiver));
@@ -72,27 +67,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Check Channel Status
       _dataChannel = channel;
     };
-
+    
     // Handle DataChannel Message
-    _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) {
+    _session.onDataChannelMessage = (dc, RTCDataChannelMessage message) async {
       // ** Binary Message ** //
       if (message.isBinary) {
         // Add chunk to currentFile
-        currentFile.addChunk(message.binary);
-
-        // Check if Block Complete
-        if (currentFile.isBlockComplete) {
+        if (currentFile.addChunk(message.binary)) {
           // Save Block
-          currentFile.saveBlock().then((status) {
-            // Check Status
-            if (status) {
-              // Request Sender next block
-              _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
-            } else {
-              // Error
-              log.i("Couldnt save Block");
-            }
-          });
+          currentFile.saveBlock();
+
+          // Request Sender next block
+          _dataChannel.send(RTCDataChannelMessage("NEXT_BLOCK"));
         }
 
         // Check if File Complete
@@ -102,23 +88,18 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       }
       // ** Text Message ** //
       else {
-        // Sending Finished
-        if (message.text == "SEND_COMPLETE") {
+        // Send Chunk
+        if (message.text == "NEXT_BLOCK") {
+          // Send Block
+          await currentFile.sendBlock(dc);
+
+          // Sending Finished
+        } else if (message.text == "SEND_COMPLETE") {
           // Change user State
           user.add(NodeCompleted(receiver: _receiver));
 
           // Clear Outgoing
           add(FileQueueCleared(TrafficDirection.Outgoing));
-        }
-        // Send Chunk
-        else if (message.text == "NEXT_BLOCK") {
-          // Send Block
-          currentFile.sendBlock(_dataChannel).then((status) {
-            // Check Status
-            if (!status) {
-              log.e("Couldnt send block to peer");
-            }
-          });
         }
       }
     };
@@ -164,6 +145,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
       // Add Metadata To Incoming
       _incoming.add(event.metadata);
 
+      // Initialize File
+      await event.metadata.createFile();
+
       // Create TransferFile
       currentFile = new TransferFile(event.metadata);
 
@@ -189,6 +173,9 @@ class DataBloc extends Bloc<DataEvent, DataState> {
         // Set SonrFile
         metadata = new Metadata(user.node, event.rawFile);
       }
+
+      // Initialize Thumbnail
+      await metadata.createThumbnail();
 
       // Add to Outgoing
       _outgoing.add(metadata);
@@ -216,6 +203,7 @@ class DataBloc extends Bloc<DataEvent, DataState> {
 
       // Change State
       if (status) {
+        // Change State
         yield PeerQueueSuccess(event.metadata, File(event.metadata.path));
       }
     }
@@ -239,13 +227,16 @@ class DataBloc extends Bloc<DataEvent, DataState> {
     // Notify Sender
     _dataChannel.send(RTCDataChannelMessage("SEND_COMPLETE"));
 
-    // Get Transfer Results
-    var results = await currentFile.complete();
-    Metadata metadata = results['metadata'];
-    File file = results['file'];
+    // Save File
+    MetadataProvider metadataProvider = new MetadataProvider();
+    await metadataProvider.open();
+    await metadataProvider.insert(currentFile.metadata);
+    File file = new File(currentFile.path);
 
     // Yield Complete
-    user.add(NodeCompleted(file: file, metadata: metadata));
+    user.add(NodeCompleted(file: file, metadata: currentFile.metadata));
+
+    await currentFile.close();
 
     // Clear Incoming
     add(FileQueueCleared(TrafficDirection.Incoming));

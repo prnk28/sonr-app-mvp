@@ -1,5 +1,5 @@
 // Directory Exports}
-export "package:flutter_webrtc/webrtc.dart";
+export 'package:flutter_webrtc/flutter_webrtc.dart';
 export 'package:chunked_stream/chunked_stream.dart';
 export 'dart:typed_data';
 export 'package:hive/hive.dart';
