@@ -38,39 +38,6 @@ Market as: Rudimentary form of Human Communication
 ## MDNS
 *TODO*
 
-# Centralization
-## Client Server Communication
-
-| Action      | Payload           | Code     | Server Response + Data                                                                                                        | Description                                                                                    |
-|-------------|-------------------|----------|-------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Initialize  | Location, Profile | 1        | joinedMessage {Lobby}                                                                                                         | Backed Method: compareLocation()                                                               |
-| Sending     | Direction         | 10, 42   | sending {circle}, errorTimeout{}                                                                                              | Sends circle to sender until timeout directions Match or sender selects                        |
-| Select      | Client            | 11       | found {Client}                                                                                                                | Client autopicked or selected receipient, transfer created                                     |
-| Request     | Client            | 12       | request {Transfer}                                                                                                            | Transfer returned to both receiver/sender                                                      |
-| Receiving   | Direction         | 20       | receiving {Circle}                                                                                                            | Sends circle to receiver until offered or cancelled                                            |
-| --          |                   | 21       | receiverOffered {Transfer}                                                                                                    | Sent back to receiver on Sender.Request()                                                      |
-| Authorize   | bool, Client      | 22/31/40 | receiverAuthorized -> Sender, receiverDeclined -> Sender, transferRecipient -> Receiver                                       | Receiver makes decision and response sent, Authorized sent to sender, 31 code sent to receiver |
-| Transfering | Client, Transfer  | 30/31/43 | transferring{Transfer, Progress} -> sender, transferRecipient {Transfer, Progress} -> receiver, errorTransferFailed{} -> Both | Progress sent to both clients, internal error sends a 43                                       |
-| Complete    | Transfer          | 32       | transferComplete {Transfer} -> Both                                                                                           | Transfer logged in Analytics                                                                   |
-| Cancel      | Process           | 41       | errorSenderCancelled() -> Both if applicable                                                                                  | At any point in sequence sender cancels                                                        |
-| Reset       | Process           | 1        | joinMessage {Lobby}                                                                                                           | Done on Error/Complete/Cancel                                                                  |
-
-## Socket.io Events
-| EVENT               	| Payload                                    	|
-|---------------------	|--------------------------------------------	|
-| INFO                	| Lobby Details {count for each channel}     	|
-| NEW_SENDER          	| Socket.id, profile, direction              	|
-| SENDER_UPDATE       	| Socket.id, profile, direction              	|
-| SENDER_LEFT         	| Socket.id                                  	|
-| NEW_RECEIVER        	| Socket.id, profile, direction              	|
-| RECEIVER_UPDATE     	| Socket.id, profile, direction              	|
-| RECEIVER_LEFT       	| Socket.id                                  	|
-| SENDER_OFFERRED     	| Socket.id, file_info, profile              	|
-| RECEIVER_AUTHORIZED 	| Socket.id, profile                         	|
-| RECEIVER_DECLINED   	| Socket.id, profile                         	|
-| COMPLETED           	| Socket.id                                  	|
-| ERROR               	| Initialize Error/Other/Message Description 	|
-
 # Sonr BLoC
 ### Events
 
