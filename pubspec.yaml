@@ -24,7 +24,7 @@ dependencies:
   equatable: ^1.2.5
 
   # -- Device --
-  flutter_sensor_compass: ^0.1.1
+  flutter_compass: ^0.5.0
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
   sensors: ^0.4.1+1

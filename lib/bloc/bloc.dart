@@ -6,6 +6,7 @@ export 'user/user_bloc.dart';
 
 // Data
 export 'data/data_bloc.dart';
+export 'sonr/sonr_bloc.dart';
 
 // Device
 export 'device/device_bloc.dart';

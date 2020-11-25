@@ -12,7 +12,7 @@ export 'package:logger/logger.dart';
 export 'package:bloc/bloc.dart';
 
 // Device Libraries
-export 'package:flutter_sensor_compass/flutter_sensor_compass.dart';
+export 'package:flutter_compass/flutter_compass.dart';
 export 'package:sensors/sensors.dart';
 export 'package:geolocator/geolocator.dart';
 export 'package:soundpool/soundpool.dart';

@@ -1,7 +1,6 @@
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/core/core.dart';
 import 'package:sonar_app/models/models.dart';
-import 'package:sonar_app/repository/repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'device_event.dart';
@@ -15,18 +14,16 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Constructer
   DeviceBloc(this.user) : super(null) {
     // ** Directional Events **
-    Compass()
-        .compassUpdates(interval: Duration(milliseconds: 100))
-        .listen((newDegrees) {
-      // Update Direction Cubit
-      directionCubit.update(newDegrees);
+    FlutterCompass.events.listen((newDegrees) {
+// Update Direction Cubit
+      directionCubit.update(newDegrees.headingForCameraMode);
 
       // Check if User Node Exists
       if (user.node != null) {
 // User is Searching
         if (user.node.status == Status.Searching) {
           // Update Direction
-          user.node.direction = newDegrees;
+          user.node.direction = newDegrees.headingForCameraMode;
 
           // Update WebBloc State
           user.add(NodeSearch());
@@ -34,7 +31,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
         // User with 500ms delay
         else if (user.node.status == Status.Available) {
           // Update Direction
-          user.node.direction = newDegrees;
+          user.node.direction = newDegrees.headingForCameraMode;
 
           // Update WebBloc State
           user.add(NodeAvailable());
