@@ -6,7 +6,7 @@
 # Description
 > Share anything to everyone and everything.
 
-App utilizes Libp2p, WebRTC, OLC to be able to send any file to a nearby person. Also has robust contact sharing feature.
+App utilizes Libp2p, QUIC, and OLC to be able to send any file to a nearby person. Also has robust contact sharing feature.
 
 ## Who is this for?
 Anyone with multiple devices not running in the same ecosystem.
