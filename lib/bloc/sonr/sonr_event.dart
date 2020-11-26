@@ -15,13 +15,6 @@ class NodeInitialize extends SonrEvent {
   const NodeInitialize(this.contact, this.position);
 }
 
-// ^ Send a Updated Direction ^ //
-// @ Args(float64) //
-class NodeUpdate extends SonrEvent {
-  final double newDirection;
-  const NodeUpdate(this.newDirection);
-}
-
 // ^ Queue a File ^ //
 // @ Args(string) //
 class NodeQueueFile extends SonrEvent {

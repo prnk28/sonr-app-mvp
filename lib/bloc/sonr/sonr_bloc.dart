@@ -39,8 +39,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
       yield* _mapNodeCancelState(event);
     } else if (event is NodeSearch) {
       yield* _mapNodeSearchState(event);
-    } else if (event is NodeUpdate) {
-      yield* _mapNodeUpdateState(event);
     } else if (event is NodeQueueFile) {
       yield* _mapNodeQueueFileState(event);
     } else if (event is NodeInvitePeer) {
@@ -63,11 +61,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     yield NodeAvailable();
   }
 
-  // ^ NodeUpdate Event ^
-  Stream<SonrState> _mapNodeUpdateState(NodeUpdate event) async* {
-    node.update(event.newDirection);
-  }
-
   // ^ NodeQueueFile Event ^
   Stream<SonrState> _mapNodeQueueFileState(NodeQueueFile event) async* {
     node.queue(event.file.path);
@@ -76,7 +69,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 
   // ^ NodeSearch Event ^
   Stream<SonrState> _mapNodeSearchState(NodeSearch event) async* {
-    yield NodeAvailable();
+    yield NodeSearching();
   }
 
   // ^ NodeCancel Event: Cancel Current Process and Change State to Available ^

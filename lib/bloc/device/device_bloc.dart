@@ -18,19 +18,17 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   DirectionCubit directionCubit = new DirectionCubit();
 
   // Constructer
-  DeviceBloc(this.sonr) : super(null) {
+  DeviceBloc(this.sonr) : super(DeviceLoading()) {
     // ** Directional Events **
     FlutterCompass.events.listen((newDegrees) {
-      // Check if User Node Exists
+      // @ Check if Correct State
       if (sonr.state is NodeAvailable || sonr.state is NodeSearching) {
-        // Get Current Direction
+        // Get Current Direction and Update Cubit
         double direction = newDegrees.headingForCameraMode;
-
-        // Update Direction Cubit
         directionCubit.update(direction);
 
-        // Update Node State
-        sonr.add(NodeUpdate(direction));
+        // Update Node Direction
+        sonr.node.update(direction);
       }
     });
   }

@@ -1,10 +1,8 @@
 export 'detail/detail.dart';
 export 'home/home.dart';
 export 'register/register.dart';
-export 'home/settings.dart';
 export 'splash/splash.dart';
 export 'searching/searching.dart';
-export 'modal/modal.dart';
 export 'lifecycle.dart';
 
 // Packages
@@ -37,4 +35,5 @@ export 'package:flare_flutter/trim_path.dart';
 // Sonr Classes
 export 'package:sonar_app/bloc/bloc.dart';
 export 'package:sonar_app/design/design.dart';
+export 'package:sonar_app/modals/modals.dart';
 export '../events.dart';

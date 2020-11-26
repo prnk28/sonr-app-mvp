@@ -36,12 +36,11 @@ class ZoneView extends StatelessWidget {
 }
 
 Widget rangeLines() {
-  // TODO: Add Device Size in Device Bloc
-  // return Padding(
-  //     padding: EdgeInsets.only(bottom: 5),
-  //     child: CustomPaint(
-  //       size: screenSize,
-  //       painter: ZonePainter(),
-  //       child: Container(),
-  //     ));
+  return Padding(
+      padding: EdgeInsets.only(bottom: 5),
+      child: CustomPaint(
+        size: screenSize,
+        painter: ZonePainter(),
+        child: Container(),
+      ));
 }

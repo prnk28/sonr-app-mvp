@@ -268,12 +268,11 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
 // ** Calculate Offset from Line ** //
 // ******************************** //
   Offset _calculateOffset(double value, Peer_Proximity proximity) {
-    // TODO: Add Device Information to Device Bloc
-    // Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
-    // PathMetrics pathMetrics = path.computeMetrics();
-    // PathMetric pathMetric = pathMetrics.elementAt(0);
-    // value = pathMetric.length * value;
-    // Tangent pos = pathMetric.getTangentForOffset(value);
-    // return pos.position;
+    Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
+    PathMetrics pathMetrics = path.computeMetrics();
+    PathMetric pathMetric = pathMetrics.elementAt(0);
+    value = pathMetric.length * value;
+    Tangent pos = pathMetric.getTangentForOffset(value);
+    return pos.position;
   }
 }
