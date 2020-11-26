@@ -1,6 +1,6 @@
+import 'package:flutter_compass/flutter_compass.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'device_event.dart';
@@ -8,34 +8,20 @@ part 'device_state.dart';
 
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
-  final UserBloc user;
+  final SonrBloc sonr;
   DirectionCubit directionCubit = new DirectionCubit();
 
   // Constructer
-  DeviceBloc(this.user) : super(null) {
+  DeviceBloc(this.sonr) : super(null) {
     // ** Directional Events **
     FlutterCompass.events.listen((newDegrees) {
-// Update Direction Cubit
+      // Update Direction Cubit
       directionCubit.update(newDegrees.headingForCameraMode);
 
       // Check if User Node Exists
-      if (user.node != null) {
-// User is Searching
-        if (user.node.status == Status.Searching) {
-          // Update Direction
-          user.node.direction = newDegrees.headingForCameraMode;
-
-          // Update WebBloc State
-          user.add(NodeSearch());
-        }
-        // User with 500ms delay
-        else if (user.node.status == Status.Available) {
-          // Update Direction
-          user.node.direction = newDegrees.headingForCameraMode;
-
-          // Update WebBloc State
-          user.add(NodeAvailable());
-        }
+      if (sonr.node != null) {
+        // Update Node State
+        sonr.add(NodeUpdate(newDegrees.headingForCameraMode));
       }
     });
   }
@@ -50,14 +36,9 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     }
   }
 
-// ***********************************
-// ** LocationPermissionCheck Event **
-// ***********************************
+// ^ LocationPermissionCheck Event ^
   Stream<DeviceState> _mapLocationPermissionCheckState(
       LocationPermissionCheck event) async* {
-    // Intialize FileType
-    await initFileType();
-
     // Check Permissions
     LocationPermission permission = await Geolocator.checkPermission();
 
@@ -65,7 +46,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     if (permission == LocationPermission.whileInUse ||
         permission == LocationPermission.always) {
       // Begin User Setup
-      user.add(UserStarted(event.data, event.signal));
       yield LocationPermissionSuccess();
     } else {
       // Permission Denied
@@ -74,9 +54,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     }
   }
 
-// ***************************************
-// ** LocationPermissionRequested Event **
-// ***************************************
+// ^ LocationPermissionRequested Event ^
   Stream<DeviceState> _mapLocationPermissionRequestedState(
       LocationPermissionRequested event) async* {
     // Ask for Locations Permission

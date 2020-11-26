@@ -36,10 +36,12 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   ) async* {
     if (event is NodeInitialize) {
       yield* _mapNodeInitializeState(event);
+    } else if (event is NodeCancel) {
+      yield* _mapNodeCancelState(event);
+    } else if (event is NodeSearch) {
+      yield* _mapNodeSearchState(event);
     } else if (event is NodeUpdate) {
       yield* _mapNodeUpdateState(event);
-    } else if (event is NodeSearchN) {
-      yield* _mapNodeSearchState(event);
     } else if (event is NodeQueueFile) {
       yield* _mapNodeQueueFileState(event);
     } else if (event is NodeInvitePeer) {
@@ -47,9 +49,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     } else if (event is NodeRespondPeer) {
       yield* _mapNodeRespondPeerState(event);
     }
-    // } else if (event is NodeTransfer) {
-    //   yield* _mapNodeTransferState(event);
-    // }
   }
 
   // **************************
@@ -62,7 +61,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 
     // Await Initialization
     node = await SonrCore.initialize(olcCode, event.contact);
-    yield NodeAvailableN();
+    yield NodeAvailable();
   }
 
   // ^ NodeUpdate Event ^
@@ -77,14 +76,19 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   }
 
   // ^ NodeSearch Event ^
-  Stream<SonrState> _mapNodeSearchState(NodeSearchN event) async* {
-    yield NodeSearchingN();
+  Stream<SonrState> _mapNodeSearchState(NodeSearch event) async* {
+    yield NodeAvailable();
+  }
+
+  // ^ NodeCancel Event: Cancel Current Process and Change State to Available ^
+  Stream<SonrState> _mapNodeCancelState(NodeCancel event) async* {
+    yield NodeAvailable();
   }
 
   // ^ NodeInvitePeer Event ^
   Stream<SonrState> _mapNodeInvitePeerState(NodeInvitePeer event) async* {
     node.invite(event.peer);
-    yield NodeRequestInProgressN(event.peer);
+    yield NodeRequestInProgress(event.peer);
   }
 
   // ^ NodeRespondPeer Event ^
@@ -95,10 +99,10 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     // @ Update State by Decision
     if (event.decision) {
       // Update State to Accepted
-      yield NodeReceiveInProgressN(event.peer);
+      yield NodeReceiveInProgress(event.peer, event.metadata);
     } else {
       // Update State to Declined
-      yield NodeAvailableN();
+      yield NodeAvailable();
     }
   }
 
@@ -119,7 +123,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     if (data is AuthMessage) {
       // Verify Event
       if (data.event == AuthMessage_Event.REQUEST) {
-        yield NodeInvited(data.from);
+        yield NodeInvited(data.from, data.metadata);
       }
     }
   }
@@ -131,7 +135,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
       // Verify Event
       if (data.event == AuthMessage_Event.ACCEPT) {
         node.transfer();
-        yield NodeTransferInProgressN(data.from);
+        yield NodeTransferInProgress(data.from);
       }
     }
   }
@@ -142,9 +146,21 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     if (data is AuthMessage) {
       // Verify Event
       if (data.event == AuthMessage_Event.DECLINE) {
-        yield NodeRequestFailureN(data.from);
+        yield NodeRequestFailure(data.from);
       }
     }
+  }
+
+  // ^ Transfer Has Succesfully Completed ^ //
+  Stream<SonrState> handleCompleted(dynamic data) async* {
+    if (data is CompletedMessage) {
+      yield NodeAvailable();
+    }
+  }
+
+// ^ An Error Has Occurred ^ //
+  Stream<SonrState> handleSonrError(dynamic data) async* {
+    if (data is ErrorMessage) {}
   }
 
 // **************************
@@ -161,20 +177,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   void handleProgressed(dynamic data) async {
     if (data is ProgressMessage) {
       exchangeProgress.update(data.progress);
-    }
-  }
-
-// ^ Transfer Has Succesfully Completed ^ //
-  void handleCompleted(dynamic data) async {
-    if (data is CompletedMessage) {
-      
-    }
-  }
-
-// ^ An Error Has Occurred ^ //
-  void handleSonrError(dynamic data) async {
-    if (data is ErrorMessage) {
-
     }
   }
 }

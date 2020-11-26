@@ -1,7 +1,10 @@
 part of 'window.dart';
 
-Widget buildProgressView(Metadata meta) {
-  return Center(child: IconLiquidFill(iconData: iconDataFromMetadata(meta)));
+Widget buildProgressView(Metadata meta, Size screenSize) {
+  return Center(
+      child: IconLiquidFill(
+          iconData: iconDataFromKind(meta.kind),
+          boxHeight: (screenSize.height / 3)));
 }
 
 class IconLiquidFill extends StatefulWidget {
@@ -12,7 +15,7 @@ class IconLiquidFill extends StatefulWidget {
   final Duration waveDuration;
 
   /// Set to screen Size
-  final double boxHeight = (screenSize.height / 3);
+  final double boxHeight;
 
   /// By default it is set to 400
   final double boxWidth;
@@ -23,6 +26,7 @@ class IconLiquidFill extends StatefulWidget {
   IconLiquidFill({
     Key key,
     @required this.iconData,
+    @required this.boxHeight,
     this.waveDuration = const Duration(seconds: 2),
     this.boxWidth = 225,
     this.waveColor = Colors.blueAccent,
@@ -69,8 +73,8 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TransferFile, double>(
-        cubit: context.getCubit(CubitType.Transfer),
+    return BlocBuilder<ExchangeProgress, double>(
+        cubit: context.getCubit(CubitType.Exchange),
         builder: (context, state) {
           return Stack(
             children: <Widget>[

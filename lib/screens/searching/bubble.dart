@@ -2,7 +2,7 @@ part of 'searching.dart';
 
 class PeerBubble extends StatefulWidget {
   final double value;
-  final Node peer;
+  final Peer peer;
 
   const PeerBubble(this.value, this.peer, {Key key}) : super(key: key);
   @override
@@ -39,7 +39,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
+    return BlocBuilder<SonrBloc, SonrState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
       if (curr is NodeRequestInProgress) {
@@ -56,14 +56,10 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
       // Initialize Toast
       fToast.init(context);
 
-      // Get Bloc References
-      final data = context.getBloc(BlocType.Data);
-      final user = context.getBloc(BlocType.User);
-
       // ** Create Requested Node Bubble **
       if (state is NodeRequestInProgress) {
         // Check if Current Node Requested
-        if (state.match.id == widget.peer.id) {
+        if (state.peer.id == widget.peer.id) {
           return Positioned(
               top: _calculateOffset(widget.value, widget.peer.proximity).dy,
               left: _calculateOffset(widget.value, widget.peer.proximity).dx,
@@ -81,13 +77,13 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
               ));
         }
         // Build as Standby Node
-        return _buildActiveNode(data, user, interactable: false);
+        return _buildActiveNode(state, interactable: false);
       }
 
       // ** Peer has Declined **
       else if (state is NodeRequestFailure) {
         // Check if Current Node Rejected
-        if (state.rejecter.id == widget.peer.id) {
+        if (state.peer.id == widget.peer.id) {
           return Positioned(
               top: _calculateOffset(widget.value, widget.peer.proximity).dy,
               left: _calculateOffset(widget.value, widget.peer.proximity).dx,
@@ -110,14 +106,14 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
               )));
         }
         // Build as Active Node
-        return _buildActiveNode(data, user);
+        return _buildActiveNode(state);
       }
 
       // ** Peer Accepted: Transfer is in Progress **
       else if (state is NodeTransferInProgress) {
-        if (state.match.id == widget.peer.id) {
-          return BlocBuilder<TransferFile, double>(
-              cubit: context.getCubit(CubitType.Transfer),
+        if (state.receiver.id == widget.peer.id) {
+          return BlocBuilder<ExchangeProgress, double>(
+              cubit: context.getCubit(CubitType.Exchange),
               builder: (context, state) {
                 return Positioned(
                     top: _calculateOffset(widget.value, widget.peer.proximity)
@@ -143,7 +139,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
         }
 
         // Build as Standby Node
-        return _buildActiveNode(data, user, interactable: false);
+        return _buildActiveNode(state, interactable: false);
       }
 
       // ** Peer has Completed Transfer **
@@ -170,27 +166,27 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
             )));
       }
       // ** Create Active Node Bubble **
-      return _buildActiveNode(data, user);
+      return _buildActiveNode(state);
     });
   }
 
-  _buildActiveNode(data, user, {bool interactable: true}) {
+  _buildActiveNode(sonr, {bool interactable: true}) {
     // Build Active Bubble
-    return BlocConsumer<DataBloc, DataState>(listenWhen: (previous, current) {
-      if (current is PeerQueueSuccess) {
+    return BlocConsumer<SonrBloc, SonrState>(listenWhen: (previous, current) {
+      if (current is NodeSearching) {
         return true;
       }
       return false;
     }, listener: (context, state) {
-      if (state is PeerQueueSuccess) {
+      if (state is NodeSearching) {
         showGreenToast(fToast, "File ready!", Icons.check);
       }
     },
         // Build Requirements
         buildWhen: (previous, current) {
-      if (current is PeerQueueInProgress) {
+      if (current is NodeQueueing) {
         return true;
-      } else if (current is PeerQueueSuccess) {
+      } else if (current is NodeQueueing) {
         return true;
       }
       return false;
@@ -203,15 +199,13 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
         bubbleChild = GestureDetector(
             onTap: () async {
               // File not yet loaded
-              if (state is PeerQueueInProgress) {
+              if (state is NodeQueueing) {
                 showRedToast(fToast, "File isnt ready", Icons.error);
               }
               // File is Loaded send offer
-              else if (state is PeerQueueSuccess) {
+              else if (state is NodeSearching) {
                 // Send Offer to Bubble
-                user.add(NodeOffered(
-                    context.getBloc(BlocType.Data), widget.peer,
-                    metadata: state.metadata));
+                sonr.add(NodeInvitePeer(widget.peer));
               }
             },
             child: _getBubbleContent(widget.peer));
@@ -228,7 +222,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
     });
   }
 
-  _getBubbleContent(Node peer) {
+  _getBubbleContent(Peer peer) {
     // Content
     var icon;
     var initials;
@@ -246,8 +240,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
 
     // Get Initials
     initials = Text(
-        peer.profile.firstName[0].toUpperCase() +
-            peer.profile.lastName[0].toUpperCase(),
+        peer.firstName[0].toUpperCase() + peer.lastName[0].toUpperCase(),
         style: mediumTextStyle());
 
     // Generate Bubble
@@ -274,12 +267,13 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
 // ******************************** //
 // ** Calculate Offset from Line ** //
 // ******************************** //
-  Offset _calculateOffset(double value, Proximity proximity) {
-    Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
-    PathMetrics pathMetrics = path.computeMetrics();
-    PathMetric pathMetric = pathMetrics.elementAt(0);
-    value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(value);
-    return pos.position;
+  Offset _calculateOffset(double value, Peer_Proximity proximity) {
+    // TODO: Add Device Information to Device Bloc
+    // Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
+    // PathMetrics pathMetrics = path.computeMetrics();
+    // PathMetric pathMetric = pathMetrics.elementAt(0);
+    // value = pathMetric.length * value;
+    // Tangent pos = pathMetric.getTangentForOffset(value);
+    // return pos.position;
   }
 }

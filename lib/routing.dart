@@ -1,4 +1,9 @@
-part of 'core.dart';
+import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonar_app/events.dart';
+import 'screens/screens.dart';
 
 // ******************* //
 // ** Build Routing ** //
@@ -6,10 +11,10 @@ part of 'core.dart';
 extension Routing on BuildContext {
   // ** Navigator Methods **
   goHome({bool initial: false}) {
-    // Connect First
-    if (initial) {
-      getBloc(BlocType.Signal).add(SocketStarted());
-    }
+    // TODO: Connect First
+    // if (initial) {
+    //   getBloc(BlocType.Signal).add(SocketStarted());
+    // }
 
     // Push
     Navigator.pushReplacementNamed(this, "/home");
@@ -37,7 +42,7 @@ extension Routing on BuildContext {
       switch (settings.name) {
         case '/home':
           // Update Status
-          getBloc(BlocType.User).add(NodeAvailable());
+          getBloc(BlocType.Sonr).add(NodeCancel());
           return PageTransition(
               child: HomeScreen(),
               type: PageTransitionType.fade,
@@ -55,7 +60,7 @@ extension Routing on BuildContext {
           break;
         case '/transfer':
           // Update Status
-          getBloc(BlocType.User).add(NodeSearch());
+          getBloc(BlocType.Sonr).add(NodeSearch());
           return PageTransition(
               child: SearchingScreen(),
               type: PageTransitionType.fade,
@@ -64,13 +69,14 @@ extension Routing on BuildContext {
               settings: settings);
           break;
         case '/detail':
-          return PageTransition(
-              child: DetailScreen(),
-              type: PageTransitionType.scale,
-              ctx: this,
-              inheritTheme: true,
-              settings: settings);
-          break;
+          // TODO: Implement Detail Screen
+          // return PageTransition(
+          //     child: DetailScreen(),
+          //     type: PageTransitionType.scale,
+          //     ctx: this,
+          //     inheritTheme: true,
+          //     settings: settings);
+          // break;
         case '/settings':
           return PageTransition(
               child: SettingsScreen(),
@@ -96,27 +102,15 @@ MultiBlocProvider initializeBloc(Widget app) {
   return MultiBlocProvider(
     providers: [
       // User Data Logic
-      BlocProvider<UserBloc>(
-        create: (context) => UserBloc(),
+      BlocProvider<SonrBloc>(
+        create: (context) => SonrBloc(),
       ),
-
-      // Local Data/Transfer Logic
-      BlocProvider<DataBloc>(
-          create: (context) => DataBloc(BlocProvider.of<UserBloc>(context))),
 
       // Device Sensors Logic
       BlocProvider<DeviceBloc>(
         create: (context) => DeviceBloc(
-          BlocProvider.of<UserBloc>(context),
+          BlocProvider.of<SonrBloc>(context),
         ),
-      ),
-
-      // Networking Logic
-      BlocProvider<SignalBloc>(
-        create: (context) => SignalBloc(
-            BlocProvider.of<DataBloc>(context),
-            BlocProvider.of<DeviceBloc>(context),
-            BlocProvider.of<UserBloc>(context)),
       ),
     ],
     child: app,

@@ -1,6 +1,6 @@
 part of 'window.dart';
 
-Widget buildAuthenticationView(BuildContext context, NodeRequestInitial state) {
+Widget buildAuthenticationView(BuildContext context, NodeInvited state) {
   return Column(
     children: [
       // Top Right Close/Cancel Button
@@ -16,18 +16,18 @@ Widget buildAuthenticationView(BuildContext context, NodeRequestInitial state) {
   );
 }
 
-Row _buildItem(BuildContext context, NodeRequestInitial state) {
+Row _buildItem(BuildContext context, NodeInvited state) {
   // Get Data
   var from = state.from;
   var metadata = state.metadata;
 
   // Preview Widget
   Widget preview;
-  switch (state.metadata.type) {
-    case FileType.Audio:
+  switch (state.metadata.kind) {
+    case "audio":
       preview = Icon(Icons.audiotrack, size: 100);
       break;
-    case FileType.Image:
+    case "image":
       if (metadata.thumbnail != null) {
         preview = ClipRRect(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
@@ -42,17 +42,14 @@ Row _buildItem(BuildContext context, NodeRequestInitial state) {
         preview = Icon(Icons.image, size: 100);
       }
       break;
-    case FileType.Unknown:
-      preview = Icon(Icons.device_unknown, size: 100);
-      break;
-    case FileType.Video:
+    case "video":
       preview = Icon(Icons.video_collection, size: 100);
       break;
-    case FileType.Word:
+    case "text":
       preview = Icon(Icons.sort_by_alpha, size: 100);
       break;
     default:
-      preview = Icon(Icons.storage, size: 100);
+      preview = Icon(Icons.device_unknown, size: 100);
       break;
   }
 
@@ -62,7 +59,7 @@ Row _buildItem(BuildContext context, NodeRequestInitial state) {
     Padding(padding: EdgeInsets.all(8)),
     Column(
       children: [
-        Text(from.profile.firstName, style: headerTextStyle()),
+        Text(from.firstName, style: headerTextStyle()),
         Text(from.device,
             style: TextStyle(
                 fontFamily: "Raleway",
@@ -74,15 +71,14 @@ Row _buildItem(BuildContext context, NodeRequestInitial state) {
   ]); // FlatButton// Container
 }
 
-NeumorphicButton _buildAuthButton(
-    BuildContext context, NodeRequestInitial state) {
+NeumorphicButton _buildAuthButton(BuildContext context, NodeInvited state) {
   // Build View
   return NeumorphicButton(
       onPressed: () {
         // Update WebBloc to Inform User Accepted
         context
-            .getBloc(BlocType.User)
-            .add(NodeAccepted(state.from, state.offer, state.metadata));
+            .getBloc(BlocType.Sonr)
+            .add(NodeRespondPeer(true, state.from, state.metadata));
 
         // Pop Window
         Navigator.pop(context);

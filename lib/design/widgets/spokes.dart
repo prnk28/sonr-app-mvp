@@ -115,18 +115,18 @@ Widget buildCenterBulb(double direction) {
       child: Container(
         decoration: BoxDecoration(
             gradient: FlutterGradients.angelCare(type: GradientType.radial)),
-        child: BlocBuilder<DataBloc, DataState>(
+        child: BlocBuilder<SonrBloc, SonrState>(
             // Build Requirements
             buildWhen: (previous, current) {
-          if (current is PeerQueueInProgress) {
+          if (current is NodeQueueing) {
             return true;
-          } else if (current is PeerQueueSuccess) {
+          } else if (current is NodeSearching) {
             return true;
           }
           return false;
         }, builder: (context, state) {
           // Still Queueing
-          if (state is PeerQueueInProgress) {
+          if (state is NodeQueueing) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -206,7 +206,7 @@ String _getCompassDesignation(double degrees) {
   var compassValue = ((degrees / 22.5) + 0.5).toInt();
 
   var compassEnum = CompassDesignation.values[(compassValue % 16)];
-  return enumAsString(compassEnum);
+  return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
 }
 
 String _getDirectionString(double degrees) {
@@ -221,4 +221,28 @@ String _getDirectionString(double degrees) {
   } else {
     return adjustedDegrees.toString();
   }
+}
+
+// ********************
+// ** Math Functions **
+// ********************
+num directionToRads(num deg) {
+  return (directionToDegrees(deg) * pi) / 180.0;
+}
+
+double directionToDegrees(double direction) {
+  if (direction + 90 > 360) {
+    return direction - 270;
+  } else {
+    return direction + 90;
+  }
+}
+
+Alignment directionToAlignment(double r, double deg) {
+  // Calculate radians
+  double radAngle = directionToRads(deg);
+
+  double x = cos(radAngle) * r;
+  double y = sin(radAngle) * r;
+  return Alignment(x, y);
 }

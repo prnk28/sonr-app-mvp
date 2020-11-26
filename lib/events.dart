@@ -1,24 +1,20 @@
-part of 'core.dart';
+import 'package:flutter/material.dart';
+import 'package:sonar_app/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'screens/screens.dart';
 
-// Cubit Name Enum
-enum CubitType { ActivePeers, Direction, Transfer }
-enum BlocType { Data, Device, User, Signal }
+enum CubitType { Direction, Exchange, Peers, Queue }
+enum BlocType { Device, Sonr }
 
 extension Events on BuildContext {
   // -- Retrieval Methods --
   getBloc(BlocType type) {
     switch (type) {
-      case BlocType.Data:
-        return BlocProvider.of<DataBloc>(this);
+      case BlocType.Sonr:
+        return BlocProvider.of<SonrBloc>(this);
         break;
       case BlocType.Device:
         return BlocProvider.of<DeviceBloc>(this);
-        break;
-      case BlocType.User:
-        return BlocProvider.of<UserBloc>(this);
-        break;
-      case BlocType.Signal:
-        return BlocProvider.of<SignalBloc>(this);
         break;
     }
     return null;
@@ -29,11 +25,14 @@ extension Events on BuildContext {
       case CubitType.Direction:
         return BlocProvider.of<DeviceBloc>(this).directionCubit;
         break;
-      case CubitType.Transfer:
-        return BlocProvider.of<DataBloc>(this).currentFile;
+      case CubitType.Exchange:
+        return BlocProvider.of<SonrBloc>(this).exchangeProgress;
         break;
-      case CubitType.ActivePeers:
-        return BlocProvider.of<UserBloc>(this).activePeers;
+      case CubitType.Peers:
+        return BlocProvider.of<SonrBloc>(this).availablePeers;
+        break;
+      case CubitType.Queue:
+        return BlocProvider.of<SonrBloc>(this).fileQueue;
         break;
     }
     return null;
@@ -41,19 +40,16 @@ extension Events on BuildContext {
 
 // -- Global Screen Size --
   setScreenSize() {
-    // Get Screen Size
-    double width = MediaQuery.of(this).size.width;
-    double height = MediaQuery.of(this).size.height;
-    screenSize = Size(width, height);
+    
   }
 }
 
 // -- BLoC Retreival Methods -- //
 getRequestListener() {
-  return BlocListener<UserBloc, UserState>(
+  return BlocListener<SonrBloc, SonrState>(
     listenWhen: (previousState, state) {
       // Current States
-      if (state is NodeRequestInitial) {
+      if (state is NodeInvited) {
         return true;
       } else if (state is NodeReceiveInProgress) {
         return true;
@@ -63,7 +59,7 @@ getRequestListener() {
       return false;
     },
     listener: (context, state) {
-      if (state is NodeRequestInitial) {
+      if (state is NodeInvited) {
         // Display Bottom Sheet
         showModalBottomSheet<void>(
             shape: windowBorder(),

@@ -35,9 +35,11 @@ class Popup {
                 FlatButton(
                   onPressed: () {
                     // Move to Page
-                    context
-                        .getBloc(BlocType.Data)
-                        .add(UserGetFile(meta: state.metadata));
+
+                    // TODO: Implement Get File
+                    // context
+                    //     .getBloc(BlocType.Data)
+                    //     .add(UserGetFile(meta: state.metadata));
 
                     // Pop View
                     Navigator.pop(context);

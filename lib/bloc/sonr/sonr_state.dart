@@ -14,83 +14,89 @@ abstract class SonrState extends Equatable {
 class NodeOffline extends SonrState {}
 
 // ^ Node is Available ^ //
-class NodeAvailableN extends SonrState {}
+class NodeAvailable extends SonrState {}
 
 // ^ Node is Queueing File ^ //
 class NodeQueueing extends SonrState {}
 
 // ^ Node is Searching for Peers ^ //
-class NodeSearchingN extends SonrState {}
+class NodeSearching extends SonrState {}
 
 // ^ Node is Searching for Peers ^ //
-class NodeError extends SonrState {}
+class NodeError extends SonrState {
+  final ErrorMessage error;
+  final SonrState errorState;
+  const NodeError(this.error, this.errorState);
+}
 
 // **********************************
 // ** Authentication based States ***
 // **********************************
 // ^ Node has been Invited ^ //
 class NodeInvited extends SonrState {
-  final Peer peer;
-  const NodeInvited(this.peer);
+  final Peer from;
+  final Metadata metadata;
+  const NodeInvited(this.from, this.metadata);
 }
 
 // ^ User has sent offer to [Peer] ^
-class NodeRequestInProgressN extends SonrState {
+class NodeRequestInProgress extends SonrState {
   final Peer peer;
-  NodeRequestInProgressN(this.peer);
+  NodeRequestInProgress(this.peer);
 }
 
 // ^ [Peer] has accepted offer ^
-class NodeRequestSuccessN extends SonrState {
+class NodeRequestSuccess extends SonrState {
   final Peer match;
-  NodeRequestSuccessN(this.match);
+  NodeRequestSuccess(this.match);
 }
 
 // ^ [Peer] has rejected offer ^
-class NodeRequestFailureN extends SonrState {
+class NodeRequestFailure extends SonrState {
   final Peer peer;
-  NodeRequestFailureN(this.peer);
+  NodeRequestFailure(this.peer);
 }
 
 // ****************************
 // ** Exchange based States ***
 // ****************************
 // ^ Node is Transferring File ^ //
-class NodeTransferInProgressN extends SonrState {
+class NodeTransferInProgress extends SonrState {
   final Peer receiver;
-  const NodeTransferInProgressN(this.receiver);
+  const NodeTransferInProgress(this.receiver);
 }
 
 // ^ User has completed transfer ^
-class NodeTransferSuccessN extends SonrState {
+class NodeTransferSuccess extends SonrState {
   final Peer receiver;
-  NodeTransferSuccessN(this.receiver);
+  NodeTransferSuccess(this.receiver);
 }
 
 // ^ User has failed to transfer ^
-class NodeTransferFailureN extends SonrState {
+class NodeTransferFailure extends SonrState {
   final Peer receiver;
-  NodeTransferFailureN(this.receiver);
+  NodeTransferFailure(this.receiver);
 }
 
 // ^ Node is Receiving File ^ //
-class NodeReceiveInProgressN extends SonrState {
+class NodeReceiveInProgress extends SonrState {
   final Peer sender;
-  const NodeReceiveInProgressN(this.sender);
+  final Metadata metadata;
+  const NodeReceiveInProgress(this.sender, this.metadata);
 }
 
 // User has completed transfer
-class NodeReceiveSuccessN extends SonrState {
+class NodeReceiveSuccess extends SonrState {
   final File file;
   final Peer sender;
   final Metadata metadata;
-  NodeReceiveSuccessN(this.file, this.sender, this.metadata);
+  NodeReceiveSuccess(this.file, this.sender, this.metadata);
 }
 
 // User has failed to transfer
-class NodeReceiveFailureN extends SonrState {
+class NodeReceiveFailure extends SonrState {
   final Peer sender;
-  NodeReceiveFailureN(this.sender);
+  NodeReceiveFailure(this.sender);
 }
 
 // *********************************************

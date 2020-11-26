@@ -103,12 +103,13 @@ class _InitializeViewState extends State<InitializeView> {
                 ),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    // Get Profile from Values
-                    var profile =
-                        new Profile(this._firstName, this._lastName, null);
+                    // TODO: Implement Method to Extract Contact and Location at once
+                    // // Get Profile from Values
+                    // var profile =
+                    //     new Profile(this._firstName, this._lastName, null);
 
-                    // Process data.
-                    context.getBloc(BlocType.User).add(ProfileUpdated(profile));
+                    // // Process data.
+                    // context.getBloc(BlocType.User).add(ProfileUpdated(profile));
                   }
                 },
                 child: Text('Submit',

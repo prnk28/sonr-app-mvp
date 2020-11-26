@@ -6,8 +6,8 @@ part of 'searching.dart';
 class ZoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ActivePeersCubit, List<Node>>(
-        cubit: context.getCubit(CubitType.ActivePeers),
+    return BlocBuilder<AvailablePeers, List<Peer>>(
+        cubit: context.getCubit(CubitType.Peers),
         builder: (context, state) {
           if (state.length > 0) {
             // Initialize Widget List
@@ -19,7 +19,7 @@ class ZoneView extends StatelessWidget {
             double mean = 1.0 / total;
 
             // Create Bubbles
-            for (Node peer in state) {
+            for (Peer peer in state) {
               // Increase Count
               current += 1;
 
@@ -36,11 +36,12 @@ class ZoneView extends StatelessWidget {
 }
 
 Widget rangeLines() {
-  return Padding(
-      padding: EdgeInsets.only(bottom: 5),
-      child: CustomPaint(
-        size: screenSize,
-        painter: ZonePainter(),
-        child: Container(),
-      ));
+  // TODO: Add Device Size in Device Bloc
+  // return Padding(
+  //     padding: EdgeInsets.only(bottom: 5),
+  //     child: CustomPaint(
+  //       size: screenSize,
+  //       painter: ZonePainter(),
+  //       child: Container(),
+  //     ));
 }

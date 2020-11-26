@@ -28,9 +28,9 @@ class FloaterButton extends StatelessWidget {
                 await picker.getImage(source: ImageSource.camera);
 
             // Queue File
-            context.getBloc(BlocType.Data).add(UserQueuedFile(
-                TrafficDirection.Outgoing,
-                rawFile: File(pickedFile.path)));
+            context
+                .getBloc(BlocType.Sonr)
+                .add(NodeQueueFile(File(pickedFile.path)));
 
             // Wait for Animation to Complete
             animationController.reverse();
@@ -48,11 +48,13 @@ class FloaterButton extends StatelessWidget {
           bubbleColor: Colors.blue,
           icon: Icons.storage,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
-          onPress: () {
+          onPress: () async {
+            // Get Test File Path
+            File testFile =
+                await getAssetFileByPath("assets/images/fat_test.jpg");
+
             // Queue File
-            context
-                .getBloc(BlocType.Data)
-                .add(UserQueuedFile(TrafficDirection.Outgoing));
+            context.getBloc(BlocType.Sonr).add(NodeQueueFile(testFile));
 
             // Wait for Animation to Complete
             animationController.reverse();
@@ -98,4 +100,22 @@ class FloaterButton extends StatelessWidget {
       backGroundColor: Colors.white,
     );
   }
+}
+
+Future<File> getAssetFileByPath(String path) async {
+  // Get Application Directory
+  Directory directory = await getApplicationDocumentsDirectory();
+
+  // Get File Extension and Set Temp DB Extenstion
+  var dbPath = join(directory.path, basename(path));
+
+  // Get Byte Data
+  ByteData data = await rootBundle.load(path);
+
+  // Get Bytes as Int
+  List<int> bytes =
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+  // Return File Object
+  return await File(dbPath).writeAsBytes(bytes);
 }

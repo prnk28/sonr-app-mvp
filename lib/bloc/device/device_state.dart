@@ -1,11 +1,10 @@
 part of 'device_bloc.dart';
 
 abstract class DeviceState extends Equatable {
-  final Node user;
-  const DeviceState({this.user});
+  const DeviceState();
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [];
 }
 
 // ** Prior to Load or on Standby **

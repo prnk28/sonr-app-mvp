@@ -1,10 +1,19 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 
 part 'card.dart';
 part 'floater.dart';
 part 'grid.dart';
+
+Logger log = Logger();
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -65,10 +74,10 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<UserBloc, UserState>(
+        BlocListener<SonrBloc, SonrState>(
           listenWhen: (previousState, state) {
             // Current States
-            if (state is NodeRequestInitial) {
+            if (state is NodeInvited) {
               return true;
             } else if (state is NodeReceiveInProgress) {
               return true;
@@ -78,7 +87,7 @@ class _HomeView extends StatelessWidget {
             return false;
           },
           listener: (context, state) {
-            if (state is NodeRequestInitial) {
+            if (state is NodeInvited) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
                   shape: windowBorder(),
@@ -112,17 +121,19 @@ class _HomeView extends StatelessWidget {
             }
           },
         ),
-        BlocListener<DataBloc, DataState>(
-          listener: (context, state) {
-            if (state is UserViewingFileInProgress) {
-              // Push to Detail Screen
-              Navigator.pushReplacementNamed(context, "/detail",
-                  arguments: state.metadata);
-            }
-          },
-        ),
+        // TODO: Implement File Viewing
+        // BlocListener<DataBloc, DataState>(
+        //   listener: (context, state) {
+        //     if (state is UserViewingFileInProgress) {
+        //       // Push to Detail Screen
+        //       Navigator.pushReplacementNamed(context, "/detail",
+        //           arguments: state.metadata);
+        //     }
+        //   },
+        // ),
       ],
-      child: ImageGrid(),
+      child: Container(),
+      // TODO: child: ImageGrid(),
     );
   }
 }

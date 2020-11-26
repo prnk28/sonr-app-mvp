@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/repository/repository.dart';
+import 'routing.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -8,9 +7,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   // Initialize HiveDB
   await Hive.initFlutter();
-
-  // Initialize Hive Adapters
-  Hive.registerAdapter(ProfileAdapter());
 
   // Run App with BLoC Providers
   runApp(initializeBloc(App()));
