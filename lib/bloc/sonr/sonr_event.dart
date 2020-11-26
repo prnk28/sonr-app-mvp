@@ -29,6 +29,12 @@ class NodeQueueFile extends SonrEvent {
   const NodeQueueFile(this.file);
 }
 
+// ^ Send a Updated Direction ^ //
+// @ Args() //
+class NodeSearchN extends SonrEvent {
+  const NodeSearchN();
+}
+
 // ^ Send an Invite ^ //
 // @ Args(string) //
 class NodeInvitePeer extends SonrEvent {
@@ -40,10 +46,6 @@ class NodeInvitePeer extends SonrEvent {
 // @ Args(bool) //
 class NodeRespondPeer extends SonrEvent {
   final bool decision;
-  const NodeRespondPeer(this.decision);
-}
-
-// ^ Transfer to an Accepted Response ^ //
-class NodeTransfer extends SonrEvent {
-  const NodeTransfer();
+  final Peer peer;
+  const NodeRespondPeer(this.decision, this.peer);
 }
