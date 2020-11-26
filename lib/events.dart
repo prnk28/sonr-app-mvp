@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'modals/modals.dart';
 import 'screens/screens.dart';
 
 enum CubitType { Direction, Exchange, Peers }

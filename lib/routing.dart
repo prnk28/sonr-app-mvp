@@ -64,14 +64,6 @@ extension Routing on BuildContext {
           //     inheritTheme: true,
           //     settings: settings);
           // break;
-        case '/settings':
-          return PageTransition(
-              child: SettingsScreen(),
-              type: PageTransitionType.topToBottom,
-              ctx: this,
-              inheritTheme: true,
-              settings: settings);
-          break;
       }
       return null;
     };
