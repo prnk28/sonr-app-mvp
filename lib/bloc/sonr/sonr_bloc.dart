@@ -14,7 +14,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties
   Node node;
   AvailablePeers availablePeers;
-  FileQueue fileQueue;
   ExchangeProgress exchangeProgress;
 
   // ^ Constructer Sets Callbacks ^ //
@@ -88,7 +87,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ NodeInvitePeer Event ^
   Stream<SonrState> _mapNodeInvitePeerState(NodeInvitePeer event) async* {
     node.invite(event.peer);
-    yield NodeRequestInProgress(event.peer);
+    yield PeerInvited(event.peer);
   }
 
   // ^ NodeRespondPeer Event ^
@@ -146,7 +145,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     if (data is AuthMessage) {
       // Verify Event
       if (data.event == AuthMessage_Event.DECLINE) {
-        yield NodeRequestFailure(data.from);
+        yield PeerInviteDeclined(data.from);
       }
     }
   }
@@ -167,9 +166,9 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ** Responsive Handlers  **
 // **************************
 // ^ File has Succesfully Queued ^ //
-  void handleQueued(dynamic data) async {
+  Stream<SonrState> handleQueued(dynamic data) async* {
     if (data is Metadata) {
-      fileQueue.update(data);
+      add(NodeSearch());
     }
   }
 

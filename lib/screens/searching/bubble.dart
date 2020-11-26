@@ -42,9 +42,9 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
     return BlocBuilder<SonrBloc, SonrState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
-      if (curr is NodeRequestInProgress) {
+      if (curr is PeerInvited) {
         return true;
-      } else if (curr is NodeRequestFailure) {
+      } else if (curr is PeerInviteDeclined) {
         return true;
       } else if (curr is NodeTransferInProgress) {
         return true;
@@ -57,7 +57,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
       fToast.init(context);
 
       // ** Create Requested Node Bubble **
-      if (state is NodeRequestInProgress) {
+      if (state is PeerInvited) {
         // Check if Current Node Requested
         if (state.peer.id == widget.peer.id) {
           return Positioned(
@@ -81,7 +81,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
       }
 
       // ** Peer has Declined **
-      else if (state is NodeRequestFailure) {
+      else if (state is PeerInviteDeclined) {
         // Check if Current Node Rejected
         if (state.peer.id == widget.peer.id) {
           return Positioned(

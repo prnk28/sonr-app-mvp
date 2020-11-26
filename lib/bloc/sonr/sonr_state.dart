@@ -40,21 +40,21 @@ class NodeInvited extends SonrState {
 }
 
 // ^ User has sent offer to [Peer] ^
-class NodeRequestInProgress extends SonrState {
+class PeerInvited extends SonrState {
   final Peer peer;
-  NodeRequestInProgress(this.peer);
+  PeerInvited(this.peer);
 }
 
 // ^ [Peer] has accepted offer ^
-class NodeRequestSuccess extends SonrState {
+class PeerInviteAccepted extends SonrState {
   final Peer match;
-  NodeRequestSuccess(this.match);
+  PeerInviteAccepted(this.match);
 }
 
 // ^ [Peer] has rejected offer ^
-class NodeRequestFailure extends SonrState {
+class PeerInviteDeclined extends SonrState {
   final Peer peer;
-  NodeRequestFailure(this.peer);
+  PeerInviteDeclined(this.peer);
 }
 
 // ****************************
@@ -85,7 +85,7 @@ class NodeReceiveInProgress extends SonrState {
   const NodeReceiveInProgress(this.sender, this.metadata);
 }
 
-// User has completed transfer
+// ^ Node succesfully received file ^ //
 class NodeReceiveSuccess extends SonrState {
   final File file;
   final Peer sender;
@@ -93,7 +93,7 @@ class NodeReceiveSuccess extends SonrState {
   NodeReceiveSuccess(this.file, this.sender, this.metadata);
 }
 
-// User has failed to transfer
+// ^ Node failed to receive file ^ //
 class NodeReceiveFailure extends SonrState {
   final Peer sender;
   NodeReceiveFailure(this.sender);
@@ -121,16 +121,5 @@ class AvailablePeers extends Cubit<List<Peer>> {
   // Update Progress
   update(List<Peer> updatedPeers) {
     emit(updatedPeers);
-  }
-}
-
-// ^ Cubit to Track File Queue ^ //
-class FileQueue extends Cubit<Metadata> {
-  // Default Value
-  FileQueue() : super(null);
-
-  // Update Progress
-  update(Metadata queuedFile) {
-    emit(queuedFile);
   }
 }

@@ -3,7 +3,7 @@ import 'package:sonar_app/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'screens/screens.dart';
 
-enum CubitType { Direction, Exchange, Peers, Queue }
+enum CubitType { Direction, Exchange, Peers }
 enum BlocType { Device, Sonr }
 
 extension Events on BuildContext {
@@ -31,16 +31,8 @@ extension Events on BuildContext {
       case CubitType.Peers:
         return BlocProvider.of<SonrBloc>(this).availablePeers;
         break;
-      case CubitType.Queue:
-        return BlocProvider.of<SonrBloc>(this).fileQueue;
-        break;
     }
     return null;
-  }
-
-// -- Global Screen Size --
-  setScreenSize() {
-    
   }
 }
 

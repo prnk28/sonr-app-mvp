@@ -10,19 +10,6 @@ import 'screens/screens.dart';
 // ******************* //
 extension Routing on BuildContext {
   // ** Navigator Methods **
-  goHome({bool initial: false}) {
-    // TODO: Connect First
-    // if (initial) {
-    //   getBloc(BlocType.Signal).add(SocketStarted());
-    // }
-
-    // Push
-    Navigator.pushReplacementNamed(this, "/home");
-  }
-
-  goRegister() {
-    Navigator.pushReplacementNamed(this, "/register");
-  }
 
   // Display Transfer as Modal
   pushTransfer() {
