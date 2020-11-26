@@ -4,7 +4,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Check Permissions
-    context.getBloc(BlocType.Device).add(StartApp(context));
+    context.getBloc(BlocType.Device).add(StartApp());
 
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),

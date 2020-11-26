@@ -40,6 +40,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   ) async* {
     if (event is StartApp) {
       yield* _mapStartAppState(event);
+    } else if (event is CreateProfile) {
+      yield* _mapCreateProfileState(event);
     } else if (event is RequestPermission) {
       yield* _mapRequestPermissionState(event);
     }
