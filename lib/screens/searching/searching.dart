@@ -6,9 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-part 'bubble.dart';
-part 'zone.dart';
-part 'compass.dart';
+part 'view/bubble.dart';
+part 'elements/zone.dart';
+part 'view/compass.dart';
 
 class SearchingScreen extends StatelessWidget {
   @override

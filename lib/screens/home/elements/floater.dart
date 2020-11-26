@@ -1,4 +1,4 @@
-part of 'home.dart';
+part of '../home.dart';
 
 class FloaterButton extends StatelessWidget {
   final Animation<double> animation;

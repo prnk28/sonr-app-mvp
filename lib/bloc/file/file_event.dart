@@ -16,6 +16,6 @@ class GetAllFiles extends FileEvent {
 // ^ Retreive ONE file from SQLite ^ //
 // @ Args() //
 class GetFile extends FileEvent {
-  final String id;
-  const GetFile(this.id);
+  final Metadata metadata;
+  const GetFile(this.metadata);
 }

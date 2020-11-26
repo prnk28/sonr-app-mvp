@@ -10,9 +10,9 @@ import 'package:sonar_app/modals/modal.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 
-part 'card.dart';
-part 'floater.dart';
-part 'grid.dart';
+part 'view/card.dart';
+part 'elements/floater.dart';
+part 'view/grid.dart';
 
 Logger log = Logger();
 

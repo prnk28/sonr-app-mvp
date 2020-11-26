@@ -1,4 +1,4 @@
-part of 'searching.dart';
+part of '../searching.dart';
 
 class PeerBubble extends StatefulWidget {
   final double value;

@@ -1,4 +1,4 @@
-part of 'home.dart';
+part of '../home.dart';
 
 // TODO: Implement Image Grid
 // class ImageGrid extends StatelessWidget {

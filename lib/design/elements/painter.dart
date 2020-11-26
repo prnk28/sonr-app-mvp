@@ -44,7 +44,6 @@ class ZonePainter extends CustomPainter {
         return Rect.fromLTRB(0, 0, _currentSize.width, 150);
         break;
       default:
-        // TODO: Utilize Connection type along with Proximity MDNS, Global Etc.
         return Rect.fromLTRB(0, 100, _currentSize.width, 300);
         break;
     }

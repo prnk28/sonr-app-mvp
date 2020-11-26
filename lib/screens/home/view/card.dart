@@ -1,4 +1,4 @@
-part of 'home.dart';
+part of '../home.dart';
 
 // TODO: Implement ImageCard
 // class ImageCard extends StatelessWidget {

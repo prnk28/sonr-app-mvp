@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'package:equatable/equatable.dart';
 
 part 'file_event.dart';
