@@ -7,4 +7,7 @@ abstract class FileState extends Equatable {
   List<Object> get props => [];
 }
 
-class FileInitial extends FileState {}
+class AllFilesLoading extends FileState {}
+class AllFilesSuccess extends FileState {}
+class AllFilesNone extends FileState {}
+class AllFilesError extends FileState {}
