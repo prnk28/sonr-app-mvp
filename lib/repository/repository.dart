@@ -1,3 +1,5 @@
 // export 'contacts.dart';
-// export 'files.dart';
-export 'profile.dart';
+export 'meta_provider.dart';
+export 'profile_provider.dart';
+
+const DATABASE_PATH = 'localData.db';

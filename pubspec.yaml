@@ -33,8 +33,8 @@ dependencies:
   vibration: ^1.2.4
 
   # -- Data --
-  image_picker:
-    path: ^1.7.0
+  image_picker: ^0.6.7+14
+  path: ^1.7.0
   path_provider: ^1.6.7
   shared_preferences: ^0.5.12+4
 
@@ -43,7 +43,6 @@ dependencies:
   sonr_core:
     git:
       url: git@github.com:sonr-io/plugin.git
-      ref: release
 
   # -- UI/UX --
   animations: ^1.1.2
