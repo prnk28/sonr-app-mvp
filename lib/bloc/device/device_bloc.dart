@@ -59,7 +59,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     await initFileType();
 
     // Check Permissions
-    LocationPermission permission = await checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
 
     // Permission by Case
     if (permission == LocationPermission.whileInUse ||

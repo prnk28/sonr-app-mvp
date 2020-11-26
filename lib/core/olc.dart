@@ -81,6 +81,7 @@ const _decode = <int>[
   14, 15, 16, -2, -2, -2, 17, 18, 19, -2, -2, -2, -2, -2, -2, -2,
 ]; //
 
+// Base File that converts Lat/Lon to an Open Location Code
 class OLC {
   static bool _matchesPattern(String string, Pattern pattern) =>
       string.indexOf(pattern) >= 0;
