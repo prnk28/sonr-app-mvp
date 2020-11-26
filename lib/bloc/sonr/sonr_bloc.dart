@@ -22,9 +22,11 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     node.assignCallback(CallbackEvent.Refreshed, handleRefreshed);
     node.assignCallback(CallbackEvent.Queued, handleQueued);
     node.assignCallback(CallbackEvent.Invited, handleInvited);
+    node.assignCallback(CallbackEvent.Accepted, handleAccepted);
     node.assignCallback(CallbackEvent.Denied, handleDenied);
     node.assignCallback(CallbackEvent.Progressed, handleProgressed);
     node.assignCallback(CallbackEvent.Completed, handleCompleted);
+    node.assignCallback(CallbackEvent.Error, handleSonrError);
   }
 
   // ^ Map Events to Function ^ //
@@ -100,12 +102,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     }
   }
 
-  // ^ NodeQueueFile Event ^
-  // TODO: Convert to onAccept Callback Handler
-  // Stream<SonrState> _mapNodeTransferState(NodeTransfer event) async* {
-  //   node.transfer();
-  // }
-
   // *****************************
   // ** Callback Based Handlers **
   // *****************************
@@ -128,6 +124,18 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     }
   }
 
+  // ^ Node Has Been Denied ^ //
+  Stream<SonrState> handleAccepted(dynamic data) async* {
+    // Check Type
+    if (data is AuthMessage) {
+      // Verify Event
+      if (data.event == AuthMessage_Event.ACCEPT) {
+        node.transfer();
+        yield NodeTransferInProgressN(data.from);
+      }
+    }
+  }
+
 // ^ Node Has Been Denied ^ //
   Stream<SonrState> handleDenied(dynamic data) async* {
     // Check Type
@@ -142,7 +150,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // **************************
 // ** Responsive Handlers  **
 // **************************
-
 // ^ File has Succesfully Queued ^ //
   void handleQueued(dynamic data) async {
     if (data is Metadata) {
@@ -159,6 +166,15 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 
 // ^ Transfer Has Succesfully Completed ^ //
   void handleCompleted(dynamic data) async {
-    if (data is CompletedMessage) {}
+    if (data is CompletedMessage) {
+      
+    }
+  }
+
+// ^ An Error Has Occurred ^ //
+  void handleSonrError(dynamic data) async {
+    if (data is ErrorMessage) {
+
+    }
   }
 }

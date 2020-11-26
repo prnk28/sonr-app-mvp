@@ -7,9 +7,9 @@ abstract class SonrState extends Equatable {
   List<Object> get props => [];
 }
 
-// **************************
-// ** Action based States ***
-// **************************
+// ********************
+// ** Default States **
+// ********************
 // ^ Node is Offline ^ //
 class NodeOffline extends SonrState {}
 
@@ -21,6 +21,9 @@ class NodeQueueing extends SonrState {}
 
 // ^ Node is Searching for Peers ^ //
 class NodeSearchingN extends SonrState {}
+
+// ^ Node is Searching for Peers ^ //
+class NodeError extends SonrState {}
 
 // **********************************
 // ** Authentication based States ***
