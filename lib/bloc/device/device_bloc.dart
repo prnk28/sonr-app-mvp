@@ -62,12 +62,14 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
         // Initialize Sonr Node
         sonr.add(NodeInitialize(profile.contact, position));
         yield DeviceActive();
+      } else {
+        // ! Profile wasnt found
+        yield ProfileError();
       }
-      // ! Profile wasnt found
-      yield ProfileError();
+    } else {
+      // ! Location Permission Denied
+      yield RequiredPermissionError();
     }
-    // ! Location Permission Denied
-    yield RequiredPermissionError();
   }
 
   // ^ CreateProfile Event ^
@@ -87,9 +89,10 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       // Initialize Sonr Node
       sonr.add(NodeInitialize(profile.contact, position));
       yield DeviceActive();
+    } else {
+      // ! Location Permission Denied
+      yield RequiredPermissionError();
     }
-    // ! Location Permission Denied
-    yield RequiredPermissionError();
   }
 
 // ^ RequestPermission Event ^
@@ -99,29 +102,33 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
       case PermissionType.Location:
         if (await Permission.locationWhenInUse.request().isGranted) {
           yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
         }
-        yield PermissionFailure(event.type);
         break;
 
       case PermissionType.Camera:
         if (await Permission.camera.request().isGranted) {
           yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
         }
-        yield PermissionFailure(event.type);
         break;
 
       case PermissionType.Photos:
         if (await Permission.mediaLibrary.request().isGranted) {
           yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
         }
-        yield PermissionFailure(event.type);
         break;
 
       case PermissionType.Notifications:
         if (await Permission.notification.request().isGranted) {
           yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
         }
-        yield PermissionFailure(event.type);
         break;
     }
   }

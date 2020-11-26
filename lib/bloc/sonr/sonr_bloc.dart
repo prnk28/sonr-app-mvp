@@ -145,12 +145,13 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 
   // ^ Transfer Has Succesfully Completed ^ //
   Stream<SonrState> handleCompleted(dynamic data) async* {
-    if (data is CompletedMessage) {
+    if (data is Metadata) {
       // Check what current state is
       if (this.state is NodeTransferInProgress) {
-      
-      } else if (this.state is NodeReceiveInProgress) {
 
+      } 
+      else if (this.state is NodeReceiveInProgress) {
+        
       }
       yield NodeAvailable();
     }

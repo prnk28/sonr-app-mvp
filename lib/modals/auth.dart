@@ -23,7 +23,7 @@ Row _buildItem(BuildContext context, NodeInvited state) {
 
   // Preview Widget
   Widget preview;
-  switch (state.metadata.kind) {
+  switch (state.metadata.mime.type) {
     case "audio":
       preview = Icon(Icons.audiotrack, size: 100);
       break;

@@ -12,7 +12,10 @@ abstract class FileState extends Equatable {
 // *******************************
 class AllFilesLoading extends FileState {}
 
-class AllFilesSuccess extends FileState {}
+class AllFilesSuccess extends FileState {
+  final List<Metadata> metadata;
+  const AllFilesSuccess(this.metadata);
+}
 
 class AllFilesNone extends FileState {}
 

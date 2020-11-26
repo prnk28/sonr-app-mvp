@@ -43,6 +43,7 @@ dependencies:
   sonr_core:
     git:
       url: git@github.com:sonr-io/plugin.git
+      ref: release
 
   # -- UI/UX --
   animations: ^1.1.2

@@ -1,7 +1,8 @@
 part of 'window.dart';
 
 Widget buildProgressView(Metadata meta) {
-  return Center(child: IconLiquidFill(iconData: iconDataFromKind(meta.kind)));
+  return Center(
+      child: IconLiquidFill(iconData: iconDataFromKind(meta.mime.type)));
 }
 
 class IconLiquidFill extends StatefulWidget {
