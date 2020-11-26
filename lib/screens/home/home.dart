@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/modals/modals.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 part 'view/card.dart';
 part 'elements/floater.dart';
@@ -133,8 +134,7 @@ class _HomeView extends StatelessWidget {
         //   },
         // ),
       ],
-      child: Container(),
-      // TODO: child: ImageGrid(),
+      child: ImageGrid(),
     );
   }
 }

@@ -31,42 +31,42 @@ class _ImageDetailViewState extends State<ImageDetailView> {
         // Spacing
         Padding(padding: EdgeInsets.only(top: 20)),
         // Additional Info
-        //_buildInfo(widget.metadata)
+        _buildInfo(widget.metadata)
         // Image
       ],
     );
   }
 }
 
-// TODO: Implement Metadata Info
-// _buildInfo(Metadata metadata) {
-//   // Init Formatters
-//   DateFormat dateFormat = new DateFormat.yMMMMd('en_US');
-//   DateFormat timeFormat = new DateFormat.jm();
+_buildInfo(Metadata metadata) {
+  // Init Formatters
+  DateFormat dateFormat = new DateFormat.yMMMMd('en_US');
+  DateFormat timeFormat = new DateFormat.jm();
 
-//   // Create Strings
-//   String date = dateFormat.format(metadata.received);
-//   String time = timeFormat.format(metadata.received);
+  // Create Strings
+  var opened = DateTime.fromMillisecondsSinceEpoch(metadata.lastOpened);
+  String date = dateFormat.format(opened);
+  String time = timeFormat.format(opened);
 
-//   // Build View
-//   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-//     // Owner Info
-//     Column(children: [
-//       Text(metadata.owner.firstName),
-//       Text(metadata.owner.lastName),
-//     ]),
+  // Build View
+  return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    // Owner Info
+    Column(children: [
+      Text(metadata.owner.firstName),
+      Text(metadata.owner.lastName),
+    ]),
 
-//     // Spacing
-//     Padding(padding: EdgeInsets.only(left: 10, right: 20)),
+    // Spacing
+    Padding(padding: EdgeInsets.only(left: 10, right: 20)),
 
-//     // File Info
-//     Column(children: [
-//       Text(_convertSize(metadata.size)),
-//       Text(date),
-//       Text(time),
-//     ])
-//   ]);
-// }
+    // File Info
+    Column(children: [
+      Text(_convertSize(metadata.size)),
+      Text(date),
+      Text(time),
+    ])
+  ]);
+}
 
 String _convertSize(int size) {
   // Byte Size

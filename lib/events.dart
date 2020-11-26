@@ -5,7 +5,7 @@ import 'modals/modals.dart';
 import 'screens/screens.dart';
 
 enum CubitType { Direction, Exchange, Peers }
-enum BlocType { Device, Sonr }
+enum BlocType { Device, File, Sonr }
 
 extension Events on BuildContext {
   // -- Retrieval Methods --
@@ -16,6 +16,9 @@ extension Events on BuildContext {
         break;
       case BlocType.Device:
         return BlocProvider.of<DeviceBloc>(this);
+        break;
+      case BlocType.File:
+        return BlocProvider.of<FileBloc>(this);
         break;
     }
     return null;
