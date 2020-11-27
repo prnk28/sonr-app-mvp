@@ -50,3 +50,10 @@ class NodeRespondPeer extends SonrEvent {
   final Metadata metadata;
   const NodeRespondPeer(this.decision, this.peer, this.metadata);
 }
+
+// ^ Start the Transfer Process ^ //
+// @ Args() //
+class NodeStartTransfer extends SonrEvent {
+  final Peer peer;
+  const NodeStartTransfer(this.peer);
+}

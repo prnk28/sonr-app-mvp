@@ -15,13 +15,12 @@ class Window {
         child: buildAuthenticationView(context, state));
   }
 
-  // TODO: Implement progress update
-  // static Widget showTransferring(
-  //     BuildContext context, ProgressUpdate state) {
-  //   // Return View
-  //   return Container(
-  //       decoration: windowDecoration(context),
-  //       height: screenSize.height / 3 + 20,
-  //       child: buildProgressView(state.metadata));
-  // }
+  static Widget showTransferring(
+      BuildContext context, NodeReceiveInProgress state) {
+    // Return View
+    return Container(
+        decoration: windowDecoration(context),
+        height: screenSize.height / 3 + 20,
+        child: buildProgressView(state));
+  }
 }

@@ -35,8 +35,8 @@ Row _buildItem(BuildContext context, AuthMessage state) {
                 fit: BoxFit.fitWidth,
                 alignment: Alignment.bottomCenter,
                 child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints(minWidth: 1, minHeight: 1), // here
+                    constraints: BoxConstraints(
+                        minWidth: 1, minHeight: 1, maxWidth: 200), // here
                     child: Image.memory(metadata.thumbnail))));
       } else {
         preview = Icon(Icons.image, size: 100);

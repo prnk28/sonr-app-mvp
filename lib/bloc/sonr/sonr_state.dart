@@ -22,19 +22,12 @@ class NodeQueueing extends SonrState {}
 // ^ Node is Searching for Peers ^ //
 class NodeSearching extends SonrState {}
 
-// ^ Node is Busy w/ Transfer/Auth ^ //
-class NodeBusy extends SonrState {}
-
-// ^ Node is Searching for Peers ^ //
-class NodeError extends SonrState {
-  final ErrorMessage error;
-  final SonrState errorState;
-  const NodeError(this.error, this.errorState);
+// ^ Node is Waiting for Peer Response ^ //
+class NodePending extends SonrState {
+  final Peer peer;
+  const NodePending(this.peer);
 }
 
-// **********************************
-// ** Authentication based States ***
-// **********************************
 // ^ Node has been Invited ^ //
 class NodeInvited extends SonrState {
   final Peer from;
@@ -42,22 +35,11 @@ class NodeInvited extends SonrState {
   const NodeInvited(this.from, this.metadata);
 }
 
-// ^ User has sent offer to [Peer] ^
-class PeerInvited extends SonrState {
-  final Peer peer;
-  PeerInvited(this.peer);
-}
-
-// ^ [Peer] has accepted offer ^
-class PeerInviteAccepted extends SonrState {
-  final Peer match;
-  PeerInviteAccepted(this.match);
-}
-
-// ^ [Peer] has rejected offer ^
-class PeerInviteDeclined extends SonrState {
-  final Peer peer;
-  PeerInviteDeclined(this.peer);
+// ^ Node is Searching for Peers ^ //
+class NodeError extends SonrState {
+  final ErrorMessage error;
+  final SonrState errorState;
+  const NodeError(this.error, this.errorState);
 }
 
 // ****************************

@@ -33,3 +33,45 @@ class OneFileSuccess extends FileState {
 }
 
 class OneFileError extends FileState {}
+
+// ****************************
+// ** Exchange based States ***
+// ****************************
+// ^ Node is Transferring File ^ //
+class FileTransferInProgress extends FileState {
+  final Peer receiver;
+  const FileTransferInProgress(this.receiver);
+}
+
+// ^ User has completed transfer ^
+class FileTransferSuccess extends FileState {
+  final Peer receiver;
+  FileTransferSuccess(this.receiver);
+}
+
+// ^ User has failed to transfer ^
+class FileTransferFailure extends FileState {
+  final Peer receiver;
+  FileTransferFailure(this.receiver);
+}
+
+// ^ Node is Receiving File ^ //
+class FileReceiveInProgress extends FileState {
+  final Peer sender;
+  final Metadata metadata;
+  const FileReceiveInProgress(this.sender, this.metadata);
+}
+
+// ^ Node succesfully received file ^ //
+class FileReceiveSuccess extends FileState {
+  final File file;
+  final Peer sender;
+  final Metadata metadata;
+  FileReceiveSuccess(this.file, this.sender, this.metadata);
+}
+
+// ^ Node failed to receive file ^ //
+class FileReceiveFailure extends FileState {
+  final Peer sender;
+  FileReceiveFailure(this.sender);
+}

@@ -83,7 +83,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ NodeInvitePeer Event ^
   Stream<SonrState> _mapNodeInvitePeerState(NodeInvitePeer event) async* {
     node.invite(event.peer);
-    yield PeerInvited(event.peer);
+    yield NodePending(event.peer);
   }
 
   // ^ NodeRespondPeer Event ^
@@ -101,25 +101,10 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     }
   }
 
-  // *****************************
-  // ** Callback Based Handlers **
-  // *****************************
-  // ^ Transfer Has Succesfully Completed ^ //
-  Stream<SonrState> handleCompleted(dynamic data) async* {
-    if (data is Metadata) {
-      print(data.toString());
-      // Check what current state is
-      if (this.state is NodeTransferInProgress) {
-      } else if (this.state is NodeReceiveInProgress) {}
-      yield NodeAvailable();
-    }
-  }
-
-// ^ An Error Has Occurred ^ //
-  Stream<SonrState> handleSonrError(dynamic data) async* {
-    if (data is ErrorMessage) {
-      print(data.toString());
-    }
+  // ^ NodeStartTransfer Event ^
+  Stream<SonrState> _mapNodeStartTransferState(NodeStartTransfer event) async* {
+    node.transfer();
+    yield NodeTransferInProgress(event.peer);
   }
 
 // **************************
@@ -148,6 +133,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     if (data is AuthMessage) {
       print(data.toString());
       authentication.update(data);
+      add(NodeStartTransfer(data.from));
     }
   }
 
@@ -173,6 +159,23 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     if (data is ProgressUpdate) {
       print(data.toString());
       exchangeProgress.update(data);
+    }
+  }
+
+  // ^ An Error Has Occurred ^ //
+  void handleSonrError(dynamic data) async {
+    if (data is ErrorMessage) {
+      print(data.toString());
+    }
+  }
+
+  // ^ Transfer Has Succesfully Completed ^ //
+  void handleCompleted(dynamic data) async {
+    if (data is Metadata) {
+      print(data.toString());
+      // Check what current state is
+      if (this.state is NodeTransferInProgress) {
+      } else if (this.state is NodeReceiveInProgress) {}
     }
   }
 }

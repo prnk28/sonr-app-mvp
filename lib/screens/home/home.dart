@@ -90,41 +90,23 @@ class _HomeView extends StatelessWidget {
                     return Window.showAuth(context, state);
                   });
             }
-            // TODO: Implement Progress Update as Cubit
-            // else if (state is NodeReceiveInProgress) {
-            //   // Display Bottom Sheet
-            //   showModalBottomSheet<void>(
-            //       shape: windowBorder(),
-            //       barrierColor: Colors.black87,
-            //       isDismissible: false,
-            //       context: context,
-            //       builder: (context) {
-            //         return Window.showTransferring(context, state);
-            //       });
-            // } else if (state is NodeReceiveSuccess) {
-            //   // Pop Current View
-            //   Navigator.pop(context);
-
-            //   // Show Current View
-            //   showDialog(
-            //       barrierColor: Colors.black87,
-            //       context: context,
-            //       builder: (context) {
-            //         return Popup.showImage(context, state);
-            //       });
-            // }
           },
         ),
-        // TODO: Implement File Viewing
-        // BlocListener<DataBloc, DataState>(
-        //   listener: (context, state) {
-        //     if (state is UserViewingFileInProgress) {
-        //       // Push to Detail Screen
-        //       Navigator.pushReplacementNamed(context, "/detail",
-        //           arguments: state.metadata);
-        //     }
-        //   },
-        // ),
+        BlocListener<SonrBloc, SonrState>(
+          listener: (context, state) {
+            if (state is NodeReceiveInProgress) {
+              // Display Bottom Sheet
+              showModalBottomSheet<void>(
+                  shape: windowBorder(),
+                  barrierColor: Colors.black87,
+                  isDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return Window.showTransferring(context, state);
+                  });
+            }
+          },
+        ),
       ],
       child: ImageGrid(),
     );

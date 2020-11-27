@@ -1,16 +1,16 @@
-part of '../searching.dart';
+part of 'bubble.dart';
 
-// ^ Set Bubble Content ^ //
-getBubbleContent(Peer peer) {
+// ^ Builds the Bubbles Content ^ //
+buildBubbleContent(Peer peer) {
   // Content
   var icon;
   var initials;
 
   // Get Icon
-  if (peer.device == "ANDROID") {
+  if (peer.device.platform == "Android") {
     icon = NeumorphicIcon((Icons.android),
         size: 30, style: NeumorphicStyle(color: Colors.green[200]));
-  } else if (peer.device == "IOS") {
+  } else if (peer.device.platform == "iOS") {
     icon = NeumorphicIcon((Icons.phone_iphone),
         size: 30, style: NeumorphicStyle(color: Colors.grey[500]));
   } else {
