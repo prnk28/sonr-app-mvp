@@ -102,7 +102,18 @@ class NodeReceiveFailure extends SonrState {
 // *********************************************
 // ** Cubit States for Non-Responsive Events ***
 // *********************************************
-// ^ Cubit to Track Available Peers ^ //
+// ^ Cubit to Tracks Authentication Messages ^ //
+class AuthenticationCubit extends Cubit<AuthMessage> {
+  // Default Value
+  AuthenticationCubit() : super(null);
+
+  // Update Progress
+  update(AuthMessage authStatus) {
+    emit(authStatus);
+  }
+}
+
+// ^ Cubit to Track Lobby ^ //
 class LobbyCubit extends Cubit<Lobby> {
   // Default Value
   LobbyCubit() : super(null);
@@ -113,13 +124,13 @@ class LobbyCubit extends Cubit<Lobby> {
   }
 }
 
-// ^ Cubit to Tracks File Transfer Progress ^ //
-class ProgressCubit extends Cubit<double> {
+// ^ Cubit to Tracks File Transfer ^ //
+class ProgressCubit extends Cubit<ProgressMessage> {
   // Default Value
-  ProgressCubit() : super(0);
+  ProgressCubit() : super(null);
 
   // Update Progress
-  update(double newProgress) {
+  update(ProgressMessage newProgress) {
     emit(newProgress);
   }
 }

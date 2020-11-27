@@ -181,7 +181,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   void handleProgressed(dynamic data) async {
     if (data is ProgressMessage) {
       print(data.toProto3Json());
-      exchangeProgress.update(data.progress);
+      exchangeProgress.update(data);
     }
   }
 }

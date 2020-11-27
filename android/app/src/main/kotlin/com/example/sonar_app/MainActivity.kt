@@ -1,4 +1,4 @@
-package com.example.sonar_app
+package io.sonr.android
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -70,7 +70,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProgressCubit, double>(
+    return BlocBuilder<ProgressCubit, ProgressMessage>(
         cubit: context.getCubit(CubitType.Exchange),
         builder: (context, state) {
           return Stack(
@@ -85,7 +85,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
                       painter: WavePainter(
                         iconKey: _iconKey,
                         waveAnimation: _waveController,
-                        percent: state,
+                        percent: state.progress,
                         boxHeight: widget.boxHeight,
                         waveColor: widget.waveColor,
                       ),
