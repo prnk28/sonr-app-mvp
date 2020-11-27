@@ -57,3 +57,17 @@ class NodeStartTransfer extends SonrEvent {
   final Peer peer;
   const NodeStartTransfer(this.peer);
 }
+
+// ^ Transfer has Completed ^ //
+// @ Args() //
+class NodeCompletedTransfer extends SonrEvent {
+  final Peer peer;
+  const NodeCompletedTransfer(this.peer);
+}
+
+// ^ Receiving File has Completed ^ //
+// @ Args() //
+class NodeReceivedTransfer extends SonrEvent {
+  final Metadata metadata;
+  const NodeReceivedTransfer(this.metadata);
+}

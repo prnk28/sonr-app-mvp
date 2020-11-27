@@ -5,7 +5,7 @@ import 'package:sonr_core/sonr_core.dart';
 import 'modals/modals.dart';
 import 'screens/screens.dart';
 
-enum CubitType { Direction, Exchange, Lobby, Authentication }
+enum CubitType { Direction, Progress, Lobby, Authentication }
 enum BlocType { Device, File, Sonr }
 
 extension Events on BuildContext {
@@ -33,11 +33,11 @@ extension Events on BuildContext {
       case CubitType.Authentication:
         return BlocProvider.of<SonrBloc>(this).authentication;
         break;
-      case CubitType.Exchange:
-        return BlocProvider.of<SonrBloc>(this).exchangeProgress;
+      case CubitType.Progress:
+        return BlocProvider.of<SonrBloc>(this).progress;
         break;
       case CubitType.Lobby:
-        return BlocProvider.of<SonrBloc>(this).availablePeers;
+        return BlocProvider.of<SonrBloc>(this).lobby;
         break;
     }
     return null;

@@ -72,10 +72,8 @@ class NodeReceiveInProgress extends SonrState {
 
 // ^ Node succesfully received file ^ //
 class NodeReceiveSuccess extends SonrState {
-  final File file;
-  final Peer sender;
   final Metadata metadata;
-  NodeReceiveSuccess(this.file, this.sender, this.metadata);
+  NodeReceiveSuccess(this.metadata);
 }
 
 // ^ Node failed to receive file ^ //

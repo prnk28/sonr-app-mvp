@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sonar_app/screens/screens.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/bloc/bloc.dart';
@@ -29,7 +31,7 @@ class Popup {
                             minWidth: 1,
                             minHeight: 1,
                           ), // here
-                          child: Image.file(state.file))),
+                          child: Image.file(File(state.metadata.path)))),
                 ),
 
                 FlatButton(

@@ -14,8 +14,8 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties
   Node node;
   AuthenticationCubit authentication = new AuthenticationCubit();
-  LobbyCubit availablePeers = new LobbyCubit();
-  ProgressCubit exchangeProgress = new ProgressCubit();
+  LobbyCubit lobby = new LobbyCubit();
+  ProgressCubit progress = new ProgressCubit();
 
   // ^ Constructer Sets Callbacks ^ //
   SonrBloc() : super(NodeOffline());
@@ -37,6 +37,12 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
       yield* _mapNodeInvitePeerState(event);
     } else if (event is NodeRespondPeer) {
       yield* _mapNodeRespondPeerState(event);
+    } else if (event is NodeStartTransfer) {
+      yield* _mapNodeStartTransferState(event);
+    } else if (event is NodeCompletedTransfer) {
+      yield* _mapNodeCompletedTransferState(event);
+    } else if (event is NodeReceivedTransfer) {
+      yield* _mapNodeReceivedTransferState(event);
     }
   }
 
@@ -107,6 +113,20 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     yield NodeTransferInProgress(event.peer);
   }
 
+  // ^ NodeStartTransfer Event ^
+  Stream<SonrState> _mapNodeCompletedTransferState(
+      NodeCompletedTransfer event) async* {
+    node.transfer();
+    yield NodeTransferSuccess(event.peer);
+  }
+
+  // ^ NodeStartTransfer Event ^
+  Stream<SonrState> _mapNodeReceivedTransferState(
+      NodeReceivedTransfer event) async* {
+    node.transfer();
+    yield NodeReceiveSuccess(event.metadata);
+  }
+
 // **************************
 // ** Responsive Handlers  **
 // **************************
@@ -114,7 +134,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   void handleRefreshed(dynamic data) async {
     // Check Type
     if (data is Lobby) {
-      availablePeers.update(data);
+      lobby.update(data);
     }
   }
 
@@ -158,7 +178,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   void handleProgressed(dynamic data) async {
     if (data is ProgressUpdate) {
       print(data.toString());
-      exchangeProgress.update(data);
+      progress.update(data);
     }
   }
 
@@ -175,7 +195,11 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
       print(data.toString());
       // Check what current state is
       if (this.state is NodeTransferInProgress) {
-      } else if (this.state is NodeReceiveInProgress) {}
+        NodeTransferInProgress currState = this.state;
+        add(NodeCompletedTransfer(currState.receiver));
+      } else if (this.state is NodeReceiveInProgress) {
+        add(NodeReceivedTransfer(data));
+      }
     }
   }
 }
