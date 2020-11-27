@@ -6,27 +6,29 @@ part of '../searching.dart';
 class ZoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AvailablePeers, List<Peer>>(
-        cubit: context.getCubit(CubitType.Peers),
+    return BlocBuilder<LobbyCubit, Lobby>(
+        cubit: context.getCubit(CubitType.Lobby),
         builder: (context, state) {
-          if (state.length > 0) {
+          print(state.toString());
+          if (state.peers.length > 0) {
             // Initialize Widget List
             List<Widget> stackWidgets = new List<Widget>();
 
             // Init Stack Vars
-            int total = state.length + 1;
+            int total = state.peers.length + 1;
             int current = 0;
             double mean = 1.0 / total;
 
             // Create Bubbles
-            for (Peer peer in state) {
+            state.peers.values.forEach((peer) {
               // Increase Count
               current += 1;
 
               // Place Bubble
               Widget bubble = new PeerBubble(current * mean, peer);
               stackWidgets.add(bubble);
-            }
+            });
+
             // Return View
             return Stack(children: stackWidgets);
           }

@@ -112,7 +112,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
       // ** Peer Accepted: Transfer is in Progress **
       else if (state is NodeTransferInProgress) {
         if (state.receiver.id == widget.peer.id) {
-          return BlocBuilder<ExchangeProgress, double>(
+          return BlocBuilder<ProgressCubit, double>(
               cubit: context.getCubit(CubitType.Exchange),
               builder: (context, state) {
                 return Positioned(

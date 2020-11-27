@@ -13,20 +13,11 @@ part 'sonr_state.dart';
 class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties
   Node node;
-  AvailablePeers availablePeers;
-  ExchangeProgress exchangeProgress;
+  LobbyCubit availablePeers = new LobbyCubit();
+  ProgressCubit exchangeProgress = new ProgressCubit();
 
   // ^ Constructer Sets Callbacks ^ //
-  SonrBloc() : super(NodeOffline()) {
-    node.assignCallback(CallbackEvent.Refreshed, handleRefreshed);
-    node.assignCallback(CallbackEvent.Queued, handleQueued);
-    node.assignCallback(CallbackEvent.Invited, handleInvited);
-    node.assignCallback(CallbackEvent.Accepted, handleAccepted);
-    node.assignCallback(CallbackEvent.Denied, handleDenied);
-    node.assignCallback(CallbackEvent.Progressed, handleProgressed);
-    node.assignCallback(CallbackEvent.Completed, handleCompleted);
-    node.assignCallback(CallbackEvent.Error, handleSonrError);
-  }
+  SonrBloc() : super(NodeOffline());
 
   // ^ Map Events to Function ^ //
   @override
@@ -54,10 +45,21 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ NodeInitialize Event ^
   Stream<SonrState> _mapNodeInitializeState(NodeInitialize event) async* {
     // Get OLC
-    var olcCode = OLC.encode(event.position.latitude, event.position.longitude);
+    var olcCode = OLC.encode(event.position.latitude, event.position.longitude,
+        codeLength: 8);
 
     // Await Initialization
     node = await SonrCore.initialize(olcCode, event.contact);
+
+    // Assign Node Callbacks
+    node.assignCallback(CallbackEvent.Refreshed, handleRefreshed);
+    node.assignCallback(CallbackEvent.Queued, handleQueued);
+    node.assignCallback(CallbackEvent.Invited, handleInvited);
+    node.assignCallback(CallbackEvent.Accepted, handleAccepted);
+    node.assignCallback(CallbackEvent.Denied, handleDenied);
+    node.assignCallback(CallbackEvent.Progressed, handleProgressed);
+    node.assignCallback(CallbackEvent.Completed, handleCompleted);
+    node.assignCallback(CallbackEvent.Error, handleSonrError);
     yield NodeAvailable();
   }
 
@@ -105,7 +107,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   void handleRefreshed(dynamic data) async {
     // Check Type
     if (data is Lobby) {
-      availablePeers.update(data.peers.values.toList());
+      availablePeers.update(data);
     }
   }
 
@@ -113,6 +115,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   Stream<SonrState> handleInvited(dynamic data) async* {
     // Check Type
     if (data is AuthMessage) {
+      print(data.toProto3Json());
       // Verify Event
       if (data.event == AuthMessage_Event.REQUEST) {
         yield NodeInvited(data.from, data.metadata);
@@ -124,6 +127,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   Stream<SonrState> handleAccepted(dynamic data) async* {
     // Check Type
     if (data is AuthMessage) {
+      print(data.toProto3Json());
       // Verify Event
       if (data.event == AuthMessage_Event.ACCEPT) {
         node.transfer();
@@ -136,6 +140,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   Stream<SonrState> handleDenied(dynamic data) async* {
     // Check Type
     if (data is AuthMessage) {
+      print(data.toProto3Json());
       // Verify Event
       if (data.event == AuthMessage_Event.DECLINE) {
         yield PeerInviteDeclined(data.from);
@@ -146,20 +151,19 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ Transfer Has Succesfully Completed ^ //
   Stream<SonrState> handleCompleted(dynamic data) async* {
     if (data is Metadata) {
+      print(data.toProto3Json());
       // Check what current state is
       if (this.state is NodeTransferInProgress) {
-
-      } 
-      else if (this.state is NodeReceiveInProgress) {
-        
-      }
+      } else if (this.state is NodeReceiveInProgress) {}
       yield NodeAvailable();
     }
   }
 
 // ^ An Error Has Occurred ^ //
   Stream<SonrState> handleSonrError(dynamic data) async* {
-    if (data is ErrorMessage) {}
+    if (data is ErrorMessage) {
+      print(data.toProto3Json());
+    }
   }
 
 // **************************
@@ -168,6 +172,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ File has Succesfully Queued ^ //
   Stream<SonrState> handleQueued(dynamic data) async* {
     if (data is Metadata) {
+      print(data.toProto3Json());
       add(NodeSearch());
     }
   }
@@ -175,6 +180,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ Transfer Has Updated Progress ^ //
   void handleProgressed(dynamic data) async {
     if (data is ProgressMessage) {
+      print(data.toProto3Json());
       exchangeProgress.update(data.progress);
     }
   }

@@ -4,7 +4,7 @@ import 'package:sonr_core/sonr_core.dart';
 import 'package:sqflite/sqflite.dart';
 
 // File Table Fields
-final String _filesTable = "files";
+final String _metaTable = "metadata";
 final String _columnId = '_id';
 final String _columnUuid = 'uuid';
 final String _columnName = 'name';
@@ -32,7 +32,7 @@ class MetadataProvider {
     db = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute('''
-create table $_filesTable ( 
+create table $_metaTable ( 
   $_columnId integer primary key autoincrement, 
   $_columnUuid text not null,
   $_columnName text not null,
@@ -41,7 +41,7 @@ create table $_filesTable (
   $_columnChunks integer not null,
   $_columnMime text not null,
   $_columnOwner text not null,
-  $_columnlastOpened integer not null
+  $_columnlastOpened integer not null)
 ''');
     });
   }
@@ -49,13 +49,13 @@ create table $_filesTable (
   // ^ Insert Metadata into SQL DB ^ //
   Future<Metadata> insert(Metadata metadata) async {
     metadata.id =
-        await db.insert(_filesTable, MetadataProvider.toSQL(metadata));
+        await db.insert(_metaTable, MetadataProvider.toSQL(metadata));
     return metadata;
   }
 
   // ^ Get One Metadata from SQL DB ^ //
   Future<Metadata> getFile(int id) async {
-    List<Map> maps = await db.query(_filesTable,
+    List<Map> maps = await db.query(_metaTable,
         columns: [
           _columnId,
           _columnUuid,
@@ -80,7 +80,7 @@ create table $_filesTable (
   Future<List<Metadata>> getAllFiles() async {
     // Get Records
     List<Map> records = await db.query(
-      _filesTable,
+      _metaTable,
       columns: [
         _columnId,
         _columnUuid,
@@ -113,12 +113,12 @@ create table $_filesTable (
   // ^ Delete a Metadata from SQL DB ^ //
   Future<int> delete(int id) async {
     return await db
-        .delete(_filesTable, where: '$_columnId = ?', whereArgs: [id]);
+        .delete(_metaTable, where: '$_columnId = ?', whereArgs: [id]);
   }
 
   // ^ Update Metadata in DB ^ //
   Future<int> update(Metadata metadata) async {
-    return await db.update(_filesTable, MetadataProvider.toSQL(metadata),
+    return await db.update(_metaTable, MetadataProvider.toSQL(metadata),
         where: '$_columnId = ?', whereArgs: [metadata.id]);
   }
 

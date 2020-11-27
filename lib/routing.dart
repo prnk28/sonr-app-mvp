@@ -56,14 +56,14 @@ extension Routing on BuildContext {
               settings: settings);
           break;
         case '/detail':
-          // TODO: Implement Detail Screen
-          // return PageTransition(
-          //     child: DetailScreen(),
-          //     type: PageTransitionType.scale,
-          //     ctx: this,
-          //     inheritTheme: true,
-          //     settings: settings);
-          // break;
+        // TODO: Implement Detail Screen
+        // return PageTransition(
+        //     child: DetailScreen(),
+        //     type: PageTransitionType.scale,
+        //     ctx: this,
+        //     inheritTheme: true,
+        //     settings: settings);
+        // break;
       }
       return null;
     };
@@ -80,7 +80,12 @@ MultiBlocProvider initializeBloc(Widget app) {
   // Return Provider
   return MultiBlocProvider(
     providers: [
-      // User Data Logic
+      // File Management
+      BlocProvider<FileBloc>(
+        create: (context) => FileBloc(),
+      ),
+
+      // Sonr Networking Logic
       BlocProvider<SonrBloc>(
         create: (context) => SonrBloc(),
       ),

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'modals/modals.dart';
 import 'screens/screens.dart';
 
-enum CubitType { Direction, Exchange, Peers }
+enum CubitType { Direction, Exchange, Lobby }
 enum BlocType { Device, File, Sonr }
 
 extension Events on BuildContext {
@@ -32,7 +32,7 @@ extension Events on BuildContext {
       case CubitType.Exchange:
         return BlocProvider.of<SonrBloc>(this).exchangeProgress;
         break;
-      case CubitType.Peers:
+      case CubitType.Lobby:
         return BlocProvider.of<SonrBloc>(this).availablePeers;
         break;
     }

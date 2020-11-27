@@ -56,9 +56,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
         Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
 
-        // Set Screen Size
-        screenSize = Size(profile.screenWidth, profile.screenHeight);
-
         // Initialize Sonr Node
         sonr.add(NodeInitialize(profile.contact, position));
         yield DeviceActive();
@@ -78,9 +75,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     if (await Permission.locationWhenInUse.request().isGranted) {
       // Get Data
       var profile = await Profile.create(event.contact, event.context);
-
-      // Set Screen Size
-      screenSize = Size(profile.screenWidth, profile.screenHeight);
 
       // Get Current Position
       Position position = await Geolocator.getCurrentPosition(

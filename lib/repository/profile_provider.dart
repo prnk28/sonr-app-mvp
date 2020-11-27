@@ -7,8 +7,6 @@ import 'dart:convert';
 class Profile {
   // ^ Properties ^
   Contact contact;
-  double screenWidth;
-  double screenHeight;
   String platform;
 
   // Default Constructer
@@ -23,6 +21,7 @@ class Profile {
     if (prefs.containsKey("profile")) {
       // Get Json Value
       var profileJson = prefs.getString("profile");
+      print("Stored Profile: " + profileJson);
 
       // Get Profile object
       return Profile.fromJson(profileJson);
@@ -35,16 +34,12 @@ class Profile {
     // Initialize
     Profile p = new Profile();
 
-    // Set Device
-    p.screenWidth = MediaQuery.of(context).size.width;
-    p.screenHeight = MediaQuery.of(context).size.height;
-
     // Set Contact
     p.contact = contact;
 
     // Save in SharedPreferences Instance
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("profile", p.toString());
+    prefs.setString("profile", p.toJson());
     return p;
   }
 
@@ -55,8 +50,6 @@ class Profile {
     Profile p = new Profile();
 
     // Set Device
-    p.screenWidth = map["screenWidth"];
-    p.screenHeight = map["screenHeight"];
     p.platform = map["platform"];
 
     // Set Contact
@@ -64,17 +57,14 @@ class Profile {
 
     // Save in SharedPreferences Instance
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("profile", p.toString());
+    prefs.setString("profile", p.toJson());
     return p;
   }
-
 
   // ^ Method converts Profile to JSON String ^
   String toJson() {
     var map = {
       "contact": this.contact.writeToJson(),
-      "screenWidth": this.screenWidth,
-      "screenHeight": this.screenHeight,
       "platform": this.platform
     };
     return json.encode(map);

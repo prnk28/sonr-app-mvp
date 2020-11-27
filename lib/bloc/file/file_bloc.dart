@@ -36,13 +36,13 @@ class FileBloc extends Bloc<FileEvent, FileState> {
     // Validate List
     if (allFiles == null) {
       yield AllFilesError();
-    }
-
-    // Change State
-    if (allFiles.length > 0) {
-      yield AllFilesSuccess(allFiles);
     } else {
-      yield AllFilesNone();
+      // Change State
+      if (allFiles.length > 0) {
+        yield AllFilesSuccess(allFiles);
+      } else {
+        yield AllFilesNone();
+      }
     }
   }
 

@@ -3,6 +3,11 @@ import 'package:sonar_app/screens/screens.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Set Device Screen Bounds
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+    screenSize = Size(screenWidth, screenHeight);
+
     // Check Permissions
     context.getBloc(BlocType.Device).add(StartApp());
 
