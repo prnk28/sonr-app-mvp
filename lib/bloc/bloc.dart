@@ -4,3 +4,4 @@ export 'file/file_bloc.dart';
 export 'package:bloc/bloc.dart';
 export 'package:equatable/equatable.dart';
 export 'observer.dart';
+export '../main.dart';

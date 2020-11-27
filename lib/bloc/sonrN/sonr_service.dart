@@ -56,7 +56,6 @@ class SonrService {
 // *******************
 // ** Node Actions  **
 // *******************
-
   // ^ Initialize Node Method ^ //
   void initialize(Position pos, Contact con) async {
     // Get OLC

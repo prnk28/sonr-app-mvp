@@ -2,6 +2,8 @@ part of 'sonr_service.dart';
 
 // ^ Sonr Service Status Enum ^ //
 enum SonrStatus {
+  // Default
+  Offline,
   // Bi-Directional
   Available,
   Searching,

@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/bloc/sonrN/sonr_service.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -58,6 +59,10 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
         // Initialize Sonr Node
         sonr.add(NodeInitialize(user.contact, position));
+
+        // Initialize Node
+        sonrService.setState((s) => {s.initialize(position, user.contact)});
+
         yield DeviceActive();
       } else {
         // ! Profile wasnt found
