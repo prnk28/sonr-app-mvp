@@ -35,7 +35,6 @@ class SearchingScreen extends StatelessWidget {
             BlocBuilder<LobbyCubit, Lobby>(
                 cubit: context.getCubit(CubitType.Lobby),
                 builder: (context, state) {
-                  print(state.toString());
                   if (state.peers.length > 0) {
                     // Initialize Widget List
                     List<Widget> stackWidgets = new List<Widget>();

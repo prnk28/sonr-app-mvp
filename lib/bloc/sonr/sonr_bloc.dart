@@ -13,6 +13,7 @@ part 'sonr_state.dart';
 class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties
   Node node;
+  AuthenticationCubit authentication = new AuthenticationCubit();
   LobbyCubit availablePeers = new LobbyCubit();
   ProgressCubit exchangeProgress = new ProgressCubit();
 
@@ -115,11 +116,12 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   Stream<SonrState> handleInvited(dynamic data) async* {
     // Check Type
     if (data is AuthMessage) {
-      print(data.toProto3Json());
+      print(data.toString());
       // Verify Event
       if (data.event == AuthMessage_Event.REQUEST) {
         yield NodeInvited(data.from, data.metadata);
       }
+      authentication.update(data);
     }
   }
 
@@ -127,7 +129,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   Stream<SonrState> handleAccepted(dynamic data) async* {
     // Check Type
     if (data is AuthMessage) {
-      print(data.toProto3Json());
+      print(data.toString());
       // Verify Event
       if (data.event == AuthMessage_Event.ACCEPT) {
         node.transfer();
@@ -140,7 +142,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   Stream<SonrState> handleDenied(dynamic data) async* {
     // Check Type
     if (data is AuthMessage) {
-      print(data.toProto3Json());
+      print(data.toString());
       // Verify Event
       if (data.event == AuthMessage_Event.DECLINE) {
         yield PeerInviteDeclined(data.from);
@@ -151,7 +153,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ Transfer Has Succesfully Completed ^ //
   Stream<SonrState> handleCompleted(dynamic data) async* {
     if (data is Metadata) {
-      print(data.toProto3Json());
+      print(data.toString());
       // Check what current state is
       if (this.state is NodeTransferInProgress) {
       } else if (this.state is NodeReceiveInProgress) {}
@@ -162,7 +164,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ An Error Has Occurred ^ //
   Stream<SonrState> handleSonrError(dynamic data) async* {
     if (data is ErrorMessage) {
-      print(data.toProto3Json());
+      print(data.toString());
     }
   }
 
@@ -172,7 +174,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ File has Succesfully Queued ^ //
   Stream<SonrState> handleQueued(dynamic data) async* {
     if (data is Metadata) {
-      print(data.toProto3Json());
+      print(data.toString());
       add(NodeSearch());
     }
   }
@@ -180,7 +182,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ Transfer Has Updated Progress ^ //
   void handleProgressed(dynamic data) async {
     if (data is ProgressUpdate) {
-      print(data.toProto3Json());
+      print(data.toString());
       exchangeProgress.update(data);
     }
   }

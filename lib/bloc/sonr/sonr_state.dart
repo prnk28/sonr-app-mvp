@@ -22,6 +22,9 @@ class NodeQueueing extends SonrState {}
 // ^ Node is Searching for Peers ^ //
 class NodeSearching extends SonrState {}
 
+// ^ Node is Busy w/ Transfer/Auth ^ //
+class NodeBusy extends SonrState {}
+
 // ^ Node is Searching for Peers ^ //
 class NodeError extends SonrState {
   final ErrorMessage error;
