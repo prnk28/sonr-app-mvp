@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'modals/modals.dart';
 import 'screens/screens.dart';
 
-enum CubitType { Direction, Exchange, Lobby }
+enum CubitType { Direction, Exchange, Lobby, Authentication }
 enum BlocType { Device, File, Sonr }
 
 extension Events on BuildContext {
@@ -29,6 +30,9 @@ extension Events on BuildContext {
       case CubitType.Direction:
         return BlocProvider.of<DeviceBloc>(this).directionCubit;
         break;
+      case CubitType.Authentication:
+        return BlocProvider.of<SonrBloc>(this).authentication;
+        break;
       case CubitType.Exchange:
         return BlocProvider.of<SonrBloc>(this).exchangeProgress;
         break;
@@ -38,55 +42,24 @@ extension Events on BuildContext {
     }
     return null;
   }
-}
 
 // -- BLoC Retreival Methods -- //
-getRequestListener() {
-  return BlocListener<SonrBloc, SonrState>(
-    listenWhen: (previousState, state) {
-      // Current States
-      if (state is NodeInvited) {
-        return true;
-      } else if (state is NodeReceiveInProgress) {
-        return true;
-      } else if (state is NodeReceiveSuccess) {
-        return true;
-      }
-      return false;
-    },
-    listener: (context, state) {
-      if (state is NodeInvited) {
-        // Display Bottom Sheet
-        showModalBottomSheet<void>(
-            shape: windowBorder(),
-            barrierColor: Colors.black87,
-            isDismissible: false,
-            context: context,
-            builder: (context) {
-              return Window.showAuth(context, state);
-            });
-      } else if (state is NodeReceiveInProgress) {
-        // Display Bottom Sheet
-        showModalBottomSheet<void>(
-            shape: windowBorder(),
-            barrierColor: Colors.black87,
-            isDismissible: false,
-            context: context,
-            builder: (context) {
-              return Window.showTransferring(context, state);
-            });
-      } else if (state is NodeReceiveSuccess) {
-        // Pop Current View
-        Navigator.pop(context);
-
-        // Show Current View
-        showDialog(
-            barrierColor: Colors.black87,
-            context: context,
-            builder: (context) {
-              return Popup.showImage(context, state);
-            });
-      }
-    },
-  );
+  getRequestListener() {
+    return BlocListener<AuthenticationCubit, AuthMessage>(
+      cubit: getCubit(CubitType.Authentication),
+      listener: (context, state) {
+        if (state is NodeInvited) {
+          // Display Bottom Sheet
+          showModalBottomSheet<void>(
+              shape: windowBorder(),
+              barrierColor: Colors.black87,
+              isDismissible: false,
+              context: context,
+              builder: (context) {
+                return Window.showAuth(context, state);
+              });
+        }
+      },
+    );
+  }
 }

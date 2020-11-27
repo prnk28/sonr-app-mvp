@@ -1,22 +1,22 @@
 part of 'window.dart';
 
-Widget buildAuthenticationView(BuildContext context, NodeInvited state) {
+Widget buildAuthenticationView(BuildContext context, AuthMessage message) {
   return Column(
     children: [
       // Top Right Close/Cancel Button
       getCloseButton(context),
 
       // Build Item from Metadata and Peer
-      _buildItem(context, state),
+      _buildItem(context, message),
       Padding(padding: EdgeInsets.only(top: 8)),
 
       // Build Auth Action
-      _buildAuthButton(context, state)
+      _buildAuthButton(context, message)
     ],
   );
 }
 
-Row _buildItem(BuildContext context, NodeInvited state) {
+Row _buildItem(BuildContext context, AuthMessage state) {
   // Get Data
   var from = state.from;
   var metadata = state.metadata;
@@ -71,7 +71,7 @@ Row _buildItem(BuildContext context, NodeInvited state) {
   ]); // FlatButton// Container
 }
 
-NeumorphicButton _buildAuthButton(BuildContext context, NodeInvited state) {
+NeumorphicButton _buildAuthButton(BuildContext context, AuthMessage state) {
   // Build View
   return NeumorphicButton(
       onPressed: () {

@@ -7,7 +7,7 @@ part 'auth.dart';
 part 'progress.dart';
 
 class Window {
-  static Widget showAuth(BuildContext context, NodeInvited state) {
+  static Widget showAuth(BuildContext context, AuthMessage state) {
     // Return View
     return Container(
         decoration: windowDecoration(context),
@@ -15,12 +15,13 @@ class Window {
         child: buildAuthenticationView(context, state));
   }
 
-  static Widget showTransferring(
-      BuildContext context, NodeReceiveInProgress state) {
-    // Return View
-    return Container(
-        decoration: windowDecoration(context),
-        height: screenSize.height / 3 + 20,
-        child: buildProgressView(state.metadata));
-  }
+  // TODO: Implement progress update
+  // static Widget showTransferring(
+  //     BuildContext context, ProgressUpdate state) {
+  //   // Return View
+  //   return Container(
+  //       decoration: windowDecoration(context),
+  //       height: screenSize.height / 3 + 20,
+  //       child: buildProgressView(state.metadata));
+  // }
 }

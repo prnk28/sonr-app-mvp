@@ -1,8 +1,8 @@
 part of 'window.dart';
 
-Widget buildProgressView(Metadata meta) {
+Widget buildProgressView(NodeInvited update) {
   return Center(
-      child: IconLiquidFill(iconData: iconDataFromKind(meta.mime.type)));
+      child: IconLiquidFill(iconData: iconDataFromKind(update.metadata.mime.type)));
 }
 
 class IconLiquidFill extends StatefulWidget {

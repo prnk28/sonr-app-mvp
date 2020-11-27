@@ -104,52 +104,6 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // *****************************
   // ** Callback Based Handlers **
   // *****************************
-  // ^ Lobby Has Been Updated ^ //
-  void handleRefreshed(dynamic data) async {
-    // Check Type
-    if (data is Lobby) {
-      availablePeers.update(data);
-    }
-  }
-
-// ^ Node Has Been Invited ^ //
-  Stream<SonrState> handleInvited(dynamic data) async* {
-    // Check Type
-    if (data is AuthMessage) {
-      print(data.toString());
-      // Verify Event
-      if (data.event == AuthMessage_Event.REQUEST) {
-        yield NodeInvited(data.from, data.metadata);
-      }
-      authentication.update(data);
-    }
-  }
-
-  // ^ Node Has Been Denied ^ //
-  Stream<SonrState> handleAccepted(dynamic data) async* {
-    // Check Type
-    if (data is AuthMessage) {
-      print(data.toString());
-      // Verify Event
-      if (data.event == AuthMessage_Event.ACCEPT) {
-        node.transfer();
-        yield NodeTransferInProgress(data.from);
-      }
-    }
-  }
-
-// ^ Node Has Been Denied ^ //
-  Stream<SonrState> handleDenied(dynamic data) async* {
-    // Check Type
-    if (data is AuthMessage) {
-      print(data.toString());
-      // Verify Event
-      if (data.event == AuthMessage_Event.DECLINE) {
-        yield PeerInviteDeclined(data.from);
-      }
-    }
-  }
-
   // ^ Transfer Has Succesfully Completed ^ //
   Stream<SonrState> handleCompleted(dynamic data) async* {
     if (data is Metadata) {
@@ -171,8 +125,43 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // **************************
 // ** Responsive Handlers  **
 // **************************
+  // ^ Lobby Has Been Updated ^ //
+  void handleRefreshed(dynamic data) async {
+    // Check Type
+    if (data is Lobby) {
+      availablePeers.update(data);
+    }
+  }
+
+// ^ Node Has Been Invited ^ //
+  void handleInvited(dynamic data) async {
+    // Check Type
+    if (data is AuthMessage) {
+      print(data.toString());
+      authentication.update(data);
+    }
+  }
+
+  // ^ Node Has Been Accepted ^ //
+  void handleAccepted(dynamic data) async {
+    // Check Type
+    if (data is AuthMessage) {
+      print(data.toString());
+      authentication.update(data);
+    }
+  }
+
+// ^ Node Has Been Denied ^ //
+  void handleDenied(dynamic data) async {
+    // Check Type
+    if (data is AuthMessage) {
+      print(data.toString());
+      authentication.update(data);
+    }
+  }
+
 // ^ File has Succesfully Queued ^ //
-  Stream<SonrState> handleQueued(dynamic data) async* {
+  void handleQueued(dynamic data) async {
     if (data is Metadata) {
       print(data.toString());
       add(NodeSearch());

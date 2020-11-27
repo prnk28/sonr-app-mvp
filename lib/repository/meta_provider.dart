@@ -48,8 +48,7 @@ create table $_metaTable (
 
   // ^ Insert Metadata into SQL DB ^ //
   Future<Metadata> insert(Metadata metadata) async {
-    metadata.id =
-        await db.insert(_metaTable, MetadataProvider.toSQL(metadata));
+    metadata.id = await db.insert(_metaTable, MetadataProvider.toSQL(metadata));
     return metadata;
   }
 
@@ -158,7 +157,7 @@ create table $_metaTable (
     meta.path = map[_columnPath];
     meta.size = map[_columnSize];
     meta.chunks = map[_columnChunks];
-    meta.mime = Metadata_MIME.fromJson(map[_columnMime]);
+    meta.mime = MIME.fromJson(map[_columnMime]);
     meta.owner = Peer.fromJson(map[_columnOwner]);
     meta.lastOpened = map[_columnlastOpened];
     return meta;
