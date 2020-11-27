@@ -1,11 +1,9 @@
 import 'dart:ui';
 
 import 'package:sonar_app/screens/screens.dart';
-import 'dart:math' as math;
 import 'package:sonr_core/sonr_core.dart';
 import 'bubble/bubble.dart';
-
-part 'elements/compass.dart';
+import 'compass/compass.dart';
 
 class SearchingScreen extends StatelessWidget {
   @override

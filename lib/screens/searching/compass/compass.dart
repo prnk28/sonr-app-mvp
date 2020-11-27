@@ -1,10 +1,13 @@
-part of '../searching.dart';
+import '../../screens.dart';
+import 'dart:math';
+part 'spokes.dart';
 
 class CompassView extends StatelessWidget {
   final double direction;
   const CompassView({Key key, this.direction}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var math;
     return Stack(alignment: Alignment.topCenter, children: [
       // Compass Total
       AspectRatio(
@@ -36,7 +39,7 @@ class CompassView extends StatelessWidget {
 
                     // Spokes
                     Transform.rotate(
-                        angle: ((this.direction ?? 0) * (math.pi / 180) * -1),
+                        angle: ((this.direction ?? 0) * (pi / 180) * -1),
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Stack(

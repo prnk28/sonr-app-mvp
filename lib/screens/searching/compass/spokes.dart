@@ -1,4 +1,4 @@
-part of 'widgets.dart';
+part of 'compass.dart';
 
 // Major Constants
 const double _K_MAJOR_SPOKE_WIDTH = 18; // Spoke Length
