@@ -7,16 +7,33 @@ abstract class DeviceEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// Check Location Permission
-class LocationPermissionCheck extends DeviceEvent {
-  final DataBloc data;
-  final SignalBloc signal;
-  const LocationPermissionCheck(this.data, this.signal);
+// ** Enum defines Type of Permission **
+enum PermissionType {
+  Location,
+  Camera,
+  Photos,
+  Notifications,
 }
 
-// Request Location Permission
-class LocationPermissionRequested extends DeviceEvent {
-  const LocationPermissionRequested();
+// ^ StartApp Event ^ //
+//(Sets Device Parameters, Checks for Required Permissions, Locates Profile, and starts Sonr)
+class StartApp extends DeviceEvent {
+  const StartApp();
+}
+
+// ^ RequestPermission Event ^ //
+// (Requests User for a App Permission)
+class RequestPermission extends DeviceEvent {
+  final PermissionType type;
+  const RequestPermission(this.type);
+}
+
+// ^ CreateProfile Event ^ //
+// (Creates New Profile from Contact Object)
+class CreateUser extends DeviceEvent {
+  final Contact contact;
+  final BuildContext context;
+  const CreateUser(this.context, this.contact);
 }
 
 // *********************

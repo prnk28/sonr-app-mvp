@@ -1,10 +1,21 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sonar_app/modals/modals.dart';
 import 'package:sonar_app/screens/screens.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
+import 'package:sonr_core/sonr_core.dart';
 
-part 'card.dart';
-part 'floater.dart';
-part 'grid.dart';
+part 'view/card.dart';
+part 'elements/floater.dart';
+part 'view/grid.dart';
+
+Logger log = Logger();
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -65,20 +76,10 @@ class _HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<UserBloc, UserState>(
-          listenWhen: (previousState, state) {
-            // Current States
-            if (state is NodeRequestInitial) {
-              return true;
-            } else if (state is NodeReceiveInProgress) {
-              return true;
-            } else if (state is NodeReceiveSuccess) {
-              return true;
-            }
-            return false;
-          },
+        BlocListener<AuthenticationCubit, AuthMessage>(
+          cubit: context.getCubit(CubitType.Authentication),
           listener: (context, state) {
-            if (state is NodeRequestInitial) {
+            if (state.event == AuthMessage_Event.REQUEST) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
                   shape: windowBorder(),
@@ -88,7 +89,12 @@ class _HomeView extends StatelessWidget {
                   builder: (context) {
                     return Window.showAuth(context, state);
                   });
-            } else if (state is NodeReceiveInProgress) {
+            }
+          },
+        ),
+        BlocListener<SonrBloc, SonrState>(
+          listener: (context, state) {
+            if (state is NodeReceiveInProgress) {
               // Display Bottom Sheet
               showModalBottomSheet<void>(
                   shape: windowBorder(),
@@ -98,26 +104,6 @@ class _HomeView extends StatelessWidget {
                   builder: (context) {
                     return Window.showTransferring(context, state);
                   });
-            } else if (state is NodeReceiveSuccess) {
-              // Pop Current View
-              Navigator.pop(context);
-
-              // Show Current View
-              showDialog(
-                  barrierColor: Colors.black87,
-                  context: context,
-                  builder: (context) {
-                    return Popup.showImage(context, state);
-                  });
-            }
-          },
-        ),
-        BlocListener<DataBloc, DataState>(
-          listener: (context, state) {
-            if (state is UserViewingFileInProgress) {
-              // Push to Detail Screen
-              Navigator.pushReplacementNamed(context, "/detail",
-                  arguments: state.metadata);
             }
           },
         ),

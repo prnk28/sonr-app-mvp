@@ -1,22 +1,37 @@
 part of 'device_bloc.dart';
 
 abstract class DeviceState extends Equatable {
-  final Node user;
-  const DeviceState({this.user});
+  const DeviceState();
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [];
 }
 
-// ** Prior to Load or on Standby **
-class LocationPermissionInitial extends DeviceState {}
+// ** Enum defines Type of Permission **
+// ^ Prior to Load or on Standby ^
+class DeviceLoading extends DeviceState {}
 
-// ** Device Received Location **
-class LocationPermissionSuccess extends DeviceState {
-  const LocationPermissionSuccess();
+// ^ Profile and Required Permissions found ^
+class DeviceActive extends DeviceState {}
+
+// ^ Profile not found ^
+class ProfileError extends DeviceState {
+  ProfileError();
 }
 
-// ** Device Received Location **
-class LocationPermissionFailure extends DeviceState {
-  const LocationPermissionFailure();
+// ^ Required Permission not found ^
+class RequiredPermissionError extends DeviceState {
+  RequiredPermissionError();
+}
+
+// ^ Device was granted a permission ^
+class PermissionSuccess extends DeviceState {
+  final PermissionType type;
+  const PermissionSuccess(this.type);
+}
+
+// ^ Device wasnt granted permission ^
+class PermissionFailure extends DeviceState {
+  final PermissionType type;
+  const PermissionFailure(this.type);
 }

@@ -3,31 +3,26 @@ import 'package:sonar_app/screens/screens.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Set Screen Size
-    context.setScreenSize();
-
-    // Get References
-    var dataBloc = context.getBloc(BlocType.Data);
-    var signalBloc = context.getBloc(BlocType.Signal);
+    // Set Device Screen Bounds
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+    screenSize = Size(screenWidth, screenHeight);
 
     // Check Permissions
-    context
-        .getBloc(BlocType.Device)
-        .add(LocationPermissionCheck(dataBloc, signalBloc));
+    context.getBloc(BlocType.Device).add(StartApp());
 
-    // Return
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Non Build States
-        body: BlocListener<UserBloc, UserState>(
+        body: BlocListener<DeviceBloc, DeviceState>(
             listener: (past, curr) {
               // Home Screen
-              if (curr is ProfileLoadSuccess) {
-                context.goHome(initial: true);
+              if (curr is DeviceActive) {
+                Navigator.pushReplacementNamed(context, "/home");
               }
               // Register Screen
-              else if (curr is ProfileLoadFailure) {
-                context.goRegister();
+              else if (curr is ProfileError) {
+                Navigator.pushReplacementNamed(context, "/register");
               }
             },
             child: Column(

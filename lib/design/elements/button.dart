@@ -7,7 +7,7 @@ Widget getCloseButton(BuildContext context,
       child: GestureDetector(
           onTap: () {
             // Reload Files
-            context.getBloc(BlocType.Data).add(UserGetAllFiles());
+            context.getBloc(BlocType.File).add(GetAllFiles());
 
             // Pop Window
             Navigator.pop(context);

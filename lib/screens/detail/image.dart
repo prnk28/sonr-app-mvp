@@ -44,8 +44,9 @@ _buildInfo(Metadata metadata) {
   DateFormat timeFormat = new DateFormat.jm();
 
   // Create Strings
-  String date = dateFormat.format(metadata.received);
-  String time = timeFormat.format(metadata.received);
+  var opened = DateTime.fromMillisecondsSinceEpoch(metadata.lastOpened);
+  String date = dateFormat.format(opened);
+  String time = timeFormat.format(opened);
 
   // Build View
   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [

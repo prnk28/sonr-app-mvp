@@ -1,10 +1,8 @@
 export 'detail/detail.dart';
 export 'home/home.dart';
 export 'register/register.dart';
-export 'home/settings.dart';
 export 'splash/splash.dart';
 export 'searching/searching.dart';
-export 'modal/modal.dart';
 export 'lifecycle.dart';
 
 // Packages
@@ -14,7 +12,6 @@ export 'package:flutter/widgets.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:vibration/vibration.dart';
 export 'package:flutter/material.dart';
-export 'package:fluttertoast/fluttertoast.dart';
 export 'package:photo_view/photo_view.dart';
 
 // Flare
@@ -36,7 +33,6 @@ export 'package:flare_flutter/trim_path.dart';
 
 // Sonr Classes
 export 'package:sonar_app/bloc/bloc.dart';
-export 'package:sonar_app/models/models.dart';
 export 'package:sonar_app/design/design.dart';
-export 'package:sonar_app/core/core.dart';
-export 'package:sonar_app/repository/repository.dart';
+export 'package:sonar_app/modals/modals.dart';
+export '../events.dart';

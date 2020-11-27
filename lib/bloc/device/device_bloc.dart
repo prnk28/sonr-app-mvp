@@ -1,44 +1,34 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_compass/flutter_compass.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/core/core.dart';
-import 'package:sonar_app/models/models.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 part 'device_event.dart';
 part 'device_state.dart';
 
+Size screenSize;
+
+// ^ DeviceBloc handles profile, permissions, and Compass ^
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
-  final UserBloc user;
+  final SonrBloc sonr;
   DirectionCubit directionCubit = new DirectionCubit();
 
   // Constructer
-  DeviceBloc(this.user) : super(null) {
+  DeviceBloc(this.sonr) : super(DeviceLoading()) {
     // ** Directional Events **
-    Compass()
-        .compassUpdates(interval: Duration(milliseconds: 100))
-        .listen((newDegrees) {
-      // Update Direction Cubit
-      directionCubit.update(newDegrees);
+    FlutterCompass.events.listen((newDegrees) {
+      // @ Check if Correct State
+      if (sonr.state is NodeAvailable || sonr.state is NodeSearching) {
+        // Get Current Direction and Update Cubit
+        double direction = newDegrees.headingForCameraMode;
+        directionCubit.update(direction);
 
-      // Check if User Node Exists
-      if (user.node != null) {
-// User is Searching
-        if (user.node.status == Status.Searching) {
-          // Update Direction
-          user.node.direction = newDegrees;
-
-          // Update WebBloc State
-          user.add(NodeSearch());
-        }
-        // User with 500ms delay
-        else if (user.node.status == Status.Available) {
-          // Update Direction
-          user.node.direction = newDegrees;
-
-          // Update WebBloc State
-          user.add(NodeAvailable());
-        }
+        // Update Node Direction
+        sonr.node.update(direction);
       }
     });
   }
@@ -46,48 +36,94 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   Stream<DeviceState> mapEventToState(
     DeviceEvent event,
   ) async* {
-    if (event is LocationPermissionCheck) {
-      yield* _mapLocationPermissionCheckState(event);
-    } else if (event is LocationPermissionRequested) {
-      yield* _mapLocationPermissionRequestedState(event);
+    if (event is StartApp) {
+      yield* _mapStartAppState(event);
+    } else if (event is CreateUser) {
+      yield* _mapCreateUserState(event);
+    } else if (event is RequestPermission) {
+      yield* _mapRequestPermissionState(event);
     }
   }
 
-// ***********************************
-// ** LocationPermissionCheck Event **
-// ***********************************
-  Stream<DeviceState> _mapLocationPermissionCheckState(
-      LocationPermissionCheck event) async* {
-    // Intialize FileType
-    await initFileType();
-
-    // Check Permissions
-    LocationPermission permission = await checkPermission();
-
-    // Permission by Case
-    if (permission == LocationPermission.whileInUse ||
-        permission == LocationPermission.always) {
-      // Begin User Setup
-      user.add(UserStarted(event.data, event.signal));
-      yield LocationPermissionSuccess();
-    } else {
-      // Permission Denied
-      add(LocationPermissionRequested());
-      yield LocationPermissionFailure();
-    }
-  }
-
-// ***************************************
-// ** LocationPermissionRequested Event **
-// ***************************************
-  Stream<DeviceState> _mapLocationPermissionRequestedState(
-      LocationPermissionRequested event) async* {
-    // Ask for Locations Permission
+// ^ StartApp Event ^
+  Stream<DeviceState> _mapStartAppState(StartApp event) async* {
+    // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
-      yield LocationPermissionSuccess();
+      // @ 2. Check for Profile
+      User user = await User.get();
+      if (user != null) {
+        // Get Current Position
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+
+        // Initialize Sonr Node
+        sonr.add(NodeInitialize(user.contact, position));
+        yield DeviceActive();
+      } else {
+        // ! Profile wasnt found
+        yield ProfileError();
+      }
     } else {
-      // Permission Denied
-      yield LocationPermissionFailure();
+      // ! Location Permission Denied
+      yield RequiredPermissionError();
+    }
+  }
+
+  // ^ CreateUser Event ^
+  Stream<DeviceState> _mapCreateUserState(CreateUser event) async* {
+    // @ 1. Check for Location
+    if (await Permission.locationWhenInUse.request().isGranted) {
+      // Get Data
+      var user = await User.create(event.contact, event.context);
+
+      // Get Current Position
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      // Initialize Sonr Node
+      sonr.add(NodeInitialize(user.contact, position));
+      yield DeviceActive();
+    } else {
+      // ! Location Permission Denied
+      yield RequiredPermissionError();
+    }
+  }
+
+// ^ RequestPermission Event ^
+  Stream<DeviceState> _mapRequestPermissionState(
+      RequestPermission event) async* {
+    switch (event.type) {
+      case PermissionType.Location:
+        if (await Permission.locationWhenInUse.request().isGranted) {
+          yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
+        }
+        break;
+
+      case PermissionType.Camera:
+        if (await Permission.camera.request().isGranted) {
+          yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
+        }
+        break;
+
+      case PermissionType.Photos:
+        if (await Permission.mediaLibrary.request().isGranted) {
+          yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
+        }
+        break;
+
+      case PermissionType.Notifications:
+        if (await Permission.notification.request().isGranted) {
+          yield PermissionSuccess(event.type);
+        } else {
+          yield PermissionFailure(event.type);
+        }
+        break;
     }
   }
 }

@@ -20,38 +20,30 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
-  flutter_bloc: ^6.1.0
   equatable: ^1.2.5
+  flutter_bloc: ^6.1.0
+  intl: ^0.15.8
+  logger: ^0.9.4
 
   # -- Device --
-  flutter_sensor_compass: ^0.1.1
+  flutter_compass: ^0.5.0
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
   sensors: ^0.4.1+1
-  soundpool: ^1.0.1
   vibration: ^1.2.4
-  uuid: ^2.0.0
 
-  # -- Extension --
-  file: ^5.2.1
-  graph_collection: ^1.1.2
-  hive: ^1.4.4
-  hive_flutter: ^0.3.1
-  image: ^2.1.18
-  intl: ^0.15.8
-  image_picker:
-  logger: ^0.8.3
-  path_provider: ^1.6.5
+  # -- Data --
+  image_picker: ^0.6.7+14
   path: ^1.7.0
-  vector_math: any
-
+  path_provider: ^1.6.7
+  shared_preferences: ^0.5.12+4
 
   # -- Network --
-  chunked_stream: ^1.1.0
-  flutter_webrtc: ^0.4.0
-  http: ^0.12.0+4
-  socket_io_client: ^0.9.11
   sqflite: ^1.3.0
+  sonr_core:
+    git:
+      url: git@github.com:sonr-io/plugin.git
+      ref: release
 
   # -- UI/UX --
   animations: ^1.1.2
@@ -59,14 +51,12 @@ dependencies:
   floating_action_bubble: ^1.0.9
   flutter_gradients: ^1.0.0+2
   flutter_neumorphic: ^3.0.2
-  fluttertoast: ^7.1.1
   page_transition: ^1.1.6
   path_drawing: ^0.4.1+1
   photo_view: ^0.10.2
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
-  hive_generator: ^0.7.1
   build_runner: ^1.10.2
 
 flutter_test:

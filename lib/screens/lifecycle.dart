@@ -24,10 +24,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.inactive:
-        socket.emit("EXIT");
+        // TODO: Implement SonrNode Exit
+        // socket.emit("EXIT");
         break;
       case AppLifecycleState.paused:
-        socket.emit("EXIT");
+        // socket.emit("EXIT");
         break;
       default:
         break;

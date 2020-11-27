@@ -1,28 +1,5 @@
-// Directory Exports}
-export 'package:flutter_webrtc/flutter_webrtc.dart';
-export 'package:chunked_stream/chunked_stream.dart';
-export 'dart:typed_data';
-export 'package:hive/hive.dart';
-export 'package:socket_io_client/socket_io_client.dart';
+// export 'contacts.dart';
+export 'meta_provider.dart';
+export 'user_provider.dart';
 
-export 'circle.dart';
-export 'emitter.dart';
-export 'session.dart';
-
-// * WebRTC Settings **
-
-const RTC_CONFIG = {
-  'iceServers': [
-    {"urls": "stun:stun.l.google.com:19302"},
-    //{'urls': 'stun:165.227.86.78:3478', 'username': 'test', 'password': 'test'}
-  ]
-};
-
-// Create DC Constraints
-const RTC_CONSTRAINTS = {
-  'mandatory': {
-    'OfferToReceiveAudio': false,
-    'OfferToReceiveVideo': false,
-  },
-  'optional': [],
-};
+const DATABASE_PATH = 'localData.db';

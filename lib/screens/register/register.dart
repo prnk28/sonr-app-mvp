@@ -1,6 +1,7 @@
 import 'package:sonar_app/screens/screens.dart';
+import 'package:sonr_core/sonr_core.dart';
 
-part 'initialize.dart';
+part 'view/initialize.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -8,14 +9,14 @@ class RegisterScreen extends StatelessWidget {
     return Scaffold(
       appBar: logoAppBar(),
       backgroundColor: NeumorphicTheme.baseColor(context),
-      body: BlocBuilder<UserBloc, UserState>(buildWhen: (prev, curr) {
-        if (curr is ProfileLoadSuccess) {
+      body: BlocBuilder<DeviceBloc, DeviceState>(buildWhen: (prev, curr) {
+        if (curr is DeviceActive) {
           // Push to Home with Profile
-          context.goHome(initial: true);
+          Navigator.pushReplacementNamed(context, "/home");
           return false;
         }
         // Register Screen
-        else if (curr is ProfileLoadFailure) {
+        else if (curr is ProfileError) {
           return true;
           // Default
         } else {
@@ -23,7 +24,7 @@ class RegisterScreen extends StatelessWidget {
         }
       }, builder: (context, state) {
         // Display Login/Signup View
-        if (state is ProfileLoadFailure) {
+        if (state is ProfileError) {
           return Column(children: <Widget>[
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),

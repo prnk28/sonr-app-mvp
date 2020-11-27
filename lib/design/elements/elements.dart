@@ -1,7 +1,7 @@
+import 'dart:math';
 import 'dart:ui';
-import 'package:sonar_app/repository/repository.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'package:sonar_app/screens/screens.dart';
-import 'package:sonar_app/core/core.dart';
 
 // Design Elements
 part 'appbar.dart';
@@ -76,75 +76,22 @@ AlertDialog detailFailureDialog({Function() onCancel, Function() onDelete}) {
   );
 }
 
-IconData iconDataFromMetadata(Metadata metadata) {
-  switch (metadata.type) {
-    case FileType.Audio:
+IconData iconDataFromKind(String kind) {
+  switch (kind) {
+    case "audio":
       return Icons.audiotrack;
       break;
-    case FileType.Image:
+    case "image":
       return Icons.image;
       break;
-    case FileType.Unknown:
-      return Icons.device_unknown;
-      break;
-    case FileType.Video:
+    case "video":
       return Icons.video_collection;
       break;
-    case FileType.Word:
+    case "text":
       return Icons.sort_by_alpha;
       break;
     default:
-      return Icons.storage;
+      return Icons.device_unknown;
       break;
   }
-}
-
-showRedToast(FToast fToast, String message, IconData icon) {
-  Widget toast = Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(25.0),
-      color: Colors.redAccent,
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: Colors.white),
-        SizedBox(
-          width: 12.0,
-        ),
-        Text(message, style: TextStyle(color: Colors.white)),
-      ],
-    ),
-  );
-
-  fToast.showToast(
-    child: toast,
-    gravity: ToastGravity.BOTTOM,
-    toastDuration: Duration(seconds: 1, milliseconds: 500),
-  );
-}
-
-showGreenToast(FToast fToast, String message, IconData icon) {
-  Widget toast = Container(
-    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0), color: Colors.greenAccent),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: Colors.white),
-        SizedBox(
-          width: 12.0,
-        ),
-        Text(message, style: TextStyle(color: Colors.white)),
-      ],
-    ),
-  );
-
-  fToast.showToast(
-    child: toast,
-    gravity: ToastGravity.BOTTOM,
-    toastDuration: Duration(seconds: 1, milliseconds: 500),
-  );
 }
