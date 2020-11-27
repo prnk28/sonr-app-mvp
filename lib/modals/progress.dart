@@ -71,54 +71,51 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProgressCubit, ProgressUpdate>(
+    return BlocBuilder<ProgressCubit, double>(
         cubit: context.getCubit(CubitType.Progress),
         builder: (context, state) {
-          if (state != null) {
-            while (state.progress < 1.0) {
-              return Stack(
-                children: <Widget>[
-                  SizedBox(
-                    height: widget.boxHeight,
-                    width: widget.boxWidth,
-                    child: AnimatedBuilder(
-                      animation: _waveController,
-                      builder: (BuildContext context, Widget child) {
-                        return CustomPaint(
-                          painter: WavePainter(
-                            iconKey: _iconKey,
-                            waveAnimation: _waveController,
-                            percent: state.progress,
-                            boxHeight: widget.boxHeight,
-                            waveColor: widget.waveColor,
-                          ),
-                        );
-                      },
-                    ),
+          while (state < 1.0) {
+            return Stack(
+              children: <Widget>[
+                SizedBox(
+                  height: widget.boxHeight,
+                  width: widget.boxWidth,
+                  child: AnimatedBuilder(
+                    animation: _waveController,
+                    builder: (BuildContext context, Widget child) {
+                      return CustomPaint(
+                        painter: WavePainter(
+                          iconKey: _iconKey,
+                          waveAnimation: _waveController,
+                          percent: state,
+                          boxHeight: widget.boxHeight,
+                          waveColor: widget.waveColor,
+                        ),
+                      );
+                    },
                   ),
-                  SizedBox(
-                    height: widget.boxHeight,
-                    width: widget.boxWidth,
-                    child: ShaderMask(
-                      blendMode: BlendMode.srcOut,
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: [NeumorphicTheme.baseColor(context)],
-                        stops: [0.0],
-                      ).createShader(bounds),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-                        child: Center(
-                          child:
-                              Icon(widget.iconData, key: _iconKey, size: 225),
-                        ),
+                ),
+                SizedBox(
+                  height: widget.boxHeight,
+                  width: widget.boxWidth,
+                  child: ShaderMask(
+                    blendMode: BlendMode.srcOut,
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: [NeumorphicTheme.baseColor(context)],
+                      stops: [0.0],
+                    ).createShader(bounds),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                      child: Center(
+                        child: Icon(widget.iconData, key: _iconKey, size: 225),
                       ),
                     ),
-                  )
-                ],
-              );
-            }
+                  ),
+                )
+              ],
+            );
           }
           return Container();
         });

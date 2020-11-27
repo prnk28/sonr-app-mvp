@@ -177,8 +177,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ Transfer Has Updated Progress ^ //
   void handleProgressed(dynamic data) async {
     if (data is ProgressUpdate) {
-      print(data.toString());
-      progress.update(data);
+      progress.update(data.progress);
     }
   }
 
