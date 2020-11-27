@@ -39,6 +39,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final SonrBloc sonrBloc = context.getBloc(BlocType.Sonr);
     return BlocBuilder<SonrBloc, SonrState>(
         // Set Build Requirements
         buildWhen: (prev, curr) {
@@ -61,10 +62,10 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
         // Check if Current Node Requested
         if (state.peer.id == widget.peer.id) {
           return Positioned(
-              top: _calculateOffset(widget.value, widget.peer.proximity).dy,
-              left: _calculateOffset(widget.value, widget.peer.proximity).dx,
+              top: calculateOffset(widget.value).dy,
+              left: calculateOffset(widget.value).dx,
               child: Container(
-                child: _getBubbleContent(widget.peer),
+                child: getBubbleContent(widget.peer),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Color.fromARGB(255, 27, 28, 30),
@@ -77,7 +78,7 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
               ));
         }
         // Build as Standby Node
-        return _buildActiveNode(state, interactable: false);
+        return _buildActiveNode(sonrBloc, interactable: false);
       }
 
       // ** Peer has Declined **
@@ -85,8 +86,8 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
         // Check if Current Node Rejected
         if (state.peer.id == widget.peer.id) {
           return Positioned(
-              top: _calculateOffset(widget.value, widget.peer.proximity).dy,
-              left: _calculateOffset(widget.value, widget.peer.proximity).dx,
+              top: calculateOffset(widget.value).dy,
+              left: calculateOffset(widget.value).dx,
               child: Container(
                   child: Neumorphic(
                 style: NeumorphicStyle(
@@ -106,20 +107,18 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
               )));
         }
         // Build as Active Node
-        return _buildActiveNode(state);
+        return _buildActiveNode(sonrBloc);
       }
 
       // ** Peer Accepted: Transfer is in Progress **
       else if (state is NodeTransferInProgress) {
         if (state.receiver.id == widget.peer.id) {
-          return BlocBuilder<ProgressCubit, ProgressMessage>(
+          return BlocBuilder<ProgressCubit, ProgressUpdate>(
               cubit: context.getCubit(CubitType.Exchange),
               builder: (context, state) {
                 return Positioned(
-                    top: _calculateOffset(widget.value, widget.peer.proximity)
-                        .dy,
-                    left: _calculateOffset(widget.value, widget.peer.proximity)
-                        .dx,
+                    top: calculateOffset(widget.value).dy,
+                    left: calculateOffset(widget.value).dx,
                     child: Stack(
                         alignment: AlignmentDirectional.center,
                         children: [
@@ -133,20 +132,20 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
                                 height: 86.0,
                                 width: 86.0,
                               )),
-                          _getBubbleContent(widget.peer),
+                          getBubbleContent(widget.peer),
                         ]));
               });
         }
 
         // Build as Standby Node
-        return _buildActiveNode(state, interactable: false);
+        return _buildActiveNode(sonrBloc, interactable: false);
       }
 
       // ** Peer has Completed Transfer **
       else if (state is NodeTransferSuccess) {
         return Positioned(
-            top: _calculateOffset(widget.value, widget.peer.proximity).dy,
-            left: _calculateOffset(widget.value, widget.peer.proximity).dx,
+            top: calculateOffset(widget.value).dy,
+            left: calculateOffset(widget.value).dx,
             child: Container(
                 child: Neumorphic(
               style: NeumorphicStyle(
@@ -166,11 +165,11 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
             )));
       }
       // ** Create Active Node Bubble **
-      return _buildActiveNode(state);
+      return _buildActiveNode(sonrBloc);
     });
   }
 
-  _buildActiveNode(sonr, {bool interactable: true}) {
+  _buildActiveNode(SonrBloc sonrBloc, {bool interactable: true}) {
     // Build Active Bubble
     return BlocConsumer<SonrBloc, SonrState>(listenWhen: (previous, current) {
       if (current is NodeSearching) {
@@ -205,74 +204,20 @@ class _PeerBubbleState extends State<PeerBubble> with TickerProviderStateMixin {
               // File is Loaded send offer
               else if (state is NodeSearching) {
                 // Send Offer to Bubble
-                sonr.add(NodeInvitePeer(widget.peer));
+                sonrBloc.add(NodeInvitePeer(widget.peer));
               }
             },
-            child: _getBubbleContent(widget.peer));
+            child: getBubbleContent(widget.peer));
       }
       // Bubble Busy
       else {
-        bubbleChild = _getBubbleContent(widget.peer);
+        bubbleChild = getBubbleContent(widget.peer);
       }
       // Build Bubble
       return Positioned(
-          top: _calculateOffset(widget.value, widget.peer.proximity).dy,
-          left: _calculateOffset(widget.value, widget.peer.proximity).dx,
+          top: calculateOffset(widget.value).dy,
+          left: calculateOffset(widget.value).dx,
           child: bubbleChild);
     });
-  }
-
-  _getBubbleContent(Peer peer) {
-    // Content
-    var icon;
-    var initials;
-
-    // Get Icon
-    if (peer.device == "ANDROID") {
-      icon = NeumorphicIcon((Icons.android),
-          size: 30, style: NeumorphicStyle(color: Colors.green[200]));
-    } else if (peer.device == "IOS") {
-      icon = NeumorphicIcon((Icons.phone_iphone),
-          size: 30, style: NeumorphicStyle(color: Colors.grey[500]));
-    } else {
-      icon = NeumorphicIcon((Icons.device_unknown));
-    }
-
-    // Get Initials
-    initials = Text(
-        peer.firstName[0].toUpperCase() + peer.lastName[0].toUpperCase(),
-        style: mediumTextStyle());
-
-    // Generate Bubble
-    return Neumorphic(
-        style: NeumorphicStyle(
-            shape: NeumorphicShape.flat,
-            boxShape: NeumorphicBoxShape.circle(),
-            depth: 10,
-            lightSource: LightSource.topLeft,
-            color: Colors.grey[300]),
-        child: Container(
-          width: 80,
-          height: 80,
-          child: Column(
-            children: [
-              Spacer(),
-              initials,
-              icon,
-            ],
-          ),
-        ));
-  }
-
-// ******************************** //
-// ** Calculate Offset from Line ** //
-// ******************************** //
-  Offset _calculateOffset(double value, Peer_Proximity proximity) {
-    Path path = ZonePainter.getBubblePath(screenSize.width, proximity);
-    PathMetrics pathMetrics = path.computeMetrics();
-    PathMetric pathMetric = pathMetrics.elementAt(0);
-    value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(value);
-    return pos.position;
   }
 }

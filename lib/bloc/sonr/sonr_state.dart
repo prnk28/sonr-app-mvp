@@ -125,12 +125,12 @@ class LobbyCubit extends Cubit<Lobby> {
 }
 
 // ^ Cubit to Tracks File Transfer ^ //
-class ProgressCubit extends Cubit<ProgressMessage> {
+class ProgressCubit extends Cubit<ProgressUpdate> {
   // Default Value
   ProgressCubit() : super(null);
 
   // Update Progress
-  update(ProgressMessage newProgress) {
+  update(ProgressUpdate newProgress) {
     emit(newProgress);
   }
 }

@@ -70,7 +70,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProgressCubit, ProgressMessage>(
+    return BlocBuilder<ProgressCubit, ProgressUpdate>(
         cubit: context.getCubit(CubitType.Exchange),
         builder: (context, state) {
           return Stack(

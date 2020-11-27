@@ -38,8 +38,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   ) async* {
     if (event is StartApp) {
       yield* _mapStartAppState(event);
-    } else if (event is CreateProfile) {
-      yield* _mapCreateProfileState(event);
+    } else if (event is CreateUser) {
+      yield* _mapCreateUserState(event);
     } else if (event is RequestPermission) {
       yield* _mapRequestPermissionState(event);
     }
@@ -50,14 +50,14 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // @ 2. Check for Profile
-      Profile profile = await Profile.get();
-      if (profile != null) {
+      User user = await User.get();
+      if (user != null) {
         // Get Current Position
         Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
 
         // Initialize Sonr Node
-        sonr.add(NodeInitialize(profile.contact, position));
+        sonr.add(NodeInitialize(user.contact, position));
         yield DeviceActive();
       } else {
         // ! Profile wasnt found
@@ -69,19 +69,19 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     }
   }
 
-  // ^ CreateProfile Event ^
-  Stream<DeviceState> _mapCreateProfileState(CreateProfile event) async* {
+  // ^ CreateUser Event ^
+  Stream<DeviceState> _mapCreateUserState(CreateUser event) async* {
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // Get Data
-      var profile = await Profile.create(event.contact, event.context);
+      var user = await User.create(event.contact, event.context);
 
       // Get Current Position
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
       // Initialize Sonr Node
-      sonr.add(NodeInitialize(profile.contact, position));
+      sonr.add(NodeInitialize(user.contact, position));
       yield DeviceActive();
     } else {
       // ! Location Permission Denied

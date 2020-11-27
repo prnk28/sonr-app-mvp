@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_core/utils/utils.dart';
+import 'package:sonr_core/utils/olc.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -179,7 +179,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 
 // ^ Transfer Has Updated Progress ^ //
   void handleProgressed(dynamic data) async {
-    if (data is ProgressMessage) {
+    if (data is ProgressUpdate) {
       print(data.toProto3Json());
       exchangeProgress.update(data);
     }

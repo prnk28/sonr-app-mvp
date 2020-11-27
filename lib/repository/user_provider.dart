@@ -4,60 +4,57 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 // ** Wraps Around SharedPreferences to Retreive User Basic Info  **
-class Profile {
+class User {
   // ^ Properties ^
   Contact contact;
   String platform;
 
   // Default Constructer
-  Profile();
+  User();
 
   // ^ Method that checks profile existence, returns if contains otherwise returns false ^
-  static Future<Profile> get() async {
+  static Future<User> get() async {
     // @ Get SharedPreferences Instance
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // @ Check for Profile
-    if (prefs.containsKey("profile")) {
+    if (prefs.containsKey("user")) {
       // Get Json Value
-      var profileJson = prefs.getString("profile");
-      print("Stored Profile: " + profileJson);
+      var profileJson = prefs.getString("user");
 
       // Get Profile object
-      return Profile.fromJson(profileJson);
+      return User.fromJson(profileJson);
     }
     return null;
   }
 
   // ^ Method Constructs Profile ^
-  static Future<Profile> create(Contact contact, BuildContext context) async {
+  static Future<User> create(Contact contact, BuildContext context) async {
     // Initialize
-    Profile p = new Profile();
+    User p = new User();
 
     // Set Contact
     p.contact = contact;
 
     // Save in SharedPreferences Instance
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("profile", p.toJson());
+    prefs.setString("user", p.toJson());
     return p;
   }
 
   // ^ Method Constructs Profile from JSON String ^
-  static Future<Profile> fromJson(String jsonData) async {
+  static Future<User> fromJson(String jsonData) async {
     // Initialize
     var map = json.decode(jsonData);
-    Profile p = new Profile();
+    User p = new User();
 
-    // Set Device
+    // Set Values
     p.platform = map["platform"];
-
-    // Set Contact
     p.contact = Contact.fromJson(map["contact"]);
 
     // Save in SharedPreferences Instance
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("profile", p.toJson());
+    prefs.setString("user", p.toJson());
     return p;
   }
 

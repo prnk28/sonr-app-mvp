@@ -111,7 +111,7 @@ class _InitializeViewState extends State<InitializeView> {
                     // Process data.
                     context
                         .getBloc(BlocType.Device)
-                        .add(CreateProfile(context, contact));
+                        .add(CreateUser(context, contact));
                   }
                 },
                 child: Text('Submit',

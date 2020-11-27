@@ -60,7 +60,7 @@ Row _buildItem(BuildContext context, NodeInvited state) {
     Column(
       children: [
         Text(from.firstName, style: headerTextStyle()),
-        Text(from.device,
+        Text(from.device.platform,
             style: TextStyle(
                 fontFamily: "Raleway",
                 fontWeight: FontWeight.w500,

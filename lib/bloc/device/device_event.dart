@@ -30,10 +30,10 @@ class RequestPermission extends DeviceEvent {
 
 // ^ CreateProfile Event ^ //
 // (Creates New Profile from Contact Object)
-class CreateProfile extends DeviceEvent {
+class CreateUser extends DeviceEvent {
   final Contact contact;
   final BuildContext context;
-  const CreateProfile(this.context, this.contact);
+  const CreateUser(this.context, this.contact);
 }
 
 // *********************
