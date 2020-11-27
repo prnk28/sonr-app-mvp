@@ -10,6 +10,9 @@ import 'package:equatable/equatable.dart';
 part 'sonr_event.dart';
 part 'sonr_state.dart';
 
+//@ Constants
+const int CALLBACK_INTERVAL = 20;
+
 class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties
   Node node;
@@ -116,14 +119,12 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ NodeStartTransfer Event ^
   Stream<SonrState> _mapNodeCompletedTransferState(
       NodeCompletedTransfer event) async* {
-    node.transfer();
     yield NodeTransferSuccess(event.peer);
   }
 
   // ^ NodeStartTransfer Event ^
   Stream<SonrState> _mapNodeReceivedTransferState(
       NodeReceivedTransfer event) async* {
-    node.transfer();
     yield NodeReceiveSuccess(event.metadata);
   }
 
@@ -177,7 +178,13 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ Transfer Has Updated Progress ^ //
   void handleProgressed(dynamic data) async {
     if (data is ProgressUpdate) {
-      progress.update(data.progress);
+      // Initialize Interval Data
+      var callbackInterval = (data.total / CALLBACK_INTERVAL).ceil();
+
+      // Update Cubit on Interval
+      if (data.current % callbackInterval == 0) {
+        progress.update(data.progress);
+      }
     }
   }
 

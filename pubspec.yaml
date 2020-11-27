@@ -24,6 +24,7 @@ dependencies:
   flutter_bloc: ^6.1.0
   intl: ^0.15.8
   logger: ^0.9.4
+  states_rebuilder: ^3.2.0
 
   # -- Device --
   flutter_compass: ^0.5.0
