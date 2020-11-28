@@ -7,11 +7,10 @@ import 'package:bloc/bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:equatable/equatable.dart';
 
+import '../bloc.dart';
+
 part 'sonr_event.dart';
 part 'sonr_state.dart';
-
-//() -- Constants() -- //
-const int CALLBACK_INTERVAL = 16; // Every Kilobyte
 
 class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties

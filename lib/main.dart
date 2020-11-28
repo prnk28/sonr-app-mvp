@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import 'routing.dart';
 import 'package:sonar_app/screens/screens.dart';
 
@@ -12,6 +14,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return LifeCycleManager(
         child: NeumorphicApp(
+      navigatorKey: Get.key,
+      navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       darkTheme: darkTheme(),

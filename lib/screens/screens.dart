@@ -6,8 +6,9 @@ export 'searching/searching.dart';
 export 'lifecycle.dart';
 
 // Packages
+export 'package:get/get.dart';
 export 'package:flutter/material.dart';
-export 'package:flutter_bloc/flutter_bloc.dart';
+export 'package:flutter_bloc/flutter_bloc.dart' hide Transition;
 export 'package:flutter/widgets.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:vibration/vibration.dart';

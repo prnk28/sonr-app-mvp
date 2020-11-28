@@ -3,6 +3,8 @@ import 'package:sonar_app/screens/screens.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Instantiate your class using Get.put() to make it available for all "child" routes there.
+    final SonrStore c = Get.put(SonrStore());
     // Set Device Screen Bounds
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
