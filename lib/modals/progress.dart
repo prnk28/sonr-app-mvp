@@ -74,7 +74,8 @@ class _IconLiquidFillState extends State<IconLiquidFill>
     return BlocBuilder<ProgressCubit, double>(
         cubit: context.getCubit(CubitType.Progress),
         builder: (context, state) {
-          while (state < 1.0) {
+          currentProgress = state;
+          if (currentProgress < 1) {
             return Stack(
               children: <Widget>[
                 SizedBox(
@@ -87,7 +88,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
                         painter: WavePainter(
                           iconKey: _iconKey,
                           waveAnimation: _waveController,
-                          percent: state,
+                          percent: currentProgress,
                           boxHeight: widget.boxHeight,
                           waveColor: widget.waveColor,
                         ),

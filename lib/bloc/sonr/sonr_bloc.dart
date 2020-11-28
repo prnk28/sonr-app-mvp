@@ -10,12 +10,16 @@ import 'package:equatable/equatable.dart';
 part 'sonr_event.dart';
 part 'sonr_state.dart';
 
+//() -- Constants() -- //
+const int CALLBACK_INTERVAL = 16; // Every Kilobyte
+
 class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // Subscription Properties
   Node node;
   AuthenticationCubit authentication = new AuthenticationCubit();
   LobbyCubit lobby = new LobbyCubit();
   ProgressCubit progress = new ProgressCubit();
+  int _callbackInterval;
 
   // ^ Constructer Sets Callbacks ^ //
   SonrBloc() : super(NodeOffline());
@@ -116,14 +120,12 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
   // ^ NodeStartTransfer Event ^
   Stream<SonrState> _mapNodeCompletedTransferState(
       NodeCompletedTransfer event) async* {
-    node.transfer();
     yield NodeTransferSuccess(event.peer);
   }
 
   // ^ NodeStartTransfer Event ^
   Stream<SonrState> _mapNodeReceivedTransferState(
       NodeReceivedTransfer event) async* {
-    node.transfer();
     yield NodeReceiveSuccess(event.metadata);
   }
 
@@ -144,6 +146,7 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
     if (data is AuthMessage) {
       print(data.toString());
       authentication.update(data);
+      _callbackInterval = (data.metadata.chunks / CALLBACK_INTERVAL).ceil();
     }
   }
 
@@ -177,7 +180,10 @@ class SonrBloc extends Bloc<SonrEvent, SonrState> {
 // ^ Transfer Has Updated Progress ^ //
   void handleProgressed(dynamic data) async {
     if (data is ProgressUpdate) {
-      progress.update(data.progress);
+      // Update Cubit on Interval
+      if (data.current % _callbackInterval == 0) {
+        progress.update(data.percent);
+      }
     }
   }
 
