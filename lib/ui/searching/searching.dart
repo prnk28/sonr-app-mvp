@@ -1,4 +1,4 @@
-import 'package:sonar_app/screens/screens.dart';
+import 'package:sonar_app/ui/screens.dart';
 import 'bubble/bubble.dart';
 import 'compass/compass.dart';
 

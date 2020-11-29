@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:intl/intl.dart';
-import 'package:sonar_app/screens/screens.dart';
+import 'package:sonar_app/ui/screens.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 part 'image.dart';

@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonar_app/screens/screens.dart';
+import 'package:sonar_app/ui/screens.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 part 'device_event.dart';

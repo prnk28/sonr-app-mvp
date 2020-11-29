@@ -1,28 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/screens.dart';
-
-// ^ Routing Information ^ //
-List<GetPage> getPages() {
-  return [
-    // ** Home Page ** //
-    GetPage(
-        name: '/home',
-        page: () => AppTheme(HomeScreen()),
-        transition: Transition.zoom),
-
-    // ** Register Page ** //
-    GetPage(
-        name: '/register',
-        page: () => AppTheme(RegisterScreen()),
-        transition: Transition.rightToLeftWithFade),
-
-    // ** Searching Page ** //
-    GetPage(
-        name: '/transfer',
-        page: () => AppTheme(SearchingScreen()),
-        transition: Transition.fade),
-  ];
-}
+import 'ui/screens.dart';
 
 // *********************** //
 // ** Build BLoC System ** //

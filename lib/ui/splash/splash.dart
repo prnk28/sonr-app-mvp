@@ -1,5 +1,5 @@
 import 'package:sonar_app/controller/controller.dart';
-import 'package:sonar_app/screens/screens.dart';
+import 'package:sonar_app/ui/screens.dart';
 
 class SplashScreen extends StatelessWidget {
   @override

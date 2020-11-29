@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import 'routing.dart';
-import 'package:sonar_app/screens/screens.dart';
+import 'package:sonar_app/ui/screens.dart';
 
 // ** Main Method ** //
 void main() async {
@@ -9,6 +9,7 @@ void main() async {
   runApp(initializeBloc(App()));
 }
 
+// ^ Root Widget ^ //
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,4 +23,27 @@ class App extends StatelessWidget {
       home: SplashScreen(),
     ));
   }
+}
+
+// ^ Routing Information ^ //
+List<GetPage> getPages() {
+  return [
+    // ** Home Page ** //
+    GetPage(
+        name: '/home',
+        page: () => AppTheme(HomeScreen()),
+        transition: Transition.zoom),
+
+    // ** Register Page ** //
+    GetPage(
+        name: '/register',
+        page: () => AppTheme(RegisterScreen()),
+        transition: Transition.rightToLeftWithFade),
+
+    // ** Searching Page ** //
+    GetPage(
+        name: '/transfer',
+        page: () => AppTheme(SearchingScreen()),
+        transition: Transition.fade),
+  ];
 }
