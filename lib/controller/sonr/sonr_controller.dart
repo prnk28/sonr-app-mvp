@@ -3,13 +3,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/utils/olc.dart';
 import 'package:get/get.dart' hide Node;
-import '../controllers.dart';
+import '../controller.dart';
 part 'sonr_data.dart';
 
 //() -- Constants() -- //
 const int CALLBACK_INTERVAL = 16; // Every Kilobyte
 
-class SonrStore extends GetxController {
+class SonrController extends GetxController {
 // *************************
 // ** Service Properties  **
 // *************************

@@ -7,7 +7,6 @@ class CompassView extends StatelessWidget {
   const CompassView({Key key, this.direction}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var math;
     return Stack(alignment: Alignment.topCenter, children: [
       // Compass Total
       AspectRatio(

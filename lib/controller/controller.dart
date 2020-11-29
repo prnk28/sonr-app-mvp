@@ -3,4 +3,4 @@ import 'package:get/get.dart' hide Node;
 import 'sonr/sonr_controller.dart';
 
 // Initialize
-final sonrStore = SonrStore().obs;
+final sonrStore = SonrController().obs;

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:sonar_app/screens/screens.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'bubble/bubble.dart';
@@ -11,8 +9,7 @@ class SearchingScreen extends StatelessWidget {
     // Return Widget
     return Scaffold(
         appBar: exitAppBar(context, Icons.close, onPressed: () {
-          // Pop Navigation
-          Navigator.pushReplacementNamed(context, "/home");
+          Get.offAllNamed("/home");
         }),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: SafeArea(

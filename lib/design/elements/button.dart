@@ -10,7 +10,7 @@ Widget getCloseButton(BuildContext context,
             context.getBloc(BlocType.File).add(GetAllFiles());
 
             // Pop Window
-            Navigator.pop(context);
+            Get.back();
           },
           child: Padding(
               padding: EdgeInsets.only(top: 10, right: 15),

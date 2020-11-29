@@ -40,7 +40,7 @@ class Popup {
                     context.getBloc(BlocType.File).add(GetFile(state.metadata));
 
                     // Pop View
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: Text("Go There"),
                 )

@@ -81,5 +81,5 @@ NeumorphicAppBar exitAppBar(
 }
 
 _defaultOnPressed(BuildContext context) {
-  Navigator.pop(context);
+  Get.back();
 }

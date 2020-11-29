@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -24,7 +23,7 @@ part 'image.dart';
 //         appBar: actionSingleAppBar(context, Icons.arrow_back, Icons.delete,
 //             onLeadingPressed: () {
 //           // Push Replacement
-//           Navigator.pushReplacementNamed(context, "/home");
+//          Get.toNamed("/home");
 //         }, onActionPressed: () {
 //           // show the dialog
 //           showDialog(
@@ -32,7 +31,7 @@ part 'image.dart';
 //             builder: (BuildContext context) {
 //               return detailDeleteDialog(onCancel: () {
 //                 // Close Window
-//                 Navigator.pop(context);
+//                 Get.back();
 //               }, onDelete: () {
 //                 // Delete File Event
 //                 context.getBloc(BlocType.Data).add(UserDeleteFile(metadata));
@@ -65,10 +64,7 @@ part 'image.dart';
 //               context.getBloc(BlocType.User).add(NodeAvailable());
 
 //               // Push to Home
-//               Navigator.pushReplacementNamed(
-//                 context,
-//                 "/home",
-//               );
+//               Get.toNamed("/home");
 //             }
 //           },
 //         ),
@@ -100,7 +96,7 @@ part 'image.dart';
 //             builder: (BuildContext context) {
 //               return detailDeleteDialog(onCancel: () {
 //                 // Close Window
-//                 Navigator.pop(context);
+//                 Get.Back();
 //               }, onDelete: () {
 //                 // Delete File Event
 //                 context
@@ -108,10 +104,7 @@ part 'image.dart';
 //                     .add(UserDeleteFile(state.metadata));
 
 //                 // Push to Home
-//                 Navigator.pushReplacementNamed(
-//                   context,
-//                   "/home",
-//                 );
+//                 Get.toNamed("/home");
 //               });
 //             },
 //           );

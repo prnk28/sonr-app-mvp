@@ -13,15 +13,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LifeCycleManager(
-        child: NeumorphicApp(
+        child: GetMaterialApp(
+      getPages: getPages(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
-      theme: lightTheme(),
-      darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       home: SplashScreen(),
-      onGenerateRoute: context.getRouting(),
     ));
   }
 }

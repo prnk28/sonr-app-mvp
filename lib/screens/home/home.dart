@@ -51,7 +51,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    
     // Build View
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
@@ -61,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
           // File Option
           if (button == "File") {
             // Push to Transfer Screen
-            Navigator.pushReplacementNamed(context, "/transfer");
+            Get.offNamed("/transfer");
           }
           // Contact Option
           else {

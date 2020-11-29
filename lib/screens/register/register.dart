@@ -12,7 +12,7 @@ class RegisterScreen extends StatelessWidget {
       body: BlocBuilder<DeviceBloc, DeviceState>(buildWhen: (prev, curr) {
         if (curr is DeviceActive) {
           // Push to Home with Profile
-          Navigator.pushReplacementNamed(context, "/home");
+          Get.offNamed("/home");
           return false;
         }
         // Register Screen

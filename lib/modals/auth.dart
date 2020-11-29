@@ -81,7 +81,7 @@ NeumorphicButton _buildAuthButton(BuildContext context, AuthMessage state) {
             .add(NodeRespondPeer(true, state.from, state.metadata));
 
         // Pop Window
-        Navigator.pop(context);
+        Get.back();
       },
       style: NeumorphicStyle(
           depth: 8,
