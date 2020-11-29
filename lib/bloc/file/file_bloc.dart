@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:sonar_app/repository/repository.dart';
+import 'package:sonar_app/database/database.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:equatable/equatable.dart';
 

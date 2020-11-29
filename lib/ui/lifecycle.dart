@@ -1,4 +1,4 @@
-import 'package:sonar_app/ui/screens.dart';
+import 'package:sonar_app/ui/ui.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget child;

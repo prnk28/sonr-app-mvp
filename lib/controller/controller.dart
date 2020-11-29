@@ -1,2 +1,2 @@
-export 'sonr/sonr_controller.dart';
-export 'design/design_controller.dart';
+export 'sonr_controller.dart';
+export 'design_controller.dart';

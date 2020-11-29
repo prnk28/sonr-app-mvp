@@ -1,12 +1,25 @@
 import 'package:get/get.dart';
-
-import 'routing.dart';
-import 'package:sonar_app/ui/screens.dart';
+import 'package:sonar_app/ui/ui.dart';
 
 // ** Main Method ** //
 void main() async {
   // Run App with BLoC Providers
-  runApp(initializeBloc(App()));
+  runApp(
+      // Return Provider
+      MultiBlocProvider(
+    providers: [
+      // File Management
+      BlocProvider<FileBloc>(
+        create: (context) => FileBloc(),
+      ),
+
+      // Device Sensors Logic
+      BlocProvider<DeviceBloc>(
+        create: (context) => DeviceBloc(),
+      ),
+    ],
+    child: App(),
+  ));
 }
 
 // ^ Root Widget ^ //
@@ -43,7 +56,7 @@ List<GetPage> getPages() {
     // ** Searching Page ** //
     GetPage(
         name: '/transfer',
-        page: () => AppTheme(SearchingScreen()),
+        page: () => AppTheme(TransferScreen()),
         transition: Transition.fade),
   ];
 }

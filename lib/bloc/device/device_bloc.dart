@@ -2,10 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/bloc/bloc.dart';
-import 'package:sonar_app/repository/repository.dart';
+import 'package:sonar_app/database/database.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonar_app/ui/screens.dart';
+import 'package:sonar_app/ui/ui.dart';
 import 'package:sonr_core/sonr_core.dart';
+import '../../model/model.dart';
 
 part 'device_event.dart';
 part 'device_state.dart';
