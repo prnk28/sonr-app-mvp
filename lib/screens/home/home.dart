@@ -75,46 +75,14 @@ class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SonrController sonrController = Get.find();
-    Obx(() {
-      if (sonrController.status == SonrStatus.Pending) {
-        Get.dialog(widget);
+    return Obx(() {
+      if (sonrController.status.value == SonrStatus.Pending) {
+        Get.dialog(AuthSheet(message: sonrController.auth.value));
+      } else if (sonrController.status.value == SonrStatus.Receiving) {
+        Get.dialog(ProgressSheet());
       }
+
+      return ImageGrid();
     });
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<AuthenticationCubit, AuthMessage>(
-          cubit: context.getCubit(CubitType.Authentication),
-          listener: (context, state) {
-            if (state.event == AuthMessage_Event.REQUEST) {
-              // Display Bottom Sheet
-              showModalBottomSheet<void>(
-                  shape: windowBorder(),
-                  barrierColor: Colors.black87,
-                  isDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return Window.showAuth(context, state);
-                  });
-            }
-          },
-        ),
-        BlocListener<SonrBloc, SonrState>(
-          listener: (context, state) {
-            if (state is NodeReceiveInProgress) {
-              // Display Bottom Sheet
-              showModalBottomSheet<void>(
-                  shape: windowBorder(),
-                  barrierColor: Colors.black87,
-                  isDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return Window.showTransferring(context, state);
-                  });
-            }
-          },
-        ),
-      ],
-      child: ImageGrid(),
-    );
   }
 }

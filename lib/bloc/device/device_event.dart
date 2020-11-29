@@ -18,7 +18,8 @@ enum PermissionType {
 // ^ StartApp Event ^ //
 //(Sets Device Parameters, Checks for Required Permissions, Locates Profile, and starts Sonr)
 class StartApp extends DeviceEvent {
-  const StartApp();
+  final SonrController sonrController;
+  const StartApp(this.sonrController);
 }
 
 // ^ RequestPermission Event ^ //

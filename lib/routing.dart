@@ -44,9 +44,7 @@ MultiBlocProvider initializeBloc(Widget app) {
 
       // Device Sensors Logic
       BlocProvider<DeviceBloc>(
-        create: (context) => DeviceBloc(
-          BlocProvider.of<SonrBloc>(context),
-        ),
+        create: (context) => DeviceBloc(),
       ),
     ],
     child: app,

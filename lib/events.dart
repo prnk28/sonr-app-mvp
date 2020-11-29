@@ -42,24 +42,4 @@ extension Events on BuildContext {
     }
     return null;
   }
-
-// -- BLoC Retreival Methods -- //
-  getRequestListener() {
-    return BlocListener<AuthenticationCubit, AuthMessage>(
-      cubit: getCubit(CubitType.Authentication),
-      listener: (context, state) {
-        if (state is NodeInvited) {
-          // Display Bottom Sheet
-          showModalBottomSheet<void>(
-              shape: windowBorder(),
-              barrierColor: Colors.black87,
-              isDismissible: false,
-              context: context,
-              builder: (context) {
-                return Window.showAuth(context, state);
-              });
-        }
-      },
-    );
-  }
 }

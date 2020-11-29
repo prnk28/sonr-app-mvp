@@ -12,16 +12,16 @@ part 'device_state.dart';
 // ^ DeviceBloc handles profile, permissions, and Compass ^
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
-  final SonrController sonr;
   DirectionCubit directionCubit = new DirectionCubit();
-
+  SonrController sonr;
   // Constructer
-  DeviceBloc(this.sonr) : super(DeviceLoading()) {
+  DeviceBloc() : super(DeviceLoading()) {
     // ** Directional Events **
     FlutterCompass.events.listen((newDegrees) {
       // @ Check if Correct State
-      if (sonr.status == SonrStatus.Available ||
-          sonr.status is SonrStatus.Searching) {
+      if (sonr != null &&
+          (sonr.status.value == SonrStatus.Available ||
+              sonr.status.value == SonrStatus.Searching)) {
         // Get Current Direction and Update Cubit
         double direction = newDegrees.headingForCameraMode;
         directionCubit.update(direction);
@@ -46,6 +46,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 
 // ^ StartApp Event ^
   Stream<DeviceState> _mapStartAppState(StartApp event) async* {
+    // Set Sonr Controller
+    sonr = event.sonrController;
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // @ 2. Check for Profile
@@ -56,7 +58,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
             desiredAccuracy: LocationAccuracy.high);
 
         // Initialize Sonr Node
-        sonr.add(NodeInitialize(user.contact, position));
+        sonr.initialize(position, user.contact);
         yield DeviceActive();
       } else {
         // ! Profile wasnt found
@@ -80,7 +82,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
           desiredAccuracy: LocationAccuracy.high);
 
       // Initialize Sonr Node
-      sonr.add(NodeInitialize(user.contact, position));
+      sonr.initialize(position, user.contact);
       yield DeviceActive();
     } else {
       // ! Location Permission Denied

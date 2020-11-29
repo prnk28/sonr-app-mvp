@@ -7,7 +7,7 @@ class SplashScreen extends StatelessWidget {
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
     final SonrController c = Get.put(SonrController());
     // Check Permissions
-    context.getBloc(BlocType.Device).add(StartApp());
+    context.getBloc(BlocType.Device).add(StartApp(c));
 
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),

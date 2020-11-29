@@ -9,11 +9,11 @@ class ProgressSheet extends StatelessWidget {
     // Return View
     return Container(
         decoration: windowDecoration(context),
-        height: screenSize.height / 3 + 20,
+        height: Get.height / 3 + 20,
         child: Center(
             child: IconLiquidFill(
                 iconData: iconDataFromKind(
-                    sonrStore.state.offeredMetadata.mime.type))));
+                    sonrController.offeredMetadata.value.mime.type))));
   }
 }
 
@@ -25,7 +25,7 @@ class IconLiquidFill extends StatefulWidget {
   final Duration waveDuration;
 
   /// Set to screen Size
-  final double boxHeight = screenSize.height / 3;
+  final double boxHeight = Get.height / 3;
 
   /// By default it is set to 400
   final double boxWidth;
@@ -75,8 +75,8 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return currentProgress.rebuilder(() {
-      while (currentProgress.state < 1.0) {
+    return GetBuilder<SonrController>(builder: (sonr) {
+      if (sonr.progress.value < 1.0) {
         return Stack(
           children: <Widget>[
             SizedBox(
@@ -89,7 +89,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
                     painter: WavePainter(
                       iconKey: _iconKey,
                       waveAnimation: _waveController,
-                      percent: currentProgress.state,
+                      percent: sonr.progress.value,
                       boxHeight: widget.boxHeight,
                       waveColor: widget.waveColor,
                     ),
