@@ -1,17 +1,44 @@
 part of '../home.dart';
 
-class FloaterButton extends StatelessWidget {
-  final Animation<double> animation;
-  final AnimationController animationController;
+class FloaterButton extends StatefulWidget {
   final Function(String) onAnimationComplete;
 
-  const FloaterButton(
-      this.animation, this.animationController, this.onAnimationComplete,
-      {Key key})
-      : super(key: key);
+  const FloaterButton(this.onAnimationComplete, {Key key}) : super(key: key);
+
+  @override
+  _FloaterButtonState createState() => _FloaterButtonState();
+}
+
+class _FloaterButtonState extends State<FloaterButton>
+    with SingleTickerProviderStateMixin {
+  // Floating Button Animations
+  Animation<double> _animation;
+  AnimationController _animationController;
+
+  @override
+  void initState() {
+    // ^ Setup Floater Animation ^ //
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    _animationController.dispose(); // you need this
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final SonrController sonrController = Get.find();
     final picker = ImagePicker();
     return FloatingActionBubble(
       // Menu items
@@ -28,16 +55,14 @@ class FloaterButton extends StatelessWidget {
                 await picker.getImage(source: ImageSource.camera);
 
             // Queue File
-            context
-                .getBloc(BlocType.Sonr)
-                .add(NodeQueueFile(File(pickedFile.path)));
+            sonrController.queueFile(File(pickedFile.path));
 
             // Wait for Animation to Complete
-            animationController.reverse();
+            _animationController.reverse();
 
             // Send Callback
-            if (onAnimationComplete != null) {
-              onAnimationComplete("File");
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete("File");
             }
           },
         ),
@@ -54,14 +79,14 @@ class FloaterButton extends StatelessWidget {
                 await getAssetFileByPath("assets/images/fat_test.jpg");
 
             // Queue File
-            context.getBloc(BlocType.Sonr).add(NodeQueueFile(testFile));
+            sonrController.queueFile(testFile);
 
             // Wait for Animation to Complete
-            animationController.reverse();
+            _animationController.reverse();
 
             // Send Callback
-            if (onAnimationComplete != null) {
-              onAnimationComplete("File");
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete("File");
             }
           },
         ),
@@ -74,23 +99,23 @@ class FloaterButton extends StatelessWidget {
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             // Wait for Animation to Complete
-            animationController.reverse();
+            _animationController.reverse();
 
             // Send Callback
-            if (onAnimationComplete != null) {
-              onAnimationComplete("Contact");
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete("Contact");
             }
           },
         ),
       ],
 
       // animation controller
-      animation: animation,
+      animation: _animation,
 
       // On pressed change animation state
-      onPress: () => animationController.isCompleted
-          ? animationController.reverse()
-          : animationController.forward(),
+      onPress: () => _animationController.isCompleted
+          ? _animationController.reverse()
+          : _animationController.forward(),
 
       // Floating Action button Icon color
       iconColor: Colors.blue,

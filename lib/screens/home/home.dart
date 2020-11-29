@@ -17,46 +17,14 @@ part 'view/grid.dart';
 
 Logger log = Logger();
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key key}) : super(key: key);
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
-  // Floating Button Animations
-  Animation<double> _animation;
-  AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 260),
-    );
-
-    final curvedAnimation =
-        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
-    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
-
-    super.initState();
-  }
-
-  @override
-  dispose() {
-    _animationController.dispose(); // you need this
-    super.dispose();
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return Scaffold(
+    return AppTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         appBar: titleAppBar("Home"),
-        floatingActionButton:
-            FloaterButton(_animation, _animationController, (button) {
+        floatingActionButton: FloaterButton((button) {
           // File Option
           if (button == "File") {
             // Push to Transfer Screen
@@ -67,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen>
             log.w("Contact not implemented yet");
           }
         }),
-        body: _HomeView());
+        body: _HomeView()));
   }
 }
 

@@ -6,19 +6,19 @@ List<GetPage> getPages() {
   return [
     // ** Home Page ** //
     GetPage(
-      name: '/',
-      page: () => HomeScreen(),
-    ),
+        name: '/home', page: () => HomeScreen(), transition: Transition.zoom),
 
     // ** Register Page ** //
     GetPage(
-        name: '/',
+        name: '/register',
         page: () => RegisterScreen(),
         transition: Transition.rightToLeftWithFade),
 
     // ** Searching Page ** //
     GetPage(
-        name: '/', page: () => SearchingScreen(), transition: Transition.fade),
+        name: '/transfer',
+        page: () => SearchingScreen(),
+        transition: Transition.fade),
   ];
 }
 

@@ -6,8 +6,9 @@ import 'compass/compass.dart';
 class SearchingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = NeumorphicTheme.currentTheme(context);
     // Return Widget
-    return Scaffold(
+    return AppTheme(Scaffold(
         appBar: exitAppBar(context, Icons.close, onPressed: () {
           Get.offAllNamed("/home");
         }),
@@ -62,6 +63,6 @@ class SearchingScreen extends StatelessWidget {
                       child: CompassView(direction: state));
                 })
           ],
-        )));
+        ))));
   }
 }
