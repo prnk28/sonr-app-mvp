@@ -135,7 +135,6 @@ class SonrController extends GetxController {
       // Update Status
       lobby(data);
       peers(data.peers);
-      //print(lobby.value.toString());
     } else {
       throw SonrError("handleRefreshed() - " + "Invalid Return type");
     }

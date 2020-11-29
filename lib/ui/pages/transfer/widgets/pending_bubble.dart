@@ -1,4 +1,7 @@
-part of 'bubble.dart';
+import 'dart:ui';
+
+import 'package:sonar_app/ui/ui.dart';
+import 'package:sonr_core/models/models.dart';
 
 class PendingBubble extends StatefulWidget {
   final double value;

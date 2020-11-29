@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sonar_app/controller/bindings/sonr_bind.dart';
 import 'package:sonar_app/ui/ui.dart';
 
 // ** Main Method ** //
@@ -55,8 +56,10 @@ List<GetPage> getPages() {
 
     // ** Searching Page ** //
     GetPage(
-        name: '/transfer',
-        page: () => AppTheme(TransferScreen()),
-        transition: Transition.fade),
+      name: '/transfer',
+      page: () => AppTheme(TransferScreen()),
+      transition: Transition.fade,
+      binding: SonrBind(),
+    ),
   ];
 }

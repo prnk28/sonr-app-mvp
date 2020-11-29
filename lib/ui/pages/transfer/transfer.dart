@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:sonar_app/ui/ui.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'widgets/bubble.dart';
 import 'widgets/compass.dart';
 
 class TransferScreen extends StatelessWidget {
-  final SonrController sonr = Get.find();
   @override
   Widget build(BuildContext context) {
     // Return Widget
@@ -25,51 +27,63 @@ class TransferScreen extends StatelessWidget {
                 )),
 
             // @ Bubble View
-            Obx(() {
+            GetX<SonrController>(builder: (sonr) {
+              // Initialize Widget List
+              List<Widget> stackWidgets = new List<Widget>();
               // Check Peers Size
               if (sonr.peers().length > 0) {
-                // Initialize Widget List
-                List<Widget> stackWidgets = new List<Widget>();
-
                 // Init Stack Vars
                 int total = sonr.peers().length;
                 int current = 0;
                 double mean = 1.0 / total;
 
                 // Create Bubbles
+                print(sonr.peers().length);
                 sonr.peers().values.forEach((peer) {
                   // Increase Count
                   current += 1;
-
                   // Create Bubble
-                  Widget bubble;
-                  if (sonr.status() == SonrStatus.Pending) {
-                    if (sonr.auth().from.id == peer.id) {
-                      bubble = getPeerBubble(current * mean, peer, sonr.auth());
-                    }
-                  } else {
-                    bubble = activeBubble(current * mean, peer);
-                  }
-
-                  // Place Bubble
-                  stackWidgets.add(bubble);
+                  stackWidgets.add(Bubble(current * mean, peer));
                 });
-
-                // Return View
-                return Stack(children: stackWidgets);
               }
-              return Container();
+              return Stack(children: stackWidgets);
             }),
-
-            // @ Have BLoC Builder Retrieve Directly from Compass
-            BlocBuilder<DirectionCubit, double>(
-                cubit: BlocProvider.of<DeviceBloc>(context).directionCubit,
-                builder: (context, state) {
-                  return Align(
-                      alignment: Alignment.bottomCenter,
-                      child: CompassView(direction: state));
-                })
+            CompassView(),
           ],
         ))));
   }
+}
+
+// ^ Builds the Bubbles Content ^ //
+buildBubbleContent(Peer peer) {
+  // Generate Bubble
+  return Neumorphic(
+      style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          boxShape: NeumorphicBoxShape.circle(),
+          depth: 10,
+          lightSource: LightSource.topLeft,
+          color: Colors.grey[300]),
+      child: Container(
+        width: 80,
+        height: 80,
+        child: Column(
+          children: [
+            Spacer(),
+            initialsFromPeer(peer),
+            iconFromPeer(peer),
+          ],
+        ),
+      ));
+}
+
+// ^ Calculate Peer Offset from Line ^ //
+Offset calculateOffset(double value,
+    {Peer_Proximity proximity = Peer_Proximity.IMMEDIATE}) {
+  Path path = ZonePainter.getBubblePath(Get.width, proximity);
+  PathMetrics pathMetrics = path.computeMetrics();
+  PathMetric pathMetric = pathMetrics.elementAt(0);
+  value = pathMetric.length * value;
+  Tangent pos = pathMetric.getTangentForOffset(value);
+  return pos.position;
 }
