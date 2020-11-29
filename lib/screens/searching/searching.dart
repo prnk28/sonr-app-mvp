@@ -3,6 +3,7 @@ import 'bubble/bubble.dart';
 import 'compass/compass.dart';
 
 class SearchingScreen extends StatelessWidget {
+  final SonrController sonr = Get.find();
   @override
   Widget build(BuildContext context) {
     // Return Widget
@@ -24,7 +25,7 @@ class SearchingScreen extends StatelessWidget {
                 )),
 
             // @ Bubble View
-            GetX<SonrController>(builder: (sonr) {
+            Obx(() {
               // Check Peers Size
               if (sonr.peers().length > 0) {
                 // Initialize Widget List
@@ -41,8 +42,7 @@ class SearchingScreen extends StatelessWidget {
                   current += 1;
 
                   // Place Bubble
-                  Widget bubble = new Bubble(current * mean, peer);
-                  stackWidgets.add(bubble);
+                  stackWidgets.add(new Bubble(current * mean, peer, sonr.auth()));
                 });
 
                 // Return View

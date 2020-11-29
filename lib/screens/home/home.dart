@@ -40,17 +40,15 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomeView extends StatelessWidget {
+  final SonrController sonrController = Get.find();
   @override
   Widget build(BuildContext context) {
-    final SonrController sonrController = Get.find();
-    return Obx(() {
-      if (sonrController.status.value == SonrStatus.Pending) {
-        Get.dialog(AuthSheet(message: sonrController.auth.value));
-      } else if (sonrController.status.value == SonrStatus.Receiving) {
-        Get.dialog(ProgressSheet());
-      }
+    if (sonrController.status.value == SonrStatus.Pending) {
+      Get.dialog(AuthSheet(message: sonrController.auth.value));
+    } else if (sonrController.status.value == SonrStatus.Receiving) {
+      Get.dialog(ProgressSheet());
+    }
 
-      return ImageGrid();
-    });
+    return ImageGrid();
   }
 }

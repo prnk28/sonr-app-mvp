@@ -131,7 +131,6 @@ class SonrController extends GetxController {
   void _handleRefreshed(dynamic data) async {
     // Check Type
     if (data is Lobby) {
-      print(data.peers.toString());
       // Update Status
       lobby(data);
       peers(data.peers);
