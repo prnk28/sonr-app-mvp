@@ -41,8 +41,18 @@ class SearchingScreen extends StatelessWidget {
                   // Increase Count
                   current += 1;
 
+                  // Create Bubble
+                  Widget bubble;
+                  if (sonr.status() == SonrStatus.Pending) {
+                    if (sonr.auth().from.id == peer.id) {
+                      bubble = getPeerBubble(current * mean, peer, sonr.auth());
+                    }
+                  } else {
+                    bubble = activeBubble(current * mean, peer);
+                  }
+
                   // Place Bubble
-                  stackWidgets.add(new Bubble(current * mean, peer, sonr.auth()));
+                  stackWidgets.add(bubble);
                 });
 
                 // Return View

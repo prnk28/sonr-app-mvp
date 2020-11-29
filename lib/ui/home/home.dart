@@ -43,9 +43,9 @@ class _HomeView extends StatelessWidget {
   final SonrController sonrController = Get.find();
   @override
   Widget build(BuildContext context) {
-    if (sonrController.status.value == SonrStatus.Pending) {
+    if (sonrController.status() == SonrStatus.Pending) {
       Get.dialog(AuthSheet(message: sonrController.auth.value));
-    } else if (sonrController.status.value == SonrStatus.Receiving) {
+    } else if (sonrController.status() == SonrStatus.Receiving) {
       Get.dialog(ProgressSheet());
     }
 

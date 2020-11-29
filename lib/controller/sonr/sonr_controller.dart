@@ -85,6 +85,7 @@ class SonrController extends GetxController {
 
   // ^ Invite-Peer Event ^
   void invitePeer(Peer peer) async {
+    print(peer.toString());
     // @ Check Connection
     if (_isConnected) {
       // @ Check File Status
