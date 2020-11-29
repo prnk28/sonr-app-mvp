@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:sonar_app/screens/screens.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sonar_app/bloc/bloc.dart';
+import 'package:sonar_app/controller/controller.dart';
 
 class Popup {
   // Build
-  static Widget showImage(BuildContext context, NodeReceiveSuccess state) {
+  static Widget showImage(BuildContext context) {
     return Dialog(
         shape: windowBorder(),
         insetAnimationDuration: Duration(seconds: 1),
@@ -18,7 +18,7 @@ class Popup {
             child: Column(
               children: [
                 // Top Right Close/Cancel Button
-                getCloseButton(context),
+                getCloseButton(),
 
                 // Some Space
                 Padding(padding: EdgeInsets.all(15)),
@@ -31,16 +31,19 @@ class Popup {
                             minWidth: 1,
                             minHeight: 1,
                           ), // here
-                          child: Image.file(File(state.metadata.path)))),
+                          child: Image.file(
+                              File(sonrStore.state.savedMetadata.path)))),
                 ),
 
                 FlatButton(
                   onPressed: () {
                     // Move to Page
-                    context.getBloc(BlocType.File).add(GetFile(state.metadata));
+                    context
+                        .getBloc(BlocType.File)
+                        .add(GetFile(sonrStore.state.savedMetadata));
 
                     // Pop View
-                    Get.back();
+                    RM.navigate.back();
                   },
                   child: Text("Go There"),
                 )

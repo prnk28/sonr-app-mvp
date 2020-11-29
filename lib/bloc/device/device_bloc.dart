@@ -9,12 +9,10 @@ import 'package:sonr_core/sonr_core.dart';
 part 'device_event.dart';
 part 'device_state.dart';
 
-Size screenSize;
-
 // ^ DeviceBloc handles profile, permissions, and Compass ^
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
-  final SonrBloc sonr;
+  final SonrController sonr;
   DirectionCubit directionCubit = new DirectionCubit();
 
   // Constructer
@@ -22,13 +20,14 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     // ** Directional Events **
     FlutterCompass.events.listen((newDegrees) {
       // @ Check if Correct State
-      if (sonr.state is NodeAvailable || sonr.state is NodeSearching) {
+      if (sonr.status == SonrStatus.Available ||
+          sonr.status is SonrStatus.Searching) {
         // Get Current Direction and Update Cubit
         double direction = newDegrees.headingForCameraMode;
         directionCubit.update(direction);
 
         // Update Node Direction
-        sonr.node.update(direction);
+        sonr.updateDirection(direction);
       }
     });
   }

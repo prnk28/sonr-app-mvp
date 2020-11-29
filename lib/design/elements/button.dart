@@ -1,13 +1,12 @@
 part of 'elements.dart';
 
-Widget getCloseButton(BuildContext context,
-    {double top: 10, double right: 15}) {
+Widget getCloseButton({double top: 10, double right: 15}) {
   return Align(
       alignment: Alignment.topRight,
       child: GestureDetector(
           onTap: () {
             // Reload Files
-            context.getBloc(BlocType.File).add(GetAllFiles());
+            //context.getBloc(BlocType.File).add(GetAllFiles());
 
             // Pop Window
             Get.back();

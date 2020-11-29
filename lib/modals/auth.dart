@@ -1,19 +1,32 @@
-part of 'window.dart';
+import 'package:sonar_app/screens/screens.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sonar_app/controller/controller.dart';
+import 'package:sonr_core/sonr_core.dart';
 
-Widget buildAuthenticationView(BuildContext context, AuthMessage message) {
-  return Column(
-    children: [
-      // Top Right Close/Cancel Button
-      getCloseButton(context),
+class AuthSheet extends StatelessWidget {
+  final AuthMessage message;
 
-      // Build Item from Metadata and Peer
-      _buildItem(context, message),
-      Padding(padding: EdgeInsets.only(top: 8)),
+  const AuthSheet({Key key, this.message}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    // Return View
+    return Container(
+        decoration: windowDecoration(context),
+        height: Get.height / 3 + 20,
+        child: Column(
+          children: [
+            // Top Right Close/Cancel Button
+            getCloseButton(),
 
-      // Build Auth Action
-      _buildAuthButton(context, message)
-    ],
-  );
+            // Build Item from Metadata and Peer
+            _buildItem(context, message),
+            Padding(padding: EdgeInsets.only(top: 8)),
+
+            // Build Auth Action
+            _buildAuthButton(message)
+          ],
+        ));
+  }
 }
 
 Row _buildItem(BuildContext context, AuthMessage state) {
@@ -71,14 +84,13 @@ Row _buildItem(BuildContext context, AuthMessage state) {
   ]); // FlatButton// Container
 }
 
-NeumorphicButton _buildAuthButton(BuildContext context, AuthMessage state) {
+NeumorphicButton _buildAuthButton(AuthMessage state) {
+  final SonrController sonrController = Get.find();
   // Build View
   return NeumorphicButton(
       onPressed: () {
-        // Update WebBloc to Inform User Accepted
-        context
-            .getBloc(BlocType.Sonr)
-            .add(NodeRespondPeer(true, state.from, state.metadata));
+        // Emit Event
+        sonrController.respondPeer(true);
 
         // Pop Window
         Get.back();

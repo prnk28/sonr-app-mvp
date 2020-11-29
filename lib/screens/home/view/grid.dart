@@ -1,8 +1,8 @@
 part of '../home.dart';
 
 class ImageGrid extends StatelessWidget {
-  final double itemHeight = (screenSize.height - kToolbarHeight - 24) / 4;
-  final double itemWidth = screenSize.width / 4;
+  final double itemHeight = (Get.height - kToolbarHeight - 24) / 4;
+  final double itemWidth = Get.width / 4;
 
   // Build Widget
   @override

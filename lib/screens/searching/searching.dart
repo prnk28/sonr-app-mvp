@@ -19,7 +19,7 @@ class SearchingScreen extends StatelessWidget {
             Padding(
                 padding: EdgeInsets.only(bottom: 5),
                 child: CustomPaint(
-                  size: screenSize,
+                  size: Size(Get.width, Get.height),
                   painter: ZonePainter(),
                   child: Container(),
                 )),

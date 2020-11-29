@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/utils/olc.dart';
 import 'package:get/get.dart' hide Node;
-import '../controller.dart';
 part 'sonr_data.dart';
 
 //() -- Constants() -- //
@@ -20,19 +19,19 @@ class SonrController extends GetxController {
   int _callbackInterval;
 
   // @ 1. Initialize State Bools
-  SonrStatus status;
+  final status = Rx<SonrStatus>();
 
   // @ 2. Initialize Data Streams
-  AuthMessage auth;
-  Lobby lobby;
-  ProgressUpdate progress;
+  final auth = Rx<AuthMessage>();
+  final lobby = Rx<Lobby>();
+  final progress = 0.0.obs;
 
   // @ 3. Initialize P2P Info
-  Peer currentPeer;
-  File sendFile;
-  Metadata sendMetadata;
-  Metadata offeredMetadata;
-  Metadata savedMetadata;
+  final currentPeer = Rx<Peer>();
+  final sendFile = Rx<File>();
+  final sendMetadata = Rx<Metadata>();
+  final offeredMetadata = Rx<Metadata>();
+  final savedMetadata = Rx<Metadata>();
 
 // *******************
 // ** Node Actions  **
@@ -57,8 +56,8 @@ class SonrController extends GetxController {
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
     // Update Status
-    sonrStore.update((sonrStore) {
-      sonrStore.status = SonrStatus.Available;
+    status.update((status) {
+      status = SonrStatus.Available;
     });
   }
 
@@ -94,10 +93,14 @@ class SonrController extends GetxController {
         await _node.invite(peer);
 
         // Update Status
-        sonrStore.update((sonrStore) {
-          peer.relation = Peer_Relation.INVITED;
-          sonrStore.currentPeer = peer;
-          sonrStore.status = SonrStatus.Pending;
+        status.update((val) {
+          val = SonrStatus.Pending;
+        });
+
+        // Update Peer
+        currentPeer.update((val) {
+          val.relation = Peer_Relation.INVITED;
+          val = peer;
         });
       } else {
         throw SonrError("InvitePeer() - " + "File not processed.");
@@ -114,13 +117,13 @@ class SonrController extends GetxController {
       // Update Status by Decision
       if (decision) {
         // Update Status
-        sonrStore.update((sonrStore) {
-          sonrStore.status = SonrStatus.Receiving;
+        status.update((val) {
+          val = SonrStatus.Receiving;
         });
       } else {
         // Update Status
-        sonrStore.update((sonrStore) {
-          sonrStore.status = SonrStatus.Available;
+        status.update((val) {
+          val = SonrStatus.Available;
         });
       }
 
@@ -140,8 +143,8 @@ class SonrController extends GetxController {
     // Check Type
     if (data is Lobby) {
       // Update Status
-      sonrStore.update((sonrStore) {
-        sonrStore.lobby = data;
+      lobby.update((val) {
+        val = data;
       });
     } else {
       throw SonrError("handleRefreshed() - " + "Invalid Return type");
@@ -154,9 +157,12 @@ class SonrController extends GetxController {
       // Set Data
       _isProcessed = true;
       // Update Status
-      sonrStore.update((sonrStore) {
-        sonrStore.sendMetadata = data;
-        sonrStore.status = SonrStatus.Searching;
+      sendMetadata.update((val) {
+        val = data;
+      });
+
+      status.update((val) {
+        val = SonrStatus.Searching;
       });
     } else {
       throw SonrError("handleQueued() - " + "Invalid Return type");
@@ -170,12 +176,24 @@ class SonrController extends GetxController {
       // Set Interval
       _callbackInterval = (data.metadata.chunks / CALLBACK_INTERVAL).ceil();
 
-      // Update Data
-      sonrStore.update((sonrStore) {
-        sonrStore.currentPeer = data.from;
-        sonrStore.auth = data;
-        sonrStore.offeredMetadata = data.metadata;
-        sonrStore.status = SonrStatus.Pending;
+      // Update Status
+      status.update((val) {
+        val = SonrStatus.Pending;
+      });
+
+      // Update Auth
+      auth.update((val) {
+        val = data;
+      });
+
+      // Update Peer
+      currentPeer.update((val) {
+        val = data.from;
+      });
+
+      // Update Metadata
+      offeredMetadata.update((val) {
+        val = data.metadata;
       });
     } else {
       throw SonrError("handleInvited() - " + "Invalid Return type");
@@ -186,14 +204,25 @@ class SonrController extends GetxController {
   void _handleAccepted(dynamic data) async {
     // Check Type
     if (data is AuthMessage) {
-      // Update Data
-      sonrStore.update((sonrStore) {
-        var _peer = data.from;
-        _peer.relation = Peer_Relation.ACCEPTED;
-        sonrStore.currentPeer = _peer;
-        sonrStore.auth = data;
-        sonrStore.offeredMetadata = data.metadata;
-        sonrStore.status = SonrStatus.Transferring;
+      // Update Status
+      status.update((val) {
+        val = SonrStatus.Transferring;
+      });
+
+      // Update Auth
+      auth.update((val) {
+        val = data;
+      });
+
+      // Update Peer
+      currentPeer.update((val) {
+        val = data.from;
+        val.relation = Peer_Relation.ACCEPTED;
+      });
+
+      // Update Metadata
+      offeredMetadata.update((val) {
+        val = data.metadata;
       });
 
       // Start Transfer
@@ -207,14 +236,20 @@ class SonrController extends GetxController {
   void _handleDenied(dynamic data) async {
     // Check Type
     if (data is AuthMessage) {
-      // Update Data
-      sonrStore.update((sonrStore) {
-        var _peer = data.from;
-        _peer.relation = Peer_Relation.DECLINED;
-        sonrStore.currentPeer = _peer;
-        sonrStore.auth = data;
-        sonrStore.offeredMetadata = data.metadata;
-        sonrStore.status = SonrStatus.Searching;
+      // Update Status
+      status.update((val) {
+        val = SonrStatus.Searching;
+      });
+
+      // Update Auth
+      auth.update((val) {
+        val = data;
+      });
+
+      // Update Peer
+      currentPeer.update((val) {
+        val = data.from;
+        val.relation = Peer_Relation.DECLINED;
       });
     } else {
       throw SonrError("handleDenied() - " + "Invalid Return type");
@@ -226,9 +261,9 @@ class SonrController extends GetxController {
     if (data is ProgressUpdate) {
       // Update Cubit on Interval
       if (data.current % _callbackInterval == 0) {
-        // Update Data
-        sonrStore.update((sonrStore) {
-          sonrStore.progress = data;
+        // Update progress
+        progress.update((val) {
+          val = data.percent;
         });
       }
     } else {
@@ -240,18 +275,22 @@ class SonrController extends GetxController {
   void _handleCompleted(dynamic data) async {
     if (data is Metadata) {
       // @ Sending Direction
-      if (sonrStore().status == SonrStatus.Transferring) {
-        // Update Data
-        sonrStore.update((sonrStore) {
-          sonrStore.status = SonrStatus.CompletedTransfer;
+      if (status.value == SonrStatus.Transferring) {
+        // Update Status
+        status.update((val) {
+          val = SonrStatus.CompletedTransfer;
         });
       }
       // @ Receiving Direction
-      else if (sonrStore().status == SonrStatus.Receiving) {
-        // Update Data
-        sonrStore.update((sonrStore) {
-          sonrStore.savedMetadata = data;
-          sonrStore.status = SonrStatus.CompletedReceive;
+      else if (status.value == SonrStatus.Receiving) {
+        // Update Status
+        status.update((val) {
+          val = SonrStatus.CompletedReceive;
+        });
+
+        // Update Metadata
+        savedMetadata.update((val) {
+          val = data;
         });
       }
     } else {

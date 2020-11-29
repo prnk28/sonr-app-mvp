@@ -6,11 +6,6 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
     final SonrController c = Get.put(SonrController());
-    // Set Device Screen Bounds
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
-    screenSize = Size(screenWidth, screenHeight);
-
     // Check Permissions
     context.getBloc(BlocType.Device).add(StartApp());
 
@@ -32,8 +27,8 @@ class SplashScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    width: screenSize.width / 5,
-                    height: screenSize.height / 5,
+                    width: Get.width / 5,
+                    height: Get.height / 5,
                     child: FittedBox(
                         child: Image.asset("assets/images/icon.png"))),
 

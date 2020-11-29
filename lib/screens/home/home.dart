@@ -74,6 +74,12 @@ class _HomeScreenState extends State<HomeScreen>
 class _HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final SonrController sonrController = Get.find();
+    Obx(() {
+      if (sonrController.status == SonrStatus.Pending) {
+        Get.dialog(widget);
+      }
+    });
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthenticationCubit, AuthMessage>(
