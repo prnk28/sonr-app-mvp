@@ -1,5 +1,5 @@
 
-part of 'sonr_store.dart';
+part of 'sonr_controller.dart';
 
 // ^ Sonr Service Status Enum ^ //
 enum SonrStatus {

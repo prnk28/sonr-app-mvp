@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/utils/olc.dart';
 import 'package:get/get.dart' hide Node;
-import '../state.dart';
+import '../controllers.dart';
 part 'sonr_data.dart';
 
 //() -- Constants() -- //
