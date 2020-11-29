@@ -24,6 +24,7 @@ class SonrController extends GetxController {
   // @ 2. Initialize Data Streams
   final auth = Rx<AuthMessage>();
   final lobby = Rx<Lobby>();
+  final peers = Rx<Map<String, Peer>>();
   final progress = 0.0.obs;
 
   // @ 3. Initialize P2P Info
@@ -36,8 +37,8 @@ class SonrController extends GetxController {
 // *******************
 // ** Node Actions  **
 // *******************
-  // ^ Initialize Node Method ^ //
-  void initialize(Position pos, Contact con) async {
+  // ^ Connect Node Method ^ //
+  void connect(Position pos, Contact con) async {
     // Get OLC
     var olcCode = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
@@ -56,9 +57,8 @@ class SonrController extends GetxController {
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
     // Update Status
-    status.update((status) {
-      status = SonrStatus.Available;
-    });
+    status(SonrStatus.Available);
+    print(status.toString());
   }
 
   // ^ Update Event ^
@@ -92,16 +92,9 @@ class SonrController extends GetxController {
         // Send Invite
         await _node.invite(peer);
 
-        // Update Status
-        status.update((val) {
-          val = SonrStatus.Pending;
-        });
-
-        // Update Peer
-        currentPeer.update((val) {
-          val.relation = Peer_Relation.INVITED;
-          val = peer;
-        });
+        // Update Data
+        status(SonrStatus.Pending);
+        currentPeer(peer);
       } else {
         throw SonrError("InvitePeer() - " + "File not processed.");
       }
@@ -117,14 +110,10 @@ class SonrController extends GetxController {
       // Update Status by Decision
       if (decision) {
         // Update Status
-        status.update((val) {
-          val = SonrStatus.Receiving;
-        });
+        status(SonrStatus.Receiving);
       } else {
         // Update Status
-        status.update((val) {
-          val = SonrStatus.Available;
-        });
+        status(SonrStatus.Available);
       }
 
       // Send Response
@@ -142,10 +131,11 @@ class SonrController extends GetxController {
   void _handleRefreshed(dynamic data) async {
     // Check Type
     if (data is Lobby) {
+      print(data.peers.toString());
       // Update Status
-      lobby.update((val) {
-        val = data;
-      });
+      lobby(data);
+      peers(data.peers);
+      //print(lobby.value.toString());
     } else {
       throw SonrError("handleRefreshed() - " + "Invalid Return type");
     }
@@ -154,16 +144,13 @@ class SonrController extends GetxController {
   // ^ File has Succesfully Queued ^ //
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
+      Metadata metadata = data;
       // Set Data
       _isProcessed = true;
-      // Update Status
-      sendMetadata.update((val) {
-        val = data;
-      });
 
-      status.update((val) {
-        val = SonrStatus.Searching;
-      });
+      // Update Data
+      status(SonrStatus.Searching);
+      sendMetadata(metadata);
     } else {
       throw SonrError("handleQueued() - " + "Invalid Return type");
     }
@@ -173,28 +160,15 @@ class SonrController extends GetxController {
   void _handleInvited(dynamic data) async {
     // Check Type
     if (data is AuthMessage) {
+      AuthMessage authMsg = data;
       // Set Interval
       _callbackInterval = (data.metadata.chunks / CALLBACK_INTERVAL).ceil();
 
-      // Update Status
-      status.update((val) {
-        val = SonrStatus.Pending;
-      });
-
-      // Update Auth
-      auth.update((val) {
-        val = data;
-      });
-
-      // Update Peer
-      currentPeer.update((val) {
-        val = data.from;
-      });
-
-      // Update Metadata
-      offeredMetadata.update((val) {
-        val = data.metadata;
-      });
+      // Update Data
+      status(SonrStatus.Pending);
+      auth(authMsg);
+      currentPeer(authMsg.from);
+      offeredMetadata(authMsg.metadata);
     } else {
       throw SonrError("handleInvited() - " + "Invalid Return type");
     }
@@ -204,26 +178,12 @@ class SonrController extends GetxController {
   void _handleAccepted(dynamic data) async {
     // Check Type
     if (data is AuthMessage) {
-      // Update Status
-      status.update((val) {
-        val = SonrStatus.Transferring;
-      });
+      AuthMessage authMsg = data;
 
-      // Update Auth
-      auth.update((val) {
-        val = data;
-      });
-
-      // Update Peer
-      currentPeer.update((val) {
-        val = data.from;
-        val.relation = Peer_Relation.ACCEPTED;
-      });
-
-      // Update Metadata
-      offeredMetadata.update((val) {
-        val = data.metadata;
-      });
+      // Update Data
+      status(SonrStatus.Transferring);
+      auth(authMsg);
+      currentPeer(authMsg.from);
 
       // Start Transfer
       _node.transfer();
@@ -236,21 +196,12 @@ class SonrController extends GetxController {
   void _handleDenied(dynamic data) async {
     // Check Type
     if (data is AuthMessage) {
-      // Update Status
-      status.update((val) {
-        val = SonrStatus.Searching;
-      });
+      AuthMessage authMsg = data;
 
-      // Update Auth
-      auth.update((val) {
-        val = data;
-      });
-
-      // Update Peer
-      currentPeer.update((val) {
-        val = data.from;
-        val.relation = Peer_Relation.DECLINED;
-      });
+      // Update Data
+      status(SonrStatus.Searching);
+      auth(authMsg);
+      currentPeer(authMsg.from);
     } else {
       throw SonrError("handleDenied() - " + "Invalid Return type");
     }
@@ -262,9 +213,7 @@ class SonrController extends GetxController {
       // Update Cubit on Interval
       if (data.current % _callbackInterval == 0) {
         // Update progress
-        progress.update((val) {
-          val = data.percent;
-        });
+        progress(data.percent);
       }
     } else {
       throw SonrError("handleProgressed() - " + "Invalid Return type");
@@ -277,21 +226,16 @@ class SonrController extends GetxController {
       // @ Sending Direction
       if (status.value == SonrStatus.Transferring) {
         // Update Status
-        status.update((val) {
-          val = SonrStatus.CompletedTransfer;
-        });
+        status(SonrStatus.CompletedTransfer);
       }
       // @ Receiving Direction
       else if (status.value == SonrStatus.Receiving) {
+        Metadata metadata = data;
         // Update Status
-        status.update((val) {
-          val = SonrStatus.CompletedReceive;
-        });
+        status(SonrStatus.CompletedReceive);
 
         // Update Metadata
-        savedMetadata.update((val) {
-          val = data;
-        });
+        savedMetadata(metadata);
       }
     } else {
       throw SonrError("handleCompleted() - " + "Invalid Return type");

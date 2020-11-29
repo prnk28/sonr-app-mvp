@@ -19,7 +19,7 @@ class App extends StatelessWidget {
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      home: AppTheme(SplashScreen()),
+      home: SplashScreen(),
     ));
   }
 }

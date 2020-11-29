@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:sonar_app/bloc/bloc.dart';
 import 'package:sonar_app/repository/repository.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sonar_app/screens/screens.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 part 'device_event.dart';
@@ -13,15 +14,15 @@ part 'device_state.dart';
 class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
   // Initialize
   DirectionCubit directionCubit = new DirectionCubit();
-  SonrController sonr;
+  SonrController sonr = Get.find();
+
   // Constructer
   DeviceBloc() : super(DeviceLoading()) {
     // ** Directional Events **
     FlutterCompass.events.listen((newDegrees) {
       // @ Check if Correct State
-      if (sonr != null &&
-          (sonr.status.value == SonrStatus.Available ||
-              sonr.status.value == SonrStatus.Searching)) {
+      if (sonr.status() == SonrStatus.Available ||
+          sonr.status() == SonrStatus.Searching) {
         // Get Current Direction and Update Cubit
         double direction = newDegrees.headingForCameraMode;
         directionCubit.update(direction);
@@ -47,7 +48,6 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
 // ^ StartApp Event ^
   Stream<DeviceState> _mapStartAppState(StartApp event) async* {
     // Set Sonr Controller
-    sonr = event.sonrController;
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // @ 2. Check for Profile
@@ -58,7 +58,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
             desiredAccuracy: LocationAccuracy.high);
 
         // Initialize Sonr Node
-        sonr.initialize(position, user.contact);
+        sonr.connect(position, user.contact);
         yield DeviceActive();
       } else {
         // ! Profile wasnt found
@@ -82,7 +82,7 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
           desiredAccuracy: LocationAccuracy.high);
 
       // Initialize Sonr Node
-      sonr.initialize(position, user.contact);
+      sonr.connect(position, user.contact);
       yield DeviceActive();
     } else {
       // ! Location Permission Denied

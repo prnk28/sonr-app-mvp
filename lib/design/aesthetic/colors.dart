@@ -15,7 +15,8 @@ Color findIconsColor(BuildContext context) {
 
 // Find Text color based on Theme - Light/Dark
 Color findTextColor(BuildContext context) {
-  if (NeumorphicTheme.isUsingDark(context)) {
+  final theme = NeumorphicTheme.of(context);
+  if (theme.isUsingDark) {
     return Colors.white;
   } else {
     return Colors.black;

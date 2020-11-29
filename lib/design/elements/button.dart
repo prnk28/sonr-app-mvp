@@ -33,9 +33,7 @@ Widget getAppBarButton(
               depth: 5),
           child: Icon(
             icon,
-            color: NeumorphicTheme.isUsingDark(context)
-                ? Colors.white70
-                : Colors.black87,
+            color: Colors.black87,
           ),
           onPressed: onPressed,
         ))

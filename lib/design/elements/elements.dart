@@ -7,6 +7,7 @@ import 'package:sonar_app/screens/screens.dart';
 part 'appbar.dart';
 part 'button.dart';
 part 'painter.dart';
+part 'peer.dart';
 part 'textStyle.dart';
 part 'textField.dart';
 

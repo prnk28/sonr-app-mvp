@@ -6,18 +6,20 @@ List<GetPage> getPages() {
   return [
     // ** Home Page ** //
     GetPage(
-        name: '/home', page: () => HomeScreen(), transition: Transition.zoom),
+        name: '/home',
+        page: () => AppTheme(HomeScreen()),
+        transition: Transition.zoom),
 
     // ** Register Page ** //
     GetPage(
         name: '/register',
-        page: () => RegisterScreen(),
+        page: () => AppTheme(RegisterScreen()),
         transition: Transition.rightToLeftWithFade),
 
     // ** Searching Page ** //
     GetPage(
         name: '/transfer',
-        page: () => SearchingScreen(),
+        page: () => AppTheme(SearchingScreen()),
         transition: Transition.fade),
   ];
 }
