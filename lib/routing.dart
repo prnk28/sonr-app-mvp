@@ -39,11 +39,6 @@ MultiBlocProvider initializeBloc(Widget app) {
         create: (context) => FileBloc(),
       ),
 
-      // Sonr Networking Logic
-      BlocProvider<SonrBloc>(
-        create: (context) => SonrBloc(),
-      ),
-
       // Device Sensors Logic
       BlocProvider<DeviceBloc>(
         create: (context) => DeviceBloc(),

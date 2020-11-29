@@ -113,42 +113,9 @@ Widget buildCenterBulb(double direction) {
       ),
       margin: EdgeInsets.all(7.5),
       child: Container(
-        decoration: BoxDecoration(
-            gradient: FlutterGradients.angelCare(type: GradientType.radial)),
-        child: BlocBuilder<SonrBloc, SonrState>(
-            // Build Requirements
-            buildWhen: (previous, current) {
-          if (current is NodeQueueing) {
-            return true;
-          } else if (current is NodeSearching) {
-            return true;
-          }
-          return false;
-        }, builder: (context, state) {
-          // Still Queueing
-          if (state is NodeQueueing) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  child: CircularProgressIndicator(
-                      strokeWidth: 6,
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.white)),
-                  height: 50.0,
-                  width: 50.0,
-                ),
-                Padding(padding: EdgeInsets.only(top: 12)),
-                Text(
-                  "Loading File..",
-                  style: bulbLoadingTextStyle(),
-                ),
-              ],
-            );
-          }
-
-          // Finished Queueing
-          return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          decoration: BoxDecoration(
+              gradient: FlutterGradients.angelCare(type: GradientType.radial)),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Stack(
               alignment: AlignmentDirectional.topEnd,
               clipBehavior: Clip.none,
@@ -173,9 +140,7 @@ Widget buildCenterBulb(double direction) {
                   _getCompassDesignation(direction),
                   style: bulbDesignationTextStyle(),
                 )),
-          ]);
-        }),
-      ),
+          ])),
     ),
   );
 }
@@ -206,7 +171,9 @@ String _getCompassDesignation(double degrees) {
   var compassValue = ((degrees / 22.5) + 0.5).toInt();
 
   var compassEnum = CompassDesignation.values[(compassValue % 16)];
-  return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
+  return compassEnum
+      .toString()
+      .substring(compassEnum.toString().indexOf('.') + 1);
 }
 
 String _getDirectionString(double degrees) {

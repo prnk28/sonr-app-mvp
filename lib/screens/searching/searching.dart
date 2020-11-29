@@ -53,7 +53,7 @@ class SearchingScreen extends StatelessWidget {
 
             // @ Have BLoC Builder Retrieve Directly from Compass
             BlocBuilder<DirectionCubit, double>(
-                cubit: context.getCubit(CubitType.Direction),
+                cubit: BlocProvider.of<DeviceBloc>(context).directionCubit,
                 builder: (context, state) {
                   return Align(
                       alignment: Alignment.bottomCenter,
