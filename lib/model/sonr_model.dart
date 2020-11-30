@@ -14,6 +14,14 @@ enum SonrStatus {
   CompletedReceive
 }
 
+// ^ Auth Update Status Enum ^ //
+enum AuthStatus {
+  None,
+  Invited,
+  Accepted,
+  Declined,
+}
+
 // ^ Core Library had Error ^ //
 class SonrError extends Error {
   final String message;

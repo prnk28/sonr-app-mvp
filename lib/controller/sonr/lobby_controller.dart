@@ -7,17 +7,8 @@ class LobbyController extends GetxController {
   final peers = Rx<Map<String, Peer>>();
 
   void refreshLobby(Lobby lobby) {
-    // Validate Code
-    if (code.value != lobby.code) {
-      code(lobby.code);
-    }
-
-    // Validate Size
-    if (size.value != lobby.size) {
-      size(lobby.size);
-    }
-
-    // Update Peers
+    code(lobby.code);
+    size(lobby.size);
     peers(lobby.peers);
   }
 }

@@ -4,16 +4,12 @@ import 'package:sonar_app/ui/ui.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Instantiate your class using Get.put() to make it available for all "child" routes there.
+    // Listen to Result
     DeviceController device = Get.find();
-    device.addListenerId("Active", () {
+    device.addListenerId("Listener", () {
       if (device.status == DeviceStatus.Active) {
         Get.offNamed("/home");
-      }
-    });
-
-    device.addListenerId("NoProfile", () {
-      if (device.status == DeviceStatus.Active) {
+      } else if (device.status == DeviceStatus.NoProfile) {
         Get.offNamed("/register");
       }
     });

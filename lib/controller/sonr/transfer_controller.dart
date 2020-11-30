@@ -9,6 +9,7 @@ class TransferController extends GetxController {
   bool _isProcessed = false;
 
   // @ Set Peer Dependencies
+  AuthStatus status;
   AuthMessage auth;
   Peer peer;
 
@@ -28,18 +29,25 @@ class TransferController extends GetxController {
     if (message != null) {
       // Set Message
       this.auth = message;
-      this.peer = peer;
 
       // Check Status
       if (message.event == AuthMessage_Event.ACCEPT) {
         // Get Controllers
         ConnController conn = Get.find();
+        this.status = AuthStatus.Accepted;
 
         // Start Transfer
         conn.node.transfer();
-        update(["Accepted"]);
+        update(["Bubble"]);
       } else if (message.event == AuthMessage_Event.DECLINE) {
-        update(["Denied"]);
+        // Report Declined
+        this.status = AuthStatus.Declined;
+        update(["Bubble"]);
+
+        // Nullify Current Peer after 1.5s
+        Future.delayed(
+            Duration(seconds: 1, milliseconds: 500), () => this.peer = null);
+        update(["Bubble"]);
       }
     }
   }
@@ -49,7 +57,7 @@ class TransferController extends GetxController {
     // Reset Peer/Auth
     this.peer = null;
     this.auth = null;
-    update(["Completed"]);
+    update(["Bubble"]);
   }
 
   // ^ Queue-File Event ^
@@ -82,6 +90,9 @@ class TransferController extends GetxController {
 
         // Update Data
         this.peer = p;
+
+        this.status = AuthStatus.Invited;
+        update();
       } else {
         throw SonrError("InvitePeer() - " + "File not processed.");
       }

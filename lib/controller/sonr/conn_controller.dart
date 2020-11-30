@@ -9,17 +9,17 @@ import 'package:get/get.dart' hide Node;
 import 'sonr.dart';
 
 class ConnController extends GetxController {
-  // @ Set Dependencies
+  // @ Set Properteris
   Node node;
   bool connected = false;
 
   ConnController() {
-    if (this.connected) {
-      FlutterCompass.events.listen((newDegrees) {
-        // Get Current Direction and Update Cubit
+    FlutterCompass.events.listen((newDegrees) {
+      // Get Current Direction and Update Cubit
+      if (connected) {
         node.update(newDegrees.headingForCameraMode);
-      });
-    }
+      }
+    });
   }
 
   // ^ Connect Node Method ^ //
@@ -46,9 +46,7 @@ class ConnController extends GetxController {
   void _handleRefreshed(dynamic data) async {
     // Check Type
     if (data is Lobby) {
-      // Get Controllers
       LobbyController lobby = Get.find();
-
       // Update Lobby
       lobby.refreshLobby(data);
     } else {

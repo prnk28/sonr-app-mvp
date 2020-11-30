@@ -27,10 +27,10 @@ class DeviceController extends GetxController {
         // Initialize Sonr Node
         sonrConn.connect(position, user.contact);
         status = DeviceStatus.Active;
-        update(["Active"]);
+        update(["Listener"]);
       } else {
         status = DeviceStatus.NoProfile;
-        update(["NoProfile"]);
+        update(["Listener"]);
       }
     } else {
       throw RequiredPermissionsError("Location Permission Denied");
@@ -52,7 +52,7 @@ class DeviceController extends GetxController {
       // Initialize Sonr Node
       sonrConn.connect(position, user.contact);
       status = DeviceStatus.Active;
-      update(["Active"]);
+      update(["Listener"]);
     } else {
       throw RequiredPermissionsError("Location Permission Denied");
     }
@@ -64,7 +64,7 @@ class DeviceController extends GetxController {
       case PermissionType.Location:
         if (await Permission.locationWhenInUse.request().isGranted) {
           status = DeviceStatus.LocationGranted;
-          update(["LocationGranted"]);
+          update();
         } else {
           throw PermissionFailure(type.toString());
         }
@@ -73,7 +73,7 @@ class DeviceController extends GetxController {
       case PermissionType.Camera:
         if (await Permission.camera.request().isGranted) {
           status = DeviceStatus.CameraGranted;
-          update(["CameraGranted"]);
+          update();
         } else {
           throw PermissionFailure(type.toString());
         }
@@ -82,7 +82,7 @@ class DeviceController extends GetxController {
       case PermissionType.Photos:
         if (await Permission.mediaLibrary.request().isGranted) {
           status = DeviceStatus.PhotosGranted;
-          update(["PhotosGranted"]);
+          update();
         } else {
           throw PermissionFailure(type.toString());
         }

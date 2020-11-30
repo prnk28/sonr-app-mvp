@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // ** Listen to States ** //
     final ReceiveController sonr = Get.find<ReceiveController>();
-    sonr.addListenerId("Invited", () {
+    sonr.addListenerId("Listener", () {
       print("State is Pending");
       Get.dialog(AuthSheet());
     });

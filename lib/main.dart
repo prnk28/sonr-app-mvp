@@ -29,7 +29,7 @@ class App extends StatelessWidget {
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      initialBinding: SplashBind(),
+      initialBinding: AppBind(),
       home: SplashScreen(),
     ));
   }
@@ -43,7 +43,7 @@ List<GetPage> getPages() {
       name: '/home',
       page: () => AppTheme(HomeScreen()),
       transition: Transition.zoom,
-      // binding: HomeBind(),
+      binding: HomeBind(),
     ),
 
     // ** Register Page ** //

@@ -6,6 +6,7 @@ import 'sonr.dart';
 
 class ReceiveController extends GetxController {
   // @ Set Peer Dependencies
+  AuthStatus status = AuthStatus.None;
   AuthMessage auth;
   Peer peer;
 
@@ -21,7 +22,8 @@ class ReceiveController extends GetxController {
       this.auth = message;
       this.peer = message.from;
       this.metadata(message.metadata);
-      update(["Invited"]);
+      this.status = AuthStatus.Invited;
+      update(["Listener"]);
     }
 
     // Validate Progress
@@ -51,11 +53,15 @@ class ReceiveController extends GetxController {
     if (conn.connected) {
       // Update Status by Decision
       if (decision) {
-        update(["Accepted"]);
+        this.status = AuthStatus.Accepted;
+        update();
       } else {
-        // Remove Peer
-        peer = null;
-        update(["Denied"]);
+        this.status = AuthStatus.Declined;
+
+        // Reset Peer/Auth
+        this.peer = null;
+        this.auth = null;
+        update();
       }
 
       // Send Response

@@ -5,12 +5,15 @@ import 'package:sonr_core/sonr_core.dart';
 import 'widgets/bubble.dart';
 import 'widgets/compass.dart';
 
+const STACK_CONSTANT = 1;
+
 class TransferScreen extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
     // Return Widget
     return AppTheme(Scaffold(
-        appBar: exitAppBar(context, Icons.close, onPressed: () {
+        appBar: exitAppBar(context, Icons.close, title: controller.code(),
+            onPressed: () {
           Get.offAllNamed("/home");
         }),
         backgroundColor: NeumorphicTheme.baseColor(context),
@@ -27,57 +30,34 @@ class TransferScreen extends GetView<LobbyController> {
                 )),
 
             // @ Bubble View
-            buildBubbles(controller),
+            Obx(() {
+              print(controller.peers.toString());
+              // Initialize Widget List
+              List<Widget> stackWidgets = new List<Widget>();
+
+              // Check Peers Size
+              if (controller.peers.value.length > 0) {
+                // Init Stack Vars
+                int total = controller.peers.value.length + STACK_CONSTANT;
+                double mean = 1.0 / total;
+                int current = 0;
+
+                // Create Bubbles
+                controller.peers.value.values.forEach((peer) {
+                  // Increase Count
+                  current += 1;
+
+                  // Create Bubble
+                  stackWidgets.add(Bubble(current * mean, peer));
+                });
+              }
+
+              return Stack(children: stackWidgets);
+            }),
             CompassView(),
           ],
         ))));
   }
-}
-
-// ^ Builds the Bubbles Stack ^ //
-Stack buildBubbles(LobbyController lobby) {
-  // Initialize Widget List
-  List<Widget> stackWidgets = new List<Widget>();
-  // Check Peers Size
-  if (lobby.peers().length > 0) {
-    // Init Stack Vars
-    int total = lobby.peers().length + 1;
-    int current = 0;
-    double mean = 1.0 / total;
-
-    // Create Bubbles
-    print(lobby.peers().length);
-    lobby.peers().values.forEach((peer) {
-      // Increase Count
-      current += 1;
-      // Create Bubble
-      stackWidgets.add(Bubble(current * mean, peer));
-    });
-  }
-  return Stack(children: stackWidgets);
-}
-
-// ^ Builds the Bubbles Content ^ //
-Neumorphic buildBubbleContent(Peer peer) {
-  // Generate Bubble
-  return Neumorphic(
-      style: NeumorphicStyle(
-          shape: NeumorphicShape.flat,
-          boxShape: NeumorphicBoxShape.circle(),
-          depth: 10,
-          lightSource: LightSource.topLeft,
-          color: Colors.grey[300]),
-      child: Container(
-        width: 80,
-        height: 80,
-        child: Column(
-          children: [
-            Spacer(),
-            initialsFromPeer(peer),
-            iconFromPeer(peer),
-          ],
-        ),
-      ));
 }
 
 // ^ Calculate Peer Offset from Line ^ //
