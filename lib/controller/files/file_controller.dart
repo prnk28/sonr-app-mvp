@@ -16,12 +16,7 @@ class FileController extends GetxController {
 
     // Set List
     List<Metadata> result = await metadataProvider.getAllFiles();
-
-    if (result == null) {
-      throw OpenFilesError("Couldnt open DB at Path");
-    } else {
-      allFiles(result);
-    }
+    allFiles(result);
   }
 
   getFile(Metadata meta) async {

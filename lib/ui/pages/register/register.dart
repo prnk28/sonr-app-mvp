@@ -7,9 +7,9 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Instantiate your class using Get.put() to make it available for all "child" routes there.
-    DeviceController device = Get.find();
-    device.addListenerId("Listener", () {
-      if (device.status == DeviceStatus.Active) {
+    UserController user = Get.find();
+    user.addListenerId("Listener", () {
+      if (user.status == UserStatus.Active) {
         Get.offNamed("/home");
       }
     });

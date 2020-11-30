@@ -1,11 +1,11 @@
 // ^ Device Status Enum ^ //
-enum DeviceStatus {
+enum UserStatus {
   // Default
   Initial,
 
   // Start Up
   Active,
-  NoProfile,
+  Inactive,
 
   // Permissions
   LocationGranted,

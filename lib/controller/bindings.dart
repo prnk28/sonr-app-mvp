@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:sonar_app/controller/user/user_controller.dart';
 import 'controller.dart';
 import 'package:sonar_app/ui/ui.dart';
 
 class AppBind extends Bindings {
   @override
   void dependencies() {
-    Get.put<DeviceController>(DeviceController(), permanent: true);
+    Get.put<UserController>(UserController(), permanent: true);
     Get.put<ConnController>(ConnController(), permanent: true);
     Get.put<ReceiveController>(ReceiveController(), permanent: true);
     Get.put<LobbyController>(LobbyController(), permanent: true);

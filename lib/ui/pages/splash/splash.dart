@@ -5,17 +5,17 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Listen to Result
-    DeviceController device = Get.find();
-    device.addListenerId("Listener", () {
-      if (device.status == DeviceStatus.Active) {
+    UserController user = Get.find();
+    user.addListenerId("Listener", () {
+      if (user.status == UserStatus.Active) {
         Get.offNamed("/home");
-      } else if (device.status == DeviceStatus.NoProfile) {
+      } else if (user.status == UserStatus.Inactive) {
         Get.offNamed("/register");
       }
     });
 
     // Check Permissions
-    device.start();
+    user.getUser();
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Non Build States
