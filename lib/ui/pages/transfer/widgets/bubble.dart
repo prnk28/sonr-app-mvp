@@ -1,25 +1,52 @@
-import 'package:sonar_app/ui/pages/transfer/widgets/pending_bubble.dart';
 import 'package:sonar_app/ui/ui.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-class Bubble extends StatelessWidget {
+class Bubble extends StatefulWidget {
   final double value;
   final Peer peer;
   Bubble(this.value, this.peer, {Key key}) : super(key: key);
 
-  final SonrController sonr = Get.find();
+  @override
+  _BubbleState createState() => _BubbleState();
+}
+
+class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
+  // Animation
+  AnimationController _animationController;
+  Animation _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Animation for Requested
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController.repeat(reverse: true);
+    _animation = Tween(begin: 1.0, end: 16.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  dispose() {
+    _animationController.dispose(); // you need this
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // ^ Looking for Peer ^ //
-    return Obx(() {
-      if (sonr.status() == SonrStatus.Searching) {
-        // @ Check if Ive already Declined
+    return GetBuilder<SonrController>(builder: (sonr) {
+      // ^ [Ive Declined] Check if Ive already Declined ^ //
+      if (sonr.status == SonrStatus.Searching) {
         if (sonr.auth() != null) {
           // Check if im the peer
-          if (_isCurrentPeer()) {
+          if (widget.peer.id == sonr.currentPeer().id) {
             return Positioned(
-                top: calculateOffset(value).dy,
-                left: calculateOffset(value).dx,
+                top: calculateOffset(widget.value).dy,
+                left: calculateOffset(widget.value).dx,
                 child: Container(
                     child: Neumorphic(
                   style: NeumorphicStyle(
@@ -40,19 +67,33 @@ class Bubble extends StatelessWidget {
           }
         }
       }
-      // ^ Check if im the Peer ^ //
-      else if (sonr.status() == SonrStatus.Pending) {
-        if (_isCurrentPeer()) {
-          return PendingBubble(value, peer);
+      // ^ [Im Pending] Check if im the Peer ^ //
+      else if (sonr.status == SonrStatus.Pending) {
+        if (widget.peer.id == sonr.currentPeer().id) {
+          return Positioned(
+              top: calculateOffset(widget.value).dy,
+              left: calculateOffset(widget.value).dx,
+              child: Container(
+                child: buildBubbleContent(widget.peer),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color.fromARGB(255, 27, 28, 30),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color.fromARGB(130, 237, 125, 58),
+                          blurRadius: _animation.value,
+                          spreadRadius: _animation.value)
+                    ]),
+              ));
         }
       }
 
-      // ^ Check if User is Transferring ^ //
-      else if (sonr.status() == SonrStatus.Transferring) {
-        if (_isCurrentPeer()) {
+      // ^ [We are transferring] Check if User is Transferring ^ //
+      else if (sonr.status == SonrStatus.Transferring) {
+        if (widget.peer.id == sonr.currentPeer().id) {
           return Positioned(
-              top: calculateOffset(value).dy,
-              left: calculateOffset(value).dx,
+              top: calculateOffset(widget.value).dy,
+              left: calculateOffset(widget.value).dx,
               child: Stack(alignment: AlignmentDirectional.center, children: [
                 Neumorphic(
                     style: NeumorphicStyle(
@@ -62,19 +103,19 @@ class Bubble extends StatelessWidget {
                       height: 86.0,
                       width: 86.0,
                     )),
-                buildBubbleContent(peer),
+                buildBubbleContent(widget.peer),
               ]));
         }
       }
 
-      // ^ Active Peer you can invite me ^
+      // ^ [Im Available] Active Peer you can invite me ^
       return Positioned(
-          top: calculateOffset(value).dy,
-          left: calculateOffset(value).dx,
+          top: calculateOffset(widget.value).dy,
+          left: calculateOffset(widget.value).dx,
           child: GestureDetector(
               onTap: () async {
                 // Send Offer to Bubble
-                sonr.invitePeer(peer);
+                sonr.invitePeer(widget.peer);
               },
               child: Neumorphic(
                   style: NeumorphicStyle(
@@ -89,20 +130,11 @@ class Bubble extends StatelessWidget {
                     child: Column(
                       children: [
                         Spacer(),
-                        initialsFromPeer(peer),
-                        iconFromPeer(peer),
+                        initialsFromPeer(widget.peer),
+                        iconFromPeer(widget.peer),
                       ],
                     ),
                   ))));
     });
-  }
-
-  // ** Peer Checking Method ** //
-  _isCurrentPeer() {
-    if (peer.id == sonr.currentPeer().id) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }

@@ -4,28 +4,28 @@ import 'package:sonar_app/controller/controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class AuthSheet extends StatelessWidget {
-  final AuthMessage message;
-
-  const AuthSheet({Key key, this.message}) : super(key: key);
+  const AuthSheet({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // Return View
-    return Container(
-        decoration: windowDecoration(context),
-        height: Get.height / 3 + 20,
-        child: Column(
-          children: [
-            // Top Right Close/Cancel Button
-            getCloseButton(),
+    return GetBuilder<SonrController>(builder: (sonr) {
+      return Container(
+          decoration: windowDecoration(context),
+          height: Get.height / 3 + 20,
+          child: Column(
+            children: [
+              // Top Right Close/Cancel Button
+              getCloseButton(),
 
-            // Build Item from Metadata and Peer
-            _buildItem(context, message),
-            Padding(padding: EdgeInsets.only(top: 8)),
+              // Build Item from Metadata and Peer
+              _buildItem(context, sonr.auth()),
+              Padding(padding: EdgeInsets.only(top: 8)),
 
-            // Build Auth Action
-            _buildAuthButton(message)
-          ],
-        ));
+              // Build Auth Action
+              _buildAuthButton()
+            ],
+          ));
+    });
   }
 }
 
@@ -84,7 +84,7 @@ Row _buildItem(BuildContext context, AuthMessage state) {
   ]); // FlatButton// Container
 }
 
-NeumorphicButton _buildAuthButton(AuthMessage state) {
+NeumorphicButton _buildAuthButton() {
   final SonrController sonrController = Get.find();
   // Build View
   return NeumorphicButton(

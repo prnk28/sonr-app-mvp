@@ -44,9 +44,11 @@ List<GetPage> getPages() {
   return [
     // ** Home Page ** //
     GetPage(
-        name: '/home',
-        page: () => AppTheme(HomeScreen()),
-        transition: Transition.zoom),
+      name: '/home',
+      page: () => AppTheme(HomeScreen()),
+      transition: Transition.zoom,
+      binding: SonrBind(),
+    ),
 
     // ** Register Page ** //
     GetPage(

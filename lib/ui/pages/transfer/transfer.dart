@@ -33,13 +33,13 @@ class TransferScreen extends StatelessWidget {
               // Check Peers Size
               if (sonr.peers().length > 0) {
                 // Init Stack Vars
-                int total = sonr.peers().length;
+                int total = sonr.peers().length + 1;
                 int current = 0;
                 double mean = 1.0 / total;
 
                 // Create Bubbles
                 print(sonr.peers().length);
-                sonr.peers().values.forEach((peer) {
+                sonr.lobby().peers.values.forEach((peer) {
                   // Increase Count
                   current += 1;
                   // Create Bubble

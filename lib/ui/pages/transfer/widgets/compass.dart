@@ -1,6 +1,6 @@
 import 'package:sonar_app/ui/ui.dart';
 import 'dart:math';
-part 'compass_spokes.dart';
+part 'spokes.dart';
 
 class CompassView extends StatelessWidget {
   const CompassView({Key key}) : super(key: key);

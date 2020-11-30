@@ -22,8 +22,8 @@ class DeviceBloc extends Bloc<DeviceEvent, DeviceState> {
     // ** Directional Events **
     FlutterCompass.events.listen((newDegrees) {
       // @ Check if Correct State
-      if (sonr.status() == SonrStatus.Available ||
-          sonr.status() == SonrStatus.Searching) {
+      if (sonr.status == SonrStatus.Available ||
+          sonr.status == SonrStatus.Searching) {
         // Get Current Direction and Update Cubit
         double direction = newDegrees.headingForCameraMode;
         directionCubit.update(direction);

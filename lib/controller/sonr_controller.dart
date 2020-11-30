@@ -19,7 +19,7 @@ class SonrController extends GetxController {
   int _callbackInterval;
 
   // @ 1. Initialize State Bools
-  final status = Rx<SonrStatus>();
+  SonrStatus status;
 
   // @ 2. Initialize Data Streams
   final auth = Rx<AuthMessage>();
@@ -57,7 +57,8 @@ class SonrController extends GetxController {
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
     // Update Status
-    status(SonrStatus.Available);
+    status = SonrStatus.Available;
+    update(["Status"]);
     print(status.toString());
   }
 
@@ -94,7 +95,8 @@ class SonrController extends GetxController {
         await _node.invite(peer);
 
         // Update Data
-        status(SonrStatus.Pending);
+        status = SonrStatus.Pending;
+        update(["Status"]);
         currentPeer(peer);
       } else {
         throw SonrError("InvitePeer() - " + "File not processed.");
@@ -111,10 +113,12 @@ class SonrController extends GetxController {
       // Update Status by Decision
       if (decision) {
         // Update Status
-        status(SonrStatus.Receiving);
+        status = SonrStatus.Receiving;
+        update(["Receiving"]);
       } else {
         // Update Status
-        status(SonrStatus.Available);
+        status = SonrStatus.Available;
+        update(["Status"]);
       }
 
       // Send Response
@@ -148,7 +152,8 @@ class SonrController extends GetxController {
       _isProcessed = true;
 
       // Update Data
-      status(SonrStatus.Searching);
+      status = SonrStatus.Searching;
+      update(["Status"]);
       sendMetadata(metadata);
     } else {
       throw SonrError("handleQueued() - " + "Invalid Return type");
@@ -160,14 +165,16 @@ class SonrController extends GetxController {
     // Check Type
     if (data is AuthMessage) {
       AuthMessage authMsg = data;
+      print(data.toString());
       // Set Interval
       _callbackInterval = (data.metadata.chunks / CALLBACK_INTERVAL).ceil();
 
       // Update Data
-      status(SonrStatus.Pending);
+      status = SonrStatus.Pending;
       auth(authMsg);
       currentPeer(authMsg.from);
       offeredMetadata(authMsg.metadata);
+      update(["Invited"]);
     } else {
       throw SonrError("handleInvited() - " + "Invalid Return type");
     }
@@ -180,7 +187,8 @@ class SonrController extends GetxController {
       AuthMessage authMsg = data;
 
       // Update Data
-      status(SonrStatus.Transferring);
+      status = SonrStatus.Transferring;
+      update(["Status"]);
       auth(authMsg);
       currentPeer(authMsg.from);
 
@@ -198,7 +206,8 @@ class SonrController extends GetxController {
       AuthMessage authMsg = data;
 
       // Update Data
-      status(SonrStatus.Searching);
+      status = SonrStatus.Searching;
+      update(["Status"]);
       auth(authMsg);
       currentPeer(authMsg.from);
     } else {
@@ -212,7 +221,8 @@ class SonrController extends GetxController {
       // Update Cubit on Interval
       if (data.current % _callbackInterval == 0) {
         // Update progress
-        progress(data.percent);
+        //progress(data.percent);
+        print(data.percent);
       }
     } else {
       throw SonrError("handleProgressed() - " + "Invalid Return type");
@@ -223,15 +233,17 @@ class SonrController extends GetxController {
   void _handleCompleted(dynamic data) async {
     if (data is Metadata) {
       // @ Sending Direction
-      if (status.value == SonrStatus.Transferring) {
+      if (status == SonrStatus.Transferring) {
         // Update Status
-        status(SonrStatus.CompletedTransfer);
+        status = SonrStatus.CompletedTransfer;
+        update();
       }
       // @ Receiving Direction
-      else if (status.value == SonrStatus.Receiving) {
+      else if (status == SonrStatus.Receiving) {
         Metadata metadata = data;
         // Update Status
-        status(SonrStatus.CompletedReceive);
+        status = SonrStatus.CompletedReceive;
+        update();
 
         // Update Metadata
         savedMetadata(metadata);

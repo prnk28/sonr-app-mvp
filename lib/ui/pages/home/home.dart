@@ -19,6 +19,22 @@ Logger log = Logger();
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // ** Listen to States ** //
+    final SonrController sonr = Get.find<SonrController>();
+    sonr.addListenerId("Invited", () {
+      if (sonr.status == SonrStatus.Pending) {
+        print("State is Pending");
+        Get.dialog(AuthSheet());
+      }
+    });
+
+    sonr.addListenerId("Receiving", () {
+      if (sonr.status == SonrStatus.Receiving) {
+        print("State is Receiving");
+        Get.dialog(ProgressSheet());
+      }
+    });
+
     // Build View
     return AppTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
@@ -34,20 +50,6 @@ class HomeScreen extends StatelessWidget {
             log.w("Contact not implemented yet");
           }
         }),
-        body: _HomeView()));
-  }
-}
-
-class _HomeView extends StatelessWidget {
-  final SonrController sonrController = Get.find();
-  @override
-  Widget build(BuildContext context) {
-    if (sonrController.status() == SonrStatus.Pending) {
-      Get.dialog(AuthSheet(message: sonrController.auth.value));
-    } else if (sonrController.status() == SonrStatus.Receiving) {
-      Get.dialog(ProgressSheet());
-    }
-
-    return ImageGrid();
+        body: ImageGrid()));
   }
 }
