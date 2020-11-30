@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sonar_app/controller/controller.dart';
 
 class ProgressSheet extends StatelessWidget {
-  final SonrController sonrController = Get.find();
+  final ReceiveController receiveController = Get.find();
   @override
   Widget build(BuildContext context) {
     // Return View
@@ -12,8 +12,8 @@ class ProgressSheet extends StatelessWidget {
         height: Get.height / 3 + 20,
         child: Center(
             child: IconLiquidFill(
-                iconData: iconDataFromKind(
-                    sonrController.offeredMetadata.value.mime.type))));
+                iconData:
+                    iconDataFromKind(receiveController.metadata().mime.type))));
   }
 }
 
@@ -75,8 +75,8 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SonrController>(builder: (sonr) {
-      if (sonr.progress.value < 1.0) {
+    return GetBuilder<ReceiveController>(builder: (sonr) {
+      if (sonr.progress().percent < 1.0) {
         return Stack(
           children: <Widget>[
             SizedBox(
@@ -89,7 +89,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
                     painter: WavePainter(
                       iconKey: _iconKey,
                       waveAnimation: _waveController,
-                      percent: sonr.progress.value,
+                      percent: sonr.progress().percent,
                       boxHeight: widget.boxHeight,
                       waveColor: widget.waveColor,
                     ),

@@ -5,7 +5,7 @@ import 'package:sonr_core/sonr_core.dart';
 import 'widgets/bubble.dart';
 import 'widgets/compass.dart';
 
-class TransferScreen extends GetView<SonrController> {
+class TransferScreen extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
     // Return Widget
@@ -35,19 +35,19 @@ class TransferScreen extends GetView<SonrController> {
 }
 
 // ^ Builds the Bubbles Stack ^ //
-Stack buildBubbles(SonrController sonr) {
+Stack buildBubbles(LobbyController lobby) {
   // Initialize Widget List
   List<Widget> stackWidgets = new List<Widget>();
   // Check Peers Size
-  if (sonr.peers().length > 0) {
+  if (lobby.peers().length > 0) {
     // Init Stack Vars
-    int total = sonr.peers().length + 1;
+    int total = lobby.peers().length + 1;
     int current = 0;
     double mean = 1.0 / total;
 
     // Create Bubbles
-    print(sonr.peers().length);
-    sonr.lobby().peers.values.forEach((peer) {
+    print(lobby.peers().length);
+    lobby.peers().values.forEach((peer) {
       // Increase Count
       current += 1;
       // Create Bubble

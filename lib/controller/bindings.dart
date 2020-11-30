@@ -6,20 +6,21 @@ class SplashBind extends Bindings {
   @override
   void dependencies() {
     Get.put<DeviceController>(DeviceController(), permanent: true);
-    Get.put<SonrController>(SonrController(), permanent: true);
+    Get.put<ConnController>(ConnController(), permanent: true);
   }
 }
 
 class HomeBind extends Bindings {
   @override
   void dependencies() {
-    Get.put<SonrController>(SonrController(), permanent: true);
+    Get.put<ReceiveController>(ReceiveController());
   }
 }
 
 class TransferBind extends Bindings {
   @override
   void dependencies() {
-    Get.put<SonrController>(SonrController(), permanent: true);
+    Get.put<LobbyController>(LobbyController());
+    Get.put<TransferController>(TransferController());
   }
 }

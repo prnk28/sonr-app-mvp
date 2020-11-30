@@ -8,7 +8,7 @@ class AuthSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Return View
-    return GetBuilder<SonrController>(builder: (sonr) {
+    return GetBuilder<ReceiveController>(builder: (sonr) {
       return Container(
           decoration: windowDecoration(context),
           height: Get.height / 3 + 20,
@@ -18,7 +18,7 @@ class AuthSheet extends StatelessWidget {
               getCloseButton(),
 
               // Build Item from Metadata and Peer
-              _buildItem(context, sonr.auth()),
+              _buildItem(context, sonr.auth),
               Padding(padding: EdgeInsets.only(top: 8)),
 
               // Build Auth Action
@@ -85,12 +85,12 @@ Row _buildItem(BuildContext context, AuthMessage state) {
 }
 
 NeumorphicButton _buildAuthButton() {
-  final SonrController sonrController = Get.find();
+  final ReceiveController receiveController = Get.find();
   // Build View
   return NeumorphicButton(
       onPressed: () {
         // Emit Event
-        sonrController.respondPeer(true);
+        receiveController.respondPeer(true);
 
         // Pop Window
         Get.back();

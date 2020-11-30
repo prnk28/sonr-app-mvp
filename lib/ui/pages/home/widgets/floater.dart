@@ -38,7 +38,7 @@ class _FloaterButtonState extends State<FloaterButton>
 
   @override
   Widget build(BuildContext context) {
-    final SonrController sonrController = Get.find();
+    final TransferController transferController = Get.put(TransferController());
     final picker = ImagePicker();
     return FloatingActionBubble(
       // Menu items
@@ -55,7 +55,7 @@ class _FloaterButtonState extends State<FloaterButton>
                 await picker.getImage(source: ImageSource.camera);
 
             // Queue File
-            sonrController.queueFile(File(pickedFile.path));
+            transferController.queueFile(File(pickedFile.path));
 
             // Wait for Animation to Complete
             _animationController.reverse();
@@ -79,7 +79,7 @@ class _FloaterButtonState extends State<FloaterButton>
                 await getAssetFileByPath("assets/images/fat_test.jpg");
 
             // Queue File
-            sonrController.queueFile(testFile);
+            transferController.queueFile(testFile);
 
             // Wait for Animation to Complete
             _animationController.reverse();

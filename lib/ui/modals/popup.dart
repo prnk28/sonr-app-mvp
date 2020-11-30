@@ -7,7 +7,7 @@ import 'package:sonar_app/controller/controller.dart';
 class Popup {
   // Build
   static Widget showImage(BuildContext context) {
-    final SonrController sonrController = Get.find();
+    final ReceiveController receiveController = Get.find();
     return Dialog(
         shape: windowBorder(),
         insetAnimationDuration: Duration(seconds: 1),
@@ -32,15 +32,14 @@ class Popup {
                             minWidth: 1,
                             minHeight: 1,
                           ), // here
-                          child: Image.file(
-                              File(sonrController.savedMetadata.value.path)))),
+                          child: Image.file(receiveController.file()))),
                 ),
 
                 FlatButton(
                   onPressed: () {
                     // Move to Page
                     BlocProvider.of<FileBloc>(context)
-                        .add(GetFile(sonrController.savedMetadata.value));
+                        .add(GetFile(receiveController.metadata()));
 
                     // Pop View
                     Get.back();

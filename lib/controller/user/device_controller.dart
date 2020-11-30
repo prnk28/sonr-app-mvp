@@ -16,7 +16,7 @@ class DeviceController extends GetxController {
     // Set Sonr Controller
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
-      SonrController sonr = Get.find();
+      ConnController sonrConn = Get.find();
       // @ 2. Check for Profile
       User user = await User.get();
       if (user != null) {
@@ -25,7 +25,7 @@ class DeviceController extends GetxController {
             desiredAccuracy: LocationAccuracy.high);
 
         // Initialize Sonr Node
-        sonr.connect(position, user.contact);
+        sonrConn.connect(position, user.contact);
         status = DeviceStatus.Active;
         update(["Active"]);
       } else {
@@ -42,7 +42,7 @@ class DeviceController extends GetxController {
     // Set Sonr Controller
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
-      SonrController sonr = Get.find();
+      ConnController sonrConn = Get.find();
       // Get Data
       var user = await User.create(contact);
       // Get Current Position
@@ -50,7 +50,7 @@ class DeviceController extends GetxController {
           desiredAccuracy: LocationAccuracy.high);
 
       // Initialize Sonr Node
-      sonr.connect(position, user.contact);
+      sonrConn.connect(position, user.contact);
       status = DeviceStatus.Active;
       update(["Active"]);
     } else {

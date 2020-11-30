@@ -20,20 +20,19 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ** Listen to States ** //
-    final SonrController sonr = Get.find<SonrController>();
+    final ReceiveController sonr = Get.find<ReceiveController>();
     sonr.addListenerId("Invited", () {
-      if (sonr.status == SonrStatus.Pending) {
-        print("State is Pending");
-        Get.dialog(AuthSheet());
-      }
+      print("State is Pending");
+      Get.dialog(AuthSheet());
     });
 
-    sonr.addListenerId("Receiving", () {
-      if (sonr.status == SonrStatus.Receiving) {
-        print("State is Receiving");
-        Get.dialog(ProgressSheet());
-      }
-    });
+    // TODO: Implement Transform on Auth Sheet
+    // sonr.addListenerId("Receiving", () {
+    //   if (sonr.status == SonrStatus.Receiving) {
+    //     print("State is Receiving");
+    //     Get.dialog(ProgressSheet());
+    //   }
+    // });
 
     // Build View
     return AppTheme(Scaffold(
