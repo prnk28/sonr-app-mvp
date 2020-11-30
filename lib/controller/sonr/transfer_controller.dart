@@ -9,9 +9,10 @@ class TransferController extends GetxController {
   bool _isProcessed = false;
 
   // @ Set Peer Dependencies
-  AuthStatus status;
+  AuthMessage_Event status = AuthMessage_Event.NONE;
   AuthMessage auth;
   Peer peer;
+  bool completed = false;
 
   // @ Set Data Dependencies
   final file = Rx<File>();
@@ -34,14 +35,16 @@ class TransferController extends GetxController {
       if (message.event == AuthMessage_Event.ACCEPT) {
         // Get Controllers
         ConnController conn = Get.find();
-        this.status = AuthStatus.Accepted;
+
+        // Report Accepted
+        this.status = message.event;
+        update(["Bubble"]);
 
         // Start Transfer
         conn.node.transfer();
-        update(["Bubble"]);
       } else if (message.event == AuthMessage_Event.DECLINE) {
         // Report Declined
-        this.status = AuthStatus.Declined;
+        this.status = message.event;
         update(["Bubble"]);
 
         // Nullify Current Peer after 1.5s
@@ -54,8 +57,10 @@ class TransferController extends GetxController {
 
   // ^ Resets Peer Info Event ^
   void setCompleted() async {
+    this.status = AuthMessage_Event.NONE;
+    this.completed = true;
+
     // Reset Peer/Auth
-    this.status = AuthStatus.Completed;
     this.peer = null;
     this.auth = null;
     update(["Bubble"]);
@@ -87,7 +92,6 @@ class TransferController extends GetxController {
       if (_isProcessed) {
         // Update Data
         this.peer = p;
-        this.status = AuthStatus.Invited;
         update(["Bubble"]);
 
         // Send Invite

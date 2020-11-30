@@ -37,10 +37,6 @@ class Popup {
 
                 FlatButton(
                   onPressed: () {
-                    // Move to Page
-                    BlocProvider.of<FileBloc>(context)
-                        .add(GetFile(receiveController.metadata()));
-
                     // Pop View
                     Get.back();
                   },

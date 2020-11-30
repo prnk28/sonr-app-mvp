@@ -6,9 +6,10 @@ import 'sonr.dart';
 
 class ReceiveController extends GetxController {
   // @ Set Peer Dependencies
-  AuthStatus status = AuthStatus.None;
+  AuthMessage_Event status = AuthMessage_Event.NONE;
   AuthMessage auth;
   Peer peer;
+  bool completed = false;
 
   // @ Set Data Dependencies
   final file = Rx<File>();
@@ -22,7 +23,7 @@ class ReceiveController extends GetxController {
       this.auth = message;
       this.peer = message.from;
       this.metadata(message.metadata);
-      this.status = AuthStatus.Invited;
+      this.status = message.event;
       update(["Listener"]);
     }
 
@@ -37,7 +38,8 @@ class ReceiveController extends GetxController {
     // Set Data
     this.metadata(metadata);
     this.file(File(metadata.path));
-    this.status = AuthStatus.Completed;
+    this.status = AuthMessage_Event.NONE;
+    this.completed = true;
 
     // Reset Peer/Auth
     this.peer = null;
@@ -54,10 +56,10 @@ class ReceiveController extends GetxController {
     if (conn.connected) {
       // Update Status by Decision
       if (decision) {
-        this.status = AuthStatus.Accepted;
+        this.status = AuthMessage_Event.ACCEPT;
         update();
       } else {
-        this.status = AuthStatus.Declined;
+        this.status = AuthMessage_Event.DECLINE;
 
         // Reset Peer/Auth
         this.peer = null;

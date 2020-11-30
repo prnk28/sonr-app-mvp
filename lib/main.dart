@@ -5,17 +5,7 @@ import 'controller/bindings.dart';
 // ** Main Method ** //
 void main() async {
   // Run App with BLoC Providers
-  runApp(
-      // Return Provider
-      MultiBlocProvider(
-    providers: [
-      // File Management
-      BlocProvider<FileBloc>(
-        create: (context) => FileBloc(),
-      ),
-    ],
-    child: App(),
-  ));
+  runApp(App());
 }
 
 // ^ Root Widget ^ //

@@ -10,7 +10,6 @@ export 'lifecycle.dart';
 // Packages
 export 'package:get/get.dart';
 export 'package:flutter/material.dart';
-export 'package:flutter_bloc/flutter_bloc.dart' hide Transition;
 export 'package:flutter/widgets.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:vibration/vibration.dart';
@@ -33,7 +32,11 @@ export 'package:flare_flutter/flare_testing.dart';
 export 'package:flare_flutter/provider/asset_flare.dart';
 export 'package:flare_flutter/provider/memory_flare.dart';
 export 'package:flare_flutter/trim_path.dart';
+export '../controller/controller.dart';
 
 // Sonr Classes
-export 'package:sonar_app/bloc/bloc.dart';
 export 'package:sonar_app/ui/design/design.dart';
+
+import 'package:logger/logger.dart';
+
+Logger log = Logger(level: Level.warning);

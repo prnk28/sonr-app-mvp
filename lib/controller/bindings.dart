@@ -16,7 +16,7 @@ class AppBind extends Bindings {
 class HomeBind extends Bindings {
   @override
   void dependencies() {
-    //Get.put<ReceiveController>(ReceiveController(), permanent: true);
+    Get.put<FileController>(FileController(), permanent: true);
   }
 }
 

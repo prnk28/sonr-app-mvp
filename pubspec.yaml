@@ -20,8 +20,6 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
-  equatable: ^1.2.5
-  flutter_bloc: ^6.1.0
   get:
   intl: ^0.15.8
   logger: ^0.9.4

@@ -37,9 +37,11 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
     // Controller Listener
     transfer.addListenerId("Bubble", () {
       // Set Bools - isInvited set on Tap
-      _hasAccepted = (_isInvited) && (transfer.status == AuthStatus.Accepted);
-      _hasDeclined = (_isInvited) && (transfer.status == AuthStatus.Declined);
-      _hasCompleted = (_isInvited) && (transfer.status == AuthStatus.Completed);
+      _hasAccepted =
+          (_isInvited) && (transfer.status == AuthMessage_Event.ACCEPT);
+      _hasDeclined =
+          (_isInvited) && (transfer.status == AuthMessage_Event.DECLINE);
+      _hasCompleted = (_isInvited) && (transfer.completed);
       setState(() {});
     });
   }
