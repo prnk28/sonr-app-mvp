@@ -5,7 +5,7 @@ import 'package:sonr_core/sonr_core.dart';
 import 'widgets/bubble.dart';
 import 'widgets/compass.dart';
 
-class TransferScreen extends StatelessWidget {
+class TransferScreen extends GetView<SonrController> {
   @override
   Widget build(BuildContext context) {
     // Return Widget
@@ -27,35 +27,38 @@ class TransferScreen extends StatelessWidget {
                 )),
 
             // @ Bubble View
-            GetX<SonrController>(builder: (sonr) {
-              // Initialize Widget List
-              List<Widget> stackWidgets = new List<Widget>();
-              // Check Peers Size
-              if (sonr.peers().length > 0) {
-                // Init Stack Vars
-                int total = sonr.peers().length + 1;
-                int current = 0;
-                double mean = 1.0 / total;
-
-                // Create Bubbles
-                print(sonr.peers().length);
-                sonr.lobby().peers.values.forEach((peer) {
-                  // Increase Count
-                  current += 1;
-                  // Create Bubble
-                  stackWidgets.add(Bubble(current * mean, peer));
-                });
-              }
-              return Stack(children: stackWidgets);
-            }),
+            buildBubbles(controller),
             CompassView(),
           ],
         ))));
   }
 }
 
+// ^ Builds the Bubbles Stack ^ //
+Stack buildBubbles(SonrController sonr) {
+  // Initialize Widget List
+  List<Widget> stackWidgets = new List<Widget>();
+  // Check Peers Size
+  if (sonr.peers().length > 0) {
+    // Init Stack Vars
+    int total = sonr.peers().length + 1;
+    int current = 0;
+    double mean = 1.0 / total;
+
+    // Create Bubbles
+    print(sonr.peers().length);
+    sonr.lobby().peers.values.forEach((peer) {
+      // Increase Count
+      current += 1;
+      // Create Bubble
+      stackWidgets.add(Bubble(current * mean, peer));
+    });
+  }
+  return Stack(children: stackWidgets);
+}
+
 // ^ Builds the Bubbles Content ^ //
-buildBubbleContent(Peer peer) {
+Neumorphic buildBubbleContent(Peer peer) {
   // Generate Bubble
   return Neumorphic(
       style: NeumorphicStyle(

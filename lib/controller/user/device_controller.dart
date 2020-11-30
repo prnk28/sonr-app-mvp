@@ -1,4 +1,3 @@
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonar_app/database/database.dart';
@@ -10,28 +9,14 @@ import '../controller.dart';
 class DeviceController extends GetxController {
   final direction = 0.0.obs;
   DeviceStatus status = DeviceStatus.Initial;
-  SonrController sonr = Get.find();
 
   // ^ DeviceController handles profile, permissions, and Compass ^
-  DeviceController() {
-    FlutterCompass.events.listen((newDegrees) {
-      // @ Check if Correct State
-      if (sonr.status == SonrStatus.Available ||
-          sonr.status == SonrStatus.Searching) {
-        // Get Current Direction and Update Cubit
-        direction(newDegrees.headingForCameraMode);
-
-        // Update Node Direction
-        sonr.updateDirection(newDegrees.headingForCameraMode);
-      }
-    });
-  }
-
   // ^ StartApp Event ^
   void start() async {
     // Set Sonr Controller
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
+      SonrController sonr = Get.find();
       // @ 2. Check for Profile
       User user = await User.get();
       if (user != null) {
@@ -57,6 +42,7 @@ class DeviceController extends GetxController {
     // Set Sonr Controller
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
+      SonrController sonr = Get.find();
       // Get Data
       var user = await User.create(contact);
       // Get Current Position

@@ -9,3 +9,17 @@ class SplashBind extends Bindings {
     Get.put<SonrController>(SonrController(), permanent: true);
   }
 }
+
+class HomeBind extends Bindings {
+  @override
+  void dependencies() {
+    Get.put<SonrController>(SonrController(), permanent: true);
+  }
+}
+
+class TransferBind extends Bindings {
+  @override
+  void dependencies() {
+    Get.put<SonrController>(SonrController(), permanent: true);
+  }
+}
