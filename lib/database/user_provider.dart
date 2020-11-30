@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -29,7 +28,7 @@ class User {
   }
 
   // ^ Method Constructs Profile ^
-  static Future<User> create(Contact contact, BuildContext context) async {
+  static Future<User> create(Contact contact) async {
     // Initialize
     User p = new User();
 

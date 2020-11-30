@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:geolocator/geolocator.dart';
+import 'package:sonar_app/model/model.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/utils/olc.dart';
 import 'package:get/get.dart' hide Node;
-import '../model/model.dart';
 
 //() -- Constants() -- //
 const int CALLBACK_INTERVAL = 16; // Every Kilobyte

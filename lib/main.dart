@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/controller/bindings/sonr_bind.dart';
 import 'package:sonar_app/ui/ui.dart';
+import 'controller/bindings.dart';
 
 // ** Main Method ** //
 void main() async {
@@ -12,11 +12,6 @@ void main() async {
       // File Management
       BlocProvider<FileBloc>(
         create: (context) => FileBloc(),
-      ),
-
-      // Device Sensors Logic
-      BlocProvider<DeviceBloc>(
-        create: (context) => DeviceBloc(),
       ),
     ],
     child: App(),
@@ -34,6 +29,7 @@ class App extends StatelessWidget {
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
+      initialBinding: SplashBind(),
       home: SplashScreen(),
     ));
   }
@@ -47,7 +43,7 @@ List<GetPage> getPages() {
       name: '/home',
       page: () => AppTheme(HomeScreen()),
       transition: Transition.zoom,
-      binding: SonrBind(),
+      // binding: HomeBind(),
     ),
 
     // ** Register Page ** //
@@ -61,7 +57,7 @@ List<GetPage> getPages() {
       name: '/transfer',
       page: () => AppTheme(TransferScreen()),
       transition: Transition.fade,
-      binding: SonrBind(),
+      // binding: HomeBind(),
     ),
   ];
 }

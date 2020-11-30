@@ -15,6 +15,7 @@ class _FormViewState extends State<FormView> {
 
   @override
   Widget build(BuildContext context) {
+    DeviceController device = Get.find();
     return Form(
       key: _formKey,
       child: Column(
@@ -109,7 +110,7 @@ class _FormViewState extends State<FormView> {
                     contact.lastName = _lastName;
 
                     // Process data.
-                    BlocProvider.of<DeviceBloc>(context).add(CreateUser(context, contact));
+                    device.createUser(contact);
                   }
                 },
                 child: Text('Submit',
