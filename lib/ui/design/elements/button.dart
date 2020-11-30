@@ -3,21 +3,13 @@ part of 'elements.dart';
 Widget getCloseButton({double top: 10, double right: 15}) {
   return Align(
       alignment: Alignment.topRight,
-      child: GestureDetector(
-          onTap: () {
-            // Reload Files
-            //context.getBloc(BlocType.File).add(GetAllFiles());
-
-            // Pop Window
-            Get.back();
-          },
-          child: Padding(
+      child: Padding(
               padding: EdgeInsets.only(top: 10, right: 15),
               child: Icon(
                 Icons.close_rounded,
                 size: 35,
                 color: Colors.grey[700],
-              ))));
+              )));
 }
 
 Widget getAppBarButton(

@@ -2,38 +2,16 @@ import 'package:sonar_app/ui/ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/controller/controller.dart';
 
-class ProgressSheet extends StatelessWidget {
-  final ReceiveController receiveController = Get.find();
-  @override
-  Widget build(BuildContext context) {
-    // Return View
-    return Container(
-        decoration: windowDecoration(context),
-        height: Get.height / 3 + 20,
-        child: Center(
-            child: IconLiquidFill(
-                iconData:
-                    iconDataFromKind(receiveController.metadata().mime.type))));
-  }
-}
-
-class IconLiquidFill extends StatefulWidget {
-  // Icon to Fill Up
+class LiquidFill extends StatefulWidget {
+  // Required Properties
   final IconData iconData;
-
-  // By default it is set to 2 seconds.
   final Duration waveDuration;
-
-  /// Set to screen Size
   final double boxHeight = Get.height / 3;
-
-  /// By default it is set to 400
   final double boxWidth;
-
-  /// By default it is set to blueAccent color
   final Color waveColor;
 
-  IconLiquidFill({
+  // Constructer
+  LiquidFill({
     Key key,
     @required this.iconData,
     this.waveDuration = const Duration(seconds: 2),
@@ -46,19 +24,15 @@ class IconLiquidFill extends StatefulWidget {
         super(key: key);
 
   @override
-  _IconLiquidFillState createState() => _IconLiquidFillState();
+  _LiquidFillState createState() => _LiquidFillState();
 }
 
-class _IconLiquidFillState extends State<IconLiquidFill>
-    with TickerProviderStateMixin {
+class _LiquidFillState extends State<LiquidFill> with TickerProviderStateMixin {
   final _iconKey = GlobalKey();
-
   AnimationController _waveController;
-
   @override
   void initState() {
     super.initState();
-
     _waveController = AnimationController(
       vsync: this,
       duration: widget.waveDuration,
@@ -75,8 +49,9 @@ class _IconLiquidFillState extends State<IconLiquidFill>
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ReceiveController>(builder: (sonr) {
-      if (sonr.progress().percent < 1.0) {
+    ReceiveController receive = Get.find();
+    return Obx(() {
+      if (receive.progress.value < 1.0) {
         return Stack(
           children: <Widget>[
             SizedBox(
@@ -89,7 +64,7 @@ class _IconLiquidFillState extends State<IconLiquidFill>
                     painter: WavePainter(
                       iconKey: _iconKey,
                       waveAnimation: _waveController,
-                      percent: sonr.progress().percent,
+                      percent: receive.progress.value,
                       boxHeight: widget.boxHeight,
                       waveColor: widget.waveColor,
                     ),

@@ -12,9 +12,9 @@ class ReceiveController extends GetxController {
   bool completed = false;
 
   // @ Set Data Dependencies
-  final file = Rx<File>();
-  final metadata = Rx<Metadata>();
-  final progress = Rx<ProgressUpdate>();
+  var file = Rx<File>();
+  var metadata = Rx<Metadata>();
+  var progress = 0.0.obs;
 
   // ** Update Properties of TransferController ** //
   void updateReceive({AuthMessage message, ProgressUpdate progress}) {
@@ -29,7 +29,7 @@ class ReceiveController extends GetxController {
 
     // Validate Progress
     if (progress != null) {
-      this.progress(progress);
+      this.progress(progress.percent);
     }
   }
 
@@ -44,7 +44,7 @@ class ReceiveController extends GetxController {
     // Reset Peer/Auth
     this.peer = null;
     this.auth = null;
-    update(["Completed"]);
+    update(["Listener"]);
   }
 
   // ^ Respond-Peer Event ^
@@ -57,14 +57,11 @@ class ReceiveController extends GetxController {
       // Update Status by Decision
       if (decision) {
         this.status = AuthMessage_Event.ACCEPT;
-        update();
+        update(["ReceiveSheet"]);
       } else {
-        this.status = AuthMessage_Event.DECLINE;
-
         // Reset Peer/Auth
         this.peer = null;
         this.auth = null;
-        update();
       }
 
       // Send Response

@@ -31,7 +31,6 @@ class TransferScreen extends GetView<LobbyController> {
 
             // @ Bubble View
             Obx(() {
-              print(controller.peers.toString());
               // Initialize Widget List
               List<Widget> stackWidgets = new List<Widget>();
 
@@ -51,7 +50,6 @@ class TransferScreen extends GetView<LobbyController> {
                   stackWidgets.add(Bubble(current * mean, peer));
                 });
               }
-
               return Stack(children: stackWidgets);
             }),
             CompassView(),
