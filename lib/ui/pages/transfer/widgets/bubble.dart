@@ -14,11 +14,17 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
   // Animation
   AnimationController _animationController;
   Animation _animation;
+  bool _isInvited = false;
+  bool _hasDeclined = false;
+  bool _hasAccepted = false;
+  bool _hasCompleted = false;
+
+  // Controller
+  TransferController transfer = Get.find();
 
   @override
   void initState() {
     super.initState();
-
     // Animation for Requested
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
@@ -27,6 +33,15 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
       ..addListener(() {
         setState(() {});
       });
+
+    // Controller Listener
+    transfer.addListenerId("Bubble", () {
+      // Set Bools - isInvited set on Tap
+      _hasAccepted = (_isInvited) && (transfer.status == AuthStatus.Accepted);
+      _hasDeclined = (_isInvited) && (transfer.status == AuthStatus.Declined);
+      _hasCompleted = (_isInvited) && (transfer.status == AuthStatus.Completed);
+      setState(() {});
+    });
   }
 
   @override
@@ -37,103 +52,102 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<TransferController>(
-        global: false,
-        assignId: true,
-        id: "Bubble",
-        builder: (transfer) {
-          switch (transfer.status) {
-            case AuthStatus.Invited:
-              // ^ [Im Pending] Check if im the Peer ^ //
-              if (widget.peer.id == transfer.peer.id) {
-                return Positioned(
-                    top: calculateOffset(widget.value).dy,
-                    left: calculateOffset(widget.value).dx,
-                    child: Container(
-                      child: buildBubbleContent(),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color.fromARGB(255, 27, 28, 30),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Color.fromARGB(130, 237, 125, 58),
-                                blurRadius: _animation.value,
-                                spreadRadius: _animation.value)
-                          ]),
-                    ));
-              }
-              break;
-            case AuthStatus.Accepted:
-              // ^ [We are transferring] Check if User is Transferring ^ //
-              if (widget.peer.id == transfer.peer.id) {
-                return Positioned(
-                    top: calculateOffset(widget.value).dy,
-                    left: calculateOffset(widget.value).dx,
-                    child: Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Neumorphic(
-                              style: NeumorphicStyle(
-                                  depth: 10,
-                                  boxShape: NeumorphicBoxShape.circle()),
-                              child: SizedBox(
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 6),
-                                height: 86.0,
-                                width: 86.0,
-                              )),
-                          buildBubbleContent(),
-                        ]));
-              }
-              break;
-            case AuthStatus.Declined:
-              // ^ [Ive Declined] Check if Ive already Declined ^ //
-              if (widget.peer.id == transfer.peer.id) {
-                return Positioned(
-                    top: calculateOffset(widget.value).dy,
-                    left: calculateOffset(widget.value).dx,
-                    child: Container(
-                        child: Neumorphic(
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.flat,
-                          boxShape: NeumorphicBoxShape.circle(),
-                          depth: 10,
-                          lightSource: LightSource.topLeft,
-                          color: Colors.grey[300]),
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        child: FlareActor("assets/animations/denied.flr",
-                            alignment: Alignment.center,
-                            fit: BoxFit.contain,
-                            animation: "animate"),
-                      ),
-                    )));
-              }
-              break;
-            default:
-              // ^ [Im Available] Active Peer you can invite me ^
-              return Positioned(
-                  top: calculateOffset(widget.value).dy,
-                  left: calculateOffset(widget.value).dx,
-                  child: GestureDetector(
-                      onTap: () async {
-                        // Send Offer to Bubble
-                        transfer.invitePeer(widget.peer);
-                      },
-                      child: buildBubbleContent()));
-          }
-          // ^ [Im Available] Active Peer you can invite me ^
-          return Positioned(
-              top: calculateOffset(widget.value).dy,
-              left: calculateOffset(widget.value).dx,
-              child: GestureDetector(
-                  onTap: () async {
-                    // Send Offer to Bubble
-                    transfer.invitePeer(widget.peer);
-                  },
-                  child: buildBubbleContent()));
-        });
+    // ^ Check if Invited ^
+    if (_isInvited) {
+      // @ We are transferring
+      if (_hasAccepted) {
+        return Positioned(
+            top: calculateOffset(widget.value).dy,
+            left: calculateOffset(widget.value).dx,
+            child: Stack(alignment: AlignmentDirectional.center, children: [
+              Neumorphic(
+                  style: NeumorphicStyle(
+                      depth: 10, boxShape: NeumorphicBoxShape.circle()),
+                  child: SizedBox(
+                    child: CircularProgressIndicator(strokeWidth: 6),
+                    height: 86.0,
+                    width: 86.0,
+                  )),
+              buildBubbleContent(),
+            ]));
+      }
+      // @ Check if Declined
+      else if (_hasDeclined) {
+        return Positioned(
+            top: calculateOffset(widget.value).dy,
+            left: calculateOffset(widget.value).dx,
+            child: Container(
+                child: Neumorphic(
+              style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: 10,
+                  lightSource: LightSource.topLeft,
+                  color: Colors.grey[300]),
+              child: Container(
+                width: 80,
+                height: 80,
+                child: FlareActor("assets/animations/denied.flr",
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: "animate"),
+              ),
+            )));
+      }
+      // @ Check if Completed
+      else if (_hasCompleted) {
+        return Positioned(
+            top: calculateOffset(widget.value).dy,
+            left: calculateOffset(widget.value).dx,
+            child: Container(
+                child: Neumorphic(
+              style: NeumorphicStyle(
+                  shape: NeumorphicShape.flat,
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: 10,
+                  lightSource: LightSource.topLeft,
+                  color: Colors.grey[300]),
+              child: Container(
+                width: 80,
+                height: 80,
+                child: FlareActor("assets/animations/complete.flr",
+                    alignment: Alignment.center,
+                    fit: BoxFit.contain,
+                    animation: "animate"),
+              ),
+            )));
+      }
+      // @ Im Pending
+      else {
+        return Positioned(
+            top: calculateOffset(widget.value).dy,
+            left: calculateOffset(widget.value).dx,
+            child: Container(
+              child: buildBubbleContent(),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromARGB(255, 27, 28, 30),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color.fromARGB(130, 237, 125, 58),
+                        blurRadius: _animation.value,
+                        spreadRadius: _animation.value)
+                  ]),
+            ));
+      }
+    }
+    // ^ [Im Available] Active Peer you can invite me ^
+    return Positioned(
+        top: calculateOffset(widget.value).dy,
+        left: calculateOffset(widget.value).dx,
+        child: GestureDetector(
+            onTap: () async {
+              // Send Offer to Bubble
+              _isInvited = true;
+              setState(() {});
+              transfer.invitePeer(widget.peer);
+            },
+            child: buildBubbleContent()));
   }
 
   // ^ Builds the Bubbles Content ^ //

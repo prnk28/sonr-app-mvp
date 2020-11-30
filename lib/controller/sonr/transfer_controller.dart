@@ -55,6 +55,7 @@ class TransferController extends GetxController {
   // ^ Resets Peer Info Event ^
   void setCompleted() async {
     // Reset Peer/Auth
+    this.status = AuthStatus.Completed;
     this.peer = null;
     this.auth = null;
     update(["Bubble"]);
@@ -79,20 +80,18 @@ class TransferController extends GetxController {
   void invitePeer(Peer p) async {
     // Get Controllers
     ConnController conn = Get.find();
-    print(p.toString());
 
     // @ Check Connection
     if (conn.connected) {
       // @ Check File Status
       if (_isProcessed) {
-        // Send Invite
-        await conn.node.invite(p);
-
         // Update Data
         this.peer = p;
-
         this.status = AuthStatus.Invited;
-        update();
+        update(["Bubble"]);
+
+        // Send Invite
+        await conn.node.invite(p);
       } else {
         throw SonrError("InvitePeer() - " + "File not processed.");
       }

@@ -1,25 +1,10 @@
-// ^ Sonr Service Status Enum ^ //
-enum SonrStatus {
-  // Default
-  Offline,
-  // Bi-Directional
-  Available,
-  Searching,
-  Pending,
-
-  // Uni-Directional
-  Receiving,
-  Transferring,
-  CompletedTransfer,
-  CompletedReceive
-}
-
 // ^ Auth Update Status Enum ^ //
 enum AuthStatus {
   None,
   Invited,
   Accepted,
   Declined,
+  Completed,
 }
 
 // ^ Core Library had Error ^ //

@@ -37,6 +37,7 @@ class ReceiveController extends GetxController {
     // Set Data
     this.metadata(metadata);
     this.file(File(metadata.path));
+    this.status = AuthStatus.Completed;
 
     // Reset Peer/Auth
     this.peer = null;
