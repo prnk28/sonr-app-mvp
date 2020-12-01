@@ -1,30 +1,53 @@
-import 'bloc/sonrN/sonr_service.dart';
-import 'routing.dart';
-import 'package:sonar_app/screens/screens.dart';
-import 'package:states_rebuilder/states_rebuilder.dart';
+import 'package:get/get.dart';
+import 'package:sonar_app/ui/ui.dart';
+import 'controller/bindings.dart';
 
-// ** Global Functional Injection ** //
-final sonrService = RM.inject(() => SonrService());
-
-// ^ Main Method ^ //
+// ** Main Method ** //
 void main() async {
   // Run App with BLoC Providers
-  runApp(initializeBloc(App()));
+  runApp(App());
 }
 
-// ^ Master Widget ^ //
+// ^ Root Widget ^ //
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LifeCycleManager(
-        child: NeumorphicApp(
-      navigatorKey: RM.navigate.navigatorKey,
+        child: GetMaterialApp(
+      getPages: getPages(),
+      navigatorKey: Get.key,
+      navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
-      theme: lightTheme(),
-      darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
+      initialBinding: AppBind(),
       home: SplashScreen(),
-      onGenerateRoute: context.getRouting(),
     ));
   }
+}
+
+// ^ Routing Information ^ //
+List<GetPage> getPages() {
+  return [
+    // ** Home Page ** //
+    GetPage(
+      name: '/home',
+      page: () => AppTheme(HomeScreen()),
+      transition: Transition.zoom,
+      binding: HomeBind(),
+    ),
+
+    // ** Register Page ** //
+    GetPage(
+        name: '/register',
+        page: () => AppTheme(RegisterScreen()),
+        transition: Transition.rightToLeftWithFade),
+
+    // ** Searching Page ** //
+    GetPage(
+      name: '/transfer',
+      page: () => AppTheme(TransferScreen()),
+      transition: Transition.fade,
+      // binding: HomeBind(),
+    ),
+  ];
 }
