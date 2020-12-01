@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
-import 'sonr.dart';
+import 'package:sonar_app/controller/sonr/conn_controller.dart';
 
 class TransferController extends GetxController {
   // @ Set Local Properties
@@ -17,41 +17,11 @@ class TransferController extends GetxController {
   final file = Rx<File>();
   final metadata = Rx<Metadata>();
 
-  // ** Update Properties of TransferController ** //
-  void updateTransfer({Metadata metadata, AuthMessage message}) {
-    // Validate Matadata
-    if (metadata != null) {
-      _isProcessed = true;
-      this.metadata(metadata);
-    }
-
-    // Validate AuthMessage
-    if (message != null) {
-      // Set Message
-      this.auth = message;
-
-      // Check Status
-      if (message.event == AuthMessage_Event.ACCEPT) {
-        // Get Controllers
-        ConnController conn = Get.find();
-
-        // Report Accepted
-        this.status = message.event;
-        update(["Bubble"]);
-
-        // Start Transfer
-        conn.node.transfer();
-      } else if (message.event == AuthMessage_Event.DECLINE) {
-        // Report Declined
-        this.status = message.event;
-        update(["Bubble"]);
-
-        // Nullify Current Peer after 1.5s
-        Future.delayed(
-            Duration(seconds: 1, milliseconds: 500), () => this.peer = null);
-        update(["Bubble"]);
-      }
-    }
+  // ^ Assign Callbacks and Create Ref for Node ^ //
+  void assign() {
+    sonrNode.assignCallback(CallbackEvent.Queued, _handleQueued);
+    sonrNode.assignCallback(CallbackEvent.Accepted, _handleAccepted);
+    sonrNode.assignCallback(CallbackEvent.Denied, _handleDenied);
   }
 
   // ^ Resets Peer Info Event ^
@@ -67,39 +37,72 @@ class TransferController extends GetxController {
 
   // ^ Queue-File Event ^
   void queueFile(File file) async {
-    // Get Controllers
-    ConnController conn = Get.find();
-
-    // @ Check Connection
-    if (conn.connected) {
-      // Queue File
-      this.file(file);
-      conn.node.queue(file.path);
-    } else {
-      print("queueFile() - " + " Not Connected");
-    }
+    // Queue File
+    this.file(file);
+    sonrNode.queue(file.path);
   }
 
   // ^ Invite-Peer Event ^
   void invitePeer(Peer p) async {
-    // Get Controllers
-    ConnController conn = Get.find();
+    // @ Check File Status
+    if (_isProcessed) {
+      // Update Data
+      this.peer = p;
+      update(["Bubble"]);
 
-    // @ Check Connection
-    if (conn.connected) {
-      // @ Check File Status
-      if (_isProcessed) {
-        // Update Data
-        this.peer = p;
-        update(["Bubble"]);
-
-        // Send Invite
-        await conn.node.invite(p);
-      } else {
-        print("InvitePeer() - " + "File not processed.");
-      }
+      // Send Invite
+      await sonrNode.invite(p);
     } else {
-      print("invitePeer() - " + "Not Connected");
+      print("InvitePeer() - " + "File not processed.");
+    }
+  }
+
+  // **************************
+  // ******* Callbacks ********
+  // **************************
+  // ^ File has Succesfully Queued ^ //
+  void _handleQueued(dynamic data) async {
+    if (data is Metadata) {
+      // Update data
+      _isProcessed = true;
+      this.metadata(data);
+    } else {
+      print("handleQueued() - " + "Invalid Return type");
+    }
+  }
+
+  // ^ Node Has Been Accepted ^ //
+  void _handleAccepted(dynamic data) async {
+    // Check Type
+    if (data is AuthMessage) {
+      // Set Message
+      this.auth = data;
+
+      // Report Accepted
+      this.status = data.event;
+      update(["Bubble"]);
+
+      // Start Transfer
+      sonrNode.transfer();
+    } else {
+      print("handleAccepted() - " + "Invalid Return type");
+    }
+  }
+
+// ^ Node Has Been Denied ^ //
+  void _handleDenied(dynamic data) async {
+    // Check Type
+    if (data is AuthMessage) {
+      // Report Declined
+      this.status = data.event;
+      update(["Bubble"]);
+
+      // Nullify Current Peer after 1.5s
+      Future.delayed(
+          Duration(seconds: 1, milliseconds: 500), () => this.peer = null);
+      update(["Bubble"]);
+    } else {
+      print("handleDenied() - " + "Invalid Return type");
     }
   }
 }

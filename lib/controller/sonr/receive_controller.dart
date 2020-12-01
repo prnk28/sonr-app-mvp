@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:sonar_app/controller/sonr/conn_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
-import 'sonr.dart';
 
 class ReceiveController extends GetxController {
   // @ Set Peer Dependencies
@@ -15,21 +15,10 @@ class ReceiveController extends GetxController {
   var metadata = Rx<Metadata>();
   var progress = 0.0.obs;
 
-  // ** Update Properties of TransferController ** //
-  void updateReceive({AuthMessage message, ProgressUpdate progress}) {
-    // Validate AuthMessage
-    if (message != null) {
-      this.auth = message;
-      this.peer = message.from;
-      this.metadata(message.metadata);
-      this.status = message.event;
-      update(["Listener"]);
-    }
-
-    // Validate Progress
-    if (progress != null) {
-      this.progress(progress.percent);
-    }
+  // ^ Assign Callbacks and Create Ref for Node ^ //
+  void assign() {
+    sonrNode.assignCallback(CallbackEvent.Invited, _handleInvite);
+    sonrNode.assignCallback(CallbackEvent.Progressed, _handleProgress);
   }
 
   // ** Mark as Received File ** //
@@ -48,25 +37,47 @@ class ReceiveController extends GetxController {
 
   // ^ Respond-Peer Event ^
   void respondPeer(bool decision) async {
-    // Get Controllers
-    ConnController conn = Get.find();
-
-    // @ Check Connection
-    if (conn.connected) {
-      // Update Status by Decision
-      if (decision) {
-        this.status = AuthMessage_Event.ACCEPT;
-        update(["ReceiveSheet"]);
-      } else {
-        // Reset Peer/Auth
-        this.peer = null;
-        this.auth = null;
-      }
-
-      // Send Response
-      await conn.node.respond(decision);
+    // Update Status by Decision
+    if (decision) {
+      this.status = AuthMessage_Event.ACCEPT;
+      update(["ReceiveSheet"]);
     } else {
-      print("respondPeer() - " + "Not Connected");
+      // Reset Peer/Auth
+      this.peer = null;
+      this.auth = null;
+    }
+
+    // Send Response
+    await sonrNode.respond(decision);
+  }
+
+  // **************************
+  // ******* Callbacks ********
+  // **************************
+  // ^ Node Has Been Invited ^ //
+  void _handleInvite(dynamic data) async {
+    // Check Type
+    if (data is AuthMessage) {
+      // Update Values
+      this.auth = data;
+      this.peer = data.from;
+      this.metadata(data.metadata);
+      this.status = data.event;
+
+      // Inform Listener
+      update(["Listener"]);
+    } else {
+      print("handleInvited() - " + "Invalid Return type");
+    }
+  }
+
+  // ^ Transfer Has Updated Progress ^ //
+  void _handleProgress(dynamic data) async {
+    if (data is ProgressUpdate) {
+      // Update Data
+      this.progress(data.percent);
+    } else {
+      print("handleProgressed() - " + "Invalid Return type");
     }
   }
 }
