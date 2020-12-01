@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/controller/user/user_controller.dart';
 import 'controller.dart';
 import 'package:sonar_app/ui/ui.dart';
 

@@ -1,4 +1,3 @@
-export 'files/files.dart';
+export 'device/device.dart';
 export 'sonr/sonr.dart';
-export 'user/user.dart';
 export 'bindings.dart';

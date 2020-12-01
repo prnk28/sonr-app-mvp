@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:sonar_app/model/model.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 import 'sonr.dart';
@@ -77,7 +76,7 @@ class TransferController extends GetxController {
       this.file(file);
       conn.node.queue(file.path);
     } else {
-      throw SonrError("queueFile() - " + " Not Connected");
+      print("queueFile() - " + " Not Connected");
     }
   }
 
@@ -97,10 +96,10 @@ class TransferController extends GetxController {
         // Send Invite
         await conn.node.invite(p);
       } else {
-        throw SonrError("InvitePeer() - " + "File not processed.");
+        print("InvitePeer() - " + "File not processed.");
       }
     } else {
-      throw SonrError("invitePeer() - " + "Not Connected");
+      print("invitePeer() - " + "Not Connected");
     }
   }
 }

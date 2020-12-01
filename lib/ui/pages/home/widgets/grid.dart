@@ -8,7 +8,6 @@ class ImageGrid extends GetView<FileController> {
   @override
   Widget build(BuildContext context) {
     // Load Files
-    controller.getAllFiles();
     return ListView.builder(
       itemCount: controller.allFiles.length,
       itemBuilder: (context, current) {

@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:sonar_app/model/model.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/utils/olc.dart';
 import 'package:get/get.dart' hide Node;
@@ -50,7 +48,7 @@ class ConnController extends GetxController {
       // Update Lobby
       lobby.refreshLobby(data);
     } else {
-      throw SonrError("handleRefreshed() - " + "Invalid Return type");
+      print("handleRefreshed() - " + "Invalid Return type");
     }
   }
 
@@ -61,7 +59,7 @@ class ConnController extends GetxController {
       TransferController transfer = Get.find();
       transfer.updateTransfer(metadata: data);
     } else {
-      throw SonrError("handleQueued() - " + "Invalid Return type");
+      print("handleQueued() - " + "Invalid Return type");
     }
   }
 
@@ -75,7 +73,7 @@ class ConnController extends GetxController {
       // Update Data
       receive.updateReceive(message: data);
     } else {
-      throw SonrError("handleInvited() - " + "Invalid Return type");
+      print("handleInvited() - " + "Invalid Return type");
     }
   }
 
@@ -89,7 +87,7 @@ class ConnController extends GetxController {
       // Update Data
       transfer.updateTransfer(message: data);
     } else {
-      throw SonrError("handleAccepted() - " + "Invalid Return type");
+      print("handleAccepted() - " + "Invalid Return type");
     }
   }
 
@@ -103,7 +101,7 @@ class ConnController extends GetxController {
       // Update Data
       transfer.updateTransfer(message: data);
     } else {
-      throw SonrError("handleDenied() - " + "Invalid Return type");
+      print("handleDenied() - " + "Invalid Return type");
     }
   }
 
@@ -116,7 +114,7 @@ class ConnController extends GetxController {
       // Update Data
       receive.updateReceive(progress: data);
     } else {
-      throw SonrError("handleProgressed() - " + "Invalid Return type");
+      print("handleProgressed() - " + "Invalid Return type");
     }
   }
 
@@ -130,14 +128,14 @@ class ConnController extends GetxController {
       receive.setCompleted(data);
       transfer.setCompleted();
     } else {
-      throw SonrError("handleCompleted() - " + "Invalid Return type");
+      print("handleCompleted() - " + "Invalid Return type");
     }
   }
 
   // ^ An Error Has Occurred ^ //
   void _handleSonrError(dynamic data) async {
     if (data is ErrorMessage) {
-      throw SonrError(data.method + "() - " + data.message);
+      print(data.method + "() - " + data.message);
     }
   }
 }

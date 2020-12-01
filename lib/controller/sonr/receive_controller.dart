@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:sonar_app/model/model.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 import 'sonr.dart';
@@ -67,7 +66,7 @@ class ReceiveController extends GetxController {
       // Send Response
       await conn.node.respond(decision);
     } else {
-      throw SonrError("respondPeer() - " + "Not Connected");
+      print("respondPeer() - " + "Not Connected");
     }
   }
 }
