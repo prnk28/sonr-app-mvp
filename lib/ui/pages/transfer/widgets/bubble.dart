@@ -1,5 +1,8 @@
+import 'package:flutter/services.dart';
+import 'package:sonar_app/controller/animation/peer_animation.dart';
 import 'package:sonar_app/ui/ui.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:rive/rive.dart';
 
 class Bubble extends StatefulWidget {
   final double value;
@@ -11,6 +14,9 @@ class Bubble extends StatefulWidget {
 }
 
 class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
+  final riveFileName = 'assets/animations/peerbubble.riv';
+  Artboard _artboard;
+  WiperAnimation _wipersController;
   // Animation
   AnimationController _animationController;
   Animation _animation;
@@ -22,9 +28,33 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
   // Controller
   TransferController transfer = Get.find();
 
+  // loads a Rive file
+  void _loadRiveFile() async {
+    final bytes = await rootBundle.load(riveFileName);
+    final file = RiveFile();
+
+    if (file.import(bytes)) {
+      // Select an animation by its name
+      setState(() => _artboard = file.mainArtboard
+        ..addController(
+          SimpleAnimation('Idle'),
+        ));
+    }
+  }
+
+  void _wipersChange(bool wipersOn) {
+    if (_wipersController == null) {
+      _artboard.addController(
+        _wipersController = WiperAnimation('Pending'),
+      );
+    }
+    setState(() => _isInvited = true);
+  }
+
   @override
   void initState() {
     super.initState();
+    _loadRiveFile();
     // Animation for Requested
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
@@ -125,17 +155,37 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             top: calculateOffset(widget.value).dy,
             left: calculateOffset(widget.value).dx,
             child: Container(
-              child: buildBubbleContent(),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color.fromARGB(255, 27, 28, 30),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(130, 237, 125, 58),
-                        blurRadius: _animation.value,
-                        spreadRadius: _animation.value)
-                  ]),
-            ));
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(167, 179, 190, 1.0),
+                    offset: Offset(0, 30),
+                    blurRadius: 60,
+                    spreadRadius: 60,
+                  ),
+                  BoxShadow(
+                    color: Color.fromRGBO(248, 252, 255, .5),
+                    offset: Offset(0, -30),
+                    blurRadius: 60,
+                    spreadRadius: 60,
+                  ),
+                ]),
+                child: Rive(
+                  artboard: _artboard,
+                  fit: BoxFit.contain,
+                )
+                //buildBubbleContent(),
+                // decoration: BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     color: Color.fromARGB(255, 27, 28, 30),
+                //     boxShadow: [
+                //       BoxShadow(
+                //           color: Color.fromARGB(130, 237, 125, 58),
+                //           blurRadius: _animation.value,
+                //           spreadRadius: _animation.value)
+                //     ]),
+                ));
       }
     }
     // ^ [Im Available] Active Peer you can invite me ^
@@ -145,11 +195,18 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
         child: GestureDetector(
             onTap: () async {
               // Send Offer to Bubble
-              _isInvited = true;
-              setState(() {});
+              _wipersChange(true);
+              //_isInvited = true;
+              //setState(() {});
               transfer.invitePeer(widget.peer);
             },
-            child: buildBubbleContent()));
+            child: Container(
+                width: 80,
+                height: 80,
+                child: Rive(
+                  artboard: _artboard,
+                  fit: BoxFit.contain,
+                ))));
   }
 
   // ^ Builds the Bubbles Content ^ //

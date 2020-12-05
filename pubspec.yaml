@@ -52,6 +52,7 @@ dependencies:
   flutter_neumorphic: ^3.0.2
   path_drawing: ^0.4.1+1
   photo_view: ^0.10.2
+  rive: ^0.6.2
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
@@ -59,7 +60,7 @@ dev_dependencies:
 
 flutter_test:
   sdk: flutter
-  
+
 # ** ================== **
 # **   FLUTTER BUILD    **
 # ** ================== **
@@ -77,7 +78,7 @@ flutter:
 
 
   # -- Fonts --
-  fonts:   
+  fonts:
     - family: Raleway
       fonts:
         - asset: assets/fonts/raleway/Raleway-Thin.ttf

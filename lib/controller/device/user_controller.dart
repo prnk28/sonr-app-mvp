@@ -7,7 +7,7 @@ import 'package:sonr_core/sonr_core.dart';
 import '../controller.dart';
 
 class UserController extends GetxController {
-  UserStatus status = UserStatus.Initial;
+  UserStatus status;
   SharedPreferences _prefs;
 
   // ^ Open SharedPreferences on Init ^ //
@@ -39,10 +39,10 @@ class UserController extends GetxController {
           sonrConn.connect(position, user.contact);
           status = UserStatus.Active;
           update(["Listener"]);
-        } else {
-          status = UserStatus.Inactive;
-          update(["Listener"]);
         }
+      } else {
+        status = UserStatus.Inactive;
+        update(["Listener"]);
       }
     } else {
       throw RequiredPermissionsError("Location Permission Denied");

@@ -8,7 +8,7 @@ NeumorphicTheme AppTheme(Widget child) {
   return NeumorphicTheme(
       themeMode: ThemeMode.light, //or dark / system
       darkTheme: NeumorphicThemeData(
-        baseColor: Color(0xff333333),
+        baseColor: Color.fromRGBO(239, 238, 238, 1.0),
         accentColor: Colors.green,
         lightSource: LightSource.topLeft,
         depth: 4,
