@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:sonar_app/controller/animation/peer_animation.dart';
 import 'package:sonar_app/ui/ui.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:rive/rive.dart';
@@ -14,12 +13,9 @@ class Bubble extends StatefulWidget {
 }
 
 class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
-  final riveFileName = 'assets/animations/peerbubble.riv';
   Artboard _artboard;
-  WiperAnimation _wipersController;
+  RiveAnimationController _controller;
   // Animation
-  AnimationController _animationController;
-  Animation _animation;
   bool _isInvited = false;
   bool _hasDeclined = false;
   bool _hasAccepted = false;
@@ -28,41 +24,44 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
   // Controller
   TransferController transfer = Get.find();
 
-  // loads a Rive file
-  void _loadRiveFile() async {
-    final bytes = await rootBundle.load(riveFileName);
-    final file = RiveFile();
-
-    if (file.import(bytes)) {
-      // Select an animation by its name
-      setState(() => _artboard = file.mainArtboard
-        ..addController(
-          SimpleAnimation('Idle'),
-        ));
-    }
-  }
-
-  void _wipersChange(bool wipersOn) {
-    if (_wipersController == null) {
+  void _setInvited() {
+    if (_controller == null) {
       _artboard.addController(
-        _wipersController = WiperAnimation('Pending'),
+        SimpleAnimation('Pending'),
       );
     }
     setState(() => _isInvited = true);
   }
 
+  // loads a Rive file
+  void _loadRiveFile() async {
+    final bytes = await rootBundle.load('assets/animations/peerbubble.riv');
+    final file = RiveFile();
+
+    if (file.import(bytes)) {
+      // Delay allow screen to load
+      Future.delayed(Duration(milliseconds: 200));
+
+      if (widget.peer.device.platform == "Android") {
+        // Select an animation by its name
+        setState(() => _artboard = file.mainArtboard
+          ..addController(
+            SimpleAnimation('Android'),
+          ));
+      } else if (widget.peer.device.platform == "iOS") {
+        // Select an animation by its name
+        setState(() => _artboard = file.mainArtboard
+          ..addController(
+            SimpleAnimation('iPhone'),
+          ));
+      }
+    }
+  }
+
   @override
   void initState() {
-    super.initState();
     _loadRiveFile();
-    // Animation for Requested
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
-    _animationController.repeat(reverse: true);
-    _animation = Tween(begin: 1.0, end: 16.0).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
+    super.initState();
 
     // Controller Listener
     transfer.addListenerId("Bubble", () {
@@ -74,12 +73,6 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
       _hasCompleted = (_isInvited) && (transfer.completed);
       setState(() {});
     });
-  }
-
-  @override
-  dispose() {
-    _animationController.dispose(); // you need this
-    super.dispose();
   }
 
   @override
@@ -155,37 +148,32 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             top: calculateOffset(widget.value).dy,
             left: calculateOffset(widget.value).dx,
             child: Container(
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
                   BoxShadow(
                     color: Color.fromRGBO(167, 179, 190, 1.0),
-                    offset: Offset(0, 30),
-                    blurRadius: 60,
-                    spreadRadius: 60,
+                    offset: Offset(8, 8),
+                    blurRadius: 10,
+                    spreadRadius: 0.5,
                   ),
                   BoxShadow(
                     color: Color.fromRGBO(248, 252, 255, .5),
-                    offset: Offset(0, -30),
-                    blurRadius: 60,
-                    spreadRadius: 60,
+                    offset: Offset(-8, -8),
+                    blurRadius: 10,
+                    spreadRadius: 0.5,
                   ),
                 ]),
-                child: Rive(
-                  artboard: _artboard,
-                  fit: BoxFit.contain,
-                )
-                //buildBubbleContent(),
-                // decoration: BoxDecoration(
-                //     shape: BoxShape.circle,
-                //     color: Color.fromARGB(255, 27, 28, 30),
-                //     boxShadow: [
-                //       BoxShadow(
-                //           color: Color.fromARGB(130, 237, 125, 58),
-                //           blurRadius: _animation.value,
-                //           spreadRadius: _animation.value)
-                //     ]),
-                ));
+                child: Stack(alignment: Alignment.center, children: [
+                  Rive(
+                    artboard: _artboard,
+                    fit: BoxFit.contain,
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    iconFromPeer(widget.peer, size: 20),
+                    initialsFromPeer(widget.peer),
+                  ]),
+                ])));
       }
     }
     // ^ [Im Available] Active Peer you can invite me ^
@@ -195,18 +183,36 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
         child: GestureDetector(
             onTap: () async {
               // Send Offer to Bubble
-              _wipersChange(true);
-              //_isInvited = true;
-              //setState(() {});
+              _setInvited();
               transfer.invitePeer(widget.peer);
             },
             child: Container(
-                width: 80,
-                height: 80,
-                child: Rive(
-                  artboard: _artboard,
-                  fit: BoxFit.contain,
-                ))));
+                width: 90,
+                height: 90,
+                decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(167, 179, 190, 1.0),
+                    offset: Offset(8, 8),
+                    blurRadius: 10,
+                    spreadRadius: 0.5,
+                  ),
+                  BoxShadow(
+                    color: Color.fromRGBO(248, 252, 255, .5),
+                    offset: Offset(-8, -8),
+                    blurRadius: 10,
+                    spreadRadius: 0.5,
+                  ),
+                ]),
+                child: Stack(alignment: Alignment.center, children: [
+                  Rive(
+                    artboard: _artboard,
+                    fit: BoxFit.contain,
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    iconFromPeer(widget.peer, size: 20),
+                    initialsFromPeer(widget.peer),
+                  ]),
+                ]))));
   }
 
   // ^ Builds the Bubbles Content ^ //
@@ -220,8 +226,8 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
             lightSource: LightSource.topLeft,
             color: Colors.grey[300]),
         child: Container(
-          width: 80,
-          height: 80,
+          width: 90,
+          height: 90,
           child: Column(
             children: [
               Spacer(),
