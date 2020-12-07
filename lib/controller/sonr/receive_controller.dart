@@ -19,20 +19,7 @@ class ReceiveController extends GetxController {
   void assign() {
     sonrNode.assignCallback(CallbackEvent.Invited, _handleInvite);
     sonrNode.assignCallback(CallbackEvent.Progressed, _handleProgress);
-  }
-
-  // ** Mark as Received File ** //
-  void setCompleted(Metadata metadata) {
-    // Set Data
-    this.metadata(metadata);
-    this.file(File(metadata.path));
-    this.status = AuthMessage_Event.NONE;
-    this.completed = true;
-
-    // Reset Peer/Auth
-    this.peer = null;
-    this.auth = null;
-    update(["Listener"]);
+    sonrNode.assignCallback(CallbackEvent.Received, _handleReceived);
   }
 
   // ^ Respond-Peer Event ^
@@ -73,9 +60,27 @@ class ReceiveController extends GetxController {
 
   // ^ Transfer Has Updated Progress ^ //
   void _handleProgress(dynamic data) async {
-    if (data is ProgressUpdate) {
+    if (data is double) {
       // Update Data
-      this.progress(data.percent);
+      this.progress(data);
+    } else {
+      print("handleProgressed() - " + "Invalid Return type");
+    }
+  }
+
+  // ** Mark as Received File ** //
+  void _handleReceived(dynamic data) {
+    if (data is Metadata) {
+      // Set Data
+      this.metadata(data);
+      this.file(File(data.path));
+      this.status = AuthMessage_Event.NONE;
+      this.completed = true;
+
+      // Reset Peer/Auth
+      this.peer = null;
+      this.auth = null;
+      update(["Listener"]);
     } else {
       print("handleProgressed() - " + "Invalid Return type");
     }

@@ -22,17 +22,7 @@ class TransferController extends GetxController {
     sonrNode.assignCallback(CallbackEvent.Queued, _handleQueued);
     sonrNode.assignCallback(CallbackEvent.Accepted, _handleAccepted);
     sonrNode.assignCallback(CallbackEvent.Denied, _handleDenied);
-  }
-
-  // ^ Resets Peer Info Event ^
-  void setCompleted() async {
-    this.status = AuthMessage_Event.NONE;
-    this.completed = true;
-
-    // Reset Peer/Auth
-    this.peer = null;
-    this.auth = null;
-    update(["Bubble"]);
+    sonrNode.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
   }
 
   // ^ Queue-File Event ^
@@ -81,9 +71,6 @@ class TransferController extends GetxController {
       // Report Accepted
       this.status = data.event;
       update(["Bubble"]);
-
-      // Start Transfer
-      sonrNode.transfer();
     } else {
       print("handleAccepted() - " + "Invalid Return type");
     }
@@ -104,5 +91,16 @@ class TransferController extends GetxController {
     } else {
       print("handleDenied() - " + "Invalid Return type");
     }
+  }
+
+  // ^ Resets Peer Info Event ^
+  void _handleTransmitted(dynamic data) async {
+    this.status = AuthMessage_Event.NONE;
+    this.completed = true;
+
+    // Reset Peer/Auth
+    this.peer = null;
+    this.auth = null;
+    update(["Bubble"]);
   }
 }

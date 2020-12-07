@@ -53,7 +53,6 @@ _buildInfo(Metadata metadata) {
     // Owner Info
     Column(children: [
       Text(metadata.owner.firstName),
-      Text(metadata.owner.lastName),
     ]),
 
     // Spacing

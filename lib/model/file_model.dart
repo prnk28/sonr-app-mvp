@@ -9,11 +9,9 @@ class OpenFilesError extends Error {
 // File Table Fields
 final String metaTable = "metadata";
 final String columnId = '_id';
-final String columnUuid = 'uuid';
 final String columnName = 'name';
 final String columnPath = 'path';
 final String columnSize = 'size';
-final String columnChunks = 'chunks';
 final String columnMime = 'mime';
 final String columnOwner = 'owner';
 final String columnlastOpened = 'lastOpened';
@@ -22,11 +20,9 @@ final String columnlastOpened = 'lastOpened';
 Map metaToSQL(Metadata meta) {
   // Create Map
   var map = <String, dynamic>{
-    columnUuid: meta.uuid,
     columnName: meta.name,
     columnPath: meta.path,
     columnSize: meta.size,
-    columnChunks: meta.chunks,
     columnMime: meta.mime.writeToJson(),
     columnOwner: meta.owner.writeToJson(),
     columnlastOpened: meta.lastOpened,
@@ -43,11 +39,9 @@ Map metaToSQL(Metadata meta) {
 Metadata metaFromSQL(Map map) {
   Metadata meta = new Metadata();
   meta.id = map[columnId];
-  meta.uuid = map[columnUuid];
   meta.name = map[columnName];
   meta.path = map[columnPath];
   meta.size = map[columnSize];
-  meta.chunks = map[columnChunks];
   meta.mime = MIME.fromJson(map[columnMime]);
   meta.owner = Peer.fromJson(map[columnOwner]);
   meta.lastOpened = map[columnlastOpened];

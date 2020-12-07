@@ -29,7 +29,8 @@ class ConnController extends GetxController {
     var olcCode = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization
-    sonrNode = await SonrCore.initialize(olcCode, con, logging: false);
+    sonrNode = await SonrCore.initialize(olcCode, "@Temp_Username", con,
+        logging: false);
     connected = true;
 
     // Get Controllers
@@ -41,22 +42,7 @@ class ConnController extends GetxController {
     lobby.assign();
     receive.assign();
     transfer.assign();
-    sonrNode.assignCallback(CallbackEvent.Completed, _handleCompleted);
     sonrNode.assignCallback(CallbackEvent.Error, _handleSonrError);
-  }
-
-  // ^ Transfer Has Succesfully Completed ^ //
-  void _handleCompleted(dynamic data) async {
-    if (data is Metadata) {
-      // Get Controllers
-      ReceiveController receive = Get.find();
-      TransferController transfer = Get.find();
-
-      receive.setCompleted(data);
-      transfer.setCompleted();
-    } else {
-      print("handleCompleted() - " + "Invalid Return type");
-    }
   }
 
   // ^ An Error Has Occurred ^ //

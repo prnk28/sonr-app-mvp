@@ -32,11 +32,8 @@ class ImageGrid extends GetView<FileController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                     Text(metadata.name),
-                    Text(metadata.mime.type),
-                    Text("Owner: " +
-                        metadata.owner.firstName +
-                        " " +
-                        metadata.owner.lastName),
+                    Text(metadata.mime.type.toString()),
+                    Text("Owner: " + metadata.owner.firstName),
                   ]),
             ));
       },

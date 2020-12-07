@@ -5,7 +5,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Listen to Result
-    UserController user = Get.find();
+    final UserController user = Get.find();
     user.addListenerId("Listener", () {
       if (user.status == UserStatus.Active) {
         Get.offNamed("/home");
