@@ -95,6 +95,7 @@ class _LiquidFillState extends State<LiquidFill> with TickerProviderStateMixin {
         );
       }
       _waveController.stop();
+      Get.back();
       return Container();
     });
   }

@@ -32,9 +32,9 @@ class HomeScreen extends StatelessWidget {
     return AppTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         appBar: titleAppBar("Home"),
-        floatingActionButton: FloaterButton((button) {
+        floatingActionButton: FloaterButton((DataType button) {
           // File Option
-          if (button == "File") {
+          if (button == DataType.File) {
             // Push to Transfer Screen
             Get.offNamed("/transfer");
           }

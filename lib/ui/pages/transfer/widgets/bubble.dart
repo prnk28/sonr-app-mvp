@@ -17,15 +17,13 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
   PeerController _controller;
   // Animation
   bool _isInvited = false;
-  bool _hasDeclined = false;
-  bool _hasAccepted = false;
   bool _hasCompleted = false;
 
   // Controller
   TransferController transfer = Get.find();
 
   void _setInvited() {
-    _controller.peerState = PeerState.Pending;
+    _controller.update(PeerState.Pending);
     setState(() => _isInvited = true);
   }
 
@@ -37,16 +35,16 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
 
     // Start Controller
     if (file.import(bytes)) {
-      setState(() => _artboard = file.mainArtboard
-        ..addController(_controller = PeerController()));
+      setState(() {
+        _artboard = file.mainArtboard
+          ..addController(
+              _controller = PeerController(widget.peer.device.platform));
+      });
     }
   }
 
   @override
   void initState() {
-    // Set Controller Device
-    _controller.device = widget.peer.device.platform;
-
     // Load File
     _loadRiveFile();
     super.initState();
@@ -54,18 +52,15 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
     // Controller Listener
     transfer.addListenerId("Bubble", () {
       // Set Bools - isInvited set on Tap
-      _hasAccepted =
-          (_isInvited) && (transfer.status == AuthMessage_Event.ACCEPT);
-      _hasDeclined =
-          (_isInvited) && (transfer.status == AuthMessage_Event.DECLINE);
       _hasCompleted = (_isInvited) && (transfer.completed);
       setState(() {
-        if (_hasAccepted) {
-          _controller.peerState = PeerState.Accepted;
-        } else if (_hasDeclined) {
-          _controller.peerState = PeerState.Denied;
-        } else if (_hasCompleted) {
-          _controller.peerState = PeerState.Done;
+        if ((_isInvited) && (transfer.status == AuthMessage_Event.ACCEPT)) {
+          _controller.update(PeerState.Accepted);
+        } else if ((_isInvited) &&
+            (transfer.status == AuthMessage_Event.DECLINE)) {
+          _controller.update(PeerState.Denied);
+        } else if ((_isInvited) && (transfer.completed)) {
+          _controller.update(PeerState.Done);
         }
       });
     });
@@ -73,31 +68,8 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // @ Check if Declined
-    if (_hasDeclined) {
-      return Positioned(
-          top: calculateOffset(widget.value).dy,
-          left: calculateOffset(widget.value).dx,
-          child: Container(
-              child: Neumorphic(
-            style: NeumorphicStyle(
-                shape: NeumorphicShape.flat,
-                boxShape: NeumorphicBoxShape.circle(),
-                depth: 10,
-                lightSource: LightSource.topLeft,
-                color: Colors.grey[300]),
-            child: Container(
-              width: 80,
-              height: 80,
-              child: FlareActor("assets/animations/denied.flr",
-                  alignment: Alignment.center,
-                  fit: BoxFit.contain,
-                  animation: "animate"),
-            ),
-          )));
-    }
     // @ Check if Completed
-    else if (_hasCompleted) {
+    if (_hasCompleted) {
       return Positioned(
           top: calculateOffset(widget.value).dy,
           left: calculateOffset(widget.value).dx,
@@ -161,28 +133,5 @@ class _BubbleState extends State<Bubble> with TickerProviderStateMixin {
                     ]),
                   ]))));
     }
-  }
-
-  // ^ Builds the Bubbles Content ^ //
-  Neumorphic buildBubbleContent() {
-    // Generate Bubble
-    return Neumorphic(
-        style: NeumorphicStyle(
-            shape: NeumorphicShape.flat,
-            boxShape: NeumorphicBoxShape.circle(),
-            depth: 10,
-            lightSource: LightSource.topLeft,
-            color: Colors.grey[300]),
-        child: Container(
-          width: 90,
-          height: 90,
-          child: Column(
-            children: [
-              Spacer(),
-              initialsFromPeer(widget.peer),
-              iconFromPeer(widget.peer),
-            ],
-          ),
-        ));
   }
 }
