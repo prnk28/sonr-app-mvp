@@ -43,8 +43,8 @@ class BubbleAnimController extends GetxController {
 
   // Internal Checkers
   var _isActive = false;
-  ValueNotifier<bool> _hasInvited;
-  ValueNotifier<bool> _hasResponded;
+  ValueNotifier<bool> _hasInvited = new ValueNotifier<bool>(false);
+  ValueNotifier<bool> _hasResponded = new ValueNotifier<bool>(false);
 
   // Observable Checkers
   var isInvited = false.obs;
@@ -52,20 +52,17 @@ class BubbleAnimController extends GetxController {
   var hasDenied = false.obs;
   var hasCompleted = false.obs;
 
-  // ^ Loads Rive File and Initializes Animations ^ //
+  // ^ Widget Start ^ //
   onInit() {
     // Import File
     _import().then((value) => artboard = value);
-
-    // Set Listenable Defaults
-    _hasInvited.value = false;
-    _hasResponded.value = false;
 
     // Start Widget
     super.onInit();
     start();
   }
 
+  // ^ Loads Rive File and Initializes Animations ^ //
   Future<Artboard> _import() async {
     // Load File
     final bytes = await rootBundle.load('assets/animations/peerbubble.riv');
@@ -90,6 +87,7 @@ class BubbleAnimController extends GetxController {
 
   // ^ Sets initial Animation ^ //
   start() {
+    // ** Validate Active ** //
     if (_isActive) {
       // @ Check Device - iOS
       if (_peer.device.platform == "iOS") {
@@ -108,9 +106,10 @@ class BubbleAnimController extends GetxController {
 
   // ^ Sets Idle Animation after initial ^ //
   _setIdle() {
+    // ** Validate Active ** //
     if (_isActive) {
       artboard.addController(_idle);
-      _idle.startUntil(artboard, _hasInvited);
+      _idle.startUntil(_hasInvited);
     } else {
       _import().then((value) => _setIdle());
     }
@@ -118,6 +117,7 @@ class BubbleAnimController extends GetxController {
 
   // ^ Sets Pending Animation after Invite ^ //
   invite() {
+    // ** Validate Active ** //
     if (_isActive) {
       // Set Checkers
       _hasInvited.value = true;
@@ -125,7 +125,7 @@ class BubbleAnimController extends GetxController {
 
       // Start Pending
       artboard.addController(_pending);
-      _pending.startUntil(artboard, _hasResponded);
+      _pending.startUntil(_hasResponded);
     } else {
       _import().then((value) => _setIdle());
     }
@@ -133,8 +133,10 @@ class BubbleAnimController extends GetxController {
 
   // ^ Sets Accepted Animation after Invite ^ //
   _setAccepted() {
+    // ** Validate Active ** //
     if (_isActive) {
       // Start Accepted
+      artboard.removeController(_pending);
       artboard.addController(_accepted);
       _accepted.startThen(setSending);
     } else {
@@ -144,6 +146,7 @@ class BubbleAnimController extends GetxController {
 
   // ^ Sets Denied Animation after Invite ^ //
   _setDenied() {
+    // ** Validate Active ** //
     if (_isActive) {
       // Start Denied
       artboard.addController(_denied);
