@@ -72,7 +72,7 @@ class _FloaterButtonState extends State<FloaterButton>
         ),
         // Floating action menu item
         Bubble(
-          title: "File (Fat Test)",
+          title: "Fat Photo",
           iconColor: Colors.white,
           bubbleColor: Colors.blue,
           icon: Icons.storage,
