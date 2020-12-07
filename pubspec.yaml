@@ -23,7 +23,6 @@ dependencies:
   get:
   intl: ^0.15.8
   logger: ^0.9.4
-  states_rebuilder: ^3.2.0
 
   # -- Device --
   flutter_compass: ^0.5.0
@@ -33,7 +32,6 @@ dependencies:
   vibration: ^1.2.4
 
   # -- Data --
-  image_picker: ^0.6.7+14
   path: ^1.7.0
   path_provider: ^1.6.7
   shared_preferences: ^0.5.12+4

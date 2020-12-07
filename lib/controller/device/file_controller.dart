@@ -49,7 +49,7 @@ create table $metaTable (
   }
 
   // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> insertMeta(Metadata metadata) async {
+  Future<Metadata> saveMeta(Metadata metadata) async {
     metadata.id = await db.insert(metaTable, metaToSQL(metadata));
     await _refreshAllFiles();
     return metadata;

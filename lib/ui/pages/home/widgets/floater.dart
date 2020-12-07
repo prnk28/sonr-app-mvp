@@ -1,7 +1,13 @@
 part of '../home.dart';
 
+enum DataType {
+  File,
+  Link,
+  Contact,
+}
+
 class FloaterButton extends StatefulWidget {
-  final Function(String) onAnimationComplete;
+  final Function(DataType) onAnimationComplete;
 
   const FloaterButton(this.onAnimationComplete, {Key key}) : super(key: key);
 
@@ -39,7 +45,6 @@ class _FloaterButtonState extends State<FloaterButton>
   @override
   Widget build(BuildContext context) {
     final TransferController transferController = Get.put(TransferController());
-    final picker = ImagePicker();
     return FloatingActionBubble(
       // Menu items
       items: <Bubble>[
@@ -50,19 +55,18 @@ class _FloaterButtonState extends State<FloaterButton>
           icon: Icons.photo,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
-            // Get Photo
-            final pickedFile =
-                await picker.getImage(source: ImageSource.camera);
+            // Get Test File Path
+            File file = await getAssetFileByPath("assets/images/test.jpg");
 
             // Queue File
-            transferController.queueFile(File(pickedFile.path));
+            transferController.queueFile(file);
 
             // Wait for Animation to Complete
             _animationController.reverse();
 
             // Send Callback
             if (widget.onAnimationComplete != null) {
-              widget.onAnimationComplete("File");
+              widget.onAnimationComplete(DataType.File);
             }
           },
         ),
@@ -86,7 +90,7 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Send Callback
             if (widget.onAnimationComplete != null) {
-              widget.onAnimationComplete("File");
+              widget.onAnimationComplete(DataType.File);
             }
           },
         ),
@@ -103,7 +107,7 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Send Callback
             if (widget.onAnimationComplete != null) {
-              widget.onAnimationComplete("Contact");
+              widget.onAnimationComplete(DataType.Contact);
             }
           },
         ),

@@ -4,9 +4,11 @@ import 'package:sonar_app/controller/controller.dart';
 
 class CompletedPopup extends StatelessWidget {
   final ReceiveController receiveController = Get.find();
+  final FileController fileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    fileController.saveMeta(receiveController.metadata());
     return Dialog(
         shape: windowBorder(),
         insetAnimationDuration: Duration(seconds: 1),
