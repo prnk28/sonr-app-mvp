@@ -70,10 +70,10 @@ Row _buildItem(BuildContext context, AuthMessage state) {
   // Preview Widget
   Widget preview;
   switch (state.metadata.mime.type) {
-    case "audio":
+    case MIME_Type.audio:
       preview = Icon(Icons.audiotrack, size: 100);
       break;
-    case "image":
+    case MIME_Type.image:
       if (metadata.thumbnail != null) {
         preview = ClipRRect(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
@@ -88,10 +88,10 @@ Row _buildItem(BuildContext context, AuthMessage state) {
         preview = Icon(Icons.image, size: 100);
       }
       break;
-    case "video":
+    case MIME_Type.video:
       preview = Icon(Icons.video_collection, size: 100);
       break;
-    case "text":
+    case MIME_Type.text:
       preview = Icon(Icons.sort_by_alpha, size: 100);
       break;
     default:

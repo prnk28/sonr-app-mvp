@@ -27,13 +27,11 @@ class FileController extends GetxController {
     db = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute('''
-create table $metaTable ( 
-  $columnId integer primary key autoincrement, 
-  $columnUuid text not null,
+create table $metaTable (
+  $columnId integer primary key autoincrement,
   $columnName text not null,
   $columnPath text not null,
   $columnSize integer not null,
-  $columnChunks integer not null,
   $columnMime text not null,
   $columnOwner text not null,
   $columnlastOpened integer not null)
@@ -85,11 +83,9 @@ create table $metaTable (
       metaTable,
       columns: [
         columnId,
-        columnUuid,
         columnName,
         columnPath,
         columnSize,
-        columnChunks,
         columnMime,
         columnOwner,
         columnlastOpened

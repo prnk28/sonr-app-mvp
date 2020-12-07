@@ -15,6 +15,6 @@ NeumorphicIcon iconFromPeer(Peer peer,
 
 Text initialsFromPeer(Peer peer, {Color color: Colors.white}) {
   // Get Initials
-  return Text(peer.firstName[0].toUpperCase() + peer.lastName[0].toUpperCase(),
+  return Text(peer.firstName[0].toUpperCase(),
       style: mediumTextStyle(setColor: color));
 }

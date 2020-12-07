@@ -77,18 +77,18 @@ AlertDialog detailFailureDialog({Function() onCancel, Function() onDelete}) {
   );
 }
 
-IconData iconDataFromKind(String kind) {
+IconData iconDataFromKind(MIME_Type kind) {
   switch (kind) {
-    case "audio":
+    case MIME_Type.audio:
       return Icons.audiotrack;
       break;
-    case "image":
+    case MIME_Type.image:
       return Icons.image;
       break;
-    case "video":
+    case MIME_Type.video:
       return Icons.video_collection;
       break;
-    case "text":
+    case MIME_Type.text:
       return Icons.sort_by_alpha;
       break;
     default:
