@@ -38,7 +38,7 @@ class TransferController extends GetxController {
     if (_isProcessed) {
       // Update Data
       this.peer = p;
-      update(["Bubble"]);
+      update(["Listener"]);
 
       // Send Invite
       await sonrNode.invite(p);
@@ -70,7 +70,7 @@ class TransferController extends GetxController {
 
       // Report Accepted
       this.status = data.event;
-      update(["Bubble"]);
+      update(["Listener"]);
     } else {
       print("handleAccepted() - " + "Invalid Return type");
     }
@@ -82,12 +82,7 @@ class TransferController extends GetxController {
     if (data is AuthMessage) {
       // Report Declined
       this.status = data.event;
-      update(["Bubble"]);
-
-      // Nullify Current Peer after 1.5s
-      Future.delayed(
-          Duration(seconds: 1, milliseconds: 500), () => this.peer = null);
-      update(["Bubble"]);
+      update(["Listener"]);
     } else {
       print("handleDenied() - " + "Invalid Return type");
     }
@@ -101,6 +96,6 @@ class TransferController extends GetxController {
     // Reset Peer/Auth
     this.peer = null;
     this.auth = null;
-    update(["Bubble"]);
+    update(["Listener"]);
   }
 }
