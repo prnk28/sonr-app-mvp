@@ -29,15 +29,14 @@ class FileController extends GetxController {
       await db.execute('''
 create table $metaTable (
   $columnId integer primary key autoincrement,
-  $columnName text not null,
-  $columnPath text not null,
-  $columnSize integer not null,
-  $columnMime text not null,
-  $columnOwner text not null,
-  $columnlastOpened integer not null)
+  $columnName text,
+  $columnPath text  not null,
+  $columnSize integer,
+  $columnMime text,
+  $columnOwner text,
+  $columnlastOpened integer)
 ''');
     });
-    print(databasesPath);
     await _refreshAllFiles();
   }
 
