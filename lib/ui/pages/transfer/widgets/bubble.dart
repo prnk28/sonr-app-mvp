@@ -1,6 +1,8 @@
 import 'package:sonar_app/ui/ui.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:rive/rive.dart';
+import 'package:simple_animations/simple_animations.dart';
+import 'package:supercharged/supercharged.dart';
 
 class Bubble extends StatelessWidget {
   // Bubble Values
@@ -11,28 +13,6 @@ class Bubble extends StatelessWidget {
 
   // Animation Handling
   final TransferController transferController = Get.find();
-
-  // Flare actor or Rive Artboard
-  Widget getChild(BubbleAnimController bubbleController) {
-    if (bubbleController.hasCompleted()) {
-      return FlareActor("assets/animations/complete.flr",
-          alignment: Alignment.center,
-          fit: BoxFit.contain,
-          animation: "animate");
-    } else {
-      return Stack(alignment: Alignment.center, children: [
-        Rive(
-          artboard: bubbleController.artboard,
-          alignment: Alignment.center,
-          fit: BoxFit.contain,
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          iconFromPeer(peer, size: 20),
-          initialsFromPeer(peer),
-        ]),
-      ]);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,18 +36,58 @@ class Bubble extends StatelessWidget {
                   decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
                     BoxShadow(
                       color: Color.fromRGBO(167, 179, 190, 1.0),
-                      offset: Offset(8, 8),
-                      blurRadius: 10,
+                      offset: Offset(0, 2),
+                      blurRadius: 6,
                       spreadRadius: 0.5,
                     ),
                     BoxShadow(
                       color: Color.fromRGBO(248, 252, 255, .5),
-                      offset: Offset(-8, -8),
-                      blurRadius: 10,
+                      offset: Offset(-2, 0),
+                      blurRadius: 6,
                       spreadRadius: 0.5,
                     ),
                   ]),
-                  child: getChild(bubbleController))));
+                  child: Stack(alignment: Alignment.center, children: [
+                    Rive(
+                      artboard: bubbleController.artboard,
+                      alignment: Alignment.center,
+                      fit: BoxFit.contain,
+                    ),
+                    GetBuilder<BubbleAnimController>(builder: (_) {
+                      if (bubbleController.hasCompleted()) {
+                        return PlayAnimation<double>(
+                            tween: (1.0).tweenTo(0.0),
+                            duration: 20.milliseconds,
+                            builder: (context, child, value) {
+                              return AnimatedOpacity(
+                                  opacity: value,
+                                  duration: 20.milliseconds,
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        iconFromPeer(peer, size: 20),
+                                        initialsFromPeer(peer),
+                                      ]));
+                            });
+                      }
+                      return PlayAnimation<double>(
+                          tween: (0.0).tweenTo(1.0),
+                          duration: 500.milliseconds,
+                          delay: 1.seconds,
+                          builder: (context, child, value) {
+                            return AnimatedOpacity(
+                                opacity: value,
+                                duration: 500.milliseconds,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      iconFromPeer(peer, size: 20),
+                                      initialsFromPeer(peer),
+                                    ]));
+                          });
+                    }),
+                  ]))));
     });
   }
 }

@@ -37,7 +37,6 @@ create table $metaTable (
   $columnlastOpened integer not null)
 ''');
     });
-    print(databasesPath);
     await _refreshAllFiles();
   }
 

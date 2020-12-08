@@ -25,6 +25,7 @@ class BubbleAnimController extends GetxController {
       if (isInvited() && (transConn.completed)) {
         hasCompleted(true);
         update();
+        _setComplete();
       }
     });
   }
@@ -40,6 +41,7 @@ class BubbleAnimController extends GetxController {
   OneShotAnimation _denied;
   OneShotAnimation _accepted;
   OneShotAnimation _sending;
+  OneShotAnimation _complete;
 
   // Internal Checkers
   var _isActive = false;
@@ -79,6 +81,7 @@ class BubbleAnimController extends GetxController {
       _accepted = OneShotAnimation('Accepted');
       _denied = OneShotAnimation('Denied');
       _sending = OneShotAnimation('Sending');
+      _complete = OneShotAnimation('Complete');
       artboard = file.mainArtboard;
       return file.mainArtboard;
     }
@@ -136,7 +139,7 @@ class BubbleAnimController extends GetxController {
     // ** Validate Active ** //
     if (_isActive) {
       // Start Accepted
-      artboard.removeController(_pending);
+      _pending.stop();
       artboard.addController(_accepted);
       _accepted.startThen(setSending);
     } else {
@@ -149,6 +152,7 @@ class BubbleAnimController extends GetxController {
     // ** Validate Active ** //
     if (_isActive) {
       // Start Denied
+      _pending.stop();
       artboard.addController(_denied);
       _denied.startThen(_setIdle);
     } else {
@@ -160,5 +164,10 @@ class BubbleAnimController extends GetxController {
   setSending() {
     artboard.addController(_sending);
     _sending.start();
+  }
+
+  _setComplete() {
+    artboard.addController(_complete);
+    _complete.startThen(() => _setIdle());
   }
 }
