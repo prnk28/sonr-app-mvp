@@ -52,7 +52,6 @@ dependencies:
   path_drawing: ^0.4.1+1
   photo_view: ^0.10.2
   rive: ^0.6.2
-  simple_animations: ^2.4.0
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:

@@ -1,190 +1,116 @@
 import 'package:flutter/foundation.dart';
 import 'package:rive/rive.dart';
 
-// ^ Combined Animation Class ^ //
-class AnimationModel extends SimpleAnimation {
-  final Loop loopType;
-  AnimationModel(String animationName, this.loopType) : super(animationName) {
-    isActive = false;
-  }
+// ^ Single Shot Animation ^ //
+class OneShotAnimation extends SimpleAnimation {
+  OneShotAnimation(String animationName) : super(animationName);
+  Function() _next;
+  ValueNotifier<bool> _enterValue;
 
   start() {
-    switch (this.loopType) {
-      case Loop.oneShot:
-        _oneShot();
-        break;
-      case Loop.loop:
-        _loop();
-        break;
-      case Loop.pingPong:
-        _pingPong();
-        break;
-    }
-  }
-
-  _oneShot() {
     instance.animation.loop = Loop.oneShot;
   }
 
-  _loop() {
-    instance.animation.loop = Loop.loop;
-    isActive = true;
+  startWait(ValueNotifier<bool> enterValue) {
+    // Wait Until Exit Value True
+    _enterValue = enterValue;
+    _enterValue.addListener(_enterListener);
   }
 
-  _pingPong() {
+  startThen(Function() next) {
+    _next = next;
+    instance.animation.loop = Loop.oneShot;
+    this.isActiveChanged.addListener(_listener);
+  }
+
+  bool advance(double amount) {
+    instance.animation.loop = Loop.oneShot;
+    return instance.advance(amount);
+  }
+
+  _enterListener() {
+    if (_enterValue != null && _enterValue.value == true) {
+      // Play Animation
+      instance.animation.loop = Loop.oneShot;
+      this.isActiveChanged.addListener(_listener);
+    }
+  }
+
+  _listener() {
+    if (_next != null && !this.isActive) {
+      _next();
+      this.dispose();
+    }
+  }
+}
+
+// ^ Ping Pong Animation ^ //
+class PingPongAnimation extends SimpleAnimation {
+  PingPongAnimation(String animationName) : super(animationName);
+  ValueNotifier<bool> _exitValue;
+
+  start() {
     instance.animation.loop = Loop.pingPong;
     isActive = true;
   }
 
+  startUntil(ValueNotifier<bool> exitValue) {
+    // Play Animation
+    _exitValue = exitValue;
+    instance.animation.loop = Loop.pingPong;
+    isActive = true;
+
+    // Wait Until Exit Value True
+    _exitValue.addListener(_exitListener);
+  }
+
   stop() => instance.animation.loop = Loop.oneShot;
+
+  _exitListener() {
+    if (_exitValue != null && _exitValue.value == true) {
+      stop();
+      this.isActiveChanged.addListener(_listener);
+    }
+  }
+
+  _listener() {
+    if (!this.isActive) {
+      this.dispose();
+    }
+  }
 }
 
-// ^ Class that starts one animation after parameter ^ //
-class AnimationTransitioner {
-  // @ Properties
-  final Artboard _artboard;
-  AnimationModel _current;
+// ^ Loop Animation ^ //
+class LoopAnimation extends SimpleAnimation {
+  LoopAnimation(String animationName) : super(animationName);
+  ValueNotifier<bool> _exitValue;
 
-  // @ Constructer
-  AnimationTransitioner(this._artboard);
-
-  pingPong(AnimationModel next) {
-    if (_current != null) {
-      _shift();
-    }
-
-    // Start First Animation
-    _artboard.artboard.addController(next);
-    next.start();
-    _current = next;
+  start() {
+    instance.animation.loop = Loop.loop;
+    isActive = true;
   }
 
-  // @ PingPong until value
-  pingPongUntil(AnimationModel first, AnimationModel second,
-      ValueNotifier<bool> exitValue) {
-    // Check if Animation Active
-    if (_current != null) {
-      _shift();
-    }
-    // Start First Animation
-    _artboard.artboard.addController(first);
-    first.start();
-    _current = first;
+  startUntil(ValueNotifier<bool> exitValue) {
+    // Play Animation
+    instance.animation.loop = Loop.pingPong;
+    isActive = true;
 
-    // Add Listener for Exit
-    exitValue.addListener(() {
-      if (exitValue.value) {
-        first.stop();
-      }
-    });
-
-    // Check for First Animation State
-    first.isActiveChanged.addListener(() {
-      if (!first.isActive) {
-        _artboard.artboard.addController(second);
-        _artboard.artboard.removeController(first);
-        second.start();
-        _current = second;
-      }
-    });
+    // Wait Until Exit Value True
+    _exitValue.addListener(_exitListener);
   }
 
-  // @ One shot then next animation
-  oneShot(AnimationModel next) {
-    // Check if Animation Active
-    if (_current != null) {
-      _shift();
+  stop() => instance.animation.loop = Loop.oneShot;
+
+  _exitListener() {
+    if (_exitValue != null && _exitValue.value == true) {
+      stop();
+      this.isActiveChanged.addListener(_listener);
     }
-
-    // Start First Animation
-    _artboard.artboard.addController(next);
-    next.start();
-    _current = next;
-
-    // Check for First Animation State
-    next.isActiveChanged.addListener(() {
-      if (!next.isActive) {
-        _artboard.artboard.removeController(next);
-        _current = null;
-      }
-    });
   }
 
-  // @ One shot then next animation
-  oneShotThen(AnimationModel first, AnimationModel second) {
-    // Check if Animation Active
-    if (_current != null) {
-      _shift();
-    }
-
-    // Start First Animation
-    _artboard.artboard.addController(first);
-    first.start();
-    _current = first;
-
-    // Check for First Animation State
-    first.isActiveChanged.addListener(() {
-      if (!first.isActive) {
-        _artboard.artboard.addController(second);
-        _artboard.artboard.removeController(first);
-        second.start();
-        _current = second;
-      }
-    });
-  }
-
-  // @ One shot then next animation until ValueNotifier
-  oneShotThenUntil(AnimationModel first, AnimationModel second,
-      ValueNotifier<bool> exitValue) {
-    // Check if Animation Active
-    if (_current != null) {
-      _shift();
-    }
-    // Start First Animation
-    _artboard.artboard.addController(first);
-    first.start();
-    _current = first;
-
-    // Add Listener for Exit
-    exitValue.addListener(() {
-      if (exitValue.value) {
-        second.stop();
-      }
-    });
-
-    // Check for First Animation State
-    first.isActiveChanged.addListener(() {
-      if (!first.isActive) {
-        _artboard.artboard.addController(second);
-        _artboard.artboard.removeController(first);
-        second.start();
-        _current = second;
-      }
-    });
-
-    second.isActiveChanged.addListener(() {
-      if (!second.isActive) {
-        _artboard.removeController(first);
-        _current = null;
-      }
-    });
-  }
-
-  // @ Shift to Next Animation if one exists
-  _shift() {
-    if (_current.isActive) {
-      // Stop active animation
-      _current.stop();
-      // Await State
-      _current.isActiveChanged.addListener(() {
-        if (!_current.isActive) {
-          // Remove Current Controller
-          _artboard.removeController(_current);
-        }
-      });
-    } else {
-      // Remove Current Controller
-      _artboard.removeController(_current);
+  _listener() {
+    if (!this.isActive) {
+      this.dispose();
     }
   }
 }

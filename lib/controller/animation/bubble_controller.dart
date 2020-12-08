@@ -14,12 +14,12 @@ class BubbleAnimController extends GetxController {
     transConn.addListenerId("Listener", () {
       if (isInvited() && (transConn.status == AuthMessage_Event.ACCEPT)) {
         hasAccepted(true);
-        _responded(true);
+        _setAccepted();
         _hasResponded.value = true;
       }
       if (isInvited() && (transConn.status == AuthMessage_Event.DECLINE)) {
         hasDenied(true);
-        _responded(false);
+        _setDenied();
         _hasResponded.value = true;
       }
       if (isInvited() && (transConn.completed)) {
@@ -33,14 +33,13 @@ class BubbleAnimController extends GetxController {
   Artboard artboard;
 
   /// Animation References
-  AnimationModel _android;
-  AnimationModel _iphone;
-  AnimationModel _idle;
-  AnimationModel _pending;
-  AnimationModel _denied;
-  AnimationModel _accepted;
-  AnimationModel _sending;
-  AnimationTransitioner _transitioner;
+  OneShotAnimation _android;
+  OneShotAnimation _iphone;
+  PingPongAnimation _idle;
+  PingPongAnimation _pending;
+  OneShotAnimation _denied;
+  OneShotAnimation _accepted;
+  OneShotAnimation _sending;
 
   // Internal Checkers
   var _isActive = false;
@@ -73,13 +72,13 @@ class BubbleAnimController extends GetxController {
     if (file.import(bytes)) {
       _isActive = true;
       // Create Animations
-      _android = AnimationModel('Android', Loop.oneShot);
-      _iphone = AnimationModel('iOS', Loop.oneShot);
-      _idle = AnimationModel('Idle', Loop.pingPong);
-      _pending = AnimationModel('Pending', Loop.pingPong);
-      _accepted = AnimationModel('Accepted', Loop.oneShot);
-      _denied = AnimationModel('Denied', Loop.oneShot);
-      _sending = AnimationModel('Sending', Loop.loop);
+      _android = OneShotAnimation('Android');
+      _iphone = OneShotAnimation('iOS');
+      _idle = PingPongAnimation('Idle');
+      _pending = PingPongAnimation('Pending');
+      _accepted = OneShotAnimation('Accepted');
+      _denied = OneShotAnimation('Denied');
+      _sending = OneShotAnimation('Sending');
       artboard = file.mainArtboard;
       return file.mainArtboard;
     }
@@ -88,25 +87,36 @@ class BubbleAnimController extends GetxController {
 
   // ^ Sets initial Animation ^ //
   start() {
-    _transitioner = AnimationTransitioner(artboard);
     // ** Validate Active ** //
     if (_isActive) {
       // @ Check Device - iOS
       if (_peer.device.platform == "iOS") {
-        _transitioner.oneShotThenUntil(_iphone, _idle, _hasInvited);
+        artboard.addController(_iphone);
+        _iphone.startThen(_setIdle);
       }
       // @ Check Device - Android
       else if (_peer.device.platform == "Android") {
-        _transitioner.oneShotThenUntil(_android, _idle, _hasInvited);
+        artboard.addController(_android);
+        _android.startThen(_setIdle);
       }
     } else {
       _import().then((value) => start());
     }
   }
 
+  // ^ Sets Idle Animation after initial ^ //
+  _setIdle() {
+    // ** Validate Active ** //
+    if (_isActive) {
+      artboard.addController(_idle);
+      _idle.startUntil(_hasInvited);
+    } else {
+      _import().then((value) => _setIdle());
+    }
+  }
+
   // ^ Sets Pending Animation after Invite ^ //
   invite() {
-    _transitioner = AnimationTransitioner(artboard);
     // ** Validate Active ** //
     if (_isActive) {
       // Set Checkers
@@ -114,25 +124,41 @@ class BubbleAnimController extends GetxController {
       isInvited(true);
 
       // Start Pending
-      _transitioner.pingPong(_pending);
+      artboard.addController(_pending);
+      _pending.startUntil(_hasResponded);
     } else {
-      _import().then((value) => invite());
+      _import().then((value) => _setIdle());
     }
   }
 
-  _responded(bool decision) {
-    _transitioner = AnimationTransitioner(artboard);
+  // ^ Sets Accepted Animation after Invite ^ //
+  _setAccepted() {
     // ** Validate Active ** //
     if (_isActive) {
-      if (decision) {
-        // Start Accepted
-        _transitioner.oneShotThen(_accepted, _sending);
-      } else {
-        // Start Denied
-        _transitioner.oneShotThen(_denied, _idle);
-      }
+      // Start Accepted
+      artboard.removeController(_pending);
+      artboard.addController(_accepted);
+      _accepted.startThen(setSending);
     } else {
-      _import().then((value) => _responded(hasAccepted.value));
+      _import().then((value) => _setIdle());
     }
+  }
+
+  // ^ Sets Denied Animation after Invite ^ //
+  _setDenied() {
+    // ** Validate Active ** //
+    if (_isActive) {
+      // Start Denied
+      artboard.addController(_denied);
+      _denied.startThen(_setIdle);
+    } else {
+      _import().then((value) => _setIdle());
+    }
+  }
+
+  // ^ Sets Sending Animation after Accepted ^ //
+  setSending() {
+    artboard.addController(_sending);
+    _sending.start();
   }
 }
