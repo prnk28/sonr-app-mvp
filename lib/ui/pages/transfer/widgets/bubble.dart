@@ -8,9 +8,8 @@ class Bubble extends StatefulWidget {
   // Bubble Values
   final double value;
   final Peer peer;
-  final Payload_Type payloadType;
 
-  Bubble(this.value, this.peer, this.payloadType);
+  Bubble(this.value, this.peer);
 
   @override
   _BubbleState createState() => _BubbleState();
@@ -31,9 +30,8 @@ class _BubbleState extends State<Bubble> {
               onTap: () async {
                 if (!bubbleController.isInvited()) {
                   // Send Offer to Bubble
+                  transferController.invitePeer(widget.peer);
                   bubbleController.invite();
-                  transferController.invitePeer(
-                      widget.peer, widget.payloadType);
                 }
               },
               child: PlayAnimation<double>(

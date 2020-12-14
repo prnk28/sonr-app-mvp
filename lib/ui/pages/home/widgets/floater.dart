@@ -1,7 +1,9 @@
 part of '../home.dart';
 
 class FloaterButton extends StatefulWidget {
-  const FloaterButton({Key key}) : super(key: key);
+  final Function() onAnimationComplete;
+
+  const FloaterButton(this.onAnimationComplete, {Key key}) : super(key: key);
 
   @override
   _FloaterButtonState createState() => _FloaterButtonState();
@@ -55,6 +57,11 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Wait for Animation to Complete
             _animationController.reverse();
+
+            // Send Callback
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete();
+            }
           },
         ),
         // Floating action menu item
@@ -74,6 +81,11 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Wait for Animation to Complete
             _animationController.reverse();
+
+            // Send Callback
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete();
+            }
           },
         ),
         // Floating action menu item
@@ -89,6 +101,11 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Wait for Animation to Complete
             _animationController.reverse();
+
+            // Send Callback
+            if (widget.onAnimationComplete != null) {
+              widget.onAnimationComplete();
+            }
           },
         ),
       ],

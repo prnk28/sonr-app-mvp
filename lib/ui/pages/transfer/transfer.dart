@@ -10,7 +10,6 @@ const STACK_CONSTANT = 1;
 class TransferScreen extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
-    final Payload_Type payload = Get.arguments;
     // Return Widget
     return AppTheme(Scaffold(
         appBar: exitAppBar(context, Icons.close, title: controller.code(),
@@ -50,7 +49,7 @@ class TransferScreen extends GetView<LobbyController> {
                     current += 1;
 
                     // Create Bubble
-                    stackWidgets.add(Bubble(current * mean, peer, payload));
+                    stackWidgets.add(Bubble(current * mean, peer));
                   });
                 }
               }
