@@ -16,6 +16,12 @@ RoundedRectangleBorder windowBorder() {
   return RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.0));
 }
 
+BoxDecoration contactDecoration(BuildContext context) {
+  return BoxDecoration(
+      borderRadius: BorderRadius.circular(40),
+      color: Colors.grey.shade200.withOpacity(0.5));
+}
+
 BoxDecoration windowDecoration(BuildContext context) {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(40),
