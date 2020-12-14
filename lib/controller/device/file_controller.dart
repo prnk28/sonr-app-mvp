@@ -40,6 +40,10 @@ create table $metaTable (
     await _refreshAllFiles();
   }
 
+  getAllFiles() async {
+    await _refreshAllFiles();
+  }
+
   // ^ Get a File from Metadata ^ //
   getFile(Metadata meta) async {
     // Set Data
