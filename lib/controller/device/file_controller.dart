@@ -24,7 +24,7 @@ class FileController extends GetxController {
     String path = join(databasesPath, DATABASE_PATH);
 
     // Open Database create files table
-    db = await openDatabase(path, version: 1,
+    db = await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''
 create table $metaTable (

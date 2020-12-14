@@ -13,12 +13,14 @@ class BubbleAnimController extends GetxController {
     TransferController transConn = Get.find();
     transConn.addListenerId("Listener", () {
       if (isInvited() && (transConn.status == AuthMessage_Event.ACCEPT)) {
-        hasAccepted(true);
+        hasResponded(true);
+        update();
         _setAccepted();
         _hasResponded.value = true;
       }
       if (isInvited() && (transConn.status == AuthMessage_Event.DECLINE)) {
-        hasDenied(true);
+        hasResponded(true);
+        update();
         _setDenied();
         _hasResponded.value = true;
       }
@@ -50,8 +52,7 @@ class BubbleAnimController extends GetxController {
 
   // Observable Checkers
   var isInvited = false.obs;
-  var hasAccepted = false.obs;
-  var hasDenied = false.obs;
+  var hasResponded = false.obs;
   var hasCompleted = false.obs;
 
   // ^ Widget Start ^ //

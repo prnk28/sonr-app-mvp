@@ -29,7 +29,7 @@ Map metaToSQL(Metadata meta) {
   };
 
   // Check if Id Provided
-  if (meta.id != null) {
+  if (meta.hasId()) {
     map[columnId] = meta.id;
   }
   return map;

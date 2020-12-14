@@ -60,7 +60,8 @@ class Bubble extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
                           GetBuilder<BubbleAnimController>(builder: (_) {
-                            if (bubbleController.hasCompleted()) {
+                            if (bubbleController.hasCompleted() ||
+                                bubbleController.hasResponded()) {
                               return PlayAnimation<double>(
                                   tween: (1.0).tweenTo(0.0),
                                   duration: 20.milliseconds,

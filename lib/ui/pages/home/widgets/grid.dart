@@ -24,7 +24,7 @@ class ImageGrid extends GetView<FileController> {
               height: 75,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: MemoryImage(metadata.thumbnail),
+                      image: FileImage(File(metadata.path)),
                       fit: BoxFit.cover)),
               child:
                   // Image Info
