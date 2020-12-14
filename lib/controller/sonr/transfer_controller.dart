@@ -8,8 +8,7 @@ class TransferController extends GetxController {
   bool _isProcessed = false;
 
   // @ Set Peer Dependencies
-  AuthMessage_Event status = AuthMessage_Event.NONE;
-  AuthMessage auth;
+  AuthReply reply;
   Peer peer;
   bool completed = false;
 
@@ -20,8 +19,7 @@ class TransferController extends GetxController {
   // ^ Assign Callbacks and Create Ref for Node ^ //
   void assign() {
     sonrNode.assignCallback(CallbackEvent.Queued, _handleQueued);
-    sonrNode.assignCallback(CallbackEvent.Accepted, _handleAccepted);
-    sonrNode.assignCallback(CallbackEvent.Denied, _handleDenied);
+    sonrNode.assignCallback(CallbackEvent.Responded, _handleResponded);
     sonrNode.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
   }
 
@@ -33,7 +31,7 @@ class TransferController extends GetxController {
   }
 
   // ^ Invite-Peer Event ^
-  void invitePeer(Peer p) async {
+  void invitePeer(Peer p, Payload_Type pl) async {
     // @ Check File Status
     if (_isProcessed) {
       // Update Data
@@ -41,7 +39,7 @@ class TransferController extends GetxController {
       update(["Listener"]);
 
       // Send Invite
-      await sonrNode.invite(p);
+      await sonrNode.invite(p, pl);
     } else {
       print("InvitePeer() - " + "File not processed.");
     }
@@ -62,40 +60,28 @@ class TransferController extends GetxController {
   }
 
   // ^ Node Has Been Accepted ^ //
-  void _handleAccepted(dynamic data) async {
+  void _handleResponded(dynamic data) async {
     // Check Type
-    if (data is AuthMessage) {
-      // Set Message
-      this.auth = data;
+    if (data is AuthReply) {
+      if (data.payload.type == Payload_Type.NONE) {
+        // Set Message
+        this.reply = data;
 
-      // Report Accepted
-      this.status = data.event;
-      update(["Listener"]);
+        // Report Replied
+        update(["Listener"]);
+      }
     } else {
       print("handleAccepted() - " + "Invalid Return type");
     }
   }
 
-// ^ Node Has Been Denied ^ //
-  void _handleDenied(dynamic data) async {
-    // Check Type
-    if (data is AuthMessage) {
-      // Report Declined
-      this.status = data.event;
-      update(["Listener"]);
-    } else {
-      print("handleDenied() - " + "Invalid Return type");
-    }
-  }
-
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(dynamic data) async {
-    this.status = AuthMessage_Event.NONE;
     this.completed = true;
 
     // Reset Peer/Auth
     this.peer = null;
-    this.auth = null;
+    this.reply = null;
     update(["Listener"]);
   }
 }

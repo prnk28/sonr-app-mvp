@@ -1,13 +1,7 @@
 part of '../home.dart';
 
-enum DataType {
-  File,
-  Link,
-  Contact,
-}
-
 class FloaterButton extends StatefulWidget {
-  final Function(DataType) onAnimationComplete;
+  final Function(Payload_Type) onAnimationComplete;
 
   const FloaterButton(this.onAnimationComplete, {Key key}) : super(key: key);
 
@@ -66,7 +60,7 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Send Callback
             if (widget.onAnimationComplete != null) {
-              widget.onAnimationComplete(DataType.File);
+              widget.onAnimationComplete(Payload_Type.FILE);
             }
           },
         ),
@@ -90,7 +84,7 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Send Callback
             if (widget.onAnimationComplete != null) {
-              widget.onAnimationComplete(DataType.File);
+              widget.onAnimationComplete(Payload_Type.FILE);
             }
           },
         ),
@@ -107,7 +101,7 @@ class _FloaterButtonState extends State<FloaterButton>
 
             // Send Callback
             if (widget.onAnimationComplete != null) {
-              widget.onAnimationComplete(DataType.Contact);
+              widget.onAnimationComplete(Payload_Type.CONTACT);
             }
           },
         ),

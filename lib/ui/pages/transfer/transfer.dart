@@ -47,7 +47,7 @@ class TransferScreen extends GetView<LobbyController> {
                   current += 1;
 
                   // Create Bubble
-                  stackWidgets.add(Bubble(current * mean, peer));
+                  stackWidgets.add(Bubble(current * mean, peer, Get.arguments));
                 });
               }
               return Stack(children: stackWidgets);

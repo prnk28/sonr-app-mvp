@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sonar_app/ui/ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/controller/controller.dart';
@@ -8,7 +10,7 @@ class CompletedPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    fileController.saveMeta(receiveController.metadata());
+    fileController.saveMeta(receiveController.file());
     return Dialog(
         shape: windowBorder(),
         insetAnimationDuration: Duration(seconds: 1),
@@ -36,7 +38,8 @@ class CompletedPopup extends StatelessWidget {
                               minWidth: 1,
                               minHeight: 1,
                             ), // here
-                            child: Image.file(receiveController.file()))),
+                            child: Image.file(
+                                File(receiveController.file.value.path)))),
                   ),
                 ),
               ],

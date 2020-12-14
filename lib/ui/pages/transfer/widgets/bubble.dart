@@ -8,8 +8,9 @@ class Bubble extends StatelessWidget {
   // Bubble Values
   final double value;
   final Peer peer;
+  final Payload_Type payloadType;
 
-  Bubble(this.value, this.peer);
+  Bubble(this.value, this.peer, this.payloadType);
 
   // Animation Handling
   final TransferController transferController = Get.find();
@@ -27,7 +28,7 @@ class Bubble extends StatelessWidget {
                 if (!bubbleController.isInvited()) {
                   // Send Offer to Bubble
                   bubbleController.invite();
-                  transferController.invitePeer(peer);
+                  transferController.invitePeer(peer, payloadType);
                 }
               },
               child: PlayAnimation<double>(

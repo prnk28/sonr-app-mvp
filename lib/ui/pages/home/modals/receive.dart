@@ -11,14 +11,14 @@ class ReceiveSheet extends StatelessWidget {
         id: "ReceiveSheet",
         builder: (receive) {
           // ^ Check Auth Status for Accept ^
-          if (receive.status == AuthMessage_Event.ACCEPT) {
+          if (receive.accepted) {
             return Container(
                 decoration: windowDecoration(context),
                 height: Get.height / 3 + 20,
                 child: Center(
                     child: LiquidFill(
-                        iconData:
-                            iconDataFromKind(receive.metadata().mime.type))));
+                        iconData: iconDataFromKind(
+                            receive.invite().payload.file.mime.type))));
           }
 
           // ^ Authentication Modal ^
@@ -40,7 +40,7 @@ class ReceiveSheet extends StatelessWidget {
                   ),
 
                   // Build Item from Metadata and Peer
-                  _buildItem(context, receive.auth),
+                  _buildItem(context, receive.invite.value),
                   Padding(padding: EdgeInsets.only(top: 8)),
 
                   // Build Auth Action
@@ -63,14 +63,15 @@ class ReceiveSheet extends StatelessWidget {
   }
 }
 
-Row _buildItem(BuildContext context, AuthMessage state) {
+Row _buildItem(BuildContext context, AuthInvite state) {
   // Get Data
   var from = state.from;
-  var metadata = state.metadata;
+  var metadata = state.payload.file;
+  var contact = state.payload.contact;
 
   // Preview Widget
   Widget preview;
-  switch (state.metadata.mime.type) {
+  switch (metadata.mime.type) {
     case MIME_Type.audio:
       preview = Icon(Icons.audiotrack, size: 100);
       break;
