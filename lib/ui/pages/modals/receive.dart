@@ -18,7 +18,7 @@ class ReceiveSheet extends StatelessWidget {
                 child: Center(
                     child: LiquidFill(
                         iconData: iconDataFromKind(
-                            receive.invite().payload.file.mime.type))));
+                            receive.invite.payload.file.mime.type))));
           }
 
           // ^ Authentication Modal ^
@@ -40,7 +40,7 @@ class ReceiveSheet extends StatelessWidget {
                   ),
 
                   // Build Item from Metadata and Peer
-                  _buildItem(context, receive.invite.value),
+                  _buildItem(context, receive.invite),
                   Padding(padding: EdgeInsets.only(top: 8)),
 
                   // Build Auth Action
@@ -67,7 +67,6 @@ Row _buildItem(BuildContext context, AuthInvite state) {
   // Get Data
   var from = state.from;
   var metadata = state.payload.file;
-  var contact = state.payload.contact;
 
   // Preview Widget
   Widget preview;

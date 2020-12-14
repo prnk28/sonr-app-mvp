@@ -17,12 +17,22 @@ class HomeScreen extends StatelessWidget {
     // ** Listen to States ** //
     final ReceiveController receive = Get.find<ReceiveController>();
     receive.addListenerId("Listener", () {
-      // Present AuthSheet
-      if (receive.invite() != null) {
-        Get.bottomSheet(ReceiveSheet());
+      if (receive.invited) {
+        switch (receive.invite.payload.type) {
+          // @ File Request
+          case Payload_Type.FILE:
+            Get.bottomSheet(ReceiveSheet());
+            break;
+
+          // @ Contact Request
+          case Payload_Type.CONTACT:
+            Get.dialog(ContactPopup(),
+                arguments: receive.invite.payload.contact);
+            break;
+        }
       }
 
-      // Present Completed Popup
+      // @ Present Completed Popup
       if (receive.completed) {
         Get.dialog(CompletedPopup());
       }

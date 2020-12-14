@@ -10,6 +10,7 @@ const STACK_CONSTANT = 1;
 class TransferScreen extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
+    final Payload_Type payload = Get.arguments;
     // Return Widget
     return AppTheme(Scaffold(
         appBar: exitAppBar(context, Icons.close, title: controller.code(),
@@ -34,21 +35,24 @@ class TransferScreen extends GetView<LobbyController> {
               // Initialize Widget List
               List<Widget> stackWidgets = new List<Widget>();
 
-              // Check Peers Size
-              if (controller.peers.value.length > 0) {
-                // Init Stack Vars
-                int total = controller.peers.value.length + STACK_CONSTANT;
-                double mean = 1.0 / total;
-                int current = 0;
+              // Verify Not Null
+              if (controller.peers.value != null) {
+                // Check Peers Size
+                if (controller.peers.value.length > 0) {
+                  // Init Stack Vars
+                  int total = controller.peers.value.length + STACK_CONSTANT;
+                  double mean = 1.0 / total;
+                  int current = 0;
 
-                // Create Bubbles
-                controller.peers.value.values.forEach((peer) {
-                  // Increase Count
-                  current += 1;
+                  // Create Bubbles
+                  controller.peers.value.values.forEach((peer) {
+                    // Increase Count
+                    current += 1;
 
-                  // Create Bubble
-                  stackWidgets.add(Bubble(current * mean, peer, Get.arguments));
-                });
+                    // Create Bubble
+                    stackWidgets.add(Bubble(current * mean, peer, payload));
+                  });
+                }
               }
               return Stack(children: stackWidgets);
             }),

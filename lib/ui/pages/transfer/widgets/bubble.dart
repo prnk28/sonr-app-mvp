@@ -4,7 +4,7 @@ import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
-class Bubble extends StatelessWidget {
+class Bubble extends StatefulWidget {
   // Bubble Values
   final double value;
   final Peer peer;
@@ -12,23 +12,28 @@ class Bubble extends StatelessWidget {
 
   Bubble(this.value, this.peer, this.payloadType);
 
-  // Animation Handling
+  @override
+  _BubbleState createState() => _BubbleState();
+}
+
+class _BubbleState extends State<Bubble> {
   final TransferController transferController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final BubbleAnimController bubbleController =
-        Get.put<BubbleAnimController>(BubbleAnimController(peer));
+        Get.put<BubbleAnimController>(BubbleAnimController(widget.peer));
     return GetBuilder<BubbleAnimController>(builder: (_) {
       return Positioned(
-          top: calculateOffset(value).dy,
-          left: calculateOffset(value).dx,
+          top: calculateOffset(widget.value).dy,
+          left: calculateOffset(widget.value).dx,
           child: GestureDetector(
               onTap: () async {
                 if (!bubbleController.isInvited()) {
                   // Send Offer to Bubble
                   bubbleController.invite();
-                  transferController.invitePeer(peer, payloadType);
+                  transferController.invitePeer(
+                      widget.peer, widget.payloadType);
                 }
               },
               child: PlayAnimation<double>(
@@ -74,8 +79,9 @@ class Bubble extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              iconFromPeer(peer, size: 20),
-                                              initialsFromPeer(peer),
+                                              iconFromPeer(widget.peer,
+                                                  size: 20),
+                                              initialsFromPeer(widget.peer),
                                             ]));
                                   });
                             }
@@ -91,8 +97,8 @@ class Bubble extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            iconFromPeer(peer, size: 20),
-                                            initialsFromPeer(peer),
+                                            iconFromPeer(widget.peer, size: 20),
+                                            initialsFromPeer(widget.peer),
                                           ]));
                                 });
                           }),

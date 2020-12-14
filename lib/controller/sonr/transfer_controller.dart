@@ -9,12 +9,8 @@ class TransferController extends GetxController {
 
   // @ Set Peer Dependencies
   AuthReply reply;
-  Peer peer;
   bool completed = false;
-
-  // @ Set Data Dependencies
-  final file = Rx<File>();
-  final metadata = Rx<Metadata>();
+  Payload_Type payloadType;
 
   // ^ Assign Callbacks and Create Ref for Node ^ //
   void assign() {
@@ -24,24 +20,29 @@ class TransferController extends GetxController {
   }
 
   // ^ Queue-File Event ^
-  void queueFile(File file) async {
+  void queue(Payload_Type payType, {File file}) async {
     // Queue File
-    this.file(file);
-    sonrNode.queue(file.path);
+    if (payType == Payload_Type.FILE) {
+      sonrNode.queue(file.path);
+    }
+    // Set Payload Type
+    payloadType = payType;
   }
 
   // ^ Invite-Peer Event ^
-  void invitePeer(Peer p, Payload_Type pl) async {
-    // @ Check File Status
-    if (_isProcessed) {
-      // Update Data
-      this.peer = p;
-      update(["Listener"]);
+  void invitePeer(Peer p) async {
+    // Update Data
+    update(["Listener"]);
 
-      // Send Invite
-      await sonrNode.invite(p, pl);
-    } else {
-      print("InvitePeer() - " + "File not processed.");
+    // Send Invite for File
+    if (payloadType == Payload_Type.FILE) {
+      if (_isProcessed) {
+        await sonrNode.invite(p, payloadType);
+      }
+    }
+    // Send Invite for Contact
+    else if (payloadType == Payload_Type.CONTACT) {
+      await sonrNode.invite(p, payloadType);
     }
   }
 
@@ -53,9 +54,6 @@ class TransferController extends GetxController {
     if (data is Metadata) {
       // Update data
       _isProcessed = true;
-      this.metadata(data);
-    } else {
-      print("handleQueued() - " + "Invalid Return type");
     }
   }
 
@@ -70,8 +68,6 @@ class TransferController extends GetxController {
         // Report Replied
         update(["Listener"]);
       }
-    } else {
-      print("handleAccepted() - " + "Invalid Return type");
     }
   }
 
@@ -80,7 +76,6 @@ class TransferController extends GetxController {
     this.completed = true;
 
     // Reset Peer/Auth
-    this.peer = null;
     this.reply = null;
     update(["Listener"]);
   }

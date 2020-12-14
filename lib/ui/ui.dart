@@ -3,7 +3,7 @@ export 'pages/home/home.dart';
 export 'pages/register/register.dart';
 export 'pages/splash/splash.dart';
 export 'pages/transfer/transfer.dart';
-export 'pages/home/modals/modals.dart';
+export 'pages/modals/modals.dart';
 export '../model/model.dart';
 export 'lifecycle.dart';
 

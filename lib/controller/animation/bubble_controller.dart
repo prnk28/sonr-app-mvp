@@ -13,7 +13,7 @@ class BubbleAnimController extends GetxController {
     TransferController transConn = Get.find();
     transConn.addListenerId("Listener", () {
       // Validate Invited
-      if (isInvited()) {
+      if (isInvited() && transConn.reply.decision != null) {
         // Check Reply
         if (transConn.reply.decision) {
           hasResponded(true);

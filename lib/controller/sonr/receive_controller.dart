@@ -4,13 +4,13 @@ import 'package:get/get.dart' hide Node;
 
 class ReceiveController extends GetxController {
   // @ Set Peer Dependencies
-  Peer peer;
-  bool accepted;
+  AuthInvite invite;
+  bool invited = false;
+  bool accepted = false;
   bool completed = false;
 
   // @ Set Data Dependencies
   var file = Rx<Metadata>();
-  var invite = Rx<AuthInvite>();
   var progress = 0.0.obs;
 
   // ^ Assign Callbacks and Create Ref for Node ^ //
@@ -24,14 +24,12 @@ class ReceiveController extends GetxController {
   void respondPeer(bool decision) async {
     // Update Status by Decision
     if (decision) {
-      accepted = true;
+      this.accepted = true;
       update(["ReceiveSheet"]);
     } else {
       // Reset Peer/Auth
-      this.peer = null;
-      this.invite(null);
+      this.invite = null;
     }
-
     // Send Response
     await sonrNode.respond(decision);
   }
@@ -41,16 +39,15 @@ class ReceiveController extends GetxController {
   // **************************
   // ^ Node Has Been Invited ^ //
   void _handleInvite(dynamic data) async {
+    print("Invite" + data.toString());
     // Check Type
     if (data is AuthInvite) {
       // Update Values
-      this.peer = data.from;
-      this.invite(data);
+      this.invited = true;
+      this.invite = data;
 
       // Inform Listener
       update(["Listener"]);
-    } else {
-      print("handleInvited() - " + "Invalid Return type");
     }
   }
 
@@ -59,8 +56,6 @@ class ReceiveController extends GetxController {
     if (data is double) {
       // Update Data
       this.progress(data);
-    } else {
-      print("handleProgressed() - " + "Invalid Return type");
     }
   }
 
@@ -72,8 +67,7 @@ class ReceiveController extends GetxController {
       this.completed = true;
 
       // Reset Peer/Auth
-      this.peer = null;
-      this.invite(null);
+      this.invite = null;
       update(["Listener"]);
     } else {
       print("handleProgressed() - " + "Invalid Return type");
