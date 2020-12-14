@@ -67,7 +67,7 @@ class InviteSheet extends StatelessWidget {
 
   Widget _buildActions(ReceiveController receive) {
     // Build Auth Action
-    NeumorphicButton(
+    return NeumorphicButton(
         onPressed: () {
           // Emit Event
           receive.respondPeer(true);
