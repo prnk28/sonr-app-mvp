@@ -38,17 +38,17 @@ class _BubbleState extends State<Bubble> {
       Status prevStatus = seq[0];
       Status currStatus = seq[1];
 
-      // @ Pending -> Busy = Peer Accepted
+      // @ Pending -> Busy = Peer Accepted File
       if (prevStatus == Status.Pending && currStatus == Status.Busy) {
         setState(() => _accepted.isActive = hasAccepted = !hasAccepted);
       }
 
-      // @ Pending -> Searching = Peer Denied
+      // @ Pending -> Searching = Peer Denied File
       if (prevStatus == Status.Pending && currStatus == Status.Searching) {
         setState(() => _denied.isActive = hasDenied = !hasDenied);
       }
 
-      // @ Pending -> Searching = Peer Completed
+      // @ Pending -> Searching = Peer Completed File
       if (prevStatus == Status.Busy && currStatus == Status.Complete) {
         setState(() => _complete.isActive = hasCompleted = !hasCompleted);
       }
@@ -65,13 +65,14 @@ class _BubbleState extends State<Bubble> {
       // Get the artboard containing the animation you want to play
       final artboard = file.mainArtboard;
 
-      // Add Remaining Animation Controllers
-      artboard.addController(SimpleAnimation('Idle')); // Idle Animation
-
+      // Add Animation Controllers
+      artboard.addController(SimpleAnimation('Idle'));
       artboard.addController(_pending = SimpleAnimation('Pending'));
       artboard.addController(_denied = SimpleAnimation('Denied'));
       artboard.addController(_accepted = SimpleAnimation('Accepted'));
       artboard.addController(_complete = SimpleAnimation('Completed'));
+
+      // Set Default States
       _pending.isActive = isInvited;
       _denied.isActive = hasDenied;
       _accepted.isActive = hasAccepted;

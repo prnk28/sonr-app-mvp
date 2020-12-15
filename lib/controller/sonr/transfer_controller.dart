@@ -75,8 +75,13 @@ class TransferController extends GetxController {
       // Set Message
       this.reply = data;
 
-      // Report Replied
-      update(["Bubble_" + data.from.id]);
+      if (data.payload.type == Payload_Type.CONTACT) {
+        // Report Replied to Bubble for File
+        update(["Listener"]);
+      } else {
+        // Report Replied to Bubble for File
+        update(["Bubble_" + data.from.id]);
+      }
     }
   }
 
