@@ -77,6 +77,27 @@ AlertDialog detailFailureDialog({Function() onCancel, Function() onDelete}) {
   );
 }
 
+IconData iconDataFromPayload(Payload payload) {
+  var kind = payload.file.mime.type;
+  switch (kind) {
+    case MIME_Type.audio:
+      return Icons.audiotrack;
+      break;
+    case MIME_Type.image:
+      return Icons.image;
+      break;
+    case MIME_Type.video:
+      return Icons.video_collection;
+      break;
+    case MIME_Type.text:
+      return Icons.sort_by_alpha;
+      break;
+    default:
+      return Icons.device_unknown;
+      break;
+  }
+}
+
 IconData iconDataFromKind(MIME_Type kind) {
   switch (kind) {
     case MIME_Type.audio:

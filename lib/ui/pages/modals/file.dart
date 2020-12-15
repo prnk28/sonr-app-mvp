@@ -1,21 +1,86 @@
 part of 'invite.dart';
 
 class FileInviteView extends StatelessWidget {
-  final Metadata metadata;
-  final Peer from;
+  final AuthInvite invite;
+  final void Function() onDecline;
+  final void Function() onAccept;
 
-  const FileInviteView(this.metadata, this.from, {Key key}) : super(key: key);
+  const FileInviteView(
+    this.invite, {
+    Key key,
+    this.onDecline,
+    this.onAccept,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    // Preview Widget
-    Widget preview;
+    // Extract Data
+    var metadata = invite.payload.file;
+    var from = invite.from;
+
+    // Build View
+    return Container(
+        decoration: windowDecoration(context),
+        height: Get.height / 3 + 20,
+        child: Column(
+          children: [
+            // @ Top Right Close/Cancel Button
+            GestureDetector(
+              onTap: () {
+                // Emit Event
+                onDecline();
+
+                // Pop Window
+                Get.back();
+              },
+              child: getWindowCloseButton(),
+            ),
+
+            // Build Item from Metadata and Peer
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              _getPreview(metadata),
+              Padding(padding: EdgeInsets.all(8)),
+              Column(
+                children: [
+                  Text(from.firstName, style: headerTextStyle()),
+                  Text(from.device.platform,
+                      style: TextStyle(
+                          fontFamily: "Raleway",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 22,
+                          color: Colors.black54))
+                ],
+              ),
+            ]),
+            Padding(padding: EdgeInsets.only(top: 8)),
+
+            // Build Auth Action
+            NeumorphicButton(
+                onPressed: () {
+                  // Emit Event
+                  onAccept();
+                },
+                style: NeumorphicStyle(
+                    depth: 8,
+                    shape: NeumorphicShape.concave,
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
+                padding: const EdgeInsets.all(12.0),
+                child: Text("Accept",
+                    style: smallTextStyle())), // FlatButton// Container
+          ],
+        ));
+    // FlatButton// Container
+  }
+
+  Widget _getPreview(Metadata metadata) {
     switch (metadata.mime.type) {
       case MIME_Type.audio:
-        preview = Icon(Icons.audiotrack, size: 100);
+        return Icon(Icons.audiotrack, size: 100);
         break;
       case MIME_Type.image:
         if (metadata.thumbnail != null) {
-          preview = ClipRRect(
+          return ClipRRect(
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
               child: FittedBox(
                   fit: BoxFit.fitWidth,
@@ -25,35 +90,19 @@ class FileInviteView extends StatelessWidget {
                           minWidth: 1, minHeight: 1, maxWidth: 200), // here
                       child: Image.memory(metadata.thumbnail))));
         } else {
-          preview = Icon(Icons.image, size: 100);
+          return Icon(Icons.image, size: 100);
         }
         break;
       case MIME_Type.video:
-        preview = Icon(Icons.video_collection, size: 100);
+        return Icon(Icons.video_collection, size: 100);
         break;
       case MIME_Type.text:
-        preview = Icon(Icons.sort_by_alpha, size: 100);
+        return Icon(Icons.sort_by_alpha, size: 100);
         break;
       default:
-        preview = Icon(Icons.device_unknown, size: 100);
+        return Icon(Icons.device_unknown, size: 100);
         break;
     }
-
-    // Build View
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      preview,
-      Padding(padding: EdgeInsets.all(8)),
-      Column(
-        children: [
-          Text(from.firstName, style: headerTextStyle()),
-          Text(from.device.platform,
-              style: TextStyle(
-                  fontFamily: "Raleway",
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: Colors.black54))
-        ],
-      ),
-    ]); // FlatButton// Container
+    return Container();
   }
 }

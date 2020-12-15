@@ -12,7 +12,7 @@ class TransferScreen extends GetView<LobbyController> {
   Widget build(BuildContext context) {
     // Return Widget
     return AppTheme(Scaffold(
-        appBar: exitAppBar(context, Icons.close, title: controller.code,
+        appBar: exitAppBar(context, Icons.close, title: controller.code(),
             onPressed: () {
           Get.offAllNamed("/home");
         }),
