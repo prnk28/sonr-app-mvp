@@ -25,12 +25,12 @@ class ReceiveController extends GetxController {
       this.invite = null;
     }
 
+    // Send Response
+    await sonrNode.respond(decision);
+
     // Update Status
     status = sonrNode.status;
     update();
-
-    // Send Response
-    await sonrNode.respond(decision);
   }
 
   // ^ Reset Session ^

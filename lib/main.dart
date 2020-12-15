@@ -5,6 +5,7 @@ import 'service/service.dart';
 
 // ** Main Method ** //
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await initServices();
   runApp(App());
 }

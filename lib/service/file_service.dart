@@ -13,12 +13,11 @@ class FileService extends GetxService {
   Database db;
 
   // Observable Properties
-  List<Metadata> allFiles = new List<Metadata>();
+  final allFiles = new List<Metadata>().obs;
   File currentFile;
   Metadata currentMetadata;
 
-  init() async {
-    super.onInit();
+  Future<FileService> init() async {
     // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, DATABASE_PATH);
@@ -100,6 +99,6 @@ create table $metaTable (
     }
 
     // Update All Files
-    allFiles = result;
+    allFiles(result);
   }
 }
