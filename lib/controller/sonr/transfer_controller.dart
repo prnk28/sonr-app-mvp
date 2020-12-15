@@ -5,7 +5,7 @@ import 'package:sonar_app/controller/sonr/conn_controller.dart';
 
 class TransferController extends GetxController {
   // @ Set Local Properties
-  bool _isProcessed = false;
+  //bool _isProcessed = false;
 
   // @ Set Peer Dependencies
   AuthReply reply;
@@ -36,9 +36,8 @@ class TransferController extends GetxController {
 
     // Send Invite for File
     if (payloadType == Payload_Type.FILE) {
-      if (_isProcessed) {
-        await sonrNode.invite(p, payloadType);
-      }
+      await sonrNode.invite(p, payloadType);
+      //}
     }
     // Send Invite for Contact
     else if (payloadType == Payload_Type.CONTACT) {
@@ -53,7 +52,7 @@ class TransferController extends GetxController {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
-      _isProcessed = true;
+      //_isProcessed = true;
     }
   }
 

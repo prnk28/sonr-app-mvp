@@ -42,6 +42,7 @@ dependencies:
     git:
       url: git@github.com:sonr-io/plugin.git
 
+
   # -- UI/UX --
   animations: ^1.1.2
   flare_flutter: ^2.0.6
