@@ -16,17 +16,6 @@ class InviteSheet extends StatelessWidget {
     return GetBuilder<ReceiveController>(
         id: "ReceiveSheet",
         builder: (receive) {
-          // ^ Check Auth Status for Accept ^
-          if (receive.status == Status.Busy) {
-            return Container(
-                decoration: windowDecoration(context),
-                height: Get.height / 3 + 20,
-                child: Center(
-                    child: ProgressView(
-                        iconData:
-                            iconDataFromPayload(receive.invite.payload))));
-          }
-
           // ^ Authentication Modal ^
           // @ Payload is a File
           if (receive.invite.payload.type == Payload_Type.FILE) {

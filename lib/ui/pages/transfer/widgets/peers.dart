@@ -16,21 +16,14 @@ class PeerStack extends GetView<LobbyController> {
         // Init Stack Vars
         int total = controller.size() + STACK_CONSTANT;
         double mean = 1.0 / total;
+        int current = 0;
 
         // @ Create Bubbles that arent added
         controller.peers().forEach((id, peer) {
-          // Check if Bubble Already Added
           // Create Bubble
-          var idx = controller.peers().values.toList().indexOf(peer);
-          stackWidgets.add(Bubble(idx * mean, peer));
+          stackWidgets.add(Bubble(current * mean, peer));
+          current++;
         });
-
-        // // @ Remove Bubbles that no longer exist
-        // stackWidgets.forEach((id, bubble) {
-        //   if (!controller.peers().containsKey(id)) {
-        //     stackWidgets.remove(id);
-        //   }
-        // });
       }
       return Stack(children: stackWidgets);
     });

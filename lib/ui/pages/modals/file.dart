@@ -1,6 +1,6 @@
 part of 'invite.dart';
 
-class FileInviteView extends StatelessWidget {
+class FileInviteView extends GetView<ReceiveController> {
   final AuthInvite invite;
 
   const FileInviteView(
@@ -10,63 +10,83 @@ class FileInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract Data
+    // @ Extract Data
     var metadata = invite.payload.file;
     var from = invite.from;
-    ReceiveController controller = Get.find();
 
-    // Build View
-    return Container(
-        decoration: windowDecoration(context),
-        height: Get.height / 3 + 20,
-        child: Column(
-          children: [
-            // @ Top Right Close/Cancel Button
-            GestureDetector(
-              onTap: () {
-                // Emit Event
-                controller.respondPeer(false);
+    return GetBuilder<ReceiveController>(
+        assignId: true,
+        id: "Listener",
+        builder: (_) {
+          // @ In Transfer
+          if (controller.status == Status.Busy) {
+            return Container(
+                decoration: windowDecoration(context),
+                height: Get.height / 3 + 20,
+                child: Center(
+                    child: ProgressView(
+                        iconData:
+                            iconDataFromPayload(controller.invite.payload))));
+          }
+          // @ Pending
+          else if (controller.status == Status.Pending) {
+            // Build AuthView
+            return Container(
+                decoration: windowDecoration(context),
+                height: Get.height / 3 + 20,
+                child: Column(
+                  children: [
+                    // @ Top Right Close/Cancel Button
+                    GestureDetector(
+                      onTap: () {
+                        // Emit Event
+                        controller.respondPeer(false);
 
-                // Pop Window
-                Get.back();
-              },
-              child: getWindowCloseButton(),
-            ),
+                        // Pop Window
+                        Get.back();
+                      },
+                      child: getWindowCloseButton(),
+                    ),
 
-            // Build Item from Metadata and Peer
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _getPreview(metadata),
-              Padding(padding: EdgeInsets.all(8)),
-              Column(
-                children: [
-                  Text(from.firstName, style: headerTextStyle()),
-                  Text(from.device.platform,
-                      style: TextStyle(
-                          fontFamily: "Raleway",
-                          fontWeight: FontWeight.w500,
-                          fontSize: 22,
-                          color: Colors.black54))
-                ],
-              ),
-            ]),
-            Padding(padding: EdgeInsets.only(top: 8)),
+                    // Build Item from Metadata and Peer
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      _getPreview(metadata),
+                      Padding(padding: EdgeInsets.all(8)),
+                      Column(
+                        children: [
+                          Text(from.firstName, style: headerTextStyle()),
+                          Text(from.device.platform,
+                              style: TextStyle(
+                                  fontFamily: "Raleway",
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 22,
+                                  color: Colors.black54))
+                        ],
+                      ),
+                    ]),
+                    Padding(padding: EdgeInsets.only(top: 8)),
 
-            // Build Auth Action
-            NeumorphicButton(
-                onPressed: () {
-                  // Emit Event
-                  controller.respondPeer(true);
-                },
-                style: NeumorphicStyle(
-                    depth: 8,
-                    shape: NeumorphicShape.concave,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
-                padding: const EdgeInsets.all(12.0),
-                child: Text("Accept",
-                    style: smallTextStyle())), // FlatButton// Container
-          ],
-        ));
+                    // Build Auth Action
+                    NeumorphicButton(
+                        onPressed: () {
+                          // Emit Event
+                          controller.respondPeer(true);
+                        },
+                        style: NeumorphicStyle(
+                            depth: 8,
+                            shape: NeumorphicShape.concave,
+                            boxShape: NeumorphicBoxShape.roundRect(
+                                BorderRadius.circular(8))),
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text("Accept",
+                            style: smallTextStyle())), // FlatButton// Container
+                  ],
+                ));
+          } else {
+            return Container();
+          }
+        });
+
     // FlatButton// Container
   }
 
