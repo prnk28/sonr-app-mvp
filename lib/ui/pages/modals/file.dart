@@ -1,6 +1,6 @@
 part of 'invite.dart';
 
-class FileInviteView extends GetView<ReceiveController> {
+class FileInviteView extends StatelessWidget {
   final AuthInvite invite;
 
   const FileInviteView(
@@ -17,7 +17,7 @@ class FileInviteView extends GetView<ReceiveController> {
     return GetBuilder<ReceiveController>(
         assignId: true,
         id: "Listener",
-        builder: (_) {
+        builder: (controller) {
           // @ In Transfer
           if (controller.status == Status.Busy) {
             return Container(
@@ -82,7 +82,14 @@ class FileInviteView extends GetView<ReceiveController> {
                             style: smallTextStyle())), // FlatButton// Container
                   ],
                 ));
-          } else {
+          }
+          // @ Completed Transfer
+          else if (controller.status == Status.Complete) {
+            Get.back();
+          }
+          // @ Error
+          else {
+            print("Incorrect Receive Controller Status");
             return Container();
           }
         });
@@ -90,6 +97,7 @@ class FileInviteView extends GetView<ReceiveController> {
     // FlatButton// Container
   }
 
+  // ^ Retreive File Preview ^ //
   Widget _getPreview(Metadata metadata) {
     switch (metadata.mime.type) {
       case MIME_Type.audio:

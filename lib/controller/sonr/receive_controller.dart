@@ -20,14 +20,15 @@ class ReceiveController extends GetxController {
 
   // ^ Respond-Peer Event ^
   void respondPeer(bool decision) async {
-    // Update Status by Decision
-    if (decision) {
-      status = sonrNode.status;
-      update(["ReceiveSheet"]);
-    } else {
-      // Reset Peer/Auth
+    // Reset Peer/Auth
+    if (!decision) {
       this.invite = null;
     }
+
+    // Update Status
+    status = sonrNode.status;
+    update();
+
     // Send Response
     await sonrNode.respond(decision);
   }
