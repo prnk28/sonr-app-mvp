@@ -17,7 +17,7 @@ class InviteSheet extends StatelessWidget {
         id: "ReceiveSheet",
         builder: (receive) {
           // ^ Check Auth Status for Accept ^
-          if (receive.status.value == Status.Busy) {
+          if (receive.status == Status.Busy) {
             return Container(
                 decoration: windowDecoration(context),
                 height: Get.height / 3 + 20,

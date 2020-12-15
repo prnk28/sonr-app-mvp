@@ -11,9 +11,11 @@ class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     // ** Listen to States ** //
-    controller.status.listen((currStatus) {
-      if (currStatus == Status.Complete) {
-        Get.bottomSheet(ContactInviteView(controller.reply.payload.contact, ));
+    controller.addListenerId("Listener", () {
+      if (controller.status == Status.Complete) {
+        if (controller.reply.payload.type == Payload_Type.CONTACT) {
+          Get.bottomSheet(ContactInviteView(controller.reply.payload.contact));
+        }
       }
     });
 

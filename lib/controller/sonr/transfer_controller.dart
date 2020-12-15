@@ -9,7 +9,7 @@ class TransferController extends GetxController {
   // @ Set Peer Dependencies
   AuthReply reply;
   Payload_Type payloadType;
-  final status = sonrNode.status.obs;
+  Status status;
 
   // ^ Assign Callbacks and Create Ref for Node ^ //
   void assign() {
@@ -26,6 +26,8 @@ class TransferController extends GetxController {
     }
     // Set Payload Type
     payloadType = payType;
+    status = sonrNode.status;
+    update(["Listener"]);
   }
 
   // ^ Invite-Peer Event ^
@@ -39,12 +41,16 @@ class TransferController extends GetxController {
     else if (payloadType == Payload_Type.CONTACT) {
       await sonrNode.invite(p, payloadType);
     }
+    status = sonrNode.status;
+    update(["Listener"]);
   }
 
   // ^ Resets Status ^
   void finish() {
     sonrNode.finish();
     reply = null;
+    status = sonrNode.status;
+    update(["Listener"]);
   }
 
   // **************************
@@ -54,6 +60,7 @@ class TransferController extends GetxController {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
+      status = sonrNode.status;
       update(["Listener"]);
     }
   }

@@ -6,19 +6,6 @@ import 'bubble.dart';
 class PeerStack extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
-    // ** Listen to States ** //
-    final TransferController receive = Get.find<TransferController>();
-    receive.addListenerId("Listener", () {
-      // if (receive.invited) {
-      //   Get.bottomSheet(InviteSheet());
-      // }
-
-      // @ Present Completed Popup
-      // if (receive.completed) {
-      //   Get.dialog(CompletedPopup());
-      // }
-    });
-
     // Initialize Widget List
     Map<String, Bubble> stackWidgets = new Map<String, Bubble>();
 

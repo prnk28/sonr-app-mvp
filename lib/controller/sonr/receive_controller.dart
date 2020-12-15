@@ -5,7 +5,7 @@ import 'package:get/get.dart' hide Node;
 class ReceiveController extends GetxController {
   // @ Set Peer Dependencies
   AuthInvite invite;
-  final status = sonrNode.status.obs;
+  Status status;
 
   // @ Set Data Dependencies
   var file = Rx<Metadata>();
@@ -22,6 +22,7 @@ class ReceiveController extends GetxController {
   void respondPeer(bool decision) async {
     // Update Status by Decision
     if (decision) {
+      status = sonrNode.status;
       update(["ReceiveSheet"]);
     } else {
       // Reset Peer/Auth
@@ -47,6 +48,7 @@ class ReceiveController extends GetxController {
       this.invite = data;
 
       // Inform Listener
+      status = sonrNode.status;
       update(["Listener"]);
     }
   }
@@ -67,6 +69,7 @@ class ReceiveController extends GetxController {
 
       // Reset Peer/Auth
       this.invite = null;
+      status = sonrNode.status;
       update(["Listener"]);
     } else {
       print("handleProgressed() - " + "Invalid Return type");

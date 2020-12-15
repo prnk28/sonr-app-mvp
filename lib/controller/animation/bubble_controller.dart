@@ -28,10 +28,12 @@ class BubbleAnimController extends GetxController {
         }
 
         // Check Completed
-        if (transConn.status() == Status.Complete) {
-          hasCompleted(true);
-          update();
-          _setComplete();
+        if (transConn.status == Status.Complete) {
+          if (transConn.reply.payload.type != Payload_Type.CONTACT) {
+            hasCompleted(true);
+            update();
+            _setComplete();
+          }
         }
       }
     });

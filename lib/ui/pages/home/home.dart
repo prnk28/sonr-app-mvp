@@ -15,10 +15,10 @@ class HomeScreen extends GetView<ReceiveController> {
   @override
   Widget build(BuildContext context) {
     // ** Listen to States ** //
-    controller.status.listen((currStatus) {
-      if (currStatus == Status.Pending) {
+    controller.addListenerId("Listener", () {
+      if (controller.status == Status.Pending) {
         Get.bottomSheet(InviteSheet());
-      } else if (currStatus == Status.Complete) {
+      } else if (controller.status == Status.Complete) {
         Get.dialog(CompletedPopup());
       }
     });
