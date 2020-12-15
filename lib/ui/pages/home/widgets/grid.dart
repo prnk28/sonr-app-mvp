@@ -1,24 +1,25 @@
 part of '../home.dart';
 
-class ImageGrid extends GetView<FileController> {
+class ImageGrid extends StatelessWidget {
   final double itemHeight = (Get.height - kToolbarHeight - 24) / 4;
   final double itemWidth = Get.width / 4;
 
   // Build Widget
   @override
   Widget build(BuildContext context) {
+    FileService files = Get.find();
     // Load Files
     return ListView.builder(
-      itemCount: controller.allFiles.length,
+      itemCount: files.allFiles.length,
       itemBuilder: (context, current) {
         // Get Current Metadata
-        Metadata metadata = controller.allFiles[current];
+        Metadata metadata = files.allFiles[current];
 
         // Generate Cell
         return GestureDetector(
             onTap: () async {
               // Process data.
-              controller.getFile(metadata);
+              files.getFile(metadata);
             },
             child: Container(
               height: 75,

@@ -13,13 +13,6 @@ class AppBind extends Bindings {
   }
 }
 
-class HomeBind extends Bindings {
-  @override
-  void dependencies() {
-    Get.put<FileController>(FileController(), permanent: true);
-  }
-}
-
 class TransferBind extends Bindings {
   @override
   void dependencies() {

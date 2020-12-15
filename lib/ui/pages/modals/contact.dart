@@ -2,7 +2,6 @@ part of 'invite.dart';
 
 class ContactInviteView extends StatelessWidget {
   final Contact contact;
-  final void Function() onSave;
   final bool isReply;
   final ReceiveController controller = Get.find();
 
@@ -10,7 +9,6 @@ class ContactInviteView extends StatelessWidget {
     this.contact, {
     this.isReply = false,
     Key key,
-    this.onSave,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,6 @@ class ContactInviteView extends StatelessWidget {
         builder: (context, scrollController) {
           return Container(
               decoration: windowDecoration(context),
-              height: Get.height / 3 + 50,
               child: Column(children: [
                 // @ Top Right Close/Cancel Button
                 GestureDetector(
@@ -51,7 +48,7 @@ class ContactInviteView extends StatelessWidget {
                 NeumorphicButton(
                     onPressed: () {
                       // Emit Event
-                      onSave();
+                      Get.back();
                     },
                     style: NeumorphicStyle(
                         depth: 8,

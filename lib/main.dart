@@ -1,11 +1,22 @@
 import 'package:get/get.dart';
 import 'package:sonar_app/ui/ui.dart';
 import 'controller/bindings.dart';
+import 'service/service.dart';
 
 // ** Main Method ** //
 void main() async {
-  // Run App with BLoC Providers
+  await initServices();
   runApp(App());
+}
+
+// ^ Services (Files, Contacts) ^ //
+// TODO: Convert SonrController to Service
+initServices() async {
+  print('starting services ...');
+
+  /// Here is where you put get_storage, hive, shared_pref initialization.
+  await Get.putAsync(() => FileService().init());
+  print('All services started...');
 }
 
 // ^ Root Widget ^ //
@@ -33,7 +44,6 @@ List<GetPage> getPages() {
       name: '/home',
       page: () => AppTheme(HomeScreen()),
       transition: Transition.zoom,
-      binding: HomeBind(),
     ),
 
     // ** Register Page ** //

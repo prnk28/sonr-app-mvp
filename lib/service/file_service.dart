@@ -8,16 +8,16 @@ import 'package:sqflite/sqflite.dart';
 
 const DATABASE_PATH = 'localData.db';
 
-class FileController extends GetxController {
+class FileService extends GetxService {
   // Database Reference
   Database db;
 
   // Observable Properties
-  var allFiles = new List<Metadata>().obs;
-  var currentFile = Rx<File>();
-  var currentMetadata = Rx<Metadata>();
+  List<Metadata> allFiles = new List<Metadata>();
+  File currentFile;
+  Metadata currentMetadata;
 
-  onInit() async {
+  init() async {
     super.onInit();
     // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
@@ -37,48 +37,44 @@ create table $metaTable (
   $columnlastOpened integer not null)
 ''');
     });
-    await _refreshAllFiles();
-  }
-
-  getAllFiles() async {
-    await _refreshAllFiles();
+    await refreshAllFiles();
+    return this;
   }
 
   // ^ Get a File from Metadata ^ //
   getFile(Metadata meta) async {
     // Set Data
-    currentMetadata(meta);
-    currentFile(File(meta.path));
+    currentMetadata = meta;
+    currentFile = File(meta.path);
   }
 
   // ^ Insert Metadata into SQL DB ^ //
   Future<Metadata> saveMeta(Metadata metadata) async {
     metadata.id = await db.insert(metaTable, metaToSQL(metadata));
-    await _refreshAllFiles();
+    await refreshAllFiles();
     return metadata;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
   Future deleteMeta(int id) async {
     await db.delete(metaTable, where: '$columnId = ?', whereArgs: [id]);
-    await _refreshAllFiles();
+    await refreshAllFiles();
   }
 
   // ^ Update Metadata in DB ^ //
   Future updateMeta(Metadata metadata) async {
     await db.update(metaTable, metaToSQL(metadata),
         where: '$columnId = ?', whereArgs: [metadata.id]);
-    await _refreshAllFiles();
+    await refreshAllFiles();
   }
 
   // ^ Close SQL Database ^ //
-  dispose() async {
-    super.dispose();
+  onClose() async {
     await db.close();
   }
 
   // ^ Get All Files ^ //
-  _refreshAllFiles() async {
+  refreshAllFiles() async {
     // Init List
     List<Metadata> result = new List<Metadata>();
     // Get Records
@@ -104,6 +100,6 @@ create table $metaTable (
     }
 
     // Update All Files
-    allFiles(result);
+    allFiles = result;
   }
 }

@@ -6,7 +6,7 @@ import 'package:sonar_app/controller/controller.dart';
 
 class CompletedPopup extends StatelessWidget {
   final ReceiveController receiveController = Get.find();
-  final FileController fileController = Get.find();
+  final FileService fileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
