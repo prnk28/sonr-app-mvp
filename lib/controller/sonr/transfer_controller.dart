@@ -30,6 +30,11 @@ class TransferController extends GetxController {
     update(["Listener"]);
   }
 
+  // ^ Gets Sequence of Status Changes ^
+  List<Status> sequence() {
+    return sonrNode.sequence();
+  }
+
   // ^ Invite-Peer Event ^
   void invitePeer(Peer p) async {
     // Send Invite for File
@@ -68,13 +73,11 @@ class TransferController extends GetxController {
   void _handleResponded(dynamic data) async {
     // Check Type
     if (data is AuthReply) {
-      if (data.payload.type == Payload_Type.NONE) {
-        // Set Message
-        this.reply = data;
+      // Set Message
+      this.reply = data;
 
-        // Report Replied
-        update(["Listener"]);
-      }
+      // Report Replied
+      update(["Bubble_" + data.from.id]);
     }
   }
 
