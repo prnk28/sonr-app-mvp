@@ -7,7 +7,7 @@ class PeerStack extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
     // Initialize Widget List
-    Map<String, Bubble> stackWidgets = new Map<String, Bubble>();
+    List<Bubble> stackWidgets = new List<Bubble>();
 
     // @ Bubble View
     return Obx(() {
@@ -20,21 +20,19 @@ class PeerStack extends GetView<LobbyController> {
         // @ Create Bubbles that arent added
         controller.peers().forEach((id, peer) {
           // Check if Bubble Already Added
-          if (!stackWidgets.containsKey(id)) {
-            // Create Bubble
-            var idx = controller.peers().values.toList().indexOf(peer);
-            stackWidgets[id] = Bubble(idx * mean, peer);
-          }
+          // Create Bubble
+          var idx = controller.peers().values.toList().indexOf(peer);
+          stackWidgets.add(Bubble(idx * mean, peer));
         });
 
-        // @ Remove Bubbles that no longer exist
-        stackWidgets.forEach((id, bubble) {
-          if (!controller.peers().containsKey(id)) {
-            stackWidgets.remove(id);
-          }
-        });
+        // // @ Remove Bubbles that no longer exist
+        // stackWidgets.forEach((id, bubble) {
+        //   if (!controller.peers().containsKey(id)) {
+        //     stackWidgets.remove(id);
+        //   }
+        // });
       }
-      return Stack(children: stackWidgets.values.toList());
+      return Stack(children: stackWidgets);
     });
   }
 }
