@@ -8,13 +8,16 @@ part 'contact.dart';
 part 'file.dart';
 
 class InviteSheet extends StatelessWidget {
+  final bool forceContact;
+
+  const InviteSheet({Key key, this.forceContact = false}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ReceiveController>(
         id: "ReceiveSheet",
         builder: (receive) {
           // ^ Check Auth Status for Accept ^
-          if (receive.accepted) {
+          if (receive.status.value == Status.Busy) {
             return Container(
                 decoration: windowDecoration(context),
                 height: Get.height / 3 + 20,

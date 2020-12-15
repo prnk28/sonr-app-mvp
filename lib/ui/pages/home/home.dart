@@ -11,18 +11,14 @@ import 'package:sonr_core/sonr_core.dart';
 part 'widgets/floater.dart';
 part 'widgets/grid.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<ReceiveController> {
   @override
   Widget build(BuildContext context) {
     // ** Listen to States ** //
-    final ReceiveController receive = Get.find<ReceiveController>();
-    receive.addListenerId("Listener", () {
-      if (receive.invited) {
+    controller.status.listen((currStatus) {
+      if (currStatus == Status.Pending) {
         Get.bottomSheet(InviteSheet());
-      }
-
-      // @ Present Completed Popup
-      if (receive.completed) {
+      } else if (currStatus == Status.Complete) {
         Get.dialog(CompletedPopup());
       }
     });

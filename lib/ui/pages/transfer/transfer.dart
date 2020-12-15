@@ -7,13 +7,19 @@ import 'widgets/compass.dart';
 
 const STACK_CONSTANT = 1;
 
-class TransferScreen extends GetView<LobbyController> {
+class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
+    // ** Listen to States ** //
+    controller.status.listen((currStatus) {
+      if (currStatus == Status.Complete) {
+        Get.bottomSheet(ContactInviteView(controller.reply.payload.contact, ));
+      }
+    });
+
     // Return Widget
     return AppTheme(Scaffold(
-        appBar: exitAppBar(context, Icons.close, title: controller.code(),
-            onPressed: () {
+        appBar: exitAppBar(context, Icons.close, title: "OLC", onPressed: () {
           Get.offAllNamed("/home");
         }),
         backgroundColor: NeumorphicTheme.baseColor(context),

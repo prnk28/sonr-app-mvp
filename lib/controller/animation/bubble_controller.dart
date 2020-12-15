@@ -28,7 +28,7 @@ class BubbleAnimController extends GetxController {
         }
 
         // Check Completed
-        if (transConn.completed) {
+        if (transConn.status() == Status.Complete) {
           hasCompleted(true);
           update();
           _setComplete();

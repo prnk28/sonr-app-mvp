@@ -5,12 +5,11 @@ import 'package:sonar_app/controller/sonr/conn_controller.dart';
 
 class TransferController extends GetxController {
   // @ Set Local Properties
-  //bool _isProcessed = false;
 
   // @ Set Peer Dependencies
   AuthReply reply;
-  bool completed = false;
   Payload_Type payloadType;
+  final status = sonrNode.status.obs;
 
   // ^ Assign Callbacks and Create Ref for Node ^ //
   void assign() {
@@ -31,9 +30,6 @@ class TransferController extends GetxController {
 
   // ^ Invite-Peer Event ^
   void invitePeer(Peer p) async {
-    // Update Data
-    update(["Listener"]);
-
     // Send Invite for File
     if (payloadType == Payload_Type.FILE) {
       await sonrNode.invite(p, payloadType);
@@ -45,6 +41,12 @@ class TransferController extends GetxController {
     }
   }
 
+  // ^ Resets Status ^
+  void finish() {
+    sonrNode.finish();
+    reply = null;
+  }
+
   // **************************
   // ******* Callbacks ********
   // **************************
@@ -52,7 +54,7 @@ class TransferController extends GetxController {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
-      //_isProcessed = true;
+      update(["Listener"]);
     }
   }
 
@@ -72,10 +74,7 @@ class TransferController extends GetxController {
 
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(dynamic data) async {
-    this.completed = true;
-
     // Reset Peer/Auth
-    this.reply = null;
     update(["Listener"]);
   }
 }

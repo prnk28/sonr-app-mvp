@@ -40,18 +40,7 @@ class ContactInviteView extends StatelessWidget {
                 ]),
 
                 // @ Send Back Button
-                NeumorphicButton(
-                    onPressed: () {
-                      // Emit Event
-                      onSendBack();
-                    },
-                    style: NeumorphicStyle(
-                        depth: 8,
-                        shape: NeumorphicShape.concave,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(8))),
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text("Send Back", style: smallTextStyle())),
+                _buildSendBack(),
 
                 // @ Save Button
                 NeumorphicButton(
@@ -68,5 +57,27 @@ class ContactInviteView extends StatelessWidget {
                     child: Text("Save", style: smallTextStyle())),
               ]));
         });
+  }
+
+  Widget _buildSendBack() {
+    // @ Sendback Is actions[0]
+    var sendback = NeumorphicButton(
+        onPressed: () {
+          // Emit Event
+          onSendBack();
+        },
+        style: NeumorphicStyle(
+            depth: 8,
+            shape: NeumorphicShape.concave,
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
+        padding: const EdgeInsets.all(12.0),
+        child: Text("Send Back", style: smallTextStyle()));
+
+    // Remove Sendback if Necessary
+    if (this.onSendBack == null) {
+      return Container();
+    }
+
+    return sendback;
   }
 }
