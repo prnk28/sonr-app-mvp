@@ -88,10 +88,9 @@ class FileInviteView extends StatelessWidget {
             Get.back();
           }
           // @ Error
-          else {
-            print("Incorrect Receive Controller Status");
-            return Container();
-          }
+
+          print("Incorrect Receive Controller Status");
+          return Container();
         });
 
     // FlatButton// Container
@@ -128,6 +127,5 @@ class FileInviteView extends StatelessWidget {
         return Icon(Icons.device_unknown, size: 100);
         break;
     }
-    return Container();
   }
 }

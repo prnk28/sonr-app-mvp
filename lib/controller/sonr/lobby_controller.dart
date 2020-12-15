@@ -6,7 +6,7 @@ import 'package:sonar_app/controller/sonr/conn_controller.dart';
 class LobbyController extends GetxController {
   final code = "".obs;
   final size = 0.obs;
-  final peers = Rx<Map<String, Peer>>();
+  final peers = Rx<List<Peer>>();
 
   // ^ Assign Callbacks ^ //
   void assign() {
@@ -16,9 +16,13 @@ class LobbyController extends GetxController {
   void handleRefresh(dynamic data) {
     // Check Type
     if (data is Lobby) {
+      // Update Peers Code
       code(data.code);
       size(data.peers.length);
-      peers(data.peers);
+
+      // Update Peers List
+      var peersList = data.peers.values.toList(growable: false);
+      peers(peersList);
     } else {
       print("handleRefreshed() - " + "Invalid Return type");
     }

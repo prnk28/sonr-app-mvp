@@ -3,10 +3,15 @@ part of 'invite.dart';
 class ContactInviteView extends StatelessWidget {
   final Contact contact;
   final void Function() onSave;
-  final void Function() onSendBack;
+  final bool isReply;
+  final ReceiveController controller = Get.find();
 
-  const ContactInviteView(this.contact, {Key key, this.onSave, this.onSendBack})
-      : super(key: key);
+  ContactInviteView(
+    this.contact, {
+    this.isReply = false,
+    Key key,
+    this.onSave,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // Build View
@@ -60,24 +65,23 @@ class ContactInviteView extends StatelessWidget {
   }
 
   Widget _buildSendBack() {
-    // @ Sendback Is actions[0]
-    var sendback = NeumorphicButton(
-        onPressed: () {
-          // Emit Event
-          onSendBack();
-        },
-        style: NeumorphicStyle(
-            depth: 8,
-            shape: NeumorphicShape.concave,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
-        padding: const EdgeInsets.all(12.0),
-        child: Text("Send Back", style: smallTextStyle()));
+    if (!isReply) {
+      // @ Sendback Is actions[0]
+      return NeumorphicButton(
+          onPressed: () {
+            // Emit Event
+            controller.respondPeer(true);
+          },
+          style: NeumorphicStyle(
+              depth: 8,
+              shape: NeumorphicShape.concave,
+              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
+          padding: const EdgeInsets.all(12.0),
+          child: Text("Send Back", style: smallTextStyle()));
 
-    // Remove Sendback if Necessary
-    if (this.onSendBack == null) {
+      // Remove Sendback if Necessary
+    } else {
       return Container();
     }
-
-    return sendback;
   }
 }

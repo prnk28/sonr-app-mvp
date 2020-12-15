@@ -19,7 +19,7 @@ class PeerStack extends GetView<LobbyController> {
         int current = 0;
 
         // @ Create Bubbles that arent added
-        controller.peers().forEach((id, peer) {
+        controller.peers().forEach((peer) {
           // Create Bubble
           stackWidgets.add(Bubble(current * mean, peer));
           current++;

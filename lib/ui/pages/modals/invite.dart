@@ -25,9 +25,6 @@ class InviteSheet extends StatelessWidget {
           else if (receive.invite.payload.type == Payload_Type.CONTACT) {
             return ContactInviteView(
               receive.invite.payload.contact,
-              onSendBack: () {
-                receive.respondPeer(true);
-              },
               onSave: () {
                 receive.respondPeer(true);
               },

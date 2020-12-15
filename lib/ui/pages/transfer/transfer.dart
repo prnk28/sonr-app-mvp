@@ -14,7 +14,10 @@ class TransferScreen extends GetView<TransferController> {
     controller.addListenerId("Listener", () {
       if (controller.status == Status.Complete) {
         if (controller.reply.payload.type == Payload_Type.CONTACT) {
-          Get.bottomSheet(ContactInviteView(controller.reply.payload.contact));
+          Get.bottomSheet(ContactInviteView(
+            controller.reply.payload.contact,
+            isReply: true,
+          ));
         }
       }
     });
