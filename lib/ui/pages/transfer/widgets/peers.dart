@@ -14,7 +14,7 @@ class PeerStack extends GetView<LobbyController> {
       // @ Verify Not Null
       if (controller.size > 0) {
         // Init Stack Vars
-        int total = controller.peers().length + STACK_CONSTANT;
+        int total = controller.size() + STACK_CONSTANT;
         double mean = 1.0 / total;
 
         // @ Create Bubbles that arent added

@@ -35,7 +35,6 @@ class TransferController extends GetxController {
     // Send Invite for File
     if (payloadType == Payload_Type.FILE) {
       await sonrNode.invite(p, payloadType);
-      //}
     }
     // Send Invite for Contact
     else if (payloadType == Payload_Type.CONTACT) {
