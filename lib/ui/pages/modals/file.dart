@@ -2,14 +2,10 @@ part of 'invite.dart';
 
 class FileInviteView extends StatelessWidget {
   final AuthInvite invite;
-  final void Function() onDecline;
-  final void Function() onAccept;
 
   const FileInviteView(
     this.invite, {
     Key key,
-    this.onDecline,
-    this.onAccept,
   }) : super(key: key);
 
   @override
@@ -17,6 +13,7 @@ class FileInviteView extends StatelessWidget {
     // Extract Data
     var metadata = invite.payload.file;
     var from = invite.from;
+    ReceiveController controller = Get.find();
 
     // Build View
     return Container(
@@ -28,7 +25,7 @@ class FileInviteView extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 // Emit Event
-                onDecline();
+                controller.respondPeer(false);
 
                 // Pop Window
                 Get.back();
@@ -58,7 +55,7 @@ class FileInviteView extends StatelessWidget {
             NeumorphicButton(
                 onPressed: () {
                   // Emit Event
-                  onAccept();
+                  controller.respondPeer(true);
                 },
                 style: NeumorphicStyle(
                     depth: 8,

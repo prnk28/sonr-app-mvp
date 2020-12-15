@@ -74,10 +74,12 @@ class TransferController extends GetxController {
     if (data is AuthReply) {
       // Set Message
       this.reply = data;
+      status = sonrNode.status;
+      print("Peer Replied: " + reply.toString());
 
       if (data.payload.type == Payload_Type.CONTACT) {
         // Report Replied to Bubble for File
-        update(["Listener"]);
+        update(["Listener", "Bubble_" + data.from.id]);
       } else {
         // Report Replied to Bubble for File
         update(["Bubble_" + data.from.id]);
@@ -88,6 +90,7 @@ class TransferController extends GetxController {
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
+    status = sonrNode.status;
     update(["Listener"]);
   }
 }

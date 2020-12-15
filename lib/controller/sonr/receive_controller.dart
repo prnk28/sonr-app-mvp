@@ -32,7 +32,10 @@ class ReceiveController extends GetxController {
     await sonrNode.respond(decision);
   }
 
+  // ^ Reset Session ^
   void finish() {
+    // Reset Peer/Auth
+    this.invite = null;
     sonrNode.finish();
   }
 
@@ -66,9 +69,6 @@ class ReceiveController extends GetxController {
     if (data is Metadata) {
       // Set Data
       this.file(data);
-
-      // Reset Peer/Auth
-      this.invite = null;
       status = sonrNode.status;
       update(["Listener"]);
     } else {

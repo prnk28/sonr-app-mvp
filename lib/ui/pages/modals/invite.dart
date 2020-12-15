@@ -30,11 +30,7 @@ class InviteSheet extends StatelessWidget {
           // ^ Authentication Modal ^
           // @ Payload is a File
           if (receive.invite.payload.type == Payload_Type.FILE) {
-            return FileInviteView(receive.invite, onAccept: () {
-              receive.respondPeer(true);
-            }, onDecline: () {
-              receive.respondPeer(false);
-            });
+            return FileInviteView(receive.invite);
           }
           // @ Payload Is Contact
           else if (receive.invite.payload.type == Payload_Type.CONTACT) {
