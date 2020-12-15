@@ -30,19 +30,22 @@ class TransferController extends GetxController {
     update(["Listener"]);
   }
 
+  // ^ Gets Sequence of Status Changes ^
+  List<Status> sequence() {
+    return sonrNode.sequence();
+  }
+
   // ^ Invite-Peer Event ^
   void invitePeer(Peer p) async {
     // Send Invite for File
     if (payloadType == Payload_Type.FILE) {
       await sonrNode.invite(p, payloadType);
-      //}
     }
     // Send Invite for Contact
     else if (payloadType == Payload_Type.CONTACT) {
       await sonrNode.invite(p, payloadType);
     }
     status = sonrNode.status;
-    update(["Listener"]);
   }
 
   // ^ Resets Status ^
@@ -69,12 +72,15 @@ class TransferController extends GetxController {
   void _handleResponded(dynamic data) async {
     // Check Type
     if (data is AuthReply) {
-      if (data.payload.type == Payload_Type.NONE) {
-        // Set Message
-        this.reply = data;
+      // Set Message
+      this.reply = data;
 
-        // Report Replied
+      if (data.payload.type == Payload_Type.CONTACT) {
+        // Report Replied to Bubble for File
         update(["Listener"]);
+      } else {
+        // Report Replied to Bubble for File
+        update(["Bubble_" + data.from.id]);
       }
     }
   }
