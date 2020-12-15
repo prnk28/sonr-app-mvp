@@ -24,13 +24,16 @@ class ConnController extends GetxController {
   }
 
   // ^ Connect Node Method ^ //
-  void connect(Position pos, Contact con) async {
+  void connect(Position pos, Contact contact) async {
     // Get OLC
     var olcCode = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization
-    sonrNode = await SonrCore.initialize(olcCode, "@Temp_Username", con,
-        logging: false);
+    sonrNode = await SonrCore.initialize(
+      olcCode,
+      "@Temp_Username",
+      contact,
+    );
     connected = true;
 
     // Get Controllers

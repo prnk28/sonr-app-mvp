@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:sonar_app/ui/ui.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'widgets/bubble.dart';
+import 'widgets/peers.dart';
 import 'widgets/compass.dart';
 
 const STACK_CONSTANT = 1;
@@ -28,30 +28,7 @@ class TransferScreen extends GetView<LobbyController> {
                   painter: ZonePainter(),
                   child: Container(),
                 )),
-
-            // @ Bubble View
-            Obx(() {
-              // Initialize Widget List
-              List<Widget> stackWidgets = new List<Widget>();
-
-              // Check Peers Size
-              if (controller.peers.value.length > 0) {
-                // Init Stack Vars
-                int total = controller.peers.value.length + STACK_CONSTANT;
-                double mean = 1.0 / total;
-                int current = 0;
-
-                // Create Bubbles
-                controller.peers.value.values.forEach((peer) {
-                  // Increase Count
-                  current += 1;
-
-                  // Create Bubble
-                  stackWidgets.add(Bubble(current * mean, peer));
-                });
-              }
-              return Stack(children: stackWidgets);
-            }),
+            PeerStack(),
             CompassView(),
           ],
         ))));

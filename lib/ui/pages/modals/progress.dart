@@ -2,7 +2,7 @@ import 'package:sonar_app/ui/ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/controller/controller.dart';
 
-class LiquidFill extends StatefulWidget {
+class ProgressView extends StatefulWidget {
   // Required Properties
   final IconData iconData;
   final Duration waveDuration;
@@ -11,7 +11,7 @@ class LiquidFill extends StatefulWidget {
   final Color waveColor;
 
   // Constructer
-  LiquidFill({
+  ProgressView({
     Key key,
     @required this.iconData,
     this.waveDuration = const Duration(seconds: 2),
@@ -24,10 +24,11 @@ class LiquidFill extends StatefulWidget {
         super(key: key);
 
   @override
-  _LiquidFillState createState() => _LiquidFillState();
+  _ProgressViewState createState() => _ProgressViewState();
 }
 
-class _LiquidFillState extends State<LiquidFill> with TickerProviderStateMixin {
+class _ProgressViewState extends State<ProgressView>
+    with TickerProviderStateMixin {
   final _iconKey = GlobalKey();
   AnimationController _waveController;
   @override

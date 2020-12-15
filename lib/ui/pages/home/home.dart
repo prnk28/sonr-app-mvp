@@ -17,12 +17,11 @@ class HomeScreen extends StatelessWidget {
     // ** Listen to States ** //
     final ReceiveController receive = Get.find<ReceiveController>();
     receive.addListenerId("Listener", () {
-      // Present AuthSheet
-      if (receive.status == AuthMessage_Event.REQUEST) {
-        Get.bottomSheet(ReceiveSheet());
+      if (receive.invited) {
+        Get.bottomSheet(InviteSheet());
       }
 
-      // Present Completed Popup
+      // @ Present Completed Popup
       if (receive.completed) {
         Get.dialog(CompletedPopup());
       }
@@ -32,16 +31,9 @@ class HomeScreen extends StatelessWidget {
     return AppTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         appBar: titleAppBar("Home"),
-        floatingActionButton: FloaterButton((DataType button) {
+        floatingActionButton: FloaterButton(() {
           // File Option
-          if (button == DataType.File) {
-            // Push to Transfer Screen
-            Get.offNamed("/transfer");
-          }
-          // Contact Option
-          else {
-            log.w("Contact not implemented yet");
-          }
+          Get.offNamed("/transfer");
         }),
         body: ImageGrid()));
   }

@@ -1,6 +1,7 @@
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/controller/sonr/conn_controller.dart';
+//import 'package:flutter/foundation.dart';
 
 class LobbyController extends GetxController {
   final code = "".obs;
@@ -16,7 +17,7 @@ class LobbyController extends GetxController {
     // Check Type
     if (data is Lobby) {
       code(data.code);
-      size(data.size);
+      size(data.peers.length);
       peers(data.peers);
     } else {
       print("handleRefreshed() - " + "Invalid Return type");

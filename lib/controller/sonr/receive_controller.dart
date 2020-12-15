@@ -1,18 +1,16 @@
-import 'dart:io';
 import 'package:sonar_app/controller/sonr/conn_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 
 class ReceiveController extends GetxController {
   // @ Set Peer Dependencies
-  AuthMessage_Event status = AuthMessage_Event.NONE;
-  AuthMessage auth;
-  Peer peer;
+  AuthInvite invite;
+  bool invited = false;
+  bool accepted = false;
   bool completed = false;
 
   // @ Set Data Dependencies
-  var file = Rx<File>();
-  var metadata = Rx<Metadata>();
+  var file = Rx<Metadata>();
   var progress = 0.0.obs;
 
   // ^ Assign Callbacks and Create Ref for Node ^ //
@@ -26,14 +24,12 @@ class ReceiveController extends GetxController {
   void respondPeer(bool decision) async {
     // Update Status by Decision
     if (decision) {
-      this.status = AuthMessage_Event.ACCEPT;
+      this.accepted = true;
       update(["ReceiveSheet"]);
     } else {
       // Reset Peer/Auth
-      this.peer = null;
-      this.auth = null;
+      this.invite = null;
     }
-
     // Send Response
     await sonrNode.respond(decision);
   }
@@ -43,18 +39,15 @@ class ReceiveController extends GetxController {
   // **************************
   // ^ Node Has Been Invited ^ //
   void _handleInvite(dynamic data) async {
+    print("Invite" + data.toString());
     // Check Type
-    if (data is AuthMessage) {
+    if (data is AuthInvite) {
       // Update Values
-      this.auth = data;
-      this.peer = data.from;
-      this.metadata(data.metadata);
-      this.status = data.event;
+      this.invited = true;
+      this.invite = data;
 
       // Inform Listener
       update(["Listener"]);
-    } else {
-      print("handleInvited() - " + "Invalid Return type");
     }
   }
 
@@ -63,8 +56,6 @@ class ReceiveController extends GetxController {
     if (data is double) {
       // Update Data
       this.progress(data);
-    } else {
-      print("handleProgressed() - " + "Invalid Return type");
     }
   }
 
@@ -72,14 +63,11 @@ class ReceiveController extends GetxController {
   void _handleReceived(dynamic data) {
     if (data is Metadata) {
       // Set Data
-      this.metadata(data);
-      this.file(File(data.path));
-      this.status = AuthMessage_Event.NONE;
+      this.file(data);
       this.completed = true;
 
       // Reset Peer/Auth
-      this.peer = null;
-      this.auth = null;
+      this.invite = null;
       update(["Listener"]);
     } else {
       print("handleProgressed() - " + "Invalid Return type");

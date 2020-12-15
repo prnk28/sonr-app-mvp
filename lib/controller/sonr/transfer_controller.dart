@@ -5,45 +5,43 @@ import 'package:sonar_app/controller/sonr/conn_controller.dart';
 
 class TransferController extends GetxController {
   // @ Set Local Properties
-  bool _isProcessed = false;
+  //bool _isProcessed = false;
 
   // @ Set Peer Dependencies
-  AuthMessage_Event status = AuthMessage_Event.NONE;
-  AuthMessage auth;
-  Peer peer;
+  AuthReply reply;
   bool completed = false;
-
-  // @ Set Data Dependencies
-  final file = Rx<File>();
-  final metadata = Rx<Metadata>();
+  Payload_Type payloadType;
 
   // ^ Assign Callbacks and Create Ref for Node ^ //
   void assign() {
     sonrNode.assignCallback(CallbackEvent.Queued, _handleQueued);
-    sonrNode.assignCallback(CallbackEvent.Accepted, _handleAccepted);
-    sonrNode.assignCallback(CallbackEvent.Denied, _handleDenied);
+    sonrNode.assignCallback(CallbackEvent.Responded, _handleResponded);
     sonrNode.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
   }
 
   // ^ Queue-File Event ^
-  void queueFile(File file) async {
+  void queue(Payload_Type payType, {File file}) async {
     // Queue File
-    this.file(file);
-    sonrNode.queue(file.path);
+    if (payType == Payload_Type.FILE) {
+      sonrNode.queue(file.path);
+    }
+    // Set Payload Type
+    payloadType = payType;
   }
 
   // ^ Invite-Peer Event ^
   void invitePeer(Peer p) async {
-    // @ Check File Status
-    if (_isProcessed) {
-      // Update Data
-      this.peer = p;
-      update(["Listener"]);
+    // Update Data
+    update(["Listener"]);
 
-      // Send Invite
-      await sonrNode.invite(p);
-    } else {
-      print("InvitePeer() - " + "File not processed.");
+    // Send Invite for File
+    if (payloadType == Payload_Type.FILE) {
+      await sonrNode.invite(p, payloadType);
+      //}
+    }
+    // Send Invite for Contact
+    else if (payloadType == Payload_Type.CONTACT) {
+      await sonrNode.invite(p, payloadType);
     }
   }
 
@@ -54,48 +52,30 @@ class TransferController extends GetxController {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
-      _isProcessed = true;
-      this.metadata(data);
-    } else {
-      print("handleQueued() - " + "Invalid Return type");
+      //_isProcessed = true;
     }
   }
 
   // ^ Node Has Been Accepted ^ //
-  void _handleAccepted(dynamic data) async {
+  void _handleResponded(dynamic data) async {
     // Check Type
-    if (data is AuthMessage) {
-      // Set Message
-      this.auth = data;
+    if (data is AuthReply) {
+      if (data.payload.type == Payload_Type.NONE) {
+        // Set Message
+        this.reply = data;
 
-      // Report Accepted
-      this.status = data.event;
-      update(["Listener"]);
-    } else {
-      print("handleAccepted() - " + "Invalid Return type");
-    }
-  }
-
-// ^ Node Has Been Denied ^ //
-  void _handleDenied(dynamic data) async {
-    // Check Type
-    if (data is AuthMessage) {
-      // Report Declined
-      this.status = data.event;
-      update(["Listener"]);
-    } else {
-      print("handleDenied() - " + "Invalid Return type");
+        // Report Replied
+        update(["Listener"]);
+      }
     }
   }
 
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(dynamic data) async {
-    this.status = AuthMessage_Event.NONE;
     this.completed = true;
 
     // Reset Peer/Auth
-    this.peer = null;
-    this.auth = null;
+    this.reply = null;
     update(["Listener"]);
   }
 }

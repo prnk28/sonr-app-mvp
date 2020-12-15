@@ -12,22 +12,27 @@ class BubbleAnimController extends GetxController {
   BubbleAnimController(this._peer) {
     TransferController transConn = Get.find();
     transConn.addListenerId("Listener", () {
-      if (isInvited() && (transConn.status == AuthMessage_Event.ACCEPT)) {
-        hasResponded(true);
-        update();
-        _setAccepted();
-        _hasResponded.value = true;
-      }
-      if (isInvited() && (transConn.status == AuthMessage_Event.DECLINE)) {
-        hasResponded(true);
-        update();
-        _setDenied();
-        _hasResponded.value = true;
-      }
-      if (isInvited() && (transConn.completed)) {
-        hasCompleted(true);
-        update();
-        _setComplete();
+      // Validate Invited
+      if (isInvited() && transConn.reply.decision != null) {
+        // Check Reply
+        if (transConn.reply.decision) {
+          hasResponded(true);
+          update();
+          _setAccepted();
+          _hasResponded.value = true;
+        } else {
+          hasResponded(true);
+          update();
+          _setDenied();
+          _hasResponded.value = true;
+        }
+
+        // Check Completed
+        if (transConn.completed) {
+          hasCompleted(true);
+          update();
+          _setComplete();
+        }
       }
     });
   }
