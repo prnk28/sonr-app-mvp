@@ -90,7 +90,9 @@ class TransferController extends GetxController {
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
-    status = sonrNode.status;
-    update(["Listener"]);
+    if (data is Peer) {
+      status = sonrNode.status;
+      update(["Listener", "Bubble_" + data.id]);
+    }
   }
 }

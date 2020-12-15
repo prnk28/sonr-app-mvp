@@ -17,7 +17,7 @@ class ContactInviteView extends StatelessWidget {
         builder: (context, scrollController) {
           return Container(
               decoration: windowDecoration(context),
-              height: Get.height / 3 + 20,
+              height: Get.height / 3 + 50,
               child: Column(children: [
                 // @ Top Right Close/Cancel Button
                 GestureDetector(

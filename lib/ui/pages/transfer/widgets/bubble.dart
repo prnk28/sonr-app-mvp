@@ -34,33 +34,41 @@ class _BubbleState extends State<Bubble> {
 
     // ^ Listen to Status Changes ^ //
     controller.addListenerId("Bubble_" + widget.peer.id, () {
-      // Retreive Sequence of Events
-      List<Status> seq = controller.sequence();
-      Status prevStatus = seq[0];
-      Status currStatus = seq[1];
-
       // @ Pending -> Busy = Peer Accepted File
-      if (prevStatus == Status.Pending && currStatus == Status.Busy) {
-        setState(() {
-          _pending.isActive = isInvited = !isInvited;
-          _accepted.isActive = hasAccepted = !hasAccepted;
-        });
+      if (controller.status == Status.Busy) {
+        if (mounted) {
+          setState(() {
+            _pending.instance.animation.loop = Loop.oneShot;
+            _accepted.isActive = hasAccepted = !hasAccepted;
+          });
+        }
       }
 
       // @ Pending -> Searching = Peer Denied File
-      if (prevStatus == Status.Pending && currStatus == Status.Searching) {
-        setState(() {
-          _pending.isActive = isInvited = !isInvited;
-          _denied.isActive = hasDenied = !hasDenied;
-        });
+      if (controller.status == Status.Searching) {
+        if (mounted) {
+          setState(() {
+            _pending.instance.animation.loop = Loop.oneShot;
+            _denied.isActive = hasDenied = !hasDenied;
+          });
+        }
       }
 
       // @ Pending -> Searching = Peer Completed File
       if (controller.status == Status.Complete) {
-        setState(() {
-          _sending.isActive = inProgress = !inProgress;
-          _complete.isActive = hasCompleted = !hasCompleted;
-        });
+        if (mounted) {
+          setState(() {
+            if (inProgress) {
+              _sending.instance.animation.loop = Loop.oneShot;
+            }
+
+            if (isInvited) {
+              _pending.instance.animation.loop = Loop.oneShot;
+            }
+
+            _complete.isActive = hasCompleted = !hasCompleted;
+          });
+        }
       }
     });
   }
@@ -81,7 +89,7 @@ class _BubbleState extends State<Bubble> {
       artboard.addController(_denied = SimpleAnimation('Denied'));
       artboard.addController(_accepted = SimpleAnimation('Accepted'));
       artboard.addController(_sending = SimpleAnimation('Sending'));
-      artboard.addController(_complete = SimpleAnimation('Completed'));
+      artboard.addController(_complete = SimpleAnimation('Complete'));
 
       // Set Default States
       _pending.isActive = isInvited;
@@ -89,14 +97,7 @@ class _BubbleState extends State<Bubble> {
       _accepted.isActive = hasAccepted;
       _sending.isActive = inProgress;
       _complete.isActive = hasCompleted;
-
-      _accepted.isActiveChanged.addListener(() {
-        if (!_accepted.isActive) {
-          setState(() {
-            _sending.isActive = inProgress = !inProgress;
-          });
-        }
-      });
+      _accepted.isActiveChanged.addListener(_handleAcceptToSend);
 
       // Wrapped in setState so the widget knows the artboard is ready to play
       setState(() => _artboard = artboard);
@@ -112,7 +113,9 @@ class _BubbleState extends State<Bubble> {
             onTap: () async {
               if (!isInvited) {
                 controller.invitePeer(widget.peer);
-                setState(() => _pending.isActive = isInvited = !isInvited);
+                if (mounted) {
+                  setState(() => _pending.isActive = isInvited = !isInvited);
+                }
               }
             },
             child: PlayAnimation<double>(
@@ -147,6 +150,18 @@ class _BubbleState extends State<Bubble> {
                         _buildContentVisibility(),
                       ]));
                 })));
+  }
+
+  // ^ Add listener for file transfer ^
+  _handleAcceptToSend() {
+    if (_accepted.isActive == false) {
+      if (mounted) {
+        setState(() {
+          _accepted.isActive = hasAccepted = !hasAccepted;
+          _sending.isActive = inProgress = !inProgress;
+        });
+      }
+    }
   }
 
   // ^ Method to Change Content Visibility By State ^ //
