@@ -18,13 +18,12 @@ class Bubble extends StatefulWidget {
 
 class _BubbleState extends State<Bubble> {
   TransferController controller = Get.find();
-  bool hasStarted = true;
   bool isInvited = false;
   bool hasDenied = false;
-  bool isReceiving = false;
+  bool hasAccepted = false;
   bool hasCompleted = false;
   Artboard _artboard;
-  SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
+  SimpleAnimation _pending, _denied, _accepted, _complete;
 
   @override
   void initState() {
@@ -41,33 +40,19 @@ class _BubbleState extends State<Bubble> {
 
       // @ Pending -> Busy = Peer Accepted
       if (prevStatus == Status.Pending && currStatus == Status.Busy) {
-        isReceiving = true;
-        hasDenied = false;
-        setState(() => _updateAnimations());
+        setState(() => _accepted.isActive = hasAccepted = !hasAccepted);
       }
 
       // @ Pending -> Searching = Peer Denied
       if (prevStatus == Status.Pending && currStatus == Status.Searching) {
-        hasDenied = true;
-        setState(() => _updateAnimations());
+        setState(() => _denied.isActive = hasDenied = !hasDenied);
       }
 
       // @ Pending -> Searching = Peer Completed
       if (prevStatus == Status.Busy && currStatus == Status.Complete) {
-        hasCompleted = true;
-        setState(() => _updateAnimations());
+        setState(() => _complete.isActive = hasCompleted = !hasCompleted);
       }
     });
-  }
-
-  _updateAnimations() {
-    // We're going to play the idle animation continuously and mix in the
-    // others when buttons are pressed.
-    _idle.isActive = !isInvited && !hasStarted;
-    _pending.isActive = isInvited;
-    _denied.isActive = hasDenied;
-    _accepted.isActive = !hasDenied && isReceiving;
-    _complete.isActive = hasCompleted;
   }
 
   // ^ Loads dat afrom a Rive file and initializes playback ^
@@ -80,29 +65,16 @@ class _BubbleState extends State<Bubble> {
       // Get the artboard containing the animation you want to play
       final artboard = file.mainArtboard;
 
-      // Set Start Animation
-      if (widget.peer.device.platform == "Android") {
-        artboard.addController(
-            SimpleAnimation('Android')); // Start Animation -> Android
-      } else {
-        artboard
-            .addController(SimpleAnimation('iOS')); // Start Animation -> iOS
-      }
-
       // Add Remaining Animation Controllers
-      artboard.addController(_idle = SimpleAnimation('Idle')); // Idle Animation
+      artboard.addController(SimpleAnimation('Idle')); // Idle Animation
+
       artboard.addController(_pending = SimpleAnimation('Pending'));
       artboard.addController(_denied = SimpleAnimation('Denied'));
       artboard.addController(_accepted = SimpleAnimation('Accepted'));
-      artboard.addController(_sending = SimpleAnimation('Sending'));
-      artboard.addController(_complete = SimpleAnimation('Complete'));
-
-      // We're going to play the idle animation continuously and mix in the
-      // others when buttons are pressed.
-      _idle.isActive = !isInvited && !hasStarted;
+      artboard.addController(_complete = SimpleAnimation('Completed'));
       _pending.isActive = isInvited;
       _denied.isActive = hasDenied;
-      _accepted.isActive = !hasDenied && isReceiving;
+      _accepted.isActive = hasAccepted;
       _complete.isActive = hasCompleted;
 
       // Wrapped in setState so the widget knows the artboard is ready to play
@@ -118,9 +90,8 @@ class _BubbleState extends State<Bubble> {
         child: GestureDetector(
             onTap: () async {
               if (!isInvited) {
-                isInvited = true;
                 controller.invitePeer(widget.peer);
-                setState(() {});
+                setState(() => _pending.isActive = isInvited = !isInvited);
               }
             },
             child: PlayAnimation<double>(
@@ -159,7 +130,7 @@ class _BubbleState extends State<Bubble> {
 
   // ^ Method to Change Content Visibility By State ^ //
   Widget _buildContentVisibility() {
-    if (hasCompleted || isReceiving || hasDenied) {
+    if (hasCompleted || hasAccepted || hasDenied) {
       return PlayAnimation<double>(
           tween: (1.0).tweenTo(0.0),
           duration: 20.milliseconds,

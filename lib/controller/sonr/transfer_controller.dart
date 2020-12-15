@@ -46,7 +46,6 @@ class TransferController extends GetxController {
       await sonrNode.invite(p, payloadType);
     }
     status = sonrNode.status;
-    update(["Listener"]);
   }
 
   // ^ Resets Status ^
