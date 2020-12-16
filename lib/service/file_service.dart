@@ -10,7 +10,7 @@ const DATABASE_PATH = 'localData.db';
 
 class FileService extends GetxService {
   // Database Reference
-  Database db;
+  Database _db;
 
   // Observable Properties
   final allFiles = new List<Metadata>().obs;
@@ -23,7 +23,7 @@ class FileService extends GetxService {
     String path = join(databasesPath, DATABASE_PATH);
 
     // Open Database create files table
-    db = await openDatabase(path, version: 2,
+    _db = await openDatabase(path, version: 2,
         onCreate: (Database db, int version) async {
       await db.execute('''
 create table $metaTable (
@@ -49,35 +49,36 @@ create table $metaTable (
 
   // ^ Insert Metadata into SQL DB ^ //
   Future<Metadata> saveMeta(Metadata metadata) async {
-    metadata.id = await db.insert(metaTable, metaToSQL(metadata));
+    metadata.id = await _db.insert(metaTable, metaToSQL(metadata));
     await refreshAllFiles();
     return metadata;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
   Future deleteMeta(int id) async {
-    await db.delete(metaTable, where: '$columnId = ?', whereArgs: [id]);
+    await _db.delete(metaTable, where: '$columnId = ?', whereArgs: [id]);
     await refreshAllFiles();
   }
 
   // ^ Update Metadata in DB ^ //
   Future updateMeta(Metadata metadata) async {
-    await db.update(metaTable, metaToSQL(metadata),
+    await _db.update(metaTable, metaToSQL(metadata),
         where: '$columnId = ?', whereArgs: [metadata.id]);
     await refreshAllFiles();
   }
 
   // ^ Close SQL Database ^ //
   onClose() async {
-    await db.close();
+    await _db.close();
   }
 
   // ^ Get All Files ^ //
   refreshAllFiles() async {
     // Init List
     List<Metadata> result = new List<Metadata>();
+
     // Get Records
-    List<Map> records = await db.query(
+    List<Map> records = await _db.query(
       metaTable,
       columns: [
         columnId,
