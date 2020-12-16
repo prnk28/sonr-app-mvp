@@ -34,8 +34,8 @@ class HomeScreen extends StatelessWidget {
               // Generate Cell
               return GestureDetector(
                   onTap: () async {
-                    // Process data.
-                    cards.getFile(metadata);
+                    // TODO Utilize Hero Animation
+                    // cards.getFile(metadata);
                   },
                   child: Container(
                     height: 75,
