@@ -17,3 +17,4 @@ build:
 clean:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
+	cd $(PROJECT_DIR) && flutter pub get

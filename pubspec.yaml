@@ -23,6 +23,7 @@ dependencies:
   get:
   intl: ^0.15.8
   logger: ^0.9.4
+  worker_manager: ^3.1.8
 
   # -- Device --
   flutter_compass: ^0.5.0
@@ -41,7 +42,7 @@ dependencies:
   sonr_core:
     git:
       url: git@github.com:sonr-io/plugin.git
-      ref: release
+
 
 
   # -- UI/UX --

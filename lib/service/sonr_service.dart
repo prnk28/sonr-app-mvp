@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
+//import 'dart:isolate';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
@@ -11,8 +11,13 @@ import 'package:sonar_app/modules/widgets/sheets/contact.dart';
 import 'package:sonar_app/modules/widgets/sheets/file.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
+import 'package:worker_manager/worker_manager.dart';
 
 class SonrService extends GetxService {
+  // @ Create Workers
+  FutureOr<Node> connect(String o, String u, Contact c) =>
+      SonrCore.initialize(o, u, c);
+
   // @ Set Properteries
   final status = Status.Offline.obs;
   final direction = 0.0.obs;
@@ -50,22 +55,16 @@ class SonrService extends GetxService {
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization -> Set Node
-    compute(_connect(user), _start);
+    _connect(user);
 
     // Return Service
     return this;
   }
 
-  _connect(User user) {
-    SonrCore.initialize(
-      code,
-      user.username,
-      user.contact,
-    );
-  }
-
-  _start(Node result) async {
-    _node = result;
+  _connect(User user) async {
+    // Create Worker
+    _node = await Executor().execute(
+        arg1: code, arg2: user.username, arg3: user.contact, fun3: connect);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
