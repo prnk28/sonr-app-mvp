@@ -1,17 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/ui/modals/modals.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'dart:io';
 import 'package:vibration/vibration.dart';
 
 class SonrService extends GetxService {
-  // @ Set Properteris
-  Node _sonrNode;
-  final connected = false.obs;
+  // @ Set Properteries
+  final status = Status.Offline.obs;
+  Node _node;
   String code = "";
-  Status status;
 
   // @ Set Lobby Dependencies
   final size = 0.obs;
@@ -30,8 +30,8 @@ class SonrService extends GetxService {
   SonrService() {
     FlutterCompass.events.listen((newDegrees) {
       // Get Current Direction and Update Cubit
-      if (connected()) {
-        _sonrNode.update(newDegrees.headingForCameraMode);
+      if (status() == Status.Ready) {
+        _node.update(newDegrees.headingForCameraMode);
       }
     });
   }
@@ -42,25 +42,86 @@ class SonrService extends GetxService {
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization
-    _sonrNode = await SonrCore.initialize(
+    _node = await SonrCore.initialize(
       code,
       "@Temp_Username",
       contact,
     );
 
     // Assign Node Callbacks
-    _sonrNode.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
-    _sonrNode.assignCallback(CallbackEvent.Invited, _handleInvite);
-    _sonrNode.assignCallback(CallbackEvent.Progressed, _handleProgress);
-    _sonrNode.assignCallback(CallbackEvent.Received, _handleReceived);
-    _sonrNode.assignCallback(CallbackEvent.Queued, _handleQueued);
-    _sonrNode.assignCallback(CallbackEvent.Responded, _handleResponded);
-    _sonrNode.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
-    _sonrNode.assignCallback(CallbackEvent.Error, _handleSonrError);
+    _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
+    _node.assignCallback(CallbackEvent.Invited, _handleInvite);
+    _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
+    _node.assignCallback(CallbackEvent.Received, _handleReceived);
+    _node.assignCallback(CallbackEvent.Queued, _handleQueued);
+    _node.assignCallback(CallbackEvent.Responded, _handleResponded);
+    _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
+    _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
     // Return and Set Connected
-    connected(true);
+    status(_node.status);
     return this;
+  }
+
+  // **************************
+  // ******* Events ********
+  // **************************
+  // ^ Queue-File Event ^
+  void queue(Payload_Type payType, {File file}) async {
+    // Queue File
+    if (payType == Payload_Type.FILE) {
+      _node.queue(file.path);
+    }
+    // Set Payload Type
+    payloadType = payType;
+    status(_node.status);
+  }
+
+  // ^ Invite-Peer Event ^
+  void invitePeer(Peer p) async {
+    // Send Invite for File
+    if (payloadType == Payload_Type.FILE) {
+      await _node.invite(p, payloadType);
+    }
+    // Send Invite for Contact
+    else if (payloadType == Payload_Type.CONTACT) {
+      await _node.invite(p, payloadType);
+    }
+    status(_node.status);
+  }
+
+  // ^ Respond-Peer Event ^
+  void respondPeer(bool decision) async {
+    // Reset Peer/Auth
+    if (!decision) {
+      this.invite = null;
+    }
+
+    // Send Response
+    await _node.respond(decision);
+
+    // Update Status
+    status(_node.status);
+  }
+
+  // ^ Resets Status ^
+  void finish() {
+    // @ Check if Sender
+    if (reply != null && invite == null) {
+      _node.finish();
+      reply = null;
+
+      status(_node.status);
+    }
+    // @ Check if Receiver
+    else {
+      _node.finish();
+      invite = null;
+
+      offer(null);
+      progress(0.0);
+      status(_node.status);
+    }
   }
 
   // **************************
@@ -83,7 +144,7 @@ class SonrService extends GetxService {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
-      status = _sonrNode.status;
+      status(_node.status);
       Get.offNamed("/transfer");
     }
   }
@@ -97,7 +158,8 @@ class SonrService extends GetxService {
       this.invite = data;
 
       // Inform Listener
-      status = _sonrNode.status;
+      status(_node.status);
+      Vibration.vibrate();
       Get.bottomSheet(InviteSheet());
     }
   }
@@ -107,8 +169,7 @@ class SonrService extends GetxService {
     if (data is AuthReply) {
       // Set Message
       this.reply = data;
-      status = _sonrNode.status;
-      print("Peer Replied: " + reply.toString());
+      status(_node.status);
 
       if (data.payload.type == Payload_Type.CONTACT) {
         // Report Replied to Bubble for File
@@ -136,7 +197,7 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
-      status = _sonrNode.status;
+      status(_node.status);
       //update([data.id]);
     }
   }
@@ -146,14 +207,12 @@ class SonrService extends GetxService {
     if (data is Metadata) {
       // Set Data
       this.offer(data);
-      status = _sonrNode.status;
+      status(_node.status);
       Get.back();
 
       // Display Completed Popup
       Future.delayed(Duration(milliseconds: 500));
       Get.dialog(CompletedPopup());
-    } else {
-      print("handleProgressed() - " + "Invalid Return type");
     }
   }
 
