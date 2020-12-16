@@ -8,8 +8,6 @@ import 'package:sonar_app/modules/pages/transfer/peer_bubble.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
 import 'package:sonar_app/modules/widgets/painter/zones.dart';
 import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonr_core/models/models.dart';
-
 import 'compass.dart';
 
 const STACK_CONSTANT = 1;
@@ -42,7 +40,7 @@ class TransferScreen extends StatelessWidget {
                 )),
 
             // @ Peer Bubbles
-            Obx(() => Stack(children: _createBubbles(sonr.peers.values.toList()))),
+            Obx(() => Stack(children: _createBubbles())),
 
             // @ Compass View
             CompassView(),
@@ -51,12 +49,12 @@ class TransferScreen extends StatelessWidget {
   }
 
   // ** Create Bubble Widgets from Peer Data ** //
-  List<Widget> _createBubbles(List<Peer> peers) {
+  List<Widget> _createBubbles() {
     // Generate
-    return new List<Widget>.generate(peers.length, (int index) {
+    return new List<Widget>.generate(sonr.peers.length, (int index) {
       // Create Bubble
       return PeerBubble(
-          Get.put(PeerController(peers[index], peers[index].difference)));
+          Get.put(PeerController(sonr.peers.values.elementAt(index))));
     });
   }
 }

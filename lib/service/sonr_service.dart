@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
@@ -48,18 +50,22 @@ class SonrService extends GetxService {
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization -> Set Node
-    _connect(user);
+    compute(_connect(user), _start);
 
     // Return Service
     return this;
   }
 
-  _connect(User user) async {
-    _node = await SonrCore.initialize(
+  _connect(User user) {
+    SonrCore.initialize(
       code,
       user.username,
       user.contact,
     );
+  }
+
+  _start(Node result) async {
+    _node = result;
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);

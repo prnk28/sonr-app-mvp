@@ -4,30 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/controllers/peer_controller.dart';
 import 'package:sonar_app/modules/widgets/design/util.dart';
-import 'package:sonar_app/modules/widgets/painter/zones.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonr_core/sonr_core.dart';
 import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
-class PeerBubble extends StatelessWidget {
+class PeerBubble extends GetView<PeerController> {
   // Bubble Values
   final PeerController controller;
   PeerBubble(this.controller);
 
   @override
   Widget build(BuildContext context) {
-    PeerController controller = Get.find();
-    SonrService sonr = Get.find();
-
-    // TODO: implement build
+    print("Bubble Built");
     return Positioned(
-        top: calculateOffset(controller.value).dy,
-        left: calculateOffset(controller.value).dx,
+        top: controller.offest.value.dy,
+        left: controller.offest.value.dx,
         child: GestureDetector(
             onTap: () async {
-              sonr.invitePeer(controller.peer);
               controller.updateStatus(PeerStatus.Invited);
             },
             child: PlayAnimation<double>(
@@ -98,16 +91,5 @@ class PeerBubble extends StatelessWidget {
                 initialsFromPeer(controller.peer),
               ]));
         });
-  }
-
-  // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset(double value,
-      {Peer_Proximity proximity = Peer_Proximity.IMMEDIATE}) {
-    Path path = ZonePainter.getBubblePath(Get.width, proximity);
-    PathMetrics pathMetrics = path.computeMetrics();
-    PathMetric pathMetric = pathMetrics.elementAt(0);
-    value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(value);
-    return pos.position;
   }
 }

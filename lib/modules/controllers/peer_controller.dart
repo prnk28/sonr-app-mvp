@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonar_app/modules/widgets/painter/zones.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -15,9 +18,10 @@ enum PeerStatus {
 }
 
 class PeerController extends GetxController {
+  SonrService _sonr = Get.find();
   final Peer peer;
-  final double value;
   final artboard = Rx<Artboard>();
+  final offest = Offset(0, 0).obs;
 
   bool _isInvited = false;
   bool _hasDenied = false;
@@ -27,8 +31,11 @@ class PeerController extends GetxController {
   bool shouldChangeVisibility = false;
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
-  PeerController(this.peer, this.value) {
-    SonrService _sonr = Get.find();
+  PeerController(this.peer) {
+    // Set Offset Value
+    offest(_calculateOffset(peer.difference));
+
+    // Listen to User Status
     _sonr.status.listen((status) {
       // * Check if Invited * //
       if (_isInvited) {
@@ -93,8 +100,11 @@ class PeerController extends GetxController {
         shouldChangeVisibility = false;
         break;
       case PeerStatus.Invited:
-        shouldChangeVisibility = false;
-        _pending.isActive = _isInvited = !_isInvited;
+        if (!_isInvited) {
+          _sonr.invitePeer(peer);
+          shouldChangeVisibility = false;
+          _pending.isActive = _isInvited = !_isInvited;
+        }
         break;
       case PeerStatus.Accepted:
         shouldChangeVisibility = true;
@@ -123,6 +133,17 @@ class PeerController extends GetxController {
         _complete.isActive = _hasCompleted = !_hasCompleted;
         break;
     }
+  }
+
+  // ^ Calculate Peer Offset from Line ^ //
+  Offset _calculateOffset(double value,
+      {Peer_Proximity proximity = Peer_Proximity.NEAR}) {
+    Path path = ZonePainter.getBubblePath(Get.width, proximity);
+    PathMetrics pathMetrics = path.computeMetrics();
+    PathMetric pathMetric = pathMetrics.elementAt(0);
+    value = pathMetric.length * value;
+    Tangent pos = pathMetric.getTangentForOffset(value);
+    return pos.position;
   }
 
   // ^ Add listener for file transfer ^
