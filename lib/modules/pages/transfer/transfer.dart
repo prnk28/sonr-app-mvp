@@ -42,7 +42,7 @@ class TransferScreen extends StatelessWidget {
                 )),
 
             // @ Peer Bubbles
-            Obx(() => Stack(children: _createBubbles())),
+            Obx(() => Stack(children: _createBubbles(sonr.peers.values.toList()))),
 
             // @ Compass View
             CompassView(),
@@ -51,13 +51,12 @@ class TransferScreen extends StatelessWidget {
   }
 
   // ** Create Bubble Widgets from Peer Data ** //
-  List<Widget> _createBubbles() {
-    return new List<Widget>.generate(sonr.peers.length, (int index) {
-      // Determine Spawn Direction
-
+  List<Widget> _createBubbles(List<Peer> peers) {
+    // Generate
+    return new List<Widget>.generate(peers.length, (int index) {
       // Create Bubble
-      return PeerBubble(Get.put(
-          PeerController(sonr.peers[index], sonr.peers[index].difference)));
+      return PeerBubble(
+          Get.put(PeerController(peers[index], peers[index].difference)));
     });
   }
 }

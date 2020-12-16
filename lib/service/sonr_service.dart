@@ -15,11 +15,12 @@ class SonrService extends GetxService {
   final status = Status.Offline.obs;
   final direction = 0.0.obs;
   Node _node;
+  bool _connected = false;
   String code = "";
 
   // @ Set Lobby Dependencies
   final size = 0.obs;
-  final peers = new List<Peer>().obs;
+  final peers = new Map<String, Peer>().obs;
 
   // @ Set Transfer Dependencies
   AuthReply reply;
@@ -31,10 +32,10 @@ class SonrService extends GetxService {
   var progress = 0.0.obs;
 
   // ^ Updates Node^ //
-  sonr() {
+  SonrService() {
     FlutterCompass.events.listen((dir) {
       // Get Current Direction and Update Cubit
-      if (status() != Status.Offline) {
+      if (_connected) {
         _node.update(dir.headingForCameraMode);
       }
       direction(dir.headingForCameraMode);
@@ -46,34 +47,36 @@ class SonrService extends GetxService {
     // Get OLC
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
-    // Await Initialization
-    SonrCore.initialize(
-      code,
-      user.username,
-      user.contact,
-    ).then((n) {
-      // Assign Node Callbacks
-      n.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
-      n.assignCallback(CallbackEvent.Invited, _handleInvite);
-      n.assignCallback(CallbackEvent.Progressed, _handleProgress);
-      n.assignCallback(CallbackEvent.Received, _handleReceived);
-      n.assignCallback(CallbackEvent.Queued, _handleQueued);
-      n.assignCallback(CallbackEvent.Responded, _handleResponded);
-      n.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
-      n.assignCallback(CallbackEvent.Error, _handleSonrError);
-
-      // Return and Set Connected
-      status(n.status);
-
-      // Set Node
-      _node = n;
-
-      // Push to Home Screen
-      Get.offNamed("/home");
-    });
+    // Await Initialization -> Set Node
+    _connect(user);
 
     // Return Service
     return this;
+  }
+
+  _connect(User user) async {
+    _node = await SonrCore.initialize(
+      code,
+      user.username,
+      user.contact,
+    );
+
+    // Assign Node Callbacks
+    _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
+    _node.assignCallback(CallbackEvent.Invited, _handleInvite);
+    _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
+    _node.assignCallback(CallbackEvent.Received, _handleReceived);
+    _node.assignCallback(CallbackEvent.Queued, _handleQueued);
+    _node.assignCallback(CallbackEvent.Responded, _handleResponded);
+    _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
+    _node.assignCallback(CallbackEvent.Error, _handleSonrError);
+
+    // Set Connected
+    _connected = true;
+    status(_node.status);
+
+    // Push to Home Screen
+    Get.offNamed("/home");
   }
 
   // ***********************
@@ -141,9 +144,7 @@ class SonrService extends GetxService {
       size(data.peers.length);
 
       // Update Peers List
-      var peersList = data.peers.values.toList(growable: false);
-      print(peersList.toString());
-      peers(peersList);
+      peers(data.peers);
     }
   }
 
