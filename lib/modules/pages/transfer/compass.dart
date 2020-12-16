@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/controller/device/direction_controller.dart';
 import 'package:sonar_app/modules/widgets/design/spokes.dart';
 import 'dart:math';
 
+import 'package:sonar_app/service/device_service.dart';
+
 class CompassView extends StatelessWidget {
   CompassView({Key key}) : super(key: key);
-  final DirectionController controller = Get.put(DirectionController());
+  final DeviceService device = Get.find();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -40,116 +41,109 @@ class CompassView extends StatelessWidget {
                         alignment: Alignment.center,
                         children: [
                           // Center Circle
-                          buildCenterBulb(controller.direction()),
+                          buildCenterBulb(device.direction()),
 
                           // Spokes
-                          AnimatedBuilder(
-                              animation: controller,
-                              builder: (context, child) {
-                                return Transform.rotate(
-                                    angle: ((controller.direction() ?? 0) *
-                                        (pi / 180) *
-                                        -1),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Stack(
-                                        children: <Widget>[
-                                          // ** <North> **//
-                                          buildMajorSpoke(0,
-                                              isNegativeAlignment: true,
-                                              textColor: Colors.red[900],
-                                              textValue: "N",
-                                              textPadding: EdgeInsets.only(
-                                                  bottom:
-                                                      K_MAJOR_BOTTOM_PADDING)),
-                                          // ** </North> **//
+                          Transform.rotate(
+                              angle:
+                                  ((device.direction() ?? 0) * (pi / 180) * -1),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Stack(
+                                  children: <Widget>[
+                                    // ** <North> **//
+                                    buildMajorSpoke(0,
+                                        isNegativeAlignment: true,
+                                        textColor: Colors.red[900],
+                                        textValue: "N",
+                                        textPadding: EdgeInsets.only(
+                                            bottom: K_MAJOR_BOTTOM_PADDING)),
+                                    // ** </North> **//
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(11.25),
-                                          buildMinorSpoke(22.5),
-                                          buildMinorSpoke(33.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(11.25),
+                                    buildMinorSpoke(22.5),
+                                    buildMinorSpoke(33.75),
+                                    // </MinorSpokes> //
 
-                                          // NorthEast
-                                          buildAuxiliarySpoke(45),
+                                    // NorthEast
+                                    buildAuxiliarySpoke(45),
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(56.25),
-                                          buildMinorSpoke(67.5),
-                                          buildMinorSpoke(78.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(56.25),
+                                    buildMinorSpoke(67.5),
+                                    buildMinorSpoke(78.75),
+                                    // </MinorSpokes> //
 
-                                          // ** <East> **//
-                                          buildMajorSpoke(90,
-                                              textValue: "W",
-                                              textPadding: EdgeInsets.only(
-                                                  top: K_MAJOR_TOP_PADDING)),
-                                          // ** </East> **//
+                                    // ** <East> **//
+                                    buildMajorSpoke(90,
+                                        textValue: "W",
+                                        textPadding: EdgeInsets.only(
+                                            top: K_MAJOR_TOP_PADDING)),
+                                    // ** </East> **//
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(101.25),
-                                          buildMinorSpoke(112.5),
-                                          buildMinorSpoke(123.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(101.25),
+                                    buildMinorSpoke(112.5),
+                                    buildMinorSpoke(123.75),
+                                    // </MinorSpokes> //
 
-                                          // SouthEast
-                                          buildAuxiliarySpoke(135),
+                                    // SouthEast
+                                    buildAuxiliarySpoke(135),
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(146.25),
-                                          buildMinorSpoke(157.5),
-                                          buildMinorSpoke(168.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(146.25),
+                                    buildMinorSpoke(157.5),
+                                    buildMinorSpoke(168.75),
+                                    // </MinorSpokes> //
 
-                                          // ** <South> **//
-                                          buildMajorSpoke(180,
-                                              isNegativeAlignment: true,
-                                              textValue: "S",
-                                              textPadding: EdgeInsets.only(
-                                                  bottom:
-                                                      K_MAJOR_BOTTOM_PADDING)),
-                                          // ** </South> **//
+                                    // ** <South> **//
+                                    buildMajorSpoke(180,
+                                        isNegativeAlignment: true,
+                                        textValue: "S",
+                                        textPadding: EdgeInsets.only(
+                                            bottom: K_MAJOR_BOTTOM_PADDING)),
+                                    // ** </South> **//
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(191.25),
-                                          buildMinorSpoke(202.5),
-                                          buildMinorSpoke(213.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(191.25),
+                                    buildMinorSpoke(202.5),
+                                    buildMinorSpoke(213.75),
+                                    // </MinorSpokes> //
 
-                                          // SouthWest
-                                          buildAuxiliarySpoke(225),
+                                    // SouthWest
+                                    buildAuxiliarySpoke(225),
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(236.25),
-                                          buildMinorSpoke(247.5),
-                                          buildMinorSpoke(258.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(236.25),
+                                    buildMinorSpoke(247.5),
+                                    buildMinorSpoke(258.75),
+                                    // </MinorSpokes> //
 
-                                          // ** <West> **//
-                                          buildMajorSpoke(270,
-                                              textValue: "E",
-                                              textPadding: EdgeInsets.only(
-                                                  top: K_MAJOR_TOP_PADDING)),
-                                          // ** </West> **//
+                                    // ** <West> **//
+                                    buildMajorSpoke(270,
+                                        textValue: "E",
+                                        textPadding: EdgeInsets.only(
+                                            top: K_MAJOR_TOP_PADDING)),
+                                    // ** </West> **//
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(281.25),
-                                          buildMinorSpoke(292.5),
-                                          buildMinorSpoke(303.75),
-                                          // </MinorSpokes> //
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(281.25),
+                                    buildMinorSpoke(292.5),
+                                    buildMinorSpoke(303.75),
+                                    // </MinorSpokes> //
 
-                                          // NorthWest
-                                          buildAuxiliarySpoke(315),
+                                    // NorthWest
+                                    buildAuxiliarySpoke(315),
 
-                                          // <MinorSpokes> //
-                                          buildMinorSpoke(326.25),
-                                          buildMinorSpoke(337.5),
-                                          buildMinorSpoke(348.75),
-                                          // </MinorSpokes> //
-                                        ],
-                                      ),
-                                    ));
-                              }),
+                                    // <MinorSpokes> //
+                                    buildMinorSpoke(326.25),
+                                    buildMinorSpoke(337.5),
+                                    buildMinorSpoke(348.75),
+                                    // </MinorSpokes> //
+                                  ],
+                                ),
+                              )),
                         ]),
                   ),
                 ),

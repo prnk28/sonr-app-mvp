@@ -9,6 +9,7 @@ import 'package:sonr_core/sonr_core.dart';
 class DeviceService extends GetxService {
   SharedPreferences _prefs;
   bool _hasLocation;
+  final direction = 0.0.obs;
 
   // ^ Open SharedPreferences on Init ^ //
   init() async {

@@ -25,7 +25,7 @@ class SonrService extends GetxService {
 
   // @ Set Receive Dependencies
   AuthInvite invite;
-  var offer = Rx<Metadata>();
+  var file = Rx<Metadata>();
   var progress = 0.0.obs;
 
   // ^ Updates Node^ //
@@ -114,7 +114,7 @@ class SonrService extends GetxService {
       reply = null;
       invite = null;
 
-      offer(null);
+      file(null);
       progress(0.0);
       status(_node.status);
     }
@@ -209,7 +209,7 @@ class SonrService extends GetxService {
   void _handleReceived(dynamic data) {
     if (data is Metadata) {
       // Set Data
-      this.offer(data);
+      this.file(data);
       status(_node.status);
       Get.back();
 

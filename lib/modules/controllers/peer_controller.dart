@@ -1,7 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonar_app/service/service.dart';
 import 'package:sonr_core/models/models.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 // ^ PeerStatus Enum ^ //
 enum PeerStatus {
@@ -9,21 +11,42 @@ enum PeerStatus {
   Invited,
   Accepted,
   Denied,
-  InProgress,
   Completed,
 }
 
-class PeerBubbleController extends GetxController {
+class PeerController extends GetxController {
   final Peer peer;
   bool _isInvited = false;
   bool _hasDenied = false;
   bool _hasAccepted = false;
   bool _inProgress = false;
   bool _hasCompleted = false;
+  bool shouldChangeVisibility = false;
   Artboard artboard;
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
+  final SonrService _sonr = Get.find();
 
-  PeerBubbleController(this.peer);
+  PeerController(this.peer) {
+    _sonr.status.listen((status) {
+      // * Check if Invited * //
+      if (_isInvited) {
+        // @ Pending -> Busy = Peer Accepted File
+        if (status == Status.Busy) {
+          updateStatus(PeerStatus.Accepted);
+        }
+
+        // @ Pending -> Searching = Peer Denied File
+        if (status == Status.Searching) {
+          updateStatus(PeerStatus.Denied);
+        }
+
+        // @ Pending -> Searching = Peer Completed File
+        if (status == Status.Complete) {
+          updateStatus(PeerStatus.Completed);
+        }
+      }
+    });
+  }
 
   @override
   void onInit() async {
@@ -65,23 +88,23 @@ class PeerBubbleController extends GetxController {
   updateStatus(PeerStatus status) {
     switch (status) {
       case PeerStatus.Idle:
-        // TODO: Handle this case.
+        shouldChangeVisibility = false;
         break;
       case PeerStatus.Invited:
+        shouldChangeVisibility = false;
         _pending.isActive = _isInvited = !_isInvited;
         break;
       case PeerStatus.Accepted:
+        shouldChangeVisibility = true;
         _pending.instance.animation.loop = Loop.oneShot;
         _accepted.instance.animation.loop = Loop.oneShot;
         _accepted.isActive = _hasAccepted = !_hasAccepted;
         break;
       case PeerStatus.Denied:
+        shouldChangeVisibility = true;
         _pending.instance.animation.loop = Loop.oneShot;
         _denied.instance.animation.loop = Loop.oneShot;
         _denied.isActive = _hasDenied = !_hasDenied;
-        break;
-      case PeerStatus.InProgress:
-        // TODO: Handle this case.
         break;
       case PeerStatus.Completed:
         if (_inProgress) {
@@ -93,6 +116,7 @@ class PeerBubbleController extends GetxController {
         }
 
         // Start Complete Animation
+        shouldChangeVisibility = true;
         _complete.instance.animation.loop = Loop.oneShot;
         _complete.isActive = _hasCompleted = !_hasCompleted;
         break;
@@ -116,6 +140,4 @@ class PeerBubbleController extends GetxController {
       _complete.mix = 0.0;
     }
   }
-
-  _statusForActive() {}
 }

@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
 import 'package:sonar_app/service/card_service.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sonar_app/controller/controller.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 
 class CardPopup extends StatelessWidget {
-  final ReceiveController receiveController = Get.find();
+  final SonrService receiveController = Get.find();
   final CardService fileController = Get.find();
 
   @override

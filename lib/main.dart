@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/pages/home/home.dart';
-
-import 'controller/bindings.dart';
 import 'modules/pages/register/register.dart';
 import 'modules/pages/transfer/transfer.dart';
 import 'modules/widgets/design/neumorphic.dart';
@@ -41,7 +39,6 @@ class App extends StatelessWidget {
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      initialBinding: AppBind(),
       home: Scaffold(
           backgroundColor: NeumorphicTheme.baseColor(context),
           // Non Build States

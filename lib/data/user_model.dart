@@ -24,3 +24,6 @@ class User {
     return json.encode(map);
   }
 }
+
+// ** Current Device User Settings **
+class Settings {}

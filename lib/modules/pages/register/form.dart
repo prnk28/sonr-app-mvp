@@ -14,25 +14,6 @@ class _FormViewState extends State<FormView> {
   String _lastName;
 
   // @ Helpers
-  // Find Icons color based on Theme - Light/Dark
-  Color findIconsColor(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-    if (theme.isUsingDark) {
-      return theme.current.accentColor;
-    } else {
-      return null;
-    }
-  }
-
-// Find Text color based on Theme - Light/Dark
-  Color findTextColor(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-    if (theme.isUsingDark) {
-      return Colors.white;
-    } else {
-      return Colors.black;
-    }
-  }
 
 // Hint Text
   TextStyle hintTextStyle({Color setColor}) {
@@ -90,7 +71,9 @@ class _FormViewState extends State<FormView> {
 
   @override
   Widget build(BuildContext context) {
-    UserController user = Get.find();
+    // Connect to Sonr Network
+    final DeviceService device = Get.find();
+
     return Form(
       key: _formKey,
       child: Column(
@@ -185,7 +168,7 @@ class _FormViewState extends State<FormView> {
                     contact.lastName = _lastName;
 
                     // Process data.
-                    user.createUser(contact);
+                    device.createUser(contact);
                   }
                 },
                 child: Text('Submit',
