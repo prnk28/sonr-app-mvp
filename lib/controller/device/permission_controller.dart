@@ -1,6 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/model/model.dart';
+import 'package:sonar_app/data/data.dart';
 
 class PermissionController extends GetxController {
   PermissionType type;

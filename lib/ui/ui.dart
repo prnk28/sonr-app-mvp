@@ -5,7 +5,7 @@ export 'pages/splash/splash.dart';
 export 'pages/transfer/transfer.dart';
 export 'modals/modals.dart';
 export '../service/service.dart';
-export '../model/model.dart';
+export '../data/data.dart';
 
 // Packages
 export 'package:get/get.dart';

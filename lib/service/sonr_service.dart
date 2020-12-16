@@ -66,7 +66,6 @@ class SonrService extends GetxService {
   // **************************
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
-    // Check Type
     if (data is Lobby) {
       // Update Peers Code
       size(data.peers.length);
@@ -74,8 +73,6 @@ class SonrService extends GetxService {
       // Update Peers List
       var peersList = data.peers.values.toList(growable: false);
       peers(peersList);
-    } else {
-      print("handleRefreshed() - " + "Invalid Return type");
     }
   }
 
@@ -90,7 +87,6 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(dynamic data) async {
-    // Check Type
     if (data is AuthReply) {
       // Set Message
       this.reply = data;
