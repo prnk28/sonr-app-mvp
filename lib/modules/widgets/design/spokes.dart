@@ -179,15 +179,6 @@ TextStyle _bulbDesignationTextStyle({Color setColor}) {
   );
 }
 
-TextStyle _bulbLoadingTextStyle({Color setColor}) {
-  return TextStyle(
-    fontFamily: "Raleway",
-    fontWeight: FontWeight.normal,
-    fontSize: 15,
-    color: setColor ?? Colors.white,
-  );
-}
-
 // ********************************
 // ** Compass Designation Finder **
 // ********************************

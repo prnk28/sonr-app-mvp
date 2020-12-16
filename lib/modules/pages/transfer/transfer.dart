@@ -3,21 +3,22 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/modules/controllers/peer_controller.dart';
 import 'package:sonar_app/modules/pages/transfer/peer_bubble.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
 import 'package:sonar_app/modules/widgets/painter/zones.dart';
 import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonr_core/models/models.dart';
 
 import 'compass.dart';
 
 const STACK_CONSTANT = 1;
 
 class TransferScreen extends StatelessWidget {
-  final SonrService sonrService = Get.find();
+  final SonrService sonr = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    // Return Widget
     return SonrTheme(Scaffold(
         appBar: SonrExitAppBar(
           context,
@@ -25,7 +26,7 @@ class TransferScreen extends StatelessWidget {
           () {
             Get.offAllNamed("/home");
           },
-          title: sonrService.code,
+          title: sonr.code,
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: SafeArea(
@@ -39,28 +40,21 @@ class TransferScreen extends StatelessWidget {
                   painter: ZonePainter(),
                   child: Container(),
                 )),
-            Obx(() {
-              // Initialize Widget List
-              List<PeerBubble> stackWidgets = new List<PeerBubble>();
 
-              // @ Verify Not Null
-              if (sonrService.size() > 0) {
-                // Init Stack Vars
-                int total = sonrService.size() + STACK_CONSTANT;
-                double mean = 1.0 / total;
-                int current = 0;
+            // @ Peer Bubbles
+            Obx(() => Stack(children: _createBubbles())),
 
-                // @ Create Bubbles that arent added
-                sonrService.peers().forEach((peer) {
-                  // Create Bubble
-                  stackWidgets.add(PeerBubble(current * mean, peer));
-                  current++;
-                });
-              }
-              return Stack(children: stackWidgets);
-            }),
+            // @ Compass View
             CompassView(),
           ],
         ))));
+  }
+
+  // ** Create Bubble Widgets from Peer Data ** //
+  List<Widget> _createBubbles() {
+    return new List<Widget>.generate(sonr.peers.value.length, (int index) {
+      return PeerBubble(Get.put(PeerController(
+          sonr.peers.value[index], (1.0 / sonr.peers.value.length) / index)));
+    });
   }
 }

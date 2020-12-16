@@ -13,6 +13,7 @@ import 'package:vibration/vibration.dart';
 class SonrService extends GetxService {
   // @ Set Properteries
   final status = Status.Offline.obs;
+  final direction = 0.0.obs;
   Node _node;
   String code = "";
 
@@ -31,11 +32,12 @@ class SonrService extends GetxService {
 
   // ^ Updates Node^ //
   SonrService() {
-    FlutterCompass.events.listen((newDegrees) {
+    FlutterCompass.events.listen((dir) {
       // Get Current Direction and Update Cubit
-      if (status() == Status.Ready || status() == Status.Searching) {
-        _node.update(newDegrees.headingForCameraMode);
+      if (status() != Status.Ready || status() == Status.Searching) {
+        _node.update(dir.headingForCameraMode);
       }
+      direction(dir.headingForCameraMode);
     });
   }
 
@@ -45,11 +47,20 @@ class SonrService extends GetxService {
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization
-    _node = await SonrCore.initialize(
+    SonrCore.initialize(
       code,
       user.username,
       user.contact,
-    );
+    ).then(_start);
+
+    // Return Service
+    return this;
+  }
+
+  // ^ Start Node Async Handler ^ //
+  _start(Node n) {
+    // Set Node
+    _node = n;
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
@@ -63,7 +74,9 @@ class SonrService extends GetxService {
 
     // Return and Set Connected
     status(_node.status);
-    return this;
+
+    // Push to Home Screen
+    Get.offNamed("/home");
   }
 
   // **************************

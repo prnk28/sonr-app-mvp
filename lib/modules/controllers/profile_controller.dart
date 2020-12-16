@@ -1,6 +1,4 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -18,12 +16,12 @@ enum ContactCoreValueType {
   Website,
 }
 
-class PeerController extends GetxController {
+class ProfileController extends GetxController {
   final Contact userContact;
   final status = ProfileStatus.Viewing.obs;
   bool _isEditing = false;
 
-  PeerController(this.userContact);
+  ProfileController(this.userContact);
 
   // ^ Toggle Editing Mode ^ //
   toggleEditing() {

@@ -13,11 +13,8 @@ import 'package:supercharged/supercharged.dart';
 
 class PeerBubble extends StatelessWidget {
   // Bubble Values
-  final double value;
-  final Peer peer;
-  PeerBubble(this.value, this.peer) {
-    Get.put(PeerController(peer));
-  }
+  final PeerController controller;
+  PeerBubble(this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +23,11 @@ class PeerBubble extends StatelessWidget {
 
     // TODO: implement build
     return Positioned(
-        top: calculateOffset(value).dy,
-        left: calculateOffset(value).dx,
+        top: calculateOffset(controller.value).dy,
+        left: calculateOffset(controller.value).dx,
         child: GestureDetector(
             onTap: () async {
-              sonr.invitePeer(peer);
+              sonr.invitePeer(controller.peer);
               controller.updateStatus(PeerStatus.Invited);
             },
             child: PlayAnimation<double>(
@@ -80,8 +77,8 @@ class PeerBubble extends StatelessWidget {
                 duration: 20.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(peer, size: 20),
-                  initialsFromPeer(peer),
+                  iconFromPeer(controller.peer, size: 20),
+                  initialsFromPeer(controller.peer),
                 ]));
           });
     }
@@ -95,8 +92,8 @@ class PeerBubble extends StatelessWidget {
               duration: 500.milliseconds,
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                iconFromPeer(peer, size: 20),
-                initialsFromPeer(peer),
+                iconFromPeer(controller.peer, size: 20),
+                initialsFromPeer(controller.peer),
               ]));
         });
   }

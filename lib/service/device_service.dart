@@ -11,10 +11,9 @@ class DeviceService extends GetxService {
   SharedPreferences _prefs;
   bool _hasLocation;
   bool _hasUser;
-  final direction = 0.0.obs;
 
   // ^ Open SharedPreferences on Init ^ //
-  init() async {
+  Future<DeviceService> init() async {
     // Init Shared Preferences
     _prefs = await SharedPreferences.getInstance();
 
@@ -24,12 +23,13 @@ class DeviceService extends GetxService {
 
     // Check User Status
     _hasUser = _prefs.containsKey("user");
+    return this;
   }
 
   // ^ Method to Connect User Event ^
-  void connectUser() async {
+  void start() async {
     // @ 1. Check for Location
-    if (_hasLocation) {
+    if (_hasLocation = await Permission.locationWhenInUse.request().isGranted) {
       // @ 2. Get Profile
       if (_hasUser) {
         // Get Json Value
@@ -44,18 +44,13 @@ class DeviceService extends GetxService {
 
           // Initialize Sonr Node
           await Get.putAsync(() => SonrService().init(position, user));
-
-          // Push to Home Screen
-          Get.offNamed("/home");
         }
       } else {
         // Push to Register Screen
         Get.offNamed("/register");
       }
     } else {
-      // Request Location again
-      _hasLocation = await Permission.locationWhenInUse.request().isGranted;
-      connectUser();
+      throw RequiredPermissionsError("Location Permission Denied");
     }
   }
 

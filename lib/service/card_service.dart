@@ -22,24 +22,9 @@ class CardService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    await initMetaDb();
-    await initContactDb();
-
-    // Refresh Items
-    await refreshFiles();
-    await refreshContacts();
-    return this;
-  }
-
-  // ** Close SQL Database ** //
-  onClose() async {
-    await _db.close();
-  }
-
-  // ^ Open Database create files table ^
-  initMetaDb() async {
-    _db = await openDatabase(_dbPath, version: 2,
+    _db = await openDatabase(_dbPath, version: 3,
         onCreate: (Database db, int version) async {
+      // Create Meta Table
       await db.execute('''
 create table $metaTable (
   $fileColumnId integer primary key autoincrement,
@@ -50,7 +35,25 @@ create table $metaTable (
   $fileColumnOwner text not null,
   $fileColumnlastOpened integer not null)
 ''');
+
+      // Create Cards Table
+      await db.execute('''
+create table $contactTable (
+  $contactColumnId integer primary key autoincrement,
+  $contactColumnFirstName text not null,
+  $contactColumnLastName text not null,
+  $contactColumnData text not null,
+  $contactColumnlastOpened integer not null)
+''');
     });
+
+    await refreshFiles();
+    return this;
+  }
+
+  // ** Close SQL Database ** //
+  onClose() async {
+    await _db.close();
   }
 
   // ^ Insert Metadata into SQL DB ^ //
@@ -99,21 +102,6 @@ create table $metaTable (
     }
     // Update All Files
     allFiles(result);
-  }
-
-  // ^ Open Database create contacts table ^
-  initContactDb() async {
-    _db = await openDatabase(_dbPath, version: 2,
-        onCreate: (Database db, int version) async {
-      await db.execute('''
-create table $contactTable (
-  $contactColumnId integer primary key autoincrement,
-  $contactColumnFirstName text not null,
-  $contactColumnLastName text not null,
-  $contactColumnData text not null,
-  $contactColumnlastOpened integer not null)
-''');
-    });
   }
 
   // ^ Insert Contact into SQL DB ^ //

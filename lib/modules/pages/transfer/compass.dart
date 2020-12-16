@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:sonar_app/modules/widgets/design/spokes.dart';
 import 'dart:math';
 
-import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 
 class CompassView extends StatelessWidget {
   CompassView({Key key}) : super(key: key);
-  final DeviceService device = Get.find();
+  final SonrService sonr = Get.find();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -41,12 +41,13 @@ class CompassView extends StatelessWidget {
                         alignment: Alignment.center,
                         children: [
                           // Center Circle
-                          buildCenterBulb(device.direction()),
+                          buildCenterBulb(sonr.direction.value),
 
                           // Spokes
                           Transform.rotate(
-                              angle:
-                                  ((device.direction() ?? 0) * (pi / 180) * -1),
+                              angle: ((sonr.direction.value ?? 0) *
+                                  (pi / 180) *
+                                  -1),
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: Stack(

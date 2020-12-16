@@ -16,6 +16,8 @@ enum PeerStatus {
 
 class PeerController extends GetxController {
   final Peer peer;
+  final double value;
+
   bool _isInvited = false;
   bool _hasDenied = false;
   bool _hasAccepted = false;
@@ -26,7 +28,7 @@ class PeerController extends GetxController {
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
   final SonrService _sonr = Get.find();
 
-  PeerController(this.peer) {
+  PeerController(this.peer, this.value) {
     _sonr.status.listen((status) {
       // * Check if Invited * //
       if (_isInvited) {

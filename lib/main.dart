@@ -19,8 +19,7 @@ void main() async {
 // TODO: Convert SonrController to Service
 initServices() async {
   print('starting services ...');
-
-  /// Here is where you put get_storage, hive, shared_pref initialization.
+  // Initializes Local Contacts/Files and Device User/Settings
   await Get.putAsync(() => CardService().init());
   await Get.putAsync(() => DeviceService().init());
   print('All services started...');
@@ -31,8 +30,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Connect to Sonr Network
-    final DeviceService device = Get.find();
-    device.connectUser();
+    DeviceService device = Get.find();
+    device.start();
 
     return GetMaterialApp(
       getPages: getPages(),
