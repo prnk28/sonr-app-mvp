@@ -30,7 +30,7 @@ class ReceiveController extends GetxController {
 
     // Update Status
     status = sonrNode.status;
-    update();
+    update(["Listener"]);
   }
 
   // ^ Reset Session ^

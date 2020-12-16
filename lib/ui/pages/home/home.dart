@@ -20,6 +20,7 @@ class HomeScreen extends GetView<ReceiveController> {
         Get.bottomSheet(InviteSheet());
       } else if (controller.status == Status.Complete) {
         Get.dialog(CompletedPopup());
+        controller.finish();
       }
     });
 

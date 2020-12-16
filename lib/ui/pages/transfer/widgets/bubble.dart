@@ -24,7 +24,7 @@ class _BubbleState extends State<Bubble> {
   bool inProgress = false;
   bool hasCompleted = false;
   Artboard _artboard;
-  SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
+  SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
   @override
   void initState() {
@@ -66,6 +66,8 @@ class _BubbleState extends State<Bubble> {
               _pending.instance.animation.loop = Loop.oneShot;
             }
 
+            // Start Complete Animation
+            _complete.instance.animation.loop = Loop.oneShot;
             _complete.isActive = hasCompleted = !hasCompleted;
           });
         }
@@ -84,7 +86,7 @@ class _BubbleState extends State<Bubble> {
       final artboard = file.mainArtboard;
 
       // Add Animation Controllers
-      artboard.addController(SimpleAnimation('Idle'));
+      artboard.addController(_idle = SimpleAnimation('Idle'));
       artboard.addController(_pending = SimpleAnimation('Pending'));
       artboard.addController(_denied = SimpleAnimation('Denied'));
       artboard.addController(_accepted = SimpleAnimation('Accepted'));
@@ -92,12 +94,16 @@ class _BubbleState extends State<Bubble> {
       artboard.addController(_complete = SimpleAnimation('Complete'));
 
       // Set Default States
+      _idle.isActive = !isInvited && !hasCompleted;
       _pending.isActive = isInvited;
       _denied.isActive = hasDenied;
       _accepted.isActive = hasAccepted;
       _sending.isActive = inProgress;
       _complete.isActive = hasCompleted;
+
+      // Add One Shot Listeners
       _accepted.isActiveChanged.addListener(_handleAcceptToSend);
+      _complete.isActiveChanged.addListener(_handleReset);
 
       // Wrapped in setState so the widget knows the artboard is ready to play
       setState(() => _artboard = artboard);
@@ -159,6 +165,18 @@ class _BubbleState extends State<Bubble> {
         setState(() {
           _accepted.isActive = hasAccepted = !hasAccepted;
           _sending.isActive = inProgress = !inProgress;
+        });
+      }
+    }
+  }
+
+  // ^ Add listener for file transfer ^
+  _handleReset() {
+    if (_complete.isActive == false) {
+      if (mounted) {
+        setState(() {
+          _complete.isActive = hasCompleted = !hasCompleted;
+          _idle.isActive = isInvited = !isInvited && !hasCompleted;
         });
       }
     }

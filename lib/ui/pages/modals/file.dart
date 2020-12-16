@@ -86,11 +86,12 @@ class FileInviteView extends StatelessWidget {
           // @ Completed Transfer
           else if (controller.status == Status.Complete) {
             Get.back();
+          } else {
+            // @ Error
+            Get.back();
+            print("Incorrect Receive Controller Status");
+            return Container();
           }
-          // @ Error
-          Get.back();
-          print("Incorrect Receive Controller Status");
-          return Container();
         });
 
     // FlatButton// Container
