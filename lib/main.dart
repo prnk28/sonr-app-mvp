@@ -16,7 +16,7 @@ initServices() async {
   print('starting services ...');
 
   /// Here is where you put get_storage, hive, shared_pref initialization.
-  await Get.putAsync(() => FileService().init());
+  await Get.putAsync(() => CardService().init());
   await Get.putAsync(() => DeviceService().init());
   print('All services started...');
 }
@@ -25,6 +25,10 @@ initServices() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Connect to Sonr Network
+    final DeviceService device = Get.find();
+    device.connectUser();
+
     return GetMaterialApp(
       getPages: getPages(),
       navigatorKey: Get.key,
@@ -32,7 +36,24 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       initialBinding: AppBind(),
-      home: SplashScreen(),
+      home: Scaffold(
+          backgroundColor: NeumorphicTheme.baseColor(context),
+          // Non Build States
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  width: Get.width / 5,
+                  height: Get.height / 5,
+                  child:
+                      FittedBox(child: Image.asset("assets/images/icon.png"))),
+
+              // Loading
+              Padding(
+                  padding: EdgeInsets.only(left: 45, right: 45),
+                  child: NeumorphicProgressIndeterminate())
+            ],
+          )),
     );
   }
 }

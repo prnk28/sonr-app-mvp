@@ -5,6 +5,7 @@ import 'dart:convert';
 class User {
   // ^ Properties ^
   Contact contact;
+  String username;
 
   // Default Constructer
   User(this.contact);

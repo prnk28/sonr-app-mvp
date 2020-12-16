@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 const DATABASE_PATH = 'localData.db';
 
-class FileService extends GetxService {
+class CardService extends GetxService {
   // Database Reference
   Database _db;
 
@@ -17,7 +17,7 @@ class FileService extends GetxService {
   File currentFile;
   Metadata currentMetadata;
 
-  Future<FileService> init() async {
+  Future<CardService> init() async {
     // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, DATABASE_PATH);
@@ -48,20 +48,20 @@ create table $metaTable (
   }
 
   // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> saveMeta(Metadata metadata) async {
+  Future<Metadata> saveFile(Metadata metadata) async {
     metadata.id = await _db.insert(metaTable, metaToSQL(metadata));
     await refreshAllFiles();
     return metadata;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
-  Future deleteMeta(int id) async {
+  Future deleteFile(int id) async {
     await _db.delete(metaTable, where: '$columnId = ?', whereArgs: [id]);
     await refreshAllFiles();
   }
 
   // ^ Update Metadata in DB ^ //
-  Future updateMeta(Metadata metadata) async {
+  Future updateFile(Metadata metadata) async {
     await _db.update(metaTable, metaToSQL(metadata),
         where: '$columnId = ?', whereArgs: [metadata.id]);
     await refreshAllFiles();

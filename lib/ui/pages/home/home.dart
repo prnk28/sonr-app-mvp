@@ -13,7 +13,7 @@ part 'widgets/floater.dart';
 class HomeScreen extends GetView<ReceiveController> {
   final double itemHeight = (Get.height - kToolbarHeight - 24) / 4;
   final double itemWidth = Get.width / 4;
-  final FileService files = Get.find();
+  final CardService files = Get.find();
   @override
   Widget build(BuildContext context) {
     // Build View

@@ -1,6 +1,6 @@
-// ^ OpenFilesError couldnt open DB at path ^
 import 'package:sonr_core/sonr_core.dart';
 
+// ^ OpenFilesError couldnt open DB at path ^
 class OpenFilesError extends Error {
   final String message;
   OpenFilesError(this.message);

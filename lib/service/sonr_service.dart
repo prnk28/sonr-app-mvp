@@ -3,13 +3,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/ui/modals/modals.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'dart:io';
+import 'package:vibration/vibration.dart';
 
 class SonrService extends GetxService {
   // @ Set Properteris
   Node _sonrNode;
   final connected = false.obs;
   String code = "";
-  AuthInvite invite;
   Status status;
 
   // @ Set Lobby Dependencies
@@ -21,6 +22,7 @@ class SonrService extends GetxService {
   Payload_Type payloadType;
 
   // @ Set Receive Dependencies
+  AuthInvite invite;
   var offer = Rx<Metadata>();
   var progress = 0.0.obs;
 
@@ -64,6 +66,7 @@ class SonrService extends GetxService {
   // **************************
   // ******* Callbacks ********
   // **************************
+
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
@@ -82,6 +85,20 @@ class SonrService extends GetxService {
       // Update data
       status = _sonrNode.status;
       Get.offNamed("/transfer");
+    }
+  }
+
+  // ^ Node Has Been Invited ^ //
+  void _handleInvite(dynamic data) async {
+    print("Invite" + data.toString());
+    // Check Type
+    if (data is AuthInvite) {
+      // Update Values
+      this.invite = data;
+
+      // Inform Listener
+      status = _sonrNode.status;
+      Get.bottomSheet(InviteSheet());
     }
   }
 
@@ -107,34 +124,20 @@ class SonrService extends GetxService {
     }
   }
 
+  // ^ Transfer Has Updated Progress ^ //
+  void _handleProgress(dynamic data) async {
+    if (data is double) {
+      // Update Data
+      this.progress(data);
+    }
+  }
+
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
       status = _sonrNode.status;
       //update([data.id]);
-    }
-  }
-
-  // ^ Node Has Been Invited ^ //
-  void _handleInvite(dynamic data) async {
-    print("Invite" + data.toString());
-    // Check Type
-    if (data is AuthInvite) {
-      // Update Values
-      this.invite = data;
-
-      // Inform Listener
-      status = _sonrNode.status;
-      Get.bottomSheet(InviteSheet());
-    }
-  }
-
-  // ^ Transfer Has Updated Progress ^ //
-  void _handleProgress(dynamic data) async {
-    if (data is double) {
-      // Update Data
-      this.progress(data);
     }
   }
 

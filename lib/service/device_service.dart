@@ -8,14 +8,20 @@ import 'package:sonr_core/sonr_core.dart';
 
 class DeviceService extends GetxService {
   SharedPreferences _prefs;
+  bool _hasLocation;
 
   // ^ Open SharedPreferences on Init ^ //
   init() async {
     // Init Shared Preferences
     _prefs = await SharedPreferences.getInstance();
 
+    // Check Location
+    _hasLocation = await Permission.locationWhenInUse.request().isGranted;
+  }
+
+  void connectUser() async {
     // @ 1. Check for Location
-    if (await Permission.locationWhenInUse.request().isGranted) {
+    if (_hasLocation) {
       // @ 2. Get Profile
       if (_prefs.containsKey("user")) {
         // Get Json Value
