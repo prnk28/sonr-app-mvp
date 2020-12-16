@@ -1,4 +1,5 @@
 import 'package:sonar_app/controller/sonr/conn_controller.dart';
+import 'package:sonar_app/ui/modals/modals.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 
@@ -30,14 +31,17 @@ class ReceiveController extends GetxController {
 
     // Update Status
     status = sonrNode.status;
-    update(["Listener"]);
+    update(["FileInvite"]);
   }
 
   // ^ Reset Session ^
   void finish() {
     // Reset Peer/Auth
+    progress(0.0);
+    file(null);
     this.invite = null;
     sonrNode.finish();
+    status = sonrNode.status;
   }
 
   // **************************
@@ -53,6 +57,7 @@ class ReceiveController extends GetxController {
 
       // Inform Listener
       status = sonrNode.status;
+      Get.bottomSheet(InviteSheet());
       update(["Listener"]);
     }
   }
@@ -71,7 +76,10 @@ class ReceiveController extends GetxController {
       // Set Data
       this.file(data);
       status = sonrNode.status;
-      update(["Listener"]);
+      Get.back();
+      //update(["Listener"]);
+      Future.delayed(Duration(milliseconds: 500));
+      Get.dialog(CompletedPopup());
     } else {
       print("handleProgressed() - " + "Invalid Return type");
     }

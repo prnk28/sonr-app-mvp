@@ -6,11 +6,11 @@ import 'bubble.dart';
 class PeerStack extends GetView<LobbyController> {
   @override
   Widget build(BuildContext context) {
-    // Initialize Widget List
-    List<Bubble> stackWidgets = new List<Bubble>();
-
     // @ Bubble View
     return Obx(() {
+      // Initialize Widget List
+      List<Bubble> stackWidgets = new List<Bubble>();
+
       // @ Verify Not Null
       if (controller.size > 0) {
         // Init Stack Vars

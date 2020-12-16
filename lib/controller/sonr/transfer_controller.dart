@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:sonar_app/ui/modals/modals.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/controller/sonr/conn_controller.dart';
@@ -27,12 +28,6 @@ class TransferController extends GetxController {
     // Set Payload Type
     payloadType = payType;
     status = sonrNode.status;
-    update(["Listener"]);
-  }
-
-  // ^ Gets Sequence of Status Changes ^
-  List<Status> sequence() {
-    return sonrNode.sequence();
   }
 
   // ^ Invite-Peer Event ^
@@ -46,14 +41,15 @@ class TransferController extends GetxController {
       await sonrNode.invite(p, payloadType);
     }
     status = sonrNode.status;
+    update([p.id]);
   }
 
   // ^ Resets Status ^
   void finish() {
+    status = Status.Ready;
+    update([reply.from.id]);
     sonrNode.finish();
     reply = null;
-    status = sonrNode.status;
-    update(["Listener"]);
   }
 
   // **************************
@@ -64,7 +60,7 @@ class TransferController extends GetxController {
     if (data is Metadata) {
       // Update data
       status = sonrNode.status;
-      update(["Listener"]);
+      Get.offNamed("/transfer");
     }
   }
 
@@ -79,10 +75,14 @@ class TransferController extends GetxController {
 
       if (data.payload.type == Payload_Type.CONTACT) {
         // Report Replied to Bubble for File
-        update(["Listener", "Bubble_" + data.from.id]);
+        Get.bottomSheet(ContactInviteView(
+          reply.payload.contact,
+          isReply: true,
+        ));
+        update([data.from.id]);
       } else {
         // Report Replied to Bubble for File
-        update(["Bubble_" + data.from.id]);
+        update([data.from.id]);
       }
     }
   }
@@ -92,7 +92,7 @@ class TransferController extends GetxController {
     // Reset Peer/Auth
     if (data is Peer) {
       status = sonrNode.status;
-      update(["Listener", "Bubble_" + data.id]);
+      update([data.id]);
     }
   }
 }

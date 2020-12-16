@@ -3,10 +3,9 @@ export 'pages/home/home.dart';
 export 'pages/register/register.dart';
 export 'pages/splash/splash.dart';
 export 'pages/transfer/transfer.dart';
-export 'pages/modals/modals.dart';
+export 'modals/modals.dart';
 export '../service/service.dart';
 export '../model/model.dart';
-export 'lifecycle.dart';
 
 // Packages
 export 'package:get/get.dart';

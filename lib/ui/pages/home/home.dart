@@ -14,23 +14,12 @@ part 'widgets/grid.dart';
 class HomeScreen extends GetView<ReceiveController> {
   @override
   Widget build(BuildContext context) {
-    // ** Listen to States ** //
-    controller.addListenerId("Listener", () {
-      if (controller.status == Status.Pending) {
-        Get.bottomSheet(InviteSheet());
-      } else if (controller.status == Status.Complete) {
-        Get.dialog(CompletedPopup());
-        controller.finish();
-      }
-    });
-
     // Build View
     return AppTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         appBar: titleAppBar("Home"),
         floatingActionButton: FloaterButton(() {
           // File Option
-          Get.offNamed("/transfer");
         }),
         body: ImageGrid()));
   }

@@ -33,12 +33,13 @@ class _BubbleState extends State<Bubble> {
     super.initState();
 
     // ^ Listen to Status Changes ^ //
-    controller.addListenerId("Bubble_" + widget.peer.id, () {
+    controller.addListenerId(widget.peer.id, () {
       // @ Pending -> Busy = Peer Accepted File
       if (controller.status == Status.Busy) {
         if (mounted) {
           setState(() {
             _pending.instance.animation.loop = Loop.oneShot;
+            _accepted.instance.animation.loop = Loop.oneShot;
             _accepted.isActive = hasAccepted = !hasAccepted;
           });
         }
@@ -49,6 +50,7 @@ class _BubbleState extends State<Bubble> {
         if (mounted) {
           setState(() {
             _pending.instance.animation.loop = Loop.oneShot;
+            _denied.instance.animation.loop = Loop.oneShot;
             _denied.isActive = hasDenied = !hasDenied;
           });
         }
@@ -163,7 +165,7 @@ class _BubbleState extends State<Bubble> {
     if (_accepted.isActive == false) {
       if (mounted) {
         setState(() {
-          _accepted.isActive = hasAccepted = !hasAccepted;
+          hasAccepted = !hasAccepted;
           _sending.isActive = inProgress = !inProgress;
         });
       }
@@ -175,8 +177,10 @@ class _BubbleState extends State<Bubble> {
     if (_complete.isActive == false) {
       if (mounted) {
         setState(() {
-          _complete.isActive = hasCompleted = !hasCompleted;
-          _idle.isActive = isInvited = !isInvited && !hasCompleted;
+          hasCompleted = false;
+          isInvited = true;
+          _idle.isActive = true;
+          _complete.mix = 0.0;
         });
       }
     }

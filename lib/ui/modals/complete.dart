@@ -28,6 +28,7 @@ class CompletedPopup extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // Shift to Detail Screen with Image
+                    receiveController.finish();
                     Get.back();
                   },
                   child: Expanded(

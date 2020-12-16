@@ -16,7 +16,7 @@ class FileInviteView extends StatelessWidget {
 
     return GetBuilder<ReceiveController>(
         assignId: true,
-        id: "Listener",
+        id: "FileInvite",
         builder: (controller) {
           // @ In Transfer
           if (controller.status == Status.Busy) {
@@ -83,11 +83,8 @@ class FileInviteView extends StatelessWidget {
                   ],
                 ));
           }
-          // @ Completed Transfer
-          else if (controller.status == Status.Complete) {
-            Get.back();
-          } else {
-            // @ Error
+          // @ Error
+          else {
             Get.back();
             print("Incorrect Receive Controller Status");
             return Container();

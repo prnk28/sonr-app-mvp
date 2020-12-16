@@ -24,8 +24,7 @@ initServices() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LifeCycleManager(
-        child: GetMaterialApp(
+    return GetMaterialApp(
       getPages: getPages(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
@@ -33,7 +32,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.light,
       initialBinding: AppBind(),
       home: SplashScreen(),
-    ));
+    );
   }
 }
 

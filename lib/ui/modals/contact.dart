@@ -68,6 +68,7 @@ class ContactInviteView extends StatelessWidget {
           onPressed: () {
             // Emit Event
             controller.respondPeer(true);
+            Get.back();
           },
           style: NeumorphicStyle(
               depth: 8,
