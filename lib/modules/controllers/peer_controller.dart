@@ -17,6 +17,7 @@ enum PeerStatus {
 class PeerController extends GetxController {
   final Peer peer;
   final double value;
+  final artboard = Rx<Artboard>();
 
   bool _isInvited = false;
   bool _hasDenied = false;
@@ -24,11 +25,10 @@ class PeerController extends GetxController {
   bool _inProgress = false;
   bool _hasCompleted = false;
   bool shouldChangeVisibility = false;
-  Artboard artboard;
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
-  final SonrService _sonr = Get.find();
 
   PeerController(this.peer, this.value) {
+    SonrService _sonr = Get.find();
     _sonr.status.listen((status) {
       // * Check if Invited * //
       if (_isInvited) {
@@ -54,10 +54,10 @@ class PeerController extends GetxController {
   void onInit() async {
     // Load your Rive data
     final data = await rootBundle.load('assets/animations/peerbubble.riv');
+
     // Create a RiveFile from the binary data
     final file = RiveFile();
     if (file.import(data)) {
-      // Get the artboard containing the animation you want to play
       final artboard = file.mainArtboard;
 
       // Add Animation Controllers
@@ -80,8 +80,8 @@ class PeerController extends GetxController {
       _accepted.isActiveChanged.addListener(_handleAcceptToSend);
       _complete.isActiveChanged.addListener(_handleReset);
 
-      // Wrapped in setState so the widget knows the artboard is ready to play
-      this.artboard = artboard;
+      // Observable Artboard
+      this.artboard(artboard);
     }
     super.onInit();
   }

@@ -43,7 +43,7 @@ class DeviceService extends GetxService {
           Position position = await user.position;
 
           // Initialize Sonr Node
-          await Get.putAsync(() => SonrService().init(position, user));
+          Get.putAsync(() => SonrService().init(position, user));
         }
       } else {
         // Push to Register Screen
@@ -69,7 +69,7 @@ class DeviceService extends GetxService {
       Position position = await user.position;
 
       // Initialize Sonr Node
-      await Get.putAsync(() => SonrService().init(position, user));
+      Get.putAsync(() => SonrService().init(position, user));
 
       // Push to Home Screen
       Get.offNamed("/home");

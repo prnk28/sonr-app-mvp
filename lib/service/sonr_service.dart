@@ -19,7 +19,7 @@ class SonrService extends GetxService {
 
   // @ Set Lobby Dependencies
   final size = 0.obs;
-  final peers = Rx<List<Peer>>();
+  final peers = new List<Peer>().obs;
 
   // @ Set Transfer Dependencies
   AuthReply reply;
@@ -31,10 +31,10 @@ class SonrService extends GetxService {
   var progress = 0.0.obs;
 
   // ^ Updates Node^ //
-  SonrService() {
+  sonr() {
     FlutterCompass.events.listen((dir) {
       // Get Current Direction and Update Cubit
-      if (status() != Status.Ready || status() == Status.Searching) {
+      if (status() != Status.Offline) {
         _node.update(dir.headingForCameraMode);
       }
       direction(dir.headingForCameraMode);
@@ -51,39 +51,36 @@ class SonrService extends GetxService {
       code,
       user.username,
       user.contact,
-    ).then(_start);
+    ).then((n) {
+      // Assign Node Callbacks
+      n.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
+      n.assignCallback(CallbackEvent.Invited, _handleInvite);
+      n.assignCallback(CallbackEvent.Progressed, _handleProgress);
+      n.assignCallback(CallbackEvent.Received, _handleReceived);
+      n.assignCallback(CallbackEvent.Queued, _handleQueued);
+      n.assignCallback(CallbackEvent.Responded, _handleResponded);
+      n.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
+      n.assignCallback(CallbackEvent.Error, _handleSonrError);
+
+      // Return and Set Connected
+      status(n.status);
+
+      // Set Node
+      _node = n;
+
+      // Push to Home Screen
+      Get.offNamed("/home");
+    });
 
     // Return Service
     return this;
   }
 
-  // ^ Start Node Async Handler ^ //
-  _start(Node n) {
-    // Set Node
-    _node = n;
-
-    // Assign Node Callbacks
-    _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
-    _node.assignCallback(CallbackEvent.Invited, _handleInvite);
-    _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
-    _node.assignCallback(CallbackEvent.Received, _handleReceived);
-    _node.assignCallback(CallbackEvent.Queued, _handleQueued);
-    _node.assignCallback(CallbackEvent.Responded, _handleResponded);
-    _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
-    _node.assignCallback(CallbackEvent.Error, _handleSonrError);
-
-    // Return and Set Connected
-    status(_node.status);
-
-    // Push to Home Screen
-    Get.offNamed("/home");
-  }
-
-  // **************************
+  // ***********************
   // ******* Events ********
-  // **************************
+  // ***********************
   // ^ Queue-File Event ^
-  void queue(Payload_Type payType, {File file}) async {
+  void queueFile(Payload_Type payType, {File file}) async {
     // Queue File
     if (payType == Payload_Type.FILE) {
       _node.queue(file.path);
@@ -145,6 +142,7 @@ class SonrService extends GetxService {
 
       // Update Peers List
       var peersList = data.peers.values.toList(growable: false);
+      print(peersList.toString());
       peers(peersList);
     }
   }

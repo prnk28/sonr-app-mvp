@@ -7,7 +7,7 @@ import 'package:sonr_core/models/models.dart';
 class ContactInviteView extends StatelessWidget {
   final Contact contact;
   final bool isReply;
-  final SonrService sonrService = Get.find();
+  final SonrService sonr = Get.find();
 
   ContactInviteView(
     this.contact, {
@@ -82,7 +82,7 @@ class ContactInviteView extends StatelessWidget {
       return NeumorphicButton(
           onPressed: () {
             // Emit Event
-            sonrService.respondPeer(true);
+            sonr.respondPeer(true);
             Get.back();
           },
           style: NeumorphicStyle(

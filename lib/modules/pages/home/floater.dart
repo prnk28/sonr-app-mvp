@@ -14,7 +14,7 @@ class _FloaterButtonState extends State<FloaterButton>
   // Floating Button Animations
   Animation<double> _animation;
   AnimationController _animationController;
-  final SonrService sonrService = Get.find();
+  final SonrService sonr = Get.find();
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _FloaterButtonState extends State<FloaterButton>
             File file = await getAssetFileByPath("assets/images/test.jpg");
 
             // Queue File
-            sonrService.queue(Payload_Type.FILE, file: file);
+            sonr.queueFile(Payload_Type.FILE, file: file);
 
             // Wait for Animation to Complete
             _animationController.reverse();
@@ -77,7 +77,7 @@ class _FloaterButtonState extends State<FloaterButton>
                 await getAssetFileByPath("assets/images/fat_test.jpg");
 
             // Queue File
-            sonrService.queue(Payload_Type.FILE, file: testFile);
+            sonr.queueFile(Payload_Type.FILE, file: testFile);
 
             // Wait for Animation to Complete
             _animationController.reverse();
@@ -97,7 +97,7 @@ class _FloaterButtonState extends State<FloaterButton>
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             // Queue File
-            sonrService.queue(Payload_Type.CONTACT);
+            sonr.queueFile(Payload_Type.CONTACT);
 
             // Wait for Animation to Complete
             _animationController.reverse();

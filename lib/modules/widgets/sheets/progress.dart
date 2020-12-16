@@ -52,9 +52,9 @@ class _ProgressViewState extends State<ProgressView>
 
   @override
   Widget build(BuildContext context) {
-    SonrService sonrService = Get.find();
+    SonrService sonr = Get.find();
     return Obx(() {
-      if (sonrService.progress.value < 1.0) {
+      if (sonr.progress.value < 1.0) {
         return Stack(
           children: <Widget>[
             SizedBox(
@@ -67,7 +67,7 @@ class _ProgressViewState extends State<ProgressView>
                     painter: WavePainter(
                       iconKey: _iconKey,
                       waveAnimation: _waveController,
-                      percent: sonrService.progress.value,
+                      percent: sonr.progress.value,
                       boxHeight: widget.boxHeight,
                       waveColor: widget.waveColor,
                     ),

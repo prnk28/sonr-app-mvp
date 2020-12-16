@@ -52,9 +52,12 @@ class TransferScreen extends StatelessWidget {
 
   // ** Create Bubble Widgets from Peer Data ** //
   List<Widget> _createBubbles() {
-    return new List<Widget>.generate(sonr.peers.value.length, (int index) {
-      return PeerBubble(Get.put(PeerController(
-          sonr.peers.value[index], (1.0 / sonr.peers.value.length) / index)));
+    return new List<Widget>.generate(sonr.peers.length, (int index) {
+      // Determine Spawn Direction
+
+      // Create Bubble
+      return PeerBubble(Get.put(
+          PeerController(sonr.peers[index], sonr.peers[index].difference)));
     });
   }
 }

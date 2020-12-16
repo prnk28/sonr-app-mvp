@@ -35,32 +35,34 @@ class PeerBubble extends StatelessWidget {
                 duration: 500.milliseconds,
                 delay: 1.seconds,
                 builder: (context, child, value) {
-                  return Container(
-                      width: 90,
-                      height: 90,
-                      decoration:
-                          BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                        BoxShadow(
-                          color: Color.fromRGBO(167, 179, 190, value),
-                          offset: Offset(0, 2),
-                          blurRadius: 6,
-                          spreadRadius: 0.5,
-                        ),
-                        BoxShadow(
-                          color: Color.fromRGBO(248, 252, 255, value / 2),
-                          offset: Offset(-2, 0),
-                          blurRadius: 6,
-                          spreadRadius: 0.5,
-                        ),
-                      ]),
-                      child: Stack(alignment: Alignment.center, children: [
-                        Rive(
-                          artboard: controller.artboard,
-                          alignment: Alignment.center,
-                          fit: BoxFit.contain,
-                        ),
-                        _buildContentVisibility(),
-                      ]));
+                  return Obx(() {
+                    return Container(
+                        width: 90,
+                        height: 90,
+                        decoration:
+                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(167, 179, 190, value),
+                            offset: Offset(0, 2),
+                            blurRadius: 6,
+                            spreadRadius: 0.5,
+                          ),
+                          BoxShadow(
+                            color: Color.fromRGBO(248, 252, 255, value / 2),
+                            offset: Offset(-2, 0),
+                            blurRadius: 6,
+                            spreadRadius: 0.5,
+                          ),
+                        ]),
+                        child: Stack(alignment: Alignment.center, children: [
+                          Rive(
+                            artboard: controller.artboard.value,
+                            alignment: Alignment.center,
+                            fit: BoxFit.contain,
+                          ),
+                          _buildContentVisibility(),
+                        ]));
+                  });
                 })));
   }
 

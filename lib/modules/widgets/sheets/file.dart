@@ -19,11 +19,11 @@ class FileInviteView extends StatelessWidget {
     // @ Extract Data
     var metadata = invite.payload.file;
     var from = invite.from;
-    SonrService sonrService = Get.find();
+    SonrService sonr = Get.find();
 
     return Obx(() {
       // @ In Transfer
-      if (sonrService.status() == Status.Busy) {
+      if (sonr.status() == Status.Busy) {
         return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(40),
@@ -32,11 +32,10 @@ class FileInviteView extends StatelessWidget {
             height: Get.height / 3 + 20,
             child: Center(
                 child: ProgressView(
-                    iconData:
-                        iconDataFromPayload(sonrService.invite.payload))));
+                    iconData: iconDataFromPayload(sonr.invite.payload))));
       }
       // @ Pending
-      else if (sonrService.status() == Status.Pending) {
+      else if (sonr.status() == Status.Pending) {
         // Build AuthView
         return Container(
             decoration: BoxDecoration(
@@ -50,7 +49,7 @@ class FileInviteView extends StatelessWidget {
                 GestureDetector(
                     onTap: () {
                       // Emit Event
-                      sonrService.respondPeer(false);
+                      sonr.respondPeer(false);
 
                       // Pop Window
                       Get.back();
@@ -87,7 +86,7 @@ class FileInviteView extends StatelessWidget {
                 NeumorphicButton(
                     onPressed: () {
                       // Emit Event
-                      sonrService.respondPeer(true);
+                      sonr.respondPeer(true);
                     },
                     style: NeumorphicStyle(
                         depth: 8,
