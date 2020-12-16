@@ -1,5 +1,11 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sonar_app/ui/ui.dart';
+import 'package:get/get.dart';
+import 'package:sonar_app/controller/controller.dart';
+import 'package:sonar_app/modules/widgets/design/util.dart';
+import 'package:sonar_app/modules/widgets/painter/zones.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
@@ -217,5 +223,16 @@ class _PeerBubbleState extends State<PeerBubble> {
                 initialsFromPeer(widget.peer),
               ]));
         });
+  }
+
+  // ^ Calculate Peer Offset from Line ^ //
+  Offset calculateOffset(double value,
+      {Peer_Proximity proximity = Peer_Proximity.IMMEDIATE}) {
+    Path path = ZonePainter.getBubblePath(Get.width, proximity);
+    PathMetrics pathMetrics = path.computeMetrics();
+    PathMetric pathMetric = pathMetrics.elementAt(0);
+    value = pathMetric.length * value;
+    Tangent pos = pathMetric.getTangentForOffset(value);
+    return pos.position;
   }
 }

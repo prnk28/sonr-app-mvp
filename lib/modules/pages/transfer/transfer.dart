@@ -65,14 +65,3 @@ class TransferScreen extends StatelessWidget {
         ))));
   }
 }
-
-// ^ Calculate Peer Offset from Line ^ //
-Offset calculateOffset(double value,
-    {Peer_Proximity proximity = Peer_Proximity.IMMEDIATE}) {
-  Path path = ZonePainter.getBubblePath(Get.width, proximity);
-  PathMetrics pathMetrics = path.computeMetrics();
-  PathMetric pathMetric = pathMetrics.elementAt(0);
-  value = pathMetric.length * value;
-  Tangent pos = pathMetric.getTangentForOffset(value);
-  return pos.position;
-}

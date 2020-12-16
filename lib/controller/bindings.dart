@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'controller.dart';
-import 'package:sonar_app/ui/ui.dart';
 
 class AppBind extends Bindings {
   @override

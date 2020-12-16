@@ -1,6 +1,12 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/ui/ui.dart';
+import 'package:sonar_app/modules/pages/home/home.dart';
+
 import 'controller/bindings.dart';
+import 'modules/pages/register/register.dart';
+import 'modules/pages/transfer/transfer.dart';
+import 'modules/widgets/design/neumorphic.dart';
 import 'service/service.dart';
 
 // ** Main Method ** //
@@ -64,20 +70,20 @@ List<GetPage> getPages() {
     // ** Home Page ** //
     GetPage(
       name: '/home',
-      page: () => AppTheme(HomeScreen()),
+      page: () => SonrTheme(HomeScreen()),
       transition: Transition.zoom,
     ),
 
     // ** Register Page ** //
     GetPage(
         name: '/register',
-        page: () => AppTheme(RegisterScreen()),
+        page: () => SonrTheme(RegisterScreen()),
         transition: Transition.rightToLeftWithFade),
 
     // ** Searching Page ** //
     GetPage(
       name: '/transfer',
-      page: () => AppTheme(TransferScreen()),
+      page: () => SonrTheme(TransferScreen()),
       transition: Transition.fade,
       // binding: HomeBind(),
     ),

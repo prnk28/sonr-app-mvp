@@ -1,6 +1,9 @@
 import 'dart:io';
 
-import 'package:sonar_app/ui/ui.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
+import 'package:sonar_app/service/card_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/controller/controller.dart';
 
@@ -12,13 +15,13 @@ class CardPopup extends StatelessWidget {
   Widget build(BuildContext context) {
     fileController.saveFile(receiveController.file());
     return Dialog(
-        shape: windowBorder(),
+        shape: SonrWindowBorder(),
         insetAnimationDuration: Duration(seconds: 1),
         insetPadding: MediaQuery.of(context).viewInsets +
             const EdgeInsets.symmetric(horizontal: 20.0, vertical: 125.0),
         elevation: 45,
         child: Container(
-            decoration: windowDecoration(context),
+            decoration: SonrWindowDecoration(context),
             child: Column(
               children: [
                 // Some Space

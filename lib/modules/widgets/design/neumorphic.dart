@@ -31,6 +31,9 @@ NeumorphicTheme SonrTheme(Widget child) {
 NeumorphicAppBar SonrAppBar(
   String title,
 ) {
+  if(title == ""){
+    
+  }
   return NeumorphicAppBar(
       title: Center(
           child: NeumorphicText(title,
