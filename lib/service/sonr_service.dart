@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/data.dart';
+import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/modules/widgets/popups/card.dart';
 import 'package:sonar_app/modules/widgets/sheets/contact.dart';
 import 'package:sonar_app/modules/widgets/sheets/file.dart';

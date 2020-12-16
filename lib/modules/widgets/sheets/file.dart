@@ -3,7 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/widgets/design/util.dart';
 import 'package:sonar_app/modules/widgets/sheets/progress.dart';
-import 'package:sonar_app/service/service.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class FileInviteView extends StatelessWidget {

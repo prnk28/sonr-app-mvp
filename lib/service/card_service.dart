@@ -1,5 +1,5 @@
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/data.dart';
+import 'package:sonar_app/data/card_model.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

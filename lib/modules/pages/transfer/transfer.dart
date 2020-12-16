@@ -6,8 +6,7 @@ import 'package:get/get.dart';
 import 'package:sonar_app/modules/pages/transfer/peer_bubble.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
 import 'package:sonar_app/modules/widgets/painter/zones.dart';
-import 'package:sonar_app/service/service.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 
 import 'compass.dart';
 

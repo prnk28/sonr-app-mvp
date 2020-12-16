@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/service/service.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 
 class ContactInviteView extends StatelessWidget {

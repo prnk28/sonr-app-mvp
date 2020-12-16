@@ -8,7 +8,8 @@ import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
-import 'package:sonar_app/service/service.dart';
+import 'package:sonar_app/service/card_service.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 part 'floater.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/widgets/painter/waves.dart';
-import 'package:sonar_app/service/service.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 
 class ProgressView extends StatefulWidget {
   // Required Properties
