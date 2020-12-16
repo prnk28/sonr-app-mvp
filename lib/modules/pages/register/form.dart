@@ -168,7 +168,7 @@ class _FormViewState extends State<FormView> {
                     contact.lastName = _lastName;
 
                     // Process data.
-                    device.createUser(contact);
+                    device.createUser(contact, "@Temp_Username");
                   }
                 },
                 child: Text('Submit',

@@ -9,6 +9,7 @@ import 'package:sonr_core/sonr_core.dart';
 class DeviceService extends GetxService {
   SharedPreferences _prefs;
   bool _hasLocation;
+  bool _hasUser;
   final direction = 0.0.obs;
 
   // ^ Open SharedPreferences on Init ^ //
@@ -16,8 +17,12 @@ class DeviceService extends GetxService {
     // Init Shared Preferences
     _prefs = await SharedPreferences.getInstance();
 
-    // Check Location
-    _hasLocation = await Permission.locationWhenInUse.request().isGranted;
+    // Check Location Status
+    _hasLocation = await Permission.locationWhenInUse.serviceStatus ==
+        ServiceStatus.enabled;
+
+    // Check User Status
+    _hasUser = _prefs.containsKey("user");
   }
 
   // ^ Method to Connect User Event ^
@@ -25,7 +30,7 @@ class DeviceService extends GetxService {
     // @ 1. Check for Location
     if (_hasLocation) {
       // @ 2. Get Profile
-      if (_prefs.containsKey("user")) {
+      if (_hasUser) {
         // Get Json Value
         var profileJson = _prefs.getString("user");
 
@@ -34,11 +39,10 @@ class DeviceService extends GetxService {
 
         if (user != null) {
           // Get Current Position
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
+          Position position = await user.position;
 
           // Initialize Sonr Node
-          await Get.putAsync(() => SonrService().init(position, user.contact));
+          await Get.putAsync(() => SonrService().init(position, user));
 
           // Push to Home Screen
           Get.offNamed("/home");
@@ -48,27 +52,28 @@ class DeviceService extends GetxService {
         Get.offNamed("/register");
       }
     } else {
-      throw RequiredPermissionsError("Location Permission Denied");
+      // Request Location again
+      _hasLocation = await Permission.locationWhenInUse.request().isGranted;
+      connectUser();
     }
   }
 
   // ^ CreateUser Event ^
-  void createUser(Contact contact) async {
+  void createUser(Contact contact, String username) async {
     // Set Sonr Controller
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // Get Data
-      var user = new User(contact);
+      var user = new User(contact, username);
 
       // Save in SharedPreferences Instance
       _prefs.setString("user", user.toJson());
 
       // Get Current Position
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+      Position position = await user.position;
 
       // Initialize Sonr Node
-      await Get.putAsync(() => SonrService().init(position, user.contact));
+      await Get.putAsync(() => SonrService().init(position, user));
 
       // Push to Home Screen
       Get.offNamed("/home");

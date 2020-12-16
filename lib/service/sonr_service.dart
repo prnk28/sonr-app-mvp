@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
+import 'package:sonar_app/data/data.dart';
 import 'package:sonar_app/modules/widgets/popups/card.dart';
 import 'package:sonar_app/modules/widgets/sheets/contact.dart';
 import 'package:sonar_app/modules/widgets/sheets/file.dart';
@@ -39,15 +40,15 @@ class SonrService extends GetxService {
   }
 
   // ^ Connect Node Method ^ //
-  Future<SonrService> init(Position pos, Contact contact) async {
+  Future<SonrService> init(Position pos, User user) async {
     // Get OLC
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
 
     // Await Initialization
     _node = await SonrCore.initialize(
       code,
-      "@Temp_Username",
-      contact,
+      user.username,
+      user.contact,
     );
 
     // Assign Node Callbacks
