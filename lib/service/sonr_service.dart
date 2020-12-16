@@ -163,7 +163,8 @@ class SonrService extends GetxService {
       }
       // Check Data Type for Contact
       else if (data.payload.type == Payload_Type.CONTACT) {
-        Get.bottomSheet(ContactInviteView(data.payload.contact));
+        Get.bottomSheet(ContactInviteView(data.payload.contact),
+            isDismissible: false);
       }
     }
   }
@@ -177,10 +178,12 @@ class SonrService extends GetxService {
 
       if (data.payload.type == Payload_Type.CONTACT) {
         // Report Replied to Bubble for File
-        Get.bottomSheet(ContactInviteView(
-          reply.payload.contact,
-          isReply: true,
-        ));
+        Get.bottomSheet(
+            ContactInviteView(
+              reply.payload.contact,
+              isReply: true,
+            ),
+            isDismissible: false);
         // update([data.from.id]);
       } else {
         // Report Replied to Bubble for File
@@ -216,7 +219,7 @@ class SonrService extends GetxService {
 
       // Display Completed Popup
       Future.delayed(Duration(milliseconds: 500));
-      Get.dialog(CardPopup());
+      Get.dialog(CardPopup(), barrierDismissible: false);
     }
   }
 
