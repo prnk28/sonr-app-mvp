@@ -14,6 +14,7 @@ class _FloaterButtonState extends State<FloaterButton>
   // Floating Button Animations
   Animation<double> _animation;
   AnimationController _animationController;
+  final SonrService sonrService = Get.find();
 
   @override
   void initState() {
@@ -38,8 +39,6 @@ class _FloaterButtonState extends State<FloaterButton>
 
   @override
   Widget build(BuildContext context) {
-    final SonrService sonrService = Get.find();
-    
     return FloatingActionBubble(
       // Menu items
       items: <Bubble>[

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/ui/modals/modals.dart';
+import 'package:sonar_app/modules/widgets/popups/card.dart';
+import 'package:sonar_app/modules/widgets/sheets/contact.dart';
+import 'package:sonar_app/modules/widgets/sheets/file.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
 
@@ -30,7 +32,7 @@ class SonrService extends GetxService {
   SonrService() {
     FlutterCompass.events.listen((newDegrees) {
       // Get Current Direction and Update Cubit
-      if (status() == Status.Ready) {
+      if (status() == Status.Ready || status() == Status.Searching) {
         _node.update(newDegrees.headingForCameraMode);
       }
     });
@@ -106,16 +108,10 @@ class SonrService extends GetxService {
 
   // ^ Resets Status ^
   void finish() {
-    // @ Check if Sender
-    if (reply != null && invite == null) {
+    // @ Check if Sender/Receiver
+    if (reply != null || invite != null) {
       _node.finish();
       reply = null;
-
-      status(_node.status);
-    }
-    // @ Check if Receiver
-    else {
-      _node.finish();
       invite = null;
 
       offer(null);
@@ -127,7 +123,6 @@ class SonrService extends GetxService {
   // **************************
   // ******* Callbacks ********
   // **************************
-
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
@@ -160,7 +155,15 @@ class SonrService extends GetxService {
       // Inform Listener
       status(_node.status);
       Vibration.vibrate();
-      Get.bottomSheet(InviteSheet());
+
+      // Check Data Type for File
+      if (data.payload.type == Payload_Type.FILE) {
+        Get.bottomSheet(FileInviteView(data));
+      }
+      // Check Data Type for Contact
+      else if (data.payload.type == Payload_Type.CONTACT) {
+        Get.bottomSheet(ContactInviteView(data.payload.contact));
+      }
     }
   }
 
@@ -212,7 +215,7 @@ class SonrService extends GetxService {
 
       // Display Completed Popup
       Future.delayed(Duration(milliseconds: 500));
-      Get.dialog(CompletedPopup());
+      Get.dialog(CardPopup());
     }
   }
 

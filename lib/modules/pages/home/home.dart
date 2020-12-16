@@ -16,7 +16,7 @@ part 'floater.dart';
 class HomeScreen extends StatelessWidget {
   final double itemHeight = (Get.height - kToolbarHeight - 24) / 4;
   final double itemWidth = Get.width / 4;
-  final CardService files = Get.find();
+  final CardService cards = Get.find();
   @override
   Widget build(BuildContext context) {
     // Build View
@@ -26,16 +26,16 @@ class HomeScreen extends StatelessWidget {
         floatingActionButton: FloaterButton(() {}),
         body: Obx(() {
           return ListView.builder(
-            itemCount: files.allFiles.length,
+            itemCount: cards.allFiles.length,
             itemBuilder: (context, current) {
               // Get Current Metadata
-              Metadata metadata = files.allFiles[current];
+              Metadata metadata = cards.allFiles[current];
 
               // Generate Cell
               return GestureDetector(
                   onTap: () async {
                     // Process data.
-                    files.getFile(metadata);
+                    cards.getFile(metadata);
                   },
                   child: Container(
                     height: 75,

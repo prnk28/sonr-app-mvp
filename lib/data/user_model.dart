@@ -11,7 +11,7 @@ class User {
   User(this.contact);
 
   // ^ Method Constructs Profile from JSON String ^
-  static User fromJson(String jsonData) {
+  factory User.fromJson(String jsonData) {
     // Initialize
     var map = json.decode(jsonData);
     User p = new User(Contact.fromJson(map["contact"]));

@@ -47,6 +47,32 @@ NeumorphicAppBar SonrAppBar(
       leading: null);
 }
 
+// ignore: non_constant_identifier_names
+NeumorphicAppBar SonrExitAppBar(
+  BuildContext context,
+  IconData icon,
+  Function() onPressed, {
+  String title: "",
+}) {
+  // Create App Bar
+  return NeumorphicAppBar(
+      title: Center(child: Text(title)),
+      leading: Align(
+          alignment: Alignment.centerLeft,
+          child: NeumorphicButton(
+            padding: EdgeInsets.all(18),
+            style: NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.circle(),
+                shape: NeumorphicShape.convex,
+                depth: 5),
+            child: Icon(
+              icon,
+              color: Colors.black87,
+            ),
+            onPressed: onPressed,
+          )));
+}
+
 // ^ Sonr Global WindowBorder Data ^ //
 // ignore: non_constant_identifier_names
 RoundedRectangleBorder SonrWindowBorder() {

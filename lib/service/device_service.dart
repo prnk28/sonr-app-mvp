@@ -19,6 +19,7 @@ class DeviceService extends GetxService {
     _hasLocation = await Permission.locationWhenInUse.request().isGranted;
   }
 
+  // ^ Method to Connect User Event ^
   void connectUser() async {
     // @ 1. Check for Location
     if (_hasLocation) {

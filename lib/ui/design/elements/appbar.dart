@@ -77,7 +77,20 @@ NeumorphicAppBar exitAppBar(
   // Create App Bar
   return NeumorphicAppBar(
       title: Center(child: Text(title)),
-      leading: getAppBarButton(context, icon, onPressed));
+      leading: Align(
+          alignment: Alignment.centerLeft,
+          child: NeumorphicButton(
+            padding: EdgeInsets.all(18),
+            style: NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.circle(),
+                shape: NeumorphicShape.convex,
+                depth: 5),
+            child: Icon(
+              icon,
+              color: Colors.black87,
+            ),
+            onPressed: onPressed,
+          )));
 }
 
 _defaultOnPressed(BuildContext context) {
