@@ -4,18 +4,7 @@ import 'package:sonar_app/ui/ui.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Listen to Result
-    final UserController user = Get.find();
-    user.addListenerId("Listener", () {
-      if (user.status == UserStatus.Active) {
-        Get.offNamed("/home");
-      } else if (user.status == UserStatus.Inactive) {
-        Get.offNamed("/register");
-      }
-    });
-
-    // Check Permissions
-    user.getUser();
+    
     return Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         // Non Build States

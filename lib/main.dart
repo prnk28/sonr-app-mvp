@@ -17,6 +17,7 @@ initServices() async {
 
   /// Here is where you put get_storage, hive, shared_pref initialization.
   await Get.putAsync(() => FileService().init());
+  await Get.putAsync(() => DeviceService().init());
   print('All services started...');
 }
 
