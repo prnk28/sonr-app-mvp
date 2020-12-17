@@ -13,62 +13,6 @@ class _FormViewState extends State<FormView> {
   String _firstName;
   String _lastName;
 
-  // @ Helpers
-
-// Hint Text
-  TextStyle hintTextStyle({Color setColor}) {
-    return TextStyle(
-      fontFamily: "Raleway",
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-      color: setColor ?? Colors.black87,
-    );
-  }
-
-// Input Text
-  TextStyle inputTextStyle({Color setColor}) {
-    return TextStyle(
-        fontFamily: "Raleway",
-        fontWeight: FontWeight.normal,
-        fontSize: 28,
-        color: setColor ?? Colors.cyan);
-  }
-
-// Description Text
-  TextStyle descriptionTextStyle({Color setColor}) {
-    return TextStyle(
-        fontFamily: "Raleway",
-        fontWeight: FontWeight.normal,
-        fontSize: 24,
-        color: setColor ?? Colors.black45);
-  }
-
-  // Text Field Decoration
-  InputDecoration textFieldDecoration() {
-    return new InputDecoration(
-        // Disable Line
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        disabledBorder: InputBorder.none,
-
-        // Input Text Style
-        hintStyle: inputTextStyle(),
-
-        // Pad for Border
-        contentPadding: const EdgeInsets.only(left: 20.0, bottom: 7.5));
-  }
-
-// Text Field Style
-  NeumorphicStyle textFieldStyle() {
-    return NeumorphicStyle(
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(45)),
-        depth: -6,
-        lightSource: LightSource.topLeft,
-        color: Colors.transparent);
-  }
-
   @override
   Widget build(BuildContext context) {
     // Connect to Sonr Network
@@ -84,9 +28,8 @@ class _FormViewState extends State<FormView> {
           // ****************** //
           // Label
           Padding(
-            padding: EdgeInsets.only(left: 22),
-            child: Text("First Name", style: hintTextStyle()),
-          ),
+              padding: EdgeInsets.only(left: 22),
+              child: hintText("First Name")),
 
           // Input
           Neumorphic(
@@ -118,9 +61,8 @@ class _FormViewState extends State<FormView> {
           // ***************** //
           // Label
           Padding(
-            padding: EdgeInsets.only(left: 22, top: 30),
-            child: Text("Last Name", style: hintTextStyle()),
-          ),
+              padding: EdgeInsets.only(left: 22, top: 30),
+              child: hintText("Last Name")),
 
           // Input
           Neumorphic(
@@ -171,8 +113,7 @@ class _FormViewState extends State<FormView> {
                     device.createUser(contact, "@Temp_Username");
                   }
                 },
-                child: Text('Submit',
-                    style: TextStyle(color: findTextColor(context))),
+                child: defaultText("Submit"),
               ),
             ),
           )

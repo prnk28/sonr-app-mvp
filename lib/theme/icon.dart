@@ -38,3 +38,36 @@ IconData iconDataFromPayload(Payload payload) {
       break;
   }
 }
+
+// ^ Get Icon and Preview Thumbnail ^ //
+Widget iconWithPreview(Metadata metadata) {
+  switch (metadata.mime.type) {
+    case MIME_Type.audio:
+      return Icon(Icons.audiotrack, size: 100);
+      break;
+    case MIME_Type.image:
+      if (metadata.thumbnail != null) {
+        return ClipRRect(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+            child: FittedBox(
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.bottomCenter,
+                child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        minWidth: 1, minHeight: 1, maxWidth: 200), // here
+                    child: Image.memory(metadata.thumbnail))));
+      } else {
+        return Icon(Icons.image, size: 100);
+      }
+      break;
+    case MIME_Type.video:
+      return Icon(Icons.video_collection, size: 100);
+      break;
+    case MIME_Type.text:
+      return Icon(Icons.sort_by_alpha, size: 100);
+      break;
+    default:
+      return Icon(Icons.device_unknown, size: 100);
+      break;
+  }
+}

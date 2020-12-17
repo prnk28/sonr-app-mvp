@@ -17,7 +17,7 @@ enum PeerStatus {
   Completed,
 }
 
-class PeerController extends GetxController {
+class PeerBubbleController extends GetxController {
   final Peer peer;
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
@@ -33,7 +33,7 @@ class PeerController extends GetxController {
 
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
-  PeerController(this.peer) {
+  PeerBubbleController(this.peer) {
     // Set Default Values
     id = peer.id;
     offest = _calculateOffset(peer.difference);
@@ -89,11 +89,6 @@ class PeerController extends GetxController {
       _sending.isActive = _inProgress;
       _complete.isActive = _hasCompleted;
 
-      // Add One Shot Listeners
-      _accepted.isActiveChanged.addListener(_handleAcceptToSend);
-      _denied.isActiveChanged.addListener(_handleDeniedToIdle);
-      _complete.isActiveChanged.addListener(_handleReset);
-
       // Observable Artboard
       this.artboard(artboard);
     }
@@ -114,9 +109,17 @@ class PeerController extends GetxController {
         }
         break;
       case PeerStatus.Accepted:
+        // Start Animation
         _pending.instance.animation.loop = Loop.oneShot;
         _accepted.instance.animation.loop = Loop.oneShot;
         _accepted.isActive = _hasAccepted = !_hasAccepted;
+
+        // Update After Delay
+        Future.delayed(Duration(seconds: 1)).then((_) {
+          _hasAccepted = !_hasAccepted;
+          _accepted.instance.time = 0.0;
+          _sending.isActive = _inProgress = !_inProgress;
+        });
         break;
       case PeerStatus.Denied:
         _pending.instance.animation.loop = Loop.oneShot;
@@ -128,6 +131,16 @@ class PeerController extends GetxController {
         _sending.instance.animation.loop = Loop.oneShot;
         _complete.instance.animation.loop = Loop.oneShot;
         _complete.isActive = _hasCompleted = !_hasCompleted;
+
+        // Update After Delay
+        Future.delayed(Duration(seconds: 1)).then((_) {
+          // Call Finish
+          _sonr.finish();
+
+          // Reset Animation States
+          artboard().advance(0);
+          this.refresh();
+        });
         break;
     }
   }
@@ -141,28 +154,5 @@ class PeerController extends GetxController {
     value = pathMetric.length * value;
     Tangent pos = pathMetric.getTangentForOffset(0.5); // TODO
     return pos.position;
-  }
-
-  // ^ Add listener for file transfer ^
-  _handleAcceptToSend() {
-    if (_accepted.isActive == false) {
-      _hasAccepted = !_hasAccepted;
-      _sending.isActive = _inProgress = !_inProgress;
-    }
-  }
-
-  // ^ Add listener for file transfer ^
-  _handleDeniedToIdle() {
-    if (_denied.isActive == false) {
-      shouldChangeVisibility(false);
-    }
-  }
-
-// ^ Add listener for file transfer ^
-  _handleReset() {
-    if (_complete.isActive == false) {
-      shouldChangeVisibility(false);
-      _sonr.finish();
-    }
   }
 }

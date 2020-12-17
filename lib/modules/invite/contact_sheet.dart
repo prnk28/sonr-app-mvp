@@ -17,100 +17,50 @@ class ContactInviteSheet extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // Build View
-    return DraggableScrollableSheet(
-        initialChildSize: 0.4,
-        minChildSize: 0.2,
-        maxChildSize: 0.6,
-        builder: (context, scrollController) {
-          return Container(
-              decoration: SonrWindowDecoration(context),
-              child: Column(children: [
-                // @ Top Right Close/Cancel Button
-                GestureDetector(
-                  onTap: () {
-                    // Pop Window
-                    Get.back();
-                  },
-                  child: Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 10, right: 15),
-                          child: Icon(
-                            Icons.close_rounded,
-                            size: 35,
-                            color: Colors.grey[700],
-                          ))),
-                ),
+    return SonrTheme(Container(
+        decoration: SonrWindowDecoration(),
+        child: Column(children: [
+          // @ Top Right Close/Cancel Button
+          closeButton(() {
+            // Emit Event
+            sonr.respondPeer(false);
 
-                // @ Basic Contact Info - Make Expandable
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Padding(padding: EdgeInsets.all(8)),
-                  Column(
-                    children: [
-                      Text(contact.firstName, style: _mediumTextStyle()),
-                      Text(contact.lastName, style: _mediumTextStyle())
-                    ],
-                  )
-                ]),
+            // Pop Window
+            Get.back();
+          }),
 
-                // @ Send Back Button
-                _buildSendBack(),
+          // @ Basic Contact Info - Make Expandable
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(padding: EdgeInsets.all(8)),
+            Column(
+              children: [
+                boldText(contact.firstName),
+                boldText(contact.lastName),
+              ],
+            )
+          ]),
 
-                // @ Save Button
-                NeumorphicButton(
-                    onPressed: () {
-                      // Emit Event
-                      Get.back();
-                    },
-                    style: NeumorphicStyle(
-                        depth: 8,
-                        shape: NeumorphicShape.concave,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(8))),
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text("Save", style: _smallTextStyle())),
-              ]));
-        });
+          // @ Send Back Button
+          _buildSendBack(),
+
+          // @ Save Button
+          rectangleButton("Save", () {
+            Get.back();
+          }),
+        ])));
   }
 
   Widget _buildSendBack() {
     if (!isReply) {
       // @ Sendback Is actions[0]
-      return NeumorphicButton(
-          onPressed: () {
-            // Emit Event
-            sonr.respondPeer(true);
-            Get.back();
-          },
-          style: NeumorphicStyle(
-              depth: 8,
-              shape: NeumorphicShape.concave,
-              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
-          padding: const EdgeInsets.all(12.0),
-          child: Text("Send Back", style: _smallTextStyle()));
-
+      return rectangleButton("Send Back", () {
+        // Emit Event
+        sonr.respondPeer(true);
+        Get.back();
+      });
       // Remove Sendback if Necessary
     } else {
       return Container();
     }
-  }
-
-  // Medium Text
-  TextStyle _mediumTextStyle({Color setColor}) {
-    return TextStyle(
-        fontFamily: "Raleway",
-        fontWeight: FontWeight.bold,
-        fontSize: 32,
-        color: setColor ?? Colors.black54);
-  }
-
-  // Small Text
-  TextStyle _smallTextStyle({Color setColor}) {
-    return TextStyle(
-        fontFamily: "Raleway",
-        fontWeight: FontWeight.w500,
-        fontSize: 16,
-        color: setColor ?? Colors.black54);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart'; // ^ Sonr Global Theme Data ^ //
-
+export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'appbar.dart';
+export 'button.dart';
 export 'color.dart';
 export 'icon.dart';
 export 'text.dart';

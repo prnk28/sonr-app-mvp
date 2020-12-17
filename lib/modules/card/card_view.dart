@@ -14,14 +14,14 @@ class CardPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     fileController.saveFile(receiveController.file());
-    return Dialog(
+    return SonrTheme(Dialog(
         shape: SonrWindowBorder(),
         insetAnimationDuration: Duration(seconds: 1),
         insetPadding: MediaQuery.of(context).viewInsets +
             const EdgeInsets.symmetric(horizontal: 20.0, vertical: 125.0),
         elevation: 45,
         child: Container(
-            decoration: SonrWindowDecoration(context),
+            decoration: SonrWindowDecoration(),
             child: Column(
               children: [
                 // Some Space
@@ -47,6 +47,6 @@ class CardPopup extends StatelessWidget {
                   ),
                 ),
               ],
-            )));
+            ))));
   }
 }

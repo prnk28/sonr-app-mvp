@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-// ^ PeerStatus Enum ^ //
+// @ PeerStatus Enum
 enum ProfileStatus {
   Viewing,
   Editing,
 }
 
+// @ Contact Value Enum
 enum ContactCoreValueType {
   FirstName,
   LastName,
@@ -15,6 +18,9 @@ enum ContactCoreValueType {
   Email,
   Website,
 }
+
+// @ SocialEditType Enum
+enum SocialEditType { TileType, Preview, Url }
 
 class ProfileController extends GetxController {
   final Contact userContact;
@@ -60,22 +66,41 @@ class ProfileController extends GetxController {
   }
 
   // ^ Update User Profile Pic ^ //
-  editProfilePic() {
-    // TODO
+  updateProfilePic(File image) async {
+    var imgBytes = await image.readAsBytes();
+    userContact.profilePic = imgBytes.toList();
+    _save();
   }
 
   // ^ Add a Social Tile ^ //
-  addSocialTile() {
-    // TODO
+  addSocialTile(Contact_SocialTile_Provider provider,
+      Contact_SocialTile_TileType tileType,
+      {int position = 0, String url = "", String username = ""}) {
+    // Create Tile from Data
+    var tile = new Contact_SocialTile();
+    tile.provider = provider;
+    tile.type = tileType;
+    tile.position = position;
+    tile.url = url;
+    tile.username = username;
+
+    // Add Tile to Contact and Save
+    userContact.socials.add(tile);
+    _save();
   }
 
   // ^ Edit a Social Tile ^ //
-  editSocialTile() {
+  editSocialTile(SocialEditType edit, dynamic data) {
     // TODO
   }
 
   // ^ Remove a Social Tile ^ //
-  removeSocialTile() {
+  removeSocialTile(Contact_SocialTile tile) {
+    // TODO
+  }
+
+  // @ Save Current Contact
+  _save() {
     // TODO
   }
 }

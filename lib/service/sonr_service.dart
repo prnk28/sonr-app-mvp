@@ -141,7 +141,6 @@ class SonrService extends GetxService {
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
-      print(data.peers.length);
       // Update Peers List
       peers(data.peers);
     }
@@ -158,7 +157,6 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvite(dynamic data) async {
-    print("Invite" + data.toString());
     // Check Type
     if (data is AuthInvite) {
       // Update Values

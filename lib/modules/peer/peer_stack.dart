@@ -1,7 +1,7 @@
 // ^ Widget that Builds Stack of Peers ^ //
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/peer/peer_controller.dart';
+import 'package:sonar_app/modules/peer/peer_bubble_controller.dart';
 import 'package:sonar_app/modules/peer/peer_bubble.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
@@ -26,7 +26,7 @@ class PeerStack extends StatelessWidget {
           // if (stackWidgets.any((b) => b.controller.peer.id == id)) {
           //   print("Peer already in list");
           // } else {
-          stackWidgets.add(PeerBubble(Get.put(PeerController(peer))));
+          stackWidgets.add(PeerBubble(Get.put(PeerBubbleController(peer))));
           // }
         });
         //} else {}

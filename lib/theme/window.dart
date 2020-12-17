@@ -1,5 +1,6 @@
 // ignore: non_constant_identifier_names
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 
 // ^ Sonr Global WindowBorder Data ^ //
 // ignore: non_constant_identifier_names
@@ -9,9 +10,9 @@ RoundedRectangleBorder SonrWindowBorder() {
 
 // ^ Sonr Global WindowDecoration Data ^ //
 // ignore: non_constant_identifier_names
-BoxDecoration SonrWindowDecoration(BuildContext context) {
+BoxDecoration SonrWindowDecoration() {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(40),
-    color: NeumorphicTheme.baseColor(context),
+    color: NeumorphicTheme.baseColor(Get.context),
   );
 }
