@@ -19,15 +19,10 @@ class PeerStack extends StatelessWidget {
       // @ Verify Not Null
       if (sonr.peers.length > 0) {
         // Init Stack Vars
-        int total = sonr.peers.length + STACK_CONSTANT;
-        double mean = 1.0 / total;
-        int current = 0;
-
         // @ Create Bubbles that arent added
         sonr.peers().forEach((id, peer) {
           // Create Bubble
           stackWidgets.add(PeerBubble(Get.put(PeerController(peer))));
-          current++;
         });
       }
       return Stack(children: stackWidgets);

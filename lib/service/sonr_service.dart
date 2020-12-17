@@ -87,13 +87,18 @@ class SonrService extends GetxService {
   // ***********************
   // ^ Queue-File Event ^
   void queueFile(Payload_Type payType, {File file}) async {
+    // Set Payload Type
+    payloadType = payType;
+    status(_node.status);
+
     // Queue File
     if (payType == Payload_Type.FILE) {
       _node.queue(file.path);
     }
-    // Set Payload Type
-    payloadType = payType;
-    status(_node.status);
+    // Go straight to transfer
+    else if (payType == Payload_Type.CONTACT) {
+      Get.offNamed("/transfer");
+    }
   }
 
   // ^ Invite-Peer Event ^
@@ -197,10 +202,6 @@ class SonrService extends GetxService {
               isReply: true,
             ),
             isDismissible: false);
-        // update([data.from.id]);
-      } else {
-        // Report Replied to Bubble for File
-        // update([data.from.id]);
       }
     }
   }
