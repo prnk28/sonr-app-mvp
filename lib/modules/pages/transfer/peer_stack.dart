@@ -22,7 +22,7 @@ class PeerStack extends StatelessWidget {
         // @ Create Bubbles that arent added
         sonr.peers().forEach((id, peer) {
           // Create Bubble
-          stackWidgets.add(PeerBubble(Get.put(PeerController(peer))));
+          stackWidgets.map((e) => PeerBubble(Get.put(PeerController(peer))));
         });
       }
       return Stack(children: stackWidgets);
