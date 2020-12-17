@@ -101,8 +101,6 @@ class FileInviteView extends StatelessWidget {
       }
       // @ Error
       else {
-        Get.back();
-        print("Incorrect Receive Controller Status");
         return Container();
       }
     });

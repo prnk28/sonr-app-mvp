@@ -229,10 +229,8 @@ class SonrService extends GetxService {
       // Set Data
       this.file(data);
       status(_node.status);
-      Get.back();
 
       // Display Completed Popup
-      Future.delayed(Duration(milliseconds: 500));
       Get.dialog(CardPopup(), barrierDismissible: false);
     }
   }

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/controllers/transfer_controller.dart';
 import 'package:sonar_app/modules/pages/transfer/peer_stack.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
 import 'package:sonar_app/modules/widgets/painter/zones.dart';
@@ -12,7 +11,7 @@ import 'compass.dart';
 
 const STACK_CONSTANT = 1;
 
-class TransferScreen extends GetView<TransferController> {
+class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SonrService sonr = Get.find();

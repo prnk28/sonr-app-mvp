@@ -157,6 +157,7 @@ class PeerController extends GetxController {
 // ^ Add listener for file transfer ^
   _handleReset() {
     if (_complete.isActive == false) {
+      shouldChangeVisibility = false;
       _hasCompleted = false;
       _isInvited = true;
       _idle.isActive = true;

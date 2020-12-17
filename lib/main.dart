@@ -5,7 +5,6 @@ import 'package:sonar_app/modules/pages/home/home.dart';
 import 'package:sonar_app/service/card_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 //import 'package:worker_manager/worker_manager.dart';
-import 'modules/controllers/transfer_controller.dart';
 import 'modules/pages/register/register.dart';
 import 'modules/pages/transfer/transfer.dart';
 import 'modules/widgets/design/neumorphic.dart';
@@ -87,7 +86,7 @@ List<GetPage> getPages() {
       name: '/transfer',
       page: () => SonrTheme(TransferScreen()),
       transition: Transition.fade,
-      binding: BindingsBuilder.put(() => TransferController()),
+      // binding: BindingsBuilder.put(() => TransferController()),
     ),
   ];
 }
