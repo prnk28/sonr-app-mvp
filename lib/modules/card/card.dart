@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
+import 'package:sonar_app/theme/neumorphic.dart';
 import 'package:sonar_app/service/card_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/service/sonr_service.dart';

@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
-import 'package:sonar_app/modules/widgets/design/util.dart';
+import 'package:sonar_app/theme/neumorphic.dart';
+import 'package:sonar_app/theme/util.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 

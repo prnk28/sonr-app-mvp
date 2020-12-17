@@ -3,11 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/pages/transfer/peer_stack.dart';
-import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
-import 'package:sonar_app/modules/widgets/painter/zones.dart';
+import 'package:sonar_app/modules/transfer/peer_stack.dart';
+import 'package:sonar_app/theme/neumorphic.dart';
 import 'package:sonar_app/service/sonr_service.dart';
+
 import 'compass.dart';
+import 'zones.dart';
 
 const STACK_CONSTANT = 1;
 

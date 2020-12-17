@@ -1,13 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/pages/home/home.dart';
+import 'package:sonar_app/modules/home/home.dart';
 import 'package:sonar_app/service/card_service.dart';
 import 'package:sonar_app/service/device_service.dart';
-//import 'package:worker_manager/worker_manager.dart';
-import 'modules/pages/register/register.dart';
-import 'modules/pages/transfer/transfer.dart';
-import 'modules/widgets/design/neumorphic.dart';
+import 'modules/register/register.dart';
+import 'modules/transfer/transfer.dart';
+import 'theme/neumorphic.dart';
 
 // ** Main Method ** //
 void main() async {

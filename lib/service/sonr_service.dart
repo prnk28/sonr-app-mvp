@@ -1,21 +1,14 @@
 import 'dart:async';
 import 'dart:io';
-//import 'dart:isolate';
-
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
-import 'package:sonar_app/modules/widgets/popups/card.dart';
-import 'package:sonar_app/modules/widgets/sheets/contact.dart';
-import 'package:sonar_app/modules/widgets/sheets/file.dart';
+import 'package:sonar_app/modules/card/card.dart';
+import 'package:sonar_app/modules/invite/contact.dart';
+import 'package:sonar_app/modules/invite/file.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
-//import 'package:worker_manager/worker_manager.dart';
-
-// @ Create Workers
-// FutureOr<Node> connect(String o, String u, Contact c) =>
-//     SonrCore.initialize(o, u, c);
 
 class SonrService extends GetxService {
   // @ Set Properteries

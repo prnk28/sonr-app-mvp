@@ -1,8 +1,8 @@
 // ^ Widget that Builds Stack of Peers ^ //
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/controllers/peer_controller.dart';
-import 'package:sonar_app/modules/pages/transfer/peer_bubble.dart';
+import 'package:sonar_app/modules/peer/peer_controller.dart';
+import 'package:sonar_app/modules/peer/peer_bubble.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
 const STACK_CONSTANT = 1;
