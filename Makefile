@@ -14,6 +14,9 @@ build:
 	cd $(PROJECT_DIR) && $(BUILDIOS)
 	cd $(PROJECT_DIR) && $(BUILDANDROID)
 
+upgrade:
+	
+
 clean:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)

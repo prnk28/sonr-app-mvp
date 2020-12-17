@@ -62,7 +62,7 @@ class PeerBubble extends StatelessWidget {
   // ^ Method to Change Content Visibility By State ^ //
   Widget _buildContentVisibility() {
     PeerController controller = Get.find();
-    if (controller.shouldChangeVisibility) {
+    if (controller.shouldChangeVisibility.value) {
       return PlayAnimation<double>(
           tween: (1.0).tweenTo(0.0),
           duration: 20.milliseconds,
@@ -76,20 +76,21 @@ class PeerBubble extends StatelessWidget {
                   initialsFromPeer(controller.peer),
                 ]));
           });
+    } else {
+      return PlayAnimation<double>(
+          tween: (0.0).tweenTo(1.0),
+          duration: 500.milliseconds,
+          delay: 1.seconds,
+          builder: (context, child, value) {
+            return AnimatedOpacity(
+                opacity: value,
+                duration: 500.milliseconds,
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  iconFromPeer(controller.peer, size: 20),
+                  initialsFromPeer(controller.peer),
+                ]));
+          });
     }
-    return PlayAnimation<double>(
-        tween: (0.0).tweenTo(1.0),
-        duration: 500.milliseconds,
-        delay: 1.seconds,
-        builder: (context, child, value) {
-          return AnimatedOpacity(
-              opacity: value,
-              duration: 500.milliseconds,
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                iconFromPeer(controller.peer, size: 20),
-                initialsFromPeer(controller.peer),
-              ]));
-        });
   }
 }

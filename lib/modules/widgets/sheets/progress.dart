@@ -98,7 +98,6 @@ class _ProgressViewState extends State<ProgressView>
         );
       }
       _waveController.stop();
-      Get.back();
       return Container();
     });
   }

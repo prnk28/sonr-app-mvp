@@ -19,11 +19,17 @@ class PeerStack extends StatelessWidget {
       // @ Verify Not Null
       if (sonr.peers.length > 0) {
         // Init Stack Vars
+        // Check length of widgets list
+        //if (stackWidgets.length > 0) {
         // @ Create Bubbles that arent added
         sonr.peers().forEach((id, peer) {
-          // Create Bubble
-          stackWidgets.map((e) => PeerBubble(Get.put(PeerController(peer))));
+          // if (stackWidgets.any((b) => b.controller.peer.id == id)) {
+          //   print("Peer already in list");
+          // } else {
+          stackWidgets.add(PeerBubble(Get.put(PeerController(peer))));
+          // }
         });
+        //} else {}
       }
       return Stack(children: stackWidgets);
     });

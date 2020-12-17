@@ -173,7 +173,7 @@ class SonrService extends GetxService {
 
       // Inform Listener
       status(_node.status);
-      Vibration.vibrate();
+      Vibration.vibrate(duration: 250);
 
       // Check Data Type for File
       if (data.payload.type == Payload_Type.FILE) {
@@ -193,9 +193,10 @@ class SonrService extends GetxService {
       // Set Message
       this.reply = data;
       status(_node.status);
+      Vibration.vibrate(duration: 100);
+      Vibration.vibrate(duration: 150);
 
       if (data.payload.type == Payload_Type.CONTACT) {
-        // Report Replied to Bubble for File
         Get.bottomSheet(
             ContactInviteView(
               reply.payload.contact,
@@ -219,7 +220,6 @@ class SonrService extends GetxService {
     // Reset Peer/Auth
     if (data is Peer) {
       status(_node.status);
-      //update([data.id]);
     }
   }
 
@@ -231,6 +231,7 @@ class SonrService extends GetxService {
       status(_node.status);
 
       // Display Completed Popup
+      Get.back();
       Get.dialog(CardPopup(), barrierDismissible: false);
     }
   }

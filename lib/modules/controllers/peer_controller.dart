@@ -18,9 +18,11 @@ enum PeerStatus {
 }
 
 class PeerController extends GetxController {
-  SonrService _sonr = Get.find();
   final Peer peer;
+  final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
+  SonrService _sonr = Get.find();
+  String id;
   var offest = Offset(0, 0);
 
   bool _isInvited = false;
@@ -28,11 +30,12 @@ class PeerController extends GetxController {
   bool _hasAccepted = false;
   bool _inProgress = false;
   bool _hasCompleted = false;
-  bool shouldChangeVisibility = false;
+
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
   PeerController(this.peer) {
-    // Set Offset Value
+    // Set Default Values
+    id = peer.id;
     offest = _calculateOffset(peer.difference);
 
     // Listen to User Status
@@ -41,16 +44,19 @@ class PeerController extends GetxController {
       if (_isInvited) {
         // @ Pending -> Busy = Peer Accepted File
         if (status == Status.Busy) {
+          shouldChangeVisibility(true);
           updateStatus(PeerStatus.Accepted);
         }
 
         // @ Pending -> Searching = Peer Denied File
         if (status == Status.Searching) {
+          shouldChangeVisibility(true);
           updateStatus(PeerStatus.Denied);
         }
 
         // @ Pending -> Searching = Peer Completed File
         if (status == Status.Complete) {
+          shouldChangeVisibility(true);
           updateStatus(PeerStatus.Completed);
         }
       }
@@ -85,6 +91,7 @@ class PeerController extends GetxController {
 
       // Add One Shot Listeners
       _accepted.isActiveChanged.addListener(_handleAcceptToSend);
+      _denied.isActiveChanged.addListener(_handleDeniedToIdle);
       _complete.isActiveChanged.addListener(_handleReset);
 
       // Observable Artboard
@@ -97,38 +104,28 @@ class PeerController extends GetxController {
   updateStatus(PeerStatus status) {
     switch (status) {
       case PeerStatus.Idle:
-        shouldChangeVisibility = false;
+        shouldChangeVisibility(false);
         break;
       case PeerStatus.Invited:
         if (!_isInvited) {
           _sonr.invitePeer(peer);
-          shouldChangeVisibility = false;
+          shouldChangeVisibility(false);
           _pending.isActive = _isInvited = !_isInvited;
         }
         break;
       case PeerStatus.Accepted:
-        shouldChangeVisibility = true;
         _pending.instance.animation.loop = Loop.oneShot;
         _accepted.instance.animation.loop = Loop.oneShot;
         _accepted.isActive = _hasAccepted = !_hasAccepted;
         break;
       case PeerStatus.Denied:
-        shouldChangeVisibility = true;
         _pending.instance.animation.loop = Loop.oneShot;
         _denied.instance.animation.loop = Loop.oneShot;
         _denied.isActive = _hasDenied = !_hasDenied;
         break;
       case PeerStatus.Completed:
-        if (_inProgress) {
-          _sending.instance.animation.loop = Loop.oneShot;
-        }
-
-        if (_isInvited) {
-          _pending.instance.animation.loop = Loop.oneShot;
-        }
-
         // Start Complete Animation
-        shouldChangeVisibility = true;
+        _sending.instance.animation.loop = Loop.oneShot;
         _complete.instance.animation.loop = Loop.oneShot;
         _complete.isActive = _hasCompleted = !_hasCompleted;
         break;
@@ -154,14 +151,18 @@ class PeerController extends GetxController {
     }
   }
 
+  // ^ Add listener for file transfer ^
+  _handleDeniedToIdle() {
+    if (_denied.isActive == false) {
+      shouldChangeVisibility(false);
+    }
+  }
+
 // ^ Add listener for file transfer ^
   _handleReset() {
     if (_complete.isActive == false) {
-      shouldChangeVisibility = false;
-      _hasCompleted = false;
-      _isInvited = true;
-      _idle.isActive = true;
-      _complete.mix = 0.0;
+      shouldChangeVisibility(false);
+      _sonr.finish();
     }
   }
 }
