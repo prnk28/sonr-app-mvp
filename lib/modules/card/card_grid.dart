@@ -14,7 +14,7 @@ class CardGrid extends GetView<CardController> {
       return GridView.builder(
           itemCount: cards.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, mainAxisSpacing: 5, crossAxisSpacing: 2),
+              crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 4),
           itemBuilder: (context, idx) {
             // Get Current Metadata
             CardModel card = cards[idx];
@@ -29,7 +29,8 @@ class CardGrid extends GetView<CardController> {
                     // cards.getFile(metadata);
                   },
                   child: Neumorphic(
-                      margin: EdgeInsets.all(2),
+                      style: NeumorphicStyle(intensity: 0.85),
+                      margin: EdgeInsets.all(4),
                       child: Container(
                         height: 75,
                         child:

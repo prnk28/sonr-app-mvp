@@ -23,10 +23,11 @@ class FileInviteSheet extends StatelessWidget {
       // @ In Transfer
       if (sonr.status() == Status.Busy) {
         return Neumorphic(
+            style: SonrBorderStyle(),
             margin: EdgeInsets.only(left: 15, right: 15),
             child: Container(
                 padding: EdgeInsetsDirectional.only(start: 15, end: 15),
-                decoration: SonrWindowDecoration(),
+                decoration: SonrDecoration(),
                 height: Get.height / 3 + 20,
                 child: Center(
                     child: ProgressView(
@@ -35,9 +36,10 @@ class FileInviteSheet extends StatelessWidget {
       // @ Pending
       else if (sonr.status() == Status.Pending) {
         return Neumorphic(
+            style: SonrBorderStyle(),
             margin: EdgeInsets.only(left: 15, right: 15),
             child: Container(
-                decoration: SonrWindowDecoration(),
+                decoration: SonrDecoration(),
                 height: Get.height / 3 + 20,
                 child: Column(
                   children: [

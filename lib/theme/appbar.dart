@@ -47,6 +47,7 @@ NeumorphicAppBar SonrHomeBar(
           child: NeumorphicButton(
             padding: EdgeInsets.all(18),
             style: NeumorphicStyle(
+                intensity: 0.85,
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.flat,
                 depth: 8),
@@ -73,6 +74,7 @@ NeumorphicAppBar SonrExitAppBar(
           child: NeumorphicButton(
             padding: EdgeInsets.all(18),
             style: NeumorphicStyle(
+                intensity: 0.85,
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.flat,
                 depth: 8),
