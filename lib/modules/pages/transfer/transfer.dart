@@ -7,6 +7,7 @@ import 'package:sonar_app/modules/controllers/peer_controller.dart';
 //import 'package:sonar_app/modules/controllers/peer_controller.dart';
 import 'package:sonar_app/modules/controllers/transfer_controller.dart';
 import 'package:sonar_app/modules/pages/transfer/peer_bubble.dart';
+import 'package:sonar_app/modules/pages/transfer/peers.dart';
 //import 'package:sonar_app/modules/pages/transfer/peer_bubble.dart';
 import 'package:sonar_app/modules/widgets/design/neumorphic.dart';
 import 'package:sonar_app/modules/widgets/painter/zones.dart';
@@ -42,17 +43,7 @@ class TransferScreen extends GetView<TransferController> {
                 )),
 
             // @ Peer Bubbles
-            Obx(() {
-              var bubbles = List<Widget>();
-
-              // @ Add Values to List
-              sonr.peers().forEach((key, value) {
-                print(value.toString());
-                // Check Existence in existing list, Add if not existing
-                bubbles.add(PeerBubble(Get.put(PeerController(value))));
-              });
-              return Stack(children: controller.bubbles);
-            }),
+            PeerStack(),
 
             // @ Compass View
             CompassView(),
