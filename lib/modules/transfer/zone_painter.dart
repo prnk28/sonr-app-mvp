@@ -1,8 +1,23 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart';
 
 const double K_ANGLE = pi;
+
+class ZoneView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Padding(
+        padding: EdgeInsets.only(bottom: 5),
+        child: CustomPaint(
+          size: Size(Get.width, Get.height),
+          painter: ZonePainter(),
+          child: Container(),
+        ));
+  }
+}
 
 class ZonePainter extends CustomPainter {
   // Size Reference

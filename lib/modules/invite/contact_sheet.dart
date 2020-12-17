@@ -3,13 +3,14 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
+import 'package:sonar_app/theme/theme.dart';
 
-class ContactInviteView extends StatelessWidget {
+class ContactInviteSheet extends StatelessWidget {
   final Contact contact;
   final bool isReply;
   final SonrService sonr = Get.find();
 
-  ContactInviteView(
+  ContactInviteSheet(
     this.contact, {
     this.isReply = false,
     Key key,
@@ -23,10 +24,7 @@ class ContactInviteView extends StatelessWidget {
         maxChildSize: 0.6,
         builder: (context, scrollController) {
           return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                color: NeumorphicTheme.baseColor(context),
-              ),
+              decoration: SonrWindowDecoration(context),
               child: Column(children: [
                 // @ Top Right Close/Cancel Button
                 GestureDetector(

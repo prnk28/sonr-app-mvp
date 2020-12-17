@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/theme/util.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonar_app/modules/invite/progress_view.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-class FileInviteView extends StatelessWidget {
+class FileInviteSheet extends StatelessWidget {
   final AuthInvite invite;
 
-  const FileInviteView(
+  const FileInviteSheet(
     this.invite, {
     Key key,
   }) : super(key: key);
@@ -25,10 +25,7 @@ class FileInviteView extends StatelessWidget {
       // @ In Transfer
       if (sonr.status() == Status.Busy) {
         return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              color: NeumorphicTheme.baseColor(context),
-            ),
+            decoration: SonrWindowDecoration(context),
             height: Get.height / 3 + 20,
             child: Center(
                 child: ProgressView(
@@ -38,10 +35,7 @@ class FileInviteView extends StatelessWidget {
       else if (sonr.status() == Status.Pending) {
         // Build AuthView
         return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              color: NeumorphicTheme.baseColor(context),
-            ),
+            decoration: SonrWindowDecoration(context),
             height: Get.height / 3 + 20,
             child: Column(
               children: [

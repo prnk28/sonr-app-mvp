@@ -11,11 +11,11 @@ class PeerStack extends StatelessWidget {
   final SonrService sonr = Get.find();
   @override
   Widget build(BuildContext context) {
-    // Initialize Widget List
-    List<PeerBubble> stackWidgets = new List<PeerBubble>();
-
     // @ Bubble View
     return Obx(() {
+      // Initialize Widget List
+      List<PeerBubble> stackWidgets = new List<PeerBubble>();
+
       // @ Verify Not Null
       if (sonr.peers.length > 0) {
         // Init Stack Vars

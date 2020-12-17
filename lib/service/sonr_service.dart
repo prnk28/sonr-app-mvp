@@ -5,8 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/modules/card/card_view.dart';
-import 'package:sonar_app/modules/invite/contact_view.dart';
-import 'package:sonar_app/modules/invite/file_view.dart';
+import 'package:sonar_app/modules/invite/contact_sheet.dart';
+import 'package:sonar_app/modules/invite/file_sheet.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
 
@@ -170,11 +170,11 @@ class SonrService extends GetxService {
 
       // Check Data Type for File
       if (data.payload.type == Payload_Type.FILE) {
-        Get.bottomSheet(FileInviteView(data));
+        Get.bottomSheet(FileInviteSheet(data));
       }
       // Check Data Type for Contact
       else if (data.payload.type == Payload_Type.CONTACT) {
-        Get.bottomSheet(ContactInviteView(data.payload.contact),
+        Get.bottomSheet(ContactInviteSheet(data.payload.contact),
             isDismissible: false);
       }
     }
@@ -191,7 +191,7 @@ class SonrService extends GetxService {
 
       if (data.payload.type == Payload_Type.CONTACT) {
         Get.bottomSheet(
-            ContactInviteView(
+            ContactInviteSheet(
               reply.payload.contact,
               isReply: true,
             ),

@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:sonar_app/modules/home/home_screen.dart';
 import 'package:sonar_app/service/card_service.dart';
 import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'modules/register/register_screen.dart';
 import 'modules/transfer/transfer_screen.dart';
-import 'theme/neumorphic.dart';
 
 // ** Main Method ** //
 void main() async {

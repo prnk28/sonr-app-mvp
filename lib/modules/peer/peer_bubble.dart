@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/peer/peer_controller.dart';
-import 'package:sonar_app/theme/util.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
