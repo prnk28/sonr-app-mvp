@@ -18,6 +18,7 @@ class HomeScreen extends GetView<CardController> {
   @override
   Widget build(BuildContext context) {
     // Build View
+    controller.fetch();
     return SonrTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         appBar: SonrHomeBar(() {}),

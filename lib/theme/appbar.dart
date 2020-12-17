@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_core/sonr_core.dart';
 
 // ^ Sonr Global AppBar Data ^ //
 // ignore: non_constant_identifier_names
@@ -49,8 +48,8 @@ NeumorphicAppBar SonrHomeBar(
             padding: EdgeInsets.all(18),
             style: NeumorphicStyle(
                 boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.convex,
-                depth: 5),
+                shape: NeumorphicShape.flat,
+                depth: 8),
             child: Icon(
               Icons.person,
               color: Colors.black87,
@@ -75,8 +74,8 @@ NeumorphicAppBar SonrExitAppBar(
             padding: EdgeInsets.all(18),
             style: NeumorphicStyle(
                 boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.convex,
-                depth: 5),
+                shape: NeumorphicShape.flat,
+                depth: 8),
             child: Icon(
               Icons.close,
               color: Colors.black87,

@@ -25,7 +25,6 @@ class SonrService extends GetxService {
   Payload_Type payloadType;
 
   // @ Set Receive Dependencies
-  final file = Rx<Metadata>();
   final progress = 0.0.obs;
 
   // ^ Updates Node^ //
@@ -119,7 +118,6 @@ class SonrService extends GetxService {
   void reset() {
     // @ Check if Sender/Receiver
     _node.finish();
-    file(null);
     progress(0.0);
     status(_node.status);
   }
@@ -203,13 +201,14 @@ class SonrService extends GetxService {
   // ^ Mark as Received File ^ //
   void _handleReceived(dynamic data) {
     if (data is Metadata) {
-      // Set Data
-      this.file(data);
-      status(_node.status);
+      // Reset Data
+      reset();
 
-      // Display Completed Popup
+      // Pop Transfer Sheet
       Get.back();
-      Get.dialog(CardPopup(), barrierDismissible: false);
+
+      // Display Contact with metadata
+      Get.dialog(CardPopup.metadata(data));
     }
   }
 

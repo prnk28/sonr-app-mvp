@@ -5,50 +5,48 @@ import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonr_core/models/models.dart';
 
-class CardPopup extends GetView<CardController> {
-  final SonrService receiveController = Get.find();
-  final SQLService fileController = Get.find();
+class CardPopup extends StatelessWidget {
+  final CardModel card;
+  CardPopup(this.card, {Key key}) : super(key: key);
 
-  CardPopup({Key key}) : super(key: key);
+  factory CardPopup.metadata(Metadata meta) {
+    CardController controller = Get.find();
+    return CardPopup(controller.addFile(meta));
+  }
+
+  factory CardPopup.contact(Contact contact) {
+    CardController controller = Get.find();
+    return CardPopup(controller.addContact(contact));
+  }
 
   @override
   Widget build(BuildContext context) {
-    CardModel card = controller.fetchLastFileCard();
-    return SonrTheme(Dialog(
-        shape: SonrWindowBorder(),
-        // insetAnimationDuration: Duration(seconds: 1),
-        // insetPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 125.0),
-        elevation: 45,
+    return Neumorphic(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 45),
         child: Container(
-            decoration: SonrWindowDecoration(),
             child: Column(
-              children: [
-                // Some Space
-                Padding(padding: EdgeInsets.all(15)),
+          children: [
+            // Some Space
+            Padding(padding: EdgeInsets.all(15)),
 
-                // Top Right Close/Cancel Button
-                GestureDetector(
-                  onTap: () {
-                    // Shift to Detail Screen with Image
-                    receiveController.reset();
-                    Get.back();
-                  },
-                  child: Expanded(
-                    child: FittedBox(
-                        alignment: Alignment.center,
-                        child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minWidth: 1,
-                              minHeight: 1,
-                            ), // here
-                            child: Image.file(File(card.meta.path)))),
-                  ),
-                ),
-              ],
-            ))));
+            // Top Right Close/Cancel Button
+            closeButton(() => Get.back()),
+
+            // Image
+            FittedBox(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 1,
+                  minHeight: 1,
+                ), // here
+                child: Image.file(File(card.meta.path)),
+              ),
+            ),
+          ],
+        )));
   }
 }

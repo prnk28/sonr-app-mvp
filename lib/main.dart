@@ -6,7 +6,6 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
-import 'modules/peer/peer_stack_controller.dart';
 import 'modules/register/register_screen.dart';
 import 'modules/transfer/transfer_screen.dart';
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
@@ -13,40 +11,40 @@ class CardGrid extends GetView<CardController> {
   Widget build(BuildContext context) {
     return Obx(() {
       List<CardModel> cards = controller.allCards();
-      return ListView.builder(
-        itemCount: cards.length,
-        itemBuilder: (context, idx) {
-          // Get Current Metadata
-          CardModel card = cards[idx];
+      return GridView.builder(
+          itemCount: cards.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisSpacing: 5, crossAxisSpacing: 2),
+          itemBuilder: (context, idx) {
+            // Get Current Metadata
+            CardModel card = cards[idx];
 
-          if (card.type == CardType.File) {
-            Metadata metadata = card.meta;
-            // Generate Cell
-            return GestureDetector(
-                onTap: () async {
-                  // TODO Utilize Hero Animation
-                  // cards.getFile(metadata);
-                },
-                child: Container(
-                  height: 75,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: FileImage(File(metadata.path)),
-                          fit: BoxFit.cover)),
-                  child:
-                      // Image Info
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                        normalText(metadata.name),
-                        normalText(metadata.mime.type.toString()),
-                        normalText("Owner: " + metadata.owner.firstName),
-                      ]),
-                ));
-          }
-          return Container();
-        },
-      );
+            // Generate File Cell
+            if (card.type == CardType.File) {
+              // Get Metadata
+              Metadata metadata = card.meta;
+              return GestureDetector(
+                  onTap: () async {
+                    // TODO Utilize Hero Animation
+                    // cards.getFile(metadata);
+                  },
+                  child: Neumorphic(
+                      margin: EdgeInsets.all(2),
+                      child: Container(
+                        height: 75,
+                        child:
+                            // Image Info
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                              normalText(metadata.name),
+                              normalText(metadata.mime.type.toString()),
+                              normalText("Owner: " + metadata.owner.firstName),
+                            ]),
+                      )));
+            }
+            return Container();
+          });
     });
   }
 }
