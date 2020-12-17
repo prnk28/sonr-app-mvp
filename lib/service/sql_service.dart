@@ -1,22 +1,19 @@
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/card_model.dart';
+import 'package:sonar_app/data/contact_sql.dart';
+import 'package:sonar_app/data/meta_sql.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 const DATABASE_PATH = 'cards.db';
 
-class CardService extends GetxService {
+class SQLService extends GetxService {
   // Database Reference
   Database _db;
   String _dbPath;
 
-  // Observable Properties
-  final allFiles = new List<Metadata>().obs;
-  final allContacts = new List<Contact>().obs;
-
   // ** Initialize CardService ** //
-  Future<CardService> init() async {
+  Future<SQLService> init() async {
     // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
     _dbPath = join(databasesPath, DATABASE_PATH);
@@ -46,8 +43,6 @@ create table $contactTable (
   $contactColumnlastOpened integer not null)
 ''');
     });
-
-    await refreshFiles();
     return this;
   }
 
@@ -58,28 +53,27 @@ create table $contactTable (
 
   // ^ Insert Metadata into SQL DB ^ //
   Future<Metadata> saveFile(Metadata metadata) async {
-    metadata.id = await _db.insert(metaTable, metaToSQL(metadata));
-    await refreshFiles();
+    metadata.id = await _db.insert(metaTable, MetaSQL(metadata).toSQL());
     return metadata;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
   Future deleteFile(int id) async {
-    await _db.delete(metaTable, where: '$fileColumnId = ?', whereArgs: [id]);
-    await refreshFiles();
+    var i = await _db
+        .delete(metaTable, where: '$fileColumnId = ?', whereArgs: [id]);
+    return i;
   }
 
   // ^ Update Metadata in DB ^ //
   Future updateFile(Metadata metadata) async {
-    await _db.update(metaTable, metaToSQL(metadata),
+    await _db.update(metaTable, MetaSQL(metadata).toSQL(),
         where: '$fileColumnId = ?', whereArgs: [metadata.id]);
-    await refreshContacts();
   }
 
   // ^ Get All Files ^ //
-  refreshFiles() async {
+  Future<List<MetaSQL>> fetchFiles() async {
     // Init List
-    List<Metadata> result = new List<Metadata>();
+    List<MetaSQL> result = new List<MetaSQL>();
     List<Map> records = await _db.query(
       metaTable,
       columns: [
@@ -96,38 +90,37 @@ create table $contactTable (
       // Convert Each Record into Object
       records.forEach((element) {
         // Implement SQL Bindings for Metadata Protobuf
-        Metadata meta = metaFromSQL(element);
+        MetaSQL meta = MetaSQL.fromSQL(element);
         result.add(meta);
       });
     }
     // Update All Files
-    allFiles(result);
+    return result;
   }
 
   // ^ Insert Contact into SQL DB ^ //
   Future<Contact> saveContact(Contact contact) async {
-    await _db.insert(contactTable, contactToSQL(contact));
-    await refreshContacts();
+    await _db.insert(contactTable, ContactSQL(contact).toSQL());
     return contact;
   }
 
   // ^ Delete a Contact from SQL DB ^ //
   Future deleteContact(int id) async {
-    await _db.delete(contactTable, where: '$fileColumnId = ?', whereArgs: [id]);
-    await refreshContacts();
+    var i = await _db
+        .delete(contactTable, where: '$fileColumnId = ?', whereArgs: [id]);
+    return i;
   }
 
-  // // ^ Update Contact in DB ^ //
-  // Future updateContact(Contact contact) async {
-  //   await _db.update(contactTable, contactToSQL(contact),
-  //       where: '$fileColumnId = ?', whereArgs: [contact.id]);
-  //   await refreshFiles();
-  // }
+  // ^ Update Contact in DB ^ //
+  Future updateContact(ContactSQL contact) async {
+    await _db.update(contactTable, contact.toSQL(),
+        where: '$fileColumnId = ?', whereArgs: [contact.id]);
+  }
 
   // ^ Get All Contacts ^ //
-  refreshContacts() async {
+  Future<List<ContactSQL>> fetchContacts() async {
     // Init List
-    List<Contact> result = new List<Contact>();
+    List<ContactSQL> result = new List<ContactSQL>();
     List<Map> records = await _db.query(
       contactTable,
       columns: [
@@ -142,12 +135,12 @@ create table $contactTable (
       // Convert Each Record into Object
       records.forEach((element) {
         // Implement SQL Bindings for Metadata Protobuf
-        Contact meta = contactFromSQL(element);
+        ContactSQL meta = ContactSQL.fromSQL(element);
         result.add(meta);
       });
     }
 
     // Update All Files
-    allContacts(result);
+    return result;
   }
 }

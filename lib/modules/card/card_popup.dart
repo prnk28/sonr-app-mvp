@@ -2,23 +2,26 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/data/card_model.dart';
+import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonar_app/service/card_service.dart';
+import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
-class CardPopup extends StatelessWidget {
+class CardPopup extends GetView<CardController> {
   final SonrService receiveController = Get.find();
-  final CardService fileController = Get.find();
+  final SQLService fileController = Get.find();
+
+  CardPopup({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    fileController.saveFile(receiveController.file());
+    CardModel card = controller.fetchLastFileCard();
     return SonrTheme(Dialog(
         shape: SonrWindowBorder(),
-        insetAnimationDuration: Duration(seconds: 1),
-        insetPadding: MediaQuery.of(context).viewInsets +
-            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 125.0),
+        // insetAnimationDuration: Duration(seconds: 1),
+        // insetPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 125.0),
         elevation: 45,
         child: Container(
             decoration: SonrWindowDecoration(),
@@ -31,7 +34,7 @@ class CardPopup extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // Shift to Detail Screen with Image
-                    receiveController.finish();
+                    receiveController.reset();
                     Get.back();
                   },
                   child: Expanded(
@@ -42,8 +45,7 @@ class CardPopup extends StatelessWidget {
                               minWidth: 1,
                               minHeight: 1,
                             ), // here
-                            child: Image.file(
-                                File(receiveController.file.value.path)))),
+                            child: Image.file(File(card.meta.path)))),
                   ),
                 ),
               ],

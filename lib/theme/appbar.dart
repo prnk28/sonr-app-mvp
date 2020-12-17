@@ -27,6 +27,40 @@ NeumorphicAppBar SonrAppBar(
 }
 
 // ignore: non_constant_identifier_names
+NeumorphicAppBar SonrHomeBar(
+  Function onPressed,
+) {
+  return NeumorphicAppBar(
+      title: Center(
+          child: NeumorphicText("Home",
+              style: NeumorphicStyle(
+                depth: 2, //customize depth here
+                color: Colors.white, //customize color here
+              ),
+              textStyle: NeumorphicTextStyle(
+                fontFamily: "Raleway",
+                fontWeight: FontWeight.w400,
+                fontSize: 28,
+              ),
+              textAlign: TextAlign.center)),
+      leading: Align(
+          alignment: Alignment.centerLeft,
+          child: NeumorphicButton(
+            padding: EdgeInsets.all(18),
+            style: NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.circle(),
+                shape: NeumorphicShape.convex,
+                depth: 5),
+            child: Icon(
+              Icons.person,
+              color: Colors.black87,
+            ),
+            onPressed: onPressed,
+          )));
+}
+
+// ^ Utilized in Transfer/Settings/Profile Screens ^ //
+// ignore: non_constant_identifier_names
 NeumorphicAppBar SonrExitAppBar(
   BuildContext context,
   String exitLocation, {

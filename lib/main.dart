@@ -2,9 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/home/home_screen.dart';
-import 'package:sonar_app/service/card_service.dart';
+import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
+import 'modules/card/card_controller.dart';
+import 'modules/peer/peer_stack_controller.dart';
 import 'modules/register/register_screen.dart';
 import 'modules/transfer/transfer_screen.dart';
 
@@ -23,7 +25,7 @@ initServices() async {
   //await Executor().warmUp();
 
   // Initializes Local Contacts/Files and Device User/Settings
-  await Get.putAsync(() => CardService().init());
+  await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => DeviceService().init());
   print('All services started...');
 }
@@ -69,10 +71,10 @@ List<GetPage> getPages() {
   return [
     // ** Home Page ** //
     GetPage(
-      name: '/home',
-      page: () => SonrTheme(HomeScreen()),
-      transition: Transition.zoom,
-    ),
+        name: '/home',
+        page: () => SonrTheme(HomeScreen()),
+        transition: Transition.zoom,
+        binding: BindingsBuilder.put(() => CardController())),
 
     // ** Register Page ** //
     GetPage(
@@ -85,7 +87,6 @@ List<GetPage> getPages() {
       name: '/transfer',
       page: () => SonrTheme(TransferScreen()),
       transition: Transition.fade,
-      // binding: BindingsBuilder.put(() => TransferController()),
     ),
   ];
 }

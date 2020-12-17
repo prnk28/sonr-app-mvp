@@ -20,9 +20,7 @@ class PeerBubble extends StatelessWidget {
         top: controller.offest.dy,
         left: controller.offest.dx,
         child: GestureDetector(
-            onTap: () async {
-              controller.updateStatus(PeerStatus.Invited);
-            },
+            onTap: () => controller.invite(),
             child: PlayAnimation<double>(
                 tween: (0.0).tweenTo(1.0),
                 duration: 500.milliseconds,

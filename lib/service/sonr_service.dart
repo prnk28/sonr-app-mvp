@@ -4,7 +4,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
-import 'package:sonar_app/modules/card/card_view.dart';
+import 'package:sonar_app/modules/card/card_popup.dart';
 import 'package:sonar_app/modules/invite/contact_sheet.dart';
 import 'package:sonar_app/modules/invite/file_sheet.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -22,13 +22,11 @@ class SonrService extends GetxService {
   final peers = new Map<String, Peer>().obs;
 
   // @ Set Transfer Dependencies
-  AuthReply reply;
   Payload_Type payloadType;
 
   // @ Set Receive Dependencies
-  AuthInvite invite;
-  var file = Rx<Metadata>();
-  var progress = 0.0.obs;
+  final file = Rx<Metadata>();
+  final progress = 0.0.obs;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -41,7 +39,7 @@ class SonrService extends GetxService {
     });
   }
 
-  // ^ Connect Node Method ^ //
+  // ^ Initialize Service Method ^ //
   Future<SonrService> init(Position pos, User user) async {
     // Get OLC
     code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
@@ -53,6 +51,7 @@ class SonrService extends GetxService {
     return this;
   }
 
+  // ^ Connect to Node Method
   _connect(User user) async {
     // Create Worker
     _node = await SonrCore.initialize(code, user.username, user.contact);
@@ -109,11 +108,6 @@ class SonrService extends GetxService {
 
   // ^ Respond-Peer Event ^
   void respondPeer(bool decision) async {
-    // Reset Peer/Auth
-    if (!decision) {
-      this.invite = null;
-    }
-
     // Send Response
     await _node.respond(decision);
 
@@ -122,17 +116,12 @@ class SonrService extends GetxService {
   }
 
   // ^ Resets Status ^
-  void finish() {
+  void reset() {
     // @ Check if Sender/Receiver
-    if (reply != null || invite != null) {
-      _node.finish();
-      reply = null;
-      invite = null;
-
-      file(null);
-      progress(0.0);
-      status(_node.status);
-    }
+    _node.finish();
+    file(null);
+    progress(0.0);
+    status(_node.status);
   }
 
   // **************************
@@ -143,6 +132,7 @@ class SonrService extends GetxService {
     if (data is Lobby) {
       // Update Peers List
       peers(data.peers);
+      peers.refresh();
     }
   }
 
@@ -159,9 +149,6 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      // Update Values
-      this.invite = data;
-
       // Inform Listener
       status(_node.status);
       Vibration.vibrate(duration: 250);
@@ -182,7 +169,6 @@ class SonrService extends GetxService {
   void _handleResponded(dynamic data) async {
     if (data is AuthReply) {
       // Set Message
-      this.reply = data;
       status(_node.status);
       Vibration.vibrate(duration: 50);
       Vibration.vibrate(duration: 100);
@@ -190,7 +176,7 @@ class SonrService extends GetxService {
       if (data.payload.type == Payload_Type.CONTACT) {
         Get.bottomSheet(
             ContactInviteSheet(
-              reply.payload.contact,
+              data.payload.contact,
               isReply: true,
             ),
             isDismissible: false);

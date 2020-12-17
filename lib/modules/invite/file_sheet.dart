@@ -27,7 +27,7 @@ class FileInviteSheet extends StatelessWidget {
             height: Get.height / 3 + 20,
             child: Center(
                 child: ProgressView(
-                    iconData: iconDataFromPayload(sonr.invite.payload)))));
+                    iconData: iconDataFromPayload(invite.payload)))));
       }
       // @ Pending
       else if (sonr.status() == Status.Pending) {

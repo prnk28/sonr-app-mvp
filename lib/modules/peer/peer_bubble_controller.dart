@@ -11,7 +11,6 @@ import 'package:sonr_core/sonr_core.dart';
 // ^ PeerStatus Enum ^ //
 enum PeerStatus {
   Idle,
-  Invited,
   Accepted,
   Denied,
   Completed,
@@ -95,18 +94,19 @@ class PeerBubbleController extends GetxController {
     super.onInit();
   }
 
+  invite() {
+    if (!_isInvited) {
+      _sonr.invitePeer(peer);
+      shouldChangeVisibility(false);
+      _pending.isActive = _isInvited = !_isInvited;
+    }
+  }
+
   // ^ Handle Update Status ^
   updateStatus(PeerStatus status) {
     switch (status) {
       case PeerStatus.Idle:
         shouldChangeVisibility(false);
-        break;
-      case PeerStatus.Invited:
-        if (!_isInvited) {
-          _sonr.invitePeer(peer);
-          shouldChangeVisibility(false);
-          _pending.isActive = _isInvited = !_isInvited;
-        }
         break;
       case PeerStatus.Accepted:
         // Start Animation
@@ -135,7 +135,8 @@ class PeerBubbleController extends GetxController {
         // Update After Delay
         Future.delayed(Duration(seconds: 1)).then((_) {
           // Call Finish
-          _sonr.finish();
+          _isInvited = false;
+          _sonr.reset();
 
           // Reset Animation States
           artboard().advance(0);
