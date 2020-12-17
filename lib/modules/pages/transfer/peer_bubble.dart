@@ -8,7 +8,7 @@ import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
-class PeerBubble extends GetView<PeerController> {
+class PeerBubble extends StatelessWidget {
   // Bubble Values
   final PeerController controller;
   PeerBubble(this.controller);
@@ -17,8 +17,8 @@ class PeerBubble extends GetView<PeerController> {
   Widget build(BuildContext context) {
     print("Bubble Built");
     return Positioned(
-        top: controller.offest.value.dy,
-        left: controller.offest.value.dx,
+        top: controller.offest.dy,
+        left: controller.offest.dx,
         child: GestureDetector(
             onTap: () async {
               controller.updateStatus(PeerStatus.Invited);

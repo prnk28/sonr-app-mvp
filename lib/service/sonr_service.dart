@@ -11,13 +11,13 @@ import 'package:sonar_app/modules/widgets/sheets/contact.dart';
 import 'package:sonar_app/modules/widgets/sheets/file.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
-import 'package:worker_manager/worker_manager.dart';
+//import 'package:worker_manager/worker_manager.dart';
+
+// @ Create Workers
+// FutureOr<Node> connect(String o, String u, Contact c) =>
+//     SonrCore.initialize(o, u, c);
 
 class SonrService extends GetxService {
-  // @ Create Workers
-  FutureOr<Node> connect(String o, String u, Contact c) =>
-      SonrCore.initialize(o, u, c);
-
   // @ Set Properteries
   final status = Status.Offline.obs;
   final direction = 0.0.obs;
@@ -26,7 +26,6 @@ class SonrService extends GetxService {
   String code = "";
 
   // @ Set Lobby Dependencies
-  final size = 0.obs;
   final peers = new Map<String, Peer>().obs;
 
   // @ Set Transfer Dependencies
@@ -63,8 +62,7 @@ class SonrService extends GetxService {
 
   _connect(User user) async {
     // Create Worker
-    _node = await Executor().execute(
-        arg1: code, arg2: user.username, arg3: user.contact, fun3: connect);
+    _node = await SonrCore.initialize(code, user.username, user.contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
@@ -145,9 +143,7 @@ class SonrService extends GetxService {
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
-      // Update Peers Code
-      size(data.peers.length);
-
+      print(data.peers.length);
       // Update Peers List
       peers(data.peers);
     }

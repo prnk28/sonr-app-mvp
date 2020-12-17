@@ -21,7 +21,7 @@ class PeerController extends GetxController {
   SonrService _sonr = Get.find();
   final Peer peer;
   final artboard = Rx<Artboard>();
-  final offest = Offset(0, 0).obs;
+  var offest = Offset(0, 0);
 
   bool _isInvited = false;
   bool _hasDenied = false;
@@ -33,7 +33,7 @@ class PeerController extends GetxController {
 
   PeerController(this.peer) {
     // Set Offset Value
-    offest(_calculateOffset(peer.difference));
+    offest = _calculateOffset(peer.difference);
 
     // Listen to User Status
     _sonr.status.listen((status) {
@@ -142,7 +142,7 @@ class PeerController extends GetxController {
     PathMetrics pathMetrics = path.computeMetrics();
     PathMetric pathMetric = pathMetrics.elementAt(0);
     value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(value);
+    Tangent pos = pathMetric.getTangentForOffset(0.5); // TODO
     return pos.position;
   }
 

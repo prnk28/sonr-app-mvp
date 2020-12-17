@@ -9,6 +9,7 @@ import 'package:sonr_core/sonr_core.dart';
 
 class DeviceService extends GetxService {
   SharedPreferences _prefs;
+  // ignore: unused_field
   bool _hasLocation;
   bool _hasUser;
 
