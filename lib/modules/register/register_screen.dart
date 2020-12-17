@@ -7,7 +7,7 @@ import 'package:sonar_app/theme/util.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-part 'form.dart';
+part 'form_view.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override

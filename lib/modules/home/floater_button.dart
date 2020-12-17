@@ -1,4 +1,4 @@
-part of 'home.dart';
+part of 'home_screen.dart';
 
 class FloaterButton extends StatefulWidget {
   final Function() onAnimationComplete;

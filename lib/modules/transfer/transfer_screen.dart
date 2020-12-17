@@ -7,8 +7,8 @@ import 'package:sonar_app/modules/transfer/peer_stack.dart';
 import 'package:sonar_app/theme/neumorphic.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
-import 'compass.dart';
-import 'zones.dart';
+import 'compass_view.dart';
+import 'zone_painter.dart';
 
 const STACK_CONSTANT = 1;
 

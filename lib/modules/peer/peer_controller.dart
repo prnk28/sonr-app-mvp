@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/modules/transfer/zones.dart';
+import 'package:sonar_app/modules/transfer/zone_painter.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';

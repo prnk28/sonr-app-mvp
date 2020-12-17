@@ -12,7 +12,7 @@ import 'package:sonar_app/service/card_service.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-part 'floater.dart';
+part 'floater_button.dart';
 
 class HomeScreen extends StatelessWidget {
   final double itemHeight = (Get.height - kToolbarHeight - 24) / 4;

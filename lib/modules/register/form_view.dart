@@ -1,4 +1,4 @@
-part of 'register.dart';
+part of 'register_screen.dart';
 
 final _formKey = GlobalKey<FormState>();
 
