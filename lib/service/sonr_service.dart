@@ -193,8 +193,8 @@ class SonrService extends GetxService {
       // Set Message
       this.reply = data;
       status(_node.status);
+      Vibration.vibrate(duration: 50);
       Vibration.vibrate(duration: 100);
-      Vibration.vibrate(duration: 150);
 
       if (data.payload.type == Payload_Type.CONTACT) {
         Get.bottomSheet(
