@@ -6,9 +6,6 @@ import 'circle_controller.dart';
 
 class CircleView extends StatelessWidget {
   CircleView({Key key}) : super(key: key);
-  // Place Controller
-  final CircleController controller = Get.put(CircleController());
-
   @override
   Widget build(BuildContext context) {
     // @ Bubble View
@@ -23,75 +20,76 @@ class CircleView extends StatelessWidget {
     // }
 
     // Create From Controller
-    return Stack(
-      children: [
-        _buildEmpty(),
-        _buildLobby(),
-      ],
-    );
+    return Obx(() {
+      return Stack(
+        children: [
+          _buildEmpty(),
+          _buildLobby(),
+        ],
+      );
+    });
   }
 
   // ^ Build Empty Lobby With Text and Animation ^ //
   Widget _buildEmpty() {
-    return Obx(() {
-      // @ Animate in
-      if (controller.isEmpty.value) {
-        return PlayAnimation<double>(
-            tween: (0.0).tweenTo(1.0),
-            duration: 500.milliseconds,
-            delay: 250.milliseconds,
-            builder: (context, child, value) {
-              return AnimatedOpacity(
-                  opacity: value,
-                  duration: 500.milliseconds,
-                  child: Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 360),
-                      child: Center(
-                          child: normalText("No Peers found.",
-                              size: 38, setColor: Colors.black87))));
-            });
-      }
-      // @ Animate out
-      else {
-        return PlayAnimation<double>(
-            tween: (1.0).tweenTo(0.0),
-            duration: 500.milliseconds,
-            builder: (context, child, value) {
-              return AnimatedOpacity(
-                  opacity: value,
-                  duration: 500.milliseconds,
-                  child: Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 360),
-                      child: Center(
-                          child: normalText("No Peers found.",
-                              size: 38, setColor: Colors.black87))));
-            });
-      }
-    });
+    CircleController controller = Get.find();
+
+    // @ Animate in
+    if (controller.isEmpty.value) {
+      return PlayAnimation<double>(
+          tween: (0.0).tweenTo(1.0),
+          duration: 500.milliseconds,
+          delay: 250.milliseconds,
+          builder: (context, child, value) {
+            return AnimatedOpacity(
+                opacity: value,
+                duration: 500.milliseconds,
+                child: Padding(
+                    padding: EdgeInsetsDirectional.only(bottom: 360),
+                    child: Center(
+                        child: normalText("No Peers found.",
+                            size: 38, setColor: Colors.black87))));
+          });
+    }
+    // @ Animate out
+    else {
+      return PlayAnimation<double>(
+          tween: (1.0).tweenTo(0.0),
+          duration: 500.milliseconds,
+          builder: (context, child, value) {
+            return AnimatedOpacity(
+                opacity: value,
+                duration: 500.milliseconds,
+                child: Padding(
+                    padding: EdgeInsetsDirectional.only(bottom: 360),
+                    child: Center(
+                        child: normalText("No Peers found.",
+                            size: 38, setColor: Colors.black87))));
+          });
+    }
   }
 
   // ^ Build Lobby With and Wait for Animation to Complete ^ //
   Widget _buildLobby() {
-    return Obx(() {
-      // @ Animate in
-      if (!controller.isEmpty.value) {
-        return PlayAnimation<double>(
-            tween: (0.0).tweenTo(1.0),
-            duration: 500.milliseconds,
-            delay: 500.milliseconds,
-            builder: (context, child, value) {
-              return Stack(children: List.from(controller.stackItems));
-            });
-      }
-      // @ Animate out
-      else {
-        return PlayAnimation<double>(
-            tween: (1.0).tweenTo(0.0),
-            duration: 500.milliseconds,
-            builder: (context, child, value) {
-              return Stack(children: List.from(controller.stackItems));
-            });
-      }
-    });
+    CircleController controller = Get.find();
+    // @ Animate in
+    if (!controller.isEmpty.value) {
+      return PlayAnimation<double>(
+          tween: (0.0).tweenTo(1.0),
+          duration: 500.milliseconds,
+          delay: 500.milliseconds,
+          builder: (context, child, value) {
+            return Stack(children: List.from(controller.stackItems));
+          });
+    }
+    // @ Animate out
+    else {
+      return PlayAnimation<double>(
+          tween: (1.0).tweenTo(0.0),
+          duration: 500.milliseconds,
+          builder: (context, child, value) {
+            return Stack(children: List.from(controller.stackItems));
+          });
+    }
   }
 }

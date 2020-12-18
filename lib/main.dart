@@ -87,16 +87,17 @@ List<GetPage> getPages() {
 
     // ** Transfer Page ** //
     GetPage(
-      name: '/transfer',
-      page: () => SonrTheme(TransferScreen()),
-      transition: Transition.fade,
-    ),
+        name: '/transfer',
+        page: () => SonrTheme(TransferScreen()),
+        transition: Transition.fade,
+        binding: BindingsBuilder.put(() => CircleController())),
 
     // ** Profile Page ** //
     GetPage(
         name: '/profile',
         page: () => SonrTheme(ProfileScreen()),
         transition: Transition.upToDown,
+        fullscreenDialog: true,
         binding:
             BindingsBuilder.put(() => ProfileController(device.user.contact))),
   ];

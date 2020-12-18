@@ -16,8 +16,8 @@ class PeerBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return Positioned(
-          top: controller.offest.value.dy,
-          left: controller.offest.value.dx,
+          top: controller.offset.value.dy,
+          left: controller.offset.value.dx,
           child: GestureDetector(
               onTap: () => controller.invite(),
               child: PlayAnimation<double>(

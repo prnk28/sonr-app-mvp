@@ -23,7 +23,7 @@ class PeerController extends GetxController {
   final Peer peer;
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
-  final offest = Offset(0, 0).obs;
+  final offset = Offset(0, 0).obs;
 
   // References
   SonrService _sonr = Get.find();
@@ -40,7 +40,7 @@ class PeerController extends GetxController {
 
   PeerController(this.id, this.peer) {
     // Set Default Values
-    offest(_calculateOffset(peer.difference));
+    offset(calculateOffset(peer.difference));
 
     // Listen to User Status
     _sonr.status.listen((status) {
@@ -108,11 +108,6 @@ class PeerController extends GetxController {
     }
   }
 
-  // ^ Update Peer Difference
-  changeDifference(double newDiff) {
-    offest(_calculateOffset(newDiff));
-  }
-
   // ^ Handle Update Status ^
   updateStatus(PeerStatus status) {
     switch (status) {
@@ -164,9 +159,9 @@ class PeerController extends GetxController {
   }
 
   // ^ Calculate Peer Offset from Line ^ //
-  Offset _calculateOffset(double value,
+  Offset calculateOffset(double value,
       {Peer_Proximity proximity = Peer_Proximity.NEAR}) {
-    Path path = ZonePainter.getBubblePath(Get.width, proximity);
+    Path path = ZonePainter.getBubblePath(1 / value, proximity);
     PathMetrics pathMetrics = path.computeMetrics();
     PathMetric pathMetric = pathMetrics.elementAt(0);
     value = pathMetric.length * value;
