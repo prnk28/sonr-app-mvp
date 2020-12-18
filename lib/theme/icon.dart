@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:flutter_svg/avd.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // ^ Get Icon from Peer Data ^ //
@@ -130,19 +129,27 @@ enum IconType {
 
 class SonrIcon extends StatelessWidget {
   final IconType icon;
-
-  const SonrIcon(
-    this.icon, {
+  final String fileName;
+  const SonrIcon({
+    this.icon,
+    this.fileName = "",
     Key key,
-  }) : super(key: key){
-
-  }
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String iconValue = icon.toString().split('.').last;
-    var name = iconValue.replaceAll(new RegExp(r'/([A-Z]+)/g'), ' ');
-
-    return SvgPicture.asset("assets/icons/" + path);
+    if (fileName.isEmpty) {
+      String iconValue = icon.toString().split('.').last;
+      var name = iconValue.replaceAll(new RegExp(r'/([A-Z]+)/g'), ' ');
+      var idx = icon.index;
+      var path = "0$idx-$name";
+      return SvgPicture.asset("assets/icons/" + path);
+    } else {
+      String iconValue = icon.toString().split('.').last;
+      var name = iconValue.replaceAll(new RegExp(r'/([A-Z]+)/g'), ' ');
+      var idx = icon.index;
+      var path = "0$idx-$name";
+      return SvgPicture.asset("assets/icons/" + path);
+    }
   }
 }
