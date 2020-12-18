@@ -41,7 +41,6 @@ dependencies:
   sonr_core:
     git:
       url: git@github.com:sonr-io/plugin.git
-      ref: release
 
   # -- UI/UX --
   clippy_flutter: ^1.1.0

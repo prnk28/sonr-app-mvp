@@ -20,14 +20,8 @@ class ZoneView extends StatelessWidget {
 }
 
 class ZonePainter extends CustomPainter {
-  // Size Reference
-  var _currentSize;
-
   @override
   void paint(Canvas canvas, Size size) {
-    // Initialize
-    _currentSize = size;
-
     // Setup Paint
     var paint = Paint();
     paint.color = Colors.grey[400];
@@ -48,16 +42,16 @@ class ZonePainter extends CustomPainter {
   Rect _rectByZone(Peer_Proximity proximity) {
     switch (proximity) {
       case Peer_Proximity.IMMEDIATE:
-        return Rect.fromLTRB(0, 200, _currentSize.width, 400);
+        return Rect.fromLTRB(0, 200, Get.width, 400);
         break;
       case Peer_Proximity.NEAR:
-        return Rect.fromLTRB(0, 100, _currentSize.width, 300);
+        return Rect.fromLTRB(0, 100, Get.width, 300);
         break;
       case Peer_Proximity.FAR:
-        return Rect.fromLTRB(0, 0, _currentSize.width, 150);
+        return Rect.fromLTRB(0, 0, Get.width, 150);
         break;
       default:
-        return Rect.fromLTRB(0, 100, _currentSize.width, 300);
+        return Rect.fromLTRB(0, 100, Get.width, 300);
         break;
     }
   }
@@ -67,22 +61,22 @@ class ZonePainter extends CustomPainter {
     return false;
   }
 
-  static Path getBubblePath(double sizeWidth, Peer_Proximity proximity) {
+  static Path getBubblePath(Peer_Proximity proximity) {
     // Check Proximity Status
     switch (proximity) {
       case Peer_Proximity.IMMEDIATE:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 120, sizeWidth, 400), K_ANGLE, K_ANGLE);
+        path.addArc(Rect.fromLTRB(0, 120, Get.width, 400), K_ANGLE, K_ANGLE);
         return path;
         break;
       case Peer_Proximity.NEAR:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 50, sizeWidth, 220), K_ANGLE, K_ANGLE);
+        path.addArc(Rect.fromLTRB(0, 50, Get.width, 220), K_ANGLE, K_ANGLE);
         return path;
         break;
       case Peer_Proximity.FAR:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 150), K_ANGLE, K_ANGLE);
+        path.addArc(Rect.fromLTRB(0, 0, Get.width, 150), K_ANGLE, K_ANGLE);
         return path;
         break;
       default:

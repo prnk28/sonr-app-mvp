@@ -173,22 +173,22 @@ class PeerController extends GetxController {
     // Get Data
     double value;
     Peer_Proximity proximity = peer.proximity;
-    if (peer.difference > 1.0) {
-      value = 1 / value;
+    if (peer.difference >= 180.0) {
+      value = 360 - peer.difference;
     } else {
       value = peer.difference;
     }
 
     // Get Path
-    // Path path = ZonePainter.getBubblePath(Get.width, proximity);
-    // PathMetrics pathMetrics = path.computeMetrics();
-    // PathMetric pathMetric = pathMetrics.elementAt(0);
-    // value = pathMetric.length * value;
+    Path path = ZonePainter.getBubblePath(proximity);
+    PathMetrics pathMetrics = path.computeMetrics();
+    PathMetric pathMetric = pathMetrics.elementAt(0);
+    value = pathMetric.length * value;
 
     // Return Position
-    var pos =
-        Tangent.fromAngle(Offset(Get.width / 2, Get.height / 2 - 300), value);
-    //Tangent pos = pathMetric.getTangentForOffset(value);
+    // var pos =
+    //     Tangent.fromAngle(Offset(Get.width / 2, Get.height / 2 - 300), value);
+    Tangent pos = pathMetric.getTangentForOffset(value);
     return pos.position;
   }
 }
