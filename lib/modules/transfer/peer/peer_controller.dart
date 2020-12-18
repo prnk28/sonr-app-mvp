@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/modules/transfer/zone_painter.dart';
+import 'package:sonar_app/modules/transfer/compass/zone_painter.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -24,6 +24,7 @@ class PeerController extends GetxController {
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
   final offset = Offset(0, 0).obs;
+  final proximity = Rx<Peer_Proximity>();
 
   // References
   SonrService _sonr = Get.find();
@@ -40,7 +41,8 @@ class PeerController extends GetxController {
 
   PeerController(this.id, this.peer) {
     // Set Default Values
-    offset(calculateOffset(peer.difference));
+    offset(_calculateOffsetForPeer(peer));
+    proximity(peer.proximity);
 
     // Listen to User Status
     _sonr.status.listen((status) {
@@ -99,12 +101,20 @@ class PeerController extends GetxController {
     super.onInit();
   }
 
-  // ^ Update User to Invite ^
+  // ^ Handle User Invitation ^
   invite() {
     if (!_isInvited) {
       _sonr.invitePeer(peer);
       shouldChangeVisibility(false);
       _pending.isActive = _isInvited = !_isInvited;
+    }
+  }
+
+  // ^ setOffset User to Invite ^
+  setOffset(Peer newValue) {
+    if (!_isInvited) {
+      proximity(peer.proximity);
+      offset(_calculateOffsetForPeer(newValue));
     }
   }
 
@@ -159,13 +169,24 @@ class PeerController extends GetxController {
   }
 
   // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset(double value,
-      {Peer_Proximity proximity = Peer_Proximity.NEAR}) {
-    Path path = ZonePainter.getBubblePath(1 / value, proximity);
+  Offset _calculateOffsetForPeer(Peer peer) {
+    // Get Data
+    double value;
+    Peer_Proximity proximity = peer.proximity;
+    if (peer.difference > 1.0) {
+      value = value / 2;
+    } else {
+      value = peer.difference;
+    }
+
+    // Get Path
+    Path path = ZonePainter.getBubblePath(Get.width, proximity);
     PathMetrics pathMetrics = path.computeMetrics();
     PathMetric pathMetric = pathMetrics.elementAt(0);
     value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(0.5); // TODO
+
+    // Return Position
+    Tangent pos = pathMetric.getTangentForOffset(value);
     return pos.position;
   }
 }

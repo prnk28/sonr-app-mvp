@@ -6,7 +6,7 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
-import 'modules/peer/circle_controller.dart';
+import 'modules/transfer/peer/circle_controller.dart';
 import 'modules/profile/profile_controller.dart';
 import 'modules/profile/profile_screen.dart';
 import 'modules/register/register_screen.dart';
