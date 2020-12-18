@@ -74,31 +74,75 @@ Widget iconWithPreview(Metadata metadata) {
   }
 }
 
-// // ^ SonrIcon from SVG Data ^ //
-// enum SonrIconType {
-//   Download,
-//   Settings,
-//   Home,
-//   Camera,
-//   Mail,
-//   Diamond,
-//   Folder,
-//   Gallery,
-//   Printer,
-//   Eye,
-//   Upload
-// }
+// ^ SonrIcon from SVG Data ^ //
+enum IconType {
+  Download,
+  Settings,
+  Home,
+  Camera,
+  Mail,
+  Diamond,
+  Folder,
+  Gallery,
+  Printer,
+  Eye,
+  Sandclock,
+  ZoomIn,
+  ZoomOut,
+  Placeholder,
+  Idea,
+  TrashBin,
+  Happy,
+  Microphone,
+  Notification,
+  Compass,
+  File,
+  Alarm,
+  Lock,
+  Layer,
+  Sound,
+  Book,
+  Dialogue,
+  Upload,
+  Target,
+  Mute,
+  Lifesaver,
+  Protection,
+  LineBars,
+  Flag,
+  Menu,
+  Share,
+  Calendar,
+  Control,
+  PieChart,
+  User,
+  BookMark,
+  Battery,
+  Megaphone,
+  ShoppingCart,
+  Medal,
+  Hierarchy,
+  PiggyBank,
+  Internet,
+  Edit,
+  Filter
+}
 
 class SonrIcon extends StatelessWidget {
-  final String icon;
+  final IconType icon;
 
   const SonrIcon(
     this.icon, {
     Key key,
-  }) : super(key: key);
+  }) : super(key: key){
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/icons/" + icon);
+    String iconValue = icon.toString().split('.').last;
+    var name = iconValue.replaceAll(new RegExp(r'/([A-Z]+)/g'), ' ');
+
+    return SvgPicture.asset("assets/icons/" + path);
   }
 }

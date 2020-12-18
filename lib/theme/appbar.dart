@@ -53,7 +53,7 @@ NeumorphicAppBar SonrHomeBar(
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.convex,
                 depth: 8),
-            child: SonrIcon("049-edit.svg"),
+            child: SonrIcon("040-user.svg"),
             onPressed: onPressed,
           )));
 }
