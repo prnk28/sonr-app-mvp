@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'icon.dart';
 
@@ -10,20 +11,10 @@ import 'icon.dart';
 NeumorphicAppBar SonrAppBar(
   String title,
 ) {
-  if (title == "") {}
   return NeumorphicAppBar(
       title: Center(
-          child: NeumorphicText(title,
-              style: NeumorphicStyle(
-                depth: 2, //customize depth here
-                color: Colors.white, //customize color here
-              ),
-              textStyle: NeumorphicTextStyle(
-                fontFamily: "Raleway",
-                fontWeight: FontWeight.w400,
-                fontSize: 28,
-              ),
-              textAlign: TextAlign.center)),
+          child: Text(title,
+              style: GoogleFonts.poppins(), textAlign: TextAlign.center)),
       leading: null);
 }
 
@@ -33,27 +24,26 @@ NeumorphicAppBar SonrHomeBar(
 ) {
   return NeumorphicAppBar(
       title: Center(
-          child: NeumorphicText("Home",
-              style: NeumorphicStyle(
-                depth: 2, //customize depth here
-                color: Colors.white, //customize color here
-              ),
-              textStyle: NeumorphicTextStyle(
-                fontFamily: "Raleway",
+          child: Text("Home",
+              style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w400,
-                fontSize: 28,
+                fontSize: 28, //customize depth here
+                color: Colors.white, //customize color here
               ),
               textAlign: TextAlign.center)),
       leading: Align(
           alignment: Alignment.centerLeft,
           child: NeumorphicButton(
-            padding: EdgeInsets.all(18),
+            padding: EdgeInsets.all(8),
             style: NeumorphicStyle(
                 intensity: 0.85,
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.convex,
                 depth: 8),
-            child: SonrIcon(fileName: "040-user.svg"),
+            child: GradientIcon(
+              Icons.person,
+              gradient: FlutterGradients.itmeoBranding(),
+            ),
             onPressed: onPressed,
           )));
 }
@@ -67,20 +57,18 @@ NeumorphicAppBar SonrExitAppBar(
 }) {
   // Create App Bar
   return NeumorphicAppBar(
-      title: Center(child: Text(title)),
+      title: Center(child: Text(title, style: GoogleFonts.poppins())),
       leading: Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           child: NeumorphicButton(
-            padding: EdgeInsets.all(18),
+            padding: EdgeInsets.all(8),
             style: NeumorphicStyle(
                 intensity: 0.85,
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.flat,
                 depth: 8),
-            child: Icon(
-              Icons.close,
-              color: Colors.black87,
-            ),
+            child: GradientIcon(Icons.close,
+                gradient: FlutterGradients.phoenixStart()),
             onPressed: () {
               Get.offAllNamed(exitLocation);
             },

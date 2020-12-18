@@ -1,4 +1,4 @@
-import 'package:flutter_neumorphic/flutter_neumorphic.dart'; // ^ Sonr Global Theme Data ^ //
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'appbar.dart';
 export 'button.dart';
@@ -7,6 +7,7 @@ export 'icon.dart';
 export 'text.dart';
 export 'window.dart';
 
+// ^ Sonr Global Theme Data ^ //
 // ignore: non_constant_identifier_names
 NeumorphicTheme SonrTheme(Widget child) {
   return NeumorphicTheme(

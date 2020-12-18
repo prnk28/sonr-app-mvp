@@ -9,13 +9,11 @@ import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
 class PeerBubble extends StatelessWidget {
-  // Bubble Values
   final PeerBubbleController controller;
   PeerBubble(this.controller);
 
   @override
   Widget build(BuildContext context) {
-    print("Bubble Built");
     return Positioned(
         top: controller.offest.dy,
         left: controller.offest.dx,

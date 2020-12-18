@@ -6,6 +6,7 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
+import 'modules/profile/profile_screen.dart';
 import 'modules/register/register_screen.dart';
 import 'modules/transfer/transfer_screen.dart';
 
@@ -81,11 +82,18 @@ List<GetPage> getPages() {
         page: () => SonrTheme(RegisterScreen()),
         transition: Transition.rightToLeftWithFade),
 
-    // ** Searching Page ** //
+    // ** Transfer Page ** //
     GetPage(
       name: '/transfer',
       page: () => SonrTheme(TransferScreen()),
       transition: Transition.fade,
+    ),
+
+    // ** Profile Page ** //
+    GetPage(
+      name: '/profile',
+      page: () => SonrTheme(ProfileScreen()),
+      transition: Transition.upToDown,
     ),
   ];
 }

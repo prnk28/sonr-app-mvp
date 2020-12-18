@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 const double _K_MAJOR_SPOKE_WIDTH = 18; // Spoke Length
 const double K_MAJOR_TOP_PADDING = 45; // West, East
@@ -151,8 +152,7 @@ Widget buildCenterBulb(double direction) {
 
 // Direction Text
 TextStyle _directionTextStyle({Color setColor}) {
-  return TextStyle(
-    fontFamily: "Raleway",
+  return GoogleFonts.poppins(
     fontWeight: FontWeight.bold,
     fontSize: 14,
     color: setColor ?? Colors.black87,
@@ -161,20 +161,18 @@ TextStyle _directionTextStyle({Color setColor}) {
 
 // Bulb Direction
 TextStyle _bulbValueTextStyle({Color setColor}) {
-  return TextStyle(
-    fontFamily: "Raleway",
+  return GoogleFonts.poppins(
     fontWeight: FontWeight.bold,
-    fontSize: 46,
+    fontSize: 42,
     color: setColor ?? Colors.white,
   );
 }
 
 // Bulb Designation
 TextStyle _bulbDesignationTextStyle({Color setColor}) {
-  return TextStyle(
-    fontFamily: "Raleway",
-    fontWeight: FontWeight.bold,
-    fontSize: 18,
+  return GoogleFonts.poppins(
+    fontWeight: FontWeight.w800,
+    fontSize: 24,
     color: setColor ?? Colors.white,
   );
 }

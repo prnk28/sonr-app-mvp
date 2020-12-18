@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+export 'package:flutter_gradients/flutter_gradients.dart';
 
 // ^ Get Icon from Peer Data ^ //
 NeumorphicIcon iconFromPeer(Peer peer,
@@ -73,83 +73,25 @@ Widget iconWithPreview(Metadata metadata) {
   }
 }
 
-// ^ SonrIcon from SVG Data ^ //
-enum IconType {
-  Download,
-  Settings,
-  Home,
-  Camera,
-  Mail,
-  Diamond,
-  Folder,
-  Gallery,
-  Printer,
-  Eye,
-  Sandclock,
-  ZoomIn,
-  ZoomOut,
-  Placeholder,
-  Idea,
-  TrashBin,
-  Happy,
-  Microphone,
-  Notification,
-  Compass,
-  File,
-  Alarm,
-  Lock,
-  Layer,
-  Sound,
-  Book,
-  Dialogue,
-  Upload,
-  Target,
-  Mute,
-  Lifesaver,
-  Protection,
-  LineBars,
-  Flag,
-  Menu,
-  Share,
-  Calendar,
-  Control,
-  PieChart,
-  User,
-  BookMark,
-  Battery,
-  Megaphone,
-  ShoppingCart,
-  Medal,
-  Hierarchy,
-  PiggyBank,
-  Internet,
-  Edit,
-  Filter
-}
-
-class SonrIcon extends StatelessWidget {
-  final IconType icon;
-  final String fileName;
-  const SonrIcon({
-    this.icon,
-    this.fileName = "",
-    Key key,
-  }) : super(key: key);
+class GradientIcon extends StatelessWidget {
+  GradientIcon(this.iconData,
+      {this.size = 40, this.center = Alignment.topLeft, this.gradient});
+  final IconData iconData;
+  final double size;
+  final Alignment center;
+  final Gradient gradient;
 
   @override
   Widget build(BuildContext context) {
-    if (fileName.isEmpty) {
-      String iconValue = icon.toString().split('.').last;
-      var name = iconValue.replaceAll(new RegExp(r'/([A-Z]+)/g'), ' ');
-      var idx = icon.index;
-      var path = "0$idx-$name";
-      return SvgPicture.asset("assets/icons/" + path);
-    } else {
-      String iconValue = icon.toString().split('.').last;
-      var name = iconValue.replaceAll(new RegExp(r'/([A-Z]+)/g'), ' ');
-      var idx = icon.index;
-      var path = "0$idx-$name";
-      return SvgPicture.asset("assets/icons/" + path);
-    }
+    return ShaderMask(
+      shaderCallback: (bounds) {
+        return gradient.createShader(bounds);
+      },
+      child: Icon(
+        iconData,
+        size: size,
+        color: Colors.white,
+      ),
+    );
   }
 }

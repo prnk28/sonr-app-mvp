@@ -46,7 +46,6 @@ dependencies:
   floating_action_bubble: ^1.0.9
   flutter_gradients: ^1.0.0+2
   flutter_neumorphic: ^3.0.2
-  flutter_svg: ^0.19.1
   google_fonts: ^1.1.1
   photo_view: ^0.10.2
   rive: ^0.6.2
@@ -70,5 +69,4 @@ flutter:
   assets:
     - assets/animations/
     - assets/audio/
-    - assets/icons/
     - assets/images/
