@@ -40,6 +40,7 @@ class ProfileController extends GetxController {
     } else {
       status(ProfileStatus.Viewing);
     }
+    print("Profile Controller Status: " + status().toString());
   }
 
   // ^ Update a Value in User Contact ^ //
@@ -62,6 +63,8 @@ class ProfileController extends GetxController {
           userContact.website = newValue;
           break;
       }
+      print("Profile Controller New Value: " + newValue);
+      _save();
     }
   }
 

@@ -16,6 +16,11 @@ class ProfileScreen extends GetView<ProfileController> {
           title: sonr.code,
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),
+        floatingActionButton: NeumorphicFloatingActionButton(
+            child: Icon(Icons.edit),
+            onPressed: () {
+              controller.toggleEditing();
+            }),
         body: SafeArea(
             child: Stack(
           children: <Widget>[],

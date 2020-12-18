@@ -23,7 +23,6 @@ dependencies:
   get:
   intl: ^0.15.8
   logger: ^0.9.4
-  worker_manager: ^3.1.8
 
   # -- Device --
   flutter_compass: ^0.5.0
@@ -43,14 +42,11 @@ dependencies:
     git:
       url: git@github.com:sonr-io/plugin.git
 
-
-
   # -- UI/UX --
-  animations: ^1.1.2
   floating_action_bubble: ^1.0.9
   flutter_gradients: ^1.0.0+2
   flutter_neumorphic: ^3.0.2
-  path_drawing: ^0.4.1+1
+  flutter_svg: ^0.19.1
   photo_view: ^0.10.2
   rive: ^0.6.2
   simple_animations: ^2.4.0
@@ -74,8 +70,8 @@ flutter:
     - assets/animations/
     - assets/audio/
     - assets/fonts/
+    - assets/icons/
     - assets/images/
-
 
   # -- Fonts --
   fonts:

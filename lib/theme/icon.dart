@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:flutter_svg/avd.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 // ^ Get Icon from Peer Data ^ //
 NeumorphicIcon iconFromPeer(Peer peer,
@@ -69,5 +71,34 @@ Widget iconWithPreview(Metadata metadata) {
     default:
       return Icon(Icons.device_unknown, size: 100);
       break;
+  }
+}
+
+// // ^ SonrIcon from SVG Data ^ //
+// enum SonrIconType {
+//   Download,
+//   Settings,
+//   Home,
+//   Camera,
+//   Mail,
+//   Diamond,
+//   Folder,
+//   Gallery,
+//   Printer,
+//   Eye,
+//   Upload
+// }
+
+class SonrIcon extends StatelessWidget {
+  final String icon;
+
+  const SonrIcon(
+    this.icon, {
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset("assets/icons/" + icon);
   }
 }

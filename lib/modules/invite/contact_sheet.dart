@@ -17,39 +17,39 @@ class ContactInviteSheet extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-        style: SonrBorderStyle(),
-        margin: EdgeInsets.only(left: 15, right: 15),
-        child: Container(
+    return Container(
+        margin: EdgeInsets.only(left: 10, right: 10),
+        child: Neumorphic(
+            style: SonrBorderStyle(),
             child: Column(children: [
-          // @ Top Right Close/Cancel Button
-          closeButton(() {
-            // Emit Event
-            sonr.respondPeer(false);
+              // @ Top Right Close/Cancel Button
+              closeButton(() {
+                // Emit Event
+                sonr.respondPeer(false);
 
-            // Pop Window
-            Get.back();
-          }),
+                // Pop Window
+                Get.back();
+              }, padTop: 8, padRight: 8),
 
-          // @ Basic Contact Info - Make Expandable
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Padding(padding: EdgeInsets.all(8)),
-            Column(
-              children: [
-                boldText(contact.firstName),
-                boldText(contact.lastName),
-              ],
-            )
-          ]),
+              // @ Basic Contact Info - Make Expandable
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Padding(padding: EdgeInsets.all(8)),
+                Column(
+                  children: [
+                    boldText(contact.firstName),
+                    boldText(contact.lastName),
+                  ],
+                )
+              ]),
 
-          // @ Send Back Button
-          _buildSendBack(),
+              // @ Send Back Button
+              _buildSendBack(),
 
-          // @ Save Button
-          rectangleButton("Save", () {
-            Get.back();
-          }),
-        ])));
+              // @ Save Button
+              rectangleButton("Save", () {
+                Get.back();
+              }),
+            ])));
   }
 
   Widget _buildSendBack() {

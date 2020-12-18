@@ -6,11 +6,11 @@ import 'package:sonar_app/modules/peer/peer_bubble_controller.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
 class PeerStack extends StatelessWidget {
+  // Initialize Widget List
+  final SonrService sonr = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    // Initialize Widget List
-    final SonrService sonr = Get.find();
-
     // @ Bubble View
     return Obx(() {
       List<PeerBubble> stackItems = new List<PeerBubble>();

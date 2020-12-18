@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
+import 'icon.dart';
+
 // ^ Sonr Global AppBar Data ^ //
 // ignore: non_constant_identifier_names
 NeumorphicAppBar SonrAppBar(
@@ -49,12 +51,9 @@ NeumorphicAppBar SonrHomeBar(
             style: NeumorphicStyle(
                 intensity: 0.85,
                 boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.flat,
+                shape: NeumorphicShape.convex,
                 depth: 8),
-            child: Icon(
-              Icons.person,
-              color: Colors.black87,
-            ),
+            child: SonrIcon("049-edit.svg"),
             onPressed: onPressed,
           )));
 }

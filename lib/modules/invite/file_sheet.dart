@@ -22,23 +22,24 @@ class FileInviteSheet extends StatelessWidget {
     return SonrTheme(Obx(() {
       // @ In Transfer
       if (sonr.status() == Status.Busy) {
-        return Neumorphic(
-            style: SonrBorderStyle(),
+        return Container(
+            padding: EdgeInsetsDirectional.only(start: 10, end: 10),
+            height: Get.height / 3 + 20,
             margin: EdgeInsets.only(left: 15, right: 15),
-            child: Container(
-                padding: EdgeInsetsDirectional.only(start: 15, end: 15),
-                height: Get.height / 3 + 20,
+            child: Neumorphic(
+                style: SonrBorderStyle(),
                 child: Center(
                     child: ProgressView(
                         iconData: iconDataFromPayload(invite.payload)))));
       }
       // @ Pending
       else if (sonr.status() == Status.Pending) {
-        return Neumorphic(
-            style: SonrBorderStyle(),
+        return Container(
+            padding: EdgeInsetsDirectional.only(start: 10, end: 10),
+            height: Get.height / 3 + 20,
             margin: EdgeInsets.only(left: 15, right: 15),
-            child: Container(
-                height: Get.height / 3 + 20,
+            child: Neumorphic(
+                style: SonrBorderStyle(),
                 child: Column(
                   children: [
                     // @ Top Right Close/Cancel Button
@@ -48,7 +49,7 @@ class FileInviteSheet extends StatelessWidget {
 
                       // Pop Window
                       Get.back();
-                    }),
+                    }, padTop: 8, padRight: 8),
 
                     // Build Item from Metadata and Peer
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -27,45 +26,45 @@ class CardPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // @ Build Neumorphic View
-    return Neumorphic(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 45),
-        child: Container(
+    // ^ Build Neumorphic View ^ //
+    return Container(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+        child: Neumorphic(
+            style: SonrBorderStyle(),
             child: Column(
-          children: [
-            // Some Space
-            Padding(padding: EdgeInsets.all(15)),
+              children: [
+                // Some Space
+                Padding(padding: EdgeInsets.all(25)),
 
-            // Top Right Close/Cancel Button
-            closeButton(() => Get.back()),
+                // Top Right Close/Cancel Button
+                closeButton(() => Get.back()),
+                Padding(padding: EdgeInsets.only(top: 10)),
 
-            // Image
-            GestureDetector(
-              onTap: () {
-                Get.to(CardHeroView(card));
-              },
-            ),
-            FittedBox(
-              alignment: Alignment.center,
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 1,
-                    minHeight: 1,
-                  ), // here
-                  child: Container(
-                      child: Hero(
-                          tag: card.meta.name, child: _buildMedia(card.meta)))),
-            ),
-          ],
-        )));
+                // Image
+                FittedBox(
+                    alignment: Alignment.center,
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 1,
+                          minHeight: 1,
+                        ),
+                        child: Container(child: _buildMedia(card.meta)))),
+              ],
+            )));
   }
 
-  // @ Build Media View
+  // ^ Build Media View ^ //
   _buildMedia(Metadata m) {
     switch (m.mime.type) {
-      // Image
+      // @ Image Redirects to Hero View
       case MIME_Type.image:
-        return Image.file(File(card.meta.path));
+        return Hero(
+            tag: m.name,
+            child: GestureDetector(
+                onTap: () {
+                  Get.off(CardHeroView.fromCard(card));
+                },
+                child: Image.file(File(card.meta.path))));
         break;
       case MIME_Type.video:
         break;

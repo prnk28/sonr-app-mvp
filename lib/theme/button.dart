@@ -13,19 +13,31 @@ NeumorphicButton rectangleButton(String text, Function onPressed,
       child: normalText(text));
 }
 
-Widget closeButton(Function onPressed) {
+Widget closeButton(Function onPressed,
+    {Alignment alignment = Alignment.topRight,
+    double padTop = 5,
+    double padRight = 5,
+    double padLeft = 5,
+    double padBottom = 5}) {
   return Align(
       alignment: Alignment.topRight,
-      child: NeumorphicButton(
-          padding: EdgeInsets.only(top: 10, right: 15),
-          style: NeumorphicStyle(
-              boxShape: NeumorphicBoxShape.circle(),
-              shape: NeumorphicShape.convex,
-              depth: 5),
-          child: Icon(
-            Icons.close_rounded,
-            size: 35,
-            color: Colors.grey[700],
+      child: Padding(
+          padding: EdgeInsets.only(
+            top: padTop,
+            right: padRight,
+            left: padLeft,
+            bottom: padBottom,
           ),
-          onPressed: onPressed));
+          child: NeumorphicButton(
+              // padding: EdgeInsets.only(top: 10, right: 15),
+              style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                  shape: NeumorphicShape.convex,
+                  depth: 5),
+              child: Icon(
+                Icons.close_rounded,
+                size: 35,
+                color: Colors.grey[700],
+              ),
+              onPressed: onPressed)));
 }
