@@ -9,9 +9,11 @@ import 'package:sonr_core/sonr_core.dart';
 
 class DeviceService extends GetxService {
   SharedPreferences _prefs;
-  // ignore: unused_field
-  bool _hasLocation;
-  bool _hasUser;
+  bool hasLocation;
+  bool hasUser;
+
+  Position position;
+  User user;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
@@ -19,29 +21,29 @@ class DeviceService extends GetxService {
     _prefs = await SharedPreferences.getInstance();
 
     // Check Location Status
-    _hasLocation = await Permission.locationWhenInUse.serviceStatus ==
+    hasLocation = await Permission.locationWhenInUse.serviceStatus ==
         ServiceStatus.enabled;
 
     // Check User Status
-    _hasUser = _prefs.containsKey("user");
+    hasUser = _prefs.containsKey("user");
     return this;
   }
 
   // ^ Method to Connect User Event ^
   void start() async {
     // @ 1. Check for Location
-    if (_hasLocation = await Permission.locationWhenInUse.request().isGranted) {
+    if (hasLocation = await Permission.locationWhenInUse.request().isGranted) {
       // @ 2. Get Profile
-      if (_hasUser) {
+      if (hasUser) {
         // Get Json Value
         var profileJson = _prefs.getString("user");
 
         // Get Profile object
-        var user = User.fromJson(profileJson);
+        user = User.fromJson(profileJson);
 
         if (user != null) {
           // Get Current Position
-          Position position = await user.position;
+          position = await user.position;
 
           // Initialize Sonr Node
           Get.putAsync(() => SonrService().init(position, user));
@@ -61,13 +63,13 @@ class DeviceService extends GetxService {
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // Get Data
-      var user = new User(contact, username);
+      user = new User(contact, username);
 
       // Save in SharedPreferences Instance
       _prefs.setString("user", user.toJson());
 
       // Get Current Position
-      Position position = await user.position;
+      position = await user.position;
 
       // Initialize Sonr Node
       Get.putAsync(() => SonrService().init(position, user));
