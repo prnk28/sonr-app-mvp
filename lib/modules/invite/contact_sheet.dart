@@ -17,9 +17,11 @@ class ContactInviteSheet extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: SonrDecoration(),
-        child: Column(children: [
+    return Neumorphic(
+        style: SonrBorderStyle(),
+        margin: EdgeInsets.only(left: 15, right: 15),
+        child: Container(
+            child: Column(children: [
           // @ Top Right Close/Cancel Button
           closeButton(() {
             // Emit Event
@@ -47,7 +49,7 @@ class ContactInviteSheet extends StatelessWidget {
           rectangleButton("Save", () {
             Get.back();
           }),
-        ]));
+        ])));
   }
 
   Widget _buildSendBack() {

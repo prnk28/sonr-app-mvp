@@ -27,7 +27,6 @@ class FileInviteSheet extends StatelessWidget {
             margin: EdgeInsets.only(left: 15, right: 15),
             child: Container(
                 padding: EdgeInsetsDirectional.only(start: 15, end: 15),
-                decoration: SonrDecoration(),
                 height: Get.height / 3 + 20,
                 child: Center(
                     child: ProgressView(
@@ -39,7 +38,6 @@ class FileInviteSheet extends StatelessWidget {
             style: SonrBorderStyle(),
             margin: EdgeInsets.only(left: 15, right: 15),
             child: Container(
-                decoration: SonrDecoration(),
                 height: Get.height / 3 + 20,
                 child: Column(
                   children: [

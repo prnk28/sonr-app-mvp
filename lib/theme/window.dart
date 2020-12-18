@@ -2,6 +2,8 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
+import 'color.dart';
+
 // ^ Sonr Global WindowBorder Data ^ //
 // ignore: non_constant_identifier_names
 NeumorphicStyle SonrBorderStyle() {
@@ -15,7 +17,7 @@ NeumorphicDecoration SonrDecoration() {
   return NeumorphicDecoration(
       isForeground: true,
       shape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
-      style: NeumorphicStyle(),
-      renderingByPath: true,
+      style: NeumorphicStyle(color: HexColor.fromHex("EFEEEE")),
+      renderingByPath: false,
       splitBackgroundForeground: true);
 }
