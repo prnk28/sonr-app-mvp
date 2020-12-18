@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'circle_controller.dart';
 
-class CircleView extends StatelessWidget {
+class CircleView extends GetView<CircleController> {
   CircleView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {

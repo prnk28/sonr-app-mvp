@@ -23,7 +23,7 @@ class CircleController extends GetxController {
   CircleController() {
     _sonr.peers.listen((map) {
       // @ Have to keep this to run for some unknown reason
-      print(map.length);
+      print(map);
 
       // * Check Map Size * //
       if (map.length > 0) {
@@ -34,8 +34,20 @@ class CircleController extends GetxController {
         }
 
         // Update Stack Items
-        _updateItems(map);
-        stackItems.refresh();
+        map.forEach((id, peer) {
+          // Validate not Duplicate
+          if (!stackItems.any((pb) => pb.controller.id == id)) {
+            stackItems.add(PeerBubble(Get.put(PeerController(id, peer))));
+            stackItems.refresh();
+            print("Added Bubble");
+          }
+          // Update an Existing Peer
+          else {
+            var bubble = stackItems.where((pb) => pb.controller.id == id);
+            bubble.first.controller.setOffset(peer);
+          }
+        });
+        print("Total Bubbbles = " + stackItems.length.toString());
       }
       // * Check Map Size * //
       else {
@@ -53,19 +65,5 @@ class CircleController extends GetxController {
   }
 
   // ^ Updates data from listener ^ //
-  _updateItems(Map<String, Peer> data) {
-    data.forEach((id, peer) {
-      // Validate not Duplicate
-      if (!stackItems.any((pb) => pb.controller.id == id)) {
-        stackItems.add(PeerBubble(Get.put(PeerController(id, peer))));
-        print("Added Bubble");
-      }
-      // Update an Existing Peer
-      else {
-        var bubble = stackItems.where((pb) => pb.controller.id == id);
-        bubble.first.controller.setOffset(peer);
-      }
-    });
-    print("Total Bubbbles = " + stackItems.length.toString());
-  }
+  _updateItems(Map<String, Peer> data) {}
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/transfer/peer/circle_controller.dart';
+import 'package:sonar_app/modules/peer/circle_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
-import 'peer/circle_view.dart';
+import '../peer/circle_view.dart';
 import 'compass/compass_view.dart';
 import 'compass/zone_painter.dart';
 
-class TransferScreen extends GetView<CircleController> {
+class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SonrService sonr = Get.find();

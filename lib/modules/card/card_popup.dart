@@ -24,33 +24,35 @@ class CardPopup extends StatelessWidget {
     return CardPopup(controller.addContact(contact));
   }
 
+// ^ Build Neumorphic View ^ //
   @override
   Widget build(BuildContext context) {
-    // ^ Build Neumorphic View ^ //
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-        child: Neumorphic(
-            style: SonrBorderStyle(),
-            child: Column(
-              children: [
-                // Some Space
-                Padding(padding: EdgeInsets.all(25)),
+    if (card.type == CardType.File) {
+      return Container(
+          margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+          child: Neumorphic(
+              style: SonrBorderStyle(),
+              child: Column(
+                children: [
+                  // Some Space
+                  Padding(padding: EdgeInsets.all(25)),
 
-                // Top Right Close/Cancel Button
-                closeButton(() => Get.back()),
-                Padding(padding: EdgeInsets.only(top: 10)),
+                  // Top Right Close/Cancel Button
+                  closeButton(() => Get.back()),
+                  Padding(padding: EdgeInsets.only(top: 10)),
 
-                // Image
-                FittedBox(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 1,
-                          minHeight: 1,
-                        ),
-                        child: Container(child: _buildMedia(card.meta)))),
-              ],
-            )));
+                  // Image
+                  FittedBox(
+                      alignment: Alignment.center,
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: 1,
+                            minHeight: 1,
+                          ),
+                          child: Container(child: _buildMedia(card.meta)))),
+                ],
+              )));
+    }
   }
 
   // ^ Build Media View ^ //
