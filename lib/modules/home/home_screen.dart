@@ -21,7 +21,9 @@ class HomeScreen extends GetView<CardController> {
     controller.fetch();
     return SonrTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
-        appBar: SonrHomeBar(() {}),
+        appBar: SonrHomeBar(() {
+          Get.offNamed("/profile");
+        }),
         floatingActionButton: FloaterButton(),
         body: CardGrid()));
   }

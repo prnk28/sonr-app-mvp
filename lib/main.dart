@@ -6,6 +6,8 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
+import 'modules/peer/circle_controller.dart';
+import 'modules/profile/profile_controller.dart';
 import 'modules/profile/profile_screen.dart';
 import 'modules/register/register_screen.dart';
 import 'modules/transfer/transfer_screen.dart';
@@ -68,6 +70,7 @@ class App extends StatelessWidget {
 
 // ^ Routing Information ^ //
 List<GetPage> getPages() {
+  DeviceService device = Get.find();
   return [
     // ** Home Page ** //
     GetPage(
@@ -80,7 +83,8 @@ List<GetPage> getPages() {
     GetPage(
         name: '/register',
         page: () => SonrTheme(RegisterScreen()),
-        transition: Transition.rightToLeftWithFade),
+        transition: Transition.rightToLeftWithFade,
+        binding: BindingsBuilder.put(() => CircleController())),
 
     // ** Transfer Page ** //
     GetPage(
@@ -91,9 +95,10 @@ List<GetPage> getPages() {
 
     // ** Profile Page ** //
     GetPage(
-      name: '/profile',
-      page: () => SonrTheme(ProfileScreen()),
-      transition: Transition.upToDown,
-    ),
+        name: '/profile',
+        page: () => SonrTheme(ProfileScreen()),
+        transition: Transition.upToDown,
+        binding:
+            BindingsBuilder.put(() => ProfileController(device.user.contact))),
   ];
 }

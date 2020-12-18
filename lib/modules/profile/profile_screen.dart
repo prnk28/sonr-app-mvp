@@ -23,7 +23,9 @@ class ProfileScreen extends GetView<ProfileController> {
             }),
         body: SafeArea(
             child: Stack(
-          children: <Widget>[],
+          children: <Widget>[
+            
+          ],
         ))));
   }
 }

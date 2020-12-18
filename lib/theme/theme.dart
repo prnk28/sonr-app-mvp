@@ -6,6 +6,8 @@ export 'color.dart';
 export 'icon.dart';
 export 'text.dart';
 export 'window.dart';
+export 'package:simple_animations/simple_animations.dart';
+export 'package:supercharged/supercharged.dart';
 
 // ^ Sonr Global Theme Data ^ //
 // ignore: non_constant_identifier_names

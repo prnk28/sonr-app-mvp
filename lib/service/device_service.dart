@@ -62,10 +62,8 @@ class DeviceService extends GetxService {
     // Set Sonr Controller
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
-      // Get Data
+      // Get Data and Save in SharedPrefs
       user = new User(contact, username);
-
-      // Save in SharedPreferences Instance
       _prefs.setString("user", user.toJson());
 
       // Get Current Position

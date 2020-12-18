@@ -12,6 +12,7 @@ class CardGrid extends GetView<CardController> {
     return Obx(() {
       List<CardModel> cards = controller.allCards();
       return GridView.builder(
+          padding: EdgeInsets.only(left: 4, right: 4, bottom: 20, top: 2),
           itemCount: cards.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 4),
@@ -22,30 +23,42 @@ class CardGrid extends GetView<CardController> {
             // Generate File Cell
             if (card.type == CardType.File) {
               // Get Metadata
-              Metadata metadata = card.meta;
-              return GestureDetector(
-                  onTap: () async {
-                    // TODO Utilize Hero Animation
-                    // cards.getFile(metadata);
-                  },
-                  child: Neumorphic(
-                      style: NeumorphicStyle(intensity: 0.85),
-                      margin: EdgeInsets.all(4),
-                      child: Container(
-                        height: 75,
-                        child:
-                            // Image Info
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                              normalText(metadata.name),
-                              normalText(metadata.mime.type.toString()),
-                              normalText("Owner: " + metadata.owner.firstName),
-                            ]),
-                      )));
+              return _buildMetadataCard(card.meta);
             }
             return Container();
           });
     });
+  }
+
+  // ^ Build a File Based Card ^ //
+  Widget _buildMetadataCard(Metadata metadata) {
+    return PlayAnimation<double>(
+      tween: (0.0).tweenTo(75.0), // <-- specify tween (from 50.0 to 200.0)
+      duration: 150.milliseconds,
+      delay: 250.milliseconds, // <-- set a duration
+      builder: (context, child, value) {
+        // <-- use builder function
+        return GestureDetector(
+            onTap: () async {
+              // TODO Utilize Hero Animation
+              // cards.getFile(metadata);
+            },
+            child: Neumorphic(
+                style: NeumorphicStyle(intensity: 0.85),
+                margin: EdgeInsets.all(4),
+                child: Container(
+                  height: value,
+                  child:
+                      // Image Info
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        normalText(metadata.name),
+                        normalText(metadata.mime.type.toString()),
+                        normalText("Owner: " + metadata.owner.firstName),
+                      ]),
+                )));
+      },
+    );
   }
 }

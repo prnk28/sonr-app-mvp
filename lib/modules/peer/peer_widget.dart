@@ -2,21 +2,21 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/peer/peer_bubble_controller.dart';
+import 'package:sonar_app/modules/peer/peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
 class PeerBubble extends StatelessWidget {
-  final PeerBubbleController controller;
+  final PeerController controller;
   PeerBubble(this.controller);
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        top: controller.offest.dy,
-        left: controller.offest.dx,
+        top: controller.offest.value.dy,
+        left: controller.offest.value.dx,
         child: GestureDetector(
             onTap: () => controller.invite(),
             child: PlayAnimation<double>(
@@ -57,7 +57,7 @@ class PeerBubble extends StatelessWidget {
 
   // ^ Method to Change Content Visibility By State ^ //
   Widget _buildContentVisibility() {
-    PeerBubbleController controller = Get.find();
+    PeerController controller = Get.find();
     if (controller.shouldChangeVisibility.value) {
       return PlayAnimation<double>(
           tween: (1.0).tweenTo(0.0),

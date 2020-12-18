@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
@@ -11,31 +10,38 @@ import 'package:sonr_core/sonr_core.dart';
 // ^ PeerStatus Enum ^ //
 enum PeerStatus {
   Idle,
+  OffLeft,
+  OffRight,
   Accepted,
   Denied,
   Completed,
 }
 
-class PeerBubbleController extends GetxController {
+class PeerController extends GetxController {
+  // Properties
   final Peer peer;
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
-  SonrService _sonr = Get.find();
   String id;
-  var offest = Offset(0, 0);
+  var offest = Offset(0, 0).obs;
 
+  // References
+  SonrService _sonr = Get.find();
+
+  // Checkers
   bool _isInvited = false;
   bool _hasDenied = false;
   bool _hasAccepted = false;
   bool _inProgress = false;
   bool _hasCompleted = false;
 
+  // Animations
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
-  PeerBubbleController(this.peer) {
+  PeerController(this.peer) {
     // Set Default Values
     id = peer.id;
-    offest = _calculateOffset(peer.difference);
+    offest(_calculateOffset(peer.difference));
 
     // Listen to User Status
     _sonr.status.listen((status) {
@@ -94,6 +100,7 @@ class PeerBubbleController extends GetxController {
     super.onInit();
   }
 
+  // ^ Update User to Invite ^
   invite() {
     if (!_isInvited) {
       _sonr.invitePeer(peer);
@@ -102,11 +109,22 @@ class PeerBubbleController extends GetxController {
     }
   }
 
+  // ^ Update Peer Difference
+  changeDifference(double newDiff) {
+    offest(_calculateOffset(newDiff));
+  }
+
   // ^ Handle Update Status ^
   updateStatus(PeerStatus status) {
     switch (status) {
       case PeerStatus.Idle:
         shouldChangeVisibility(false);
+        break;
+      case PeerStatus.OffLeft:
+        // TODO: Handle this case.
+        break;
+      case PeerStatus.OffRight:
+        // TODO: Handle this case.
         break;
       case PeerStatus.Accepted:
         // Start Animation
