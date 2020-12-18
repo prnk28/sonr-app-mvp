@@ -6,8 +6,8 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 
 import '../peer/circle_view.dart';
-import 'compass/compass_view.dart';
-import 'compass/zone_painter.dart';
+import 'compass_view.dart';
+import 'zone_painter.dart';
 
 class TransferScreen extends StatelessWidget {
   @override
