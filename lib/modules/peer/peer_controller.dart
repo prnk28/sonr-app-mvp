@@ -19,11 +19,11 @@ enum PeerStatus {
 
 class PeerController extends GetxController {
   // Properties
+  final String id;
   final Peer peer;
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
-  String id;
-  var offest = Offset(0, 0).obs;
+  final offest = Offset(0, 0).obs;
 
   // References
   SonrService _sonr = Get.find();
@@ -38,9 +38,8 @@ class PeerController extends GetxController {
   // Animations
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
-  PeerController(this.peer) {
+  PeerController(this.id, this.peer) {
     // Set Default Values
-    id = peer.id;
     offest(_calculateOffset(peer.difference));
 
     // Listen to User Status

@@ -14,17 +14,17 @@ class PeerBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        top: controller.offest.value.dy,
-        left: controller.offest.value.dx,
-        child: GestureDetector(
-            onTap: () => controller.invite(),
-            child: PlayAnimation<double>(
-                tween: (0.0).tweenTo(1.0),
-                duration: 500.milliseconds,
-                delay: 1.seconds,
-                builder: (context, child, value) {
-                  return Obx(() {
+    return Obx(() {
+      return Positioned(
+          top: controller.offest.value.dy,
+          left: controller.offest.value.dx,
+          child: GestureDetector(
+              onTap: () => controller.invite(),
+              child: PlayAnimation<double>(
+                  tween: (0.0).tweenTo(1.0),
+                  duration: 500.milliseconds,
+                  delay: 1.seconds,
+                  builder: (context, child, value) {
                     return Container(
                         width: 90,
                         height: 90,
@@ -51,8 +51,8 @@ class PeerBubble extends StatelessWidget {
                           ),
                           _buildContentVisibility(),
                         ]));
-                  });
-                })));
+                  })));
+    });
   }
 
   // ^ Method to Change Content Visibility By State ^ //

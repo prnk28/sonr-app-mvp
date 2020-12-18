@@ -83,8 +83,7 @@ List<GetPage> getPages() {
     GetPage(
         name: '/register',
         page: () => SonrTheme(RegisterScreen()),
-        transition: Transition.rightToLeftWithFade,
-        binding: BindingsBuilder.put(() => CircleController())),
+        transition: Transition.rightToLeftWithFade),
 
     // ** Transfer Page ** //
     GetPage(
