@@ -7,7 +7,6 @@ CLEAN=$(FLUTTER) clean
 PROJECT_DIR=/Users/prad/Sonr/app
 
 run:
-	@cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(RUN)
 
 build:
@@ -15,5 +14,10 @@ build:
 	cd $(PROJECT_DIR) && $(BUILDIOS)
 	cd $(PROJECT_DIR) && $(BUILDANDROID)
 
+upgrade:
+	
+
 clean:
+	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
+	cd $(PROJECT_DIR) && flutter pub get

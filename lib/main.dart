@@ -1,27 +1,67 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/ui/ui.dart';
-import 'controller/bindings.dart';
+import 'package:sonar_app/modules/home/home_screen.dart';
+import 'package:sonar_app/service/sql_service.dart';
+import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/theme/theme.dart';
+import 'modules/card/card_controller.dart';
+import 'modules/register/register_screen.dart';
+import 'modules/transfer/transfer_screen.dart';
 
 // ** Main Method ** //
 void main() async {
-  // Run App with BLoC Providers
+  WidgetsFlutterBinding.ensureInitialized();
+  await initServices();
   runApp(App());
+}
+
+// ^ Services (Files, Contacts) ^ //
+// TODO: Convert SonrController to Service
+initServices() async {
+  print('starting services ...');
+  // Initializes Worker Executer
+  //await Executor().warmUp();
+
+  // Initializes Local Contacts/Files and Device User/Settings
+  await Get.putAsync(() => SQLService().init());
+  await Get.putAsync(() => DeviceService().init());
+  print('All services started...');
 }
 
 // ^ Root Widget ^ //
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LifeCycleManager(
-        child: GetMaterialApp(
+    // Connect to Sonr Network
+    DeviceService device = Get.find();
+    device.start();
+
+    return GetMaterialApp(
       getPages: getPages(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
-      initialBinding: AppBind(),
-      home: SplashScreen(),
-    ));
+      home: Scaffold(
+          backgroundColor: NeumorphicTheme.baseColor(context),
+          // Non Build States
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  width: Get.width / 5,
+                  height: Get.height / 5,
+                  child:
+                      FittedBox(child: Image.asset("assets/images/icon.png"))),
+
+              // Loading
+              Padding(
+                  padding: EdgeInsets.only(left: 45, right: 45),
+                  child: NeumorphicProgressIndeterminate())
+            ],
+          )),
+    );
   }
 }
 
@@ -30,24 +70,22 @@ List<GetPage> getPages() {
   return [
     // ** Home Page ** //
     GetPage(
-      name: '/home',
-      page: () => AppTheme(HomeScreen()),
-      transition: Transition.zoom,
-      binding: HomeBind(),
-    ),
+        name: '/home',
+        page: () => SonrTheme(HomeScreen()),
+        transition: Transition.zoom,
+        binding: BindingsBuilder.put(() => CardController())),
 
     // ** Register Page ** //
     GetPage(
         name: '/register',
-        page: () => AppTheme(RegisterScreen()),
+        page: () => SonrTheme(RegisterScreen()),
         transition: Transition.rightToLeftWithFade),
 
     // ** Searching Page ** //
     GetPage(
       name: '/transfer',
-      page: () => AppTheme(TransferScreen()),
+      page: () => SonrTheme(TransferScreen()),
       transition: Transition.fade,
-      // binding: HomeBind(),
     ),
   ];
 }
