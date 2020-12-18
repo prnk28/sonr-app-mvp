@@ -1,38 +1,50 @@
-import 'package:geolocator/geolocator.dart';
-import 'package:sonr_core/sonr_core.dart';
 import 'dart:convert';
 
-// ** Current Device User Model **
+// ** Current Device Settings **
 class Settings {
   // ^ Properties ^
   final String username;
   final List<SettingItem> items;
 
-  // Get User Position
-  Future<Position> get position =>
-      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
   // Default Constructer
-  Settings(this.username, this.items);
+  Settings(this.username, {this.items});
 
-  // ^ Method Constructs Profile from JSON String ^
+  // ^ Method Constructs Settings from JSON String ^
   factory Settings.fromJson(String jsonData) {
     // Initialize
     var map = json.decode(jsonData);
-    Settings p = new Settings(map["username"], map["items"]);
+
+    // Decode Items
+    List<String> itemsJson = map["items"];
+    var itemsList = <SettingItem>[];
+    itemsJson.forEach((i) {
+      itemsList.add(SettingItem.fromJson(i));
+    });
+
+    // Return Object
+    Settings p = new Settings(map["username"], items: itemsList);
     return p;
   }
 
-  // ^ Method converts Profile to JSON String ^
+  // ^ Method converts Settings to JSON String ^
   String toJson() {
+    // Convert Items to Json
+    var itemsJson = <String>[];
+    this.items.forEach((i) {
+      itemsJson.add(i.toJson());
+    });
+
+    // Convert to Json Object
     var map = {
       "username": this.username,
-      "items": this.items,
+      "items": itemsJson,
     };
     return json.encode(map);
   }
 }
 
+// ** An option in Settings ** //
+// TODO: Name should be enum //
 class SettingItem {
   final String name;
   final bool isActive;
@@ -40,7 +52,7 @@ class SettingItem {
 
   SettingItem(this.name, {this.isActive, this.value});
 
-  // ^ Method Constructs Profile from JSON String ^
+  // ^ Method Constructs SettingItem from JSON String ^
   factory SettingItem.fromJson(String jsonData) {
     // Initialize
     var map = json.decode(jsonData);
@@ -49,7 +61,7 @@ class SettingItem {
     return si;
   }
 
-  // ^ Method converts Profile to JSON String ^
+  // ^ Method converts SettingItem to JSON String ^
   String toJson() {
     var map = {
       "name": this.name,
