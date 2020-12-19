@@ -14,15 +14,18 @@ class SonrService extends GetxService {
   // @ Set Properteries
   final status = Status.Offline.obs;
   final direction = 0.0.obs;
+  final lobby = Lobby().obs;
+  final code = "".obs;
+
+  // @ Set References
   Node _node;
   bool _connected = false;
-  String code = "";
-
-  // @ Set Lobby Dependencies
-  Map<String, Peer> peers = {};
+  String _code = "";
+  double _direction = 0;
+  Lobby _lobby = Lobby();
 
   // @ Set Transfer Dependencies
-  Payload_Type payloadType;
+  Payload_Type _payloadType;
 
   // @ Set Receive Dependencies
   final progress = 0.0.obs;
@@ -34,14 +37,16 @@ class SonrService extends GetxService {
       if (_connected) {
         _node.update(dir.headingForCameraMode);
       }
-      direction(dir.headingForCameraMode);
+      _direction = dir.headingForCameraMode;
+      direction(_direction);
     });
   }
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(Position pos, User user) async {
     // Get OLC
-    code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
+    _code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
+    code(_code);
 
     // Await Initialization -> Set Node
     _connect(user);
@@ -53,7 +58,7 @@ class SonrService extends GetxService {
   // ^ Connect to Node Method
   _connect(User user) async {
     // Create Worker
-    _node = await SonrCore.initialize(code, user.username, user.contact);
+    _node = await SonrCore.initialize(_code, user.username, user.contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
@@ -79,7 +84,7 @@ class SonrService extends GetxService {
   // ^ Queue-File Event ^
   void queue(Payload_Type payType, {File file}) async {
     // Set Payload Type
-    payloadType = payType;
+    _payloadType = payType;
     status(_node.status);
 
     // Queue File
@@ -95,12 +100,12 @@ class SonrService extends GetxService {
   // ^ Invite-Peer Event ^
   void invite(Peer p) async {
     // Send Invite for File
-    if (payloadType == Payload_Type.FILE) {
-      await _node.invite(p, payloadType);
+    if (_payloadType == Payload_Type.FILE) {
+      await _node.invite(p, _payloadType);
     }
     // Send Invite for Contact
-    else if (payloadType == Payload_Type.CONTACT) {
-      await _node.invite(p, payloadType);
+    else if (_payloadType == Payload_Type.CONTACT) {
+      await _node.invite(p, _payloadType);
     }
     status(_node.status);
   }
@@ -129,7 +134,9 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Peers List
-      peers = data.peers;
+      print(data.toString());
+      _lobby = data;
+      lobby(_lobby);
     }
   }
 

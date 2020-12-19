@@ -13,7 +13,7 @@ class ProfileScreen extends GetView<ProfileController> {
         appBar: SonrExitAppBar(
           context,
           "/home",
-          title: sonr.code,
+          title: sonr.code.value,
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),
         floatingActionButton: NeumorphicFloatingActionButton(
@@ -23,9 +23,7 @@ class ProfileScreen extends GetView<ProfileController> {
             }),
         body: SafeArea(
             child: Stack(
-          children: <Widget>[
-            
-          ],
+          children: <Widget>[],
         ))));
   }
 }

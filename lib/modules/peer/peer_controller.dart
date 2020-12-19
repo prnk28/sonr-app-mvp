@@ -28,7 +28,6 @@ class PeerController extends GetxController {
   // References
   String id = "";
   Peer peer;
-  Timer _timer;
 
   // Checkers
   bool _isInvited = false;
@@ -42,11 +41,13 @@ class PeerController extends GetxController {
 
   PeerController() {
     // Listen to this Peers Updates
-    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    Get.find<SonrService>().lobby.listen((lob) {
       // Validate ID
-      if (id == this.id && !_isInvited) {
-        offset(_calculateOffsetForPeer(peer));
-      }
+      lob.peers.forEach((key, value) {
+        if (key == this.id && !_isInvited) {
+          offset(_calculateOffsetForPeer(peer));
+        }
+      });
     });
 
     // Listen to User Status
@@ -174,12 +175,6 @@ class PeerController extends GetxController {
         });
         break;
     }
-  }
-
-  @override
-  void onClose() {
-    _timer.cancel();
-    super.onClose();
   }
 
   // ^ Calculate Peer Offset from Line ^ //
