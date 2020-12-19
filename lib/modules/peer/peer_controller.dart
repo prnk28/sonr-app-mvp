@@ -26,7 +26,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Peer_Proximity>();
 
   // References
-  //final Peer peer;
+  final Peer peer;
 
   // Checkers
   bool _isInvited = false;
@@ -38,7 +38,7 @@ class PeerController extends GetxController {
   // Animations
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
-  PeerController() {
+  PeerController(this.peer) {
     // Listen to User Status
     Get.find<SonrService>().status.listen((status) {
       // * Check if Invited * //
@@ -106,9 +106,9 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle User Invitation ^
-  invite(Peer peer) {
+  invite() {
     if (!_isInvited) {
-      Get.find<SonrService>().invite(peer);
+      Get.find<SonrService>().invite(this.peer);
       shouldChangeVisibility(false);
       _pending.isActive = _isInvited = !_isInvited;
     }

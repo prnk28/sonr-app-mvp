@@ -10,15 +10,15 @@ import 'package:rive/rive.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 
-class PeerBubble extends GetWidget<PeerController> {
+class PeerBubble extends StatelessWidget {
   // Initializes the Peer controller for this Instance
-  final Peer peer;
-  PeerBubble(this.peer) {
+  final PeerController controller;
+  PeerBubble(this.controller) {
     // Listen to this Peers Updates
     Get.find<SonrService>().lobby.listen((map) {
       // Validate ID
       map.forEach((id, val) {
-        if (id == peer.id) {
+        if (id == controller.peer.id) {
           controller.updatePeer(val);
         }
       });
@@ -32,7 +32,7 @@ class PeerBubble extends GetWidget<PeerController> {
           top: controller.offset.value.dy,
           left: controller.offset.value.dx,
           child: GestureDetector(
-              onTap: () => controller.invite(peer),
+              onTap: () => controller.invite(),
               child: PlayAnimation<double>(
                   tween: (0.0).tweenTo(1.0),
                   duration: 500.milliseconds,
@@ -80,8 +80,8 @@ class PeerBubble extends GetWidget<PeerController> {
                 duration: 20.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(peer, size: 20),
-                  initialsFromPeer(peer),
+                  iconFromPeer(controller.peer, size: 20),
+                  initialsFromPeer(controller.peer),
                 ]));
           });
     } else {
@@ -95,8 +95,8 @@ class PeerBubble extends GetWidget<PeerController> {
                 duration: 500.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(peer, size: 20),
-                  initialsFromPeer(peer),
+                  iconFromPeer(controller.peer, size: 20),
+                  initialsFromPeer(controller.peer),
                 ]));
           });
     }

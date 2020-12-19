@@ -26,8 +26,8 @@ class LobbyController extends GetxController {
 
     // @ Create Bubbles
     // Validate not Duplicate
-    if (!stackItems.any((pb) => pb.peer.id == id)) {
-      stackItems.add(PeerBubble(peer));
+    if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
+      stackItems.add(PeerBubble(Get.put<PeerController>(PeerController(peer))));
       stackItems.refresh();
       print("Added Bubble");
     }
@@ -37,5 +37,6 @@ class LobbyController extends GetxController {
       // _updateExistingPeer(bubble.first, peer);
     }
     print("Total Bubbbles = " + stackItems.length.toString());
+    stackItems.refresh();
   }
 }
