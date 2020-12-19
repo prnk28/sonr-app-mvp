@@ -4,7 +4,8 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
-import 'package:sonar_app/modules/card/card_view.dart';
+import 'package:sonar_app/modules/card/card_item.dart';
+import 'package:sonar_app/modules/card/card_popup.dart';
 import 'package:sonar_app/modules/invite/contact_sheet.dart';
 import 'package:sonar_app/modules/invite/file_sheet.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -214,7 +215,7 @@ class SonrService extends GetxService {
       Get.back();
 
       // Display Contact with metadata
-      Get.dialog(CardView.popupMeta(data));
+      Get.dialog(CardPopup.metadata(data));
     }
   }
 

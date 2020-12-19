@@ -1,20 +1,14 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/home/home_screen.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'modules/card/card_controller.dart';
-import 'modules/card/card_photo.dart';
 import 'modules/home/home_binding.dart';
-import 'modules/profile/profile_controller.dart';
-import 'modules/profile/profile_screen.dart';
+import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_screen.dart';
 import 'modules/transfer/transfer_binding.dart';
-import 'modules/transfer/transfer_screen.dart';
 
-// ** Main Method ** //
+// ^ Main Method ^ //
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initServices();
@@ -24,14 +18,9 @@ void main() async {
 // ^ Services (Files, Contacts) ^ //
 // TODO: Convert SonrController to Service
 initServices() async {
-  print('starting services ...');
-  // Initializes Worker Executer
-  //await Executor().warmUp();
-
   // Initializes Local Contacts/Files and Device User/Settings
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => DeviceService().init());
-  print('All services started...');
 }
 
 // ^ Root Widget ^ //
@@ -72,7 +61,6 @@ class App extends StatelessWidget {
 
 // ^ Routing Information ^ //
 List<GetPage> getPages() {
-  DeviceService device = Get.find();
   return [
     // ** Home Page ** //
     GetPage(
@@ -100,16 +88,6 @@ List<GetPage> getPages() {
         page: () => SonrTheme(ProfileScreen()),
         transition: Transition.upToDown,
         fullscreenDialog: true,
-        binding: BindingsBuilder(
-            () => Get.lazyPut(() => ProfileController(device.user.contact)))),
-
-    // GetPage(
-    //     name: '/hero',
-    //     settings: RouteSettings(),
-    //     page: () => SonrTheme(CardHeroView(arguments[0], arguments[1])),
-    //     transition: Transition.native,
-    //     fullscreenDialog: true,
-    //     binding: BindingsBuilder(
-    //         () => Get.lazyPut(() => ProfileController(device.user.contact))))
+        binding: ProfileBinding()),
   ];
 }

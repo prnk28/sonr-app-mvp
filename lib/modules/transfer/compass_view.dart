@@ -7,7 +7,7 @@ import 'dart:math';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CompassView extends GetView<TransferController> {
+class CompassView extends GetView<CompassController> {
   CompassView({Key key}) : super(key: key);
 
   @override

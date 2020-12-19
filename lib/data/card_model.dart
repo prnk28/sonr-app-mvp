@@ -9,7 +9,7 @@ class CardsError extends Error {
   CardsError(this.message);
 }
 
-enum CardType { File, Contact }
+enum CardType { File, Contact, Image }
 
 // ^ Card Model for Data ^ //
 class CardModel {
