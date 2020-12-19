@@ -18,6 +18,7 @@ NeumorphicAppBar SonrAppBar(
       leading: null);
 }
 
+
 // ignore: non_constant_identifier_names
 NeumorphicAppBar SonrHomeBar(
   Function onPressed,
@@ -42,7 +43,7 @@ NeumorphicAppBar SonrHomeBar(
                 depth: 8),
             child: GradientIcon(
               Icons.person,
-              gradient: FlutterGradients.itmeoBranding(),
+              gradientType: FlutterGradientNames.itmeoBranding,
             ),
             onPressed: onPressed,
           )));
@@ -68,7 +69,7 @@ NeumorphicAppBar SonrExitAppBar(
                 shape: NeumorphicShape.flat,
                 depth: 8),
             child: GradientIcon(Icons.close,
-                gradient: FlutterGradients.phoenixStart()),
+                gradientType: FlutterGradientNames.phoenixStart),
             onPressed: () {
               Get.offAllNamed(exitLocation);
             },

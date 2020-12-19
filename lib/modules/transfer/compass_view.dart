@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'spokes_widget.dart';
+import 'package:sonar_app/theme/theme.dart';
+import 'compass_controller.dart';
+import 'compass_helper.dart';
 import 'dart:math';
-import 'package:sonar_app/service/sonr_service.dart';
 
-class CompassView extends StatelessWidget {
+class CompassView extends GetView<CompassController> {
   CompassView({Key key}) : super(key: key);
-  final SonrService sonr = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -40,11 +41,12 @@ class CompassView extends StatelessWidget {
                         alignment: Alignment.center,
                         children: [
                           // Center Circle
-                          buildCenterBulb(sonr.direction.value),
+                          buildCenterBulb(controller.direction.value,
+                              controller.gradient.value),
 
                           // Spokes
                           Transform.rotate(
-                              angle: ((sonr.direction.value ?? 0) *
+                              angle: ((controller.direction.value ?? 0) *
                                   (pi / 180) *
                                   -1),
                               child: Padding(

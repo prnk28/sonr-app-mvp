@@ -19,15 +19,12 @@ enum PeerStatus {
 
 class PeerController extends GetxController {
   // Properties
-  final String id;
-  final Peer peer;
+  String id;
+  Peer peer;
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Peer_Proximity>();
-
-  // References
-  SonrService _sonr = Get.find();
 
   // Checkers
   bool _isInvited = false;
@@ -39,13 +36,9 @@ class PeerController extends GetxController {
   // Animations
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
-  PeerController(this.id, this.peer) {
-    // Set Default Values
-    offset(_calculateOffsetForPeer(peer));
-    proximity(peer.proximity);
-
+  PeerController() {
     // Listen to User Status
-    _sonr.status.listen((status) {
+    Get.find<SonrService>().status.listen((status) {
       // * Check if Invited * //
       if (_isInvited) {
         // @ Pending -> Busy = Peer Accepted File
@@ -101,10 +94,21 @@ class PeerController extends GetxController {
     super.onInit();
   }
 
+  // ^ Initialize Peer Info ^
+  init(String id, Peer peer) {
+    // Initialize Peer
+    this.id = id;
+    this.peer = peer;
+
+    // Set Default Values
+    offset(_calculateOffsetForPeer(peer));
+    proximity(peer.proximity);
+  }
+
   // ^ Handle User Invitation ^
   invite() {
     if (!_isInvited) {
-      _sonr.invitePeer(peer);
+      Get.find<SonrService>().invitePeer(peer);
       shouldChangeVisibility(false);
       _pending.isActive = _isInvited = !_isInvited;
     }
@@ -158,7 +162,7 @@ class PeerController extends GetxController {
         Future.delayed(Duration(seconds: 1)).then((_) {
           // Call Finish
           _isInvited = false;
-          _sonr.reset();
+          Get.find<SonrService>().reset();
 
           // Reset Animation States
           artboard().advance(0);
@@ -188,7 +192,7 @@ class PeerController extends GetxController {
     // Return Position
     // var pos =
     //     Tangent.fromAngle(Offset(Get.width / 2, Get.height / 2 - 300), value);
-    Tangent pos = pathMetric.getTangentForOffset(value);
+    Tangent pos = pathMetric.getTangentForOffset(1);
     return pos.position;
   }
 }

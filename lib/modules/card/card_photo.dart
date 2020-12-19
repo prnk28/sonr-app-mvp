@@ -6,8 +6,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/theme/theme.dart';
 
-class CardHeroView extends StatelessWidget {
-  CardHeroView(
+class CardPhotoView extends StatelessWidget {
+  CardPhotoView(
     this.provider,
     this.tag, {
     this.backgroundDecoration,
@@ -16,8 +16,8 @@ class CardHeroView extends StatelessWidget {
   final Decoration backgroundDecoration;
   final String tag;
 
-  factory CardHeroView.fromCard(CardModel card) {
-    return new CardHeroView(FileImage(File(card.meta.path)), card.meta.name);
+  factory CardPhotoView.fromCard(CardModel card) {
+    return new CardPhotoView(FileImage(File(card.meta.path)), card.meta.name);
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/peer/circle_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 

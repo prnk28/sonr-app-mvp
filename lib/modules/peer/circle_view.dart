@@ -5,20 +5,10 @@ import 'package:sonar_app/theme/theme.dart';
 import 'circle_controller.dart';
 
 class CircleView extends GetView<CircleController> {
-  CircleView({Key key}) : super(key: key);
+  CircleView();
   @override
   Widget build(BuildContext context) {
     // @ Bubble View
-    // List<PeerBubble> stackItems = new List<PeerBubble>();
-    // // @ Verify Not Null
-    // if (sonr.peers().length > 0) {
-    //   // @ Create Bubbles that arent added
-    //   sonr.peers().forEach((id, peer) {
-    //     // Create Bubble
-    //     stackItems.add(PeerBubble(Get.put(PeerController(peer))));
-    //   });
-    // }
-
     // Create From Controller
     return Obx(() {
       return Stack(
@@ -32,8 +22,6 @@ class CircleView extends GetView<CircleController> {
 
   // ^ Build Empty Lobby With Text and Animation ^ //
   Widget _buildEmpty() {
-    CircleController controller = Get.find();
-
     // @ Animate in
     if (controller.isEmpty.value) {
       return PlayAnimation<double>(
@@ -71,7 +59,6 @@ class CircleView extends GetView<CircleController> {
 
   // ^ Build Lobby With and Wait for Animation to Complete ^ //
   Widget _buildLobby() {
-    CircleController controller = Get.find();
     // @ Animate in
     if (!controller.isEmpty.value) {
       return PlayAnimation<double>(

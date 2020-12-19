@@ -103,7 +103,7 @@ Widget buildMinorSpoke(double direction) {
       ));
 }
 
-Widget buildCenterBulb(double direction) {
+Widget buildCenterBulb(double direction, FlutterGradientNames gradient) {
   return Neumorphic(
     style: NeumorphicStyle(
       depth: -5,
@@ -119,33 +119,21 @@ Widget buildCenterBulb(double direction) {
       margin: EdgeInsets.all(7.5),
       child: Container(
           decoration: BoxDecoration(
-              gradient: FlutterGradients.angelCare(type: GradientType.radial)),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Stack(
-              alignment: AlignmentDirectional.topEnd,
-              clipBehavior: Clip.none,
+              gradient: FlutterGradients.findByName(gradient,
+                  type: GradientType.radial)),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                    padding: EdgeInsets.only(left: 0, top: 5),
-                    child: Text(
-                      "°",
-                      style: _bulbValueTextStyle(),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(right: 12),
-                    child: Text(
-                      _getDirectionString(direction),
-                      style: _bulbValueTextStyle(),
-                    )),
-              ],
-            ),
-            Padding(
-                padding: EdgeInsets.only(right: 6),
-                child: Text(
+                Text(
+                  _getDirectionString(direction),
+                  style: _bulbValueTextStyle(),
+                ),
+                Text(
                   _getCompassDesignation(direction),
                   style: _bulbDesignationTextStyle(),
-                )),
-          ])),
+                ),
+              ])),
     ),
   );
 }
@@ -162,8 +150,8 @@ TextStyle _directionTextStyle({Color setColor}) {
 // Bulb Direction
 TextStyle _bulbValueTextStyle({Color setColor}) {
   return GoogleFonts.poppins(
-    fontWeight: FontWeight.bold,
-    fontSize: 42,
+    fontWeight: FontWeight.w400,
+    fontSize: 46,
     color: setColor ?? Colors.white,
   );
 }
@@ -171,7 +159,7 @@ TextStyle _bulbValueTextStyle({Color setColor}) {
 // Bulb Designation
 TextStyle _bulbDesignationTextStyle({Color setColor}) {
   return GoogleFonts.poppins(
-    fontWeight: FontWeight.w800,
+    fontWeight: FontWeight.bold,
     fontSize: 24,
     color: setColor ?? Colors.white,
   );
@@ -211,14 +199,15 @@ String _getCompassDesignation(double degrees) {
 String _getDirectionString(double degrees) {
   // Round
   var adjustedDegrees = degrees.round();
+  var unit = "°";
 
   // Add 0 for Aesthetic
   if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
-    return "0" + "0" + adjustedDegrees.toString();
+    return "0" + "0" + adjustedDegrees.toString() + unit;
   } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
-    return "0" + adjustedDegrees.toString();
+    return "0" + adjustedDegrees.toString() + unit;
   } else {
-    return adjustedDegrees.toString();
+    return adjustedDegrees.toString() + unit;
   }
 }
 

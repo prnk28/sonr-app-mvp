@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
@@ -74,17 +75,18 @@ Widget iconWithPreview(Metadata metadata) {
 }
 
 class GradientIcon extends StatelessWidget {
-  GradientIcon(this.iconData,
-      {this.size = 40, this.center = Alignment.topLeft, this.gradient});
+  const GradientIcon(this.iconData,
+      {this.size = 40, this.center = Alignment.topLeft, this.gradientType});
   final IconData iconData;
   final double size;
   final Alignment center;
-  final Gradient gradient;
+  final FlutterGradientNames gradientType;
 
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
       shaderCallback: (bounds) {
+        var gradient = FlutterGradients.findByName(gradientType);
         return gradient.createShader(bounds);
       },
       child: Icon(

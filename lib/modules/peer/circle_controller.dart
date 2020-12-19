@@ -16,12 +16,9 @@ class CircleController extends GetxController {
   bool _isEmpty = true;
   RxList<PeerBubble> stackItems = new List<PeerBubble>().obs;
 
-  // References
-  SonrService _sonr = Get.find();
-
   // ^ Constructer ^ //
   CircleController() {
-    _sonr.peers.listen((map) {
+    Get.find<SonrService>().peers.listen((map) {
       // @ Have to keep this to run for some unknown reason
       print(map);
 
@@ -37,7 +34,7 @@ class CircleController extends GetxController {
         map.forEach((id, peer) {
           // Validate not Duplicate
           if (!stackItems.any((pb) => pb.controller.id == id)) {
-            stackItems.add(PeerBubble(Get.put(PeerController(id, peer))));
+            stackItems.add(PeerBubble(id, peer));
             stackItems.refresh();
             print("Added Bubble");
           }
@@ -65,5 +62,5 @@ class CircleController extends GetxController {
   }
 
   // ^ Updates data from listener ^ //
-  _updateItems(Map<String, Peer> data) {}
+  // _updateItems(Map<String, Peer> data) {}
 }

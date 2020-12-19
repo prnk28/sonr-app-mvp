@@ -6,10 +6,12 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
-import 'modules/peer/circle_controller.dart';
+import 'modules/card/card_photo.dart';
+import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_controller.dart';
 import 'modules/profile/profile_screen.dart';
 import 'modules/register/register_screen.dart';
+import 'modules/transfer/transfer_binding.dart';
 import 'modules/transfer/transfer_screen.dart';
 
 // ** Main Method ** //
@@ -77,7 +79,7 @@ List<GetPage> getPages() {
         name: '/home',
         page: () => SonrTheme(HomeScreen()),
         transition: Transition.zoom,
-        binding: BindingsBuilder.put(() => CardController())),
+        binding: HomeBinding()),
 
     // ** Register Page ** //
     GetPage(
@@ -90,7 +92,7 @@ List<GetPage> getPages() {
         name: '/transfer',
         page: () => SonrTheme(TransferScreen()),
         transition: Transition.fade,
-        binding: BindingsBuilder.put(() => CircleController())),
+        binding: TransferBinding()),
 
     // ** Profile Page ** //
     GetPage(
@@ -98,7 +100,16 @@ List<GetPage> getPages() {
         page: () => SonrTheme(ProfileScreen()),
         transition: Transition.upToDown,
         fullscreenDialog: true,
-        binding:
-            BindingsBuilder.put(() => ProfileController(device.user.contact))),
+        binding: BindingsBuilder(
+            () => Get.lazyPut(() => ProfileController(device.user.contact)))),
+
+    // GetPage(
+    //     name: '/hero',
+    //     settings: RouteSettings(),
+    //     page: () => SonrTheme(CardHeroView(arguments[0], arguments[1])),
+    //     transition: Transition.native,
+    //     fullscreenDialog: true,
+    //     binding: BindingsBuilder(
+    //         () => Get.lazyPut(() => ProfileController(device.user.contact))))
   ];
 }
