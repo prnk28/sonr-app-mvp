@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -11,10 +12,17 @@ import 'package:supercharged/supercharged.dart';
 
 class PeerBubble extends GetWidget<PeerController> {
   // Initializes the Peer controller for this Instance
-  final int index;
   final Peer peer;
-  PeerBubble(this.index, this.peer) {
-    controller.init(peer.id, peer);
+  PeerBubble(this.peer) {
+    // Listen to this Peers Updates
+    Get.find<SonrService>().lobby.listen((map) {
+      // Validate ID
+      map.forEach((id, val) {
+        if (id == peer.id) {
+          controller.updatePeer(val);
+        }
+      });
+    });
   }
 
   @override
@@ -24,7 +32,7 @@ class PeerBubble extends GetWidget<PeerController> {
           top: controller.offset.value.dy,
           left: controller.offset.value.dx,
           child: GestureDetector(
-              onTap: () => controller.invite(),
+              onTap: () => controller.invite(peer),
               child: PlayAnimation<double>(
                   tween: (0.0).tweenTo(1.0),
                   duration: 500.milliseconds,
@@ -72,8 +80,8 @@ class PeerBubble extends GetWidget<PeerController> {
                 duration: 20.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(controller.peer, size: 20),
-                  initialsFromPeer(controller.peer),
+                  iconFromPeer(peer, size: 20),
+                  initialsFromPeer(peer),
                 ]));
           });
     } else {
@@ -87,8 +95,8 @@ class PeerBubble extends GetWidget<PeerController> {
                 duration: 500.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(controller.peer, size: 20),
-                  initialsFromPeer(controller.peer),
+                  iconFromPeer(peer, size: 20),
+                  initialsFromPeer(peer),
                 ]));
           });
     }

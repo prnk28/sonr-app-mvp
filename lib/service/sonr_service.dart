@@ -4,7 +4,6 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
-import 'package:sonar_app/modules/card/card_item.dart';
 import 'package:sonar_app/modules/card/card_popup.dart';
 import 'package:sonar_app/modules/invite/contact_sheet.dart';
 import 'package:sonar_app/modules/invite/file_sheet.dart';
@@ -15,15 +14,12 @@ class SonrService extends GetxService {
   // @ Set Properteries
   final status = Status.Offline.obs;
   final direction = 0.0.obs;
-  final lobby = Lobby().obs;
+  final lobby = Map<String, Peer>().obs;
   final code = "".obs;
 
   // @ Set References
   Node _node;
   bool _connected = false;
-  String _code = "";
-  double _direction = 0;
-  Lobby _lobby = Lobby();
 
   // @ Set Transfer Dependencies
   Payload_Type _payloadType;
@@ -38,16 +34,14 @@ class SonrService extends GetxService {
       if (_connected) {
         _node.update(dir.headingForCameraMode);
       }
-      _direction = dir.headingForCameraMode;
-      direction(_direction);
+      direction(dir.headingForCameraMode);
     });
   }
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(Position pos, User user) async {
     // Get OLC
-    _code = OLC.encode(pos.latitude, pos.longitude, codeLength: 8);
-    code(_code);
+    code(OLC.encode(pos.latitude, pos.longitude, codeLength: 8));
 
     // Await Initialization -> Set Node
     _connect(user);
@@ -59,7 +53,7 @@ class SonrService extends GetxService {
   // ^ Connect to Node Method
   _connect(User user) async {
     // Create Worker
-    _node = await SonrCore.initialize(_code, user.username, user.contact);
+    _node = await SonrCore.initialize(code.value, user.username, user.contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
@@ -135,9 +129,7 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Peers List
-      print(data.toString());
-      _lobby = data;
-      lobby(_lobby);
+      lobby(data.peers);
     }
   }
 

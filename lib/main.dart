@@ -28,8 +28,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Connect to Sonr Network
-    DeviceService device = Get.find();
-    device.start();
+    Get.find<DeviceService>().start();
 
     return GetMaterialApp(
       getPages: getPages(),
