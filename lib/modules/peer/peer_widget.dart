@@ -11,8 +11,10 @@ import 'package:supercharged/supercharged.dart';
 
 class PeerBubble extends GetWidget<PeerController> {
   // Initializes the Peer controller for this Instance
-  PeerBubble(String id, Peer peer) {
-    controller.init(id, peer);
+  final int index;
+  final Peer peer;
+  PeerBubble(this.index, this.peer) {
+    controller.init(peer.id, peer);
   }
 
   @override

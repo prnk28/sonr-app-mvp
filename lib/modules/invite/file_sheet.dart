@@ -45,7 +45,7 @@ class FileInviteSheet extends StatelessWidget {
                     // @ Top Right Close/Cancel Button
                     closeButton(() {
                       // Emit Event
-                      sonr.respondPeer(false);
+                      sonr.respond(false);
 
                       // Pop Window
                       Get.back();
@@ -67,7 +67,7 @@ class FileInviteSheet extends StatelessWidget {
                     // Build Auth Action
                     rectangleButton("Accept", () {
                       // Emit Event
-                      sonr.respondPeer(true);
+                      sonr.respond(true);
                     }),
                   ],
                 )));

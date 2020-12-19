@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -19,12 +20,15 @@ enum PeerStatus {
 
 class PeerController extends GetxController {
   // Properties
-  String id;
-  Peer peer;
   final shouldChangeVisibility = false.obs;
   final artboard = Rx<Artboard>();
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Peer_Proximity>();
+
+  // References
+  String id = "";
+  Peer peer;
+  Timer _timer;
 
   // Checkers
   bool _isInvited = false;
@@ -37,6 +41,14 @@ class PeerController extends GetxController {
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
 
   PeerController() {
+    // Listen to this Peers Updates
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      // Validate ID
+      if (id == this.id && !_isInvited) {
+        offset(_calculateOffsetForPeer(peer));
+      }
+    });
+
     // Listen to User Status
     Get.find<SonrService>().status.listen((status) {
       // * Check if Invited * //
@@ -108,17 +120,9 @@ class PeerController extends GetxController {
   // ^ Handle User Invitation ^
   invite() {
     if (!_isInvited) {
-      Get.find<SonrService>().invitePeer(peer);
+      Get.find<SonrService>().invite(peer);
       shouldChangeVisibility(false);
       _pending.isActive = _isInvited = !_isInvited;
-    }
-  }
-
-  // ^ setOffset User to Invite ^
-  setOffset(Peer newValue) {
-    if (!_isInvited) {
-      proximity(peer.proximity);
-      offset(_calculateOffsetForPeer(newValue));
     }
   }
 
@@ -170,6 +174,12 @@ class PeerController extends GetxController {
         });
         break;
     }
+  }
+
+  @override
+  void onClose() {
+    _timer.cancel();
+    super.onClose();
   }
 
   // ^ Calculate Peer Offset from Line ^ //

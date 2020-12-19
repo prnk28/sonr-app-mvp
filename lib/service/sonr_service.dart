@@ -19,7 +19,7 @@ class SonrService extends GetxService {
   String code = "";
 
   // @ Set Lobby Dependencies
-  final peers = new Map<String, Peer>().obs;
+  Map<String, Peer> peers = {};
 
   // @ Set Transfer Dependencies
   Payload_Type payloadType;
@@ -77,7 +77,7 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Queue-File Event ^
-  void queueFile(Payload_Type payType, {File file}) async {
+  void queue(Payload_Type payType, {File file}) async {
     // Set Payload Type
     payloadType = payType;
     status(_node.status);
@@ -93,7 +93,7 @@ class SonrService extends GetxService {
   }
 
   // ^ Invite-Peer Event ^
-  void invitePeer(Peer p) async {
+  void invite(Peer p) async {
     // Send Invite for File
     if (payloadType == Payload_Type.FILE) {
       await _node.invite(p, payloadType);
@@ -106,7 +106,7 @@ class SonrService extends GetxService {
   }
 
   // ^ Respond-Peer Event ^
-  void respondPeer(bool decision) async {
+  void respond(bool decision) async {
     // Send Response
     await _node.respond(decision);
 
@@ -129,8 +129,7 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Peers List
-      peers(data.peers);
-      peers.refresh();
+      peers = data.peers;
     }
   }
 

@@ -51,7 +51,7 @@ class _FloaterButtonState extends State<FloaterButton>
             File file = await getAssetFileByPath("assets/images/test.jpg");
 
             // Queue File
-            sonr.queueFile(Payload_Type.FILE, file: file);
+            sonr.queue(Payload_Type.FILE, file: file);
 
             // Wait for Animation to Complete
             _animationController.reverse();
@@ -70,7 +70,7 @@ class _FloaterButtonState extends State<FloaterButton>
                 await getAssetFileByPath("assets/images/fat_test.jpg");
 
             // Queue File
-            sonr.queueFile(Payload_Type.FILE, file: testFile);
+            sonr.queue(Payload_Type.FILE, file: testFile);
 
             // Wait for Animation to Complete
             _animationController.reverse();
@@ -85,7 +85,7 @@ class _FloaterButtonState extends State<FloaterButton>
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
             // Queue File
-            sonr.queueFile(Payload_Type.CONTACT);
+            sonr.queue(Payload_Type.CONTACT);
 
             // Wait for Animation to Complete
             _animationController.reverse();

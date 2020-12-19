@@ -25,7 +25,7 @@ class ContactInviteSheet extends StatelessWidget {
               // @ Top Right Close/Cancel Button
               closeButton(() {
                 // Emit Event
-                sonr.respondPeer(false);
+                sonr.respond(false);
 
                 // Pop Window
                 Get.back();
@@ -57,7 +57,7 @@ class ContactInviteSheet extends StatelessWidget {
       // @ Sendback Is actions[0]
       return rectangleButton("Send Back", () {
         // Emit Event
-        sonr.respondPeer(true);
+        sonr.respond(true);
         sonr.reset();
         Get.back();
       });
