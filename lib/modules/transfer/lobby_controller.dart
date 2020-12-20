@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/peer/peer_widget.dart';
+import 'peer_widget.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 

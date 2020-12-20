@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'transfer_controller.dart';
+import 'compass_controller.dart';
 import 'dart:math';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,7 +42,7 @@ class CompassView extends GetView<CompassController> {
                         alignment: Alignment.center,
                         children: [
                           // Center Circle
-                          buildCenterBulb(controller.direction.value,
+                          _buildCenterBulb(controller.direction.value,
                               controller.gradient.value),
 
                           // Spokes
@@ -55,7 +55,7 @@ class CompassView extends GetView<CompassController> {
                                 child: Stack(
                                   children: <Widget>[
                                     // ** <North> **//
-                                    buildMajorSpoke(0,
+                                    _buildMajorSpoke(0,
                                         isNegativeAlignment: true,
                                         textColor: Colors.red[900],
                                         textValue: "N",
@@ -64,44 +64,44 @@ class CompassView extends GetView<CompassController> {
                                     // ** </North> **//
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(11.25),
-                                    buildMinorSpoke(22.5),
-                                    buildMinorSpoke(33.75),
+                                    _buildMinorSpoke(11.25),
+                                    _buildMinorSpoke(22.5),
+                                    _buildMinorSpoke(33.75),
                                     // </MinorSpokes> //
 
                                     // NorthEast
-                                    buildAuxiliarySpoke(45),
+                                    _buildAuxiliarySpoke(45),
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(56.25),
-                                    buildMinorSpoke(67.5),
-                                    buildMinorSpoke(78.75),
+                                    _buildMinorSpoke(56.25),
+                                    _buildMinorSpoke(67.5),
+                                    _buildMinorSpoke(78.75),
                                     // </MinorSpokes> //
 
                                     // ** <East> **//
-                                    buildMajorSpoke(90,
+                                    _buildMajorSpoke(90,
                                         textValue: "W",
                                         textPadding: EdgeInsets.only(
                                             top: K_MAJOR_TOP_PADDING)),
                                     // ** </East> **//
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(101.25),
-                                    buildMinorSpoke(112.5),
-                                    buildMinorSpoke(123.75),
+                                    _buildMinorSpoke(101.25),
+                                    _buildMinorSpoke(112.5),
+                                    _buildMinorSpoke(123.75),
                                     // </MinorSpokes> //
 
                                     // SouthEast
-                                    buildAuxiliarySpoke(135),
+                                    _buildAuxiliarySpoke(135),
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(146.25),
-                                    buildMinorSpoke(157.5),
-                                    buildMinorSpoke(168.75),
+                                    _buildMinorSpoke(146.25),
+                                    _buildMinorSpoke(157.5),
+                                    _buildMinorSpoke(168.75),
                                     // </MinorSpokes> //
 
                                     // ** <South> **//
-                                    buildMajorSpoke(180,
+                                    _buildMajorSpoke(180,
                                         isNegativeAlignment: true,
                                         textValue: "S",
                                         textPadding: EdgeInsets.only(
@@ -109,40 +109,40 @@ class CompassView extends GetView<CompassController> {
                                     // ** </South> **//
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(191.25),
-                                    buildMinorSpoke(202.5),
-                                    buildMinorSpoke(213.75),
+                                    _buildMinorSpoke(191.25),
+                                    _buildMinorSpoke(202.5),
+                                    _buildMinorSpoke(213.75),
                                     // </MinorSpokes> //
 
                                     // SouthWest
-                                    buildAuxiliarySpoke(225),
+                                    _buildAuxiliarySpoke(225),
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(236.25),
-                                    buildMinorSpoke(247.5),
-                                    buildMinorSpoke(258.75),
+                                    _buildMinorSpoke(236.25),
+                                    _buildMinorSpoke(247.5),
+                                    _buildMinorSpoke(258.75),
                                     // </MinorSpokes> //
 
                                     // ** <West> **//
-                                    buildMajorSpoke(270,
+                                    _buildMajorSpoke(270,
                                         textValue: "E",
                                         textPadding: EdgeInsets.only(
                                             top: K_MAJOR_TOP_PADDING)),
                                     // ** </West> **//
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(281.25),
-                                    buildMinorSpoke(292.5),
-                                    buildMinorSpoke(303.75),
+                                    _buildMinorSpoke(281.25),
+                                    _buildMinorSpoke(292.5),
+                                    _buildMinorSpoke(303.75),
                                     // </MinorSpokes> //
 
                                     // NorthWest
-                                    buildAuxiliarySpoke(315),
+                                    _buildAuxiliarySpoke(315),
 
                                     // <MinorSpokes> //
-                                    buildMinorSpoke(326.25),
-                                    buildMinorSpoke(337.5),
-                                    buildMinorSpoke(348.75),
+                                    _buildMinorSpoke(326.25),
+                                    _buildMinorSpoke(337.5),
+                                    _buildMinorSpoke(348.75),
                                     // </MinorSpokes> //
                                   ],
                                 ),
@@ -199,7 +199,7 @@ const double K_MAJOR_BOTTOM_PADDING = 20; // North, South
 // Minor Constants
 const double _K_MINOR_SPOKE_WIDTH = 12;
 
-Widget buildMajorSpoke(
+Widget _buildMajorSpoke(
   double direction, {
   bool isNegativeAlignment = false,
   Color textColor = Colors.black54,
@@ -215,14 +215,14 @@ Widget buildMajorSpoke(
   }
   // Build Major Spoke
   return Align(
-      alignment: directionToAlignment(multiplier * 1, direction),
+      alignment: _directionToAlignment(multiplier * 1, direction),
       child: Stack(
-        alignment: directionToAlignment(multiplier * 1, direction),
+        alignment: _directionToAlignment(multiplier * 1, direction),
         children: [
           // Create Spoke
           RotationTransition(
               turns: new AlwaysStoppedAnimation(
-                  directionToDegrees(direction) / 360),
+                  _directionToDegrees(direction) / 360),
               child: Padding(
                   padding: EdgeInsets.only(left: _K_MAJOR_SPOKE_WIDTH),
                   child: Neumorphic(
@@ -238,7 +238,7 @@ Widget buildMajorSpoke(
           // Create Text
           RotationTransition(
               turns: new AlwaysStoppedAnimation(
-                  directionToDegrees(direction + 90) / 360),
+                  _directionToDegrees(direction + 90) / 360),
               child: Padding(
                   padding: textPadding,
                   child: Text(textValue,
@@ -247,11 +247,11 @@ Widget buildMajorSpoke(
       ));
 }
 
-Widget buildAuxiliarySpoke(double direction) {
+Widget _buildAuxiliarySpoke(double direction) {
   return Align(
-      alignment: directionToAlignment(-1, direction),
+      alignment: _directionToAlignment(-1, direction),
       child: RotationTransition(
-        turns: new AlwaysStoppedAnimation(directionToDegrees(direction) / 360),
+        turns: new AlwaysStoppedAnimation(_directionToDegrees(direction) / 360),
         child: Padding(
           padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
           child: Neumorphic(
@@ -268,11 +268,11 @@ Widget buildAuxiliarySpoke(double direction) {
       ));
 }
 
-Widget buildMinorSpoke(double direction) {
+Widget _buildMinorSpoke(double direction) {
   return Align(
-      alignment: directionToAlignment(-1, direction),
+      alignment: _directionToAlignment(-1, direction),
       child: RotationTransition(
-        turns: new AlwaysStoppedAnimation(directionToDegrees(direction) / 360),
+        turns: new AlwaysStoppedAnimation(_directionToDegrees(direction) / 360),
         child: Padding(
           padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
           child: Neumorphic(
@@ -289,7 +289,7 @@ Widget buildMinorSpoke(double direction) {
       ));
 }
 
-Widget buildCenterBulb(double direction, FlutterGradientNames gradient) {
+Widget _buildCenterBulb(double direction, FlutterGradientNames gradient) {
   return Neumorphic(
     style: NeumorphicStyle(
       depth: -5,
@@ -400,11 +400,11 @@ String _getDirectionString(double degrees) {
 // ********************
 // ** Math Functions **
 // ********************
-num directionToRads(num deg) {
-  return (directionToDegrees(deg) * pi) / 180.0;
+num _directionToRads(num deg) {
+  return (_directionToDegrees(deg) * pi) / 180.0;
 }
 
-double directionToDegrees(double direction) {
+double _directionToDegrees(double direction) {
   if (direction + 90 > 360) {
     return direction - 270;
   } else {
@@ -412,9 +412,9 @@ double directionToDegrees(double direction) {
   }
 }
 
-Alignment directionToAlignment(double r, double deg) {
+Alignment _directionToAlignment(double r, double deg) {
   // Calculate radians
-  double radAngle = directionToRads(deg);
+  double radAngle = _directionToRads(deg);
 
   double x = cos(radAngle) * r;
   double y = sin(radAngle) * r;

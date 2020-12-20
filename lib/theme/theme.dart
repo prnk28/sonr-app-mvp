@@ -6,7 +6,10 @@ export 'icon.dart';
 export 'painter.dart';
 export 'text.dart';
 export 'window.dart';
+
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
+export 'package:simple_animations/simple_animations.dart';
+export 'package:supercharged/supercharged.dart';
 export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
 
