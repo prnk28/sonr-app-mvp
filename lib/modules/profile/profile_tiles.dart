@@ -9,12 +9,12 @@ class ProfileTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return ListView.builder(
-        itemCount: 6,
-        padding: EdgeInsets.only(left: 4, right: 4, bottom: 20, top: 2),
-        itemBuilder: (context, idx) {
-          return _SocialTile();
-        });
+    return SafeArea(
+        child: ListView.builder(
+            itemCount: 6,
+            itemBuilder: (context, idx) {
+              return _SocialTile();
+            }));
   }
 }
 
@@ -24,7 +24,7 @@ class _SocialTile extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onLongPress: () async {
-          print("Long tap begin jiggle");
+          print("Long tapped jiggle");
         },
         child: Neumorphic(
             style: NeumorphicStyle(intensity: 0.85),

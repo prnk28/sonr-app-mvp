@@ -68,6 +68,20 @@ List<GetPage> getPages() {
         transition: Transition.zoom,
         binding: HomeBinding()),
 
+    // ** Home Page - Back ** //
+    GetPage(
+        name: '/home-from-transfer',
+        page: () => SonrTheme(HomeScreen()),
+        transition: Transition.leftToRightWithFade,
+        binding: HomeBinding()),
+
+    // ** Home Page - Back ** //
+    GetPage(
+        name: '/home-from-profile',
+        page: () => SonrTheme(HomeScreen()),
+        transition: Transition.downToUp,
+        binding: HomeBinding()),
+
     // ** Register Page ** //
     GetPage(
         name: '/register',
@@ -78,7 +92,7 @@ List<GetPage> getPages() {
     GetPage(
         name: '/transfer',
         page: () => SonrTheme(TransferScreen()),
-        transition: Transition.fade,
+        transition: Transition.rightToLeftWithFade,
         binding: TransferBinding()),
 
     // ** Profile Page ** //

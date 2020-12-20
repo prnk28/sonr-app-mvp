@@ -15,9 +15,6 @@ class _FormViewState extends State<FormView> {
 
   @override
   Widget build(BuildContext context) {
-    // Connect to Sonr Network
-    final DeviceService device = Get.find();
-
     return Form(
       key: _formKey,
       child: Column(
@@ -110,7 +107,8 @@ class _FormViewState extends State<FormView> {
                     contact.lastName = _lastName;
 
                     // Process data.
-                    device.createUser(contact, "@Temp_Username");
+                    Get.find<DeviceService>()
+                        .createUser(contact, "@Temp_Username");
                   }
                 },
                 child: defaultText("Submit"),

@@ -15,15 +15,6 @@ class LobbyController extends GetxController {
   bool _isEmpty = true;
   RxList<PeerBubble> stackItems = new List<PeerBubble>().obs;
 
-  LobbyController() {
-    // @ Listen to Peers Updates
-    Get.find<SonrService>().lobby().forEach((id, peer) {
-      // print(id);
-      // * Check Map Size * //
-      createItem(id, peer);
-    });
-  }
-
   // ^ Constructer ^ //
   createItem(String id, Peer peer) {
     // @ Update State if already unchecked

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 import 'card_controller.dart';
 
@@ -12,57 +13,64 @@ class CardItem extends GetView<CardController> {
   @override
   Widget build(BuildContext context) {
     // File
-    if (card.type == CardType.File) {
-      return _MediaItemView(card);
+    if (card.type == CardType.File || card.type == CardType.Image) {
+      return _MediaItemView(card.metadata);
     }
     // Contact
     else {
-      return _ContactItemView();
+      return _ContactItemView(card.contact);
     }
   }
 }
 
 // ^ Media File Item View ^ //
 class _MediaItemView extends StatelessWidget {
-  final CardModel card;
-  _MediaItemView(this.card);
+  final Metadata metadata;
+  _MediaItemView(this.metadata);
 
   @override
   Widget build(BuildContext context) {
-    return PlayAnimation<double>(
-      tween: (0.0).tweenTo(75.0), // <-- specify tween (from 50.0 to 200.0)
-      duration: 150.milliseconds,
-      delay: 250.milliseconds, // <-- set a duration
-      builder: (context, child, value) {
-        // <-- use builder function
-        return GestureDetector(
-            onTap: () async {
-            },
-            child: Neumorphic(
-                style: NeumorphicStyle(intensity: 0.85),
-                margin: EdgeInsets.all(4),
-                child: Container(
-                  height: value,
-                  child:
-                      // Image Info
-                      Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                        normalText(card.metadata.name),
-                        normalText(card.metadata.mime.type.toString()),
-                        normalText("Owner: " + card.metadata.owner.firstName),
-                      ]),
-                )));
-      },
-    );
+    return GestureDetector(
+        onTap: () async {},
+        child: Neumorphic(
+            style: NeumorphicStyle(intensity: 0.85),
+            margin: EdgeInsets.all(4),
+            child: Container(
+              height: 75,
+              child:
+                  // Image Info
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    normalText(metadata.name),
+                    normalText(metadata.mime.type.toString()),
+                    normalText("Owner: " + metadata.owner.firstName),
+                  ]),
+            )));
   }
 }
 
 // ^ Contact Item View ^ //
 class _ContactItemView extends StatelessWidget {
+  final Contact contact;
+  _ContactItemView(this.contact);
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container();
+    return GestureDetector(
+        onTap: () async {},
+        child: Neumorphic(
+            style: NeumorphicStyle(intensity: 0.85),
+            margin: EdgeInsets.all(4),
+            child: Container(
+              height: 75,
+              child:
+                  // Image Info
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    normalText(contact.firstName),
+                    normalText(contact.lastName),
+                  ]),
+            )));
   }
 }

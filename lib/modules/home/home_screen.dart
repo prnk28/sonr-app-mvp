@@ -45,11 +45,7 @@ class _HomeView extends GetView<HomeController> {
             CardModel card = cards[idx];
 
             // Generate File Cell
-            if (card.type == CardType.File) {
-              // Get Metadata
-              return CardItem(card);
-            }
-            return Container();
+            return CardItem(card);
           });
     });
   }

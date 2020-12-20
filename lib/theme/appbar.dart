@@ -48,10 +48,9 @@ NeumorphicAppBar SonrHomeBar(
           )));
 }
 
-// ^ Utilized in Transfer/Settings/Profile Screens ^ //
+// ^ Utilized in Transfer/Settings Screens ^ //
 // ignore: non_constant_identifier_names
 NeumorphicAppBar SonrExitAppBar(
-  BuildContext context,
   String exitLocation, {
   String title: "",
 }) {
@@ -67,8 +66,34 @@ NeumorphicAppBar SonrExitAppBar(
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.flat,
                 depth: 8),
-            child: GradientIcon(Icons.close,
-                FlutterGradientNames.phoenixStart),
+            child: GradientIcon(Icons.close, FlutterGradientNames.phoenixStart),
+            onPressed: () {
+              Get.offAllNamed(exitLocation);
+            },
+          )));
+}
+
+// ^ Utilized in Profile Screen ^ //
+// ignore: non_constant_identifier_names
+AppBar SonrProfileAppBar(
+  String exitLocation, {
+  String title: "",
+}) {
+  // Create App Bar
+  return AppBar(
+      backgroundColor: Color(0x44000000),
+      elevation: 0,
+      title: Center(child: Text(title, style: GoogleFonts.poppins())),
+      leading: Align(
+          alignment: Alignment.center,
+          child: NeumorphicButton(
+            padding: EdgeInsets.all(8),
+            style: NeumorphicStyle(
+                intensity: 0.85,
+                boxShape: NeumorphicBoxShape.circle(),
+                shape: NeumorphicShape.flat,
+                depth: 8),
+            child: GradientIcon(Icons.close, FlutterGradientNames.phoenixStart),
             onPressed: () {
               Get.offAllNamed(exitLocation);
             },

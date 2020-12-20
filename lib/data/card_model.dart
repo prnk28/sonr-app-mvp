@@ -15,7 +15,7 @@ enum CardType { File, Contact, Image }
 class CardModel {
   // Properties
   final int id;
-  final CardType type;
+  CardType type;
 
   // Data
   final Metadata metadata;

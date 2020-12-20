@@ -107,6 +107,8 @@ class ProfileController extends GetxController {
 
   // @ Save Current Contact
   _save() {
-    Get.find<DeviceService>().updateContact(userContact.value);
+    if (_isEditing) {
+      Get.find<DeviceService>().updateContact(userContact.value);
+    }
   }
 }

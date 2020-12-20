@@ -4,9 +4,9 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
+import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/modules/card/card_invite.dart';
 import 'package:sonar_app/modules/card/card_popup.dart';
-import 'package:sonar_app/modules/invite/contact_sheet.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
 import 'sql_service.dart';
@@ -131,6 +131,22 @@ class SonrService extends GetxService {
     }
   }
 
+  // ^ Save and Reset Status ^
+  void finishContact(Contact c) async {
+    // Save Card
+    Get.find<SQLService>().saveContact(c);
+    if (status.value != SonrStatus.Searching) {
+      status(SonrStatus.Ready);
+    }
+  }
+
+  // ^ Save and Reset Status ^
+  void finishFile(Metadata m) async {
+    // Save Card
+    Get.find<SQLService>().saveFile(m);
+    status(SonrStatus.Ready);
+  }
+
   // **************************
   // ******* Callbacks ********
   // **************************
@@ -173,6 +189,7 @@ class SonrService extends GetxService {
         // Check if Sent Back Contact
         if (data.payload.type == Payload_Type.CONTACT) {
           Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
+          status(SonrStatus.Searching);
         }
       } else {
         // User Denied
@@ -193,7 +210,7 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
-      status(SonrStatus.Searching);
+      status(SonrStatus.Complete);
     }
   }
 
@@ -202,7 +219,8 @@ class SonrService extends GetxService {
     if (data is Metadata) {
       // Reset Data
       progress(0.0);
-      status(SonrStatus.Ready);
+      status(SonrStatus.Complete);
+      Get.find<CardController>().setFile(data);
     }
   }
 
