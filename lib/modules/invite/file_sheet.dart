@@ -21,7 +21,7 @@ class FileInviteSheet extends StatelessWidget {
 
     return SonrTheme(Obx(() {
       // @ In Transfer
-      if (sonr.status() == Status.Busy) {
+      if (sonr.status() == SonrStatus.Busy) {
         return Container(
             padding: EdgeInsetsDirectional.only(start: 10, end: 10),
             height: Get.height / 3 + 20,
@@ -33,7 +33,7 @@ class FileInviteSheet extends StatelessWidget {
                         iconData: iconDataFromPayload(invite.payload)))));
       }
       // @ Pending
-      else if (sonr.status() == Status.Pending) {
+      else if (sonr.status() == SonrStatus.Pending) {
         return Container(
             padding: EdgeInsetsDirectional.only(start: 10, end: 10),
             height: Get.height / 3 + 20,

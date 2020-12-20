@@ -218,7 +218,6 @@ class SonrService extends GetxService {
   void _handleReceived(dynamic data) {
     if (data is Metadata) {
       // Reset Data
-      _node.finish();
       progress(0.0);
       status(SonrStatus.Ready);
 

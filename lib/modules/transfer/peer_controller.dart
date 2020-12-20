@@ -44,19 +44,19 @@ class PeerController extends GetxController {
       // * Check if Invited * //
       if (_isInvited) {
         // @ Pending -> Busy = Peer Accepted File
-        if (status == Status.Busy) {
+        if (status == SonrStatus.Busy) {
           shouldChangeVisibility(true);
           updateStatus(PeerStatus.Accepted);
         }
 
         // @ Pending -> Searching = Peer Denied File
-        if (status == Status.Searching) {
+        if (status == SonrStatus.Searching) {
           shouldChangeVisibility(true);
           updateStatus(PeerStatus.Denied);
         }
 
         // @ Pending -> Searching = Peer Completed File
-        if (status == Status.Complete) {
+        if (status == SonrStatus.Complete) {
           shouldChangeVisibility(true);
           updateStatus(PeerStatus.Completed);
         }
