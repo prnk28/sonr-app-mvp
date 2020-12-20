@@ -102,21 +102,20 @@ class SonrService extends GetxService {
     }
     // Go straight to transfer
     else if (payType == Payload_Type.CONTACT) {
-      Get.offNamed("/transfer");
+      status(SonrStatus.Searching);
     }
+
+    // Go to Transfer
+    Get.offNamed("/transfer");
   }
 
   // ^ Invite-Peer Event ^
   void invite(Peer p) async {
-    // Send Invite for File
-    if (_payloadType == Payload_Type.FILE) {
+    // Check Status
+    if (status.value == SonrStatus.Searching) {
       await _node.invite(p, _payloadType);
+      status(SonrStatus.Pending);
     }
-    // Send Invite for Contact
-    else if (_payloadType == Payload_Type.CONTACT) {
-      await _node.invite(p, _payloadType);
-    }
-    status(SonrStatus.Pending);
   }
 
   // ^ Respond-Peer Event ^
@@ -148,7 +147,6 @@ class SonrService extends GetxService {
     if (data is Metadata) {
       // Update data
       status(SonrStatus.Searching);
-      Get.offNamed("/transfer");
     }
   }
 
@@ -174,12 +172,7 @@ class SonrService extends GetxService {
 
         // Check if Sent Back Contact
         if (data.payload.type == Payload_Type.CONTACT) {
-          Get.bottomSheet(
-              ContactInviteSheet(
-                data.payload.contact,
-                isReply: true,
-              ),
-              isDismissible: false);
+          Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
         }
       } else {
         // User Denied
@@ -210,15 +203,6 @@ class SonrService extends GetxService {
       // Reset Data
       progress(0.0);
       status(SonrStatus.Ready);
-
-      // Pop Transfer Sheet
-      Get.back();
-
-      // Save Card
-      Get.find<SQLService>().saveFile(data);
-
-      // Display Contact with metadata
-      Get.dialog(CardPopup.metadata(data));
     }
   }
 

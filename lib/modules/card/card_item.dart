@@ -48,9 +48,9 @@ class _MediaItemView extends StatelessWidget {
                       Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                        normalText(card.meta.name),
-                        normalText(card.meta.mime.type.toString()),
-                        normalText("Owner: " + card.meta.owner.firstName),
+                        normalText(card.metadata.name),
+                        normalText(card.metadata.mime.type.toString()),
+                        normalText("Owner: " + card.metadata.owner.firstName),
                       ]),
                 )));
       },

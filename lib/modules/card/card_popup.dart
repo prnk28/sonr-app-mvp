@@ -10,45 +10,42 @@ import 'card_controller.dart';
 
 class CardPopup extends GetView<CardController> {
   // Properties
-  final CardType type;
-  final Metadata metadata;
-  final Contact contact;
+  final bool fromTransfer;
+  final CardModel data;
 
   // ** Constructer ** //
-  CardPopup(this.type, {this.metadata, this.contact}) {
-    if (type == CardType.File) {}
+  CardPopup(this.fromTransfer, this.data) {
+    if (fromTransfer) {
+      if (data.type == CardType.File || data.type == CardType.Image) {
+        controller.saveFile(data.metadata);
+      }
+    }
+  }
+
+  factory CardPopup.fromTransferMetadata(Metadata m) {
+    return CardPopup(true, CardModel.fromMetadata(m));
   }
 
   // ** Metadata Popup ** //
-  factory CardPopup.metadata(Metadata m) {
-    // Create Metadata Card
-    var card = CardModel.fromMetadata(m);
-
-    // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(card);
-
-    // @ Check Type
-    if (m.mime.type == MIME_Type.image) {
-      return CardPopup(CardType.Image, metadata: m);
-    }
-    return CardPopup(CardType.File, metadata: m);
+  factory CardPopup.fromTransferContact(Contact c) {
+    return CardPopup(true, CardModel.fromContact(c));
   }
 
   // ** Contact Popup ** //
-  factory CardPopup.contact(Contact c) {
-    return CardPopup(CardType.Contact, contact: c);
+  factory CardPopup.fromItem(CardModel card) {
+    return CardPopup(false, card);
   }
 
   @override
   Widget build(BuildContext context) {
     // @ Check Card Type - Contact
-    if (type == CardType.Contact) {
-      return _ContactPopupView();
+    if (data.type == CardType.Contact) {
+      return _ContactPopupView(data.contact);
     }
     // @ Check Card Type - MediaFile
-    else if (type == CardType.File) {
-      if (metadata != null) {
-        return _MediaPopupView(metadata);
+    else if (data.type == CardType.File) {
+      if (data.metadata != null) {
+        return _MediaPopupView(data.metadata);
       } else {
         print("Null Metadata in Popup - MediaFile");
         return Container();
@@ -57,8 +54,8 @@ class CardPopup extends GetView<CardController> {
 
     // @ Check Card Type - ImageFile
     else {
-      if (metadata != null) {
-        return _ImagePopupView(metadata);
+      if (data.metadata != null) {
+        return _ImagePopupView(data.metadata);
       } else {
         print("Null Metadata in Popup - ImageFile");
         return Container();
@@ -68,11 +65,31 @@ class CardPopup extends GetView<CardController> {
 }
 
 // ^ Contact Popup View ^ //
-class _ContactPopupView extends StatelessWidget {
+class _ContactPopupView extends GetView<CardController> {
+  final Contact contact;
+  _ContactPopupView(this.contact);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container();
+    // Display Info
+    return Column(children: [
+      // @ Basic Contact Info - Make Expandable
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Padding(padding: EdgeInsets.all(8)),
+        Column(
+          children: [
+            boldText(contact.firstName),
+            boldText(contact.lastName),
+          ],
+        )
+      ]),
+
+      // @ Save Button
+      rectangleButton("Save", () {
+        controller.acceptContact(contact, false);
+        Get.back();
+      }),
+    ]);
   }
 }
 
@@ -166,7 +183,8 @@ class CardPhotoView extends StatelessWidget {
   final String tag;
 
   factory CardPhotoView.fromCard(CardModel card) {
-    return new CardPhotoView(FileImage(File(card.meta.path)), card.meta.name);
+    return new CardPhotoView(
+        FileImage(File(card.metadata.path)), card.metadata.name);
   }
 
   factory CardPhotoView.fromMeta(Metadata meta) {

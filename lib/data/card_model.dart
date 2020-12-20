@@ -18,7 +18,7 @@ class CardModel {
   final CardType type;
 
   // Data
-  final Metadata meta;
+  final Metadata metadata;
   final Contact contact;
   DateTime lastOpened = DateTime.now();
 
@@ -26,7 +26,7 @@ class CardModel {
     this.type, {
     this.id = 0,
     this.lastOpened,
-    this.meta,
+    this.metadata,
     this.contact,
   });
 
@@ -36,20 +36,36 @@ class CardModel {
 
   factory CardModel.fromMetadata(Metadata m) {
     if (m.mime.type == MIME_Type.image) {
-      return CardModel(CardType.Image, id: m.id, meta: m);
+      return CardModel(CardType.Image, id: m.id, metadata: m);
     } else {
-      return CardModel(CardType.File, id: m.id, meta: m);
+      return CardModel(CardType.File, id: m.id, metadata: m);
     }
   }
 
-  // Constructer from data model
+  factory CardModel.fromInvite(AuthInvite inv) {
+    if (inv.payload.type == Payload_Type.FILE) {
+      if (inv.payload.file.mime.type == MIME_Type.image) {
+        return CardModel(CardType.Image, metadata: inv.payload.file);
+      } else {
+        return CardModel(CardType.File, metadata: inv.payload.file);
+      }
+    }
+    // Contact
+    else if (inv.payload.type == Payload_Type.CONTACT) {
+      return CardModel(CardType.Contact, contact: inv.payload.contact);
+    } else {
+      throw CardsError("Invalid Payload Type");
+    }
+  }
+
+  // Constructer from sql data model
   factory CardModel.fromMetaSQL(MetaSQL sql) {
     if (sql.metadata.mime.type == MIME_Type.image) {
       return CardModel(CardType.Image,
-          id: sql.id, lastOpened: sql.lastOpened, meta: sql.metadata);
+          id: sql.id, lastOpened: sql.lastOpened, metadata: sql.metadata);
     } else {
       return CardModel(CardType.File,
-          id: sql.id, lastOpened: sql.lastOpened, meta: sql.metadata);
+          id: sql.id, lastOpened: sql.lastOpened, metadata: sql.metadata);
     }
   }
 
