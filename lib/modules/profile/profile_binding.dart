@@ -6,7 +6,7 @@ export 'profile_screen.dart';
 class ProfileBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<CardController>(() => CardController());
+    Get.put<ProfileController>(ProfileController());
+    Get.put<CardController>(CardController());
   }
 }

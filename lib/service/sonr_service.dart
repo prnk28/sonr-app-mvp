@@ -181,6 +181,7 @@ class SonrService extends GetxService {
   void _handleResponded(dynamic data) async {
     if (data is AuthReply) {
       if (data.decision) {
+        print(data.toString());
         // Update Status
         status(SonrStatus.Busy);
         Vibration.vibrate(duration: 50);
@@ -189,7 +190,7 @@ class SonrService extends GetxService {
         // Check if Sent Back Contact
         if (data.payload.type == Payload_Type.CONTACT) {
           Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
-          status(SonrStatus.Searching);
+          status(SonrStatus.Complete);
         }
       } else {
         // User Denied

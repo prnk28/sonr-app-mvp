@@ -8,9 +8,9 @@ export 'transfer_screen.dart';
 class TransferBinding implements Bindings {
   @override
   void dependencies() {
+    Get.put<CardController>(CardController());
     Get.put<CompassController>(CompassController());
     Get.put<LobbyController>(LobbyController());
-    Get.lazyPut<CardController>(() => CardController());
     Get.create(() => PeerController());
   }
 }

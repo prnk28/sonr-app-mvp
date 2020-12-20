@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/profile/profile_tiles.dart';
+import 'profile_tiles.dart';
 import 'profile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'profile_header.dart';
@@ -10,7 +10,7 @@ class ProfileScreen extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return SonrTheme(Scaffold(
         appBar: SonrExitAppBar(
-          "/home-from-profile",
+          "/home/profile",
           title: controller.userContact.value.firstName +
               " " +
               controller.userContact.value.lastName,

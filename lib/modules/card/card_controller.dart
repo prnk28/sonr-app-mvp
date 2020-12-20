@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/modules/home/home_controller.dart';
 import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -12,6 +13,7 @@ class CardController extends GetxController {
   final state = CardState.None.obs;
   bool accepted = false;
   Metadata receivedFile;
+  RxList<CardModel> allCards = List<CardModel>().obs;
 
   // ^ Update State to be Invitation ^ //
   CardController() {
@@ -38,17 +40,18 @@ class CardController extends GetxController {
 
   // ^ Accept Contact Invite Request ^ //
   CardModel acceptContact(Contact c, bool sb) {
+    // Check if Send Back
+    if (sb) {
+      Get.find<SonrService>().respond(true);
+    }
+
     // Create Contact Card
     var card = CardModel.fromContact(c);
     accepted = true;
 
     // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(card);
-
-    // Check if Send Back
-    if (sb) {
-      Get.find<SonrService>().respond(true);
-    }
+    allCards.add(card);
+    allCards.refresh();
 
     // Return Card Model
     state(CardState.Viewing);
@@ -72,7 +75,8 @@ class CardController extends GetxController {
     var card = CardModel.fromMetadata(metadata);
 
     // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(card);
+    allCards.add(card);
+    allCards.refresh();
     return card;
   }
 }

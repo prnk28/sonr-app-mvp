@@ -70,14 +70,14 @@ List<GetPage> getPages() {
 
     // ** Home Page - Back ** //
     GetPage(
-        name: '/home-from-transfer',
+        name: '/home/transfer',
         page: () => SonrTheme(HomeScreen()),
-        transition: Transition.leftToRightWithFade,
+        transition: Transition.leftToRight,
         binding: HomeBinding()),
 
     // ** Home Page - Back ** //
     GetPage(
-        name: '/home-from-profile',
+        name: '/home/profile',
         page: () => SonrTheme(HomeScreen()),
         transition: Transition.downToUp,
         binding: HomeBinding()),
@@ -86,13 +86,13 @@ List<GetPage> getPages() {
     GetPage(
         name: '/register',
         page: () => SonrTheme(RegisterScreen()),
-        transition: Transition.rightToLeftWithFade),
+        transition: Transition.rightToLeft),
 
     // ** Transfer Page ** //
     GetPage(
         name: '/transfer',
         page: () => SonrTheme(TransferScreen()),
-        transition: Transition.rightToLeftWithFade,
+        transition: Transition.rightToLeft,
         binding: TransferBinding()),
 
     // ** Profile Page ** //

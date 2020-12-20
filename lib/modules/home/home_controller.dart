@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
+import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/service/sql_service.dart';
 
 class HomeController extends GetxController {
   // Properties
-  RxList<CardModel> allCards = List<CardModel>().obs;
+  RxList<CardModel> allCards = Get.find<CardController>().allCards;
 
   void fetch() async {
     // Fetch File Data
@@ -17,13 +18,5 @@ class HomeController extends GetxController {
     allCards.refresh();
   }
 
-  void addCard(CardModel card) {
-    allCards.add(card);
-    allCards.refresh();
-  }
-
-
-  void openCard(CardModel card) {
-
-  }
+  void openCard(CardModel card) {}
 }

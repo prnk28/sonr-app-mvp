@@ -29,17 +29,17 @@ class CompassController extends GetxController {
   //final Rx<Direction> direction = Direction(0).obs;
   final Rx<Gradient> gradient = FlutterGradients.findByName(
           FlutterGradientNames.blessing,
-          type: GradientType.radial)
+          type: GradientType.linear)
       .obs;
 
   // @ References
   final inactiveGradient = FlutterGradients.findByName(
       FlutterGradientNames.blessing,
-      type: GradientType.radial);
+      type: GradientType.linear);
 
   final activeGradient = FlutterGradients.findByName(
       FlutterGradientNames.angelCare,
-      type: GradientType.radial);
+      type: GradientType.linear);
 
   // @ Direction Properties
   final direction = 0.0.obs;

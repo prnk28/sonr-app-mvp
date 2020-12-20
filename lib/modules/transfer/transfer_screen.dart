@@ -12,7 +12,7 @@ class TransferScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SonrTheme(Scaffold(
         appBar: SonrExitAppBar(
-          "/home-from-transfer",
+          "/home/transfer",
           title: Get.find<SonrService>().code.value,
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),

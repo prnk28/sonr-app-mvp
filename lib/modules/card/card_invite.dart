@@ -35,7 +35,7 @@ class CardInvite extends GetView<CardController> {
     }
 
     return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
         child: Neumorphic(
             style: SonrBorderStyle(),
             child: Column(children: [
@@ -147,7 +147,7 @@ class _FileInviteProgress extends HookWidget {
   final IconData iconData;
   final double boxHeight = Get.height / 3;
   final double boxWidth = Get.width;
-  final Color waveColor = Colors.blueAccent;
+  final Color waveColor = Colors.greenAccent;
 
   // Constructer
   _FileInviteProgress(this.iconData) : super(key: GlobalKey());
@@ -155,7 +155,7 @@ class _FileInviteProgress extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // Hook Controller
-    final controller = useAnimationController(duration: Duration(seconds: 2));
+    final controller = useAnimationController(duration: Duration(seconds: 1));
     final iconKey = GlobalKey();
     controller.repeat();
 
@@ -185,15 +185,22 @@ class _FileInviteProgress extends HookWidget {
             SizedBox(
               height: boxHeight,
               width: boxWidth,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                child: Center(
-                  child: Icon(iconData, key: iconKey, size: 225),
+              child: ShaderMask(
+                blendMode: BlendMode.srcOut,
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: [HexColor.fromHex("EFEEEE")],
+                  stops: [0.0],
+                ).createShader(bounds),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Icon(iconData, key: iconKey, size: 225),
+                  ),
                 ),
               ),
-            ),
+            )
           ],
         );
       }
@@ -213,28 +220,15 @@ class _FileInviteComplete extends StatelessWidget {
   Widget build(BuildContext context) {
     // @ Non-Image Type
     return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-        child: Neumorphic(
-            style: SonrBorderStyle(),
-            child: Column(
-              children: [
-                // Some Space
-                Padding(padding: EdgeInsets.all(25)),
-
-                // Top Right Close/Cancel Button
-                closeButton(() => Get.back()),
-                Padding(padding: EdgeInsets.only(top: 10)),
-
-                // Image
-                FittedBox(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 1,
-                          minHeight: 1,
-                        ),
-                        child: Container(child: Image.file(File(meta.path))))),
-              ],
-            )));
+      margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+      child: FittedBox(
+          alignment: Alignment.center,
+          child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 1,
+                minHeight: 1,
+              ),
+              child: Container(child: Image.file(File(meta.path))))),
+    );
   }
 }
