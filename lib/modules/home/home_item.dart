@@ -3,12 +3,11 @@ import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'home_controller.dart';
 
-import 'card_controller.dart';
-
-class CardItem extends GetView<CardController> {
+class HomeCardItem extends GetView<HomeController> {
   final CardModel card;
-  CardItem(this.card);
+  HomeCardItem(this.card);
 
   @override
   Widget build(BuildContext context) {
