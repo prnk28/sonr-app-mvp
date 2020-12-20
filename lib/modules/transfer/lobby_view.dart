@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/service/sonr_service.dart';
 import 'lobby_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 
@@ -13,12 +12,7 @@ class LobbyView extends GetView<LobbyController> {
       Widget lobbyText;
       Widget peerStack;
 
-      // @ Listen to Peers Updates
-      Get.find<SonrService>().lobby().forEach((id, peer) {
-        print(id);
-        // * Check Map Size * //
-        controller.updateItem(id, peer);
-      });
+
 
       // @ Lobby is Inactive
       if (controller.isEmpty()) {

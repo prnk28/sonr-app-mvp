@@ -9,8 +9,9 @@ import 'package:sonar_app/modules/card/card_popup.dart';
 import 'package:sonar_app/modules/invite/contact_sheet.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
-
 import 'sql_service.dart';
+
+export 'package:sonr_core/sonr_core.dart';
 
 // @ Enum to Handle Status
 enum SonrStatus {
@@ -159,15 +160,6 @@ class SonrService extends GetxService {
       status(SonrStatus.Pending);
       Vibration.vibrate(duration: 250);
       Get.dialog(CardInvite(data));
-
-      // Check Data Type for File
-      // if (data.payload.type == Payload_Type.FILE) {
-      // }
-      // // Check Data Type for Contact
-      // else if (data.payload.type == Payload_Type.CONTACT) {
-      //   Get.bottomSheet(ContactInviteSheet(data.payload.contact),
-      //       isDismissible: false);
-      // }
     }
   }
 

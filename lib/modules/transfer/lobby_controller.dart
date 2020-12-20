@@ -3,8 +3,6 @@ import 'peer_widget.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 
-import 'peer_controller.dart';
-
 enum CircleState {
   Empty,
   Active,
@@ -17,8 +15,17 @@ class LobbyController extends GetxController {
   bool _isEmpty = true;
   RxList<PeerBubble> stackItems = new List<PeerBubble>().obs;
 
+  LobbyController() {
+    // @ Listen to Peers Updates
+    Get.find<SonrService>().lobby().forEach((id, peer) {
+      // print(id);
+      // * Check Map Size * //
+      createItem(id, peer);
+    });
+  }
+
   // ^ Constructer ^ //
-  updateItem(String id, Peer peer) {
+  createItem(String id, Peer peer) {
     // @ Update State if already unchecked
     if (_isEmpty) {
       isEmpty(_isEmpty = false);
@@ -27,14 +34,9 @@ class LobbyController extends GetxController {
     // @ Create Bubbles
     // Validate not Duplicate
     if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
-      stackItems.add(PeerBubble(Get.put<PeerController>(PeerController(peer))));
+      stackItems.add(PeerBubble(peer, stackItems.length - 1));
       stackItems.refresh();
       //print("Added Bubble");
-    }
-    // Update an Existing Peer
-    else {
-      //var bubble = stackItems.where((pb) => pb.controller.id == id);
-      // _updateExistingPeer(bubble.first, peer);
     }
     //print("Total Bubbbles = " + stackItems.length.toString());
     stackItems.refresh();

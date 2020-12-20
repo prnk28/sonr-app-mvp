@@ -3,6 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonar_app/data/permission_model.dart';
+import 'package:sonar_app/data/settings_model.dart';
 import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -14,6 +15,7 @@ class DeviceService extends GetxService {
 
   Position position;
   User user;
+  Settings settings;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
@@ -73,6 +75,16 @@ class DeviceService extends GetxService {
       Get.putAsync(() => SonrService().init(position, user));
     } else {
       throw RequiredPermissionsError("Location Permission Denied");
+    }
+  }
+
+  // ^ UpdateContact Event ^
+  void updateContact(Contact newContact) async {
+    // @ Validate
+    if (hasUser) {
+      // Update Contact
+      user = new User(newContact, user.username);
+      _prefs.setString("user", user.toJson());
     }
   }
 

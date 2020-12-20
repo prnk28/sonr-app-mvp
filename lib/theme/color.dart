@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 // ^ Find Icons color based on Theme - Light/Dark ^
 Color findIconsColor() {

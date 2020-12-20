@@ -1,24 +1,16 @@
+import 'package:sonr_core/sonr_core.dart';
 import 'peer_controller.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 
-class PeerBubble extends StatelessWidget {
-  // Initializes the Peer controller for this Instance
-  final PeerController controller;
-  PeerBubble(this.controller) {
-    // Listen to this Peers Updates
-    Get.find<SonrService>().lobby.listen((map) {
-      // Validate ID
-      map.forEach((id, val) {
-        if (id == controller.peer.id) {
-          controller.updatePeer(val);
-        }
-      });
-    });
+class PeerBubble extends GetWidget<PeerController> {
+  final Peer peer;
+  final int index;
+  PeerBubble(this.peer, this.index) {
+    controller.init(peer);
   }
 
   @override

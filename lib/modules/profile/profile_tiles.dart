@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'profile_controller.dart';
 
-class ProfileTiles extends GetView<ProfileController> {
+// ** Builds List of Social Tile ** //
+class ProfileTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -18,6 +18,7 @@ class ProfileTiles extends GetView<ProfileController> {
   }
 }
 
+// ** Builds Social Tile ** //
 class _SocialTile extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {

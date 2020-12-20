@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'profile_tiles.dart';
 import 'profile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-
 import 'profile_header.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
@@ -19,6 +16,7 @@ class ProfileScreen extends GetView<ProfileController> {
             }),
         body: Column(
           children: [
+            closeButton(() => Get.back()),
             ProfileHeader(),
           ],
         )));

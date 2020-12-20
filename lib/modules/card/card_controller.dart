@@ -42,7 +42,7 @@ class CardController extends GetxController {
     Get.find<SQLService>().saveContact(c);
 
     // Create Contact Card
-    var card = CardModel(contact: c);
+    var card = CardModel.fromContact(c);
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);
@@ -70,7 +70,7 @@ class CardController extends GetxController {
     Get.find<SQLService>().saveFile(metadata);
 
     // Create Metadata Card
-    var card = CardModel(id: metadata.id, meta: metadata);
+    var card = CardModel.fromMetadata(metadata);
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);

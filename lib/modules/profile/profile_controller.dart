@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:sonar_app/service/device_service.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -23,11 +23,14 @@ enum ContactCoreValueType {
 enum SocialEditType { TileType, Preview, Url }
 
 class ProfileController extends GetxController {
-  final Contact userContact;
+  final userContact = Contact().obs;
   final status = ProfileStatus.Viewing.obs;
   bool _isEditing = false;
 
-  ProfileController(this.userContact);
+  ProfileController() {
+    var contact = Get.find<DeviceService>().user.contact;
+    userContact(contact);
+  }
 
   // ^ Toggle Editing Mode ^ //
   toggleEditing() {
@@ -48,19 +51,19 @@ class ProfileController extends GetxController {
     if (_isEditing) {
       switch (type) {
         case ContactCoreValueType.FirstName:
-          userContact.firstName = newValue;
+          userContact.value.firstName = newValue;
           break;
         case ContactCoreValueType.LastName:
-          userContact.lastName = newValue;
+          userContact.value.lastName = newValue;
           break;
         case ContactCoreValueType.Phone:
-          userContact.phone = newValue;
+          userContact.value.phone = newValue;
           break;
         case ContactCoreValueType.Email:
-          userContact.email = newValue;
+          userContact.value.email = newValue;
           break;
         case ContactCoreValueType.Website:
-          userContact.website = newValue;
+          userContact.value.website = newValue;
           break;
       }
       print("Profile Controller New Value: " + newValue);
@@ -71,7 +74,7 @@ class ProfileController extends GetxController {
   // ^ Update User Profile Pic ^ //
   updateProfilePic(File image) async {
     var imgBytes = await image.readAsBytes();
-    userContact.profilePic = imgBytes.toList();
+    userContact.value.profilePic = imgBytes.toList();
     _save();
   }
 
@@ -88,7 +91,7 @@ class ProfileController extends GetxController {
     tile.username = username;
 
     // Add Tile to Contact and Save
-    userContact.socials.add(tile);
+    userContact.value.socials.add(tile);
     _save();
   }
 
@@ -104,6 +107,6 @@ class ProfileController extends GetxController {
 
   // @ Save Current Contact
   _save() {
-    // TODO
+    Get.find<DeviceService>().updateContact(userContact.value);
   }
 }

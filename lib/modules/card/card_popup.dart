@@ -22,7 +22,7 @@ class CardPopup extends GetView<CardController> {
   // ** Metadata Popup ** //
   factory CardPopup.metadata(Metadata m) {
     // Create Metadata Card
-    var card = CardModel(id: m.id, meta: m);
+    var card = CardModel.fromMetadata(m);
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);

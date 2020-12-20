@@ -15,44 +15,46 @@ enum CardType { File, Contact, Image }
 class CardModel {
   // Properties
   final int id;
-  CardType type;
+  final CardType type;
 
   // Data
   final Metadata meta;
   final Contact contact;
   DateTime lastOpened = DateTime.now();
 
-  CardModel({
+  CardModel(
+    this.type, {
     this.id = 0,
     this.lastOpened,
     this.meta,
     this.contact,
-  }) {
-    if (meta != null) {
-      this.type = CardType.File;
+  });
+
+  factory CardModel.fromContact(Contact c) {
+    return CardModel(CardType.Contact, contact: c);
+  }
+
+  factory CardModel.fromMetadata(Metadata m) {
+    if (m.mime.type == MIME_Type.image) {
+      return CardModel(CardType.Image, id: m.id, meta: m);
     } else {
-      this.type = CardType.Contact;
+      return CardModel(CardType.File, id: m.id, meta: m);
     }
   }
 
-  factory CardModel.fromContact(Contact c){
-
-  }
-
-  factory CardModel.fromMetadata(Contact c){
-
-  }
-
   // Constructer from data model
-  factory CardModel.fromMetaSQL(MetaSQL meta) {
-    return CardModel(
-        id: meta.id, lastOpened: meta.lastOpened, meta: meta.metadata);
+  factory CardModel.fromMetaSQL(MetaSQL sql) {
+    if (sql.metadata.mime.type == MIME_Type.image) {
+      return CardModel(CardType.Image,
+          id: sql.id, lastOpened: sql.lastOpened, meta: sql.metadata);
+    } else {
+      return CardModel(CardType.File,
+          id: sql.id, lastOpened: sql.lastOpened, meta: sql.metadata);
+    }
   }
 
-  factory CardModel.fromContactSQL(ContactSQL contact) {
-    return CardModel(
-        id: contact.id,
-        lastOpened: contact.lastOpened,
-        contact: contact.contact);
+  factory CardModel.fromContactSQL(ContactSQL sql) {
+    return CardModel(CardType.Contact,
+        id: sql.id, lastOpened: sql.lastOpened, contact: sql.contact);
   }
 }

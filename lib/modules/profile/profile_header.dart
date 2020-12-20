@@ -6,6 +6,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'profile_controller.dart';
 
 class ProfileHeader extends GetView<ProfileController> {
+  // Header Properties
   static final double containerHeight = 300.0;
   final double clipHeight = containerHeight * 0.35;
   final DiagonalPosition position = DiagonalPosition.BOTTOM_LEFT;
