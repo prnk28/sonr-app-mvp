@@ -35,8 +35,10 @@ Widget closeButton(Function onPressed,
                   boxShape: NeumorphicBoxShape.circle(),
                   shape: NeumorphicShape.convex,
                   depth: 5),
-              child: GradientIcon(Icons.close,
-                  center: Alignment.topRight,
-                  gradientType: FlutterGradientNames.phoenixStart),
+              child: GradientIcon(
+                Icons.close,
+                FlutterGradientNames.phoenixStart,
+                center: Alignment.topRight,
+              ),
               onPressed: onPressed)));
 }

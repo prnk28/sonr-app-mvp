@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/modules/transfer/zone_painter.dart';
 import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonar_app/theme/painter.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -154,11 +154,10 @@ class PeerController extends GetxController {
         Future.delayed(Duration(seconds: 1)).then((_) {
           // Call Finish
           _isInvited = false;
-          Get.find<SonrService>().reset();
 
           // Reset Animation States
-          artboard().advance(0);
-          this.refresh();
+          artboard.value.advance(0);
+          refresh();
         });
         break;
     }

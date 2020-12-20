@@ -5,7 +5,6 @@ import 'package:sonar_app/modules/peer/lobby_view.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'compass_view.dart';
-import 'zone_painter.dart';
 
 class TransferScreen extends StatelessWidget {
   // @ Initialize
@@ -22,7 +21,13 @@ class TransferScreen extends StatelessWidget {
             child: Stack(
           children: <Widget>[
             // @ Range Lines
-            ZoneView(),
+            Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: CustomPaint(
+                  size: Size(Get.width, Get.height),
+                  painter: ZonePainter(),
+                  child: Container(),
+                )),
 
             // @ Lobby View
             LobbyView(),

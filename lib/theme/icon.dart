@@ -75,8 +75,8 @@ Widget iconWithPreview(Metadata metadata) {
 }
 
 class GradientIcon extends StatelessWidget {
-  const GradientIcon(this.iconData,
-      {this.size = 40, this.center = Alignment.topLeft, this.gradientType});
+  const GradientIcon(this.iconData, this.gradientType,
+      {this.size = 40, this.center = Alignment.topLeft});
   final IconData iconData;
   final double size;
   final Alignment center;

@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/modules/home/home_controller.dart';
@@ -7,33 +6,44 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-enum CardState { None, Invitation, InProgress, Viewing }
+enum CardState { None, Invitation, InProgress, Received, Viewing }
 
 class CardController extends GetxController {
   // Properties
   final Rx<CardState> state = CardState.None.obs;
-  final RxDouble progress = Get.find<SonrService>().progress;
 
-  // References
-  AuthInvite _invite;
-  Payload_Type _payload;
-
-  setInvited(AuthInvite invite) {
-    _invite = invite;
-    _payload = invite.payload.type;
-  }
-
-  // ^ Accept Invite Request ^ //
-  acceptCard() {
+  // ^ Accept File Invite Request ^ //
+  acceptFile() {
     state(CardState.InProgress);
     Get.find<SonrService>().respond(true);
   }
 
+  // ^ Accept Contact Invite Request ^ //
+  CardModel acceptContact(Contact c, bool sb) {
+    // Save Card
+    Get.find<SQLService>().saveContact(c);
+
+    // Create Contact Card
+    var card = CardModel(contact: c);
+
+    // Add to Cards Display Last Card
+    Get.find<HomeController>().addCard(card);
+
+    // Check if Send Back
+    if (sb) {
+      Get.find<SonrService>().respond(true);
+    }
+
+    // Return Card Model
+    state(CardState.Viewing);
+    return card;
+  }
+
   // ^ Decline Invite Request ^ //
-  declineCard() {
-    state(CardState.None);
+  declineInvite() {
     Get.find<SonrService>().respond(false);
     Get.back();
+    state(CardState.None);
   }
 
   // ^ Save Metadata after Completed Transfer ^ //
@@ -43,19 +53,6 @@ class CardController extends GetxController {
 
     // Create Metadata Card
     var card = CardModel(id: metadata.id, meta: metadata);
-
-    // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(card);
-    return card;
-  }
-
-  // ^ Save Contact after Completed Transfer ^ //
-  CardModel saveContact(Contact contact) {
-    // Save Card
-    Get.find<SQLService>().saveContact(contact);
-
-    // Create Contact Card
-    var card = CardModel(contact: contact);
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);

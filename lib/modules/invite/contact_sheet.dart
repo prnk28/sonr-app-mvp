@@ -58,7 +58,6 @@ class ContactInviteSheet extends StatelessWidget {
       return rectangleButton("Send Back", () {
         // Emit Event
         sonr.respond(true);
-        sonr.reset();
         Get.back();
       });
       // Remove Sendback if Necessary

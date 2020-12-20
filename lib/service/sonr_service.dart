@@ -3,16 +3,31 @@ import 'dart:io';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
+import 'package:sonar_app/data/card_model.dart';
 import 'package:sonar_app/data/user_model.dart';
+import 'package:sonar_app/modules/card/card_invite.dart';
 import 'package:sonar_app/modules/card/card_popup.dart';
 import 'package:sonar_app/modules/invite/contact_sheet.dart';
 import 'package:sonar_app/modules/invite/file_sheet.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
 
+import 'sql_service.dart';
+
+// @ Enum to Handle Status
+enum SonrStatus {
+  Offline,
+  Ready, // Available
+  Processing, // Queuing File
+  Searching, // Searching -> Post Processing
+  Pending, // Pending Authorization
+  Busy, // In Transfer
+  Complete, // Completed Transfer
+}
+
 class SonrService extends GetxService {
   // @ Set Properteries
-  final status = Status.Offline.obs;
+  final status = SonrStatus.Offline.obs;
   final direction = 0.0.obs;
   final lobby = Map<String, Peer>().obs;
   final code = "".obs;
@@ -67,7 +82,7 @@ class SonrService extends GetxService {
 
     // Set Connected
     _connected = true;
-    status(_node.status);
+    status(SonrStatus.Ready);
 
     // Push to Home Screen
     Get.offNamed("/home");
@@ -80,7 +95,7 @@ class SonrService extends GetxService {
   void queue(Payload_Type payType, {File file}) async {
     // Set Payload Type
     _payloadType = payType;
-    status(_node.status);
+    status(SonrStatus.Processing);
 
     // Queue File
     if (payType == Payload_Type.FILE) {
@@ -102,7 +117,7 @@ class SonrService extends GetxService {
     else if (_payloadType == Payload_Type.CONTACT) {
       await _node.invite(p, _payloadType);
     }
-    status(_node.status);
+    status(SonrStatus.Pending);
   }
 
   // ^ Respond-Peer Event ^
@@ -111,15 +126,11 @@ class SonrService extends GetxService {
     await _node.respond(decision);
 
     // Update Status
-    status(_node.status);
-  }
-
-  // ^ Resets Status ^
-  void reset() {
-    // @ Check if Sender/Receiver
-    _node.finish();
-    progress(0.0);
-    status(_node.status);
+    if (decision) {
+      status(SonrStatus.Ready);
+    } else {
+      status(SonrStatus.Busy);
+    }
   }
 
   // **************************
@@ -137,7 +148,7 @@ class SonrService extends GetxService {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
-      status(_node.status);
+      status(SonrStatus.Searching);
       Get.offNamed("/transfer");
     }
   }
@@ -147,36 +158,42 @@ class SonrService extends GetxService {
     // Check Type
     if (data is AuthInvite) {
       // Inform Listener
-      status(_node.status);
+      status(SonrStatus.Pending);
       Vibration.vibrate(duration: 250);
+      Get.dialog(CardInvite(data));
 
       // Check Data Type for File
-      if (data.payload.type == Payload_Type.FILE) {
-        Get.bottomSheet(FileInviteSheet(data));
-      }
-      // Check Data Type for Contact
-      else if (data.payload.type == Payload_Type.CONTACT) {
-        Get.bottomSheet(ContactInviteSheet(data.payload.contact),
-            isDismissible: false);
-      }
+      // if (data.payload.type == Payload_Type.FILE) {
+      // }
+      // // Check Data Type for Contact
+      // else if (data.payload.type == Payload_Type.CONTACT) {
+      //   Get.bottomSheet(ContactInviteSheet(data.payload.contact),
+      //       isDismissible: false);
+      // }
     }
   }
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(dynamic data) async {
     if (data is AuthReply) {
-      // Set Message
-      status(_node.status);
-      Vibration.vibrate(duration: 50);
-      Vibration.vibrate(duration: 100);
+      if (data.decision) {
+        // Update Status
+        status(SonrStatus.Busy);
+        Vibration.vibrate(duration: 50);
+        Vibration.vibrate(duration: 100);
 
-      if (data.payload.type == Payload_Type.CONTACT) {
-        Get.bottomSheet(
-            ContactInviteSheet(
-              data.payload.contact,
-              isReply: true,
-            ),
-            isDismissible: false);
+        // Check if Sent Back Contact
+        if (data.payload.type == Payload_Type.CONTACT) {
+          Get.bottomSheet(
+              ContactInviteSheet(
+                data.payload.contact,
+                isReply: true,
+              ),
+              isDismissible: false);
+        }
+      } else {
+        // User Denied
+        status(SonrStatus.Searching);
       }
     }
   }
@@ -193,7 +210,7 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
-      status(_node.status);
+      status(SonrStatus.Searching);
     }
   }
 
@@ -201,10 +218,15 @@ class SonrService extends GetxService {
   void _handleReceived(dynamic data) {
     if (data is Metadata) {
       // Reset Data
-      reset();
+      _node.finish();
+      progress(0.0);
+      status(SonrStatus.Ready);
 
       // Pop Transfer Sheet
       Get.back();
+
+      // Save Card
+      Get.find<SQLService>().saveFile(data);
 
       // Display Contact with metadata
       Get.dialog(CardPopup.metadata(data));
@@ -213,7 +235,7 @@ class SonrService extends GetxService {
 
   // ^ An Error Has Occurred ^ //
   void _handleSonrError(dynamic data) async {
-    this.reset();
+    Get.reset();
     if (data is ErrorMessage) {
       print(data.method + "() - " + data.message);
     }
