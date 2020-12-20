@@ -10,7 +10,25 @@ enum CardState { None, Invitation, InProgress, Received, Viewing }
 
 class CardController extends GetxController {
   // Properties
-  final Rx<CardState> state = CardState.None.obs;
+  final state = CardState.None.obs;
+  CardState _prevState = CardState.None;
+
+  // ^ Update State to be Invitation ^ //
+  CardController() {
+    Get.find<SonrService>().status.listen((s) {
+      // User Invited
+      if (s == SonrStatus.Pending) {
+        _prevState = state.value;
+        state(CardState.Invitation);
+      }
+
+      // User Completed Transfer
+      else if (s == SonrStatus.Ready && _prevState == CardState.InProgress) {
+        _prevState = state.value;
+        state(CardState.Received);
+      }
+    });
+  }
 
   // ^ Accept File Invite Request ^ //
   acceptFile() {

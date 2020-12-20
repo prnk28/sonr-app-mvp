@@ -5,9 +5,9 @@ import 'package:sonar_app/theme/theme.dart';
 
 import 'card_controller.dart';
 
-class CardView extends GetView<CardController> {
+class CardItem extends GetView<CardController> {
   final CardModel card;
-  CardView(this.card);
+  CardItem(this.card);
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,6 @@ class _MediaItemView extends StatelessWidget {
         // <-- use builder function
         return GestureDetector(
             onTap: () async {
-              // TODO Utilize Hero Animation
-              // cards.getFile(metadata);
             },
             child: Neumorphic(
                 style: NeumorphicStyle(intensity: 0.85),

@@ -29,14 +29,14 @@ class LobbyController extends GetxController {
     if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
       stackItems.add(PeerBubble(Get.put<PeerController>(PeerController(peer))));
       stackItems.refresh();
-      print("Added Bubble");
+      //print("Added Bubble");
     }
     // Update an Existing Peer
     else {
       //var bubble = stackItems.where((pb) => pb.controller.id == id);
       // _updateExistingPeer(bubble.first, peer);
     }
-    print("Total Bubbbles = " + stackItems.length.toString());
+    //print("Total Bubbbles = " + stackItems.length.toString());
     stackItems.refresh();
   }
 }

@@ -7,6 +7,8 @@ export 'painter.dart';
 export 'text.dart';
 export 'window.dart';
 
+export 'package:google_fonts/google_fonts.dart';
+export 'package:flutter/material.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
 export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';

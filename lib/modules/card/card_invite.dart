@@ -9,37 +9,27 @@ import 'package:sonr_core/sonr_core.dart';
 // ^ General Invite Builds from Invite Protobuf ^ //
 class CardInvite extends GetView<CardController> {
   final AuthInvite invite;
-  CardInvite(this.invite) {
-    controller.state(CardState.Invitation);
-  }
+  CardInvite(this.invite);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      // File
-      if (invite.payload.type == Payload_Type.FILE) {
-        return _FileInvite(invite);
-      }
-      // Contact
-      else if (invite.payload.type == Payload_Type.CONTACT) {
-        return _ContactInvite(invite.payload.contact);
-      }
-      // Invalid Right Now
-      else {
-        print("Invalid File");
-        return Container();
-      }
-    });
-  }
-}
+    // Initialize
+    Widget inviteView;
 
-// ^ Contact Invite from AuthInvite Proftobuf ^ //
-class _ContactInvite extends GetView<CardController> {
-  final Contact contact;
-  _ContactInvite(this.contact);
+    // File
+    if (invite.payload.type == Payload_Type.FILE) {
+      inviteView = _FileInvite(invite);
+    }
+    // Contact
+    else if (invite.payload.type == Payload_Type.CONTACT) {
+      inviteView = _ContactInvite(invite.payload.contact);
+    }
+    // Invalid Right Now
+    else {
+      print("Invalid File");
+      inviteView = Container();
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
         child: Neumorphic(
@@ -54,30 +44,46 @@ class _ContactInvite extends GetView<CardController> {
                 Get.back();
               }, padTop: 8, padRight: 8),
 
-              // @ Basic Contact Info - Make Expandable
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Padding(padding: EdgeInsets.all(8)),
-                Column(
-                  children: [
-                    boldText(contact.firstName),
-                    boldText(contact.lastName),
-                  ],
-                )
-              ]),
-
-              // @ Send Back Button
-              rectangleButton("Send Back", () {
-                // Emit Event
-                controller.acceptContact(contact, true);
-                Get.back();
-              }),
-
-              // @ Save Button
-              rectangleButton("Save", () {
-                controller.acceptContact(contact, false);
-                Get.back();
-              }),
+              // @ Invite View
+              Padding(padding: EdgeInsets.all(8)),
+              inviteView
             ])));
+  }
+}
+
+// ^ Contact Invite from AuthInvite Proftobuf ^ //
+class _ContactInvite extends GetView<CardController> {
+  final Contact contact;
+  _ContactInvite(this.contact);
+
+  @override
+  Widget build(BuildContext context) {
+    // Display Info
+    return Column(children: [
+      // @ Basic Contact Info - Make Expandable
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Padding(padding: EdgeInsets.all(8)),
+        Column(
+          children: [
+            boldText(contact.firstName),
+            boldText(contact.lastName),
+          ],
+        )
+      ]),
+
+      // @ Send Back Button
+      rectangleButton("Send Back", () {
+        // Emit Event
+        controller.acceptContact(contact, true);
+        Get.back();
+      }),
+
+      // @ Save Button
+      rectangleButton("Save", () {
+        controller.acceptContact(contact, false);
+        Get.back();
+      }),
+    ]);
   }
 }
 
@@ -88,55 +94,40 @@ class _FileInvite extends GetView<CardController> {
 
   @override
   Widget build(BuildContext context) {
+    // Display Info
     return Obx(() {
-      // Initialize Child
-      Widget fileInviteChild;
-
       // Check State of Card --> Invitation
       if (controller.state.value == CardState.Invitation) {
-        fileInviteChild = AnimatedSwitcher(
-            duration: Duration(seconds: 1),
-            child: Column(
-              children: [
-                // Top Right Close/Cancel Button
-                closeButton(() {
-                  // Emit Event
-                  controller.declineInvite();
-                }, padTop: 8, padRight: 8),
+        return Column(
+          children: [
+            // Build Item from Metadata and Peer
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              iconWithPreview(invite.payload.file),
+              Padding(padding: EdgeInsets.all(8)),
+              Column(
+                children: [
+                  boldText(invite.from.firstName, size: 32),
+                  normalText(invite.from.device.platform, size: 22),
+                ],
+              ),
+            ]),
+            Padding(padding: EdgeInsets.only(top: 8)),
 
-                // Build Item from Metadata and Peer
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconWithPreview(invite.payload.file),
-                  Padding(padding: EdgeInsets.all(8)),
-                  Column(
-                    children: [
-                      boldText(invite.from.firstName, size: 32),
-                      normalText(invite.from.device.platform, size: 22),
-                    ],
-                  ),
-                ]),
-                Padding(padding: EdgeInsets.only(top: 8)),
-
-                // @ Build Auth Action
-                rectangleButton("Accept", () {
-                  controller.acceptFile();
-                }),
-              ],
-            ));
+            // @ Build Auth Action
+            rectangleButton("Accept", () {
+              controller.acceptFile();
+            }),
+          ],
+        );
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        fileInviteChild = AnimatedSwitcher(
+        return AnimatedSwitcher(
             duration: Duration(seconds: 1),
             child: _FileInviteProgress(iconDataFromPayload(invite.payload)));
+      } else {
+        return Container();
       }
-
-      // @ Return View with the Current Child
-      return Container(
-          padding: EdgeInsetsDirectional.only(start: 10, end: 10),
-          height: Get.height / 3 + 20,
-          margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-          child: Neumorphic(style: SonrBorderStyle(), child: fileInviteChild));
     });
   }
 }
@@ -148,15 +139,13 @@ class _FileInviteProgress extends HookWidget {
   final double boxHeight = Get.height / 3;
   final double boxWidth = Get.width;
   final Color waveColor = Colors.blueAccent;
+  final controller = useAnimationController(duration: Duration(seconds: 2));
 
   // Constructer
   _FileInviteProgress(this.iconData) : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
-    // Use Hook Widget For Progress
-    final controller = useAnimationController(duration: Duration(seconds: 2));
-
     // Reactive to Sonr Service
     return Obx(() {
       if (Get.find<SonrService>().progress.value < 1.0) {

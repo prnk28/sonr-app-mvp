@@ -53,11 +53,13 @@ class PeerBubble extends StatelessWidget {
                           ),
                         ]),
                         child: Stack(alignment: Alignment.center, children: [
-                          Rive(
-                            artboard: controller.artboard.value,
-                            alignment: Alignment.center,
-                            fit: BoxFit.contain,
-                          ),
+                          controller.artboard.value == null
+                              ? const SizedBox()
+                              : Rive(
+                                  artboard: controller.artboard.value,
+                                  alignment: Alignment.center,
+                                  fit: BoxFit.contain,
+                                ),
                           _buildContentVisibility(),
                         ]));
                   })));

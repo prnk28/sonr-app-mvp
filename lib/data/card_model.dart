@@ -35,16 +35,24 @@ class CardModel {
     }
   }
 
+  factory CardModel.fromContact(Contact c){
+
+  }
+
+  factory CardModel.fromMetadata(Contact c){
+
+  }
+
   // Constructer from data model
-  factory CardModel.fromSQLData({MetaSQL meta, ContactSQL contact}) {
-    if (meta != null) {
-      return CardModel(
-          id: meta.id, lastOpened: meta.lastOpened, meta: meta.metadata);
-    } else {
-      return CardModel(
-          id: contact.id,
-          lastOpened: contact.lastOpened,
-          contact: contact.contact);
-    }
+  factory CardModel.fromMetaSQL(MetaSQL meta) {
+    return CardModel(
+        id: meta.id, lastOpened: meta.lastOpened, meta: meta.metadata);
+  }
+
+  factory CardModel.fromContactSQL(ContactSQL contact) {
+    return CardModel(
+        id: contact.id,
+        lastOpened: contact.lastOpened,
+        contact: contact.contact);
   }
 }
