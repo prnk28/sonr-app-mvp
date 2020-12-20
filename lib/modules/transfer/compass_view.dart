@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'compass_controller.dart';
 import 'dart:math';
-import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+// ^ Build Compass View ^ //
 class CompassView extends GetView<CompassController> {
+  final double _kMajorSpokeWidth = 18; // Spoke Length
+  final double _kMajorTopPadding = 45; // West, East
+  final double _kMajorBottomPadding = 20; // North, South
+  final double _kMinorSpokeWidth = 12; // Minor Spoke Length
+
   CompassView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      final direction = controller.direction.value;
       return Align(
           alignment: Alignment.bottomCenter,
           child: Stack(alignment: Alignment.topCenter, children: [
@@ -42,14 +49,11 @@ class CompassView extends GetView<CompassController> {
                         alignment: Alignment.center,
                         children: [
                           // Center Circle
-                          _buildCenterBulb(controller.direction.value,
-                              controller.gradient.value),
+                          _CompassBulb(),
 
                           // Spokes
                           Transform.rotate(
-                              angle: ((controller.direction.value ?? 0) *
-                                  (pi / 180) *
-                                  -1),
+                              angle: ((direction ?? 0) * (pi / 180) * -1),
                               child: Padding(
                                 padding: const EdgeInsets.all(5.0),
                                 child: Stack(
@@ -60,7 +64,7 @@ class CompassView extends GetView<CompassController> {
                                         textColor: Colors.red[900],
                                         textValue: "N",
                                         textPadding: EdgeInsets.only(
-                                            bottom: K_MAJOR_BOTTOM_PADDING)),
+                                            bottom: _kMajorBottomPadding)),
                                     // ** </North> **//
 
                                     // <MinorSpokes> //
@@ -82,7 +86,7 @@ class CompassView extends GetView<CompassController> {
                                     _buildMajorSpoke(90,
                                         textValue: "W",
                                         textPadding: EdgeInsets.only(
-                                            top: K_MAJOR_TOP_PADDING)),
+                                            top: _kMajorTopPadding)),
                                     // ** </East> **//
 
                                     // <MinorSpokes> //
@@ -105,7 +109,7 @@ class CompassView extends GetView<CompassController> {
                                         isNegativeAlignment: true,
                                         textValue: "S",
                                         textPadding: EdgeInsets.only(
-                                            bottom: K_MAJOR_BOTTOM_PADDING)),
+                                            bottom: _kMajorBottomPadding)),
                                     // ** </South> **//
 
                                     // <MinorSpokes> //
@@ -127,7 +131,7 @@ class CompassView extends GetView<CompassController> {
                                     _buildMajorSpoke(270,
                                         textValue: "E",
                                         textPadding: EdgeInsets.only(
-                                            top: K_MAJOR_TOP_PADDING)),
+                                            top: _kMajorTopPadding)),
                                     // ** </West> **//
 
                                     // <MinorSpokes> //
@@ -185,175 +189,127 @@ class CompassView extends GetView<CompassController> {
           ]));
     });
   }
-}
 
-// ******************************* //
-// *******----------------********* //
-// ******| HELPER METHODS |******* //
-// *******----------------******** //
-// ******************************* //
-const double _K_MAJOR_SPOKE_WIDTH = 18; // Spoke Length
-const double K_MAJOR_TOP_PADDING = 45; // West, East
-const double K_MAJOR_BOTTOM_PADDING = 20; // North, South
-
-// Minor Constants
-const double _K_MINOR_SPOKE_WIDTH = 12;
-
-Widget _buildMajorSpoke(
-  double direction, {
-  bool isNegativeAlignment = false,
-  Color textColor = Colors.black54,
-  String textValue,
-  EdgeInsets textPadding,
-}) {
-  // Check Negative Alignment
-  double multiplier;
-  if (isNegativeAlignment) {
-    multiplier = -1;
-  } else {
-    multiplier = 1;
-  }
-  // Build Major Spoke
-  return Align(
-      alignment: _directionToAlignment(multiplier * 1, direction),
-      child: Stack(
+  Widget _buildMajorSpoke(
+    double direction, {
+    bool isNegativeAlignment = false,
+    Color textColor = Colors.black54,
+    String textValue,
+    EdgeInsets textPadding,
+  }) {
+    // Check Negative Alignment
+    double multiplier;
+    if (isNegativeAlignment) {
+      multiplier = -1;
+    } else {
+      multiplier = 1;
+    }
+    // Build Major Spoke
+    return Align(
         alignment: _directionToAlignment(multiplier * 1, direction),
-        children: [
-          // Create Spoke
-          RotationTransition(
-              turns: new AlwaysStoppedAnimation(
-                  _directionToDegrees(direction) / 360),
-              child: Padding(
-                  padding: EdgeInsets.only(left: _K_MAJOR_SPOKE_WIDTH),
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      depth: 20,
-                    ),
-                    child: Container(
-                      width: _K_MAJOR_SPOKE_WIDTH,
-                      height: 1.5,
-                      decoration: BoxDecoration(color: Colors.grey[700]),
-                    ),
-                  ))),
-          // Create Text
-          RotationTransition(
-              turns: new AlwaysStoppedAnimation(
-                  _directionToDegrees(direction + 90) / 360),
-              child: Padding(
-                  padding: textPadding,
-                  child: Text(textValue,
-                      style: _directionTextStyle(setColor: textColor)))),
-        ],
-      ));
-}
+        child: Stack(
+          alignment: _directionToAlignment(multiplier * 1, direction),
+          children: [
+            // Create Spoke
+            RotationTransition(
+                turns: new AlwaysStoppedAnimation(
+                    _directionToDegrees(direction) / 360),
+                child: Padding(
+                    padding: EdgeInsets.only(left: _kMajorSpokeWidth),
+                    child: Neumorphic(
+                      style: NeumorphicStyle(
+                        depth: 20,
+                      ),
+                      child: Container(
+                        width: _kMajorSpokeWidth,
+                        height: 1.5,
+                        decoration: BoxDecoration(color: Colors.grey[700]),
+                      ),
+                    ))),
+            // Create Text
+            RotationTransition(
+                turns: new AlwaysStoppedAnimation(
+                    _directionToDegrees(direction + 90) / 360),
+                child: Padding(
+                    padding: textPadding,
+                    child: Text(textValue,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black54,
+                        )))),
+          ],
+        ));
+  }
 
-Widget _buildAuxiliarySpoke(double direction) {
-  return Align(
-      alignment: _directionToAlignment(-1, direction),
-      child: RotationTransition(
-        turns: new AlwaysStoppedAnimation(_directionToDegrees(direction) / 360),
-        child: Padding(
-          padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
-          child: Neumorphic(
-            style: NeumorphicStyle(
-              depth: 20,
-            ),
-            child: Container(
-              width: 15,
-              height: 1.35,
-              decoration: BoxDecoration(color: Colors.grey),
-            ),
-          ),
-        ),
-      ));
-}
-
-Widget _buildMinorSpoke(double direction) {
-  return Align(
-      alignment: _directionToAlignment(-1, direction),
-      child: RotationTransition(
-        turns: new AlwaysStoppedAnimation(_directionToDegrees(direction) / 360),
-        child: Padding(
-          padding: EdgeInsets.only(left: _K_MINOR_SPOKE_WIDTH),
-          child: Neumorphic(
-            style: NeumorphicStyle(
-              depth: 20,
-            ),
-            child: Container(
-              width: _K_MINOR_SPOKE_WIDTH,
-              height: 1,
-              decoration: BoxDecoration(color: Colors.grey),
+  Widget _buildMinorSpoke(double direction) {
+    return Align(
+        alignment: _directionToAlignment(-1, direction),
+        child: RotationTransition(
+          turns:
+              new AlwaysStoppedAnimation(_directionToDegrees(direction) / 360),
+          child: Padding(
+            padding: EdgeInsets.only(left: _kMinorSpokeWidth),
+            child: Neumorphic(
+              style: NeumorphicStyle(
+                depth: 20,
+              ),
+              child: Container(
+                width: _kMinorSpokeWidth,
+                height: 1,
+                decoration: BoxDecoration(color: Colors.grey),
+              ),
             ),
           ),
-        ),
-      ));
+        ));
+  }
+
+  Widget _buildAuxiliarySpoke(double direction) {
+    return Align(
+        alignment: _directionToAlignment(-1, direction),
+        child: RotationTransition(
+          turns:
+              new AlwaysStoppedAnimation(_directionToDegrees(direction) / 360),
+          child: Padding(
+            padding: EdgeInsets.only(left: _kMinorSpokeWidth),
+            child: Neumorphic(
+              style: NeumorphicStyle(
+                depth: 20,
+              ),
+              child: Container(
+                width: 15,
+                height: 1.35,
+                decoration: BoxDecoration(color: Colors.grey),
+              ),
+            ),
+          ),
+        ));
+  }
+
+  num _directionToRads(num deg) {
+    return (_directionToDegrees(deg) * pi) / 180.0;
+  }
+
+  double _directionToDegrees(double direction) {
+    if (direction + 90 > 360) {
+      return direction - 270;
+    } else {
+      return direction + 90;
+    }
+  }
+
+  Alignment _directionToAlignment(double r, double deg) {
+    // Calculate radians
+    double radAngle = _directionToRads(deg);
+
+    double x = cos(radAngle) * r;
+    double y = sin(radAngle) * r;
+    return Alignment(x, y);
+  }
 }
 
-Widget _buildCenterBulb(double direction, FlutterGradientNames gradient) {
-  return Neumorphic(
-    style: NeumorphicStyle(
-      depth: -5,
-      boxShape: NeumorphicBoxShape.circle(),
-    ),
-    margin: EdgeInsets.all(65),
-    child: Neumorphic(
-      style: NeumorphicStyle(
-        depth: 10,
-        shape: NeumorphicShape.concave,
-        boxShape: NeumorphicBoxShape.circle(),
-      ),
-      margin: EdgeInsets.all(7.5),
-      child: Container(
-          decoration: BoxDecoration(
-              gradient: FlutterGradients.findByName(gradient,
-                  type: GradientType.radial)),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  _getDirectionString(direction),
-                  style: _bulbValueTextStyle(),
-                ),
-                Text(
-                  _getCompassDesignation(direction),
-                  style: _bulbDesignationTextStyle(),
-                ),
-              ])),
-    ),
-  );
-}
-
-// Direction Text
-TextStyle _directionTextStyle({Color setColor}) {
-  return GoogleFonts.poppins(
-    fontWeight: FontWeight.bold,
-    fontSize: 14,
-    color: setColor ?? Colors.black87,
-  );
-}
-
-// Bulb Direction
-TextStyle _bulbValueTextStyle({Color setColor}) {
-  return GoogleFonts.poppins(
-    fontWeight: FontWeight.w400,
-    fontSize: 46,
-    color: setColor ?? Colors.white,
-  );
-}
-
-// Bulb Designation
-TextStyle _bulbDesignationTextStyle({Color setColor}) {
-  return GoogleFonts.poppins(
-    fontWeight: FontWeight.bold,
-    fontSize: 24,
-    color: setColor ?? Colors.white,
-  );
-}
-
-// ********************************
-// ** Compass Designation Finder **
-// ********************************
+// ^ Center Compass Bulb ^ //
+// ** Compass Designation Enum **
 enum CompassDesignation {
   N,
   NNE,
@@ -373,50 +329,82 @@ enum CompassDesignation {
   NNW
 }
 
-String _getCompassDesignation(double degrees) {
-  var compassValue = ((degrees / 22.5) + 0.5).toInt();
+class _CompassBulb extends HookWidget {
+  // @ Builder Method
+  @override
+  Widget build(BuildContext context) {
+    return Neumorphic(
+      style: NeumorphicStyle(
+        depth: -5,
+        boxShape: NeumorphicBoxShape.circle(),
+      ),
+      margin: EdgeInsets.all(65),
+      child: Neumorphic(
+        style: NeumorphicStyle(
+          depth: 10,
+          shape: NeumorphicShape.concave,
+          boxShape: NeumorphicBoxShape.circle(),
+        ),
+        margin: EdgeInsets.all(7.5),
+        child: Obx(() {
+          // @ Get Data
+          double direction = Get.find<CompassController>().direction.value;
+          List<Gradient> gradients = Get.find<CompassController>().gradients;
 
-  var compassEnum = CompassDesignation.values[(compassValue % 16)];
-  return compassEnum
-      .toString()
-      .substring(compassEnum.toString().indexOf('.') + 1);
-}
+          // @ Initialize
+          String dirString;
+          String desString;
+          var adjustedDegrees = direction.round();
+          var adjustedDesignation = ((direction / 22.5) + 0.5).toInt();
+          var unit = "°";
 
-String _getDirectionString(double degrees) {
-  // Round
-  var adjustedDegrees = degrees.round();
-  var unit = "°";
+          // @ Convert To String
+          if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
+            dirString = "0" + "0" + adjustedDegrees.toString() + unit;
+          } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
+            dirString = "0" + adjustedDegrees.toString() + unit;
+          } else {
+            dirString = adjustedDegrees.toString() + unit;
+          }
 
-  // Add 0 for Aesthetic
-  if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
-    return "0" + "0" + adjustedDegrees.toString() + unit;
-  } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
-    return "0" + adjustedDegrees.toString() + unit;
-  } else {
-    return adjustedDegrees.toString() + unit;
+          // @ Get Designation Value
+          var compassEnum =
+              CompassDesignation.values[(adjustedDesignation % 16)];
+          desString = compassEnum
+              .toString()
+              .substring(compassEnum.toString().indexOf('.') + 1);
+
+          // @ Build View
+          return Container(
+              decoration:
+                  BoxDecoration(gradient: useAnimatedGradient(gradients)),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: Text(
+                          dirString,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 46,
+                            color: Colors.white,
+                          ),
+                        )),
+                    AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: Text(
+                          desString,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            color: Colors.white,
+                          ),
+                        ))
+                  ]));
+        }),
+      ),
+    );
   }
-}
-
-// ********************
-// ** Math Functions **
-// ********************
-num _directionToRads(num deg) {
-  return (_directionToDegrees(deg) * pi) / 180.0;
-}
-
-double _directionToDegrees(double direction) {
-  if (direction + 90 > 360) {
-    return direction - 270;
-  } else {
-    return direction + 90;
-  }
-}
-
-Alignment _directionToAlignment(double r, double deg) {
-  // Calculate radians
-  double radAngle = _directionToRads(deg);
-
-  double x = cos(radAngle) * r;
-  double y = sin(radAngle) * r;
-  return Alignment(x, y);
 }

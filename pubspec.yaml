@@ -20,7 +20,8 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
-  get:
+  flutter_hooks: ^0.15.0
+  get: ^3.23.1
   intl: ^0.15.8
   logger: ^0.9.4
 

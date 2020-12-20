@@ -4,8 +4,14 @@ import 'package:sonar_app/theme/theme.dart';
 
 class CompassController extends GetxController {
   // Properties
-  final gradient = FlutterGradientNames.angelCare.obs;
-  final RxDouble direction = Get.find<SonrService>().direction;
+  final gradients = [
+    // First Gradient
+    FlutterGradients.findByName(FlutterGradientNames.angelCare,
+        type: GradientType.radial),
 
-  // Inferred Properties
+    // Second Gradient
+    FlutterGradients.findByName(FlutterGradientNames.blessing,
+        type: GradientType.radial)
+  ].obs;
+  final RxDouble direction = Get.find<SonrService>().direction;
 }
