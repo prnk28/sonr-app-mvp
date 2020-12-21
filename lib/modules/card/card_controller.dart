@@ -25,12 +25,6 @@ class CardController extends GetxController {
     });
   }
 
-  // ^ Set File after Transfer^ //
-  setFile(Metadata meta) {
-    state(CardState.Received);
-    receivedFile = meta;
-  }
-
   // ^ Accept File Invite Request ^ //
   acceptFile() {
     state(CardState.InProgress);
@@ -44,6 +38,9 @@ class CardController extends GetxController {
     if (sb) {
       Get.find<SonrService>().respond(true);
     }
+
+    // Save Contact
+    Get.find<SonrService>().finishContact(c);
 
     // Create Contact Card
     var card = CardModel.fromContact(c);
@@ -69,14 +66,17 @@ class CardController extends GetxController {
     state(CardState.None);
   }
 
-  // ^ Save Metadata after Completed Transfer ^ //
-  CardModel saveFile(Metadata metadata) {
+  // ^ Set File after Transfer^ //
+  received(Metadata meta) {
+    state(CardState.Received);
+    receivedFile = meta;
+
     // Create Metadata Card
-    var card = CardModel.fromMetadata(metadata);
+    var card = CardModel.fromMetadata(meta);
+    Get.find<SonrService>().finishFile(meta);
 
     // Add to Cards Display Last Card
     allCards.add(card);
     allCards.refresh();
-    return card;
   }
 }

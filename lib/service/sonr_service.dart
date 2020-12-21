@@ -135,8 +135,10 @@ class SonrService extends GetxService {
   void finishContact(Contact c) async {
     // Save Card
     Get.find<SQLService>().saveContact(c);
-    if (status.value != SonrStatus.Searching) {
+    if (status.value != SonrStatus.Complete) {
       status(SonrStatus.Ready);
+    } else {
+      status(SonrStatus.Searching);
     }
   }
 
@@ -183,8 +185,10 @@ class SonrService extends GetxService {
     if (data is AuthReply) {
       // Check if Sent Back Contact
       if (data.payload.type == Payload_Type.CONTACT) {
-        Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
+        Vibration.vibrate(duration: 50);
+        Vibration.vibrate(duration: 100);
         status(SonrStatus.Complete);
+        Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
       } else {
         // For File
         if (data.decision) {
@@ -222,7 +226,7 @@ class SonrService extends GetxService {
       // Reset Data
       progress(0.0);
       status(SonrStatus.Complete);
-      Get.find<CardController>().setFile(data);
+      Get.find<CardController>().received(data);
     }
   }
 

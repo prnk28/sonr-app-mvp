@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sonar_app/data/card_model.dart';
-import 'package:sonar_app/modules/home/home_controller.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'card_controller.dart';
@@ -14,13 +13,7 @@ class CardPopup extends GetView<CardController> {
   final CardModel data;
 
   // ** Constructer ** //
-  CardPopup(this.fromTransfer, this.data) {
-    if (fromTransfer) {
-      if (data.type == CardType.File || data.type == CardType.Image) {
-        controller.saveFile(data.metadata);
-      }
-    }
-  }
+  CardPopup(this.fromTransfer, this.data);
 
   factory CardPopup.fromTransferMetadata(Metadata m) {
     return CardPopup(true, CardModel.fromMetadata(m));
