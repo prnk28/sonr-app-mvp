@@ -32,7 +32,7 @@ Widget closeButton(Function onPressed,
               style: NeumorphicStyle(
                   boxShape: NeumorphicBoxShape.circle(),
                   shape: NeumorphicShape.flat,
-                  depth: 8),
+                  depth: 10),
               child: GradientIcon(
                 Icons.close,
                 FlutterGradientNames.phoenixStart,
