@@ -75,18 +75,20 @@ class _ContactInvite extends GetView<CardController> {
         )
       ]),
 
-      // @ Send Back Button
-      rectangleButton("Send Back", () {
-        // Emit Event
-        controller.acceptContact(contact, true);
-        Get.back();
-      }),
-
-      // @ Save Button
-      rectangleButton("Save", () {
-        controller.acceptContact(contact, false);
-        Get.back();
-      }),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        // @ Send Back Button
+        rectangleButton("Send Back", () {
+          // Emit Event
+          controller.acceptContact(contact, true);
+          Get.back();
+        }),
+        Padding(padding: EdgeInsets.all(6)),
+        // @ Save Button
+        rectangleButton("Save", () {
+          controller.acceptContact(contact, false);
+          Get.back();
+        }),
+      ])
     ]);
   }
 }
