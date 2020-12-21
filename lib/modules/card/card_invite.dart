@@ -14,10 +14,10 @@ class CardInvite extends GetView<CardController> {
   CardInvite(this.invite);
 
   // @ Container Sizes
-  EdgeInsetsGeometry defaultSize =
+  final EdgeInsetsGeometry defaultSize =
       EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105);
 
-  EdgeInsetsGeometry progressSize =
+  final EdgeInsetsGeometry progressSize =
       EdgeInsets.only(left: 20, right: 20, top: 85, bottom: 105);
 
   @override
@@ -39,24 +39,25 @@ class CardInvite extends GetView<CardController> {
       inviteView = Container();
     }
 
-    return Container(
+    return NeumorphicBackground(
         margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
+        borderRadius: BorderRadius.circular(40),
+        backendColor: Colors.black87,
         child: Neumorphic(
-            style: SonrBorderStyle(),
             child: Column(children: [
-              // @ Top Right Close/Cancel Button
-              closeButton(() {
-                // Emit Event
-                controller.declineInvite();
+          // @ Top Right Close/Cancel Button
+          closeButton(() {
+            // Emit Event
+            controller.declineInvite();
 
-                // Pop Window
-                Get.back();
-              }, padTop: 8, padRight: 8),
+            // Pop Window
+            Get.back();
+          }, padTop: 8, padRight: 8),
 
-              // @ Invite View
-              Padding(padding: EdgeInsets.all(8)),
-              inviteView
-            ])));
+          // @ Invite View
+          Padding(padding: EdgeInsets.all(8)),
+          inviteView
+        ])));
   }
 }
 
@@ -80,20 +81,23 @@ class _ContactInvite extends GetView<CardController> {
         )
       ]),
 
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        // @ Send Back Button
-        rectangleButton("Keep and send yours", () {
-          // Emit Event
-          controller.acceptContact(contact, true);
-          Get.back();
-        }),
-        Padding(padding: EdgeInsets.all(6)),
-        // @ Save Button
-        rectangleButton("Keep", () {
-          controller.acceptContact(contact, false);
-          Get.back();
-        }),
-      ])
+      Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // @ Send Back Button
+            rectangleButton("Keep and send yours", () {
+              // Emit Event
+              controller.acceptContact(contact, true);
+              Get.back();
+            }),
+            Padding(padding: EdgeInsets.all(6)),
+            // @ Save Button
+            rectangleButton("Keep", () {
+              controller.acceptContact(contact, false);
+              Get.back();
+            }),
+          ])
     ]);
   }
 }

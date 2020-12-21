@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:sonar_app/data/card_model.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -47,9 +46,7 @@ class CardPopup extends GetView<CardController> {
 
     // @ Check Card Type - ImageFile
     else {
-      if (data.metadata != null) {
-        popupView = _ImagePopupView(data.metadata);
-      }
+      popupView = Container();
     }
 
     return Container(
@@ -76,7 +73,6 @@ class _ContactPopupView extends GetView<CardController> {
   _ContactPopupView(this.contact);
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     // Display Info
     return Column(children: [
       // @ Basic Contact Info - Make Expandable
@@ -96,49 +92,6 @@ class _ContactPopupView extends GetView<CardController> {
         Get.back();
       }),
     ]);
-  }
-}
-
-// ^ Image Popup View ^ //
-class _ImagePopupView extends StatelessWidget {
-  final Metadata meta;
-
-  const _ImagePopupView(this.meta, {Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-        child: Neumorphic(
-            style: SonrBorderStyle(),
-            child: Column(
-              children: [
-                // Some Space
-                Padding(padding: EdgeInsets.all(25)),
-
-                // Top Right Close/Cancel Button
-                closeButton(() => Get.back()),
-                Padding(padding: EdgeInsets.only(top: 10)),
-
-                // Image
-                FittedBox(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 1,
-                          minHeight: 1,
-                        ),
-                        child: Container(
-                            child: Hero(
-                                tag: meta.name,
-                                child: GestureDetector(
-                                    onTap: () {
-                                      Get.dialog(CardPhotoView.fromMeta(meta),
-                                          barrierDismissible: false,
-                                          useSafeArea: false);
-                                    },
-                                    child: Image.file(File(meta.path))))))),
-              ],
-            )));
   }
 }
 
@@ -174,43 +127,5 @@ class _MediaPopupView extends StatelessWidget {
                         child: Container(child: Image.file(File(meta.path))))),
               ],
             )));
-  }
-}
-
-// ^ Card Hero Image View ^ //
-class CardPhotoView extends StatelessWidget {
-  CardPhotoView(
-    this.provider,
-    this.tag, {
-    this.backgroundDecoration,
-  });
-  final ImageProvider<Object> provider;
-  final Decoration backgroundDecoration;
-  final String tag;
-
-  factory CardPhotoView.fromCard(CardModel card) {
-    return new CardPhotoView(
-        FileImage(File(card.metadata.path)), card.metadata.name);
-  }
-
-  factory CardPhotoView.fromMeta(Metadata meta) {
-    return new CardPhotoView(FileImage(File(meta.path)), meta.name);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints.expand(
-        height: Get.height,
-      ),
-      child: Stack(children: [
-        PhotoView(
-            tightMode: true,
-            imageProvider: provider,
-            backgroundDecoration: backgroundDecoration,
-            heroAttributes: PhotoViewHeroAttributes(tag: tag)),
-        closeButton(() => Get.back(), padTop: 35, padRight: 25),
-      ]),
-    );
   }
 }

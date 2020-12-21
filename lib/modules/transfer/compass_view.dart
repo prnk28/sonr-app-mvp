@@ -335,9 +335,10 @@ class _CompassBulb extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       AnimatedSwitcher(
-                          duration: Duration(milliseconds: 500),
+                          duration: Duration(milliseconds: 50),
                           child: Text(
                             direction,
+                            key: UniqueKey(),
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.w400,
                               fontSize: 46,
@@ -345,9 +346,10 @@ class _CompassBulb extends StatelessWidget {
                             ),
                           )),
                       AnimatedSwitcher(
-                          duration: Duration(milliseconds: 500),
+                          duration: Duration(milliseconds: 50),
                           child: Text(
                             heading,
+                            key: UniqueKey(),
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               fontSize: 24,

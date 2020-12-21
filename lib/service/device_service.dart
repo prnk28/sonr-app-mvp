@@ -48,7 +48,7 @@ class DeviceService extends GetxService {
           position = await user.position;
 
           // Initialize Sonr Node
-          Get.putAsync(() => SonrService().init(position, user));
+          await Get.putAsync(() => SonrService().init(position, user));
         }
       } else {
         // Push to Register Screen

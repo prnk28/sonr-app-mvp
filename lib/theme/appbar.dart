@@ -68,7 +68,7 @@ NeumorphicAppBar SonrExitAppBar(
                 depth: 8),
             child: GradientIcon(Icons.close, FlutterGradientNames.phoenixStart),
             onPressed: () {
-              Get.offAllNamed(exitLocation);
+              Get.offNamed(exitLocation);
             },
           )));
 }

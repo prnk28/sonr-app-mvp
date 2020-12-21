@@ -8,7 +8,6 @@ NeumorphicButton rectangleButton(String text, Function onPressed,
       onPressed: onPressed,
       style: NeumorphicStyle(
           depth: 8,
-          shape: shape,
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
       padding: const EdgeInsets.all(12.0),
       child: normalText(text));
@@ -30,11 +29,10 @@ Widget closeButton(Function onPressed,
             bottom: padBottom,
           ),
           child: NeumorphicButton(
-              // padding: EdgeInsets.only(top: 10, right: 15),
               style: NeumorphicStyle(
                   boxShape: NeumorphicBoxShape.circle(),
-                  shape: NeumorphicShape.convex,
-                  depth: 5),
+                  shape: NeumorphicShape.flat,
+                  depth: 8),
               child: GradientIcon(
                 Icons.close,
                 FlutterGradientNames.phoenixStart,

@@ -15,11 +15,14 @@ class ProfileHeader extends GetView<ProfileController> {
           clipHeight: 150.0,
           child: Container(
             width: Get.width,
-            height: 450.0,
-            color: Colors.blue,
+            height: 400.0,
+            color: Colors.blue, // Same Header Color
           ),
         ),
-        _buildActions()
+        NeumorphicBackground(
+          child: _buildActions(),
+          backendColor: Colors.blue, // Same Header Color
+        )
       ],
     );
   }
@@ -40,6 +43,7 @@ class ProfileHeader extends GetView<ProfileController> {
                           child: NeumorphicButton(
                             padding: EdgeInsets.all(8),
                             style: NeumorphicStyle(
+                                color: Colors.grey[200],
                                 intensity: 0.6,
                                 boxShape: NeumorphicBoxShape.circle(),
                                 shape: NeumorphicShape.flat,
@@ -47,7 +51,7 @@ class ProfileHeader extends GetView<ProfileController> {
                             child: GradientIcon(
                                 Icons.close, FlutterGradientNames.phoenixStart),
                             onPressed: () {
-                              Get.offAllNamed("/home/profile");
+                              Get.offNamed("/home/profile");
                             },
                           ))),
                   Spacer(),
@@ -71,12 +75,13 @@ class ProfileHeader extends GetView<ProfileController> {
                           child: NeumorphicButton(
                               padding: EdgeInsets.all(8),
                               style: NeumorphicStyle(
+                                  color: Colors.grey[200],
                                   intensity: 0.6,
                                   boxShape: NeumorphicBoxShape.circle(),
                                   shape: NeumorphicShape.flat,
                                   depth: 8),
-                              child: GradientIcon(
-                                  Icons.edit, FlutterGradientNames.bigMango),
+                              child: GradientIcon(Icons.more_horiz_outlined,
+                                  FlutterGradientNames.northMiracle),
                               onPressed: () {
                                 controller.toggleEditing();
                               }))),

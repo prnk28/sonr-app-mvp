@@ -78,8 +78,8 @@ class ProfileController extends GetxController {
     _save();
   }
 
-  // ^ Add a Social Tile ^ //
-  addSocialTile(Contact_SocialTile_Provider provider,
+  // ^ Add a Social Tile  ^ //
+  saveSocialTile(Contact_SocialTile_Provider provider,
       Contact_SocialTile_TileType tileType,
       {int position = 0, String url = "", String username = ""}) {
     // Create Tile from Data
@@ -94,6 +94,8 @@ class ProfileController extends GetxController {
     userContact.value.socials.add(tile);
     _save();
   }
+
+  changeAddTileView() {}
 
   // ^ Edit a Social Tile ^ //
   editSocialTile(SocialEditType edit, dynamic data) {

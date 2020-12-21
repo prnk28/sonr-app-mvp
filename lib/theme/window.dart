@@ -7,5 +7,8 @@ import 'color.dart';
 NeumorphicStyle SonrBorderStyle() {
   return NeumorphicStyle(
       color: HexColor.fromHex("EFEEEE"),
+      lightSource: LightSource.top,
+      intensity: 0.85,
+      surfaceIntensity: 0.25,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)));
 }
