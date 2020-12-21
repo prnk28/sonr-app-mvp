@@ -179,22 +179,23 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(dynamic data) async {
+    print(data.toString());
     if (data is AuthReply) {
-      if (data.decision) {
-        print(data.toString());
-        // Update Status
-        status(SonrStatus.Busy);
-        Vibration.vibrate(duration: 50);
-        Vibration.vibrate(duration: 100);
-
-        // Check if Sent Back Contact
-        if (data.payload.type == Payload_Type.CONTACT) {
-          Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
-          status(SonrStatus.Complete);
-        }
+      // Check if Sent Back Contact
+      if (data.payload.type == Payload_Type.CONTACT) {
+        Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
+        status(SonrStatus.Complete);
       } else {
-        // User Denied
-        status(SonrStatus.Searching);
+        // For File
+        if (data.decision) {
+          // Update Status
+          status(SonrStatus.Busy);
+          Vibration.vibrate(duration: 50);
+          Vibration.vibrate(duration: 100);
+        } else {
+          // User Denied
+          status(SonrStatus.Searching);
+        }
       }
     }
   }

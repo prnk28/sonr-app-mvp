@@ -38,29 +38,42 @@ class CardPopup extends GetView<CardController> {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize
+    Widget popupView = Container();
+
     // @ Check Card Type - Contact
     if (data.type == CardType.Contact) {
-      return _ContactPopupView(data.contact);
+      popupView = _ContactPopupView(data.contact);
     }
     // @ Check Card Type - MediaFile
     else if (data.type == CardType.File) {
       if (data.metadata != null) {
-        return _MediaPopupView(data.metadata);
-      } else {
-        print("Null Metadata in Popup - MediaFile");
-        return Container();
+        popupView = _MediaPopupView(data.metadata);
       }
     }
 
     // @ Check Card Type - ImageFile
     else {
       if (data.metadata != null) {
-        return _ImagePopupView(data.metadata);
-      } else {
-        print("Null Metadata in Popup - ImageFile");
-        return Container();
+        popupView = _ImagePopupView(data.metadata);
       }
     }
+
+    return Container(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
+        child: Neumorphic(
+            style: SonrBorderStyle(),
+            child: Column(children: [
+              // @ Top Right Close/Cancel Button
+              closeButton(() {
+                // Pop Window
+                Get.back();
+              }, padTop: 8, padRight: 8),
+
+              // @ Invite View
+              Padding(padding: EdgeInsets.all(8)),
+              popupView
+            ])));
   }
 }
 

@@ -31,6 +31,7 @@ class _SocialTile extends GetView<ProfileController> {
             margin: EdgeInsets.all(4),
             child: Container(
               height: 80,
+              width: 80,
               child:
                   // Image Info
                   Column(

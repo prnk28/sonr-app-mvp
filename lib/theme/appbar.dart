@@ -75,27 +75,41 @@ NeumorphicAppBar SonrExitAppBar(
 
 // ^ Utilized in Profile Screen ^ //
 // ignore: non_constant_identifier_names
-AppBar SonrProfileAppBar(
-  String exitLocation, {
+NeumorphicAppBar SonrProfileAppBar(
+  String exitLocation,
+  Function onEdit, {
   String title: "",
 }) {
-  // Create App Bar
-  return AppBar(
-      backgroundColor: Color(0x44000000),
-      elevation: 0,
-      title: Center(child: Text(title, style: GoogleFonts.poppins())),
-      leading: Align(
+  return NeumorphicAppBar(
+    title: Center(child: Text(title, style: GoogleFonts.poppins())),
+    leading: Align(
+        alignment: Alignment.center,
+        child: NeumorphicButton(
+          padding: EdgeInsets.all(8),
+          style: NeumorphicStyle(
+              intensity: 0.85,
+              boxShape: NeumorphicBoxShape.circle(),
+              shape: NeumorphicShape.flat,
+              depth: 8),
+          child: GradientIcon(Icons.close, FlutterGradientNames.phoenixStart),
+          onPressed: () {
+            Get.offAllNamed(exitLocation);
+          },
+        )),
+    actions: [
+      Align(
           alignment: Alignment.center,
           child: NeumorphicButton(
-            padding: EdgeInsets.all(8),
-            style: NeumorphicStyle(
-                intensity: 0.85,
-                boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.flat,
-                depth: 8),
-            child: GradientIcon(Icons.close, FlutterGradientNames.phoenixStart),
-            onPressed: () {
-              Get.offAllNamed(exitLocation);
-            },
-          )));
+              padding: EdgeInsets.all(8),
+              style: NeumorphicStyle(
+                  intensity: 0.85,
+                  boxShape: NeumorphicBoxShape.circle(),
+                  shape: NeumorphicShape.flat,
+                  depth: 8),
+              child: GradientIcon(Icons.edit, FlutterGradientNames.bigMango),
+              onPressed: () {
+                onEdit();
+              }))
+    ],
+  );
 }

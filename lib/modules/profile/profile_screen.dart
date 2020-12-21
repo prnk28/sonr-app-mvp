@@ -9,18 +9,16 @@ class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return SonrTheme(Scaffold(
-        appBar: SonrExitAppBar(
+        appBar: SonrProfileAppBar(
           "/home/profile",
+          () {
+            controller.toggleEditing();
+          },
           title: controller.userContact.value.firstName +
               " " +
               controller.userContact.value.lastName,
         ),
         backgroundColor: NeumorphicTheme.baseColor(context),
-        floatingActionButton: NeumorphicFloatingActionButton(
-            child: GradientIcon(Icons.edit, FlutterGradientNames.bigMango),
-            onPressed: () {
-              controller.toggleEditing();
-            }),
         body: Column(
           children: [
             ProfileHeader(),
