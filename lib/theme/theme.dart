@@ -25,14 +25,14 @@ NeumorphicTheme SonrTheme(Widget child) {
         accentColor: Colors.green,
         lightSource: LightSource.topLeft,
         depth: 4,
-        intensity: 0.3,
+        intensity: 0.5,
       ),
       theme: NeumorphicThemeData(
         baseColor: Color(0xffDDDDDD),
         accentColor: Colors.cyan,
         lightSource: LightSource.topLeft,
         depth: 6,
-        intensity: 0.5,
+        intensity: 0.65,
       ),
       child: child);
 }

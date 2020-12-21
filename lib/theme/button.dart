@@ -15,8 +15,8 @@ NeumorphicButton rectangleButton(String text, Function onPressed,
 
 Widget closeButton(Function onPressed,
     {Alignment alignment = Alignment.topRight,
-    double padTop = 5,
-    double padRight = 5,
+    double padTop = 8,
+    double padRight = 8,
     double padLeft = 5,
     double padBottom = 5}) {
   return Align(
@@ -32,7 +32,7 @@ Widget closeButton(Function onPressed,
               style: NeumorphicStyle(
                   boxShape: NeumorphicBoxShape.circle(),
                   shape: NeumorphicShape.flat,
-                  depth: 10),
+                  depth: 8),
               child: GradientIcon(
                 Icons.close,
                 FlutterGradientNames.phoenixStart,

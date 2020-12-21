@@ -56,17 +56,21 @@ class ProfileHeader extends GetView<ProfileController> {
                           ))),
                   Spacer(),
 
-                  // @ Text Widget
-                  Center(
-                      child: Text(controller.userContact.value.firstName,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                            fontSize: 24,
-                            color: Colors.white,
-                          ))),
+                  // @ Avatar / Name
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _AvatarField(),
+                        Text(controller.userContact.value.firstName,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ))
+                      ]),
 
-                  // @ Edit Button
+                  // @ More Button
                   Spacer(),
                   Padding(
                       padding: EdgeInsets.only(right: 14),
@@ -82,9 +86,27 @@ class ProfileHeader extends GetView<ProfileController> {
                                   depth: 8),
                               child: GradientIcon(Icons.more_horiz_outlined,
                                   FlutterGradientNames.northMiracle),
-                              onPressed: () {
-                                controller.toggleEditing();
-                              }))),
+                              onPressed: () {}))),
                 ])));
+  }
+}
+
+class _AvatarField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Neumorphic(
+        padding: EdgeInsets.all(10),
+        style: NeumorphicStyle(
+          boxShape: NeumorphicBoxShape.circle(),
+          depth: NeumorphicTheme.embossDepth(context),
+        ),
+        child: Icon(
+          Icons.insert_emoticon,
+          size: 120,
+          color: Colors.black.withOpacity(0.2),
+        ),
+      ),
+    );
   }
 }

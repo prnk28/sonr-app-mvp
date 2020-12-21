@@ -1,4 +1,3 @@
-import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -17,7 +16,7 @@ class SocialTile extends GetView<ProfileController> {
     Widget view;
     switch (data.type) {
       case Contact_SocialTile_TileType.Icon:
-        view = _buildIconView();
+        view = Center(child: gradientIconFromSocialProvider(data.provider));
         break;
       case Contact_SocialTile_TileType.Showcase:
         view = _buildShowcaseView();
@@ -38,41 +37,6 @@ class SocialTile extends GetView<ProfileController> {
             child: Container(
               child: view,
             )));
-  }
-
-  // ^ Create Icon View based on Data ^ //
-  Widget _buildIconView() {
-    Widget w;
-    switch (data.provider) {
-      case Contact_SocialTile_Provider.Facebook:
-        w = GradientIcon(
-            Boxicons.bxl_facebook_square, FlutterGradientNames.perfectBlue);
-        break;
-      case Contact_SocialTile_Provider.Instagram:
-        w = GradientIcon(
-            Boxicons.bxl_instagram, FlutterGradientNames.ripeMalinka);
-        break;
-      case Contact_SocialTile_Provider.Medium:
-        w = GradientIcon(
-            Boxicons.bxl_medium, FlutterGradientNames.mountainRock);
-        break;
-      case Contact_SocialTile_Provider.Spotify:
-        w = GradientIcon(Boxicons.bxl_spotify, FlutterGradientNames.newLife);
-        break;
-      case Contact_SocialTile_Provider.TikTok:
-        w = GradientIcon(Boxicons.bxl_creative_commons,
-            FlutterGradientNames.premiumDark); // TODO
-        break;
-      case Contact_SocialTile_Provider.Twitter:
-        w = GradientIcon(Boxicons.bxl_twitter, FlutterGradientNames.partyBliss);
-        break;
-      case Contact_SocialTile_Provider.YouTube:
-        w = GradientIcon(Boxicons.bxl_youtube, FlutterGradientNames.loveKiss);
-        break;
-    }
-    return Container(
-      child: Center(child: w),
-    );
   }
 
   // ^ Create Showcase View based on Data ^ //

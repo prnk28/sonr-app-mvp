@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -71,6 +72,71 @@ Widget iconWithPreview(Metadata metadata) {
     default:
       return Icon(Icons.device_unknown, size: 100);
       break;
+  }
+}
+
+// ^ Get Gradient Icon from Social Provider ^ //
+GradientIcon gradientIconFromSocialProvider(
+    Contact_SocialTile_Provider provider) {
+  switch (provider) {
+    case Contact_SocialTile_Provider.Facebook:
+      return GradientIcon(
+          Boxicons.bxl_facebook_square, FlutterGradientNames.perfectBlue);
+      break;
+    case Contact_SocialTile_Provider.Instagram:
+      return GradientIcon(
+          Boxicons.bxl_instagram, FlutterGradientNames.ripeMalinka);
+      break;
+    case Contact_SocialTile_Provider.Medium:
+      return GradientIcon(
+          Boxicons.bxl_medium, FlutterGradientNames.mountainRock);
+      break;
+    case Contact_SocialTile_Provider.Spotify:
+      return GradientIcon(Boxicons.bxl_spotify, FlutterGradientNames.newLife);
+      break;
+    case Contact_SocialTile_Provider.TikTok:
+      return GradientIcon(Boxicons.bxl_creative_commons,
+          FlutterGradientNames.premiumDark); // TODO
+      break;
+    case Contact_SocialTile_Provider.Twitter:
+      return GradientIcon(
+          Boxicons.bxl_twitter, FlutterGradientNames.partyBliss);
+      break;
+    case Contact_SocialTile_Provider.YouTube:
+      return GradientIcon(Boxicons.bxl_youtube, FlutterGradientNames.loveKiss);
+      break;
+    default:
+      return GradientIcon(
+          Icons.device_unknown_rounded, FlutterGradientNames.aboveTheSky);
+  }
+}
+
+// ^ Get Normal Icon from Social Provider ^ //
+Icon iconFromSocialProvider(Contact_SocialTile_Provider provider) {
+  switch (provider) {
+    case Contact_SocialTile_Provider.Facebook:
+      return Icon(Boxicons.bxl_facebook_square);
+      break;
+    case Contact_SocialTile_Provider.Instagram:
+      return Icon(Boxicons.bxl_instagram);
+      break;
+    case Contact_SocialTile_Provider.Medium:
+      return Icon(Boxicons.bxl_medium);
+      break;
+    case Contact_SocialTile_Provider.Spotify:
+      return Icon(Boxicons.bxl_spotify);
+      break;
+    case Contact_SocialTile_Provider.TikTok:
+      return Icon(Boxicons.bxl_creative_commons); // TODO
+      break;
+    case Contact_SocialTile_Provider.Twitter:
+      return Icon(Boxicons.bxl_twitter);
+      break;
+    case Contact_SocialTile_Provider.YouTube:
+      return Icon(Boxicons.bxl_youtube);
+      break;
+    default:
+      return Icon(Icons.device_unknown_rounded);
   }
 }
 

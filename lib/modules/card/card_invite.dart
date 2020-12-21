@@ -42,7 +42,7 @@ class CardInvite extends GetView<CardController> {
     return NeumorphicBackground(
         margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
         borderRadius: BorderRadius.circular(40),
-        backendColor: Colors.black87,
+        backendColor: Colors.black54,
         child: Neumorphic(
             child: Column(children: [
           // @ Top Right Close/Cancel Button
