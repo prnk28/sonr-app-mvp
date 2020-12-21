@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -92,13 +93,35 @@ class ProfileController extends GetxController {
     // @ Step 2
     else if (state.value == ProfileState.AddingTileStepOne) {
       if (currentTile.value.hasProvider()) {
+        // Update State
         state(ProfileState.AddingTileStepTwo);
+      } else {
+        // Display Error Snackbar
+        Get.snackbar("Hold Up!", "Select a social media provider first",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            icon: Icon(
+              Icons.warning_outlined,
+              color: Colors.white,
+            ),
+            colorText: Colors.white);
       }
     }
     // @ Step 3
     else if (state.value == ProfileState.AddingTileStepTwo) {
+      // Update State
       if (currentTile.value.hasUrl() && currentTile.value.hasUsername()) {
         state(ProfileState.AddingTileStepThree);
+      } else {
+        // Display Error Snackbar
+        Get.snackbar("Wait!", "Add your information",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            icon: Icon(
+              Icons.warning_outlined,
+              color: Colors.white,
+            ),
+            colorText: Colors.white);
       }
     }
     // @ Finish
