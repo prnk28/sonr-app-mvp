@@ -9,21 +9,22 @@ class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return SonrTheme(Scaffold(
-        appBar: SonrProfileAppBar(
-          "/home/profile",
-          () {
-            controller.toggleEditing();
-          },
-          title: controller.userContact.value.firstName +
-              " " +
-              controller.userContact.value.lastName,
-        ),
         backgroundColor: NeumorphicTheme.baseColor(context),
-        body: Column(
-          children: [
-            ProfileHeader(),
-            ProfileTiles(),
-          ],
-        )));
+        body: _ProfileView()));
+  }
+}
+
+class _ProfileView extends GetView<ProfileController> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Neumorphic(
+        child: Column(
+      children: [
+        ProfileHeader(),
+        Padding(padding: EdgeInsets.all(40)),
+        ProfileTiles(),
+      ],
+    ));
   }
 }

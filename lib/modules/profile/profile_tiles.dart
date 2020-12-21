@@ -9,10 +9,14 @@ class ProfileTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return SafeArea(
-        child: ListView.builder(
-            itemCount: 6,
+    return Expanded(
+        child: GridView.builder(
+            padding: EdgeInsets.only(left: 4, right: 4, bottom: 20, top: 2),
+            itemCount: 5,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4, mainAxisSpacing: 8, crossAxisSpacing: 4),
             itemBuilder: (context, idx) {
+              // Generate File Cell
               return _SocialTile();
             }));
   }
@@ -30,13 +34,9 @@ class _SocialTile extends GetView<ProfileController> {
             style: NeumorphicStyle(intensity: 0.85),
             margin: EdgeInsets.all(4),
             child: Container(
-              height: 80,
-              width: 80,
-              child:
-                  // Image Info
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     normalText("Some Text"),
                     normalText("Some URL"),
                     normalText("Some Preview"),
