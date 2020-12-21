@@ -91,7 +91,7 @@ class _ContactPopupView extends GetView<CardController> {
       ]),
 
       // @ Save Button
-      rectangleButton("Save", () {
+      rectangleButton("Keep", () {
         controller.acceptContact(contact, false);
         Get.back();
       }),

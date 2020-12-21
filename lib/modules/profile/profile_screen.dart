@@ -22,7 +22,7 @@ class ProfileScreen extends GetView<ProfileController> {
         body: Column(
           children: [
             ProfileHeader(),
-            //ProfileTiles(),
+            ProfileTiles(),
           ],
         )));
   }

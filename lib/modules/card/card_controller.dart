@@ -33,7 +33,7 @@ class CardController extends GetxController {
   }
 
   // ^ Accept Contact Invite Request ^ //
-  CardModel acceptContact(Contact c, bool sb) {
+  acceptContact(Contact c, bool sb) {
     // Check if Send Back
     if (sb) {
       Get.find<SonrService>().respond(true);
@@ -49,10 +49,6 @@ class CardController extends GetxController {
     // Add to Cards Display Last Card
     allCards.add(card);
     allCards.refresh();
-
-    // Return Card Model
-    state(CardState.Viewing);
-    return card;
   }
 
   // ^ Decline Invite Request ^ //

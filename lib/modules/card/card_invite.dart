@@ -8,12 +8,17 @@ import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-import 'card_popup.dart';
-
 // ^ General Invite Builds from Invite Protobuf ^ //
 class CardInvite extends GetView<CardController> {
   final AuthInvite invite;
   CardInvite(this.invite);
+
+  // @ Container Sizes
+  EdgeInsetsGeometry defaultSize =
+      EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105);
+
+  EdgeInsetsGeometry progressSize =
+      EdgeInsets.only(left: 20, right: 20, top: 85, bottom: 105);
 
   @override
   Widget build(BuildContext context) {
@@ -77,14 +82,14 @@ class _ContactInvite extends GetView<CardController> {
 
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         // @ Send Back Button
-        rectangleButton("Send Back", () {
+        rectangleButton("Keep and send yours", () {
           // Emit Event
           controller.acceptContact(contact, true);
           Get.back();
         }),
         Padding(padding: EdgeInsets.all(6)),
         // @ Save Button
-        rectangleButton("Save", () {
+        rectangleButton("Keep", () {
           controller.acceptContact(contact, false);
           Get.back();
         }),
