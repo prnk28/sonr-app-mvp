@@ -59,7 +59,7 @@ class EditTile extends GetView<ProfileController> {
       style: NeumorphicStyle(intensity: 0.85),
       child: GradientIcon(Icons.add, FlutterGradientNames.morpheusDen),
       onPressed: () {
-        Get.dialog(TileAddDialog());
+        Get.dialog(TileAddDialog(), barrierColor: K_DIALOG_COLOR);
       },
     );
   }

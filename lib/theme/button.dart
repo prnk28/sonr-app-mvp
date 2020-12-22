@@ -20,7 +20,7 @@ Widget closeButton(Function onPressed,
     double padLeft = 5,
     double padBottom = 5}) {
   return Align(
-      alignment: Alignment.topRight,
+      alignment: Alignment.topLeft,
       child: Padding(
           padding: EdgeInsets.only(
             top: padTop,

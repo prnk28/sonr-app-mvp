@@ -34,7 +34,7 @@ class ContactSQL {
 
   // @ Convert from SQL Map to Contact
   factory ContactSQL.fromSQL(Map map) {
-    return ContactSQL(map[contactColumnData],
+    return ContactSQL(Contact.fromJson(map[contactColumnData]),
         id: map[contactColumnId],
         lastOpened:
             DateTime.fromMillisecondsSinceEpoch(map[contactColumnlastOpened]));

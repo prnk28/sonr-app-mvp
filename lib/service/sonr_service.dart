@@ -7,6 +7,7 @@ import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/modules/card/card_invite.dart';
 import 'package:sonar_app/modules/card/card_popup.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
 import 'sql_service.dart';
@@ -175,7 +176,7 @@ class SonrService extends GetxService {
       // Inform Listener
       status(SonrStatus.Pending);
       Vibration.vibrate(duration: 250);
-      Get.dialog(CardInvite(data));
+      Get.dialog(CardInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 

@@ -13,13 +13,6 @@ class CardInvite extends GetView<CardController> {
   final AuthInvite invite;
   CardInvite(this.invite);
 
-  // @ Container Sizes
-  final EdgeInsetsGeometry defaultSize =
-      EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105);
-
-  final EdgeInsetsGeometry progressSize =
-      EdgeInsets.only(left: 20, right: 20, top: 85, bottom: 105);
-
   @override
   Widget build(BuildContext context) {
     // Initialize
@@ -39,25 +32,31 @@ class CardInvite extends GetView<CardController> {
       inviteView = Container();
     }
 
-    return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
-        borderRadius: BorderRadius.circular(40),
-        backendColor: Colors.black54,
-        child: Neumorphic(
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: NeumorphicBackground(
+          margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
+          borderRadius: BorderRadius.circular(40),
+          backendColor: Colors.transparent,
+          child: Neumorphic(
+              child: Container(
             child: Column(children: [
-          // @ Top Right Close/Cancel Button
-          closeButton(() {
-            // Emit Event
-            controller.declineInvite();
+              // @ Top Right Close/Cancel Button
+              closeButton(() {
+                // Emit Event
+                controller.declineInvite();
 
-            // Pop Window
-            Get.back();
-          }, padTop: 8, padRight: 8),
+                // Pop Window
+                Get.back();
+              }, padTop: 8, padLeft: 8),
 
-          // @ Invite View
-          Padding(padding: EdgeInsets.all(8)),
-          inviteView
-        ])));
+              // @ Invite View
+              Padding(padding: EdgeInsets.all(8)),
+              inviteView
+            ]),
+          ))),
+    );
   }
 }
 
@@ -155,7 +154,7 @@ class _FileInviteProgress extends HookWidget {
   final IconData iconData;
   final double boxHeight = Get.height / 3;
   final double boxWidth = Get.width;
-  final Color waveColor = Colors.greenAccent;
+  final Gradient waveColor = FlutterGradients.paloAlto();
 
   // Constructer
   _FileInviteProgress(this.iconData) : super(key: GlobalKey());
@@ -186,7 +185,7 @@ class _FileInviteProgress extends HookWidget {
                         waveAnimation: controller,
                         percent: Get.find<SonrService>().progress.value,
                         boxHeight: boxHeight,
-                        waveColor: waveColor,
+                        gradient: waveColor,
                       ),
                     );
                   },
@@ -203,7 +202,7 @@ class _FileInviteProgress extends HookWidget {
                   ).createShader(bounds),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
+                      color: K_BACKGROUND_COLOR,
                     ),
                     child: Center(
                       child: Icon(iconData, key: iconKey, size: 225),
@@ -241,8 +240,7 @@ class _FileInviteComplete extends StatelessWidget {
                   minWidth: 1,
                   minHeight: 1,
                 ),
-                child: InteractiveViewer(
-                    constrained: false, child: Image.file(File(meta.path))))),
+                child: Container(child: Image.file(File(meta.path))))),
       ),
     );
   }

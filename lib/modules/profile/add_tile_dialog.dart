@@ -36,8 +36,9 @@ class TileAddDialog extends GetView<ProfileController> {
       return SonrTheme(
         Scaffold(
             backgroundColor: Colors.transparent,
+            extendBodyBehindAppBar: true,
             body: NeumorphicBackground(
-                backendColor: Colors.black54,
+                backendColor: Colors.transparent,
                 margin:
                     EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
                 borderRadius: BorderRadius.circular(40),
@@ -278,7 +279,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
             Padding(padding: EdgeInsets.all(20)),
 
             // @ Toggle Buttons for Widget Size
-            
+
             Row(
               children: [
                 // Icon Tile

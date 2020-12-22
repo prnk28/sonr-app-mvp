@@ -12,14 +12,14 @@ class WavePainter extends CustomPainter {
   final Animation<double> waveAnimation;
   final double percent;
   final double boxHeight;
-  final Color waveColor;
+  final Gradient gradient;
 
   WavePainter({
     @required this.iconKey,
     this.waveAnimation,
     this.percent,
     this.boxHeight,
-    this.waveColor,
+    this.gradient,
   });
 
   @override
@@ -43,7 +43,10 @@ class WavePainter extends CustomPainter {
     path.lineTo(width, height);
     path.lineTo(0.0, height);
     path.close();
-    final wavePaint = Paint()..color = waveColor;
+    final wavePaint = Paint()
+      ..shader = gradient.createShader(
+        Rect.fromLTWH(0, 0, width, height),
+      );
     canvas.drawPath(path, wavePaint);
   }
 

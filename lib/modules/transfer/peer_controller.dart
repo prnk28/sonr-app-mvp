@@ -117,6 +117,7 @@ class PeerController extends GetxController {
     if (!_isInvited) {
       Get.find<SonrService>().invite(this.peer);
       shouldChangeVisibility(false);
+      _pending.instance.animation.loop = Loop.pingPong;
       _pending.isActive = _isInvited = !_isInvited;
     }
   }
@@ -127,12 +128,15 @@ class PeerController extends GetxController {
       case PeerStatus.Idle:
         shouldChangeVisibility(false);
         break;
+
       case PeerStatus.OffLeft:
         // TODO: Handle this case.
         break;
+
       case PeerStatus.OffRight:
         // TODO: Handle this case.
         break;
+
       case PeerStatus.Accepted:
         // Start Animation
         _pending.instance.animation.loop = Loop.oneShot;
@@ -146,11 +150,21 @@ class PeerController extends GetxController {
           _sending.isActive = _inProgress = !_inProgress;
         });
         break;
+
       case PeerStatus.Denied:
         _pending.instance.animation.loop = Loop.oneShot;
         _denied.instance.animation.loop = Loop.oneShot;
         _denied.isActive = _hasDenied = !_hasDenied;
+
+        // Update After Delay
+        Future.delayed(Duration(seconds: 1)).then((_) {
+          // Call Finish
+          _isInvited = false;
+          _denied.instance.time = 0.0;
+          shouldChangeVisibility(false);
+        });
         break;
+
       case PeerStatus.Completed:
         // Start Complete Animation
         _sending.instance.animation.loop = Loop.oneShot;
