@@ -10,6 +10,7 @@ import 'profile_header.dart';
 class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
+    // Build View
     return SonrTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: _ProfileView()));
@@ -29,7 +30,7 @@ class _ProfileView extends GetView<ProfileController> {
     }
 
     // Create View
-    return Neumorphic(
+    return NeumorphicBackground(
         child: Column(
       children: [
         // @ Builds Profile Header

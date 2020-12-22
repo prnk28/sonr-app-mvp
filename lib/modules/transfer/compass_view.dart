@@ -328,34 +328,32 @@ class _CompassBulb extends StatelessWidget {
             ),
             margin: EdgeInsets.all(7.5),
             child: AnimatedContainer(
-                duration: Duration(milliseconds: 500),
+                duration: Duration(seconds: 1),
                 decoration: BoxDecoration(gradient: gradient),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      AnimatedSwitcher(
-                          duration: Duration(milliseconds: 50),
+                      SlideDownAnimatedSwitcher(
                           child: Text(
-                            direction,
-                            key: UniqueKey(),
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 46,
-                              color: Colors.white,
-                            ),
-                          )),
-                      AnimatedSwitcher(
-                          duration: Duration(milliseconds: 50),
+                        direction,
+                        key: ValueKey<String>(direction),
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 46,
+                          color: Colors.white,
+                        ),
+                      )),
+                      SlideUpAnimatedSwitcher(
                           child: Text(
-                            heading,
-                            key: UniqueKey(),
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Colors.white,
-                            ),
-                          ))
+                        heading,
+                        key: ValueKey<String>(heading),
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                      ))
                     ]))));
   }
 }

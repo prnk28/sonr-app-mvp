@@ -18,73 +18,28 @@ class _FormViewState extends State<FormView> {
     return Form(
       key: _formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // ****************** //
           // ** <First Name> ** //
           // ****************** //
-          // Label
-          Padding(
-              padding: EdgeInsets.only(left: 22),
-              child: hintText("First Name")),
-
-          // Input
-          Neumorphic(
-              // Padding from Label
-              padding: EdgeInsets.only(top: 12),
-              child: TextFormField(
-                  // Align Inner Text
-                  textAlign: TextAlign.left,
-                  decoration: textFieldDecoration(),
-
-                  // Validate Entry
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter valid first name.';
-                    }
-                    return null;
-                  },
-
-                  // Update Value
-                  onChanged: (String value) {
-                    this._firstName = value;
-                  }),
-
-              // Obtain Style
-              style: textFieldStyle()),
+          NeuomorphicTextField(
+              label: "First Name",
+              hint: "Enter your first name",
+              onChanged: (String value) {
+                this._firstName = value;
+              }),
 
           // ***************** //
           // ** <Last Name> ** //
           // ***************** //
-          // Label
-          Padding(
-              padding: EdgeInsets.only(left: 22, top: 30),
-              child: hintText("Last Name")),
-
-          // Input
-          Neumorphic(
-              // Padding from Label
-              padding: EdgeInsets.only(top: 12),
-              child: TextFormField(
-                  // Align Inner Text
-                  textAlign: TextAlign.left,
-                  decoration: textFieldDecoration(),
-
-                  // Validate Entry
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter valid last name.';
-                    }
-                    return null;
-                  },
-
-                  // Update Value
-                  onChanged: (String value) {
-                    this._lastName = value;
-                  }),
-
-              // Obtain Style
-              style: textFieldStyle()),
+          NeuomorphicTextField(
+              label: "Last Name",
+              hint: "Enter your last name",
+              onChanged: (String value) {
+                this._lastName = value;
+              }),
 
           // ********************* //
           // ** <Submit Button> ** //

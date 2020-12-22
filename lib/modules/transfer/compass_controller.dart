@@ -54,15 +54,17 @@ class CompassController extends GetxController {
   CompassController() {
     // @ Update Direction
     Get.find<SonrService>().direction.listen((newDir) {
-      // Reference
-      direction(newDir);
-      angle(((newDir ?? 0) * (pi / 180) * -1));
+      if ((direction.value - newDir).abs() > 2.5) {
+        // Reference
+        direction(newDir);
+        angle(((newDir ?? 0) * (pi / 180) * -1));
 
-      // Calculate Degrees
-      if (newDir + 90 > 360) {
-        degrees(newDir - 270);
-      } else {
-        degrees(newDir + 90);
+        // Calculate Degrees
+        if (newDir + 90 > 360) {
+          degrees(newDir - 270);
+        } else {
+          degrees(newDir + 90);
+        }
       }
     });
 

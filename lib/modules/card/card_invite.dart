@@ -114,6 +114,7 @@ class _FileInvite extends GetView<CardController> {
       // Check State of Card --> Invitation
       if (controller.state.value == CardState.Invitation) {
         return Column(
+          key: UniqueKey(),
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Build Item from Metadata and Peer
@@ -174,6 +175,7 @@ class _FileInviteProgress extends HookWidget {
     return Obx(() {
       if (Get.find<SonrService>().progress.value < 1.0) {
         return Stack(
+          key: UniqueKey(),
           children: <Widget>[
             SizedBox(
               height: boxHeight,
@@ -231,6 +233,7 @@ class _FileInviteComplete extends StatelessWidget {
   Widget build(BuildContext context) {
     // @ Non-Image Type
     return Container(
+      key: UniqueKey(),
       margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
       child: FittedBox(
           alignment: Alignment.center,

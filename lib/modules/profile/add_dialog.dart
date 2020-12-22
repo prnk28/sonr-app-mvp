@@ -9,63 +9,70 @@ import 'profile_controller.dart';
 class AddDialog extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
-    // Update State
-    controller.addSocialTileNextStep();
-    
     // Get Current View
-    Widget currentView = Obx(() {
+    return Obx(() {
+      // Update State
+      controller.addSocialTileNextStep();
+
+      // Views
+      Widget nextButton;
+      Widget backButton;
+      Widget currentView;
       if (controller.state.value == ProfileState.AddingTileStepTwo) {
-        return _SetInfoView();
-      } else if (controller.state.value == ProfileState.AddingTileStepTwo) {
-        return _SetSizePosView();
+        nextButton = _buildNextButton();
+        backButton = _buildBackButton();
+        currentView = _SetInfoView();
+      } else if (controller.state.value == ProfileState.AddingTileStepThree) {
+        nextButton = _buildNextButton(isFinished: true);
+        backButton = _buildBackButton();
+        currentView = _SetSizePosView();
       } else {
-        return _DropdownAddView();
+        nextButton = _buildNextButton();
+        backButton = _buildBackButton(isDisabled: true);
+        currentView = _DropdownAddView();
       }
+
+      // Build View
+      return SonrTheme(
+        Scaffold(
+            backgroundColor: Colors.transparent,
+            body: NeumorphicBackground(
+                backendColor: Colors.black54,
+                margin:
+                    EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
+                borderRadius: BorderRadius.circular(40),
+                child: Neumorphic(
+                    child: Column(children: [
+                  // @ Top Right Close/Cancel Button
+                  closeButton(() {
+                    // Reset State
+                    controller.state(ProfileState.Viewing);
+                    controller.currentTile(Contact_SocialTile());
+
+                    // Pop Window
+                    Get.back();
+                  }, padTop: 12, padRight: 12),
+
+                  // @ Current Add Popup View
+                  Padding(padding: EdgeInsets.all(10)),
+                  SlideRightAnimatedSwitcher(
+                      child: Align(
+                          key: UniqueKey(),
+                          alignment: Alignment.topCenter,
+                          child: currentView)),
+
+                  // @ Action Buttons
+                  Spacer(),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [backButton, nextButton]),
+                  ),
+                  Padding(padding: EdgeInsets.all(25))
+                ])))),
+      );
     });
-
-    // Build View
-    return SonrTheme(
-      Scaffold(
-          backgroundColor: Colors.transparent,
-          body: NeumorphicBackground(
-              backendColor: Colors.black54,
-              margin:
-                  EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
-              borderRadius: BorderRadius.circular(40),
-              child: Neumorphic(
-                  child: Column(children: [
-                // @ Top Right Close/Cancel Button
-                closeButton(() {
-                  // Reset State
-                  controller.state(ProfileState.Viewing);
-                  controller.currentTile(Contact_SocialTile());
-
-                  // Pop Window
-                  Get.back();
-                }, padTop: 12, padRight: 12),
-
-                // @ Current Add Popup View
-                Padding(padding: EdgeInsets.all(10)),
-                Align(
-                    alignment: Alignment.topCenter,
-                    child: AnimatedSwitcher(
-                        duration: Duration(seconds: 1, milliseconds: 500),
-                        child: currentView)),
-
-                // @ Action Buttons
-                Spacer(),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildBackButton(isDisabled: true),
-                        _buildNextButton(),
-                      ]),
-                ),
-                Padding(padding: EdgeInsets.all(25))
-              ])))),
-    );
   }
 
   // ^ Build Next Button with Finish at End ^ //
@@ -73,6 +80,7 @@ class AddDialog extends GetView<ProfileController> {
     if (isFinished) {
       return NeumorphicButton(
           onPressed: () {
+            print("Finish Tapped");
             controller.addSocialTileNextStep();
           },
           style: NeumorphicStyle(
@@ -89,6 +97,7 @@ class AddDialog extends GetView<ProfileController> {
       return NeumorphicButton(
           onPressed: () {
             print("Next Tapped");
+            controller.addSocialTileNextStep();
           },
           style: NeumorphicStyle(
               depth: 8,
@@ -143,7 +152,7 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        key: UniqueKey(),
+        key: GlobalKey(),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // @ InfoGraph
@@ -239,7 +248,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        key: UniqueKey(),
+        key: GlobalKey(),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // @ InfoGraph
@@ -255,11 +264,11 @@ class _SetInfoViewState extends State<_SetInfoView> {
                           color: Colors.black38)),
                 ),
                 Container(
-                  width: Get.width / 2 + 20,
-                  padding: EdgeInsets.only(top: 15, left: 55),
+                  width: Get.width / 2 + 40,
+                  padding: EdgeInsets.only(top: 25, left: 65),
                   child: Text("Set your info",
                       style: GoogleFonts.poppins(
-                        fontSize: 34,
+                        fontSize: 38,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       )),
@@ -335,7 +344,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        key: UniqueKey(),
+        key: GlobalKey(),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // @ InfoGraph
@@ -461,60 +470,6 @@ class _AgeField extends StatelessWidget {
             )
           ],
         ),
-      ],
-    );
-  }
-}
-
-class _TextField extends StatefulWidget {
-  final String label;
-  final String hint;
-
-  final ValueChanged<String> onChanged;
-
-  _TextField({@required this.label, @required this.hint, this.onChanged});
-
-  @override
-  __TextFieldState createState() => __TextFieldState();
-}
-
-class __TextFieldState extends State<_TextField> {
-  TextEditingController _controller;
-
-  @override
-  void initState() {
-    _controller = TextEditingController(text: widget.hint);
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-          child: Text(
-            this.widget.label,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: NeumorphicTheme.defaultTextColor(context),
-            ),
-          ),
-        ),
-        Neumorphic(
-          margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-          style: NeumorphicStyle(
-            depth: NeumorphicTheme.embossDepth(context),
-            boxShape: NeumorphicBoxShape.stadium(),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-          child: TextField(
-            onChanged: this.widget.onChanged,
-            controller: _controller,
-            decoration: InputDecoration.collapsed(hintText: this.widget.hint),
-          ),
-        )
       ],
     );
   }
