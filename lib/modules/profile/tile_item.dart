@@ -16,7 +16,9 @@ class SocialTile extends GetView<ProfileController> {
     Widget view;
     switch (data.type) {
       case Contact_SocialTile_TileType.Icon:
-        view = Center(child: gradientIconFromSocialProvider(data.provider));
+        view = Center(
+            child:
+                SonrIcon.socialFromProvider(IconType.Gradient, data.provider));
         break;
       case Contact_SocialTile_TileType.Showcase:
         view = _buildShowcaseView();
@@ -57,7 +59,7 @@ class EditTile extends GetView<ProfileController> {
     // Create View
     return NeumorphicButton(
       style: NeumorphicStyle(intensity: 0.85),
-      child: GradientIcon(Icons.add, FlutterGradientNames.morpheusDen),
+      child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
       onPressed: () {
         Get.dialog(TileAddDialog(), barrierColor: K_DIALOG_COLOR);
       },

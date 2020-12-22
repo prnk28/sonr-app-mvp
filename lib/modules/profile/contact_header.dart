@@ -51,7 +51,7 @@ class ContactHeader extends GetView<ProfileController> {
                               boxShape: NeumorphicBoxShape.circle(),
                               shape: NeumorphicShape.flat,
                               depth: 8),
-                          child: GradientIcon(
+                          child: SonrIcon.gradient(
                               Icons.close, FlutterGradientNames.phoenixStart),
                           onPressed: () {
                             Get.offNamed("/home/profile");
@@ -89,7 +89,7 @@ class ContactHeader extends GetView<ProfileController> {
                                 boxShape: NeumorphicBoxShape.circle(),
                                 shape: NeumorphicShape.flat,
                                 depth: 8),
-                            child: GradientIcon(Icons.more_horiz_outlined,
+                            child: SonrIcon.gradient(Icons.more_horiz_outlined,
                                 FlutterGradientNames.northMiracle),
                             onPressed: () {})),
                   ),

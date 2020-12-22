@@ -40,7 +40,7 @@ NeumorphicAppBar SonrHomeBar(
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.convex,
                 depth: 8),
-            child: GradientIcon(
+            child: SonrIcon.gradient(
               Icons.person_outline,
               FlutterGradientNames.itmeoBranding,
             ),
@@ -66,7 +66,8 @@ NeumorphicAppBar SonrExitAppBar(
                 boxShape: NeumorphicBoxShape.circle(),
                 shape: NeumorphicShape.flat,
                 depth: 8),
-            child: GradientIcon(Icons.close, FlutterGradientNames.phoenixStart),
+            child: SonrIcon.gradient(
+                Icons.close, FlutterGradientNames.phoenixStart),
             onPressed: () {
               Get.offNamed(exitLocation);
             },

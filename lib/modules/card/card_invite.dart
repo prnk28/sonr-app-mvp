@@ -32,32 +32,28 @@ class CardInvite extends GetView<CardController> {
       inviteView = Container();
     }
 
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: NeumorphicBackground(
-          margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
-          borderRadius: BorderRadius.circular(40),
-          backendColor: Colors.transparent,
-          child: Neumorphic(
-              style: NeumorphicStyle(color: K_BASE_COLOR),
-              child: Container(
-                child: Column(children: [
-                  // @ Top Right Close/Cancel Button
-                  closeButton(() {
-                    // Emit Event
-                    controller.declineInvite();
+    return NeumorphicBackground(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
+        borderRadius: BorderRadius.circular(40),
+        backendColor: Colors.transparent,
+        child: Neumorphic(
+            style: NeumorphicStyle(color: K_BASE_COLOR),
+            child: Container(
+              child: Column(children: [
+                // @ Top Right Close/Cancel Button
+                closeButton(() {
+                  // Emit Event
+                  controller.declineInvite();
 
-                    // Pop Window
-                    Get.back();
-                  }, padTop: 8, padLeft: 8),
+                  // Pop Window
+                  Get.back();
+                }, padTop: 8, padLeft: 8),
 
-                  // @ Invite View
-                  Padding(padding: EdgeInsets.all(8)),
-                  inviteView
-                ]),
-              ))),
-    );
+                // @ Invite View
+                Padding(padding: EdgeInsets.all(8)),
+                inviteView
+              ]),
+            )));
   }
 }
 
@@ -109,7 +105,11 @@ class _FileInvite extends GetView<CardController> {
 
   @override
   Widget build(BuildContext context) {
-    // Display Info
+    // @ Initialize Preview
+    SonrIcon preview =
+        SonrIcon.metaFromPayload(IconType.Thumbnail, invite.payload);
+
+    // @ Display Info
     return Obx(() {
       // Check State of Card --> Invitation
       if (controller.state.value == CardState.Invitation) {
@@ -118,12 +118,16 @@ class _FileInvite extends GetView<CardController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Build Item from Metadata and Peer
-            iconWithPreview(invite.payload.file),
+            preview,
             Padding(padding: EdgeInsets.all(8)),
             Column(
               children: [
-                boldText(invite.from.firstName, size: 32),
-                normalText(invite.from.device.platform, size: 22),
+                boldText(
+                    invite.payload.file.mime.type.toString() +
+                        " from " +
+                        invite.from.firstName,
+                    size: 32),
+                normalText("on " + invite.from.device.platform, size: 22),
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 8)),
@@ -137,7 +141,7 @@ class _FileInvite extends GetView<CardController> {
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        return _FileInviteProgress(iconDataFromPayload(invite.payload));
+        return _FileInviteProgress(preview.data);
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
@@ -185,7 +189,7 @@ class _FileInviteProgress extends HookWidget {
                         waveAnimation: controller,
                         percent: Get.find<SonrService>().progress.value,
                         boxHeight: boxHeight,
-                        gradient: FlutterGradients.amyCrisp(),
+                        gradient: randomProgressGradient(),
                       ),
                     );
                   },

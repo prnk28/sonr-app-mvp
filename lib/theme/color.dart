@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'icon.dart';
 
 const Color K_BASE_COLOR = Color(0xffDDDDDD);
 const Color K_DIALOG_COLOR = Color.fromRGBO(27, 27, 27, 0.7);
@@ -25,7 +27,27 @@ Color findTextColor() {
   }
 }
 
-// ^ Gradient Mask ^
+// ^ Progress Gradient Mask Random ^
+Gradient randomProgressGradient() {
+  // Predefined Colors
+  var opts = [
+    FlutterGradients.amyCrisp(),
+    FlutterGradients.sugarLollipop(),
+    FlutterGradients.summerGames(),
+    FlutterGradients.supremeSky(),
+    FlutterGradients.juicyCake(),
+    FlutterGradients.northMiracle(),
+    FlutterGradients.seaLord()
+  ];
+
+  // Generates a new Random object
+  final _random = new Random();
+
+  // Generate a random index based on the list length
+  return opts[_random.nextInt(opts.length)];
+}
+
+// ^ Color from HEX Code ^
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   static Color fromHex(String hexString) {

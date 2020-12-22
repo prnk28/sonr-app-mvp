@@ -194,7 +194,7 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                       var value = Contact_SocialTile_Provider.values[index];
                       return DropdownMenuItem(
                         child: Row(children: [
-                          iconFromSocialProvider(value),
+                          SonrIcon.socialFromProvider(IconType.Normal, value),
                           Padding(padding: EdgeInsets.all(4)),
                           Text(value.toString())
                         ]),

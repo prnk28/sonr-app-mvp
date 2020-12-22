@@ -36,10 +36,9 @@ Widget closeButton(Function onPressed,
                   color: K_BASE_COLOR,
                   shape: NeumorphicShape.flat,
                   depth: 8),
-              child: GradientIcon(
+              child: SonrIcon.gradient(
                 Icons.close,
                 FlutterGradientNames.phoenixStart,
-                center: Alignment.topRight,
               ),
               onPressed: onPressed)));
 }

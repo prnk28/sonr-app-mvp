@@ -4,162 +4,272 @@ import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
+
+import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
-// ^ Get Icon from Peer Data ^ //
-NeumorphicIcon iconFromPeer(Peer peer,
-    {double size = 30, Color color: Colors.white}) {
-  if (peer.device.platform == "Android") {
-    return NeumorphicIcon((Icons.android),
-        size: size, style: NeumorphicStyle(color: color));
-  } else if (peer.device.platform == "iOS") {
-    return NeumorphicIcon((Icons.phone_iphone),
-        size: size, style: NeumorphicStyle(color: color));
-  } else {
-    return NeumorphicIcon((Icons.device_unknown), size: size);
-  }
-}
+enum IconType { Neumorphic, Normal, Gradient, Thumbnail }
 
-// ^ Get Icon from Payload Data^ //
-IconData iconDataFromPayload(Payload payload) {
-  var kind = payload.file.mime.type;
-  switch (kind) {
-    case MIME_Type.audio:
-      return Icons.audiotrack;
-      break;
-    case MIME_Type.image:
-      return Icons.image;
-      break;
-    case MIME_Type.video:
-      return Icons.video_collection;
-      break;
-    case MIME_Type.text:
-      return Icons.sort_by_alpha;
-      break;
-    default:
-      return Icons.device_unknown;
-      break;
-  }
-}
-
-// ^ Get Icon and Preview Thumbnail ^ //
-Widget iconWithPreview(Metadata metadata) {
-  switch (metadata.mime.type) {
-    case MIME_Type.audio:
-      return Icon(Icons.audiotrack, size: 100);
-      break;
-    case MIME_Type.image:
-      if (metadata.thumbnail != null) {
-        return ClipRRect(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-            child: FittedBox(
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.bottomCenter,
-                child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: 1, minHeight: 1, maxWidth: 200), // here
-                    child: Image.memory(metadata.thumbnail))));
-      } else {
-        return Icon(Icons.image, size: 100);
-      }
-      break;
-    case MIME_Type.video:
-      return Icon(Icons.video_collection, size: 100);
-      break;
-    case MIME_Type.text:
-      return Icon(Icons.sort_by_alpha, size: 100);
-      break;
-    default:
-      return Icon(Icons.device_unknown, size: 100);
-      break;
-  }
-}
-
-// ^ Get Gradient Icon from Social Provider ^ //
-GradientIcon gradientIconFromSocialProvider(
-    Contact_SocialTile_Provider provider) {
-  switch (provider) {
-    case Contact_SocialTile_Provider.Facebook:
-      return GradientIcon(
-          Boxicons.bxl_facebook_square, FlutterGradientNames.perfectBlue);
-      break;
-    case Contact_SocialTile_Provider.Instagram:
-      return GradientIcon(
-          Boxicons.bxl_instagram, FlutterGradientNames.ripeMalinka);
-      break;
-    case Contact_SocialTile_Provider.Medium:
-      return GradientIcon(
-          Boxicons.bxl_medium, FlutterGradientNames.mountainRock);
-      break;
-    case Contact_SocialTile_Provider.Spotify:
-      return GradientIcon(Boxicons.bxl_spotify, FlutterGradientNames.newLife);
-      break;
-    case Contact_SocialTile_Provider.TikTok:
-      return GradientIcon(Boxicons.bxl_creative_commons,
-          FlutterGradientNames.premiumDark); // TODO
-      break;
-    case Contact_SocialTile_Provider.Twitter:
-      return GradientIcon(
-          Boxicons.bxl_twitter, FlutterGradientNames.partyBliss);
-      break;
-    case Contact_SocialTile_Provider.YouTube:
-      return GradientIcon(Boxicons.bxl_youtube, FlutterGradientNames.loveKiss);
-      break;
-    default:
-      return GradientIcon(
-          Icons.device_unknown_rounded, FlutterGradientNames.aboveTheSky);
-  }
-}
-
-// ^ Get Normal Icon from Social Provider ^ //
-Icon iconFromSocialProvider(Contact_SocialTile_Provider provider) {
-  switch (provider) {
-    case Contact_SocialTile_Provider.Facebook:
-      return Icon(Boxicons.bxl_facebook_square);
-      break;
-    case Contact_SocialTile_Provider.Instagram:
-      return Icon(Boxicons.bxl_instagram);
-      break;
-    case Contact_SocialTile_Provider.Medium:
-      return Icon(Boxicons.bxl_medium);
-      break;
-    case Contact_SocialTile_Provider.Spotify:
-      return Icon(Boxicons.bxl_spotify);
-      break;
-    case Contact_SocialTile_Provider.TikTok:
-      return Icon(Boxicons.bxl_creative_commons); // TODO
-      break;
-    case Contact_SocialTile_Provider.Twitter:
-      return Icon(Boxicons.bxl_twitter);
-      break;
-    case Contact_SocialTile_Provider.YouTube:
-      return Icon(Boxicons.bxl_youtube);
-      break;
-    default:
-      return Icon(Icons.device_unknown_rounded);
-  }
-}
-
-class GradientIcon extends StatelessWidget {
-  const GradientIcon(this.iconData, this.gradientType,
-      {this.size = 40, this.center = Alignment.topLeft});
-  final IconData iconData;
+class SonrIcon extends StatelessWidget {
+  final IconData data;
+  final IconType type;
   final double size;
-  final Alignment center;
-  final FlutterGradientNames gradientType;
+  final FlutterGradientNames gradient;
+  final Color color;
+  final List<int> thumbnail;
+
+  SonrIcon(this.data, this.type, this.color, this.gradient,
+      {this.thumbnail, this.size});
+
+  // ^ Gradient Icon with Provided Data
+  factory SonrIcon.gradient(
+    IconData data,
+    FlutterGradientNames gradient, {
+    double size = 40,
+  }) {
+    return SonrIcon(data, IconType.Gradient, Colors.white, gradient,
+        size: size);
+  }
+
+  // ^ Gradient Icon with Provided Data
+  factory SonrIcon.neumorphic(IconData data,
+      {double size = 40, Color color = K_BASE_COLOR}) {
+    return SonrIcon(data, IconType.Neumorphic, color, null, size: size);
+  }
+
+  // ^ Gradient Icon with Provided Data
+  factory SonrIcon.normal(IconData data,
+      {double size = 40, Color color = K_BASE_COLOR}) {
+    return SonrIcon(data, IconType.Normal, color, null, size: size);
+  }
+
+  // ^ Peer Data Platform to Icon
+  factory SonrIcon.deviceFromPeer(IconType type, Peer peer,
+      {double size = 30}) {
+    // Set Color
+    Color color;
+    if (type == IconType.Normal) {
+      color = Colors.white;
+    } else {
+      color = K_BASE_COLOR;
+    }
+
+    // Get Icon
+    if (peer.device.platform == "Android") {
+      return SonrIcon(
+        Icons.android,
+        type,
+        color,
+        FlutterGradientNames.dustyGrass,
+        size: size,
+      );
+    } else if (peer.device.platform == "iOS") {
+      return SonrIcon(
+        Icons.phone_iphone,
+        type,
+        color,
+        FlutterGradientNames.highFlight,
+        size: size,
+      );
+    } else {
+      return SonrIcon(
+        Icons.device_unknown,
+        type,
+        color,
+        FlutterGradientNames.highFlight,
+        size: size,
+      );
+    }
+  }
+
+  // ^ Payload Data File Type to Icon
+  factory SonrIcon.metaFromPayload(IconType type, Payload payload,
+      {double size = 30,
+      Color color = Colors.black,
+      FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
+    // Get Metadata
+    var kind = payload.file.mime.type;
+    var thumbnail = payload.file.thumbnail;
+
+    // Get Icon
+    switch (kind) {
+      case MIME_Type.audio:
+        return SonrIcon(
+          Icons.audiotrack,
+          type,
+          color,
+          gradient,
+          thumbnail: thumbnail,
+          size: size,
+        );
+        break;
+      case MIME_Type.image:
+        return SonrIcon(
+          Icons.image,
+          type,
+          color,
+          gradient,
+          thumbnail: thumbnail,
+          size: size,
+        );
+        break;
+      case MIME_Type.video:
+        return SonrIcon(
+          Icons.video_collection,
+          type,
+          color,
+          gradient,
+          thumbnail: thumbnail,
+          size: size,
+        );
+        break;
+      case MIME_Type.text:
+        return SonrIcon(
+          Icons.sort_by_alpha,
+          type,
+          color,
+          gradient,
+          thumbnail: thumbnail,
+          size: size,
+        );
+        break;
+      default:
+        return SonrIcon(
+          Icons.device_unknown,
+          type,
+          color,
+          gradient,
+          thumbnail: thumbnail,
+          size: size,
+        );
+        break;
+    }
+  }
+
+  // ^ Payload Data File Type to Icon
+  factory SonrIcon.socialFromProvider(
+      IconType type, Contact_SocialTile_Provider provider,
+      {double size = 40}) {
+    // Get Icon
+    switch (provider) {
+      case Contact_SocialTile_Provider.Facebook:
+        return SonrIcon(
+          Boxicons.bxl_facebook_square,
+          type,
+          Colors.black,
+          FlutterGradientNames.perfectBlue,
+          size: size,
+        );
+        break;
+      case Contact_SocialTile_Provider.Instagram:
+        return SonrIcon(
+          Boxicons.bxl_instagram,
+          type,
+          Colors.black,
+          FlutterGradientNames.ripeMalinka,
+          size: size,
+        );
+        break;
+      case Contact_SocialTile_Provider.Medium:
+        return SonrIcon(
+          Boxicons.bxl_medium,
+          type,
+          Colors.black,
+          FlutterGradientNames.mountainRock,
+          size: size,
+        );
+        break;
+      case Contact_SocialTile_Provider.Spotify:
+        return SonrIcon(Boxicons.bxl_spotify, type, Colors.black,
+            FlutterGradientNames.newLife,
+            size: size);
+        break;
+      case Contact_SocialTile_Provider.TikTok:
+        // TODO
+        return SonrIcon(
+          Boxicons.bxl_creative_commons,
+          type,
+          Colors.black,
+          FlutterGradientNames.premiumDark,
+          size: size,
+        );
+        break;
+      case Contact_SocialTile_Provider.Twitter:
+        return SonrIcon(
+          Boxicons.bxl_twitter,
+          type,
+          Colors.black,
+          FlutterGradientNames.partyBliss,
+          size: size,
+        );
+        break;
+      case Contact_SocialTile_Provider.YouTube:
+        return SonrIcon(
+          Boxicons.bxl_youtube,
+          type,
+          Colors.black,
+          FlutterGradientNames.loveKiss,
+          size: size,
+        );
+        break;
+      default:
+        return SonrIcon(
+          Icons.device_unknown_rounded,
+          type,
+          Colors.black,
+          FlutterGradientNames.aboveTheSky,
+          size: size,
+        );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (bounds) {
-        var gradient = FlutterGradients.findByName(gradientType);
-        return gradient.createShader(bounds);
-      },
-      child: Icon(
-        iconData,
-        size: size,
-        color: Colors.white,
-      ),
-    );
+    Widget result;
+    switch (type) {
+      // @ Creates Neumorphic Icon
+      case IconType.Neumorphic:
+        result = NeumorphicIcon((data),
+            size: size, style: NeumorphicStyle(color: color));
+        break;
+
+      // @ Creates Normal Icon
+      case IconType.Normal:
+        result = Icon(data, size: size, color: color);
+        break;
+
+      // @ Creates Gradient Icon
+      case IconType.Gradient:
+        result = ShaderMask(
+          shaderCallback: (bounds) {
+            var grad = FlutterGradients.findByName(gradient);
+            return grad.createShader(bounds);
+          },
+          child: Icon(
+            data,
+            size: size,
+            color: Colors.white,
+          ),
+        );
+        break;
+
+      // @ Creates Thumbnail or Icon
+      case IconType.Thumbnail:
+        if (thumbnail != null) {
+          result = ClipRRect(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+              child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.bottomCenter,
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minWidth: 1, minHeight: 1, maxWidth: 200), // here
+                      child: Image.memory(thumbnail))));
+        } else {
+          result = Icon(data, size: size);
+        }
+        break;
+    }
+    return result;
   }
 }
