@@ -26,14 +26,14 @@ class PeerController extends GetxController {
   final proximity = Rx<Peer_Proximity>();
 
   // References
-  Peer peer = Peer();
+  var peer = Peer();
 
   // Checkers
-  bool _isInvited = false;
-  bool _hasDenied = false;
-  bool _hasAccepted = false;
-  bool _inProgress = false;
-  bool _hasCompleted = false;
+  var _isInvited = false;
+  var _hasDenied = false;
+  var _hasAccepted = false;
+  var _inProgress = false;
+  var _hasCompleted = false;
 
   // Animations
   SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
@@ -106,7 +106,8 @@ class PeerController extends GetxController {
     super.onInit();
   }
 
-  init(Peer peer) {
+  // ^ Sets Peer for this Widget ^
+  setPeer(Peer peer) {
     this.peer = peer;
     offset(calculateOffset(peer.difference));
     proximity(peer.proximity);

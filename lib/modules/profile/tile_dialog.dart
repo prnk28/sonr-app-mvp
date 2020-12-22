@@ -1,16 +1,17 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'profile_controller.dart';
 
 // ** Builds Add Social Form Dialog ** //
-class TileAddDialog extends GetView<ProfileController> {
+class TileDialog extends GetView<TileController> {
   @override
   Widget build(BuildContext context) {
     // Update State
-    controller.addSocialTileNextStep();
+    controller.createTile();
 
     // Get Current View
     return Obx(() {
@@ -18,19 +19,14 @@ class TileAddDialog extends GetView<ProfileController> {
       Widget nextButton;
       Widget backButton;
       Widget currentView;
-      if (controller.state.value == ProfileState.AddingTileStepTwo) {
-        nextButton = _buildNextButton();
-        backButton = _buildBackButton();
-        currentView = _SetInfoView(controller.currentTile.value.provider);
-      } else if (controller.state.value == ProfileState.AddingTileStepThree) {
-        nextButton = _buildNextButton(isFinished: true);
-        backButton = _buildBackButton();
-        currentView = _SetSizePosView();
-      } else {
-        nextButton = _buildNextButton();
-        backButton = _buildBackButton(isDisabled: true);
-        currentView = _DropdownAddView();
-      }
+      List<Widget> _views = [_DropdownAddView(), _SetInfoView(controller.currentTile.provider), _SetSizePosView()];
+
+      // @ Update By Step
+      controller.createStep.listen((step) {
+        currentView = _views[step + 1];
+        nextButton = _buildNextButton(step);
+        backButton = _buildBackButton(step);
+      });
 
       // @ Build View
       return SonrTheme(
@@ -51,8 +47,7 @@ class TileAddDialog extends GetView<ProfileController> {
                         Get.back();
 
                         // Reset State
-                        controller.state(ProfileState.Viewing);
-                        controller.currentTile(Contact_SocialTile());
+                        controller.state(TileState.None);
                       }, padTop: 12, padRight: 12),
 
                       // @ Current Add Popup View
@@ -77,12 +72,12 @@ class TileAddDialog extends GetView<ProfileController> {
   }
 
   // ^ Build Next Button with Finish at End ^ //
-  _buildNextButton({bool isFinished = false}) {
-    if (isFinished) {
+  _buildNextButton(int step) {
+    if (step == 3) {
       return NeumorphicButton(
           onPressed: () {
             print("Finish Tapped");
-            controller.addSocialTileNextStep();
+            controller.nextStep();
           },
           style: NeumorphicStyle(
               depth: 8,
@@ -99,7 +94,7 @@ class TileAddDialog extends GetView<ProfileController> {
       return NeumorphicButton(
           onPressed: () {
             print("Next Tapped");
-            controller.addSocialTileNextStep();
+            controller.nextStep();
           },
           style: NeumorphicStyle(
               depth: 8,
@@ -116,8 +111,8 @@ class TileAddDialog extends GetView<ProfileController> {
   }
 
   // ^ Build Back Button with Disabled at Beginning ^ //
-  _buildBackButton({bool isDisabled = false}) {
-    if (isDisabled) {
+  _buildBackButton(int step) {
+    if (step == 1) {
       return IgnorePointer(
         ignoring: true,
         child: FlatButton(
@@ -130,7 +125,7 @@ class TileAddDialog extends GetView<ProfileController> {
       return NeumorphicButton(
         onPressed: () {
           print("Back Tapped");
-          controller.addSocialTilePrevStep();
+          controller.previousStep();
         },
         style: NeumorphicStyle(
             depth: 8,
@@ -205,8 +200,7 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                       if (value is Contact_SocialTile_Provider) {
                         setState(() {
                           // Update Controller
-                          Get.find<ProfileController>()
-                              .addSocialTileProvider(value);
+                          Get.find<TileController>().setProvider(value);
 
                           // Update Widget View
                           _provider = value;

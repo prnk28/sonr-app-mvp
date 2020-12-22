@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart';
-import 'tile_item.dart';
+import 'tile_widget.dart';
 import 'profile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'contact_header.dart';
+import 'header_view.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   @override
