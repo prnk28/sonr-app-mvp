@@ -66,7 +66,7 @@ class _FormViewState extends State<FormView> {
                         .createUser(contact, "@Temp_Username");
                   }
                 },
-                child: defaultText("Submit"),
+                child: normalText("Submit"),
               ),
             ),
           )

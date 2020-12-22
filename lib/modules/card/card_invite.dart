@@ -159,6 +159,7 @@ class _FileInviteProgress extends HookWidget {
   final IconData iconData;
   final double boxHeight = Get.height / 3;
   final double boxWidth = Get.width;
+  final Gradient color = randomProgressGradient();
 
   // Constructer
   _FileInviteProgress(this.iconData) : super(key: GlobalKey());
@@ -189,7 +190,7 @@ class _FileInviteProgress extends HookWidget {
                         waveAnimation: controller,
                         percent: Get.find<SonrService>().progress.value,
                         boxHeight: boxHeight,
-                        gradient: randomProgressGradient(),
+                        gradient: color,
                       ),
                     );
                   },

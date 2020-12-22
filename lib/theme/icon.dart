@@ -33,21 +33,20 @@ class SonrIcon extends StatelessWidget {
 
   // ^ Gradient Icon with Provided Data
   factory SonrIcon.neumorphic(IconData data,
-      {double size = 40, Color color = K_BASE_COLOR}) {
+      {double size = 30, Color color = K_BASE_COLOR}) {
     return SonrIcon(data, IconType.Neumorphic, color, null, size: size);
   }
 
   // ^ Gradient Icon with Provided Data
   factory SonrIcon.normal(IconData data,
-      {double size = 40, Color color = K_BASE_COLOR}) {
+      {double size = 24, Color color = K_BASE_COLOR}) {
     return SonrIcon(data, IconType.Normal, color, null, size: size);
   }
 
   // ^ Peer Data Platform to Icon
   factory SonrIcon.deviceFromPeer(IconType type, Peer peer,
-      {double size = 30}) {
+      {Color color, double size = 30}) {
     // Set Color
-    Color color;
     if (type == IconType.Normal) {
       color = Colors.white;
     } else {
@@ -149,7 +148,14 @@ class SonrIcon extends StatelessWidget {
   // ^ Payload Data File Type to Icon
   factory SonrIcon.socialFromProvider(
       IconType type, Contact_SocialTile_Provider provider,
-      {double size = 40}) {
+      {double size}) {
+    // Set Size
+    if (type == IconType.Normal && size == null) {
+      size = 24;
+    } else {
+      size = 40;
+    }
+
     // Get Icon
     switch (provider) {
       case Contact_SocialTile_Provider.Facebook:
