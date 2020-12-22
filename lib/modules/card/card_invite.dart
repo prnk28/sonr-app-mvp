@@ -197,12 +197,12 @@ class _FileInviteProgress extends HookWidget {
                 child: ShaderMask(
                   blendMode: BlendMode.srcOut,
                   shaderCallback: (bounds) => LinearGradient(
-                    colors: [HexColor.fromHex("EFEEEE")],
+                    colors: [K_BACKGROUND_COLOR],
                     stops: [0.0],
                   ).createShader(bounds),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: K_BACKGROUND_COLOR,
+                      color: HexColor.fromHex("EFEEEE"),
                     ),
                     child: Center(
                       child: Icon(iconData, key: iconKey, size: 225),
