@@ -137,15 +137,11 @@ class _FileInvite extends GetView<CardController> {
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        return AnimatedSwitcher(
-            duration: Duration(seconds: 1),
-            child: _FileInviteProgress(iconDataFromPayload(invite.payload)));
+        return _FileInviteProgress(iconDataFromPayload(invite.payload));
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
-        return AnimatedSwitcher(
-            duration: Duration(seconds: 1),
-            child: _FileInviteComplete(controller.receivedFile));
+        return _FileInviteComplete(controller.receivedFile);
       } else {
         return Container();
       }
@@ -172,55 +168,57 @@ class _FileInviteProgress extends HookWidget {
     controller.repeat();
 
     // Reactive to Progress
-    return Obx(() {
-      if (Get.find<SonrService>().progress.value < 1.0) {
-        return Stack(
-          key: UniqueKey(),
-          children: <Widget>[
-            SizedBox(
-              height: boxHeight,
-              width: boxWidth,
-              child: AnimatedBuilder(
-                animation: controller,
-                builder: (BuildContext context, Widget child) {
-                  return CustomPaint(
-                    painter: WavePainter(
-                      iconKey: iconKey,
-                      waveAnimation: controller,
-                      percent: Get.find<SonrService>().progress.value,
-                      boxHeight: boxHeight,
-                      waveColor: waveColor,
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: boxHeight,
-              width: boxWidth,
-              child: ShaderMask(
-                blendMode: BlendMode.srcOut,
-                shaderCallback: (bounds) => LinearGradient(
-                  colors: [HexColor.fromHex("EFEEEE")],
-                  stops: [0.0],
-                ).createShader(bounds),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                  ),
-                  child: Center(
-                    child: Icon(iconData, key: iconKey, size: 225),
-                  ),
+    return SlideUpAnimatedSwitcher(
+      child: Obx(() {
+        if (Get.find<SonrService>().progress.value < 1.0) {
+          return Stack(
+            key: UniqueKey(),
+            children: <Widget>[
+              SizedBox(
+                height: boxHeight,
+                width: boxWidth,
+                child: AnimatedBuilder(
+                  animation: controller,
+                  builder: (BuildContext context, Widget child) {
+                    return CustomPaint(
+                      painter: WavePainter(
+                        iconKey: iconKey,
+                        waveAnimation: controller,
+                        percent: Get.find<SonrService>().progress.value,
+                        boxHeight: boxHeight,
+                        waveColor: waveColor,
+                      ),
+                    );
+                  },
                 ),
               ),
-            )
-          ],
-        );
-      }
-      controller.stop();
-      controller.dispose();
-      return Container();
-    });
+              SizedBox(
+                height: boxHeight,
+                width: boxWidth,
+                child: ShaderMask(
+                  blendMode: BlendMode.srcOut,
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: [HexColor.fromHex("EFEEEE")],
+                    stops: [0.0],
+                  ).createShader(bounds),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                    ),
+                    child: Center(
+                      child: Icon(iconData, key: iconKey, size: 225),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        }
+        controller.stop();
+        controller.dispose();
+        return Container();
+      }),
+    );
   }
 }
 
@@ -232,17 +230,19 @@ class _FileInviteComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // @ Non-Image Type
-    return Container(
-      key: UniqueKey(),
-      margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-      child: FittedBox(
-          alignment: Alignment.center,
-          child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 1,
-                minHeight: 1,
-              ),
-              child: Container(child: Image.file(File(meta.path))))),
+    return SlideDownAnimatedSwitcher(
+      child: Container(
+        key: UniqueKey(),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+        child: FittedBox(
+            alignment: Alignment.center,
+            child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 1,
+                  minHeight: 1,
+                ),
+                child: Container(child: Image.file(File(meta.path))))),
+      ),
     );
   }
 }
