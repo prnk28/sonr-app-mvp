@@ -1,16 +1,35 @@
 import 'package:sonar_app/theme/theme.dart';
 
-class SlideUpAnimatedSwitcher extends StatelessWidget {
+class FadeAnimatedSwitcher extends StatelessWidget {
   final Widget child;
   final Duration duration;
-  const SlideUpAnimatedSwitcher(
-      {this.child, this.duration = const Duration(seconds: 1)});
+  const FadeAnimatedSwitcher(
+      {this.child, this.duration = const Duration(milliseconds: 1500)});
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
         duration: duration,
-        switchOutCurve: Curves.easeInOutCubic,
+        switchOutCurve: Curves.easeInOutSine,
+        switchInCurve: Curves.fastLinearToSlowEaseIn,
+        layoutBuilder: (Widget currentChild, List<Widget> previousChildren) {
+          return currentChild;
+        },
+        child: child);
+  }
+}
+
+class SlideUpAnimatedSwitcher extends StatelessWidget {
+  final Widget child;
+  final Duration duration;
+  const SlideUpAnimatedSwitcher(
+      {this.child, this.duration = const Duration(seconds: 2)});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+        duration: duration,
+        switchOutCurve: Curves.easeInOutSine,
         switchInCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           final offsetAnimation = TweenSequence([
@@ -19,7 +38,7 @@ class SlideUpAnimatedSwitcher extends StatelessWidget {
                     begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0)),
                 weight: 1),
             TweenSequenceItem(
-                tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
+                tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
           ]).animate(animation);
           return ClipRect(
             child: SlideTransition(
@@ -45,7 +64,7 @@ class SlideDownAnimatedSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
         duration: duration,
-        switchOutCurve: Curves.easeInOutCubic,
+        switchOutCurve: Curves.easeInOutSine,
         switchInCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           final offsetAnimation = TweenSequence([
@@ -54,7 +73,7 @@ class SlideDownAnimatedSwitcher extends StatelessWidget {
                     begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0)),
                 weight: 1),
             TweenSequenceItem(
-                tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
+                tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
           ]).animate(animation);
           return ClipRect(
             child: SlideTransition(

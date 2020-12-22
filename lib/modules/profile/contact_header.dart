@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -7,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'profile_controller.dart';
 
-class ProfileHeader extends GetView<ProfileController> {
+class ContactHeader extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -38,8 +36,8 @@ class ProfileHeader extends GetView<ProfileController> {
                   // @ Exit Button
                   Padding(
                     padding: EdgeInsets.only(left: 14),
-                    child: NeumorphicBackground(
-                        borderRadius: BorderRadius.circular(2 * pi),
+                    child: Neumorphic(
+                        drawSurfaceAboveChild: false,
                         child: Align(
                             alignment: Alignment.center,
                             child: NeumorphicButton(
@@ -62,8 +60,8 @@ class ProfileHeader extends GetView<ProfileController> {
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        NeumorphicBackground(
-                            borderRadius: BorderRadius.circular(2 * pi),
+                        Neumorphic(
+                            drawSurfaceAboveChild: false,
                             child: _AvatarField()),
                         Text(controller.userContact.value.firstName,
                             softWrap: false,
@@ -77,8 +75,8 @@ class ProfileHeader extends GetView<ProfileController> {
                   // @ More Button
                   Padding(
                     padding: EdgeInsets.only(right: 14),
-                    child: NeumorphicBackground(
-                        borderRadius: BorderRadius.circular(2 * pi),
+                    child: Neumorphic(
+                        drawSurfaceAboveChild: false,
                         child: Align(
                             alignment: Alignment.center,
                             child: NeumorphicButton(

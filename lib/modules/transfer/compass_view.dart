@@ -335,8 +335,9 @@ class _CompassBulb extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SlideDownAnimatedSwitcher(
-                          child: Text(
+                          child: GradientText(
                         direction,
+                        FlutterGradients.glassWater(),
                         key: ValueKey<String>(direction),
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w400,
@@ -344,9 +345,10 @@ class _CompassBulb extends StatelessWidget {
                           color: Colors.white,
                         ),
                       )),
-                      SlideUpAnimatedSwitcher(
-                          child: Text(
+                      FadeAnimatedSwitcher(
+                          child: GradientText(
                         heading,
+                        FlutterGradients.glassWater(),
                         key: ValueKey<String>(heading),
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.bold,

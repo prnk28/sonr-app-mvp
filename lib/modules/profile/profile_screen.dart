@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart';
-import 'profile_tiles.dart';
+import 'tile_item.dart';
 import 'profile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'profile_header.dart';
+import 'contact_header.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   @override
@@ -34,7 +34,7 @@ class _ProfileView extends GetView<ProfileController> {
         child: Column(
       children: [
         // @ Builds Profile Header
-        ProfileHeader(),
+        ContactHeader(),
 
         // @ Builds List of Social Tile
         Expanded(

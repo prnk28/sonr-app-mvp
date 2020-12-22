@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'add_dialog.dart';
+import 'add_tile_dialog.dart';
 import 'profile_controller.dart';
 
 // ** Builds Social Tile ** //
@@ -59,7 +59,7 @@ class EditTile extends GetView<ProfileController> {
       style: NeumorphicStyle(intensity: 0.85),
       child: GradientIcon(Icons.add, FlutterGradientNames.morpheusDen),
       onPressed: () {
-        Get.dialog(AddDialog());
+        Get.dialog(TileAddDialog());
       },
     );
   }

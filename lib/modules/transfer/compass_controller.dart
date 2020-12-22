@@ -28,17 +28,26 @@ class CompassController extends GetxController {
   // @ Properties
   //final Rx<Direction> direction = Direction(0).obs;
   final Rx<Gradient> gradient = FlutterGradients.findByName(
-          FlutterGradientNames.blessing,
+          FlutterGradientNames.octoberSilence,
           type: GradientType.linear)
       .obs;
 
   // @ References
+  final Rx<SonrStatus> _status = Get.find<SonrService>().status;
   final inactiveGradient = FlutterGradients.findByName(
-      FlutterGradientNames.blessing,
+      FlutterGradientNames.octoberSilence,
       type: GradientType.linear);
 
   final activeGradient = FlutterGradients.findByName(
+      FlutterGradientNames.summerGames,
+      type: GradientType.linear);
+
+  final pendingGradient = FlutterGradients.findByName(
       FlutterGradientNames.angelCare,
+      type: GradientType.linear);
+
+  final busyGradient = FlutterGradients.findByName(
+      FlutterGradientNames.nightParty,
       type: GradientType.linear);
 
   // @ Direction Properties
@@ -54,7 +63,7 @@ class CompassController extends GetxController {
   CompassController() {
     // @ Update Direction
     Get.find<SonrService>().direction.listen((newDir) {
-      if ((direction.value - newDir).abs() > 2.5) {
+      if ((direction.value - newDir).abs() > 4) {
         // Reference
         direction(newDir);
         angle(((newDir ?? 0) * (pi / 180) * -1));
@@ -68,10 +77,16 @@ class CompassController extends GetxController {
       }
     });
 
-    // Check Peers Length
+    // @ Check Peers Length
     Get.find<SonrService>().lobby.listen((lob) {
       if (lob.length > 0) {
-        gradient(activeGradient);
+        if (_status.value == SonrStatus.Pending) {
+          gradient(pendingGradient);
+        } else if (_status.value == SonrStatus.Busy) {
+          gradient(busyGradient);
+        } else {
+          gradient(activeGradient);
+        }
       } else {
         gradient(inactiveGradient);
       }
