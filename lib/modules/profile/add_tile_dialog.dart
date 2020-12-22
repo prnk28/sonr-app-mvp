@@ -43,34 +43,35 @@ class TileAddDialog extends GetView<ProfileController> {
                     EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
                 borderRadius: BorderRadius.circular(40),
                 child: Neumorphic(
+                    style: NeumorphicStyle(color: K_BASE_COLOR),
                     child: Column(children: [
-                  // @ Top Right Close/Cancel Button
-                  closeButton(() {
-                    // Pop Window
-                    Get.back();
+                      // @ Top Right Close/Cancel Button
+                      closeButton(() {
+                        // Pop Window
+                        Get.back();
 
-                    // Reset State
-                    controller.state(ProfileState.Viewing);
-                    controller.currentTile(Contact_SocialTile());
-                  }, padTop: 12, padRight: 12),
+                        // Reset State
+                        controller.state(ProfileState.Viewing);
+                        controller.currentTile(Contact_SocialTile());
+                      }, padTop: 12, padRight: 12),
 
-                  // @ Current Add Popup View
-                  Padding(padding: EdgeInsets.all(10)),
-                  Align(
-                      key: UniqueKey(),
-                      alignment: Alignment.topCenter,
-                      child: FadeAnimatedSwitcher(child: currentView)),
+                      // @ Current Add Popup View
+                      Padding(padding: EdgeInsets.all(10)),
+                      Align(
+                          key: UniqueKey(),
+                          alignment: Alignment.topCenter,
+                          child: FadeAnimatedSwitcher(child: currentView)),
 
-                  // @ Action Buttons
-                  Spacer(),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [backButton, nextButton]),
-                  ),
-                  Padding(padding: EdgeInsets.all(25))
-                ])))),
+                      // @ Action Buttons
+                      Spacer(),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [backButton, nextButton]),
+                      ),
+                      Padding(padding: EdgeInsets.all(25))
+                    ])))),
       );
     });
   }
@@ -85,6 +86,7 @@ class TileAddDialog extends GetView<ProfileController> {
           },
           style: NeumorphicStyle(
               depth: 8,
+              color: K_BASE_COLOR,
               boxShape:
                   NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
           padding: const EdgeInsets.only(
@@ -101,6 +103,7 @@ class TileAddDialog extends GetView<ProfileController> {
           },
           style: NeumorphicStyle(
               depth: 8,
+              color: K_BASE_COLOR,
               boxShape:
                   NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
           padding: const EdgeInsets.only(

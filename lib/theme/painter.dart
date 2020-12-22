@@ -29,8 +29,8 @@ class WavePainter extends CustomPainter {
     final baseHeight =
         (boxHeight / 2) + (iconHeight / 2) - (percent * iconHeight);
 
-    final width = size.width ?? 200;
-    final height = size.height ?? 200;
+    final width = size.width ?? 325;
+    final height = size.height ?? 325;
     final path = Path();
     path.moveTo(0.0, baseHeight);
     for (var i = 0.0; i < width; i++) {

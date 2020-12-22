@@ -1,4 +1,5 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'color.dart';
 import 'icon.dart';
 import 'text.dart';
 
@@ -8,6 +9,7 @@ NeumorphicButton rectangleButton(String text, Function onPressed,
       onPressed: onPressed,
       style: NeumorphicStyle(
           depth: 8,
+          color: K_BASE_COLOR,
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
       padding: const EdgeInsets.all(12.0),
       child: normalText(text));
@@ -31,6 +33,7 @@ Widget closeButton(Function onPressed,
           child: NeumorphicButton(
               style: NeumorphicStyle(
                   boxShape: NeumorphicBoxShape.circle(),
+                  color: K_BASE_COLOR,
                   shape: NeumorphicShape.flat,
                   depth: 8),
               child: GradientIcon(

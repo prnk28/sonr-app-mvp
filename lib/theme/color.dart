@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 
-const Color K_BACKGROUND_COLOR = Color(0xffDDDDDD);
+const Color K_BASE_COLOR = Color(0xffDDDDDD);
 const Color K_DIALOG_COLOR = Color.fromRGBO(27, 27, 27, 0.7);
 
 // ^ Find Icons color based on Theme - Light/Dark ^

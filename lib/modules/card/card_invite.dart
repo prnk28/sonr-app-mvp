@@ -40,22 +40,23 @@ class CardInvite extends GetView<CardController> {
           borderRadius: BorderRadius.circular(40),
           backendColor: Colors.transparent,
           child: Neumorphic(
+              style: NeumorphicStyle(color: K_BASE_COLOR),
               child: Container(
-            child: Column(children: [
-              // @ Top Right Close/Cancel Button
-              closeButton(() {
-                // Emit Event
-                controller.declineInvite();
+                child: Column(children: [
+                  // @ Top Right Close/Cancel Button
+                  closeButton(() {
+                    // Emit Event
+                    controller.declineInvite();
 
-                // Pop Window
-                Get.back();
-              }, padTop: 8, padLeft: 8),
+                    // Pop Window
+                    Get.back();
+                  }, padTop: 8, padLeft: 8),
 
-              // @ Invite View
-              Padding(padding: EdgeInsets.all(8)),
-              inviteView
-            ]),
-          ))),
+                  // @ Invite View
+                  Padding(padding: EdgeInsets.all(8)),
+                  inviteView
+                ]),
+              ))),
     );
   }
 }
@@ -154,7 +155,6 @@ class _FileInviteProgress extends HookWidget {
   final IconData iconData;
   final double boxHeight = Get.height / 3;
   final double boxWidth = Get.width;
-  final Gradient waveColor = FlutterGradients.paloAlto();
 
   // Constructer
   _FileInviteProgress(this.iconData) : super(key: GlobalKey());
@@ -185,7 +185,7 @@ class _FileInviteProgress extends HookWidget {
                         waveAnimation: controller,
                         percent: Get.find<SonrService>().progress.value,
                         boxHeight: boxHeight,
-                        gradient: waveColor,
+                        gradient: FlutterGradients.amyCrisp(),
                       ),
                     );
                   },
@@ -197,15 +197,15 @@ class _FileInviteProgress extends HookWidget {
                 child: ShaderMask(
                   blendMode: BlendMode.srcOut,
                   shaderCallback: (bounds) => LinearGradient(
-                    colors: [K_BACKGROUND_COLOR],
+                    colors: [K_BASE_COLOR],
                     stops: [0.0],
                   ).createShader(bounds),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: HexColor.fromHex("EFEEEE"),
+                      color: Colors.transparent,
                     ),
                     child: Center(
-                      child: Icon(iconData, key: iconKey, size: 225),
+                      child: Icon(iconData, key: iconKey, size: 325),
                     ),
                   ),
                 ),
