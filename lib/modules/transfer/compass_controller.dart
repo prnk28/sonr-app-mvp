@@ -75,7 +75,7 @@ class CompassController extends GetxController {
       }
 
       // Update String Elements
-      if ((direction.value - newDir).abs() > 6) {
+      if ((direction.value - newDir).abs() > 8) {
         string(_directionString());
         heading(_headingString());
       }
