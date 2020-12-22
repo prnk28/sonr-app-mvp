@@ -26,7 +26,6 @@ enum CompassHeading {
 
 class CompassController extends GetxController {
   // @ Properties
-  //final Rx<Direction> direction = Direction(0).obs;
   final Rx<Gradient> gradient = FlutterGradients.findByName(
           FlutterGradientNames.octoberSilence,
           type: GradientType.linear)
@@ -55,7 +54,7 @@ class CompassController extends GetxController {
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
 
-  // @ Direction Methods
+  // @ String Properties
   final string = "".obs;
   final heading = "".obs;
 
@@ -63,6 +62,12 @@ class CompassController extends GetxController {
   CompassController() {
     // @ Update Direction
     Get.find<SonrService>().direction.listen((newDir) {
+      // Update String Elements
+      if ((direction.value - newDir).abs() > 6) {
+        string(_directionString(newDir));
+        heading(_headingString(newDir));
+      }
+
       // Reference
       direction(newDir);
       angle(((newDir ?? 0) * (pi / 180) * -1));
@@ -72,12 +77,6 @@ class CompassController extends GetxController {
         degrees(newDir - 270);
       } else {
         degrees(newDir + 90);
-      }
-
-      // Update String Elements
-      if ((direction.value - newDir).abs() > 8) {
-        string(_directionString());
-        heading(_headingString());
       }
     });
 
@@ -98,9 +97,9 @@ class CompassController extends GetxController {
   }
 
   // ^ Retreives Direction String ^ //
-  _directionString() {
+  _directionString(double dir) {
     // Calculated
-    var adjustedDegrees = direction.round();
+    var adjustedDegrees = dir.round();
     final unit = "°";
 
     // @ Convert To String
@@ -114,8 +113,8 @@ class CompassController extends GetxController {
   }
 
   // ^ Retreives Heading String ^ //
-  _headingString() {
-    var adjustedDesignation = ((direction / 22.5) + 0.5).toInt();
+  _headingString(double dir) {
+    var adjustedDesignation = ((dir / 22.5) + 0.5).toInt();
     var compassEnum = CompassHeading.values[(adjustedDesignation % 16)];
     return compassEnum
         .toString()
