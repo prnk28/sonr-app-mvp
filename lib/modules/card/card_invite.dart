@@ -241,7 +241,8 @@ class _FileInviteComplete extends StatelessWidget {
                   minWidth: 1,
                   minHeight: 1,
                 ),
-                child: Container(child: Image.file(File(meta.path))))),
+                child: InteractiveViewer(
+                    constrained: false, child: Image.file(File(meta.path))))),
       ),
     );
   }

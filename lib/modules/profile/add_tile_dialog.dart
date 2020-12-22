@@ -21,7 +21,7 @@ class TileAddDialog extends GetView<ProfileController> {
       if (controller.state.value == ProfileState.AddingTileStepTwo) {
         nextButton = _buildNextButton();
         backButton = _buildBackButton();
-        currentView = _SetInfoView();
+        currentView = _SetInfoView(controller.currentTile.value.provider);
       } else if (controller.state.value == ProfileState.AddingTileStepThree) {
         nextButton = _buildNextButton(isFinished: true);
         backButton = _buildBackButton();
@@ -58,7 +58,7 @@ class TileAddDialog extends GetView<ProfileController> {
                   Align(
                       key: UniqueKey(),
                       alignment: Alignment.topCenter,
-                      child: currentView),
+                      child: FadeAnimatedSwitcher(child: currentView)),
 
                   // @ Action Buttons
                   Spacer(),
@@ -138,6 +138,7 @@ class TileAddDialog extends GetView<ProfileController> {
   }
 }
 
+// ^ Step 1 Select Provider ^ //
 class _DropdownAddView extends StatefulWidget {
   @override
   _DropdownAddViewState createState() => _DropdownAddViewState();
@@ -150,43 +151,21 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
   // Build View As Stateless
   @override
   Widget build(BuildContext context) {
-    return SlideLeftAnimatedSwitcher(
+    return Container(
       child: Column(
           key: UniqueKey(),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // @ InfoGraph
-            Center(
-              child: Stack(
-                alignment: Alignment.topLeft,
-                children: [
-                  Container(
-                    child: Text("1",
-                        style: GoogleFonts.poppins(
-                            fontSize: 108,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black38)),
-                  ),
-                  Container(
-                    width: Get.width / 2 + 20,
-                    padding: EdgeInsets.only(top: 15, left: 55),
-                    child: Text("Choose a Social Media",
-                        style: GoogleFonts.poppins(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                  ),
-                ],
-              ),
-            ),
+            _InfoText(index: 1, text: "Choose a Social Media"),
             Padding(padding: EdgeInsets.all(20)),
+
             // @ Drop Down
             Neumorphic(
                 style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
                 margin: EdgeInsets.only(left: 14, right: 14),
                 child: Container(
-                  width: Get.width - 100,
+                  width: Get.width - 80,
                   margin: EdgeInsets.only(left: 12, right: 12),
                   child: DropdownButton(
                     isExpanded: true,
@@ -237,246 +216,122 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
   }
 }
 
+// ^ Step 2 Connect to the provider API ^ //
 class _SetInfoView extends StatefulWidget {
+  final Contact_SocialTile_Provider provider;
+
+  const _SetInfoView(
+    this.provider, {
+    Key key,
+  }) : super(key: key);
 // Initialize Tile
   @override
   _SetInfoViewState createState() => _SetInfoViewState();
 }
 
 class _SetInfoViewState extends State<_SetInfoView> {
-  Contact_SocialTile_Provider _provider;
-
   @override
   Widget build(BuildContext context) {
-    return SlideLeftAnimatedSwitcher(
+    Widget infoView = Container();
+    switch (widget.provider) {
+    }
+    return Container(
       child: Column(
           key: UniqueKey(),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // @ InfoGraph
-            Center(
-              child: Stack(
-                alignment: Alignment.topLeft,
-                children: [
-                  Container(
-                    child: Text("2",
-                        style: GoogleFonts.poppins(
-                            fontSize: 108,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black38)),
-                  ),
-                  Container(
-                    width: Get.width / 2 + 60,
-                    padding: EdgeInsets.only(top: 30, left: 75),
-                    child: Text("Set your info",
-                        style: GoogleFonts.poppins(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                  ),
-                ],
-              ),
-            ),
+            _InfoText(
+                index: 2, text: "Set your ${widget.provider.toString()} info"),
             Padding(padding: EdgeInsets.all(20)),
 
-            // @ Drop Down
+            // @ Connect Button
             Neumorphic(
                 style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
                 margin: EdgeInsets.only(left: 14, right: 14),
                 child: Container(
-                  width: Get.width - 100,
-                  margin: EdgeInsets.only(left: 12, right: 12),
-                  child: DropdownButton(
-                    isExpanded: true,
-                    value: _provider,
-                    underline: Container(),
-                    style: GoogleFonts.poppins(
-                        fontSize: 16, color: Colors.black87),
-                    icon: Align(
-                        child: Icon(Icons.arrow_downward),
-                        alignment: Alignment.centerRight),
-                    elevation: 0,
-                    hint: Text("Select...",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black26,
-                        )),
-
-                    // @ Custom Dropdown Items
-                    items: List<DropdownMenuItem>.generate(
-                        Contact_SocialTile_Provider.values.length, (index) {
-                      var value = Contact_SocialTile_Provider.values[index];
-                      return DropdownMenuItem(
-                        child: Row(children: [
-                          iconFromSocialProvider(value),
-                          Padding(padding: EdgeInsets.all(4)),
-                          Text(value.toString())
-                        ]),
-                        value: value,
-                      );
-                    }),
-                    onChanged: (value) {
-                      if (value is Contact_SocialTile_Provider) {
-                        setState(() {
-                          // Update Controller
-                          Get.find<ProfileController>()
-                              .addSocialTileProvider(value);
-
-                          // Update Widget View
-                          _provider = value;
-                        });
-                      }
-                    },
-                  ),
-                )),
+                    width: Get.width - 80,
+                    margin: EdgeInsets.only(left: 12, right: 12),
+                    child: infoView)),
           ]),
     );
   }
 }
 
+// ^ Step 3 Set the Social Tile type ^ //
 class _SetSizePosView extends StatefulWidget {
-// Initialize Tile
+  const _SetSizePosView({Key key}) : super(key: key);
   @override
   _SetSizePosState createState() => _SetSizePosState();
 }
 
 class _SetSizePosState extends State<_SetSizePosView> {
-  Contact_SocialTile_Provider _provider;
-
   @override
   Widget build(BuildContext context) {
-    return SlideLeftAnimatedSwitcher(
+    return Container(
       child: Column(
           key: UniqueKey(),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // @ InfoGraph
-            Center(
-              child: Stack(
-                alignment: Alignment.topLeft,
-                children: [
-                  Container(
-                    child: Text("3",
-                        style: GoogleFonts.poppins(
-                            fontSize: 108,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.black38)),
-                  ),
-                  Container(
-                    width: Get.width / 2 + 20,
-                    padding: EdgeInsets.only(top: 15, left: 55),
-                    child: Text("Set size and position",
-                        style: GoogleFonts.poppins(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                  ),
-                ],
-              ),
-            ),
+            _InfoText(index: 3, text: "Set size and position"),
             Padding(padding: EdgeInsets.all(20)),
-            // @ Drop Down
+
+            // @ Toggle Buttons for Widget Size
+            
+            Row(
+              children: [
+                // Icon Tile
+                NeumorphicRadio(),
+
+                // Showcase Tile
+                NeumorphicRadio(),
+
+                // Feed Tile
+                NeumorphicRadio(),
+              ],
+            ),
             Neumorphic(
                 style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
                 margin: EdgeInsets.only(left: 14, right: 14),
                 child: Container(
-                  width: Get.width - 100,
-                  margin: EdgeInsets.only(left: 12, right: 12),
-                  child: DropdownButton(
-                    isExpanded: true,
-                    value: _provider,
-                    underline: Container(),
-                    style: GoogleFonts.poppins(
-                        fontSize: 16, color: Colors.black87),
-                    icon: Align(
-                        child: Icon(Icons.arrow_downward),
-                        alignment: Alignment.centerRight),
-                    elevation: 0,
-                    hint: Text("Select...",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black26,
-                        )),
-
-                    // @ Custom Dropdown Items
-                    items: List<DropdownMenuItem>.generate(
-                        Contact_SocialTile_Provider.values.length, (index) {
-                      var value = Contact_SocialTile_Provider.values[index];
-                      return DropdownMenuItem(
-                        child: Row(children: [
-                          iconFromSocialProvider(value),
-                          Padding(padding: EdgeInsets.all(4)),
-                          Text(value.toString())
-                        ]),
-                        value: value,
-                      );
-                    }),
-                    onChanged: (value) {
-                      if (value is Contact_SocialTile_Provider) {
-                        setState(() {
-                          // Update Controller
-                          Get.find<ProfileController>()
-                              .addSocialTileProvider(value);
-
-                          // Update Widget View
-                          _provider = value;
-                        });
-                      }
-                    },
-                  ),
-                )),
+                    width: Get.width - 100,
+                    margin: EdgeInsets.only(left: 12, right: 12),
+                    child: Container())),
           ]),
     );
   }
 }
 
-class _AgeField extends StatelessWidget {
-  final double age;
-  final ValueChanged<double> onChanged;
+// ^ Creates Infographic Text thats used in all Views ^ //
+class _InfoText extends StatelessWidget {
+  final int index;
+  final String text;
 
-  _AgeField({@required this.age, this.onChanged});
-
+  const _InfoText({Key key, @required this.index, @required this.text})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-          child: Text(
-            "Age",
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: NeumorphicTheme.defaultTextColor(context),
-            ),
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            child: Text(index.toString(),
+                style: GoogleFonts.poppins(
+                    fontSize: 108,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black38)),
           ),
-        ),
-        Row(
-          children: <Widget>[
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: NeumorphicSlider(
-                  min: 8,
-                  max: 75,
-                  value: this.age,
-                  onChanged: (value) {
-                    this.onChanged(value);
-                  },
-                ),
-              ),
-            ),
-            Text("${this.age.floor()}"),
-            SizedBox(
-              width: 18,
-            )
-          ],
-        ),
-      ],
-    );
+          Container(
+            width: Get.width / 2 + 30,
+            child: Text(text,
+                style: GoogleFonts.poppins(
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                )),
+          ),
+        ]);
   }
 }

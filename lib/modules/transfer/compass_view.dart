@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'compass_controller.dart';
@@ -38,7 +39,9 @@ class CompassView extends GetView<CompassController> {
                         alignment: Alignment.center,
                         children: [
                           // Center Circle
-                          _CompassBulb(controller.string, controller.heading,
+                          _CompassBulb(
+                              controller.string.value,
+                              controller.heading.value,
                               controller.gradient.value),
 
                           // Spokes
@@ -86,11 +89,14 @@ class CompassView extends GetView<CompassController> {
 // ** Builds Compass View Spokes ** //
 enum SpokeType { Major, Minor, Aux }
 
-class _Spokes extends StatelessWidget {
+class _Spokes extends HookWidget {
   final double angle;
   _Spokes(this.angle);
   @override
   Widget build(BuildContext context) {
+    // Smoothly Rotate
+    final controller = useAnimationController();
+
     // Build Spokes
     List<_Spoke> spokes = [];
     for (double i = 0; i <= 348.75; i += 11.25) {
@@ -99,14 +105,19 @@ class _Spokes extends StatelessWidget {
     }
 
     // Rotate Spokes on Direction
-    return Transform.rotate(
-        angle: angle,
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Stack(
-            children: spokes,
-          ),
-        ));
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (_, child) {
+        return Transform.rotate(angle: angle, child: child);
+      },
+      child: Padding(
+        key: Key('animated-spokes'),
+        padding: const EdgeInsets.all(5.0),
+        child: Stack(
+          children: spokes,
+        ),
+      ),
+    );
   }
 }
 
@@ -335,16 +346,17 @@ class _CompassBulb extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SlideDownAnimatedSwitcher(
+                          duration: Duration(seconds: 3),
                           child: GradientText(
-                        direction,
-                        FlutterGradients.glassWater(),
-                        key: ValueKey<String>(direction),
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 46,
-                          color: Colors.white,
-                        ),
-                      )),
+                            direction,
+                            FlutterGradients.glassWater(),
+                            key: ValueKey<String>(direction),
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 46,
+                              color: Colors.white,
+                            ),
+                          )),
                       FadeAnimatedSwitcher(
                           child: GradientText(
                         heading,

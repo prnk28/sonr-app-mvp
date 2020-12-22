@@ -56,24 +56,28 @@ class CompassController extends GetxController {
   final degrees = 0.0.obs;
 
   // @ Direction Methods
-  get string => _directionString();
-  get heading => _headingString();
+  final string = "".obs;
+  final heading = "".obs;
 
   // ^ Controller Constructer ^
   CompassController() {
     // @ Update Direction
     Get.find<SonrService>().direction.listen((newDir) {
-      if ((direction.value - newDir).abs() > 4) {
-        // Reference
-        direction(newDir);
-        angle(((newDir ?? 0) * (pi / 180) * -1));
+      // Reference
+      direction(newDir);
+      angle(((newDir ?? 0) * (pi / 180) * -1));
 
-        // Calculate Degrees
-        if (newDir + 90 > 360) {
-          degrees(newDir - 270);
-        } else {
-          degrees(newDir + 90);
-        }
+      // Calculate Degrees
+      if (newDir + 90 > 360) {
+        degrees(newDir - 270);
+      } else {
+        degrees(newDir + 90);
+      }
+
+      // Update String Elements
+      if ((direction.value - newDir).abs() > 6) {
+        string(_directionString());
+        heading(_headingString());
       }
     });
 

@@ -99,6 +99,7 @@ class ProfileController extends GetxController {
         // Display Error Snackbar
         Get.snackbar("Hold Up!", "Select a social media provider first",
             snackStyle: SnackStyle.FLOATING,
+            duration: Duration(milliseconds: 1250),
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
             icon: Icon(
@@ -117,6 +118,7 @@ class ProfileController extends GetxController {
         // Display Error Snackbar
         Get.snackbar("Wait!", "Add your information",
             snackStyle: SnackStyle.FLOATING,
+            duration: Duration(milliseconds: 1250),
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
             icon: Icon(

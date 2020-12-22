@@ -30,7 +30,7 @@ class _ProfileView extends GetView<ProfileController> {
     }
 
     // Create View
-    return NeumorphicBackground(
+    return SonrTheme(NeumorphicBackground(
         child: Column(
       children: [
         // @ Builds Profile Header
@@ -38,46 +38,50 @@ class _ProfileView extends GetView<ProfileController> {
 
         // @ Builds List of Social Tile
         Expanded(
-            child: StaggeredGridView.countBuilder(
-          crossAxisCount: 4,
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
-          itemCount: count,
-          itemBuilder: (BuildContext context, int index) {
-            // Return Edit Button
-            if (index == count - 1) {
-              return EditTile();
-            }
+          child: Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: StaggeredGridView.countBuilder(
+                crossAxisCount: 4,
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+                itemCount: count,
+                itemBuilder: (BuildContext context, int index) {
+                  // Return Edit Button
+                  if (index == count - 1) {
+                    return EditTile();
+                  }
 
-            // Return Social Tile
-            else {
-              return SocialTile(socials[index]);
-            }
-          },
-          staggeredTileBuilder: (int index) {
-            // @ Validate Socials
-            if (socials.isNotEmpty) {
-              // Feed Occupies 1 Whole Row/ 3 Columns
-              if (socials[index].type == Contact_SocialTile_TileType.Feed) {
-                return StaggeredTile.count(4, 4);
-              }
-              // Showcase Occupies 0.5 Whole Rows/ 2 Columns
-              else if (socials[index].type ==
-                  Contact_SocialTile_TileType.Showcase) {
-                return StaggeredTile.count(2, 2);
-              }
-              // Icon can by 1/1
-              else {
-                return StaggeredTile.count(1, 1);
-              }
-            }
-            // @ No Socials
-            else {
-              return StaggeredTile.count(1, 1);
-            }
-          },
-        ))
+                  // Return Social Tile
+                  else {
+                    return SocialTile(socials[index]);
+                  }
+                },
+                staggeredTileBuilder: (int index) {
+                  // @ Validate Socials
+                  if (socials.isNotEmpty) {
+                    // Feed Occupies 1 Whole Row/ 3 Columns
+                    if (socials[index].type ==
+                        Contact_SocialTile_TileType.Feed) {
+                      return StaggeredTile.count(4, 4);
+                    }
+                    // Showcase Occupies 0.5 Whole Rows/ 2 Columns
+                    else if (socials[index].type ==
+                        Contact_SocialTile_TileType.Showcase) {
+                      return StaggeredTile.count(2, 2);
+                    }
+                    // Icon can by 1/1
+                    else {
+                      return StaggeredTile.count(1, 1);
+                    }
+                  }
+                  // @ No Socials
+                  else {
+                    return StaggeredTile.count(1, 1);
+                  }
+                },
+              )),
+        )
       ],
-    ));
+    )));
   }
 }
