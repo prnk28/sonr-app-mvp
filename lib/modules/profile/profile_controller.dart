@@ -21,48 +21,41 @@ enum ContactCoreValueType {
 }
 
 class ProfileController extends GetxController {
+  // Properties
   final state = ProfileState.Viewing.obs;
   final firstName = "".obs;
   final lastName = "".obs;
   final phone = "".obs;
   final email = "".obs;
   final website = "".obs;
+  final profilePic = List<int>().obs;
   final tiles = List<Contact_SocialTile>().obs;
 
-  ProfileController() {
-    var result = Get.find<DeviceService>().user.contact;
-    contact(result);
-    tiles(result.socials);
-  }
+  // References
+  Contact _contact = Get.find<DeviceService>().user.contact;
 
-  // ^ Update a Value in User Contact ^ //
-  editCoreValue(ContactCoreValueType type, String newValue) {
-    switch (type) {
-      case ContactCoreValueType.FirstName:
-        contact.value.firstName = newValue;
-        break;
-      case ContactCoreValueType.LastName:
-        contact.value.lastName = newValue;
-        break;
-      case ContactCoreValueType.Phone:
-        contact.value.phone = newValue;
-        break;
-      case ContactCoreValueType.Email:
-        contact.value.email = newValue;
-        break;
-      case ContactCoreValueType.Website:
-        contact.value.website = newValue;
-        break;
-    }
-    print("Profile Controller New Value: " + newValue);
-    Get.find<DeviceService>().updateContact(contact.value);
+  ProfileController() {
+    firstName(_contact.firstName);
+    lastName(_contact.lastName);
+    phone(_contact.phone);
+    email(_contact.email);
+    website(_contact.website);
+    profilePic(_contact.profilePic);
+    tiles(_contact.socials);
   }
 
   // ^ Update User Profile Pic ^ //
-  updateProfilePic(File image) async {
+  setPicture(File image) async {
+    // Read Bytes from File into Ref
     var imgBytes = await image.readAsBytes();
-    contact.value.profilePic = imgBytes.toList();
-    Get.find<DeviceService>().updateContact(contact.value);
+    _contact.profilePic = imgBytes.toList();
+
+    // Set Profile Pic
+    profilePic(imgBytes.toList());
+    profilePic.refresh();
+
+    // Save Ref
+    Get.find<DeviceService>().updateContact(_contact);
   }
 
   // ^ Save a Social Tile  ^ //
