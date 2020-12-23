@@ -16,11 +16,14 @@ enum TileState {
 }
 
 class TileController extends GetxController {
+  // Properties
   final state = TileState.None.obs;
   final currentTile = Contact_SocialTile().obs;
+
+  // References
   bool _isEditing = false;
 
-  // ^ Initial for Existing Tile ^ //
+  // ^ Toggle Editing Mode ^ //
   toggleEditing(Contact_SocialTile value) {
     _isEditing = !_isEditing;
     if (_isEditing) {

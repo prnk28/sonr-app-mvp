@@ -11,15 +11,6 @@ enum ProfileState {
   Editing,
 }
 
-// @ Contact Value Enum
-enum ContactCoreValueType {
-  FirstName,
-  LastName,
-  Phone,
-  Email,
-  Website,
-}
-
 class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;
@@ -32,9 +23,20 @@ class ProfileController extends GetxController {
   final tiles = List<Contact_SocialTile>().obs;
 
   // References
+  bool _isEditing = false;
   Contact _contact;
   ProfileController() {
     fetch();
+  }
+
+  // ^ Toggle Editing Mode ^ //
+  toggleEditing() {
+    _isEditing = !_isEditing;
+    if (_isEditing) {
+      state(ProfileState.Editing);
+    } else {
+      state(ProfileState.Viewing);
+    }
   }
 
   // ^ Fetch Values ^ //
