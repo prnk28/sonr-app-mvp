@@ -248,7 +248,7 @@ class _SetInfoView extends StatefulWidget {
 }
 
 class _SetInfoViewState extends State<_SetInfoView> {
-  String _username;
+  String _username = "";
 
   @override
   Widget build(BuildContext context) {
@@ -283,6 +283,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
       return NeuomorphicTextField(
           label: "Username",
           hint: "@prnk28 (Incredible Posts BTW) ",
+          value: _username,
           onChanged: (String value) {
             this._username = value;
           },
@@ -290,6 +291,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
             setState(() {
               // Update Controller
               Get.find<TileController>().setUsername(_username);
+              Get.find<TileController>().nextStep();
             });
           });
     } else {
@@ -373,6 +375,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 groupValue: _groupValue,
                 onChanged: (value) {
                   setState(() {
+                    _groupValue = value;
                     Get.find<TileController>().setType(_groupValue);
                   });
                 },
@@ -390,6 +393,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 groupValue: _groupValue,
                 onChanged: (value) {
                   setState(() {
+                    _groupValue = value;
                     Get.find<TileController>().setType(_groupValue);
                   });
                 },

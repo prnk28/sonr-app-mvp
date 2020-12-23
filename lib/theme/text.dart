@@ -67,6 +67,7 @@ class GradientText extends StatelessWidget {
 class NeuomorphicTextField extends StatefulWidget {
   final String label;
   final String hint;
+  final String value;
 
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
@@ -74,6 +75,7 @@ class NeuomorphicTextField extends StatefulWidget {
   NeuomorphicTextField(
       {@required this.label,
       @required this.hint,
+      @required this.value,
       this.onChanged,
       this.onEditingComplete});
 
@@ -83,12 +85,10 @@ class NeuomorphicTextField extends StatefulWidget {
 
 class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
   TextEditingController _controller;
-  String _inputText = "";
-  String get text => _inputText;
 
   @override
   void initState() {
-    _controller = TextEditingController(text: _inputText);
+    _controller = TextEditingController(text: widget.value);
     super.initState();
   }
 
@@ -119,7 +119,6 @@ class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
               this.widget.onEditingComplete();
             },
             onChanged: (value) {
-              _inputText = value;
               this.widget.onChanged(value);
             },
             controller: _controller,

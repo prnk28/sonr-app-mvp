@@ -10,8 +10,8 @@ class FormView extends StatefulWidget {
 }
 
 class _FormViewState extends State<FormView> {
-  String _firstName;
-  String _lastName;
+  String _firstName = "";
+  String _lastName = "";
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +27,7 @@ class _FormViewState extends State<FormView> {
           NeuomorphicTextField(
               label: "First Name",
               hint: "Enter your first name",
+              value: _firstName,
               onChanged: (String value) {
                 this._firstName = value;
               }),
@@ -37,6 +38,7 @@ class _FormViewState extends State<FormView> {
           NeuomorphicTextField(
               label: "Last Name",
               hint: "Enter your last name",
+              value: _lastName,
               onChanged: (String value) {
                 this._lastName = value;
               }),

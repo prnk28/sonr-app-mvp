@@ -73,6 +73,12 @@ class SocialMediaService extends GetxService {
 
       // @ Retreive Medium RSS Feed as JSON
       case Contact_SocialTile_Provider.Medium:
+        // Check if user provided "@" and Remove
+        if (query.contains("@")) {
+          query = query.substring(1);
+        }
+
+        // Fetch Feed
         if (filter == SearchFilter.User) {
           // API Call
           var resp = await fetchMediumFeedWithID(item, query);
