@@ -4,6 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/modules/profile/social_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
+import 'package:vibration/vibration.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'tile_dialog.dart';
 
@@ -25,6 +26,7 @@ class SocialTile extends GetView<TileController> {
           return GestureDetector(
               onLongPress: () async {
                 controller.toggleEditing(data);
+                Vibration.vibrate(duration: 100);
               },
               child: Neumorphic(
                   margin: EdgeInsets.all(4),

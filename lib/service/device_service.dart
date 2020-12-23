@@ -115,8 +115,19 @@ class DeviceService extends GetxService {
   void addSocial(Contact_SocialTile tile) async {
     // @ Validate
     if (hasUser && !user.isNullOrBlank) {
-      // Update Contact
+      // Add Contact
       user.contact.socials.add(tile);
+      _prefs.setString("user", user.toJson());
+    }
+  }
+
+  // ^ UpdateTiles Event ^
+  void updateSocial(Contact_SocialTile tile) async {
+    // @ Validate
+    if (hasUser && !user.isNullOrBlank) {
+      // Update Contact
+      int index = user.contact.socials.indexOf(tile);
+      user.contact.socials[index] = tile;
       _prefs.setString("user", user.toJson());
     }
   }

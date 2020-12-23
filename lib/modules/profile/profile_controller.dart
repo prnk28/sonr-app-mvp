@@ -77,9 +77,16 @@ class ProfileController extends GetxController {
   // ^ Save a Social Tile  ^ //
   saveSocialTile(Contact_SocialTile tile) {
     // Add Tile to Contact and Save
-    tiles.add(tile);
+    if (tiles.contains(tile)) {
+      int index = tiles.indexOf(tile);
+      tiles[index] = tile;
+      Get.find<DeviceService>().updateSocial(tile);
+    } else {
+      tiles.add(tile);
+      Get.find<DeviceService>().addSocial(tile);
+    }
+
     tiles.refresh();
-    Get.find<DeviceService>().addSocial(tile);
     update();
   }
 

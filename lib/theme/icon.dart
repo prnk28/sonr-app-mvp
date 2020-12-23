@@ -148,14 +148,14 @@ class SonrIcon extends StatelessWidget {
   // ^ Payload Data File Type to Icon
   factory SonrIcon.socialFromProvider(
       IconType type, Contact_SocialTile_Provider provider,
-      {double size = 24}) {
+      {double size = 24, Color color = Colors.black}) {
     // Get Icon
     switch (provider) {
       case Contact_SocialTile_Provider.Facebook:
         return SonrIcon(
           Boxicons.bxl_facebook_square,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.perfectBlue,
           size: size,
         );
@@ -164,7 +164,7 @@ class SonrIcon extends StatelessWidget {
         return SonrIcon(
           Boxicons.bxl_instagram,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.ripeMalinka,
           size: size,
         );
@@ -173,14 +173,14 @@ class SonrIcon extends StatelessWidget {
         return SonrIcon(
           Boxicons.bxl_medium,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.mountainRock,
           size: size,
         );
         break;
       case Contact_SocialTile_Provider.Spotify:
-        return SonrIcon(Boxicons.bxl_spotify, type, Colors.black,
-            FlutterGradientNames.newLife,
+        return SonrIcon(
+            Boxicons.bxl_spotify, type, color, FlutterGradientNames.newLife,
             size: size);
         break;
       case Contact_SocialTile_Provider.TikTok:
@@ -188,7 +188,7 @@ class SonrIcon extends StatelessWidget {
         return SonrIcon(
           Boxicons.bxl_creative_commons,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.premiumDark,
           size: size,
         );
@@ -197,7 +197,7 @@ class SonrIcon extends StatelessWidget {
         return SonrIcon(
           Boxicons.bxl_twitter,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.partyBliss,
           size: size,
         );
@@ -206,7 +206,7 @@ class SonrIcon extends StatelessWidget {
         return SonrIcon(
           Boxicons.bxl_youtube,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.loveKiss,
           size: size,
         );
@@ -215,7 +215,7 @@ class SonrIcon extends StatelessWidget {
         return SonrIcon(
           Icons.device_unknown_rounded,
           type,
-          Colors.black,
+          color,
           FlutterGradientNames.aboveTheSky,
           size: size,
         );
