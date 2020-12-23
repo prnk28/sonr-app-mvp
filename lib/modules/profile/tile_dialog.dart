@@ -4,6 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
+import 'package:sonar_app/modules/profile/tile_preview.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -330,89 +331,44 @@ class _SetSizePosState extends State<_SetSizePosView> {
       Padding(padding: EdgeInsets.all(20)),
 
       // @ Toggle Buttons for Widget Size
-      _buildRadios(),
-      Neumorphic(
-          style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
-          margin: EdgeInsets.only(left: 14, right: 14),
-          child: Container(
-              width: Get.width - 100,
-              margin: EdgeInsets.only(left: 12, right: 12),
-              child: Container())),
-    ]);
-  }
+      Container(
+          constraints: BoxConstraints(maxWidth: Get.width - 80),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                // Icon Option
+                TilePreview(Contact_SocialTile_TileType.Icon,
+                    groupValue: _groupValue, onChanged: (value) {
+                  Get.find<TileController>().setType(value);
+                  setState(() {
+                    _groupValue = value;
+                  });
+                }),
 
-  Widget _buildRadios() {
-    return Container(
-        constraints: BoxConstraints(maxWidth: Get.width - 80),
-        child: Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              NeumorphicRadio(
-                style: NeumorphicRadioStyle(
-                    unselectedColor: K_BASE_COLOR,
-                    selectedColor: K_BASE_COLOR,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
-                child: SizedBox(
-                  height: 85,
-                  width: 85,
-                  child: Center(child: normalText("Icon")),
-                ),
-                value: Contact_SocialTile_TileType.Icon,
-                groupValue: _groupValue,
-                onChanged: (value) {
+                // Showcase Option
+                TilePreview(Contact_SocialTile_TileType.Showcase,
+                    groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
                     _groupValue = value;
                   });
-                },
-              ),
-              NeumorphicRadio(
-                style: NeumorphicRadioStyle(
-                    unselectedColor: K_BASE_COLOR,
-                    selectedColor: K_BASE_COLOR,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
-                child: SizedBox(
-                  height: 85,
-                  width: 85,
-                  child: Center(child: normalText("Showcase")),
-                ),
-                value: Contact_SocialTile_TileType.Showcase,
-                groupValue: _groupValue,
-                onChanged: (value) {
+                }),
+
+                // Feed Option
+                TilePreview(Contact_SocialTile_TileType.Feed,
+                    groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
                     _groupValue = value;
                   });
-                },
-              ),
-              NeumorphicRadio(
-                style: NeumorphicRadioStyle(
-                    unselectedColor: K_BASE_COLOR,
-                    selectedColor: K_BASE_COLOR,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
-                child: SizedBox(
-                  height: 85,
-                  width: 85,
-                  child: Center(child: normalText("Feed")),
-                ),
-                value: Contact_SocialTile_TileType.Feed,
-                groupValue: _groupValue,
-                onChanged: (value) {
-                  Get.find<TileController>().setType(value);
-                  setState(() {
-                    _groupValue = value;
-                  });
-                },
-              ),
-            ],
-          ),
-        ));
+                }),
+              ],
+            ),
+          )),
+    ]);
   }
 }
 

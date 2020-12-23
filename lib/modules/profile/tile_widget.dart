@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/modules/profile/social_view.dart';
+import 'package:sonar_app/modules/profile/tile_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:vibration/vibration.dart';
@@ -40,7 +40,7 @@ class SocialTile extends GetView<TileController> {
                           shape: NeumorphicShape.convex,
                           depth: 8),
                   child: Container(
-                    child: SocialView.fromTile(data),
+                    child: TileSocialView.fromTile(data),
                   )));
         });
   }

@@ -6,30 +6,30 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Social View Displays Tile Item ** //
-class SocialView extends StatefulWidget {
+class TileSocialView extends StatefulWidget {
   final Contact_SocialTile_TileType type;
   final SocialMediaItem item;
 
-  SocialView(this.type, this.item, {Key key}) : super(key: key);
+  TileSocialView(this.type, this.item, {Key key}) : super(key: key);
 
   // @ To Display Existing Tile
-  factory SocialView.fromTile(Contact_SocialTile tile) {
+  factory TileSocialView.fromTile(Contact_SocialTile tile) {
     var item = Get.find<SocialMediaService>().getItem(tile);
-    return SocialView(tile.type, item);
+    return TileSocialView(tile.type, item);
   }
 
   // @ To Display Tile Preview
-  factory SocialView.fromItem(
+  factory TileSocialView.fromItem(
       SocialMediaItem tile, Contact_SocialTile_TileType type) {
-    return SocialView.fromItem(tile, type);
+    return TileSocialView.fromItem(tile, type);
   }
 
   @override
-  _SocialViewState createState() => _SocialViewState();
+  _TileSocialViewState createState() => _TileSocialViewState();
 }
 
 // ** Stateful Widget to Fetch Data ** //
-class _SocialViewState extends State<SocialView> {
+class _TileSocialViewState extends State<TileSocialView> {
   bool _dataLoaded;
   dynamic _data;
 

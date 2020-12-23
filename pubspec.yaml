@@ -73,5 +73,4 @@ flutter:
   # -- Media --
   assets:
     - assets/animations/
-    - assets/audio/
     - assets/images/
