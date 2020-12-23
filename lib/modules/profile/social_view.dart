@@ -30,12 +30,21 @@ class SocialView extends StatefulWidget {
 
 // ** Stateful Widget to Fetch Data ** //
 class _SocialViewState extends State<SocialView> {
-  bool _dataLoaded = false;
+  bool _dataLoaded;
   dynamic _data;
 
   @override
   void initState() {
-    _fetch();
+    // Skip Fetch if Icon
+    if (widget.type == Contact_SocialTile_TileType.Icon) {
+      _dataLoaded = true;
+    }
+
+    // Fetch for Showcase/Feed
+    else {
+      _dataLoaded = false;
+      _fetch();
+    }
     super.initState();
   }
 
@@ -44,6 +53,31 @@ class _SocialViewState extends State<SocialView> {
     _dataLoaded = false;
     _data = null;
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // @ Await Data to load
+    if (_dataLoaded) {
+      // Validate Data
+      if (_data == null) {
+        return Center(
+            child: SonrIcon.socialFromProvider(
+                IconType.Gradient, widget.item.provider));
+      }
+
+      // Check Received Data
+      else {
+        return _buildView();
+      }
+    }
+
+    // @ Display Loading
+    else {
+      return Center(
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+    }
   }
 
   // ^ Fetch Item Data ^
@@ -57,31 +91,17 @@ class _SocialViewState extends State<SocialView> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // @ Await Data to load
-    if (_dataLoaded) {
-      // Medium Data
-      if (_data is MediumFeedModel) {
-        return _buildMedium(_data);
-      }
-      // TODO
-      else {
-        return Center(
-            child: SonrIcon.socialFromProvider(
-                IconType.Gradient, widget.item.provider));
-      }
+  // ^ Builds Data for Corresponding Model ^ //
+  Widget _buildView() {
+    // Medium Data
+    if (_data is MediumFeedModel) {
+      return _mediumView(_data);
     }
-
-    // @ Display Loading
-    else {
-      return Center(
-          child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
-    }
+    return Container();
   }
 
-  Widget _buildMedium(MediumFeedModel data) {
+  // ^ Medium Model Data View ^ //
+  Widget _mediumView(MediumFeedModel data) {
     // @ Build Feed View
     if (widget.type == Contact_SocialTile_TileType.Feed) {
       return Text("Feed View TODO");

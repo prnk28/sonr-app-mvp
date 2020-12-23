@@ -25,7 +25,7 @@ class SocialTile extends GetView<TileController> {
               onLongPress: () async {
                 controller.toggleEditing(data);
               },
-              child: NeumorphicButton(
+              child: Neumorphic(
                   style: isViewing
                       ? NeumorphicStyle(
                           intensity: 0.75,
@@ -47,17 +47,17 @@ class SocialTile extends GetView<TileController> {
 class EditTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Create View
-    return NeumorphicButton(
-      margin: EdgeInsets.all(4),
-      style: NeumorphicStyle(
-          intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
-      child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
-      onPressed: () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
-        });
-      },
-    );
+    return GestureDetector(
+        onTap: () async {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
+          });
+        },
+        child: Neumorphic(
+            margin: EdgeInsets.all(4),
+            style: NeumorphicStyle(
+                intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
+            child: SonrIcon.gradient(
+                Icons.add, FlutterGradientNames.morpheusDen)));
   }
 }

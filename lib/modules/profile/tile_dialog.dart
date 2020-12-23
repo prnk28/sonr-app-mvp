@@ -80,7 +80,19 @@ class TileDialog extends GetView<TileController> {
           } else if (controller.state == TileState.NewStepThree) {
             return _SetSizePosView();
           } else {
-            return _DropdownAddView();
+            // Initialize List of Options
+            var options = List<Contact_SocialTile_Provider>();
+
+            // Iterate through All Options
+            Contact_SocialTile_Provider.values.forEach((provider) {
+              if (Get.find<ProfileController>()
+                  .tiles
+                  .any((tile) => tile.provider != provider)) {
+                options.add(provider);
+              }
+            });
+
+            return _DropdownAddView(options);
           }
         });
   }
@@ -94,7 +106,6 @@ class TileDialog extends GetView<TileController> {
           if (controller.state == TileState.NewStepThree) {
             return NeumorphicButton(
                 onPressed: () {
-                  print("Finish Tapped");
                   controller.nextStep();
                 },
                 style: NeumorphicStyle(
@@ -111,7 +122,6 @@ class TileDialog extends GetView<TileController> {
           } else {
             return NeumorphicButton(
                 onPressed: () {
-                  print("Next Tapped");
                   controller.nextStep();
                 },
                 style: NeumorphicStyle(
@@ -139,24 +149,28 @@ class TileDialog extends GetView<TileController> {
               controller.state == TileState.NewStepThree) {
             return NeumorphicButton(
               onPressed: () {
-                print("Back Tapped");
                 controller.previousStep();
               },
               style: NeumorphicStyle(
                   depth: 8,
                   color: K_BASE_COLOR,
                   boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
-              padding: const EdgeInsets.all(12.0),
-              child: normalText("Back"),
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+              padding: const EdgeInsets.only(
+                  top: 12.0, bottom: 12.0, left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [Icon(Icons.arrow_left), normalText("Back")],
+              ),
             );
           } else {
             return IgnorePointer(
               ignoring: true,
               child: FlatButton(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.only(
+                    top: 12.0, bottom: 12.0, left: 20, right: 20),
                 onPressed: null,
-                child: normalText("Back", setColor: Colors.black45),
+                child: normalText("Back", setColor: Colors.black38),
               ),
             );
           }
@@ -166,7 +180,8 @@ class TileDialog extends GetView<TileController> {
 
 // ^ Step 1 Select Provider ^ //
 class _DropdownAddView extends StatefulWidget {
-  const _DropdownAddView({Key key}) : super(key: key);
+  final List<Contact_SocialTile_Provider> options;
+  const _DropdownAddView(this.options, {Key key}) : super(key: key);
   @override
   _DropdownAddViewState createState() => _DropdownAddViewState();
 }
@@ -187,7 +202,11 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
 
         // @ Drop Down
         Neumorphic(
-            style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
+            style: NeumorphicStyle(
+              depth: 8,
+              shape: NeumorphicShape.flat,
+              color: K_BASE_COLOR,
+            ),
             margin: EdgeInsets.only(left: 14, right: 14),
             child: Container(
               width: Get.width - 80,
@@ -209,10 +228,10 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                     )),
 
                 // @ Custom Dropdown Items
-                items: List<DropdownMenuItem>.generate(_filterOptions().length,
+                items: List<DropdownMenuItem>.generate(widget.options.length,
                     (index) {
-                  // Filter Out Existing Providers
-                  var value = _filterOptions()[index];
+                  // Pull Options
+                  var value = widget.options[index];
 
                   // Create Dropdown Menu Items
                   return DropdownMenuItem(
@@ -227,10 +246,7 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                 onChanged: (value) {
                   if (value is Contact_SocialTile_Provider) {
                     setState(() {
-                      // Update Controller
                       Get.find<TileController>().setProvider(value);
-
-                      // Update Widget View
                       _provider = value;
                     });
                   }
@@ -240,21 +256,6 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
       ],
     );
   }
-
-  List<Contact_SocialTile_Provider> _filterOptions() {
-    // Initialize List of Options
-    var options = List<Contact_SocialTile_Provider>();
-
-    // Iterate through All Options
-    Contact_SocialTile_Provider.values.forEach((provider) {
-      if (Get.find<ProfileController>()
-          .tiles
-          .any((tile) => tile.provider != provider)) {
-        options.add(provider);
-      }
-    });
-    return options;
-  }
 }
 
 // ^ Step 2 Connect to the provider API ^ //
@@ -262,7 +263,6 @@ class _SetInfoView extends StatefulWidget {
   const _SetInfoView({
     Key key,
   }) : super(key: key);
-// Initialize Tile
   @override
   _SetInfoViewState createState() => _SetInfoViewState();
 }

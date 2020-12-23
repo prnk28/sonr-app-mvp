@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:sonar_app/data/medium_model.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -73,7 +72,7 @@ class TileController extends GetxController {
         // Display Error Snackbar
         Get.snackbar("Hold Up!", "Select a social media provider first",
             snackStyle: SnackStyle.FLOATING,
-            duration: Duration(seconds: 1),
+            duration: Duration(milliseconds: 1500),
             forwardAnimationCurve: Curves.bounceIn,
             reverseAnimationCurve: Curves.easeOut,
             snackPosition: SnackPosition.BOTTOM,
@@ -89,14 +88,15 @@ class TileController extends GetxController {
     else if (state == TileState.NewStepTwo) {
       // Update State
       if (currentTile.hasUsername()) {
-        await _fetchMediumDataFromUsername();
-        state = TileState.NewStepThree;
-        update(["TileDialog"]);
+        if (await _checkMediumUsername()) {
+          state = TileState.NewStepThree;
+          update(["TileDialog"]);
+        }
       } else {
         // Display Error Snackbar
         Get.snackbar("Wait!", "Add your information",
             snackStyle: SnackStyle.FLOATING,
-            duration: Duration(seconds: 1),
+            duration: Duration(milliseconds: 1500),
             forwardAnimationCurve: Curves.bounceIn,
             reverseAnimationCurve: Curves.easeOut,
             snackPosition: SnackPosition.BOTTOM,
@@ -123,7 +123,7 @@ class TileController extends GetxController {
         // Display Error Snackbar
         Get.snackbar("Almost There!", "Pick a Tile Type",
             snackStyle: SnackStyle.FLOATING,
-            duration: Duration(seconds: 1),
+            duration: Duration(milliseconds: 1500),
             forwardAnimationCurve: Curves.bounceIn,
             reverseAnimationCurve: Curves.easeOut,
             snackPosition: SnackPosition.BOTTOM,
@@ -139,17 +139,18 @@ class TileController extends GetxController {
 
   // ^ Simple Data Validation ^ //
   // TODO: Temporary find Universal Method of Handling API's
-  _fetchMediumDataFromUsername() async {
+  Future<bool> _checkMediumUsername() async {
     // Get Feed Data For Username
     var data = await Get.find<SocialMediaService>()
         .connect(currentTile.provider, SearchFilter.User, currentTile.username);
 
     // Get Medium Model
-    if (data is MediumFeedModel) {
-      data.posts.forEach((element) {
-        print(element.title);
-      });
+    if (data != null) {
+      if (data is MediumFeedModel) {
+        return true;
+      }
     }
+    return false;
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
