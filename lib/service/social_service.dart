@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonar_app/data/medium_model.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/repository/medium_api.dart';

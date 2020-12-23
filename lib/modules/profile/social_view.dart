@@ -39,13 +39,22 @@ class _SocialViewState extends State<SocialView> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _dataLoaded = false;
+    _data = null;
+    super.dispose();
+  }
+
   // ^ Fetch Item Data ^
   _fetch() async {
     var result = await Get.find<SocialMediaService>().fetchData(widget.item);
-    setState(() {
-      _data = result;
-      _dataLoaded = true;
-    });
+    if (mounted) {
+      setState(() {
+        _data = result;
+        _dataLoaded = true;
+      });
+    }
   }
 
   @override
@@ -66,7 +75,9 @@ class _SocialViewState extends State<SocialView> {
 
     // @ Display Loading
     else {
-      return NeumorphicProgressIndeterminate();
+      return Center(
+          child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
     }
   }
 
