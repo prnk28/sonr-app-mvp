@@ -32,9 +32,16 @@ class ProfileController extends GetxController {
   final tiles = List<Contact_SocialTile>().obs;
 
   // References
-  Contact _contact = Get.find<DeviceService>().user.contact;
-
+  Contact _contact;
   ProfileController() {
+    fetch();
+  }
+
+  // ^ Fetch Values ^ //
+  fetch() {
+    if (_contact == null) {
+      _contact = Get.find<DeviceService>().user.contact;
+    }
     firstName(_contact.firstName);
     lastName(_contact.lastName);
     phone(_contact.phone);
@@ -62,12 +69,14 @@ class ProfileController extends GetxController {
   saveSocialTile(Contact_SocialTile tile) {
     // Add Tile to Contact and Save
     tiles.add(tile);
+    tiles.refresh();
     Get.find<DeviceService>().addSocial(tile);
   }
 
   // ^ Remove a Social Tile ^ //
   removeSocialTile(Contact_SocialTile tile) {
     tiles.remove(tile);
+    tiles.refresh();
     Get.find<DeviceService>().removeSocial(tile);
   }
 }

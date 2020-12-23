@@ -32,15 +32,18 @@ class _ProfileView extends GetView<ProfileController> {
           child: Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: Obx(() {
+                controller.fetch();
+                int count = controller.tiles.length + 1;
+
                 // Build Staggered Grid View
                 return StaggeredGridView.countBuilder(
                   crossAxisCount: 4,
                   mainAxisSpacing: 4.0,
                   crossAxisSpacing: 4.0,
-                  itemCount: controller.tiles.length + 1,
+                  itemCount: count,
                   itemBuilder: (BuildContext context, int index) {
                     // Return Edit Button
-                    if (index == controller.tiles.length - 1) {
+                    if (index == count - 1) {
                       return EditTile();
                     }
 
@@ -51,7 +54,7 @@ class _ProfileView extends GetView<ProfileController> {
                   },
                   staggeredTileBuilder: (int index) {
                     // @ Validate Socials
-                    if (controller.tiles.isNotEmpty) {
+                    if (count > 1) {
                       // Feed Occupies 1 Whole Row/ 3 Columns
                       if (controller.tiles[index].type ==
                           Contact_SocialTile_TileType.Feed) {

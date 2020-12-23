@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:sonar_app/data/medium_model.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -48,8 +49,8 @@ class TileController extends GetxController {
   }
 
   // ^ Step 3: In New Social Tile ^ //
-  setTypePos(Contact_SocialTile_TileType tileType) {
-    currentTile.value.type = tileType;
+  setType(Contact_SocialTile_TileType type) {
+    currentTile.value.type = type;
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
@@ -103,7 +104,8 @@ class TileController extends GetxController {
       if (currentTile.value.hasType() &&
           state.value == TileState.NewStepThree) {
         // Add Tile to Contact and Save
-        Get.find<ProfileController>().saveSocialTile(currentTile.value);
+        Get.find<ProfileController>().tiles.add(currentTile.value);
+        Get.find<DeviceService>().addSocial(currentTile.value);
 
         // Reset Current Tile
         Get.back();
@@ -178,5 +180,12 @@ class TileController extends GetxController {
   // ^ Edit a Social Tile Type ^ //
   editFeed(Contact_SocialTile tile, dynamic data) {
     // TODO
+  }
+
+  // ^ Remove a Social Tile ^ //
+  deleteTile() {
+    // Remove Tile from Contact and Save
+    Get.find<ProfileController>().tiles.remove(currentTile.value);
+    Get.find<DeviceService>().removeSocial(currentTile.value);
   }
 }

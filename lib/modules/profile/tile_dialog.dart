@@ -346,7 +346,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 onChanged: (value) {
                   setState(() {
                     _groupValue = value;
-                    Get.find<TileController>().setTypePos(_groupValue);
+                    Get.find<TileController>().setType(_groupValue);
                   });
                 },
               ),
@@ -363,7 +363,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 groupValue: _groupValue,
                 onChanged: (value) {
                   setState(() {
-                    Get.find<TileController>().setTypePos(_groupValue);
+                    Get.find<TileController>().setType(_groupValue);
                   });
                 },
               ),
@@ -380,7 +380,7 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 groupValue: _groupValue,
                 onChanged: (value) {
                   setState(() {
-                    Get.find<TileController>().setTypePos(_groupValue);
+                    Get.find<TileController>().setType(_groupValue);
                   });
                 },
               ),
