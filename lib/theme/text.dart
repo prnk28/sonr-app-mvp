@@ -117,7 +117,9 @@ class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
             onEditingComplete: this.widget.onEditingComplete,
             onChanged: this.widget.onChanged,
             controller: _controller,
-            decoration: InputDecoration.collapsed(hintText: this.widget.hint),
+            decoration: InputDecoration.collapsed(
+                hintText: this.widget.hint,
+                hintStyle: TextStyle(color: Colors.grey[350])),
           ),
         )
       ],

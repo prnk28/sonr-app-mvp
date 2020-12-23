@@ -272,7 +272,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
     if (isButton == false) {
       return NeuomorphicTextField(
           label: "Username",
-          hint: "@medium_username...",
+          hint: "@prnk28 (Incredible Posts BTW) ",
           onChanged: (String value) {
             this._username = value;
           },
@@ -345,7 +345,7 @@ class _InfoText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: Get.width - 100),
+      constraints: BoxConstraints(maxWidth: Get.width - 80),
       child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -356,6 +356,7 @@ class _InfoText extends StatelessWidget {
                     fontSize: 108,
                     fontWeight: FontWeight.w900,
                     color: Colors.black38)),
+            Padding(padding: EdgeInsets.all(8)),
             Expanded(
               child: Text(text,
                   style: GoogleFonts.poppins(
