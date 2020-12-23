@@ -32,8 +32,7 @@ class _ProfileView extends GetView<ProfileController> {
           child: Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: Obx(() {
-                controller.fetch();
-                int count = controller.tiles.length + 1;
+                int count = controller.tiles.length;
 
                 // Build Staggered Grid View
                 return StaggeredGridView.countBuilder(
@@ -49,19 +48,26 @@ class _ProfileView extends GetView<ProfileController> {
 
                     // Return Social Tile
                     else {
-                      return SocialTile(controller.tiles[index]);
+                      return SocialTile(controller.tiles[index], index);
                     }
                   },
                   staggeredTileBuilder: (int index) {
-                    // @ Validate Socials
-                    if (count > 1) {
+                    // Return Edit Button
+                    if (index == count - 1) {
+                      return StaggeredTile.count(1, 1);
+                    }
+
+                    // Return Social Tile
+                    else {
+                      // Retreive Data
+                      var data = controller.tiles[index];
+
                       // Feed Occupies 1 Whole Row/ 3 Columns
-                      if (controller.tiles[index].type ==
-                          Contact_SocialTile_TileType.Feed) {
+                      if (data.type == Contact_SocialTile_TileType.Feed) {
                         return StaggeredTile.count(4, 4);
                       }
                       // Showcase Occupies 0.5 Whole Rows/ 2 Columns
-                      else if (controller.tiles[index].type ==
+                      else if (data.type ==
                           Contact_SocialTile_TileType.Showcase) {
                         return StaggeredTile.count(2, 2);
                       }
@@ -69,10 +75,6 @@ class _ProfileView extends GetView<ProfileController> {
                       else {
                         return StaggeredTile.count(1, 1);
                       }
-                    }
-                    // @ No Socials
-                    else {
-                      return StaggeredTile.count(1, 1);
                     }
                   },
                 );

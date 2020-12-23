@@ -10,7 +10,8 @@ import 'tile_dialog.dart';
 // ** Builds Social Tile ** //
 class SocialTile extends GetView<TileController> {
   final Contact_SocialTile data;
-  SocialTile(this.data);
+  final int index;
+  SocialTile(this.data, this.index);
   @override
   Widget build(BuildContext context) {
     return Obx(() {

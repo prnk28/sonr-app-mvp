@@ -37,27 +37,6 @@ class SocialMediaService extends GetxService {
         .firstWhere((smi) => smi.provider == tile.provider);
   }
 
-  // ^ Retreives Model Item from Tile ^ //
-  fetchData(SocialMediaItem item) {
-    if (item.provider == Contact_SocialTile_Provider.Medium) {
-      var data = fetchMediumFeedWithItem(item);
-      if (data != null) {
-        return data;
-      } else {
-        Get.snackbar("Uh Oh!", "That username was not found",
-            snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1250),
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            icon: Icon(
-              Icons.warning_outlined,
-              color: Colors.white,
-            ),
-            colorText: Colors.white);
-      }
-    }
-  }
-
   // ^ Refreshes all Social Media Data ^ //
   refresh() async {
     // @ Validate Socials
@@ -134,5 +113,26 @@ class SocialMediaService extends GetxService {
         break;
     }
     return true;
+  }
+
+  // ^ Retreives Model Item from Tile ^ //
+  Future<dynamic> fetchData(SocialMediaItem item) async {
+    if (item.provider == Contact_SocialTile_Provider.Medium) {
+      var data = await fetchMediumFeedWithItem(item);
+      if (data != null) {
+        return data;
+      } else {
+        Get.snackbar("Uh Oh!", "That username was not found",
+            snackStyle: SnackStyle.FLOATING,
+            duration: Duration(milliseconds: 1250),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            icon: Icon(
+              Icons.warning_outlined,
+              color: Colors.white,
+            ),
+            colorText: Colors.white);
+      }
+    }
   }
 }

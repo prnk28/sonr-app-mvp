@@ -5,7 +5,8 @@ import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
-class SocialView extends StatelessWidget {
+// ** Social View Displays Tile Item ** //
+class SocialView extends StatefulWidget {
   final Contact_SocialTile_TileType type;
   final SocialMediaItem item;
 
@@ -24,32 +25,65 @@ class SocialView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // Fetch Item Data
-    var data = Get.find<SocialMediaService>().fetchData(item);
+  _SocialViewState createState() => _SocialViewState();
+}
 
-    // Check Data Model Type
-    if (data is MediumFeedModel) {
-      return _buildMedium(data);
-    }
+// ** Stateful Widget to Fetch Data ** //
+class _SocialViewState extends State<SocialView> {
+  bool _dataLoaded = false;
+  dynamic _data;
 
-    return Container();
+  @override
+  void initState() {
+    _fetch();
+    super.initState();
   }
 
-  // ^ Build Medium Based View ^ //
+  // ^ Fetch Item Data ^
+  _fetch() async {
+    var result = await Get.find<SocialMediaService>().fetchData(widget.item);
+    setState(() {
+      _data = result;
+      _dataLoaded = true;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // @ Await Data to load
+    if (_dataLoaded) {
+      // Medium Data
+      if (_data is MediumFeedModel) {
+        return _buildMedium(_data);
+      }
+      // TODO
+      else {
+        return Center(
+            child: SonrIcon.socialFromProvider(
+                IconType.Gradient, widget.item.provider));
+      }
+    }
+
+    // @ Display Loading
+    else {
+      return NeumorphicProgressIndeterminate();
+    }
+  }
+
   Widget _buildMedium(MediumFeedModel data) {
     // @ Build Feed View
-    if (type == Contact_SocialTile_TileType.Feed) {
+    if (widget.type == Contact_SocialTile_TileType.Feed) {
       return Text("Feed View TODO");
     }
     // @ Build ShowCase View
-    else if (type == Contact_SocialTile_TileType.Showcase) {
+    else if (widget.type == Contact_SocialTile_TileType.Showcase) {
       return Text("Showcase View TODO");
     }
     // @ Build Icon View
     else {
       return Center(
-          child: SonrIcon.socialFromProvider(IconType.Gradient, item.provider));
+          child: SonrIcon.socialFromProvider(
+              IconType.Gradient, widget.item.provider));
     }
   }
 }

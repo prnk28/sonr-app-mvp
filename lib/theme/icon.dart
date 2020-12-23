@@ -148,14 +148,7 @@ class SonrIcon extends StatelessWidget {
   // ^ Payload Data File Type to Icon
   factory SonrIcon.socialFromProvider(
       IconType type, Contact_SocialTile_Provider provider,
-      {double size}) {
-    // Set Size
-    if (type == IconType.Normal && size == null) {
-      size = 24;
-    } else {
-      size = 40;
-    }
-
+      {double size = 24}) {
     // Get Icon
     switch (provider) {
       case Contact_SocialTile_Provider.Facebook:

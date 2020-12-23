@@ -41,16 +41,23 @@ class ProfileController extends GetxController {
 
   // ^ Fetch Values ^ //
   fetch() {
+    // Check for Contact
     if (_contact == null) {
       _contact = Get.find<DeviceService>().user.contact;
     }
+
+    // Set Core Values
     firstName(_contact.firstName);
     lastName(_contact.lastName);
     phone(_contact.phone);
     email(_contact.email);
     website(_contact.website);
+
+    // Update Refresh Lists
     profilePic(_contact.profilePic);
+    profilePic.refresh();
     tiles(_contact.socials);
+    tiles.refresh();
   }
 
   // ^ Update User Profile Pic ^ //
