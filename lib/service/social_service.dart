@@ -73,7 +73,7 @@ class SocialMediaService extends GetxService {
         }
 
         // Add To List
-        enabledSocialMedia().add(item);
+        enabledSocialMedia.add(item);
         enabledSocialMedia.refresh();
       });
     } else {
@@ -105,7 +105,10 @@ class SocialMediaService extends GetxService {
             // Add Item To Preferences
             item.value = query;
             _prefs.setString(item.key, item.value);
-            refresh();
+
+            // Add To List
+            enabledSocialMedia.add(item);
+            enabledSocialMedia.refresh();
             return resp;
           } else {
             Get.snackbar("Uh Oh!", "That username was not found",

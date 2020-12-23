@@ -83,11 +83,12 @@ class NeuomorphicTextField extends StatefulWidget {
 
 class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
   TextEditingController _controller;
-  String get text => _controller.value.text;
+  String _inputText = "";
+  String get text => _inputText;
 
   @override
   void initState() {
-    _controller = TextEditingController(text: text);
+    _controller = TextEditingController(text: _inputText);
     super.initState();
   }
 
@@ -117,7 +118,10 @@ class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
             onEditingComplete: () {
               this.widget.onEditingComplete();
             },
-            onChanged: this.widget.onChanged,
+            onChanged: (value) {
+              _inputText = value;
+              this.widget.onChanged(value);
+            },
             controller: _controller,
             decoration: InputDecoration.collapsed(
                 hintText: this.widget.hint,

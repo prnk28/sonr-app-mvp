@@ -22,54 +22,59 @@ enum ContactCoreValueType {
 
 class ProfileController extends GetxController {
   final state = ProfileState.Viewing.obs;
-  final userContact = Contact().obs;
-  final tileCount = Get.find<DeviceService>().user.contact.socials.length.obs;
+  final firstName = "".obs;
+  final lastName = "".obs;
+  final phone = "".obs;
+  final email = "".obs;
+  final website = "".obs;
+  final tiles = List<Contact_SocialTile>().obs;
 
   ProfileController() {
-    var contact = Get.find<DeviceService>().user.contact;
-    userContact(contact);
+    var result = Get.find<DeviceService>().user.contact;
+    contact(result);
+    tiles(result.socials);
   }
 
   // ^ Update a Value in User Contact ^ //
   editCoreValue(ContactCoreValueType type, String newValue) {
     switch (type) {
       case ContactCoreValueType.FirstName:
-        userContact.value.firstName = newValue;
+        contact.value.firstName = newValue;
         break;
       case ContactCoreValueType.LastName:
-        userContact.value.lastName = newValue;
+        contact.value.lastName = newValue;
         break;
       case ContactCoreValueType.Phone:
-        userContact.value.phone = newValue;
+        contact.value.phone = newValue;
         break;
       case ContactCoreValueType.Email:
-        userContact.value.email = newValue;
+        contact.value.email = newValue;
         break;
       case ContactCoreValueType.Website:
-        userContact.value.website = newValue;
+        contact.value.website = newValue;
         break;
     }
     print("Profile Controller New Value: " + newValue);
-    Get.find<DeviceService>().updateContact(userContact.value);
+    Get.find<DeviceService>().updateContact(contact.value);
   }
 
   // ^ Update User Profile Pic ^ //
   updateProfilePic(File image) async {
     var imgBytes = await image.readAsBytes();
-    userContact.value.profilePic = imgBytes.toList();
-    Get.find<DeviceService>().updateContact(userContact.value);
+    contact.value.profilePic = imgBytes.toList();
+    Get.find<DeviceService>().updateContact(contact.value);
   }
 
   // ^ Save a Social Tile  ^ //
   saveSocialTile(Contact_SocialTile tile) {
     // Add Tile to Contact and Save
-    userContact.value.socials.add(tile);
-    Get.find<DeviceService>().updateContact(userContact.value);
+    tiles.add(tile);
+    Get.find<DeviceService>().addSocial(tile);
   }
 
   // ^ Remove a Social Tile ^ //
   removeSocialTile(Contact_SocialTile tile) {
-    userContact.value.socials.remove(tile);
-    Get.find<DeviceService>().updateContact(userContact.value);
+    tiles.remove(tile);
+    Get.find<DeviceService>().removeSocial(tile);
   }
 }

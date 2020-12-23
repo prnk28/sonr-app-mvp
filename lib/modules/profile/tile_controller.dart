@@ -106,8 +106,9 @@ class TileController extends GetxController {
         Get.find<ProfileController>().saveSocialTile(currentTile.value);
 
         // Reset Current Tile
+        Get.back();
         state(TileState.None);
-        currentTile.value = null;
+        currentTile(Contact_SocialTile());
       } else {
         // Display Error Snackbar
         Get.snackbar("Almost There!", "Pick a Tile Type",

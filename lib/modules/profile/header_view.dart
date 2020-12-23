@@ -66,7 +66,7 @@ class ContactHeader extends GetView<ProfileController> {
                         _AvatarField(),
                         Padding(
                           padding: const EdgeInsets.only(top: 6.0),
-                          child: Text(controller.userContact.value.firstName,
+                          child: Text(controller.firstName.value,
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(

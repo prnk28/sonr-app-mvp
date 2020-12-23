@@ -13,20 +13,25 @@ class SocialTile extends GetView<TileController> {
   SocialTile(this.data);
   @override
   Widget build(BuildContext context) {
-    // @ Build View
-    return GestureDetector(
-        onLongPress: () async {
-          controller.toggleEditing(data);
-        },
-        child: Obx(() => Neumorphic(
-            style: controller.state.value != TileState.Editing
-                ? NeumorphicStyle(intensity: 0.45)
-                : NeumorphicStyle(
-                    intensity: 0.85, shape: NeumorphicShape.flat, depth: 15),
-            margin: EdgeInsets.all(4),
-            child: Container(
-              child: SocialView.fromTile(data),
-            ))));
+    return Obx(() {
+      // @ Determine State
+      bool isViewing = (controller.state.value != TileState.Editing);
+
+      // @ Build View
+      return GestureDetector(
+          onLongPress: () async {
+            controller.toggleEditing(data);
+          },
+          child: Obx(() => Neumorphic(
+              style: isViewing
+                  ? NeumorphicStyle(intensity: 0.85)
+                  : NeumorphicStyle(
+                      intensity: 0.85, shape: NeumorphicShape.flat, depth: 15),
+              margin: EdgeInsets.all(4),
+              child: Container(
+                child: SocialView.fromTile(data),
+              ))));
+    });
   }
 }
 

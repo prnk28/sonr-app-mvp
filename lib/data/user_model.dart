@@ -46,7 +46,7 @@ class User {
   // ^ Method converts Profile to JSON String ^
   String toJson() {
     // Convert Items to Json based on length
-    if (this.settings.length > 0) {
+    if (this.settings != null) {
       var settingsJson = <String>[];
       this.settings.forEach((i) {
         settingsJson.add(i.toJson());
