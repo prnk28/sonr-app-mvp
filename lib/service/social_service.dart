@@ -1,16 +1,13 @@
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonar_app/data/permission_model.dart';
-import 'package:http/http.dart' as http;
-import 'package:sonar_app/data/social_media/medium_model.dart';
-
-import 'package:sonar_app/data/social_media/social_model.dart';
+import 'package:sonar_app/data/medium_model.dart';
+import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Handles SocialMedia ** //
@@ -56,28 +53,24 @@ class SocialMediaService extends GetxService {
   }
 
   // ^ Connect account to a Social Media Provider ^ //
-  Future<dynamic> search(Contact_SocialTile_Provider provider,
+  Future<dynamic> connect(Contact_SocialTile_Provider provider,
       SearchFilter filter, String query) async {
+    // Create Item
+    var item = SocialMediaItem.fromProviderData(provider);
+
+    // Connect By Provider
     switch (provider) {
       case Contact_SocialTile_Provider.Facebook:
         break;
       case Contact_SocialTile_Provider.Instagram:
         break;
+
+      // @ Retreive Medium RSS Feed as JSON
       case Contact_SocialTile_Provider.Medium:
         if (filter == SearchFilter.User) {
-          var resp = await SocialAPI.getMediumFeed(query);
-          if (resp.statusCode == 200) {
-            // If the server did return a 200 OK response
-            var feed = MediumFeedModel.fromJson(jsonDecode(resp.body));
-            if (feed.status == "error") {
-              // Snackbar Error
-            } else if (feed.status == "ok") {
-              return feed;
-            }
-          } else {
-            // If the server did not return a 200 OK response,
-            // then throw an exception.
-            throw Exception('Failed to load album');
+          var resp = await _fetchMediumFeed(item, query);
+          if (resp != null) {
+            return resp;
           }
         }
         break;
@@ -93,33 +86,44 @@ class SocialMediaService extends GetxService {
     return true;
   }
 
-  // ^ Connect account to a Social Media Provider ^ //
-  Future<bool> connect(Contact_SocialTile_Provider provider) async {
-    switch (provider) {
-      case Contact_SocialTile_Provider.Facebook:
-        break;
-      case Contact_SocialTile_Provider.Instagram:
-        break;
-      case Contact_SocialTile_Provider.Medium:
-        break;
-      case Contact_SocialTile_Provider.Spotify:
-        break;
-      case Contact_SocialTile_Provider.TikTok:
-        break;
-      case Contact_SocialTile_Provider.Twitter:
-        break;
-      case Contact_SocialTile_Provider.YouTube:
-        break;
-    }
-    return true;
-  }
-}
-
-// ** Class that Calls Social Network APIs
-class SocialAPI {
-  static Future<http.Response> getMediumFeed(userID) {
-    return http.get(
+  // ^ Fetches Medium feed by ID ^ //
+  Future<MediumFeedModel> _fetchMediumFeed(
+      SocialMediaItem item, String userID) async {
+    // @ Request
+    var resp = await http.get(
         'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@' +
             userID);
+
+    // @ Check Status Code
+    if (resp.statusCode == 200) {
+      // Initialize Model
+      var feed = MediumFeedModel.fromJson(jsonDecode(resp.body));
+
+      // Return Model Save Auth+Link
+      if (feed.status == "ok") {
+        item.value = userID;
+        _prefs.setString(item.key, item.value);
+        return feed;
+      }
+      // Display Error Snackbar
+      else {
+        Get.snackbar("Uh Oh!", "That username was not found",
+            snackStyle: SnackStyle.FLOATING,
+            duration: Duration(milliseconds: 1250),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            icon: Icon(
+              Icons.warning_outlined,
+              color: Colors.white,
+            ),
+            colorText: Colors.white);
+
+        return null;
+      }
+    }
+    // @ Invalid Code
+    else {
+      return null;
+    }
   }
 }

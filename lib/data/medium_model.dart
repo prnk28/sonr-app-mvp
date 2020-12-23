@@ -1,17 +1,17 @@
 class MediumFeedModel {
   String status;
   Feed feed;
-  List<Posts> items;
+  List<Post> posts;
 
-  MediumFeedModel({this.status, this.feed, this.items});
+  MediumFeedModel({this.status, this.feed, this.posts});
 
   MediumFeedModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     feed = json['feed'] != null ? new Feed.fromJson(json['feed']) : null;
     if (json['items'] != null) {
-      items = new List<Posts>();
+      posts = new List<Post>();
       json['items'].forEach((v) {
-        items.add(new Posts.fromJson(v));
+        posts.add(new Post.fromJson(v));
       });
     }
   }
@@ -22,8 +22,8 @@ class MediumFeedModel {
     if (this.feed != null) {
       data['feed'] = this.feed.toJson();
     }
-    if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
+    if (this.posts != null) {
+      data['items'] = this.posts.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -66,7 +66,7 @@ class Feed {
   }
 }
 
-class Posts {
+class Post {
   String title;
   String pubDate;
   String link;
@@ -77,7 +77,7 @@ class Posts {
   String content;
   List<String> categories;
 
-  Posts(
+  Post(
       {this.title,
       this.pubDate,
       this.link,
@@ -88,7 +88,7 @@ class Posts {
       this.content,
       this.categories});
 
-  Posts.fromJson(Map<String, dynamic> json) {
+  Post.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     pubDate = json['pubDate'];
     link = json['link'];

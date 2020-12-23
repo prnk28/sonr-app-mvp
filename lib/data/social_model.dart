@@ -9,7 +9,8 @@ class SocialMediaItem {
   String _oauthToken;
   String _link;
   String get key => provider.toString() + "_auth";
-  String get value => _authValueForRefType();
+  String get value => _getAuthValueForRefType();
+  set value(value) => _setAuthValueForRefType(value);
 
   SocialMediaItem(this.provider, this.reference);
 
@@ -34,11 +35,35 @@ class SocialMediaItem {
     }
   }
 
-  _authValueForRefType() {
+  _getAuthValueForRefType() {
     if (this.reference == SocialRefType.Link) {
       return _link;
     } else {
       return _oauthToken;
+    }
+  }
+
+  _setAuthValueForRefType(String value) {
+    if (this.reference == SocialRefType.Link) {
+      _link = _linkFromValueAndProvider(value);
+    } else {
+      _oauthToken = value;
+    }
+  }
+
+  _linkFromValueAndProvider(String value) {
+    switch (provider) {
+      case Contact_SocialTile_Provider.Medium:
+        return 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@' +
+            value;
+        break;
+      case Contact_SocialTile_Provider.Spotify:
+        break;
+      case Contact_SocialTile_Provider.Twitter:
+        break;
+      case Contact_SocialTile_Provider.YouTube:
+        break;
+      default:
     }
   }
 }

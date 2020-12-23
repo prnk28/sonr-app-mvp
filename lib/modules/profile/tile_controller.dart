@@ -1,7 +1,7 @@
-// @ SocialEditType Enum
 import 'package:get/get.dart';
+import 'package:sonar_app/data/medium_model.dart';
+import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'tile_dialog.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -35,8 +35,7 @@ class TileController extends GetxController {
   }
 
   // ^ Step 2: In New Social Tile ^ //
-  setInfo(String url, String username) {
-    currentTile.value.url = url;
+  setUsername(String username) {
     currentTile.value.username = username;
   }
 
@@ -47,13 +46,12 @@ class TileController extends GetxController {
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
-  nextStep() {
+  nextStep() async {
     // @ Step 2
     if (state.value == TileState.NewStepOne) {
       if (currentTile.value.hasProvider()) {
         // Update State
         state(TileState.NewStepTwo);
-        update();
       } else {
         // Display Error Snackbar
         Get.snackbar("Hold Up!", "Select a social media provider first",
@@ -71,9 +69,9 @@ class TileController extends GetxController {
     // @ Step 3
     else if (state.value == TileState.NewStepTwo) {
       // Update State
-      if (currentTile.value.hasUrl() && currentTile.value.hasUsername()) {
+      if (currentTile.value.hasUsername()) {
+        await _fetchDataFromUsername();
         state(TileState.NewStepThree);
-        update();
       } else {
         // Display Error Snackbar
         Get.snackbar("Wait!", "Add your information",
@@ -101,6 +99,21 @@ class TileController extends GetxController {
         state(TileState.None);
         currentTile.value = null;
       }
+    }
+  }
+
+  _fetchDataFromUsername() async {
+    // Get Feed Data For Username
+    var data = await Get.find<SocialMediaService>().connect(
+        currentTile.value.provider,
+        SearchFilter.User,
+        currentTile.value.username);
+
+    // Get Medium Model
+    if (data is MediumFeedModel) {
+      data.posts.forEach((element) {
+        print(element.title);
+      });
     }
   }
 
