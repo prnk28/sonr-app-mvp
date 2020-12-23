@@ -87,7 +87,7 @@ class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
 
   @override
   void initState() {
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: text);
     super.initState();
   }
 
@@ -114,12 +114,14 @@ class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
           ),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
-            onEditingComplete: this.widget.onEditingComplete,
+            onEditingComplete: () {
+              this.widget.onEditingComplete();
+            },
             onChanged: this.widget.onChanged,
             controller: _controller,
             decoration: InputDecoration.collapsed(
                 hintText: this.widget.hint,
-                hintStyle: TextStyle(color: Colors.grey[350])),
+                hintStyle: TextStyle(color: Colors.black38)),
           ),
         )
       ],

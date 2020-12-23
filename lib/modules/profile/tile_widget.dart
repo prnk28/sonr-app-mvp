@@ -10,33 +10,24 @@ import 'tile_dialog.dart';
 // ** Builds Social Tile ** //
 class SocialTile extends GetView<TileController> {
   final Contact_SocialTile data;
-  SocialTile(this.data) {}
+  SocialTile(this.data);
   @override
   Widget build(BuildContext context) {
-    // Initialize
-    controller.setTile(data);
-
-    return Obx(() {
-      // @ Determine State
-      bool isViewing = (controller.state.value != TileState.Editing);
-
-      // @ Build View
-      return GestureDetector(
-          onLongPress: () async {
-            print("Long tapped jiggle");
-          },
-          child: Neumorphic(
-              style: isViewing
-                  ? NeumorphicStyle(intensity: 0.85)
-                  : NeumorphicStyle(
-                      intensity: 0.85, shape: NeumorphicShape.flat, depth: 15),
-              margin: EdgeInsets.all(4),
-              child: Container(
-                child: SocialView.fromTile(data),
-              )));
-    });
+    // @ Build View
+    return GestureDetector(
+        onLongPress: () async {
+          controller.toggleEditing(data);
+        },
+        child: Obx(() => Neumorphic(
+            style: controller.state.value != TileState.Editing
+                ? NeumorphicStyle(intensity: 0.45)
+                : NeumorphicStyle(
+                    intensity: 0.85, shape: NeumorphicShape.flat, depth: 15),
+            margin: EdgeInsets.all(4),
+            child: Container(
+              child: SocialView.fromTile(data),
+            ))));
   }
-
 }
 
 // ** Builds Edit Tile ** //

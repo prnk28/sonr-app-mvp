@@ -17,10 +17,18 @@ enum TileState {
 class TileController extends GetxController {
   final state = TileState.None.obs;
   final currentTile = Contact_SocialTile().obs;
+  bool _isEditing = false;
 
   // ^ Initial for Existing Tile ^ //
-  setTile(Contact_SocialTile value) {
-    currentTile(value);
+  toggleEditing(Contact_SocialTile value) {
+    _isEditing = !_isEditing;
+    if (_isEditing) {
+      currentTile(value);
+      state(TileState.Editing);
+    } else {
+      currentTile(Contact_SocialTile());
+      state(TileState.None);
+    }
   }
 
   // ^ Create New Tile ^ //
@@ -55,7 +63,9 @@ class TileController extends GetxController {
         // Display Error Snackbar
         Get.snackbar("Hold Up!", "Select a social media provider first",
             snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1250),
+            duration: Duration(seconds: 1),
+            forwardAnimationCurve: Curves.bounceIn,
+            reverseAnimationCurve: Curves.easeOut,
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
             icon: Icon(
@@ -69,13 +79,15 @@ class TileController extends GetxController {
     else if (state.value == TileState.NewStepTwo) {
       // Update State
       if (currentTile.value.hasUsername()) {
-        await _fetchDataFromUsername();
+        await _fetchMediumDataFromUsername();
         state(TileState.NewStepThree);
       } else {
         // Display Error Snackbar
         Get.snackbar("Wait!", "Add your information",
             snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1250),
+            duration: Duration(seconds: 1),
+            forwardAnimationCurve: Curves.bounceIn,
+            reverseAnimationCurve: Curves.easeOut,
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.red,
             icon: Icon(
@@ -96,11 +108,27 @@ class TileController extends GetxController {
         // Reset Current Tile
         state(TileState.None);
         currentTile.value = null;
+      } else {
+        // Display Error Snackbar
+        Get.snackbar("Almost There!", "Pick a Tile Type",
+            snackStyle: SnackStyle.FLOATING,
+            duration: Duration(seconds: 1),
+            forwardAnimationCurve: Curves.bounceIn,
+            reverseAnimationCurve: Curves.easeOut,
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            icon: Icon(
+              Icons.warning_outlined,
+              color: Colors.white,
+            ),
+            colorText: Colors.white);
       }
     }
   }
 
-  _fetchDataFromUsername() async {
+  // ^ Simple Data Validation ^ //
+  // TODO: Temporary find Universal Method of Handling API's
+  _fetchMediumDataFromUsername() async {
     // Get Feed Data For Username
     var data = await Get.find<SocialMediaService>().connect(
         currentTile.value.provider,

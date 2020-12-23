@@ -303,27 +303,16 @@ class _SetSizePosView extends StatefulWidget {
 }
 
 class _SetSizePosState extends State<_SetSizePosView> {
+  Contact_SocialTile_TileType _groupValue;
   @override
   Widget build(BuildContext context) {
     return Column(key: UniqueKey(), children: [
       // @ InfoGraph
-      _InfoText(index: 3, text: "Set size and position"),
+      _InfoText(index: 3, text: "Set your Tile's type"),
       Padding(padding: EdgeInsets.all(20)),
 
       // @ Toggle Buttons for Widget Size
-
-      Row(
-        children: [
-          // Icon Tile
-          NeumorphicRadio(),
-
-          // Showcase Tile
-          NeumorphicRadio(),
-
-          // Feed Tile
-          NeumorphicRadio(),
-        ],
-      ),
+      _buildRadios(),
       Neumorphic(
           style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
           margin: EdgeInsets.only(left: 14, right: 14),
@@ -332,6 +321,72 @@ class _SetSizePosState extends State<_SetSizePosView> {
               margin: EdgeInsets.only(left: 12, right: 12),
               child: Container())),
     ]);
+  }
+
+  Widget _buildRadios() {
+    return Container(
+        constraints: BoxConstraints(maxWidth: Get.width - 80),
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(width: 6),
+              NeumorphicRadio(
+                style: NeumorphicRadioStyle(
+                    boxShape: NeumorphicBoxShape.stadium()),
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Center(child: normalText("Icon")),
+                ),
+                value: Contact_SocialTile_TileType.Icon,
+                groupValue: _groupValue,
+                onChanged: (value) {
+                  setState(() {
+                    _groupValue = value;
+                    Get.find<TileController>().setTypePos(_groupValue);
+                  });
+                },
+              ),
+              SizedBox(width: 6),
+              NeumorphicRadio(
+                style: NeumorphicRadioStyle(
+                    boxShape: NeumorphicBoxShape.stadium()),
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Center(child: normalText("Showcase")),
+                ),
+                value: Contact_SocialTile_TileType.Showcase,
+                groupValue: _groupValue,
+                onChanged: (value) {
+                  setState(() {
+                    Get.find<TileController>().setTypePos(_groupValue);
+                  });
+                },
+              ),
+              SizedBox(width: 6),
+              NeumorphicRadio(
+                style: NeumorphicRadioStyle(
+                    boxShape: NeumorphicBoxShape.stadium()),
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: Center(child: normalText("Feed")),
+                ),
+                value: Contact_SocialTile_TileType.Feed,
+                groupValue: _groupValue,
+                onChanged: (value) {
+                  setState(() {
+                    Get.find<TileController>().setTypePos(_groupValue);
+                  });
+                },
+              ),
+            ],
+          ),
+        ));
   }
 }
 
@@ -346,26 +401,28 @@ class _InfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(maxWidth: Get.width - 80),
-      child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(index.toString(),
-                style: GoogleFonts.poppins(
-                    fontSize: 108,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black38)),
-            Padding(padding: EdgeInsets.all(8)),
-            Expanded(
-              child: Text(text,
+      child: Center(
+        child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(index.toString(),
                   style: GoogleFonts.poppins(
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  )),
-            ),
-          ]),
+                      fontSize: 108,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black38)),
+              Padding(padding: EdgeInsets.all(8)),
+              Expanded(
+                child: Text(text,
+                    style: GoogleFonts.poppins(
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    )),
+              ),
+            ]),
+      ),
     );
   }
 }
