@@ -6,26 +6,26 @@ import 'package:sonr_core/models/models.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'card_controller.dart';
 
-class CardPopup extends GetView<CardController> {
+class CardView extends GetView<CardController> {
   // Properties
   final bool fromTransfer;
   final CardModel data;
 
   // ** Constructer ** //
-  CardPopup(this.fromTransfer, this.data);
+  CardView(this.fromTransfer, this.data);
 
-  factory CardPopup.fromTransferMetadata(Metadata m) {
-    return CardPopup(true, CardModel.fromMetadata(m));
+  factory CardView.fromTransferMetadata(Metadata m) {
+    return CardView(true, CardModel.fromMetadata(m));
   }
 
   // ** Metadata Popup ** //
-  factory CardPopup.fromTransferContact(Contact c) {
-    return CardPopup(true, CardModel.fromContact(c));
+  factory CardView.fromTransferContact(Contact c) {
+    return CardView(true, CardModel.fromContact(c));
   }
 
   // ** Contact Popup ** //
-  factory CardPopup.fromItem(CardModel card) {
-    return CardPopup(false, card);
+  factory CardView.fromItem(CardModel card) {
+    return CardView(false, card);
   }
 
   @override
@@ -80,7 +80,7 @@ class _ContactPopupView extends GetView<CardController> {
         Padding(padding: EdgeInsets.all(8)),
         Column(
           children: [
-             SonrText.bold(contact.firstName),
+            SonrText.bold(contact.firstName),
             SonrText.bold(contact.lastName),
           ],
         )

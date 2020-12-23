@@ -147,6 +147,8 @@ class TileDialog extends GetView<TileController> {
   // ^ Build Next Button with Finish at End ^ //
   _buildNextButton({bool expanded = false}) {
     return NeumorphicButton(
+        margin:
+            expanded ? EdgeInsets.only(left: 20, right: 20) : EdgeInsets.zero,
         onPressed: () {
           controller.nextStep();
         },
@@ -160,7 +162,9 @@ class TileDialog extends GetView<TileController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            expanded ?  SonrText.normal("Next", size: 22) :  SonrText.normal("Next"),
+            expanded
+                ? SonrText.normal("Next", size: 22)
+                : SonrText.normal("Next"),
             SonrIcon.gradient(
                 Icons.arrow_right, FlutterGradientNames.eternalConstance,
                 size: 24)
@@ -182,7 +186,7 @@ class TileDialog extends GetView<TileController> {
           const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [Icon(Icons.arrow_left),  SonrText.normal("Back")],
+        children: [Icon(Icons.arrow_left), SonrText.normal("Back")],
       ),
     );
   }

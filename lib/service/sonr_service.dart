@@ -6,7 +6,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/modules/card/card_invite.dart';
-import 'package:sonar_app/modules/card/card_popup.dart';
+import 'package:sonar_app/modules/card/card_view.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:vibration/vibration.dart';
@@ -189,7 +189,7 @@ class SonrService extends GetxService {
         Vibration.vibrate(duration: 50);
         Vibration.vibrate(duration: 100);
         status(SonrStatus.Complete);
-        Get.dialog(CardPopup.fromTransferContact(data.payload.contact));
+        Get.dialog(CardView.fromTransferContact(data.payload.contact));
       } else {
         // For File
         if (data.decision) {
