@@ -85,9 +85,9 @@ class TileDialog extends GetView<TileController> {
 
             // Iterate through All Options
             Contact_SocialTile_Provider.values.forEach((provider) {
-              if (Get.find<ProfileController>()
+              if (!Get.find<ProfileController>()
                   .tiles
-                  .any((tile) => tile.provider != provider)) {
+                  .any((tile) => tile.provider == provider)) {
                 options.add(provider);
               }
             });
@@ -354,7 +354,8 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 style: NeumorphicRadioStyle(
                     unselectedColor: K_BASE_COLOR,
                     selectedColor: K_BASE_COLOR,
-                    boxShape: NeumorphicBoxShape.stadium()),
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
                 child: SizedBox(
                   height: 85,
                   width: 85,
@@ -373,7 +374,8 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 style: NeumorphicRadioStyle(
                     unselectedColor: K_BASE_COLOR,
                     selectedColor: K_BASE_COLOR,
-                    boxShape: NeumorphicBoxShape.stadium()),
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
                 child: SizedBox(
                   height: 85,
                   width: 85,
@@ -392,7 +394,8 @@ class _SetSizePosState extends State<_SetSizePosView> {
                 style: NeumorphicRadioStyle(
                     unselectedColor: K_BASE_COLOR,
                     selectedColor: K_BASE_COLOR,
-                    boxShape: NeumorphicBoxShape.stadium()),
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
                 child: SizedBox(
                   height: 85,
                   width: 85,

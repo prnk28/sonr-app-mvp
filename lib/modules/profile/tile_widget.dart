@@ -18,7 +18,8 @@ class SocialTile extends GetView<TileController> {
         id: "SocialTile",
         builder: (_) {
           // @ Determine State
-          bool isViewing = (controller.state != TileState.Editing);
+          bool isEditing = (controller.state == TileState.Editing &&
+              controller.currentTile == data);
 
           // @ Build View
           return GestureDetector(
@@ -26,16 +27,16 @@ class SocialTile extends GetView<TileController> {
                 controller.toggleEditing(data);
               },
               child: Neumorphic(
-                  style: isViewing
+                  margin: EdgeInsets.all(4),
+                  style: isEditing
                       ? NeumorphicStyle(
                           intensity: 0.75,
-                          shape: NeumorphicShape.convex,
-                          depth: 8)
+                          shape: NeumorphicShape.flat,
+                          depth: 15)
                       : NeumorphicStyle(
                           intensity: 0.75,
-                          shape: NeumorphicShape.flat,
-                          depth: 15),
-                  margin: EdgeInsets.all(4),
+                          shape: NeumorphicShape.convex,
+                          depth: 8),
                   child: Container(
                     child: SocialView.fromTile(data),
                   )));
@@ -47,17 +48,13 @@ class SocialTile extends GetView<TileController> {
 class EditTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () async {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
-          });
+    return NeumorphicButton(
+        onPressed: () {
+          Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
         },
-        child: Neumorphic(
-            margin: EdgeInsets.all(4),
-            style: NeumorphicStyle(
-                intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
-            child: SonrIcon.gradient(
-                Icons.add, FlutterGradientNames.morpheusDen)));
+        margin: EdgeInsets.all(4),
+        style: NeumorphicStyle(
+            intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
+        child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen));
   }
 }
