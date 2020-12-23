@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/social_model.dart';
+import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -134,7 +135,7 @@ class TileDialog extends GetView<TileController> {
         id: "TileDialog",
         builder: (_) {
           // Set Disabled By State
-          if (controller.state != TileState.NewStepTwo ||
+          if (controller.state == TileState.NewStepTwo ||
               controller.state == TileState.NewStepThree) {
             return NeumorphicButton(
               onPressed: () {
@@ -143,6 +144,7 @@ class TileDialog extends GetView<TileController> {
               },
               style: NeumorphicStyle(
                   depth: 8,
+                  color: K_BASE_COLOR,
                   boxShape:
                       NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
               padding: const EdgeInsets.all(12.0),
@@ -207,9 +209,12 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                     )),
 
                 // @ Custom Dropdown Items
-                items: List<DropdownMenuItem>.generate(
-                    Contact_SocialTile_Provider.values.length, (index) {
-                  var value = Contact_SocialTile_Provider.values[index];
+                items: List<DropdownMenuItem>.generate(_filterOptions().length,
+                    (index) {
+                  // Filter Out Existing Providers
+                  var value = _filterOptions()[index];
+
+                  // Create Dropdown Menu Items
                   return DropdownMenuItem(
                     child: Row(children: [
                       SonrIcon.socialFromProvider(IconType.Normal, value),
@@ -235,6 +240,21 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
       ],
     );
   }
+
+  List<Contact_SocialTile_Provider> _filterOptions() {
+    // Initialize List of Options
+    var options = List<Contact_SocialTile_Provider>();
+
+    // Iterate through All Options
+    Contact_SocialTile_Provider.values.forEach((provider) {
+      if (Get.find<ProfileController>()
+          .tiles
+          .any((tile) => tile.provider != provider)) {
+        options.add(provider);
+      }
+    });
+    return options;
+  }
 }
 
 // ^ Step 2 Connect to the provider API ^ //
@@ -254,42 +274,28 @@ class _SetInfoViewState extends State<_SetInfoView> {
   Widget build(BuildContext context) {
     // Find Data
     Contact_SocialTile tile = Get.find<TileController>().currentTile;
-    Widget authView;
-    Widget infoText;
     var item = SocialMediaItem.fromProviderData(tile.provider);
-
-    // Create Widgets
-    if (item.reference == SocialRefType.Link) {
-      authView = _buildView(isButton: false);
-      infoText = _InfoText(
-          index: 2, text: "Add your ${tile.provider.toString()} username");
-    } else {
-      authView = _buildView(isButton: true);
-      infoText =
-          _InfoText(index: 2, text: "Connect with ${tile.provider.toString()}");
-    }
 
     // Build View
     return Column(key: UniqueKey(), children: [
       // @ InfoGraph
-      infoText,
+      _InfoText(index: 2, text: item.infoText),
       Padding(padding: EdgeInsets.all(20)),
-      authView
+      _buildView(item)
     ]);
   }
 
-  _buildView({bool isButton = true}) {
-    if (isButton == false) {
+  _buildView(SocialMediaItem item) {
+    if (item.reference == SocialRefType.Link) {
       return NeuomorphicTextField(
-          label: "Username",
-          hint: "@prnk28 (Incredible Posts BTW) ",
+          label: item.label,
+          hint: item.hint,
           value: _username,
           onChanged: (String value) {
             this._username = value;
           },
           onEditingComplete: () {
             setState(() {
-              // Update Controller
               Get.find<TileController>().setUsername(_username);
               Get.find<TileController>().nextStep();
             });
@@ -340,61 +346,64 @@ class _SetSizePosState extends State<_SetSizePosView> {
         constraints: BoxConstraints(maxWidth: Get.width - 80),
         child: Center(
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(width: 6),
               NeumorphicRadio(
                 style: NeumorphicRadioStyle(
+                    unselectedColor: K_BASE_COLOR,
+                    selectedColor: K_BASE_COLOR,
                     boxShape: NeumorphicBoxShape.stadium()),
                 child: SizedBox(
-                  height: 50,
-                  width: 50,
+                  height: 85,
+                  width: 85,
                   child: Center(child: normalText("Icon")),
                 ),
                 value: Contact_SocialTile_TileType.Icon,
                 groupValue: _groupValue,
                 onChanged: (value) {
+                  Get.find<TileController>().setType(value);
                   setState(() {
                     _groupValue = value;
-                    Get.find<TileController>().setType(_groupValue);
                   });
                 },
               ),
-              SizedBox(width: 6),
               NeumorphicRadio(
                 style: NeumorphicRadioStyle(
+                    unselectedColor: K_BASE_COLOR,
+                    selectedColor: K_BASE_COLOR,
                     boxShape: NeumorphicBoxShape.stadium()),
                 child: SizedBox(
-                  height: 50,
-                  width: 50,
+                  height: 85,
+                  width: 85,
                   child: Center(child: normalText("Showcase")),
                 ),
                 value: Contact_SocialTile_TileType.Showcase,
                 groupValue: _groupValue,
                 onChanged: (value) {
+                  Get.find<TileController>().setType(value);
                   setState(() {
                     _groupValue = value;
-                    Get.find<TileController>().setType(_groupValue);
                   });
                 },
               ),
-              SizedBox(width: 6),
               NeumorphicRadio(
                 style: NeumorphicRadioStyle(
+                    unselectedColor: K_BASE_COLOR,
+                    selectedColor: K_BASE_COLOR,
                     boxShape: NeumorphicBoxShape.stadium()),
                 child: SizedBox(
-                  height: 50,
-                  width: 50,
+                  height: 85,
+                  width: 85,
                   child: Center(child: normalText("Feed")),
                 ),
                 value: Contact_SocialTile_TileType.Feed,
                 groupValue: _groupValue,
                 onChanged: (value) {
+                  Get.find<TileController>().setType(value);
                   setState(() {
                     _groupValue = value;
-                    Get.find<TileController>().setType(_groupValue);
                   });
                 },
               ),
@@ -421,6 +430,7 @@ class _InfoText extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(padding: EdgeInsets.all(14)),
               Text(index.toString(),
                   style: GoogleFonts.poppins(
                       fontSize: 108,

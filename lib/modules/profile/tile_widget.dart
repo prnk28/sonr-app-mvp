@@ -25,20 +25,20 @@ class SocialTile extends GetView<TileController> {
               onLongPress: () async {
                 controller.toggleEditing(data);
               },
-              child: Obx(() => NeumorphicButton(
+              child: NeumorphicButton(
                   style: isViewing
                       ? NeumorphicStyle(
-                          intensity: 0.45,
+                          intensity: 0.75,
                           shape: NeumorphicShape.convex,
                           depth: 8)
                       : NeumorphicStyle(
-                          intensity: 0.85,
+                          intensity: 0.75,
                           shape: NeumorphicShape.flat,
                           depth: 15),
                   margin: EdgeInsets.all(4),
                   child: Container(
                     child: SocialView.fromTile(data),
-                  ))));
+                  )));
         });
   }
 }
