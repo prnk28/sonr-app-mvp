@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonar_app/data/medium_model.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/data/user_model.dart';
+import 'package:sonar_app/repository/medium_api.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -30,6 +30,34 @@ class SocialMediaService extends GetxService {
     return this;
   }
 
+  // ^ Retreives Model Item from Tile ^ //
+  SocialMediaItem getItem(Contact_SocialTile tile) {
+    // Find Saved Oauth Tokens/Links
+    return enabledSocialMedia
+        .firstWhere((smi) => smi.provider == tile.provider);
+  }
+
+  // ^ Retreives Model Item from Tile ^ //
+  fetchData(SocialMediaItem item) {
+    if (item.provider == Contact_SocialTile_Provider.Medium) {
+      var data = fetchMediumFeedWithItem(item);
+      if (data != null) {
+        return data;
+      } else {
+        Get.snackbar("Uh Oh!", "That username was not found",
+            snackStyle: SnackStyle.FLOATING,
+            duration: Duration(milliseconds: 1250),
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.red,
+            icon: Icon(
+              Icons.warning_outlined,
+              color: Colors.white,
+            ),
+            colorText: Colors.white);
+      }
+    }
+  }
+
   // ^ Refreshes all Social Media Data ^ //
   refresh() async {
     // @ Validate Socials
@@ -46,6 +74,7 @@ class SocialMediaService extends GetxService {
 
         // Add To List
         enabledSocialMedia().add(item);
+        enabledSocialMedia.refresh();
       });
     } else {
       print("Empty Socials");
@@ -68,9 +97,27 @@ class SocialMediaService extends GetxService {
       // @ Retreive Medium RSS Feed as JSON
       case Contact_SocialTile_Provider.Medium:
         if (filter == SearchFilter.User) {
-          var resp = await _fetchMediumFeed(item, query);
+          // API Call
+          var resp = await fetchMediumFeedWithID(item, query);
+
+          // Check Response
           if (resp != null) {
+            // Add Item To Preferences
+            item.value = query;
+            _prefs.setString(item.key, item.value);
+            refresh();
             return resp;
+          } else {
+            Get.snackbar("Uh Oh!", "That username was not found",
+                snackStyle: SnackStyle.FLOATING,
+                duration: Duration(milliseconds: 1250),
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.red,
+                icon: Icon(
+                  Icons.warning_outlined,
+                  color: Colors.white,
+                ),
+                colorText: Colors.white);
           }
         }
         break;
@@ -84,46 +131,5 @@ class SocialMediaService extends GetxService {
         break;
     }
     return true;
-  }
-
-  // ^ Fetches Medium feed by ID ^ //
-  Future<MediumFeedModel> _fetchMediumFeed(
-      SocialMediaItem item, String userID) async {
-    // @ Request
-    var resp = await http.get(
-        'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@' +
-            userID);
-
-    // @ Check Status Code
-    if (resp.statusCode == 200) {
-      // Initialize Model
-      var feed = MediumFeedModel.fromJson(jsonDecode(resp.body));
-
-      // Return Model Save Auth+Link
-      if (feed.status == "ok") {
-        item.value = userID;
-        _prefs.setString(item.key, item.value);
-        return feed;
-      }
-      // Display Error Snackbar
-      else {
-        Get.snackbar("Uh Oh!", "That username was not found",
-            snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1250),
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            icon: Icon(
-              Icons.warning_outlined,
-              color: Colors.white,
-            ),
-            colorText: Colors.white);
-
-        return null;
-      }
-    }
-    // @ Invalid Code
-    else {
-      return null;
-    }
   }
 }

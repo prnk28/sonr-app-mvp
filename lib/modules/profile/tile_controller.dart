@@ -40,9 +40,8 @@ class TileController extends GetxController {
   }
 
   // ^ Step 3: In New Social Tile ^ //
-  setTypePos(Contact_SocialTile_TileType tileType, int position) {
+  setTypePos(Contact_SocialTile_TileType tileType) {
     currentTile.value.type = tileType;
-    currentTile.value.position = position;
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
@@ -89,8 +88,7 @@ class TileController extends GetxController {
     // @ Finish
     else {
       // Validate
-      if (currentTile.value.hasPosition() &&
-          currentTile.value.hasType() &&
+      if (currentTile.value.hasType() &&
           state.value == TileState.NewStepThree) {
         // Add Tile to Contact and Save
         Get.find<ProfileController>().saveSocialTile(currentTile.value);

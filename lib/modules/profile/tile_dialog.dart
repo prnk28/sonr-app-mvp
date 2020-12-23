@@ -5,7 +5,6 @@ import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'profile_controller.dart';
 
 // ** Builds Add Social Form Dialog ** //
 class TileDialog extends GetView<TileController> {
@@ -14,68 +13,77 @@ class TileDialog extends GetView<TileController> {
     // Update State
     controller.createTile();
 
-    // Get Current View
-    return Obx(() {
-      // @ Views by State
-      Widget nextButton;
-      Widget backButton;
-      Widget currentView;
-      if (controller.state.value == TileState.NewStepTwo) {
-        nextButton = _buildNextButton();
-        backButton = _buildBackButton();
-        currentView = _SetInfoView();
-      } else if (controller.state.value == TileState.NewStepThree) {
-        nextButton = _buildNextButton(isFinished: true);
-        backButton = _buildBackButton();
-        currentView = _SetSizePosView();
-      } else {
-        nextButton = _buildNextButton();
-        backButton = _buildBackButton(isDisabled: true);
-        currentView = _DropdownAddView();
-      }
+    return NeumorphicBackground(
+        backendColor: Colors.transparent,
+        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
+        borderRadius: BorderRadius.circular(40),
+        child: LayoutBuilder(builder:
+            (BuildContext context, BoxConstraints viewportConstraints) {
+          return Obx(() {
+            // @ Views by State
+            Widget nextButton;
+            Widget backButton;
+            Widget currentView;
+            if (controller.state.value == TileState.NewStepTwo) {
+              nextButton = _buildNextButton();
+              backButton = _buildBackButton();
+              currentView = _SetInfoView();
+            } else if (controller.state.value == TileState.NewStepThree) {
+              nextButton = _buildNextButton(isFinished: true);
+              backButton = _buildBackButton();
+              currentView = _SetSizePosView();
+            } else {
+              nextButton = _buildNextButton();
+              backButton = _buildBackButton(isDisabled: true);
+              currentView = _DropdownAddView();
+            }
 
-      // @ Build View
-      return SonrTheme(
-        Scaffold(
-            backgroundColor: Colors.transparent,
-            body: NeumorphicBackground(
-                backendColor: Colors.transparent,
-                margin:
-                    EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
-                borderRadius: BorderRadius.circular(40),
+            // @ Build View
+            return Material(
+                color: Colors.transparent,
                 child: Neumorphic(
-                    style: NeumorphicStyle(color: K_BASE_COLOR),
-                    child: SingleChildScrollView(
-                      child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        // @ Top Right Close/Cancel Button
-                        closeButton(() {
-                          // Pop Window
-                          Get.back();
-
-                          // Reset State
-                          controller.state(TileState.None);
-                        }, padTop: 12, padRight: 12),
-
-                        // @ Current Add Popup View
-                        Padding(padding: EdgeInsets.all(5)),
-                        Align(
-                            key: UniqueKey(),
-                            alignment: Alignment.topCenter,
-                            child: Flexible(child: currentView)),
-
-                        // @ Action Buttons
-                        Spacer(),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [backButton, nextButton]),
+                  style: NeumorphicStyle(color: K_BASE_COLOR),
+                  child: SingleChildScrollView(
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: viewportConstraints.minHeight,
+                          minWidth: viewportConstraints.minWidth,
                         ),
-                        Padding(padding: EdgeInsets.all(15))
-                      ]),
-                    )))),
-      );
-    });
+                        child: IntrinsicHeight(
+                          child: Column(children: [
+                            // @ Top Right Close/Cancel Button
+                            closeButton(() {
+                              // Pop Window
+                              Get.back();
+
+                              // Reset State
+                              controller.state(TileState.None);
+                            }, padTop: 12, padRight: 12),
+
+                            // @ Current Add Popup View
+                            Padding(padding: EdgeInsets.all(5)),
+                            Align(
+                                key: UniqueKey(),
+                                alignment: Alignment.topCenter,
+                                child: Container(child: currentView)),
+
+                            // @ Action Buttons
+                            Spacer(),
+
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [backButton, nextButton]),
+                            ),
+                            Padding(padding: EdgeInsets.all(15))
+                          ]),
+                        )),
+                  ),
+                ));
+          });
+        }));
   }
 
   // ^ Build Next Button with Finish at End ^ //
@@ -158,10 +166,8 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
   // Build View As Stateless
   @override
   Widget build(BuildContext context) {
-    return Flex(
+    return Column(
       key: UniqueKey(),
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      direction: Axis.vertical,
       children: [
         // @ InfoGraph
         _InfoText(index: 1, text: "Choose a Social Media to Add"),
@@ -254,23 +260,19 @@ class _SetInfoViewState extends State<_SetInfoView> {
     }
 
     // Build View
-    return Flex(
-        direction: Axis.vertical,
-        key: UniqueKey(),
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // @ InfoGraph
-          infoText,
-          Padding(padding: EdgeInsets.all(20)),
-          authView
-        ]);
+    return Column(key: UniqueKey(), children: [
+      // @ InfoGraph
+      infoText,
+      Padding(padding: EdgeInsets.all(20)),
+      authView
+    ]);
   }
 
   _buildView({bool isButton = true}) {
     if (isButton == false) {
       return NeuomorphicTextField(
-          label: "First Name",
-          hint: "Enter your first name",
+          label: "Username",
+          hint: "@medium_username...",
           onChanged: (String value) {
             this._username = value;
           },
@@ -303,37 +305,33 @@ class _SetSizePosView extends StatefulWidget {
 class _SetSizePosState extends State<_SetSizePosView> {
   @override
   Widget build(BuildContext context) {
-    return Flex(
-        direction: Axis.vertical,
-        key: UniqueKey(),
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Column(key: UniqueKey(), children: [
+      // @ InfoGraph
+      _InfoText(index: 3, text: "Set size and position"),
+      Padding(padding: EdgeInsets.all(20)),
+
+      // @ Toggle Buttons for Widget Size
+
+      Row(
         children: [
-          // @ InfoGraph
-          _InfoText(index: 3, text: "Set size and position"),
-          Padding(padding: EdgeInsets.all(20)),
+          // Icon Tile
+          NeumorphicRadio(),
 
-          // @ Toggle Buttons for Widget Size
+          // Showcase Tile
+          NeumorphicRadio(),
 
-          Row(
-            children: [
-              // Icon Tile
-              NeumorphicRadio(),
-
-              // Showcase Tile
-              NeumorphicRadio(),
-
-              // Feed Tile
-              NeumorphicRadio(),
-            ],
-          ),
-          Neumorphic(
-              style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
-              margin: EdgeInsets.only(left: 14, right: 14),
-              child: Container(
-                  width: Get.width - 100,
-                  margin: EdgeInsets.only(left: 12, right: 12),
-                  child: Container())),
-        ]);
+          // Feed Tile
+          NeumorphicRadio(),
+        ],
+      ),
+      Neumorphic(
+          style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
+          margin: EdgeInsets.only(left: 14, right: 14),
+          child: Container(
+              width: Get.width - 100,
+              margin: EdgeInsets.only(left: 12, right: 12),
+              child: Container())),
+    ]);
   }
 }
 
@@ -346,27 +344,27 @@ class _InfoText extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          FittedBox(
-            fit: BoxFit.cover,
-            child: Text(index.toString(),
+    return Container(
+      constraints: BoxConstraints(maxWidth: Get.width - 100),
+      child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(index.toString(),
                 style: GoogleFonts.poppins(
                     fontSize: 108,
                     fontWeight: FontWeight.w900,
                     color: Colors.black38)),
-          ),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(text,
-                style: GoogleFonts.poppins(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                )),
-          ),
-        ]);
+            Expanded(
+              child: Text(text,
+                  style: GoogleFonts.poppins(
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  )),
+            ),
+          ]),
+    );
   }
 }

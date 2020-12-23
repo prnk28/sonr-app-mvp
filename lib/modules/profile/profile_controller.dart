@@ -21,9 +21,9 @@ enum ContactCoreValueType {
 }
 
 class ProfileController extends GetxController {
-  final userContact = Contact().obs;
   final state = ProfileState.Viewing.obs;
-  final currentTile = Contact_SocialTile().obs;
+  final userContact = Contact().obs;
+  final tileCount = Get.find<DeviceService>().user.contact.socials.length.obs;
 
   ProfileController() {
     var contact = Get.find<DeviceService>().user.contact;
