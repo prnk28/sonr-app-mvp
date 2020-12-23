@@ -36,7 +36,7 @@ class _ProfileView extends GetView<ProfileController> {
             expandedHeight: 350,
             // @ Close Button
             leading: Padding(
-              padding: EdgeInsets.only(left: 14),
+              padding: EdgeInsets.only(left: 14, top: 14, bottom: 5),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: NeumorphicButton(
@@ -44,6 +44,7 @@ class _ProfileView extends GetView<ProfileController> {
                     style: NeumorphicStyle(
                         intensity: 0.85,
                         boxShape: NeumorphicBoxShape.circle(),
+                        color: K_BASE_COLOR,
                         shape: NeumorphicShape.flat,
                         depth: 8),
                     child: SonrIcon.gradient(
@@ -56,7 +57,7 @@ class _ProfileView extends GetView<ProfileController> {
             actions: [
               // @ More Button
               Padding(
-                padding: EdgeInsets.only(right: 14),
+                padding: EdgeInsets.only(right: 14, top: 14, bottom: 5),
                 child: Align(
                     alignment: Alignment.centerRight,
                     child: NeumorphicButton(
@@ -64,7 +65,8 @@ class _ProfileView extends GetView<ProfileController> {
                       style: NeumorphicStyle(
                           intensity: 0.85,
                           boxShape: NeumorphicBoxShape.circle(),
-                          shape: NeumorphicShape.convex,
+                          color: K_BASE_COLOR,
+                          shape: NeumorphicShape.flat,
                           depth: 8),
                       child: SonrIcon.gradient(Icons.more_horiz_outlined,
                           FlutterGradientNames.northMiracle),

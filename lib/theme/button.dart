@@ -17,8 +17,8 @@ NeumorphicButton rectangleButton(String text, Function onPressed,
 
 Widget closeButton(Function onPressed,
     {Alignment alignment = Alignment.topRight,
-    double padTop = 12,
-    double padRight = 12,
+    double padTop = 14,
+    double padRight = 14,
     double padLeft = 5,
     double padBottom = 5}) {
   return Align(
@@ -45,9 +45,9 @@ Widget closeButton(Function onPressed,
 
 Widget acceptButton(Function onPressed,
     {Alignment alignment = Alignment.topLeft,
-    double padTop = 12,
+    double padTop = 14,
     double padRight = 5,
-    double padLeft = 12,
+    double padLeft = 14,
     double padBottom = 5}) {
   return Align(
       alignment: Alignment.topLeft,

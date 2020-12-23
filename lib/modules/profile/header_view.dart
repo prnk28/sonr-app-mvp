@@ -17,10 +17,10 @@ class ContactHeader extends GetView<ProfileController> {
               Diagonal(
                 clipHeight: 75.0,
                 child: Neumorphic(
+                  style: NeumorphicStyle(color: Colors.blue),
                   child: Container(
                     width: Get.width,
-                    height: 350.0,
-                    color: Colors.blue, // Same Header Color
+                    height: 350.0, // Same Header Color
                   ),
                 ),
               ),
@@ -28,7 +28,7 @@ class ContactHeader extends GetView<ProfileController> {
             ],
           ),
         )),
-        title:  SonrText.normal(
+        title: SonrText.normal(
             controller.firstName.value + " " + controller.lastName.value,
             size: 18),
         centerTitle: true);
