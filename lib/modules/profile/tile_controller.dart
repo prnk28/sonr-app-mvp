@@ -16,46 +16,44 @@ enum TileState {
 
 class TileController extends GetxController {
   final state = TileState.None.obs;
-  final createStep = 0.obs;
-  var currentTile = Contact_SocialTile();
+  final currentTile = Contact_SocialTile().obs;
 
   // ^ Initial for Existing Tile ^ //
   setTile(Contact_SocialTile value) {
-    currentTile = value;
+    currentTile(value);
   }
 
   // ^ Create New Tile ^ //
   createTile() {
-    currentTile = new Contact_SocialTile();
-    createStep(1);
+    currentTile(Contact_SocialTile());
     state(TileState.NewStepOne);
   }
 
   // ^ Step 1: In New Social Tile ^ //
   setProvider(Contact_SocialTile_Provider provider) {
-    currentTile.provider = provider;
+    currentTile.value.provider = provider;
   }
 
   // ^ Step 2: In New Social Tile ^ //
   setInfo(String url, String username) {
-    currentTile.url = url;
-    currentTile.username = username;
+    currentTile.value.url = url;
+    currentTile.value.username = username;
   }
 
   // ^ Step 3: In New Social Tile ^ //
   setTypePos(Contact_SocialTile_TileType tileType, int position) {
-    currentTile.type = tileType;
-    currentTile.position = position;
+    currentTile.value.type = tileType;
+    currentTile.value.position = position;
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() {
     // @ Step 2
-    if (createStep.value == 1) {
-      if (currentTile.hasProvider()) {
+    if (state.value == TileState.NewStepOne) {
+      if (currentTile.value.hasProvider()) {
         // Update State
         state(TileState.NewStepTwo);
-        createStep(2);
+        update();
       } else {
         // Display Error Snackbar
         Get.snackbar("Hold Up!", "Select a social media provider first",
@@ -73,8 +71,9 @@ class TileController extends GetxController {
     // @ Step 3
     else if (state.value == TileState.NewStepTwo) {
       // Update State
-      if (currentTile.hasUrl() && currentTile.hasUsername()) {
+      if (currentTile.value.hasUrl() && currentTile.value.hasUsername()) {
         state(TileState.NewStepThree);
+        update();
       } else {
         // Display Error Snackbar
         Get.snackbar("Wait!", "Add your information",
@@ -92,14 +91,15 @@ class TileController extends GetxController {
     // @ Finish
     else {
       // Validate
-      if (currentTile.hasPosition() &&
-          currentTile.hasType() &&
+      if (currentTile.value.hasPosition() &&
+          currentTile.value.hasType() &&
           state.value == TileState.NewStepThree) {
         // Add Tile to Contact and Save
-        Get.find<ProfileController>().saveSocialTile(currentTile);
+        Get.find<ProfileController>().saveSocialTile(currentTile.value);
 
         // Reset Current Tile
-        currentTile = null;
+        state(TileState.None);
+        currentTile.value = null;
       }
     }
   }

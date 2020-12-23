@@ -8,7 +8,7 @@ import 'tile_dialog.dart';
 import 'profile_controller.dart';
 
 // ** Builds Social Tile ** //
-class SocialTile extends GetWidget<TileController> {
+class SocialTile extends GetView<TileController> {
   final Contact_SocialTile data;
   SocialTile(this.data) {}
   @override

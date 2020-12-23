@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonar_app/data/permission_model.dart';
+import 'package:http/http.dart' as http;
+import 'package:sonar_app/data/social_media/medium_model.dart';
 
-import 'package:sonar_app/data/social_model.dart';
+import 'package:sonar_app/data/social_media/social_model.dart';
 import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -52,14 +56,30 @@ class SocialMediaService extends GetxService {
   }
 
   // ^ Connect account to a Social Media Provider ^ //
-  Future<bool> search(Contact_SocialTile_Provider provider, SearchFilter filter,
-      String query) async {
+  Future<dynamic> search(Contact_SocialTile_Provider provider,
+      SearchFilter filter, String query) async {
     switch (provider) {
       case Contact_SocialTile_Provider.Facebook:
         break;
       case Contact_SocialTile_Provider.Instagram:
         break;
       case Contact_SocialTile_Provider.Medium:
+        if (filter == SearchFilter.User) {
+          var resp = await SocialAPI.getMediumFeed(query);
+          if (resp.statusCode == 200) {
+            // If the server did return a 200 OK response
+            var feed = MediumFeedModel.fromJson(jsonDecode(resp.body));
+            if (feed.status == "error") {
+              // Snackbar Error
+            } else if (feed.status == "ok") {
+              return feed;
+            }
+          } else {
+            // If the server did not return a 200 OK response,
+            // then throw an exception.
+            throw Exception('Failed to load album');
+          }
+        }
         break;
       case Contact_SocialTile_Provider.Spotify:
         break;
@@ -92,5 +112,14 @@ class SocialMediaService extends GetxService {
         break;
     }
     return true;
+  }
+}
+
+// ** Class that Calls Social Network APIs
+class SocialAPI {
+  static Future<http.Response> getMediumFeed(userID) {
+    return http.get(
+        'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@' +
+            userID);
   }
 }

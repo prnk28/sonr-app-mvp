@@ -19,14 +19,19 @@ class TileDialog extends GetView<TileController> {
       Widget nextButton;
       Widget backButton;
       Widget currentView;
-      List<Widget> _views = [_DropdownAddView(), _SetInfoView(controller.currentTile.provider), _SetSizePosView()];
-
-      // @ Update By Step
-      controller.createStep.listen((step) {
-        currentView = _views[step + 1];
-        nextButton = _buildNextButton(step);
-        backButton = _buildBackButton(step);
-      });
+      if (controller.state.value == TileState.NewStepTwo) {
+        nextButton = _buildNextButton();
+        backButton = _buildBackButton();
+        currentView = _SetInfoView();
+      } else if (controller.state.value == TileState.NewStepThree) {
+        nextButton = _buildNextButton(isFinished: true);
+        backButton = _buildBackButton();
+        currentView = _SetSizePosView();
+      } else {
+        nextButton = _buildNextButton();
+        backButton = _buildBackButton(isDisabled: true);
+        currentView = _DropdownAddView();
+      }
 
       // @ Build View
       return SonrTheme(
@@ -72,8 +77,8 @@ class TileDialog extends GetView<TileController> {
   }
 
   // ^ Build Next Button with Finish at End ^ //
-  _buildNextButton(int step) {
-    if (step == 3) {
+  _buildNextButton({bool isFinished = false}) {
+    if (isFinished) {
       return NeumorphicButton(
           onPressed: () {
             print("Finish Tapped");
@@ -111,8 +116,8 @@ class TileDialog extends GetView<TileController> {
   }
 
   // ^ Build Back Button with Disabled at Beginning ^ //
-  _buildBackButton(int step) {
-    if (step == 1) {
+  _buildBackButton({bool isDisabled = false}) {
+    if (isDisabled) {
       return IgnorePointer(
         ignoring: true,
         child: FlatButton(
@@ -139,6 +144,7 @@ class TileDialog extends GetView<TileController> {
 
 // ^ Step 1 Select Provider ^ //
 class _DropdownAddView extends StatefulWidget {
+  const _DropdownAddView({Key key}) : super(key: key);
   @override
   _DropdownAddViewState createState() => _DropdownAddViewState();
 }
@@ -216,10 +222,7 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
 
 // ^ Step 2 Connect to the provider API ^ //
 class _SetInfoView extends StatefulWidget {
-  final Contact_SocialTile_Provider provider;
-
-  const _SetInfoView(
-    this.provider, {
+  const _SetInfoView({
     Key key,
   }) : super(key: key);
 // Initialize Tile
@@ -230,9 +233,8 @@ class _SetInfoView extends StatefulWidget {
 class _SetInfoViewState extends State<_SetInfoView> {
   @override
   Widget build(BuildContext context) {
+    Contact_SocialTile tile = Get.find<TileController>().currentTile.value;
     Widget infoView = Container();
-    switch (widget.provider) {
-    }
     return Container(
       child: Column(
           key: UniqueKey(),
@@ -240,7 +242,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
           children: [
             // @ InfoGraph
             _InfoText(
-                index: 2, text: "Set your ${widget.provider.toString()} info"),
+                index: 2, text: "Set your ${tile.provider.toString()} info"),
             Padding(padding: EdgeInsets.all(20)),
 
             // @ Connect Button

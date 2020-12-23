@@ -9,6 +9,6 @@ class ProfileBinding implements Bindings {
   void dependencies() {
     Get.put<CardController>(CardController());
     Get.put<ProfileController>(ProfileController());
-    Get.create(() => TileController());
+    Get.put<TileController>(TileController());
   }
 }
