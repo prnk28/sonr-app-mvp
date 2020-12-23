@@ -347,26 +347,16 @@ class _CompassBulb extends StatelessWidget {
                     children: [
                       SlideDownAnimatedSwitcher(
                           duration: Duration(seconds: 3),
-                          child: GradientText(
+                          child: SonrText.gradient(
                             direction,
-                            FlutterGradients.glassWater(),
+                            FlutterGradientNames.glassWater,
                             key: ValueKey<String>(direction),
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 46,
-                              color: Colors.white,
-                            ),
                           )),
                       FadeAnimatedSwitcher(
-                          child: GradientText(
+                          child: SonrText.gradient(
                         heading,
-                        FlutterGradients.glassWater(),
+                        FlutterGradientNames.glassWater,
                         key: ValueKey<String>(heading),
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: Colors.white,
-                        ),
                       ))
                     ]))));
   }

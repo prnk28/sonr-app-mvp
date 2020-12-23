@@ -20,38 +20,80 @@ class ProfileScreen extends GetView<ProfileController> {
 class _ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
-    // Create View
-    return SonrTheme(NeumorphicBackground(
-        child: Column(
-      children: [
-        // @ Builds Profile Header
-        ContactHeader(),
+    return Obx(() {
+      // Get Tile Count
+      int count = controller.tiles.length + 1;
 
-        // @ Builds List of Social Tile
-        Expanded(
-          child: Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: Obx(() {
-                int count = controller.tiles.length;
+      // Create View
+      return SonrTheme(NeumorphicBackground(
+          child: CustomScrollView(
+        slivers: [
+          // @ Builds Profile Header
+          SliverAppBar(
+            flexibleSpace: ContactHeader(),
+            pinned: true,
+            floating: true,
+            expandedHeight: 350,
+            // @ Close Button
+            leading: Padding(
+              padding: EdgeInsets.only(left: 14),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: NeumorphicButton(
+                    padding: EdgeInsets.all(8),
+                    style: NeumorphicStyle(
+                        intensity: 0.85,
+                        boxShape: NeumorphicBoxShape.circle(),
+                        shape: NeumorphicShape.flat,
+                        depth: 8),
+                    child: SonrIcon.gradient(
+                        Icons.close, FlutterGradientNames.phoenixStart),
+                    onPressed: () {
+                      Get.offNamed("/home/profile");
+                    },
+                  )),
+            ),
+            actions: [
+              // @ More Button
+              Padding(
+                padding: EdgeInsets.only(right: 14),
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: NeumorphicButton(
+                      padding: EdgeInsets.all(8),
+                      style: NeumorphicStyle(
+                          intensity: 0.85,
+                          boxShape: NeumorphicBoxShape.circle(),
+                          shape: NeumorphicShape.convex,
+                          depth: 8),
+                      child: SonrIcon.gradient(Icons.more_horiz_outlined,
+                          FlutterGradientNames.northMiracle),
+                      onPressed: () {},
+                    )),
+              )
+            ],
+          ),
 
-                // Build Staggered Grid View
-                return StaggeredGridView.countBuilder(
+          // @ Builds List of Social Tile
+          SliverStaggeredGrid(
+              delegate:
+                  SliverChildBuilderDelegate((BuildContext context, int index) {
+                // Return Edit Button
+                if (index == count - 1) {
+                  return EditTile();
+                }
+
+                // Return Social Tile
+                else {
+                  return SocialTile(controller.tiles[index], index);
+                }
+              }),
+              gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
                   mainAxisSpacing: 4.0,
                   crossAxisSpacing: 4.0,
-                  itemCount: count,
-                  itemBuilder: (BuildContext context, int index) {
-                    // Return Edit Button
-                    if (index == count - 1) {
-                      return EditTile();
-                    }
-
-                    // Return Social Tile
-                    else {
-                      return SocialTile(controller.tiles[index], index);
-                    }
-                  },
-                  staggeredTileBuilder: (int index) {
+                  staggeredTileCount: count,
+                  staggeredTileBuilder: (index) {
                     // Return Edit Button
                     if (index == count - 1) {
                       return StaggeredTile.count(1, 1);
@@ -76,11 +118,9 @@ class _ProfileView extends GetView<ProfileController> {
                         return StaggeredTile.count(1, 1);
                       }
                     }
-                  },
-                );
-              })),
-        )
-      ],
-    )));
+                  })),
+        ],
+      )));
+    });
   }
 }

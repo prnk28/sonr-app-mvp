@@ -72,7 +72,7 @@ class PeerBubble extends GetWidget<PeerController> {
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SonrIcon.deviceFromPeer(IconType.Neumorphic, controller.peer,
                       size: 20),
-                  initialsFromPeer(controller.peer),
+                  SonrText.initials(controller.peer),
                 ]));
           });
     } else {
@@ -88,7 +88,7 @@ class PeerBubble extends GetWidget<PeerController> {
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SonrIcon.deviceFromPeer(IconType.Neumorphic, controller.peer,
                       size: 20),
-                  initialsFromPeer(controller.peer),
+                  SonrText.initials(controller.peer),
                 ]));
           });
     }

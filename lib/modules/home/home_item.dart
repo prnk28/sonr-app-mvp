@@ -41,9 +41,9 @@ class _MediaItemView extends StatelessWidget {
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                    normalText(metadata.name),
-                    normalText(metadata.mime.type.toString()),
-                    normalText("Owner: " + metadata.owner.firstName),
+                     SonrText.normal(metadata.name),
+                     SonrText.normal(metadata.mime.type.toString()),
+                     SonrText.normal("Owner: " + metadata.owner.firstName),
                   ]),
             )));
   }
@@ -67,8 +67,8 @@ class _ContactItemView extends StatelessWidget {
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                    normalText(contact.firstName),
-                    normalText(contact.lastName),
+                     SonrText.normal(contact.firstName),
+                     SonrText.normal(contact.lastName),
                   ]),
             )));
   }

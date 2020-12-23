@@ -1,70 +1,123 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'color.dart';
 
-// ^ Helper: Get Initials from Peer Data ^ //
-Text initialsFromPeer(Peer peer, {Color color: Colors.white}) {
-  // Get Initials
-  return Text(peer.firstName[0].toUpperCase(),
-      style: GoogleFonts.poppins(
-          fontWeight: FontWeight.bold,
-          fontSize: 32,
-          color: color ?? Colors.black54));
-}
-
-// ^ Hint Text ^
-Text descriptionText(String text, {Color setColor}) {
-  return Text(text,
-      style: GoogleFonts.poppins(
-          fontWeight: FontWeight.normal,
-          fontSize: 24,
-          color: setColor ?? Colors.black45));
-}
-
-// ^ Bold Text ^ //
-Text boldText(String text, {double size, Color setColor}) {
-  return Text(text,
-      style: GoogleFonts.poppins(
-          fontWeight: FontWeight.bold,
-          fontSize: size ?? 32.0,
-          color: setColor ?? findTextColor()));
-}
-
-// ^ Normal Text ^ //
-Text normalText(String text, {double size, Color setColor}) {
-  return Text(text,
-      style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w500,
-          fontSize: size ?? 16,
-          color: setColor ?? findTextColor()));
-}
-
-class GradientText extends StatelessWidget {
+class SonrText extends StatelessWidget {
   final String text;
+  final Color color;
   final Gradient gradient;
-  final TextStyle style;
+  final FontWeight weight;
+  final double size;
+  final bool isGradient;
 
-  const GradientText(this.text, this.gradient, {Key key, this.style})
+  const SonrText(this.text, this.isGradient,
+      {Key key, this.color, this.gradient, this.weight, this.size})
       : super(key: key);
+
+  // ** Normal ** //
+  // ^ Gradient Text with Provided Data
+  factory SonrText.initials(Peer peer,
+      {Color color, FontWeight weight, double size, Key key}) {
+    return SonrText(peer.firstName[0].toUpperCase(), false,
+        weight: FontWeight.bold,
+        size: size ?? 32,
+        key: key,
+        color: color ?? Colors.white);
+  }
+
+  // ^ Gradient Text with Provided Data
+  factory SonrText.normal(String text, {Color color, double size, Key key}) {
+    return SonrText(text, false,
+        weight: FontWeight.w500,
+        size: size ?? 16,
+        key: key,
+        color: color ?? Colors.black);
+  }
+
+  // ^ Gradient Text with Provided Data
+  factory SonrText.bold(String text, {Color color, double size, Key key}) {
+    return SonrText(text, false,
+        weight: FontWeight.bold,
+        size: size ?? 32,
+        key: key,
+        color: color ?? Colors.black);
+  }
+
+  // ^ Gradient Text with Provided Data
+  factory SonrText.description(String text,
+      {Color color, double size, Key key}) {
+    return SonrText(text, false,
+        weight: FontWeight.bold,
+        size: size ?? 24,
+        key: key,
+        color: color ?? Colors.grey[800]);
+  }
+
+  // ^ Gradient Text with Provided Data
+  factory SonrText.header(String text, {Color color, double size, Key key}) {
+    return SonrText(text, false,
+        weight: FontWeight.w800,
+        size: size ?? 108,
+        key: key,
+        color: color ?? Colors.white);
+  }
+
+  // ** Gradient ** //
+  factory SonrText.gradient(String text, FlutterGradientNames gradient,
+      {Color color, FontWeight weight, double size, Key key}) {
+    return SonrText(text, true,
+        weight: FontWeight.bold,
+        size: size ?? 32,
+        key: key,
+        gradient: FlutterGradients.findByName(gradient));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-        shaderCallback: (bounds) => gradient.createShader(
-              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-            ),
-        child: Text(
-          text,
-          style: style,
-        ));
+    // @ Generate Style
+    var style = GoogleFonts.poppins(
+        fontWeight: FontWeight.bold,
+        fontSize: size ?? 32.0,
+        color: color ?? _findTextColor());
+
+    // @ Gradient Type Text
+    if (isGradient) {
+      return ShaderMask(
+          shaderCallback: (bounds) => gradient.createShader(
+                Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+              ),
+          child: Text(
+            text,
+            style: style,
+          ));
+    }
+
+    // @ Normal Type Text
+    else {
+      return Text(text,
+          style: GoogleFonts.poppins(
+              fontWeight: weight,
+              fontSize: size ?? 16,
+              color: color ?? _findTextColor()));
+    }
+  }
+
+  // ^ Find Text color based on Theme - Light/Dark ^
+  Color _findTextColor() {
+    if (Get.isDarkMode) {
+      return Colors.white;
+    } else {
+      return Colors.black;
+    }
   }
 }
 
 // ^ Builds Neumorphic Text Field ^ //
-class NeuomorphicTextField extends StatefulWidget {
+class SonrTextField extends StatefulWidget {
   final String label;
   final String hint;
   final String value;
@@ -72,7 +125,7 @@ class NeuomorphicTextField extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
 
-  NeuomorphicTextField(
+  SonrTextField(
       {@required this.label,
       @required this.hint,
       @required this.value,
@@ -80,10 +133,10 @@ class NeuomorphicTextField extends StatefulWidget {
       this.onEditingComplete});
 
   @override
-  _NeuomorphicTextFieldState createState() => _NeuomorphicTextFieldState();
+  _SonrTextFieldState createState() => _SonrTextFieldState();
 }
 
-class _NeuomorphicTextFieldState extends State<NeuomorphicTextField> {
+class _SonrTextFieldState extends State<SonrTextField> {
   TextEditingController _controller;
 
   @override

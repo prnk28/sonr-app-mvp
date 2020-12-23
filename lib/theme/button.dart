@@ -12,13 +12,13 @@ NeumorphicButton rectangleButton(String text, Function onPressed,
           color: K_BASE_COLOR,
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
       padding: const EdgeInsets.all(12.0),
-      child: normalText(text));
+      child: SonrText.normal(text));
 }
 
 Widget closeButton(Function onPressed,
     {Alignment alignment = Alignment.topRight,
-    double padTop = 8,
-    double padRight = 8,
+    double padTop = 12,
+    double padRight = 12,
     double padLeft = 5,
     double padBottom = 5}) {
   return Align(
@@ -40,5 +40,31 @@ Widget closeButton(Function onPressed,
                 Icons.close,
                 FlutterGradientNames.phoenixStart,
               ),
+              onPressed: onPressed)));
+}
+
+Widget acceptButton(Function onPressed,
+    {Alignment alignment = Alignment.topLeft,
+    double padTop = 12,
+    double padRight = 5,
+    double padLeft = 12,
+    double padBottom = 5}) {
+  return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+          padding: EdgeInsets.only(
+            top: padTop,
+            right: padRight,
+            left: padLeft,
+            bottom: padBottom,
+          ),
+          child: NeumorphicButton(
+              style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                  color: K_BASE_COLOR,
+                  shape: NeumorphicShape.flat,
+                  depth: 8),
+              child: SonrIcon.gradient(
+                  Icons.check, FlutterGradientNames.hiddenJaguar),
               onPressed: onPressed)));
 }

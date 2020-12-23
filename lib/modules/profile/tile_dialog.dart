@@ -27,46 +27,92 @@ class TileDialog extends GetView<TileController> {
               child: Neumorphic(
                 style: NeumorphicStyle(color: K_BASE_COLOR),
                 child: SingleChildScrollView(
-                  child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: viewportConstraints.minHeight,
-                        minWidth: viewportConstraints.minWidth,
-                      ),
-                      child: IntrinsicHeight(
-                        child: Column(children: [
-                          // @ Top Right Close/Cancel Button
-                          closeButton(() {
-                            // Pop Window
-                            Get.back();
+                    child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: viewportConstraints.minHeight,
+                          minWidth: viewportConstraints.minWidth,
+                        ),
+                        child: IntrinsicHeight(
+                            child: GetBuilder<TileController>(
+                                id: "TileDialog",
+                                builder: (_) {
+                                  Widget topButtons;
+                                  Widget bottomButtons;
 
-                            // Reset State
-                            controller.state = TileState.None;
-                          }, padTop: 12, padRight: 12),
+                                  // @ Step Three: No Buttom Buttons, Cancel and Confirm
+                                  if (controller.state ==
+                                      TileState.NewStepThree) {
+                                    // Top Buttons
+                                    topButtons = Container();
 
-                          // @ Current Add Popup View
-                          Padding(padding: EdgeInsets.all(5)),
-                          Align(
-                              key: UniqueKey(),
-                              alignment: Alignment.topCenter,
-                              child: Container(child: _buildCurrentView())),
+                                    // Bottom Buttons
+                                    bottomButtons = Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          // @ Top Left Close/Cancel Button
+                                          closeButton(() {
+                                            Get.back();
+                                            controller.state = TileState.None;
+                                          }),
+                                          // @ Top Right Confirm Button
+                                          acceptButton(() {
+                                            controller.nextStep();
+                                          }),
+                                        ]);
+                                  }
+                                  // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
+                                  else if (controller.state ==
+                                      TileState.NewStepTwo) {
+                                    topButtons = closeButton(() {
+                                      Get.back();
+                                      controller.state = TileState.None;
+                                    });
 
-                          // @ Action Buttons
-                          Spacer(),
+                                    // Bottom Buttons
+                                    bottomButtons = Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          _buildBackButton(),
+                                          _buildNextButton()
+                                        ]);
+                                  }
+                                  // @ Step One: Top Cancel Button, Bottom wide Next Button
+                                  else {
+                                    // Top Buttons
+                                    topButtons = closeButton(() {
+                                      Get.back();
+                                      controller.state = TileState.None;
+                                    });
 
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildBackButton(),
-                                  _buildNextButton()
-                                ]),
-                          ),
-                          Padding(padding: EdgeInsets.all(15))
-                        ]),
-                      )),
-                ),
+                                    // Bottom Buttons
+                                    bottomButtons =
+                                        _buildNextButton(expanded: true);
+                                  }
+
+                                  // ^ Build View ^ //
+                                  return Column(children: [
+                                    // Top Buttons
+                                    topButtons,
+
+                                    // Current View
+                                    Padding(padding: EdgeInsets.all(5)),
+                                    Align(
+                                        key: UniqueKey(),
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                            child: _buildCurrentView())),
+
+                                    // Bottom Buttons
+                                    Spacer(),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: bottomButtons,
+                                    ),
+                                    Padding(padding: EdgeInsets.all(15))
+                                  ]);
+                                })))),
               ));
         }));
   }
@@ -79,7 +125,7 @@ class TileDialog extends GetView<TileController> {
           if (controller.state == TileState.NewStepTwo) {
             return _SetInfoView();
           } else if (controller.state == TileState.NewStepThree) {
-            return _SetSizePosView();
+            return _SetTypeView();
           } else {
             // Initialize List of Options
             var options = List<Contact_SocialTile_Provider>();
@@ -99,83 +145,46 @@ class TileDialog extends GetView<TileController> {
   }
 
   // ^ Build Next Button with Finish at End ^ //
-  _buildNextButton() {
-    return GetBuilder<TileController>(
-        id: "TileDialog",
-        builder: (_) {
-          // Set Finished By State
-          if (controller.state == TileState.NewStepThree) {
-            return NeumorphicButton(
-                onPressed: () {
-                  controller.nextStep();
-                },
-                style: NeumorphicStyle(
-                    depth: 8,
-                    color: K_BASE_COLOR,
-                    boxShape: NeumorphicBoxShape.roundRect(
-                        BorderRadius.circular(20))),
-                padding: const EdgeInsets.only(
-                    top: 12.0, bottom: 12.0, left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [normalText("Finish"), Icon(Icons.check)],
-                ));
-          } else {
-            return NeumorphicButton(
-                onPressed: () {
-                  controller.nextStep();
-                },
-                style: NeumorphicStyle(
-                    depth: 8,
-                    color: K_BASE_COLOR,
-                    boxShape: NeumorphicBoxShape.roundRect(
-                        BorderRadius.circular(20))),
-                padding: const EdgeInsets.only(
-                    top: 12.0, bottom: 12.0, left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [normalText("Next"), Icon(Icons.arrow_right)],
-                ));
-          }
-        });
+  _buildNextButton({bool expanded = false}) {
+    return NeumorphicButton(
+        onPressed: () {
+          controller.nextStep();
+        },
+        style: NeumorphicStyle(
+            depth: 8,
+            color: K_BASE_COLOR,
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+        padding: expanded
+            ? EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20)
+            : EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            expanded ?  SonrText.normal("Next", size: 22) :  SonrText.normal("Next"),
+            SonrIcon.gradient(
+                Icons.arrow_right, FlutterGradientNames.eternalConstance,
+                size: 24)
+          ],
+        ));
   }
 
   // ^ Build Back Button with Disabled at Beginning ^ //
   _buildBackButton() {
-    return GetBuilder<TileController>(
-        id: "TileDialog",
-        builder: (_) {
-          // Set Disabled By State
-          if (controller.state == TileState.NewStepTwo ||
-              controller.state == TileState.NewStepThree) {
-            return NeumorphicButton(
-              onPressed: () {
-                controller.previousStep();
-              },
-              style: NeumorphicStyle(
-                  depth: 8,
-                  color: K_BASE_COLOR,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-              padding: const EdgeInsets.only(
-                  top: 12.0, bottom: 12.0, left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [Icon(Icons.arrow_left), normalText("Back")],
-              ),
-            );
-          } else {
-            return IgnorePointer(
-              ignoring: true,
-              child: FlatButton(
-                padding: const EdgeInsets.only(
-                    top: 12.0, bottom: 12.0, left: 20, right: 20),
-                onPressed: null,
-                child: normalText("Back", setColor: Colors.black38),
-              ),
-            );
-          }
-        });
+    return NeumorphicButton(
+      onPressed: () {
+        controller.previousStep();
+      },
+      style: NeumorphicStyle(
+          depth: 8,
+          color: K_BASE_COLOR,
+          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+      padding:
+          const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [Icon(Icons.arrow_left),  SonrText.normal("Back")],
+      ),
+    );
   }
 }
 
@@ -189,7 +198,7 @@ class _DropdownAddView extends StatefulWidget {
 
 class _DropdownAddViewState extends State<_DropdownAddView> {
   // Initialize Tile
-  Contact_SocialTile_Provider _provider;
+  dynamic _dropValue;
 
   // Build View As Stateless
   @override
@@ -214,7 +223,7 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
               margin: EdgeInsets.only(left: 12, right: 12),
               child: DropdownButton(
                 isExpanded: true,
-                value: _provider,
+                value: _dropValue,
                 underline: Container(),
                 style: GoogleFonts.poppins(fontSize: 16, color: Colors.black87),
                 icon: Align(
@@ -245,12 +254,10 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                   );
                 }),
                 onChanged: (value) {
-                  if (value is Contact_SocialTile_Provider) {
-                    setState(() {
-                      Get.find<TileController>().setProvider(value);
-                      _provider = value;
-                    });
-                  }
+                  setState(() {
+                    this._dropValue = value;
+                  });
+                  Get.find<TileController>().setProvider(value);
                 },
               ),
             )),
@@ -288,7 +295,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
 
   _buildView(SocialMediaItem item) {
     if (item.reference == SocialRefType.Link) {
-      return NeuomorphicTextField(
+      return SonrTextField(
           label: item.label,
           hint: item.hint,
           value: _username,
@@ -315,13 +322,13 @@ class _SetInfoViewState extends State<_SetInfoView> {
 }
 
 // ^ Step 3 Set the Social Tile type ^ //
-class _SetSizePosView extends StatefulWidget {
-  const _SetSizePosView({Key key}) : super(key: key);
+class _SetTypeView extends StatefulWidget {
+  const _SetTypeView({Key key}) : super(key: key);
   @override
   _SetSizePosState createState() => _SetSizePosState();
 }
 
-class _SetSizePosState extends State<_SetSizePosView> {
+class _SetSizePosState extends State<_SetTypeView> {
   Contact_SocialTile_TileType _groupValue;
   @override
   Widget build(BuildContext context) {
@@ -340,29 +347,29 @@ class _SetSizePosState extends State<_SetSizePosView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // Icon Option
-                TilePreview(Contact_SocialTile_TileType.Icon,
+                TilePreviewRadio(Contact_SocialTile_TileType.Icon,
                     groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
-                    _groupValue = value;
+                    this._groupValue = value;
                   });
                 }),
 
                 // Showcase Option
-                TilePreview(Contact_SocialTile_TileType.Showcase,
+                TilePreviewRadio(Contact_SocialTile_TileType.Showcase,
                     groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
-                    _groupValue = value;
+                    this._groupValue = value;
                   });
                 }),
 
                 // Feed Option
-                TilePreview(Contact_SocialTile_TileType.Feed,
+                TilePreviewRadio(Contact_SocialTile_TileType.Feed,
                     groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
-                    _groupValue = value;
+                    this._groupValue = value;
                   });
                 }),
               ],

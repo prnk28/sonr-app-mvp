@@ -34,8 +34,8 @@ class LobbyView extends GetView<LobbyController> {
                   child: Padding(
                       padding: EdgeInsetsDirectional.only(bottom: 360),
                       child: Center(
-                          child: normalText("No Peers found.",
-                              size: 38, setColor: Colors.black87))));
+                          child: SonrText.normal("No Peers found.",
+                              size: 38, color: Colors.black87))));
             });
 
         // Hide Text
@@ -54,8 +54,8 @@ class LobbyView extends GetView<LobbyController> {
                   child: Padding(
                       padding: EdgeInsetsDirectional.only(bottom: 360),
                       child: Center(
-                          child: normalText("No Peers found.",
-                              size: 38, setColor: Colors.black87))));
+                          child: SonrText.normal("No Peers found.",
+                              size: 38, color: Colors.black87))));
             });
 
         // Present Stack

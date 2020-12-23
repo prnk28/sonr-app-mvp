@@ -24,7 +24,7 @@ class _FormViewState extends State<FormView> {
           // ****************** //
           // ** <First Name> ** //
           // ****************** //
-          NeuomorphicTextField(
+          SonrTextField(
               label: "First Name",
               hint: "Enter your first name",
               value: _firstName,
@@ -35,7 +35,7 @@ class _FormViewState extends State<FormView> {
           // ***************** //
           // ** <Last Name> ** //
           // ***************** //
-          NeuomorphicTextField(
+          SonrTextField(
               label: "Last Name",
               hint: "Enter your last name",
               value: _lastName,
@@ -68,7 +68,7 @@ class _FormViewState extends State<FormView> {
                         .createUser(contact, "@Temp_Username");
                   }
                 },
-                child: normalText("Submit"),
+                child: SonrText.normal("Submit"),
               ),
             ),
           )

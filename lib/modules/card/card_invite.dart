@@ -71,8 +71,8 @@ class _ContactInvite extends GetView<CardController> {
         Padding(padding: EdgeInsets.all(8)),
         Column(
           children: [
-            boldText(contact.firstName),
-            boldText(contact.lastName),
+            SonrText.bold(contact.firstName),
+            SonrText.bold(contact.lastName),
           ],
         )
       ]),
@@ -122,12 +122,12 @@ class _FileInvite extends GetView<CardController> {
             Padding(padding: EdgeInsets.all(8)),
             Column(
               children: [
-                boldText(
+                SonrText.bold(
                     invite.payload.file.mime.type.toString() +
                         " from " +
                         invite.from.firstName,
                     size: 32),
-                normalText("on " + invite.from.device.platform, size: 22),
+                SonrText.normal("on " + invite.from.device.platform, size: 22),
               ],
             ),
             Padding(padding: EdgeInsets.only(top: 8)),

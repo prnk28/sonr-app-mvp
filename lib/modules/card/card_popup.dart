@@ -80,8 +80,8 @@ class _ContactPopupView extends GetView<CardController> {
         Padding(padding: EdgeInsets.all(8)),
         Column(
           children: [
-            boldText(contact.firstName),
-            boldText(contact.lastName),
+             SonrText.bold(contact.firstName),
+            SonrText.bold(contact.lastName),
           ],
         )
       ]),

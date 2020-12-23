@@ -18,14 +18,6 @@ Color findIconsColor() {
   }
 }
 
-// ^ Find Text color based on Theme - Light/Dark ^
-Color findTextColor() {
-  if (Get.isDarkMode) {
-    return Colors.white;
-  } else {
-    return Colors.black;
-  }
-}
 
 // ^ Color from HEX Code ^
 extension HexColor on Color {
