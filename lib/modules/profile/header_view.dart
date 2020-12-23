@@ -1,9 +1,11 @@
-import 'package:clippy_flutter/clippy_flutter.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'profile_controller.dart';
+
+const double _K_CONTAINER_HEIGHT = 250;
 
 class ContactHeader extends GetView<ProfileController> {
   @override
@@ -14,13 +16,12 @@ class ContactHeader extends GetView<ProfileController> {
           child: Stack(
             overflow: Overflow.visible,
             children: [
-              Diagonal(
-                clipHeight: 75.0,
+              ClipPath(
+                clipper: DiagonalPathClipperOne(),
                 child: Neumorphic(
                   style: NeumorphicStyle(color: Colors.blue),
                   child: Container(
-                    width: Get.width,
-                    height: 350.0, // Same Header Color
+                    height: _K_CONTAINER_HEIGHT, // Same Header Color
                   ),
                 ),
               ),
@@ -28,9 +29,13 @@ class ContactHeader extends GetView<ProfileController> {
             ],
           ),
         )),
-        title: SonrText.normal(
-            controller.firstName.value + " " + controller.lastName.value,
-            size: 18),
+        title: Padding(
+          padding: EdgeInsets.only(bottom: 8.0),
+          child: SonrText.normal(
+              controller.firstName.value + " " + controller.lastName.value,
+              color: Colors.white,
+              size: 24),
+        ),
         centerTitle: true);
   }
 
@@ -39,16 +44,19 @@ class ContactHeader extends GetView<ProfileController> {
         height: 250,
         child: Container(
             color: Colors.blue, // Same Header Color
-            padding: EdgeInsets.only(top: 64),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              // @ Avatar
-              Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 12.0),
-                  child: _AvatarField(),
-                )
-              ]),
-            ])));
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // @ Avatar
+                  Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: _AvatarField(),
+                    ),
+                    Padding(padding: EdgeInsets.all(35))
+                  ]),
+                ])));
   }
 }
 

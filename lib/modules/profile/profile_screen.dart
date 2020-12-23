@@ -31,25 +31,26 @@ class _ProfileView extends GetView<ProfileController> {
           slivers: [
             // @ Builds Profile Header
             SliverAppBar(
+              automaticallyImplyLeading: false,
+              toolbarHeight: kToolbarHeight + 16 * 2,
               flexibleSpace: ContactHeader(),
               pinned: true,
               floating: true,
-              expandedHeight: 350,
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(40.0),
-                child: Text(''),
-              ),
-              // @ Close Button
-              leading: Padding(
-                padding: EdgeInsets.only(left: 14, top: 14, bottom: 5),
-                child: Align(
-                    alignment: Alignment.centerLeft,
+              snap: true,
+              expandedHeight: 285,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  // @ Close Button
+                  Padding(
+                    padding: EdgeInsets.only(left: 4.0),
                     child: NeumorphicButton(
                       padding: EdgeInsets.all(8),
                       style: NeumorphicStyle(
                           intensity: 0.6,
                           boxShape: NeumorphicBoxShape.circle(),
-                          color: K_BASE_COLOR,
+                          color: Colors.grey[200],
                           shape: NeumorphicShape.flat,
                           depth: 8),
                       child: SonrIcon.gradient(
@@ -57,28 +58,26 @@ class _ProfileView extends GetView<ProfileController> {
                       onPressed: () {
                         Get.offNamed("/home/profile");
                       },
-                    )),
+                    ),
+                  ),
+                  // @ More Button
+                  Padding(
+                    padding: EdgeInsets.only(right: 4.0),
+                    child: NeumorphicButton(
+                      padding: EdgeInsets.all(8),
+                      style: NeumorphicStyle(
+                          intensity: 0.6,
+                          boxShape: NeumorphicBoxShape.circle(),
+                          color: Colors.grey[200],
+                          shape: NeumorphicShape.flat,
+                          depth: 8),
+                      child: SonrIcon.gradient(Icons.more_horiz_outlined,
+                          FlutterGradientNames.northMiracle),
+                      onPressed: () {},
+                    ),
+                  )
+                ],
               ),
-              actions: [
-                // @ More Button
-                Padding(
-                  padding: EdgeInsets.only(right: 8, top: 14, bottom: 5),
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: NeumorphicButton(
-                        padding: EdgeInsets.all(8),
-                        style: NeumorphicStyle(
-                            intensity: 0.6,
-                            boxShape: NeumorphicBoxShape.circle(),
-                            color: K_BASE_COLOR,
-                            shape: NeumorphicShape.flat,
-                            depth: 8),
-                        child: SonrIcon.gradient(Icons.more_horiz_outlined,
-                            FlutterGradientNames.northMiracle),
-                        onPressed: () {},
-                      )),
-                )
-              ],
             ),
 
             // @ Builds List of Social Tile

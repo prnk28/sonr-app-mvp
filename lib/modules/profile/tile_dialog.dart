@@ -148,7 +148,7 @@ class TileDialog extends GetView<TileController> {
   _buildNextButton({bool expanded = false}) {
     return NeumorphicButton(
         margin:
-            expanded ? EdgeInsets.only(left: 20, right: 20) : EdgeInsets.zero,
+            expanded ? EdgeInsets.only(left: 50, right: 50) : EdgeInsets.zero,
         onPressed: () {
           controller.nextStep();
         },
