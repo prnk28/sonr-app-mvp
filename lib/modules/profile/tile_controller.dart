@@ -17,8 +17,8 @@ enum TileState {
 
 class TileController extends GetxController {
   // Properties
-  final state = TileState.None.obs;
-  final currentTile = Contact_SocialTile().obs;
+  var state = TileState.None;
+  var currentTile = Contact_SocialTile();
 
   // References
   bool _isEditing = false;
@@ -27,42 +27,48 @@ class TileController extends GetxController {
   toggleEditing(Contact_SocialTile value) {
     _isEditing = !_isEditing;
     if (_isEditing) {
-      currentTile(value);
-      state(TileState.Editing);
+      currentTile = value;
+      state = TileState.Editing;
     } else {
-      currentTile(Contact_SocialTile());
-      state(TileState.None);
+      currentTile = Contact_SocialTile();
+      state = TileState.None;
     }
+    update(["SocialTile"]);
   }
 
   // ^ Create New Tile ^ //
   createTile() {
-    currentTile(Contact_SocialTile());
-    state(TileState.NewStepOne);
+    currentTile = Contact_SocialTile();
+    state = TileState.NewStepOne;
+    update(["TileDialog"]);
   }
 
   // ^ Step 1: In New Social Tile ^ //
   setProvider(Contact_SocialTile_Provider provider) {
-    currentTile.value.provider = provider;
+    currentTile.provider = provider;
+    update(["TileDialog"]);
   }
 
   // ^ Step 2: In New Social Tile ^ //
   setUsername(String username) {
-    currentTile.value.username = username;
+    currentTile.username = username;
+    update(["TileDialog"]);
   }
 
   // ^ Step 3: In New Social Tile ^ //
   setType(Contact_SocialTile_TileType type) {
-    currentTile.value.type = type;
+    currentTile.type = type;
+    update(["TileDialog"]);
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (state.value == TileState.NewStepOne) {
-      if (currentTile.value.hasProvider()) {
+    if (state == TileState.NewStepOne) {
+      if (currentTile.hasProvider()) {
         // Update State
-        state(TileState.NewStepTwo);
+        state = TileState.NewStepTwo;
+        update(["TileDialog"]);
       } else {
         // Display Error Snackbar
         Get.snackbar("Hold Up!", "Select a social media provider first",
@@ -80,11 +86,12 @@ class TileController extends GetxController {
       }
     }
     // @ Step 3
-    else if (state.value == TileState.NewStepTwo) {
+    else if (state == TileState.NewStepTwo) {
       // Update State
-      if (currentTile.value.hasUsername()) {
+      if (currentTile.hasUsername()) {
         await _fetchMediumDataFromUsername();
-        state(TileState.NewStepThree);
+        state = TileState.NewStepThree;
+        update(["TileDialog"]);
       } else {
         // Display Error Snackbar
         Get.snackbar("Wait!", "Add your information",
@@ -104,16 +111,14 @@ class TileController extends GetxController {
     // @ Finish
     else {
       // Validate
-      if (currentTile.value.hasType() &&
-          state.value == TileState.NewStepThree) {
+      if (currentTile.hasType() && state == TileState.NewStepThree) {
         // Add Tile to Contact and Save
-        Get.find<ProfileController>().tiles.add(currentTile.value);
-        Get.find<DeviceService>().addSocial(currentTile.value);
+        Get.find<ProfileController>().saveSocialTile(currentTile);
 
         // Reset Current Tile
         Get.back();
-        state(TileState.None);
-        currentTile(Contact_SocialTile());
+        state = TileState.None;
+        currentTile = Contact_SocialTile();
       } else {
         // Display Error Snackbar
         Get.snackbar("Almost There!", "Pick a Tile Type",
@@ -136,10 +141,8 @@ class TileController extends GetxController {
   // TODO: Temporary find Universal Method of Handling API's
   _fetchMediumDataFromUsername() async {
     // Get Feed Data For Username
-    var data = await Get.find<SocialMediaService>().connect(
-        currentTile.value.provider,
-        SearchFilter.User,
-        currentTile.value.username);
+    var data = await Get.find<SocialMediaService>()
+        .connect(currentTile.provider, SearchFilter.User, currentTile.username);
 
     // Get Medium Model
     if (data is MediumFeedModel) {
@@ -152,43 +155,50 @@ class TileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
     // First Step
-    if (state.value == TileState.NewStepOne) {
-      state(TileState.None);
+    if (state == TileState.NewStepOne) {
+      state = TileState.None;
+      update(["TileDialog"]);
     }
     // Step 2
-    if (state.value == TileState.NewStepTwo) {
-      state(TileState.NewStepOne);
+    else if (state == TileState.NewStepTwo) {
+      state = TileState.NewStepOne;
+      update(["TileDialog"]);
     }
     // Step 3
-    else if (state.value == TileState.NewStepThree) {
-      state(TileState.NewStepTwo);
+    else if (state == TileState.NewStepThree) {
+      state = TileState.NewStepTwo;
+      update(["TileDialog"]);
     }
   }
 
   // ^ Edit a Social Tile Type ^ //
   editType(Contact_SocialTile tile, dynamic data) {
     // TODO
+    update(["SocialTile"]);
   }
 
   // ^ Edit a Social Tile Type ^ //
   editPosition(Contact_SocialTile tile, dynamic data) {
     // TODO
+    update(["SocialTile"]);
   }
 
   // ^ Edit a Social Tile Type ^ //
   editShowcase(Contact_SocialTile tile, dynamic data) {
     // TODO
+    update(["SocialTile"]);
   }
 
   // ^ Edit a Social Tile Type ^ //
   editFeed(Contact_SocialTile tile, dynamic data) {
     // TODO
+    update(["SocialTile"]);
   }
 
   // ^ Remove a Social Tile ^ //
   deleteTile() {
     // Remove Tile from Contact and Save
-    Get.find<ProfileController>().tiles.remove(currentTile.value);
-    Get.find<DeviceService>().removeSocial(currentTile.value);
+    Get.find<ProfileController>().removeSocialTile(currentTile);
+    update(["SocialTile"]);
   }
 }

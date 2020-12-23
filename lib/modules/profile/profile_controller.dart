@@ -58,6 +58,7 @@ class ProfileController extends GetxController {
     profilePic.refresh();
     tiles(_contact.socials);
     tiles.refresh();
+    update();
   }
 
   // ^ Update User Profile Pic ^ //
@@ -80,6 +81,7 @@ class ProfileController extends GetxController {
     tiles.add(tile);
     tiles.refresh();
     Get.find<DeviceService>().addSocial(tile);
+    update();
   }
 
   // ^ Remove a Social Tile ^ //
@@ -87,5 +89,6 @@ class ProfileController extends GetxController {
     tiles.remove(tile);
     tiles.refresh();
     Get.find<DeviceService>().removeSocial(tile);
+    update();
   }
 }

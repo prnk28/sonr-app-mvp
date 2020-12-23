@@ -19,136 +19,146 @@ class TileDialog extends GetView<TileController> {
         borderRadius: BorderRadius.circular(40),
         child: LayoutBuilder(builder:
             (BuildContext context, BoxConstraints viewportConstraints) {
-          return Obx(() {
-            // @ Views by State
-            Widget nextButton;
-            Widget backButton;
-            Widget currentView;
-            if (controller.state.value == TileState.NewStepTwo) {
-              nextButton = _buildNextButton();
-              backButton = _buildBackButton();
-              currentView = _SetInfoView();
-            } else if (controller.state.value == TileState.NewStepThree) {
-              nextButton = _buildNextButton(isFinished: true);
-              backButton = _buildBackButton();
-              currentView = _SetSizePosView();
-            } else {
-              nextButton = _buildNextButton();
-              backButton = _buildBackButton(isDisabled: true);
-              currentView = _DropdownAddView();
-            }
+          // @ Build View
+          return Material(
+              color: Colors.transparent,
+              child: Neumorphic(
+                style: NeumorphicStyle(color: K_BASE_COLOR),
+                child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: viewportConstraints.minHeight,
+                        minWidth: viewportConstraints.minWidth,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(children: [
+                          // @ Top Right Close/Cancel Button
+                          closeButton(() {
+                            // Pop Window
+                            Get.back();
 
-            // @ Build View
-            return Material(
-                color: Colors.transparent,
-                child: Neumorphic(
-                  style: NeumorphicStyle(color: K_BASE_COLOR),
-                  child: SingleChildScrollView(
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: viewportConstraints.minHeight,
-                          minWidth: viewportConstraints.minWidth,
-                        ),
-                        child: IntrinsicHeight(
-                          child: Column(children: [
-                            // @ Top Right Close/Cancel Button
-                            closeButton(() {
-                              // Pop Window
-                              Get.back();
+                            // Reset State
+                            controller.state = TileState.None;
+                          }, padTop: 12, padRight: 12),
 
-                              // Reset State
-                              controller.state(TileState.None);
-                            }, padTop: 12, padRight: 12),
+                          // @ Current Add Popup View
+                          Padding(padding: EdgeInsets.all(5)),
+                          Align(
+                              key: UniqueKey(),
+                              alignment: Alignment.topCenter,
+                              child: Container(child: _buildCurrentView())),
 
-                            // @ Current Add Popup View
-                            Padding(padding: EdgeInsets.all(5)),
-                            Align(
-                                key: UniqueKey(),
-                                alignment: Alignment.topCenter,
-                                child: Container(child: currentView)),
+                          // @ Action Buttons
+                          Spacer(),
 
-                            // @ Action Buttons
-                            Spacer(),
-
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [backButton, nextButton]),
-                            ),
-                            Padding(padding: EdgeInsets.all(15))
-                          ]),
-                        )),
-                  ),
-                ));
-          });
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildBackButton(),
+                                  _buildNextButton()
+                                ]),
+                          ),
+                          Padding(padding: EdgeInsets.all(15))
+                        ]),
+                      )),
+                ),
+              ));
         }));
   }
 
+  // ^ Build Current View ^ //
+  _buildCurrentView() {
+    return GetBuilder<TileController>(
+        id: "TileDialog",
+        builder: (_) {
+          if (controller.state == TileState.NewStepTwo) {
+            return _SetInfoView();
+          } else if (controller.state == TileState.NewStepThree) {
+            return _SetSizePosView();
+          } else {
+            return _DropdownAddView();
+          }
+        });
+  }
+
   // ^ Build Next Button with Finish at End ^ //
-  _buildNextButton({bool isFinished = false}) {
-    if (isFinished) {
-      return NeumorphicButton(
-          onPressed: () {
-            print("Finish Tapped");
-            controller.nextStep();
-          },
-          style: NeumorphicStyle(
-              depth: 8,
-              color: K_BASE_COLOR,
-              boxShape:
-                  NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-          padding: const EdgeInsets.only(
-              top: 12.0, bottom: 12.0, left: 20, right: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [normalText("Finish"), Icon(Icons.check)],
-          ));
-    } else {
-      return NeumorphicButton(
-          onPressed: () {
-            print("Next Tapped");
-            controller.nextStep();
-          },
-          style: NeumorphicStyle(
-              depth: 8,
-              color: K_BASE_COLOR,
-              boxShape:
-                  NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-          padding: const EdgeInsets.only(
-              top: 12.0, bottom: 12.0, left: 20, right: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [normalText("Next"), Icon(Icons.arrow_right)],
-          ));
-    }
+  _buildNextButton() {
+    return GetBuilder<TileController>(
+        id: "TileDialog",
+        builder: (_) {
+          // Set Finished By State
+          if (controller.state == TileState.NewStepThree) {
+            return NeumorphicButton(
+                onPressed: () {
+                  print("Finish Tapped");
+                  controller.nextStep();
+                },
+                style: NeumorphicStyle(
+                    depth: 8,
+                    color: K_BASE_COLOR,
+                    boxShape: NeumorphicBoxShape.roundRect(
+                        BorderRadius.circular(20))),
+                padding: const EdgeInsets.only(
+                    top: 12.0, bottom: 12.0, left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [normalText("Finish"), Icon(Icons.check)],
+                ));
+          } else {
+            return NeumorphicButton(
+                onPressed: () {
+                  print("Next Tapped");
+                  controller.nextStep();
+                },
+                style: NeumorphicStyle(
+                    depth: 8,
+                    color: K_BASE_COLOR,
+                    boxShape: NeumorphicBoxShape.roundRect(
+                        BorderRadius.circular(20))),
+                padding: const EdgeInsets.only(
+                    top: 12.0, bottom: 12.0, left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [normalText("Next"), Icon(Icons.arrow_right)],
+                ));
+          }
+        });
   }
 
   // ^ Build Back Button with Disabled at Beginning ^ //
-  _buildBackButton({bool isDisabled = false}) {
-    if (isDisabled) {
-      return IgnorePointer(
-        ignoring: true,
-        child: FlatButton(
-          padding: const EdgeInsets.all(12.0),
-          onPressed: null,
-          child: normalText("Back", setColor: Colors.black45),
-        ),
-      );
-    } else {
-      return NeumorphicButton(
-        onPressed: () {
-          print("Back Tapped");
-          controller.previousStep();
-        },
-        style: NeumorphicStyle(
-            depth: 8,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
-        padding: const EdgeInsets.all(12.0),
-        child: normalText("Back"),
-      );
-    }
+  _buildBackButton() {
+    return GetBuilder<TileController>(
+        id: "TileDialog",
+        builder: (_) {
+          // Set Disabled By State
+          if (controller.state != TileState.NewStepTwo ||
+              controller.state == TileState.NewStepThree) {
+            return NeumorphicButton(
+              onPressed: () {
+                print("Back Tapped");
+                controller.previousStep();
+              },
+              style: NeumorphicStyle(
+                  depth: 8,
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(8))),
+              padding: const EdgeInsets.all(12.0),
+              child: normalText("Back"),
+            );
+          } else {
+            return IgnorePointer(
+              ignoring: true,
+              child: FlatButton(
+                padding: const EdgeInsets.all(12.0),
+                onPressed: null,
+                child: normalText("Back", setColor: Colors.black45),
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -243,7 +253,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
   @override
   Widget build(BuildContext context) {
     // Find Data
-    Contact_SocialTile tile = Get.find<TileController>().currentTile.value;
+    Contact_SocialTile tile = Get.find<TileController>().currentTile;
     Widget authView;
     Widget infoText;
     var item = SocialMediaItem.fromProviderData(tile.provider);
