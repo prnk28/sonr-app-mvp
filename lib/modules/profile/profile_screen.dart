@@ -81,6 +81,8 @@ class _SliverViews extends GetView<ProfileController> {
               ),
             ),
 
+            SliverPadding(padding: EdgeInsets.all(14)),
+
             // @ Builds List of Social Tile
             SliverStaggeredGrid(
                 delegate: SliverChildBuilderDelegate(
