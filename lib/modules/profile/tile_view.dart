@@ -11,11 +11,11 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 class MediumView extends StatelessWidget {
   // Properties
   final Contact_SocialTile_TileType type;
-  final MediumFeedModel data;
+  final MediumModel data;
   final Post post;
   MediumView(this.type, {this.data, this.post});
 
-  factory MediumView.feed(MediumFeedModel data) {
+  factory MediumView.feed(MediumModel data) {
     return MediumView(Contact_SocialTile_TileType.Feed, data: data);
   }
 

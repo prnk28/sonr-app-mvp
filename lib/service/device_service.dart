@@ -7,16 +7,30 @@ import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'social_service.dart';
+import 'social_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DeviceService extends GetxService {
+  // Properties
+  final contact = Rx<Contact>();
+
+  // References
   SharedPreferences _prefs;
   bool hasLocation;
   bool hasUser;
-
   Position position;
   User user;
+
+  DeviceService() {
+    // Save Contact Changes
+    contact.listen((updatedContact) {
+      if (hasUser) {
+        // Update Contact
+        user.contact = updatedContact;
+        _prefs.setString("user", user.toJson());
+      }
+    });
+  }
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
@@ -43,14 +57,16 @@ class DeviceService extends GetxService {
 
         // Get Profile object
         user = User.fromJson(profileJson);
+        contact(user.contact);
 
         if (user != null) {
           // Get Current Position
           position = await user.position;
 
           // Initialize Dependent Services
-          await Get.putAsync(() => SocialMediaService().init(user));
-          await Get.putAsync(() => SonrService().init(position, user));
+          Get.put(() => SocialMediaProvider());
+          await Get.putAsync(
+              () => SonrService().init(position, user.contact, user.username));
         }
       } else {
         // Push to Register Screen
@@ -67,15 +83,17 @@ class DeviceService extends GetxService {
     // @ 1. Check for Location
     if (await Permission.locationWhenInUse.request().isGranted) {
       // Get Data and Save in SharedPrefs
-      user = new User(contact, username);
+      user = User(contact, username);
       _prefs.setString("user", user.toJson());
+      hasUser = true;
 
       // Get Current Position
       position = await user.position;
 
       // Initialize Dependent Services
-      await Get.putAsync(() => SocialMediaService().init(user));
-      await Get.putAsync(() => SonrService().init(position, user));
+      Get.put(() => SocialMediaProvider());
+      await Get.putAsync(
+          () => SonrService().init(position, user.contact, user.username));
     } else {
       throw RequiredPermissionsError("Location Permission Denied");
     }
@@ -98,16 +116,10 @@ class DeviceService extends GetxService {
       bool result = await GallerySaver.saveVideo(path, albumName: vidAlbum);
       return result;
     }
-    print("Not Valid Media Type");
-    return false;
-  }
-
-  // ^ UpdateContact Event ^
-  void saveContact(Contact contact) async {
-    // @ Validate
-    if (hasUser && !user.isNullOrBlank) {
-      // Update Contact
-      _prefs.setString("user", user.toJson());
+    // Invalid Media
+    else {
+      print("Not Valid Media Type");
+      return false;
     }
   }
 

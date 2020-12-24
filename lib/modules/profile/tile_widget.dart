@@ -40,13 +40,17 @@ class SocialTile extends GetView<TileController> {
                     controller.state = TileState.Dragging;
                     controller.update(["SocialTile"]);
                   }),
-              DragTarget(
+              DragTarget<Contact_SocialTile>(
                 builder: (context, candidateData, rejectedData) {
                   return Container();
                 },
                 // Only accept same tiles
                 onWillAccept: (data) {
-                  return true;
+                  if (data.type == this.data.type) {
+                    return true;
+                  } else {
+                    return false;
+                  }
                 },
                 // Switch Index Positions with animation
                 onAccept: (data) {
@@ -60,17 +64,17 @@ class SocialTile extends GetView<TileController> {
 
   // ^ Builds Data for Corresponding Model ^ //
   Widget _buildView({bool isDragging = false}) {
-    // Determine State
+    // Initialize
+    Widget socialChild;
     bool isEditing = (controller.state == TileState.Editing &&
         controller.currentTile.value == data);
 
-    Widget child;
     // Medium Data
-    if (controller.fetchedData is MediumFeedModel) {
-      child = MediumView(data.type, data: controller.fetchedData);
+    if (controller.fetchedData is MediumModel) {
+      socialChild = MediumView(data.type, data: controller.fetchedData);
     }
 
-    // Theming View
+    // Theming View with Drag
     return Neumorphic(
       margin: EdgeInsets.all(4),
       style: isEditing
@@ -79,9 +83,9 @@ class SocialTile extends GetView<TileController> {
           : NeumorphicStyle(
               intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
       child: Container(
-        width: isDragging ? 200 : Get.width,
-        height: isDragging ? 200 : Get.height,
-        child: isDragging ? Icon(Icons.drag_indicator) : child,
+        width: isDragging ? 125 : Get.width,
+        height: isDragging ? 125 : Get.height,
+        child: isDragging ? Icon(Icons.drag_indicator) : socialChild,
       ),
     );
   }

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:sonar_app/data/medium_model.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/social_service.dart';
+import 'package:sonar_app/service/social_provider.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
@@ -27,16 +27,15 @@ class TileController extends GetxController {
   // References
   bool _isEditing = false;
 
-  // ^ Fetch Tile Data ^
-  fetchData(Contact_SocialTile tile) async {
-    var item = Get.find<SocialMediaService>().getItem(tile);
-    fetchedData = await Get.find<SocialMediaService>().fetchData(item);
-    state = TileState.None;
-    update(["SocialTile"]);
+  // ^ Create New Tile ^ //
+  createTile() {
+    currentTile(Contact_SocialTile());
+    state = TileState.NewStepOne;
+    update(["TileDialog"]);
   }
 
   // ^ Toggle Editing Mode ^ //
-  toggleEditing(Contact_SocialTile value) {
+  editTile(Contact_SocialTile value) {
     _isEditing = !_isEditing;
     if (_isEditing) {
       currentTile(value);
@@ -48,11 +47,16 @@ class TileController extends GetxController {
     update(["SocialTile"]);
   }
 
-  // ^ Create New Tile ^ //
-  createTile() {
-    currentTile(Contact_SocialTile());
-    state = TileState.NewStepOne;
-    update(["TileDialog"]);
+  // ^ Fetch Tile Data ^
+  fetchData(Contact_SocialTile tile) async {
+    // Data By Provdider
+    if (tile.provider == Contact_SocialTile_Provider.Medium) {
+      fetchedData =
+          await Get.find<SocialMediaProvider>().getMedium(tile.username);
+    }
+
+    state = TileState.None;
+    update(["SocialTile"]);
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
@@ -136,14 +140,12 @@ class TileController extends GetxController {
   // TODO: Temporary find Universal Method of Handling API's
   Future<bool> _checkMediumUsername() async {
     // Get Feed Data For Username
-    var data = await Get.find<SocialMediaService>().connect(
-        currentTile.value.provider,
-        SearchFilter.User,
-        currentTile.value.username);
+    var data = await Get.find<SocialMediaProvider>()
+        .getMedium(currentTile.value.username);
 
     // Get Medium Model
     if (data != null) {
-      if (data is MediumFeedModel) {
+      if (data is MediumModel) {
         return true;
       }
     }

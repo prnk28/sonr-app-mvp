@@ -11,6 +11,7 @@ import 'package:sonar_app/modules/card/card_view.dart';
 import 'package:sonar_app/modules/transfer/peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'device_service.dart';
 import 'sql_service.dart';
 
 export 'package:sonr_core/sonr_core.dart';
@@ -54,21 +55,22 @@ class SonrService extends GetxService {
   }
 
   // ^ Initialize Service Method ^ //
-  Future<SonrService> init(Position pos, User user) async {
+  Future<SonrService> init(
+      Position pos, Contact contact, String username) async {
     // Get OLC
     code(OLC.encode(pos.latitude, pos.longitude, codeLength: 8));
 
     // Await Initialization -> Set Node
-    _connect(user);
+    _connect(contact, username);
 
     // Return Service
     return this;
   }
 
   // ^ Connect to Node Method
-  _connect(User user) async {
+  _connect(Contact contact, String username) async {
     // Create Worker
-    _node = await SonrCore.initialize(code.value, user.username, user.contact);
+    _node = await SonrCore.initialize(code.value, username, contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
@@ -123,7 +125,7 @@ class SonrService extends GetxService {
   // ^ Save and Reset Status ^
   void saveContact(Contact c) async {
     // Save Card
-    Get.find<SQLService>().saveContact(c);
+    Get.find<SQLService>().storeContact(c);
   }
 
   // **************************
@@ -202,7 +204,8 @@ class SonrService extends GetxService {
       progress(0.0);
 
       // Save Card
-      Get.find<SQLService>().saveFile(data);
+      Get.find<SQLService>().storeFile(data);
+      Get.find<DeviceService>().saveMedia(data);
       Get.find<CardController>().received(data);
       HapticFeedback.vibrate();
     }

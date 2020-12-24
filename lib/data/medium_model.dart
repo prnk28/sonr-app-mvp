@@ -1,11 +1,11 @@
-class MediumFeedModel {
+class MediumModel {
   String status;
   Feed feed;
   List<Post> posts;
 
-  MediumFeedModel({this.status, this.feed, this.posts});
+  MediumModel({this.status, this.feed, this.posts});
 
-  MediumFeedModel.fromJson(Map<String, dynamic> json) {
+  MediumModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     feed = json['feed'] != null ? new Feed.fromJson(json['feed']) : null;
     if (json['items'] != null) {

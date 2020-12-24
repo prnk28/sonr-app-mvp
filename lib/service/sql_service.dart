@@ -52,7 +52,7 @@ create table $contactTable (
   }
 
   // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> saveFile(Metadata metadata) async {
+  Future<Metadata> storeFile(Metadata metadata) async {
     metadata.id = await _db.insert(metaTable, MetaSQL(metadata).toSQL());
     return metadata;
   }
@@ -99,7 +99,7 @@ create table $contactTable (
   }
 
   // ^ Insert Contact into SQL DB ^ //
-  Future<Contact> saveContact(Contact contact) async {
+  Future<Contact> storeContact(Contact contact) async {
     await _db.insert(contactTable, ContactSQL(contact).toSQL());
     return contact;
   }

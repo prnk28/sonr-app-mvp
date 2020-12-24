@@ -41,24 +41,16 @@ class ProfileController extends GetxController {
 
   // ^ Fetch Values ^ //
   saveChanges() {
-    // Set Core Values
-    Get.find<DeviceService>().saveContact(Contact()
-      ..firstName = firstName.value
-      ..lastName = lastName.value
-      ..phone = phone.value
-      ..email = email.value
-      ..website = website.value
-      ..profilePic = profilePic
-      ..socials.addAll(socials));
-
-    firstName.refresh();
-    lastName.refresh();
-    phone.refresh();
-    lastName.refresh();
-    email.refresh();
-    website.refresh();
-    profilePic.refresh();
-    socials.refresh();
+    Get.find<DeviceService>().contact.value.firstName = firstName.value;
+    Get.find<DeviceService>().contact.value.lastName = lastName.value;
+    Get.find<DeviceService>().contact.value.phone = phone.value;
+    Get.find<DeviceService>().contact.value.email = email.value;
+    Get.find<DeviceService>().contact.value.website = website.value;
+    Get.find<DeviceService>().contact.value.profilePic.clear();
+    Get.find<DeviceService>().contact.value.profilePic = profilePic.toList();
+    Get.find<DeviceService>().contact.value.socials.clear();
+    Get.find<DeviceService>().contact.value.socials.addAll(socials.toList());
+    Get.find<DeviceService>().contact.refresh();
     update();
   }
 
@@ -69,6 +61,8 @@ class ProfileController extends GetxController {
 
     // Set Profile Pic
     profilePic(imgBytes.toList());
+
+    // Save Contact
     saveChanges();
   }
 
