@@ -7,7 +7,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
-// ^ Medium Social View/Preview ^ //
+// ** Medium Social View/Preview ** //
 class MediumView extends StatelessWidget {
   // Properties
   final Contact_SocialTile_TileType type;
@@ -50,10 +50,7 @@ class MediumView extends StatelessWidget {
     }
     // @ Build ShowCase View
     else if (type == Contact_SocialTile_TileType.Showcase) {
-      return Stack(children: [
-        _buildPost(data.posts.first, isShowcase: true),
-        _buildBadge()
-      ]);
+      return Stack(children: [_buildShowcase(data.posts.first), _buildBadge()]);
     }
     // @ Build Icon View
     else {
@@ -77,7 +74,7 @@ class MediumView extends StatelessWidget {
   }
 
   // ^ Build Feed Post for Medium ^ //
-  _buildPost(Post post, {bool isShowcase = false}) {
+  _buildShowcase(Post post) {
     // Build View
     return GestureDetector(
       onTap: () {
@@ -85,8 +82,7 @@ class MediumView extends StatelessWidget {
         HapticFeedback.lightImpact();
       },
       child: Container(
-        width: isShowcase ? 150 : 275,
-        height: isShowcase ? 90 : 180,
+        width: 150,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -94,14 +90,35 @@ class MediumView extends StatelessWidget {
                   clipper: WaveClipperOne(),
                   child: Image.network(post.thumbnail)),
               SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                  size: isShowcase ? 16 : 20),
-              isShowcase
-                  ? Container()
-                  : SonrText.description(_cleanDescription(post.description),
-                      size: 14),
-              isShowcase
-                  ? Container()
-                  : SonrText.normal(_cleanDate(post.pubDate), size: 14)
+                  size: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ^ Build Feed Post for Medium ^ //
+  _buildPost(Post post) {
+    // Build View
+    return NeumorphicButton(
+      onPressed: () {
+        Get.find<DeviceService>().launchURL(post.link);
+      },
+      child: Container(
+        width: 275,
+        height: 180,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ClipPath(
+                  clipper: WaveClipperOne(),
+                  child: Image.network(post.thumbnail)),
+              SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
+                  size: 20),
+              SonrText.description(_cleanDescription(post.description),
+                  size: 14),
+              SonrText.normal(_cleanDate(post.pubDate), size: 14)
             ],
           ),
         ),
@@ -126,3 +143,9 @@ class MediumView extends StatelessWidget {
     return cleaned = cleaned.substring(0, 130) + "...";
   }
 }
+
+// ** Twitter Social View/Preview ** //
+
+// ** Spotify Social View/Preview ** //
+
+// ** Spotify Social View/Preview ** //

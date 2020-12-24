@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/medium_model.dart';
-import 'package:sonar_app/modules/profile/tile_view.dart';
+import 'package:sonar_app/modules/profile/social_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';

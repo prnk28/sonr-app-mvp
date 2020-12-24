@@ -32,21 +32,12 @@ class CompassController extends GetxController {
       .obs;
 
   // @ References
-  final Rx<SonrStatus> _status = Get.find<SonrService>().status;
   final inactiveGradient = FlutterGradients.findByName(
       FlutterGradientNames.octoberSilence,
       type: GradientType.linear);
 
   final activeGradient = FlutterGradients.findByName(
       FlutterGradientNames.summerGames,
-      type: GradientType.linear);
-
-  final pendingGradient = FlutterGradients.findByName(
-      FlutterGradientNames.angelCare,
-      type: GradientType.linear);
-
-  final busyGradient = FlutterGradients.findByName(
-      FlutterGradientNames.nightParty,
       type: GradientType.linear);
 
   // @ Direction Properties
@@ -83,13 +74,7 @@ class CompassController extends GetxController {
     // @ Check Peers Length
     Get.find<SonrService>().lobby.listen((lob) {
       if (lob.length > 0) {
-        if (_status.value == SonrStatus.Pending) {
-          gradient(pendingGradient);
-        } else if (_status.value == SonrStatus.Busy) {
-          gradient(busyGradient);
-        } else {
-          gradient(activeGradient);
-        }
+        gradient(activeGradient);
       } else {
         gradient(inactiveGradient);
       }

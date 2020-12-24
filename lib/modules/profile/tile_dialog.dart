@@ -15,107 +15,90 @@ class TileDialog extends GetView<TileController> {
   Widget build(BuildContext context) {
     // Update State
     controller.createTile();
-
     return NeumorphicBackground(
         backendColor: Colors.transparent,
-        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
         borderRadius: BorderRadius.circular(40),
-        child: LayoutBuilder(builder:
-            (BuildContext context, BoxConstraints viewportConstraints) {
-          // @ Build View
-          return Material(
-              color: Colors.transparent,
-              child: Neumorphic(
-                style: NeumorphicStyle(color: K_BASE_COLOR),
-                child: SingleChildScrollView(
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: viewportConstraints.minHeight,
-                          minWidth: viewportConstraints.minWidth,
+        child: Material(
+            color: Colors.transparent,
+            child: Neumorphic(
+              style: NeumorphicStyle(color: K_BASE_COLOR),
+              child: Container(
+                width: 352,
+                height: Get.height - 200,
+                child: GetBuilder<TileController>(
+                    id: "TileDialog",
+                    builder: (_) {
+                      Widget topButtons;
+                      Widget bottomButtons;
+
+                      // @ Step Three: No Buttom Buttons, Cancel and Confirm
+                      if (controller.state == TileState.NewStepThree) {
+                        // Top Buttons
+                        topButtons = Container();
+
+                        // Bottom Buttons
+                        bottomButtons = Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // @ Top Left Close/Cancel Button
+                              closeButton(() {
+                                Get.back();
+                                controller.state = TileState.None;
+                              }),
+                              // @ Top Right Confirm Button
+                              acceptButton(() {
+                                controller.nextStep();
+                              }),
+                            ]);
+                      }
+                      // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
+                      else if (controller.state == TileState.NewStepTwo) {
+                        topButtons = closeButton(() {
+                          Get.back();
+                          controller.state = TileState.None;
+                        });
+
+                        // Bottom Buttons
+                        bottomButtons = Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [_buildBackButton(), _buildNextButton()]);
+                      }
+                      // @ Step One: Top Cancel Button, Bottom wide Next Button
+                      else {
+                        // Top Buttons
+                        topButtons = closeButton(() {
+                          Get.back();
+                          controller.state = TileState.None;
+                        });
+
+                        // Bottom Buttons
+                        bottomButtons = _buildNextButton(expanded: true);
+                      }
+
+                      // ^ Build View ^ //
+                      return Column(children: [
+                        // Top Buttons
+                        topButtons,
+
+                        // Current View
+                        Padding(padding: EdgeInsets.all(5)),
+                        Align(
+                            key: UniqueKey(),
+                            alignment: Alignment.topCenter,
+                            child: Container(child: _buildCurrentView())),
+
+                        // Bottom Buttons
+                        Spacer(),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: bottomButtons,
                         ),
-                        child: IntrinsicHeight(
-                            child: GetBuilder<TileController>(
-                                id: "TileDialog",
-                                builder: (_) {
-                                  Widget topButtons;
-                                  Widget bottomButtons;
-
-                                  // @ Step Three: No Buttom Buttons, Cancel and Confirm
-                                  if (controller.state ==
-                                      TileState.NewStepThree) {
-                                    // Top Buttons
-                                    topButtons = Container();
-
-                                    // Bottom Buttons
-                                    bottomButtons = Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          // @ Top Left Close/Cancel Button
-                                          closeButton(() {
-                                            Get.back();
-                                            controller.state = TileState.None;
-                                          }),
-                                          // @ Top Right Confirm Button
-                                          acceptButton(() {
-                                            controller.nextStep();
-                                          }),
-                                        ]);
-                                  }
-                                  // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
-                                  else if (controller.state ==
-                                      TileState.NewStepTwo) {
-                                    topButtons = closeButton(() {
-                                      Get.back();
-                                      controller.state = TileState.None;
-                                    });
-
-                                    // Bottom Buttons
-                                    bottomButtons = Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          _buildBackButton(),
-                                          _buildNextButton()
-                                        ]);
-                                  }
-                                  // @ Step One: Top Cancel Button, Bottom wide Next Button
-                                  else {
-                                    // Top Buttons
-                                    topButtons = closeButton(() {
-                                      Get.back();
-                                      controller.state = TileState.None;
-                                    });
-
-                                    // Bottom Buttons
-                                    bottomButtons =
-                                        _buildNextButton(expanded: true);
-                                  }
-
-                                  // ^ Build View ^ //
-                                  return Column(children: [
-                                    // Top Buttons
-                                    topButtons,
-
-                                    // Current View
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    Align(
-                                        key: UniqueKey(),
-                                        alignment: Alignment.topCenter,
-                                        child: Container(
-                                            child: _buildCurrentView())),
-
-                                    // Bottom Buttons
-                                    Spacer(),
-                                    Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: bottomButtons,
-                                    ),
-                                    Padding(padding: EdgeInsets.all(15))
-                                  ]);
-                                })))),
-              ));
-        }));
+                        Padding(padding: EdgeInsets.all(15))
+                      ]);
+                    }),
+              ),
+            )));
   }
 
   // ^ Build Current View ^ //
@@ -134,7 +117,7 @@ class TileDialog extends GetView<TileController> {
             // Iterate through All Options
             Contact_SocialTile_Provider.values.forEach((provider) {
               if (!Get.find<ProfileController>()
-                  .tiles
+                  .socials
                   .any((tile) => tile.provider == provider)) {
                 options.add(provider);
               }
@@ -200,6 +183,8 @@ class _DropdownAddView extends GetView<TileController> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // @ InfoGraph
         _InfoText(index: 1, text: "Choose a Social Media to Add"),
@@ -263,6 +248,8 @@ class _DropdownAddView extends GetView<TileController> {
 class _SetInfoView extends GetView<TileController> {
   final _username = "".obs;
 
+  _SetInfoView();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<TileController>(
@@ -273,30 +260,35 @@ class _SetInfoView extends GetView<TileController> {
           var item = SocialMediaItem.fromProviderData(tile.provider);
 
           // Build View
-          return Column(children: [
-            // @ InfoGraph
-            _InfoText(index: 2, text: item.infoText),
-            Padding(padding: EdgeInsets.all(20)),
-            _buildView(item)
-          ]);
+          return SingleChildScrollView(
+            reverse: true,
+            child: Column(children: [
+              // @ InfoGraph
+              _InfoText(index: 2, text: item.infoText),
+              Padding(padding: EdgeInsets.all(20)),
+              _buildView(item)
+            ]),
+          );
         });
   }
 
   _buildView(SocialMediaItem item) {
     if (item.reference == SocialRefType.Link) {
       // @ Text Field
-      return Obx(() => SonrTextField(
-          label: item.label,
-          hint: item.hint,
-          value: _username.value,
-          onChanged: (String value) {
-            _username(value);
-          },
-          onEditingComplete: () {
-            controller.currentTile.value.username = _username.value;
-            controller.currentTile.refresh();
-            controller.nextStep();
-          }));
+      return Obx(
+        () => SonrTextField(
+            label: item.label,
+            hint: item.hint,
+            value: _username.value,
+            onChanged: (String value) {
+              _username(value);
+            },
+            onEditingComplete: () {
+              controller.currentTile.value.username = _username.value;
+              controller.currentTile.refresh();
+              controller.nextStep();
+            }),
+      );
     } else {
       // @ Connect Button
       return Neumorphic(

@@ -10,7 +10,7 @@ class PeerBubble extends GetWidget<PeerController> {
   final Peer peer;
   final int index;
   PeerBubble(this.peer, this.index) {
-    controller.setPeer(peer);
+    controller.initialize(peer);
   }
 
   @override
@@ -60,14 +60,15 @@ class PeerBubble extends GetWidget<PeerController> {
 
   // ^ Method to Change Content Visibility By State ^ //
   Widget _buildContentVisibility() {
-    if (controller.shouldChangeVisibility.value) {
+    if (controller.isContentVisible.value) {
       return PlayAnimation<double>(
-          tween: (1.0).tweenTo(0.0),
-          duration: 20.milliseconds,
+          tween: (0.0).tweenTo(1.0),
+          duration: 500.milliseconds,
+          delay: 1.seconds,
           builder: (context, child, value) {
             return AnimatedOpacity(
                 opacity: value,
-                duration: 20.milliseconds,
+                duration: 500.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SonrIcon.deviceFromPeer(IconType.Neumorphic, controller.peer,
@@ -77,13 +78,12 @@ class PeerBubble extends GetWidget<PeerController> {
           });
     } else {
       return PlayAnimation<double>(
-          tween: (0.0).tweenTo(1.0),
-          duration: 500.milliseconds,
-          delay: 1.seconds,
+          tween: (1.0).tweenTo(0.0),
+          duration: 20.milliseconds,
           builder: (context, child, value) {
             return AnimatedOpacity(
                 opacity: value,
-                duration: 500.milliseconds,
+                duration: 20.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SonrIcon.deviceFromPeer(IconType.Neumorphic, controller.peer,
