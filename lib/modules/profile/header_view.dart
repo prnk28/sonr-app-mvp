@@ -1,9 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:vibration/vibration.dart';
 import 'profile_controller.dart';
 
 const double _K_CONTAINER_HEIGHT = 285;
@@ -23,14 +23,20 @@ class ContactHeader extends GetView<ProfileController> {
             clipper: OvalBottomBorderClipper(),
             child: Neumorphic(
               style: NeumorphicStyle(color: Colors.blue),
-              child: Container(
-                height: _K_CONTAINER_HEIGHT, // Same Header Color
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // @ Avatar
-                    _AvatarField(),
-                  ],
+              child: GestureDetector(
+                onLongPress: () async {
+                  print("Launch Color picker to change header");
+                  HapticFeedback.heavyImpact();
+                },
+                child: Container(
+                  height: _K_CONTAINER_HEIGHT, // Same Header Color
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // @ Avatar
+                      _AvatarField(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -45,7 +51,7 @@ class ContactHeader extends GetView<ProfileController> {
     return GestureDetector(
         onLongPress: () async {
           print("Launch Text Dialog to Update Name");
-          Vibration.vibrate(duration: 100);
+          HapticFeedback.heavyImpact();
         },
         child: SonrText.normal(
             controller.firstName.value + " " + controller.lastName.value,
@@ -60,7 +66,7 @@ class _AvatarField extends GetView<ProfileController> {
     return GestureDetector(
       onLongPress: () async {
         print("Launch Profile Pic Camera View");
-        Vibration.vibrate(duration: 100);
+        HapticFeedback.heavyImpact();
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 4.0),

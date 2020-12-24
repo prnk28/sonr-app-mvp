@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'color.dart';
 import 'icon.dart';
@@ -6,7 +7,10 @@ import '../widgets/text.dart';
 NeumorphicButton rectangleButton(String text, Function onPressed,
     {NeumorphicShape shape = NeumorphicShape.concave}) {
   return NeumorphicButton(
-      onPressed: onPressed,
+      onPressed: () {
+        HapticFeedback.lightImpact();
+        onPressed();
+      },
       style: NeumorphicStyle(
           depth: 8,
           color: K_BASE_COLOR,
@@ -40,7 +44,10 @@ Widget closeButton(Function onPressed,
                 Icons.close,
                 FlutterGradientNames.phoenixStart,
               ),
-              onPressed: onPressed)));
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onPressed();
+              })));
 }
 
 Widget acceptButton(Function onPressed,
@@ -66,5 +73,8 @@ Widget acceptButton(Function onPressed,
                   depth: 8),
               child: SonrIcon.gradient(
                   Icons.check, FlutterGradientNames.hiddenJaguar),
-              onPressed: onPressed)));
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                onPressed();
+              })));
 }

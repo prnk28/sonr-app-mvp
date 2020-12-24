@@ -13,19 +13,18 @@ enum ProfileState {
 class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;
-  final firstName = "".obs;
-  final lastName = "".obs;
-  final phone = "".obs;
-  final email = "".obs;
-  final website = "".obs;
-  final profilePic = List<int>().obs;
-  final tiles = List<Contact_SocialTile>().obs;
+  final firstName = Get.find<DeviceService>().user.contact.firstName.obs;
+  final lastName = Get.find<DeviceService>().user.contact.lastName.obs;
+  final phone = Get.find<DeviceService>().user.contact.phone.obs;
+  final email = Get.find<DeviceService>().user.contact.email.obs;
+  final website = Get.find<DeviceService>().user.contact.website.obs;
+  final profilePic = Get.find<DeviceService>().user.contact.profilePic.obs;
+  final tiles = Get.find<DeviceService>().user.contact.socials.obs;
 
   // References
   bool _isEditing = false;
-  Contact _contact;
   ProfileController() {
-    fetch();
+    refresh();
   }
 
   // ^ Toggle Editing Mode ^ //
@@ -39,23 +38,16 @@ class ProfileController extends GetxController {
   }
 
   // ^ Fetch Values ^ //
-  fetch() {
-    // Check for Contact
-    if (_contact == null) {
-      _contact = Get.find<DeviceService>().user.contact;
-    }
-
+  saveChanges() {
     // Set Core Values
-    firstName(_contact.firstName);
-    lastName(_contact.lastName);
-    phone(_contact.phone);
-    email(_contact.email);
-    website(_contact.website);
-
-    // Update Refresh Lists
-    profilePic(_contact.profilePic);
+    Get.find<DeviceService>().saveContact();
+    firstName.refresh();
+    lastName.refresh();
+    phone.refresh();
+    lastName.refresh();
+    email.refresh();
+    website.refresh();
     profilePic.refresh();
-    tiles(_contact.socials);
     tiles.refresh();
     update();
   }
@@ -64,37 +56,33 @@ class ProfileController extends GetxController {
   setPicture(File image) async {
     // Read Bytes from File into Ref
     var imgBytes = await image.readAsBytes();
-    _contact.profilePic = imgBytes.toList();
 
     // Set Profile Pic
     profilePic(imgBytes.toList());
-    profilePic.refresh();
-
-    // Save Ref
-    Get.find<DeviceService>().updateContact(_contact);
+    saveChanges();
   }
 
   // ^ Save a Social Tile  ^ //
   saveSocialTile(Contact_SocialTile tile) {
-    // Add Tile to Contact and Save
+    // Add Tile to Contact
     if (tiles.contains(tile)) {
       int index = tiles.indexOf(tile);
       tiles[index] = tile;
-      Get.find<DeviceService>().updateSocial(tile);
     } else {
       tiles.add(tile);
-      Get.find<DeviceService>().addSocial(tile);
     }
 
-    tiles.refresh();
-    update();
+    // Save Contact
+    saveChanges();
   }
 
   // ^ Remove a Social Tile ^ //
   removeSocialTile(Contact_SocialTile tile) {
-    tiles.remove(tile);
-    tiles.refresh();
-    Get.find<DeviceService>().removeSocial(tile);
-    update();
+    if (tiles.contains(tile)) {
+      tiles.remove(tile);
+    }
+
+    // Save Contact
+    saveChanges();
   }
 }

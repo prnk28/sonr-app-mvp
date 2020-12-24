@@ -54,7 +54,7 @@ class SonrText extends StatelessWidget {
         weight: FontWeight.bold,
         size: size ?? 24,
         key: key,
-        color: color ?? Colors.grey[800]);
+        color: color ?? Colors.grey);
   }
 
   // ^ Gradient Text with Provided Data

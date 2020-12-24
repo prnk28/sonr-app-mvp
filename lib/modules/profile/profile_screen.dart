@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/modules/profile/tile_dialog.dart';
 import 'package:sonr_core/models/models.dart';
 import 'tile_widget.dart';
 import 'profile_controller.dart';
@@ -12,8 +13,16 @@ class ProfileScreen extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     // Build View
     return SonrTheme(Scaffold(
-        backgroundColor: NeumorphicTheme.baseColor(context),
-        body: _SliverViews()));
+      backgroundColor: NeumorphicTheme.baseColor(context),
+      body: _SliverViews(),
+      floatingActionButton: NeumorphicFloatingActionButton(
+          child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
+          style: NeumorphicStyle(
+              intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
+          onPressed: () {
+            Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
+          }),
+    ));
   }
 }
 
@@ -22,7 +31,7 @@ class _SliverViews extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // Get Tile Count
-      int count = controller.tiles.length + 1;
+      int count = controller.tiles.length;
 
       // Create View
       return NeumorphicBackground(
@@ -87,15 +96,7 @@ class _SliverViews extends GetView<ProfileController> {
             SliverStaggeredGrid(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  // Return Edit Button
-                  if (index == count - 1) {
-                    return EditTile();
-                  }
-
-                  // Return Social Tile
-                  else {
-                    return SocialTile(controller.tiles[index], index);
-                  }
+                  return SocialTile(controller.tiles[index], index);
                 }),
                 gridDelegate:
                     SliverStaggeredGridDelegateWithFixedCrossAxisCount(
@@ -104,29 +105,21 @@ class _SliverViews extends GetView<ProfileController> {
                         crossAxisSpacing: 4.0,
                         staggeredTileCount: count,
                         staggeredTileBuilder: (index) {
-                          // Return Edit Button
-                          if (index == count - 1) {
-                            return StaggeredTile.count(1, 1);
+                          // Retreive Data
+                          var data = controller.tiles[index];
+
+                          // Feed Occupies 1 Whole Row/ 3 Columns
+                          if (data.type == Contact_SocialTile_TileType.Feed) {
+                            return StaggeredTile.count(4, 4);
                           }
-
-                          // Return Social Tile
+                          // Showcase Occupies 0.5 Whole Rows/ 2 Columns
+                          else if (data.type ==
+                              Contact_SocialTile_TileType.Showcase) {
+                            return StaggeredTile.count(2, 2);
+                          }
+                          // Icon can by 1/1
                           else {
-                            // Retreive Data
-                            var data = controller.tiles[index];
-
-                            // Feed Occupies 1 Whole Row/ 3 Columns
-                            if (data.type == Contact_SocialTile_TileType.Feed) {
-                              return StaggeredTile.count(4, 4);
-                            }
-                            // Showcase Occupies 0.5 Whole Rows/ 2 Columns
-                            else if (data.type ==
-                                Contact_SocialTile_TileType.Showcase) {
-                              return StaggeredTile.count(2, 2);
-                            }
-                            // Icon can by 1/1
-                            else {
-                              return StaggeredTile.count(1, 1);
-                            }
+                            return StaggeredTile.count(1, 1);
                           }
                         })),
           ],

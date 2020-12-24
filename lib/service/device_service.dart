@@ -8,6 +8,7 @@ import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'social_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DeviceService extends GetxService {
   SharedPreferences _prefs;
@@ -102,42 +103,10 @@ class DeviceService extends GetxService {
   }
 
   // ^ UpdateContact Event ^
-  void updateContact(Contact newContact) async {
+  void saveContact() async {
     // @ Validate
     if (hasUser && !user.isNullOrBlank) {
       // Update Contact
-      user.contact = newContact;
-      _prefs.setString("user", user.toJson());
-    }
-  }
-
-  // ^ UpdateTiles Event ^
-  void addSocial(Contact_SocialTile tile) async {
-    // @ Validate
-    if (hasUser && !user.isNullOrBlank) {
-      // Add Contact
-      user.contact.socials.add(tile);
-      _prefs.setString("user", user.toJson());
-    }
-  }
-
-  // ^ UpdateTiles Event ^
-  void updateSocial(Contact_SocialTile tile) async {
-    // @ Validate
-    if (hasUser && !user.isNullOrBlank) {
-      // Update Contact
-      int index = user.contact.socials.indexOf(tile);
-      user.contact.socials[index] = tile;
-      _prefs.setString("user", user.toJson());
-    }
-  }
-
-  // ^ UpdateTiles Event ^
-  void removeSocial(Contact_SocialTile tile) async {
-    // @ Validate
-    if (hasUser && !user.isNullOrBlank) {
-      // Update Contact
-      user.contact.socials.remove(tile);
       _prefs.setString("user", user.toJson());
     }
   }
@@ -178,6 +147,15 @@ class DeviceService extends GetxService {
         break;
       default:
         break;
+    }
+  }
+
+  // ^ Launch a URL Event ^ //
+  launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }

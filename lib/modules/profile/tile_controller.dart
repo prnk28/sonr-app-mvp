@@ -7,6 +7,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 enum TileState {
+  Loading,
   None,
   Editing,
   NewStepOne,
@@ -16,11 +17,22 @@ enum TileState {
 
 class TileController extends GetxController {
   // Properties
-  var state = TileState.None;
+  var fetchedData;
+  var state = TileState.Loading;
+
+  // Reactive
   final currentTile = Contact_SocialTile().obs;
 
   // References
   bool _isEditing = false;
+
+  // ^ Fetch Tile Data ^
+  fetchData(Contact_SocialTile tile) async {
+    var item = Get.find<SocialMediaService>().getItem(tile);
+    fetchedData = await Get.find<SocialMediaService>().fetchData(item);
+    state = TileState.None;
+    update(["SocialTile"]);
+  }
 
   // ^ Toggle Editing Mode ^ //
   toggleEditing(Contact_SocialTile value) {
