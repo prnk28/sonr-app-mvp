@@ -49,21 +49,22 @@ class CardView extends GetView<CardController> {
       popupView = Container();
     }
 
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
-        child: Neumorphic(
-            style: SonrBorderStyle(),
-            child: Column(children: [
-              // @ Top Right Close/Cancel Button
-              closeButton(() {
-                // Pop Window
-                Get.back();
-              }, padTop: 8, padRight: 8),
+    return NeumorphicBackground(
+      child: Container(
+          margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 105),
+          child: Neumorphic(
+              child: Column(children: [
+            // @ Top Right Close/Cancel Button
+            closeButton(() {
+              // Pop Window
+              Get.back();
+            }, padTop: 8, padRight: 8),
 
-              // @ Invite View
-              Padding(padding: EdgeInsets.all(8)),
-              popupView
-            ])));
+            // @ Invite View
+            Padding(padding: EdgeInsets.all(8)),
+            popupView
+          ]))),
+    );
   }
 }
 
@@ -103,29 +104,30 @@ class _MediaPopupView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // @ Non-Image Type
-    return Container(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-        child: Neumorphic(
-            style: SonrBorderStyle(),
-            child: Column(
-              children: [
-                // Some Space
-                Padding(padding: EdgeInsets.all(25)),
+    return NeumorphicBackground(
+      child: Container(
+          margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+          child: Neumorphic(
+              child: Column(
+            children: [
+              // Some Space
+              Padding(padding: EdgeInsets.all(25)),
 
-                // Top Right Close/Cancel Button
-                closeButton(() => Get.back()),
-                Padding(padding: EdgeInsets.only(top: 10)),
+              // Top Right Close/Cancel Button
+              closeButton(() => Get.back()),
+              Padding(padding: EdgeInsets.only(top: 10)),
 
-                // Image
-                FittedBox(
-                    alignment: Alignment.center,
-                    child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minWidth: 1,
-                          minHeight: 1,
-                        ),
-                        child: Container(child: Image.file(File(meta.path))))),
-              ],
-            )));
+              // Image
+              FittedBox(
+                  alignment: Alignment.center,
+                  child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: 1,
+                        minHeight: 1,
+                      ),
+                      child: Container(child: Image.file(File(meta.path))))),
+            ],
+          ))),
+    );
   }
 }

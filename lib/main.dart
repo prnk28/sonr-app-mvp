@@ -64,41 +64,41 @@ List<GetPage> getPages() {
     // ** Home Page ** //
     GetPage(
         name: '/home',
-        page: () => SonrTheme(HomeScreen()),
+        page: () => SonrTheme(child: HomeScreen()),
         transition: Transition.zoom,
         binding: HomeBinding()),
 
     // ** Home Page - Back ** //
     GetPage(
         name: '/home/transfer',
-        page: () => SonrTheme(HomeScreen()),
-        transition: Transition.leftToRight,
+        page: () => SonrTheme(child: HomeScreen()),
+        transition: Transition.size,
         binding: HomeBinding()),
 
     // ** Home Page - Back ** //
     GetPage(
         name: '/home/profile',
-        page: () => SonrTheme(HomeScreen()),
+        page: () => SonrTheme(child: HomeScreen()),
         transition: Transition.downToUp,
         binding: HomeBinding()),
 
     // ** Register Page ** //
     GetPage(
         name: '/register',
-        page: () => SonrTheme(RegisterScreen()),
-        transition: Transition.rightToLeft),
+        page: () => SonrTheme(child: RegisterScreen()),
+        transition: Transition.fade),
 
     // ** Transfer Page ** //
     GetPage(
         name: '/transfer',
-        page: () => SonrTheme(TransferScreen()),
-        transition: Transition.rightToLeft,
+        page: () => SonrTheme(child: TransferScreen()),
+        transition: Transition.size,
         binding: TransferBinding()),
 
     // ** Profile Page ** //
     GetPage(
         name: '/profile',
-        page: () => SonrTheme(ProfileScreen()),
+        page: () => SonrTheme(child: ProfileScreen()),
         transition: Transition.upToDown,
         fullscreenDialog: true,
         binding: ProfileBinding()),

@@ -17,7 +17,7 @@ class ContactHeader extends GetView<ProfileController> {
       title: _buildTitle(),
       centerTitle: true,
       background: SonrTheme(
-        NeumorphicBackground(
+        child: NeumorphicBackground(
           backendColor: Colors.transparent,
           child: ClipPath(
             clipper: OvalBottomBorderClipper(),

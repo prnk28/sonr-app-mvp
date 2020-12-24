@@ -10,30 +10,31 @@ class TransferScreen extends StatelessWidget {
   // @ Initialize
   @override
   Widget build(BuildContext context) {
-    return SonrTheme(Scaffold(
-        appBar: SonrExitAppBar(
-          "/home/transfer",
-          title: Get.find<SonrService>().code.value,
-        ),
-        backgroundColor: NeumorphicTheme.baseColor(context),
-        body: SafeArea(
-            child: Stack(
-          children: <Widget>[
-            // @ Range Lines
-            Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: CustomPaint(
-                  size: Size(Get.width, Get.height),
-                  painter: ZonePainter(),
-                  child: Container(),
-                )),
+    return SonrTheme(
+        child: Scaffold(
+            appBar: SonrExitAppBar(
+              "/home/transfer",
+              title: Get.find<SonrService>().code.value,
+            ),
+            backgroundColor: NeumorphicTheme.baseColor(context),
+            body: SafeArea(
+                child: Stack(
+              children: <Widget>[
+                // @ Range Lines
+                Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: CustomPaint(
+                      size: Size(Get.width, Get.height),
+                      painter: ZonePainter(),
+                      child: Container(),
+                    )),
 
-            // @ Lobby View
-            LobbyView(),
+                // @ Lobby View
+                LobbyView(),
 
-            // @ Compass View
-            CompassView(),
-          ],
-        ))));
+                // @ Compass View
+                CompassView(),
+              ],
+            ))));
   }
 }

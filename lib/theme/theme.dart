@@ -1,12 +1,11 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-export '../widgets/animation.dart';
 export 'appbar.dart';
 export 'button.dart';
 export 'color.dart';
 export 'icon.dart';
+export '../widgets/animation.dart';
 export '../widgets/painter.dart';
 export '../widgets/text.dart';
-export 'window.dart';
 
 export 'package:google_fonts/google_fonts.dart';
 export 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ export 'package:supercharged/supercharged.dart';
 
 // ^ Sonr Global Theme Data ^ //
 // ignore: non_constant_identifier_names
-NeumorphicTheme SonrTheme(Widget child) {
+NeumorphicTheme SonrTheme({@required Widget child}) {
   return NeumorphicTheme(
       themeMode: ThemeMode.light, //or dark / system
       darkTheme: NeumorphicThemeData(

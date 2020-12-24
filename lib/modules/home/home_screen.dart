@@ -20,13 +20,14 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // Build View
     controller.fetch();
-    return SonrTheme(Scaffold(
-        backgroundColor: NeumorphicTheme.baseColor(context),
-        appBar: SonrHomeBar(() {
-          Get.offNamed("/profile");
-        }),
-        floatingActionButton: FloaterButton(),
-        body: _HomeView()));
+    return SonrTheme(
+        child: Scaffold(
+            backgroundColor: NeumorphicTheme.baseColor(context),
+            appBar: SonrHomeBar(() {
+              Get.offNamed("/profile");
+            }),
+            floatingActionButton: FloaterButton(),
+            body: _HomeView()));
   }
 }
 

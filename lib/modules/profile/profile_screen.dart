@@ -12,7 +12,8 @@ class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return SonrTheme(Scaffold(
+    return SonrTheme(
+        child: Scaffold(
       backgroundColor: NeumorphicTheme.baseColor(context),
       body: _SliverViews(),
       floatingActionButton: NeumorphicFloatingActionButton(

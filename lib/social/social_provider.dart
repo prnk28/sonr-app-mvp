@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:http/http.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/social/medium_data.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -7,7 +7,7 @@ import 'package:sonar_app/theme/theme.dart';
 const K_RSS_API = 'https://api.rss2json.com/v1/api.json?rss_url=';
 const K_MEDIUM_FEED = 'https://medium.com/feed/@';
 
-class SocialMediaProvider extends GetConnect {
+class SocialMediaProvider extends GetxService {
   // ^ Gets Medium Data as RSS Feed then Converts to JSON ^ //
   Future<MediumData> getMedium(String userID) async {
     //  Request with UserID
