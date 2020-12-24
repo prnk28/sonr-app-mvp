@@ -3,21 +3,21 @@ import 'package:rive/rive.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
-class TilePreviewRadio extends StatefulWidget {
+class AnimatedTileRadio extends StatefulWidget {
   // Properties
   final Contact_SocialTile_TileType type;
   final ValueChanged<dynamic> onChanged;
   final dynamic groupValue;
 
-  const TilePreviewRadio(this.type,
+  const AnimatedTileRadio(this.type,
       {Key key, @required this.onChanged, @required this.groupValue})
       : super(key: key);
 
   @override
-  _TilePreviewRadioState createState() => _TilePreviewRadioState();
+  _AnimatedTileRadioState createState() => _AnimatedTileRadioState();
 }
 
-class _TilePreviewRadioState extends State<TilePreviewRadio> {
+class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
   Artboard _riveArtboard;
   @override
   void initState() {

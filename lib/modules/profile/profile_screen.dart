@@ -13,11 +13,11 @@ class ProfileScreen extends GetView<ProfileController> {
     // Build View
     return SonrTheme(Scaffold(
         backgroundColor: NeumorphicTheme.baseColor(context),
-        body: _ProfileView()));
+        body: _SliverViews()));
   }
 }
 
-class _ProfileView extends GetView<ProfileController> {
+class _SliverViews extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -31,12 +31,13 @@ class _ProfileView extends GetView<ProfileController> {
           slivers: [
             // @ Builds Profile Header
             SliverAppBar(
-              automaticallyImplyLeading: false,
-              toolbarHeight: kToolbarHeight + 16 * 2,
-              flexibleSpace: ContactHeader(),
               pinned: true,
               floating: true,
               snap: true,
+              primary: true,
+              automaticallyImplyLeading: false,
+              toolbarHeight: kToolbarHeight + 16 * 2,
+              flexibleSpace: ContactHeader(),
               expandedHeight: 285,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +51,7 @@ class _ProfileView extends GetView<ProfileController> {
                       style: NeumorphicStyle(
                           intensity: 0.6,
                           boxShape: NeumorphicBoxShape.circle(),
-                          color: Colors.grey[200],
+                          color: K_BASE_COLOR,
                           shape: NeumorphicShape.flat,
                           depth: 8),
                       child: SonrIcon.gradient(
@@ -68,7 +69,7 @@ class _ProfileView extends GetView<ProfileController> {
                       style: NeumorphicStyle(
                           intensity: 0.6,
                           boxShape: NeumorphicBoxShape.circle(),
-                          color: Colors.grey[200],
+                          color: K_BASE_COLOR,
                           shape: NeumorphicShape.flat,
                           depth: 8),
                       child: SonrIcon.gradient(Icons.more_horiz_outlined,

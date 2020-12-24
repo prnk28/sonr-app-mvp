@@ -4,7 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
-import 'package:sonar_app/modules/profile/tile_preview.dart';
+import 'package:sonar_app/modules/profile/anim_radio.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -148,7 +148,7 @@ class TileDialog extends GetView<TileController> {
   _buildNextButton({bool expanded = false}) {
     return NeumorphicButton(
         margin:
-            expanded ? EdgeInsets.only(left: 50, right: 50) : EdgeInsets.zero,
+            expanded ? EdgeInsets.only(left: 60, right: 80) : EdgeInsets.zero,
         onPressed: () {
           controller.nextStep();
         },
@@ -156,9 +156,7 @@ class TileDialog extends GetView<TileController> {
             depth: 8,
             color: K_BASE_COLOR,
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-        padding: expanded
-            ? EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20)
-            : EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
+        padding: EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -167,7 +165,7 @@ class TileDialog extends GetView<TileController> {
                 : SonrText.normal("Next"),
             SonrIcon.gradient(
                 Icons.arrow_right, FlutterGradientNames.eternalConstance,
-                size: 24)
+                size: 30)
           ],
         ));
   }
@@ -202,13 +200,12 @@ class _DropdownAddView extends StatefulWidget {
 
 class _DropdownAddViewState extends State<_DropdownAddView> {
   // Initialize Tile
-  dynamic _dropValue;
+  Contact_SocialTile_Provider _dropValue;
 
   // Build View As Stateless
   @override
   Widget build(BuildContext context) {
     return Column(
-      key: UniqueKey(),
       children: [
         // @ InfoGraph
         _InfoText(index: 1, text: "Choose a Social Media to Add"),
@@ -244,24 +241,22 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
                 // @ Custom Dropdown Items
                 items: List<DropdownMenuItem>.generate(widget.options.length,
                     (index) {
-                  // Pull Options
-                  var value = widget.options[index];
-
                   // Create Dropdown Menu Items
                   return DropdownMenuItem(
                     child: Row(children: [
-                      SonrIcon.socialFromProvider(IconType.Normal, value),
+                      SonrIcon.socialFromProvider(
+                          IconType.Normal, widget.options[index]),
                       Padding(padding: EdgeInsets.all(4)),
-                      Text(value.toString())
+                      Text(widget.options[index].toString())
                     ]),
-                    value: value,
+                    value: widget.options[index],
                   );
                 }),
                 onChanged: (value) {
+                  Get.find<TileController>().setProvider(value);
                   setState(() {
                     this._dropValue = value;
                   });
-                  Get.find<TileController>().setProvider(value);
                 },
               ),
             )),
@@ -289,7 +284,7 @@ class _SetInfoViewState extends State<_SetInfoView> {
     var item = SocialMediaItem.fromProviderData(tile.provider);
 
     // Build View
-    return Column(key: UniqueKey(), children: [
+    return Column(children: [
       // @ InfoGraph
       _InfoText(index: 2, text: item.infoText),
       Padding(padding: EdgeInsets.all(20)),
@@ -336,7 +331,7 @@ class _SetSizePosState extends State<_SetTypeView> {
   Contact_SocialTile_TileType _groupValue;
   @override
   Widget build(BuildContext context) {
-    return Column(key: UniqueKey(), children: [
+    return Column(children: [
       // @ InfoGraph
       _InfoText(index: 3, text: "Set your Tile's type"),
       Padding(padding: EdgeInsets.all(20)),
@@ -351,7 +346,7 @@ class _SetSizePosState extends State<_SetTypeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // Icon Option
-                TilePreviewRadio(Contact_SocialTile_TileType.Icon,
+                AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
                     groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
@@ -360,7 +355,7 @@ class _SetSizePosState extends State<_SetTypeView> {
                 }),
 
                 // Showcase Option
-                TilePreviewRadio(Contact_SocialTile_TileType.Showcase,
+                AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
                     groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
@@ -369,7 +364,7 @@ class _SetSizePosState extends State<_SetTypeView> {
                 }),
 
                 // Feed Option
-                TilePreviewRadio(Contact_SocialTile_TileType.Feed,
+                AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
                     groupValue: _groupValue, onChanged: (value) {
                   Get.find<TileController>().setType(value);
                   setState(() {
