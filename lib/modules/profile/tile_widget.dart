@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/data/medium_model.dart';
+import 'package:sonar_app/social/medium_data.dart';
 import 'package:sonar_app/modules/profile/tile_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -15,7 +15,7 @@ class SocialTile extends GetView<TileController> {
   SocialTile(this.data, this.index);
   @override
   Widget build(BuildContext context) {
-    controller.fetchData(data); // Initial Data Fetch
+    controller.getData(data); // Initial Data Fetch
     return GetBuilder<TileController>(
         id: "SocialTile",
         builder: (_) {
@@ -70,7 +70,7 @@ class SocialTile extends GetView<TileController> {
         controller.currentTile.value == data);
 
     // Medium Data
-    if (controller.fetchedData is MediumModel) {
+    if (controller.fetchedData is MediumData) {
       socialChild = MediumView(data.type, data: controller.fetchedData);
     }
 

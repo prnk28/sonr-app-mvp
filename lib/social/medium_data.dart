@@ -1,11 +1,14 @@
-class MediumModel {
+import 'dart:convert';
+
+class MediumData {
   String status;
   Feed feed;
   List<Post> posts;
 
-  MediumModel({this.status, this.feed, this.posts});
+  MediumData({this.status, this.feed, this.posts});
 
-  MediumModel.fromJson(Map<String, dynamic> json) {
+  MediumData.fromResponse(dynamic respBody) {
+    Map<String, dynamic> json = jsonDecode(respBody);
     status = json['status'];
     feed = json['feed'] != null ? new Feed.fromJson(json['feed']) : null;
     if (json['items'] != null) {

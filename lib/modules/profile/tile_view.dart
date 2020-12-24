@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sonar_app/data/medium_model.dart';
+import 'package:sonar_app/social/medium_data.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -11,11 +11,11 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 class MediumView extends StatelessWidget {
   // Properties
   final Contact_SocialTile_TileType type;
-  final MediumModel data;
+  final MediumData data;
   final Post post;
   MediumView(this.type, {this.data, this.post});
 
-  factory MediumView.feed(MediumModel data) {
+  factory MediumView.feed(MediumData data) {
     return MediumView(Contact_SocialTile_TileType.Feed, data: data);
   }
 

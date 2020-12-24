@@ -7,7 +7,7 @@ import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'social_provider.dart';
+import '../social/social_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DeviceService extends GetxService {

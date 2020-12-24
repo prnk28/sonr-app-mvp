@@ -1,5 +1,5 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-export 'animation.dart';
+export '../widgets/animation.dart';
 export 'appbar.dart';
 export 'button.dart';
 export 'color.dart';

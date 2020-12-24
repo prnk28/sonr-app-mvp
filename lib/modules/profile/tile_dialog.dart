@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/widgets/radio.dart';
@@ -257,28 +256,27 @@ class _SetInfoView extends GetView<TileController> {
         builder: (_) {
           // Find Data
           Contact_SocialTile tile = controller.currentTile.value;
-          var item = SocialMediaItem.fromProviderData(tile.provider);
 
           // Build View
           return SingleChildScrollView(
             reverse: true,
             child: Column(children: [
               // @ InfoGraph
-              _InfoText(index: 2, text: item.infoText),
+              _InfoText(index: 2, text: _getInfoText(tile.provider)),
               Padding(padding: EdgeInsets.all(20)),
-              _buildView(item)
+              _buildView(tile)
             ]),
           );
         });
   }
 
-  _buildView(SocialMediaItem item) {
-    if (item.reference == SocialRefType.Link) {
+  _buildView(Contact_SocialTile tile) {
+    if (controller.getAuthType(tile) == SocialAuthType.Link) {
       // @ Text Field
       return Obx(
         () => SonrTextField(
-            label: item.label,
-            hint: item.hint,
+            label: _getLabelText(tile.provider),
+            hint: _getHintText(tile.provider),
             value: _username.value,
             onChanged: (String value) {
               _username(value);
@@ -298,6 +296,59 @@ class _SetInfoView extends GetView<TileController> {
               width: Get.width - 80,
               margin: EdgeInsets.only(left: 12, right: 12),
               child: Container()));
+    }
+  }
+
+  _getInfoText(Contact_SocialTile_Provider provider) {
+    // Link Item
+    if (provider == Contact_SocialTile_Provider.Medium ||
+        provider == Contact_SocialTile_Provider.Spotify ||
+        provider == Contact_SocialTile_Provider.YouTube) {
+      return "Link your ${provider.toString()}";
+    }
+    // OAuth Item
+    else {
+      return "Connect with ${provider.toString()}";
+    }
+  }
+
+  _getHintText(Contact_SocialTile_Provider provider) {
+    switch (provider) {
+      case Contact_SocialTile_Provider.Facebook:
+        return "Insert facebook username ";
+      case Contact_SocialTile_Provider.Instagram:
+        return "Insert instagram username ";
+      case Contact_SocialTile_Provider.Medium:
+        return "@prnk28 (Incredible Posts BTW) ";
+      case Contact_SocialTile_Provider.Spotify:
+        return "Any public playlist or profile ";
+      case Contact_SocialTile_Provider.TikTok:
+        return "Insert TikTok username ";
+      case Contact_SocialTile_Provider.Twitter:
+        return "Insert Twitter username ";
+      case Contact_SocialTile_Provider.YouTube:
+        return "Insert channel name ";
+      default:
+    }
+  }
+
+  _getLabelText(Contact_SocialTile_Provider provider) {
+    switch (provider) {
+      case Contact_SocialTile_Provider.Facebook:
+        return "Profile";
+      case Contact_SocialTile_Provider.Instagram:
+        return "Profile";
+      case Contact_SocialTile_Provider.Medium:
+        return "Account Username";
+      case Contact_SocialTile_Provider.Spotify:
+        return "Account Username";
+      case Contact_SocialTile_Provider.TikTok:
+        return "Account Username";
+      case Contact_SocialTile_Provider.Twitter:
+        return "Twitter Handle";
+      case Contact_SocialTile_Provider.YouTube:
+        return "YouTube Channel";
+      default:
     }
   }
 }

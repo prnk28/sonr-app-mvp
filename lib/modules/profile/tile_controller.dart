@@ -1,8 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/data/medium_model.dart';
-import 'package:sonar_app/data/social_model.dart';
+import 'package:sonar_app/social/medium_data.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/social_provider.dart';
+import 'package:sonar_app/social/social_provider.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
@@ -15,6 +14,9 @@ enum TileState {
   NewStepTwo,
   NewStepThree,
 }
+
+enum SocialAuthType { Link, OAuth }
+enum SearchFilter { User, Playlist, Post }
 
 class TileController extends GetxController {
   // Properties
@@ -48,7 +50,7 @@ class TileController extends GetxController {
   }
 
   // ^ Fetch Tile Data ^
-  fetchData(Contact_SocialTile tile) async {
+  getData(Contact_SocialTile tile) async {
     // Data By Provdider
     if (tile.provider == Contact_SocialTile_Provider.Medium) {
       fetchedData =
@@ -57,6 +59,20 @@ class TileController extends GetxController {
 
     state = TileState.None;
     update(["SocialTile"]);
+  }
+
+  // ^ Determine Auth Type ^
+  getAuthType(Contact_SocialTile tile) {
+    // Link Item
+    if (tile.provider == Contact_SocialTile_Provider.Medium ||
+        tile.provider == Contact_SocialTile_Provider.Spotify ||
+        tile.provider == Contact_SocialTile_Provider.YouTube) {
+      return SocialAuthType.Link;
+    }
+    // OAuth Item
+    else {
+      return SocialAuthType.OAuth;
+    }
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
@@ -145,7 +161,7 @@ class TileController extends GetxController {
 
     // Get Medium Model
     if (data != null) {
-      if (data is MediumModel) {
+      if (data is MediumData) {
         return true;
       }
     }
