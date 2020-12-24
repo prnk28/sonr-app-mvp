@@ -40,7 +40,7 @@ class ProfileController extends GetxController {
   // ^ Fetch Values ^ //
   saveChanges() {
     // Set Core Values
-    Get.find<DeviceService>().saveContact();
+    Get.find<DeviceService>().save();
     firstName.refresh();
     lastName.refresh();
     phone.refresh();

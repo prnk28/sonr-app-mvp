@@ -8,6 +8,7 @@ import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/modules/card/card_invite.dart';
 import 'package:sonar_app/modules/card/card_view.dart';
+import 'package:sonar_app/modules/transfer/peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'sql_service.dart';
@@ -22,12 +23,10 @@ enum SonrStatus {
   Searching, // Searching -> Post Processing
   Pending, // Pending Authorization
   Busy, // In Transfer
-  Complete, // Completed Transfer
 }
 
 class SonrService extends GetxService {
-  // @ Set Properteries
-  final status = SonrStatus.Offline.obs;
+  // @ Set Properties
   final direction = 0.0.obs;
   final lobby = Map<String, Peer>().obs;
   final code = "".obs;
@@ -35,6 +34,7 @@ class SonrService extends GetxService {
   // @ Set References
   Node _node;
   bool _connected = false;
+  bool _processed = false;
 
   // @ Set Transfer Dependencies
   Payload_Type _payloadType;
@@ -82,7 +82,6 @@ class SonrService extends GetxService {
 
     // Set Connected
     _connected = true;
-    status(SonrStatus.Ready);
 
     // Push to Home Screen
     Get.offNamed("/home");
@@ -95,15 +94,12 @@ class SonrService extends GetxService {
   void queue(Payload_Type payType, {File file}) async {
     // Set Payload Type
     _payloadType = payType;
-    status(SonrStatus.Processing);
 
     // Queue File
     if (payType == Payload_Type.FILE) {
       _node.queue(file.path);
-    }
-    // Go straight to transfer
-    else if (payType == Payload_Type.CONTACT) {
-      status(SonrStatus.Searching);
+    } else {
+      _processed = true;
     }
 
     // Go to Transfer
@@ -113,9 +109,8 @@ class SonrService extends GetxService {
   // ^ Invite-Peer Event ^
   void invite(Peer p) async {
     // Check Status
-    if (status.value == SonrStatus.Searching) {
+    if (_processed) {
       await _node.invite(p, _payloadType);
-      status(SonrStatus.Pending);
     }
   }
 
@@ -123,31 +118,12 @@ class SonrService extends GetxService {
   void respond(bool decision) async {
     // Send Response
     await _node.respond(decision);
-
-    // Update Status
-    if (decision) {
-      status(SonrStatus.Ready);
-    } else {
-      status(SonrStatus.Busy);
-    }
   }
 
   // ^ Save and Reset Status ^
-  void finishContact(Contact c) async {
+  void saveContact(Contact c) async {
     // Save Card
     Get.find<SQLService>().saveContact(c);
-    if (status.value != SonrStatus.Complete) {
-      status(SonrStatus.Ready);
-    } else {
-      status(SonrStatus.Searching);
-    }
-  }
-
-  // ^ Save and Reset Status ^
-  void finishFile(Metadata m) async {
-    // Save Card
-    Get.find<SQLService>().saveFile(m);
-    status(SonrStatus.Ready);
   }
 
   // **************************
@@ -165,7 +141,7 @@ class SonrService extends GetxService {
   void _handleQueued(dynamic data) async {
     if (data is Metadata) {
       // Update data
-      status(SonrStatus.Searching);
+      _processed = true;
     }
   }
 
@@ -174,7 +150,7 @@ class SonrService extends GetxService {
     // Check Type
     if (data is AuthInvite) {
       // Inform Listener
-      status(SonrStatus.Pending);
+      Get.find<CardController>().setInvited();
       HapticFeedback.heavyImpact();
       Get.dialog(CardInvite(data), barrierColor: K_DIALOG_COLOR);
     }
@@ -187,17 +163,15 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload.type == Payload_Type.CONTACT) {
         HapticFeedback.vibrate();
-        status(SonrStatus.Complete);
+        Get.find<PeerController>().playCompleted();
         Get.dialog(CardView.fromTransferContact(data.payload.contact));
       } else {
         // For File
         if (data.decision) {
-          // Update Status
-          status(SonrStatus.Busy);
+          Get.find<PeerController>().playAccepted();
           HapticFeedback.lightImpact();
         } else {
-          // User Denied
-          status(SonrStatus.Searching);
+          Get.find<PeerController>().playDenied();
           HapticFeedback.mediumImpact();
         }
       }
@@ -216,7 +190,7 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
-      status(SonrStatus.Complete);
+      Get.find<PeerController>().playCompleted();
       HapticFeedback.vibrate();
     }
   }
@@ -226,7 +200,9 @@ class SonrService extends GetxService {
     if (data is Metadata) {
       // Reset Data
       progress(0.0);
-      status(SonrStatus.Complete);
+
+      // Save Card
+      Get.find<SQLService>().saveFile(data);
       Get.find<CardController>().received(data);
       HapticFeedback.vibrate();
     }

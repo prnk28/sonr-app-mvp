@@ -14,13 +14,8 @@ class CardController extends GetxController {
   RxList<CardModel> allCards = List<CardModel>().obs;
 
   // ^ Update State to be Invitation ^ //
-  CardController() {
-    Get.find<SonrService>().status.listen((s) {
-      // User Invited
-      if (s == SonrStatus.Pending) {
-        state(CardState.Invitation);
-      }
-    });
+  setInvited() {
+    state(CardState.Invitation);
   }
 
   // ^ Accept File Invite Request ^ //
@@ -38,7 +33,7 @@ class CardController extends GetxController {
     }
 
     // Save Contact
-    Get.find<SonrService>().finishContact(c);
+    Get.find<SonrService>().saveContact(c);
 
     // Create Contact Card
     var card = CardModel.fromContact(c);
@@ -67,7 +62,6 @@ class CardController extends GetxController {
 
     // Create Metadata Card
     var card = CardModel.fromMetadata(meta);
-    Get.find<SonrService>().finishFile(meta);
 
     // Add to Cards Display Last Card
     allCards.add(card);

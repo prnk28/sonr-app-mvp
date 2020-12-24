@@ -103,25 +103,10 @@ class DeviceService extends GetxService {
   }
 
   // ^ UpdateContact Event ^
-  void saveContact() async {
+  void save() async {
     // @ Validate
     if (hasUser && !user.isNullOrBlank) {
       // Update Contact
-      _prefs.setString("user", user.toJson());
-    }
-  }
-
-  // ^ UpdateContact Event ^
-  void updateSettings(SettingsItem item) async {
-    // @ Validate
-    if (hasUser && !user.isNullOrBlank) {
-      // Update Item
-      if (user.settings.contains(item)) {
-        int idx = user.settings.indexOf(item);
-        user.settings[idx] = item;
-      } else {
-        user.settings.add(item);
-      }
       _prefs.setString("user", user.toJson());
     }
   }

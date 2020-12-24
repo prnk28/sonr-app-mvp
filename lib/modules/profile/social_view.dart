@@ -7,7 +7,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
-// ^ Medium Social View/Preview ^ //
+// ** Medium Social View/Preview ** //
 class MediumView extends StatelessWidget {
   // Properties
   final Contact_SocialTile_TileType type;
@@ -126,3 +126,9 @@ class MediumView extends StatelessWidget {
     return cleaned = cleaned.substring(0, 130) + "...";
   }
 }
+
+// ** Twitter Social View/Preview ** //
+
+// ** Spotify Social View/Preview ** //
+
+// ** Spotify Social View/Preview ** //
