@@ -4,9 +4,10 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
-import 'package:sonar_app/widgets/tile_radio.dart';
+import 'package:sonar_app/widgets/radio.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 
 // ** Builds Add Social Form Dialog ** //
 class TileDialog extends GetView<TileController> {
@@ -216,20 +217,21 @@ class _DropdownAddView extends GetView<TileController> {
                 width: Get.width - 80,
                 margin: EdgeInsets.only(left: 12, right: 12),
 
-                // @ Stateful ValueBuilder
+                // @ ValueBuilder for DropDown
                 child: ValueBuilder<Contact_SocialTile_Provider>(
-                  initialValue: null,
-                  builder: (value, updateFn) {
-                    return DropdownButton(
+                  onUpdate: (value) {
+                    print("Value updated: $value");
+                    controller.currentTile.value.provider = value;
+                    controller.currentTile.refresh();
+                  },
+                  builder: (item, updateFn) {
+                    return DropDown<Contact_SocialTile_Provider>(
+                      showUnderline: false,
                       isExpanded: true,
-                      value: value,
-                      underline: Container(),
-                      style: GoogleFonts.poppins(
-                          fontSize: 16, color: Colors.black87),
-                      icon: Align(
-                          child: Icon(Icons.arrow_downward),
-                          alignment: Alignment.centerRight),
-                      elevation: 0,
+                      initialValue: item,
+                      items: options,
+                      customWidgets: List<Widget>.generate(
+                          options.length, (index) => _buildOptionWidget(index)),
                       hint: Text("Select...",
                           style: GoogleFonts.poppins(
                             fontSize: 16,
@@ -237,27 +239,23 @@ class _DropdownAddView extends GetView<TileController> {
                             color: Colors.black26,
                           )),
                       onChanged: updateFn,
-                      // @ Custom Dropdown Items
-                      items: options.map((item) {
-                        // Create Dropdown Menu Items
-                        return DropdownMenuItem(
-                          child: Row(children: [
-                            SonrIcon.socialFromProvider(IconType.Normal, item),
-                            Padding(padding: EdgeInsets.all(4)),
-                            Text(item.toString())
-                          ]),
-                          value: item,
-                        );
-                      }).toList(),
+                      isCleared:
+                          controller.currentTile.value.hasProvider() == false,
                     );
-                  },
-                  onUpdate: (value) {
-                    print("Value updated: $value");
-                    controller.setProvider(value);
                   },
                 ))),
       ],
     );
+  }
+
+  // ^ Builds option at index
+  _buildOptionWidget(int index) {
+    var item = options.elementAt(index);
+    return Row(children: [
+      SonrIcon.socialFromProvider(IconType.Normal, item),
+      Padding(padding: EdgeInsets.all(4)),
+      Text(item.toString())
+    ]);
   }
 }
 
@@ -271,7 +269,7 @@ class _SetInfoView extends GetView<TileController> {
         id: "TileDialog",
         builder: (_) {
           // Find Data
-          Contact_SocialTile tile = controller.currentTile;
+          Contact_SocialTile tile = controller.currentTile.value;
           var item = SocialMediaItem.fromProviderData(tile.provider);
 
           // Build View
@@ -295,8 +293,9 @@ class _SetInfoView extends GetView<TileController> {
             _username(value);
           },
           onEditingComplete: () {
-            Get.find<TileController>().setUsername(_username.value);
-            Get.find<TileController>().nextStep();
+            controller.currentTile.value.username = _username.value;
+            controller.currentTile.refresh();
+            controller.nextStep();
           }));
     } else {
       // @ Connect Button
@@ -339,7 +338,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Icon Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().setType(value);
+                  Get.find<TileController>().currentTile.value.type = value;
+                  Get.find<TileController>().currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -348,7 +348,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Showcase Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().setType(value);
+                  Get.find<TileController>().currentTile.value.type = value;
+                  Get.find<TileController>().currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -357,7 +358,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Feed Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().setType(value);
+                  Get.find<TileController>().currentTile.value.type = value;
+                  Get.find<TileController>().currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -368,6 +370,20 @@ class _SetSizePosState extends State<_SetTypeView> {
     ]);
   }
 }
+
+// ValueBuilder<Contact_SocialTile_TileType>(
+//             initialValue: _groupValue,
+//             builder: (value, updateFn) {
+//               return AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
+//                   groupValue: value, onChanged: updateFn);
+//             },
+//             // if you need to call something outside the builder method.
+//             onUpdate: (value) {
+//               Get.find<TileController>().setType(value);
+//               print("Value updated: $value");
+//             },
+//             onDispose: () => print("Widget unmounted"),
+//           ),
 
 // ^ Creates Infographic Text thats used in all Views ^ //
 class _InfoText extends StatelessWidget {

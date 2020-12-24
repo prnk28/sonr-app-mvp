@@ -78,12 +78,6 @@ class SonrText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // @ Generate Style
-    var style = GoogleFonts.poppins(
-        fontWeight: FontWeight.bold,
-        fontSize: size ?? 32.0,
-        color: color ?? _findTextColor());
-
     // @ Gradient Type Text
     if (isGradient) {
       return ShaderMask(
@@ -92,7 +86,10 @@ class SonrText extends StatelessWidget {
               ),
           child: Text(
             text,
-            style: style,
+            style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold,
+                fontSize: size ?? 32.0,
+                color: Colors.white),
           ));
     }
 

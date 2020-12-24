@@ -5,7 +5,7 @@ import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-import '../theme/color.dart';
+import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
 enum IconType { Neumorphic, Normal, Gradient, Thumbnail }

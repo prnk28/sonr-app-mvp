@@ -3,7 +3,7 @@ export 'animation.dart';
 export 'appbar.dart';
 export 'button.dart';
 export 'color.dart';
-export '../widgets/icon.dart';
+export 'icon.dart';
 export '../widgets/painter.dart';
 export '../widgets/text.dart';
 export 'window.dart';

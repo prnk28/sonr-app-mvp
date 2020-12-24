@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import '../widgets/icon.dart';
+import 'icon.dart';
 
 const Color K_BASE_COLOR = Color(0xffDDDDDD);
 const Color K_DIALOG_COLOR = Color.fromRGBO(0, 0, 0, 0.7);
