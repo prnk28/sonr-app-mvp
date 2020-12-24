@@ -163,15 +163,15 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload.type == Payload_Type.CONTACT) {
         HapticFeedback.vibrate();
-        Get.find<PeerController>().playCompleted();
+        Get.find<PeerController>().playCompleted(data.from);
         Get.dialog(CardView.fromTransferContact(data.payload.contact));
       } else {
         // For File
         if (data.decision) {
-          Get.find<PeerController>().playAccepted();
+          Get.find<PeerController>().playAccepted(data.from);
           HapticFeedback.lightImpact();
         } else {
-          Get.find<PeerController>().playDenied();
+          Get.find<PeerController>().playDenied(data.from);
           HapticFeedback.mediumImpact();
         }
       }
@@ -190,7 +190,7 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
-      Get.find<PeerController>().playCompleted();
+      Get.find<PeerController>().playCompleted(data);
       HapticFeedback.vibrate();
     }
   }

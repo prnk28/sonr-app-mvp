@@ -118,6 +118,7 @@ class SonrTextField extends StatefulWidget {
   final String label;
   final String hint;
   final String value;
+  final FocusNode focus;
 
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
@@ -127,6 +128,7 @@ class SonrTextField extends StatefulWidget {
       @required this.hint,
       @required this.value,
       this.onChanged,
+      this.focus,
       this.onEditingComplete});
 
   @override
@@ -165,6 +167,7 @@ class _SonrTextFieldState extends State<SonrTextField> {
           ),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
+            focusNode: widget.focus,
             onEditingComplete: () {
               this.widget.onEditingComplete();
             },

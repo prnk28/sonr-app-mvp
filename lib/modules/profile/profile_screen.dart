@@ -31,7 +31,7 @@ class _SliverViews extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // Get Tile Count
-      int count = controller.tiles.length;
+      int count = controller.socials.length;
 
       // Create View
       return NeumorphicBackground(
@@ -96,7 +96,7 @@ class _SliverViews extends GetView<ProfileController> {
             SliverStaggeredGrid(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return SocialTile(controller.tiles[index], index);
+                  return SocialTile(controller.socials[index], index);
                 }),
                 gridDelegate:
                     SliverStaggeredGridDelegateWithFixedCrossAxisCount(
@@ -106,7 +106,7 @@ class _SliverViews extends GetView<ProfileController> {
                         staggeredTileCount: count,
                         staggeredTileBuilder: (index) {
                           // Retreive Data
-                          var data = controller.tiles[index];
+                          var data = controller.socials[index];
 
                           // Feed Occupies 1 Whole Row/ 3 Columns
                           if (data.type == Contact_SocialTile_TileType.Feed) {

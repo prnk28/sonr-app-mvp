@@ -8,6 +8,7 @@ import 'package:sonr_core/sonr_core.dart';
 enum ProfileState {
   Viewing,
   Editing,
+  Dragging,
 }
 
 class ProfileController extends GetxController {
@@ -19,11 +20,13 @@ class ProfileController extends GetxController {
   final email = Get.find<DeviceService>().user.contact.email.obs;
   final website = Get.find<DeviceService>().user.contact.website.obs;
   final profilePic = Get.find<DeviceService>().user.contact.profilePic.obs;
-  final tiles = Get.find<DeviceService>().user.contact.socials.obs;
+  final socials = Get.find<DeviceService>().user.contact.socials.obs;
+  var tiles;
 
   // References
   bool _isEditing = false;
   ProfileController() {
+    tiles = socials;
     refresh();
   }
 
@@ -48,7 +51,7 @@ class ProfileController extends GetxController {
     email.refresh();
     website.refresh();
     profilePic.refresh();
-    tiles.refresh();
+    socials.refresh();
     update();
   }
 
@@ -65,11 +68,11 @@ class ProfileController extends GetxController {
   // ^ Save a Social Tile  ^ //
   saveSocialTile(Contact_SocialTile tile) {
     // Add Tile to Contact
-    if (tiles.contains(tile)) {
-      int index = tiles.indexOf(tile);
-      tiles[index] = tile;
+    if (socials.contains(tile)) {
+      int index = socials.indexOf(tile);
+      socials[index] = tile;
     } else {
-      tiles.add(tile);
+      socials.add(tile);
     }
 
     // Save Contact
@@ -78,8 +81,8 @@ class ProfileController extends GetxController {
 
   // ^ Remove a Social Tile ^ //
   removeSocialTile(Contact_SocialTile tile) {
-    if (tiles.contains(tile)) {
-      tiles.remove(tile);
+    if (socials.contains(tile)) {
+      socials.remove(tile);
     }
 
     // Save Contact
