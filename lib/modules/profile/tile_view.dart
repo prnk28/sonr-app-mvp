@@ -35,6 +35,7 @@ class MediumView extends StatelessWidget {
     // @ Build Feed View
     if (type == Contact_SocialTile_TileType.Feed) {
       return ListView.separated(
+        shrinkWrap: true,
         itemCount: data.posts.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {

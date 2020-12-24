@@ -103,7 +103,7 @@ class DeviceService extends GetxService {
   }
 
   // ^ UpdateContact Event ^
-  void save() async {
+  void saveContact(Contact contact) async {
     // @ Validate
     if (hasUser && !user.isNullOrBlank) {
       // Update Contact

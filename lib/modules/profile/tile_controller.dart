@@ -8,6 +8,7 @@ import 'package:sonr_core/models/models.dart';
 
 enum TileState {
   Loading,
+  Dragging,
   None,
   Editing,
   NewStepOne,

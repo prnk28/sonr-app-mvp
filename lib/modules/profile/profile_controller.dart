@@ -8,7 +8,6 @@ import 'package:sonr_core/sonr_core.dart';
 enum ProfileState {
   Viewing,
   Editing,
-  Dragging,
 }
 
 class ProfileController extends GetxController {
@@ -43,7 +42,15 @@ class ProfileController extends GetxController {
   // ^ Fetch Values ^ //
   saveChanges() {
     // Set Core Values
-    Get.find<DeviceService>().save();
+    Get.find<DeviceService>().saveContact(Contact()
+      ..firstName = firstName.value
+      ..lastName = lastName.value
+      ..phone = phone.value
+      ..email = email.value
+      ..website = website.value
+      ..profilePic = profilePic
+      ..socials.addAll(socials));
+
     firstName.refresh();
     lastName.refresh();
     phone.refresh();
@@ -68,7 +75,7 @@ class ProfileController extends GetxController {
   // ^ Save a Social Tile  ^ //
   saveSocialTile(Contact_SocialTile tile) {
     // Add Tile to Contact
-    if (socials.contains(tile)) {
+    if (socials.any((t) => t.provider == tile.provider)) {
       int index = socials.indexOf(tile);
       socials[index] = tile;
     } else {
