@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/painter.dart';
+import 'package:sonar_app/widgets/painter.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 

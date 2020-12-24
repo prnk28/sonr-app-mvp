@@ -1,7 +1,7 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'color.dart';
-import 'icon.dart';
-import 'text.dart';
+import '../widgets/icon.dart';
+import '../widgets/text.dart';
 
 NeumorphicButton rectangleButton(String text, Function onPressed,
     {NeumorphicShape shape = NeumorphicShape.concave}) {

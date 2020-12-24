@@ -4,7 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'icon.dart';
+import '../widgets/icon.dart';
 
 // ^ Sonr Global AppBar Data ^ //
 // ignore: non_constant_identifier_names

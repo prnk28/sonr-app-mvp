@@ -4,7 +4,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/social_model.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
-import 'package:sonar_app/modules/profile/anim_radio.dart';
+import 'package:sonar_app/widgets/tile_radio.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -191,16 +191,9 @@ class TileDialog extends GetView<TileController> {
 }
 
 // ^ Step 1 Select Provider ^ //
-class _DropdownAddView extends StatefulWidget {
+class _DropdownAddView extends GetView<TileController> {
   final List<Contact_SocialTile_Provider> options;
-  const _DropdownAddView(this.options, {Key key}) : super(key: key);
-  @override
-  _DropdownAddViewState createState() => _DropdownAddViewState();
-}
-
-class _DropdownAddViewState extends State<_DropdownAddView> {
-  // Initialize Tile
-  Contact_SocialTile_Provider _dropValue;
+  _DropdownAddView(this.options, {Key key}) : super(key: key);
 
   // Build View As Stateless
   @override
@@ -220,93 +213,91 @@ class _DropdownAddViewState extends State<_DropdownAddView> {
             ),
             margin: EdgeInsets.only(left: 14, right: 14),
             child: Container(
-              width: Get.width - 80,
-              margin: EdgeInsets.only(left: 12, right: 12),
-              child: DropdownButton(
-                isExpanded: true,
-                value: _dropValue,
-                underline: Container(),
-                style: GoogleFonts.poppins(fontSize: 16, color: Colors.black87),
-                icon: Align(
-                    child: Icon(Icons.arrow_downward),
-                    alignment: Alignment.centerRight),
-                elevation: 0,
-                hint: Text("Select...",
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black26,
-                    )),
+                width: Get.width - 80,
+                margin: EdgeInsets.only(left: 12, right: 12),
 
-                // @ Custom Dropdown Items
-                items: List<DropdownMenuItem>.generate(widget.options.length,
-                    (index) {
-                  // Create Dropdown Menu Items
-                  return DropdownMenuItem(
-                    child: Row(children: [
-                      SonrIcon.socialFromProvider(
-                          IconType.Normal, widget.options[index]),
-                      Padding(padding: EdgeInsets.all(4)),
-                      Text(widget.options[index].toString())
-                    ]),
-                    value: widget.options[index],
-                  );
-                }),
-                onChanged: (value) {
-                  Get.find<TileController>().setProvider(value);
-                  setState(() {
-                    this._dropValue = value;
-                  });
-                },
-              ),
-            )),
+                // @ Stateful ValueBuilder
+                child: ValueBuilder<Contact_SocialTile_Provider>(
+                  initialValue: null,
+                  builder: (value, updateFn) {
+                    return DropdownButton(
+                      isExpanded: true,
+                      value: value,
+                      underline: Container(),
+                      style: GoogleFonts.poppins(
+                          fontSize: 16, color: Colors.black87),
+                      icon: Align(
+                          child: Icon(Icons.arrow_downward),
+                          alignment: Alignment.centerRight),
+                      elevation: 0,
+                      hint: Text("Select...",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.black26,
+                          )),
+                      onChanged: updateFn,
+                      // @ Custom Dropdown Items
+                      items: options.map((item) {
+                        // Create Dropdown Menu Items
+                        return DropdownMenuItem(
+                          child: Row(children: [
+                            SonrIcon.socialFromProvider(IconType.Normal, item),
+                            Padding(padding: EdgeInsets.all(4)),
+                            Text(item.toString())
+                          ]),
+                          value: item,
+                        );
+                      }).toList(),
+                    );
+                  },
+                  onUpdate: (value) {
+                    print("Value updated: $value");
+                    controller.setProvider(value);
+                  },
+                ))),
       ],
     );
   }
 }
 
 // ^ Step 2 Connect to the provider API ^ //
-class _SetInfoView extends StatefulWidget {
-  const _SetInfoView({
-    Key key,
-  }) : super(key: key);
-  @override
-  _SetInfoViewState createState() => _SetInfoViewState();
-}
-
-class _SetInfoViewState extends State<_SetInfoView> {
-  String _username = "";
+class _SetInfoView extends GetView<TileController> {
+  final _username = "".obs;
 
   @override
   Widget build(BuildContext context) {
-    // Find Data
-    Contact_SocialTile tile = Get.find<TileController>().currentTile;
-    var item = SocialMediaItem.fromProviderData(tile.provider);
+    return GetBuilder<TileController>(
+        id: "TileDialog",
+        builder: (_) {
+          // Find Data
+          Contact_SocialTile tile = controller.currentTile;
+          var item = SocialMediaItem.fromProviderData(tile.provider);
 
-    // Build View
-    return Column(children: [
-      // @ InfoGraph
-      _InfoText(index: 2, text: item.infoText),
-      Padding(padding: EdgeInsets.all(20)),
-      _buildView(item)
-    ]);
+          // Build View
+          return Column(children: [
+            // @ InfoGraph
+            _InfoText(index: 2, text: item.infoText),
+            Padding(padding: EdgeInsets.all(20)),
+            _buildView(item)
+          ]);
+        });
   }
 
   _buildView(SocialMediaItem item) {
     if (item.reference == SocialRefType.Link) {
-      return SonrTextField(
+      // @ Text Field
+      return Obx(() => SonrTextField(
           label: item.label,
           hint: item.hint,
-          value: _username,
+          value: _username.value,
           onChanged: (String value) {
-            this._username = value;
+            _username(value);
           },
           onEditingComplete: () {
-            setState(() {
-              Get.find<TileController>().setUsername(_username);
-              Get.find<TileController>().nextStep();
-            });
-          });
+            Get.find<TileController>().setUsername(_username.value);
+            Get.find<TileController>().nextStep();
+          }));
     } else {
       // @ Connect Button
       return Neumorphic(
