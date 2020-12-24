@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/medium_model.dart';
@@ -78,9 +79,10 @@ class MediumView extends StatelessWidget {
   // ^ Build Feed Post for Medium ^ //
   _buildPost(Post post, {bool isShowcase = false}) {
     // Build View
-    return NeumorphicButton(
-      onPressed: () {
+    return GestureDetector(
+      onTap: () {
         Get.find<DeviceService>().launchURL(post.link);
+        HapticFeedback.lightImpact();
       },
       child: Container(
         width: isShowcase ? 150 : 275,

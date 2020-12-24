@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
@@ -9,7 +10,6 @@ import 'package:sonar_app/modules/card/card_invite.dart';
 import 'package:sonar_app/modules/card/card_view.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:vibration/vibration.dart';
 import 'sql_service.dart';
 
 export 'package:sonr_core/sonr_core.dart';
@@ -175,7 +175,7 @@ class SonrService extends GetxService {
     if (data is AuthInvite) {
       // Inform Listener
       status(SonrStatus.Pending);
-      Vibration.vibrate(duration: 250);
+      HapticFeedback.heavyImpact();
       Get.dialog(CardInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
@@ -186,8 +186,7 @@ class SonrService extends GetxService {
     if (data is AuthReply) {
       // Check if Sent Back Contact
       if (data.payload.type == Payload_Type.CONTACT) {
-        Vibration.vibrate(duration: 50);
-        Vibration.vibrate(duration: 100);
+        HapticFeedback.vibrate();
         status(SonrStatus.Complete);
         Get.dialog(CardView.fromTransferContact(data.payload.contact));
       } else {
@@ -195,11 +194,11 @@ class SonrService extends GetxService {
         if (data.decision) {
           // Update Status
           status(SonrStatus.Busy);
-          Vibration.vibrate(duration: 50);
-          Vibration.vibrate(duration: 100);
+          HapticFeedback.lightImpact();
         } else {
           // User Denied
           status(SonrStatus.Searching);
+          HapticFeedback.mediumImpact();
         }
       }
     }
@@ -218,6 +217,7 @@ class SonrService extends GetxService {
     // Reset Peer/Auth
     if (data is Peer) {
       status(SonrStatus.Complete);
+      HapticFeedback.vibrate();
     }
   }
 
@@ -228,6 +228,7 @@ class SonrService extends GetxService {
       progress(0.0);
       status(SonrStatus.Complete);
       Get.find<CardController>().received(data);
+      HapticFeedback.vibrate();
     }
   }
 

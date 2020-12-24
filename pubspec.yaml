@@ -31,7 +31,6 @@ dependencies:
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
   sensors: ^0.4.1+1
-  vibration: ^1.2.4
 
   # -- Data --
   gallery_saver: ^2.0.1

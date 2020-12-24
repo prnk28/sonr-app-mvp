@@ -5,11 +5,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/data/medium_model.dart';
 import 'package:sonar_app/modules/profile/tile_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
-import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:vibration/vibration.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'tile_dialog.dart';
 
 // ** Builds Social Tile ** //
 class SocialTile extends GetView<TileController> {
