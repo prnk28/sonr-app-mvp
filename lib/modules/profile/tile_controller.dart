@@ -25,6 +25,7 @@ class TileController extends GetxController {
 
   // Reactive
   final currentTile = Contact_SocialTile().obs;
+  final RxBool providerIsPublic = false.obs;
 
   // References
   bool _isEditing = false;
@@ -63,15 +64,19 @@ class TileController extends GetxController {
 
   // ^ Determine Auth Type ^
   getAuthType(Contact_SocialTile tile) {
-    // Link Item
-    if (tile.provider == Contact_SocialTile_Provider.Medium ||
-        tile.provider == Contact_SocialTile_Provider.Spotify ||
-        tile.provider == Contact_SocialTile_Provider.YouTube) {
+    if (providerIsPublic.value) {
       return SocialAuthType.Link;
-    }
-    // OAuth Item
-    else {
-      return SocialAuthType.OAuth;
+    } else {
+      // Link Item
+      if (tile.provider == Contact_SocialTile_Provider.Medium ||
+          tile.provider == Contact_SocialTile_Provider.Spotify ||
+          tile.provider == Contact_SocialTile_Provider.YouTube) {
+        return SocialAuthType.Link;
+      }
+      // OAuth Item
+      else {
+        return SocialAuthType.OAuth;
+      }
     }
   }
 
@@ -85,42 +90,21 @@ class TileController extends GetxController {
         update(["TileDialog"]);
       } else {
         // Display Error Snackbar
-        Get.snackbar("Hold Up!", "Select a social media provider first",
-            snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1500),
-            forwardAnimationCurve: Curves.bounceIn,
-            reverseAnimationCurve: Curves.easeOut,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            icon: Icon(
-              Icons.warning_outlined,
-              color: Colors.white,
-            ),
-            colorText: Colors.white);
+        SonrSnack.missing("Select a provider first");
       }
     }
     // @ Step 3
     else if (state == TileState.NewStepTwo) {
       // Update State
       if (currentTile.value.hasUsername()) {
-        if (await _checkMediumUsername()) {
+        if (await Get.find<SocialMediaProvider>().validateUsername(
+            currentTile.value.provider, currentTile.value.username)) {
           state = TileState.NewStepThree;
           update(["TileDialog"]);
         }
       } else {
         // Display Error Snackbar
-        Get.snackbar("Wait!", "Add your information",
-            snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1500),
-            forwardAnimationCurve: Curves.bounceIn,
-            reverseAnimationCurve: Curves.easeOut,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            icon: Icon(
-              Icons.warning_outlined,
-              color: Colors.white,
-            ),
-            colorText: Colors.white);
+        SonrSnack.missing("Add your username or Link your account");
       }
     }
     // @ Finish
@@ -134,38 +118,12 @@ class TileController extends GetxController {
         Get.back();
         state = TileState.None;
         currentTile(Contact_SocialTile());
+        providerIsPublic(false);
       } else {
         // Display Error Snackbar
-        Get.snackbar("Almost There!", "Pick a Tile Type",
-            snackStyle: SnackStyle.FLOATING,
-            duration: Duration(milliseconds: 1500),
-            forwardAnimationCurve: Curves.bounceIn,
-            reverseAnimationCurve: Curves.easeOut,
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.red,
-            icon: Icon(
-              Icons.warning_outlined,
-              color: Colors.white,
-            ),
-            colorText: Colors.white);
+        SonrSnack.missing("Pick a Tile Type", isLast: true);
       }
     }
-  }
-
-  // ^ Simple Data Validation ^ //
-  // TODO: Temporary find Universal Method of Handling API's
-  Future<bool> _checkMediumUsername() async {
-    // Get Feed Data For Username
-    var data = await Get.find<SocialMediaProvider>()
-        .getMedium(currentTile.value.username);
-
-    // Get Medium Model
-    if (data != null) {
-      if (data is MediumData) {
-        return true;
-      }
-    }
-    return false;
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
@@ -187,31 +145,14 @@ class TileController extends GetxController {
     }
   }
 
-  // ^ Edit a Social Tile Type ^ //
-  editType(Contact_SocialTile tile, dynamic data) {
-    // TODO
-    update(["SocialTile"]);
+  // ^ Helper method to judge Privacy^ //
+  bool doesProviderAllowVisibility(Contact_SocialTile_Provider provider) {
+    return (provider == Contact_SocialTile_Provider.Twitter ||
+        provider == Contact_SocialTile_Provider.TikTok ||
+        provider == Contact_SocialTile_Provider.YouTube);
   }
 
-  // ^ Edit a Social Tile Type ^ //
-  editPosition(Contact_SocialTile tile, dynamic data) {
-    // TODO
-    update(["SocialTile"]);
-  }
-
-  // ^ Edit a Social Tile Type ^ //
-  editShowcase(Contact_SocialTile tile, dynamic data) {
-    // TODO
-    update(["SocialTile"]);
-  }
-
-  // ^ Edit a Social Tile Type ^ //
-  editFeed(Contact_SocialTile tile, dynamic data) {
-    // TODO
-    update(["SocialTile"]);
-  }
-
-  // ^ Remove a Social Tile ^ //
+  // ^ Removes Current Tile ^ //
   deleteTile() {
     // Remove Tile from Contact and Save
     Get.find<ProfileController>().removeSocialTile(currentTile.value);

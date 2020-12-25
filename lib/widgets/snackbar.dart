@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
@@ -17,15 +19,17 @@ class SonrSnack {
         snackStyle: SnackStyle.FLOATING,
         duration: Duration(milliseconds: time),
         snackPosition: SnackPosition.BOTTOM,
+        forwardAnimationCurve: Curves.bounceIn,
+        reverseAnimationCurve: Curves.easeOut,
         backgroundColor: color,
         icon: icon,
         colorText: Colors.white);
   }
 
-  // ^ Invalid Operation ^ //
+  // ^ Succesful Operation ^ //
   factory SonrSnack.success(String message) {
     return SonrSnack(
-        "Success!",
+        "Success!!",
         message,
         Icon(
           Boxicons.bx_check_circle,
@@ -33,6 +37,23 @@ class SonrSnack {
         ),
         Colors.green,
         1250);
+  }
+
+  // ^ Missing Data ^ //
+  factory SonrSnack.missing(String message, {bool isLast}) {
+    // Get Missing Title
+    final random = new Random();
+    final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
+
+    return SonrSnack(
+        isLast ? "Almost There!" : list[random.nextInt(list.length)],
+        message,
+        Icon(
+          Boxicons.bx_message_square_error,
+          color: Colors.white,
+        ),
+        Colors.redAccent,
+        1500);
   }
 
   // ^ Invalid Operation ^ //
@@ -48,7 +69,7 @@ class SonrSnack {
         1250);
   }
 
-  // ^ Invalid Operation ^ //
+  // ^ Cancelled Operation ^ //
   factory SonrSnack.cancelled(String message) {
     return SonrSnack(
         "Cancelled.",
@@ -61,10 +82,10 @@ class SonrSnack {
         1250);
   }
 
-  // ^ Invalid Operation ^ //
+  // ^ Error on Operation ^ //
   factory SonrSnack.error(String message) {
     return SonrSnack(
-        "Error!",
+        "Error.",
         message,
         Icon(
           Boxicons.bx_error,

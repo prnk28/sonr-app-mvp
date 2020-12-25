@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -39,21 +40,6 @@ class ProfileController extends GetxController {
     }
   }
 
-  // ^ Fetch Values ^ //
-  saveChanges() {
-    Get.find<DeviceService>().contact.value.firstName = firstName.value;
-    Get.find<DeviceService>().contact.value.lastName = lastName.value;
-    Get.find<DeviceService>().contact.value.phone = phone.value;
-    Get.find<DeviceService>().contact.value.email = email.value;
-    Get.find<DeviceService>().contact.value.website = website.value;
-    Get.find<DeviceService>().contact.value.profilePic.clear();
-    Get.find<DeviceService>().contact.value.profilePic = profilePic.toList();
-    Get.find<DeviceService>().contact.value.socials.clear();
-    Get.find<DeviceService>().contact.value.socials.addAll(socials.toList());
-    Get.find<DeviceService>().contact.refresh();
-    update();
-  }
-
   // ^ Update User Profile Pic ^ //
   setPicture(File image) async {
     // Read Bytes from File into Ref
@@ -78,6 +64,7 @@ class ProfileController extends GetxController {
 
     // Save Contact
     saveChanges();
+    SonrSnack.success("Added new ${tile.provider.toString()} tile");
   }
 
   // ^ Remove a Social Tile ^ //
@@ -88,5 +75,20 @@ class ProfileController extends GetxController {
 
     // Save Contact
     saveChanges();
+  }
+
+  // ^ Save Changed Values to Storage ^ //
+  saveChanges() {
+    Get.find<DeviceService>().contact.value.firstName = firstName.value;
+    Get.find<DeviceService>().contact.value.lastName = lastName.value;
+    Get.find<DeviceService>().contact.value.phone = phone.value;
+    Get.find<DeviceService>().contact.value.email = email.value;
+    Get.find<DeviceService>().contact.value.website = website.value;
+    Get.find<DeviceService>().contact.value.profilePic.clear();
+    Get.find<DeviceService>().contact.value.profilePic = profilePic.toList();
+    Get.find<DeviceService>().contact.value.socials.clear();
+    Get.find<DeviceService>().contact.value.socials.addAll(socials.toList());
+    Get.find<DeviceService>().contact.refresh();
+    update();
   }
 }

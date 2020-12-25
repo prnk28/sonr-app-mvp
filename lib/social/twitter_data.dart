@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 // ^ API Endpoints ^ //
-const TWITTER_API_USERS =
-    "https://api.twitter.com/2/users/by?usernames=twitterdev,twitterapi,adsapi";
+const TWITTER_API_USERS = "https://api.twitter.com/2/users/by?usernames=";
 const TWITTER_FIELDS_USERS =
     "&user.fields=created_at&expansions=pinned_tweet_id&tweet.fields=author_id,created_at";
 

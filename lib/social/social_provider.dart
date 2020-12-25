@@ -80,6 +80,38 @@ class SocialMediaProvider extends GetxService {
     }
   }
 
+  // ^ Simple Username Validation ^ //
+  Future<bool> validateUsername(
+      Contact_SocialTile_Provider prov, String username) async {
+    // Initialize
+    var data;
+
+    // Check Provider
+    switch (prov) {
+      case Contact_SocialTile_Provider.Medium:
+        data = await getMedium(username);
+        break;
+      case Contact_SocialTile_Provider.Spotify:
+        // TODO
+        break;
+      case Contact_SocialTile_Provider.TikTok:
+        // TODO
+        break;
+      case Contact_SocialTile_Provider.Twitter:
+        data = await getTwitter(username);
+        break;
+      case Contact_SocialTile_Provider.YouTube:
+        // TODO
+        break;
+    }
+
+    // Check Data
+    if (data != null) {
+      return true;
+    }
+    return false;
+  }
+
   // * ------------------- * //
   // * ---- Retreival ---- * //
   // * ------------------- * //
@@ -95,13 +127,14 @@ class SocialMediaProvider extends GetxService {
   }
 
   // ^ Retreive Profile/ Tweets ^ //
-  Future<TwitterData> getTwitter() async {
+  Future<TwitterData> getTwitter(String username) async {
     // Perform Request
-    final resp = await get(TWITTER_API_USERS + TWITTER_FIELDS_USERS, headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${_apiKeys["twitterBearer"]}',
-    });
+    final resp = await get(TWITTER_API_USERS + username + TWITTER_FIELDS_USERS,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${_apiKeys["twitterBearer"]}',
+        });
 
     // Valid Status
     if (resp.statusCode == 200) {
@@ -116,9 +149,9 @@ class SocialMediaProvider extends GetxService {
   }
 
   // ^ Gets Medium Data as RSS Feed then Converts to JSON ^ //
-  Future<MediumData> getMedium(String userID) async {
+  Future<MediumData> getMedium(String username) async {
     //  Request with UserID
-    final resp = await get(MEDIUM_API_FEED + userID);
+    final resp = await get(MEDIUM_API_FEED + username);
 
     //  Valid Status
     if (resp.statusCode == 200) {

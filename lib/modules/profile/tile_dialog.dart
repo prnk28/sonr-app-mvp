@@ -204,7 +204,6 @@ class _DropdownAddView extends GetView<TileController> {
                 // @ ValueBuilder for DropDown
                 child: ValueBuilder<Contact_SocialTile_Provider>(
                   onUpdate: (value) {
-                    print("Value updated: $value");
                     controller.currentTile.value.provider = value;
                     controller.currentTile.refresh();
                   },
@@ -228,6 +227,36 @@ class _DropdownAddView extends GetView<TileController> {
                     );
                   },
                 ))),
+
+        // @ Public/Private Checker
+        Obx(() {
+          // Check Selected
+          if (controller.currentTile.value.hasProvider()) {
+            // Check Privacy
+            if (controller.doesProviderAllowVisibility(
+                controller.currentTile.value.provider)) {
+              return Container(
+                width: Get.width - 160,
+                margin: EdgeInsets.only(left: 12, right: 12),
+                child: Column(children: [
+                  // @ Set Text
+                  SonrText.normal("Is your account Public?"),
+
+                  // @ Create Check Box
+                  ValueBuilder<bool>(onUpdate: (value) {
+                    controller.providerIsPublic(value);
+                  }, builder: (isPublic, updateFn) {
+                    return NeumorphicCheckbox(
+                      onChanged: updateFn,
+                      value: isPublic,
+                    );
+                  })
+                ]),
+              );
+            }
+          }
+          return Container();
+        })
       ],
     );
   }
