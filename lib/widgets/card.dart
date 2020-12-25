@@ -3,62 +3,101 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:sonar_app/modules/card/card_controller.dart';
+import 'package:sonar_app/data/model_card.dart';
+import 'package:sonar_app/modules/home/home_controller.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-// ^ General Invite Builds from Invite Protobuf ^ //
-class CardInvite extends GetView<CardController> {
+enum CardState { None, Invitation, InProgress, Received, Viewing }
+
+// * ------------------------ * //
+// * ---- Card View --------- * //
+// * ------------------------ * //
+class SonrCard extends GetView<SonrCardController> {
   final AuthInvite invite;
-  CardInvite(this.invite);
+  final Contact contact;
+  final bool isInvite;
+
+  SonrCard(this.isInvite, {this.invite, this.contact});
+
+  factory SonrCard.fromInvite(AuthInvite inv) => SonrCard(true, invite: inv);
+
+  factory SonrCard.fromReplyAsContact(Contact c) => SonrCard(false, contact: c);
 
   @override
   Widget build(BuildContext context) {
-    // Initialize
-    Widget inviteView;
+    // @ Invite View
+    if (isInvite) {
+      // Initialize
+      Widget inviteView;
 
-    // File
-    if (invite.payload.type == Payload_Type.FILE) {
-      inviteView = _FileInvite(invite);
+      // File
+      if (invite.payload.type == Payload_Type.FILE) {
+        inviteView = _FileInvite(invite);
+      }
+      // Contact
+      else if (invite.payload.type == Payload_Type.CONTACT) {
+        inviteView = _ContactInvite(invite.payload.contact);
+      }
+      // Invalid Right Now
+      else {
+        print("Invalid File");
+        inviteView = Container();
+      }
+
+      return NeumorphicBackground(
+          margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
+          borderRadius: BorderRadius.circular(40),
+          backendColor: Colors.transparent,
+          child: Neumorphic(
+              style: NeumorphicStyle(color: K_BASE_COLOR),
+              child: Container(
+                child: Column(children: [
+                  // @ Top Right Close/Cancel Button
+                  closeButton(() {
+                    // Emit Event
+                    controller.declineInvite();
+
+                    // Pop Window
+                    Get.back();
+                  }, padTop: 8, padLeft: 8),
+
+                  // @ Invite View
+                  Padding(padding: EdgeInsets.all(8)),
+                  inviteView
+                ]),
+              )));
     }
-    // Contact
-    else if (invite.payload.type == Payload_Type.CONTACT) {
-      inviteView = _ContactInvite(invite.payload.contact);
-    }
-    // Invalid Right Now
+    // @ Reply View
     else {
-      print("Invalid File");
-      inviteView = Container();
+      assert(contact != null);
+
+      // Display Info
+      return Column(children: [
+        // Basic Contact Info - Make Expandable
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Padding(padding: EdgeInsets.all(8)),
+          Column(
+            children: [
+              SonrText.bold(contact.firstName),
+              SonrText.bold(contact.lastName),
+            ],
+          )
+        ]),
+
+        // Save Button
+        rectangleButton("Keep", () {
+          controller.acceptContact(contact, false);
+          Get.back();
+        }),
+      ]);
     }
-
-    return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
-        borderRadius: BorderRadius.circular(40),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-            style: NeumorphicStyle(color: K_BASE_COLOR),
-            child: Container(
-              child: Column(children: [
-                // @ Top Right Close/Cancel Button
-                closeButton(() {
-                  // Emit Event
-                  controller.declineInvite();
-
-                  // Pop Window
-                  Get.back();
-                }, padTop: 8, padLeft: 8),
-
-                // @ Invite View
-                Padding(padding: EdgeInsets.all(8)),
-                inviteView
-              ]),
-            )));
   }
 }
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
-class _ContactInvite extends GetView<CardController> {
+class _ContactInvite extends GetView<SonrCardController> {
   final Contact contact;
   _ContactInvite(this.contact);
 
@@ -99,7 +138,7 @@ class _ContactInvite extends GetView<CardController> {
 }
 
 // ^ File Invite Builds from Invite Protobuf ^ //
-class _FileInvite extends GetView<CardController> {
+class _FileInvite extends GetView<SonrCardController> {
   final AuthInvite invite;
   _FileInvite(this.invite);
 
@@ -248,5 +287,68 @@ class _FileInviteComplete extends StatelessWidget {
                 child: Container(child: Image.file(File(meta.path))))),
       ),
     );
+  }
+}
+
+// * ------------------------------ * //
+// * ---- Card Controller --------- * //
+// * ------------------------------ * //
+class SonrCardController extends GetxController {
+  // Properties
+  final state = CardState.None.obs;
+  bool accepted = false;
+  Metadata receivedFile;
+
+  // ^ Update State to be Invitation ^ //
+  setInvited() {
+    state(CardState.Invitation);
+  }
+
+  // ^ Accept File Invite Request ^ //
+  acceptFile() {
+    state(CardState.InProgress);
+    Get.find<SonrService>().respond(true);
+    accepted = true;
+  }
+
+  // ^ Accept Contact Invite Request ^ //
+  acceptContact(Contact c, bool sb) {
+    // Check if Send Back
+    if (sb) {
+      Get.find<SonrService>().respond(true);
+    }
+
+    // Save Contact
+    Get.find<SonrService>().saveContact(c);
+
+    // Create Contact Card
+    var card = CardModel.fromContact(c);
+    accepted = true;
+
+    // Add to Cards Display Last Card
+    Get.find<HomeController>().addCard(card);
+  }
+
+  // ^ Decline Invite Request ^ //
+  declineInvite() {
+    // Check if accepted
+    if (!accepted) {
+      Get.find<SonrService>().respond(false);
+    }
+
+    Get.back();
+    state(CardState.None);
+  }
+
+  // ^ Set File after Transfer^ //
+  received(Metadata meta) {
+    state(CardState.Received);
+    receivedFile = meta;
+
+    // Create Metadata Card
+    var card = CardModel.fromMetadata(meta);
+
+    // Add to Cards Display Last Card
+    Get.find<HomeController>().addCard(card);
   }
 }

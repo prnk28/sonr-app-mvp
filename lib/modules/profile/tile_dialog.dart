@@ -9,11 +9,11 @@ import 'package:sonr_core/sonr_core.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 
 // ** Builds Add Social Form Dialog ** //
-class TileDialog extends GetView<TileController> {
+class TileDialog extends GetWidget<TileController> {
   @override
   Widget build(BuildContext context) {
     // Update State
-    controller.createTile();
+    controller.newTile();
     return NeumorphicBackground(
         backendColor: Colors.transparent,
         margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
@@ -25,106 +25,94 @@ class TileDialog extends GetView<TileController> {
               child: Container(
                 width: 352,
                 height: Get.height - 200,
-                child: GetBuilder<TileController>(
-                    id: "TileDialog",
-                    builder: (_) {
-                      Widget topButtons;
-                      Widget bottomButtons;
+                child: Obx(() {
+                  Widget topButtons;
+                  Widget bottomButtons;
+                  Widget currentView;
 
-                      // @ Step Three: No Buttom Buttons, Cancel and Confirm
-                      if (controller.state == TileState.NewStepThree) {
-                        // Top Buttons
-                        topButtons = Container();
+                  // @ Step Three: No Buttom Buttons, Cancel and Confirm
+                  if (controller.step.value == TileStep.StepThree) {
+                    // Top Buttons
+                    currentView = _SetTypeView(controller);
+                    topButtons = Container();
 
-                        // Bottom Buttons
-                        bottomButtons = Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // @ Top Left Close/Cancel Button
-                              closeButton(() {
-                                Get.back();
-                                controller.state = TileState.None;
-                              }),
-                              // @ Top Right Confirm Button
-                              acceptButton(() {
-                                controller.nextStep();
-                              }),
-                            ]);
+                    // Bottom Buttons
+                    bottomButtons = Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // @ Top Left Close/Cancel Button
+                          closeButton(() {
+                            Get.back();
+                            controller.step(TileStep.Zero);
+                          }),
+                          // @ Top Right Confirm Button
+                          acceptButton(() {
+                            controller.nextStep();
+                          }),
+                        ]);
+                  }
+                  // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
+                  else if (controller.step.value == TileStep.StepTwo) {
+                    currentView = _SetInfoView(controller);
+                    topButtons = closeButton(() {
+                      Get.back();
+                      controller.step(TileStep.Zero);
+                    });
+
+                    // Bottom Buttons
+                    bottomButtons = Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [_buildBackButton(), _buildNextButton()]);
+                  }
+                  // @ Step One: Top Cancel Button, Bottom wide Next Button
+                  else {
+                    // Initialize List of Options
+                    var options = List<Contact_SocialTile_Provider>();
+
+                    // Iterate through All Options
+                    Contact_SocialTile_Provider.values.forEach((provider) {
+                      if (!Get.find<ProfileController>()
+                          .socials
+                          .any((tile) => tile.provider == provider)) {
+                        options.add(provider);
                       }
-                      // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
-                      else if (controller.state == TileState.NewStepTwo) {
-                        topButtons = closeButton(() {
-                          Get.back();
-                          controller.state = TileState.None;
-                        });
+                    });
 
-                        // Bottom Buttons
-                        bottomButtons = Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [_buildBackButton(), _buildNextButton()]);
-                      }
-                      // @ Step One: Top Cancel Button, Bottom wide Next Button
-                      else {
-                        // Top Buttons
-                        topButtons = closeButton(() {
-                          Get.back();
-                          controller.state = TileState.None;
-                        });
+                    currentView = _DropdownAddView(options, controller);
 
-                        // Bottom Buttons
-                        bottomButtons = _buildNextButton(expanded: true);
-                      }
+                    // Top Buttons
+                    topButtons = closeButton(() {
+                      Get.back();
+                      controller.step(TileStep.Zero);
+                    });
 
-                      // ^ Build View ^ //
-                      return Column(children: [
-                        // Top Buttons
-                        topButtons,
+                    // Bottom Buttons
+                    bottomButtons = _buildNextButton(expanded: true);
+                  }
 
-                        // Current View
-                        Padding(padding: EdgeInsets.all(5)),
-                        Align(
-                            key: UniqueKey(),
-                            alignment: Alignment.topCenter,
-                            child: Container(child: _buildCurrentView())),
+                  // ^ Build View ^ //
+                  return Column(children: [
+                    // Top Buttons
+                    topButtons,
 
-                        // Bottom Buttons
-                        Spacer(),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: bottomButtons,
-                        ),
-                        Padding(padding: EdgeInsets.all(15))
-                      ]);
-                    }),
+                    // Current View
+                    Padding(padding: EdgeInsets.all(5)),
+                    Align(
+                        key: UniqueKey(),
+                        alignment: Alignment.topCenter,
+                        child: Container(child: currentView)),
+
+                    // Bottom Buttons
+                    Spacer(),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: bottomButtons,
+                    ),
+                    Padding(padding: EdgeInsets.all(15))
+                  ]);
+                }),
               ),
             )));
-  }
-
-  // ^ Build Current View ^ //
-  _buildCurrentView() {
-    return GetBuilder<TileController>(
-        id: "TileDialog",
-        builder: (_) {
-          if (controller.state == TileState.NewStepTwo) {
-            return _SetInfoView();
-          } else if (controller.state == TileState.NewStepThree) {
-            return _SetTypeView();
-          } else {
-            // Initialize List of Options
-            var options = List<Contact_SocialTile_Provider>();
-
-            // Iterate through All Options
-            Contact_SocialTile_Provider.values.forEach((provider) {
-              if (!Get.find<ProfileController>()
-                  .socials
-                  .any((tile) => tile.provider == provider)) {
-                options.add(provider);
-              }
-            });
-
-            return _DropdownAddView(options);
-          }
-        });
   }
 
   // ^ Build Next Button with Finish at End ^ //
@@ -174,9 +162,10 @@ class TileDialog extends GetView<TileController> {
 }
 
 // ^ Step 1 Select Provider ^ //
-class _DropdownAddView extends GetView<TileController> {
+class _DropdownAddView extends StatelessWidget {
+  final TileController controller;
   final List<Contact_SocialTile_Provider> options;
-  _DropdownAddView(this.options, {Key key}) : super(key: key);
+  _DropdownAddView(this.options, this.controller, {Key key}) : super(key: key);
 
   // Build View As Stateless
   @override
@@ -227,7 +216,6 @@ class _DropdownAddView extends GetView<TileController> {
                     );
                   },
                 ))),
-
         // @ Public/Private Checker
         Obx(() {
           // Check Selected
@@ -236,22 +224,33 @@ class _DropdownAddView extends GetView<TileController> {
             if (controller.doesProviderAllowVisibility(
                 controller.currentTile.value.provider)) {
               return Container(
+                padding: EdgeInsets.only(top: 25),
                 width: Get.width - 160,
                 margin: EdgeInsets.only(left: 12, right: 12),
-                child: Column(children: [
-                  // @ Set Text
-                  SonrText.normal("Is your account Public?"),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // @ Set Text
+                      SonrText.normal("Is your account Public?", size: 18),
 
-                  // @ Create Check Box
-                  ValueBuilder<bool>(onUpdate: (value) {
-                    controller.providerIsPublic(value);
-                  }, builder: (isPublic, updateFn) {
-                    return NeumorphicCheckbox(
-                      onChanged: updateFn,
-                      value: isPublic,
-                    );
-                  })
-                ]),
+                      // @ Create Check Box
+                      ValueBuilder<bool>(
+                          initialValue: false,
+                          onUpdate: (value) {
+                            controller.providerIsPublic(value);
+                          },
+                          builder: (isPublic, updateFn) {
+                            return Container(
+                              width: 35,
+                              height: 35,
+                              child: NeumorphicCheckbox(
+                                onChanged: updateFn,
+                                value: isPublic,
+                              ),
+                            );
+                          })
+                    ]),
               );
             }
           }
@@ -273,10 +272,10 @@ class _DropdownAddView extends GetView<TileController> {
 }
 
 // ^ Step 2 Connect to the provider API ^ //
-class _SetInfoView extends GetView<TileController> {
+class _SetInfoView extends StatelessWidget {
   final _username = "".obs;
-
-  _SetInfoView();
+  final TileController controller;
+  _SetInfoView(this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -384,7 +383,8 @@ class _SetInfoView extends GetView<TileController> {
 
 // ^ Step 3 Set the Social Tile type ^ //
 class _SetTypeView extends StatefulWidget {
-  const _SetTypeView({Key key}) : super(key: key);
+  final TileController controller;
+  const _SetTypeView(this.controller, {Key key}) : super(key: key);
   @override
   _SetSizePosState createState() => _SetSizePosState();
 }
@@ -410,8 +410,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Icon Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().currentTile.value.type = value;
-                  Get.find<TileController>().currentTile.refresh();
+                  widget.controller.currentTile.value.type = value;
+                  widget.controller.currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -420,8 +420,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Showcase Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().currentTile.value.type = value;
-                  Get.find<TileController>().currentTile.refresh();
+                  widget.controller.currentTile.value.type = value;
+                  widget.controller.currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -430,8 +430,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Feed Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().currentTile.value.type = value;
-                  Get.find<TileController>().currentTile.refresh();
+                  widget.controller.currentTile.value.type = value;
+                  widget.controller.currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -442,20 +442,6 @@ class _SetSizePosState extends State<_SetTypeView> {
     ]);
   }
 }
-
-// ValueBuilder<Contact_SocialTile_TileType>(
-//             initialValue: _groupValue,
-//             builder: (value, updateFn) {
-//               return AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
-//                   groupValue: value, onChanged: updateFn);
-//             },
-//             // if you need to call something outside the builder method.
-//             onUpdate: (value) {
-//               Get.find<TileController>().setType(value);
-//               print("Value updated: $value");
-//             },
-//             onDispose: () => print("Widget unmounted"),
-//           ),
 
 // ^ Creates Infographic Text thats used in all Views ^ //
 class _InfoText extends StatelessWidget {
@@ -470,7 +456,6 @@ class _InfoText extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: Get.width - 80),
       child: Center(
         child: Row(
-            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

@@ -2,8 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/data/social_medium.dart';
-import 'package:sonar_app/data/social_twitter.dart';
+import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/social/medium_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/modules/social/twitter_view.dart';
@@ -11,75 +10,51 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Builds Social Tile ** //
-class SocialTileItem extends GetView<TileController> {
-  final Contact_SocialTile data;
+class SocialTileItem extends GetWidget<TileController> {
+  final Contact_SocialTile item;
   final int index;
-  SocialTileItem(this.data, this.index);
+  SocialTileItem(this.item, this.index) {
+    controller.setTile(item);
+  }
   @override
   Widget build(BuildContext context) {
-    controller.getData(data); // Initial Data Fetch
-    return GetBuilder<TileController>(
-        id: "SocialTile",
-        builder: (_) {
-          // @ Check If Data Loaded
-          if (controller.state == TileState.Loading) {
-            return Center(
-                child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+    return Stack(children: [
+      LongPressDraggable(
+          feedback: _buildView(controller.state.value == TileState.Editing,
+              isDragging: true),
+          child: _buildView(controller.state.value == TileState.Editing),
+          data: item,
+          childWhenDragging: Container(),
+          onDragStarted: () {
+            HapticFeedback.heavyImpact();
+            controller.state(TileState.Dragging);
+          }),
+      DragTarget<Contact_SocialTile>(
+        builder: (context, candidateData, rejectedData) {
+          return Container();
+        },
+        // Only accept same tiles
+        onWillAccept: (data) {
+          if (data.type == this.item.type) {
+            return true;
+          } else {
+            return false;
           }
-          // @ Other States
-          else {
-            // Build View
-            return Stack(children: [
-              Draggable(
-                  feedback: _buildView(isDragging: true),
-                  child: _buildView(),
-                  data: data,
-                  childWhenDragging: Container(),
-                  onDragStarted: () {
-                    HapticFeedback.heavyImpact();
-                    controller.state = TileState.Dragging;
-                    controller.update(["SocialTile"]);
-                  }),
-              DragTarget<Contact_SocialTile>(
-                builder: (context, candidateData, rejectedData) {
-                  return Container();
-                },
-                // Only accept same tiles
-                onWillAccept: (data) {
-                  if (data.type == this.data.type) {
-                    return true;
-                  } else {
-                    return false;
-                  }
-                },
-                // Switch Index Positions with animation
-                onAccept: (data) {
-                  print(data);
-                },
-              ),
-            ]);
-          }
-        });
+        },
+        // Switch Index Positions with animation
+        onAccept: (data) {
+          // Get Indexs
+          int selfIndex = Get.find<ProfileController>().socials.indexOf(item);
+          int incomIndex = Get.find<ProfileController>().socials.indexOf(data);
+          Get.find<ProfileController>().socials.swap(selfIndex, incomIndex);
+          Get.find<ProfileController>().socials.refresh();
+        },
+      ),
+    ]);
   }
 
-  // ^ Builds Data for Corresponding Model ^ //
-  Widget _buildView({bool isDragging = false}) {
-    // Initialize
-    Widget socialChild;
-    bool isEditing = (controller.state == TileState.Editing &&
-        controller.currentTile.value == data);
-
-    // Medium Data
-    if (controller.fetchedData is MediumData) {
-      socialChild = MediumView(data.type, data: controller.fetchedData);
-    }
-    // Twitter Data
-    else if (controller.fetchedData is TwitterData) {
-      socialChild = TwitterView(data.type, data: controller.fetchedData);
-    }
-
+  // ^ Builds Neumorohic Item ^ //
+  Widget _buildView(bool isEditing, {bool isDragging = false}) {
     // Theming View with Drag
     return Neumorphic(
       margin: EdgeInsets.all(4),
@@ -91,8 +66,21 @@ class SocialTileItem extends GetView<TileController> {
       child: Container(
         width: isDragging ? 125 : Get.width,
         height: isDragging ? 125 : Get.height,
-        child: isDragging ? Icon(Icons.drag_indicator) : socialChild,
+        child: isDragging ? Icon(Icons.drag_indicator) : _setSocialView(),
       ),
     );
+  }
+
+  // ^ Builds Corresponding SocialView ^ //
+  Widget _setSocialView() {
+    // Medium Data
+    if (item.provider == Contact_SocialTile_Provider.Medium) {
+      return MediumView(item);
+    }
+    // Twitter Data
+    else if (item.provider == Contact_SocialTile_Provider.Twitter) {
+      return TwitterView(item);
+    }
+    return Container();
   }
 }

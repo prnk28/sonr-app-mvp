@@ -4,9 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/modules/card/card_controller.dart';
-import 'package:sonar_app/modules/card/card_invite.dart';
-import 'package:sonar_app/modules/card/card_view.dart';
 import 'package:sonar_app/modules/transfer/peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -143,9 +140,9 @@ class SonrService extends GetxService {
     // Check Type
     if (data is AuthInvite) {
       // Inform Listener
-      Get.find<CardController>().setInvited();
+      Get.find<SonrCardController>().setInvited();
       HapticFeedback.heavyImpact();
-      Get.dialog(CardInvite(data), barrierColor: K_DIALOG_COLOR);
+      Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -157,7 +154,7 @@ class SonrService extends GetxService {
       if (data.payload.type == Payload_Type.CONTACT) {
         HapticFeedback.vibrate();
         Get.find<PeerController>().playCompleted(data.from);
-        Get.dialog(CardView.fromTransferContact(data.payload.contact));
+        Get.dialog(SonrCard.fromReplyAsContact(data.payload.contact));
       } else {
         // For File
         if (data.decision) {
@@ -197,7 +194,7 @@ class SonrService extends GetxService {
       // Save Card
       Get.find<SQLService>().storeFile(data);
       Get.find<DeviceService>().saveMedia(data);
-      Get.find<CardController>().received(data);
+      Get.find<SonrCardController>().received(data);
       HapticFeedback.vibrate();
     }
   }

@@ -71,12 +71,8 @@ class DeviceService extends GetxService {
           position = await user.position;
 
           // Initialize Dependent Services
-          await Get.putAsync(() => SonrService().init(
-                position,
-                user.username,
-                user.contact,
-              ));
-          await Get.putAsync(() => SocialMediaService().init());
+          Get.putAsync(
+              () => SonrService().init(position, user.username, user.contact));
         }
       } else {
         // Push to Register Screen
@@ -101,12 +97,8 @@ class DeviceService extends GetxService {
       position = await user.position;
 
       // Initialize Dependent Services
-      await Get.putAsync(() => SonrService().init(
-            position,
-            user.username,
-            user.contact,
-          ));
-      await Get.putAsync(() => SocialMediaService().init());
+      Get.putAsync(
+          () => SonrService().init(position, user.username, user.contact));
     } else {
       print("Location Permission Denied");
     }

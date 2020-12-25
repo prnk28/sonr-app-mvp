@@ -102,8 +102,8 @@ class _SliverViews extends GetView<ProfileController> {
                 gridDelegate:
                     SliverStaggeredGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
-                        mainAxisSpacing: 4.0,
-                        crossAxisSpacing: 4.0,
+                        mainAxisSpacing: 12.0,
+                        crossAxisSpacing: 6.0,
                         staggeredTileCount: count,
                         staggeredTileBuilder: (index) {
                           // Retreive Data

@@ -5,9 +5,9 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'home_controller.dart';
 
-class HomeCardItem extends GetView<HomeController> {
+class TransferItem extends GetView<HomeController> {
   final CardModel card;
-  HomeCardItem(this.card);
+  TransferItem(this.card);
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +41,9 @@ class _MediaItemView extends StatelessWidget {
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                     SonrText.normal(metadata.name),
-                     SonrText.normal(metadata.mime.type.toString()),
-                     SonrText.normal("Owner: " + metadata.owner.firstName),
+                    SonrText.normal(metadata.name),
+                    SonrText.normal(metadata.mime.type.toString()),
+                    SonrText.normal("Owner: " + metadata.owner.firstName),
                   ]),
             )));
   }
@@ -67,8 +67,8 @@ class _ContactItemView extends StatelessWidget {
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                     SonrText.normal(contact.firstName),
-                     SonrText.normal(contact.lastName),
+                    SonrText.normal(contact.firstName),
+                    SonrText.normal(contact.lastName),
                   ]),
             )));
   }

@@ -5,13 +5,16 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 enum TileState {
-  Loading,
-  Dragging,
   None,
+  Dragging,
   Editing,
-  NewStepOne,
-  NewStepTwo,
-  NewStepThree,
+}
+
+enum TileStep {
+  Zero,
+  StepOne,
+  StepTwo,
+  StepThree,
 }
 
 enum SocialAuthType { Link, OAuth }
@@ -19,49 +22,36 @@ enum SearchFilter { User, Playlist, Post }
 
 class TileController extends GetxController {
   // Properties
-  var fetchedData;
-  var state = TileState.Loading;
-
-  // Reactive
-  final currentTile = Contact_SocialTile().obs;
-  final RxBool providerIsPublic = false.obs;
+  final providerIsPublic = false.obs;
+  final currentTile = Rx<Contact_SocialTile>();
+  final state = TileState.None.obs;
+  final step = TileStep.Zero.obs;
 
   // References
   bool _isEditing = false;
 
   // ^ Create New Tile ^ //
-  createTile() {
-    currentTile(Contact_SocialTile());
-    state = TileState.NewStepOne;
-    update(["TileDialog"]);
+  setTile(Contact_SocialTile value) async {
+    // Set Tile
+    currentTile(value);
   }
 
   // ^ Toggle Editing Mode ^ //
-  editTile(Contact_SocialTile value) {
+  editTile() {
     _isEditing = !_isEditing;
     if (_isEditing) {
-      currentTile(value);
-      state = TileState.Editing;
+      state(TileState.Editing);
     } else {
       currentTile(Contact_SocialTile());
-      state = TileState.None;
+      state(TileState.None);
     }
     update(["SocialTile"]);
   }
 
-  // ^ Fetch Tile Data ^
-  getData(Contact_SocialTile tile) async {
-    // Data By Provdider
-    if (tile.provider == Contact_SocialTile_Provider.Medium) {
-      fetchedData =
-          await Get.find<SocialMediaService>().getMedium(tile.username);
-    } else if (tile.provider == Contact_SocialTile_Provider.Twitter) {
-      fetchedData =
-          await Get.find<SocialMediaService>().getTwitterPublic(tile.username);
-    }
-
-    state = TileState.None;
-    update(["SocialTile"]);
+  // ^ Create New Tile ^ //
+  newTile() {
+    currentTile(Contact_SocialTile());
+    step(TileStep.StepOne);
   }
 
   // ^ Determine Auth Type ^
@@ -85,24 +75,22 @@ class TileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (state == TileState.NewStepOne) {
+    if (step.value == TileStep.StepOne) {
       if (currentTile.value.hasProvider()) {
         // Update State
-        state = TileState.NewStepTwo;
-        update(["TileDialog"]);
+        step(TileStep.StepTwo);
       } else {
         // Display Error Snackbar
         SonrSnack.missing("Select a provider first");
       }
     }
     // @ Step 3
-    else if (state == TileState.NewStepTwo) {
+    else if (step.value == TileStep.StepTwo) {
       // Update State
       if (currentTile.value.hasUsername()) {
-        if (await Get.find<SocialMediaService>().validateUsername(
-            currentTile.value.provider, currentTile.value.username)) {
-          state = TileState.NewStepThree;
-          update(["TileDialog"]);
+        if (await Get.find<SocialMediaService>()
+            .validate(currentTile.value.provider, currentTile.value.username)) {
+          step(TileStep.StepThree);
         }
       } else {
         // Display Error Snackbar
@@ -112,13 +100,17 @@ class TileController extends GetxController {
     // @ Finish
     else {
       // Validate
-      if (currentTile.value.hasType() && state == TileState.NewStepThree) {
+      if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
+        // Set Position
+        currentTile.value.position =
+            Get.find<ProfileController>().socials.length - 1;
+
         // Add Tile to Contact and Save
         Get.find<ProfileController>().saveSocialTile(currentTile.value);
 
         // Reset Current Tile
         Get.back();
-        state = TileState.None;
+        step(TileStep.Zero);
         currentTile(Contact_SocialTile());
         providerIsPublic(false);
       } else {
@@ -131,25 +123,23 @@ class TileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
     // First Step
-    if (state == TileState.NewStepOne) {
-      state = TileState.None;
-      update(["TileDialog"]);
+    if (step.value == TileStep.StepOne) {
+      step(TileStep.Zero);
     }
     // Step 2
-    else if (state == TileState.NewStepTwo) {
-      state = TileState.NewStepOne;
-      update(["TileDialog"]);
+    else if (step.value == TileStep.StepTwo) {
+      step(TileStep.StepOne);
     }
     // Step 3
-    else if (state == TileState.NewStepThree) {
-      state = TileState.NewStepTwo;
-      update(["TileDialog"]);
+    else if (step.value == TileStep.StepThree) {
+      step(TileStep.StepTwo);
     }
   }
 
   // ^ Helper method to judge Privacy^ //
   bool doesProviderAllowVisibility(Contact_SocialTile_Provider provider) {
     return (provider == Contact_SocialTile_Provider.Twitter ||
+        provider == Contact_SocialTile_Provider.Spotify ||
         provider == Contact_SocialTile_Provider.TikTok ||
         provider == Contact_SocialTile_Provider.YouTube);
   }
