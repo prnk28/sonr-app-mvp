@@ -16,7 +16,6 @@ enum PermissionType {
   Photos,
   Notifications,
 }
-
 class DeviceService extends GetxService {
   // Properties
   final contact = Rx<Contact>();
