@@ -44,10 +44,7 @@ class SocialTileItem extends GetWidget<TileController> {
         // Switch Index Positions with animation
         onAccept: (data) {
           // Get Indexs
-          int selfIndex = Get.find<ProfileController>().socials.indexOf(item);
-          int incomIndex = Get.find<ProfileController>().socials.indexOf(data);
-          Get.find<ProfileController>().socials.swap(selfIndex, incomIndex);
-          Get.find<ProfileController>().socials.refresh();
+          Get.find<ProfileController>().swapSocialTiles(item, data);
         },
       ),
     ]);

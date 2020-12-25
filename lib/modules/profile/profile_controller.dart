@@ -77,6 +77,15 @@ class ProfileController extends GetxController {
     saveChanges();
   }
 
+  // ^ Swap Positions of Two Tiles ^ //
+  swapSocialTiles(Contact_SocialTile first, Contact_SocialTile second) {
+    int idxOne = socials.indexOf(first);
+    int idxTwo = socials.indexOf(second);
+    socials.swap(idxOne, idxTwo);
+    socials.refresh();
+    saveChanges();
+  }
+
   // ^ Save Changed Values to Storage ^ //
   saveChanges() {
     Get.find<DeviceService>().contact.value.firstName = firstName.value;
@@ -93,6 +102,7 @@ class ProfileController extends GetxController {
   }
 }
 
+// @ Dart Util to Swap Indexes In List //
 extension ListSwap<T> on List<T> {
   void swap(int index1, int index2) {
     var length = this.length;
