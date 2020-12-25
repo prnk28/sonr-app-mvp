@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,7 +70,7 @@ class DeviceService extends GetxService {
           position = await user.position;
 
           // Initialize Dependent Services
-          Get.put(() => SocialMediaProvider());
+          await Get.putAsync(() => SocialMediaProvider().init());
           await Get.putAsync(
               () => SonrService().init(position, user.contact, user.username));
         }
@@ -91,7 +97,7 @@ class DeviceService extends GetxService {
       position = await user.position;
 
       // Initialize Dependent Services
-      Get.put(() => SocialMediaProvider());
+      await Get.putAsync(() => SocialMediaProvider().init());
       await Get.putAsync(
           () => SonrService().init(position, user.contact, user.username));
     } else {
@@ -99,6 +105,13 @@ class DeviceService extends GetxService {
     }
   }
 
+  // ^ Retreive API Keys ^ //
+  Future<dynamic> getKeys() async {
+    final data = await rootBundle.loadString('assets/keys.json');
+    return jsonDecode(data);
+  }
+
+  // ^ Save a Social Auth ^ //
   Future<bool> saveAuth(
       Contact_SocialTile_Provider provider, List<String> auth) async {
     var result = await _prefs.setStringList(provider.toString(), auth);

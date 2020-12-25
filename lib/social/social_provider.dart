@@ -2,14 +2,22 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/social/medium_data.dart';
 import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_core/models/models.dart';
 
 // ** Handles SocialMedia ** //
 const K_RSS_API = 'https://api.rss2json.com/v1/api.json?rss_url=';
 const K_MEDIUM_FEED = 'https://medium.com/feed/@';
 
 class SocialMediaProvider extends GetxService {
+  Map _apiKeys;
+
+  init() async {
+    _apiKeys = await Get.find<DeviceService>().getKeys();
+  }
+
   // ^ Authenticates Facebook ^ //
   linkFacebook() {}
 
@@ -17,8 +25,8 @@ class SocialMediaProvider extends GetxService {
   linkTwitter() async {
     // Set Vars
     var twitterLogin = new TwitterLogin(
-      consumerKey: 'BXIzMYRhbPKXHplTPhPZa9RLB',
-      consumerSecret: 'eR1xkfFM9zReFzR3yxQN1nUBxZaiYS9eNTNFMtBiFaV6Mjej4M',
+      consumerKey: _apiKeys["twitterConsumer"],
+      consumerSecret: _apiKeys["twitterSecret"],
     );
 
     // Authorize User
@@ -27,10 +35,14 @@ class SocialMediaProvider extends GetxService {
     // Check Status
     switch (result.status) {
       case TwitterLoginStatus.loggedIn:
+        // Get Session Result
         var session = result.session;
-        // _sendTokenAndSecretToServer(session.token, session.secret);
 
-        var twitterAuth = [session.token, session.secret];
+        // Save Auth to Data
+        Get.find<DeviceService>().saveAuth(Contact_SocialTile_Provider.Twitter,
+            [session.token, session.secret]);
+
+        // Present Success
         SonrSnack.success("Twitter link success");
         break;
       case TwitterLoginStatus.cancelledByUser:
