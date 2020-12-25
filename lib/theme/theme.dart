@@ -5,6 +5,7 @@ export 'color.dart';
 export 'icon.dart';
 export '../widgets/animation.dart';
 export '../widgets/painter.dart';
+export '../widgets/snackbar.dart';
 export '../widgets/text.dart';
 
 export 'package:google_fonts/google_fonts.dart';

@@ -99,6 +99,12 @@ class DeviceService extends GetxService {
     }
   }
 
+  Future<bool> saveAuth(
+      Contact_SocialTile_Provider provider, List<String> auth) async {
+    var result = await _prefs.setStringList(provider.toString(), auth);
+    return result;
+  }
+
   // ^ Saves Media to Gallery ^ //
   Future<bool> saveMedia(Metadata media) async {
     // Get Data from Media
