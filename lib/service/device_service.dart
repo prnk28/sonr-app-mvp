@@ -111,6 +111,12 @@ class DeviceService extends GetxService {
     return jsonDecode(data);
   }
 
+  // ^ Get a Social Auth ^ //
+  List<String> getAuth(Contact_SocialTile_Provider provider) {
+    var result = _prefs.getStringList(provider.toString());
+    return result;
+  }
+
   // ^ Save a Social Auth ^ //
   Future<bool> saveAuth(
       Contact_SocialTile_Provider provider, List<String> auth) async {
