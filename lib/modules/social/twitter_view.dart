@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_twitter.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -17,8 +18,13 @@ class TwitterView extends StatefulWidget {
 }
 
 class _TwitterViewState extends State<TwitterView> {
-  TweetsModel data;
+  // Fetched Data
+  TweetsModel tweets;
+  TwitterUserModel user;
+
+  // References
   bool fetched = false;
+
   @override
   void initState() {
     super.initState();
@@ -27,10 +33,13 @@ class _TwitterViewState extends State<TwitterView> {
 
   // ^ Fetches Data ^ //
   _fetch() async {
-    var result =
+    var res =
         await Get.find<SocialMediaService>().getTweets(widget.item.username);
+    var resB = await Get.find<SocialMediaService>()
+        .getTwitterUser(widget.item.username);
     setState(() {
-      data = result;
+      tweets = res;
+      user = resB;
       fetched = true;
     });
   }
@@ -41,28 +50,25 @@ class _TwitterViewState extends State<TwitterView> {
     if (fetched) {
       // @ Build Feed View
       if (widget.item.type == Contact_SocialTile_TileType.Feed) {
-        return Container(
-          margin: EdgeInsets.all(8),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: data.tweets.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index) {
-              return _buildTweet(data.tweets.elementAt(index));
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                width: 25,
-                height: 25,
-              );
-            },
-          ),
+        return ListView.separated(
+          shrinkWrap: true,
+          itemCount: tweets.tweets.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (BuildContext context, int index) {
+            return _buildTweet(tweets.tweets.elementAt(index));
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(
+              width: 25,
+              height: 25,
+            );
+          },
         );
       }
       // @ Build ShowCase View
       else if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
         return Stack(
-            children: [_buildShowcase(data.tweets.first), _buildBadge()]);
+            children: [_buildShowcase(tweets.tweets.first), _buildBadge()]);
       }
       // @ Build Icon View
       else {
@@ -93,10 +99,12 @@ class _TwitterViewState extends State<TwitterView> {
     // Build View
     return GestureDetector(
       onTap: () {
-        // TODO: Get.find<DeviceService>().launchURL(tweet.id);
+        Get.find<DeviceService>().launchURL(
+            "https://twitter.com/${widget.item.username}/status/${tweet.id}");
         HapticFeedback.lightImpact();
       },
       child: Container(
+        padding: EdgeInsets.all(12),
         width: 150,
         child: SingleChildScrollView(
           child: Column(
@@ -113,21 +121,44 @@ class _TwitterViewState extends State<TwitterView> {
   _buildTweet(Tweet tweet) {
     // Build View
     return NeumorphicButton(
+      padding: EdgeInsets.all(12),
       onPressed: () {
-        // TODO: Get.find<DeviceService>().launchURL(post.link);
+        Get.find<DeviceService>().launchURL(
+            "https://twitter.com/${widget.item.username}/status/${tweet.id}");
       },
       child: Container(
         width: 275,
-        height: 180,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // SonrText.gradient(tweet.id, FlutterGradientNames.premiumDark,
-              //     size: 20),
-              SonrText.description(tweet.text, size: 14),
-              SonrText.normal(_cleanDate(tweet.createdAt), size: 14)
-            ],
-          ),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            GestureDetector(
+              onTap: () {
+                Get.find<DeviceService>().launchURL(user.data.first.url);
+              },
+              child: Container(
+                width: 55,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ClipOval(
+                          child: Image.network(user.data.first.profilePicUrl)),
+                      SonrText.normal(user.data.first.username, size: 10)
+                    ]),
+              ),
+            ),
+            Container(
+              width: 265,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SonrText.gradient(_cleanDate(tweet.createdAt),
+                      FlutterGradientNames.premiumDark,
+                      size: 20),
+                  SonrText.description(tweet.text, size: 14),
+                ],
+              ),
+            ),
+          ]),
         ),
       ),
     );

@@ -25,94 +25,92 @@ class TileDialog extends GetWidget<TileController> {
               child: Container(
                 width: 352,
                 height: Get.height - 200,
-                child: GetBuilder<TileController>(
-                    id: "TileDialog",
-                    builder: (_) {
-                      Widget topButtons;
-                      Widget bottomButtons;
-                      Widget currentView;
+                child: Obx(() {
+                  Widget topButtons;
+                  Widget bottomButtons;
+                  Widget currentView;
 
-                      // @ Step Three: No Buttom Buttons, Cancel and Confirm
-                      if (controller.step == TileStep.StepThree) {
-                        // Top Buttons
-                        currentView = _SetTypeView(controller);
-                        topButtons = Container();
+                  // @ Step Three: No Buttom Buttons, Cancel and Confirm
+                  if (controller.step.value == TileStep.StepThree) {
+                    // Top Buttons
+                    currentView = _SetTypeView(controller);
+                    topButtons = Container();
 
-                        // Bottom Buttons
-                        bottomButtons = Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // @ Top Left Close/Cancel Button
-                              closeButton(() {
-                                Get.back();
-                                controller.step = TileStep.Zero;
-                              }),
-                              // @ Top Right Confirm Button
-                              acceptButton(() {
-                                controller.nextStep();
-                              }),
-                            ]);
+                    // Bottom Buttons
+                    bottomButtons = Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // @ Top Left Close/Cancel Button
+                          closeButton(() {
+                            Get.back();
+                            controller.step(TileStep.Zero);
+                          }),
+                          // @ Top Right Confirm Button
+                          acceptButton(() {
+                            controller.nextStep();
+                          }),
+                        ]);
+                  }
+                  // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
+                  else if (controller.step.value == TileStep.StepTwo) {
+                    currentView = _SetInfoView(controller);
+                    topButtons = closeButton(() {
+                      Get.back();
+                      controller.step(TileStep.Zero);
+                    });
+
+                    // Bottom Buttons
+                    bottomButtons = Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [_buildBackButton(), _buildNextButton()]);
+                  }
+                  // @ Step One: Top Cancel Button, Bottom wide Next Button
+                  else {
+                    // Initialize List of Options
+                    var options = List<Contact_SocialTile_Provider>();
+
+                    // Iterate through All Options
+                    Contact_SocialTile_Provider.values.forEach((provider) {
+                      if (!Get.find<ProfileController>()
+                          .socials
+                          .any((tile) => tile.provider == provider)) {
+                        options.add(provider);
                       }
-                      // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
-                      else if (controller.step == TileStep.StepTwo) {
-                        currentView = _SetInfoView(controller);
-                        topButtons = closeButton(() {
-                          Get.back();
-                          controller.step = TileStep.Zero;
-                        });
+                    });
 
-                        // Bottom Buttons
-                        bottomButtons = Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [_buildBackButton(), _buildNextButton()]);
-                      }
-                      // @ Step One: Top Cancel Button, Bottom wide Next Button
-                      else {
-                        // Initialize List of Options
-                        var options = List<Contact_SocialTile_Provider>();
+                    currentView = _DropdownAddView(options, controller);
 
-                        // Iterate through All Options
-                        Contact_SocialTile_Provider.values.forEach((provider) {
-                          if (!Get.find<ProfileController>()
-                              .socials
-                              .any((tile) => tile.provider == provider)) {
-                            options.add(provider);
-                          }
-                        });
+                    // Top Buttons
+                    topButtons = closeButton(() {
+                      Get.back();
+                      controller.step(TileStep.Zero);
+                    });
 
-                        currentView = _DropdownAddView(options, controller);
+                    // Bottom Buttons
+                    bottomButtons = _buildNextButton(expanded: true);
+                  }
 
-                        // Top Buttons
-                        topButtons = closeButton(() {
-                          Get.back();
-                          controller.step = TileStep.Zero;
-                        });
+                  // ^ Build View ^ //
+                  return Column(children: [
+                    // Top Buttons
+                    topButtons,
 
-                        // Bottom Buttons
-                        bottomButtons = _buildNextButton(expanded: true);
-                      }
+                    // Current View
+                    Padding(padding: EdgeInsets.all(5)),
+                    Align(
+                        key: UniqueKey(),
+                        alignment: Alignment.topCenter,
+                        child: Container(child: currentView)),
 
-                      // ^ Build View ^ //
-                      return Column(children: [
-                        // Top Buttons
-                        topButtons,
-
-                        // Current View
-                        Padding(padding: EdgeInsets.all(5)),
-                        Align(
-                            key: UniqueKey(),
-                            alignment: Alignment.topCenter,
-                            child: Container(child: currentView)),
-
-                        // Bottom Buttons
-                        Spacer(),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: bottomButtons,
-                        ),
-                        Padding(padding: EdgeInsets.all(15))
-                      ]);
-                    }),
+                    // Bottom Buttons
+                    Spacer(),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: bottomButtons,
+                    ),
+                    Padding(padding: EdgeInsets.all(15))
+                  ]);
+                }),
               ),
             )));
   }

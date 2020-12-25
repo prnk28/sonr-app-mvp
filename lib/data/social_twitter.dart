@@ -5,7 +5,7 @@ const TWITTER_API_USERS = "https://api.twitter.com/2/users/by?usernames=";
 const TWITTER_API_TWEETS =
     "https://api.twitter.com/2/tweets/search/recent?query=from:";
 const TWITTER_FIELDS_USERS =
-    "&user.fields=created_at,description,entities,pinned_tweet_id,public_metrics,url,verified";
+    "&user.fields=created_at,description,entities,pinned_tweet_id,public_metrics,url,verified,profile_image_url";
 const TWITTER_FIELDS_TWEETS =
     "&tweet.fields=created_at&expansions=author_id&user.fields=created_at";
 
@@ -45,7 +45,7 @@ class TweetsModel {
 }
 
 class TwitterUserModel {
-  List<Data> data;
+  List<UserData> data;
   List<Errors> errors;
 
   TwitterUserModel({this.data, this.errors});
@@ -53,9 +53,9 @@ class TwitterUserModel {
   TwitterUserModel.fromResponse(dynamic respBody) {
     Map<String, dynamic> json = jsonDecode(respBody);
     if (json['data'] != null) {
-      data = new List<Data>();
+      data = new List<UserData>();
       json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data.add(new UserData.fromJson(v));
       });
     }
     if (json['errors'] != null) {
@@ -377,7 +377,7 @@ class Errors {
   }
 }
 
-class Data {
+class UserData {
   Entities entities;
   String createdAt;
   String description;
@@ -388,8 +388,9 @@ class Data {
   String name;
   bool verified;
   String url;
+  String profilePicUrl;
 
-  Data(
+  UserData(
       {this.entities,
       this.createdAt,
       this.description,
@@ -399,9 +400,10 @@ class Data {
       this.id,
       this.name,
       this.verified,
-      this.url});
+      this.url,
+      this.profilePicUrl});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  UserData.fromJson(Map<String, dynamic> json) {
     entities = json['entities'] != null
         ? new Entities.fromJson(json['entities'])
         : null;
@@ -416,6 +418,7 @@ class Data {
     name = json['name'];
     verified = json['verified'];
     url = json['url'];
+    profilePicUrl = json['profile_image_url'];
   }
 
   Map<String, dynamic> toJson() {

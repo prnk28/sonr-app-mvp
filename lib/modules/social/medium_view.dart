@@ -42,22 +42,19 @@ class _MediumViewState extends State<MediumView> {
     if (fetched) {
       // @ Build Feed View
       if (widget.item.type == Contact_SocialTile_TileType.Feed) {
-        return Container(
-          margin: EdgeInsets.all(8),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: data.posts.length,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (BuildContext context, int index) {
-              return _buildPost(data.posts.elementAt(index));
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                width: 25,
-                height: 25,
-              );
-            },
-          ),
+        return ListView.separated(
+          shrinkWrap: true,
+          itemCount: data.posts.length,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (BuildContext context, int index) {
+            return _buildPost(data.posts.elementAt(index));
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return SizedBox(
+              width: 25,
+              height: 25,
+            );
+          },
         );
       }
       // @ Build ShowCase View
@@ -98,6 +95,7 @@ class _MediumViewState extends State<MediumView> {
         HapticFeedback.lightImpact();
       },
       child: Container(
+        padding: EdgeInsets.all(12),
         width: 150,
         child: SingleChildScrollView(
           child: Column(
@@ -117,6 +115,7 @@ class _MediumViewState extends State<MediumView> {
   _buildPost(Post post) {
     // Build View
     return NeumorphicButton(
+      padding: EdgeInsets.all(12),
       onPressed: () {
         Get.find<DeviceService>().launchURL(post.link);
       },
@@ -131,7 +130,8 @@ class _MediumViewState extends State<MediumView> {
                   child: Image.network(post.thumbnail)),
               SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
                   size: 20),
-              SonrText.description(_cleanDescription(post.description),
+              SonrText.description(
+                  _cleanDescription(post.title.length, post.description),
                   size: 14),
               SonrText.normal(_cleanDate(post.pubDate), size: 14)
             ],
@@ -147,12 +147,19 @@ class _MediumViewState extends State<MediumView> {
     return output.format(date).toString();
   }
 
-  String _cleanDescription(String postDesc) {
+  String _cleanDescription(int titleLength, String postDesc) {
+    // Calculate Description length
+    int maxDesc = 118;
+    if (titleLength > 50) {
+      int factor = titleLength - 50;
+      maxDesc = maxDesc - factor;
+    }
+
     // Clean from HTML Tags
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
     String cleaned = postDesc.replaceAll(exp, '');
 
     // Limit Characters
-    return cleaned = cleaned.substring(0, 130) + "...";
+    return cleaned = cleaned.substring(0, maxDesc) + "...";
   }
 }

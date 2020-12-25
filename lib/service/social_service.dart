@@ -32,12 +32,10 @@ class SocialMediaService extends GetxService {
   // * ---- Authentication ---- * //
   // * ------------------------ * //
   // ^ Simple Username Validation ^ //
-  Future<bool> validateUsername(
-      Contact_SocialTile_Provider prov, String username) async {
-    // Check Provider
-    switch (prov) {
+  Future<bool> validate(Contact_SocialTile_Provider prv, String usr) async {
+    switch (prv) {
       case Contact_SocialTile_Provider.Medium:
-        MediumData data = await getMedium(username);
+        MediumData data = await getMedium(usr);
         return data.status == "ok";
         break;
       case Contact_SocialTile_Provider.Spotify:
@@ -47,13 +45,14 @@ class SocialMediaService extends GetxService {
         // TODO
         break;
       case Contact_SocialTile_Provider.Twitter:
-        TwitterUserModel data = await getTwitterUser(username);
+        TwitterUserModel data = await getTwitterUser(usr);
         return data.errors.isEmpty;
         break;
       case Contact_SocialTile_Provider.YouTube:
         // TODO
         break;
     }
+    return false;
   }
 
   // * ------------------- * //
@@ -94,7 +93,6 @@ class SocialMediaService extends GetxService {
 
     // Valid Status
     if (userResp.statusCode == 200) {
-      print(userResp.body);
       return TwitterUserModel.fromResponse(userResp.body);
     }
 

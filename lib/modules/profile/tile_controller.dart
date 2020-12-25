@@ -25,9 +25,9 @@ class TileController extends GetxController {
   final providerIsPublic = false.obs;
   final currentTile = Rx<Contact_SocialTile>();
   final state = TileState.None.obs;
+  final step = TileStep.Zero.obs;
 
   // References
-  TileStep step = TileStep.Zero;
   bool _isEditing = false;
 
   // ^ Create New Tile ^ //
@@ -50,9 +50,8 @@ class TileController extends GetxController {
 
   // ^ Create New Tile ^ //
   newTile() {
-    currentTile(Contact_SocialTile.create());
-    step = TileStep.StepOne;
-    update(["TileDialog"]);
+    currentTile(Contact_SocialTile());
+    step(TileStep.StepOne);
   }
 
   // ^ Determine Auth Type ^
@@ -76,24 +75,22 @@ class TileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (step == TileStep.StepOne) {
+    if (step.value == TileStep.StepOne) {
       if (currentTile.value.hasProvider()) {
         // Update State
-        step = TileStep.StepTwo;
-        update(["TileDialog"]);
+        step(TileStep.StepTwo);
       } else {
         // Display Error Snackbar
         SonrSnack.missing("Select a provider first");
       }
     }
     // @ Step 3
-    else if (step == TileStep.StepTwo) {
+    else if (step.value == TileStep.StepTwo) {
       // Update State
       if (currentTile.value.hasUsername()) {
-        if (await Get.find<SocialMediaService>().validateUsername(
-            currentTile.value.provider, currentTile.value.username)) {
-          step = TileStep.StepThree;
-          update(["TileDialog"]);
+        if (await Get.find<SocialMediaService>()
+            .validate(currentTile.value.provider, currentTile.value.username)) {
+          step(TileStep.StepThree);
         }
       } else {
         // Display Error Snackbar
@@ -103,13 +100,17 @@ class TileController extends GetxController {
     // @ Finish
     else {
       // Validate
-      if (currentTile.value.hasType() && step == TileStep.StepThree) {
+      if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
+        // Set Position
+        currentTile.value.position =
+            Get.find<ProfileController>().socials.length - 1;
+
         // Add Tile to Contact and Save
         Get.find<ProfileController>().saveSocialTile(currentTile.value);
 
         // Reset Current Tile
         Get.back();
-        step = TileStep.Zero;
+        step(TileStep.Zero);
         currentTile(Contact_SocialTile());
         providerIsPublic(false);
       } else {
@@ -122,19 +123,16 @@ class TileController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
     // First Step
-    if (step == TileStep.StepOne) {
-      step = TileStep.Zero;
-      update(["TileDialog"]);
+    if (step.value == TileStep.StepOne) {
+      step(TileStep.Zero);
     }
     // Step 2
-    else if (step == TileStep.StepTwo) {
-      step = TileStep.StepOne;
-      update(["TileDialog"]);
+    else if (step.value == TileStep.StepTwo) {
+      step(TileStep.StepOne);
     }
     // Step 3
-    else if (step == TileStep.StepThree) {
-      step = TileStep.StepTwo;
-      update(["TileDialog"]);
+    else if (step.value == TileStep.StepThree) {
+      step(TileStep.StepTwo);
     }
   }
 

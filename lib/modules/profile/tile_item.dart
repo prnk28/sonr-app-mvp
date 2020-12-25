@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/social/medium_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/modules/social/twitter_view.dart';
@@ -42,7 +43,11 @@ class SocialTileItem extends GetWidget<TileController> {
         },
         // Switch Index Positions with animation
         onAccept: (data) {
-          print(data);
+          // Get Indexs
+          int selfIndex = Get.find<ProfileController>().socials.indexOf(item);
+          int incomIndex = Get.find<ProfileController>().socials.indexOf(data);
+          Get.find<ProfileController>().socials.swap(selfIndex, incomIndex);
+          Get.find<ProfileController>().socials.refresh();
         },
       ),
     ]);
