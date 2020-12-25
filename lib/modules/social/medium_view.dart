@@ -42,19 +42,22 @@ class _MediumViewState extends State<MediumView> {
     if (fetched) {
       // @ Build Feed View
       if (widget.item.type == Contact_SocialTile_TileType.Feed) {
-        return ListView.separated(
-          shrinkWrap: true,
-          itemCount: data.posts.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) {
-            return _buildPost(data.posts.elementAt(index));
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              width: 25,
-              height: 25,
-            );
-          },
+        return Container(
+          margin: EdgeInsets.all(8),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: data.posts.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildPost(data.posts.elementAt(index));
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                width: 25,
+                height: 25,
+              );
+            },
+          ),
         );
       }
       // @ Build ShowCase View

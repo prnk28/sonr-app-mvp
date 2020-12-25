@@ -17,55 +17,39 @@ class SocialTileItem extends GetWidget<TileController> {
   }
   @override
   Widget build(BuildContext context) {
-    Widget socialChild;
-    // Medium Data
-    if (item.provider == Contact_SocialTile_Provider.Medium) {
-      socialChild = MediumView(item);
-    }
-    // Twitter Data
-    else if (item.provider == Contact_SocialTile_Provider.Twitter) {
-      socialChild = TwitterView(item);
-    }
-
-    return Obx(() {
-      // Build View
-      return Stack(children: [
-        LongPressDraggable(
-            feedback: _buildView(
-                controller.state == TileState.Editing, socialChild,
-                isDragging: true),
-            child:
-                _buildView(controller.state == TileState.Editing, socialChild),
-            data: item,
-            childWhenDragging: Container(),
-            onDragStarted: () {
-              HapticFeedback.heavyImpact();
-              controller.state = TileState.Dragging;
-            }),
-        DragTarget<Contact_SocialTile>(
-          builder: (context, candidateData, rejectedData) {
-            return Container();
-          },
-          // Only accept same tiles
-          onWillAccept: (data) {
-            if (data.type == this.item.type) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-          // Switch Index Positions with animation
-          onAccept: (data) {
-            print(data);
-          },
-        ),
-      ]);
-    });
+    return Stack(children: [
+      LongPressDraggable(
+          feedback: _buildView(controller.state.value == TileState.Editing,
+              isDragging: true),
+          child: _buildView(controller.state.value == TileState.Editing),
+          data: item,
+          childWhenDragging: Container(),
+          onDragStarted: () {
+            HapticFeedback.heavyImpact();
+            controller.state(TileState.Dragging);
+          }),
+      DragTarget<Contact_SocialTile>(
+        builder: (context, candidateData, rejectedData) {
+          return Container();
+        },
+        // Only accept same tiles
+        onWillAccept: (data) {
+          if (data.type == this.item.type) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        // Switch Index Positions with animation
+        onAccept: (data) {
+          print(data);
+        },
+      ),
+    ]);
   }
 
-  // ^ Builds Data for Corresponding Model ^ //
-  Widget _buildView(bool isEditing, Widget socialChild,
-      {bool isDragging = false}) {
+  // ^ Builds Neumorohic Item ^ //
+  Widget _buildView(bool isEditing, {bool isDragging = false}) {
     // Theming View with Drag
     return Neumorphic(
       margin: EdgeInsets.all(4),
@@ -77,8 +61,21 @@ class SocialTileItem extends GetWidget<TileController> {
       child: Container(
         width: isDragging ? 125 : Get.width,
         height: isDragging ? 125 : Get.height,
-        child: isDragging ? Icon(Icons.drag_indicator) : socialChild,
+        child: isDragging ? Icon(Icons.drag_indicator) : _setSocialView(),
       ),
     );
+  }
+
+  // ^ Builds Corresponding SocialView ^ //
+  Widget _setSocialView() {
+    // Medium Data
+    if (item.provider == Contact_SocialTile_Provider.Medium) {
+      return MediumView(item);
+    }
+    // Twitter Data
+    else if (item.provider == Contact_SocialTile_Provider.Twitter) {
+      return TwitterView(item);
+    }
+    return Container();
   }
 }

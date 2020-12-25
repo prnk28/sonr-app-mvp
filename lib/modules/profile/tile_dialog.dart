@@ -9,7 +9,7 @@ import 'package:sonr_core/sonr_core.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 
 // ** Builds Add Social Form Dialog ** //
-class TileDialog extends GetView<TileController> {
+class TileDialog extends GetWidget<TileController> {
   @override
   Widget build(BuildContext context) {
     // Update State
@@ -30,10 +30,12 @@ class TileDialog extends GetView<TileController> {
                     builder: (_) {
                       Widget topButtons;
                       Widget bottomButtons;
+                      Widget currentView;
 
                       // @ Step Three: No Buttom Buttons, Cancel and Confirm
-                      if (controller.state == TileState.NewStepThree) {
+                      if (controller.step == TileStep.StepThree) {
                         // Top Buttons
+                        currentView = _SetTypeView(controller);
                         topButtons = Container();
 
                         // Bottom Buttons
@@ -43,7 +45,7 @@ class TileDialog extends GetView<TileController> {
                               // @ Top Left Close/Cancel Button
                               closeButton(() {
                                 Get.back();
-                                controller.state = TileState.None;
+                                controller.step = TileStep.Zero;
                               }),
                               // @ Top Right Confirm Button
                               acceptButton(() {
@@ -52,10 +54,11 @@ class TileDialog extends GetView<TileController> {
                             ]);
                       }
                       // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
-                      else if (controller.state == TileState.NewStepTwo) {
+                      else if (controller.step == TileStep.StepTwo) {
+                        currentView = _SetInfoView(controller);
                         topButtons = closeButton(() {
                           Get.back();
-                          controller.state = TileState.None;
+                          controller.step = TileStep.Zero;
                         });
 
                         // Bottom Buttons
@@ -65,10 +68,24 @@ class TileDialog extends GetView<TileController> {
                       }
                       // @ Step One: Top Cancel Button, Bottom wide Next Button
                       else {
+                        // Initialize List of Options
+                        var options = List<Contact_SocialTile_Provider>();
+
+                        // Iterate through All Options
+                        Contact_SocialTile_Provider.values.forEach((provider) {
+                          if (!Get.find<ProfileController>()
+                              .socials
+                              .any((tile) => tile.provider == provider)) {
+                            options.add(provider);
+                          }
+                        });
+
+                        currentView = _DropdownAddView(options, controller);
+
                         // Top Buttons
                         topButtons = closeButton(() {
                           Get.back();
-                          controller.state = TileState.None;
+                          controller.step = TileStep.Zero;
                         });
 
                         // Bottom Buttons
@@ -85,7 +102,7 @@ class TileDialog extends GetView<TileController> {
                         Align(
                             key: UniqueKey(),
                             alignment: Alignment.topCenter,
-                            child: Container(child: _buildCurrentView())),
+                            child: Container(child: currentView)),
 
                         // Bottom Buttons
                         Spacer(),
@@ -98,33 +115,6 @@ class TileDialog extends GetView<TileController> {
                     }),
               ),
             )));
-  }
-
-  // ^ Build Current View ^ //
-  _buildCurrentView() {
-    return GetBuilder<TileController>(
-        id: "TileDialog",
-        builder: (_) {
-          if (controller.state == TileState.NewStepTwo) {
-            return _SetInfoView();
-          } else if (controller.state == TileState.NewStepThree) {
-            return _SetTypeView();
-          } else {
-            // Initialize List of Options
-            var options = List<Contact_SocialTile_Provider>();
-
-            // Iterate through All Options
-            Contact_SocialTile_Provider.values.forEach((provider) {
-              if (!Get.find<ProfileController>()
-                  .socials
-                  .any((tile) => tile.provider == provider)) {
-                options.add(provider);
-              }
-            });
-
-            return _DropdownAddView(options);
-          }
-        });
   }
 
   // ^ Build Next Button with Finish at End ^ //
@@ -174,9 +164,10 @@ class TileDialog extends GetView<TileController> {
 }
 
 // ^ Step 1 Select Provider ^ //
-class _DropdownAddView extends GetView<TileController> {
+class _DropdownAddView extends StatelessWidget {
+  final TileController controller;
   final List<Contact_SocialTile_Provider> options;
-  _DropdownAddView(this.options, {Key key}) : super(key: key);
+  _DropdownAddView(this.options, this.controller, {Key key}) : super(key: key);
 
   // Build View As Stateless
   @override
@@ -227,7 +218,6 @@ class _DropdownAddView extends GetView<TileController> {
                     );
                   },
                 ))),
-
         // @ Public/Private Checker
         Obx(() {
           // Check Selected
@@ -236,29 +226,33 @@ class _DropdownAddView extends GetView<TileController> {
             if (controller.doesProviderAllowVisibility(
                 controller.currentTile.value.provider)) {
               return Container(
+                padding: EdgeInsets.only(top: 25),
                 width: Get.width - 160,
                 margin: EdgeInsets.only(left: 12, right: 12),
-                child: Column(children: [
-                  // @ Set Text
-                  SonrText.normal("Is your account Public?"),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // @ Set Text
+                      SonrText.normal("Is your account Public?", size: 18),
 
-                  // @ Create Check Box
-                  ValueBuilder<bool>(
-                      initialValue: false,
-                      onUpdate: (value) {
-                        controller.providerIsPublic(value);
-                      },
-                      builder: (isPublic, updateFn) {
-                        return Container(
-                          width: 60,
-                          height: 60,
-                          child: NeumorphicCheckbox(
-                            onChanged: updateFn,
-                            value: isPublic,
-                          ),
-                        );
-                      })
-                ]),
+                      // @ Create Check Box
+                      ValueBuilder<bool>(
+                          initialValue: false,
+                          onUpdate: (value) {
+                            controller.providerIsPublic(value);
+                          },
+                          builder: (isPublic, updateFn) {
+                            return Container(
+                              width: 35,
+                              height: 35,
+                              child: NeumorphicCheckbox(
+                                onChanged: updateFn,
+                                value: isPublic,
+                              ),
+                            );
+                          })
+                    ]),
               );
             }
           }
@@ -280,10 +274,10 @@ class _DropdownAddView extends GetView<TileController> {
 }
 
 // ^ Step 2 Connect to the provider API ^ //
-class _SetInfoView extends GetView<TileController> {
+class _SetInfoView extends StatelessWidget {
   final _username = "".obs;
-
-  _SetInfoView();
+  final TileController controller;
+  _SetInfoView(this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -391,7 +385,8 @@ class _SetInfoView extends GetView<TileController> {
 
 // ^ Step 3 Set the Social Tile type ^ //
 class _SetTypeView extends StatefulWidget {
-  const _SetTypeView({Key key}) : super(key: key);
+  final TileController controller;
+  const _SetTypeView(this.controller, {Key key}) : super(key: key);
   @override
   _SetSizePosState createState() => _SetSizePosState();
 }
@@ -417,8 +412,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Icon Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().currentTile.value.type = value;
-                  Get.find<TileController>().currentTile.refresh();
+                  widget.controller.currentTile.value.type = value;
+                  widget.controller.currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -427,8 +422,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Showcase Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().currentTile.value.type = value;
-                  Get.find<TileController>().currentTile.refresh();
+                  widget.controller.currentTile.value.type = value;
+                  widget.controller.currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -437,8 +432,8 @@ class _SetSizePosState extends State<_SetTypeView> {
                 // Feed Option
                 AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
                     groupValue: _groupValue, onChanged: (value) {
-                  Get.find<TileController>().currentTile.value.type = value;
-                  Get.find<TileController>().currentTile.refresh();
+                  widget.controller.currentTile.value.type = value;
+                  widget.controller.currentTile.refresh();
                   setState(() {
                     this._groupValue = value;
                   });
@@ -449,20 +444,6 @@ class _SetSizePosState extends State<_SetTypeView> {
     ]);
   }
 }
-
-// ValueBuilder<Contact_SocialTile_TileType>(
-//             initialValue: _groupValue,
-//             builder: (value, updateFn) {
-//               return AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
-//                   groupValue: value, onChanged: updateFn);
-//             },
-//             // if you need to call something outside the builder method.
-//             onUpdate: (value) {
-//               Get.find<TileController>().setType(value);
-//               print("Value updated: $value");
-//             },
-//             onDispose: () => print("Widget unmounted"),
-//           ),
 
 // ^ Creates Infographic Text thats used in all Views ^ //
 class _InfoText extends StatelessWidget {
@@ -477,7 +458,6 @@ class _InfoText extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: Get.width - 80),
       child: Center(
         child: Row(
-            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

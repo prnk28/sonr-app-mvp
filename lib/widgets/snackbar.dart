@@ -40,7 +40,7 @@ class SonrSnack {
   }
 
   // ^ Missing Data ^ //
-  factory SonrSnack.missing(String message, {bool isLast}) {
+  factory SonrSnack.missing(String message, {bool isLast = false}) {
     // Get Missing Title
     final random = new Random();
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
