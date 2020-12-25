@@ -29,6 +29,7 @@ initServices() async {
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
+    Get.put<AppController>(AppController(), permanent: true);
     Get.put<SonrCardController>(SonrCardController(), permanent: true);
   }
 }
@@ -82,58 +83,68 @@ List<GetPage> getPages() {
 
 // ^ For handling inbound files/url ^ //
 class AppController extends GetxController {
-  StreamSubscription intentDataStreamSubscription;
-  List<SharedMediaFile> sharedFiles;
-  String sharedText;
+  StreamSubscription _intentDataStreamSubscription;
+  final incomingFile = Rx<SharedMediaFile>();
+  final incomingText = "".obs;
 
   @override
   void onInit() {
     // For sharing images coming from outside the app while the app is in the memory
-    intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream().listen(
-        (List<SharedMediaFile> value) {
-      sharedFiles = value;
-      print(sharedFiles);
+    _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
+        .listen((List<SharedMediaFile> value) {
+      incomingFile(value.first);
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
-      sharedFiles = value;
-      print(sharedFiles);
+      incomingFile(value.first);
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
-    intentDataStreamSubscription =
+    _intentDataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String value) {
-      sharedText = value;
-      print(sharedText);
+      incomingText(value);
     }, onError: (err) {
       print("getLinkStream error: $err");
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialText().then((String value) {
-      sharedText = value;
-      print(sharedText);
+      incomingText(value);
     });
     super.onInit();
   }
 
   @override
   void onClose() {
-    intentDataStreamSubscription.cancel();
+    _intentDataStreamSubscription.cancel();
     super.onClose();
   }
 }
 
 // ^ Root App Widget ^ //
-class App extends StatelessWidget {
+class App extends GetView<AppController> {
+  // @ Handle Sharing Intent
+  App() {
+    // Listen to Incoming File
+    controller.incomingFile.listen((file) {
+      print("Incoming File: " + file.toString());
+    });
+
+    // Listen to Incoming Text
+    controller.incomingText.listen((text) {
+      print("Incoming Text: " + text);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Connect to Sonr Network
     Get.find<DeviceService>().start();
 
+    // Build View
     return GetMaterialApp(
       getPages: getPages(),
       initialBinding: InitialBinding(),
