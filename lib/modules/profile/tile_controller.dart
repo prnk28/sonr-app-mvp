@@ -5,9 +5,8 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 enum TileState {
-  Loading,
-  Dragging,
   None,
+  Dragging,
   Editing,
   NewStepOne,
   NewStepTwo,
@@ -19,21 +18,17 @@ enum SearchFilter { User, Playlist, Post }
 
 class TileController extends GetxController {
   // Properties
-  var fetchedData;
-  var state = TileState.Loading;
-
-  // Reactive
-  final currentTile = Contact_SocialTile().obs;
-  final RxBool providerIsPublic = false.obs;
+  final providerIsPublic = false.obs;
+  final currentTile = Rx<Contact_SocialTile>();
 
   // References
+  var state = TileState.None;
   bool _isEditing = false;
 
   // ^ Create New Tile ^ //
-  createTile() {
-    currentTile(Contact_SocialTile());
-    state = TileState.NewStepOne;
-    update(["TileDialog"]);
+  setTile(Contact_SocialTile value) async {
+    // Set Tile
+    currentTile(value);
   }
 
   // ^ Toggle Editing Mode ^ //
@@ -49,19 +44,11 @@ class TileController extends GetxController {
     update(["SocialTile"]);
   }
 
-  // ^ Fetch Tile Data ^
-  getData(Contact_SocialTile tile) async {
-    // Data By Provdider
-    if (tile.provider == Contact_SocialTile_Provider.Medium) {
-      fetchedData =
-          await Get.find<SocialMediaService>().getMedium(tile.username);
-    } else if (tile.provider == Contact_SocialTile_Provider.Twitter) {
-      fetchedData =
-          await Get.find<SocialMediaService>().getTwitterPublic(tile.username);
-    }
-
-    state = TileState.None;
-    update(["SocialTile"]);
+  // ^ Create New Tile ^ //
+  newTile() {
+    currentTile(Contact_SocialTile());
+    state = TileState.NewStepOne;
+    update(["TileDialog"]);
   }
 
   // ^ Determine Auth Type ^

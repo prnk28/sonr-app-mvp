@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sonar_app/modules/home/transfer_item.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'home_controller.dart';
-import 'floater_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
   @override
@@ -16,7 +15,35 @@ class HomeScreen extends GetView<HomeController> {
             appBar: SonrHomeBar(() {
               Get.offNamed("/profile");
             }),
-            floatingActionButton: FloaterButton(),
+            floatingActionButton: Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 80,
+                  height: 240,
+                  child: Column(
+                      verticalDirection: VerticalDirection.up,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        NeumorphicButton(
+                          onPressed: () {
+                            controller.queueTest();
+                          },
+                          child: SonrText.normal("File"),
+                        ),
+                        NeumorphicButton(
+                          onPressed: () {
+                            controller.queueFatTest();
+                          },
+                          child: SonrText.normal("Fat File"),
+                        ),
+                        NeumorphicButton(
+                          onPressed: () {
+                            controller.queueContact();
+                          },
+                          child: SonrText.normal("Contact"),
+                        )
+                      ]),
+                )),
             body: _HomeView()));
   }
 }

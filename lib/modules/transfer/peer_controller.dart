@@ -11,8 +11,8 @@ import 'package:sonr_core/sonr_core.dart';
 class PeerController extends GetxController {
   // Properties
   final isContentVisible = false.obs;
-  final artboard = Rx<Artboard>();
   final offset = Offset(0, 0).obs;
+  final artboard = Rx<Artboard>();
   final proximity = Rx<Peer_Proximity>();
 
   // References

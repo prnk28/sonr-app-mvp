@@ -9,6 +9,6 @@ class TransferBinding implements Bindings {
   void dependencies() {
     Get.put<CompassController>(CompassController());
     Get.put<LobbyController>(LobbyController());
-    Get.create(() => PeerController());
+    Get.create<PeerController>(() => PeerController());
   }
 }

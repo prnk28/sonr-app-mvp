@@ -13,7 +13,7 @@ class TileDialog extends GetView<TileController> {
   @override
   Widget build(BuildContext context) {
     // Update State
-    controller.createTile();
+    controller.newTile();
     return NeumorphicBackground(
         backendColor: Colors.transparent,
         margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
@@ -243,14 +243,21 @@ class _DropdownAddView extends GetView<TileController> {
                   SonrText.normal("Is your account Public?"),
 
                   // @ Create Check Box
-                  ValueBuilder<bool>(onUpdate: (value) {
-                    controller.providerIsPublic(value);
-                  }, builder: (isPublic, updateFn) {
-                    return NeumorphicCheckbox(
-                      onChanged: updateFn,
-                      value: isPublic,
-                    );
-                  })
+                  ValueBuilder<bool>(
+                      initialValue: false,
+                      onUpdate: (value) {
+                        controller.providerIsPublic(value);
+                      },
+                      builder: (isPublic, updateFn) {
+                        return Container(
+                          width: 60,
+                          height: 60,
+                          child: NeumorphicCheckbox(
+                            onChanged: updateFn,
+                            value: isPublic,
+                          ),
+                        );
+                      })
                 ]),
               );
             }
