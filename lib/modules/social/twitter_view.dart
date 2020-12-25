@@ -1,33 +1,30 @@
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sonar_app/social/medium_data.dart';
-import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/data/social_twitter.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 // ** Medium Social View/Preview ** //
-class MediumView extends StatelessWidget {
+class TwitterView extends StatelessWidget {
   // Properties
   final Contact_SocialTile_TileType type;
-  final MediumData data;
-  final Post post;
-  MediumView(this.type, {this.data, this.post});
+  final TwitterData data;
+  final Tweet tweet;
+  TwitterView(this.type, {this.data, this.tweet});
 
-  factory MediumView.feed(MediumData data) {
-    return MediumView(Contact_SocialTile_TileType.Feed, data: data);
+  factory TwitterView.feed(TwitterData data) {
+    return TwitterView(Contact_SocialTile_TileType.Feed, data: data);
   }
 
-  factory MediumView.showcase(Post post) {
-    return MediumView(
+  factory TwitterView.showcase(Tweet tweet) {
+    return TwitterView(
       Contact_SocialTile_TileType.Showcase,
-      post: post,
+      tweet: tweet,
     );
   }
 
-  factory MediumView.icon() {
-    return MediumView(Contact_SocialTile_TileType.Icon);
+  factory TwitterView.icon() {
+    return TwitterView(Contact_SocialTile_TileType.Icon);
   }
 
   @override
@@ -36,10 +33,10 @@ class MediumView extends StatelessWidget {
     if (type == Contact_SocialTile_TileType.Feed) {
       return ListView.separated(
         shrinkWrap: true,
-        itemCount: data.posts.length,
+        itemCount: data.tweets.list.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (BuildContext context, int index) {
-          return _buildPost(data.posts.elementAt(index));
+          return _buildTweet(data.tweets.list.elementAt(index));
         },
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(
@@ -51,7 +48,8 @@ class MediumView extends StatelessWidget {
     }
     // @ Build ShowCase View
     else if (type == Contact_SocialTile_TileType.Showcase) {
-      return Stack(children: [_buildShowcase(data.posts.first), _buildBadge()]);
+      return Stack(
+          children: [_buildShowcase(data.tweets.list.first), _buildBadge()]);
     }
     // @ Build Icon View
     else {
@@ -75,11 +73,11 @@ class MediumView extends StatelessWidget {
   }
 
   // ^ Build Feed Post for Medium ^ //
-  _buildShowcase(Post post) {
+  _buildShowcase(Tweet tweet) {
     // Build View
     return GestureDetector(
       onTap: () {
-        Get.find<DeviceService>().launchURL(post.link);
+        // TODO: Get.find<DeviceService>().launchURL(tweet.id);
         HapticFeedback.lightImpact();
       },
       child: Container(
@@ -87,11 +85,8 @@ class MediumView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ClipPath(
-                  clipper: WaveClipperOne(),
-                  child: Image.network(post.thumbnail)),
-              SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                  size: 16),
+              SonrText.description(tweet.text, size: 14),
+              SonrText.normal(_cleanDate(tweet.createdAt), size: 14)
             ],
           ),
         ),
@@ -100,11 +95,11 @@ class MediumView extends StatelessWidget {
   }
 
   // ^ Build Feed Post for Medium ^ //
-  _buildPost(Post post) {
+  _buildTweet(Tweet tweet) {
     // Build View
     return NeumorphicButton(
       onPressed: () {
-        Get.find<DeviceService>().launchURL(post.link);
+        // TODO: Get.find<DeviceService>().launchURL(post.link);
       },
       child: Container(
         width: 275,
@@ -112,14 +107,10 @@ class MediumView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ClipPath(
-                  clipper: WaveClipperOne(),
-                  child: Image.network(post.thumbnail)),
-              SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                  size: 20),
-              SonrText.description(_cleanDescription(post.description),
-                  size: 14),
-              SonrText.normal(_cleanDate(post.pubDate), size: 14)
+              // SonrText.gradient(tweet.id, FlutterGradientNames.premiumDark,
+              //     size: 20),
+              SonrText.description(tweet.text, size: 14),
+              SonrText.normal(_cleanDate(tweet.createdAt), size: 14)
             ],
           ),
         ),
@@ -132,16 +123,6 @@ class MediumView extends StatelessWidget {
     var date = DateTime.parse(pubDate);
     var output = new DateFormat.yMMMMd('en_US');
     return output.format(date).toString();
-  }
-
-  // ^ Method to Clean Description ^ //
-  String _cleanDescription(String postDesc) {
-    // Clean from HTML Tags
-    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-    String cleaned = postDesc.replaceAll(exp, '');
-
-    // Limit Characters
-    return cleaned = cleaned.substring(0, 130) + "...";
   }
 }
 

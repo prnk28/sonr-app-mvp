@@ -5,15 +5,15 @@ import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/social/medium_data.dart';
-import 'package:sonar_app/social/twitter_data.dart';
+import 'package:sonar_app/data/social_medium.dart';
+import 'package:sonar_app/data/social_twitter.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Handles SocialMedia ** //
 const K_FB_GRAPH = 'https://graph.facebook.com/v2.12/';
 
-class SocialMediaProvider extends GetxService {
+class SocialMediaService extends GetxService {
   dynamic _apiKeys;
 
   init() async {
@@ -98,7 +98,7 @@ class SocialMediaProvider extends GetxService {
         // TODO
         break;
       case Contact_SocialTile_Provider.Twitter:
-        data = await getTwitter(username);
+        data = await getTwitterPublic(username);
         break;
       case Contact_SocialTile_Provider.YouTube:
         // TODO
@@ -116,18 +116,18 @@ class SocialMediaProvider extends GetxService {
   // * ---- Retreival ---- * //
   // * ------------------- * //
 
-  // ^ Retreive Profile Information ^ //
-  Future getFacebook() async {
-    // Get User Token
-    final token = Get.find<DeviceService>()
-        .getAuth(Contact_SocialTile_Provider.Facebook)[0];
+  // // ^ Retreive Profile Information ^ //
+  // Future getFacebook() async {
+  //   // Get User Token
+  //   final token = Get.find<DeviceService>()
+  //       .getAuth(Contact_SocialTile_Provider.Facebook)[0];
 
-    final response = await get(
-        'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$token');
-  }
+  //   final response = await get(
+  //       'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=$token');
+  // }
 
   // ^ Retreive Profile/ Tweets ^ //
-  Future<TwitterData> getTwitter(String username) async {
+  Future<TwitterData> getTwitterPublic(String username) async {
     // Perform Request
     final resp = await get(TWITTER_API_USERS + username + TWITTER_FIELDS_USERS,
         headers: {
@@ -138,6 +138,7 @@ class SocialMediaProvider extends GetxService {
 
     // Valid Status
     if (resp.statusCode == 200) {
+      print(resp.body);
       return TwitterData.fromResponse(resp.body);
     }
 

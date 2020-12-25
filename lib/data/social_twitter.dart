@@ -8,9 +8,9 @@ const TWITTER_FIELDS_USERS =
 // ^ Model ^ //
 class TwitterData {
   List<User> users;
-  Tweets includes;
+  Tweets tweets;
 
-  TwitterData({this.users, this.includes});
+  TwitterData({this.users, this.tweets});
 
   TwitterData.fromResponse(dynamic respBody) {
     Map<String, dynamic> json = jsonDecode(respBody);
@@ -20,7 +20,7 @@ class TwitterData {
         users.add(new User.fromJson(v));
       });
     }
-    includes =
+    tweets =
         json['includes'] != null ? new Tweets.fromJson(json['includes']) : null;
   }
 
@@ -29,8 +29,8 @@ class TwitterData {
     if (this.users != null) {
       data['data'] = this.users.map((v) => v.toJson()).toList();
     }
-    if (this.includes != null) {
-      data['includes'] = this.includes.toJson();
+    if (this.tweets != null) {
+      data['includes'] = this.tweets.toJson();
     }
     return data;
   }
@@ -65,23 +65,23 @@ class User {
 }
 
 class Tweets {
-  List<Tweet> tweets;
+  List<Tweet> list;
 
-  Tweets({this.tweets});
+  Tweets({this.list});
 
   Tweets.fromJson(Map<String, dynamic> json) {
     if (json['tweets'] != null) {
-      tweets = new List<Tweet>();
+      list = new List<Tweet>();
       json['tweets'].forEach((v) {
-        tweets.add(new Tweet.fromJson(v));
+        list.add(new Tweet.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.tweets != null) {
-      data['tweets'] = this.tweets.map((v) => v.toJson()).toList();
+    if (this.list != null) {
+      data['tweets'] = this.list.map((v) => v.toJson()).toList();
     }
     return data;
   }

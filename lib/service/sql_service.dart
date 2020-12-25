@@ -1,6 +1,6 @@
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/contact_sql.dart';
-import 'package:sonar_app/data/meta_sql.dart';
+import 'package:sonar_app/data/sql_contact.dart';
+import 'package:sonar_app/data/sql_meta.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

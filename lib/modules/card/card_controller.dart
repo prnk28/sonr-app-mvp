@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/data/card_model.dart';
+import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';

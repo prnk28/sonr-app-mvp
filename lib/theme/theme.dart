@@ -15,6 +15,7 @@ export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
 export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
+export 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 // ^ Sonr Global Theme Data ^ //
 // ignore: non_constant_identifier_names

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/data/card_model.dart';
+import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/service/sql_service.dart';
 

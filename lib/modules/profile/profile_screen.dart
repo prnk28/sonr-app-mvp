@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/profile/tile_dialog.dart';
 import 'package:sonr_core/models/models.dart';
-import 'tile_widget.dart';
+import 'tile_item.dart';
 import 'profile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'header_view.dart';
@@ -97,7 +97,7 @@ class _SliverViews extends GetView<ProfileController> {
             SliverStaggeredGrid(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return SocialTile(controller.socials[index], index);
+                  return SocialTileItem(controller.socials[index], index);
                 }),
                 gridDelegate:
                     SliverStaggeredGridDelegateWithFixedCrossAxisCount(

@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/social/medium_data.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/social/social_provider.dart';
+import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
@@ -55,7 +54,10 @@ class TileController extends GetxController {
     // Data By Provdider
     if (tile.provider == Contact_SocialTile_Provider.Medium) {
       fetchedData =
-          await Get.find<SocialMediaProvider>().getMedium(tile.username);
+          await Get.find<SocialMediaService>().getMedium(tile.username);
+    } else if (tile.provider == Contact_SocialTile_Provider.Twitter) {
+      fetchedData =
+          await Get.find<SocialMediaService>().getTwitterPublic(tile.username);
     }
 
     state = TileState.None;
@@ -97,7 +99,7 @@ class TileController extends GetxController {
     else if (state == TileState.NewStepTwo) {
       // Update State
       if (currentTile.value.hasUsername()) {
-        if (await Get.find<SocialMediaProvider>().validateUsername(
+        if (await Get.find<SocialMediaService>().validateUsername(
             currentTile.value.provider, currentTile.value.username)) {
           state = TileState.NewStepThree;
           update(["TileDialog"]);

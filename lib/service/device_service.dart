@@ -2,13 +2,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonar_app/data/permission_model.dart';
-import 'package:sonar_app/data/user_model.dart';
+import 'package:sonar_app/data/model_user.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import '../social/social_provider.dart';
+import 'social_service.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// @ Enum defines Type of Permission
+enum PermissionType {
+  Location,
+  Camera,
+  Photos,
+  Notifications,
+}
 
 class DeviceService extends GetxService {
   // Properties
@@ -69,14 +76,14 @@ class DeviceService extends GetxService {
                 user.username,
                 user.contact,
               ));
-          await Get.putAsync(() => SocialMediaProvider().init());
+          await Get.putAsync(() => SocialMediaService().init());
         }
       } else {
         // Push to Register Screen
         Get.offNamed("/register");
       }
     } else {
-      throw RequiredPermissionsError("Location Permission Denied");
+      print("Location Permission Denied");
     }
   }
 
@@ -99,9 +106,9 @@ class DeviceService extends GetxService {
             user.username,
             user.contact,
           ));
-      await Get.putAsync(() => SocialMediaProvider().init());
+      await Get.putAsync(() => SocialMediaService().init());
     } else {
-      throw RequiredPermissionsError("Location Permission Denied");
+      print("Location Permission Denied");
     }
   }
 

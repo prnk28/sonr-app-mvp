@@ -2,17 +2,19 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/social/medium_data.dart';
-import 'package:sonar_app/modules/profile/tile_view.dart';
+import 'package:sonar_app/data/social_medium.dart';
+import 'package:sonar_app/data/social_twitter.dart';
+import 'package:sonar_app/modules/social/medium_view.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
+import 'package:sonar_app/modules/social/twitter_view.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Builds Social Tile ** //
-class SocialTile extends GetView<TileController> {
+class SocialTileItem extends GetView<TileController> {
   final Contact_SocialTile data;
   final int index;
-  SocialTile(this.data, this.index);
+  SocialTileItem(this.data, this.index);
   @override
   Widget build(BuildContext context) {
     controller.getData(data); // Initial Data Fetch
@@ -72,6 +74,10 @@ class SocialTile extends GetView<TileController> {
     // Medium Data
     if (controller.fetchedData is MediumData) {
       socialChild = MediumView(data.type, data: controller.fetchedData);
+    }
+    // Twitter Data
+    else if (controller.fetchedData is TwitterData) {
+      socialChild = TwitterView(data.type, data: controller.fetchedData);
     }
 
     // Theming View with Drag

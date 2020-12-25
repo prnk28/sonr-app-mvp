@@ -1,7 +1,7 @@
 import 'package:sonr_core/sonr_core.dart';
 
-import 'contact_sql.dart';
-import 'meta_sql.dart';
+import 'sql_contact.dart';
+import 'sql_meta.dart';
 
 // ^ OpenFilesError couldnt open DB at path ^
 class CardsError extends Error {
