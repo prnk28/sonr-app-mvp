@@ -1,10 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,9 +64,12 @@ class DeviceService extends GetxService {
           position = await user.position;
 
           // Initialize Dependent Services
+          await Get.putAsync(() => SonrService().init(
+                position,
+                user.username,
+                user.contact,
+              ));
           await Get.putAsync(() => SocialMediaProvider().init());
-          await Get.putAsync(
-              () => SonrService().init(position, user.contact, user.username));
         }
       } else {
         // Push to Register Screen
@@ -97,18 +94,15 @@ class DeviceService extends GetxService {
       position = await user.position;
 
       // Initialize Dependent Services
+      await Get.putAsync(() => SonrService().init(
+            position,
+            user.username,
+            user.contact,
+          ));
       await Get.putAsync(() => SocialMediaProvider().init());
-      await Get.putAsync(
-          () => SonrService().init(position, user.contact, user.username));
     } else {
       throw RequiredPermissionsError("Location Permission Denied");
     }
-  }
-
-  // ^ Retreive API Keys ^ //
-  Future<dynamic> getKeys() async {
-    final data = await rootBundle.loadString('assets/keys.json');
-    return jsonDecode(data);
   }
 
   // ^ Get a Social Auth ^ //

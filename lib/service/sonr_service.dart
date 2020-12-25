@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/user_model.dart';
 import 'package:sonar_app/modules/card/card_controller.dart';
 import 'package:sonar_app/modules/card/card_invite.dart';
 import 'package:sonar_app/modules/card/card_view.dart';
@@ -13,8 +12,6 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'device_service.dart';
 import 'sql_service.dart';
-
-export 'package:sonr_core/sonr_core.dart';
 
 // @ Enum to Handle Status
 enum SonrStatus {
@@ -56,19 +53,10 @@ class SonrService extends GetxService {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(
-      Position pos, Contact contact, String username) async {
+      Position pos, String username, Contact contact) async {
     // Get OLC
     code(OLC.encode(pos.latitude, pos.longitude, codeLength: 8));
 
-    // Await Initialization -> Set Node
-    _connect(contact, username);
-
-    // Return Service
-    return this;
-  }
-
-  // ^ Connect to Node Method
-  _connect(Contact contact, String username) async {
     // Create Worker
     _node = await SonrCore.initialize(code.value, username, contact);
 
@@ -87,6 +75,9 @@ class SonrService extends GetxService {
 
     // Push to Home Screen
     Get.offNamed("/home");
+
+    // Return Service
+    return this;
   }
 
   // ***********************

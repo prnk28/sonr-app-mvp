@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+// ^ API Endpoints ^ //
+const MEDIUM_API_FEED =
+    'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@';
+
+// ^ Model ^ //
 class MediumData {
   String status;
   Feed feed;
