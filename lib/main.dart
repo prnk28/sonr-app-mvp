@@ -32,6 +32,7 @@ class App extends StatelessWidget {
 
     return GetMaterialApp(
       getPages: getPages(),
+      initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
@@ -103,4 +104,12 @@ List<GetPage> getPages() {
         fullscreenDialog: true,
         binding: ProfileBinding()),
   ];
+}
+
+// ^ Initial Controller Bindings ^ //
+class InitialBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<SonrCardController>(SonrCardController(), permanent: true);
+  }
 }

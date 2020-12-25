@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/model_card.dart';
+import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sonr_core/models/models.dart';
 
 class HomeController extends GetxController {
   // Properties
@@ -33,8 +35,31 @@ class HomeController extends GetxController {
     // TODO
   }
 
+  // @ Testing Purposes File Transfer
+  void queueTest() async {
+    // Get Test File Path
+    File file = await _getAssetFileByPath("assets/images/test.jpg");
+
+    // Queue File
+    Get.find<SonrService>().queue(Payload_Type.FILE, file: file);
+  }
+
+  // @ Testing Purposes Large File Transfer
+  void queueFatTest() async {
+    // Get Test File Path
+    File testFile = await _getAssetFileByPath("assets/images/fat_test.jpg");
+
+    // Queue File
+    Get.find<SonrService>().queue(Payload_Type.FILE, file: testFile);
+  }
+
+  // ^ Queues a Contact for Transfer ^ //
+  void queueContact() {
+    Get.find<SonrService>().queue(Payload_Type.CONTACT);
+  }
+
   // ^ Converts File in Assets to File Object ^ //
-  Future<File> getAssetFileByPath(String path) async {
+  Future<File> _getAssetFileByPath(String path) async {
     var directory = await getApplicationDocumentsDirectory();
     var dbPath = join(directory.path, basename(path));
     var data = await rootBundle.load(path);

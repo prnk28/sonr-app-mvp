@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/service/device_service.dart';
@@ -9,6 +8,7 @@ import 'package:sonar_app/data/social_medium.dart';
 import 'package:sonar_app/data/social_twitter.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
+export 'package:sonr_core/models/models.dart';
 
 // ** Handles SocialMedia ** //
 const K_FB_GRAPH = 'https://graph.facebook.com/v2.12/';
@@ -52,33 +52,33 @@ class SocialMediaService extends GetxService {
     }
   }
 
-  // ^ Authenticates Twitter ^ //
-  linkTwitter() async {
-    // Set Vars
-    var twitterLogin = new TwitterLogin(
-      consumerKey: _apiKeys["twitterConsumer"],
-      consumerSecret: _apiKeys["twitterSecret"],
-    );
+  // // ^ Authenticates Twitter ^ //
+  // linkTwitter() async {
+  //   // Set Vars
+  //   var twitterLogin = new TwitterLogin(
+  //     consumerKey: _apiKeys["twitterConsumer"],
+  //     consumerSecret: _apiKeys["twitterSecret"],
+  //   );
 
-    // Authorize User
-    final TwitterLoginResult result = await twitterLogin.authorize();
+  //   // Authorize User
+  //   final TwitterLoginResult result = await twitterLogin.authorize();
 
-    // Check Status
-    switch (result.status) {
-      case TwitterLoginStatus.loggedIn:
-        // Save Auth to Persistent Data
-        Get.find<DeviceService>().saveAuth(Contact_SocialTile_Provider.Twitter,
-            [result.session.token, result.session.secret]);
-        SonrSnack.success("Twitter link success");
-        break;
-      case TwitterLoginStatus.cancelledByUser:
-        SonrSnack.cancelled("Twitter link stopped");
-        break;
-      case TwitterLoginStatus.error:
-        SonrSnack.error("Something went wrong");
-        break;
-    }
-  }
+  //   // Check Status
+  //   switch (result.status) {
+  //     case TwitterLoginStatus.loggedIn:
+  //       // Save Auth to Persistent Data
+  //       Get.find<DeviceService>().saveAuth(Contact_SocialTile_Provider.Twitter,
+  //           [result.session.token, result.session.secret]);
+  //       SonrSnack.success("Twitter link success");
+  //       break;
+  //     case TwitterLoginStatus.cancelledByUser:
+  //       SonrSnack.cancelled("Twitter link stopped");
+  //       break;
+  //     case TwitterLoginStatus.error:
+  //       SonrSnack.error("Something went wrong");
+  //       break;
+  //   }
+  // }
 
   // ^ Simple Username Validation ^ //
   Future<bool> validateUsername(

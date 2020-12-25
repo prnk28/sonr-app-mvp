@@ -1,42 +1,22 @@
-part of 'home_screen.dart';
+import 'dart:io';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
+import 'package:sonar_app/theme/theme.dart';
+import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonr_core/sonr_core.dart';
+import 'home_controller.dart';
 
-class FloaterButton extends StatefulWidget {
+class FloaterButton extends HookWidget {
   const FloaterButton({Key key}) : super(key: key);
-
-  @override
-  _FloaterButtonState createState() => _FloaterButtonState();
-}
-
-class _FloaterButtonState extends State<FloaterButton>
-    with SingleTickerProviderStateMixin {
-  // Floating Button Animations
-  Animation<double> _animation;
-  AnimationController _animationController;
-  final SonrService sonr = Get.find();
-
-  @override
-  void initState() {
-    // ^ Setup Floater Animation ^ //
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 260),
-    );
-
-    final curvedAnimation =
-        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
-    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
-
-    super.initState();
-  }
-
-  @override
-  dispose() {
-    _animationController.dispose(); // you need this
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = useAnimationController(duration: Duration(seconds: 260));
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: controller);
+    Animation<double> _animation =
+        Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     return FloatingActionBubble(
       // Menu items
       items: <Bubble>[
@@ -47,15 +27,8 @@ class _FloaterButtonState extends State<FloaterButton>
           icon: Icons.photo,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
-            // Get Test File Path
-            File file = await Get.find<HomeController>()
-                .getAssetFileByPath("assets/images/test.jpg");
-
-            // Queue File
-            sonr.queue(Payload_Type.FILE, file: file);
-
-            // Wait for Animation to Complete
-            _animationController.reverse();
+            Get.find<HomeController>().queueTest();
+            controller.reverse();
           },
         ),
         // Floating action menu item
@@ -66,15 +39,8 @@ class _FloaterButtonState extends State<FloaterButton>
           icon: Icons.storage,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () async {
-            // Get Test File Path
-            File testFile = await Get.find<HomeController>()
-                .getAssetFileByPath("assets/images/fat_test.jpg");
-
-            // Queue File
-            sonr.queue(Payload_Type.FILE, file: testFile);
-
-            // Wait for Animation to Complete
-            _animationController.reverse();
+            Get.find<HomeController>().queueFatTest();
+            controller.reverse();
           },
         ),
         // Floating action menu item
@@ -85,11 +51,8 @@ class _FloaterButtonState extends State<FloaterButton>
           icon: Icons.person,
           titleStyle: TextStyle(fontSize: 16, color: Colors.white),
           onPress: () {
-            // Queue File
-            sonr.queue(Payload_Type.CONTACT);
-
-            // Wait for Animation to Complete
-            _animationController.reverse();
+            Get.find<HomeController>().queueContact();
+            controller.reverse();
           },
         ),
       ],
@@ -98,9 +61,8 @@ class _FloaterButtonState extends State<FloaterButton>
       animation: _animation,
 
       // On pressed change animation state
-      onPress: () => _animationController.isCompleted
-          ? _animationController.reverse()
-          : _animationController.forward(),
+      onPress: () =>
+          controller.isCompleted ? controller.reverse() : controller.forward(),
 
       // Floating Action button Icon color
       iconColor: Colors.blue,

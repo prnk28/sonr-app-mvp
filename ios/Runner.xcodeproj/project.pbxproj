@@ -147,6 +147,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				4DDAE37E9AF84E533A2FEB38 /* [CP] Embed Pods Frameworks */,
+				2CC4676CEBC4AD7FEA127A65 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -207,6 +208,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2CC4676CEBC4AD7FEA127A65 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -228,10 +247,15 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${PODS_ROOT}/../Flutter/Flutter.framework",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
 				"${BUILT_PRODUCTS_DIR}/device_info/device_info.framework",
 				"${BUILT_PRODUCTS_DIR}/flutter_compass/flutter_compass.framework",
+				"${BUILT_PRODUCTS_DIR}/flutter_twitter_login/flutter_twitter_login.framework",
 				"${BUILT_PRODUCTS_DIR}/gallery_saver/gallery_saver.framework",
 				"${BUILT_PRODUCTS_DIR}/geolocator/geolocator.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider/path_provider.framework",
@@ -243,10 +267,15 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flutter.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/device_info.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_compass.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/flutter_twitter_login.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/gallery_saver.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/geolocator.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/path_provider.framework",

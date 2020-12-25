@@ -7,7 +7,6 @@ export 'profile_screen.dart';
 class ProfileBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<SonrCardController>(SonrCardController());
     Get.put<ProfileController>(ProfileController());
     Get.put<TileController>(TileController());
   }
