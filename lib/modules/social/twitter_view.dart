@@ -74,7 +74,7 @@ class _TwitterViewState extends State<TwitterView> {
       else {
         return Center(
             child: SonrIcon.socialFromProvider(
-                IconType.Gradient, Contact_SocialTile_Provider.Medium));
+                IconType.Gradient, Contact_SocialTile_Provider.Twitter));
       }
     } else {
       return Center(
@@ -89,7 +89,7 @@ class _TwitterViewState extends State<TwitterView> {
       child: Align(
         alignment: Alignment.topLeft,
         child: SonrIcon.socialFromProvider(
-            IconType.Gradient, Contact_SocialTile_Provider.Medium,
+            IconType.Gradient, Contact_SocialTile_Provider.Twitter,
             size: 30),
       ),
     );

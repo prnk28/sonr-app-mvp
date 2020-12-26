@@ -3,6 +3,9 @@ import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
+export '../social/medium_view.dart';
+export '../social/twitter_view.dart';
+export '../social/youtube_view.dart';
 
 enum TileState {
   None,

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-//import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/social_medium.dart';
@@ -8,7 +7,6 @@ import 'package:sonar_app/data/social_twitter.dart';
 import 'package:sonar_app/data/social_youtube.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-export 'package:sonr_core/models/models.dart';
 
 // ** Handles SocialMedia ** //
 const K_FB_GRAPH = 'https://graph.facebook.com/v2.12/';
@@ -35,10 +33,10 @@ class SocialMediaService extends GetxService {
   // * ---- Authentication ---- * //
   // * ------------------------ * //
   // ^ Simple Username Validation ^ //
-  Future<bool> validate(Contact_SocialTile_Provider prv, String usr) async {
+  Future<bool> validate(Contact_SocialTile_Provider prv, String query) async {
     switch (prv) {
       case Contact_SocialTile_Provider.Medium:
-        MediumModel data = await getMedium(usr);
+        MediumModel data = await getMedium(query);
         return data.status == "ok";
         break;
       case Contact_SocialTile_Provider.Spotify:
@@ -48,11 +46,12 @@ class SocialMediaService extends GetxService {
         // TODO
         break;
       case Contact_SocialTile_Provider.Twitter:
-        TwitterUserModel data = await getTwitterUser(usr);
+        TwitterUserModel data = await getTwitterUser(query);
         return data.errors.isEmpty;
         break;
       case Contact_SocialTile_Provider.YouTube:
-        // TODO
+        YoutubeModel data = await getYoutube(query);
+        return data.items.isNotEmpty;
         break;
     }
     return false;
