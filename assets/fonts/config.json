@@ -1,0 +1,96 @@
+{
+  "name": "SonrSocialIcons",
+  "css_prefix_text": "",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "9434d50caf4b56a0c95cd4eeb780fd96",
+      "css": "medium",
+      "code": 62407,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "9907676b3894562a44338bf67b4257ac",
+      "css": "medium-fill",
+      "code": 62010,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "e4b799ca3860a8276dba05b11d7e13db",
+      "css": "spotify",
+      "code": 59392,
+      "src": "zocial"
+    },
+    {
+      "uid": "240979dd9fcf2e46250e66792edb8092",
+      "css": "facebook",
+      "code": 62208,
+      "src": "brandico"
+    },
+    {
+      "uid": "8045477f6a7ef0bd7caff130ad25b88d",
+      "css": "facebook-fill",
+      "code": 62209,
+      "src": "brandico"
+    },
+    {
+      "uid": "d090355c31f497b61d676416c1fd39fb",
+      "css": "twitter",
+      "code": 62217,
+      "src": "entypo"
+    },
+    {
+      "uid": "216891b0093d4dbef19877d5b00d1b16",
+      "css": "retweet",
+      "code": 59393,
+      "src": "entypo"
+    },
+    {
+      "uid": "71064f0fa3be043351efdcaea9c5b8ea",
+      "css": "instagram",
+      "code": 61805,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "3e0d6ad6090a1e3937cf2dac38d853eb",
+      "css": "youtube",
+      "code": 61799,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "a9862b9d5197886c1ad693ecd7120b31",
+      "css": "youtube-text",
+      "code": 59394,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "1b1a592d33fa26c37926cbe840eb60b8",
+      "css": "snapchat",
+      "code": 62124,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "d20b5fb608f848b0e14aef1325c9e23c",
+      "css": "snapchat-fill",
+      "code": 62125,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "fe1a53ae1a330a415637528d954b6bba",
+      "css": "tiktok",
+      "code": 59395,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M624.4 0C640.9 141.9 720.1 226.5 857.8 235.5V395.1C778 402.9 708.1 376.8 626.8 327.6V626.2C626.8 1005.4 213.3 1123.9 47.1 852.1-59.7 677.2 5.7 370.2 348.3 357.9V526.3C322.2 530.5 294.3 537.1 268.8 545.8 192.6 571.6 149.4 619.9 161.4 705.1 184.5 868.3 483.9 916.6 459 597.7V0.3H624.4Z",
+        "width": 858
+      },
+      "search": [
+        "tiktok"
+      ]
+    }
+  ]
+}

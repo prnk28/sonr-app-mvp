@@ -27,7 +27,7 @@ dependencies:
   url_launcher: ^5.7.10
 
   # -- Device --
-  flutter_compass: ^0.5.0
+  flutter_compass: ^0.5.1
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
   sensors: ^0.4.1+1
@@ -45,6 +45,7 @@ dependencies:
     git:
       url: git@github.com:sonr-io/plugin.git
       ref: release
+  webview_flutter: ^1.0.7
 
   # -- UI/UX --
   flutter_boxicons: ^2.0.1
@@ -71,8 +72,16 @@ flutter:
   # -- Theme/Colors --
   uses-material-design: true
 
+  fonts:
+  - family:  SonrSocialIcons
+    fonts:
+      - asset: fonts/SonrSocialIcons.ttf
+
   # -- Media --
   assets:
     - assets/animations/
+    - assets/fonts/
     - assets/images/
     - assets/keys.json
+
+

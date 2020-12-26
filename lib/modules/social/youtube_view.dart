@@ -50,7 +50,7 @@ class _YoutubeViewState extends State<YoutubeView> {
       // @ Build Icon View
       else {
         return Center(
-            child: SonrIcon.socialFromProvider(
+            child: SonrIcon.social(
                 IconType.Gradient, Contact_SocialTile_Provider.YouTube));
       }
     } else {
@@ -65,7 +65,7 @@ class _YoutubeViewState extends State<YoutubeView> {
       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
       child: Align(
         alignment: Alignment.topLeft,
-        child: SonrIcon.socialFromProvider(
+        child: SonrIcon.social(
             IconType.Gradient, Contact_SocialTile_Provider.YouTube,
             size: 30),
       ),
@@ -76,8 +76,6 @@ class _YoutubeViewState extends State<YoutubeView> {
     // Build View
     return GestureDetector(
       onTap: () {
-        // Get.find<DeviceService>().launchURL(
-        //     "https://twitter.com/${widget.item.username}/status/${video.video.id}");
         HapticFeedback.lightImpact();
       },
       child: Container(

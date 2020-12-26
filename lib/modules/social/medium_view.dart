@@ -11,7 +11,9 @@ import 'package:sonr_core/models/models.dart';
 class MediumView extends StatefulWidget {
   // Properties
   final Contact_SocialTile item;
-  MediumView(this.item);
+  MediumView(this.item) {
+    item.type = Contact_SocialTile_TileType.Icon;
+  }
 
   @override
   _MediumViewState createState() => _MediumViewState();
@@ -65,7 +67,7 @@ class _MediumViewState extends State<MediumView> {
       // @ Build Icon View
       else {
         return Center(
-            child: SonrIcon.socialFromProvider(
+            child: SonrIcon.social(
                 IconType.Gradient, Contact_SocialTile_Provider.Medium));
       }
     } else {
@@ -80,7 +82,7 @@ class _MediumViewState extends State<MediumView> {
       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
       child: Align(
         alignment: Alignment.topLeft,
-        child: SonrIcon.socialFromProvider(
+        child: SonrIcon.social(
             IconType.Gradient, Contact_SocialTile_Provider.Medium,
             size: 30),
       ),

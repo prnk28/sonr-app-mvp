@@ -9,6 +9,15 @@ import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
 enum IconType { Neumorphic, Normal, Gradient, Thumbnail }
+enum SocialIcon {
+  Spotify,
+  Twitter,
+  Instagram,
+  YouTube,
+  Medium,
+  Facebook,
+  Snapchat
+}
 
 class SonrIcon extends StatelessWidget {
   final IconData data;
@@ -41,6 +50,54 @@ class SonrIcon extends StatelessWidget {
   factory SonrIcon.normal(IconData data,
       {double size = 24, Color color = K_BASE_COLOR}) {
     return SonrIcon(data, IconType.Normal, color, null, size: size);
+  }
+
+  factory SonrIcon.social(IconType type, Contact_SocialTile_Provider social,
+      {double size = 24, Color color = Colors.black, bool alternate = false}) {
+    // Init Icon Data
+    IconData data;
+    FlutterGradientNames gradient;
+
+    // Check Icon Type
+    switch (social) {
+      case Contact_SocialTile_Provider.Spotify:
+        data = _SocialIcons.spotify;
+        gradient = FlutterGradientNames.newLife;
+        break;
+      case Contact_SocialTile_Provider.TikTok:
+        data = _SocialIcons.tiktok;
+        gradient = FlutterGradientNames.premiumDark;
+        break;
+      case Contact_SocialTile_Provider.Instagram:
+        data = _SocialIcons.instagram;
+        gradient = FlutterGradientNames.ripeMalinka;
+        break;
+      case Contact_SocialTile_Provider.Twitter:
+        data = alternate ? _SocialIcons.retweet : _SocialIcons.twitter;
+        gradient = FlutterGradientNames.partyBliss;
+        break;
+      case Contact_SocialTile_Provider.YouTube:
+        data = alternate ? _SocialIcons.youtube_text : _SocialIcons.youtube;
+        gradient = FlutterGradientNames.loveKiss;
+        break;
+      case Contact_SocialTile_Provider.Medium:
+        data = alternate ? _SocialIcons.medium_fill : _SocialIcons.medium;
+        gradient = FlutterGradientNames.mountainRock;
+        break;
+      case Contact_SocialTile_Provider.Facebook:
+        data = alternate ? _SocialIcons.facebook_fill : _SocialIcons.facebook;
+        gradient = FlutterGradientNames.perfectBlue;
+        break;
+      // case Contact_SocialTile_Provider.Snapchat:
+      //   data = alternate ? _SocialIcons.snapchat_fill : _SocialIcons.snapchat;
+      //   break;
+      default:
+        data = Icons.device_unknown_rounded;
+        gradient = FlutterGradientNames.aboveTheSky;
+    }
+
+    // Create Icon
+    return SonrIcon(data, type, color, gradient, size: size);
   }
 
   // ^ Peer Data Platform to Icon
@@ -89,137 +146,36 @@ class SonrIcon extends StatelessWidget {
     // Get Metadata
     var kind = payload.file.mime.type;
     var thumbnail = payload.file.thumbnail;
+    IconData data;
 
     // Get Icon
     switch (kind) {
       case MIME_Type.audio:
-        return SonrIcon(
-          Icons.audiotrack,
-          type,
-          color,
-          gradient,
-          thumbnail: thumbnail,
-          size: size,
-        );
+        data = Icons.audiotrack;
         break;
       case MIME_Type.image:
-        return SonrIcon(
-          Icons.image,
-          type,
-          color,
-          gradient,
-          thumbnail: thumbnail,
-          size: size,
-        );
+        data = Icons.image;
         break;
       case MIME_Type.video:
-        return SonrIcon(
-          Icons.video_collection,
-          type,
-          color,
-          gradient,
-          thumbnail: thumbnail,
-          size: size,
-        );
+        data = Icons.video_collection;
         break;
       case MIME_Type.text:
-        return SonrIcon(
-          Icons.sort_by_alpha,
-          type,
-          color,
-          gradient,
-          thumbnail: thumbnail,
-          size: size,
-        );
+        data = Icons.sort_by_alpha;
         break;
       default:
-        return SonrIcon(
-          Icons.device_unknown,
-          type,
-          color,
-          gradient,
-          thumbnail: thumbnail,
-          size: size,
-        );
+        data = Icons.device_unknown;
         break;
     }
-  }
 
-  // ^ Payload Data File Type to Icon
-  factory SonrIcon.socialFromProvider(
-      IconType type, Contact_SocialTile_Provider provider,
-      {double size = 24, Color color = Colors.black}) {
-    // Get Icon
-    switch (provider) {
-      case Contact_SocialTile_Provider.Facebook:
-        return SonrIcon(
-          Boxicons.bxl_facebook_square,
-          type,
-          color,
-          FlutterGradientNames.perfectBlue,
-          size: size,
-        );
-        break;
-      case Contact_SocialTile_Provider.Instagram:
-        return SonrIcon(
-          Boxicons.bxl_instagram,
-          type,
-          color,
-          FlutterGradientNames.ripeMalinka,
-          size: size,
-        );
-        break;
-      case Contact_SocialTile_Provider.Medium:
-        return SonrIcon(
-          Boxicons.bxl_medium,
-          type,
-          color,
-          FlutterGradientNames.mountainRock,
-          size: size,
-        );
-        break;
-      case Contact_SocialTile_Provider.Spotify:
-        return SonrIcon(
-            Boxicons.bxl_spotify, type, color, FlutterGradientNames.newLife,
-            size: size);
-        break;
-      case Contact_SocialTile_Provider.TikTok:
-        // TODO
-        return SonrIcon(
-          Boxicons.bxl_creative_commons,
-          type,
-          color,
-          FlutterGradientNames.premiumDark,
-          size: size,
-        );
-        break;
-      case Contact_SocialTile_Provider.Twitter:
-        return SonrIcon(
-          Boxicons.bxl_twitter,
-          type,
-          color,
-          FlutterGradientNames.partyBliss,
-          size: size,
-        );
-        break;
-      case Contact_SocialTile_Provider.YouTube:
-        return SonrIcon(
-          Boxicons.bxl_youtube,
-          type,
-          color,
-          FlutterGradientNames.loveKiss,
-          size: size,
-        );
-        break;
-      default:
-        return SonrIcon(
-          Icons.device_unknown_rounded,
-          type,
-          color,
-          FlutterGradientNames.aboveTheSky,
-          size: size,
-        );
-    }
+    // Return Widget
+    return SonrIcon(
+      data,
+      type,
+      color,
+      gradient,
+      thumbnail: thumbnail,
+      size: size,
+    );
   }
 
   @override
@@ -271,4 +227,38 @@ class SonrIcon extends StatelessWidget {
     }
     return result;
   }
+}
+
+class _SocialIcons {
+  _SocialIcons._();
+
+  static const _kFontFam = 'SonrSocialIcons';
+  static const _kFontPkg = null;
+
+  static const IconData spotify =
+      IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData retweet =
+      IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData youtube_text =
+      IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData youtube =
+      IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData instagram =
+      IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData medium_fill =
+      IconData(0xf23a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData snapchat =
+      IconData(0xf2ac, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData snapchat_fill =
+      IconData(0xf2ad, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData tiktok =
+      IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook =
+      IconData(0xf300, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook_fill =
+      IconData(0xf301, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData twitter =
+      IconData(0xf309, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData medium =
+      IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

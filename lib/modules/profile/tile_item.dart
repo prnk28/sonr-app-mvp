@@ -6,6 +6,7 @@ import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 // ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {
@@ -28,6 +29,7 @@ class SocialTileItem extends GetWidget<TileController> {
             HapticFeedback.heavyImpact();
             controller.state(TileState.Dragging);
           }),
+
       DragTarget<Contact_SocialTile>(
         builder: (context, candidateData, rejectedData) {
           return Container();
@@ -81,6 +83,8 @@ class SocialTileItem extends GetWidget<TileController> {
     else if (item.provider == Contact_SocialTile_Provider.YouTube) {
       return YoutubeView(item);
     }
-    return Container();
+    return WebView(
+      initialUrl: item.url,
+    );
   }
 }

@@ -73,7 +73,7 @@ class _TwitterViewState extends State<TwitterView> {
       // @ Build Icon View
       else {
         return Center(
-            child: SonrIcon.socialFromProvider(
+            child: SonrIcon.social(
                 IconType.Gradient, Contact_SocialTile_Provider.Twitter));
       }
     } else {
@@ -88,7 +88,7 @@ class _TwitterViewState extends State<TwitterView> {
       padding: const EdgeInsets.only(top: 8.0, left: 8.0),
       child: Align(
         alignment: Alignment.topLeft,
-        child: SonrIcon.socialFromProvider(
+        child: SonrIcon.social(
             IconType.Gradient, Contact_SocialTile_Provider.Twitter,
             size: 30),
       ),

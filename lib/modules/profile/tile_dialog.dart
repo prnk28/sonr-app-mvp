@@ -264,7 +264,7 @@ class _DropdownAddView extends StatelessWidget {
   _buildOptionWidget(int index) {
     var item = options.elementAt(index);
     return Row(children: [
-      SonrIcon.socialFromProvider(IconType.Normal, item),
+      SonrIcon.social(IconType.Normal, item),
       Padding(padding: EdgeInsets.all(4)),
       Text(item.toString())
     ]);
