@@ -375,7 +375,7 @@ class _SetInfoView extends StatelessWidget {
       case Contact_SocialTile_Provider.Twitter:
         return "Twitter Handle";
       case Contact_SocialTile_Provider.YouTube:
-        return "YouTube Channel";
+        return "YouTube Video or Channel";
       default:
     }
   }
@@ -401,43 +401,43 @@ class _SetSizePosState extends State<_SetTypeView> {
       // @ Toggle Buttons for Widget Size
       Container(
           constraints: BoxConstraints(maxWidth: Get.width - 80),
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                // Icon Option
-                AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
-                    groupValue: _groupValue, onChanged: (value) {
-                  widget.controller.currentTile.value.type = value;
-                  widget.controller.currentTile.refresh();
-                  setState(() {
-                    this._groupValue = value;
-                  });
-                }),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              // Icon Option
+              AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
+                  groupValue: _groupValue, onChanged: (value) {
+                widget.controller.currentTile.value.type = value;
+                widget.controller.currentTile.refresh();
+                setState(() {
+                  this._groupValue = value;
+                });
+              }),
 
-                // Showcase Option
-                AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
-                    groupValue: _groupValue, onChanged: (value) {
-                  widget.controller.currentTile.value.type = value;
-                  widget.controller.currentTile.refresh();
-                  setState(() {
-                    this._groupValue = value;
-                  });
-                }),
+              // Showcase Option
+              AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
+                  groupValue: _groupValue, onChanged: (value) {
+                widget.controller.currentTile.value.type = value;
+                widget.controller.currentTile.refresh();
+                setState(() {
+                  this._groupValue = value;
+                });
+              }),
 
-                // Feed Option
-                AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
-                    groupValue: _groupValue, onChanged: (value) {
-                  widget.controller.currentTile.value.type = value;
-                  widget.controller.currentTile.refresh();
-                  setState(() {
-                    this._groupValue = value;
-                  });
-                }),
-              ],
-            ),
+              // Feed Option
+              widget.controller.doesProviderAllowFeed(
+                      widget.controller.currentTile.value.provider)
+                  ? AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
+                      groupValue: _groupValue, onChanged: (value) {
+                      widget.controller.currentTile.value.type = value;
+                      widget.controller.currentTile.refresh();
+                      setState(() {
+                        this._groupValue = value;
+                      });
+                    })
+                  : Container(),
+            ],
           )),
     ]);
   }

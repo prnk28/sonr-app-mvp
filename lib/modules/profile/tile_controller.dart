@@ -147,6 +147,12 @@ class TileController extends GetxController {
         provider == Contact_SocialTile_Provider.YouTube);
   }
 
+  // ^ Helper to Display Tile Options ^ //
+  bool doesProviderAllowFeed(Contact_SocialTile_Provider provider) {
+    return (provider == Contact_SocialTile_Provider.Twitter ||
+        provider == Contact_SocialTile_Provider.Medium);
+  }
+
   // ^ Removes Current Tile ^ //
   deleteTile() {
     // Remove Tile from Contact and Save

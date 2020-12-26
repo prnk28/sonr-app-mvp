@@ -125,9 +125,10 @@ class AppController extends GetxController {
 }
 
 // ^ Root App Widget ^ //
-class App extends GetView<AppController> {
+class App extends StatelessWidget {
   // @ Handle Sharing Intent
   App() {
+    final controller = Get.put(AppController());
     // Listen to Incoming File
     controller.incomingFile.listen((file) {
       print("Incoming File: " + file.toString());

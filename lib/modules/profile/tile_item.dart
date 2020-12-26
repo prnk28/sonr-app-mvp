@@ -17,6 +17,7 @@ class SocialTileItem extends GetWidget<TileController> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
+      // Draggable Aspect
       LongPressDraggable(
           feedback: _buildView(controller.state.value == TileState.Editing,
               isDragging: true),
