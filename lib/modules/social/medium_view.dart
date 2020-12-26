@@ -18,7 +18,7 @@ class MediumView extends StatefulWidget {
 }
 
 class _MediumViewState extends State<MediumView> {
-  MediumData data;
+  MediumModel data;
   bool fetched = false;
   @override
   void initState() {

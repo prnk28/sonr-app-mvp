@@ -5,14 +5,14 @@ const MEDIUM_API_FEED =
     'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@';
 
 // ^ Model ^ //
-class MediumData {
+class MediumModel {
   String status;
   Feed feed;
   List<Post> posts;
 
-  MediumData({this.status, this.feed, this.posts});
+  MediumModel({this.status, this.feed, this.posts});
 
-  MediumData.fromResponse(dynamic respBody) {
+  MediumModel.fromResponse(dynamic respBody) {
     Map<String, dynamic> json = jsonDecode(respBody);
     status = json['status'];
     feed = json['feed'] != null ? new Feed.fromJson(json['feed']) : null;

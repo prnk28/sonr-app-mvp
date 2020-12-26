@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/social_medium.dart';
 import 'package:sonar_app/data/social_twitter.dart';
+import 'package:sonar_app/data/social_youtube.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 export 'package:sonr_core/models/models.dart';
@@ -18,6 +19,7 @@ class SocialMediaService extends GetxService {
   String _twitterConsumer;
   // ignore: unused_field
   String _twitterSecret;
+  String _youtubeKey;
 
   Future<SocialMediaService> init() async {
     final data = await rootBundle.loadString('assets/keys.json', cache: false);
@@ -25,6 +27,7 @@ class SocialMediaService extends GetxService {
     _twitterBearer = result["twitterBearer"];
     _twitterConsumer = result["twitterConsumer"];
     _twitterSecret = result["twitterSecret"];
+    _youtubeKey = result["youtubeKey"];
     return this;
   }
 
@@ -35,7 +38,7 @@ class SocialMediaService extends GetxService {
   Future<bool> validate(Contact_SocialTile_Provider prv, String usr) async {
     switch (prv) {
       case Contact_SocialTile_Provider.Medium:
-        MediumData data = await getMedium(usr);
+        MediumModel data = await getMedium(usr);
         return data.status == "ok";
         break;
       case Contact_SocialTile_Provider.Spotify:
@@ -58,6 +61,22 @@ class SocialMediaService extends GetxService {
   // * ------------------- * //
   // * ---- Retreival ---- * //
   // * ------------------- * //
+  // ^ Gets Medium Data as RSS Feed then Converts to JSON ^ //
+  Future<MediumModel> getMedium(String username) async {
+    //  Request with UserID
+    final resp = await get(MEDIUM_API_FEED + username);
+
+    //  Valid Status
+    if (resp.statusCode == 200) {
+      return MediumModel.fromResponse(resp.body);
+    }
+    // ! Invalid Code
+    else {
+      SonrSnack.error("Something went wrong");
+      return null;
+    }
+  }
+
   // ^ Retreive Profile/ Tweets ^ //
   Future<TweetsModel> getTweets(String username) async {
     // Valid Status
@@ -104,13 +123,17 @@ class SocialMediaService extends GetxService {
   }
 
   // ^ Gets Medium Data as RSS Feed then Converts to JSON ^ //
-  Future<MediumData> getMedium(String username) async {
-    //  Request with UserID
-    final resp = await get(MEDIUM_API_FEED + username);
+  Future<YoutubeModel> getYoutube(String video) async {
+    // Perform Request
+    final youResp = await get(
+        YOUTUBE_API_SEARCH + video + YOUTUBE_KEY + _youtubeKey,
+        headers: {
+          'Accept': 'application/json',
+        });
 
     //  Valid Status
-    if (resp.statusCode == 200) {
-      return MediumData.fromResponse(resp.body);
+    if (youResp.statusCode == 200) {
+      return YoutubeModel.fromResponse(youResp.body);
     }
     // ! Invalid Code
     else {
