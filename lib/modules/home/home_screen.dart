@@ -1,10 +1,18 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/main.dart';
 import 'package:sonar_app/modules/home/transfer_item.dart';
 import 'package:sonar_app/theme/theme.dart';
+import 'package:sonar_app/widgets/sheet.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
+  HomeScreen() {
+    Get.find<AppController>().incomingFile.listen((data) {
+      Get.bottomSheet(IncomingFileSheet(data));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // Build View
@@ -12,9 +20,10 @@ class HomeScreen extends GetView<HomeController> {
     return SonrTheme(
         child: Scaffold(
             backgroundColor: NeumorphicTheme.baseColor(context),
-            appBar: SonrHomeBar(() {
-              Get.offNamed("/profile");
-            }),
+            appBar: SonrAppBar.leading(
+                "Home",
+                SonrButton.appBar(SonrIcon.profile, IconPosition.OnlyLeft,
+                    () => Get.offNamed("/profile"))),
             floatingActionButton: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(

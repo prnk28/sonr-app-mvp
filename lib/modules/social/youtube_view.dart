@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_youtube.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';

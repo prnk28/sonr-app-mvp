@@ -55,13 +55,13 @@ class SonrCard extends GetView<SonrCardController> {
               child: Container(
                 child: Column(children: [
                   // @ Top Right Close/Cancel Button
-                  closeButton(() {
+                  SonrButton.close(() {
                     // Emit Event
                     controller.declineInvite();
 
                     // Pop Window
                     Get.back();
-                  }, padTop: 8, padLeft: 8),
+                  }, padTop: 8, padRight: 8),
 
                   // @ Invite View
                   Padding(padding: EdgeInsets.all(8)),
@@ -87,7 +87,7 @@ class SonrCard extends GetView<SonrCardController> {
         ]),
 
         // Save Button
-        rectangleButton("Keep", () {
+        SonrButton.rectangle(SonrText.normal("Keep"), () {
           controller.acceptContact(contact, false);
           Get.back();
         }),
@@ -121,14 +121,14 @@ class _ContactInvite extends GetView<SonrCardController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // @ Send Back Button
-            rectangleButton("Keep and send yours", () {
+            SonrButton.rectangle(SonrText.normal("Keep and send yours"), () {
               // Emit Event
               controller.acceptContact(contact, true);
               Get.back();
             }),
             Padding(padding: EdgeInsets.all(6)),
             // @ Save Button
-            rectangleButton("Keep", () {
+            SonrButton.rectangle(SonrText.normal("Keep"), () {
               controller.acceptContact(contact, false);
               Get.back();
             }),
@@ -145,8 +145,7 @@ class _FileInvite extends GetView<SonrCardController> {
   @override
   Widget build(BuildContext context) {
     // @ Initialize Preview
-    SonrIcon preview =
-        SonrIcon.file(IconType.Thumbnail, invite.payload);
+    SonrIcon preview = SonrIcon.file(IconType.Thumbnail, invite.payload);
 
     // @ Display Info
     return Obx(() {
@@ -172,7 +171,7 @@ class _FileInvite extends GetView<SonrCardController> {
             Padding(padding: EdgeInsets.only(top: 8)),
 
             // @ Build Auth Action
-            rectangleButton("Accept", () {
+            SonrButton.rectangle(SonrText.normal("Accept"), () {
               controller.acceptFile();
             }),
           ],

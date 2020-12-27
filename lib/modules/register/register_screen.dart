@@ -11,7 +11,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: SonrAppBar("Sonr"),
+        appBar: SonrAppBar.title("Sonr"),
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: Column(children: <Widget>[
           Padding(

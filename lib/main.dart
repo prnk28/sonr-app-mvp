@@ -6,6 +6,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/widgets/sheet.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_screen.dart';
@@ -29,7 +30,6 @@ initServices() async {
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<AppController>(AppController(), permanent: true);
     Get.put<SonrCardController>(SonrCardController(), permanent: true);
   }
 }
@@ -42,6 +42,13 @@ List<GetPage> getPages() {
         name: '/home',
         page: () => SonrTheme(child: HomeScreen()),
         transition: Transition.zoom,
+        binding: HomeBinding()),
+
+    // ** Home Page - Incoming File ** //
+    GetPage(
+        name: '/home/incoming',
+        page: () => SonrTheme(child: HomeScreen()),
+        transition: Transition.cupertinoDialog,
         binding: HomeBinding()),
 
     // ** Home Page - Back ** //
@@ -84,6 +91,7 @@ List<GetPage> getPages() {
 // ^ For handling inbound files/url ^ //
 class AppController extends GetxController {
   StreamSubscription _intentDataStreamSubscription;
+  final started = false.obs;
   final incomingFile = Rx<List<SharedMediaFile>>();
   final incomingText = "".obs;
 
@@ -92,22 +100,24 @@ class AppController extends GetxController {
     // For sharing images coming from outside the app while the app is in the memory
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
+      started(true);
       incomingFile(value);
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
 
-    // For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
-      incomingFile(value);
-    });
-
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentDataStreamSubscription =
         ReceiveSharingIntent.getTextStream().listen((String value) {
+      started(true);
       incomingText(value);
     }, onError: (err) {
       print("getLinkStream error: $err");
+    });
+
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
+      incomingFile(value);
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
@@ -128,7 +138,9 @@ class AppController extends GetxController {
 class App extends StatelessWidget {
   // @ Handle Sharing Intent
   App() {
+    // Inject App Controller
     final controller = Get.put(AppController());
+
     // Listen to Incoming File
     controller.incomingFile.listen((file) {
       print("Incoming File: " + file.toString());
@@ -142,8 +154,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Connect to Sonr Network
-    Get.find<DeviceService>().start();
+    // Check if App in Memory
+    if (Get.find<AppController>().started.value) {
+      Get.offAllNamed("/home/incoming");
+      return Container();
+    } else {
+      // Connect to Sonr Network
+      Get.find<DeviceService>().start();
+    }
 
     // Build View
     return GetMaterialApp(

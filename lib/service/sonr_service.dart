@@ -24,7 +24,7 @@ class SonrService extends GetxService {
   // @ Set Properties
   final direction = 0.0.obs;
   final lobby = Map<String, Peer>().obs;
-  final code = "".obs;
+  final olc = "".obs;
 
   // @ Set References
   Node _node;
@@ -52,10 +52,10 @@ class SonrService extends GetxService {
   Future<SonrService> init(
       Position pos, String username, Contact contact) async {
     // Get OLC
-    code(OLC.encode(pos.latitude, pos.longitude, codeLength: 8));
+    olc(OLC.encode(pos.latitude, pos.longitude, codeLength: 8));
 
     // Create Worker
-    _node = await SonrCore.initialize(code.value, username, contact);
+    _node = await SonrCore.initialize(olc.value, username, contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);

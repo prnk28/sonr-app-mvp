@@ -113,7 +113,7 @@ class SocialsGrid extends StatelessWidget {
     print(focusedIndex);
     return SliverStaggeredGrid(
         delegate: SliverChildBuilderDelegate((context, index) {
-          return SocialTileItem(tiles[index], tiles.indexOf(tiles[index]));
+          return SocialTileItem(tiles[index], index);
         }),
         gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,

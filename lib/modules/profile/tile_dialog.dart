@@ -41,12 +41,12 @@ class TileDialog extends GetWidget<TileController> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // @ Top Left Close/Cancel Button
-                          closeButton(() {
+                          SonrButton.close(() {
                             Get.back();
                             controller.step(TileStep.Zero);
                           }),
                           // @ Top Right Confirm Button
-                          acceptButton(() {
+                          SonrButton.accept(() {
                             if (controller.finish()) {
                               Get.back();
                             }
@@ -56,7 +56,7 @@ class TileDialog extends GetWidget<TileController> {
                   // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
                   else if (controller.step.value == TileStep.StepTwo) {
                     currentView = _SetInfoView(controller);
-                    topButtons = closeButton(() {
+                    topButtons = SonrButton.close(() {
                       Get.back();
                       controller.step(TileStep.Zero);
                     });
@@ -64,7 +64,15 @@ class TileDialog extends GetWidget<TileController> {
                     // Bottom Buttons
                     bottomButtons = Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [_buildBackButton(), _buildNextButton()]);
+                        children: [
+                          SonrButton.rectangle(
+                              SonrText.normal("Back"), controller.previousStep,
+                              icon: SonrIcon.back),
+                          SonrButton.rectangle(
+                              SonrText.normal("Next"), controller.nextStep,
+                              icon: SonrIcon.forward,
+                              iconPosition: IconPosition.Right),
+                        ]);
                   }
                   // @ Step One: Top Cancel Button, Bottom wide Next Button
                   else {
@@ -83,13 +91,17 @@ class TileDialog extends GetWidget<TileController> {
                     currentView = _DropdownAddView(options, controller);
 
                     // Top Buttons
-                    topButtons = closeButton(() {
+                    topButtons = SonrButton.close(() {
                       Get.back();
                       controller.step(TileStep.Zero);
                     });
 
                     // Bottom Buttons
-                    bottomButtons = _buildNextButton(expanded: true);
+                    bottomButtons = SonrButton.rectangle(
+                        SonrText.normal("Next", size: 22), controller.nextStep,
+                        icon: SonrIcon.forward,
+                        margin: EdgeInsets.only(left: 60, right: 80),
+                        iconPosition: IconPosition.Right);
                   }
 
                   // ^ Build View ^ //
@@ -117,50 +129,50 @@ class TileDialog extends GetWidget<TileController> {
             )));
   }
 
-  // ^ Build Next Button with Finish at End ^ //
-  _buildNextButton({bool expanded = false}) {
-    return NeumorphicButton(
-        margin:
-            expanded ? EdgeInsets.only(left: 60, right: 80) : EdgeInsets.zero,
-        onPressed: () {
-          controller.nextStep();
-        },
-        style: NeumorphicStyle(
-            depth: 8,
-            color: K_BASE_COLOR,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-        padding: EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            expanded
-                ? SonrText.normal("Next", size: 22)
-                : SonrText.normal("Next"),
-            SonrIcon.gradient(
-                Icons.arrow_right, FlutterGradientNames.eternalConstance,
-                size: 30)
-          ],
-        ));
-  }
+  // // ^ Build Next Button with Finish at End ^ //
+  // _buildNextButton({bool expanded = false}) {
+  //   return NeumorphicButton(
+  //       margin:
+  //           expanded ? EdgeInsets.only(left: 60, right: 80) : EdgeInsets.zero,
+  //       onPressed: () {
+  //         controller.nextStep();
+  //       },
+  //       style: NeumorphicStyle(
+  //           depth: 8,
+  //           color: K_BASE_COLOR,
+  //           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+  //       padding: EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: [
+  //           expanded
+  //               ? SonrText.normal("Next", size: 22)
+  //               : SonrText.normal("Next"),
+  //           SonrIcon.gradient(
+  //               Icons.arrow_right, FlutterGradientNames.eternalConstance,
+  //               size: 30)
+  //         ],
+  //       ));
+  // }
 
-  // ^ Build Back Button with Disabled at Beginning ^ //
-  _buildBackButton() {
-    return NeumorphicButton(
-      onPressed: () {
-        controller.previousStep();
-      },
-      style: NeumorphicStyle(
-          depth: 8,
-          color: K_BASE_COLOR,
-          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-      padding:
-          const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [Icon(Icons.arrow_left), SonrText.normal("Back")],
-      ),
-    );
-  }
+  // // ^ Build Back Button with Disabled at Beginning ^ //
+  // _buildBackButton() {
+  //   return NeumorphicButton(
+  //     onPressed: () {
+  //       controller.previousStep();
+  //     },
+  //     style: NeumorphicStyle(
+  //         depth: 8,
+  //         color: K_BASE_COLOR,
+  //         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+  //     padding:
+  //         const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       children: [Icon(Icons.arrow_left), SonrText.normal("Back")],
+  //     ),
+  //   );
+  // }
 }
 
 // ^ Step 1 Select Provider ^ //

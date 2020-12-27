@@ -1,9 +1,7 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_twitter.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';

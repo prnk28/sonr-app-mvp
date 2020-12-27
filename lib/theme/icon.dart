@@ -140,6 +140,22 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get info =>
       SonrIcon(_SonrIconData.info, IconType.Normal, Colors.black, null);
 
+  static SonrIcon get back =>
+      SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance,
+          size: 30);
+
+  static SonrIcon get forward => SonrIcon.gradient(
+      Icons.arrow_right, FlutterGradientNames.eternalConstance,
+      size: 30);
+
+  static SonrIcon get close =>
+      SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart);
+
+  static SonrIcon get profile => SonrIcon.gradient(
+        Icons.person_outline,
+        FlutterGradientNames.itmeoBranding,
+      );
+
   static Padding socialBadge(Contact_SocialTile_Provider prov) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),

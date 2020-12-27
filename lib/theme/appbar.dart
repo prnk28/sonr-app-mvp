@@ -1,75 +1,77 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sonar_app/theme/theme.dart';
 
-import 'icon.dart';
-
-// ^ Sonr Global AppBar Data ^ //
-// ignore: non_constant_identifier_names
-NeumorphicAppBar SonrAppBar(
-  String title,
-) {
-  return NeumorphicAppBar(
-      title: Center(
-          child: Text(title,
-              style: GoogleFonts.poppins(), textAlign: TextAlign.center)),
-      leading: null);
+enum AppBarType {
+  Title,
+  Leading,
+  Action,
+  LeadingAction,
 }
 
-// ignore: non_constant_identifier_names
-NeumorphicAppBar SonrHomeBar(
-  Function onPressed,
-) {
-  return NeumorphicAppBar(
-      title: Center(
-          child: Text("Home",
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w400,
-                fontSize: 28, //customize depth here
-                color: Colors.white, //customize color here
-              ),
-              textAlign: TextAlign.center)),
-      leading: Align(
-          alignment: Alignment.centerLeft,
-          child: NeumorphicButton(
-            padding: EdgeInsets.all(8),
-            style: NeumorphicStyle(
-                intensity: 0.85,
-                boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.convex,
-                depth: 8),
-            child: SonrIcon.gradient(
-              Icons.person_outline,
-              FlutterGradientNames.itmeoBranding,
-            ),
-            onPressed: onPressed,
-          )));
-}
+class SonrAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final SonrText title;
+  final Widget leading;
+  final Widget action;
+  final AppBarType type;
 
-// ^ Utilized in Transfer/Settings Screens ^ //
-// ignore: non_constant_identifier_names
-NeumorphicAppBar SonrExitAppBar(
-  String exitLocation, {
-  String title: "",
-}) {
-  // Create App Bar
-  return NeumorphicAppBar(
-      title: Center(child: Text(title, style: GoogleFonts.poppins())),
-      leading: Align(
-          alignment: Alignment.center,
-          child: NeumorphicButton(
-            padding: EdgeInsets.all(8),
-            style: NeumorphicStyle(
-                intensity: 0.85,
-                boxShape: NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.flat,
-                depth: 8),
-            child: SonrIcon.gradient(
-                Icons.close, FlutterGradientNames.phoenixStart),
-            onPressed: () {
-              Get.offNamed(exitLocation);
-            },
-          )));
+  @override
+  final Size preferredSize;
+  static const toolbarHeight = kToolbarHeight + 16 * 2;
+
+  SonrAppBar(
+    this.type, {
+    this.title,
+    this.leading,
+    this.action,
+    Key key,
+  })  : preferredSize = Size.fromHeight(toolbarHeight),
+        super(key: key);
+
+  factory SonrAppBar.title(String title) {
+    return SonrAppBar(AppBarType.Title, title: SonrText.appBar(title));
+  }
+
+  factory SonrAppBar.leading(String title, SonrButton leading) {
+    return SonrAppBar(
+      AppBarType.Leading,
+      leading: leading,
+    );
+  }
+
+  factory SonrAppBar.action(String title, SonrButton action) {
+    return SonrAppBar(AppBarType.Action,
+        title: SonrText.appBar(title), action: action);
+  }
+
+  factory SonrAppBar.leadingWithAction(
+      String title, SonrButton leading, SonrButton action) {
+    return SonrAppBar(AppBarType.LeadingAction,
+        title: SonrText.appBar(title), leading: leading, action: action);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    switch (type) {
+      case AppBarType.Title:
+        assert(title != null);
+        return NeumorphicAppBar(title: title);
+        break;
+      case AppBarType.Leading:
+        assert(title != null && leading != null);
+        return NeumorphicAppBar(title: title, leading: leading);
+        break;
+      case AppBarType.Action:
+        assert(title != null && action != null);
+        return NeumorphicAppBar(title: title, actions: [action]);
+        break;
+      case AppBarType.LeadingAction:
+        assert(title != null && action != null && leading != null);
+        return NeumorphicAppBar(
+            title: title, leading: leading, actions: [action]);
+        break;
+    }
+    return Container();
+  }
 }

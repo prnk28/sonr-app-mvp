@@ -29,7 +29,7 @@ class SonrText extends StatelessWidget {
         color: color ?? Colors.white);
   }
 
-  // ^ Gradient Text with Provided Data
+  // ^ Normal Text with Provided Data
   factory SonrText.normal(String text, {Color color, double size, Key key}) {
     return SonrText(text, false,
         weight: FontWeight.w500,
@@ -38,7 +38,7 @@ class SonrText extends StatelessWidget {
         color: color ?? Colors.black);
   }
 
-  // ^ Gradient Text with Provided Data
+  // ^ Bold Text with Provided Data
   factory SonrText.bold(String text, {Color color, double size, Key key}) {
     return SonrText(text, false,
         weight: FontWeight.bold,
@@ -47,7 +47,7 @@ class SonrText extends StatelessWidget {
         color: color ?? Colors.black);
   }
 
-  // ^ Gradient Text with Provided Data
+  // ^ Description Text with Provided Data
   factory SonrText.description(String text,
       {Color color, double size, Key key}) {
     return SonrText(text, false,
@@ -57,7 +57,7 @@ class SonrText extends StatelessWidget {
         color: color ?? Colors.grey);
   }
 
-  // ^ Gradient Text with Provided Data
+  // ^ Header Text with Provided Data
   factory SonrText.header(String text, {Color color, double size, Key key}) {
     return SonrText(text, false,
         weight: FontWeight.w800,
@@ -66,7 +66,7 @@ class SonrText extends StatelessWidget {
         color: color ?? Colors.white);
   }
 
-  // ** Gradient ** //
+  // ^ Gradient Text with Provided Data
   factory SonrText.gradient(String text, FlutterGradientNames gradient,
       {Color color, FontWeight weight, double size, Key key}) {
     return SonrText(text, true,
@@ -74,6 +74,15 @@ class SonrText extends StatelessWidget {
         size: size ?? 32,
         key: key,
         gradient: FlutterGradients.findByName(gradient));
+  }
+
+  // ^ AppBar Text with Provided Data
+  factory SonrText.appBar(String text, {Color color, double size, Key key}) {
+    return SonrText(text, false,
+        weight: FontWeight.w600,
+        size: size ?? 28,
+        key: key,
+        color: color ?? Colors.black);
   }
 
   @override

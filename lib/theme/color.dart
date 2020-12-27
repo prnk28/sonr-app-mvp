@@ -18,7 +18,6 @@ Color findIconsColor() {
   }
 }
 
-
 // ^ Color from HEX Code ^
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
@@ -35,6 +34,26 @@ extension HexColor on Color {
       '${red.toRadixString(16).padLeft(2, '0')}'
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
+}
+
+// ^ AppBar Gradient Mask Random ^
+Gradient randomAppbarGradient() {
+  // Predefined Colors
+  var opts = [
+    FlutterGradients.amyCrisp(),
+    FlutterGradients.sugarLollipop(),
+    FlutterGradients.summerGames(),
+    FlutterGradients.supremeSky(),
+    FlutterGradients.juicyCake(),
+    FlutterGradients.northMiracle(),
+    FlutterGradients.seaLord()
+  ];
+
+  // Generates a new Random object
+  final _random = new Random();
+
+  // Generate a random index based on the list length
+  return opts[_random.nextInt(opts.length)];
 }
 
 // ^ Progress Gradient Mask Random ^
