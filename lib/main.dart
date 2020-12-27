@@ -6,10 +6,10 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/widgets/sheet.dart';
+
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
-import 'modules/register/register_screen.dart';
+import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
 
 // ^ Main Method ^ //
@@ -55,7 +55,7 @@ List<GetPage> getPages() {
     GetPage(
         name: '/home/transfer',
         page: () => SonrTheme(child: HomeScreen()),
-        transition: Transition.size,
+        transition: Transition.upToDown,
         binding: HomeBinding()),
 
     // ** Home Page - Back ** //
@@ -69,13 +69,14 @@ List<GetPage> getPages() {
     GetPage(
         name: '/register',
         page: () => SonrTheme(child: RegisterScreen()),
-        transition: Transition.fade),
+        transition: Transition.fade,
+        binding: RegisterBinding()),
 
     // ** Transfer Page ** //
     GetPage(
         name: '/transfer',
         page: () => SonrTheme(child: TransferScreen()),
-        transition: Transition.size,
+        transition: Transition.downToUp,
         binding: TransferBinding()),
 
     // ** Profile Page ** //

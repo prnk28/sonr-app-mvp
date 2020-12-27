@@ -8,9 +8,18 @@ import 'home_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
   HomeScreen() {
+    // Listens to Incoming Files
     Get.find<AppController>().incomingFile.listen((data) {
       if (!Get.isBottomSheetOpen) {
         Get.bottomSheet(IncomingFileSheet(data));
+      }
+    });
+
+    // Listens to Incoming URLs
+    Get.find<AppController>().incomingText.listen((s) {
+      // Set Shared URL
+      if (!Get.isBottomSheetOpen && GetUtils.isURL(s)) {
+        Get.bottomSheet(IncomingUrlSheet(s));
       }
     });
   }

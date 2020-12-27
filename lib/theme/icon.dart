@@ -82,46 +82,50 @@ class SonrIcon extends StatelessWidget {
     }
   }
 
-  // ^ Payload Data File Type to Icon
-  factory SonrIcon.file(IconType type, Payload payload,
+  // ^ Payload Data File Type to Icon with Preview
+  factory SonrIcon.filePreview(IconType type, Payload payload,
       {double size = 30,
       Color color = Colors.black,
       FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
-    // Contact
+    IconData data;
     if (payload.type == Payload_Type.CONTACT) {
-      return SonrIcon(
-        _SonrIconData.contact,
-        type,
-        color,
-        gradient,
-        thumbnail: payload.file.thumbnail,
-        size: size,
-      );
+      data = _SonrIconData.contact;
+    } else if (payload.type == Payload_Type.FILE) {
+      data = _SonrIconData.files[payload.file.mime.type];
+    } else {
+      data = _SonrIconData.url;
     }
+    return SonrIcon(
+      data,
+      type,
+      color,
+      gradient,
+      thumbnail: payload.file.thumbnail,
+      size: size,
+    );
+  }
 
-    // File
-    else if (payload.type == Payload_Type.FILE) {
-      return SonrIcon(
-        _SonrIconData.files[payload.file.mime.type],
-        type,
-        color,
-        gradient,
-        thumbnail: payload.file.thumbnail,
-        size: size,
-      );
+  // ^ Payload Data File Type to Icon
+  factory SonrIcon.file(IconType type, Payload_Type payload,
+      {double size = 30,
+      MIME_Type mimeType = MIME_Type.image,
+      Color color = Colors.black,
+      FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
+    IconData data;
+    if (payload == Payload_Type.CONTACT) {
+      data = _SonrIconData.contact;
+    } else if (payload == Payload_Type.FILE) {
+      data = _SonrIconData.files[mimeType];
+    } else {
+      data = _SonrIconData.url;
     }
-
-    // URL
-    else {
-      return SonrIcon(
-        _SonrIconData.url,
-        type,
-        color,
-        gradient,
-        thumbnail: payload.file.thumbnail,
-        size: size,
-      );
-    }
+    return SonrIcon(
+      data,
+      type,
+      color,
+      gradient,
+      size: size,
+    );
   }
 
   // ^ UI Icons ^ //

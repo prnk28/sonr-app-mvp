@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:sonar_app/modules/register/register_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonr_core/sonr_core.dart';
-
-part 'form_view.dart';
+import 'register_form.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -15,7 +13,8 @@ class RegisterScreen extends StatelessWidget {
         backgroundColor: NeumorphicTheme.baseColor(context),
         body: Column(children: <Widget>[
           Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0), child: FormView())
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              child: RegisterForm())
         ]));
   }
 }

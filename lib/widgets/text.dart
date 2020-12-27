@@ -58,12 +58,18 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Header Text with Provided Data
-  factory SonrText.header(String text, {Color color, double size, Key key}) {
-    return SonrText(text, false,
-        weight: FontWeight.w800,
-        size: size ?? 108,
-        key: key,
-        color: color ?? Colors.white);
+  factory SonrText.header(String text,
+      {FlutterGradientNames gradient = FlutterGradientNames.viciousStance,
+      double size,
+      Key key}) {
+    return SonrText(
+      text,
+      true,
+      weight: FontWeight.w800,
+      size: size ?? 108,
+      key: key,
+      gradient: FlutterGradients.findByName(gradient),
+    );
   }
 
   // ^ Gradient Text with Provided Data
@@ -82,11 +88,14 @@ class SonrText extends StatelessWidget {
       double size,
       FlutterGradientNames gradient = FlutterGradientNames.premiumDark,
       Key key}) {
-    return SonrText(text, true,
-        weight: FontWeight.w600,
-        size: size ?? 30,
-        key: key,
-        gradient: FlutterGradients.findByName(gradient),);
+    return SonrText(
+      text,
+      true,
+      weight: FontWeight.w600,
+      size: size ?? 30,
+      key: key,
+      gradient: FlutterGradients.findByName(gradient),
+    );
   }
 
   @override
