@@ -5,6 +5,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class IncomingFileSheet extends StatelessWidget {
   final List<SharedMediaFile> sharedFiles;
@@ -65,8 +66,8 @@ class IncomingFileSheet extends StatelessWidget {
 }
 
 class IncomingUrlSheet extends StatelessWidget {
-  final String sharedText;
-  const IncomingUrlSheet(this.sharedText);
+  final String url;
+  const IncomingUrlSheet(this.url);
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +89,11 @@ class IncomingUrlSheet extends StatelessWidget {
             // Bottom Left Close/Cancel Button
             SonrIcon.file(IconType.Gradient, Payload_Type.URL,
                 gradient: FlutterGradientNames.magicRay),
+
+            Expanded(
+                child: WebView(
+              initialUrl: url,
+            )),
 
             // Bottom Right Confirm Button
             SonrButton.accept(() {
