@@ -90,8 +90,8 @@ class _SliverViews extends GetView<ProfileController> {
           SliverPadding(padding: EdgeInsets.all(14)),
 
           // @ Builds List of Social Tile
-          Obx(() => SocialsGrid(
-              controller.socials, controller.focusTileIndex.value)),
+          Obx(() =>
+              SocialsGrid(controller.socials, controller.focusTileIndex.value)),
         ],
       ),
     );
@@ -101,6 +101,7 @@ class _SliverViews extends GetView<ProfileController> {
 class SocialsGrid extends StatelessWidget {
   final List<Contact_SocialTile> tiles;
   final int focusedIndex;
+
   const SocialsGrid(
     this.tiles,
     this.focusedIndex, {
@@ -109,9 +110,10 @@ class SocialsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(focusedIndex);
     return SliverStaggeredGrid(
         delegate: SliverChildBuilderDelegate((context, index) {
-          return SocialTileItem(tiles[index], index);
+          return SocialTileItem(tiles[index], tiles.indexOf(tiles[index]));
         }),
         gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
@@ -119,10 +121,13 @@ class SocialsGrid extends StatelessWidget {
             crossAxisSpacing: 6.0,
             staggeredTileCount: tiles.length,
             staggeredTileBuilder: (index) {
-              // Feed Occupies 1 Whole Row/ 3 Columns
-              return focusedIndex == index
-                  ? StaggeredTile.count(3, 4)
-                  : StaggeredTile.count(2, 2);
+              if (focusedIndex >= 0) {
+                return focusedIndex == index
+                    ? StaggeredTile.count(4, 3)
+                    : StaggeredTile.count(2, 2);
+              } else {
+                return StaggeredTile.count(2, 2);
+              }
             }));
   }
 }

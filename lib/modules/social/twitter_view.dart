@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_twitter.dart';
+import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
@@ -11,9 +12,9 @@ import 'package:sonr_core/models/models.dart';
 // ** Medium Social View/Preview ** //
 class TwitterView extends StatefulWidget {
   // Properties
-  final TileController controller;
   final Contact_SocialTile item;
-  TwitterView(this.item, this.controller) {
+  final int index;
+  TwitterView(this.item, this.index) {
     item.type = Contact_SocialTile_TileType.Showcase;
   }
 
@@ -35,8 +36,8 @@ class _TwitterViewState extends State<TwitterView> {
     super.initState();
     _fetch();
 
-    widget.controller.state.listen((state) {
-      if (state == TileState.Expanded) {
+    Get.find<ProfileController>().focusTileIndex.listen((idx) {
+      if (idx == widget.index) {
         setState(() {
           expanded = true;
         });
@@ -64,9 +65,9 @@ class _TwitterViewState extends State<TwitterView> {
   @override
   Widget build(BuildContext context) {
     // * Validate Fetched * //
-    if (fetched) {
-      // @ Build Expanded Feed View
-      if (expanded) {
+    // @ Build Expanded Feed View
+    if (expanded) {
+      if (fetched) {
         return ListView.separated(
           shrinkWrap: true,
           itemCount: tweets.tweets.length,
@@ -81,18 +82,24 @@ class _TwitterViewState extends State<TwitterView> {
             );
           },
         );
+      } else {
+        return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
-      // @ Build ShowCase View
-      else {
+    }
+    // @ Build ShowCase View
+    else {
+      if (fetched) {
         return Stack(children: [
           _buildTile(tweets.tweets.first),
           SonrIcon.socialBadge(Contact_SocialTile_Provider.Twitter)
         ]);
+      } else {
+        return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
-    } else {
-      return Center(
-          child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
     }
   }
 
@@ -115,7 +122,6 @@ class _TwitterViewState extends State<TwitterView> {
   }
 
   _buildExpandedItem(Tweet tweet) {
-    // Build View
     return NeumorphicButton(
       padding: EdgeInsets.all(12),
       onPressed: () {

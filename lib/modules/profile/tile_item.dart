@@ -57,7 +57,7 @@ class SocialTileItem extends GetWidget<TileController> {
     // Theming View with Drag
     return GestureDetector(
       onTap: () {
-        controller.setExpanded(true);
+        Get.find<ProfileController>().toggleExpand(item);
         HapticFeedback.lightImpact();
       },
       onDoubleTap: () {
@@ -85,15 +85,15 @@ class SocialTileItem extends GetWidget<TileController> {
   Widget _setSocialView() {
     // Medium Data
     if (item.provider == Contact_SocialTile_Provider.Medium) {
-      return MediumView(item, controller);
+      return MediumView(item, index);
     }
     // Twitter Data
     else if (item.provider == Contact_SocialTile_Provider.Twitter) {
-      return TwitterView(item, controller);
+      return TwitterView(item, index);
     }
     // Youtube Data
     else if (item.provider == Contact_SocialTile_Provider.YouTube) {
-      return YoutubeView(item, controller);
+      return YoutubeView(item, index);
     }
     return WebView(
       initialUrl: item.url,

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_medium.dart';
+import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -10,8 +11,8 @@ import 'package:sonr_core/models/models.dart';
 class MediumView extends StatefulWidget {
   // Properties
   final Contact_SocialTile item;
-  final TileController controller;
-  MediumView(this.item, this.controller) {
+  final int index;
+  MediumView(this.item, this.index) {
     item.type = Contact_SocialTile_TileType.Showcase;
   }
 
@@ -29,8 +30,8 @@ class _MediumViewState extends State<MediumView> {
     super.initState();
     _fetch();
 
-    widget.controller.state.listen((state) {
-      if (state == TileState.Expanded) {
+    Get.find<ProfileController>().focusTileIndex.listen((idx) {
+      if (idx == widget.index) {
         setState(() {
           expanded = true;
         });
@@ -55,9 +56,9 @@ class _MediumViewState extends State<MediumView> {
   @override
   Widget build(BuildContext context) {
     // * Validate Fetched * //
-    if (fetched) {
-      // @ Build Expanded Feed View
-      if (expanded) {
+    // @ Build Expanded Feed View
+    if (expanded) {
+      if (fetched) {
         return ListView.separated(
           shrinkWrap: true,
           itemCount: data.posts.length,
@@ -72,18 +73,24 @@ class _MediumViewState extends State<MediumView> {
             );
           },
         );
+      } else {
+        return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
-      // @ Build Tile View
-      else {
+    }
+    // @ Build Tile View
+    else {
+      if (fetched) {
         return Stack(children: [
           _buildTile(data.posts.first),
           SonrIcon.socialBadge(Contact_SocialTile_Provider.Medium)
         ]);
+      } else {
+        return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
-    } else {
-      return Center(
-          child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
     }
   }
 

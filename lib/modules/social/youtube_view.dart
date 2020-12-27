@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_youtube.dart';
+import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -9,9 +10,9 @@ import 'package:sonr_core/models/models.dart';
 // ** Medium Social View/Preview ** //
 class YoutubeView extends StatefulWidget {
   // Properties
-  final TileController controller;
+  final int index;
   final Contact_SocialTile item;
-  YoutubeView(this.item, this.controller) {
+  YoutubeView(this.item, this.index) {
     item.type = Contact_SocialTile_TileType.Showcase;
   }
 
@@ -32,8 +33,8 @@ class _YoutubeViewState extends State<YoutubeView> {
     super.initState();
     _fetch();
 
-    widget.controller.state.listen((state) {
-      if (state == TileState.Expanded) {
+    Get.find<ProfileController>().focusTileIndex.listen((idx) {
+      if (idx == widget.index) {
         setState(() {
           expanded = true;
         });
@@ -56,25 +57,30 @@ class _YoutubeViewState extends State<YoutubeView> {
 
   @override
   Widget build(BuildContext context) {
-    // * Validate Fetched * //
-    if (fetched) {
-      // @ Build ShowCase View
-      if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
+    // @ Build ShowCase View
+    if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
+      if (fetched) {
         return Stack(children: [
           _buildTile(video.items.first),
           SonrIcon.socialBadge(Contact_SocialTile_Provider.YouTube)
         ]);
+      } else {
+        return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
-      // @ Build Icon View
-      else {
+    }
+    // @ Build Icon View
+    else {
+      if (fetched) {
         return Center(
             child: SonrIcon.social(
                 IconType.Gradient, Contact_SocialTile_Provider.YouTube));
+      } else {
+        return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
-    } else {
-      return Center(
-          child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
     }
   }
 

@@ -7,7 +7,7 @@ export '../social/medium_view.dart';
 export '../social/twitter_view.dart';
 export '../social/youtube_view.dart';
 
-enum TileState { None, Dragging, Editing, Expanded }
+enum TileState { None, Dragging, Editing }
 
 enum TileStep {
   Zero,
@@ -29,7 +29,6 @@ class TileController extends GetxController {
   // References
   int index;
   bool _isEditing = false;
-  bool _isExpanded = false;
 
   // ^ Create New Tile ^ //
   initTile(Contact_SocialTile value, int index) async {
@@ -41,20 +40,6 @@ class TileController extends GetxController {
   newTile() {
     currentTile(Contact_SocialTile());
     step(TileStep.StepOne);
-  }
-
-  // ^ Toggle Expanded Mode ^ //
-  setExpanded(bool expanded) {
-    _isExpanded = expanded;
-    if (_isExpanded) {
-      Get.find<ProfileController>().focusTileIndex(index);
-      Get.find<ProfileController>().focusTileIndex.refresh();
-      state(TileState.Expanded);
-    } else {
-      Get.find<ProfileController>().focusTileIndex(-2);
-      Get.find<ProfileController>().focusTileIndex.refresh();
-      state(TileState.None);
-    }
   }
 
   // ^ Toggle Editing Mode ^ //

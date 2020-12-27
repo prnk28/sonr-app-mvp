@@ -6,10 +6,7 @@ import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // @ PeerStatus Enum
-enum ProfileState {
-  Viewing,
-  Editing,
-}
+enum ProfileState { Viewing, Editing }
 
 class ProfileController extends GetxController {
   // Properties
@@ -21,10 +18,11 @@ class ProfileController extends GetxController {
   final website = Get.find<DeviceService>().user.contact.website.obs;
   final profilePic = Get.find<DeviceService>().user.contact.profilePic.obs;
   final socials = Get.find<DeviceService>().user.contact.socials.obs;
-  final focusTileIndex = RxInt(-2);
+  final focusTileIndex = (-2).obs;
 
   // References
   bool _isEditing = false;
+  bool _isExpanded = false;
 
   ProfileController() {
     refresh();
@@ -53,6 +51,17 @@ class ProfileController extends GetxController {
 
     // Save Contact
     saveChanges();
+  }
+
+  // ^ Expand a Tile  ^ //
+  toggleExpand(Contact_SocialTile tile) {
+    _isExpanded = !_isExpanded;
+    if (_isExpanded) {
+      int idx = socials.indexOf(tile);
+      focusTileIndex(idx);
+    } else {
+      focusTileIndex(-2);
+    }
   }
 
   // ^ Save a Social Tile  ^ //
