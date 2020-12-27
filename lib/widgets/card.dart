@@ -146,7 +146,7 @@ class _FileInvite extends GetView<SonrCardController> {
   Widget build(BuildContext context) {
     // @ Initialize Preview
     SonrIcon preview =
-        SonrIcon.metaFromPayload(IconType.Thumbnail, invite.payload);
+        SonrIcon.file(IconType.Thumbnail, invite.payload);
 
     // @ Display Info
     return Obx(() {

@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -29,14 +27,7 @@ class SonrSnack {
   // ^ Succesful Operation ^ //
   factory SonrSnack.success(String message) {
     return SonrSnack(
-        "Success!!",
-        message,
-        Icon(
-          Boxicons.bx_check_circle,
-          color: Colors.white,
-        ),
-        Colors.green,
-        1250);
+        "Success!!", message, SonrIcon.success, Colors.green, 1250);
   }
 
   // ^ Missing Data ^ //
@@ -48,50 +39,24 @@ class SonrSnack {
     return SonrSnack(
         isLast ? "Almost There!" : list[random.nextInt(list.length)],
         message,
-        Icon(
-          Boxicons.bx_message_square_error,
-          color: Colors.white,
-        ),
+        SonrIcon.missing,
         Colors.redAccent,
         1500);
   }
 
   // ^ Invalid Operation ^ //
   factory SonrSnack.invalid(String message) {
-    return SonrSnack(
-        "Uh Oh!",
-        message,
-        Icon(
-          Boxicons.bx_help_circle,
-          color: Colors.white,
-        ),
-        Colors.orange,
-        1250);
+    return SonrSnack("Uh Oh!", message, SonrIcon.missing, Colors.orange, 1250);
   }
 
   // ^ Cancelled Operation ^ //
   factory SonrSnack.cancelled(String message) {
     return SonrSnack(
-        "Cancelled.",
-        message,
-        Icon(
-          Boxicons.bx_x_circle,
-          color: Colors.white,
-        ),
-        Colors.yellow,
-        1250);
+        "Cancelled.", message, SonrIcon.cancel, Colors.yellow, 1250);
   }
 
   // ^ Error on Operation ^ //
   factory SonrSnack.error(String message) {
-    return SonrSnack(
-        "Error.",
-        message,
-        Icon(
-          Boxicons.bx_error,
-          color: Colors.white,
-        ),
-        Colors.red,
-        1500);
+    return SonrSnack("Error.", message, SonrIcon.error, Colors.red, 1500);
   }
 }

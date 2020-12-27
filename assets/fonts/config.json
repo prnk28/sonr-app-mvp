@@ -1,5 +1,5 @@
 {
-  "name": "SonrSocialIcons",
+  "name": "SonrIconData",
   "css_prefix_text": "",
   "css_use_suffix": false,
   "hinting": true,
@@ -44,7 +44,7 @@
     },
     {
       "uid": "216891b0093d4dbef19877d5b00d1b16",
-      "css": "retweet",
+      "css": "twitter-rt",
       "code": 59393,
       "src": "entypo"
     },
@@ -91,6 +91,96 @@
       "search": [
         "tiktok"
       ]
+    },
+    {
+      "uid": "5e0a374728ffa8d0ae1f331a8f648231",
+      "css": "github-alt",
+      "code": 61715,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "0f6a2573a7b6df911ed199bb63717e27",
+      "css": "github",
+      "code": 61595,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "m3m8301t2xdy30x4lp7txm0vztl67tcl",
+      "css": "mobile",
+      "code": 59396,
+      "src": "modernpics"
+    },
+    {
+      "uid": "aaf371ab44841e9aaffebd179d324ce4",
+      "css": "android",
+      "code": 59397,
+      "src": "zocial"
+    },
+    {
+      "uid": "81db033e704eb7c586a365559d7c0f36",
+      "css": "file-audio",
+      "code": 61895,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "7614c6e6f2bd5c38e65e3a25253656f8",
+      "css": "photo_video",
+      "code": 63612,
+      "src": "fontawesome5"
+    },
+    {
+      "uid": "381da2c2f7fd51f8de877c044d7f439d",
+      "css": "picture",
+      "code": 59406,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "5408be43f7c42bccee419c6be53fdef5",
+      "css": "doc-text",
+      "code": 61686,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "815503841e980c848f55e0271deacead",
+      "css": "link",
+      "code": 59398,
+      "src": "entypo"
+    },
+    {
+      "uid": "933f454f9d3342a055217fd695475d44",
+      "css": "vcard",
+      "code": 59399,
+      "src": "typicons"
+    },
+    {
+      "uid": "17ebadd1e3f274ff0205601eef7b9cc4",
+      "css": "help-circled",
+      "code": 59422,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "e82cedfa1d5f15b00c5a81c9bd731ea2",
+      "css": "info-circled",
+      "code": 59423,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "43ab845088317bd348dee1d975700c48",
+      "css": "ok-circled",
+      "code": 59413,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "0f4cae16f34ae243a6144c18a003f2d8",
+      "css": "cancel-circled",
+      "code": 59416,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "3c0ef77f5fbb5c933c23f2c437d8cab8",
+      "css": "error-alt",
+      "code": 59400,
+      "src": "elusive"
     }
   ]
 }

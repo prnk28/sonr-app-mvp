@@ -48,7 +48,6 @@ dependencies:
   webview_flutter: ^1.0.7
 
   # -- UI/UX --
-  flutter_boxicons: ^2.0.1
   flutter_custom_clippers: ^1.1.2
   flutter_dropdown: ^0.0.8
   flutter_gradients: ^1.0.0+2
@@ -73,9 +72,9 @@ flutter:
   uses-material-design: true
 
   fonts:
-  - family:  SonrSocialIcons
+  - family:  SonrIcons
     fonts:
-      - asset: fonts/SonrSocialIcons.ttf
+      - asset: fonts/sonr_icons.ttf
 
   # -- Media --
   assets:

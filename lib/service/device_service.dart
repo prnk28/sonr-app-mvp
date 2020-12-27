@@ -6,7 +6,6 @@ import 'package:sonar_app/data/model_user.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'social_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
