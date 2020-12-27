@@ -94,8 +94,8 @@ class TransferController extends GetxController {
     });
   }
 
-  // ^ Add Peer Item ^ //
-  createItem(String id, Peer peer) {
+  // ^ Create Peer Item from Data ^ //
+  addPeerBubble(String id, Peer peer) {
     // @ Update State if already unchecked
     if (_isEmpty) {
       isEmpty(_isEmpty = false);

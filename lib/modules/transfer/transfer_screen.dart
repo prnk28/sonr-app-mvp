@@ -52,7 +52,7 @@ class LobbyView extends GetView<TransferController> {
       Get.find<SonrService>().lobby().forEach((id, peer) {
         // print(id);
         // * Check Map Size * //
-        controller.createItem(id, peer);
+        controller.addPeerBubble(id, peer);
       });
 
       // @ Lobby is Inactive
