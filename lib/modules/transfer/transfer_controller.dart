@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:get/get.dart';
+import 'package:sonar_app/modules/transfer/peer_widget.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_core/models/models.dart';
 
 // ** Compass Designation Enum **
 enum CompassHeading {
@@ -24,7 +26,13 @@ enum CompassHeading {
   NNW
 }
 
-class CompassController extends GetxController {
+enum LobbyState {
+  Empty,
+  Active,
+  Busy,
+}
+
+class TransferController extends GetxController {
   // @ Properties
   final Rx<Gradient> gradient = FlutterGradients.findByName(
           FlutterGradientNames.octoberSilence,
@@ -49,8 +57,13 @@ class CompassController extends GetxController {
   final string = "".obs;
   final heading = "".obs;
 
+  // @ Lobby Properties
+  final isEmpty = true.obs;
+  bool _isEmpty = true;
+  RxList<PeerBubble> stackItems = new List<PeerBubble>().obs;
+
   // ^ Controller Constructer ^
-  CompassController() {
+  TransferController() {
     // @ Update Direction
     Get.find<SonrService>().direction.listen((newDir) {
       // Update String Elements
@@ -79,6 +92,24 @@ class CompassController extends GetxController {
         gradient(inactiveGradient);
       }
     });
+  }
+
+  // ^ Add Peer Item ^ //
+  createItem(String id, Peer peer) {
+    // @ Update State if already unchecked
+    if (_isEmpty) {
+      isEmpty(_isEmpty = false);
+    }
+
+    // @ Create Bubbles
+    // Validate not Duplicate
+    if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
+      stackItems.add(PeerBubble(peer, stackItems.length - 1));
+      stackItems.refresh();
+      //print("Added Bubble");
+    }
+    //print("Total Bubbbles = " + stackItems.length.toString());
+    stackItems.refresh();
   }
 
   // ^ Retreives Direction String ^ //

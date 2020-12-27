@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'compass_controller.dart';
+import 'transfer_controller.dart';
 
 // ** Build CompassView ** //
-class CompassView extends GetView<CompassController> {
+class CompassView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
