@@ -14,8 +14,8 @@ class TransferScreen extends StatelessWidget {
         child: Scaffold(
             appBar: SonrAppBar.leading(
                 Get.find<SonrService>().olc.value,
-                SonrButton.appBar(SonrIcon.close, IconPosition.OnlyLeft,
-                    () => Get.offNamed("/home/transfer"))),
+                SonrButton.appBar(
+                    SonrIcon.close, () => Get.offNamed("/home/transfer"))),
             backgroundColor: NeumorphicTheme.baseColor(context),
             body: SafeArea(
                 child: Stack(

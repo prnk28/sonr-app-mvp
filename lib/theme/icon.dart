@@ -149,12 +149,16 @@ class SonrIcon extends StatelessWidget {
       size: 30);
 
   static SonrIcon get close =>
-      SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart);
+      SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart,
+          size: 36);
 
   static SonrIcon get profile => SonrIcon.gradient(
-        Icons.person_outline,
-        FlutterGradientNames.itmeoBranding,
-      );
+      Icons.person_outline, FlutterGradientNames.itmeoBranding,
+      size: 36);
+
+  static SonrIcon get more => SonrIcon.gradient(
+      Icons.more_horiz_outlined, FlutterGradientNames.northMiracle,
+      size: 36);
 
   static Padding socialBadge(Contact_SocialTile_Provider prov) {
     return Padding(
@@ -209,7 +213,10 @@ class SonrIcon extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: ConstrainedBox(
                       constraints: BoxConstraints(
-                          minWidth: 1, minHeight: 1, maxWidth: 200), // here
+                          minWidth: 1,
+                          minHeight: 1,
+                          maxWidth: 200,
+                          maxHeight: 200), // here
                       child: Image.memory(thumbnail))));
         } else {
           result = Icon(data, size: size);

@@ -71,10 +71,9 @@ class SocialTileItem extends GetWidget<TileController> {
                 intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
             : NeumorphicStyle(
                 intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
-        child: AnimatedContainer(
+        child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,
-          duration: Duration(milliseconds: 1500),
           child: isDragging ? Icon(Icons.drag_indicator) : _setSocialView(),
         ),
       ),

@@ -40,12 +40,12 @@ class TileDialog extends GetWidget<TileController> {
                     bottomButtons = Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // @ Top Left Close/Cancel Button
+                          // @ Bottom Left Close/Cancel Button
                           SonrButton.close(() {
                             Get.back();
                             controller.step(TileStep.Zero);
                           }),
-                          // @ Top Right Confirm Button
+                          // @ Bottom Right Confirm Button
                           SonrButton.accept(() {
                             if (controller.finish()) {
                               Get.back();
@@ -128,51 +128,6 @@ class TileDialog extends GetWidget<TileController> {
               ),
             )));
   }
-
-  // // ^ Build Next Button with Finish at End ^ //
-  // _buildNextButton({bool expanded = false}) {
-  //   return NeumorphicButton(
-  //       margin:
-  //           expanded ? EdgeInsets.only(left: 60, right: 80) : EdgeInsets.zero,
-  //       onPressed: () {
-  //         controller.nextStep();
-  //       },
-  //       style: NeumorphicStyle(
-  //           depth: 8,
-  //           color: K_BASE_COLOR,
-  //           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-  //       padding: EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         children: [
-  //           expanded
-  //               ? SonrText.normal("Next", size: 22)
-  //               : SonrText.normal("Next"),
-  //           SonrIcon.gradient(
-  //               Icons.arrow_right, FlutterGradientNames.eternalConstance,
-  //               size: 30)
-  //         ],
-  //       ));
-  // }
-
-  // // ^ Build Back Button with Disabled at Beginning ^ //
-  // _buildBackButton() {
-  //   return NeumorphicButton(
-  //     onPressed: () {
-  //       controller.previousStep();
-  //     },
-  //     style: NeumorphicStyle(
-  //         depth: 8,
-  //         color: K_BASE_COLOR,
-  //         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
-  //     padding:
-  //         const EdgeInsets.only(top: 12.0, bottom: 12.0, left: 20, right: 20),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //       children: [Icon(Icons.arrow_left), SonrText.normal("Back")],
-  //     ),
-  //   );
-  // }
 }
 
 // ^ Step 1 Select Provider ^ //

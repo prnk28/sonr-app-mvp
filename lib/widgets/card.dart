@@ -173,7 +173,7 @@ class _FileInvite extends GetView<SonrCardController> {
             // @ Build Auth Action
             SonrButton.rectangle(SonrText.normal("Accept"), () {
               controller.acceptFile();
-            }),
+            }, icon: SonrIcon.success),
           ],
         );
       }
@@ -248,7 +248,7 @@ class _FileInviteProgress extends HookWidget {
                       color: Colors.transparent,
                     ),
                     child: Center(
-                      child: Icon(iconData, key: iconKey, size: 325),
+                      child: Icon(iconData, key: iconKey, size: 250),
                     ),
                   ),
                 ),
@@ -264,7 +264,7 @@ class _FileInviteProgress extends HookWidget {
   }
 }
 
-// ^ Media Popup View ^ //
+// ^ File Received View ^ //
 class _FileInviteComplete extends StatelessWidget {
   final Metadata meta;
 

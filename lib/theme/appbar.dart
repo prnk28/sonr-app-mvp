@@ -36,6 +36,7 @@ class SonrAppBar extends StatelessWidget implements PreferredSizeWidget {
   factory SonrAppBar.leading(String title, SonrButton leading) {
     return SonrAppBar(
       AppBarType.Leading,
+      title: SonrText.appBar(title),
       leading: leading,
     );
   }

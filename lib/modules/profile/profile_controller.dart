@@ -26,9 +26,6 @@ class ProfileController extends GetxController {
 
   ProfileController() {
     refresh();
-    focusTileIndex.listen((i) {
-      print("Tile $i is expanded");
-    });
   }
 
   // ^ Toggle Editing Mode ^ //

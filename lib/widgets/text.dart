@@ -77,12 +77,16 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ AppBar Text with Provided Data
-  factory SonrText.appBar(String text, {Color color, double size, Key key}) {
-    return SonrText(text, false,
+  factory SonrText.appBar(String text,
+      {Color color,
+      double size,
+      FlutterGradientNames gradient = FlutterGradientNames.premiumDark,
+      Key key}) {
+    return SonrText(text, true,
         weight: FontWeight.w600,
-        size: size ?? 28,
+        size: size ?? 30,
         key: key,
-        color: color ?? Colors.black);
+        gradient: FlutterGradients.findByName(gradient),);
   }
 
   @override

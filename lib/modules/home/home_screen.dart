@@ -9,7 +9,9 @@ import 'home_controller.dart';
 class HomeScreen extends GetView<HomeController> {
   HomeScreen() {
     Get.find<AppController>().incomingFile.listen((data) {
-      Get.bottomSheet(IncomingFileSheet(data));
+      if (!Get.isBottomSheetOpen) {
+        Get.bottomSheet(IncomingFileSheet(data));
+      }
     });
   }
 
@@ -22,8 +24,8 @@ class HomeScreen extends GetView<HomeController> {
             backgroundColor: NeumorphicTheme.baseColor(context),
             appBar: SonrAppBar.leading(
                 "Home",
-                SonrButton.appBar(SonrIcon.profile, IconPosition.OnlyLeft,
-                    () => Get.offNamed("/profile"))),
+                SonrButton.appBar(
+                    SonrIcon.profile, () => Get.offNamed("/profile"))),
             floatingActionButton: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(

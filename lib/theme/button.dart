@@ -5,7 +5,7 @@ import 'icon.dart';
 import '../widgets/text.dart';
 
 enum HapticFeedbackType { Light, Medium, Heavy, Selection }
-enum IconPosition { Left, Right, Top, Bottom, OnlyLeft, OnlyRight }
+enum IconPosition { Left, Right, Top, Bottom, Only }
 
 class SonrButton extends StatelessWidget {
   final bool hasIcon;
@@ -43,7 +43,7 @@ class SonrButton extends StatelessWidget {
       {EdgeInsets margin = EdgeInsets.zero,
       SonrIcon icon,
       double radius = 20,
-      double intensity = 0.4,
+      double intensity = 0.85,
       IconPosition iconPosition = IconPosition.Left,
       HapticFeedbackType haptic = HapticFeedbackType.Light}) {
     if (icon != null) {
@@ -93,8 +93,8 @@ class SonrButton extends StatelessWidget {
   }
 
   // * Rectangle Button * //
-  factory SonrButton.appBar(
-      SonrIcon icon, IconPosition pos, Function onPressed) {
+  factory SonrButton.appBar(SonrIcon icon, Function onPressed,
+      {double intensity = 0.85}) {
     return SonrButton(
         true,
         null,
@@ -102,12 +102,12 @@ class SonrButton extends StatelessWidget {
         EdgeInsets.zero,
         NeumorphicShape.flat,
         8,
-        0.85,
+        intensity,
         NeumorphicBoxShape.circle(),
         onPressed,
         HapticFeedbackType.Medium,
         icon: icon,
-        iconPosition: pos);
+        iconPosition: IconPosition.Only);
   }
 
   // * Accept Menu Button * //
@@ -211,11 +211,8 @@ class SonrButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [text, icon]);
         break;
-      case IconPosition.OnlyLeft:
-        Align(alignment: Alignment.centerLeft, child: icon);
-        break;
-      case IconPosition.OnlyRight:
-        Align(alignment: Alignment.centerRight, child: icon);
+      case IconPosition.Only:
+        return icon;
         break;
     }
     return Container();

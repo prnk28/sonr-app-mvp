@@ -51,38 +51,16 @@ class _SliverViews extends GetView<ProfileController> {
               children: <Widget>[
                 // @ Close Button
                 Padding(
-                  padding: EdgeInsets.only(left: 4.0),
-                  child: NeumorphicButton(
-                    padding: EdgeInsets.all(8),
-                    style: NeumorphicStyle(
-                        intensity: 0.6,
-                        boxShape: NeumorphicBoxShape.circle(),
-                        color: K_BASE_COLOR,
-                        shape: NeumorphicShape.flat,
-                        depth: 8),
-                    child: SonrIcon.gradient(
-                        Icons.close, FlutterGradientNames.phoenixStart),
-                    onPressed: () {
-                      Get.offNamed("/home/profile");
-                    },
-                  ),
-                ),
+                    padding: EdgeInsets.only(left: 4.0),
+                    child: SonrButton.appBar(
+                        SonrIcon.close, () => Get.offNamed("/home/profile"),
+                        intensity: 0.4)),
+
                 // @ More Button
                 Padding(
-                  padding: EdgeInsets.only(right: 4.0),
-                  child: NeumorphicButton(
-                    padding: EdgeInsets.all(8),
-                    style: NeumorphicStyle(
-                        intensity: 0.6,
-                        boxShape: NeumorphicBoxShape.circle(),
-                        color: K_BASE_COLOR,
-                        shape: NeumorphicShape.flat,
-                        depth: 8),
-                    child: SonrIcon.gradient(Icons.more_horiz_outlined,
-                        FlutterGradientNames.northMiracle),
-                    onPressed: () {},
-                  ),
-                )
+                    padding: EdgeInsets.only(right: 4.0),
+                    child: SonrButton.appBar(SonrIcon.more, () => {},
+                        intensity: 0.4)),
               ],
             ),
           ),
@@ -110,10 +88,11 @@ class SocialsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(focusedIndex);
     return SliverStaggeredGrid(
         delegate: SliverChildBuilderDelegate((context, index) {
-          return SocialTileItem(tiles[index], index);
+          return AnimatedContainer(
+              duration: Duration(milliseconds: 1500),
+              child: SocialTileItem(tiles[index], index));
         }),
         gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
@@ -123,7 +102,7 @@ class SocialsGrid extends StatelessWidget {
             staggeredTileBuilder: (index) {
               if (focusedIndex >= 0) {
                 return focusedIndex == index
-                    ? StaggeredTile.count(4, 3)
+                    ? StaggeredTile.count(4, 4)
                     : StaggeredTile.count(2, 2);
               } else {
                 return StaggeredTile.count(2, 2);
