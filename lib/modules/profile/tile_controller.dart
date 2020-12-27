@@ -7,11 +7,7 @@ export '../social/medium_view.dart';
 export '../social/twitter_view.dart';
 export '../social/youtube_view.dart';
 
-enum TileState {
-  None,
-  Dragging,
-  Editing,
-}
+enum TileState { None, Dragging, Editing, Expanded }
 
 enum TileStep {
   Zero,
@@ -31,12 +27,34 @@ class TileController extends GetxController {
   final step = TileStep.Zero.obs;
 
   // References
+  int index;
   bool _isEditing = false;
+  bool _isExpanded = false;
 
   // ^ Create New Tile ^ //
-  setTile(Contact_SocialTile value) async {
+  initTile(Contact_SocialTile value, int index) async {
     // Set Tile
     currentTile(value);
+  }
+
+  // ^ Create New Tile ^ //
+  newTile() {
+    currentTile(Contact_SocialTile());
+    step(TileStep.StepOne);
+  }
+
+  // ^ Toggle Expanded Mode ^ //
+  setExpanded(bool expanded) {
+    _isExpanded = expanded;
+    if (_isExpanded) {
+      Get.find<ProfileController>().focusTileIndex(index);
+      Get.find<ProfileController>().focusTileIndex.refresh();
+      state(TileState.Expanded);
+    } else {
+      Get.find<ProfileController>().focusTileIndex(-2);
+      Get.find<ProfileController>().focusTileIndex.refresh();
+      state(TileState.None);
+    }
   }
 
   // ^ Toggle Editing Mode ^ //
@@ -49,12 +67,6 @@ class TileController extends GetxController {
       state(TileState.None);
     }
     update(["SocialTile"]);
-  }
-
-  // ^ Create New Tile ^ //
-  newTile() {
-    currentTile(Contact_SocialTile());
-    step(TileStep.StepOne);
   }
 
   // ^ Determine Auth Type ^
@@ -100,26 +112,24 @@ class TileController extends GetxController {
         SonrSnack.missing("Add your username or Link your account");
       }
     }
-    // @ Finish
-    else {
-      // Validate
-      if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
-        // Set Position
-        currentTile.value.position =
-            Get.find<ProfileController>().socials.length - 1;
+  }
 
-        // Add Tile to Contact and Save
-        Get.find<ProfileController>().saveSocialTile(currentTile.value);
+  // ^ Finish and Save new Tile ^ //
+  bool finish() {
+    // Validate
+    if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
+      // Set Position
+      currentTile.value.position =
+          Get.find<ProfileController>().socials.length - 1;
 
-        // Reset Current Tile
-        Get.back();
-        step(TileStep.Zero);
-        currentTile(Contact_SocialTile());
-        providerIsPublic(false);
-      } else {
-        // Display Error Snackbar
-        SonrSnack.missing("Pick a Tile Type", isLast: true);
-      }
+      // Add Tile to Contact and Save
+      Get.find<ProfileController>().saveSocialTile(currentTile.value);
+      providerIsPublic(false);
+      return true;
+    } else {
+      // Display Error Snackbar
+      SonrSnack.missing("Pick a Tile Type", isLast: true);
+      return false;
     }
   }
 

@@ -38,7 +38,7 @@ class TileDialog extends GetWidget<TileController> {
 
                     // Bottom Buttons
                     bottomButtons = Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           // @ Top Left Close/Cancel Button
                           closeButton(() {
@@ -47,7 +47,9 @@ class TileDialog extends GetWidget<TileController> {
                           }),
                           // @ Top Right Confirm Button
                           acceptButton(() {
-                            controller.nextStep();
+                            if (controller.finish()) {
+                              Get.back();
+                            }
                           }),
                         ]);
                   }
@@ -401,8 +403,11 @@ class _SetSizePosState extends State<_SetTypeView> {
       // @ Toggle Buttons for Widget Size
       Container(
           constraints: BoxConstraints(maxWidth: Get.width - 80),
+          height: Get.height - 600,
+          width: Get.width,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Icon Option

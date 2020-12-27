@@ -1,7 +1,7 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_youtube.dart';
+import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -9,8 +9,11 @@ import 'package:sonr_core/models/models.dart';
 // ** Medium Social View/Preview ** //
 class YoutubeView extends StatefulWidget {
   // Properties
+  final TileController controller;
   final Contact_SocialTile item;
-  YoutubeView(this.item);
+  YoutubeView(this.item, this.controller) {
+    item.type = Contact_SocialTile_TileType.Showcase;
+  }
 
   @override
   _YoutubeViewState createState() => _YoutubeViewState();
@@ -22,11 +25,24 @@ class _YoutubeViewState extends State<YoutubeView> {
 
   // References
   bool fetched = false;
+  bool expanded = false;
 
   @override
   void initState() {
     super.initState();
     _fetch();
+
+    widget.controller.state.listen((state) {
+      if (state == TileState.Expanded) {
+        setState(() {
+          expanded = true;
+        });
+      } else {
+        setState(() {
+          expanded = false;
+        });
+      }
+    });
   }
 
   // ^ Fetches Data ^ //
@@ -44,8 +60,10 @@ class _YoutubeViewState extends State<YoutubeView> {
     if (fetched) {
       // @ Build ShowCase View
       if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
-        return Stack(
-            children: [_buildShowcase(video.items.first), _buildBadge()]);
+        return Stack(children: [
+          _buildTile(video.items.first),
+          SonrIcon.socialBadge(Contact_SocialTile_Provider.YouTube)
+        ]);
       }
       // @ Build Icon View
       else {
@@ -60,34 +78,17 @@ class _YoutubeViewState extends State<YoutubeView> {
     }
   }
 
-  _buildBadge() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: SonrIcon.social(
-            IconType.Gradient, Contact_SocialTile_Provider.YouTube,
-            size: 30),
-      ),
-    );
-  }
-
-  _buildShowcase(VideoList video) {
+  _buildTile(VideoList video) {
     // Build View
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        width: 150,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SonrText.description(video.video.title, size: 14),
-              SonrText.normal(_cleanDate(video.video.publishTime), size: 14)
-            ],
-          ),
+    return Container(
+      padding: EdgeInsets.all(12),
+      width: 150,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SonrText.description(video.video.title, size: 14),
+            SonrText.normal(_cleanDate(video.video.publishTime), size: 14)
+          ],
         ),
       ),
     );

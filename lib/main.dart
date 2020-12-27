@@ -84,7 +84,7 @@ List<GetPage> getPages() {
 // ^ For handling inbound files/url ^ //
 class AppController extends GetxController {
   StreamSubscription _intentDataStreamSubscription;
-  final incomingFile = Rx<SharedMediaFile>();
+  final incomingFile = Rx<List<SharedMediaFile>>();
   final incomingText = "".obs;
 
   @override
@@ -92,14 +92,14 @@ class AppController extends GetxController {
     // For sharing images coming from outside the app while the app is in the memory
     _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
         .listen((List<SharedMediaFile> value) {
-      incomingFile(value.first);
+      incomingFile(value);
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> value) {
-      incomingFile(value.first);
+      incomingFile(value);
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory

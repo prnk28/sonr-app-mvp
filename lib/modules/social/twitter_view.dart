@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_twitter.dart';
+import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -10,8 +11,11 @@ import 'package:sonr_core/models/models.dart';
 // ** Medium Social View/Preview ** //
 class TwitterView extends StatefulWidget {
   // Properties
+  final TileController controller;
   final Contact_SocialTile item;
-  TwitterView(this.item);
+  TwitterView(this.item, this.controller) {
+    item.type = Contact_SocialTile_TileType.Showcase;
+  }
 
   @override
   _TwitterViewState createState() => _TwitterViewState();
@@ -24,11 +28,24 @@ class _TwitterViewState extends State<TwitterView> {
 
   // References
   bool fetched = false;
+  bool expanded = false;
 
   @override
   void initState() {
     super.initState();
     _fetch();
+
+    widget.controller.state.listen((state) {
+      if (state == TileState.Expanded) {
+        setState(() {
+          expanded = true;
+        });
+      } else {
+        setState(() {
+          expanded = false;
+        });
+      }
+    });
   }
 
   // ^ Fetches Data ^ //
@@ -48,14 +65,14 @@ class _TwitterViewState extends State<TwitterView> {
   Widget build(BuildContext context) {
     // * Validate Fetched * //
     if (fetched) {
-      // @ Build Feed View
-      if (widget.item.type == Contact_SocialTile_TileType.Feed) {
+      // @ Build Expanded Feed View
+      if (expanded) {
         return ListView.separated(
           shrinkWrap: true,
           itemCount: tweets.tweets.length,
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
-            return _buildTweet(tweets.tweets.elementAt(index));
+            return _buildExpandedItem(tweets.tweets.elementAt(index));
           },
           separatorBuilder: (BuildContext context, int index) {
             return SizedBox(
@@ -66,15 +83,11 @@ class _TwitterViewState extends State<TwitterView> {
         );
       }
       // @ Build ShowCase View
-      else if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
-        return Stack(
-            children: [_buildShowcase(tweets.tweets.first), _buildBadge()]);
-      }
-      // @ Build Icon View
       else {
-        return Center(
-            child: SonrIcon.social(
-                IconType.Gradient, Contact_SocialTile_Provider.Twitter));
+        return Stack(children: [
+          _buildTile(tweets.tweets.first),
+          SonrIcon.socialBadge(Contact_SocialTile_Provider.Twitter)
+        ]);
       }
     } else {
       return Center(
@@ -83,42 +96,25 @@ class _TwitterViewState extends State<TwitterView> {
     }
   }
 
-  _buildBadge() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: SonrIcon.social(
-            IconType.Gradient, Contact_SocialTile_Provider.Twitter,
-            size: 30),
-      ),
-    );
-  }
-
-  _buildShowcase(Tweet tweet) {
+  _buildTile(Tweet tweet) {
+    // Get.find<DeviceService>().launchURL(
+    //     "https://twitter.com/${widget.item.username}/status/${tweet.id}");
     // Build View
-    return GestureDetector(
-      onTap: () {
-        Get.find<DeviceService>().launchURL(
-            "https://twitter.com/${widget.item.username}/status/${tweet.id}");
-        HapticFeedback.lightImpact();
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        width: 150,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SonrText.description(tweet.text, size: 14),
-              SonrText.normal(_cleanDate(tweet.createdAt), size: 14)
-            ],
-          ),
+    return Container(
+      padding: EdgeInsets.all(12),
+      width: 150,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SonrText.description(tweet.text, size: 14),
+            SonrText.normal(_cleanDate(tweet.createdAt), size: 14)
+          ],
         ),
       ),
     );
   }
 
-  _buildTweet(Tweet tweet) {
+  _buildExpandedItem(Tweet tweet) {
     // Build View
     return NeumorphicButton(
       padding: EdgeInsets.all(12),
@@ -131,20 +127,13 @@ class _TwitterViewState extends State<TwitterView> {
         child: SingleChildScrollView(
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            GestureDetector(
-              onTap: () {
-                Get.find<DeviceService>().launchURL(user.data.first.url);
-              },
-              child: Container(
-                width: 55,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ClipOval(
-                          child: Image.network(user.data.first.profilePicUrl)),
-                      SonrText.normal(user.data.first.username, size: 10)
-                    ]),
-              ),
+            Container(
+              width: 55,
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                ClipOval(child: Image.network(user.data.first.profilePicUrl)),
+                SonrText.normal(user.data.first.username, size: 10)
+              ]),
             ),
             Container(
               width: 265,

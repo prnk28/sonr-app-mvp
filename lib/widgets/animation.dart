@@ -1,3 +1,4 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:sonar_app/theme/theme.dart';
 
 class FadeAnimatedSwitcher extends StatelessWidget {
@@ -158,3 +159,4 @@ class SlideLeftAnimatedSwitcher extends StatelessWidget {
         child: child);
   }
 }
+

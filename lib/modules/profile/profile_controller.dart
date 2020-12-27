@@ -21,13 +21,16 @@ class ProfileController extends GetxController {
   final website = Get.find<DeviceService>().user.contact.website.obs;
   final profilePic = Get.find<DeviceService>().user.contact.profilePic.obs;
   final socials = Get.find<DeviceService>().user.contact.socials.obs;
-  var tiles;
+  final focusTileIndex = RxInt(-2);
 
   // References
   bool _isEditing = false;
+
   ProfileController() {
-    tiles = socials;
     refresh();
+    focusTileIndex.listen((i) {
+      print("Tile $i is expanded");
+    });
   }
 
   // ^ Toggle Editing Mode ^ //

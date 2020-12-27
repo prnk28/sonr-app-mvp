@@ -140,6 +140,19 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get info =>
       SonrIcon(_SonrIconData.info, IconType.Normal, Colors.black, null);
 
+  static Padding socialBadge(Contact_SocialTile_Provider prov) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: SonrIcon.social(
+            IconType.Gradient, Contact_SocialTile_Provider.Medium,
+            size: 30),
+      ),
+    );
+  }
+
+  // ^ Build View of Icon ^ //
   @override
   Widget build(BuildContext context) {
     Widget result;
@@ -268,7 +281,7 @@ class _SonrIconData {
         _SonrIconData.youtube, FlutterGradientNames.loveKiss,
         alt: _SonrIconData.youtube_text),
     Contact_SocialTile_Provider.Medium: _IconGradientWData(
-        _SonrIconData.medium, FlutterGradientNames.mountainRock,
+        _SonrIconData.medium, FlutterGradientNames.eternalConstance,
         alt: _SonrIconData.medium_fill),
     Contact_SocialTile_Provider.Facebook: _IconGradientWData(
         _SonrIconData.facebook, FlutterGradientNames.perfectBlue,

@@ -30,102 +30,99 @@ class ProfileScreen extends GetView<ProfileController> {
 class _SliverViews extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      // Get Tile Count
-      int count = controller.socials.length;
-
-      // Create View
-      return NeumorphicBackground(
-        backendColor: Colors.transparent,
-        child: CustomScrollView(
-          slivers: [
-            // @ Builds Profile Header
-            SliverAppBar(
-              pinned: true,
-              floating: true,
-              snap: true,
-              primary: true,
-              automaticallyImplyLeading: false,
-              toolbarHeight: kToolbarHeight + 16 * 2,
-              flexibleSpace: ContactHeader(),
-              expandedHeight: 285,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  // @ Close Button
-                  Padding(
-                    padding: EdgeInsets.only(left: 4.0),
-                    child: NeumorphicButton(
-                      padding: EdgeInsets.all(8),
-                      style: NeumorphicStyle(
-                          intensity: 0.6,
-                          boxShape: NeumorphicBoxShape.circle(),
-                          color: K_BASE_COLOR,
-                          shape: NeumorphicShape.flat,
-                          depth: 8),
-                      child: SonrIcon.gradient(
-                          Icons.close, FlutterGradientNames.phoenixStart),
-                      onPressed: () {
-                        Get.offNamed("/home/profile");
-                      },
-                    ),
+    // Create View
+    return NeumorphicBackground(
+      backendColor: Colors.transparent,
+      child: CustomScrollView(
+        slivers: [
+          // @ Builds Profile Header
+          SliverAppBar(
+            pinned: true,
+            floating: true,
+            snap: true,
+            primary: true,
+            automaticallyImplyLeading: false,
+            toolbarHeight: kToolbarHeight + 16 * 2,
+            flexibleSpace: ContactHeader(),
+            expandedHeight: 285,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                // @ Close Button
+                Padding(
+                  padding: EdgeInsets.only(left: 4.0),
+                  child: NeumorphicButton(
+                    padding: EdgeInsets.all(8),
+                    style: NeumorphicStyle(
+                        intensity: 0.6,
+                        boxShape: NeumorphicBoxShape.circle(),
+                        color: K_BASE_COLOR,
+                        shape: NeumorphicShape.flat,
+                        depth: 8),
+                    child: SonrIcon.gradient(
+                        Icons.close, FlutterGradientNames.phoenixStart),
+                    onPressed: () {
+                      Get.offNamed("/home/profile");
+                    },
                   ),
-                  // @ More Button
-                  Padding(
-                    padding: EdgeInsets.only(right: 4.0),
-                    child: NeumorphicButton(
-                      padding: EdgeInsets.all(8),
-                      style: NeumorphicStyle(
-                          intensity: 0.6,
-                          boxShape: NeumorphicBoxShape.circle(),
-                          color: K_BASE_COLOR,
-                          shape: NeumorphicShape.flat,
-                          depth: 8),
-                      child: SonrIcon.gradient(Icons.more_horiz_outlined,
-                          FlutterGradientNames.northMiracle),
-                      onPressed: () {},
-                    ),
-                  )
-                ],
-              ),
+                ),
+                // @ More Button
+                Padding(
+                  padding: EdgeInsets.only(right: 4.0),
+                  child: NeumorphicButton(
+                    padding: EdgeInsets.all(8),
+                    style: NeumorphicStyle(
+                        intensity: 0.6,
+                        boxShape: NeumorphicBoxShape.circle(),
+                        color: K_BASE_COLOR,
+                        shape: NeumorphicShape.flat,
+                        depth: 8),
+                    child: SonrIcon.gradient(Icons.more_horiz_outlined,
+                        FlutterGradientNames.northMiracle),
+                    onPressed: () {},
+                  ),
+                )
+              ],
             ),
+          ),
 
-            SliverPadding(padding: EdgeInsets.all(14)),
+          SliverPadding(padding: EdgeInsets.all(14)),
 
-            // @ Builds List of Social Tile
-            SliverStaggeredGrid(
-                delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return SocialTileItem(controller.socials[index], index);
-                }),
-                gridDelegate:
-                    SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: 12.0,
-                        crossAxisSpacing: 6.0,
-                        staggeredTileCount: count,
-                        staggeredTileBuilder: (index) {
-                          // Retreive Data
-                          var data = controller.socials[index];
+          // @ Builds List of Social Tile
+          Obx(() => SocialsGrid(
+              controller.socials, controller.focusTileIndex.value)),
+        ],
+      ),
+    );
+  }
+}
 
-                          // Feed Occupies 1 Whole Row/ 3 Columns
-                          if (data.type == Contact_SocialTile_TileType.Feed) {
-                            return StaggeredTile.count(4, 4);
-                          }
-                          // Showcase Occupies 0.5 Whole Rows/ 2 Columns
-                          else if (data.type ==
-                              Contact_SocialTile_TileType.Showcase) {
-                            return StaggeredTile.count(2, 2);
-                          }
-                          // Icon can by 1/1
-                          else {
-                            return StaggeredTile.count(1, 1);
-                          }
-                        })),
-          ],
-        ),
-      );
-    });
+class SocialsGrid extends StatelessWidget {
+  final List<Contact_SocialTile> tiles;
+  final int focusedIndex;
+  const SocialsGrid(
+    this.tiles,
+    this.focusedIndex, {
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverStaggeredGrid(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          return SocialTileItem(tiles[index], index);
+        }),
+        gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 12.0,
+            crossAxisSpacing: 6.0,
+            staggeredTileCount: tiles.length,
+            staggeredTileBuilder: (index) {
+              // Feed Occupies 1 Whole Row/ 3 Columns
+              return focusedIndex == index
+                  ? StaggeredTile.count(3, 4)
+                  : StaggeredTile.count(2, 2);
+            }));
   }
 }

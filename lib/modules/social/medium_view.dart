@@ -1,8 +1,7 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonar_app/data/social_medium.dart';
-import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/modules/profile/tile_controller.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -11,8 +10,9 @@ import 'package:sonr_core/models/models.dart';
 class MediumView extends StatefulWidget {
   // Properties
   final Contact_SocialTile item;
-  MediumView(this.item) {
-    item.type = Contact_SocialTile_TileType.Icon;
+  final TileController controller;
+  MediumView(this.item, this.controller) {
+    item.type = Contact_SocialTile_TileType.Showcase;
   }
 
   @override
@@ -22,10 +22,24 @@ class MediumView extends StatefulWidget {
 class _MediumViewState extends State<MediumView> {
   MediumModel data;
   bool fetched = false;
+  bool expanded = false;
+
   @override
   void initState() {
     super.initState();
     _fetch();
+
+    widget.controller.state.listen((state) {
+      if (state == TileState.Expanded) {
+        setState(() {
+          expanded = true;
+        });
+      } else {
+        setState(() {
+          expanded = false;
+        });
+      }
+    });
   }
 
   // ^ Fetches Data ^ //
@@ -42,14 +56,14 @@ class _MediumViewState extends State<MediumView> {
   Widget build(BuildContext context) {
     // * Validate Fetched * //
     if (fetched) {
-      // @ Build Feed View
-      if (widget.item.type == Contact_SocialTile_TileType.Feed) {
+      // @ Build Expanded Feed View
+      if (expanded) {
         return ListView.separated(
           shrinkWrap: true,
           itemCount: data.posts.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
-            return _buildPost(data.posts.elementAt(index));
+            return _buildExpandedItem(data.posts.elementAt(index));
           },
           separatorBuilder: (BuildContext context, int index) {
             return SizedBox(
@@ -59,16 +73,12 @@ class _MediumViewState extends State<MediumView> {
           },
         );
       }
-      // @ Build ShowCase View
-      else if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
-        return Stack(
-            children: [_buildShowcase(data.posts.first), _buildBadge()]);
-      }
-      // @ Build Icon View
+      // @ Build Tile View
       else {
-        return Center(
-            child: SonrIcon.social(
-                IconType.Gradient, Contact_SocialTile_Provider.Medium));
+        return Stack(children: [
+          _buildTile(data.posts.first),
+          SonrIcon.socialBadge(Contact_SocialTile_Provider.Medium)
+        ]);
       }
     } else {
       return Center(
@@ -77,67 +87,43 @@ class _MediumViewState extends State<MediumView> {
     }
   }
 
-  _buildBadge() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: SonrIcon.social(
-            IconType.Gradient, Contact_SocialTile_Provider.Medium,
-            size: 30),
-      ),
-    );
-  }
-
-  _buildShowcase(Post post) {
+  _buildTile(Post post) {
     // Build View
-    return GestureDetector(
-      onTap: () {
-        Get.find<DeviceService>().launchURL(post.link);
-        HapticFeedback.lightImpact();
-      },
-      child: Container(
-        padding: EdgeInsets.all(12),
-        width: 150,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ClipPath(
-                  clipper: WaveClipperOne(),
-                  child: Image.network(post.thumbnail)),
-              SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                  size: 16),
-            ],
-          ),
+    return Container(
+      padding: EdgeInsets.all(12),
+      width: 150,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ClipPath(
+                clipper: WaveClipperOne(),
+                child: Image.network(post.thumbnail)),
+            SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
+                size: 16),
+          ],
         ),
       ),
     );
   }
 
-  _buildPost(Post post) {
+  _buildExpandedItem(Post post) {
     // Build View
-    return NeumorphicButton(
-      padding: EdgeInsets.all(12),
-      onPressed: () {
-        Get.find<DeviceService>().launchURL(post.link);
-      },
-      child: Container(
-        width: 275,
-        height: 180,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ClipPath(
-                  clipper: WaveClipperOne(),
-                  child: Image.network(post.thumbnail)),
-              SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                  size: 20),
-              SonrText.description(
-                  _cleanDescription(post.title.length, post.description),
-                  size: 14),
-              SonrText.normal(_cleanDate(post.pubDate), size: 14)
-            ],
-          ),
+    return Container(
+      width: 275,
+      height: 180,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ClipPath(
+                clipper: WaveClipperOne(),
+                child: Image.network(post.thumbnail)),
+            SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
+                size: 20),
+            SonrText.description(
+                _cleanDescription(post.title.length, post.description),
+                size: 14),
+            SonrText.normal(_cleanDate(post.pubDate), size: 14)
+          ],
         ),
       ),
     );

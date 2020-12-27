@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonar_app/modules/profile/profile_controller.dart';
 import 'package:sonar_app/modules/profile/tile_controller.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -13,7 +14,7 @@ class SocialTileItem extends GetWidget<TileController> {
   final Contact_SocialTile item;
   final int index;
   SocialTileItem(this.item, this.index) {
-    controller.setTile(item);
+    controller.initTile(item, index);
   }
   @override
   Widget build(BuildContext context) {
@@ -54,17 +55,28 @@ class SocialTileItem extends GetWidget<TileController> {
   // ^ Builds Neumorohic Item ^ //
   Widget _buildView(bool isEditing, {bool isDragging = false}) {
     // Theming View with Drag
-    return Neumorphic(
-      margin: EdgeInsets.all(4),
-      style: isEditing
-          ? NeumorphicStyle(
-              intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
-          : NeumorphicStyle(
-              intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
-      child: Container(
-        width: isDragging ? 125 : Get.width,
-        height: isDragging ? 125 : Get.height,
-        child: isDragging ? Icon(Icons.drag_indicator) : _setSocialView(),
+    return GestureDetector(
+      onTap: () {
+        controller.setExpanded(true);
+        HapticFeedback.lightImpact();
+      },
+      onDoubleTap: () {
+        Get.find<DeviceService>().launchURL(item.url);
+        HapticFeedback.mediumImpact();
+      },
+      child: Neumorphic(
+        margin: EdgeInsets.all(4),
+        style: isEditing
+            ? NeumorphicStyle(
+                intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
+            : NeumorphicStyle(
+                intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
+        child: AnimatedContainer(
+          width: isDragging ? 125 : Get.width,
+          height: isDragging ? 125 : Get.height,
+          duration: Duration(milliseconds: 1500),
+          child: isDragging ? Icon(Icons.drag_indicator) : _setSocialView(),
+        ),
       ),
     );
   }
@@ -73,15 +85,15 @@ class SocialTileItem extends GetWidget<TileController> {
   Widget _setSocialView() {
     // Medium Data
     if (item.provider == Contact_SocialTile_Provider.Medium) {
-      return MediumView(item);
+      return MediumView(item, controller);
     }
     // Twitter Data
     else if (item.provider == Contact_SocialTile_Provider.Twitter) {
-      return TwitterView(item);
+      return TwitterView(item, controller);
     }
     // Youtube Data
     else if (item.provider == Contact_SocialTile_Provider.YouTube) {
-      return YoutubeView(item);
+      return YoutubeView(item, controller);
     }
     return WebView(
       initialUrl: item.url,
