@@ -13,7 +13,12 @@ class ShareSheet extends StatelessWidget {
   // Properties
   final Widget child;
   final Size size;
-  const ShareSheet({Key key, @required this.child, @required this.size})
+  final Payload_Type payloadType;
+  const ShareSheet(
+      {Key key,
+      @required this.child,
+      @required this.size,
+      @required this.payloadType})
       : super(key: key);
 
   // @ Bottom Sheet for Media
@@ -30,7 +35,8 @@ class ShareSheet extends StatelessWidget {
           isUrl: false,
           child: _ShareItem(false, sharedFiles: sharedFiles, size: content),
         ),
-        size: window);
+        size: window,
+        payloadType: Payload_Type.FILE);
   }
 
   // @ Bottom Sheet for URL
@@ -47,7 +53,8 @@ class ShareSheet extends StatelessWidget {
           isUrl: true,
           child: _ShareItem(true, urlText: value, size: content),
         ),
-        size: window);
+        size: window,
+        payloadType: Payload_Type.URL);
   }
 
   // ^ Build Widget View ^ //
@@ -79,9 +86,10 @@ class ShareSheet extends StatelessWidget {
 
                             SonrText.header("Share", size: 40),
 
-                            // Bottom Right Confirm Button
+                            // @ Top Right Confirm Button
                             SonrButton.accept(() {
-                              Get.find<SonrService>().queue(Payload_Type.URL);
+                              // Go to Transfer
+                              Get.offNamed("/transfer");
                             }),
                           ]),
 
@@ -170,6 +178,10 @@ class _ShareItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (isURL) {
+      // Set Payload
+      Get.find<SonrService>().queue(Payload_Type.URL, url: urlText);
+    }
     // Return Widget
     return Container(
         margin: EdgeInsets.all(8),
@@ -182,10 +194,13 @@ class _ShareItem extends StatelessWidget {
   }
 
   _buildMediaView() {
-    // Set Shared File
+    // Get Shared File
     File file = sharedFiles.length > 1
         ? File(sharedFiles.last.path)
         : File(sharedFiles.first.path);
+
+    // Set Payload
+    Get.find<SonrService>().queue(Payload_Type.FILE, file: file);
 
     // Create View
     return ClipRRect(

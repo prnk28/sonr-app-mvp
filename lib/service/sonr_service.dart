@@ -32,7 +32,8 @@ class SonrService extends GetxService {
   bool _processed = false;
 
   // @ Set Transfer Dependencies
-  Payload_Type _payloadType;
+  Payload_Type _payType;
+  String _url;
 
   // @ Set Receive Dependencies
   final progress = 0.0.obs;
@@ -81,26 +82,47 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Queue-File Event ^
-  void queue(Payload_Type payType, {File file}) async {
+  void queue(Payload_Type type, {File file, String url}) async {
     // Set Payload Type
-    _payloadType = payType;
+    _payType = type;
 
-    // Queue File
-    if (payType == Payload_Type.FILE) {
-      _node.queue(file.path);
-    } else {
-      _processed = true;
+    // File Payload
+    if (_payType == Payload_Type.FILE) {
+      assert(file != null);
+      _node.processFile(file.path);
     }
 
-    // Go to Transfer
-    Get.offNamed("/transfer");
+    // Link Payload
+    else if (_payType == Payload_Type.URL) {
+      assert(url != null);
+      _url = url;
+    }
   }
 
   // ^ Invite-Peer Event ^
   void invite(Peer p) async {
-    // Check Status
-    if (_processed) {
-      await _node.invite(p, _payloadType);
+    // File Payload
+    if (_payType == Payload_Type.FILE) {
+      // Check Status
+      if (_processed) {
+        await _node.inviteFile(p);
+      }
+    }
+
+    // Contact Payload
+    else if (_payType == Payload_Type.CONTACT) {
+      await _node.inviteContact(p);
+    }
+
+    // Link Payload
+    else if (_payType == Payload_Type.URL) {
+      assert(_url != null);
+      await _node.inviteLink(p, _url, _url);
+    }
+
+    // No Payload
+    else {
+      SonrSnack.error("No media, contact, or link provided");
     }
   }
 
@@ -180,6 +202,8 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
+      _url = null;
+      _payType = null;
       Get.find<PeerController>().playCompleted(data);
       HapticFeedback.vibrate();
     }

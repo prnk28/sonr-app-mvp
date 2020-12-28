@@ -18,12 +18,19 @@ class SonrCard extends GetView<SonrCardController> {
   final AuthInvite invite;
   final Contact contact;
   final bool isInvite;
+  final bool isURL;
 
-  SonrCard(this.isInvite, {this.invite, this.contact});
+  SonrCard(this.isInvite, this.isURL, {this.invite, this.contact});
 
-  factory SonrCard.fromInvite(AuthInvite inv) => SonrCard(true, invite: inv);
-
-  factory SonrCard.fromReplyAsContact(Contact c) => SonrCard(false, contact: c);
+  factory SonrCard.fromInvite(AuthInvite inv) {
+    if (inv.payload.type == Payload_Type.URL) {
+      return SonrCard(true, true, invite: inv);
+    } else {
+      return SonrCard(true, false, invite: inv);
+    }
+  }
+  factory SonrCard.fromReplyAsContact(Contact c) =>
+      SonrCard(false, false, contact: c);
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +47,11 @@ class SonrCard extends GetView<SonrCardController> {
       else if (invite.payload.type == Payload_Type.CONTACT) {
         inviteView = _ContactInvite(invite.payload.contact);
       }
+      // Link
+      else if (invite.payload.type == Payload_Type.URL) {
+        print(invite.payload.link.url);
+        inviteView = _URLInvite(invite.payload.link);
+      }
       // Invalid Right Now
       else {
         print("Invalid File");
@@ -53,11 +65,13 @@ class SonrCard extends GetView<SonrCardController> {
           child: Neumorphic(
               style: NeumorphicStyle(color: K_BASE_COLOR),
               child: Container(
-                child: Column(children: [
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
                   // @ Top Right Close/Cancel Button
                   SonrButton.close(() {
-                    // Emit Event
-                    controller.declineInvite();
+                    if (!isURL) {
+                      // Emit Event
+                      controller.declineInvite();
+                    }
 
                     // Pop Window
                     Get.back();
@@ -74,7 +88,7 @@ class SonrCard extends GetView<SonrCardController> {
       assert(contact != null);
 
       // Display Info
-      return Column(children: [
+      return Column(mainAxisSize: MainAxisSize.min, children: [
         // Basic Contact Info - Make Expandable
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Padding(padding: EdgeInsets.all(8)),
@@ -93,6 +107,42 @@ class SonrCard extends GetView<SonrCardController> {
         }),
       ]);
     }
+  }
+}
+
+// ^ Contact Invite from AuthInvite Proftobuf ^ //
+class _URLInvite extends GetView<SonrCardController> {
+  final Link link;
+  _URLInvite(this.link);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // @ Sonr Icon
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: SonrIcon.share(isUrl: true),
+        ),
+
+        // @ Indent View
+        Expanded(
+          child: Neumorphic(
+              style: NeumorphicStyle(
+                depth: -8,
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+              ),
+              margin: EdgeInsets.all(10),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SonrText.url(link.url),
+              )),
+        ),
+      ],
+    );
   }
 }
 

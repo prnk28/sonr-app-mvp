@@ -42,6 +42,9 @@ class HomeController extends GetxController {
 
     // Queue File
     Get.find<SonrService>().queue(Payload_Type.FILE, file: file);
+
+    // Go to Transfer
+    Get.offNamed("/transfer");
   }
 
   // @ Testing Purposes Large File Transfer
@@ -51,11 +54,17 @@ class HomeController extends GetxController {
 
     // Queue File
     Get.find<SonrService>().queue(Payload_Type.FILE, file: testFile);
+
+    // Go to Transfer
+    Get.offNamed("/transfer");
   }
 
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
     Get.find<SonrService>().queue(Payload_Type.CONTACT);
+
+    // Go to Transfer
+    Get.offNamed("/transfer");
   }
 
   // ^ Converts File in Assets to File Object ^ //
