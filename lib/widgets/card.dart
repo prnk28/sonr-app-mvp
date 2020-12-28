@@ -15,134 +15,116 @@ enum CardState { None, Invitation, InProgress, Received, Viewing }
 // * ---- Card View --------- * //
 // * ------------------------ * //
 class SonrCard extends GetView<SonrCardController> {
-  final AuthInvite invite;
-  final Contact contact;
-  final bool isInvite;
-  final bool isURL;
+  // Properties
+  final Widget child;
+  final Payload_Type payloadType;
+  final double bottom;
 
-  SonrCard(this.isInvite, this.isURL, {this.invite, this.contact});
+  const SonrCard(
+      {Key key,
+      @required this.child,
+      @required this.payloadType,
+      @required this.bottom});
 
-  factory SonrCard.fromInvite(AuthInvite inv) {
-    if (inv.payload.type == Payload_Type.URL) {
-      return SonrCard(true, true, invite: inv);
-    } else {
-      return SonrCard(true, false, invite: inv);
-    }
+  // @ Dialog for Invite Contact
+  factory SonrCard.fromInviteContact(Contact contact) {
+    final double contactbottom = 90;
+    return SonrCard(
+        child: _ContactInvite(contact),
+        payloadType: Payload_Type.CONTACT,
+        bottom: contactbottom);
   }
-  factory SonrCard.fromReplyAsContact(Contact c) =>
-      SonrCard(false, false, contact: c);
+
+  // @ Dialog for Invite File
+  factory SonrCard.fromInviteMetadata(AuthInvite invite) {
+    final double metaBottom = 180;
+    return SonrCard(
+        child: _FileInvite(invite.payload.file, invite.from),
+        payloadType: Payload_Type.FILE,
+        bottom: metaBottom);
+  }
+
+  // @ Dialog for Invite URL
+  factory SonrCard.fromInviteUrl(Link link, String firstName) {
+    final double urlBottom = 360;
+    return SonrCard(
+        child: _URLInvite(link, firstName),
+        payloadType: Payload_Type.URL,
+        bottom: urlBottom);
+  }
+
+  // @ Dialog for Replied Contact
+  factory SonrCard.asReply(Contact c) {
+    final double contactbottom = 90;
+    return SonrCard(
+        child: _ContactReply(c),
+        payloadType: Payload_Type.CONTACT,
+        bottom: contactbottom);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // @ Invite View
-    if (isInvite) {
-      // Initialize
-      Widget inviteView;
-
-      // File
-      if (invite.payload.type == Payload_Type.FILE) {
-        inviteView = _FileInvite(invite);
-      }
-      // Contact
-      else if (invite.payload.type == Payload_Type.CONTACT) {
-        inviteView = _ContactInvite(invite.payload.contact);
-      }
-      // Link
-      else if (invite.payload.type == Payload_Type.URL) {
-        print(invite.payload.link.url);
-        inviteView = _URLInvite(invite.payload.link);
-      }
-      // Invalid Right Now
-      else {
-        print("Invalid File");
-        inviteView = Container();
-      }
-
-      return NeumorphicBackground(
-          margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
-          borderRadius: BorderRadius.circular(40),
-          backendColor: Colors.transparent,
-          child: Neumorphic(
-              style: NeumorphicStyle(color: K_BASE_COLOR),
-              child: Container(
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  // @ Top Right Close/Cancel Button
-                  SonrButton.close(() {
-                    if (!isURL) {
-                      // Emit Event
-                      controller.declineInvite();
-                    }
-
-                    // Pop Window
-                    Get.back();
-                  }, padTop: 8, padRight: 8),
-
-                  // @ Invite View
-                  Padding(padding: EdgeInsets.all(8)),
-                  inviteView
-                ]),
-              )));
-    }
-    // @ Reply View
-    else {
-      assert(contact != null);
-
-      // Display Info
-      return Column(mainAxisSize: MainAxisSize.min, children: [
-        // Basic Contact Info - Make Expandable
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Padding(padding: EdgeInsets.all(8)),
-          Column(
-            children: [
-              SonrText.bold(contact.firstName),
-              SonrText.bold(contact.lastName),
-            ],
-          )
-        ]),
-
-        // Save Button
-        SonrButton.rectangle(SonrText.normal("Keep"), () {
-          controller.acceptContact(contact, false);
-          Get.back();
-        }),
-      ]);
-    }
+    return NeumorphicBackground(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: bottom),
+        borderRadius: BorderRadius.circular(40),
+        backendColor: Colors.transparent,
+        child: Neumorphic(
+          style: NeumorphicStyle(color: K_BASE_COLOR),
+          child: Container(child: child),
+        ));
   }
 }
 
-// ^ Contact Invite from AuthInvite Proftobuf ^ //
-class _URLInvite extends GetView<SonrCardController> {
-  final Link link;
-  _URLInvite(this.link);
+// ^ Card Header Row ^ //
+class _SonrCardHeader extends GetView<SonrCardController> {
+  // Properties
+  final String name;
+  final Function onAccept;
+  final bool hasAccept;
+  final Payload_Type type;
+
+  // Constructer
+  _SonrCardHeader(
+      {@required this.type,
+      @required this.name,
+      this.hasAccept = true,
+      this.onAccept});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // @ Sonr Icon
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: SonrIcon.share(isUrl: true),
-        ),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // @ Top Right Close/Cancel Button
+          SonrButton.close(
+            () {
+              if (type != Payload_Type.URL) {
+                controller.declineInvite();
+              }
+              Get.back();
+            },
+          ),
 
-        // @ Indent View
-        Expanded(
-          child: Neumorphic(
-              style: NeumorphicStyle(
-                depth: -8,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-              ),
-              margin: EdgeInsets.all(10),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SonrText.url(link.url),
-              )),
-        ),
-      ],
-    );
+          Expanded(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: hasAccept
+                  ? SonrText.invite(type.toString(), name)
+                  : SonrText.header("Completed!"),
+            ),
+          ),
+
+          // @ Top Right Confirm Button
+          hasAccept
+              ? SonrButton.accept(() {
+                  if (onAccept != null) {
+                    onAccept();
+                    Get.back();
+                  }
+                })
+              : Container()
+        ]);
   }
 }
 
@@ -154,82 +136,95 @@ class _ContactInvite extends GetView<SonrCardController> {
   @override
   Widget build(BuildContext context) {
     // Display Info
-    return Column(children: [
-      // @ Basic Contact Info - Make Expandable
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Padding(padding: EdgeInsets.all(8)),
-        Column(
-          children: [
-            SonrText.bold(contact.firstName),
-            SonrText.bold(contact.lastName),
-          ],
-        )
-      ]),
+    return Column(mainAxisSize: MainAxisSize.max, children: [
+      // @ Header
+      _SonrCardHeader(
+          name: contact.firstName,
+          type: Payload_Type.CONTACT,
+          onAccept: () {
+            controller.acceptContact(contact, false);
+          }),
+      Padding(padding: EdgeInsets.all(8)),
 
-      Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // @ Send Back Button
-            SonrButton.rectangle(SonrText.normal("Keep and send yours"), () {
-              // Emit Event
-              controller.acceptContact(contact, true);
-              Get.back();
-            }),
-            Padding(padding: EdgeInsets.all(6)),
-            // @ Save Button
-            SonrButton.rectangle(SonrText.normal("Keep"), () {
-              controller.acceptContact(contact, false);
-              Get.back();
-            }),
-          ])
+      // @ Basic Contact Info - Make Expandable
+      SonrText.bold(contact.firstName),
+      SonrText.bold(contact.lastName),
+
+      // @ Send Back Button
+      SonrButton.rectangle(SonrText.normal("Send yours back"), () {
+        // Emit Event
+        controller.acceptContact(contact, true);
+        Get.back();
+      }),
     ]);
+  }
+}
+
+// ^ Contact Invite from AuthInvite Proftobuf ^ //
+class _ContactReply extends GetView<SonrCardController> {
+  final Contact contact;
+  _ContactReply(this.contact);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      child: Column(mainAxisSize: MainAxisSize.max, children: [
+        // @ Header
+        _SonrCardHeader(name: contact.firstName, type: Payload_Type.CONTACT),
+        Padding(padding: EdgeInsets.all(8)),
+
+        // @ Basic Contact Info - Make Expandable
+        SonrText.bold(contact.firstName),
+        SonrText.bold(contact.lastName),
+      ]),
+    );
   }
 }
 
 // ^ File Invite Builds from Invite Protobuf ^ //
 class _FileInvite extends GetView<SonrCardController> {
-  final AuthInvite invite;
-  _FileInvite(this.invite);
+  final Metadata metadata;
+  final Peer from;
+  _FileInvite(this.metadata, this.from);
 
   @override
   Widget build(BuildContext context) {
-    // @ Initialize Preview
-    SonrIcon preview = SonrIcon.file(IconType.Thumbnail, invite.payload);
-
     // @ Display Info
     return Obx(() {
       // Check State of Card --> Invitation
       if (controller.state.value == CardState.Invitation) {
         return Column(
+          mainAxisSize: MainAxisSize.max,
           key: UniqueKey(),
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Build Item from Metadata and Peer
-            preview,
+            // @ Header
+            _SonrCardHeader(
+                name: from.firstName,
+                type: Payload_Type.FILE,
+                onAccept: () {
+                  controller.acceptFile();
+                }),
             Padding(padding: EdgeInsets.all(8)),
+
+            // @ Build Item from Metadata and Peer
             Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SonrText.bold(
-                    invite.payload.file.mime.type.toString() +
-                        " from " +
-                        invite.from.firstName,
-                    size: 32),
-                SonrText.normal("on " + invite.from.device.platform, size: 22),
+                Expanded(child: SonrIcon.meta(IconType.Thumbnail, metadata)),
+                SonrText.normal(metadata.mime.type.toString().capitalizeFirst,
+                    size: 22),
               ],
             ),
-            Padding(padding: EdgeInsets.only(top: 8)),
-
-            // @ Build Auth Action
-            SonrButton.rectangle(SonrText.normal("Accept"), () {
-              controller.acceptFile();
-            }, icon: SonrIcon.success),
           ],
         );
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        return _FileInviteProgress(preview.data);
+        return _FileInviteProgress(
+            SonrIcon.meta(IconType.Thumbnail, metadata).data);
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
@@ -238,6 +233,56 @@ class _FileInvite extends GetView<SonrCardController> {
         return Container();
       }
     });
+  }
+}
+
+// ^ Contact Invite from AuthInvite Proftobuf ^ //
+class _URLInvite extends GetView<SonrCardController> {
+  final String name;
+  final Link link;
+  _URLInvite(this.link, this.name);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.max, children: [
+      // @ Header
+      Expanded(
+        child: _SonrCardHeader(
+            name: name,
+            type: Payload_Type.URL,
+            onAccept: () {
+              controller.acceptFile();
+            }),
+      ),
+      Padding(padding: EdgeInsets.all(8)),
+
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // @ Sonr Icon
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: SonrIcon.share(isUrl: true),
+          ),
+
+          // @ Indent View
+          Expanded(
+            child: Neumorphic(
+                style: NeumorphicStyle(
+                  depth: -8,
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                ),
+                margin: EdgeInsets.all(10),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SonrText.url(link.url),
+                )),
+          ),
+        ],
+      ),
+    ]);
   }
 }
 
@@ -264,6 +309,7 @@ class _FileInviteProgress extends HookWidget {
       child: Obx(() {
         if (Get.find<SonrService>().progress.value < 1.0) {
           return Stack(
+            alignment: Alignment.center,
             key: UniqueKey(),
             children: <Widget>[
               SizedBox(
@@ -322,22 +368,33 @@ class _FileInviteComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // @ Non-Image Type
-    return SlideDownAnimatedSwitcher(
-      child: Container(
-        key: UniqueKey(),
-        margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-        child: FittedBox(
-            alignment: Alignment.center,
-            child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 1,
-                  minHeight: 1,
-                ),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.file(File(meta.path))))),
+    return Column(mainAxisSize: MainAxisSize.max, children: [
+      // @ Header
+      Expanded(
+        child: _SonrCardHeader(
+          name: "",
+          type: Payload_Type.FILE,
+          hasAccept: false,
+        ),
       ),
-    );
+      Padding(padding: EdgeInsets.all(8)),
+      SlideDownAnimatedSwitcher(
+        child: Container(
+          key: UniqueKey(),
+          margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
+          child: FittedBox(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 1,
+                    minHeight: 1,
+                  ),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.file(File(meta.path))))),
+        ),
+      ),
+    ]);
   }
 }
 

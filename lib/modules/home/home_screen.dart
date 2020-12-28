@@ -1,31 +1,10 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/main.dart';
 import 'package:sonar_app/modules/home/transfer_item.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonar_app/widgets/sheet.dart';
 import 'home_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
-  HomeScreen() {
-    // Listens to Incoming Files
-    Get.find<AppController>().incomingFile.listen((data) {
-      if (!Get.isBottomSheetOpen) {
-        Get.bottomSheet(ShareSheet.media(data),
-            barrierColor: K_DIALOG_COLOR, isDismissible: false);
-      }
-    });
-
-    // Listens to Incoming URLs
-    Get.find<AppController>().incomingText.listen((s) {
-      // Set Shared URL
-      if (!Get.isBottomSheetOpen && GetUtils.isURL(s)) {
-        Get.bottomSheet(ShareSheet.url(s),
-            barrierColor: K_DIALOG_COLOR, isDismissible: false);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Build View

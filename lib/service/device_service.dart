@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonar_app/data/model_user.dart';
 import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,8 +23,10 @@ enum PermissionType {
 class DeviceService extends GetxService {
   // Properties
   final contact = Rx<Contact>();
+  final started = false.obs;
 
   // References
+  StreamSubscription _intentDataStreamSubscription;
   SharedPreferences _prefs;
   bool hasLocation;
   bool hasUser;
@@ -28,14 +34,51 @@ class DeviceService extends GetxService {
   User user;
 
   DeviceService() {
-    // Save Contact Changes
+    // @ Save Contact Changes
     contact.listen((updatedContact) {
       if (hasUser) {
-        // Update Contact
         user.contact = updatedContact;
         _prefs.setString("user", user.toJson());
       }
     });
+
+    // @ Listen to Incoming File
+    _intentDataStreamSubscription = ReceiveSharingIntent.getMediaStream()
+        .listen((List<SharedMediaFile> data) {
+      if (!Get.isBottomSheetOpen && hasUser) {
+        Get.bottomSheet(ShareSheet.media(data),
+            barrierColor: K_DIALOG_COLOR, isDismissible: false);
+      }
+    }, onError: (err) {
+      print("getIntentDataStream error: $err");
+    });
+
+    // @ Listen to Incoming Text
+    _intentDataStreamSubscription =
+        ReceiveSharingIntent.getTextStream().listen((String text) {
+      if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
+        Get.bottomSheet(ShareSheet.url(text),
+            barrierColor: K_DIALOG_COLOR, isDismissible: false);
+      }
+    }, onError: (err) {
+      print("getLinkStream error: $err");
+    });
+  }
+
+  @override
+  void onInit() {
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> data) {
+      //incomingFile(value);
+      print(data);
+    });
+
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialText().then((String text) {
+      //incomingText(value);
+      print(text);
+    });
+    super.onInit();
   }
 
   // ^ Open SharedPreferences on Init ^ //
@@ -49,6 +92,7 @@ class DeviceService extends GetxService {
 
     // Check User Status
     hasUser = _prefs.containsKey("user");
+    start();
     return this;
   }
 
@@ -171,5 +215,11 @@ class DeviceService extends GetxService {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  @override
+  void onClose() {
+    _intentDataStreamSubscription.cancel();
+    super.onClose();
   }
 }

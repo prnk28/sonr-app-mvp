@@ -161,10 +161,25 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      // Inform Listener
       Get.find<SonrCardController>().setInvited();
       HapticFeedback.heavyImpact();
-      Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
+
+      // Check Payload Type
+      switch (data.payload.type) {
+        case Payload_Type.CONTACT:
+          Get.dialog(SonrCard.fromInviteContact(data.payload.contact),
+              barrierColor: K_DIALOG_COLOR);
+          break;
+        case Payload_Type.FILE:
+          Get.dialog(SonrCard.fromInviteMetadata(data),
+              barrierColor: K_DIALOG_COLOR);
+          break;
+        case Payload_Type.URL:
+          Get.dialog(
+              SonrCard.fromInviteUrl(data.payload.link, data.from.firstName),
+              barrierColor: K_DIALOG_COLOR);
+          break;
+      }
     }
   }
 
@@ -176,7 +191,7 @@ class SonrService extends GetxService {
       if (data.payload.type == Payload_Type.CONTACT) {
         HapticFeedback.vibrate();
         Get.find<PeerController>().playCompleted(data.from);
-        Get.dialog(SonrCard.fromReplyAsContact(data.payload.contact));
+        Get.dialog(SonrCard.asReply(data.payload.contact));
       } else {
         // For File
         if (data.decision) {

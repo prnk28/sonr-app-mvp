@@ -64,7 +64,7 @@ class SonrText extends StatelessWidget {
       text,
       isGradient: true,
       weight: FontWeight.w800,
-      size: size ?? 108,
+      size: size ?? 40,
       key: key,
       gradient: FlutterGradients.findByName(gradient),
     );
@@ -76,7 +76,7 @@ class SonrText extends StatelessWidget {
     return SonrText(text,
         isGradient: true,
         weight: FontWeight.bold,
-        size: size ?? 32,
+        size: size ?? 40,
         key: key,
         gradient: FlutterGradients.findByName(gradient));
   }
@@ -105,6 +105,29 @@ class SonrText extends StatelessWidget {
         size: size ?? 32,
         key: key,
         color: color ?? Colors.white);
+  }
+
+  // ^ Rich Text with FirstName and Invite
+  factory SonrText.invite(String type, String firstName) {
+    return SonrText("",
+        isRich: true,
+        richText: RichText(
+            overflow: TextOverflow.fade,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: type.capitalizeFirst,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 26,
+                      color: Colors.black)),
+              TextSpan(
+                  text: " from ${firstName.capitalizeFirst}",
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.normal,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 22,
+                      color: Colors.blue[900])),
+            ])));
   }
 
   // ^ Rich Text with Provided Data as URL

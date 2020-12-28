@@ -83,7 +83,7 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data File Type to Icon with Preview
-  factory SonrIcon.file(IconType type, Payload payload,
+  factory SonrIcon.payload(IconType type, Payload payload,
       {double size = 30,
       Color color = Colors.black,
       FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
@@ -101,6 +101,21 @@ class SonrIcon extends StatelessWidget {
       color,
       gradient,
       thumbnail: payload.file.thumbnail,
+      size: size,
+    );
+  }
+
+  // ^ Payload Data from Metadata
+  factory SonrIcon.meta(IconType type, Metadata meta,
+      {double size = 30,
+      Color color = Colors.black,
+      FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
+    return SonrIcon(
+      _SonrIconData.files[meta.mime.type],
+      type,
+      color,
+      gradient,
+      thumbnail: meta.thumbnail,
       size: size,
     );
   }
