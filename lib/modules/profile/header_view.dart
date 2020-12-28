@@ -51,6 +51,11 @@ class ContactHeader extends GetView<ProfileController> {
     return GestureDetector(
         onLongPress: () async {
           print("Launch Text Dialog to Update Name");
+          Get.dialog(EditDialog.textField(
+              "Name", "Enter your First Name", controller.firstName.value,
+              text: "Text", onChanged: (val) {
+            controller.firstName(val);
+          }));
           HapticFeedback.heavyImpact();
         },
         child: SonrText.normal(

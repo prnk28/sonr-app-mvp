@@ -5,11 +5,12 @@ import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
-const double K_CONTENT_HEIGHT_MODIFIER = 110;
-const double K_CONTENT_WIDTH_MODIFIER = 20;
+const double S_CONTENT_HEIGHT_MODIFIER = 110;
+const double E_CONTENT_WIDTH_MODIFIER = 20;
 
+// ** Share from External App BottomSheet View ** //
 class ShareSheet extends StatelessWidget {
-  // ** Properties ** //
+  // Properties
   final Widget child;
   final Size size;
   const ShareSheet({Key key, @required this.child, @required this.size})
@@ -19,8 +20,8 @@ class ShareSheet extends StatelessWidget {
   factory ShareSheet.media(List<SharedMediaFile> sharedFiles) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 3 + 150);
-    final Size content = Size(window.width - K_CONTENT_WIDTH_MODIFIER,
-        window.height - K_CONTENT_HEIGHT_MODIFIER);
+    final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER,
+        window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
     return ShareSheet(
@@ -36,8 +37,8 @@ class ShareSheet extends StatelessWidget {
   factory ShareSheet.url(String value) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 5 + 40);
-    final Size content = Size(window.width - K_CONTENT_WIDTH_MODIFIER,
-        window.height - K_CONTENT_HEIGHT_MODIFIER);
+    final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER,
+        window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
     return ShareSheet(
@@ -92,6 +93,7 @@ class ShareSheet extends StatelessWidget {
   }
 }
 
+// ** ShareSheet Content Builder View ** //
 class _ShareSheetContentView extends StatelessWidget {
   final Widget child;
   final bool isUrl;
@@ -155,6 +157,7 @@ class _ShareSheetContentView extends StatelessWidget {
   }
 }
 
+// ** ShareSheet Item Widget ** //
 class _ShareItem extends StatelessWidget {
   final List<SharedMediaFile> sharedFiles;
   final Size size;

@@ -7,7 +7,7 @@ export 'color.dart';
 export 'icon.dart';
 export '../widgets/animation.dart';
 export '../widgets/card.dart';
-export '../widgets/edit.dart';
+export '../widgets/overlay.dart';
 export '../widgets/painter.dart';
 export '../widgets/snackbar.dart';
 export '../widgets/text.dart';
