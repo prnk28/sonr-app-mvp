@@ -11,27 +11,25 @@ class SonrText extends StatelessWidget {
   final Color color;
   final Gradient gradient;
   final FontWeight weight;
+  final RichText richText;
   final double size;
   final bool isGradient;
+  final bool isRich;
 
-  const SonrText(this.text, this.isGradient,
-      {Key key, this.color, this.gradient, this.weight, this.size})
+  const SonrText(this.text,
+      {Key key,
+      this.isGradient = false,
+      this.isRich = false,
+      this.color,
+      this.gradient,
+      this.richText,
+      this.weight,
+      this.size})
       : super(key: key);
-
-  // ** Normal ** //
-  // ^ Gradient Text with Provided Data
-  factory SonrText.initials(Peer peer,
-      {Color color, FontWeight weight, double size, Key key}) {
-    return SonrText(peer.firstName[0].toUpperCase(), false,
-        weight: FontWeight.bold,
-        size: size ?? 32,
-        key: key,
-        color: color ?? Colors.white);
-  }
 
   // ^ Normal Text with Provided Data
   factory SonrText.normal(String text, {Color color, double size, Key key}) {
-    return SonrText(text, false,
+    return SonrText(text,
         weight: FontWeight.w500,
         size: size ?? 16,
         key: key,
@@ -40,7 +38,7 @@ class SonrText extends StatelessWidget {
 
   // ^ Bold Text with Provided Data
   factory SonrText.bold(String text, {Color color, double size, Key key}) {
-    return SonrText(text, false,
+    return SonrText(text,
         weight: FontWeight.bold,
         size: size ?? 32,
         key: key,
@@ -50,7 +48,7 @@ class SonrText extends StatelessWidget {
   // ^ Description Text with Provided Data
   factory SonrText.description(String text,
       {Color color, double size, Key key}) {
-    return SonrText(text, false,
+    return SonrText(text,
         weight: FontWeight.bold,
         size: size ?? 24,
         key: key,
@@ -64,7 +62,7 @@ class SonrText extends StatelessWidget {
       Key key}) {
     return SonrText(
       text,
-      true,
+      isGradient: true,
       weight: FontWeight.w800,
       size: size ?? 108,
       key: key,
@@ -75,7 +73,8 @@ class SonrText extends StatelessWidget {
   // ^ Gradient Text with Provided Data
   factory SonrText.gradient(String text, FlutterGradientNames gradient,
       {Color color, FontWeight weight, double size, Key key}) {
-    return SonrText(text, true,
+    return SonrText(text,
+        isGradient: true,
         weight: FontWeight.bold,
         size: size ?? 32,
         key: key,
@@ -90,12 +89,76 @@ class SonrText extends StatelessWidget {
       Key key}) {
     return SonrText(
       text,
-      true,
+      isGradient: true,
       weight: FontWeight.w600,
       size: size ?? 30,
       key: key,
       gradient: FlutterGradients.findByName(gradient),
     );
+  }
+
+  // ^ Gradient Text with Provided Data
+  factory SonrText.initials(Peer peer,
+      {Color color, FontWeight weight, double size, Key key}) {
+    return SonrText(peer.firstName[0].toUpperCase(),
+        weight: FontWeight.bold,
+        size: size ?? 32,
+        key: key,
+        color: color ?? Colors.white);
+  }
+
+  // ^ Rich Text with Provided Data as URL
+  factory SonrText.url(String text) {
+    // Initialize
+    Uri uri = Uri.parse(text);
+    int segmentCount = uri.pathSegments.length;
+    String host = uri.host;
+    String path = "/";
+
+    // Check host for Sub
+    if (host.contains("mobile")) {
+      host = host.substring(5);
+      replaceCharAt(host, 0, "m");
+    }
+
+    // Create Path
+    int directories = 0;
+    for (int i = 0; i <= segmentCount - 1; i++) {
+      // Check if final Segment
+      if (i == segmentCount - 1) {
+        directories > 0
+            ? path += path += "/${uri.pathSegments[i]}"
+            : path += uri.pathSegments[i];
+      } else {
+        directories += 1;
+        path += ".";
+      }
+    }
+
+    // Return With Rich Text
+    return SonrText(text,
+        isRich: true,
+        richText: RichText(
+            overflow: TextOverflow.fade,
+            text: TextSpan(children: [
+              TextSpan(
+                  text: host,
+                  style: GoogleFonts.poppins(
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.dotted,
+                      fontWeight: FontWeight.w300,
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.blueGrey[300])),
+              TextSpan(
+                  text: path,
+                  style: GoogleFonts.poppins(
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.dotted,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: Colors.blue[600])),
+            ])));
   }
 
   @override
@@ -115,23 +178,33 @@ class SonrText extends StatelessWidget {
           ));
     }
 
-    // @ Normal Type Text
-    else {
-      return Text(text,
-          style: GoogleFonts.poppins(
-              fontWeight: weight,
-              fontSize: size ?? 16,
-              color: color ?? _findTextColor()));
+    // @ Rich Type Text
+    if (isRich) {
+      return richText;
     }
+
+    // @ Normal Type Text
+    return Text(text,
+        style: GoogleFonts.poppins(
+            fontWeight: weight,
+            fontSize: size ?? 16,
+            color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^
-  Color _findTextColor() {
+  static Color findTextColor() {
     if (Get.isDarkMode) {
       return Colors.white;
     } else {
       return Colors.black;
     }
+  }
+
+  // ^ Replace Character in given String with given Index ^
+  static String replaceCharAt(String oldString, int index, String newChar) {
+    return oldString.substring(0, index) +
+        newChar +
+        oldString.substring(index + 1);
   }
 }
 

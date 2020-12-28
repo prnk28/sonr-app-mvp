@@ -103,9 +103,13 @@ class ProfileController extends GetxController {
     Get.find<DeviceService>().contact.value.email = email.value;
     Get.find<DeviceService>().contact.value.website = website.value;
     Get.find<DeviceService>().contact.value.profilePic.clear();
-    Get.find<DeviceService>().contact.value.profilePic = profilePic.toList();
+    Get.find<DeviceService>().contact.value.profilePic = profilePic;
+
+    // Update Socials
     Get.find<DeviceService>().contact.value.socials.clear();
-    Get.find<DeviceService>().contact.value.socials.addAll(socials.toList());
+    socials.forEach((s) {
+      Get.find<DeviceService>().contact.value.socials.add(s);
+    });
     Get.find<DeviceService>().contact.refresh();
     update();
   }

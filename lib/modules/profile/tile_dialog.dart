@@ -43,13 +43,10 @@ class TileDialog extends GetWidget<TileController> {
                           // @ Bottom Left Close/Cancel Button
                           SonrButton.close(() {
                             Get.back();
-                            controller.step(TileStep.Zero);
                           }),
                           // @ Bottom Right Confirm Button
                           SonrButton.accept(() {
-                            if (controller.finish()) {
-                              Get.back();
-                            }
+                            controller.finish();
                           }),
                         ]);
                   }
@@ -58,7 +55,6 @@ class TileDialog extends GetWidget<TileController> {
                     currentView = _SetInfoView(controller);
                     topButtons = SonrButton.close(() {
                       Get.back();
-                      controller.step(TileStep.Zero);
                     });
 
                     // Bottom Buttons
@@ -93,7 +89,6 @@ class TileDialog extends GetWidget<TileController> {
                     // Top Buttons
                     topButtons = SonrButton.close(() {
                       Get.back();
-                      controller.step(TileStep.Zero);
                     });
 
                     // Bottom Buttons

@@ -11,7 +11,8 @@ class HomeScreen extends GetView<HomeController> {
     // Listens to Incoming Files
     Get.find<AppController>().incomingFile.listen((data) {
       if (!Get.isBottomSheetOpen) {
-        Get.bottomSheet(IncomingFileSheet(data));
+        Get.bottomSheet(ShareSheet.media(data),
+            barrierColor: K_DIALOG_COLOR, isDismissible: false);
       }
     });
 
@@ -19,7 +20,8 @@ class HomeScreen extends GetView<HomeController> {
     Get.find<AppController>().incomingText.listen((s) {
       // Set Shared URL
       if (!Get.isBottomSheetOpen && GetUtils.isURL(s)) {
-        Get.bottomSheet(IncomingUrlSheet(s));
+        Get.bottomSheet(ShareSheet.url(s),
+            barrierColor: K_DIALOG_COLOR, isDismissible: false);
       }
     });
   }
@@ -35,35 +37,7 @@ class HomeScreen extends GetView<HomeController> {
                 "Home",
                 SonrButton.appBar(
                     SonrIcon.profile, () => Get.offNamed("/profile"))),
-            floatingActionButton: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  width: 80,
-                  height: 240,
-                  child: Column(
-                      verticalDirection: VerticalDirection.up,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        NeumorphicButton(
-                          onPressed: () {
-                            controller.queueTest();
-                          },
-                          child: SonrText.normal("File"),
-                        ),
-                        NeumorphicButton(
-                          onPressed: () {
-                            controller.queueFatTest();
-                          },
-                          child: SonrText.normal("Fat File"),
-                        ),
-                        NeumorphicButton(
-                          onPressed: () {
-                            controller.queueContact();
-                          },
-                          child: SonrText.normal("Contact"),
-                        )
-                      ]),
-                )),
+            floatingActionButton: _ShareButton(),
             body: _HomeView()));
   }
 }
@@ -82,5 +56,40 @@ class _HomeView extends GetView<HomeController> {
             return TransferItem(controller.allCards[idx]);
           });
     });
+  }
+}
+
+class _ShareButton extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          width: 80,
+          height: 240,
+          child: Column(
+              verticalDirection: VerticalDirection.up,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                NeumorphicButton(
+                  onPressed: () {
+                    controller.queueTest();
+                  },
+                  child: SonrText.normal("File"),
+                ),
+                NeumorphicButton(
+                  onPressed: () {
+                    controller.queueFatTest();
+                  },
+                  child: SonrText.normal("Fat File"),
+                ),
+                NeumorphicButton(
+                  onPressed: () {
+                    controller.queueContact();
+                  },
+                  child: SonrText.normal("Contact"),
+                )
+              ]),
+        ));
   }
 }

@@ -45,7 +45,6 @@ dependencies:
     git:
       url: git@github.com:sonr-io/plugin.git
       ref: release
-  webview_flutter: ^1.0.7
 
   # -- UI/UX --
   flutter_custom_clippers: ^1.1.2

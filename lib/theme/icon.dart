@@ -83,7 +83,7 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data File Type to Icon with Preview
-  factory SonrIcon.filePreview(IconType type, Payload payload,
+  factory SonrIcon.file(IconType type, Payload payload,
       {double size = 30,
       Color color = Colors.black,
       FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
@@ -106,19 +106,18 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data File Type to Icon
-  factory SonrIcon.file(IconType type, Payload_Type payload,
-      {double size = 30,
-      MIME_Type mimeType = MIME_Type.image,
-      Color color = Colors.black,
-      FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
-    IconData data;
-    if (payload == Payload_Type.CONTACT) {
-      data = _SonrIconData.contact;
-    } else if (payload == Payload_Type.FILE) {
-      data = _SonrIconData.files[mimeType];
-    } else {
-      data = _SonrIconData.url;
-    }
+  factory SonrIcon.share({
+    IconType type = IconType.Gradient,
+    bool isUrl = false,
+    double size = 40,
+    Color color = Colors.black,
+  }) {
+    // Set Icon for URL and Media
+    IconData data = isUrl ? _SonrIconData.url : _SonrIconData.video;
+    FlutterGradientNames gradient = isUrl
+        ? FlutterGradientNames.magicRay
+        : FlutterGradientNames.octoberSilence;
+
     return SonrIcon(
       data,
       type,
@@ -148,9 +147,9 @@ class SonrIcon extends StatelessWidget {
       SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance,
           size: 30);
 
-  static SonrIcon get forward => SonrIcon.gradient(
-      Icons.arrow_right, FlutterGradientNames.eternalConstance,
-      size: 30);
+  static SonrIcon get forward =>
+      SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen,
+          size: 30);
 
   static SonrIcon get close =>
       SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart,

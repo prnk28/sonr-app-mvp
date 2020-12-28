@@ -133,7 +133,7 @@ class SonrButton extends StatelessWidget {
                     shape: NeumorphicShape.flat,
                     depth: 8),
                 child: SonrIcon.gradient(
-                    Icons.check, FlutterGradientNames.hiddenJaguar),
+                    Icons.check, FlutterGradientNames.newLife),
                 onPressed: () {
                   HapticFeedback.lightImpact();
                   onPressed();

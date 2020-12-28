@@ -145,7 +145,7 @@ class _FileInvite extends GetView<SonrCardController> {
   @override
   Widget build(BuildContext context) {
     // @ Initialize Preview
-    SonrIcon preview = SonrIcon.filePreview(IconType.Thumbnail, invite.payload);
+    SonrIcon preview = SonrIcon.file(IconType.Thumbnail, invite.payload);
 
     // @ Display Info
     return Obx(() {
@@ -283,7 +283,9 @@ class _FileInviteComplete extends StatelessWidget {
                   minWidth: 1,
                   minHeight: 1,
                 ),
-                child: Container(child: Image.file(File(meta.path))))),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.file(File(meta.path))))),
       ),
     );
   }

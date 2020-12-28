@@ -100,7 +100,7 @@ class TileController extends GetxController {
   }
 
   // ^ Finish and Save new Tile ^ //
-  bool finish() {
+  finish() {
     // Validate
     if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
       // Set Position
@@ -110,11 +110,10 @@ class TileController extends GetxController {
       // Add Tile to Contact and Save
       Get.find<ProfileController>().saveSocialTile(currentTile.value);
       providerIsPublic(false);
-      return true;
+      Get.back();
     } else {
       // Display Error Snackbar
       SonrSnack.missing("Pick a Tile Type", isLast: true);
-      return false;
     }
   }
 
