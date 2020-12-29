@@ -41,11 +41,11 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     FlutterCompass.events.listen((dir) {
+      direction(dir.headingForCameraMode);
       // Get Current Direction and Update Cubit
       if (_connected) {
         _node.update(dir.headingForCameraMode);
       }
-      direction(dir.headingForCameraMode);
     });
   }
 
@@ -68,8 +68,9 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
-    // Set Connected
+    // Set Connected, Send first Update
     _connected = true;
+    _node.update(direction.value);
 
     // Push to Home Screen
     Get.offNamed("/home");
