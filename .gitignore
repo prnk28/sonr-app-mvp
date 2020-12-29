@@ -10,6 +10,7 @@
 .history
 .svn/
 .github/
+assets/keys.json
 
 # IntelliJ related
 *.iml

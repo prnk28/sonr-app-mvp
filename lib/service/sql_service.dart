@@ -1,6 +1,6 @@
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/contact_sql.dart';
-import 'package:sonar_app/data/meta_sql.dart';
+import 'package:sonar_app/data/sql_contact.dart';
+import 'package:sonar_app/data/sql_meta.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -52,7 +52,7 @@ create table $contactTable (
   }
 
   // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> saveFile(Metadata metadata) async {
+  Future<Metadata> storeFile(Metadata metadata) async {
     metadata.id = await _db.insert(metaTable, MetaSQL(metadata).toSQL());
     return metadata;
   }
@@ -99,7 +99,7 @@ create table $contactTable (
   }
 
   // ^ Insert Contact into SQL DB ^ //
-  Future<Contact> saveContact(Contact contact) async {
+  Future<Contact> storeContact(Contact contact) async {
     await _db.insert(contactTable, ContactSQL(contact).toSQL());
     return contact;
   }

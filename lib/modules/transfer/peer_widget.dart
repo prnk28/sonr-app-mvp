@@ -10,7 +10,7 @@ class PeerBubble extends GetWidget<PeerController> {
   final Peer peer;
   final int index;
   PeerBubble(this.peer, this.index) {
-    controller.init(peer);
+    controller.initialize(peer);
   }
 
   @override
@@ -60,21 +60,7 @@ class PeerBubble extends GetWidget<PeerController> {
 
   // ^ Method to Change Content Visibility By State ^ //
   Widget _buildContentVisibility() {
-    if (controller.shouldChangeVisibility.value) {
-      return PlayAnimation<double>(
-          tween: (1.0).tweenTo(0.0),
-          duration: 20.milliseconds,
-          builder: (context, child, value) {
-            return AnimatedOpacity(
-                opacity: value,
-                duration: 20.milliseconds,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(controller.peer, size: 20),
-                  initialsFromPeer(controller.peer),
-                ]));
-          });
-    } else {
+    if (controller.isContentVisible.value) {
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
           duration: 500.milliseconds,
@@ -85,8 +71,24 @@ class PeerBubble extends GetWidget<PeerController> {
                 duration: 500.milliseconds,
                 child:
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  iconFromPeer(controller.peer, size: 20),
-                  initialsFromPeer(controller.peer),
+                  SonrIcon.device(IconType.Neumorphic, controller.peer,
+                      size: 20),
+                  SonrText.initials(controller.peer),
+                ]));
+          });
+    } else {
+      return PlayAnimation<double>(
+          tween: (1.0).tweenTo(0.0),
+          duration: 20.milliseconds,
+          builder: (context, child, value) {
+            return AnimatedOpacity(
+                opacity: value,
+                duration: 20.milliseconds,
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  SonrIcon.device(IconType.Neumorphic, controller.peer,
+                      size: 20),
+                  SonrText.initials(controller.peer),
                 ]));
           });
     }

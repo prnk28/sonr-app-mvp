@@ -1,11 +1,12 @@
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/service/device_service.dart';
+import 'package:sonar_app/service/social_service.dart';
+import 'package:sonar_app/service/sql_service.dart';
 import 'package:sonar_app/theme/theme.dart';
+
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
-import 'modules/register/register_screen.dart';
+import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
 
 // ^ Main Method ^ //
@@ -16,29 +17,33 @@ void main() async {
 }
 
 // ^ Services (Files, Contacts) ^ //
-// TODO: Convert SonrController to Service
 initServices() async {
-  // Initializes Local Contacts/Files and Device User/Settings
   await Get.putAsync(() => SQLService().init());
+  await Get.putAsync(() => SocialMediaService().init());
   await Get.putAsync(() => DeviceService().init());
 }
 
-// ^ Root Widget ^ //
+// ^ Initial Controller Bindings ^ //
+class InitialBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<SonrCardController>(SonrCardController(), permanent: true);
+  }
+}
+
+// ^ Root App Widget ^ //
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Connect to Sonr Network
-    Get.find<DeviceService>().start();
-
     return GetMaterialApp(
-      getPages: getPages(),
+      getPages: K_PAGES,
+      initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       home: Scaffold(
           backgroundColor: NeumorphicTheme.baseColor(context),
-          // Non Build States
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -59,48 +64,55 @@ class App extends StatelessWidget {
 }
 
 // ^ Routing Information ^ //
-List<GetPage> getPages() {
-  return [
-    // ** Home Page ** //
-    GetPage(
-        name: '/home',
-        page: () => SonrTheme(HomeScreen()),
-        transition: Transition.zoom,
-        binding: HomeBinding()),
+// ignore: non_constant_identifier_names
+List<GetPage> get K_PAGES => [
+      // ** Home Page ** //
+      GetPage(
+          name: '/home',
+          page: () => SonrTheme(child: HomeScreen()),
+          transition: Transition.zoom,
+          binding: HomeBinding()),
 
-    // ** Home Page - Back ** //
-    GetPage(
-        name: '/home/transfer',
-        page: () => SonrTheme(HomeScreen()),
-        transition: Transition.leftToRight,
-        binding: HomeBinding()),
+      // ** Home Page - Incoming File ** //
+      GetPage(
+          name: '/home/incoming',
+          page: () => SonrTheme(child: HomeScreen()),
+          transition: Transition.cupertinoDialog,
+          binding: HomeBinding()),
 
-    // ** Home Page - Back ** //
-    GetPage(
-        name: '/home/profile',
-        page: () => SonrTheme(HomeScreen()),
-        transition: Transition.downToUp,
-        binding: HomeBinding()),
+      // ** Home Page - Back ** //
+      GetPage(
+          name: '/home/transfer',
+          page: () => SonrTheme(child: HomeScreen()),
+          transition: Transition.upToDown,
+          binding: HomeBinding()),
 
-    // ** Register Page ** //
-    GetPage(
-        name: '/register',
-        page: () => SonrTheme(RegisterScreen()),
-        transition: Transition.rightToLeft),
+      // ** Home Page - Back ** //
+      GetPage(
+          name: '/home/profile',
+          page: () => SonrTheme(child: HomeScreen()),
+          transition: Transition.downToUp,
+          binding: HomeBinding()),
 
-    // ** Transfer Page ** //
-    GetPage(
-        name: '/transfer',
-        page: () => SonrTheme(TransferScreen()),
-        transition: Transition.rightToLeft,
-        binding: TransferBinding()),
+      // ** Register Page ** //
+      GetPage(
+          name: '/register',
+          page: () => SonrTheme(child: RegisterScreen()),
+          transition: Transition.fade,
+          binding: RegisterBinding()),
 
-    // ** Profile Page ** //
-    GetPage(
-        name: '/profile',
-        page: () => SonrTheme(ProfileScreen()),
-        transition: Transition.upToDown,
-        fullscreenDialog: true,
-        binding: ProfileBinding()),
-  ];
-}
+      // ** Transfer Page ** //
+      GetPage(
+          name: '/transfer',
+          page: () => SonrTheme(child: TransferScreen()),
+          transition: Transition.downToUp,
+          binding: TransferBinding()),
+
+      // ** Profile Page ** //
+      GetPage(
+          name: '/profile',
+          page: () => SonrTheme(child: ProfileScreen()),
+          transition: Transition.upToDown,
+          fullscreenDialog: true,
+          binding: ProfileBinding()),
+    ];

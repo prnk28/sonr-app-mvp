@@ -24,20 +24,22 @@ dependencies:
   get: ^3.23.1
   intl: ^0.15.8
   logger: ^0.9.4
+  url_launcher: ^5.7.10
 
   # -- Device --
-  flutter_compass: ^0.5.0
+  flutter_compass: ^0.5.1
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
   sensors: ^0.4.1+1
-  vibration: ^1.2.4
 
   # -- Data --
+  gallery_saver: ^2.0.1
   path: ^1.7.0
   path_provider: ^1.6.7
   shared_preferences: ^0.5.12+4
 
   # -- Network --
+  receive_sharing_intent: ^1.4.2
   sqflite: ^1.3.0
   sonr_core:
     git:
@@ -45,12 +47,12 @@ dependencies:
       ref: release
 
   # -- UI/UX --
-  clippy_flutter: ^1.1.0
-  floating_action_bubble: ^1.0.9
+  flutter_custom_clippers: ^1.1.2
+  flutter_dropdown: ^0.0.8
   flutter_gradients: ^1.0.0+2
   flutter_neumorphic: ^3.0.2
+  flutter_staggered_grid_view: ^0.3.2
   google_fonts: ^1.1.1
-  photo_view: ^0.10.2
   rive: ^0.6.2
   simple_animations: ^2.4.0
 
@@ -68,8 +70,16 @@ flutter:
   # -- Theme/Colors --
   uses-material-design: true
 
+  fonts:
+  - family:  SonrIcons
+    fonts:
+      - asset: assets/fonts/sonr_icons.ttf
+
   # -- Media --
   assets:
     - assets/animations/
-    - assets/audio/
+    - assets/fonts/
     - assets/images/
+    - assets/keys.json
+
+

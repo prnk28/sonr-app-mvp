@@ -1,32 +1,23 @@
-import 'dart:io';
-
-import 'package:floating_action_bubble/floating_action_bubble.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sonar_app/data/card_model.dart';
-import 'package:sonar_app/modules/home/home_item.dart';
+import 'package:sonar_app/modules/home/transfer_item.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonr_core/sonr_core.dart';
 import 'home_controller.dart';
-
-part 'floater_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     // Build View
     controller.fetch();
-    return SonrTheme(Scaffold(
-        backgroundColor: NeumorphicTheme.baseColor(context),
-        appBar: SonrHomeBar(() {
-          Get.offNamed("/profile");
-        }),
-        floatingActionButton: FloaterButton(),
-        body: _HomeView()));
+    return SonrTheme(
+        child: Scaffold(
+            backgroundColor: NeumorphicTheme.baseColor(context),
+            appBar: SonrAppBar.leading(
+                "Home",
+                SonrButton.appBar(
+                    SonrIcon.profile, () => Get.offNamed("/profile"))),
+            floatingActionButton: _ShareButton(),
+            body: _HomeView()));
   }
 }
 
@@ -34,16 +25,50 @@ class _HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      List<CardModel> cards = controller.allCards();
       return GridView.builder(
           padding: EdgeInsets.only(left: 4, right: 4, bottom: 20, top: 2),
-          itemCount: cards.length,
+          itemCount: controller.allCards.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 4),
           itemBuilder: (context, idx) {
             // Generate File Cell
-            return HomeCardItem(cards[idx]);
+            return TransferItem(controller.allCards[idx]);
           });
     });
+  }
+}
+
+class _ShareButton extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          width: 80,
+          height: 240,
+          child: Column(
+              verticalDirection: VerticalDirection.up,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                NeumorphicButton(
+                  onPressed: () {
+                    controller.queueTest();
+                  },
+                  child: SonrText.normal("File"),
+                ),
+                NeumorphicButton(
+                  onPressed: () {
+                    controller.queueFatTest();
+                  },
+                  child: SonrText.normal("Fat File"),
+                ),
+                NeumorphicButton(
+                  onPressed: () {
+                    controller.queueContact();
+                  },
+                  child: SonrText.normal("Contact"),
+                )
+              ]),
+        ));
   }
 }

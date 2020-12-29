@@ -1,7 +1,12 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'icon.dart';
+
+const Color K_BASE_COLOR = Color(0xffDDDDDD);
+const Color K_DIALOG_COLOR = Color.fromRGBO(0, 0, 0, 0.7);
 
 // ^ Find Icons color based on Theme - Light/Dark ^
 Color findIconsColor() {
@@ -13,16 +18,7 @@ Color findIconsColor() {
   }
 }
 
-// ^ Find Text color based on Theme - Light/Dark ^
-Color findTextColor() {
-  if (Get.isDarkMode) {
-    return Colors.white;
-  } else {
-    return Colors.black;
-  }
-}
-
-// ^ Gradient Mask ^
+// ^ Color from HEX Code ^
 extension HexColor on Color {
   /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
   static Color fromHex(String hexString) {
@@ -38,4 +34,24 @@ extension HexColor on Color {
       '${red.toRadixString(16).padLeft(2, '0')}'
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
+}
+
+// ^ Progress Gradient Mask Random ^
+Gradient randomProgressGradient() {
+  // Predefined Colors
+  var opts = [
+    FlutterGradients.amyCrisp(),
+    FlutterGradients.sugarLollipop(),
+    FlutterGradients.summerGames(),
+    FlutterGradients.supremeSky(),
+    FlutterGradients.juicyCake(),
+    FlutterGradients.northMiracle(),
+    FlutterGradients.seaLord()
+  ];
+
+  // Generates a new Random object
+  final _random = new Random();
+
+  // Generate a random index based on the list length
+  return opts[_random.nextInt(opts.length)];
 }
