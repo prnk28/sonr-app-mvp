@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/modules/home/home_controller.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -92,39 +93,39 @@ class _SonrCardHeader extends GetView<SonrCardController> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          // @ Top Right Close/Cancel Button
-          SonrButton.close(
-            () {
-              if (type != Payload_Type.URL) {
-                controller.declineInvite();
-              }
-              Get.back();
-            },
-          ),
+    return Container(
+      height: kToolbarHeight + 16 * 2,
+      child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // @ Top Right Close/Cancel Button
+            SonrButton.close(
+              () {
+                if (type != Payload_Type.URL) {
+                  controller.declineInvite();
+                }
+                Get.back();
+              },
+            ),
 
-          Expanded(
-            child: Align(
-              alignment: Alignment.topCenter,
+            Expanded(
               child: hasAccept
                   ? SonrText.invite(type.toString(), name)
-                  : SonrText.header("Completed!"),
+                  : SonrText.header("Completed", size: 34),
             ),
-          ),
 
-          // @ Top Right Confirm Button
-          hasAccept
-              ? SonrButton.accept(() {
-                  if (onAccept != null) {
-                    onAccept();
-                    Get.back();
-                  }
-                })
-              : Container()
-        ]);
+            // @ Top Right Confirm Button
+            hasAccept
+                ? SonrButton.accept(() {
+                    if (onAccept != null) {
+                      onAccept();
+                    }
+                  })
+                : Container()
+          ]),
+    );
   }
 }
 
@@ -143,6 +144,7 @@ class _ContactInvite extends GetView<SonrCardController> {
           type: Payload_Type.CONTACT,
           onAccept: () {
             controller.acceptContact(contact, false);
+            Get.back();
           }),
       Padding(padding: EdgeInsets.all(8)),
 
@@ -151,11 +153,14 @@ class _ContactInvite extends GetView<SonrCardController> {
       SonrText.bold(contact.lastName),
 
       // @ Send Back Button
-      SonrButton.rectangle(SonrText.normal("Send yours back"), () {
-        // Emit Event
-        controller.acceptContact(contact, true);
-        Get.back();
-      }),
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: SonrButton.rectangle(SonrText.normal("Send yours back"), () {
+          // Emit Event
+          controller.acceptContact(contact, true);
+          Get.back();
+        }),
+      ),
     ]);
   }
 }
@@ -171,7 +176,14 @@ class _ContactReply extends GetView<SonrCardController> {
       height: 60,
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
-        _SonrCardHeader(name: contact.firstName, type: Payload_Type.CONTACT),
+        _SonrCardHeader(
+          name: contact.firstName,
+          type: Payload_Type.CONTACT,
+          onAccept: () {
+            controller.acceptContact(contact, false);
+            Get.back();
+          },
+        ),
         Padding(padding: EdgeInsets.all(8)),
 
         // @ Basic Contact Info - Make Expandable
@@ -192,12 +204,15 @@ class _FileInvite extends GetView<SonrCardController> {
   Widget build(BuildContext context) {
     // @ Display Info
     return Obx(() {
+      Widget child;
+      double height;
+
       // Check State of Card --> Invitation
       if (controller.state.value == CardState.Invitation) {
-        return Column(
+        child = Column(
           mainAxisSize: MainAxisSize.max,
           key: UniqueKey(),
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // @ Header
             _SonrCardHeader(
@@ -209,29 +224,27 @@ class _FileInvite extends GetView<SonrCardController> {
             Padding(padding: EdgeInsets.all(8)),
 
             // @ Build Item from Metadata and Peer
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(child: SonrIcon.meta(IconType.Thumbnail, metadata)),
-                SonrText.normal(metadata.mime.type.toString().capitalizeFirst,
-                    size: 22),
-              ],
-            ),
+            Expanded(child: SonrIcon.meta(IconType.Thumbnail, metadata)),
+            SonrText.normal(metadata.mime.type.toString().capitalizeFirst,
+                size: 22),
           ],
         );
+        height = 500;
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        return _FileInviteProgress(
+        child = _FileInviteProgress(
             SonrIcon.meta(IconType.Thumbnail, metadata).data);
+        height = 300;
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
-        return _FileInviteComplete(controller.receivedFile);
-      } else {
-        return Container();
+        child = _FileInviteComplete(controller.receivedFile);
+        height = 500;
       }
+
+      return AnimatedContainer(
+          duration: Duration(seconds: 1), child: child, height: height);
     });
   }
 }
@@ -251,7 +264,8 @@ class _URLInvite extends GetView<SonrCardController> {
             name: name,
             type: Payload_Type.URL,
             onAccept: () {
-              controller.acceptFile();
+              Get.back();
+              Get.find<DeviceService>().launchURL(link.url);
             }),
       ),
       Padding(padding: EdgeInsets.all(8)),

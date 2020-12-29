@@ -112,6 +112,7 @@ class SonrText extends StatelessWidget {
     return SonrText("",
         isRich: true,
         richText: RichText(
+            textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
               TextSpan(
@@ -188,17 +189,19 @@ class SonrText extends StatelessWidget {
   Widget build(BuildContext context) {
     // @ Gradient Type Text
     if (isGradient) {
-      return ShaderMask(
-          shaderCallback: (bounds) => gradient.createShader(
-                Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-              ),
-          child: Text(
-            text,
-            style: GoogleFonts.poppins(
-                fontWeight: FontWeight.bold,
-                fontSize: size ?? 32.0,
-                color: Colors.white),
-          ));
+      return Center(
+        child: ShaderMask(
+            shaderCallback: (bounds) => gradient.createShader(
+                  Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                ),
+            child: Text(
+              text,
+              style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  fontSize: size ?? 32.0,
+                  color: Colors.white),
+            )),
+      );
     }
 
     // @ Rich Type Text
