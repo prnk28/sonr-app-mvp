@@ -25,18 +25,14 @@ class SonrService extends GetxService {
   final direction = 0.0.obs;
   final lobby = Map<String, Peer>().obs;
   final olc = "".obs;
+  final progress = 0.0.obs;
 
   // @ Set References
   Node _node;
+  Payload _payType;
   bool _connected = false;
   bool _processed = false;
-
-  // @ Set Transfer Dependencies
-  Payload _payType;
   String _url;
-
-  // @ Set Receive Dependencies
-  final progress = 0.0.obs;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -118,7 +114,7 @@ class SonrService extends GetxService {
     // Link Payload
     else if (_payType == Payload.URL) {
       assert(_url != null);
-      await _node.inviteLink(p, _url, _url);
+      await _node.inviteLink(p, _url);
     }
 
     // No Payload
