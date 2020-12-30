@@ -117,8 +117,7 @@ class PeerController extends GetxController {
     // Update After Delay
     Future.delayed(Duration(milliseconds: 1000)).then((_) {
       // Call Finish
-      _isInvited = false;
-      isContentVisible(true);
+      _reset();
     });
   }
 
@@ -134,9 +133,31 @@ class PeerController extends GetxController {
     // Update After Delay
     Future.delayed(Duration(milliseconds: 1400)).then((_) {
       // Call Finish
-      _isInvited = false;
-      isContentVisible(true);
+      _reset();
     });
+  }
+
+  // ^ Temporary: Workaround to handle Bubble States ^ //
+  _reset() async {
+    // Call Finish
+    _hasDenied = false;
+    _hasCompleted = false;
+    _inProgress = false;
+    _isInvited = false;
+    isContentVisible(true);
+
+    // Remove Sending/Complete
+    artboard.value.removeController(_sending);
+    artboard.value.removeController(_complete);
+
+    // Add Animation Controllers
+    artboard.value.addController(_sending = SimpleAnimation('Sending'));
+    artboard.value.addController(_complete = SimpleAnimation('Complete'));
+
+    // Set Default States
+    _denied.isActive = _hasDenied;
+    _sending.isActive = _inProgress;
+    _complete.isActive = _hasCompleted;
   }
 
   // ^ Calculate Peer Offset from Line ^ //
