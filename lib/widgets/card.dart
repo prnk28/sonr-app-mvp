@@ -18,7 +18,7 @@ enum CardState { None, Invitation, InProgress, Received, Viewing }
 class SonrCard extends GetView<SonrCardController> {
   // Properties
   final Widget child;
-  final Payload_Type payloadType;
+  final Payload payloadType;
   final double bottom;
 
   const SonrCard(
@@ -32,7 +32,7 @@ class SonrCard extends GetView<SonrCardController> {
     final double contactbottom = 90;
     return SonrCard(
         child: _ContactInvite(contact),
-        payloadType: Payload_Type.CONTACT,
+        payloadType: Payload.CONTACT,
         bottom: contactbottom);
   }
 
@@ -40,17 +40,17 @@ class SonrCard extends GetView<SonrCardController> {
   factory SonrCard.fromInviteMetadata(AuthInvite invite) {
     final double metaBottom = 180;
     return SonrCard(
-        child: _FileInvite(invite.payload.file, invite.from),
-        payloadType: Payload_Type.FILE,
+        child: _FileInvite(invite.file, invite.from),
+        payloadType: Payload.FILE,
         bottom: metaBottom);
   }
 
   // @ Dialog for Invite URL
-  factory SonrCard.fromInviteUrl(Link link, String firstName) {
+  factory SonrCard.fromInviteUrl(String url, String firstName) {
     final double urlBottom = 360;
     return SonrCard(
-        child: _URLInvite(link, firstName),
-        payloadType: Payload_Type.URL,
+        child: _URLInvite(url, firstName),
+        payloadType: Payload.URL,
         bottom: urlBottom);
   }
 
@@ -59,7 +59,7 @@ class SonrCard extends GetView<SonrCardController> {
     final double contactbottom = 90;
     return SonrCard(
         child: _ContactReply(c),
-        payloadType: Payload_Type.CONTACT,
+        payloadType: Payload.CONTACT,
         bottom: contactbottom);
   }
 
@@ -82,7 +82,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
   final String name;
   final Function onAccept;
   final bool hasAccept;
-  final Payload_Type type;
+  final Payload type;
 
   // Constructer
   _SonrCardHeader(
@@ -103,7 +103,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
             // @ Top Right Close/Cancel Button
             SonrButton.close(
               () {
-                if (type != Payload_Type.URL) {
+                if (type != Payload.URL) {
                   controller.declineInvite();
                 }
                 Get.back();
@@ -141,7 +141,7 @@ class _ContactInvite extends GetView<SonrCardController> {
       // @ Header
       _SonrCardHeader(
           name: contact.firstName,
-          type: Payload_Type.CONTACT,
+          type: Payload.CONTACT,
           onAccept: () {
             controller.acceptContact(contact, false);
             Get.back();
@@ -178,7 +178,7 @@ class _ContactReply extends GetView<SonrCardController> {
         // @ Header
         _SonrCardHeader(
           name: contact.firstName,
-          type: Payload_Type.CONTACT,
+          type: Payload.CONTACT,
           onAccept: () {
             controller.acceptContact(contact, false);
             Get.back();
@@ -217,7 +217,7 @@ class _FileInvite extends GetView<SonrCardController> {
             // @ Header
             _SonrCardHeader(
                 name: from.firstName,
-                type: Payload_Type.FILE,
+                type: Payload.FILE,
                 onAccept: () {
                   controller.acceptFile();
                 }),
@@ -252,8 +252,8 @@ class _FileInvite extends GetView<SonrCardController> {
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
 class _URLInvite extends GetView<SonrCardController> {
   final String name;
-  final Link link;
-  _URLInvite(this.link, this.name);
+  final String url;
+  _URLInvite(this.url, this.name);
 
   @override
   Widget build(BuildContext context) {
@@ -262,10 +262,10 @@ class _URLInvite extends GetView<SonrCardController> {
       Expanded(
         child: _SonrCardHeader(
             name: name,
-            type: Payload_Type.URL,
+            type: Payload.URL,
             onAccept: () {
               Get.back();
-              Get.find<DeviceService>().launchURL(link.url);
+              Get.find<DeviceService>().launchURL(url);
             }),
       ),
       Padding(padding: EdgeInsets.all(8)),
@@ -291,7 +291,7 @@ class _URLInvite extends GetView<SonrCardController> {
                 margin: EdgeInsets.all(10),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: SonrText.url(link.url),
+                  child: SonrText.url(url),
                 )),
           ),
         ],
@@ -387,7 +387,7 @@ class _FileInviteComplete extends StatelessWidget {
       Expanded(
         child: _SonrCardHeader(
           name: "",
-          type: Payload_Type.FILE,
+          type: Payload.FILE,
           hasAccept: false,
         ),
       ),

@@ -88,10 +88,8 @@ class SonrIcon extends StatelessWidget {
       Color color = Colors.black,
       FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
     IconData data;
-    if (payload.type == Payload_Type.CONTACT) {
+    if (payload == Payload.CONTACT) {
       data = _SonrIconData.contact;
-    } else if (payload.type == Payload_Type.FILE) {
-      data = _SonrIconData.files[payload.file.mime.type];
     } else {
       data = _SonrIconData.url;
     }
@@ -100,7 +98,6 @@ class SonrIcon extends StatelessWidget {
       type,
       color,
       gradient,
-      thumbnail: payload.file.thumbnail,
       size: size,
     );
   }

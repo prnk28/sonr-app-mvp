@@ -32,7 +32,7 @@ class SonrService extends GetxService {
   bool _processed = false;
 
   // @ Set Transfer Dependencies
-  Payload_Type _payType;
+  Payload _payType;
   String _url;
 
   // @ Set Receive Dependencies
@@ -83,18 +83,18 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Queue-File Event ^
-  void queue(Payload_Type type, {File file, String url}) async {
+  void queue(Payload type, {File file, String url}) async {
     // Set Payload Type
     _payType = type;
 
     // File Payload
-    if (_payType == Payload_Type.FILE) {
+    if (_payType == Payload.FILE) {
       assert(file != null);
       _node.processFile(file.path);
     }
 
     // Link Payload
-    else if (_payType == Payload_Type.URL) {
+    else if (_payType == Payload.URL) {
       assert(url != null);
       _url = url;
     }
@@ -103,7 +103,7 @@ class SonrService extends GetxService {
   // ^ Invite-Peer Event ^
   void invite(Peer p) async {
     // File Payload
-    if (_payType == Payload_Type.FILE) {
+    if (_payType == Payload.FILE) {
       // Check Status
       if (_processed) {
         await _node.inviteFile(p);
@@ -111,12 +111,12 @@ class SonrService extends GetxService {
     }
 
     // Contact Payload
-    else if (_payType == Payload_Type.CONTACT) {
+    else if (_payType == Payload.CONTACT) {
       await _node.inviteContact(p);
     }
 
     // Link Payload
-    else if (_payType == Payload_Type.URL) {
+    else if (_payType == Payload.URL) {
       assert(_url != null);
       await _node.inviteLink(p, _url, _url);
     }
@@ -146,7 +146,7 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Peers List
-      lobby(data.peers);
+      lobby(data.available);
     }
   }
 
@@ -166,18 +166,17 @@ class SonrService extends GetxService {
       HapticFeedback.heavyImpact();
 
       // Check Payload Type
-      switch (data.payload.type) {
-        case Payload_Type.CONTACT:
-          Get.dialog(SonrCard.fromInviteContact(data.payload.contact),
+      switch (data.payload) {
+        case Payload.CONTACT:
+          Get.dialog(SonrCard.fromInviteContact(data.contact),
               barrierColor: K_DIALOG_COLOR);
           break;
-        case Payload_Type.FILE:
+        case Payload.FILE:
           Get.dialog(SonrCard.fromInviteMetadata(data),
               barrierColor: K_DIALOG_COLOR);
           break;
-        case Payload_Type.URL:
-          Get.dialog(
-              SonrCard.fromInviteUrl(data.payload.link, data.from.firstName),
+        case Payload.URL:
+          Get.dialog(SonrCard.fromInviteUrl(data.url, data.from.firstName),
               barrierColor: K_DIALOG_COLOR);
           break;
       }
@@ -189,10 +188,10 @@ class SonrService extends GetxService {
     print(data.toString());
     if (data is AuthReply) {
       // Check if Sent Back Contact
-      if (data.payload.type == Payload_Type.CONTACT) {
+      if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
         Get.find<PeerController>().playCompleted(data.from);
-        Get.dialog(SonrCard.asReply(data.payload.contact));
+        Get.dialog(SonrCard.asReply(data.contact));
       } else {
         // For File
         if (data.decision) {

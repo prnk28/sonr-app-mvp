@@ -43,16 +43,16 @@ class CardModel {
   }
 
   factory CardModel.fromInvite(AuthInvite inv) {
-    if (inv.payload.type == Payload_Type.FILE) {
-      if (inv.payload.file.mime.type == MIME_Type.image) {
-        return CardModel(CardType.Image, metadata: inv.payload.file);
+    if (inv.payload == Payload.FILE) {
+      if (inv.file.mime.type == MIME_Type.image) {
+        return CardModel(CardType.Image, metadata: inv.file);
       } else {
-        return CardModel(CardType.File, metadata: inv.payload.file);
+        return CardModel(CardType.File, metadata: inv.file);
       }
     }
     // Contact
-    else if (inv.payload.type == Payload_Type.CONTACT) {
-      return CardModel(CardType.Contact, contact: inv.payload.contact);
+    else if (inv.payload == Payload.CONTACT) {
+      return CardModel(CardType.Contact, contact: inv.contact);
     } else {
       throw CardsError("Invalid Payload Type");
     }

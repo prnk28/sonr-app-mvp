@@ -7,7 +7,7 @@ CLEAN=$(FLUTTER) clean
 PROJECT_DIR=/Users/prad/Sonr/app
 
 run:
-	cd $(PROJECT_DIR) && $(RUN)
+	cd $(PROJECT_DIR) && $(RUN) --release
 
 build:
 	@cd $(PROJECT_DIR) && $(CLEAN)
@@ -15,7 +15,7 @@ build:
 	cd $(PROJECT_DIR) && $(BUILDANDROID)
 
 upgrade:
-	
+
 
 clean:
 	cd $(PROJECT_DIR) && rm -rf build

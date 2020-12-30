@@ -13,7 +13,7 @@ class ShareSheet extends StatelessWidget {
   // Properties
   final Widget child;
   final Size size;
-  final Payload_Type payloadType;
+  final Payload payloadType;
   const ShareSheet(
       {Key key,
       @required this.child,
@@ -36,7 +36,7 @@ class ShareSheet extends StatelessWidget {
           child: _ShareItem(false, sharedFiles: sharedFiles, size: content),
         ),
         size: window,
-        payloadType: Payload_Type.FILE);
+        payloadType: Payload.FILE);
   }
 
   // @ Bottom Sheet for URL
@@ -54,7 +54,7 @@ class ShareSheet extends StatelessWidget {
           child: _ShareItem(true, urlText: value, size: content),
         ),
         size: window,
-        payloadType: Payload_Type.URL);
+        payloadType: Payload.URL);
   }
 
   // ^ Build Widget View ^ //
@@ -180,7 +180,7 @@ class _ShareItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isURL) {
       // Set Payload
-      Get.find<SonrService>().queue(Payload_Type.URL, url: urlText);
+      Get.find<SonrService>().queue(Payload.URL, url: urlText);
     }
     // Return Widget
     return Container(
@@ -200,7 +200,7 @@ class _ShareItem extends StatelessWidget {
         : File(sharedFiles.first.path);
 
     // Set Payload
-    Get.find<SonrService>().queue(Payload_Type.FILE, file: file);
+    Get.find<SonrService>().queue(Payload.FILE, file: file);
 
     // Create View
     return ClipRRect(
