@@ -217,10 +217,14 @@ class SonrService extends GetxService {
   void _handleTransmitted(dynamic data) async {
     // Reset Peer/Auth
     if (data is Peer) {
+      // Provide Feedback
+      HapticFeedback.vibrate();
+      _peerController.playCompleted();
+
+      // Reset References
       _url = null;
       _payType = null;
-      _peerController.playCompleted();
-      HapticFeedback.vibrate();
+      _peerController = null;
     }
   }
 

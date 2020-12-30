@@ -26,7 +26,7 @@ class PeerController extends GetxController {
   var _hasCompleted = false;
 
   // Animations
-  SimpleAnimation _idle, _pending, _denied, _accepted, _sending, _complete;
+  SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
 
   PeerController() {
     // Listen to this peers updates
@@ -51,7 +51,7 @@ class PeerController extends GetxController {
       final artboard = file.mainArtboard;
 
       // Add Animation Controllers
-      artboard.addController(_idle = SimpleAnimation('Idle'));
+      artboard.addController(SimpleAnimation('Idle'));
       artboard.addController(_pending = SimpleAnimation('Pending'));
       artboard.addController(_denied = SimpleAnimation('Denied'));
       artboard.addController(_accepted = SimpleAnimation('Accepted'));
@@ -59,7 +59,6 @@ class PeerController extends GetxController {
       artboard.addController(_complete = SimpleAnimation('Complete'));
 
       // Set Default States
-      _idle.isActive = !_isInvited && !_hasCompleted;
       _pending.isActive = _isInvited;
       _denied.isActive = _hasDenied;
       _accepted.isActive = _hasAccepted;
@@ -100,8 +99,7 @@ class PeerController extends GetxController {
     _accepted.isActive = _hasAccepted = !_hasAccepted;
 
     // Update After Delay
-    Future.delayed(Duration(seconds: 1)).then((_) {
-      _hasAccepted = !_hasAccepted;
+    Future.delayed(Duration(milliseconds: 900)).then((_) {
       _accepted.instance.time = 0.0;
       _sending.isActive = _inProgress = !_inProgress;
     });
@@ -117,7 +115,7 @@ class PeerController extends GetxController {
     _denied.isActive = _hasDenied = !_hasDenied;
 
     // Update After Delay
-    Future.delayed(Duration(seconds: 1)).then((_) {
+    Future.delayed(Duration(milliseconds: 1000)).then((_) {
       // Call Finish
       _isInvited = false;
       isContentVisible(true);
@@ -134,7 +132,7 @@ class PeerController extends GetxController {
     _complete.isActive = _hasCompleted = !_hasCompleted;
 
     // Update After Delay
-    Future.delayed(Duration(seconds: 1)).then((_) {
+    Future.delayed(Duration(milliseconds: 1400)).then((_) {
       // Call Finish
       _isInvited = false;
       isContentVisible(true);

@@ -55,11 +55,6 @@ class SonrIcon extends StatelessWidget {
   factory SonrIcon.device(IconType type, Peer peer,
       {Color color, double size = 30}) {
     // Set Color
-    if (type == IconType.Normal) {
-      color = Colors.white;
-    } else {
-      color = K_BASE_COLOR;
-    }
     _IconGradientWData result = _SonrIconData.devices[peer.device.platform];
 
     // Get Icon
@@ -338,13 +333,13 @@ class _SonrIconData {
   // ^ Device Platform to Icon Map ^ //
   static Map<String, _IconGradientWData> devices = {
     "Android": _IconGradientWData(
-        _SonrIconData.android, FlutterGradientNames.dustyGrass),
+        _SonrIconData.android, FlutterGradientNames.glassWater),
     "iOS": _IconGradientWData(
-        _SonrIconData.iphone, FlutterGradientNames.highFlight),
+        _SonrIconData.iphone, FlutterGradientNames.glassWater),
     "Mac":
-        _IconGradientWData(_SonrIconData.mac, FlutterGradientNames.highFlight),
+        _IconGradientWData(_SonrIconData.mac, FlutterGradientNames.glassWater),
     "Windows": _IconGradientWData(
-        _SonrIconData.windows, FlutterGradientNames.highFlight),
+        _SonrIconData.windows, FlutterGradientNames.glassWater),
   };
 
   // ^ File Type to Icon Map ^ //

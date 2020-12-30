@@ -63,18 +63,22 @@ class PeerBubble extends GetWidget<PeerController> {
     if (controller.isContentVisible.value) {
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
-          duration: 500.milliseconds,
-          delay: 1.seconds,
+          duration: 1.seconds,
+          delay: 500.milliseconds,
           builder: (context, child, value) {
             return AnimatedOpacity(
                 opacity: value,
                 duration: 500.milliseconds,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  SonrIcon.device(IconType.Neumorphic, controller.peer,
-                      size: 20),
-                  SonrText.initials(controller.peer),
-                ]));
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(padding: EdgeInsets.all(8)),
+                      SonrIcon.device(IconType.Gradient, controller.peer,
+                          size: 24),
+                      SonrText.initials(controller.peer),
+                      Padding(padding: EdgeInsets.all(8)),
+                    ]));
           });
     } else {
       return PlayAnimation<double>(
@@ -84,12 +88,16 @@ class PeerBubble extends GetWidget<PeerController> {
             return AnimatedOpacity(
                 opacity: value,
                 duration: 20.milliseconds,
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  SonrIcon.device(IconType.Neumorphic, controller.peer,
-                      size: 20),
-                  SonrText.initials(controller.peer),
-                ]));
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(padding: EdgeInsets.all(8)),
+                      SonrIcon.device(IconType.Gradient, controller.peer,
+                          size: 24),
+                      SonrText.initials(controller.peer),
+                      Padding(padding: EdgeInsets.all(8)),
+                    ]));
           });
     }
   }

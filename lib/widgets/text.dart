@@ -99,12 +99,17 @@ class SonrText extends StatelessWidget {
 
   // ^ Gradient Text with Provided Data
   factory SonrText.initials(Peer peer,
-      {Color color, FontWeight weight, double size, Key key}) {
+      {Color color,
+      FlutterGradientNames gradient = FlutterGradientNames.glassWater,
+      FontWeight weight,
+      double size,
+      Key key}) {
     return SonrText(peer.firstName[0].toUpperCase(),
+        isGradient: true,
         weight: FontWeight.bold,
-        size: size ?? 32,
+        size: size ?? 36,
         key: key,
-        color: color ?? Colors.white);
+        gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ Rich Text with FirstName and Invite
