@@ -4,7 +4,7 @@
 # -- Basic --
 name: sonar_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.7.0+0.1
+version: 0.7.8+0.1
 
 # -- Flutter Settings --
 environment:

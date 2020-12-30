@@ -75,6 +75,7 @@ class PeerController extends GetxController {
   // ^ Sets Peer for this Widget ^
   initialize(Peer peer) {
     this.peer = peer;
+    isContentVisible(true);
     offset(calculateOffset(peer.difference));
     proximity(peer.proximity);
   }
@@ -82,7 +83,7 @@ class PeerController extends GetxController {
   // ^ Handle User Invitation ^
   invite() {
     if (!_isInvited) {
-      Get.find<SonrService>().invite(this.peer);
+      Get.find<SonrService>().invite(this);
       isContentVisible(true);
       _pending.instance.animation.loop = Loop.pingPong;
       _pending.isActive = _isInvited = !_isInvited;
@@ -90,60 +91,54 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Accepted ^
-  playAccepted(Peer peer) async {
-    if (peer.id == this.peer.id) {
-      // Update Visibility
-      isContentVisible(false);
+  playAccepted() async {
+    // Update Visibility
+    isContentVisible(false);
 
-      // Start Animation
-      _pending.instance.animation.loop = Loop.oneShot;
-      _accepted.isActive = _hasAccepted = !_hasAccepted;
+    // Start Animation
+    _pending.instance.animation.loop = Loop.oneShot;
+    _accepted.isActive = _hasAccepted = !_hasAccepted;
 
-      // Update After Delay
-      Future.delayed(Duration(seconds: 1)).then((_) {
-        _hasAccepted = !_hasAccepted;
-        _accepted.instance.time = 0.0;
-        _sending.isActive = _inProgress = !_inProgress;
-      });
-    }
+    // Update After Delay
+    Future.delayed(Duration(seconds: 1)).then((_) {
+      _hasAccepted = !_hasAccepted;
+      _accepted.instance.time = 0.0;
+      _sending.isActive = _inProgress = !_inProgress;
+    });
   }
 
   // ^ Handle Denied ^
-  playDenied(Peer peer) async {
-    if (peer.id == this.peer.id) {
-      // Update Visibility
-      isContentVisible(false);
+  playDenied() async {
+    // Update Visibility
+    isContentVisible(false);
 
-      // Start Animation
-      _pending.instance.animation.loop = Loop.oneShot;
-      _denied.isActive = _hasDenied = !_hasDenied;
+    // Start Animation
+    _pending.instance.animation.loop = Loop.oneShot;
+    _denied.isActive = _hasDenied = !_hasDenied;
 
-      // Update After Delay
-      Future.delayed(Duration(seconds: 1)).then((_) {
-        // Call Finish
-        _isInvited = false;
-        isContentVisible(true);
-      });
-    }
+    // Update After Delay
+    Future.delayed(Duration(seconds: 1)).then((_) {
+      // Call Finish
+      _isInvited = false;
+      isContentVisible(true);
+    });
   }
 
   // ^ Handle Completed ^
-  playCompleted(Peer peer) async {
-    if (peer.id == this.peer.id) {
-      // Update Visibility
-      isContentVisible(false);
+  playCompleted() async {
+    // Update Visibility
+    isContentVisible(false);
 
-      // Start Complete Animation
-      _sending.instance.animation.loop = Loop.oneShot;
-      _complete.isActive = _hasCompleted = !_hasCompleted;
+    // Start Complete Animation
+    _sending.instance.animation.loop = Loop.oneShot;
+    _complete.isActive = _hasCompleted = !_hasCompleted;
 
-      // Update After Delay
-      Future.delayed(Duration(seconds: 1)).then((_) {
-        // Call Finish
-        _isInvited = false;
-        isContentVisible(true);
-      });
-    }
+    // Update After Delay
+    Future.delayed(Duration(seconds: 1)).then((_) {
+      // Call Finish
+      _isInvited = false;
+      isContentVisible(true);
+    });
   }
 
   // ^ Calculate Peer Offset from Line ^ //

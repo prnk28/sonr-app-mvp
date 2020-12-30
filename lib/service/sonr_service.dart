@@ -30,6 +30,7 @@ class SonrService extends GetxService {
   // @ Set References
   Node _node;
   Payload _payType;
+  PeerController _peerController;
   bool _connected = false;
   bool _processed = false;
   String _url;
@@ -97,24 +98,27 @@ class SonrService extends GetxService {
   }
 
   // ^ Invite-Peer Event ^
-  void invite(Peer p) async {
+  void invite(PeerController c) async {
+    // Set For Animation
+    _peerController = c;
+
     // File Payload
     if (_payType == Payload.FILE) {
       // Check Status
       if (_processed) {
-        await _node.inviteFile(p);
+        await _node.inviteFile(c.peer);
       }
     }
 
     // Contact Payload
     else if (_payType == Payload.CONTACT) {
-      await _node.inviteContact(p);
+      await _node.inviteContact(c.peer);
     }
 
     // Link Payload
     else if (_payType == Payload.URL) {
       assert(_url != null);
-      await _node.inviteLink(p, _url);
+      await _node.inviteLink(c.peer, _url);
     }
 
     // No Payload
@@ -186,15 +190,15 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
-        Get.find<PeerController>().playCompleted(data.from);
+        _peerController.playCompleted();
         Get.dialog(SonrCard.asReply(data.contact));
       } else {
         // For File
         if (data.decision) {
-          Get.find<PeerController>().playAccepted(data.from);
+          _peerController.playAccepted();
           HapticFeedback.lightImpact();
         } else {
-          Get.find<PeerController>().playDenied(data.from);
+          _peerController.playDenied();
           HapticFeedback.mediumImpact();
         }
       }
@@ -215,7 +219,7 @@ class SonrService extends GetxService {
     if (data is Peer) {
       _url = null;
       _payType = null;
-      Get.find<PeerController>().playCompleted(data);
+      _peerController.playCompleted();
       HapticFeedback.vibrate();
     }
   }

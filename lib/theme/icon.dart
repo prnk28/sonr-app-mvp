@@ -246,7 +246,14 @@ class _SonrIconData {
   _SonrIconData._();
   static const _kFontFam = 'SonrIcons';
   static const _kFontPkg = null;
-
+  static const IconData iphone =
+      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData android =
+      IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData mac =
+      IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData windows =
+      IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData spotify =
       IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData twitter_rt =
@@ -255,10 +262,6 @@ class _SonrIconData {
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tiktok =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData iphone =
-      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData android =
-      IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData url =
       IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData contact =
@@ -338,6 +341,10 @@ class _SonrIconData {
         _SonrIconData.android, FlutterGradientNames.dustyGrass),
     "iOS": _IconGradientWData(
         _SonrIconData.iphone, FlutterGradientNames.highFlight),
+    "Mac":
+        _IconGradientWData(_SonrIconData.mac, FlutterGradientNames.highFlight),
+    "Windows": _IconGradientWData(
+        _SonrIconData.windows, FlutterGradientNames.highFlight),
   };
 
   // ^ File Type to Icon Map ^ //
