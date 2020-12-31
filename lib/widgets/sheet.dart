@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -22,7 +22,7 @@ class ShareSheet extends StatelessWidget {
       : super(key: key);
 
   // @ Bottom Sheet for Media
-  factory ShareSheet.media(List<SharedMediaFile> sharedFiles) {
+  factory ShareSheet.media(List<intent.SharedMediaFile> sharedFiles) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 3 + 150);
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER,
@@ -167,7 +167,7 @@ class _ShareSheetContentView extends StatelessWidget {
 
 // ** ShareSheet Item Widget ** //
 class _ShareItem extends StatelessWidget {
-  final List<SharedMediaFile> sharedFiles;
+  final List<intent.SharedMediaFile> sharedFiles;
   final Size size;
   final String urlText;
   final bool isURL;
@@ -180,7 +180,7 @@ class _ShareItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isURL) {
       // Set Payload
-      Get.find<SonrService>().queue(Payload.URL, url: urlText);
+      Get.find<SonrService>().process(Payload.URL, url: urlText);
     }
     // Return Widget
     return Container(
@@ -195,12 +195,11 @@ class _ShareItem extends StatelessWidget {
 
   _buildMediaView() {
     // Get Shared File
-    File file = sharedFiles.length > 1
-        ? File(sharedFiles.last.path)
-        : File(sharedFiles.first.path);
+    intent.SharedMediaFile sharedIntent =
+        sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
 
     // Set Payload
-    Get.find<SonrService>().queue(Payload.FILE, file: file);
+    Get.find<SonrService>().processExternal(sharedIntent);
 
     // Create View
     return ClipRRect(
@@ -213,7 +212,7 @@ class _ShareItem extends StatelessWidget {
               minHeight: 1,
               maxHeight: size.height - 20,
             ),
-            child: Image.file(file),
+            child: Image.file(File(sharedIntent.path)),
           )),
     );
   }

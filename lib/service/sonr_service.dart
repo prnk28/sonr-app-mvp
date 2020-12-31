@@ -9,6 +9,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'device_service.dart';
 import 'sql_service.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
 
 // @ Enum to Handle Status
 enum SonrStatus {
@@ -79,8 +80,8 @@ class SonrService extends GetxService {
   // ***********************
   // ******* Events ********
   // ***********************
-  // ^ Queue-File Event ^
-  void queue(Payload type, {File file, String url}) async {
+  // ^ Process-File Event ^
+  void process(Payload type, {File file, String url}) async {
     // Set Payload Type
     _payType = type;
 
@@ -95,6 +96,22 @@ class SonrService extends GetxService {
       assert(url != null);
       _url = url;
     }
+  }
+
+  // ^ Process-File Event ^
+  void processExternal(intent.SharedMediaFile mediaFile) async {
+    // Set Payload Type
+    _payType = Payload.FILE;
+
+    // Create Protobuf
+    SharedMediaFile shared = new SharedMediaFile();
+    shared.duration = mediaFile.duration;
+    shared.path = mediaFile.path;
+    shared.thumbnail = mediaFile.thumbnail;
+    shared.type = SharedMediaFile_Type.valueOf(mediaFile.type.index);
+
+    // File Payload
+    _node.processExternalFile(shared);
   }
 
   // ^ Invite-Peer Event ^

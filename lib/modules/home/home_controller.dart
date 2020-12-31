@@ -41,7 +41,7 @@ class HomeController extends GetxController {
     File file = await _getAssetFileByPath("assets/images/test.jpg");
 
     // Queue File
-    Get.find<SonrService>().queue(Payload.FILE, file: file);
+    Get.find<SonrService>().process(Payload.FILE, file: file);
 
     // Go to Transfer
     Get.offNamed("/transfer");
@@ -53,7 +53,7 @@ class HomeController extends GetxController {
     File testFile = await _getAssetFileByPath("assets/images/fat_test.jpg");
 
     // Queue File
-    Get.find<SonrService>().queue(Payload.FILE, file: testFile);
+    Get.find<SonrService>().process(Payload.FILE, file: testFile);
 
     // Go to Transfer
     Get.offNamed("/transfer");
@@ -61,7 +61,7 @@ class HomeController extends GetxController {
 
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
-    Get.find<SonrService>().queue(Payload.CONTACT);
+    Get.find<SonrService>().process(Payload.CONTACT);
 
     // Go to Transfer
     Get.offNamed("/transfer");
