@@ -196,9 +196,9 @@ class _ContactReply extends GetView<SonrCardController> {
 
 // ^ File Invite Builds from Invite Protobuf ^ //
 class _FileInvite extends GetView<SonrCardController> {
-  final Preview metadata;
+  final Preview preview;
   final Peer from;
-  _FileInvite(this.metadata, this.from);
+  _FileInvite(this.preview, this.from);
 
   @override
   Widget build(BuildContext context) {
@@ -224,8 +224,8 @@ class _FileInvite extends GetView<SonrCardController> {
             Padding(padding: EdgeInsets.all(8)),
 
             // @ Build Item from Metadata and Peer
-            Expanded(child: SonrIcon.preview(IconType.Thumbnail, metadata)),
-            SonrText.normal(metadata.mime.type.toString().capitalizeFirst,
+            Expanded(child: SonrIcon.preview(IconType.Thumbnail, preview)),
+            SonrText.normal(preview.mime.type.toString().capitalizeFirst,
                 size: 22),
           ],
         );
@@ -234,7 +234,7 @@ class _FileInvite extends GetView<SonrCardController> {
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
         child = _FileInviteProgress(
-            SonrIcon.preview(IconType.Thumbnail, metadata).data);
+            SonrIcon.preview(IconType.Thumbnail, preview).data);
         height = 300;
       }
       // @ Check State of Card --> Completed Transfer

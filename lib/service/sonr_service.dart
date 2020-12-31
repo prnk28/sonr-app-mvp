@@ -152,7 +152,7 @@ class SonrService extends GetxService {
 
   // ^ File has Succesfully Queued ^ //
   void _handleQueued(dynamic data) async {
-    if (data is Metadata) {
+    if (data is Preview) {
       // Update data
       _processed = true;
     }
@@ -160,6 +160,7 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvite(dynamic data) async {
+    print(data);
     // Check Type
     if (data is AuthInvite) {
       Get.find<SonrCardController>().setInvited();
