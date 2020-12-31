@@ -108,7 +108,7 @@ class TransferController extends GetxController {
       stackItems.refresh();
       //print("Added Bubble");
     }
-    //print("Total Bubbbles = " + stackItems.length.toString());
+    print("Total Bubbbles = " + stackItems.length.toString());
     stackItems.refresh();
   }
 

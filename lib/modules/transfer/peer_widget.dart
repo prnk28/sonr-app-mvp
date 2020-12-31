@@ -10,7 +10,7 @@ class PeerBubble extends GetWidget<PeerController> {
   final Peer peer;
   final int index;
   PeerBubble(this.peer, this.index) {
-    controller.initialize(peer);
+    controller.initialize(peer, index);
   }
 
   @override

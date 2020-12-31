@@ -17,6 +17,7 @@ class PeerController extends GetxController {
 
   // References
   var peer = Peer();
+  int index;
 
   // Checkers
   var _isInvited = false;
@@ -72,8 +73,9 @@ class PeerController extends GetxController {
   }
 
   // ^ Sets Peer for this Widget ^
-  initialize(Peer peer) {
+  initialize(Peer peer, int index) {
     this.peer = peer;
+    this.index = index;
     isContentVisible(true);
     offset(calculateOffset(peer.difference));
     proximity(peer.proximity);
@@ -167,7 +169,7 @@ class PeerController extends GetxController {
     PathMetrics pathMetrics = path.computeMetrics();
     PathMetric pathMetric = pathMetrics.elementAt(0);
     value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(0.5); // TODO
+    Tangent pos = pathMetric.getTangentForOffset(1 / this.index); // TODO
     return pos.position;
   }
 }
