@@ -146,7 +146,7 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Peers List
-      lobby(data.available);
+      lobby(data.peers);
     }
   }
 
