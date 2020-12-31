@@ -41,7 +41,6 @@ class _MediaItemView extends StatelessWidget {
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                    SonrText.normal(metadata.name),
                     SonrText.normal(metadata.mime.type.toString()),
                     //SonrText.normal("Owner: " + metadata.owner.firstName),
                   ]),

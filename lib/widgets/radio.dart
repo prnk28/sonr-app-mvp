@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 import 'package:sonar_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
 
 class AnimatedTileRadio extends StatefulWidget {
   // Properties
