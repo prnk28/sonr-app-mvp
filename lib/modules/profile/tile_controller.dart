@@ -102,19 +102,19 @@ class TileController extends GetxController {
   // ^ Finish and Save new Tile ^ //
   finish() {
     // Validate
-    if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
-      // Set Position
-      currentTile.value.position =
-          Get.find<ProfileController>().socials.length - 1;
+    // if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
+    // Set Position
+    currentTile.value.position =
+        Get.find<ProfileController>().socials.length - 1;
 
-      // Add Tile to Contact and Save
-      Get.find<ProfileController>().saveSocialTile(currentTile.value);
-      providerIsPublic(false);
-      Get.back();
-    } else {
-      // Display Error Snackbar
-      SonrSnack.missing("Pick a Tile Type", isLast: true);
-    }
+    // Add Tile to Contact and Save
+    Get.find<ProfileController>().saveSocialTile(currentTile.value);
+    providerIsPublic(false);
+    Get.back();
+    // } else {
+    //   // Display Error Snackbar
+    //   SonrSnack.missing("Pick a Tile Type", isLast: true);
+    // }
   }
 
   // ^ Add Social Tile Move to Next Step ^ //

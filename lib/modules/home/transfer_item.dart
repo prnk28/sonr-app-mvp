@@ -13,7 +13,7 @@ class TransferItem extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // File
     if (card.type == CardType.File || card.type == CardType.Image) {
-      return _MediaItemView(card.metadata);
+      return _MediaItemView(card.preview);
     }
     // Contact
     else {
@@ -24,7 +24,7 @@ class TransferItem extends GetView<HomeController> {
 
 // ^ Media File Item View ^ //
 class _MediaItemView extends StatelessWidget {
-  final Metadata metadata;
+  final Preview metadata;
   _MediaItemView(this.metadata);
 
   @override
@@ -43,7 +43,7 @@ class _MediaItemView extends StatelessWidget {
                       children: [
                     SonrText.normal(metadata.name),
                     SonrText.normal(metadata.mime.type.toString()),
-                    SonrText.normal("Owner: " + metadata.owner.firstName),
+                    //SonrText.normal("Owner: " + metadata.owner.firstName),
                   ]),
             )));
   }

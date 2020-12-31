@@ -230,14 +230,15 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   void _handleReceived(dynamic data) {
-    if (data is Metadata) {
+    if (data is Received) {
       // Reset Data
       progress(0.0);
 
       // Save Card
-      Get.find<SQLService>().storeFile(data);
-      Get.find<DeviceService>().saveMedia(data);
-      Get.find<SonrCardController>().received(data);
+      Get.find<SQLService>().storeFile(data.metadata, data.owner,
+          DateTime.fromMillisecondsSinceEpoch(data.received));
+      Get.find<DeviceService>().saveMedia(data.metadata);
+      Get.find<SonrCardController>().received(data.metadata);
       HapticFeedback.vibrate();
     }
   }

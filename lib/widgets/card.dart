@@ -40,7 +40,7 @@ class SonrCard extends GetView<SonrCardController> {
   factory SonrCard.fromInviteMetadata(AuthInvite invite) {
     final double metaBottom = 180;
     return SonrCard(
-        child: _FileInvite(invite.file, invite.from),
+        child: _FileInvite(invite.preview, invite.from),
         payloadType: Payload.FILE,
         bottom: metaBottom);
   }
@@ -196,7 +196,7 @@ class _ContactReply extends GetView<SonrCardController> {
 
 // ^ File Invite Builds from Invite Protobuf ^ //
 class _FileInvite extends GetView<SonrCardController> {
-  final Metadata metadata;
+  final Preview metadata;
   final Peer from;
   _FileInvite(this.metadata, this.from);
 
@@ -224,7 +224,7 @@ class _FileInvite extends GetView<SonrCardController> {
             Padding(padding: EdgeInsets.all(8)),
 
             // @ Build Item from Metadata and Peer
-            Expanded(child: SonrIcon.meta(IconType.Thumbnail, metadata)),
+            Expanded(child: SonrIcon.preview(IconType.Thumbnail, metadata)),
             SonrText.normal(metadata.mime.type.toString().capitalizeFirst,
                 size: 22),
           ],
@@ -234,7 +234,7 @@ class _FileInvite extends GetView<SonrCardController> {
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
         child = _FileInviteProgress(
-            SonrIcon.meta(IconType.Thumbnail, metadata).data);
+            SonrIcon.preview(IconType.Thumbnail, metadata).data);
         height = 300;
       }
       // @ Check State of Card --> Completed Transfer

@@ -12,13 +12,16 @@ final String fileColumnSize = 'size';
 final String fileColumnMime = 'mime';
 final String fileColumnOwner = 'owner';
 final String fileColumnlastOpened = 'lastOpened';
+final String fileColumnReceived = 'received';
 
 class MetaSQL {
   int id;
   final Metadata metadata;
+  final Peer owner;
+  final DateTime received;
   DateTime lastOpened;
 
-  MetaSQL(this.metadata) {
+  MetaSQL(this.metadata, this.owner, this.received) {
     this.id = id;
     this.lastOpened = DateTime.fromMillisecondsSinceEpoch(metadata.lastOpened);
   }
@@ -31,7 +34,7 @@ class MetaSQL {
       fileColumnPath: metadata.path,
       fileColumnSize: metadata.size,
       fileColumnMime: metadata.mime.writeToJson(),
-      fileColumnOwner: metadata.owner.writeToJson(),
+      fileColumnOwner: owner.writeToJson(),
       fileColumnlastOpened: metadata.lastOpened,
     };
 
@@ -50,8 +53,8 @@ class MetaSQL {
     meta.path = map[fileColumnPath];
     meta.size = map[fileColumnSize];
     meta.mime = MIME.fromJson(map[fileColumnMime]);
-    meta.owner = Peer.fromJson(map[fileColumnOwner]);
     meta.lastOpened = map[fileColumnlastOpened];
-    return MetaSQL(meta);
+    return MetaSQL(meta, Peer.fromJson(map[fileColumnOwner]),
+        DateTime.fromMillisecondsSinceEpoch(map[fileColumnReceived]));
   }
 }

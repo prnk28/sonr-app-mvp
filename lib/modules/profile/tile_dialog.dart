@@ -354,7 +354,7 @@ class _SetTypeView extends StatefulWidget {
 }
 
 class _SetSizePosState extends State<_SetTypeView> {
-  Contact_SocialTile_TileType _groupValue;
+  String _groupValue;
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -373,9 +373,9 @@ class _SetSizePosState extends State<_SetTypeView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Icon Option
-              AnimatedTileRadio(Contact_SocialTile_TileType.Icon,
-                  groupValue: _groupValue, onChanged: (value) {
-                widget.controller.currentTile.value.type = value;
+              AnimatedTileRadio("Icon", groupValue: _groupValue,
+                  onChanged: (value) {
+                //widget.controller.currentTile.value.type = value;
                 widget.controller.currentTile.refresh();
                 setState(() {
                   this._groupValue = value;
@@ -383,9 +383,9 @@ class _SetSizePosState extends State<_SetTypeView> {
               }),
 
               // Showcase Option
-              AnimatedTileRadio(Contact_SocialTile_TileType.Showcase,
-                  groupValue: _groupValue, onChanged: (value) {
-                widget.controller.currentTile.value.type = value;
+              AnimatedTileRadio("Showcase", groupValue: _groupValue,
+                  onChanged: (value) {
+                //widget.controller.currentTile.value.type = value;
                 widget.controller.currentTile.refresh();
                 setState(() {
                   this._groupValue = value;
@@ -395,9 +395,9 @@ class _SetSizePosState extends State<_SetTypeView> {
               // Feed Option
               widget.controller.doesProviderAllowFeed(
                       widget.controller.currentTile.value.provider)
-                  ? AnimatedTileRadio(Contact_SocialTile_TileType.Feed,
-                      groupValue: _groupValue, onChanged: (value) {
-                      widget.controller.currentTile.value.type = value;
+                  ? AnimatedTileRadio("Feed", groupValue: _groupValue,
+                      onChanged: (value) {
+                      //widget.controller.currentTile.value.type = value;
                       widget.controller.currentTile.refresh();
                       setState(() {
                         this._groupValue = value;

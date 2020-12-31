@@ -98,16 +98,16 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data from Metadata
-  factory SonrIcon.meta(IconType type, Metadata meta,
+  factory SonrIcon.preview(IconType type, Preview preview,
       {double size = 30,
       Color color = Colors.black,
       FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
     return SonrIcon(
-      _SonrIconData.files[meta.mime.type],
+      _SonrIconData.files[preview.mime.type],
       type,
       color,
       gradient,
-      thumbnail: meta.thumbnail,
+      thumbnail: preview.thumbnail,
       size: size,
     );
   }

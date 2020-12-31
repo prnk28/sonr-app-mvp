@@ -5,7 +5,7 @@ import 'package:sonr_core/models/models.dart';
 
 class AnimatedTileRadio extends StatefulWidget {
   // Properties
-  final Contact_SocialTile_TileType type;
+  final String type;
   final ValueChanged<dynamic> onChanged;
   final dynamic groupValue;
 
@@ -63,18 +63,18 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
         onChanged: widget.onChanged,
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-       SonrText.normal(widget.type.toString(), size: 14, color: Colors.black),
+      SonrText.normal(widget.type.toString(), size: 14, color: Colors.black),
     ]);
   }
 
   // ^ Get Animation Controller By Type ^ //
-  SimpleAnimation _riveControllerByType(Contact_SocialTile_TileType type) {
+  SimpleAnimation _riveControllerByType(String type) {
     // Retreive Feed Loop
-    if (type == Contact_SocialTile_TileType.Feed) {
+    if (type == "Feed") {
       return SimpleAnimation('Feed');
     }
     // Retreive Showcase Loop
-    else if (type == Contact_SocialTile_TileType.Showcase) {
+    else if (type == "Showcase") {
       return SimpleAnimation('Showcase');
     }
     // Retreive Icon Loop

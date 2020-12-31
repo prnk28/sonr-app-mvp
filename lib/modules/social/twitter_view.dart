@@ -13,7 +13,7 @@ class TwitterView extends StatefulWidget {
   final Contact_SocialTile item;
   final int index;
   TwitterView(this.item, this.index) {
-    item.type = Contact_SocialTile_TileType.Showcase;
+    // item.type = Contact_SocialTile_TileType.Showcase;
   }
 
   @override

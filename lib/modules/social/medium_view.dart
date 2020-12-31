@@ -12,7 +12,7 @@ class MediumView extends StatefulWidget {
   final Contact_SocialTile item;
   final int index;
   MediumView(this.item, this.index) {
-    item.type = Contact_SocialTile_TileType.Showcase;
+    // item.type = Contact_SocialTile_TileType.Showcase;
   }
 
   @override

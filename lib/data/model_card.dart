@@ -18,6 +18,7 @@ class CardModel {
   CardType type;
 
   // Data
+  final Preview preview;
   final Metadata metadata;
   final Contact contact;
   DateTime lastOpened = DateTime.now();
@@ -26,6 +27,7 @@ class CardModel {
     this.type, {
     this.id = 0,
     this.lastOpened,
+    this.preview,
     this.metadata,
     this.contact,
   });
@@ -42,12 +44,20 @@ class CardModel {
     }
   }
 
+  factory CardModel.fromPreview(Preview m) {
+    if (m.mime.type == MIME_Type.image) {
+      return CardModel(CardType.Image, preview: m);
+    } else {
+      return CardModel(CardType.File, preview: m);
+    }
+  }
+
   factory CardModel.fromInvite(AuthInvite inv) {
     if (inv.payload == Payload.FILE) {
-      if (inv.file.mime.type == MIME_Type.image) {
-        return CardModel(CardType.Image, metadata: inv.file);
+      if (inv.preview.mime.type == MIME_Type.image) {
+        return CardModel(CardType.Image, preview: inv.preview);
       } else {
-        return CardModel(CardType.File, metadata: inv.file);
+        return CardModel(CardType.File, preview: inv.preview);
       }
     }
     // Contact

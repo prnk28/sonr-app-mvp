@@ -52,8 +52,10 @@ create table $contactTable (
   }
 
   // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> storeFile(Metadata metadata) async {
-    metadata.id = await _db.insert(metaTable, MetaSQL(metadata).toSQL());
+  Future<Metadata> storeFile(
+      Metadata metadata, Peer owner, DateTime received) async {
+    metadata.id =
+        await _db.insert(metaTable, MetaSQL(metadata, owner, received).toSQL());
     return metadata;
   }
 
@@ -62,12 +64,6 @@ create table $contactTable (
     var i = await _db
         .delete(metaTable, where: '$fileColumnId = ?', whereArgs: [id]);
     return i;
-  }
-
-  // ^ Update Metadata in DB ^ //
-  Future updateFile(Metadata metadata) async {
-    await _db.update(metaTable, MetaSQL(metadata).toSQL(),
-        where: '$fileColumnId = ?', whereArgs: [metadata.id]);
   }
 
   // ^ Get All Files ^ //

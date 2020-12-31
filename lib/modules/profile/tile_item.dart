@@ -34,11 +34,11 @@ class SocialTileItem extends GetWidget<TileController> {
         },
         // Only accept same tiles
         onWillAccept: (data) {
-          if (data.type == this.item.type) {
-            return true;
-          } else {
-            return false;
-          }
+          // if (data.type == this.item.type) {
+          return true;
+          // } else {
+          //   return false;
+          // }
         },
         // Switch Index Positions with animation
         onAccept: (data) {
@@ -58,7 +58,7 @@ class SocialTileItem extends GetWidget<TileController> {
         HapticFeedback.lightImpact();
       },
       onDoubleTap: () {
-        Get.find<DeviceService>().launchURL(item.url);
+        Get.find<DeviceService>().launchURL(item.showcase);
         HapticFeedback.mediumImpact();
       },
       child: Neumorphic(
