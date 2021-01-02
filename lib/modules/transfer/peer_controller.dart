@@ -44,7 +44,7 @@ class PeerController extends GetxController {
   @override
   void onInit() async {
     // Load your Rive data
-    final data = await rootBundle.load('assets/animations/peerbubble.riv');
+    final data = await rootBundle.load('assets/animations/peer_bubble.riv');
 
     // Create a RiveFile from the binary data
     final file = RiveFile();

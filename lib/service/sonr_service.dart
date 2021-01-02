@@ -67,6 +67,8 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
+    _connected = true;
+
     // Push to Home Screen
     Get.offNamed("/home");
 
@@ -159,7 +161,7 @@ class SonrService extends GetxService {
   // ^ Handle Connected to Bootstrap Nodes ^ //
   void _handleConnected(dynamic data) {
     // Set Connected, Send first Update
-    _connected = true;
+
     _node.update(direction.value);
   }
 
@@ -181,7 +183,6 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvite(dynamic data) async {
-    print(data);
     // Check Type
     if (data is AuthInvite) {
       Get.find<SonrCardController>().setInvited();
@@ -207,13 +208,11 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(dynamic data) async {
-    print(data.toString());
     if (data is AuthReply) {
       // Check if Sent Back Contact
       if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
-        _peerController.playCompleted();
-        Get.dialog(SonrCard.asReply(data.contact));
+        Get.dialog(SonrCard.fromReplyContact(data.contact));
       } else {
         // For File
         if (data.decision) {

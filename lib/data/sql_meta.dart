@@ -36,6 +36,7 @@ class MetaSQL {
       fileColumnMime: metadata.mime.writeToJson(),
       fileColumnOwner: owner.writeToJson(),
       fileColumnlastOpened: metadata.lastOpened,
+      fileColumnReceived: received.millisecondsSinceEpoch
     };
 
     // Check if Id Provided

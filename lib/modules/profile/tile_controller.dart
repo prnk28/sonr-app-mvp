@@ -110,7 +110,6 @@ class TileController extends GetxController {
     // Add Tile to Contact and Save
     Get.find<ProfileController>().saveSocialTile(currentTile.value);
     providerIsPublic(false);
-    Get.back();
     // } else {
     //   // Display Error Snackbar
     //   SonrSnack.missing("Pick a Tile Type", isLast: true);

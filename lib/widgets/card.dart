@@ -55,7 +55,7 @@ class SonrCard extends GetView<SonrCardController> {
   }
 
   // @ Dialog for Replied Contact
-  factory SonrCard.asReply(Contact c) {
+  factory SonrCard.fromReplyContact(Contact c) {
     final double contactbottom = 90;
     return SonrCard(
         child: _ContactReply(c),
@@ -65,6 +65,10 @@ class SonrCard extends GetView<SonrCardController> {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize Home Controller for Saving
+    Get.put<HomeController>(HomeController());
+
+    // Build View
     return NeumorphicBackground(
         margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: bottom),
         borderRadius: BorderRadius.circular(40),
@@ -83,11 +87,13 @@ class _SonrCardHeader extends GetView<SonrCardController> {
   final Function onAccept;
   final bool hasAccept;
   final Payload type;
+  final bool isReply;
 
   // Constructer
   _SonrCardHeader(
       {@required this.type,
       @required this.name,
+      this.isReply = false,
       this.hasAccept = true,
       this.onAccept});
 
@@ -103,7 +109,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
             // @ Top Right Close/Cancel Button
             SonrButton.close(
               () {
-                if (type != Payload.URL) {
+                if (type != Payload.URL && !isReply) {
                   controller.declineInvite();
                 }
                 Get.back();
@@ -179,6 +185,7 @@ class _ContactReply extends GetView<SonrCardController> {
         _SonrCardHeader(
           name: contact.firstName,
           type: Payload.CONTACT,
+          isReply: true,
           onAccept: () {
             controller.acceptContact(contact, false);
             Get.back();

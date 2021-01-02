@@ -13,7 +13,7 @@ class TransferItem extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // File
     if (card.type == CardType.File || card.type == CardType.Image) {
-      return _MediaItemView(card.preview);
+      return _MediaItemView(card.metadata);
     }
     // Contact
     else {
@@ -24,7 +24,7 @@ class TransferItem extends GetView<HomeController> {
 
 // ^ Media File Item View ^ //
 class _MediaItemView extends StatelessWidget {
-  final Preview metadata;
+  final Metadata metadata;
   _MediaItemView(this.metadata);
 
   @override

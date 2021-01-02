@@ -16,45 +16,39 @@ class PeerBubble extends GetWidget<PeerController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Positioned(
+      return AnimatedPositioned(
           top: controller.offset.value.dy,
           left: controller.offset.value.dx,
+          duration: 500.milliseconds,
           child: GestureDetector(
               onTap: () => controller.invite(),
-              child: PlayAnimation<double>(
-                  tween: (0.0).tweenTo(1.0),
-                  duration: 500.milliseconds,
-                  delay: 1.seconds,
-                  builder: (context, child, value) {
-                    return Container(
-                        width: 90,
-                        height: 90,
-                        decoration:
-                            BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(167, 179, 190, value),
-                            offset: Offset(0, 2),
-                            blurRadius: 6,
-                            spreadRadius: 0.5,
+              child: Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(167, 179, 190, 1.0),
+                      offset: Offset(0, 2),
+                      blurRadius: 6,
+                      spreadRadius: 0.5,
+                    ),
+                    BoxShadow(
+                      color: Color.fromRGBO(248, 252, 255, 0.5),
+                      offset: Offset(-2, 0),
+                      blurRadius: 6,
+                      spreadRadius: 0.5,
+                    ),
+                  ]),
+                  child: Stack(alignment: Alignment.center, children: [
+                    controller.artboard.value == null
+                        ? const SizedBox()
+                        : Rive(
+                            artboard: controller.artboard.value,
+                            alignment: Alignment.center,
+                            fit: BoxFit.contain,
                           ),
-                          BoxShadow(
-                            color: Color.fromRGBO(248, 252, 255, value / 2),
-                            offset: Offset(-2, 0),
-                            blurRadius: 6,
-                            spreadRadius: 0.5,
-                          ),
-                        ]),
-                        child: Stack(alignment: Alignment.center, children: [
-                          controller.artboard.value == null
-                              ? const SizedBox()
-                              : Rive(
-                                  artboard: controller.artboard.value,
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.contain,
-                                ),
-                          _buildContentVisibility(),
-                        ]));
-                  })));
+                    _buildContentVisibility(),
+                  ]))));
     });
   }
 
@@ -63,7 +57,7 @@ class PeerBubble extends GetWidget<PeerController> {
     if (controller.isContentVisible.value) {
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
-          duration: 1.seconds,
+          duration: 500.milliseconds,
           delay: 500.milliseconds,
           builder: (context, child, value) {
             return AnimatedOpacity(
@@ -83,7 +77,8 @@ class PeerBubble extends GetWidget<PeerController> {
     } else {
       return PlayAnimation<double>(
           tween: (1.0).tweenTo(0.0),
-          duration: 20.milliseconds,
+          duration: 500.milliseconds,
+          delay: 500.milliseconds,
           builder: (context, child, value) {
             return AnimatedOpacity(
                 opacity: value,

@@ -47,6 +47,7 @@ class TileDialog extends GetWidget<TileController> {
                           // @ Bottom Right Confirm Button
                           SonrButton.accept(() {
                             controller.finish();
+                            Get.back();
                           }),
                         ]);
                   }

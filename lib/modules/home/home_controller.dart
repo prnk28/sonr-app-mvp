@@ -7,13 +7,16 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sonr_core/models/models.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeController extends GetxController {
   // Properties
-  RxList<CardModel> allCards = List<CardModel>().obs;
+  final allCards = List<CardModel>().obs;
+  final isShareExpanded = false.obs;
+  final imagePicker = ImagePicker();
 
-  // ^ Retreives Cards from SQL Service ^ //
-  void fetch() async {
+  @override
+  void onInit() {
     // Fetch File Data
     Get.find<SQLService>().fetchFiles().then(
         (data) => data.forEach((m) => allCards.add(CardModel.fromMetaSQL(m))));
@@ -22,6 +25,13 @@ class HomeController extends GetxController {
     Get.find<SQLService>().fetchContacts().then((data) =>
         data.forEach((c) => allCards.add(CardModel.fromContactSQL(c))));
     allCards.refresh();
+    super.onInit();
+  }
+
+  // ^ Toggles Expanded Share Button ^ //
+  void toggleExpand() {
+    HapticFeedback.heavyImpact();
+    isShareExpanded(!isShareExpanded.value);
   }
 
   // ^ Adds a Card to Screen ^ //
@@ -35,28 +45,35 @@ class HomeController extends GetxController {
     // TODO
   }
 
-  // @ Testing Purposes File Transfer
-  void queueTest() async {
-    // Get Test File Path
-    File file = await _getAssetFileByPath("assets/images/test.jpg");
+  // ^ Opens File Picker ^ //
+  void openCamera() async {
+    // Show Picker
+    final pickedFile = await imagePicker.getImage(source: ImageSource.camera);
 
-    // Queue File
-    Get.find<SonrService>().process(Payload.FILE, file: file);
+    // Retreive File and Process
+    if (pickedFile != null) {
+      // Queue
+      Get.find<SonrService>()
+          .process(Payload.FILE, file: File(pickedFile.path));
 
-    // Go to Transfer
-    Get.offNamed("/transfer");
+      // Go to Transfer
+      Get.offNamed("/transfer");
+    }
   }
 
-  // @ Testing Purposes Large File Transfer
-  void queueFatTest() async {
-    // Get Test File Path
-    File testFile = await _getAssetFileByPath("assets/images/fat_test.jpg");
+  // ^ Opens File Picker ^ //
+  void openFilePicker() async {
+    // Show Picker
+    final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
 
-    // Queue File
-    Get.find<SonrService>().process(Payload.FILE, file: testFile);
+    // Retreive File and Process
+    if (pickedFile != null) {
+      Get.find<SonrService>()
+          .process(Payload.FILE, file: File(pickedFile.path));
 
-    // Go to Transfer
-    Get.offNamed("/transfer");
+      // Go to Transfer
+      Get.offNamed("/transfer");
+    }
   }
 
   // ^ Queues a Contact for Transfer ^ //

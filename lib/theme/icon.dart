@@ -166,6 +166,9 @@ class SonrIcon extends StatelessWidget {
       Icons.person_outline, FlutterGradientNames.itmeoBranding,
       size: 36);
 
+  static SonrIcon get search =>
+      SonrIcon.gradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
+
   static SonrIcon get more => SonrIcon.gradient(
       Icons.more_horiz_outlined, FlutterGradientNames.northMiracle,
       size: 36);
