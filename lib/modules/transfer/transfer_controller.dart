@@ -96,19 +96,19 @@ class TransferController extends GetxController {
 
   // ^ Create Peer Item from Data ^ //
   addPeerBubble(String id, Peer peer) {
-    // @ Update State if already unchecked
+    // Update State if already unchecked
     if (_isEmpty) {
       isEmpty(_isEmpty = false);
     }
 
-    // @ Create Bubbles
-    // Validate not Duplicate
+    // Check Position
+    Offset off = _getPeerOffset(peer);
+
+    // Create Bubble Validate not Duplicate
     if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
       stackItems.add(PeerBubble(peer, stackItems.length - 1));
       stackItems.refresh();
-      //print("Added Bubble");
     }
-    print("Total Bubbbles = " + stackItems.length.toString());
     stackItems.refresh();
   }
 
@@ -136,4 +136,18 @@ class TransferController extends GetxController {
         .toString()
         .substring(compassEnum.toString().indexOf('.') + 1);
   }
+
+  // ^ Get Peer Offset Compared to User ^ //
+  Offset _getPeerOffset(Peer peer) {
+    var prOff = Offset.fromDirection(_degreesToRads(peer.direction));
+    var usrOff = Offset.fromDirection(_degreesToRads(direction.value));
+    print("Peer Offset: ${prOff.dx}, ${prOff.dy}");
+    print("User Offset: ${usrOff.dx}, ${usrOff.dy}");
+    return usrOff - prOff;
+  }
+}
+
+// ^ Math Helper Method ^ //
+num _degreesToRads(num deg) {
+  return (deg * pi) / 180.0;
 }

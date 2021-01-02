@@ -39,7 +39,7 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     FlutterCompass.events.listen((dir) {
-      direction(dir.headingForCameraMode);
+      direction(dir.heading);
       // Get Current Direction and Update Cubit
       if (_connected) {
         _node.update(dir.headingForCameraMode);
