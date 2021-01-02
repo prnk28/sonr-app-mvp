@@ -15,7 +15,7 @@ class ShareButton extends GetView<HomeController> {
             padding: EdgeInsetsDirectional.only(start: 30),
             width: controller.isShareExpanded.value
                 ? Get.width / 2 + 165
-                : Get.width / 2 + 20,
+                : Get.width / 2 + 30,
             height: controller.isShareExpanded.value ? 130 : 70,
             duration: 200.milliseconds,
             child: Center(
