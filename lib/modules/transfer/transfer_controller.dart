@@ -103,6 +103,7 @@ class TransferController extends GetxController {
 
     // Check Position
     Offset off = _getPeerOffset(peer);
+    print(off);
 
     // Create Bubble Validate not Duplicate
     if (!stackItems.any((pb) => pb.controller.peer.id == id)) {

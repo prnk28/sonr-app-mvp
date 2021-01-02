@@ -40,12 +40,17 @@ class ShareButton extends GetView<HomeController> {
 class _DefaultView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: SonrText.header(
-      "Share",
-      size: 32,
-      gradient: FlutterGradientNames.glassWater,
-    ));
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          SonrIcon.send,
+          SonrText.header(
+            "Share",
+            size: 32,
+            gradient: FlutterGradientNames.glassWater,
+          )
+        ]);
   }
 }
 
@@ -60,13 +65,13 @@ class _ExpandedView extends StatelessWidget {
           final controller = Get.find<HomeController>();
           return AnimatedOpacity(
               opacity: value,
-              duration: 500.milliseconds,
+              duration: 150.milliseconds,
               child: NeumorphicTheme(
                 theme: NeumorphicThemeData(
                   baseColor: Color.fromRGBO(239, 238, 238, 1.0),
                   lightSource: LightSource.top,
                   depth: 8,
-                  intensity: 0.6,
+                  intensity: 0.4,
                 ),
                 child: Row(
                     mainAxisSize: MainAxisSize.max,
@@ -75,27 +80,36 @@ class _ExpandedView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
-                        child: _AnimatedButtonOption(
-                          onPressed: () {
-                            controller.openCamera();
-                          },
-                          type: ArtboardType.Camera,
+                        child: Container(
+                          height: Get.height,
+                          child: _AnimatedButtonOption(
+                            onPressed: () {
+                              controller.openCamera();
+                            },
+                            type: ArtboardType.Camera,
+                          ),
                         ),
                       ),
                       Expanded(
-                        child: _AnimatedButtonOption(
-                          onPressed: () {
-                            controller.openFilePicker();
-                          },
-                          type: ArtboardType.Gallery,
+                        child: Container(
+                          height: Get.height,
+                          child: _AnimatedButtonOption(
+                            onPressed: () {
+                              controller.openFilePicker();
+                            },
+                            type: ArtboardType.Gallery,
+                          ),
                         ),
                       ),
                       Expanded(
-                        child: _AnimatedButtonOption(
-                          onPressed: () {
-                            controller.queueContact();
-                          },
-                          type: ArtboardType.Icon,
+                        child: Container(
+                          height: Get.height,
+                          child: _AnimatedButtonOption(
+                            onPressed: () {
+                              controller.queueContact();
+                            },
+                            type: ArtboardType.Contact,
+                          ),
                         ),
                       )
                     ]),
@@ -119,6 +133,9 @@ class _AnimatedButtonOption extends StatelessWidget {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       NeumorphicButton(
         style: NeumorphicStyle(
+            surfaceIntensity: 0.7,
+            depth: 8,
+            shape: NeumorphicShape.convex,
             color: HexColor.fromHex("EFEEEE"),
             boxShape: NeumorphicBoxShape.circle()),
         child: RiveActor.fromType(type: type),

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonar_app/theme/theme.dart';
 
-class RiveActor extends StatelessWidget {
+class RiveActor extends GetView<RiveActorController> {
   final double width;
   final double height;
   final Artboard artboard;
@@ -13,25 +13,30 @@ class RiveActor extends StatelessWidget {
 
   factory RiveActor.fromType(
       {@required ArtboardType type, double width = 55, double height = 55}) {
-    final path = 'assets/animations/tile_preview.riv';
-    final controller = Get.put(RiveActorController(path));
+    final controller = Get.find<RiveActorController>();
     return RiveActor(controller.getArtboard(type), width, height);
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 55,
-      width: 55,
-      child: Center(child: Rive(artboard: artboard)),
-    );
+    return Obx(() {
+      if (controller.loaded.value) {
+        return SizedBox(
+          height: height,
+          width: width,
+          child: Center(child: Rive(artboard: artboard)),
+        );
+      } else {
+        return Container();
+      }
+    });
   }
 }
 
 enum ArtboardType {
   Camera,
   Gallery,
-  Icon,
+  Contact,
   Feed,
 }
 
@@ -39,18 +44,15 @@ class RiveActorController extends GetxController {
   // References
   ByteData _riveFileData;
   final String path;
+  final loaded = false.obs;
 
-  RiveActorController(this.path);
-
-  @override
-  void onInit() {
+  RiveActorController(this.path) {
     // Load the RiveFile from the binary data.
     rootBundle.load(path).then((data) async {
       if (data != null) {
         _riveFileData = data;
       }
     });
-    super.onInit();
   }
 
   // ^ Gets Pre Initialized Artboard by Type ^ //
@@ -76,6 +78,9 @@ class RiveActorController extends GetxController {
     else {
       artboard.addController(SimpleAnimation('Icon'));
     }
+
+    // @ Return Board
+    loaded(true);
     return artboard;
   }
 }
