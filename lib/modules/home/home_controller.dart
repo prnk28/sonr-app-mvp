@@ -5,8 +5,6 @@ import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:image_picker/image_picker.dart';
 
