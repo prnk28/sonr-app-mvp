@@ -14,8 +14,8 @@ class ShareButton extends GetView<HomeController> {
             padding: EdgeInsetsDirectional.only(start: 30),
             width: controller.isShareExpanded.value
                 ? Get.width / 2 + 165
-                : Get.width / 2 + 60,
-            height: controller.isShareExpanded.value ? 130 : 80,
+                : Get.width / 2 + 20,
+            height: controller.isShareExpanded.value ? 130 : 70,
             duration: 200.milliseconds,
             child: Center(
               child: NeumorphicButton(
@@ -40,6 +40,7 @@ class ShareButton extends GetView<HomeController> {
     return Center(
         child: SonrText.header(
       "Share",
+      size: 32,
       gradient: FlutterGradientNames.glassWater,
     ));
   }
@@ -52,46 +53,48 @@ class ShareButton extends GetView<HomeController> {
         delay: 100.milliseconds,
         builder: (context, child, value) {
           final controller = Get.find<HomeController>();
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: AnimatedOpacity(
-                  opacity: value,
-                  duration: 500.milliseconds,
-                  child: NeumorphicTheme(
-                    theme: NeumorphicThemeData(
-                      baseColor: Color.fromRGBO(239, 238, 238, 1.0),
-                      lightSource: LightSource.top,
-                      depth: 8,
-                      intensity: 0.6,
-                    ),
-                    child: Row(
-                        verticalDirection: VerticalDirection.up,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _AnimatedButtonOption(
-                            onPressed: () {
-                              controller.openCamera();
-                            },
-                            type: "Camera",
-                          ),
-                          _AnimatedButtonOption(
-                            onPressed: () {
-                              controller.openFilePicker();
-                            },
-                            type: "Gallery",
-                          ),
-                          _AnimatedButtonOption(
-                            onPressed: () {
-                              controller.queueContact();
-                            },
-                            type: "Contact",
-                          )
-                        ]),
-                  )),
-            ),
-          );
+          return AnimatedOpacity(
+              opacity: value,
+              duration: 500.milliseconds,
+              child: NeumorphicTheme(
+                theme: NeumorphicThemeData(
+                  baseColor: Color.fromRGBO(239, 238, 238, 1.0),
+                  lightSource: LightSource.top,
+                  depth: 8,
+                  intensity: 0.6,
+                ),
+                child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    verticalDirection: VerticalDirection.up,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: _AnimatedButtonOption(
+                          onPressed: () {
+                            controller.openCamera();
+                          },
+                          type: "Camera",
+                        ),
+                      ),
+                      Expanded(
+                        child: _AnimatedButtonOption(
+                          onPressed: () {
+                            controller.openFilePicker();
+                          },
+                          type: "Gallery",
+                        ),
+                      ),
+                      Expanded(
+                        child: _AnimatedButtonOption(
+                          onPressed: () {
+                            controller.queueContact();
+                          },
+                          type: "Contact",
+                        ),
+                      )
+                    ]),
+              ));
         });
   }
 }
@@ -111,33 +114,21 @@ class _AnimatedButtonOptionState extends State<_AnimatedButtonOption> {
   Artboard _riveArtboard;
   @override
   void initState() {
-    // Load the RiveFile from the binary data.
-    rootBundle.load('assets/animations/tile_preview.riv').then(
-      (data) async {
-        // Await Loading
-        final file = RiveFile();
-        if (file.import(data)) {
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(_riveControllerByType(widget.type));
-          setState(() => _riveArtboard = artboard);
-        }
-      },
-    );
+    final artboard = Get.find<HomeController>().getArtboard(widget.type);
+    setState(() => _riveArtboard = artboard);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       NeumorphicButton(
         style: NeumorphicStyle(
-            color: K_BASE_COLOR, boxShape: NeumorphicBoxShape.circle()),
+            color: HexColor.fromHex("EFEEEE"),
+            boxShape: NeumorphicBoxShape.circle()),
         child: SizedBox(
-          height: 50,
-          width: 50,
+          height: 55,
+          width: 55,
           child: Center(
               child: _riveArtboard == null
                   ? const SizedBox(
@@ -151,21 +142,5 @@ class _AnimatedButtonOptionState extends State<_AnimatedButtonOption> {
       Padding(padding: EdgeInsets.only(top: 4)),
       SonrText.normal(widget.type.toString(), size: 14, color: Colors.white),
     ]);
-  }
-
-  // ^ Get Animation Controller By Type ^ //
-  SimpleAnimation _riveControllerByType(String type) {
-    // Retreive Feed Loop
-    if (type == "Camera") {
-      return SimpleAnimation('Feed');
-    }
-    // Retreive Showcase Loop
-    else if (type == "Gallery") {
-      return SimpleAnimation('Showcase');
-    }
-    // Retreive Icon Loop
-    else {
-      return SimpleAnimation('Icon');
-    }
   }
 }

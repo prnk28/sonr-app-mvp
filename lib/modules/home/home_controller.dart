@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:get/get.dart';
+import 'package:rive/rive.dart';
 import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
@@ -15,6 +16,9 @@ class HomeController extends GetxController {
   final isShareExpanded = false.obs;
   final imagePicker = ImagePicker();
 
+  // References
+  ByteData _riveFileData;
+
   @override
   void onInit() {
     // Fetch File Data
@@ -25,6 +29,12 @@ class HomeController extends GetxController {
     Get.find<SQLService>().fetchContacts().then((data) =>
         data.forEach((c) => allCards.add(CardModel.fromContactSQL(c))));
     allCards.refresh();
+
+    // Load the RiveFile from the binary data.
+    rootBundle.load('assets/animations/tile_preview.riv').then((data) async {
+      _riveFileData = data;
+    });
+
     super.onInit();
   }
 
@@ -34,15 +44,26 @@ class HomeController extends GetxController {
     isShareExpanded(!isShareExpanded.value);
   }
 
-  // ^ Adds a Card to Screen ^ //
-  void addCard(CardModel card) {
-    allCards.add(card);
-    allCards.refresh();
-  }
+// ^ Gets Pre Initialized Artboard by Type ^ //
+  Artboard getArtboard(String type) {
+    // @ Initialize File
+    final riveFile = RiveFile();
+    riveFile.import(_riveFileData);
+    final artboard = riveFile.mainArtboard;
 
-  // ^ Opens Card with Hero ^ //
-  void openCard(CardModel card) {
-    // TODO
+    // @ Add Controller
+    if (type == "Camera") {
+      artboard.addController(SimpleAnimation('Camera'));
+    }
+    // Retreive Showcase Loop
+    else if (type == "Gallery") {
+      artboard.addController(SimpleAnimation('Showcase'));
+    }
+    // Retreive Icon Loop
+    else {
+      artboard.addController(SimpleAnimation('Icon'));
+    }
+    return artboard;
   }
 
   // ^ Opens File Picker ^ //
@@ -84,12 +105,14 @@ class HomeController extends GetxController {
     Get.offNamed("/transfer");
   }
 
-  // ^ Converts File in Assets to File Object ^ //
-  Future<File> _getAssetFileByPath(String path) async {
-    var directory = await getApplicationDocumentsDirectory();
-    var dbPath = join(directory.path, basename(path));
-    var data = await rootBundle.load(path);
-    var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    return await File(dbPath).writeAsBytes(bytes);
+  // ^ Adds a Card to Screen ^ //
+  void addCard(CardModel card) {
+    allCards.add(card);
+    allCards.refresh();
+  }
+
+  // ^ Opens Card with Hero ^ //
+  void openCard(CardModel card) {
+    // TODO
   }
 }
