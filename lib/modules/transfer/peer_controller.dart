@@ -84,10 +84,19 @@ class PeerController extends GetxController {
   // ^ Handle User Invitation ^
   invite() {
     if (!_isInvited) {
+      // Perform Invite
       Get.find<SonrService>().invite(this);
-      isContentVisible(true);
-      _pending.instance.animation.loop = Loop.pingPong;
-      _pending.isActive = _isInvited = !_isInvited;
+
+      // Check for File
+      if (Get.find<SonrService>().payload.value == Payload.FILE) {
+        isContentVisible(true);
+        _pending.instance.animation.loop = Loop.pingPong;
+        _pending.isActive = _isInvited = !_isInvited;
+      }
+      // Contact/URL
+      else {
+        playCompleted();
+      }
     }
   }
 

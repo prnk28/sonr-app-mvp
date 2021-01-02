@@ -29,10 +29,10 @@ class SonrService extends GetxService {
   final progress = 0.0.obs;
 
   // @ Set References
-  Node _node;
-  Payload _payType;
-  PeerController _peerController;
   bool _connected = false;
+  Node _node;
+  final payload = Rx<Payload>();
+  PeerController _peerController;
   bool _processed = false;
   String _url;
 
@@ -57,6 +57,7 @@ class SonrService extends GetxService {
     _node = await SonrCore.initialize(olc.value, username, contact);
 
     // Assign Node Callbacks
+    _node.assignCallback(CallbackEvent.Connected, _handleConnected);
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
     _node.assignCallback(CallbackEvent.Invited, _handleInvite);
     _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
@@ -65,10 +66,6 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Responded, _handleResponded);
     _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
-
-    // Set Connected, Send first Update
-    _connected = true;
-    _node.update(direction.value);
 
     // Push to Home Screen
     Get.offNamed("/home");
@@ -83,16 +80,16 @@ class SonrService extends GetxService {
   // ^ Process-File Event ^
   void process(Payload type, {File file, String url}) async {
     // Set Payload Type
-    _payType = type;
+    payload(type);
 
     // File Payload
-    if (_payType == Payload.FILE) {
+    if (payload.value == Payload.FILE) {
       assert(file != null);
       _node.processFile(file.path);
     }
 
     // Link Payload
-    else if (_payType == Payload.URL) {
+    else if (payload.value == Payload.URL) {
       assert(url != null);
       _url = url;
     }
@@ -101,13 +98,13 @@ class SonrService extends GetxService {
   // ^ Process-File Event ^
   void processExternal(intent.SharedMediaFile mediaFile) async {
     // Set Payload Type
-    _payType = Payload.FILE;
+    payload.value = Payload.FILE;
 
     // Create Protobuf
     SharedMediaFile shared = new SharedMediaFile();
-    shared.duration = mediaFile.duration;
+    shared.duration = mediaFile.duration != null ? mediaFile.duration : 0;
+    shared.thumbnail = mediaFile.thumbnail != null ? mediaFile.thumbnail : "";
     shared.path = mediaFile.path;
-    shared.thumbnail = mediaFile.thumbnail;
     shared.type = SharedMediaFile_Type.valueOf(mediaFile.type.index);
 
     // File Payload
@@ -120,7 +117,7 @@ class SonrService extends GetxService {
     _peerController = c;
 
     // File Payload
-    if (_payType == Payload.FILE) {
+    if (payload.value == Payload.FILE) {
       // Check Status
       if (_processed) {
         await _node.inviteFile(c.peer);
@@ -128,12 +125,12 @@ class SonrService extends GetxService {
     }
 
     // Contact Payload
-    else if (_payType == Payload.CONTACT) {
+    else if (payload.value == Payload.CONTACT) {
       await _node.inviteContact(c.peer);
     }
 
     // Link Payload
-    else if (_payType == Payload.URL) {
+    else if (payload.value == Payload.URL) {
       assert(_url != null);
       await _node.inviteLink(c.peer, _url);
     }
@@ -159,6 +156,13 @@ class SonrService extends GetxService {
   // **************************
   // ******* Callbacks ********
   // **************************
+  // ^ Handle Connected to Bootstrap Nodes ^ //
+  void _handleConnected(dynamic data) {
+    // Set Connected, Send first Update
+    _connected = true;
+    _node.update(direction.value);
+  }
+
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
@@ -241,7 +245,7 @@ class SonrService extends GetxService {
 
       // Reset References
       _url = null;
-      _payType = null;
+      payload(null);
       _peerController = null;
     }
   }
@@ -251,6 +255,7 @@ class SonrService extends GetxService {
     if (data is Received) {
       // Reset Data
       progress(0.0);
+      print(data.toString());
 
       // Save Card
       Get.find<SQLService>().storeFile(data.metadata, data.owner,
