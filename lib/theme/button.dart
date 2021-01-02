@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'color.dart';
 import 'icon.dart';
-import '../widgets/text.dart';
+import 'text.dart';
 
 enum HapticFeedbackType { Light, Medium, Heavy, Selection }
 enum IconPosition { Left, Right, Top, Bottom, Only }

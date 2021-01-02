@@ -1,18 +1,21 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-// Custom Classes
+// Custom Theme Aspects
 export 'appbar.dart';
 export 'button.dart';
 export 'color.dart';
 export 'icon.dart';
+export 'snackbar.dart';
+export 'text.dart';
+
+// Global UI Widgets
+export '../widgets/actor.dart';
 export '../widgets/animation.dart';
 export '../widgets/card.dart';
 export '../widgets/overlay.dart';
 export '../widgets/painter.dart';
 export '../widgets/radio.dart';
 export '../widgets/sheet.dart';
-export '../widgets/snackbar.dart';
-export '../widgets/text.dart';
 
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';

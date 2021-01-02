@@ -14,9 +14,6 @@ class HomeController extends GetxController {
   final isShareExpanded = false.obs;
   final imagePicker = ImagePicker();
 
-  // References
-  ByteData _riveFileData;
-
   @override
   void onInit() {
     // Fetch File Data
@@ -28,11 +25,6 @@ class HomeController extends GetxController {
         data.forEach((c) => allCards.add(CardModel.fromContactSQL(c))));
     allCards.refresh();
 
-    // Load the RiveFile from the binary data.
-    rootBundle.load('assets/animations/tile_preview.riv').then((data) async {
-      _riveFileData = data;
-    });
-
     super.onInit();
   }
 
@@ -40,28 +32,6 @@ class HomeController extends GetxController {
   void toggleExpand() {
     HapticFeedback.heavyImpact();
     isShareExpanded(!isShareExpanded.value);
-  }
-
-// ^ Gets Pre Initialized Artboard by Type ^ //
-  Artboard getArtboard(String type) {
-    // @ Initialize File
-    final riveFile = RiveFile();
-    riveFile.import(_riveFileData);
-    final artboard = riveFile.mainArtboard;
-
-    // @ Add Controller
-    if (type == "Camera") {
-      artboard.addController(SimpleAnimation('Camera'));
-    }
-    // Retreive Showcase Loop
-    else if (type == "Gallery") {
-      artboard.addController(SimpleAnimation('Showcase'));
-    }
-    // Retreive Icon Loop
-    else {
-      artboard.addController(SimpleAnimation('Icon'));
-    }
-    return artboard;
   }
 
   // ^ Opens File Picker ^ //

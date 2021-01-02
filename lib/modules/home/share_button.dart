@@ -1,10 +1,11 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 import 'package:sonar_app/modules/home/home_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 
 class ShareButton extends GetView<HomeController> {
+  final expandedView = _ExpandedView();
+  final defaultView = _DefaultView();
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -20,8 +21,8 @@ class ShareButton extends GetView<HomeController> {
             child: Center(
               child: NeumorphicButton(
                   child: controller.isShareExpanded.value
-                      ? _buildExpandedChild()
-                      : _buildDefaultChild(),
+                      ? expandedView
+                      : defaultView,
                   onPressed: controller.toggleExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
@@ -34,9 +35,11 @@ class ShareButton extends GetView<HomeController> {
       );
     });
   }
+}
 
-  // Build Child View
-  Widget _buildDefaultChild() {
+class _DefaultView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Center(
         child: SonrText.header(
       "Share",
@@ -44,9 +47,11 @@ class ShareButton extends GetView<HomeController> {
       gradient: FlutterGradientNames.glassWater,
     ));
   }
+}
 
-  // Build Expanded Child View
-  Widget _buildExpandedChild() {
+class _ExpandedView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return PlayAnimation<double>(
         tween: (0.0).tweenTo(1.0),
         duration: 100.milliseconds,
@@ -74,7 +79,7 @@ class ShareButton extends GetView<HomeController> {
                           onPressed: () {
                             controller.openCamera();
                           },
-                          type: "Camera",
+                          type: ArtboardType.Camera,
                         ),
                       ),
                       Expanded(
@@ -82,7 +87,7 @@ class ShareButton extends GetView<HomeController> {
                           onPressed: () {
                             controller.openFilePicker();
                           },
-                          type: "Gallery",
+                          type: ArtboardType.Gallery,
                         ),
                       ),
                       Expanded(
@@ -90,7 +95,7 @@ class ShareButton extends GetView<HomeController> {
                           onPressed: () {
                             controller.queueContact();
                           },
-                          type: "Contact",
+                          type: ArtboardType.Icon,
                         ),
                       )
                     ]),
@@ -99,26 +104,16 @@ class ShareButton extends GetView<HomeController> {
   }
 }
 
-class _AnimatedButtonOption extends StatefulWidget {
+class _AnimatedButtonOption extends StatelessWidget {
   // Properties
-  final String type;
+  final ArtboardType type;
   final Function onPressed;
+
+  // Method to Return Type
+  String get _typeText => type.toString().split('.').last;
 
   const _AnimatedButtonOption({Key key, this.type, this.onPressed})
       : super(key: key);
-  @override
-  _AnimatedButtonOptionState createState() => _AnimatedButtonOptionState();
-}
-
-class _AnimatedButtonOptionState extends State<_AnimatedButtonOption> {
-  Artboard _riveArtboard;
-  @override
-  void initState() {
-    final artboard = Get.find<HomeController>().getArtboard(widget.type);
-    setState(() => _riveArtboard = artboard);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -126,21 +121,11 @@ class _AnimatedButtonOptionState extends State<_AnimatedButtonOption> {
         style: NeumorphicStyle(
             color: HexColor.fromHex("EFEEEE"),
             boxShape: NeumorphicBoxShape.circle()),
-        child: SizedBox(
-          height: 55,
-          width: 55,
-          child: Center(
-              child: _riveArtboard == null
-                  ? const SizedBox(
-                      child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
-                  : Rive(artboard: _riveArtboard)),
-        ),
-        onPressed: widget.onPressed,
+        child: RiveActor.fromType(type: type),
+        onPressed: onPressed,
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.normal(widget.type.toString(), size: 14, color: Colors.white),
+      SonrText.normal(_typeText, size: 14, color: Colors.white),
     ]);
   }
 }
