@@ -86,7 +86,7 @@ class LobbyView extends GetView<TransferController> {
             builder: (context, child, value) {
               return AnimatedOpacity(
                   opacity: value,
-                  duration: 500.milliseconds,
+                  duration: 200.milliseconds,
                   child: Padding(
                       padding: EdgeInsetsDirectional.only(bottom: 360),
                       child: Center(
