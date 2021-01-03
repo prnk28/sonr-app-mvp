@@ -142,8 +142,8 @@ class TransferController extends GetxController {
   Offset _getPeerOffset(Peer peer) {
     var prOff = Offset.fromDirection(_degreesToRads(peer.direction));
     var usrOff = Offset.fromDirection(_degreesToRads(direction.value));
-    print("Peer Offset: ${prOff.dx}, ${prOff.dy}");
-    print("User Offset: ${usrOff.dx}, ${usrOff.dy}");
+    // print("Peer Offset: ${prOff.dx}, ${prOff.dy}");
+    // print("User Offset: ${usrOff.dx}, ${usrOff.dy}");
     return usrOff - prOff;
   }
 }
