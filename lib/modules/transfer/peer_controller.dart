@@ -142,7 +142,7 @@ class PeerController extends GetxController {
     _complete.isActive = _hasCompleted = !_hasCompleted;
 
     // Update After Delay
-    Future.delayed(Duration(milliseconds: 1400)).then((_) {
+    Future.delayed(Duration(milliseconds: 2500)).then((_) {
       // Call Finish
       _reset();
     });

@@ -19,7 +19,7 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 3,
+    _db = await openDatabase(_dbPath, version: 4,
         onCreate: (Database db, int version) async {
       // Create Meta Table
       await db.execute('''
@@ -30,7 +30,8 @@ create table $metaTable (
   $fileColumnSize integer not null,
   $fileColumnMime text not null,
   $fileColumnOwner text not null,
-  $fileColumnlastOpened integer not null)
+  $fileColumnlastOpened integer not null,
+  $fileColumnReceived integer not null)
 ''');
 
       // Create Cards Table
@@ -79,7 +80,8 @@ create table $contactTable (
         fileColumnSize,
         fileColumnMime,
         fileColumnOwner,
-        fileColumnlastOpened
+        fileColumnlastOpened,
+        fileColumnReceived
       ],
     );
     if (records.length > 0) {
