@@ -19,7 +19,7 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 4,
+    _db = await openDatabase(_dbPath, version: 5,
         onCreate: (Database db, int version) async {
       // Create Meta Table
       await db.execute('''
