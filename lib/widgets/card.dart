@@ -109,7 +109,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
             // @ Top Right Close/Cancel Button
             SonrButton.close(
               () {
-                if (type != Payload.URL && !isReply) {
+                if (type != Payload.URL && type != Payload.CONTACT) {
                   controller.declineInvite();
                 }
                 Get.back();
