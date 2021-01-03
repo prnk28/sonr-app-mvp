@@ -60,12 +60,12 @@ class LobbyView extends GetView<TransferController> {
         // Present Text
         lobbyText = PlayAnimation<double>(
             tween: (0.0).tweenTo(1.0),
-            duration: 500.milliseconds,
-            delay: 250.milliseconds,
+            duration: 200.milliseconds,
+            delay: 200.milliseconds,
             builder: (context, child, value) {
               return AnimatedOpacity(
                   opacity: value,
-                  duration: 500.milliseconds,
+                  duration: 200.milliseconds,
                   child: Padding(
                       padding: EdgeInsetsDirectional.only(bottom: 360),
                       child: Center(
@@ -81,7 +81,8 @@ class LobbyView extends GetView<TransferController> {
         // Hide Text
         lobbyText = PlayAnimation<double>(
             tween: (1.0).tweenTo(0.0),
-            duration: 500.milliseconds,
+            duration: 200.milliseconds,
+            delay: 200.milliseconds,
             builder: (context, child, value) {
               return AnimatedOpacity(
                   opacity: value,
