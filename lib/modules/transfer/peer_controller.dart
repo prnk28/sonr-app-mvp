@@ -179,6 +179,7 @@ class PeerController extends GetxController {
     PathMetric pathMetric = pathMetrics.elementAt(0);
     value = pathMetric.length * value;
     Tangent pos = pathMetric.getTangentForOffset(1 / this.index); // TODO
+    print("Calculated Offset: ${offset.value}");
     return pos.position;
   }
 }

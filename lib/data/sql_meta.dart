@@ -1,9 +1,6 @@
 // @ Table Names
 import 'package:sonr_core/sonr_core.dart';
 
-final String metaTable = "metadata";
-final String contactTable = "contact";
-
 // ** Metadata Table Fields ** //
 final String fileColumnId = '_id';
 final String fileColumnName = 'name';
@@ -11,19 +8,17 @@ final String fileColumnPath = 'path';
 final String fileColumnSize = 'size';
 final String fileColumnMime = 'mime';
 final String fileColumnOwner = 'owner';
-final String fileColumnlastOpened = 'lastOpened';
 final String fileColumnReceived = 'received';
 
 class MetaSQL {
   int id;
   final Metadata metadata;
-  final Peer owner;
-  final int received;
+  Peer owner;
   DateTime lastOpened;
 
-  MetaSQL(this.metadata, this.owner, this.received) {
+  MetaSQL(this.metadata) {
     this.id = id;
-    this.lastOpened = DateTime.fromMillisecondsSinceEpoch(metadata.lastOpened);
+    this.lastOpened = DateTime.fromMillisecondsSinceEpoch(metadata.received);
   }
 
   // @ Convert Metadata to SQL Map to Store
@@ -34,9 +29,8 @@ class MetaSQL {
       fileColumnPath: metadata.path,
       fileColumnSize: metadata.size,
       fileColumnMime: metadata.mime.writeToJson(),
-      fileColumnOwner: owner.writeToJson(),
-      fileColumnlastOpened: metadata.lastOpened,
-      fileColumnReceived: received
+      fileColumnOwner: metadata.owner.writeToJson(),
+      fileColumnReceived: metadata.received,
     };
 
     // Check if Id Provided
@@ -53,9 +47,9 @@ class MetaSQL {
     meta.name = map[fileColumnName];
     meta.path = map[fileColumnPath];
     meta.size = map[fileColumnSize];
+    meta.owner = Peer.fromJson(map[fileColumnOwner]);
     meta.mime = MIME.fromJson(map[fileColumnMime]);
-    meta.lastOpened = map[fileColumnlastOpened];
-    return MetaSQL(
-        meta, Peer.fromJson(map[fileColumnOwner]), map[fileColumnReceived]);
+    meta.received = map[fileColumnReceived];
+    return MetaSQL(meta);
   }
 }

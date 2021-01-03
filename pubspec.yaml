@@ -33,7 +33,7 @@ dependencies:
   sensors: ^0.4.1+1
 
   # -- Data --
-  gallery_saver: ^2.0.1
+  image_gallery_saver: ^1.6.7
   image_picker: ^0.6.7+17
   path: ^1.7.0
   path_provider: ^1.6.7

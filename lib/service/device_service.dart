@@ -9,7 +9,7 @@ import 'package:sonar_app/data/model_user.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
@@ -162,27 +162,14 @@ class DeviceService extends GetxService {
   }
 
   // ^ Saves Media to Gallery ^ //
-  Future<bool> saveMedia(Metadata media) async {
+  Future saveMedia(Metadata media) async {
     // Get Data from Media
-    final imgAlbum = "Sonr Images";
-    final vidAlbum = "Sonr Videos";
+    // final imgAlbum = "Sonr Images";
+    // final vidAlbum = "Sonr Videos";
     final path = media.path;
 
     // Save Image to Gallery
-    if (media.mime.type == MIME_Type.image) {
-      bool result = await GallerySaver.saveImage(path, albumName: imgAlbum);
-      return result;
-    }
-    // Save Video to Gallery
-    else if (media.mime.type == MIME_Type.video) {
-      bool result = await GallerySaver.saveVideo(path, albumName: vidAlbum);
-      return result;
-    }
-    // Invalid Media
-    else {
-      print("Not Valid Media Type");
-      return false;
-    }
+    await ImageGallerySaver.saveFile(path);
   }
 
   // ^ RequestPermission Event ^ //

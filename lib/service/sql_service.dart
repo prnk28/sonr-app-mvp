@@ -6,6 +6,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 const DATABASE_PATH = 'cards.db';
+final String metaTable = "files";
+final String contactTable = "contacts";
 
 class SQLService extends GetxService {
   // Database Reference
@@ -19,19 +21,18 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 2,
+    _db = await openDatabase(_dbPath, version: 1,
         onCreate: (Database db, int version) async {
       // Create Meta Table
       await db.execute('''
 create table $metaTable (
   $fileColumnId integer primary key autoincrement,
-  $fileColumnName text not null,
-  $fileColumnPath text not null,
-  $fileColumnSize integer not null,
-  $fileColumnMime text not null,
-  $fileColumnOwner text not null,
-  $fileColumnlastOpened integer not null,
-  $fileColumnReceived integer)
+  $fileColumnName text,
+  $fileColumnPath text,
+  $fileColumnSize integer,
+  $fileColumnMime text,
+  $fileColumnReceived integer,
+  $fileColumnOwner text)
 ''');
 
       // Create Cards Table
@@ -53,10 +54,15 @@ create table $contactTable (
   }
 
   // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> storeFile(
-      Metadata metadata, Peer owner, DateTime received) async {
-    metadata.id = await _db.insert(metaTable,
-        MetaSQL(metadata, owner, received.millisecondsSinceEpoch).toSQL());
+  Future<Metadata> storeFile(Metadata metadata) async {
+    metadata.id = await _db.insert(metaTable, {
+      fileColumnName: metadata.name,
+      fileColumnPath: metadata.path,
+      fileColumnSize: metadata.size,
+      fileColumnMime: metadata.mime.writeToJson(),
+      fileColumnReceived: metadata.received,
+      fileColumnOwner: metadata.owner.writeToJson(),
+    });
     return metadata;
   }
 
@@ -79,9 +85,8 @@ create table $contactTable (
         fileColumnPath,
         fileColumnSize,
         fileColumnMime,
+        fileColumnReceived,
         fileColumnOwner,
-        fileColumnlastOpened,
-        fileColumnReceived
       ],
     );
     if (records.length > 0) {
