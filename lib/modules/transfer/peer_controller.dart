@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -77,7 +78,7 @@ class PeerController extends GetxController {
     this.peer = peer;
     this.index = index;
     isContentVisible(true);
-    offset(calculateOffset(peer.difference));
+    offset(calculateOffset(peer.direction));
     proximity(peer.proximity);
   }
 
@@ -174,12 +175,7 @@ class PeerController extends GetxController {
   // ^ Calculate Peer Offset from Line ^ //
   Offset calculateOffset(double value,
       {Peer_Proximity proximity = Peer_Proximity.NEAR}) {
-    Path path = ZonePainter.getBubblePath(1 / value, proximity);
-    PathMetrics pathMetrics = path.computeMetrics();
-    PathMetric pathMetric = pathMetrics.elementAt(0);
-    value = pathMetric.length * value;
-    Tangent pos = pathMetric.getTangentForOffset(1 / this.index); // TODO
-    print("Calculated Offset: ${offset.value}");
+    var pos = Tangent.fromAngle(Offset(Get.width / 2, Get.height / 5), value);
     return pos.position;
   }
 }

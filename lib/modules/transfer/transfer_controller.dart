@@ -101,10 +101,6 @@ class TransferController extends GetxController {
       isEmpty(_isEmpty = false);
     }
 
-    // Check Position
-    Offset off = _getPeerOffset(peer);
-    print(off);
-
     // Create Bubble Validate not Duplicate
     if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
       stackItems.add(PeerBubble(peer, stackItems.length - 1));
@@ -137,22 +133,4 @@ class TransferController extends GetxController {
         .toString()
         .substring(compassEnum.toString().indexOf('.') + 1);
   }
-
-  // ^ Get Peer Offset Compared to User ^ //
-  Offset _getPeerOffset(Peer peer) {
-    var prOff = Offset.fromDirection(_degreesToRads(peer.difference), 100);
-    var usrOff = Offset.fromDirection(_degreesToRads(direction.value), 100);
-    // print("Peer Offset: ${prOff.dx}, ${prOff.dy}");
-    // print("User Offset: ${usrOff.dx}, ${usrOff.dy}");
-    if (peer.difference > direction.value) {
-      return prOff - usrOff;
-    } else {
-      return usrOff - prOff;
-    }
-  }
-}
-
-// ^ Math Helper Method ^ //
-num _degreesToRads(num deg) {
-  return (deg * pi) / 180.0;
 }
