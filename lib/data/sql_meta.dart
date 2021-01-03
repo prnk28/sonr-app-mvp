@@ -18,7 +18,7 @@ class MetaSQL {
   int id;
   final Metadata metadata;
   final Peer owner;
-  final DateTime received;
+  final int received;
   DateTime lastOpened;
 
   MetaSQL(this.metadata, this.owner, this.received) {
@@ -36,7 +36,7 @@ class MetaSQL {
       fileColumnMime: metadata.mime.writeToJson(),
       fileColumnOwner: owner.writeToJson(),
       fileColumnlastOpened: metadata.lastOpened,
-      fileColumnReceived: received.millisecondsSinceEpoch
+      fileColumnReceived: received
     };
 
     // Check if Id Provided
@@ -55,7 +55,7 @@ class MetaSQL {
     meta.size = map[fileColumnSize];
     meta.mime = MIME.fromJson(map[fileColumnMime]);
     meta.lastOpened = map[fileColumnlastOpened];
-    return MetaSQL(meta, Peer.fromJson(map[fileColumnOwner]),
-        DateTime.fromMillisecondsSinceEpoch(map[fileColumnReceived]));
+    return MetaSQL(
+        meta, Peer.fromJson(map[fileColumnOwner]), map[fileColumnReceived]);
   }
 }
