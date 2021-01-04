@@ -36,6 +36,7 @@ class MediaPicker extends GetView<MediaPickerController> {
   }
 }
 
+// ** Create Media Album Dropdown Bar ** //
 class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
   // Properties
   final Function onCancel;
@@ -95,7 +96,7 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
     );
   }
 
-  // ^ Builds option at index
+  // @ Builds option at index
   _buildOptionWidget(int index) {
     var item = controller.allCollections.value.elementAt(index);
     return Row(

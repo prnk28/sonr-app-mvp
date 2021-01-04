@@ -418,7 +418,7 @@ class _FileInviteComplete extends GetView<SonrCardController> {
   Widget buildView() {
     if (meta.mime.type == MIME_Type.image) {
       return Container(
-          width: 320, height: 400, child: Image.file(File(meta.path)));
+          width: 300, height: 300, child: Image.file(File(meta.path)));
     }
     // @ Video Player View
     else if (meta.mime.type == MIME_Type.video) {
@@ -427,12 +427,12 @@ class _FileInviteComplete extends GetView<SonrCardController> {
         return Obx(() {
           return Center(
             child: Container(
-              width: 320,
-              height: 400,
+              width: 300,
+              height: 300,
               child: AspectRatio(
-              aspectRatio: controller.videoController.value.aspectRatio,
-              child: VideoPlayer(controller.videoController),
-            ),
+                aspectRatio: controller.videoController.value.aspectRatio,
+                child: VideoPlayer(controller.videoController),
+              ),
             ),
           );
         });

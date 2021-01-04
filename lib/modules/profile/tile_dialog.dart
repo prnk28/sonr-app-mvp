@@ -225,7 +225,7 @@ class _DropdownAddView extends StatelessWidget {
     );
   }
 
-  // ^ Builds option at index
+  // @ Builds option at index
   _buildOptionWidget(int index) {
     var item = options.elementAt(index);
     return Row(children: [
