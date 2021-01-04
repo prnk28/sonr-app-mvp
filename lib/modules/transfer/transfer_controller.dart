@@ -120,12 +120,10 @@ class TransferController extends GetxController {
     );
 
     // Update Stack
-    stackItems.remove(bubble);
-    stackItems.refresh();
-
-    // Clear Exited
-    Get.find<SonrService>().exited.clear();
-    Get.find<SonrService>().exited.refresh();
+    if (bubble != null) {
+      stackItems.remove(bubble);
+      stackItems.refresh();
+    }
   }
 
   // ^ Retreives Direction String ^ //

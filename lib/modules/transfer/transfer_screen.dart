@@ -44,10 +44,6 @@ class LobbyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // @ Item Refs
-      Widget lobbyText;
-      Widget peerStack;
-
       // @ Listen to Peers Updates
       Get.find<SonrService>().peers().forEach((id, peer) {
         controller.addPeer(id, peer);
@@ -58,56 +54,17 @@ class LobbyView extends GetView<TransferController> {
         controller.removePeer(id);
       });
 
-      // @ Lobby is Inactive
-      if (controller.isEmpty()) {
-        // Present Text
-        lobbyText = PlayAnimation<double>(
-            tween: (0.0).tweenTo(1.0),
-            duration: 200.milliseconds,
-            delay: 200.milliseconds,
-            builder: (context, child, value) {
-              return AnimatedOpacity(
-                  opacity: value,
-                  duration: 200.milliseconds,
-                  child: Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 360),
-                      child: Center(
-                          child: SonrText.normal("No Peers found.",
-                              size: 38, color: Colors.black87))));
-            });
-
-        // Hide Text
-        peerStack = Container();
-      }
-      // @ Lobby is Active
-      else {
-        // Hide Text
-        lobbyText = PlayAnimation<double>(
-            tween: (1.0).tweenTo(0.0),
-            duration: 200.milliseconds,
-            delay: 200.milliseconds,
-            builder: (context, child, value) {
-              return AnimatedOpacity(
-                  opacity: value,
-                  duration: 200.milliseconds,
-                  child: Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 360),
-                      child: Center(
-                          child: SonrText.normal("No Peers found.",
-                              size: 38, color: Colors.black87))));
-            });
-
-        // Present Stack
-        peerStack = Stack(children: List.from(controller.stackItems));
-      }
-
-      // @ Create View
-      return Stack(
-        children: [
-          lobbyText,
-          peerStack,
-        ],
-      );
+      // Present Text
+      return PlayAnimation<double>(
+          tween: (0.0).tweenTo(1.0),
+          duration: 200.milliseconds,
+          delay: 200.milliseconds,
+          builder: (context, child, value) {
+            return AnimatedOpacity(
+                opacity: value,
+                duration: 200.milliseconds,
+                child: Stack(children: List.from(controller.stackItems)));
+          });
     });
   }
 }
