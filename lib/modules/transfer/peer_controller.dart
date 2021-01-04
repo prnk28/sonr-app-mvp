@@ -32,7 +32,7 @@ class PeerController extends GetxController {
 
   PeerController() {
     // Listen to this peers updates
-    Get.find<SonrService>().lobby.listen((lob) {
+    Get.find<SonrService>().peers.listen((lob) {
       lob.forEach((key, value) {
         if (key == peer.id) {
           offset(calculateOffset(value.difference));

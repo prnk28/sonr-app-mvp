@@ -49,10 +49,13 @@ class LobbyView extends GetView<TransferController> {
       Widget peerStack;
 
       // @ Listen to Peers Updates
-      Get.find<SonrService>().lobby().forEach((id, peer) {
-        // print(id);
-        // * Check Map Size * //
-        controller.addPeerBubble(id, peer);
+      Get.find<SonrService>().peers().forEach((id, peer) {
+        controller.addPeer(id, peer);
+      });
+
+      // @ Listen to Exited Updates
+      Get.find<SonrService>().exited().forEach((id) {
+        controller.removePeer(id);
       });
 
       // @ Lobby is Inactive

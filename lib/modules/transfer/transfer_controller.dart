@@ -85,7 +85,7 @@ class TransferController extends GetxController {
     });
 
     // @ Check Peers Length
-    Get.find<SonrService>().lobby.listen((lob) {
+    Get.find<SonrService>().peers.listen((lob) {
       if (lob.length > 0) {
         gradient(activeGradient);
       } else {
@@ -95,7 +95,7 @@ class TransferController extends GetxController {
   }
 
   // ^ Create Peer Item from Data ^ //
-  addPeerBubble(String id, Peer peer) {
+  addPeer(String id, Peer peer) {
     // Update State if already unchecked
     if (_isEmpty) {
       isEmpty(_isEmpty = false);
@@ -107,6 +107,25 @@ class TransferController extends GetxController {
       stackItems.refresh();
     }
     stackItems.refresh();
+  }
+
+  // ^ Remove Peer Item from ID ^ //
+  removePeer(String id) {
+    // Find Bubble
+    PeerBubble bubble = stackItems.firstWhere(
+      (pb) => pb.controller.peer.id == id,
+      orElse: () {
+        return null;
+      },
+    );
+
+    // Update Stack
+    stackItems.remove(bubble);
+    stackItems.refresh();
+
+    // Clear Exited
+    Get.find<SonrService>().exited.clear();
+    Get.find<SonrService>().exited.refresh();
   }
 
   // ^ Retreives Direction String ^ //

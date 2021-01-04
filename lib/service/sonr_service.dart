@@ -24,7 +24,8 @@ enum SonrStatus {
 class SonrService extends GetxService {
   // @ Set Properties
   final direction = 0.0.obs;
-  final lobby = Map<String, Peer>().obs;
+  final peers = Map<String, Peer>().obs;
+  final exited = List<String>().obs;
   final olc = "".obs;
   final progress = 0.0.obs;
 
@@ -168,7 +169,12 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Peers List
-      lobby(data.peers);
+      peers(data.peers);
+
+      // Check for Exited
+      if (data.exited.length > 0) {
+        exited.assignAll(data.exited);
+      }
     }
   }
 
