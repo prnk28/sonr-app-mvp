@@ -408,36 +408,43 @@ class _FileInviteComplete extends GetView<SonrCardController> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Obx(() {
-                      // @ Image View
-                      if (meta.mime.type == MIME_Type.image) {
-                        return Image.file(File(meta.path));
-                      }
-                      // @ Video Player View
-                      else if (meta.mime.type == MIME_Type.video) {
-                        // Video Player Ready
-                        if (controller.videoReady.value) {
-                          return Center(
-                              child: AspectRatio(
-                            aspectRatio:
-                                controller.videoController.value.aspectRatio,
-                            child: VideoPlayer(controller.videoController),
-                          ));
-                        }
-                        // Loading Value
-                        else {
-                          return NeumorphicProgressIndeterminate();
-                        }
-                      }
-                      // @ Unknown File Type
-                      else {
-                        return Text(meta.mime.toString());
-                      }
-                    }),
+                    child: buildView(),
                   ))),
         ),
       ),
     ]);
+  }
+
+  Widget buildView() {
+    if (meta.mime.type == MIME_Type.image) {
+      return Container(
+          width: 320, height: 400, child: Image.file(File(meta.path)));
+    }
+    // @ Video Player View
+    else if (meta.mime.type == MIME_Type.video) {
+      // Video Player Ready
+      if (controller.videoReady.value) {
+        return Obx(() {
+          return Container(
+            width: 320,
+            height: 400,
+            child: Center(
+                child: AspectRatio(
+              aspectRatio: controller.videoController.value.aspectRatio,
+              child: VideoPlayer(controller.videoController),
+            )),
+          );
+        });
+      }
+      // Loading Value
+      else {
+        return NeumorphicProgressIndeterminate();
+      }
+    }
+    // @ Unknown File Type
+    else {
+      return Text(meta.mime.toString());
+    }
   }
 }
 

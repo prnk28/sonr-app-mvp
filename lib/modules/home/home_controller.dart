@@ -34,7 +34,7 @@ class HomeController extends GetxController {
     isShareExpanded(!isShareExpanded.value);
   }
 
-  // ^ Opens File Picker ^ //
+  // ^ Opens Camera Picker ^ //
   void openCamera() async {
     // Show Picker
     final pickedFile = await imagePicker.getImage(source: ImageSource.camera);
@@ -45,6 +45,28 @@ class HomeController extends GetxController {
       Get.find<SonrService>()
           .process(Payload.FILE, file: File(pickedFile.path));
 
+      // Close Share Button
+      Get.find<HomeController>().toggleExpand();
+
+      // Go to Transfer
+      Get.offNamed("/transfer");
+    }
+  }
+
+  // ^ Opens File Picker ^ //
+  void openPicker() async {
+    // Show Picker
+    final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+
+    // Retreive File and Process
+    if (pickedFile != null) {
+      // Queue
+      Get.find<SonrService>()
+          .process(Payload.FILE, file: File(pickedFile.path));
+
+      // Close Share Button
+      Get.find<HomeController>().toggleExpand();
+
       // Go to Transfer
       Get.offNamed("/transfer");
     }
@@ -53,6 +75,9 @@ class HomeController extends GetxController {
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
     Get.find<SonrService>().process(Payload.CONTACT);
+
+    // Close Share Button
+    Get.find<HomeController>().toggleExpand();
 
     // Go to Transfer
     Get.offNamed("/transfer");

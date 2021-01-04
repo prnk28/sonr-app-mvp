@@ -9,7 +9,7 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<RiveActorController>(
         RiveActorController('assets/animations/tile_preview.riv'));
-    Get.put<MediaPickerController>(MediaPickerController());
+    Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
     Get.put<HomeController>(HomeController());
   }
 }
