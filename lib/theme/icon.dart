@@ -178,6 +178,10 @@ class SonrIcon extends StatelessWidget {
       _SonrIconData.paperPlane, FlutterGradientNames.glassWater,
       size: 24);
 
+  static SonrIcon get video =>
+      SonrIcon.gradient(_SonrIconData.video, FlutterGradientNames.glassWater,
+          size: 28);
+
   static Padding socialBadge(Contact_SocialTile_Provider prov) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),

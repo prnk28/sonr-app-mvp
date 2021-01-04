@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -14,15 +15,13 @@ class MediaPicker extends GetView<MediaPickerController> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(
-      margin: EdgeInsets.only(left: 20, right: 20, top: 40, bottom: 40),
       borderRadius: BorderRadius.circular(40),
       backendColor: Colors.transparent,
       child: Neumorphic(
           style: NeumorphicStyle(color: K_BASE_COLOR),
           child: Column(children: [
             // Header Buttons
-            SonrDialogBar(
-                title: SonrText.header("Select.."),
+            _MediaDropdownDialogBar(
                 onCancel: () => Get.back(),
                 onAccept: () => controller.confirmSelectedFile()),
             Obx(() {
@@ -37,14 +36,82 @@ class MediaPicker extends GetView<MediaPickerController> {
   }
 }
 
+class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
+  // Properties
+  final Function onCancel;
+  final Function onAccept;
+
+  // Constructer
+  const _MediaDropdownDialogBar(
+      {Key key, @required this.onCancel, @required this.onAccept})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kToolbarHeight + 16 * 2,
+      child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // @ Top Left Close/Cancel Button
+            SonrButton.close(onCancel),
+
+            // @ Drop Down
+            Neumorphic(
+                style: NeumorphicStyle(
+                  depth: 8,
+                  shape: NeumorphicShape.flat,
+                  color: K_BASE_COLOR,
+                ),
+                margin: EdgeInsets.only(left: 14, right: 14),
+                child: Container(
+                    width: Get.width - 250,
+                    margin: EdgeInsets.only(left: 12, right: 12),
+
+                    // @ ValueBuilder for DropDown
+                    child: ValueBuilder<MediaCollection>(
+                      onUpdate: (value) {
+                        controller.updateMediaCollection(value);
+                      },
+                      builder: (item, updateFn) {
+                        return DropDown<MediaCollection>(
+                          showUnderline: false,
+                          isExpanded: true,
+                          initialValue: controller.mediaCollection.value,
+                          items: controller.allCollections.value,
+                          customWidgets: List<Widget>.generate(
+                              controller.allCollections.value.length,
+                              (index) => _buildOptionWidget(index)),
+                          onChanged: updateFn,
+                        );
+                      },
+                    ))),
+
+            // @ Top Right Confirm Button
+            SonrButton.accept(onAccept)
+          ]),
+    );
+  }
+
+  // ^ Builds option at index
+  _buildOptionWidget(int index) {
+    var item = controller.allCollections.value.elementAt(index);
+    return Row(
+        children: [Padding(padding: EdgeInsets.all(4)), Text(item.name)]);
+  }
+}
+
 // ** Create Media Grid ** //
 class _MediaGrid extends GetView<MediaPickerController> {
+  _MediaGrid();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return Container(
         width: 330,
-        height: 565,
+        height: 368,
         child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10),
@@ -144,7 +211,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
                 }
               }),
           widget.mediaFile.mediaType == MediaType.video
-              ? Icon(Icons.play_circle_filled, color: Colors.white, size: 24)
+              ? SonrIcon.video
               : const SizedBox()
         ],
       ),
@@ -154,6 +221,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
 
 // ** MediaPicker GetXController ** //
 class MediaPickerController extends GetxController {
+  final allCollections = Rx<List<MediaCollection>>();
   final mediaCollection = Rx<MediaCollection>();
   final allMedias = List<Media>().obs;
   final selectedFile = Rx<Media>();
@@ -172,6 +240,8 @@ class MediaPickerController extends GetxController {
     List<MediaCollection> collections = await MediaGallery.listMediaCollections(
       mediaTypes: [MediaType.image, MediaType.video],
     );
+
+    allCollections(collections);
 
     // List Collections
     collections.forEach((element) {
@@ -213,6 +283,33 @@ class MediaPickerController extends GetxController {
       allMedias.assignAll(combined);
     }
     loaded(true);
+  }
+
+  // ^ Method Updates the Current Media Collection ^ //
+  updateMediaCollection(MediaCollection collection) async {
+    mediaCollection(collection);
+    if (mediaCollection.value.count > 0) {
+      // Get Images
+      final MediaPage imagePage = await mediaCollection.value.getMedias(
+        mediaType: MediaType.image,
+        take: 500,
+      );
+
+      // Get Videos
+      final MediaPage videoPage = await mediaCollection.value.getMedias(
+        mediaType: MediaType.video,
+        take: 500,
+      );
+
+      // Combine Media
+      final List<Media> combined = [
+        ...imagePage.items,
+        ...videoPage.items,
+      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+
+      // Set All Media
+      allMedias.assignAll(combined);
+    }
   }
 
   // ^ Process Selected File ^ //
