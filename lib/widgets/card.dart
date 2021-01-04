@@ -425,14 +425,15 @@ class _FileInviteComplete extends GetView<SonrCardController> {
       // Video Player Ready
       if (controller.videoReady.value) {
         return Obx(() {
-          return Container(
-            width: 320,
-            height: 400,
-            child: Center(
-                child: AspectRatio(
+          return Center(
+            child: Container(
+              width: 320,
+              height: 400,
+              child: AspectRatio(
               aspectRatio: controller.videoController.value.aspectRatio,
               child: VideoPlayer(controller.videoController),
-            )),
+            ),
+            ),
           );
         });
       }

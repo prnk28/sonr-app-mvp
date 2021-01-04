@@ -235,7 +235,7 @@ class SonrIcon extends StatelessWidget {
                           minHeight: 1,
                           maxWidth: 200,
                           maxHeight: 200), // here
-                      child: Image.memory(Uint8List.fromList(thumbnail)))));
+                      child: Image.memory(thumbnail))));
         } else {
           result = Icon(data, size: size);
         }
