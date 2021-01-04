@@ -6,6 +6,7 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:image_picker/image_picker.dart';
+import 'media_picker.dart';
 
 class HomeController extends GetxController {
   // Properties
@@ -41,21 +42,6 @@ class HomeController extends GetxController {
     // Retreive File and Process
     if (pickedFile != null) {
       // Queue
-      Get.find<SonrService>()
-          .process(Payload.FILE, file: File(pickedFile.path));
-
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    }
-  }
-
-  // ^ Opens File Picker ^ //
-  void openFilePicker() async {
-    // Show Picker
-    final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
-
-    // Retreive File and Process
-    if (pickedFile != null) {
       Get.find<SonrService>()
           .process(Payload.FILE, file: File(pickedFile.path));
 

@@ -184,7 +184,7 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      Get.find<SonrCardController>().setInvited();
+      Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
 
       // Check Payload Type
@@ -194,7 +194,7 @@ class SonrService extends GetxService {
               barrierColor: K_DIALOG_COLOR);
           break;
         case Payload.FILE:
-          Get.dialog(SonrCard.fromInviteMetadata(data),
+          Get.dialog(SonrCard.fromInviteFile(data),
               barrierColor: K_DIALOG_COLOR);
           break;
         case Payload.URL:

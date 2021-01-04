@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:sonar_app/modules/home/home_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 
+import 'media_picker.dart';
+
 class ShareButton extends GetView<HomeController> {
   final expandedView = _ExpandedView();
   final defaultView = _DefaultView();
@@ -101,7 +103,7 @@ class _ExpandedView extends StatelessWidget {
                             height: Get.height,
                             child: _AnimatedButtonOption(
                               onPressed: () {
-                                controller.openFilePicker();
+                                Get.dialog(MediaPicker());
                               },
                               type: ArtboardType.Gallery,
                             ),

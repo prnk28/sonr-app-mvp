@@ -76,3 +76,39 @@ class SonrAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container();
   }
 }
+
+class SonrDialogBar extends StatelessWidget {
+  // Properties
+  final SonrText title;
+  final Function onCancel;
+  final Function onAccept;
+
+  // Constructer
+  const SonrDialogBar(
+      {Key key,
+      @required this.title,
+      @required this.onCancel,
+      @required this.onAccept})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kToolbarHeight + 16 * 2,
+      child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // @ Top Left Close/Cancel Button
+            SonrButton.close(onCancel),
+
+            // @ Title
+            Expanded(child: Center(child: title)),
+
+            // @ Top Right Confirm Button
+            SonrButton.accept(onAccept)
+          ]),
+    );
+  }
+}

@@ -9,6 +9,7 @@ import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:video_player/video_player.dart';
 
 enum CardState { None, Invitation, InProgress, Received, Viewing }
 
@@ -36,8 +37,17 @@ class SonrCard extends GetView<SonrCardController> {
         bottom: contactbottom);
   }
 
+  // @ Dialog for Replied Contact
+  factory SonrCard.fromReplyContact(Contact c) {
+    final double contactbottom = 90;
+    return SonrCard(
+        child: _ContactReply(c),
+        payloadType: Payload.CONTACT,
+        bottom: contactbottom);
+  }
+
   // @ Dialog for Invite File
-  factory SonrCard.fromInviteMetadata(AuthInvite invite) {
+  factory SonrCard.fromInviteFile(AuthInvite invite) {
     final double metaBottom = 180;
     return SonrCard(
         child: _FileInvite(invite.preview, invite.from),
@@ -47,20 +57,11 @@ class SonrCard extends GetView<SonrCardController> {
 
   // @ Dialog for Invite URL
   factory SonrCard.fromInviteUrl(String url, String firstName) {
-    final double urlBottom = 360;
+    final double urlBottom = 450;
     return SonrCard(
         child: _URLInvite(url, firstName),
         payloadType: Payload.URL,
         bottom: urlBottom);
-  }
-
-  // @ Dialog for Replied Contact
-  factory SonrCard.fromReplyContact(Contact c) {
-    final double contactbottom = 90;
-    return SonrCard(
-        child: _ContactReply(c),
-        payloadType: Payload.CONTACT,
-        bottom: contactbottom);
   }
 
   @override
@@ -75,7 +76,7 @@ class SonrCard extends GetView<SonrCardController> {
         backendColor: Colors.transparent,
         child: Neumorphic(
           style: NeumorphicStyle(color: K_BASE_COLOR),
-          child: Container(child: child),
+          child: AnimatedContainer(duration: 1.seconds, child: child),
         ));
   }
 }
@@ -212,7 +213,6 @@ class _FileInvite extends GetView<SonrCardController> {
     // @ Display Info
     return Obx(() {
       Widget child;
-      double height;
 
       // Check State of Card --> Invitation
       if (controller.state.value == CardState.Invitation) {
@@ -236,22 +236,18 @@ class _FileInvite extends GetView<SonrCardController> {
                 size: 22),
           ],
         );
-        height = 500;
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
         child = _FileInviteProgress(
             SonrIcon.preview(IconType.Thumbnail, preview).data);
-        height = 300;
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
-        child = _FileInviteComplete(controller.receivedFile);
-        height = 500;
+        child = _FileInviteComplete(controller.receivedMeta);
       }
 
-      return AnimatedContainer(
-          duration: Duration(seconds: 1), child: child, height: height);
+      return AnimatedContainer(duration: Duration(seconds: 1), child: child);
     });
   }
 }
@@ -382,7 +378,7 @@ class _FileInviteProgress extends HookWidget {
 }
 
 // ^ File Received View ^ //
-class _FileInviteComplete extends StatelessWidget {
+class _FileInviteComplete extends GetView<SonrCardController> {
   final Metadata meta;
 
   const _FileInviteComplete(this.meta, {Key key}) : super(key: key);
@@ -411,8 +407,34 @@ class _FileInviteComplete extends StatelessWidget {
                     minHeight: 1,
                   ),
                   child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.file(File(meta.path))))),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Obx(() {
+                      // @ Image View
+                      if (meta.mime.type == MIME_Type.image) {
+                        return Image.file(File(meta.path));
+                      }
+                      // @ Video Player View
+                      else if (meta.mime.type == MIME_Type.video) {
+                        // Video Player Ready
+                        if (controller.videoReady.value) {
+                          return Center(
+                              child: AspectRatio(
+                            aspectRatio:
+                                controller.videoController.value.aspectRatio,
+                            child: VideoPlayer(controller.videoController),
+                          ));
+                        }
+                        // Loading Value
+                        else {
+                          return NeumorphicProgressIndeterminate();
+                        }
+                      }
+                      // @ Unknown File Type
+                      else {
+                        return Text(meta.mime.toString());
+                      }
+                    }),
+                  ))),
         ),
       ),
     ]);
@@ -426,12 +448,10 @@ class SonrCardController extends GetxController {
   // Properties
   final state = CardState.None.obs;
   bool accepted = false;
-  Metadata receivedFile;
-
-  // ^ Update State to be Invitation ^ //
-  setInvited() {
-    state(CardState.Invitation);
-  }
+  final videoReady = false.obs;
+  Metadata receivedMeta;
+  File receivedFile;
+  VideoPlayerController videoController;
 
   // ^ Accept File Invite Request ^ //
   acceptFile() {
@@ -472,12 +492,18 @@ class SonrCardController extends GetxController {
   // ^ Set File after Transfer^ //
   received(Metadata meta) {
     state(CardState.Received);
-    receivedFile = meta;
+    receivedMeta = meta;
+    receivedFile = File(meta.path);
 
     // Create Metadata Card
     var card = CardModel.fromMetadata(meta);
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);
+  }
+
+  playVideo() async {
+    videoController = VideoPlayerController.file(receivedFile);
+    videoController.initialize().then((_) => videoReady(true));
   }
 }
