@@ -15,11 +15,13 @@ class SonrText extends StatelessWidget {
   final double size;
   final bool isGradient;
   final bool isRich;
+  final bool isCentered;
 
   const SonrText(this.text,
       {Key key,
       this.isGradient = false,
       this.isRich = false,
+      this.isCentered = false,
       this.color,
       this.gradient,
       this.richText,
@@ -63,6 +65,7 @@ class SonrText extends StatelessWidget {
     return SonrText(
       text,
       isGradient: true,
+      isCentered: true,
       weight: FontWeight.w800,
       size: size ?? 40,
       key: key,
@@ -201,6 +204,7 @@ class SonrText extends StatelessWidget {
                 ),
             child: Text(
               text,
+              textAlign: isCentered ? TextAlign.center : TextAlign.start,
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: size ?? 32.0,
