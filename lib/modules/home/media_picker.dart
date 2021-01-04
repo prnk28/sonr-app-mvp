@@ -99,8 +99,13 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
   // @ Builds option at index
   _buildOptionWidget(int index) {
     var item = controller.allCollections.value.elementAt(index);
-    return Row(
-        children: [Padding(padding: EdgeInsets.all(4)), Text(item.name)]);
+    return Row(children: [
+      Padding(padding: EdgeInsets.all(4)),
+      SonrText.normal(
+        item.name,
+        color: Colors.black,
+      )
+    ]);
   }
 }
 
@@ -288,29 +293,31 @@ class MediaPickerController extends GetxController {
 
   // ^ Method Updates the Current Media Collection ^ //
   updateMediaCollection(MediaCollection collection) async {
+    // Reset Loaded
+    loaded(false);
     mediaCollection(collection);
-    if (mediaCollection.value.count > 0) {
-      // Get Images
-      final MediaPage imagePage = await mediaCollection.value.getMedias(
-        mediaType: MediaType.image,
-        take: 500,
-      );
 
-      // Get Videos
-      final MediaPage videoPage = await mediaCollection.value.getMedias(
-        mediaType: MediaType.video,
-        take: 500,
-      );
+    // Get Images
+    final MediaPage imagePage = await mediaCollection.value.getMedias(
+      mediaType: MediaType.image,
+      take: 500,
+    );
 
-      // Combine Media
-      final List<Media> combined = [
-        ...imagePage.items,
-        ...videoPage.items,
-      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+    // Get Videos
+    final MediaPage videoPage = await mediaCollection.value.getMedias(
+      mediaType: MediaType.video,
+      take: 500,
+    );
 
-      // Set All Media
-      allMedias.assignAll(combined);
-    }
+    // Combine Media
+    final List<Media> combined = [
+      ...imagePage.items,
+      ...videoPage.items,
+    ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+
+    // Set All Media
+    allMedias.assignAll(combined);
+    loaded(true);
   }
 
   // ^ Process Selected File ^ //

@@ -106,7 +106,8 @@ class _ExpandedView extends StatelessWidget {
                                 if (Get.find<MediaPickerController>()
                                     .hasGallery
                                     .value) {
-                                  Get.bottomSheet(MediaPicker(), enableDrag: true);
+                                  Get.bottomSheet(MediaPicker(),
+                                      isDismissible: false);
                                 } else {
                                   controller.openPicker();
                                 }
