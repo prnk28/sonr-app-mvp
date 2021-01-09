@@ -101,7 +101,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight + 16 * 2,
+      height: 120,
       child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,

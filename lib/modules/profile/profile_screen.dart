@@ -59,7 +59,7 @@ class _SliverViews extends GetView<ProfileController> {
                 // @ More Button
                 Padding(
                     padding: EdgeInsets.only(right: 4.0),
-                    child: SonrButton.appBar(SonrIcon.more, () => {},
+                    child: SonrButton.appBar(SonrIcon.settings, () => {},
                         intensity: 0.4)),
               ],
             ),

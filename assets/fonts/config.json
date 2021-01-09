@@ -231,6 +231,18 @@
       "src": "fontawesome"
     },
     {
+      "uid": "484b4ad2058d17849f205c4054b6f315",
+      "css": "cog",
+      "code": 59404,
+      "src": "linecons"
+    },
+    {
+      "uid": "3e2bd88137dd7ceec98b4bfd8640e5ec",
+      "css": "params",
+      "code": 59405,
+      "src": "linecons"
+    },
+    {
       "uid": "d29bbb6930c9ec74da3ba18528c4911e",
       "css": "paper-plane",
       "code": 59396,

@@ -174,6 +174,14 @@ class SonrIcon extends StatelessWidget {
       Icons.more_horiz_outlined, FlutterGradientNames.northMiracle,
       size: 36);
 
+  static SonrIcon get settings =>
+      SonrIcon.gradient(_SonrIconData.gear, FlutterGradientNames.northMiracle,
+          size: 36);
+
+  static SonrIcon get multiSettings =>
+      SonrIcon.gradient(_SonrIconData.params, FlutterGradientNames.northMiracle,
+          size: 36);
+
   static SonrIcon get send => SonrIcon.gradient(
       _SonrIconData.paperPlane, FlutterGradientNames.glassWater,
       size: 24);
@@ -315,6 +323,10 @@ class _SonrIconData {
       IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData paperPlane =
       IconData(0xf1d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData gear =
+      IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData params =
+      IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 
   // ^ SocialProvider to Icon Map ^ //
   static Map<Contact_SocialTile_Provider, _IconGradientWData> socials = {
