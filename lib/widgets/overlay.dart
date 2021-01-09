@@ -81,7 +81,11 @@ class EditDialog extends StatelessWidget {
                                 Get.back();
                               }),
 
-                              SonrText.header("Edit + $headerText", size: 34),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 20.0),
+                                child: SonrText.header("Edit + $headerText",
+                                    size: 24),
+                              ),
 
                               // Bottom Right Confirm Button
                               SonrButton.accept(() {
@@ -107,7 +111,8 @@ class EditDialog extends StatelessWidget {
         return Container();
         break;
       case EditType.TextField:
-        return Container(
+        return Material(
+          color: Colors.transparent,
           child: SonrTextField(
               hint: textfieldHint,
               label: textfieldLabel,
