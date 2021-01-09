@@ -129,7 +129,7 @@ class EditDialog extends StatelessWidget {
         return Size(Get.width - 60, Get.height / 4 + 95);
         break;
       case EditType.TextField:
-        return Size(Get.width - 60, Get.height / 5 + 40);
+        return Size(Get.width - 60, 80);
         break;
     }
     return Size(0, 0);
