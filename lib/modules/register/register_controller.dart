@@ -16,6 +16,8 @@ class RegisterController extends GetxController {
 
       // Process data.
       Get.find<DeviceService>().createUser(contact, "@Temp_Username");
+      FocusScope.of(Get.context).unfocus();
+      Get.offNamed("/home");
     } else {
       SonrSnack.error("Some fields are not correct");
     }

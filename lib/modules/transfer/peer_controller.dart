@@ -1,22 +1,24 @@
 import 'dart:async';
-import 'dart:math';
+
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/widgets/painter.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class PeerController extends GetxController {
   // Properties
   final isContentVisible = false.obs;
-  final offset = Offset(0, 0).obs;
   final artboard = Rx<Artboard>();
+  final difference = 0.0.obs;
+  final direction = 0.0.obs;
+  final offset = Offset(0, 0).obs;
   final proximity = Rx<Peer_Proximity>();
 
   // References
+  final RxDouble userDirection = Get.find<SonrService>().direction;
   var peer = Peer();
   int index;
 
@@ -35,7 +37,9 @@ class PeerController extends GetxController {
     Get.find<SonrService>().peers.listen((lob) {
       lob.forEach((key, value) {
         if (key == peer.id) {
-          offset(calculateOffset(value.difference));
+          difference((userDirection.value - value.direction).abs());
+          direction(value.direction);
+          offset(calculateOffset(difference.value));
           proximity(value.proximity);
         }
       });
