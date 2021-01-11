@@ -62,7 +62,8 @@ class _SliverViews extends GetView<ProfileController> {
                 // @ More Button
                 Padding(
                     padding: EdgeInsets.only(right: 4.0),
-                    child: SonrButton.appBar(SonrIcon.settings, () => {},
+                    child: SonrButton.appBar(
+                        SonrIcon.settings, () => {Get.dialog(_QRScanner())},
                         intensity: 0.4)),
               ],
             ),
@@ -116,10 +117,10 @@ class SocialsGrid extends StatelessWidget {
 
 class _QRScanner extends StatefulWidget {
   @override
-  __QRScannerState createState() => __QRScannerState();
+  _QRScannerState createState() => _QRScannerState();
 }
 
-class __QRScannerState extends State<_QRScanner> {
+class _QRScannerState extends State<_QRScanner> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
