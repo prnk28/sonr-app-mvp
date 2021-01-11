@@ -187,8 +187,14 @@ class PeerController extends GetxController {
 
   // ^ Calculate Peer Offset from Line ^ //
   Offset calculateOffset() {
-    var pos = Tangent.fromAngle(
-        Offset(difference.value, Get.height / 5), direction.value);
-    return pos.position;
+    if (proximity.value == Peer_Proximity.IMMEDIATE) {
+      var pos = Tangent.fromAngle(
+          Offset(difference.value, Get.height / 5), direction.value);
+      return pos.position;
+    } else {
+      var pos = Tangent.fromAngle(
+          Offset(difference.value, Get.height / 14), direction.value);
+      return pos.position;
+    }
   }
 }
