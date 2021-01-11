@@ -8,6 +8,7 @@ PROJECT_DIR=/Users/prad/Sonr/app
 
 # Lists Options
 all: Makefile
+	@echo 'Sonr App Module'
 	@sed -n 's/^##//p' $<
 
 ## run       :   Run Mobile App in Debug Mode

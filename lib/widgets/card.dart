@@ -262,15 +262,13 @@ class _URLInvite extends GetView<SonrCardController> {
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.max, children: [
       // @ Header
-      Expanded(
-        child: _SonrCardHeader(
-            name: name,
-            type: Payload.URL,
-            onAccept: () {
-              Get.back();
-              Get.find<DeviceService>().launchURL(url);
-            }),
-      ),
+      _SonrCardHeader(
+          name: name,
+          type: Payload.URL,
+          onAccept: () {
+            Get.back();
+            Get.find<DeviceService>().launchURL(url);
+          }),
       Padding(padding: EdgeInsets.all(8)),
 
       Row(
@@ -387,12 +385,10 @@ class _FileInviteComplete extends GetView<SonrCardController> {
     // @ Non-Image Type
     return Column(mainAxisSize: MainAxisSize.max, children: [
       // @ Header
-      Expanded(
-        child: _SonrCardHeader(
-          name: "",
-          type: Payload.FILE,
-          hasAccept: false,
-        ),
+      _SonrCardHeader(
+        name: "",
+        type: Payload.FILE,
+        hasAccept: false,
       ),
       Padding(padding: EdgeInsets.all(8)),
       SlideDownAnimatedSwitcher(

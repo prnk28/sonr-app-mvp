@@ -70,9 +70,6 @@ class SonrService extends GetxService {
 
     _connected = true;
 
-    // Push to Home Screen
-    Get.offNamed("/home");
-
     // Return Service
     return this;
   }

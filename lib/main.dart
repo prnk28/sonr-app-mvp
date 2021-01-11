@@ -1,4 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:rive/rive.dart';
 import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/social_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
@@ -32,7 +34,38 @@ class InitialBinding implements Bindings {
 }
 
 // ^ Root App Widget ^ //
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  Artboard _riveArtboard;
+  @override
+  void initState() {
+    super.initState();
+    // Load the RiveFile from the binary data.
+    rootBundle.load('assets/animations/splash_screen.riv').then(
+      (data) async {
+        // Await Loading
+        final file = RiveFile();
+        if (file.import(data)) {
+          // Retreive Artboard
+          final artboard = file.mainArtboard;
+
+          // Determine Animation by Tile Type
+          artboard.addController(SimpleAnimation('Default'));
+          setState(() => _riveArtboard = artboard);
+
+          // Add Delay before switching screens
+          Future.delayed(Duration(milliseconds: 1250)).then((_) {
+            Get.offNamed("/home");
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -43,20 +76,19 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       home: Scaffold(
-          backgroundColor: NeumorphicTheme.baseColor(context),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          backgroundColor: Colors.black,
+          body: Stack(
             children: [
               Container(
-                  width: Get.width / 5,
-                  height: Get.height / 5,
-                  child:
-                      FittedBox(child: Image.asset("assets/images/icon.png"))),
-
-              // Loading
-              Padding(
-                  padding: EdgeInsets.only(left: 45, right: 45),
-                  child: NeumorphicProgressIndeterminate())
+                  width: Get.width,
+                  height: Get.height,
+                  child: Center(
+                      child: _riveArtboard == null
+                          ? const SizedBox(
+                              child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.blueAccent)))
+                          : Rive(artboard: _riveArtboard))),
             ],
           )),
     );
