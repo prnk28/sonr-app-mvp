@@ -251,9 +251,6 @@ class MediaPickerController extends GetxController {
 
     // List Collections
     collections.forEach((element) {
-      // Log Collection
-      print("Collection ${element.name}, with ${element.count} items");
-
       // Set Has Gallery
       if (element.count > 0) {
         hasGallery(true);

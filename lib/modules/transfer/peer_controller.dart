@@ -39,8 +39,9 @@ class PeerController extends GetxController {
         if (key == peer.id) {
           difference((userDirection.value - value.direction).abs());
           direction(value.direction);
-          offset(calculateOffset(difference.value));
+          offset(calculateOffset());
           proximity(value.proximity);
+          _log();
         }
       });
     });
@@ -82,8 +83,16 @@ class PeerController extends GetxController {
     this.peer = peer;
     this.index = index;
     isContentVisible(true);
-    offset(calculateOffset(peer.direction));
+    difference((userDirection.value - peer.direction).abs());
+    direction(peer.direction);
+    offset(calculateOffset());
     proximity(peer.proximity);
+  }
+
+  _log() {
+    print("Difference: ${difference.value}");
+    print("Direction: ${direction.value}");
+    print("Offset: ${offset.value}");
   }
 
   // ^ Handle User Invitation ^
@@ -177,9 +186,9 @@ class PeerController extends GetxController {
   }
 
   // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset(double value,
-      {Peer_Proximity proximity = Peer_Proximity.NEAR}) {
-    var pos = Tangent.fromAngle(Offset(Get.width / 2, Get.height / 5), value);
+  Offset calculateOffset() {
+    var pos = Tangent.fromAngle(
+        Offset(difference.value, Get.height / 5), direction.value);
     return pos.position;
   }
 }

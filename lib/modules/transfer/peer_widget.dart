@@ -19,7 +19,7 @@ class PeerBubble extends GetWidget<PeerController> {
       return AnimatedPositioned(
           top: controller.offset.value.dy,
           left: controller.offset.value.dx,
-          duration: 500.milliseconds,
+          duration: 150.milliseconds,
           child: GestureDetector(
               onTap: () => controller.invite(),
               child: Container(
