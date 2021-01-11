@@ -30,6 +30,7 @@ dependencies:
   flutter_compass: ^0.5.1
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
+  qr_code_scanner: ^0.3.0
   sensors: ^0.4.1+1
 
   # -- Data --
