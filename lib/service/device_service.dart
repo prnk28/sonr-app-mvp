@@ -71,12 +71,30 @@ class DeviceService extends GetxService {
     intent.ReceiveSharingIntent.getInitialMedia()
         .then((List<intent.SharedMediaFile> data) {
       //incomingFile(value);
+      started.listen((val) {
+        // Check if Started
+        if (val) {
+          if (!Get.isBottomSheetOpen && hasUser) {
+            Get.bottomSheet(ShareSheet.media(data),
+                barrierColor: K_DIALOG_COLOR, isDismissible: false);
+          }
+        }
+      });
       print(data);
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     intent.ReceiveSharingIntent.getInitialText().then((String text) {
       //incomingText(value);
+      started.listen((val) {
+        // Check if Started
+        if (val) {
+          if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
+            Get.bottomSheet(ShareSheet.url(text),
+                barrierColor: K_DIALOG_COLOR, isDismissible: false);
+          }
+        }
+      });
       print(text);
     });
     super.onInit();
@@ -117,6 +135,7 @@ class DeviceService extends GetxService {
           // Initialize Dependent Services
           Get.putAsync(
               () => SonrService().init(position, user.username, user.contact));
+          started(true);
         }
       } else {
         // Push to Register Screen
@@ -143,6 +162,7 @@ class DeviceService extends GetxService {
       // Initialize Dependent Services
       Get.putAsync(
           () => SonrService().init(position, user.username, user.contact));
+      started(true);
     } else {
       print("Location Permission Denied");
     }
