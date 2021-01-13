@@ -58,7 +58,7 @@ class _AppState extends State<App> {
           setState(() => _riveArtboard = artboard);
 
           // Add Delay before switching screens
-          Future.delayed(Duration(milliseconds: 1250)).then((_) {
+          Future.delayed(Duration(milliseconds: 1600)).then((_) {
             Get.offNamed("/home");
           });
         }
@@ -78,7 +78,9 @@ class _AppState extends State<App> {
       home: Scaffold(
           backgroundColor: Colors.black,
           body: Stack(
+            alignment: Alignment.topCenter,
             children: [
+              // @ Rive Animation
               Container(
                   width: Get.width,
                   height: Get.height,
@@ -89,6 +91,21 @@ class _AppState extends State<App> {
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Colors.blueAccent)))
                           : Rive(artboard: _riveArtboard))),
+
+              // @ Fade Animation of Text
+              PlayAnimation<double>(
+                  tween: (0.0).tweenTo(1.0),
+                  duration: 400.milliseconds,
+                  delay: 1.seconds,
+                  builder: (context, child, value) {
+                    return AnimatedOpacity(
+                        opacity: value,
+                        duration: 400.milliseconds,
+                        child: Padding(
+                            padding: EdgeInsets.only(top: 200),
+                            child: SonrText.header("Sonr",
+                                gradient: FlutterGradientNames.glassWater)));
+                  }),
             ],
           )),
     );

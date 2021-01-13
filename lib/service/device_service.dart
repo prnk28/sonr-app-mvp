@@ -74,7 +74,7 @@ class DeviceService extends GetxService {
       started.listen((val) {
         // Check if Started
         if (val) {
-          if (!Get.isBottomSheetOpen && hasUser) {
+          if (!Get.isBottomSheetOpen && hasUser && !data.isNullOrBlank) {
             Get.bottomSheet(ShareSheet.media(data),
                 barrierColor: K_DIALOG_COLOR, isDismissible: false);
           }
