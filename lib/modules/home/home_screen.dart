@@ -41,7 +41,7 @@ class _HomeView extends GetView<HomeController> {
     return Column(children: [
       Container(
         padding: EdgeInsets.only(top: 10),
-        margin: EdgeInsets.only(left: 20, right: 20),
+        margin: EdgeInsets.only(left: 30, right: 30),
         child: NeumorphicToggle(
           onChanged: (val) => controller.toggleIndex(val),
           thumb: Center(child: Obx(() => controller.getToggleCategory())),
