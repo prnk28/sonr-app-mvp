@@ -324,7 +324,7 @@ class MediaPickerController extends GetxController {
     Get.find<SonrService>().process(Payload.FILE, file: mediaFile);
 
     // Close Share Button
-    Get.find<HomeController>().toggleExpand();
+    Get.find<HomeController>().toggleShareExpand();
 
     // Go to Transfer
     Get.offNamed("/transfer");

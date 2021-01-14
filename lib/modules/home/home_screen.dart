@@ -29,7 +29,8 @@ class HomeScreen extends GetView<HomeController> {
                 )),
             floatingActionButton: ShareButton(),
             body: GestureDetector(
-                onTap: () => controller.toggleExpand, child: _HomeView())));
+                onTap: () => controller.toggleShareExpand,
+                child: _HomeView())));
   }
 }
 
@@ -37,23 +38,51 @@ class HomeScreen extends GetView<HomeController> {
 class _HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return GestureDetector(
-          onTap: () {
-            if (controller.isShareExpanded.value) {
-              controller.toggleExpand();
-            }
-          },
-          child: GridView.builder(
-              padding: EdgeInsets.only(left: 4, right: 4, bottom: 20, top: 2),
-              itemCount: controller.allCards.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 4),
-              itemBuilder: (context, idx) {
-                // Generate File Cell
-                return _TransferItem(controller.allCards[idx]);
-              }));
-    });
+    return Column(children: [
+      Container(
+        padding: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(left: 20, right: 20),
+        child: NeumorphicToggle(
+          onChanged: (val) => controller.toggleIndex(val),
+          thumb: Center(child: Obx(() => controller.getToggleCategory())),
+          children: [
+            ToggleElement(),
+            ToggleElement(),
+            ToggleElement(),
+          ],
+        ),
+      ),
+      Obx(() => Container(
+            padding: EdgeInsets.only(top: 15),
+            margin: EdgeInsets.all(10),
+            height: 500, // card height
+            child: PageView.builder(
+                itemCount: controller.allCards.length,
+                controller: PageController(viewportFraction: 0.7),
+                onPageChanged: (int index) => controller.pageIndex(index),
+                itemBuilder: (_, idx) {
+                  return Obx(() {
+                    if (idx == controller.pageIndex.value) {
+                      return PlayAnimation<double>(
+                        tween: (0.85).tweenTo(0.95),
+                        duration: 150.milliseconds,
+                        builder: (context, child, value) {
+                          return Transform.scale(
+                            scale: value,
+                            child: _TransferItem(controller.allCards[idx]),
+                          );
+                        },
+                      );
+                    } else {
+                      return Transform.scale(
+                        scale: 0.85,
+                        child: _TransferItem(controller.allCards[idx]),
+                      );
+                    }
+                  });
+                }),
+          ))
+    ]);
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
+import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:image_picker/image_picker.dart';
 import 'media_picker.dart';
@@ -13,6 +14,8 @@ class HomeController extends GetxController {
   final allCards = List<CardModel>().obs;
   final isShareExpanded = false.obs;
   final imagePicker = ImagePicker();
+  final pageIndex = 0.obs;
+  final toggleIndex = 0.obs;
 
   @override
   void onInit() {
@@ -28,8 +31,19 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
+  // ^ Helper Method for Category Filter ^ //
+  SonrText getToggleCategory() {
+    if (toggleIndex.value == 0) {
+      return SonrText.normal("All");
+    } else if (toggleIndex.value == 1) {
+      return SonrText.normal("Media");
+    } else {
+      return SonrText.normal("Contact");
+    }
+  }
+
   // ^ Toggles Expanded Share Button ^ //
-  void toggleExpand() {
+  void toggleShareExpand() {
     HapticFeedback.heavyImpact();
     isShareExpanded(!isShareExpanded.value);
   }
@@ -46,7 +60,7 @@ class HomeController extends GetxController {
           .process(Payload.FILE, file: File(pickedFile.path));
 
       // Close Share Button
-      Get.find<HomeController>().toggleExpand();
+      Get.find<HomeController>().toggleShareExpand();
 
       // Go to Transfer
       Get.offNamed("/transfer");
@@ -65,7 +79,7 @@ class HomeController extends GetxController {
           .process(Payload.FILE, file: File(pickedFile.path));
 
       // Close Share Button
-      Get.find<HomeController>().toggleExpand();
+      Get.find<HomeController>().toggleShareExpand();
 
       // Go to Transfer
       Get.offNamed("/transfer");
@@ -77,7 +91,7 @@ class HomeController extends GetxController {
     Get.find<SonrService>().process(Payload.CONTACT);
 
     // Close Share Button
-    Get.find<HomeController>().toggleExpand();
+    Get.find<HomeController>().toggleShareExpand();
 
     // Go to Transfer
     Get.offNamed("/transfer");

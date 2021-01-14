@@ -25,7 +25,7 @@ class ShareButton extends GetView<HomeController> {
                   child: controller.isShareExpanded.value
                       ? expandedView
                       : defaultView,
-                  onPressed: controller.toggleExpand,
+                  onPressed: controller.toggleShareExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
                     surfaceIntensity: 0.6,
