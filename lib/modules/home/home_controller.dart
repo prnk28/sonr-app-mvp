@@ -12,7 +12,12 @@ enum ToggleFilter { All, Media, Contact }
 
 class HomeController extends GetxController {
   // Properties
+  final cards = List<CardModel>().obs;
   final allCards = List<CardModel>().obs;
+  // final contactCards = List<CardModel>().obs;
+  // final mediaCards = List<CardModel>().obs;
+
+  // Widget Elements
   final isExpanded = false.obs;
   final pageIndex = 0.obs;
   final toggleIndex = 0.obs;
@@ -24,16 +29,40 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     // Fetch File Data
-    Get.find<SQLService>().fetchFiles().then(
-        (data) => data.forEach((m) => allCards.add(CardModel.fromMetaSQL(m))));
+    Get.find<SQLService>().fetchFiles().then((data) {
+      data.forEach((m) => allCards.add(CardModel.fromMetaSQL(m)));
+      // data.forEach((m) => mediaCards.add(CardModel.fromMetaSQL(m)));
+    });
 
     // Fetch Contact Data
-    Get.find<SQLService>().fetchContacts().then((data) =>
-        data.forEach((c) => allCards.add(CardModel.fromContactSQL(c))));
-    allCards.refresh();
+    Get.find<SQLService>().fetchContacts().then((data) {
+      data.forEach((c) => allCards.add(CardModel.fromContactSQL(c)));
+      // data.forEach((c) => contactCards.add(CardModel.fromContactSQL(c)));
+    });
 
+    // Refresh Cards
+    allCards.refresh();
     super.onInit();
   }
+
+  // HomeController() {
+  //   category.listen((cat) {
+  //     switch (cat) {
+  //       case ToggleFilter.All:
+  //         cards(allCards);
+  //         cards.refresh();
+  //         break;
+  //       case ToggleFilter.Media:
+  //         cards(mediaCards);
+  //         cards.refresh();
+  //         break;
+  //       case ToggleFilter.Contact:
+  //         cards(contactCards);
+  //         cards.refresh();
+  //         break;
+  //     }
+  //   });
+  // }
 
   // ^ Helper Method for Category Filter ^ //
   SonrText getToggleCategory() {
@@ -41,10 +70,10 @@ class HomeController extends GetxController {
       category(ToggleFilter.All);
       return SonrText.normal("All");
     } else if (toggleIndex.value == 1) {
-      category(ToggleFilter.All);
+      category(ToggleFilter.Media);
       return SonrText.normal("Media");
     } else {
-      category(ToggleFilter.All);
+      category(ToggleFilter.Contact);
       return SonrText.normal("Contact");
     }
   }

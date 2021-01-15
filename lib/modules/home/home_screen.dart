@@ -58,7 +58,7 @@ class _HomeView extends GetView<HomeController> {
             margin: EdgeInsets.all(10),
             height: 500, // card height
             child: PageView.builder(
-                itemCount: controller.allCards.length,
+                itemCount: controller.cards.length,
                 controller: PageController(viewportFraction: 0.7),
                 onPageChanged: (int index) => controller.pageIndex(index),
                 itemBuilder: (_, idx) {
@@ -70,14 +70,14 @@ class _HomeView extends GetView<HomeController> {
                         builder: (context, child, value) {
                           return Transform.scale(
                             scale: value,
-                            child: _TransferItem(controller.allCards[idx]),
+                            child: _TransferItem(controller.cards[idx]),
                           );
                         },
                       );
                     } else {
                       return Transform.scale(
                         scale: 0.85,
-                        child: _TransferItem(controller.allCards[idx]),
+                        child: _TransferItem(controller.cards[idx]),
                       );
                     }
                   });
