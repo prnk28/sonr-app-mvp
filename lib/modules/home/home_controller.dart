@@ -8,7 +8,7 @@ import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:image_picker/image_picker.dart';
 
-enum ToggleFilter { All, Media, Contact }
+enum ToggleFilter { All, Media, Contact, Links }
 
 class HomeController extends GetxController {
   // Properties
@@ -66,15 +66,22 @@ class HomeController extends GetxController {
 
   // ^ Helper Method for Category Filter ^ //
   SonrText getToggleCategory() {
+    // Haptic Feedback
+    HapticFeedback.mediumImpact();
+
+    // Change Category
     if (toggleIndex.value == 0) {
       category(ToggleFilter.All);
       return SonrText.normal("All");
     } else if (toggleIndex.value == 1) {
       category(ToggleFilter.Media);
       return SonrText.normal("Media");
+    } else if (toggleIndex.value == 2) {
+      category(ToggleFilter.Media);
+      return SonrText.normal("Contacts");
     } else {
-      category(ToggleFilter.Contact);
-      return SonrText.normal("Contact");
+      category(ToggleFilter.Links);
+      return SonrText.normal("Links");
     }
   }
 

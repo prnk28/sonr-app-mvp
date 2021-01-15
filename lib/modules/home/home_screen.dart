@@ -39,49 +39,56 @@ class _HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
-        padding: EdgeInsets.only(top: 10),
-        margin: EdgeInsets.only(left: 30, right: 30),
-        child: Obx(() => NeumorphicToggle(
-              selectedIndex: controller.toggleIndex.value,
-              onChanged: (val) => controller.toggleIndex(val),
-              thumb: Center(child: Obx(() => controller.getToggleCategory())),
-              children: [
-                ToggleElement(),
-                ToggleElement(),
-                ToggleElement(),
-              ],
-            )),
+      GestureDetector(
+        onTap: () => controller.toggleShareExpand,
+        child: Container(
+          padding: EdgeInsets.only(top: 10),
+          margin: EdgeInsets.only(left: 30, right: 30),
+          child: Obx(() => NeumorphicToggle(
+                selectedIndex: controller.toggleIndex.value,
+                onChanged: (val) => controller.toggleIndex(val),
+                thumb: Center(child: Obx(() => controller.getToggleCategory())),
+                children: [
+                  ToggleElement(),
+                  ToggleElement(),
+                  ToggleElement(),
+                  ToggleElement(),
+                ],
+              )),
+        ),
       ),
-      Obx(() => Container(
-            padding: EdgeInsets.only(top: 15),
-            margin: EdgeInsets.all(10),
-            height: 500, // card height
-            child: PageView.builder(
-                itemCount: controller.cards.length,
-                controller: PageController(viewportFraction: 0.7),
-                onPageChanged: (int index) => controller.pageIndex(index),
-                itemBuilder: (_, idx) {
-                  return Obx(() {
-                    if (idx == controller.pageIndex.value) {
-                      return PlayAnimation<double>(
-                        tween: (0.85).tweenTo(0.95),
-                        duration: 200.milliseconds,
-                        builder: (context, child, value) {
-                          return Transform.scale(
-                            scale: value,
-                            child: _TransferItem(controller.cards[idx]),
-                          );
-                        },
-                      );
-                    } else {
-                      return Transform.scale(
-                        scale: 0.85,
-                        child: _TransferItem(controller.cards[idx]),
-                      );
-                    }
-                  });
-                }),
+      Obx(() => GestureDetector(
+            onTap: () => controller.toggleShareExpand,
+            child: Container(
+              padding: EdgeInsets.only(top: 15),
+              margin: EdgeInsets.all(10),
+              height: 500, // card height
+              child: PageView.builder(
+                  itemCount: controller.allCards.length,
+                  controller: PageController(viewportFraction: 0.7),
+                  onPageChanged: (int index) => controller.pageIndex(index),
+                  itemBuilder: (_, idx) {
+                    return Obx(() {
+                      if (idx == controller.pageIndex.value) {
+                        return PlayAnimation<double>(
+                          tween: (0.85).tweenTo(0.95),
+                          duration: 200.milliseconds,
+                          builder: (context, child, value) {
+                            return Transform.scale(
+                              scale: value,
+                              child: _TransferItem(controller.allCards[idx]),
+                            );
+                          },
+                        );
+                      } else {
+                        return Transform.scale(
+                          scale: 0.85,
+                          child: _TransferItem(controller.allCards[idx]),
+                        );
+                      }
+                    });
+                  }),
+            ),
           ))
     ]);
   }
