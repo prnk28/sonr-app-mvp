@@ -58,7 +58,7 @@ class _AppState extends State<App> {
           setState(() => _riveArtboard = artboard);
 
           // Add Delay before switching screens
-          Future.delayed(Duration(milliseconds: 1600)).then((_) {
+          Future.delayed(2.seconds).then((_) {
             Get.offNamed("/home");
           });
         }

@@ -42,15 +42,16 @@ class _HomeView extends GetView<HomeController> {
       Container(
         padding: EdgeInsets.only(top: 10),
         margin: EdgeInsets.only(left: 30, right: 30),
-        child: NeumorphicToggle(
-          onChanged: (val) => controller.toggleIndex(val),
-          thumb: Center(child: Obx(() => controller.getToggleCategory())),
-          children: [
-            ToggleElement(),
-            ToggleElement(),
-            ToggleElement(),
-          ],
-        ),
+        child: Obx(() => NeumorphicToggle(
+              selectedIndex: controller.toggleIndex.value,
+              onChanged: (val) => controller.toggleIndex(val),
+              thumb: Center(child: Obx(() => controller.getToggleCategory())),
+              children: [
+                ToggleElement(),
+                ToggleElement(),
+                ToggleElement(),
+              ],
+            )),
       ),
       Obx(() => Container(
             padding: EdgeInsets.only(top: 15),
@@ -65,7 +66,7 @@ class _HomeView extends GetView<HomeController> {
                     if (idx == controller.pageIndex.value) {
                       return PlayAnimation<double>(
                         tween: (0.85).tweenTo(0.95),
-                        duration: 150.milliseconds,
+                        duration: 200.milliseconds,
                         builder: (context, child, value) {
                           return Transform.scale(
                             scale: value,

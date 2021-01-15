@@ -7,15 +7,19 @@ import 'package:flutter/services.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:image_picker/image_picker.dart';
-import 'media_picker.dart';
+
+enum ToggleFilter { All, Media, Contact }
 
 class HomeController extends GetxController {
   // Properties
   final allCards = List<CardModel>().obs;
-  final isShareExpanded = false.obs;
-  final imagePicker = ImagePicker();
+  final isExpanded = false.obs;
   final pageIndex = 0.obs;
   final toggleIndex = 0.obs;
+
+  // References
+  final category = Rx<ToggleFilter>(ToggleFilter.All);
+  final imagePicker = ImagePicker();
 
   @override
   void onInit() {
@@ -34,10 +38,13 @@ class HomeController extends GetxController {
   // ^ Helper Method for Category Filter ^ //
   SonrText getToggleCategory() {
     if (toggleIndex.value == 0) {
+      category(ToggleFilter.All);
       return SonrText.normal("All");
     } else if (toggleIndex.value == 1) {
+      category(ToggleFilter.All);
       return SonrText.normal("Media");
     } else {
+      category(ToggleFilter.All);
       return SonrText.normal("Contact");
     }
   }
@@ -45,7 +52,7 @@ class HomeController extends GetxController {
   // ^ Toggles Expanded Share Button ^ //
   void toggleShareExpand() {
     HapticFeedback.heavyImpact();
-    isShareExpanded(!isShareExpanded.value);
+    isExpanded(!isExpanded.value);
   }
 
   // ^ Opens Camera Picker ^ //
