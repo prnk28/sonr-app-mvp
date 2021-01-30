@@ -78,14 +78,21 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Process-File Event ^
-  void process(Payload type, {File file, String url}) async {
+  void process(Payload type,
+      {File file,
+      String url,
+      bool isExtern = false,
+      int duration = 0,
+      String thumbPath = ""}) async {
     // Set Payload Type
     payload(type);
 
     // File Payload
     if (payload.value == Payload.FILE) {
       assert(file != null);
-      _node.processFile(file.path);
+
+      _node.processFile(isExtern, file.path,
+          thumbPath: thumbPath, duration: duration);
     }
 
     // Link Payload
