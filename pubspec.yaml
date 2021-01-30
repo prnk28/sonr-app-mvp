@@ -5,6 +5,7 @@
 name: sonar_app
 description: The dead simple way to connect with people and transfer files.
 version: 0.8.0+0.0.1
+publish_to: none
 
 # -- Flutter Settings --
 environment:
@@ -29,12 +30,12 @@ dependencies:
   # -- Device --
   flutter_compass: ^0.5.1
   geolocator: ^6.0.0+4
-  permission_handler: ^5.0.1+1
+  permission_handler: 5.0.0+hotfix.10
   sensors: ^0.4.1+1
 
   # -- Data --
   image_gallery_saver: ^1.6.7
-  image_picker: ^0.6.7+17
+  image_picker: ^0.6.7+22
   media_gallery: ^0.1.5
   path: ^1.7.0
   path_provider: ^1.6.7

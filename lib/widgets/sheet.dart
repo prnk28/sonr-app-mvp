@@ -199,7 +199,11 @@ class _ShareItem extends StatelessWidget {
         sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
 
     // Set Payload
-    Get.find<SonrService>().processExternal(sharedIntent);
+    Get.find<SonrService>().process(Payload.FILE,
+        file: File(sharedIntent.path),
+        duration: sharedIntent.duration,
+        isExtern: true,
+        thumbPath: sharedIntent.thumbnail);
 
     // Create View
     return ClipRRect(
