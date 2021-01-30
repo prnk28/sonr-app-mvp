@@ -53,11 +53,9 @@ class SonrService extends GetxService {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(
       Position pos, String username, Contact contact) async {
-    // Get OLC
-    olc(OLC.encode(pos.latitude, pos.longitude, codeLength: 8));
-
     // Create Worker
-    _node = await SonrCore.initialize(olc.value, username, contact);
+    _node = await SonrCore.initialize(
+        pos.latitude, pos.longitude, username, contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Connected, _handleConnected);
@@ -95,22 +93,6 @@ class SonrService extends GetxService {
       assert(url != null);
       _url = url;
     }
-  }
-
-  // ^ Process-File Event ^
-  void processExternal(intent.SharedMediaFile mediaFile) async {
-    // Set Payload Type
-    payload.value = Payload.FILE;
-
-    // Create Protobuf
-    SharedMediaFile shared = new SharedMediaFile();
-    shared.duration = mediaFile.duration != null ? mediaFile.duration : 0;
-    shared.thumbnail = mediaFile.thumbnail != null ? mediaFile.thumbnail : "";
-    shared.path = mediaFile.path;
-    shared.type = SharedMediaFile_Type.valueOf(mediaFile.type.index);
-
-    // File Payload
-    _node.processExternalFile(shared);
   }
 
   // ^ Invite-Peer Event ^
@@ -169,11 +151,6 @@ class SonrService extends GetxService {
     if (data is Lobby) {
       // Update Peers List
       peers(data.peers);
-
-      // Check for Exited
-      if (data.exited.length > 0) {
-        exited.assignAll(data.exited);
-      }
     }
   }
 
