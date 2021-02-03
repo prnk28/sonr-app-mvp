@@ -1,4 +1,4 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:sonr_core/sonr_core.dart';
 import 'dart:convert';
 
@@ -12,8 +12,8 @@ class User {
   List<SettingsItem> settings = new List<SettingsItem>();
 
   // Get User Position
-  Future<Position> get position =>
-      Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  Future<Pkg.Position> get position => Pkg.Geolocator.getCurrentPosition(
+      desiredAccuracy: Pkg.LocationAccuracy.high);
 
   // Default Constructer
   User(this.contact, this.username, {this.settings});

@@ -17,7 +17,7 @@ class MediumModel {
     status = json['status'];
     feed = json['feed'] != null ? new Feed.fromJson(json['feed']) : null;
     if (json['items'] != null) {
-      posts = new List<Post>();
+      posts = <Post>[];
       json['items'].forEach((v) {
         posts.add(new Post.fromJson(v));
       });

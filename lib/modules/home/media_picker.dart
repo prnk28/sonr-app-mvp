@@ -229,7 +229,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
 class MediaPickerController extends GetxController {
   final allCollections = Rx<List<MediaCollection>>();
   final mediaCollection = Rx<MediaCollection>();
-  final allMedias = List<Media>().obs;
+  final allMedias = <Media>[].obs;
   final selectedFile = Rx<Media>();
   final hasGallery = false.obs;
   final loaded = false.obs;

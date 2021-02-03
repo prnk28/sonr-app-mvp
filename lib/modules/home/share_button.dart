@@ -102,14 +102,7 @@ class _ExpandedView extends StatelessWidget {
                             height: Get.height,
                             child: _AnimatedButtonOption(
                               onPressed: () {
-                                if (Get.find<MediaPickerController>()
-                                    .hasGallery
-                                    .value) {
-                                  Get.bottomSheet(MediaPicker(),
-                                      isDismissible: false);
-                                } else {
-                                  // controller.openPicker();
-                                }
+                               
                               },
                               type: ArtboardType.Gallery,
                             ),

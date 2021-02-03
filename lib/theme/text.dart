@@ -107,7 +107,7 @@ class SonrText extends StatelessWidget {
       FontWeight weight,
       double size,
       Key key}) {
-    return SonrText(peer.firstName[0].toUpperCase(),
+    return SonrText(peer.profile.firstName[0].toUpperCase(),
         isGradient: true,
         weight: FontWeight.bold,
         size: size ?? 36,

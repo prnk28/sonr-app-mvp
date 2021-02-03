@@ -1,21 +1,23 @@
-import 'dart:io';
+import 'package:camerawesome/models/flashmodes.dart';
+import 'package:camerawesome/picture_controller.dart';
+import 'package:camerawesome/sensors.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/model_card.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-//import 'package:image_picker/image_picker.dart';
+import 'camera_view.dart';
+import 'media_picker.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 
 class HomeController extends GetxController {
   // Properties
-  final cards = List<CardModel>().obs;
-  final allCards = List<CardModel>().obs;
-  // final contactCards = List<CardModel>().obs;
-  // final mediaCards = List<CardModel>().obs;
+  final cards = <CardModel>[].obs;
+  final allCards = <CardModel>[].obs;
 
   // Widget Elements
   final isExpanded = false.obs;
@@ -24,45 +26,31 @@ class HomeController extends GetxController {
 
   // References
   final category = Rx<ToggleFilter>(ToggleFilter.All);
-  // final imagePicker = ImagePicker();
+
+  // Notifiers
+  ValueNotifier<CameraFlashes> switchFlash = ValueNotifier(CameraFlashes.NONE);
+  ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.BACK);
+  ValueNotifier<Size> photoSize = ValueNotifier(null);
+
+  // Controllers
+  PictureController pictureController = new PictureController();
 
   @override
   void onInit() {
     // Fetch File Data
     Get.find<SQLService>().fetchFiles().then((data) {
       data.forEach((m) => allCards.add(CardModel.fromMetaSQL(m)));
-      // data.forEach((m) => mediaCards.add(CardModel.fromMetaSQL(m)));
     });
 
     // Fetch Contact Data
     Get.find<SQLService>().fetchContacts().then((data) {
       data.forEach((c) => allCards.add(CardModel.fromContactSQL(c)));
-      // data.forEach((c) => contactCards.add(CardModel.fromContactSQL(c)));
     });
 
     // Refresh Cards
     allCards.refresh();
     super.onInit();
   }
-
-  // HomeController() {
-  //   category.listen((cat) {
-  //     switch (cat) {
-  //       case ToggleFilter.All:
-  //         cards(allCards);
-  //         cards.refresh();
-  //         break;
-  //       case ToggleFilter.Media:
-  //         cards(mediaCards);
-  //         cards.refresh();
-  //         break;
-  //       case ToggleFilter.Contact:
-  //         cards(contactCards);
-  //         cards.refresh();
-  //         break;
-  //     }
-  //   });
-  // }
 
   // ^ Helper Method for Category Filter ^ //
   SonrText getToggleCategory() {
@@ -86,48 +74,62 @@ class HomeController extends GetxController {
   }
 
   // ^ Toggles Expanded Share Button ^ //
-  void toggleShareExpand() {
-    HapticFeedback.heavyImpact();
-    isExpanded(!isExpanded.value);
+  void toggleShareExpand({ToggleForced options}) {
+    // Force Toggle
+    if (options != null) {
+      // Toggle Options
+      HapticFeedback.heavyImpact();
+      isExpanded(options.value);
+    } else {
+      // Toggle
+      HapticFeedback.heavyImpact();
+      isExpanded(!isExpanded.value);
+    }
   }
 
   // ^ Opens Camera Picker ^ //
   void openCamera() async {
-    // // Show Picker
-    // final pickedFile = await imagePicker.getImage(source: ImageSource.camera);
+    // Check for Permssions
+    Get.find<DeviceService>()
+        .requestPermission(PermissionType.Camera)
+        .then((result) {
+      if (result) {
+        // Toggle Share Expand
+        toggleShareExpand(options: ToggleForced(true));
 
-    // // Retreive File and Process
-    // if (pickedFile != null) {
-    //   // Queue
-    //   Get.find<SonrService>()
-    //       .process(Payload.FILE, file: File(pickedFile.path));
-
-    //   // Close Share Button
-    //   Get.find<HomeController>().toggleShareExpand();
-
-    //   // Go to Transfer
-    //   Get.offNamed("/transfer");
-    // }
+        // Show Picker
+        Get.dialog(CameraView());
+      } else {
+        // Display Error
+        SonrSnack.error("Sonr isnt permitted to access your media.");
+      }
+    });
   }
 
-  // // ^ Opens File Picker ^ //
-  // void openPicker() async {
-  //   // Show Picker
-  //   final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+  // ^ Opens File Picker UI ^ //
+  void openFilePicker() async {
+    // Toggle Share Expand
+    toggleShareExpand();
+  }
 
-  //   // Retreive File and Process
-  //   if (pickedFile != null) {
-  //     // Queue
-  //     Get.find<SonrService>()
-  //         .process(Payload.FILE, file: File(pickedFile.path));
+  // ^ Opens Media Picker UI ^ //
+  void openMediaPicker() async {
+    // Check for Permssions
+    Get.find<DeviceService>()
+        .requestPermission(PermissionType.Gallery)
+        .then((result) {
+      if (result) {
+        // Toggle Share Expand
+        toggleShareExpand(options: ToggleForced(true));
 
-  //     // Close Share Button
-  //     Get.find<HomeController>().toggleShareExpand();
-
-  //     // Go to Transfer
-  //     Get.offNamed("/transfer");
-  //   }
-  // }
+        // Display Bottom Sheet
+        Get.bottomSheet(MediaPicker(), isDismissible: false);
+      } else {
+        // Display Error
+        SonrSnack.error("Sonr isnt permitted to access your media.");
+      }
+    });
+  }
 
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
@@ -150,4 +152,9 @@ class HomeController extends GetxController {
   void openCard(CardModel card) {
     // TODO
   }
+}
+
+class ToggleForced {
+  final bool value;
+  ToggleForced(this.value);
 }

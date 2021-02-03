@@ -15,7 +15,7 @@ class PeerController extends GetxController {
   final difference = 0.0.obs;
   final direction = 0.0.obs;
   final offset = Offset(0, 0).obs;
-  final proximity = Rx<Peer_Proximity>();
+  final proximity = Rx<Position_Proximity>();
 
   // References
   final RxDouble userDirection = Get.find<SonrService>().direction;
@@ -35,13 +35,12 @@ class PeerController extends GetxController {
   PeerController() {
     // Listen to this peers updates
     Get.find<SonrService>().peers.listen((lob) {
-      lob.forEach((key, value) {
-        if (key == peer.id) {
-          difference((userDirection.value - value.direction).abs());
-          direction(value.direction);
+      lob.forEach((id, value) {
+        if (id == peer.id) {
+          difference((userDirection.value - value.position.direction).abs());
+          direction(value.position.direction);
           offset(calculateOffset(value.device));
-          proximity(value.proximity);
-          _log();
+          proximity(value.position.proximity);
         }
       });
     });
@@ -79,20 +78,14 @@ class PeerController extends GetxController {
   }
 
   // ^ Sets Peer for this Widget ^
-  initialize(Peer peer, int index) {
-    this.peer = peer;
+  initialize(Peer peerVal, int index) {
+    this.peer = peerVal;
     this.index = index;
     isContentVisible(true);
-    difference((userDirection.value - peer.direction).abs());
-    direction(peer.direction);
-    offset(calculateOffset(peer.device));
-    proximity(peer.proximity);
-  }
-
-  _log() {
-    print("Difference: ${difference.value}");
-    print("Direction: ${direction.value}");
-    print("Offset: ${offset.value}");
+    difference((userDirection.value - peerVal.position.direction).abs());
+    direction(peerVal.position.direction);
+    offset(calculateOffset(peerVal.device));
+    proximity(peerVal.position.proximity);
   }
 
   // ^ Handle User Invitation ^
@@ -192,7 +185,7 @@ class PeerController extends GetxController {
           Offset(difference.value, Get.height / 5), direction.value);
       return pos.position;
     } else {
-      if (proximity.value == Peer_Proximity.IMMEDIATE) {
+      if (proximity.value == Position_Proximity.Immediate) {
         var pos = Tangent.fromAngle(
             Offset(difference.value, Get.height / 5), direction.value);
         return pos.position;

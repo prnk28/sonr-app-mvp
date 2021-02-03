@@ -6,26 +6,6 @@ import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
-// ** Compass Designation Enum **
-enum CompassHeading {
-  N,
-  NNE,
-  NE,
-  ENE,
-  E,
-  ESE,
-  SE,
-  SSE,
-  S,
-  SSW,
-  SW,
-  WSW,
-  W,
-  WNW,
-  NW,
-  NNW
-}
-
 enum LobbyState {
   Empty,
   Active,
@@ -60,7 +40,7 @@ class TransferController extends GetxController {
   // @ Lobby Properties
   final isEmpty = true.obs;
   bool _isEmpty = true;
-  RxList<PeerBubble> stackItems = new List<PeerBubble>().obs;
+  RxList<PeerBubble> stackItems = <PeerBubble>[].obs;
 
   // ^ Controller Constructer ^
   TransferController() {
@@ -145,7 +125,7 @@ class TransferController extends GetxController {
   // ^ Retreives Heading String ^ //
   _headingString(double dir) {
     var adjustedDesignation = ((dir / 22.5) + 0.5).toInt();
-    var compassEnum = CompassHeading.values[(adjustedDesignation % 16)];
+    var compassEnum = Position_Heading.values[(adjustedDesignation % 16)];
     return compassEnum
         .toString()
         .substring(compassEnum.toString().indexOf('.') + 1);

@@ -222,7 +222,7 @@ class _FileInvite extends GetView<SonrCardController> {
           children: [
             // @ Header
             _SonrCardHeader(
-                name: from.firstName,
+                name: from.profile.firstName,
                 type: Payload.FILE,
                 onAccept: () {
                   controller.acceptFile();

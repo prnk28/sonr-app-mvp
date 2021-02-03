@@ -19,13 +19,13 @@ class TweetsModel {
   TweetsModel.fromResponse(dynamic respBody) {
     Map<String, dynamic> json = jsonDecode(respBody);
     if (json['data'] != null) {
-      tweets = new List<Tweet>();
+      tweets = <Tweet>[];
       json['data'].forEach((v) {
         tweets.add(new Tweet.fromJson(v));
       });
     }
     if (json['errors'] != null) {
-      errors = new List<Errors>();
+      errors = <Errors>[];
       json['errors'].forEach((v) {
         errors.add(new Errors.fromJson(v));
       });
@@ -53,13 +53,13 @@ class TwitterUserModel {
   TwitterUserModel.fromResponse(dynamic respBody) {
     Map<String, dynamic> json = jsonDecode(respBody);
     if (json['data'] != null) {
-      data = new List<UserData>();
+      data = <UserData>[];
       json['data'].forEach((v) {
         data.add(new UserData.fromJson(v));
       });
     }
     if (json['errors'] != null) {
-      errors = new List<Errors>();
+      errors = <Errors>[];
       json['errors'].forEach((v) {
         errors.add(new Errors.fromJson(v));
       });
@@ -108,7 +108,7 @@ class Tweet {
         ? new Entities.fromJson(json['entities'])
         : null;
     if (json['referenced_tweets'] != null) {
-      referencedTweets = new List<ReferencedTweets>();
+      referencedTweets = <ReferencedTweets>[];
       json['referenced_tweets'].forEach((v) {
         referencedTweets.add(new ReferencedTweets.fromJson(v));
       });
@@ -161,19 +161,19 @@ class Entities {
 
   Entities.fromJson(Map<String, dynamic> json) {
     if (json['urls'] != null) {
-      urls = new List<Urls>();
+      urls = <Urls>[];
       json['urls'].forEach((v) {
         urls.add(new Urls.fromJson(v));
       });
     }
     if (json['mentions'] != null) {
-      mentions = new List<Mentions>();
+      mentions = <Mentions>[];
       json['mentions'].forEach((v) {
         mentions.add(new Mentions.fromJson(v));
       });
     }
     if (json['hashtags'] != null) {
-      hashtags = new List<Hashtags>();
+      hashtags = <Hashtags>[];
       json['hashtags'].forEach((v) {
         hashtags.add(new Hashtags.fromJson(v));
       });
@@ -226,7 +226,7 @@ class Urls {
     expandedUrl = json['expanded_url'];
     displayUrl = json['display_url'];
     if (json['images'] != null) {
-      images = new List<Images>();
+      images = <Images>[];
       json['images'].forEach((v) {
         images.add(new Images.fromJson(v));
       });
@@ -471,7 +471,7 @@ class Description {
 
   Description.fromJson(Map<String, dynamic> json) {
     if (json['hashtags'] != null) {
-      hashtags = new List<Hashtags>();
+      hashtags = <Hashtags>[];
       json['hashtags'].forEach((v) {
         hashtags.add(new Hashtags.fromJson(v));
       });
