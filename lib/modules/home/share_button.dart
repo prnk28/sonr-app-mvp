@@ -22,9 +22,8 @@ class ShareButton extends GetView<HomeController> {
             duration: 200.milliseconds,
             child: Center(
               child: NeumorphicButton(
-                  child: controller.isExpanded.value
-                      ? expandedView
-                      : defaultView,
+                  child:
+                      controller.isExpanded.value ? expandedView : defaultView,
                   onPressed: controller.toggleShareExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
@@ -109,7 +108,7 @@ class _ExpandedView extends StatelessWidget {
                                   Get.bottomSheet(MediaPicker(),
                                       isDismissible: false);
                                 } else {
-                                  controller.openPicker();
+                                  // controller.openPicker();
                                 }
                               },
                               type: ArtboardType.Gallery,

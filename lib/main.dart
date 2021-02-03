@@ -73,7 +73,6 @@ class _AppState extends State<App> {
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
-      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       home: Scaffold(
           backgroundColor: Colors.black,

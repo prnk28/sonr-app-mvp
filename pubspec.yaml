@@ -35,7 +35,7 @@ dependencies:
 
   # -- Data --
   image_gallery_saver: ^1.6.7
-  image_picker: ^0.6.7+17
+  # image_picker: ^0.6.7+17
   media_gallery: ^0.1.5
   path: ^1.7.0
   path_provider: ^1.6.7

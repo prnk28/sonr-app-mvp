@@ -6,7 +6,7 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 
@@ -24,7 +24,7 @@ class HomeController extends GetxController {
 
   // References
   final category = Rx<ToggleFilter>(ToggleFilter.All);
-  final imagePicker = ImagePicker();
+  // final imagePicker = ImagePicker();
 
   @override
   void onInit() {
@@ -93,41 +93,41 @@ class HomeController extends GetxController {
 
   // ^ Opens Camera Picker ^ //
   void openCamera() async {
-    // Show Picker
-    final pickedFile = await imagePicker.getImage(source: ImageSource.camera);
+    // // Show Picker
+    // final pickedFile = await imagePicker.getImage(source: ImageSource.camera);
 
-    // Retreive File and Process
-    if (pickedFile != null) {
-      // Queue
-      Get.find<SonrService>()
-          .process(Payload.FILE, file: File(pickedFile.path));
+    // // Retreive File and Process
+    // if (pickedFile != null) {
+    //   // Queue
+    //   Get.find<SonrService>()
+    //       .process(Payload.FILE, file: File(pickedFile.path));
 
-      // Close Share Button
-      Get.find<HomeController>().toggleShareExpand();
+    //   // Close Share Button
+    //   Get.find<HomeController>().toggleShareExpand();
 
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    }
+    //   // Go to Transfer
+    //   Get.offNamed("/transfer");
+    // }
   }
 
-  // ^ Opens File Picker ^ //
-  void openPicker() async {
-    // Show Picker
-    final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+  // // ^ Opens File Picker ^ //
+  // void openPicker() async {
+  //   // Show Picker
+  //   final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
 
-    // Retreive File and Process
-    if (pickedFile != null) {
-      // Queue
-      Get.find<SonrService>()
-          .process(Payload.FILE, file: File(pickedFile.path));
+  //   // Retreive File and Process
+  //   if (pickedFile != null) {
+  //     // Queue
+  //     Get.find<SonrService>()
+  //         .process(Payload.FILE, file: File(pickedFile.path));
 
-      // Close Share Button
-      Get.find<HomeController>().toggleShareExpand();
+  //     // Close Share Button
+  //     Get.find<HomeController>().toggleShareExpand();
 
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    }
-  }
+  //     // Go to Transfer
+  //     Get.offNamed("/transfer");
+  //   }
+  // }
 
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
