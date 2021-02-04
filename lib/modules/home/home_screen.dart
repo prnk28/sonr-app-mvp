@@ -129,7 +129,7 @@ class _TransferItem extends GetView<HomeController> {
   Widget buildMediaItem(Metadata metadata) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       SonrText.normal(metadata.mime.type.toString()),
-      SonrText.normal("Owner: " + metadata.owner.profile.firstName),
+      SonrText.normal("Owner: " + metadata.owner.firstName),
     ]);
   }
 

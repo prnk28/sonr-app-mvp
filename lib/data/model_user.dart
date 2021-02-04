@@ -9,7 +9,7 @@ class User {
   // ^ Properties ^
   final String username;
   Contact contact;
-  List<SettingsItem> settings = new List<SettingsItem>();
+  List<SettingsItem> settings = <SettingsItem>[];
 
   // Get User Position
   Future<Pkg.Position> get position => Pkg.Geolocator.getCurrentPosition(

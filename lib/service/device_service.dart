@@ -184,7 +184,7 @@ class DeviceService extends GetxService {
         break;
 
       case PermissionType.Gallery:
-        return await Permission.mediaLibrary.request().isGranted;
+        return await Permission.photos.request().isGranted;
         break;
 
       case PermissionType.Notifications:

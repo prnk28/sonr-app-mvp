@@ -6,7 +6,7 @@ export 'transfer_screen.dart';
 class TransferBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<TransferController>(TransferController());
     Get.create<PeerController>(() => PeerController());
+    Get.put<TransferController>(TransferController());
   }
 }

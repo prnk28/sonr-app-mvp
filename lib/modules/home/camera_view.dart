@@ -10,7 +10,8 @@ class CameraView extends GetView<HomeController> {
     return CameraAwesome(
       testMode: false,
       onPermissionsResult: (bool result) {},
-      selectDefaultSize: (List<Size> availableSizes) => Size(1920, 1080),
+      selectDefaultSize: (List<Size> availableSizes) =>
+          Size(Get.width, Get.height),
       onCameraStarted: () {},
       onOrientationChanged: (CameraOrientations newOrientation) {},
       sensor: controller.sensor,

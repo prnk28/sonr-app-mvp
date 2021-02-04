@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sonar_app/modules/profile/tile_dialog.dart';
-import 'package:sonr_core/models/models.dart';
+import 'package:sonr_core/models/models.dart' hide Platform;
 import 'tile_item.dart';
 import 'profile_controller.dart';
 import 'package:sonar_app/theme/theme.dart';

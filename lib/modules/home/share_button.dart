@@ -102,7 +102,7 @@ class _ExpandedView extends StatelessWidget {
                             height: Get.height,
                             child: _AnimatedButtonOption(
                               onPressed: () {
-                               
+                                controller.openMediaPicker();
                               },
                               type: ArtboardType.Gallery,
                             ),
