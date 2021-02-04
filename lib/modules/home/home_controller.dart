@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:camerawesome/models/flashmodes.dart';
 import 'package:camerawesome/picture_controller.dart';
 import 'package:camerawesome/sensors.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/service/device_service.dart';
@@ -13,6 +16,23 @@ import 'camera_picker.dart';
 import 'media_picker.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
+const K_ALLOWED_FILE_TYPES = [
+  'pdf',
+  'doc',
+  'docx',
+  'ttf',
+  'mp3',
+  'xml',
+  'csv',
+  'key',
+  'ppt',
+  'pptx',
+  'xls',
+  'xlsm',
+  'xlsx',
+  'rtf',
+  'txt'
+];
 
 class HomeController extends GetxController {
   // Properties
@@ -100,8 +120,14 @@ class HomeController extends GetxController {
 
   // ^ Opens File Picker UI ^ //
   void openFilePicker() async {
-    // Toggle Share Expand
-    toggleShareExpand();
+    // Await for Picker
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: K_ALLOWED_FILE_TYPES);
+
+    // Get File
+    if (result != null) {
+      File file = File(result.files.single.path);
+    }
   }
 
   // ^ Opens Media Picker UI ^ //
