@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:camerawesome/models/orientations.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +19,6 @@ class CameraPicker extends GetView<CameraPickerController> {
     return Obx(() {
       // @ Display Current Picture
       if (controller.hasCapture.value) {
-        var sidePadding = (Get.width / 2) + 25;
-
         return Stack(
           children: [
             // Preview
@@ -39,14 +36,14 @@ class CameraPicker extends GetView<CameraPickerController> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Left Button - Cancel and Retake
-                    SonrButton.circle(SonrText.normal(""), () {
+                    SonrButton.close(() {
                       controller.clearPhoto();
-                    }, icon: SonrIcon.error),
+                    }),
 
                     // Right Button - Continue and Accept
-                    SonrButton.circle(SonrText.normal(""), () {
+                    SonrButton.accept(() {
                       controller.continuePhoto();
-                    }, icon: SonrIcon.success),
+                    }),
                   ]),
             ),
           ],
@@ -66,14 +63,28 @@ class CameraPicker extends GetView<CameraPickerController> {
               photoSize: controller.photoSize,
               switchFlashMode: controller.switchFlash,
             ),
+            // Buttons
             Container(
-              padding: EdgeInsets.only(bottom: 25),
               alignment: Alignment.bottomCenter,
-              child: SonrButton.circle(SonrText.normal(""), () {
-                controller.capturePhoto();
-              },
-                  icon: SonrIcon.gradient(
-                      Icons.camera, FlutterGradientNames.alchemistLab)),
+              padding: EdgeInsets.only(bottom: 25),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SonrButton.circle(SonrText.normal(""), () {
+                      controller.capturePhoto();
+                    },
+                        icon: SonrIcon.gradient(
+                            Icons.camera, FlutterGradientNames.alchemistLab)),
+                  ]),
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              padding: EdgeInsets.only(left: 10),
+              child: SonrButton.close(
+                () {
+                  Get.back();
+                },
+              ),
             ),
           ],
         );
