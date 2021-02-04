@@ -357,14 +357,14 @@ class _SonrIconData {
   };
 
   // ^ Device Platform to Icon Map ^ //
-  static Map<String, _IconGradientWData> devices = {
-    "Android": _IconGradientWData(
+  static Map<Platform, _IconGradientWData> devices = {
+    Platform.Android: _IconGradientWData(
         _SonrIconData.android, FlutterGradientNames.glassWater),
-    "iOS": _IconGradientWData(
+    Platform.iOS: _IconGradientWData(
         _SonrIconData.iphone, FlutterGradientNames.glassWater),
-    "Mac":
+    Platform.MacOS:
         _IconGradientWData(_SonrIconData.mac, FlutterGradientNames.glassWater),
-    "Windows": _IconGradientWData(
+    Platform.Windows: _IconGradientWData(
         _SonrIconData.windows, FlutterGradientNames.glassWater),
   };
 

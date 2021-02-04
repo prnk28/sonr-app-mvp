@@ -29,7 +29,9 @@ class HomeScreen extends GetView<HomeController> {
                 )),
             floatingActionButton: ShareButton(),
             body: GestureDetector(
-                onTap: () => controller.toggleExpand, child: _HomeView())));
+                onTap: () =>
+                    controller.toggleShareExpand(options: ToggleForced(false)),
+                child: _HomeView())));
   }
 }
 
@@ -37,23 +39,60 @@ class HomeScreen extends GetView<HomeController> {
 class _HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return GestureDetector(
-          onTap: () {
-            if (controller.isShareExpanded.value) {
-              controller.toggleExpand();
-            }
-          },
-          child: GridView.builder(
-              padding: EdgeInsets.only(left: 4, right: 4, bottom: 20, top: 2),
-              itemCount: controller.allCards.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisSpacing: 8, crossAxisSpacing: 4),
-              itemBuilder: (context, idx) {
-                // Generate File Cell
-                return _TransferItem(controller.allCards[idx]);
-              }));
-    });
+    return Column(children: [
+      GestureDetector(
+        onTap: () => controller.toggleShareExpand,
+        child: Container(
+          padding: EdgeInsets.only(top: 10),
+          margin: EdgeInsets.only(left: 30, right: 30),
+          child: Obx(() => NeumorphicToggle(
+                selectedIndex: controller.toggleIndex.value,
+                onChanged: (val) => controller.toggleIndex(val),
+                thumb: Center(child: Obx(() => controller.getToggleCategory())),
+                children: [
+                  ToggleElement(),
+                  ToggleElement(),
+                  ToggleElement(),
+                  ToggleElement(),
+                ],
+              )),
+        ),
+      ),
+      Obx(() => GestureDetector(
+            onTap: () =>
+                controller.toggleShareExpand(options: ToggleForced(false)),
+            child: Container(
+              padding: EdgeInsets.only(top: 15),
+              margin: EdgeInsets.all(10),
+              height: 500, // card height
+              child: PageView.builder(
+                  itemCount: controller.allCards.length,
+                  controller: PageController(viewportFraction: 0.7),
+                  onPageChanged: (int index) => controller.pageIndex(index),
+                  itemBuilder: (_, idx) {
+                    return Obx(() {
+                      if (idx == controller.pageIndex.value) {
+                        return PlayAnimation<double>(
+                          tween: (0.85).tweenTo(0.95),
+                          duration: 200.milliseconds,
+                          builder: (context, child, value) {
+                            return Transform.scale(
+                              scale: value,
+                              child: _TransferItem(controller.allCards[idx]),
+                            );
+                          },
+                        );
+                      } else {
+                        return Transform.scale(
+                          scale: 0.85,
+                          child: _TransferItem(controller.allCards[idx]),
+                        );
+                      }
+                    });
+                  }),
+            ),
+          ))
+    ]);
   }
 }
 
@@ -77,7 +116,9 @@ class _TransferItem extends GetView<HomeController> {
 
     // @ Return View
     return GestureDetector(
-        onTap: () async {},
+        onTap: () async {
+          controller.toggleShareExpand(options: ToggleForced(false));
+        },
         child: Neumorphic(
             style: NeumorphicStyle(intensity: 0.85),
             margin: EdgeInsets.all(4),

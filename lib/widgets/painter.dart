@@ -87,25 +87,25 @@ class ZonePainter extends CustomPainter {
     paint.strokeWidth = 1;
 
     // Draw Zone Arcs
-    canvas.drawArc(
-        _rectByZone(Peer_Proximity.IMMEDIATE), K_ANGLE, K_ANGLE, false, paint);
+    canvas.drawArc(_rectByZone(Position_Proximity.Immediate), K_ANGLE, K_ANGLE,
+        false, paint);
 
     canvas.drawArc(
-        _rectByZone(Peer_Proximity.NEAR), K_ANGLE, K_ANGLE, false, paint);
+        _rectByZone(Position_Proximity.Near), K_ANGLE, K_ANGLE, false, paint);
 
-    canvas.drawArc(
-        _rectByZone(Peer_Proximity.FAR), K_ANGLE, K_ANGLE, false, paint);
+    canvas.drawArc(_rectByZone(Position_Proximity.Distant), K_ANGLE, K_ANGLE,
+        false, paint);
   }
 
-  Rect _rectByZone(Peer_Proximity proximity) {
+  Rect _rectByZone(Position_Proximity proximity) {
     switch (proximity) {
-      case Peer_Proximity.IMMEDIATE:
+      case Position_Proximity.Immediate:
         return Rect.fromLTRB(0, 200, _currentSize.width, 400);
         break;
-      case Peer_Proximity.NEAR:
+      case Position_Proximity.Near:
         return Rect.fromLTRB(0, 100, _currentSize.width, 300);
         break;
-      case Peer_Proximity.FAR:
+      case Position_Proximity.Distant:
         return Rect.fromLTRB(0, 0, _currentSize.width, 150);
         break;
       default:
@@ -119,20 +119,20 @@ class ZonePainter extends CustomPainter {
     return false;
   }
 
-  static Path getBubblePath(double sizeWidth, Peer_Proximity proximity) {
+  static Path getBubblePath(double sizeWidth, Position_Proximity proximity) {
     // Check Proximity Status
     switch (proximity) {
-      case Peer_Proximity.IMMEDIATE:
+      case Position_Proximity.Immediate:
         Path path = new Path();
         path.addArc(Rect.fromLTRB(0, 120, sizeWidth, 400), K_ANGLE, K_ANGLE);
         return path;
         break;
-      case Peer_Proximity.NEAR:
+      case Position_Proximity.Near:
         Path path = new Path();
         path.addArc(Rect.fromLTRB(0, 50, sizeWidth, 220), K_ANGLE, K_ANGLE);
         return path;
         break;
-      case Peer_Proximity.FAR:
+      case Position_Proximity.Distant:
         Path path = new Path();
         path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 150), K_ANGLE, K_ANGLE);
         return path;

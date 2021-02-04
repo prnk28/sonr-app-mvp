@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:get/get.dart' hide Node;
 import 'package:sonar_app/modules/transfer/peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
@@ -52,7 +52,7 @@ class SonrService extends GetxService {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(
-      Position pos, String username, Contact contact) async {
+      Pkg.Position pos, String username, Contact contact) async {
     // Create Worker
     _node = await SonrCore.initialize(
         pos.latitude, pos.longitude, username, contact);
@@ -187,7 +187,8 @@ class SonrService extends GetxService {
               barrierColor: K_DIALOG_COLOR);
           break;
         case Payload.URL:
-          Get.dialog(SonrCard.fromInviteUrl(data.url, data.from.firstName),
+          Get.dialog(
+              SonrCard.fromInviteUrl(data.url, data.from.profile.firstName),
               barrierColor: K_DIALOG_COLOR);
           break;
       }
@@ -246,7 +247,7 @@ class SonrService extends GetxService {
 
       // Save Card
       Get.find<SQLService>().storeFile(data);
-      Get.find<DeviceService>().saveMedia(data);
+      Get.find<DeviceService>().saveMediaFromMeta(data);
       Get.find<SonrCardController>().received(data);
       HapticFeedback.vibrate();
     }

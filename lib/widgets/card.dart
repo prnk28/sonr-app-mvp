@@ -9,7 +9,6 @@ import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/service/sonr_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:video_player/video_player.dart';
 
 enum CardState { None, Invitation, InProgress, Received, Viewing }
 
@@ -223,7 +222,7 @@ class _FileInvite extends GetView<SonrCardController> {
           children: [
             // @ Header
             _SonrCardHeader(
-                name: from.firstName,
+                name: from.profile.firstName,
                 type: Payload.FILE,
                 onAccept: () {
                   controller.acceptFile();
@@ -414,7 +413,7 @@ class _FileInviteComplete extends GetView<SonrCardController> {
   Widget buildView() {
     if (meta.mime.type == MIME_Type.image) {
       return Container(
-          width: 300, height: 300, child: Image.file(File(meta.path)));
+          width: 300, height: 200, child: Image.file(File(meta.path)));
     }
     // @ Video Player View
     else if (meta.mime.type == MIME_Type.video) {
@@ -425,10 +424,10 @@ class _FileInviteComplete extends GetView<SonrCardController> {
             child: Container(
               width: 300,
               height: 300,
-              child: AspectRatio(
-                aspectRatio: controller.videoController.value.aspectRatio,
-                child: VideoPlayer(controller.videoController),
-              ),
+              // child: AspectRatio(
+              //   aspectRatio: controller.videoController.value.aspectRatio,
+              //   child: VideoPlayer(controller.videoController),
+              // ),
             ),
           );
         });
@@ -455,7 +454,6 @@ class SonrCardController extends GetxController {
   final videoReady = false.obs;
   Metadata receivedMeta;
   File receivedFile;
-  VideoPlayerController videoController;
 
   // ^ Accept File Invite Request ^ //
   acceptFile() {
@@ -504,10 +502,5 @@ class SonrCardController extends GetxController {
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);
-  }
-
-  playVideo() async {
-    videoController = VideoPlayerController.file(receivedFile);
-    videoController.initialize().then((_) => videoReady(true));
   }
 }

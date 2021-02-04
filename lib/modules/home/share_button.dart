@@ -15,17 +15,16 @@ class ShareButton extends GetView<HomeController> {
         alignment: Alignment.bottomCenter,
         child: AnimatedContainer(
             padding: EdgeInsetsDirectional.only(start: 30),
-            width: controller.isShareExpanded.value
+            width: controller.isExpanded.value
                 ? Get.width / 2 + 165
                 : Get.width / 2 + 30,
-            height: controller.isShareExpanded.value ? 130 : 70,
+            height: controller.isExpanded.value ? 130 : 70,
             duration: 200.milliseconds,
             child: Center(
               child: NeumorphicButton(
-                  child: controller.isShareExpanded.value
-                      ? expandedView
-                      : defaultView,
-                  onPressed: controller.toggleExpand,
+                  child:
+                      controller.isExpanded.value ? expandedView : defaultView,
+                  onPressed: controller.toggleShareExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
                     surfaceIntensity: 0.6,
@@ -103,14 +102,7 @@ class _ExpandedView extends StatelessWidget {
                             height: Get.height,
                             child: _AnimatedButtonOption(
                               onPressed: () {
-                                if (Get.find<MediaPickerController>()
-                                    .hasGallery
-                                    .value) {
-                                  Get.bottomSheet(MediaPicker(),
-                                      isDismissible: false);
-                                } else {
-                                  controller.openPicker();
-                                }
+                                controller.openMediaPicker();
                               },
                               type: ArtboardType.Gallery,
                             ),

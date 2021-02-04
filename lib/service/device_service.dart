@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
@@ -13,12 +13,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
-enum PermissionType {
-  Location,
-  Camera,
-  Photos,
-  Notifications,
-}
+enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
 
 class DeviceService extends GetxService {
   // Properties
@@ -30,7 +25,7 @@ class DeviceService extends GetxService {
   SharedPreferences _prefs;
   bool hasLocation;
   bool hasUser;
-  Position position;
+  Pkg.Position position;
   User user;
 
   DeviceService() {
@@ -71,12 +66,30 @@ class DeviceService extends GetxService {
     intent.ReceiveSharingIntent.getInitialMedia()
         .then((List<intent.SharedMediaFile> data) {
       //incomingFile(value);
+      started.listen((val) {
+        // Check if Started
+        if (val) {
+          if (!Get.isBottomSheetOpen && hasUser && !data.isNullOrBlank) {
+            Get.bottomSheet(ShareSheet.media(data),
+                barrierColor: K_DIALOG_COLOR, isDismissible: false);
+          }
+        }
+      });
       print(data);
     });
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     intent.ReceiveSharingIntent.getInitialText().then((String text) {
       //incomingText(value);
+      started.listen((val) {
+        // Check if Started
+        if (val) {
+          if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
+            Get.bottomSheet(ShareSheet.url(text),
+                barrierColor: K_DIALOG_COLOR, isDismissible: false);
+          }
+        }
+      });
       print(text);
     });
     super.onInit();
@@ -117,6 +130,7 @@ class DeviceService extends GetxService {
           // Initialize Dependent Services
           Get.putAsync(
               () => SonrService().init(position, user.username, user.contact));
+          started(true);
         }
       } else {
         // Push to Register Screen
@@ -143,37 +157,28 @@ class DeviceService extends GetxService {
       // Initialize Dependent Services
       Get.putAsync(
           () => SonrService().init(position, user.username, user.contact));
+      started(true);
     } else {
       print("Location Permission Denied");
     }
   }
 
-  // ^ Get a Social Auth ^ //
-  List<String> getAuth(Contact_SocialTile_Provider provider) {
-    var result = _prefs.getStringList(provider.toString());
-    return result;
-  }
-
-  // ^ Save a Social Auth ^ //
-  Future<bool> saveAuth(
-      Contact_SocialTile_Provider provider, List<String> auth) async {
-    var result = await _prefs.setStringList(provider.toString(), auth);
-    return result;
-  }
-
-  // ^ Saves Media to Gallery ^ //
-  Future saveMedia(Metadata media) async {
+  // ^ Saves Received Media to Gallery ^ //
+  Future saveMediaFromMeta(Metadata media) async {
     // Get Data from Media
-    // final imgAlbum = "Sonr Images";
-    // final vidAlbum = "Sonr Videos";
     final path = media.path;
 
     // Save Image to Gallery
     await ImageGallerySaver.saveFile(path);
   }
 
+  // ^ Saves Photo to Gallery ^ //
+  Future savePhoto(String mediaPath) async {
+    // Save Image to Gallery
+    await ImageGallerySaver.saveFile(mediaPath);
+  }
+
   // ^ RequestPermission Event ^ //
-  // ignore: missing_return
   Future<bool> requestPermission(PermissionType type) async {
     switch (type) {
       case PermissionType.Location:
@@ -184,14 +189,20 @@ class DeviceService extends GetxService {
         return await Permission.camera.request().isGranted;
         break;
 
-      case PermissionType.Photos:
-        return await Permission.mediaLibrary.request().isGranted;
+      case PermissionType.Gallery:
+        return await Permission.photos.request().isGranted;
         break;
 
       case PermissionType.Notifications:
         return await Permission.notification.request().isGranted;
         break;
+
+      case PermissionType.Sound:
+        return await Permission.microphone.request().isGranted;
+        break;
+
       default:
+        return false;
         break;
     }
   }

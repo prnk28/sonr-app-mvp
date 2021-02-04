@@ -9,12 +9,11 @@ import 'package:rive/rive.dart';
 class PeerBubble extends GetWidget<PeerController> {
   final Peer peer;
   final int index;
-  PeerBubble(this.peer, this.index) {
-    controller.initialize(peer, index);
-  }
+  PeerBubble(this.peer, this.index) {}
 
   @override
   Widget build(BuildContext context) {
+    controller.initialize(peer, index);
     return Obx(() {
       return AnimatedPositioned(
           top: controller.offset.value.dy,

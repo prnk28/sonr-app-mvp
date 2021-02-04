@@ -229,7 +229,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
 class MediaPickerController extends GetxController {
   final allCollections = Rx<List<MediaCollection>>();
   final mediaCollection = Rx<MediaCollection>();
-  final allMedias = List<Media>().obs;
+  final allMedias = <Media>[].obs;
   final selectedFile = Rx<Media>();
   final hasGallery = false.obs;
   final loaded = false.obs;
@@ -324,7 +324,7 @@ class MediaPickerController extends GetxController {
     Get.find<SonrService>().process(Payload.FILE, file: mediaFile);
 
     // Close Share Button
-    Get.find<HomeController>().toggleExpand();
+    Get.find<HomeController>().toggleShareExpand();
 
     // Go to Transfer
     Get.offNamed("/transfer");

@@ -32,7 +32,7 @@ class YoutubeModel {
         ? new PageInfo.fromJson(json['pageInfo'])
         : null;
     if (json['items'] != null) {
-      items = new List<VideoList>();
+      items = <VideoList>[];
       json['items'].forEach((v) {
         items.add(new VideoList.fromJson(v));
       });

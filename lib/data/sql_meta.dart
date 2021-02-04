@@ -47,7 +47,7 @@ class MetaSQL {
     meta.name = map[fileColumnName];
     meta.path = map[fileColumnPath];
     meta.size = map[fileColumnSize];
-    meta.owner = Peer.fromJson(map[fileColumnOwner]);
+    meta.owner = Profile.fromJson(map[fileColumnOwner]);
     meta.mime = MIME.fromJson(map[fileColumnMime]);
     meta.received = map[fileColumnReceived];
     return MetaSQL(meta);
