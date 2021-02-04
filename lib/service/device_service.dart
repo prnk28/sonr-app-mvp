@@ -76,7 +76,7 @@ class DeviceService extends GetxService {
 
     // @ For sharing or opening urls/text coming from outside the app while the app is closed
     intent.ReceiveSharingIntent.getInitialText().then((String text) {
-      if (text != null && GetUtils.isURL(text)) {
+      if (text != null) {
         incomingText(text);
         incomingText.refresh();
       }
@@ -152,16 +152,28 @@ class DeviceService extends GetxService {
 
   // ^ Checks for Initial Media/Text to Share ^ //
   void checkInitialShare() {
-    // Check for Media
+    // @ Check for Media
     if (incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
+      // Open Sheet
       Get.bottomSheet(ShareSheet.media(incomingMedia),
           barrierColor: K_DIALOG_COLOR, isDismissible: false);
+
+      // Reset Incoming
+      incomingMedia.clear();
+      incomingMedia.refresh();
     }
 
-    // Check for Text
-    if (!incomingText.isBlank && !Get.isBottomSheetOpen) {
+    // @ Check for Text
+    if (incomingText.value != "" &&
+        GetUtils.isURL(incomingText.value) &&
+        !Get.isBottomSheetOpen) {
+      // Open Sheet
       Get.bottomSheet(ShareSheet.url(incomingText.value),
           barrierColor: K_DIALOG_COLOR, isDismissible: false);
+
+      // Reset Incoming
+      incomingText("");
+      incomingText.refresh();
     }
   }
 
