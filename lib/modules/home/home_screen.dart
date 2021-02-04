@@ -1,6 +1,7 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/modules/home/share_button.dart';
+import 'package:sonar_app/service/device_service.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'package:sonr_core/sonr_core.dart';
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
+    // Check for Initial Media after connected
+    Get.find<DeviceService>().checkInitialShare();
+
     // Build View
     return SonrTheme(
         child: Scaffold(

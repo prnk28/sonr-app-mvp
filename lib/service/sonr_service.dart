@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:get/get.dart' hide Node;
+import 'package:sonar_app/data/model_user.dart';
 import 'package:sonar_app/modules/transfer/peer_controller.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -52,10 +53,10 @@ class SonrService extends GetxService {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(
-      Pkg.Position pos, String username, Contact contact) async {
+      Pkg.Position pos, User user) async {
     // Create Worker
     _node = await SonrCore.initialize(
-        pos.latitude, pos.longitude, username, contact);
+        pos.latitude, pos.longitude, user.username, user.contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Connected, _handleConnected);
