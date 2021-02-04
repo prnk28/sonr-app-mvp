@@ -42,6 +42,15 @@ class HomeController extends GetxController {
   // References
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
+  // ^ Check for Initial Media after connected ^ //
+  HomeController() {
+    Get.find<SonrService>().connected.listen((conn) {
+      if (conn) {
+        Get.find<DeviceService>().checkInitialShare();
+      }
+    });
+  }
+
   @override
   void onInit() {
     // Fetch File Data

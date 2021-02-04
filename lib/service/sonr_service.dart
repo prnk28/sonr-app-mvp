@@ -23,6 +23,7 @@ enum SonrStatus {
 
 class SonrService extends GetxService {
   // @ Set Properties
+  final connected = false.obs;
   final direction = 0.0.obs;
   final peers = Map<String, Peer>().obs;
   final exited = <String>[].obs;
@@ -30,7 +31,6 @@ class SonrService extends GetxService {
   final progress = 0.0.obs;
 
   // @ Set References
-  bool _connected = false;
   Node _node;
   final payload = Rx<Payload>();
   PeerController _peerController;
@@ -44,7 +44,7 @@ class SonrService extends GetxService {
       direction(dir.heading);
 
       // Get Current Direction and Update Cubit
-      if (_connected) {
+      if (connected.value) {
         _node.update(dir.headingForCameraMode);
       }
     });
@@ -68,30 +68,10 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
-    _connected = true;
-    _checkInitial();
+    connected(true);
 
     // Return Service
     return this;
-  }
-
-  // ^ Checks for Initial Media/Text to Share ^ //
-  void _checkInitial() {
-    // Get Data
-    var initialMedia = Get.find<DeviceService>().initialSharedMedia;
-    var initialText = Get.find<DeviceService>().initialSharedText;
-
-    // Check for Media
-    if (initialMedia.isNotEmpty && !Get.isBottomSheetOpen) {
-      Get.bottomSheet(ShareSheet.media(initialMedia),
-          barrierColor: K_DIALOG_COLOR, isDismissible: false);
-    }
-
-    // Check for Text
-    if (!initialText.isBlank && !Get.isBottomSheetOpen) {
-      Get.bottomSheet(ShareSheet.url(initialText.value),
-          barrierColor: K_DIALOG_COLOR, isDismissible: false);
-    }
   }
 
   // ***********************

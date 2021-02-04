@@ -20,8 +20,8 @@ class DeviceService extends GetxService {
   // Properties
   final contact = Rx<Contact>();
   final started = false.obs;
-  final initialSharedMedia = <SharedMediaFile>[].obs;
-  final initialSharedText = "".obs;
+  final incomingMedia = <SharedMediaFile>[].obs;
+  final incomingText = "".obs;
 
   // References
   StreamSubscription _intentDataStreamSubscription;
@@ -69,14 +69,14 @@ class DeviceService extends GetxService {
     intent.ReceiveSharingIntent.getInitialMedia()
         .then((List<intent.SharedMediaFile> data) {
       if (data.isNotEmpty) {
-        initialSharedMedia(data);
+        incomingMedia(data);
       }
     });
 
     // @ For sharing or opening urls/text coming from outside the app while the app is closed
     intent.ReceiveSharingIntent.getInitialText().then((String text) {
-      if (text.isNotEmpty) {
-        initialSharedText(text);
+      if (text.length > 0) {
+        incomingText(text);
       }
     });
     super.onInit();
@@ -147,6 +147,21 @@ class DeviceService extends GetxService {
       started(true);
     } else {
       print("Location Permission Denied");
+    }
+  }
+
+  // ^ Checks for Initial Media/Text to Share ^ //
+  void checkInitialShare() {
+    // Check for Media
+    if (incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
+      Get.bottomSheet(ShareSheet.media(incomingMedia),
+          barrierColor: K_DIALOG_COLOR, isDismissible: false);
+    }
+
+    // Check for Text
+    if (!incomingText.isBlank && !Get.isBottomSheetOpen) {
+      Get.bottomSheet(ShareSheet.url(incomingText.value),
+          barrierColor: K_DIALOG_COLOR, isDismissible: false);
     }
   }
 
