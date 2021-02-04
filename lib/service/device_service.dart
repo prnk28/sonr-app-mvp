@@ -163,13 +163,19 @@ class DeviceService extends GetxService {
     }
   }
 
-  // ^ Saves Media to Gallery ^ //
-  Future saveMedia(Metadata media) async {
+  // ^ Saves Received Media to Gallery ^ //
+  Future saveMediaFromMeta(Metadata media) async {
     // Get Data from Media
     final path = media.path;
 
     // Save Image to Gallery
     await ImageGallerySaver.saveFile(path);
+  }
+
+  // ^ Saves Photo to Gallery ^ //
+  Future savePhoto(String mediaPath) async {
+    // Save Image to Gallery
+    await ImageGallerySaver.saveFile(mediaPath);
   }
 
   // ^ RequestPermission Event ^ //

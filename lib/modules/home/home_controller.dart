@@ -9,7 +9,7 @@ import 'package:sonar_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonar_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import 'camera_view.dart';
+import 'camera_picker.dart';
 import 'media_picker.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -26,14 +26,6 @@ class HomeController extends GetxController {
 
   // References
   final category = Rx<ToggleFilter>(ToggleFilter.All);
-
-  // Notifiers
-  ValueNotifier<CameraFlashes> switchFlash = ValueNotifier(CameraFlashes.NONE);
-  ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.BACK);
-  ValueNotifier<Size> photoSize = ValueNotifier(null);
-
-  // Controllers
-  PictureController pictureController = new PictureController();
 
   @override
   void onInit() {
@@ -95,10 +87,10 @@ class HomeController extends GetxController {
         .then((result) {
       if (result) {
         // Toggle Share Expand
-        toggleShareExpand(options: ToggleForced(true));
+        toggleShareExpand(options: ToggleForced(false));
 
         // Show Picker
-        Get.dialog(CameraView());
+        Get.dialog(CameraPicker());
       } else {
         // Display Error
         SonrSnack.error("Sonr isnt permitted to access your media.");

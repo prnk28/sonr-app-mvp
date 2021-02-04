@@ -247,7 +247,7 @@ class SonrService extends GetxService {
 
       // Save Card
       Get.find<SQLService>().storeFile(data);
-      Get.find<DeviceService>().saveMedia(data);
+      Get.find<DeviceService>().saveMediaFromMeta(data);
       Get.find<SonrCardController>().received(data);
       HapticFeedback.vibrate();
     }

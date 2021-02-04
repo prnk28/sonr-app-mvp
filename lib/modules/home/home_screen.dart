@@ -30,7 +30,7 @@ class HomeScreen extends GetView<HomeController> {
             floatingActionButton: ShareButton(),
             body: GestureDetector(
                 onTap: () =>
-                    controller.toggleShareExpand(options: ToggleForced(true)),
+                    controller.toggleShareExpand(options: ToggleForced(false)),
                 child: _HomeView())));
   }
 }
@@ -60,7 +60,7 @@ class _HomeView extends GetView<HomeController> {
       ),
       Obx(() => GestureDetector(
             onTap: () =>
-                controller.toggleShareExpand(options: ToggleForced(true)),
+                controller.toggleShareExpand(options: ToggleForced(false)),
             child: Container(
               padding: EdgeInsets.only(top: 15),
               margin: EdgeInsets.all(10),
@@ -117,7 +117,7 @@ class _TransferItem extends GetView<HomeController> {
     // @ Return View
     return GestureDetector(
         onTap: () async {
-          controller.toggleShareExpand(options: ToggleForced(true));
+          controller.toggleShareExpand(options: ToggleForced(false));
         },
         child: Neumorphic(
             style: NeumorphicStyle(intensity: 0.85),
