@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonar_app/data/model_user.dart';
 import 'package:sonar_app/service/sonr_service.dart';
@@ -19,6 +20,8 @@ class DeviceService extends GetxService {
   // Properties
   final contact = Rx<Contact>();
   final started = false.obs;
+  final initialSharedMedia = <SharedMediaFile>[].obs;
+  final initialSharedText = "".obs;
 
   // References
   StreamSubscription _intentDataStreamSubscription;
@@ -62,35 +65,19 @@ class DeviceService extends GetxService {
 
   @override
   void onInit() {
-    // For sharing images coming from outside the app while the app is closed
+    // @ For sharing images coming from outside the app while the app is closed
     intent.ReceiveSharingIntent.getInitialMedia()
         .then((List<intent.SharedMediaFile> data) {
-      //incomingFile(value);
-      started.listen((val) {
-        // Check if Started
-        if (val) {
-          if (!Get.isBottomSheetOpen && hasUser && !data.isNullOrBlank) {
-            Get.bottomSheet(ShareSheet.media(data),
-                barrierColor: K_DIALOG_COLOR, isDismissible: false);
-          }
-        }
-      });
-      print(data);
+      if (data.isNotEmpty) {
+        initialSharedMedia(data);
+      }
     });
 
-    // For sharing or opening urls/text coming from outside the app while the app is closed
+    // @ For sharing or opening urls/text coming from outside the app while the app is closed
     intent.ReceiveSharingIntent.getInitialText().then((String text) {
-      //incomingText(value);
-      started.listen((val) {
-        // Check if Started
-        if (val) {
-          if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
-            Get.bottomSheet(ShareSheet.url(text),
-                barrierColor: K_DIALOG_COLOR, isDismissible: false);
-          }
-        }
-      });
-      print(text);
+      if (text.isNotEmpty) {
+        initialSharedText(text);
+      }
     });
     super.onInit();
   }

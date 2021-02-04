@@ -1,9 +1,4 @@
-import 'dart:io';
-
-import 'package:camerawesome/models/flashmodes.dart';
-import 'package:camerawesome/picture_controller.dart';
-import 'package:camerawesome/sensors.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:sonar_app/data/model_card.dart';
 import 'package:sonar_app/service/device_service.dart';
@@ -120,14 +115,14 @@ class HomeController extends GetxController {
 
   // ^ Opens File Picker UI ^ //
   void openFilePicker() async {
-    // Await for Picker
-    FilePickerResult result = await FilePicker.platform.pickFiles(
-        type: FileType.custom, allowedExtensions: K_ALLOWED_FILE_TYPES);
+    // // Await for Picker
+    // FilePickerResult result = await FilePicker.platform.pickFiles(
+    //     type: FileType.custom, allowedExtensions: K_ALLOWED_FILE_TYPES);
 
-    // Get File
-    if (result != null) {
-      File file = File(result.files.single.path);
-    }
+    // // Get File
+    // if (result != null) {
+    //   File file = File(result.files.single.path);
+    // }
   }
 
   // ^ Opens Media Picker UI ^ //

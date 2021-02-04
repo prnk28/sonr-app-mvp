@@ -25,7 +25,7 @@ class SonrService extends GetxService {
   // @ Set Properties
   final direction = 0.0.obs;
   final peers = Map<String, Peer>().obs;
-  final exited = List<String>().obs;
+  final exited = <String>[].obs;
   final olc = "".obs;
   final progress = 0.0.obs;
 
@@ -69,9 +69,29 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
     _connected = true;
+    _checkInitial();
 
     // Return Service
     return this;
+  }
+
+  // ^ Checks for Initial Media/Text to Share ^ //
+  void _checkInitial() {
+    // Get Data
+    var initialMedia = Get.find<DeviceService>().initialSharedMedia;
+    var initialText = Get.find<DeviceService>().initialSharedText;
+
+    // Check for Media
+    if (initialMedia.isNotEmpty && !Get.isBottomSheetOpen) {
+      Get.bottomSheet(ShareSheet.media(initialMedia),
+          barrierColor: K_DIALOG_COLOR, isDismissible: false);
+    }
+
+    // Check for Text
+    if (!initialText.isBlank && !Get.isBottomSheetOpen) {
+      Get.bottomSheet(ShareSheet.url(initialText.value),
+          barrierColor: K_DIALOG_COLOR, isDismissible: false);
+    }
   }
 
   // ***********************
