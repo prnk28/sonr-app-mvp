@@ -27,7 +27,6 @@ class SonrService extends GetxService {
   final connected = false.obs;
   final direction = 0.0.obs;
   final peers = Map<String, Peer>().obs;
-  final exited = <String>[].obs;
   final olc = "".obs;
   final progress = 0.0.obs;
 
@@ -52,8 +51,7 @@ class SonrService extends GetxService {
   }
 
   // ^ Initialize Service Method ^ //
-  Future<SonrService> init(
-      Pkg.Position pos, User user) async {
+  Future<SonrService> init(Pkg.Position pos, User user) async {
     // Create Worker
     _node = await SonrCore.initialize(
         pos.latitude, pos.longitude, user.username, user.contact);
@@ -176,6 +174,7 @@ class SonrService extends GetxService {
     if (data is AuthInvite) {
       Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
+      print(data.toString());
 
       // Check Payload Type
       switch (data.payload) {

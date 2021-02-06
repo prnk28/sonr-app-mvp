@@ -9,7 +9,7 @@ import 'package:rive/rive.dart';
 class PeerBubble extends GetWidget<PeerController> {
   final Peer peer;
   final int index;
-  PeerBubble(this.peer, this.index) {}
+  PeerBubble(this.peer, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +62,12 @@ class PeerBubble extends GetWidget<PeerController> {
             return AnimatedOpacity(
                 opacity: value,
                 duration: 500.milliseconds,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(padding: EdgeInsets.all(8)),
-                      SonrIcon.device(IconType.Gradient, controller.peer,
-                          size: 24),
-                      SonrText.initials(controller.peer),
-                      Padding(padding: EdgeInsets.all(8)),
-                    ]));
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Padding(padding: EdgeInsets.all(8)),
+                  SonrIcon.device(IconType.Gradient, controller.peer, size: 24),
+                  SonrText.initials(controller.peer),
+                  Padding(padding: EdgeInsets.all(8)),
+                ]));
           });
     } else {
       return PlayAnimation<double>(
@@ -82,16 +78,12 @@ class PeerBubble extends GetWidget<PeerController> {
             return AnimatedOpacity(
                 opacity: value,
                 duration: 20.milliseconds,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(padding: EdgeInsets.all(8)),
-                      SonrIcon.device(IconType.Gradient, controller.peer,
-                          size: 24),
-                      SonrText.initials(controller.peer),
-                      Padding(padding: EdgeInsets.all(8)),
-                    ]));
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Padding(padding: EdgeInsets.all(8)),
+                  SonrIcon.device(IconType.Gradient, controller.peer, size: 24),
+                  SonrText.initials(controller.peer),
+                  Padding(padding: EdgeInsets.all(8)),
+                ]));
           });
     }
   }

@@ -12,10 +12,7 @@ class TransferScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SonrTheme(
         child: Scaffold(
-            appBar: SonrAppBar.leading(
-                Get.find<SonrService>().olc.value,
-                SonrButton.appBar(
-                    SonrIcon.close, () => Get.offNamed("/home/transfer"))),
+            appBar: SonrAppBar.leading(Get.find<SonrService>().olc.value, SonrButton.appBar(SonrIcon.close, () => Get.offNamed("/home/transfer"))),
             backgroundColor: NeumorphicTheme.baseColor(context),
             body: SafeArea(
                 child: Stack(
@@ -49,21 +46,13 @@ class LobbyView extends GetView<TransferController> {
         controller.addPeer(id, peer);
       });
 
-      // @ Listen to Exited Updates
-      Get.find<SonrService>().exited().forEach((id) {
-        controller.removePeer(id);
-      });
-
       // Present Text
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
           duration: 200.milliseconds,
           delay: 200.milliseconds,
           builder: (context, child, value) {
-            return AnimatedOpacity(
-                opacity: value,
-                duration: 200.milliseconds,
-                child: Stack(children: List.from(controller.stackItems)));
+            return AnimatedOpacity(opacity: value, duration: 200.milliseconds, child: Stack(children: List.from(controller.stackItems)));
           });
     });
   }
