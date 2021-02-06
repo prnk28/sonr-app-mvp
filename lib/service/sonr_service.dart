@@ -53,8 +53,7 @@ class SonrService extends GetxService {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init(Pkg.Position pos, User user) async {
     // Create Worker
-    _node = await SonrCore.initialize(
-        pos.latitude, pos.longitude, user.username, user.contact);
+    _node = await SonrCore.initialize(pos.latitude, pos.longitude, user.username, user.contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Connected, _handleConnected);
@@ -77,12 +76,7 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Process-File Event ^
-  void process(Payload type,
-      {File file,
-      String url,
-      bool isExtern = false,
-      int duration = 0,
-      String thumbPath = ""}) async {
+  void process(Payload type, {File file, String url, bool isExtern = false, int duration = 0, String thumbPath = ""}) async {
     // Set Payload Type
     payload(type);
 
@@ -90,8 +84,7 @@ class SonrService extends GetxService {
     if (payload.value == Payload.FILE) {
       assert(file != null);
 
-      _node.processFile(isExtern, file.path,
-          thumbPath: thumbPath, duration: duration);
+      _node.processFile(false, file.path);
     }
 
     // Link Payload
@@ -179,17 +172,13 @@ class SonrService extends GetxService {
       // Check Payload Type
       switch (data.payload) {
         case Payload.CONTACT:
-          Get.dialog(SonrCard.fromInviteContact(data.contact),
-              barrierColor: K_DIALOG_COLOR);
+          Get.dialog(SonrCard.fromInviteContact(data.contact), barrierColor: K_DIALOG_COLOR);
           break;
         case Payload.FILE:
-          Get.dialog(SonrCard.fromInviteFile(data),
-              barrierColor: K_DIALOG_COLOR);
+          Get.dialog(SonrCard.fromInviteFile(data), barrierColor: K_DIALOG_COLOR);
           break;
         case Payload.URL:
-          Get.dialog(
-              SonrCard.fromInviteUrl(data.url, data.from.profile.firstName),
-              barrierColor: K_DIALOG_COLOR);
+          Get.dialog(SonrCard.fromInviteUrl(data.url, data.from.profile.firstName), barrierColor: K_DIALOG_COLOR);
           break;
       }
     }
