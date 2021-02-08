@@ -30,7 +30,7 @@ class ShareSheet extends StatelessWidget {
           child: _ShareItem(false, sharedFiles: sharedFiles, size: content),
         ),
         size: window,
-        payloadType: Payload.FILE);
+        payloadType: Payload.MEDIA);
   }
 
   // @ Bottom Sheet for URL
@@ -177,7 +177,7 @@ class _ShareItem extends StatelessWidget {
 
     // Set Payload
     Get.find<SonrService>()
-        .process(Payload.FILE, file: File(sharedIntent.path), duration: sharedIntent.duration, isExtern: true, thumbPath: sharedIntent.thumbnail);
+        .process(Payload.MEDIA, file: File(sharedIntent.path), duration: sharedIntent.duration, isExtern: true, thumbPath: sharedIntent.thumbnail);
 
     // Create View
     return ClipRRect(

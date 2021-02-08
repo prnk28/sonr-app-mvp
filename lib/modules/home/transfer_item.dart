@@ -3,12 +3,11 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:sonr_app/data/model_card.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Home Screen Item ** //
 class TransferItem extends GetView<HomeController> {
-  final CardModel card;
+  final TransferCard card;
   TransferItem(this.card);
 
   @override
@@ -28,29 +27,26 @@ class TransferItem extends GetView<HomeController> {
   }
 
   // ^ Method Creates Card Widget ^ //
-  Widget buildCard(CardModel card) {
-    switch (card.type) {
-      case CardType.File:
-        return _buildMediaItem(card.metadata);
+  Widget buildCard(TransferCard card) {
+    switch (card.payload) {
+      case Payload.MEDIA:
+        return _buildMediaItem(card.metadata, card);
         break;
-      case CardType.Contact:
+      case Payload.CONTACT:
         return _buildContactItem(card.contact);
-        break;
-      case CardType.Image:
-        return _buildMediaItem(card.metadata);
         break;
     }
     return Container();
   }
 
   // @ Method Builds Media Content from Metadata ^ //
-  Widget _buildMediaItem(Metadata metadata) {
+  Widget _buildMediaItem(Metadata metadata, TransferCard card) {
     return Hero(
       tag: metadata.id,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         SonrText.normal(metadata.mime.type.toString()),
-        SonrText.normal("Owner: " + metadata.owner.firstName),
-        Image.memory(metadata.thumbnail)
+        SonrText.normal("Owner: " + card.firstName),
+        Image.memory(metadata.thumbnail),
       ]),
     );
   }

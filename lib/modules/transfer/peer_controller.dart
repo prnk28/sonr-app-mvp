@@ -95,7 +95,7 @@ class PeerController extends GetxController {
       Get.find<SonrService>().invite(this);
 
       // Check for File
-      if (Get.find<SonrService>().payload.value == Payload.FILE) {
+      if (Get.find<SonrService>().payload.value == Payload.MEDIA) {
         isContentVisible(true);
         _pending.instance.animation.loop = Loop.pingPong;
         _pending.isActive = _isInvited = !_isInvited;

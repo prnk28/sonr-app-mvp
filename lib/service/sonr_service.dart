@@ -80,7 +80,7 @@ class SonrService extends GetxService {
     payload(type);
 
     // File Payload
-    if (payload.value == Payload.FILE) {
+    if (payload.value == Payload.MEDIA) {
       assert(file != null);
 
       _node.processFile(false, file.path);
@@ -99,7 +99,7 @@ class SonrService extends GetxService {
     _peerController = c;
 
     // File Payload
-    if (payload.value == Payload.FILE) {
+    if (payload.value == Payload.MEDIA) {
       // Check Status
       if (_processed) {
         await _node.inviteFile(c.peer);
@@ -129,12 +129,6 @@ class SonrService extends GetxService {
     await _node.respond(decision);
   }
 
-  // ^ Save and Reset Status ^
-  void saveContact(Contact c) async {
-    // Save Card
-    Get.find<SQLService>().storeContact(c);
-  }
-
   // **************************
   // ******* Callbacks ********
   // **************************
@@ -154,7 +148,7 @@ class SonrService extends GetxService {
 
   // ^ File has Succesfully Queued ^ //
   void _handleQueued(dynamic data) async {
-    if (data is Preview) {
+    if (data is TransferCard) {
       // Update data
       _processed = true;
     }
@@ -166,19 +160,7 @@ class SonrService extends GetxService {
     if (data is AuthInvite) {
       Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
-
-      // Check Payload Type
-      switch (data.payload) {
-        case Payload.CONTACT:
-          Get.dialog(SonrCard.fromInviteContact(data.contact), barrierColor: K_DIALOG_COLOR);
-          break;
-        case Payload.FILE:
-          Get.dialog(SonrCard.fromInviteFile(data), barrierColor: K_DIALOG_COLOR);
-          break;
-        case Payload.URL:
-          Get.dialog(SonrCard.fromInviteUrl(data.url, data.from.profile.firstName), barrierColor: K_DIALOG_COLOR);
-          break;
-      }
+      Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -188,7 +170,7 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
-        Get.dialog(SonrCard.fromReplyContact(data.contact));
+        Get.dialog(SonrCard.fromReply(data));
       } else {
         // For File
         if (data.decision) {
@@ -233,14 +215,14 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   void _handleReceived(dynamic data) {
-    if (data is Metadata) {
+    if (data is TransferCard) {
       // Reset Data
       progress(0.0);
       print(data.toString());
 
       // Save Card
-      Get.find<SQLService>().storeFile(data);
-      Get.find<DeviceService>().saveMediaFromMeta(data);
+      // Get.find<SQLService>().storeFile(data);
+      Get.find<DeviceService>().saveMediaFromCard(data);
       Get.find<SonrCardController>().received(data);
       HapticFeedback.vibrate();
     }

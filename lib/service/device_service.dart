@@ -168,9 +168,9 @@ class DeviceService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  Future saveMediaFromMeta(Metadata media) async {
+  Future saveMediaFromCard(TransferCard card) async {
     // Get Data from Media
-    final path = media.path;
+    final path = card.metadata.path;
 
     // Save Image to Gallery
     await ImageGallerySaver.saveFile(path);

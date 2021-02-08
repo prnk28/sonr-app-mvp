@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:sonr_app/data/model_card.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -23,28 +23,37 @@ class SonrCard extends GetView<SonrCardController> {
 
   const SonrCard({Key key, @required this.child, @required this.payloadType, @required this.bottom});
 
-  // @ Dialog for Invite Contact
-  factory SonrCard.fromInviteContact(Contact contact) {
+  factory SonrCard.fromInvite(AuthInvite inv) {
+    // Check Payload Type
+    switch (inv.payload) {
+      case Payload.CONTACT:
+        final double contactbottom = 90;
+        return SonrCard(
+          child: _ContactInvite(inv.card),
+          payloadType: Payload.CONTACT,
+          bottom: contactbottom,
+        );
+      case Payload.MEDIA:
+        final double metaBottom = 180;
+        return SonrCard(
+          child: _FileInvite(inv.card, inv.from),
+          payloadType: inv.payload,
+          bottom: metaBottom,
+        );
+      case Payload.URL:
+        final double urlBottom = 450;
+        return SonrCard(
+          child: _URLInvite(inv.card.url, inv.from.profile.firstName),
+          payloadType: Payload.URL,
+          bottom: urlBottom,
+        );
+    }
+    return SonrCard(child: Container(), payloadType: Payload.UNDEFINED, bottom: 0);
+  }
+
+  factory SonrCard.fromReply(AuthReply reply) {
     final double contactbottom = 90;
-    return SonrCard(child: _ContactInvite(contact), payloadType: Payload.CONTACT, bottom: contactbottom);
-  }
-
-  // @ Dialog for Replied Contact
-  factory SonrCard.fromReplyContact(Contact c) {
-    final double contactbottom = 90;
-    return SonrCard(child: _ContactReply(c), payloadType: Payload.CONTACT, bottom: contactbottom);
-  }
-
-  // @ Dialog for Invite File
-  factory SonrCard.fromInviteFile(AuthInvite invite) {
-    final double metaBottom = 180;
-    return SonrCard(child: _FileInvite(invite.preview, invite.from), payloadType: Payload.FILE, bottom: metaBottom);
-  }
-
-  // @ Dialog for Invite URL
-  factory SonrCard.fromInviteUrl(String url, String firstName) {
-    final double urlBottom = 450;
-    return SonrCard(child: _URLInvite(url, firstName), payloadType: Payload.URL, bottom: urlBottom);
+    return SonrCard(child: _ContactReply(reply.card), payloadType: Payload.CONTACT, bottom: contactbottom);
   }
 
   @override
@@ -91,6 +100,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
                 if (type != Payload.URL && type != Payload.CONTACT) {
                   controller.declineInvite();
                 }
+                controller.state(CardState.None);
                 Get.back();
               },
             ),
@@ -114,8 +124,8 @@ class _SonrCardHeader extends GetView<SonrCardController> {
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
 class _ContactInvite extends GetView<SonrCardController> {
-  final Contact contact;
-  _ContactInvite(this.contact);
+  final TransferCard card;
+  _ContactInvite(this.card);
 
   @override
   Widget build(BuildContext context) {
@@ -123,24 +133,24 @@ class _ContactInvite extends GetView<SonrCardController> {
     return Column(mainAxisSize: MainAxisSize.max, children: [
       // @ Header
       _SonrCardHeader(
-          name: contact.firstName,
+          name: card.contact.firstName,
           type: Payload.CONTACT,
           onAccept: () {
-            controller.acceptContact(contact, false);
+            controller.acceptContact(card, false);
             Get.back();
           }),
       Padding(padding: EdgeInsets.all(8)),
 
       // @ Basic Contact Info - Make Expandable
-      SonrText.bold(contact.firstName),
-      SonrText.bold(contact.lastName),
+      SonrText.bold(card.contact.firstName),
+      SonrText.bold(card.contact.lastName),
 
       // @ Send Back Button
       Align(
         alignment: Alignment.bottomCenter,
         child: SonrButton.rectangle(SonrText.normal("Send yours back"), () {
           // Emit Event
-          controller.acceptContact(contact, true);
+          controller.acceptContact(card, true);
           Get.back();
         }),
       ),
@@ -150,8 +160,8 @@ class _ContactInvite extends GetView<SonrCardController> {
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
 class _ContactReply extends GetView<SonrCardController> {
-  final Contact contact;
-  _ContactReply(this.contact);
+  final TransferCard card;
+  _ContactReply(this.card);
 
   @override
   Widget build(BuildContext context) {
@@ -160,19 +170,19 @@ class _ContactReply extends GetView<SonrCardController> {
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         _SonrCardHeader(
-          name: contact.firstName,
+          name: card.contact.firstName,
           type: Payload.CONTACT,
           isReply: true,
           onAccept: () {
-            controller.acceptContact(contact, false);
+            controller.acceptContact(card, false);
             Get.back();
           },
         ),
         Padding(padding: EdgeInsets.all(8)),
 
         // @ Basic Contact Info - Make Expandable
-        SonrText.bold(contact.firstName),
-        SonrText.bold(contact.lastName),
+        SonrText.bold(card.contact.firstName),
+        SonrText.bold(card.contact.lastName),
       ]),
     );
   }
@@ -180,9 +190,9 @@ class _ContactReply extends GetView<SonrCardController> {
 
 // ^ File Invite Builds from Invite Protobuf ^ //
 class _FileInvite extends GetView<SonrCardController> {
-  final Preview preview;
+  final TransferCard card;
   final Peer from;
-  _FileInvite(this.preview, this.from);
+  _FileInvite(this.card, this.from);
 
   @override
   Widget build(BuildContext context) {
@@ -200,25 +210,25 @@ class _FileInvite extends GetView<SonrCardController> {
             // @ Header
             _SonrCardHeader(
                 name: from.profile.firstName,
-                type: Payload.FILE,
+                type: card.payload,
                 onAccept: () {
                   controller.acceptFile();
                 }),
             Padding(padding: EdgeInsets.all(8)),
 
             // @ Build Item from Metadata and Peer
-            Expanded(child: SonrIcon.preview(IconType.Thumbnail, preview)),
-            SonrText.normal(preview.mime.type.toString().capitalizeFirst, size: 22),
+            Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
+            SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
           ],
         );
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        child = _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, preview).data);
+        child = _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, card).data);
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
-        child = _FileInviteComplete(controller.receivedMeta);
+        child = _FileInviteComplete(controller.currentCard);
       }
 
       return AnimatedContainer(duration: Duration(seconds: 1), child: child);
@@ -350,9 +360,9 @@ class _FileInviteProgress extends HookWidget {
 
 // ^ File Received View ^ //
 class _FileInviteComplete extends GetView<SonrCardController> {
-  final Metadata meta;
+  final TransferCard card;
 
-  const _FileInviteComplete(this.meta, {Key key}) : super(key: key);
+  const _FileInviteComplete(this.card, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // @ Non-Image Type
@@ -360,7 +370,7 @@ class _FileInviteComplete extends GetView<SonrCardController> {
       // @ Header
       _SonrCardHeader(
         name: "",
-        type: Payload.FILE,
+        type: card.payload,
         hasAccept: false,
       ),
       Padding(padding: EdgeInsets.all(8)),
@@ -385,11 +395,11 @@ class _FileInviteComplete extends GetView<SonrCardController> {
   }
 
   Widget buildView() {
-    if (meta.mime.type == MIME_Type.image) {
-      return Container(width: 300, height: 200, child: Image.file(File(meta.path)));
+    if (card.metadata.mime.type == MIME_Type.image) {
+      return Container(width: 300, height: 200, child: Image.file(File(card.metadata.path)));
     }
     // @ Video Player View
-    else if (meta.mime.type == MIME_Type.video) {
+    else if (card.metadata.mime.type == MIME_Type.video) {
       // Video Player Ready
       if (controller.videoReady.value) {
         return Obx(() {
@@ -412,7 +422,7 @@ class _FileInviteComplete extends GetView<SonrCardController> {
     }
     // @ Unknown File Type
     else {
-      return Text(meta.mime.toString());
+      return Text(card.metadata.mime.toString());
     }
   }
 }
@@ -425,7 +435,7 @@ class SonrCardController extends GetxController {
   final state = CardState.None.obs;
   bool accepted = false;
   final videoReady = false.obs;
-  Metadata receivedMeta;
+  TransferCard currentCard;
   File receivedFile;
 
   // ^ Accept File Invite Request ^ //
@@ -436,21 +446,17 @@ class SonrCardController extends GetxController {
   }
 
   // ^ Accept Contact Invite Request ^ //
-  acceptContact(Contact c, bool sb) {
+  acceptContact(TransferCard c, bool sb) {
     // Check if Send Back
     if (sb) {
       Get.find<SonrService>().respond(true);
     }
 
-    // Save Contact
-    Get.find<SonrService>().saveContact(c);
-
-    // Create Contact Card
-    var card = CardModel.fromContact(c);
-    accepted = true;
+    // Save Card
+    Get.find<SQLService>().storeCard(c);
 
     // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(card);
+    Get.find<HomeController>().addCard(c);
   }
 
   // ^ Decline Invite Request ^ //
@@ -465,13 +471,10 @@ class SonrCardController extends GetxController {
   }
 
   // ^ Set File after Transfer^ //
-  received(Metadata meta) {
+  received(TransferCard card) {
     state(CardState.Received);
-    receivedMeta = meta;
-    receivedFile = File(meta.path);
-
-    // Create Metadata Card
-    var card = CardModel.fromMetadata(meta);
+    currentCard = card;
+    receivedFile = File(card.metadata.path);
 
     // Add to Cards Display Last Card
     Get.find<HomeController>().addCard(card);
