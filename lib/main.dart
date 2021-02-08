@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/service/social_service.dart';
-import 'package:sonar_app/service/sql_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/service/sql_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
@@ -85,10 +85,7 @@ class _AppState extends State<App> {
                   height: Get.height,
                   child: Center(
                       child: _riveArtboard == null
-                          ? const SizedBox(
-                              child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.blueAccent)))
+                          ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
                           : Rive(artboard: _riveArtboard))),
 
               // @ Fade Animation of Text
@@ -100,10 +97,8 @@ class _AppState extends State<App> {
                     return AnimatedOpacity(
                         opacity: value,
                         duration: 400.milliseconds,
-                        child: Padding(
-                            padding: EdgeInsets.only(top: 200),
-                            child: SonrText.header("Sonr",
-                                gradient: FlutterGradientNames.glassWater)));
+                        child:
+                            Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", gradient: FlutterGradientNames.glassWater)));
                   }),
             ],
           )),
@@ -115,46 +110,22 @@ class _AppState extends State<App> {
 // ignore: non_constant_identifier_names
 List<GetPage> get K_PAGES => [
       // ** Home Page ** //
-      GetPage(
-          name: '/home',
-          page: () => SonrTheme(child: HomeScreen()),
-          transition: Transition.zoom,
-          binding: HomeBinding()),
+      GetPage(name: '/home', page: () => SonrTheme(child: HomeScreen()), transition: Transition.zoom, binding: HomeBinding()),
 
       // ** Home Page - Incoming File ** //
-      GetPage(
-          name: '/home/incoming',
-          page: () => SonrTheme(child: HomeScreen()),
-          transition: Transition.cupertinoDialog,
-          binding: HomeBinding()),
+      GetPage(name: '/home/incoming', page: () => SonrTheme(child: HomeScreen()), transition: Transition.cupertinoDialog, binding: HomeBinding()),
 
       // ** Home Page - Back ** //
-      GetPage(
-          name: '/home/transfer',
-          page: () => SonrTheme(child: HomeScreen()),
-          transition: Transition.upToDown,
-          binding: HomeBinding()),
+      GetPage(name: '/home/transfer', page: () => SonrTheme(child: HomeScreen()), transition: Transition.upToDown, binding: HomeBinding()),
 
       // ** Home Page - Back ** //
-      GetPage(
-          name: '/home/profile',
-          page: () => SonrTheme(child: HomeScreen()),
-          transition: Transition.downToUp,
-          binding: HomeBinding()),
+      GetPage(name: '/home/profile', page: () => SonrTheme(child: HomeScreen()), transition: Transition.downToUp, binding: HomeBinding()),
 
       // ** Register Page ** //
-      GetPage(
-          name: '/register',
-          page: () => SonrTheme(child: RegisterScreen()),
-          transition: Transition.fade,
-          binding: RegisterBinding()),
+      GetPage(name: '/register', page: () => SonrTheme(child: RegisterScreen()), transition: Transition.fade, binding: RegisterBinding()),
 
       // ** Transfer Page ** //
-      GetPage(
-          name: '/transfer',
-          page: () => SonrTheme(child: TransferScreen()),
-          transition: Transition.downToUp,
-          binding: TransferBinding()),
+      GetPage(name: '/transfer', page: () => SonrTheme(child: TransferScreen()), transition: Transition.downToUp, binding: TransferBinding()),
 
       // ** Profile Page ** //
       GetPage(

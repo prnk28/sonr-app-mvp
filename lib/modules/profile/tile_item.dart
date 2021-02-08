@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/modules/profile/tile_controller.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/modules/profile/tile_controller.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Builds Social Tile ** //
@@ -18,8 +18,7 @@ class SocialTileItem extends GetWidget<TileController> {
     return Stack(children: [
       // Draggable Aspect
       LongPressDraggable(
-          feedback: _buildView(controller.state.value == TileState.Editing,
-              isDragging: true),
+          feedback: _buildView(controller.state.value == TileState.Editing, isDragging: true),
           child: _buildView(controller.state.value == TileState.Editing),
           data: item,
           childWhenDragging: Container(),
@@ -64,10 +63,8 @@ class SocialTileItem extends GetWidget<TileController> {
       child: Neumorphic(
         margin: EdgeInsets.all(4),
         style: isEditing
-            ? NeumorphicStyle(
-                intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
-            : NeumorphicStyle(
-                intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
+            ? NeumorphicStyle(intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
+            : NeumorphicStyle(intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
         child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,

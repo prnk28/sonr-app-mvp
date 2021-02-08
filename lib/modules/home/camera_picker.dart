@@ -6,9 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import 'home_controller.dart';
@@ -32,19 +32,17 @@ class CameraPicker extends GetView<CameraPickerController> {
             Container(
               alignment: Alignment.bottomCenter,
               padding: EdgeInsets.only(bottom: 25),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Left Button - Cancel and Retake
-                    SonrButton.close(() {
-                      controller.clearPhoto();
-                    }),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                // Left Button - Cancel and Retake
+                SonrButton.close(() {
+                  controller.clearPhoto();
+                }),
 
-                    // Right Button - Continue and Accept
-                    SonrButton.accept(() {
-                      controller.continuePhoto();
-                    }),
-                  ]),
+                // Right Button - Continue and Accept
+                SonrButton.accept(() {
+                  controller.continuePhoto();
+                }),
+              ]),
             ),
           ],
         );
@@ -67,15 +65,11 @@ class CameraPicker extends GetView<CameraPickerController> {
             Container(
               alignment: Alignment.bottomCenter,
               padding: EdgeInsets.only(bottom: 25),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SonrButton.circle(SonrText.normal(""), () {
-                      controller.capturePhoto();
-                    },
-                        icon: SonrIcon.gradient(
-                            Icons.camera, FlutterGradientNames.alchemistLab)),
-                  ]),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                SonrButton.circle(SonrText.normal(""), () {
+                  controller.capturePhoto();
+                }, icon: SonrIcon.gradient(Icons.camera, FlutterGradientNames.alchemistLab)),
+              ]),
             ),
             Container(
               alignment: Alignment.topLeft,
@@ -137,8 +131,7 @@ class CameraPickerController extends GetxController {
     // Save Photo
     Get.find<DeviceService>().savePhoto(capturePath.value);
 
-    Get.find<SonrService>()
-        .process(Payload.FILE, file: File(capturePath.value));
+    Get.find<SonrService>().process(Payload.FILE, file: File(capturePath.value));
 
     // Close Share Button
     Get.find<HomeController>().toggleShareExpand();

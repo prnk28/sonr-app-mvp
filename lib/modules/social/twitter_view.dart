@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sonar_app/data/social_twitter.dart';
-import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/service/social_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/data/social_twitter.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Medium Social View/Preview ** //
@@ -49,10 +49,8 @@ class _TwitterViewState extends State<TwitterView> {
 
   // ^ Fetches Data ^ //
   _fetch() async {
-    var res =
-        await Get.find<SocialMediaService>().getTweets(widget.item.username);
-    var resB = await Get.find<SocialMediaService>()
-        .getTwitterUser(widget.item.username);
+    var res = await Get.find<SocialMediaService>().getTweets(widget.item.username);
+    var resB = await Get.find<SocialMediaService>().getTwitterUser(widget.item.username);
     setState(() {
       tweets = res;
       user = resB;
@@ -81,22 +79,15 @@ class _TwitterViewState extends State<TwitterView> {
           },
         );
       } else {
-        return Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+        return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
     }
     // @ Build ShowCase View
     else {
       if (fetched) {
-        return Stack(children: [
-          _buildTile(tweets.tweets.first),
-          SonrIcon.socialBadge(Contact_SocialTile_Provider.Twitter)
-        ]);
+        return Stack(children: [_buildTile(tweets.tweets.first), SonrIcon.socialBadge(Contact_SocialTile_Provider.Twitter)]);
       } else {
-        return Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+        return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
     }
   }
@@ -110,10 +101,7 @@ class _TwitterViewState extends State<TwitterView> {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [
-            SonrText.description(tweet.text, size: 14),
-            SonrText.normal(_cleanDate(tweet.createdAt), size: 14)
-          ],
+          children: [SonrText.description(tweet.text, size: 14), SonrText.normal(_cleanDate(tweet.createdAt), size: 14)],
         ),
       ),
     );
@@ -123,30 +111,24 @@ class _TwitterViewState extends State<TwitterView> {
     return NeumorphicButton(
       padding: EdgeInsets.all(12),
       onPressed: () {
-        Get.find<DeviceService>().launchURL(
-            "https://twitter.com/${widget.item.username}/status/${tweet.id}");
+        Get.find<DeviceService>().launchURL("https://twitter.com/${widget.item.username}/status/${tweet.id}");
       },
       child: Container(
         width: 275,
         child: SingleChildScrollView(
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Container(
               width: 55,
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                ClipOval(child: Image.network(user.data.first.profilePicUrl)),
-                SonrText.normal(user.data.first.username, size: 10)
-              ]),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [ClipOval(child: Image.network(user.data.first.profilePicUrl)), SonrText.normal(user.data.first.username, size: 10)]),
             ),
             Container(
               width: 265,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SonrText.gradient(_cleanDate(tweet.createdAt),
-                      FlutterGradientNames.premiumDark,
-                      size: 20),
+                  SonrText.gradient(_cleanDate(tweet.createdAt), FlutterGradientNames.premiumDark, size: 20),
                   SonrText.description(tweet.text, size: 14),
                 ],
               ),

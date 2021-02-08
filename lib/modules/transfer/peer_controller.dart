@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/service/sonr_service.dart';
+import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -181,17 +181,14 @@ class PeerController extends GetxController {
   // ^ Calculate Peer Offset from Line ^ //
   Offset calculateOffset(Device device) {
     if (device.platform == "Mac") {
-      var pos = Tangent.fromAngle(
-          Offset(difference.value, Get.height / 5), direction.value);
+      var pos = Tangent.fromAngle(Offset(difference.value, Get.height / 5), direction.value);
       return pos.position;
     } else {
       if (proximity.value == Position_Proximity.Immediate) {
-        var pos = Tangent.fromAngle(
-            Offset(difference.value, Get.height / 5), direction.value);
+        var pos = Tangent.fromAngle(Offset(difference.value, Get.height / 5), direction.value);
         return pos.position;
       } else {
-        var pos = Tangent.fromAngle(
-            Offset(difference.value, Get.height / 14), direction.value);
+        var pos = Tangent.fromAngle(Offset(difference.value, Get.height / 14), direction.value);
         return pos.position;
       }
     }

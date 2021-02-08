@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 // ** Alert Dialog View ** //
 class SonrAlertDialog extends StatelessWidget {
@@ -29,21 +29,17 @@ class EditDialog extends StatelessWidget {
   final String textfieldLabel;
   final String textfieldHint;
   final String textfieldValue;
-  EditDialog(this.type, this.headerText, this.onChanged,
-      {this.textfieldLabel, this.textfieldHint, this.textfieldValue});
+  EditDialog(this.type, this.headerText, this.onChanged, {this.textfieldLabel, this.textfieldHint, this.textfieldValue});
 
-  factory EditDialog.colorPicker(
-      {@required String text, @required Function(dynamic) onChanged}) {
+  factory EditDialog.colorPicker({@required String text, @required Function(dynamic) onChanged}) {
     return EditDialog(EditType.Color, text, onChanged);
   }
 
-  factory EditDialog.colorComboPicker(
-      {@required String text, @required Function(dynamic) onChanged}) {
+  factory EditDialog.colorComboPicker({@required String text, @required Function(dynamic) onChanged}) {
     return EditDialog(EditType.ColorCombo, text, onChanged);
   }
 
-  factory EditDialog.textField(String label, String hint, String value,
-      {@required String text, @required Function(dynamic) onChanged}) {
+  factory EditDialog.textField(String label, String hint, String value, {@required String text, @required Function(dynamic) onChanged}) {
     return EditDialog(
       EditType.TextField,
       text,
@@ -66,39 +62,32 @@ class EditDialog extends StatelessWidget {
                 width: _getSize().width,
                 height: _getSize().height,
                 margin: EdgeInsets.only(left: 10, right: 10),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // @ Top Banner
-                      Expanded(
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Bottom Left Close/Cancel Button
-                              SonrButton.close(() {
-                                Get.back();
-                              }),
+                child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  // @ Top Banner
+                  Expanded(
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      // Bottom Left Close/Cancel Button
+                      SonrButton.close(() {
+                        Get.back();
+                      }),
 
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 20.0),
-                                child: SonrText.header("Edit + $headerText",
-                                    size: 24),
-                              ),
-
-                              // Bottom Right Confirm Button
-                              SonrButton.accept(() {
-                                Get.back();
-                              }),
-                            ]),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: SonrText.header("Edit + $headerText", size: 24),
                       ),
 
-                      // @ Window Content
-                      Spacer(),
-                      _buildView(),
-                      Spacer()
-                    ]))));
+                      // Bottom Right Confirm Button
+                      SonrButton.accept(() {
+                        Get.back();
+                      }),
+                    ]),
+                  ),
+
+                  // @ Window Content
+                  Spacer(),
+                  _buildView(),
+                  Spacer()
+                ]))));
   }
 
   // ^ Build View by EditType ^ //
@@ -113,11 +102,7 @@ class EditDialog extends StatelessWidget {
       case EditType.TextField:
         return Material(
           color: Colors.transparent,
-          child: SonrTextField(
-              hint: textfieldHint,
-              label: textfieldLabel,
-              value: textfieldValue,
-              onChanged: onChanged),
+          child: SonrTextField(hint: textfieldHint, label: textfieldLabel, value: textfieldValue, onChanged: onChanged),
         );
         break;
     }

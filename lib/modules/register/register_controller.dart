@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 class RegisterController extends GetxController {
@@ -24,7 +24,6 @@ class RegisterController extends GetxController {
   }
 
   _validate() {
-    return GetUtils.isAlphabetOnly(firstName.value) &&
-        GetUtils.isAlphabetOnly(lastName.value);
+    return GetUtils.isAlphabetOnly(firstName.value) && GetUtils.isAlphabetOnly(lastName.value);
   }
 }

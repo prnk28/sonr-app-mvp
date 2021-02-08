@@ -3,7 +3,7 @@ import 'peer_controller.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 
 class PeerBubble extends GetWidget<PeerController> {

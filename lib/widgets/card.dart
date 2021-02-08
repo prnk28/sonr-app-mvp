@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:sonar_app/data/model_card.dart';
-import 'package:sonar_app/modules/home/home_controller.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/data/model_card.dart';
+import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 enum CardState { None, Invitation, InProgress, Received, Viewing }
@@ -21,46 +21,30 @@ class SonrCard extends GetView<SonrCardController> {
   final Payload payloadType;
   final double bottom;
 
-  const SonrCard(
-      {Key key,
-      @required this.child,
-      @required this.payloadType,
-      @required this.bottom});
+  const SonrCard({Key key, @required this.child, @required this.payloadType, @required this.bottom});
 
   // @ Dialog for Invite Contact
   factory SonrCard.fromInviteContact(Contact contact) {
     final double contactbottom = 90;
-    return SonrCard(
-        child: _ContactInvite(contact),
-        payloadType: Payload.CONTACT,
-        bottom: contactbottom);
+    return SonrCard(child: _ContactInvite(contact), payloadType: Payload.CONTACT, bottom: contactbottom);
   }
 
   // @ Dialog for Replied Contact
   factory SonrCard.fromReplyContact(Contact c) {
     final double contactbottom = 90;
-    return SonrCard(
-        child: _ContactReply(c),
-        payloadType: Payload.CONTACT,
-        bottom: contactbottom);
+    return SonrCard(child: _ContactReply(c), payloadType: Payload.CONTACT, bottom: contactbottom);
   }
 
   // @ Dialog for Invite File
   factory SonrCard.fromInviteFile(AuthInvite invite) {
     final double metaBottom = 180;
-    return SonrCard(
-        child: _FileInvite(invite.preview, invite.from),
-        payloadType: Payload.FILE,
-        bottom: metaBottom);
+    return SonrCard(child: _FileInvite(invite.preview, invite.from), payloadType: Payload.FILE, bottom: metaBottom);
   }
 
   // @ Dialog for Invite URL
   factory SonrCard.fromInviteUrl(String url, String firstName) {
     final double urlBottom = 450;
-    return SonrCard(
-        child: _URLInvite(url, firstName),
-        payloadType: Payload.URL,
-        bottom: urlBottom);
+    return SonrCard(child: _URLInvite(url, firstName), payloadType: Payload.URL, bottom: urlBottom);
   }
 
   @override
@@ -90,12 +74,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
   final bool isReply;
 
   // Constructer
-  _SonrCardHeader(
-      {@required this.type,
-      @required this.name,
-      this.isReply = false,
-      this.hasAccept = true,
-      this.onAccept});
+  _SonrCardHeader({@required this.type, @required this.name, this.isReply = false, this.hasAccept = true, this.onAccept});
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +96,7 @@ class _SonrCardHeader extends GetView<SonrCardController> {
             ),
 
             Expanded(
-              child: hasAccept
-                  ? SonrText.invite(type.toString(), name)
-                  : SonrText.header("Completed", size: 34),
+              child: hasAccept ? SonrText.invite(type.toString(), name) : SonrText.header("Completed", size: 34),
             ),
 
             // @ Top Right Confirm Button
@@ -231,15 +208,13 @@ class _FileInvite extends GetView<SonrCardController> {
 
             // @ Build Item from Metadata and Peer
             Expanded(child: SonrIcon.preview(IconType.Thumbnail, preview)),
-            SonrText.normal(preview.mime.type.toString().capitalizeFirst,
-                size: 22),
+            SonrText.normal(preview.mime.type.toString().capitalizeFirst, size: 22),
           ],
         );
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardState.InProgress) {
-        child = _FileInviteProgress(
-            SonrIcon.preview(IconType.Thumbnail, preview).data);
+        child = _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, preview).data);
       }
       // @ Check State of Card --> Completed Transfer
       else if (controller.state.value == CardState.Received) {
@@ -285,8 +260,7 @@ class _URLInvite extends GetView<SonrCardController> {
             child: Neumorphic(
                 style: NeumorphicStyle(
                   depth: -8,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                 ),
                 margin: EdgeInsets.all(10),
                 child: SingleChildScrollView(
@@ -412,8 +386,7 @@ class _FileInviteComplete extends GetView<SonrCardController> {
 
   Widget buildView() {
     if (meta.mime.type == MIME_Type.image) {
-      return Container(
-          width: 300, height: 200, child: Image.file(File(meta.path)));
+      return Container(width: 300, height: 200, child: Image.file(File(meta.path)));
     }
     // @ Video Player View
     else if (meta.mime.type == MIME_Type.video) {

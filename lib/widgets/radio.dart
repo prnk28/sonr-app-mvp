@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 class AnimatedTileRadio extends StatefulWidget {
   // Properties
@@ -8,9 +8,7 @@ class AnimatedTileRadio extends StatefulWidget {
   final ValueChanged<dynamic> onChanged;
   final dynamic groupValue;
 
-  const AnimatedTileRadio(this.type,
-      {Key key, @required this.onChanged, @required this.groupValue})
-      : super(key: key);
+  const AnimatedTileRadio(this.type, {Key key, @required this.onChanged, @required this.groupValue}) : super(key: key);
 
   @override
   _AnimatedTileRadioState createState() => _AnimatedTileRadioState();
@@ -43,18 +41,13 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
     return Column(children: [
       NeumorphicRadio(
         style: NeumorphicRadioStyle(
-            unselectedColor: K_BASE_COLOR,
-            selectedColor: K_BASE_COLOR,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+            unselectedColor: K_BASE_COLOR, selectedColor: K_BASE_COLOR, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
         child: SizedBox(
           height: 60,
           width: 60,
           child: Center(
               child: _riveArtboard == null
-                  ? const SizedBox(
-                      child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
+                  ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
                   : Rive(artboard: _riveArtboard)),
         ),
         value: widget.type,

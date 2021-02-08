@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 enum AppBarType {
   Title,
@@ -42,14 +42,11 @@ class SonrAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   factory SonrAppBar.action(String title, SonrButton action) {
-    return SonrAppBar(AppBarType.Action,
-        title: SonrText.appBar(title), action: action);
+    return SonrAppBar(AppBarType.Action, title: SonrText.appBar(title), action: action);
   }
 
-  factory SonrAppBar.leadingWithAction(
-      String title, SonrButton leading, SonrButton action) {
-    return SonrAppBar(AppBarType.LeadingAction,
-        title: SonrText.appBar(title), leading: leading, action: action);
+  factory SonrAppBar.leadingWithAction(String title, SonrButton leading, SonrButton action) {
+    return SonrAppBar(AppBarType.LeadingAction, title: SonrText.appBar(title), leading: leading, action: action);
   }
 
   @override
@@ -69,8 +66,7 @@ class SonrAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case AppBarType.LeadingAction:
         assert(title != null && action != null && leading != null);
-        return NeumorphicAppBar(
-            title: title, leading: leading, actions: [action]);
+        return NeumorphicAppBar(title: title, leading: leading, actions: [action]);
         break;
     }
     return Container();
@@ -84,12 +80,7 @@ class SonrDialogBar extends StatelessWidget {
   final Function onAccept;
 
   // Constructer
-  const SonrDialogBar(
-      {Key key,
-      @required this.title,
-      @required this.onCancel,
-      @required this.onAccept})
-      : super(key: key);
+  const SonrDialogBar({Key key, @required this.title, @required this.onCancel, @required this.onAccept}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

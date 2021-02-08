@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:media_gallery/media_gallery.dart';
@@ -21,9 +21,7 @@ class MediaPicker extends GetView<MediaPickerController> {
           style: NeumorphicStyle(color: K_BASE_COLOR),
           child: Column(children: [
             // Header Buttons
-            _MediaDropdownDialogBar(
-                onCancel: () => Get.back(),
-                onAccept: () => controller.confirmSelectedFile()),
+            _MediaDropdownDialogBar(onCancel: () => Get.back(), onAccept: () => controller.confirmSelectedFile()),
             Obx(() {
               if (controller.loaded.value) {
                 return _MediaGrid();
@@ -43,9 +41,7 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
   final Function onAccept;
 
   // Constructer
-  const _MediaDropdownDialogBar(
-      {Key key, @required this.onCancel, @required this.onAccept})
-      : super(key: key);
+  const _MediaDropdownDialogBar({Key key, @required this.onCancel, @required this.onAccept}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +78,7 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
                           isExpanded: true,
                           initialValue: controller.mediaCollection.value,
                           items: controller.allCollections.value,
-                          customWidgets: List<Widget>.generate(
-                              controller.allCollections.value.length,
-                              (index) => _buildOptionWidget(index)),
+                          customWidgets: List<Widget>.generate(controller.allCollections.value.length, (index) => _buildOptionWidget(index)),
                           onChanged: updateFn,
                         );
                       },
@@ -119,8 +113,7 @@ class _MediaGrid extends GetView<MediaPickerController> {
         width: 330,
         height: 368,
         child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10),
             itemCount: controller.allMedias.length,
             itemBuilder: (context, index) {
               return _MediaPickerItem(controller.allMedias[index]);
@@ -148,8 +141,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
   // Listen to Selected File
   @override
   void initState() {
-    selectedStream =
-        Get.find<MediaPickerController>().selectedFile.listen((val) {
+    selectedStream = Get.find<MediaPickerController>().selectedFile.listen((val) {
       if (widget.mediaFile == val) {
         if (!isPressed) {
           if (mounted) {
@@ -182,11 +174,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
     // Initialize Styles
     final defaultStyle = NeumorphicStyle(color: K_BASE_COLOR);
     final pressedStyle = NeumorphicStyle(
-        color: K_BASE_COLOR,
-        disableDepth: true,
-        intensity: 0,
-        border: NeumorphicBorder(
-            isEnabled: true, width: 4, color: Colors.greenAccent));
+        color: K_BASE_COLOR, disableDepth: true, intensity: 0, border: NeumorphicBorder(isEnabled: true, width: 4, color: Colors.greenAccent));
 
     // Build Button
     return NeumorphicButton(
@@ -200,8 +188,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
         children: [
           FutureBuilder(
               future: widget.mediaFile.getThumbnail(),
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
                 if (snapshot.hasData) {
                   return Image.memory(
                     Uint8List.fromList(snapshot.data),
@@ -216,9 +203,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
                   );
                 }
               }),
-          widget.mediaFile.mediaType == MediaType.video
-              ? SonrIcon.video
-              : const SizedBox()
+          widget.mediaFile.mediaType == MediaType.video ? SonrIcon.video : const SizedBox()
         ],
       ),
     );

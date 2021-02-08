@@ -1,33 +1,17 @@
 // import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/data/model_card.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/service/sql_service.dart';
+import 'package:sonr_app/data/model_card.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'camera_picker.dart';
 import 'media_picker.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
-const K_ALLOWED_FILE_TYPES = [
-  'pdf',
-  'doc',
-  'docx',
-  'ttf',
-  'mp3',
-  'xml',
-  'csv',
-  'key',
-  'ppt',
-  'pptx',
-  'xls',
-  'xlsm',
-  'xlsx',
-  'rtf',
-  'txt'
-];
+const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
   // Properties
@@ -97,9 +81,7 @@ class HomeController extends GetxController {
   // ^ Opens Camera Picker ^ //
   void openCamera() async {
     // Check for Permssions
-    Get.find<DeviceService>()
-        .requestPermission(PermissionType.Camera)
-        .then((result) {
+    Get.find<DeviceService>().requestPermission(PermissionType.Camera).then((result) {
       if (result) {
         // Toggle Share Expand
         toggleShareExpand(options: ToggleForced(false));
@@ -128,9 +110,7 @@ class HomeController extends GetxController {
   // ^ Opens Media Picker UI ^ //
   void openMediaPicker() async {
     // Check for Permssions
-    Get.find<DeviceService>()
-        .requestPermission(PermissionType.Gallery)
-        .then((result) {
+    Get.find<DeviceService>().requestPermission(PermissionType.Gallery).then((result) {
       if (result) {
         // Toggle Share Expand
         toggleShareExpand(options: ToggleForced(true));

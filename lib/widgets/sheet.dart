@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
@@ -14,19 +14,13 @@ class ShareSheet extends StatelessWidget {
   final Widget child;
   final Size size;
   final Payload payloadType;
-  const ShareSheet(
-      {Key key,
-      @required this.child,
-      @required this.size,
-      @required this.payloadType})
-      : super(key: key);
+  const ShareSheet({Key key, @required this.child, @required this.size, @required this.payloadType}) : super(key: key);
 
   // @ Bottom Sheet for Media
   factory ShareSheet.media(List<intent.SharedMediaFile> sharedFiles) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 3 + 150);
-    final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER,
-        window.height - S_CONTENT_HEIGHT_MODIFIER);
+    final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
     return ShareSheet(
@@ -43,8 +37,7 @@ class ShareSheet extends StatelessWidget {
   factory ShareSheet.url(String value) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 5 + 40);
-    final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER,
-        window.height - S_CONTENT_HEIGHT_MODIFIER);
+    final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
     return ShareSheet(
@@ -61,8 +54,7 @@ class ShareSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         backendColor: Colors.transparent,
         child: Neumorphic(
             style: NeumorphicStyle(color: K_BASE_COLOR),
@@ -70,34 +62,28 @@ class ShareSheet extends StatelessWidget {
                 width: size.width,
                 height: size.height,
                 margin: EdgeInsets.only(left: 10, right: 10),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // @ Top Banner
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Bottom Left Close/Cancel Button
-                            SonrButton.close(() {
-                              Get.back();
-                            }),
+                child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  // @ Top Banner
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    // Bottom Left Close/Cancel Button
+                    SonrButton.close(() {
+                      Get.back();
+                    }),
 
-                            SonrText.header("Share", size: 40),
+                    SonrText.header("Share", size: 40),
 
-                            // @ Top Right Confirm Button
-                            SonrButton.accept(() {
-                              // Go to Transfer
-                              Get.offNamed("/transfer");
-                            }),
-                          ]),
+                    // @ Top Right Confirm Button
+                    SonrButton.accept(() {
+                      // Go to Transfer
+                      Get.offNamed("/transfer");
+                    }),
+                  ]),
 
-                      // @ Window Content
-                      Spacer(),
-                      child,
-                      Spacer()
-                    ]))));
+                  // @ Window Content
+                  Spacer(),
+                  child,
+                  Spacer()
+                ]))));
   }
 }
 
@@ -106,12 +92,7 @@ class _ShareSheetContentView extends StatelessWidget {
   final Widget child;
   final bool isUrl;
   final Size size;
-  const _ShareSheetContentView(
-      {Key key,
-      @required this.child,
-      @required this.size,
-      @required this.isUrl})
-      : super(key: key);
+  const _ShareSheetContentView({Key key, @required this.child, @required this.size, @required this.isUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +135,7 @@ class _ShareSheetContentView extends StatelessWidget {
           child: Neumorphic(
               style: NeumorphicStyle(
                 depth: -8,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
               ),
               margin: EdgeInsets.all(10),
               child: child),
@@ -172,9 +152,7 @@ class _ShareItem extends StatelessWidget {
   final String urlText;
   final bool isURL;
 
-  const _ShareItem(this.isURL,
-      {@required this.size, this.sharedFiles, this.urlText, Key key})
-      : super(key: key);
+  const _ShareItem(this.isURL, {@required this.size, this.sharedFiles, this.urlText, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -195,15 +173,11 @@ class _ShareItem extends StatelessWidget {
 
   _buildMediaView() {
     // Get Shared File
-    intent.SharedMediaFile sharedIntent =
-        sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+    intent.SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
 
     // Set Payload
-    Get.find<SonrService>().process(Payload.FILE,
-        file: File(sharedIntent.path),
-        duration: sharedIntent.duration,
-        isExtern: true,
-        thumbPath: sharedIntent.thumbnail);
+    Get.find<SonrService>()
+        .process(Payload.FILE, file: File(sharedIntent.path), duration: sharedIntent.duration, isExtern: true, thumbPath: sharedIntent.thumbnail);
 
     // Create View
     return ClipRRect(

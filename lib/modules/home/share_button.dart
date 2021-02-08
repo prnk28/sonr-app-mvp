@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/home/home_controller.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 import 'media_picker.dart';
 
@@ -15,23 +15,19 @@ class ShareButton extends GetView<HomeController> {
         alignment: Alignment.bottomCenter,
         child: AnimatedContainer(
             padding: EdgeInsetsDirectional.only(start: 30),
-            width: controller.isExpanded.value
-                ? Get.width / 2 + 165
-                : Get.width / 2 + 30,
+            width: controller.isExpanded.value ? Get.width / 2 + 165 : Get.width / 2 + 30,
             height: controller.isExpanded.value ? 130 : 70,
             duration: 200.milliseconds,
             child: Center(
               child: NeumorphicButton(
-                  child:
-                      controller.isExpanded.value ? expandedView : defaultView,
+                  child: controller.isExpanded.value ? expandedView : defaultView,
                   onPressed: controller.toggleShareExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
                     surfaceIntensity: 0.6,
                     intensity: 0.75,
                     depth: 8,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
+                    boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
                   )),
             )),
       );
@@ -42,17 +38,14 @@ class ShareButton extends GetView<HomeController> {
 class _DefaultView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SonrIcon.send,
-          SonrText.header(
-            "Share",
-            size: 32,
-            gradient: FlutterGradientNames.glassWater,
-          )
-        ]);
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      SonrIcon.send,
+      SonrText.header(
+        "Share",
+        size: 32,
+        gradient: FlutterGradientNames.glassWater,
+      )
+    ]);
   }
 }
 
@@ -135,8 +128,7 @@ class _AnimatedButtonOption extends StatelessWidget {
   // Method to Return Type
   String get _typeText => type.toString().split('.').last;
 
-  const _AnimatedButtonOption({Key key, this.type, this.onPressed})
-      : super(key: key);
+  const _AnimatedButtonOption({Key key, this.type, this.onPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [

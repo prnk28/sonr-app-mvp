@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/social_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 export '../social/medium_view.dart';
 export '../social/twitter_view.dart';
@@ -88,8 +88,7 @@ class TileController extends GetxController {
     else if (step.value == TileStep.StepTwo) {
       // Update State
       if (currentTile.value.hasUsername()) {
-        if (await Get.find<SocialMediaService>()
-            .validate(currentTile.value.provider, currentTile.value.username)) {
+        if (await Get.find<SocialMediaService>().validate(currentTile.value.provider, currentTile.value.username)) {
           step(TileStep.StepThree);
         }
       } else {
@@ -104,8 +103,7 @@ class TileController extends GetxController {
     // Validate
     // if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
     // Set Position
-    currentTile.value.position =
-        Get.find<ProfileController>().socials.length - 1;
+    currentTile.value.position = Get.find<ProfileController>().socials.length - 1;
 
     // Add Tile to Contact and Save
     Get.find<ProfileController>().saveSocialTile(currentTile.value);
@@ -142,8 +140,7 @@ class TileController extends GetxController {
 
   // ^ Helper to Display Tile Options ^ //
   bool doesProviderAllowFeed(Contact_SocialTile_Provider provider) {
-    return (provider == Contact_SocialTile_Provider.Twitter ||
-        provider == Contact_SocialTile_Provider.Medium);
+    return (provider == Contact_SocialTile_Provider.Twitter || provider == Contact_SocialTile_Provider.Medium);
   }
 
   // ^ Removes Current Tile ^ //

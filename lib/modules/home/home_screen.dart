@@ -1,11 +1,11 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/home/share_button.dart';
-import 'package:sonar_app/service/device_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/home/share_button.dart';
+import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:sonar_app/data/model_card.dart';
+import 'package:sonr_app/data/model_card.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -32,10 +32,7 @@ class HomeScreen extends GetView<HomeController> {
                   () => print("Search"),
                 )),
             floatingActionButton: ShareButton(),
-            body: GestureDetector(
-                onTap: () =>
-                    controller.toggleShareExpand(options: ToggleForced(false)),
-                child: _HomeView())));
+            body: GestureDetector(onTap: () => controller.toggleShareExpand(options: ToggleForced(false)), child: _HomeView())));
   }
 }
 
@@ -63,8 +60,7 @@ class _HomeView extends GetView<HomeController> {
         ),
       ),
       Obx(() => GestureDetector(
-            onTap: () =>
-                controller.toggleShareExpand(options: ToggleForced(false)),
+            onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
             child: Container(
               padding: EdgeInsets.only(top: 15),
               margin: EdgeInsets.all(10),
@@ -123,10 +119,7 @@ class _TransferItem extends GetView<HomeController> {
         onTap: () async {
           controller.toggleShareExpand(options: ToggleForced(false));
         },
-        child: Neumorphic(
-            style: NeumorphicStyle(intensity: 0.85),
-            margin: EdgeInsets.all(4),
-            child: Container(height: 75, child: child)));
+        child: Neumorphic(style: NeumorphicStyle(intensity: 0.85), margin: EdgeInsets.all(4), child: Container(height: 75, child: child)));
   }
 
   // ^ Method Builds Media Content from Metadata ^ //

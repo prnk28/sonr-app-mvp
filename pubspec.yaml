@@ -2,9 +2,9 @@
 # **    PROJECT INFO    **
 # ** ================== **
 # -- Basic --
-name: sonar_app
+name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.8.0+0.0.1
+version: 0.9.0+0.0.1
 publish_to: none
 
 # -- Flutter Settings --

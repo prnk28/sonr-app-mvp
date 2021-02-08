@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/register/register_controller.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/register/register_controller.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
   @override

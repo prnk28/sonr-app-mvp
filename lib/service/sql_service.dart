@@ -1,6 +1,6 @@
 import 'package:get/get.dart' hide Node;
-import 'package:sonar_app/data/sql_contact.dart';
-import 'package:sonar_app/data/sql_meta.dart';
+import 'package:sonr_app/data/sql_contact.dart';
+import 'package:sonr_app/data/sql_meta.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,8 +21,7 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 1,
-        onCreate: (Database db, int version) async {
+    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
       // Create Meta Table
       await db.execute('''
 create table $metaTable (
@@ -68,8 +67,7 @@ create table $contactTable (
 
   // ^ Delete a Metadata from SQL DB ^ //
   Future deleteFile(int id) async {
-    var i = await _db
-        .delete(metaTable, where: '$fileColumnId = ?', whereArgs: [id]);
+    var i = await _db.delete(metaTable, where: '$fileColumnId = ?', whereArgs: [id]);
     return i;
   }
 
@@ -109,15 +107,13 @@ create table $contactTable (
 
   // ^ Delete a Contact from SQL DB ^ //
   Future deleteContact(int id) async {
-    var i = await _db
-        .delete(contactTable, where: '$fileColumnId = ?', whereArgs: [id]);
+    var i = await _db.delete(contactTable, where: '$fileColumnId = ?', whereArgs: [id]);
     return i;
   }
 
   // ^ Update Contact in DB ^ //
   Future updateContact(ContactSQL contact) async {
-    await _db.update(contactTable, contact.toSQL(),
-        where: '$fileColumnId = ?', whereArgs: [contact.id]);
+    await _db.update(contactTable, contact.toSQL(), where: '$fileColumnId = ?', whereArgs: [contact.id]);
   }
 
   // ^ Get All Contacts ^ //
@@ -126,13 +122,7 @@ create table $contactTable (
     List<ContactSQL> result = new List<ContactSQL>();
     List<Map> records = await _db.query(
       contactTable,
-      columns: [
-        contactColumnId,
-        contactColumnFirstName,
-        contactColumnLastName,
-        contactColumnData,
-        contactColumnlastOpened
-      ],
+      columns: [contactColumnId, contactColumnFirstName, contactColumnLastName, contactColumnData, contactColumnlastOpened],
     );
     if (records.length > 0) {
       // Convert Each Record into Object

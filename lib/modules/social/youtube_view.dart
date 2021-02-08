@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sonar_app/data/social_youtube.dart';
-import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/social_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/data/social_youtube.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Medium Social View/Preview ** //
@@ -47,8 +47,7 @@ class _YoutubeViewState extends State<YoutubeView> {
 
   // ^ Fetches Data ^ //
   _fetch() async {
-    var res =
-        await Get.find<SocialMediaService>().getYoutube(widget.item.showcase);
+    var res = await Get.find<SocialMediaService>().getYoutube(widget.item.showcase);
     setState(() {
       video = res;
       fetched = true;
@@ -60,14 +59,9 @@ class _YoutubeViewState extends State<YoutubeView> {
     // @ Build ShowCase View
     //if (widget.item.type == Contact_SocialTile_TileType.Showcase) {
     if (fetched) {
-      return Stack(children: [
-        _buildTile(video.items.first),
-        SonrIcon.socialBadge(Contact_SocialTile_Provider.YouTube)
-      ]);
+      return Stack(children: [_buildTile(video.items.first), SonrIcon.socialBadge(Contact_SocialTile_Provider.YouTube)]);
     } else {
-      return Center(
-          child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+      return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
     }
     //}
     // // @ Build Icon View
@@ -91,10 +85,7 @@ class _YoutubeViewState extends State<YoutubeView> {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [
-            SonrText.description(video.video.title, size: 14),
-            SonrText.normal(_cleanDate(video.video.publishTime), size: 14)
-          ],
+          children: [SonrText.description(video.video.title, size: 14), SonrText.normal(_cleanDate(video.video.publishTime), size: 14)],
         ),
       ),
     );

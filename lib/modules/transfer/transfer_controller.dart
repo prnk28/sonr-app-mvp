@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/transfer/peer_widget.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/transfer/peer_widget.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 enum LobbyState {
@@ -14,19 +14,12 @@ enum LobbyState {
 
 class TransferController extends GetxController {
   // @ Properties
-  final Rx<Gradient> gradient = FlutterGradients.findByName(
-          FlutterGradientNames.octoberSilence,
-          type: GradientType.linear)
-      .obs;
+  final Rx<Gradient> gradient = FlutterGradients.findByName(FlutterGradientNames.octoberSilence, type: GradientType.linear).obs;
 
   // @ References
-  final inactiveGradient = FlutterGradients.findByName(
-      FlutterGradientNames.octoberSilence,
-      type: GradientType.linear);
+  final inactiveGradient = FlutterGradients.findByName(FlutterGradientNames.octoberSilence, type: GradientType.linear);
 
-  final activeGradient = FlutterGradients.findByName(
-      FlutterGradientNames.summerGames,
-      type: GradientType.linear);
+  final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
 
   // @ Direction Properties
   final direction = 0.0.obs;
@@ -126,8 +119,6 @@ class TransferController extends GetxController {
   _headingString(double dir) {
     var adjustedDesignation = ((dir / 22.5) + 0.5).toInt();
     var compassEnum = Position_Heading.values[(adjustedDesignation % 16)];
-    return compassEnum
-        .toString()
-        .substring(compassEnum.toString().indexOf('.') + 1);
+    return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }

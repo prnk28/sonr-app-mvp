@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 class RiveActor extends GetView<RiveActorController> {
   final double width;
@@ -11,8 +11,7 @@ class RiveActor extends GetView<RiveActorController> {
   final Artboard artboard;
   const RiveActor(this.artboard, this.width, this.height);
 
-  factory RiveActor.fromType(
-      {@required ArtboardType type, double width = 55, double height = 55}) {
+  factory RiveActor.fromType({@required ArtboardType type, double width = 55, double height = 55}) {
     final controller = Get.find<RiveActorController>();
     return RiveActor(controller.getArtboard(type), width, height);
   }

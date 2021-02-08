@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:sonar_app/service/device_service.dart';
+import 'package:sonr_app/service/device_service.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 

@@ -1,10 +1,9 @@
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 class FadeAnimatedSwitcher extends StatelessWidget {
   final Widget child;
   final Duration duration;
-  const FadeAnimatedSwitcher(
-      {this.child, this.duration = const Duration(milliseconds: 1500)});
+  const FadeAnimatedSwitcher({this.child, this.duration = const Duration(milliseconds: 1500)});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +21,7 @@ class FadeAnimatedSwitcher extends StatelessWidget {
 class SlideUpAnimatedSwitcher extends StatelessWidget {
   final Widget child;
   final Duration duration;
-  const SlideUpAnimatedSwitcher(
-      {this.child, this.duration = const Duration(seconds: 2)});
+  const SlideUpAnimatedSwitcher({this.child, this.duration = const Duration(seconds: 2)});
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +31,8 @@ class SlideUpAnimatedSwitcher extends StatelessWidget {
         switchInCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           final offsetAnimation = TweenSequence([
-            TweenSequenceItem(
-                tween: Tween<Offset>(
-                    begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0)),
-                weight: 1),
-            TweenSequenceItem(
-                tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
+            TweenSequenceItem(tween: Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0)), weight: 1),
+            TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
           ]).animate(animation);
           return ClipRect(
             child: SlideTransition(
@@ -57,8 +51,7 @@ class SlideUpAnimatedSwitcher extends StatelessWidget {
 class SlideDownAnimatedSwitcher extends StatelessWidget {
   final Widget child;
   final Duration duration;
-  const SlideDownAnimatedSwitcher(
-      {this.child, this.duration = const Duration(seconds: 1)});
+  const SlideDownAnimatedSwitcher({this.child, this.duration = const Duration(seconds: 1)});
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +61,8 @@ class SlideDownAnimatedSwitcher extends StatelessWidget {
         switchInCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           final offsetAnimation = TweenSequence([
-            TweenSequenceItem(
-                tween: Tween<Offset>(
-                    begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0)),
-                weight: 1),
-            TweenSequenceItem(
-                tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
+            TweenSequenceItem(tween: Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0)), weight: 1),
+            TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
           ]).animate(animation);
           return ClipRect(
             child: SlideTransition(
@@ -92,8 +81,7 @@ class SlideDownAnimatedSwitcher extends StatelessWidget {
 class SlideRightAnimatedSwitcher extends StatelessWidget {
   final Widget child;
   final Duration duration;
-  const SlideRightAnimatedSwitcher(
-      {this.child, this.duration = const Duration(seconds: 1)});
+  const SlideRightAnimatedSwitcher({this.child, this.duration = const Duration(seconds: 1)});
 
   @override
   Widget build(BuildContext context) {
@@ -103,12 +91,8 @@ class SlideRightAnimatedSwitcher extends StatelessWidget {
         switchInCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           final offsetAnimation = TweenSequence([
-            TweenSequenceItem(
-                tween: Tween<Offset>(
-                    begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0)),
-                weight: 1),
-            TweenSequenceItem(
-                tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
+            TweenSequenceItem(tween: Tween<Offset>(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0)), weight: 1),
+            TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
           ]).animate(animation);
           return ClipRect(
             child: SlideTransition(
@@ -127,8 +111,7 @@ class SlideRightAnimatedSwitcher extends StatelessWidget {
 class SlideLeftAnimatedSwitcher extends StatelessWidget {
   final Widget child;
   final Duration duration;
-  const SlideLeftAnimatedSwitcher(
-      {this.child, this.duration = const Duration(seconds: 1)});
+  const SlideLeftAnimatedSwitcher({this.child, this.duration = const Duration(seconds: 1)});
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +121,8 @@ class SlideLeftAnimatedSwitcher extends StatelessWidget {
         switchInCurve: Curves.fastLinearToSlowEaseIn,
         transitionBuilder: (Widget child, Animation<double> animation) {
           final offsetAnimation = TweenSequence([
-            TweenSequenceItem(
-                tween: Tween<Offset>(
-                    begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0)),
-                weight: 1),
-            TweenSequenceItem(
-                tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
+            TweenSequenceItem(tween: Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0)), weight: 1),
+            TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
           ]).animate(animation);
           return ClipRect(
             child: SlideTransition(
@@ -158,4 +137,3 @@ class SlideLeftAnimatedSwitcher extends StatelessWidget {
         child: child);
   }
 }
-

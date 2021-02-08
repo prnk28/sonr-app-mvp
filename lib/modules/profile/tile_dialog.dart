@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/modules/profile/tile_controller.dart';
-import 'package:sonar_app/widgets/radio.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/modules/profile/tile_controller.dart';
+import 'package:sonr_app/widgets/radio.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 
@@ -37,19 +37,17 @@ class TileDialog extends GetWidget<TileController> {
                     topButtons = Container();
 
                     // Bottom Buttons
-                    bottomButtons = Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          // @ Bottom Left Close/Cancel Button
-                          SonrButton.close(() {
-                            Get.back();
-                          }),
-                          // @ Bottom Right Confirm Button
-                          SonrButton.accept(() {
-                            Get.back();
-                            controller.finish();
-                          }),
-                        ]);
+                    bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      // @ Bottom Left Close/Cancel Button
+                      SonrButton.close(() {
+                        Get.back();
+                      }),
+                      // @ Bottom Right Confirm Button
+                      SonrButton.accept(() {
+                        Get.back();
+                        controller.finish();
+                      }),
+                    ]);
                   }
                   // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
                   else if (controller.step.value == TileStep.StepTwo) {
@@ -59,17 +57,10 @@ class TileDialog extends GetWidget<TileController> {
                     });
 
                     // Bottom Buttons
-                    bottomButtons = Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SonrButton.rectangle(
-                              SonrText.normal("Back"), controller.previousStep,
-                              icon: SonrIcon.back),
-                          SonrButton.rectangle(
-                              SonrText.normal("Next"), controller.nextStep,
-                              icon: SonrIcon.forward,
-                              iconPosition: IconPosition.Right),
-                        ]);
+                    bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      SonrButton.rectangle(SonrText.normal("Back"), controller.previousStep, icon: SonrIcon.back),
+                      SonrButton.rectangle(SonrText.normal("Next"), controller.nextStep, icon: SonrIcon.forward, iconPosition: IconPosition.Right),
+                    ]);
                   }
                   // @ Step One: Top Cancel Button, Bottom wide Next Button
                   else {
@@ -78,9 +69,7 @@ class TileDialog extends GetWidget<TileController> {
 
                     // Iterate through All Options
                     Contact_SocialTile_Provider.values.forEach((provider) {
-                      if (!Get.find<ProfileController>()
-                          .socials
-                          .any((tile) => tile.provider == provider)) {
+                      if (!Get.find<ProfileController>().socials.any((tile) => tile.provider == provider)) {
                         options.add(provider);
                       }
                     });
@@ -93,11 +82,8 @@ class TileDialog extends GetWidget<TileController> {
                     });
 
                     // Bottom Buttons
-                    bottomButtons = SonrButton.rectangle(
-                        SonrText.normal("Next", size: 22), controller.nextStep,
-                        icon: SonrIcon.forward,
-                        margin: EdgeInsets.only(left: 60, right: 80),
-                        iconPosition: IconPosition.Right);
+                    bottomButtons = SonrButton.rectangle(SonrText.normal("Next", size: 22), controller.nextStep,
+                        icon: SonrIcon.forward, margin: EdgeInsets.only(left: 60, right: 80), iconPosition: IconPosition.Right);
                   }
 
                   // ^ Build View ^ //
@@ -107,10 +93,7 @@ class TileDialog extends GetWidget<TileController> {
 
                     // Current View
                     Padding(padding: EdgeInsets.all(5)),
-                    Align(
-                        key: UniqueKey(),
-                        alignment: Alignment.topCenter,
-                        child: Container(child: currentView)),
+                    Align(key: UniqueKey(), alignment: Alignment.topCenter, child: Container(child: currentView)),
 
                     // Bottom Buttons
                     Spacer(),
@@ -167,8 +150,7 @@ class _DropdownAddView extends StatelessWidget {
                       isExpanded: true,
                       initialValue: item,
                       items: options,
-                      customWidgets: List<Widget>.generate(
-                          options.length, (index) => _buildOptionWidget(index)),
+                      customWidgets: List<Widget>.generate(options.length, (index) => _buildOptionWidget(index)),
                       hint: Text("Select...",
                           style: GoogleFonts.poppins(
                             fontSize: 16,
@@ -176,8 +158,7 @@ class _DropdownAddView extends StatelessWidget {
                             color: Colors.black26,
                           )),
                       onChanged: updateFn,
-                      isCleared:
-                          controller.currentTile.value.hasProvider() == false,
+                      isCleared: controller.currentTile.value.hasProvider() == false,
                     );
                   },
                 ))),
@@ -186,36 +167,32 @@ class _DropdownAddView extends StatelessWidget {
           // Check Selected
           if (controller.currentTile.value.hasProvider()) {
             // Check Privacy
-            if (controller.doesProviderAllowVisibility(
-                controller.currentTile.value.provider)) {
+            if (controller.doesProviderAllowVisibility(controller.currentTile.value.provider)) {
               return Container(
                 padding: EdgeInsets.only(top: 25),
                 width: Get.width - 160,
                 margin: EdgeInsets.only(left: 12, right: 12),
-                child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // @ Set Text
-                      SonrText.normal("Is your account Public?", size: 18),
+                child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                  // @ Set Text
+                  SonrText.normal("Is your account Public?", size: 18),
 
-                      // @ Create Check Box
-                      ValueBuilder<bool>(
-                          initialValue: false,
-                          onUpdate: (value) {
-                            controller.providerIsPublic(value);
-                          },
-                          builder: (isPublic, updateFn) {
-                            return Container(
-                              width: 35,
-                              height: 35,
-                              child: NeumorphicCheckbox(
-                                onChanged: updateFn,
-                                value: isPublic,
-                              ),
-                            );
-                          })
-                    ]),
+                  // @ Create Check Box
+                  ValueBuilder<bool>(
+                      initialValue: false,
+                      onUpdate: (value) {
+                        controller.providerIsPublic(value);
+                      },
+                      builder: (isPublic, updateFn) {
+                        return Container(
+                          width: 35,
+                          height: 35,
+                          child: NeumorphicCheckbox(
+                            onChanged: updateFn,
+                            value: isPublic,
+                          ),
+                        );
+                      })
+                ]),
               );
             }
           }
@@ -228,11 +205,7 @@ class _DropdownAddView extends StatelessWidget {
   // @ Builds option at index
   _buildOptionWidget(int index) {
     var item = options.elementAt(index);
-    return Row(children: [
-      SonrIcon.social(IconType.Normal, item),
-      Padding(padding: EdgeInsets.all(4)),
-      Text(item.toString())
-    ]);
+    return Row(children: [SonrIcon.social(IconType.Normal, item), Padding(padding: EdgeInsets.all(4)), Text(item.toString())]);
   }
 }
 
@@ -285,10 +258,7 @@ class _SetInfoView extends StatelessWidget {
       return Neumorphic(
           style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
           margin: EdgeInsets.only(left: 14, right: 14),
-          child: Container(
-              width: Get.width - 80,
-              margin: EdgeInsets.only(left: 12, right: 12),
-              child: Container()));
+          child: Container(width: Get.width - 80, margin: EdgeInsets.only(left: 12, right: 12), child: Container()));
     }
   }
 
@@ -374,8 +344,7 @@ class _SetSizePosState extends State<_SetTypeView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Icon Option
-              AnimatedTileRadio("Icon", groupValue: _groupValue,
-                  onChanged: (value) {
+              AnimatedTileRadio("Icon", groupValue: _groupValue, onChanged: (value) {
                 //widget.controller.currentTile.value.type = value;
                 widget.controller.currentTile.refresh();
                 setState(() {
@@ -384,8 +353,7 @@ class _SetSizePosState extends State<_SetTypeView> {
               }),
 
               // Showcase Option
-              AnimatedTileRadio("Showcase", groupValue: _groupValue,
-                  onChanged: (value) {
+              AnimatedTileRadio("Showcase", groupValue: _groupValue, onChanged: (value) {
                 //widget.controller.currentTile.value.type = value;
                 widget.controller.currentTile.refresh();
                 setState(() {
@@ -394,10 +362,8 @@ class _SetSizePosState extends State<_SetTypeView> {
               }),
 
               // Feed Option
-              widget.controller.doesProviderAllowFeed(
-                      widget.controller.currentTile.value.provider)
-                  ? AnimatedTileRadio("Feed", groupValue: _groupValue,
-                      onChanged: (value) {
+              widget.controller.doesProviderAllowFeed(widget.controller.currentTile.value.provider)
+                  ? AnimatedTileRadio("Feed", groupValue: _groupValue, onChanged: (value) {
                       //widget.controller.currentTile.value.type = value;
                       widget.controller.currentTile.refresh();
                       setState(() {
@@ -416,33 +382,25 @@ class _InfoText extends StatelessWidget {
   final int index;
   final String text;
 
-  const _InfoText({Key key, @required this.index, @required this.text})
-      : super(key: key);
+  const _InfoText({Key key, @required this.index, @required this.text}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(maxWidth: Get.width - 80),
       child: Center(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(padding: EdgeInsets.all(14)),
-              Text(index.toString(),
-                  style: GoogleFonts.poppins(
-                      fontSize: 108,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black38)),
-              Padding(padding: EdgeInsets.all(8)),
-              Expanded(
-                child: Text(text,
-                    style: GoogleFonts.poppins(
-                      fontSize: 34,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )),
-              ),
-            ]),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Padding(padding: EdgeInsets.all(14)),
+          Text(index.toString(), style: GoogleFonts.poppins(fontSize: 108, fontWeight: FontWeight.w900, color: Colors.black38)),
+          Padding(padding: EdgeInsets.all(8)),
+          Expanded(
+            child: Text(text,
+                style: GoogleFonts.poppins(
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                )),
+          ),
+        ]),
       ),
     );
   }

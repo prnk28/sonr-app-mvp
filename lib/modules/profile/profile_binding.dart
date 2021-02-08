@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonar_app/modules/profile/tile_controller.dart';
+import 'package:sonr_app/modules/profile/tile_controller.dart';
 import 'profile_controller.dart';
 export 'profile_screen.dart';
 

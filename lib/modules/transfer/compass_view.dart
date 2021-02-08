@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'transfer_controller.dart';
 
 // ** Build CompassView ** //
@@ -34,19 +34,13 @@ class CompassView extends GetView<TransferController> {
                     ),
                     margin: EdgeInsets.all(10),
                     // Interior Compass
-                    child: Stack(
-                        fit: StackFit.expand,
-                        alignment: Alignment.center,
-                        children: [
-                          // Center Circle
-                          _CompassBulb(
-                              controller.string.value,
-                              controller.heading.value,
-                              controller.gradient.value),
+                    child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
+                      // Center Circle
+                      _CompassBulb(controller.string.value, controller.heading.value, controller.gradient.value),
 
-                          // Spokes
-                          _Spokes(controller.angle.value),
-                        ]),
+                      // Spokes
+                      _Spokes(controller.angle.value),
+                    ]),
                   ),
                 ),
               ),
@@ -56,10 +50,7 @@ class CompassView extends GetView<TransferController> {
             Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: Neumorphic(
-                  style: NeumorphicStyle(
-                      depth: -20,
-                      lightSource: LightSource.topRight,
-                      intensity: 0.75),
+                  style: NeumorphicStyle(depth: -20, lightSource: LightSource.topRight, intensity: 0.75),
                   child: Container(
                     width: 3,
                     height: 36,
@@ -71,10 +62,7 @@ class CompassView extends GetView<TransferController> {
             Padding(
                 padding: EdgeInsets.only(top: 50),
                 child: Neumorphic(
-                  style: NeumorphicStyle(
-                      depth: -20,
-                      lightSource: LightSource.topRight,
-                      intensity: 0.75),
+                  style: NeumorphicStyle(depth: -20, lightSource: LightSource.topRight, intensity: 0.75),
                   child: Container(
                     width: 7,
                     height: 7,
@@ -128,9 +116,7 @@ class _Spoke extends StatelessWidget {
   final String textValue;
   final EdgeInsets textPadding;
 
-  _Spoke(this.type, this.direction,
-      {this.multiplier = 0.0, this.textValue = "", this.textPadding})
-      : assert(type != null);
+  _Spoke(this.type, this.direction, {this.multiplier = 0.0, this.textValue = "", this.textPadding}) : assert(type != null);
 
   // ^ List Builder ^ //
   factory _Spoke.fromList(double i) {
@@ -232,8 +218,7 @@ class _Spoke extends StatelessWidget {
                       ))),
               // Create Text
               RotationTransition(
-                  turns:
-                      new AlwaysStoppedAnimation(degrees(direction + 90) / 360),
+                  turns: new AlwaysStoppedAnimation(degrees(direction + 90) / 360),
                   child: Padding(
                       padding: textPadding,
                       child: Text(textValue,
@@ -341,23 +326,20 @@ class _CompassBulb extends StatelessWidget {
             child: AnimatedContainer(
                 duration: Duration(seconds: 1),
                 decoration: BoxDecoration(gradient: gradient),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SlideDownAnimatedSwitcher(
-                          duration: Duration(seconds: 3),
-                          child: SonrText.gradient(
-                            direction,
-                            FlutterGradientNames.glassWater,
-                            key: ValueKey<String>(direction),
-                          )),
-                      FadeAnimatedSwitcher(
-                          child: SonrText.gradient(
-                        heading,
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  SlideDownAnimatedSwitcher(
+                      duration: Duration(seconds: 3),
+                      child: SonrText.gradient(
+                        direction,
                         FlutterGradientNames.glassWater,
-                        key: ValueKey<String>(heading),
-                      ))
-                    ]))));
+                        key: ValueKey<String>(direction),
+                      )),
+                  FadeAnimatedSwitcher(
+                      child: SonrText.gradient(
+                    heading,
+                    FlutterGradientNames.glassWater,
+                    key: ValueKey<String>(heading),
+                  ))
+                ]))));
   }
 }

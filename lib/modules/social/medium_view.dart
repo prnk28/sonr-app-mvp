@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sonar_app/data/social_medium.dart';
-import 'package:sonar_app/modules/profile/profile_controller.dart';
-import 'package:sonar_app/service/social_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/data/social_medium.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Medium Social View/Preview ** //
@@ -44,8 +44,7 @@ class _MediumViewState extends State<MediumView> {
 
   // ^ Fetches Data ^ //
   _fetch() async {
-    var result =
-        await Get.find<SocialMediaService>().getMedium(widget.item.username);
+    var result = await Get.find<SocialMediaService>().getMedium(widget.item.username);
     setState(() {
       data = result;
       fetched = true;
@@ -73,22 +72,15 @@ class _MediumViewState extends State<MediumView> {
           },
         );
       } else {
-        return Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+        return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
     }
     // @ Build Tile View
     else {
       if (fetched) {
-        return Stack(children: [
-          _buildTile(data.posts.first),
-          SonrIcon.socialBadge(Contact_SocialTile_Provider.Medium)
-        ]);
+        return Stack(children: [_buildTile(data.posts.first), SonrIcon.socialBadge(Contact_SocialTile_Provider.Medium)]);
       } else {
-        return Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
+        return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)));
       }
     }
   }
@@ -101,11 +93,8 @@ class _MediumViewState extends State<MediumView> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            ClipPath(
-                clipper: WaveClipperOne(),
-                child: Image.network(post.thumbnail)),
-            SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                size: 16),
+            ClipPath(clipper: WaveClipperOne(), child: Image.network(post.thumbnail)),
+            SonrText.gradient(post.title, FlutterGradientNames.premiumDark, size: 16),
           ],
         ),
       ),
@@ -120,14 +109,9 @@ class _MediumViewState extends State<MediumView> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            ClipPath(
-                clipper: WaveClipperOne(),
-                child: Image.network(post.thumbnail)),
-            SonrText.gradient(post.title, FlutterGradientNames.premiumDark,
-                size: 20),
-            SonrText.description(
-                _cleanDescription(post.title.length, post.description),
-                size: 14),
+            ClipPath(clipper: WaveClipperOne(), child: Image.network(post.thumbnail)),
+            SonrText.gradient(post.title, FlutterGradientNames.premiumDark, size: 20),
+            SonrText.description(_cleanDescription(post.title.length, post.description), size: 14),
             SonrText.normal(_cleanDate(post.pubDate), size: 14)
           ],
         ),

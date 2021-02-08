@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
-import 'package:sonar_app/data/social_medium.dart';
-import 'package:sonar_app/data/social_twitter.dart';
-import 'package:sonar_app/data/social_youtube.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/data/social_medium.dart';
+import 'package:sonr_app/data/social_twitter.dart';
+import 'package:sonr_app/data/social_youtube.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Handles SocialMedia ** //
@@ -92,13 +92,11 @@ class SocialMediaService extends GetxService {
   // ^ Retreive Profile/ Tweets ^ //
   Future<TweetsModel> getTweets(String username) async {
     // Valid Status
-    final tweetResp = await get(
-        TWITTER_API_TWEETS + username + TWITTER_FIELDS_TWEETS,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $_twitterBearer',
-        });
+    final tweetResp = await get(TWITTER_API_TWEETS + username + TWITTER_FIELDS_TWEETS, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $_twitterBearer',
+    });
 
     if (tweetResp.statusCode == 200) {
       return TweetsModel.fromResponse(tweetResp.body);
@@ -114,13 +112,11 @@ class SocialMediaService extends GetxService {
   // ^ Retreive Profile/ Tweets ^ //
   Future<TwitterUserModel> getTwitterUser(String username) async {
     // Perform Request
-    final userResp = await get(
-        TWITTER_API_USERS + username + TWITTER_FIELDS_USERS,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $_twitterBearer',
-        });
+    final userResp = await get(TWITTER_API_USERS + username + TWITTER_FIELDS_USERS, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $_twitterBearer',
+    });
 
     // Valid Status
     if (userResp.statusCode == 200) {
@@ -137,11 +133,9 @@ class SocialMediaService extends GetxService {
   // ^ Gets Medium Data as RSS Feed then Converts to JSON ^ //
   Future<YoutubeModel> getYoutube(String video) async {
     // Perform Request
-    final youResp = await get(
-        YOUTUBE_API_SEARCH + video + YOUTUBE_KEY + _youtubeKey,
-        headers: {
-          'Accept': 'application/json',
-        });
+    final youResp = await get(YOUTUBE_API_SEARCH + video + YOUTUBE_KEY + _youtubeKey, headers: {
+      'Accept': 'application/json',
+    });
 
     //  Valid Status
     if (youResp.statusCode == 200) {

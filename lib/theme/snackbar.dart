@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 class SonrSnack {
   // Properties
@@ -26,8 +26,7 @@ class SonrSnack {
 
   // ^ Succesful Operation ^ //
   factory SonrSnack.success(String message) {
-    return SonrSnack(
-        "Success!!", message, SonrIcon.success, Colors.green, 1250);
+    return SonrSnack("Success!!", message, SonrIcon.success, Colors.green, 1250);
   }
 
   // ^ Missing Data ^ //
@@ -36,12 +35,7 @@ class SonrSnack {
     final random = new Random();
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
 
-    return SonrSnack(
-        isLast ? "Almost There!" : list[random.nextInt(list.length)],
-        message,
-        SonrIcon.missing,
-        Colors.redAccent,
-        1500);
+    return SonrSnack(isLast ? "Almost There!" : list[random.nextInt(list.length)], message, SonrIcon.missing, Colors.redAccent, 1500);
   }
 
   // ^ Invalid Operation ^ //
@@ -51,8 +45,7 @@ class SonrSnack {
 
   // ^ Cancelled Operation ^ //
   factory SonrSnack.cancelled(String message) {
-    return SonrSnack(
-        "Cancelled.", message, SonrIcon.cancel, Colors.yellow, 1250);
+    return SonrSnack("Cancelled.", message, SonrIcon.cancel, Colors.yellow, 1250);
   }
 
   // ^ Error on Operation ^ //

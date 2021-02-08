@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonar_app/data/model_user.dart';
-import 'package:sonar_app/service/sonr_service.dart';
-import 'package:sonar_app/theme/theme.dart';
+import 'package:sonr_app/data/model_user.dart';
+import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,22 +41,18 @@ class DeviceService extends GetxService {
     });
 
     // @ Listen to Incoming File
-    _intentDataStreamSubscription = intent.ReceiveSharingIntent.getMediaStream()
-        .listen((List<intent.SharedMediaFile> data) {
+    _intentDataStreamSubscription = intent.ReceiveSharingIntent.getMediaStream().listen((List<intent.SharedMediaFile> data) {
       if (!Get.isBottomSheetOpen && hasUser) {
-        Get.bottomSheet(ShareSheet.media(data),
-            barrierColor: K_DIALOG_COLOR, isDismissible: false);
+        Get.bottomSheet(ShareSheet.media(data), barrierColor: K_DIALOG_COLOR, isDismissible: false);
       }
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
 
     // @ Listen to Incoming Text
-    _intentDataStreamSubscription =
-        intent.ReceiveSharingIntent.getTextStream().listen((String text) {
+    _intentDataStreamSubscription = intent.ReceiveSharingIntent.getTextStream().listen((String text) {
       if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
-        Get.bottomSheet(ShareSheet.url(text),
-            barrierColor: K_DIALOG_COLOR, isDismissible: false);
+        Get.bottomSheet(ShareSheet.url(text), barrierColor: K_DIALOG_COLOR, isDismissible: false);
       }
     }, onError: (err) {
       print("getLinkStream error: $err");
@@ -66,8 +62,7 @@ class DeviceService extends GetxService {
   @override
   void onInit() {
     // @ For sharing images coming from outside the app while the app is closed
-    intent.ReceiveSharingIntent.getInitialMedia()
-        .then((List<intent.SharedMediaFile> data) {
+    intent.ReceiveSharingIntent.getInitialMedia().then((List<intent.SharedMediaFile> data) {
       if (data != null) {
         incomingMedia(data);
         incomingMedia.refresh();
@@ -90,8 +85,7 @@ class DeviceService extends GetxService {
     _prefs = await SharedPreferences.getInstance();
 
     // Check Location Status
-    hasLocation = await Permission.locationWhenInUse.serviceStatus ==
-        ServiceStatus.enabled;
+    hasLocation = await Permission.locationWhenInUse.serviceStatus == ServiceStatus.enabled;
 
     // Check User Status
     hasUser = _prefs.containsKey("user");
@@ -155,8 +149,7 @@ class DeviceService extends GetxService {
     // @ Check for Media
     if (incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.media(incomingMedia),
-          barrierColor: K_DIALOG_COLOR, isDismissible: false);
+      Get.bottomSheet(ShareSheet.media(incomingMedia), barrierColor: K_DIALOG_COLOR, isDismissible: false);
 
       // Reset Incoming
       incomingMedia.clear();
@@ -164,12 +157,9 @@ class DeviceService extends GetxService {
     }
 
     // @ Check for Text
-    if (incomingText.value != "" &&
-        GetUtils.isURL(incomingText.value) &&
-        !Get.isBottomSheetOpen) {
+    if (incomingText.value != "" && GetUtils.isURL(incomingText.value) && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(incomingText.value),
-          barrierColor: K_DIALOG_COLOR, isDismissible: false);
+      Get.bottomSheet(ShareSheet.url(incomingText.value), barrierColor: K_DIALOG_COLOR, isDismissible: false);
 
       // Reset Incoming
       incomingText("");
