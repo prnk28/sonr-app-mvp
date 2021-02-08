@@ -1,4 +1,5 @@
 import 'package:get/get.dart' hide Node;
+import 'package:sonr_app/data/model_card.dart';
 import 'package:sonr_app/data/sql_contact.dart';
 import 'package:sonr_app/data/sql_meta.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -21,7 +22,7 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
+    _db = await openDatabase(_dbPath, version: 2, onCreate: (Database db, int version) async {
       // Create Meta Table
       await db.execute('''
 create table $metaTable (
@@ -31,6 +32,7 @@ create table $metaTable (
   $fileColumnSize integer,
   $fileColumnMime text,
   $fileColumnReceived integer,
+  $fileColumnThumbnail blob,
   $fileColumnOwner text)
 ''');
 
@@ -60,6 +62,7 @@ create table $contactTable (
       fileColumnSize: metadata.size,
       fileColumnMime: metadata.mime.writeToJson(),
       fileColumnReceived: metadata.received,
+      fileColumnThumbnail: metadata.thumbnail,
       fileColumnOwner: metadata.owner.writeToJson(),
     });
     return metadata;
@@ -74,7 +77,7 @@ create table $contactTable (
   // ^ Get All Files ^ //
   Future<List<MetaSQL>> fetchFiles() async {
     // Init List
-    List<MetaSQL> result = new List<MetaSQL>();
+    List<MetaSQL> result = <MetaSQL>[];
     List<Map> records = await _db.query(
       metaTable,
       columns: [
@@ -84,6 +87,7 @@ create table $contactTable (
         fileColumnSize,
         fileColumnMime,
         fileColumnReceived,
+        fileColumnThumbnail,
         fileColumnOwner,
       ],
     );
@@ -119,7 +123,7 @@ create table $contactTable (
   // ^ Get All Contacts ^ //
   Future<List<ContactSQL>> fetchContacts() async {
     // Init List
-    List<ContactSQL> result = new List<ContactSQL>();
+    List<ContactSQL> result = <ContactSQL>[];
     List<Map> records = await _db.query(
       contactTable,
       columns: [contactColumnId, contactColumnFirstName, contactColumnLastName, contactColumnData, contactColumnlastOpened],
@@ -134,6 +138,26 @@ create table $contactTable (
     }
 
     // Update All Files
+    return result;
+  }
+
+  // ^ Returns all Transfers ^ //
+  Future<List<CardModel>> fetchAll() async {
+    // Retreive Data
+    var result = <CardModel>[];
+    var contacts = await fetchContacts();
+    var media = await fetchFiles();
+
+    // Convert Contacts to Cards
+    contacts.forEach((c) {
+      result.add(CardModel.fromContactSQL(c));
+    });
+
+    // Convert Media to Cards
+    media.forEach((m) {
+      result.add(CardModel.fromMetaSQL(m));
+    });
+
     return result;
   }
 }

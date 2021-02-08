@@ -1,4 +1,6 @@
 // @ Table Names
+import 'dart:typed_data';
+
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Metadata Table Fields ** //
@@ -8,6 +10,7 @@ final String fileColumnPath = 'path';
 final String fileColumnSize = 'size';
 final String fileColumnMime = 'mime';
 final String fileColumnOwner = 'owner';
+final String fileColumnThumbnail = 'thumbnail';
 final String fileColumnReceived = 'received';
 
 class MetaSQL {
@@ -30,6 +33,7 @@ class MetaSQL {
       fileColumnSize: metadata.size,
       fileColumnMime: metadata.mime.writeToJson(),
       fileColumnOwner: metadata.owner.writeToJson(),
+      fileColumnThumbnail: metadata.hasThumbnail() ? Uint8List.fromList(metadata.thumbnail) : null,
       fileColumnReceived: metadata.received,
     };
 
@@ -43,12 +47,14 @@ class MetaSQL {
   // @ Convert from SQL Map to Metadata
   factory MetaSQL.fromSQL(Map map) {
     Metadata meta = new Metadata();
+    Uint8List thumb = map[fileColumnThumbnail];
     meta.id = map[fileColumnId];
     meta.name = map[fileColumnName];
     meta.path = map[fileColumnPath];
     meta.size = map[fileColumnSize];
     meta.owner = Profile.fromJson(map[fileColumnOwner]);
     meta.mime = MIME.fromJson(map[fileColumnMime]);
+    meta.thumbnail = thumb.toList();
     meta.received = map[fileColumnReceived];
     return MetaSQL(meta);
   }

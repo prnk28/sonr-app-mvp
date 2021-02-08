@@ -28,14 +28,9 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    // Fetch File Data
-    Get.find<SQLService>().fetchFiles().then((data) {
-      data.forEach((m) => allCards.add(CardModel.fromMetaSQL(m)));
-    });
-
-    // Fetch Contact Data
-    Get.find<SQLService>().fetchContacts().then((data) {
-      data.forEach((c) => allCards.add(CardModel.fromContactSQL(c)));
+    // Fetch Data
+    Get.find<SQLService>().fetchAll().then((data) {
+      data.forEach((c) => allCards.add(c));
     });
 
     // Refresh Cards
@@ -76,6 +71,12 @@ class HomeController extends GetxController {
       HapticFeedback.heavyImpact();
       isExpanded(!isExpanded.value);
     }
+  }
+
+  // ^ Opens Hero View of Card ^ //
+  void openExpandedCard() {
+    // Close Share Menu if Open
+    toggleShareExpand(options: ToggleForced(false));
   }
 
   // ^ Opens Camera Picker ^ //

@@ -10,7 +10,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'device_service.dart';
 import 'sql_service.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
 
 // @ Enum to Handle Status
 enum SonrStatus {
@@ -29,10 +28,10 @@ class SonrService extends GetxService {
   final peers = Map<String, Peer>().obs;
   final olc = "".obs;
   final progress = 0.0.obs;
+  final payload = Rx<Payload>();
 
   // @ Set References
   Node _node;
-  final payload = Rx<Payload>();
   PeerController _peerController;
   bool _processed = false;
   String _url;
@@ -167,7 +166,6 @@ class SonrService extends GetxService {
     if (data is AuthInvite) {
       Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
-      print(data.toString());
 
       // Check Payload Type
       switch (data.payload) {
@@ -197,8 +195,14 @@ class SonrService extends GetxService {
           _peerController.playAccepted();
           HapticFeedback.lightImpact();
         } else {
+          // Play Animation
           _peerController.playDenied();
           HapticFeedback.mediumImpact();
+
+          // Reset References
+          _url = null;
+          payload(null);
+          _peerController = null;
         }
       }
     }

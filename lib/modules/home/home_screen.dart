@@ -5,8 +5,7 @@ import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:sonr_app/data/model_card.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'transfer_item.dart';
 
 class HomeScreen extends GetView<HomeController> {
   @override
@@ -78,63 +77,20 @@ class _HomeView extends GetView<HomeController> {
                           builder: (context, child, value) {
                             return Transform.scale(
                               scale: value,
-                              child: _TransferItem(controller.allCards[idx]),
+                              child: TransferItem(controller.allCards[idx]),
                             );
                           },
                         );
                       } else {
                         return Transform.scale(
                           scale: 0.85,
-                          child: _TransferItem(controller.allCards[idx]),
+                          child: TransferItem(controller.allCards[idx]),
                         );
                       }
                     });
                   }),
             ),
           ))
-    ]);
-  }
-}
-
-// ** Home Screen Item ** //
-class _TransferItem extends GetView<HomeController> {
-  final CardModel card;
-  _TransferItem(this.card);
-
-  @override
-  Widget build(BuildContext context) {
-    // Intialize
-    Widget child;
-    // File
-    if (card.type == CardType.File || card.type == CardType.Image) {
-      child = buildMediaItem(card.metadata);
-    }
-    // Contact
-    else {
-      child = buildContactItem(card.contact);
-    }
-
-    // @ Return View
-    return GestureDetector(
-        onTap: () async {
-          controller.toggleShareExpand(options: ToggleForced(false));
-        },
-        child: Neumorphic(style: NeumorphicStyle(intensity: 0.85), margin: EdgeInsets.all(4), child: Container(height: 75, child: child)));
-  }
-
-  // ^ Method Builds Media Content from Metadata ^ //
-  Widget buildMediaItem(Metadata metadata) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SonrText.normal(metadata.mime.type.toString()),
-      SonrText.normal("Owner: " + metadata.owner.firstName),
-    ]);
-  }
-
-// ^ Method Builds Contact Content ^ //
-  Widget buildContactItem(Contact contact) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SonrText.normal(contact.firstName),
-      SonrText.normal(contact.lastName),
     ]);
   }
 }
