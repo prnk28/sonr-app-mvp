@@ -65,7 +65,7 @@ class TileDialog extends GetWidget<TileController> {
                   // @ Step One: Top Cancel Button, Bottom wide Next Button
                   else {
                     // Initialize List of Options
-                    var options = List<Contact_SocialTile_Provider>();
+                    var options = <Contact_SocialTile_Provider>[];
 
                     // Iterate through All Options
                     Contact_SocialTile_Provider.values.forEach((provider) {

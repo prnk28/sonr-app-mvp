@@ -180,7 +180,7 @@ class PeerController extends GetxController {
 
   // ^ Calculate Peer Offset from Line ^ //
   Offset calculateOffset(Device device) {
-    if (device.platform == "Mac") {
+    if (device.platform == Platform.MacOS) {
       var pos = Tangent.fromAngle(Offset(difference.value, Get.height / 5), direction.value);
       return pos.position;
     } else {

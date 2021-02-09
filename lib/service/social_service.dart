@@ -47,7 +47,7 @@ class SocialMediaService extends GetxService {
         break;
       case Contact_SocialTile_Provider.Twitter:
         TwitterUserModel data = await getTwitterUser(query);
-        return data.errors.isNullOrBlank;
+        return data.errors.isNotEmpty;
         break;
       case Contact_SocialTile_Provider.YouTube:
         YoutubeModel data = await getYoutube(query);
