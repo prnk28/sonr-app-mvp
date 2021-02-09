@@ -59,7 +59,7 @@ class TileDialog extends GetWidget<TileController> {
                     // Bottom Buttons
                     bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                       SonrButton.rectangle(SonrText.normal("Back"), controller.previousStep, icon: SonrIcon.back),
-                      SonrButton.rectangle(SonrText.normal("Next"), controller.nextStep, icon: SonrIcon.forward, iconPosition: IconPosition.Right),
+                      SonrButton.rectangle(SonrText.normal("Next"), controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
                     ]);
                   }
                   // @ Step One: Top Cancel Button, Bottom wide Next Button
@@ -83,7 +83,7 @@ class TileDialog extends GetWidget<TileController> {
 
                     // Bottom Buttons
                     bottomButtons = SonrButton.rectangle(SonrText.normal("Next", size: 22), controller.nextStep,
-                        icon: SonrIcon.forward, margin: EdgeInsets.only(left: 60, right: 80), iconPosition: IconPosition.Right);
+                        icon: SonrIcon.forward, margin: EdgeInsets.only(left: 60, right: 80), iconPosition: WidgetPosition.Right);
                   }
 
                   // ^ Build View ^ //

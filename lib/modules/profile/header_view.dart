@@ -16,27 +16,25 @@ class ContactHeader extends GetView<ProfileController> {
       titlePadding: EdgeInsets.only(bottom: 24),
       title: _buildTitle(),
       centerTitle: true,
-      background: SonrTheme(
-        child: NeumorphicBackground(
-          backendColor: Colors.transparent,
-          child: ClipPath(
-            clipper: OvalBottomBorderClipper(),
-            child: Neumorphic(
-              style: NeumorphicStyle(color: Colors.blue),
-              child: GestureDetector(
-                onLongPress: () async {
-                  print("Launch Color picker to change header");
-                  HapticFeedback.heavyImpact();
-                },
-                child: Container(
-                  height: _K_CONTAINER_HEIGHT, // Same Header Color
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // @ Avatar
-                      _AvatarField(),
-                    ],
-                  ),
+      background: NeumorphicBackground(
+        backendColor: Colors.transparent,
+        child: ClipPath(
+          clipper: OvalBottomBorderClipper(),
+          child: Neumorphic(
+            style: NeumorphicStyle(color: Colors.lightBlue[100]),
+            child: GestureDetector(
+              onLongPress: () async {
+                print("Launch Color picker to change header");
+                HapticFeedback.heavyImpact();
+              },
+              child: Container(
+                height: _K_CONTAINER_HEIGHT, // Same Header Color
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // @ Avatar
+                    _AvatarField(),
+                  ],
                 ),
               ),
             ),

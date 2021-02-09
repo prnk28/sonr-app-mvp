@@ -132,13 +132,23 @@ class _ContactInvite extends GetView<SonrCardController> {
     // Display Info
     return Column(mainAxisSize: MainAxisSize.max, children: [
       // @ Header
-      _SonrCardHeader(
-          name: card.contact.firstName,
-          type: Payload.CONTACT,
-          onAccept: () {
-            controller.acceptContact(card, false);
-            Get.back();
-          }),
+      SonrHeaderBar.closeAccept(
+        title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
+        onAccept: () {
+          controller.acceptContact(card, false);
+          Get.back();
+        },
+        onCancel: () {
+          Get.back();
+        },
+      ),
+      // _SonrCardHeader(
+      //     name: card.contact.firstName,
+      //     type: Payload.CONTACT,
+      //     onAccept: () {
+      //       controller.acceptContact(card, false);
+      //       Get.back();
+      //     }),
       Padding(padding: EdgeInsets.all(8)),
 
       // @ Basic Contact Info - Make Expandable
@@ -169,15 +179,25 @@ class _ContactReply extends GetView<SonrCardController> {
       height: 60,
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
-        _SonrCardHeader(
-          name: card.contact.firstName,
-          type: Payload.CONTACT,
-          isReply: true,
+        SonrHeaderBar.closeAccept(
+          title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
           onAccept: () {
             controller.acceptContact(card, false);
             Get.back();
           },
+          onCancel: () {
+            Get.back();
+          },
         ),
+        // _SonrCardHeader(
+        //   name: card.contact.firstName,
+        //   type: Payload.CONTACT,
+        //   isReply: true,
+        //   onAccept: () {
+        //     controller.acceptContact(card, false);
+        //     Get.back();
+        //   },
+        // ),
         Padding(padding: EdgeInsets.all(8)),
 
         // @ Basic Contact Info - Make Expandable
@@ -208,12 +228,22 @@ class _FileInvite extends GetView<SonrCardController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // @ Header
-            _SonrCardHeader(
-                name: from.profile.firstName,
-                type: card.payload,
-                onAccept: () {
-                  controller.acceptFile();
-                }),
+            SonrHeaderBar.closeAccept(
+              title: SonrText.invite(card.payload.toString(), from.profile.firstName),
+              onAccept: () {
+                controller.acceptFile();
+              },
+              onCancel: () {
+                controller.declineInvite();
+                Get.back();
+              },
+            ),
+            // _SonrCardHeader(
+            //     name: from.profile.firstName,
+            //     type: card.payload,
+            //     onAccept: () {
+            //       controller.acceptFile();
+            //     }),
             Padding(padding: EdgeInsets.all(8)),
 
             // @ Build Item from Metadata and Peer
@@ -246,13 +276,23 @@ class _URLInvite extends GetView<SonrCardController> {
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.max, children: [
       // @ Header
-      _SonrCardHeader(
-          name: name,
-          type: Payload.URL,
-          onAccept: () {
-            Get.back();
-            Get.find<DeviceService>().launchURL(url);
-          }),
+      SonrHeaderBar.closeAccept(
+        title: SonrText.invite(Payload.URL.toString(), name),
+        onAccept: () {
+          Get.back();
+          Get.find<DeviceService>().launchURL(url);
+        },
+        onCancel: () {
+          Get.back();
+        },
+      ),
+      // _SonrCardHeader(
+      //     name: name,
+      //     type: Payload.URL,
+      //     onAccept: () {
+      //       Get.back();
+      //       Get.find<DeviceService>().launchURL(url);
+      //     }),
       Padding(padding: EdgeInsets.all(8)),
 
       Row(

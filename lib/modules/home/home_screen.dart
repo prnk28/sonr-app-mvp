@@ -13,25 +13,18 @@ class HomeScreen extends GetView<HomeController> {
     // Check for Initial Media after connected
     Get.find<DeviceService>().checkInitialShare();
 
-    // Build View
-    return SonrTheme(
-        child: Scaffold(
-            backgroundColor: NeumorphicTheme.baseColor(context),
-            appBar: SonrAppBar.leadingWithAction(
-                "Home",
-                // Leading Profile
-                SonrButton.appBar(
-                  SonrIcon.profile,
-                  () => Get.offNamed("/profile"),
-                ),
-
-                // Action Search
-                SonrButton.appBar(
-                  SonrIcon.search,
-                  () => print("Search"),
-                )),
-            floatingActionButton: ShareButton(),
-            body: GestureDetector(onTap: () => controller.toggleShareExpand(options: ToggleForced(false)), child: _HomeView())));
+    return SonrScaffold.appBarLeadingAction(
+        title: "Home",
+        leading: SonrButton.circleIcon(
+          SonrIcon.profile,
+          () => Get.offNamed("/profile"),
+        ),
+        action: SonrButton.circleIcon(
+          SonrIcon.search,
+          () => print("Search"),
+        ),
+        floatingActionButton: ShareButton(),
+        body: GestureDetector(onTap: () => controller.toggleShareExpand(options: ToggleForced(false)), child: _HomeView()));
   }
 }
 

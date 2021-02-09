@@ -14,17 +14,14 @@ class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return SonrTheme(
-        child: Scaffold(
-      backgroundColor: NeumorphicTheme.baseColor(context),
-      body: _SliverViews(),
-      floatingActionButton: NeumorphicFloatingActionButton(
-          child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
-          style: NeumorphicStyle(intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
-          onPressed: () {
-            Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
-          }),
-    ));
+    return SonrScaffold(
+        body: _SliverViews(),
+        floatingActionButton: NeumorphicFloatingActionButton(
+            child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
+            style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
+            onPressed: () {
+              Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
+            }));
   }
 }
 
@@ -37,31 +34,12 @@ class _SliverViews extends GetView<ProfileController> {
       child: CustomScrollView(
         slivers: [
           // @ Builds Profile Header
-          SliverAppBar(
-            pinned: true,
-            floating: true,
-            snap: true,
-            primary: true,
-            automaticallyImplyLeading: false,
-            toolbarHeight: kToolbarHeight + 16 * 2,
-            flexibleSpace: ContactHeader(),
-            expandedHeight: 285,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                // @ Close Button
-                Padding(
-                    padding: EdgeInsets.only(left: 4.0),
-                    child: SonrButton.appBar(SonrIcon.close, () => Get.offNamed("/home/profile"), intensity: 0.4)),
-
-                // @ More Button
-                Padding(
-                    padding: EdgeInsets.only(right: 4.0),
-                    child: SonrButton.appBar(SonrIcon.settings, () => {Get.dialog(_QRScanner())}, intensity: 0.4)),
-              ],
-            ),
-          ),
+          SonrHeaderBar.sliver(
+              leading: SonrButton.circleIcon(SonrIcon.close, () => Get.offNamed("/home/profile"),
+                  intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
+              action: SonrButton.circleIcon(SonrIcon.more, () => {Get.dialog(_QRScanner())},
+                  intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
+              flexibleSpace: ContactHeader()),
 
           SliverPadding(padding: EdgeInsets.all(14)),
 

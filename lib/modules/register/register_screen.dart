@@ -7,9 +7,8 @@ import 'package:sonr_app/theme/theme.dart';
 class RegisterScreen extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: SonrAppBar.title("Sonr"),
-        backgroundColor: NeumorphicTheme.baseColor(context),
+    return SonrScaffold.appBarTitle(
+        title: "Sonr",
         body: Column(children: <Widget>[
           Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0),
