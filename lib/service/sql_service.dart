@@ -39,8 +39,8 @@ class SQLService extends GetxService {
       await db.execute('''
 create table $CARD_TABLE (
   $cardColumnId integer primary key autoincrement,
-  $cardColumnPayload text not null,
-  $cardColumnPlatform text not null,
+  $cardColumnPayload integer not null,
+  $cardColumnPlatform integer not null,
   $cardColumnPreview blob,
   $cardColumnReceived integer not null,
   $cardColumnUserName text not null,
@@ -56,15 +56,20 @@ create table $CARD_TABLE (
   // ^ Insert TransferCard into SQL DB ^ //
   Future<TransferCard> storeCard(TransferCard card) async {
     card.id = await _db.insert(CARD_TABLE, {
-      cardColumnPayload: card.payload.toString(),
-      cardColumnPlatform: card.platform.toString(),
+      // General
+      cardColumnPayload: card.payload.value,
+      cardColumnPlatform: card.platform.value,
       cardColumnPreview: Uint8List.fromList(card.preview),
       cardColumnReceived: card.received,
+
+      // Owner Properties
       cardColumnUserName: card.username,
       cardColumnFirstName: card.firstName,
       cardColumnLastName: card.lastName,
-      cardColumnContact: card.contact.toProto3Json(),
-      cardColumnMetadata: card.metadata.toProto3Json(),
+
+      // Transfer Properties
+      cardColumnContact: card.contact.writeToJson(),
+      cardColumnMetadata: card.metadata.writeToJson(),
     });
     return card;
   }
@@ -100,12 +105,16 @@ create table $CARD_TABLE (
     // Validate Record Length
     if (records.length > 0) {
       records.forEach((e) {
+        print(e);
         // Create TransferCard Object
         TransferCard card = new TransferCard();
         card.id = e[cardColumnId];
-        card.payload = e[cardColumnPayload];
-        card.platform = e[cardColumnPlatform];
-        card.preview = e[cardColumnPreview];
+        card.payload = Payload.valueOf(e[cardColumnPayload]);
+        card.platform = Platform.valueOf(e[cardColumnPlatform]);
+
+        // Get Preview
+        Uint8List preview = e[cardColumnPreview];
+        card.preview = preview.toList();
         card.received = e[cardColumnReceived];
         card.username = e[cardColumnUserName];
         card.firstName = e[cardColumnFirstName];

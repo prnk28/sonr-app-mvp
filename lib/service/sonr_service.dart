@@ -33,7 +33,7 @@ class SonrService extends GetxService {
   // @ Set References
   Node _node;
   PeerController _peerController;
-  bool _processed = false;
+  // bool _processed = false;
   String _url;
   InviteRequest_FileInfo _file;
 
@@ -105,9 +105,9 @@ class SonrService extends GetxService {
     // File Payload
     if (payload.value == Payload.MEDIA) {
       // Check Status
-      if (_processed) {
-        await _node.inviteFile(c.peer, _file);
-      }
+      //if (_processed) {
+      await _node.inviteFile(c.peer, _file);
+      // }
     }
 
     // Contact Payload
@@ -218,7 +218,7 @@ class SonrService extends GetxService {
       print(data.toString());
 
       // Save Card
-      // Get.find<SQLService>().storeFile(data);
+      Get.find<SQLService>().storeCard(data);
       Get.find<DeviceService>().saveMediaFromCard(data);
       Get.find<SonrCardController>().received(data);
       HapticFeedback.vibrate();
