@@ -6,44 +6,82 @@ import 'package:flutter/material.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ** Home Screen Item ** //
-class TransferItem extends GetView<HomeController> {
+class TransferItem extends GetWidget<TransferItemController> {
   final TransferCard card;
-  TransferItem(this.card);
+  final int index;
+  TransferItem(this.card, this.index);
 
   @override
   Widget build(BuildContext context) {
-    // @ Return View
+    // Initialize TransferItem Controller
+    controller.initialize(card, index);
+
+    // Return View
+    return Obx(() {
+      // @ Current Card is in Focus
+      if (controller.isFocused.value) {
+        return PlayAnimation<double>(
+          tween: (0.85).tweenTo(0.95),
+          duration: 200.milliseconds,
+          builder: (context, child, value) {
+            return Transform.scale(
+              scale: value,
+              child: buildCard(card),
+            );
+          },
+        );
+      }
+
+      if (controller.hasLeftFocus.value) {
+        return PlayAnimation<double>(
+          tween: (0.95).tweenTo(0.85),
+          duration: 200.milliseconds,
+          builder: (context, child, value) {
+            return Transform.scale(
+              scale: value,
+              child: buildCard(card),
+            );
+          },
+        );
+      }
+
+      // @ Current Card is Out of Focus
+      return Transform.scale(
+        scale: 0.85,
+        child: buildCard(card),
+      );
+    });
+  }
+
+  // ^ Method Creates Card Widget ^ //
+  Widget buildCard(TransferCard card) {
+    Widget view;
+    switch (card.payload) {
+      case Payload.MEDIA:
+        view = _buildMediaItem(card.metadata, card);
+        break;
+      case Payload.CONTACT:
+        view = _buildContactItem(card.contact);
+        break;
+    }
     return GestureDetector(
       onTap: () async {
-        controller.toggleShareExpand(options: ToggleForced(false));
+        // controller.toggleShareExpand(options: ToggleForced(false));
       },
       child: Neumorphic(
         style: NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
         margin: EdgeInsets.all(4),
         child: Container(
           height: 75,
-          child: buildCard(card),
           decoration: BoxDecoration(
               image: DecorationImage(
             fit: BoxFit.cover,
             image: MemoryImage(card.metadata.thumbnail),
           )),
+          child: view,
         ),
       ),
     );
-  }
-
-  // ^ Method Creates Card Widget ^ //
-  Widget buildCard(TransferCard card) {
-    switch (card.payload) {
-      case Payload.MEDIA:
-        return _buildMediaItem(card.metadata, card);
-        break;
-      case Payload.CONTACT:
-        return _buildContactItem(card.contact);
-        break;
-    }
-    return Container();
   }
 
   // @ Method Builds Media Content from Metadata ^ //
@@ -94,4 +132,47 @@ class MediaItemExpanded extends StatelessWidget {
       ),
     );
   }
+}
+
+class TransferItemController extends GetxController {
+  // References
+  int index;
+  TransferCard card;
+  bool _initialized;
+
+  // Properties
+  final isFocused = false.obs;
+  final hasLeftFocus = false.obs;
+
+  TransferItemController() {
+    // Check if Focused
+    Get.find<HomeController>().pageIndex.listen((currIdx) {
+      if (_initialized) {
+        // Check if No Longer Focused
+        if (isFocused.value) {
+          // Set to Scale Down
+          hasLeftFocus(index == currIdx);
+
+          // Reset after Delay
+          Future.delayed(200.milliseconds, () {
+            hasLeftFocus(false);
+          });
+        }
+
+        // Update Focused
+        isFocused(index == currIdx);
+      }
+    });
+  }
+
+  // ^ Sets TransferCard Data for this Widget ^
+  initialize(TransferCard card, int index) {
+    this.card = card;
+    this.index = index;
+    _initialized = true;
+    isFocused(index == 0);
+  }
+
+  // ^ Expands Transfer Card into Hero ^ //
+  expand() {}
 }

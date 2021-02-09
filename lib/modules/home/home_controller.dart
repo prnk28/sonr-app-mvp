@@ -20,7 +20,7 @@ class HomeController extends GetxController {
   // Widget Elements
   final isExpanded = false.obs;
   final pageIndex = 0.obs;
-  final pagePrevIndex = 0.obs;
+
   final pageOffset = 0.0.obs;
   final toggleIndex = 0.obs;
 
@@ -142,15 +142,6 @@ class HomeController extends GetxController {
 
     // Go to Transfer
     Get.offNamed("/transfer");
-  }
-
-  // ^ updatePageIndex changes page index value ^ //
-  void updatePageIndex(int newIndex) {
-    // Set Previous Index for Scale Down
-    pagePrevIndex(pageIndex.value);
-
-    // Change Current Page Index
-    pageIndex(newIndex);
   }
 
   // ^ Adds a Card to Screen ^ //

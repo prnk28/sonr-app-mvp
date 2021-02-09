@@ -67,46 +67,9 @@ class _HomeView extends GetView<HomeController> {
               child: PageView.builder(
                   itemCount: controller.allCards.length,
                   controller: controller.pageController,
-                  onPageChanged: (int index) => controller.updatePageIndex(index),
+                  onPageChanged: (int index) => controller.pageIndex(index),
                   itemBuilder: (_, idx) {
-                    return Obx(() {
-                      // @ Current Card is in Focus
-                      if (idx == controller.pageIndex.value) {
-                        return PlayAnimation<double>(
-                          tween: (0.85).tweenTo(0.95),
-                          duration: 200.milliseconds,
-                          builder: (context, child, value) {
-                            return Transform.scale(
-                              scale: value,
-                              child: TransferItem(controller.allCards[idx]),
-                            );
-                          },
-                        );
-                      }
-                      // @ Current Card is Out of Focus
-                      else {
-                        // Card was Previously in Focus
-                        if (idx == controller.pagePrevIndex.value) {
-                          return PlayAnimation<double>(
-                            tween: (0.95).tweenTo(0.85),
-                            duration: 100.milliseconds,
-                            builder: (context, child, value) {
-                              return Transform.scale(
-                                scale: value,
-                                child: TransferItem(controller.allCards[idx]),
-                              );
-                            },
-                          );
-                        }
-                        // Card never in Focus
-                        else {
-                          return Transform.scale(
-                            scale: 0.85,
-                            child: TransferItem(controller.allCards[idx]),
-                          );
-                        }
-                      }
-                    });
+                    return TransferItem(controller.allCards[idx], idx);
                   }),
             ),
           ))
