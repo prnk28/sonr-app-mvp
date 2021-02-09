@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'color.dart';
-import 'icon.dart';
-import 'text.dart';
+import '../theme/color.dart';
+import '../theme/icon.dart';
+import '../theme/text.dart';
 
 enum HapticFeedbackType { Light, Medium, Heavy, Selection }
 enum WidgetPosition { Left, Right, Top, Bottom, Center }

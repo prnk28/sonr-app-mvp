@@ -163,7 +163,7 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      Get.find<SonrCardController>().state(CardState.Invitation);
+      Get.find<TransferCardController>().state(CardType.Invite);
       HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
@@ -227,7 +227,7 @@ class SonrService extends GetxService {
       // Save Card
       Get.find<SQLService>().storeCard(data);
       Get.find<DeviceService>().saveMediaFromCard(data);
-      Get.find<SonrCardController>().received(data);
+      Get.find<TransferCardController>().received(data);
       HapticFeedback.vibrate();
     }
   }

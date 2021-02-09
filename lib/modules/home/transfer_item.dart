@@ -4,6 +4,9 @@ import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:photo_view/photo_view.dart';
+
+import 'home_screen.dart';
 
 // ** Home Screen Item ** //
 class TransferItem extends GetWidget<TransferItemController> {
@@ -55,6 +58,7 @@ class TransferItem extends GetWidget<TransferItemController> {
 
   // ^ Method Creates Card Widget ^ //
   Widget buildView() {
+    // Initialize
     Widget view;
     switch (card.payload) {
       case Payload.MEDIA:
@@ -64,12 +68,14 @@ class TransferItem extends GetWidget<TransferItemController> {
         view = _buildContactItem(card.contact);
         break;
     }
+
+    // Create View
     return Neumorphic(
       style: NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
       margin: EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {
-          controller.expand();
+          controller.openCard();
         },
         child: Hero(
           tag: card.id,
@@ -89,7 +95,7 @@ class TransferItem extends GetWidget<TransferItemController> {
 
   // @ Method Builds Media Content from Metadata ^ //
   Widget _buildMediaItem(Metadata metadata, TransferCard card) {
-    return new Stack(
+    return Stack(
       children: <Widget>[
         Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           SonrText.normal(metadata.mime.type.toString()),
@@ -105,37 +111,6 @@ class TransferItem extends GetWidget<TransferItemController> {
       SonrText.normal(contact.firstName),
       SonrText.normal(contact.lastName),
     ]);
-  }
-}
-
-// ** Expanded Hero Home Screen Item ** //
-class MediaItemExpanded extends StatelessWidget {
-  final TransferItemController controller;
-
-  const MediaItemExpanded({Key key, @required this.controller}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: Get.width,
-      child: GestureDetector(
-        onTap: () {
-          Get.back();
-        },
-        child: Hero(
-          tag: controller.card.id,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: Get.back,
-              child: Image.memory(
-                controller.card.metadata.thumbnail,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 
@@ -180,13 +155,13 @@ class TransferItemController extends GetxController {
   }
 
   // ^ Expands Transfer Card into Hero ^ //
-  expand() {
+  openCard() {
     if (isFocused.value) {
       // Close Share Menu
       Get.find<HomeController>().toggleShareExpand(options: ToggleForced(false));
 
       // Push to Page
-      Get.to(MediaItemExpanded(controller: this), transition: Transition.fadeIn);
+      Get.to(ExpandedView(card: card), transition: Transition.fadeIn);
     }
   }
 }

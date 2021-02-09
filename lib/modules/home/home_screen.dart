@@ -1,8 +1,10 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/modules/home/share_button.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'home_controller.dart';
 import 'package:flutter/material.dart';
 import 'transfer_item.dart';
@@ -62,10 +64,40 @@ class _HomeView extends GetView<HomeController> {
                   controller: controller.pageController,
                   onPageChanged: (int index) => controller.pageIndex(index),
                   itemBuilder: (_, idx) {
-                    return TransferItem(controller.allCards[idx], idx);
+                    return SonrCard.fromItem(controller.allCards[idx], idx);
                   }),
             ),
           ))
     ]);
+  }
+}
+
+// ** Expanded Hero Home Screen Item ** //
+class ExpandedView extends StatelessWidget {
+  final TransferCard card;
+
+  const ExpandedView({Key key, @required this.card}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: Get.back,
+      child: SizedBox(
+        width: Get.width,
+        child: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: Hero(
+            tag: card.id,
+            child: Material(
+              color: Colors.transparent,
+              child: PhotoView(
+                imageProvider: MemoryImage(card.metadata.thumbnail),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

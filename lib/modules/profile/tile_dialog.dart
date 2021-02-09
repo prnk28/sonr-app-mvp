@@ -37,6 +37,7 @@ class TileDialog extends GetWidget<TileController> {
                     topButtons = Container();
 
                     // Bottom Buttons
+                    
                     bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                       // @ Bottom Left Close/Cancel Button
                       SonrButton.close(() {

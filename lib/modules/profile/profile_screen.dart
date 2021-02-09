@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sonr_app/modules/profile/tile_dialog.dart';
 import 'package:sonr_core/models/models.dart' hide Platform;
 import 'tile_item.dart';
@@ -37,8 +35,7 @@ class _SliverViews extends GetView<ProfileController> {
           SonrHeaderBar.sliver(
               leading: SonrButton.circleIcon(SonrIcon.close, () => Get.offNamed("/home/profile"),
                   intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
-              action: SonrButton.circleIcon(SonrIcon.more, () => {Get.dialog(_QRScanner())},
-                  intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
+              action: SonrButton.circleIcon(SonrIcon.more, () => {}, intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
               flexibleSpace: ContactHeader()),
 
           SliverPadding(padding: EdgeInsets.all(14)),
@@ -79,77 +76,5 @@ class SocialsGrid extends StatelessWidget {
                 return StaggeredTile.count(2, 2);
               }
             }));
-  }
-}
-
-class _QRScanner extends StatefulWidget {
-  @override
-  _QRScannerState createState() => _QRScannerState();
-}
-
-class _QRScannerState extends State<_QRScanner> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode result;
-  QRViewController controller;
-
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller.resumeCamera();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            // To ensure the Scanner view is properly sizes after rotation
-            // we need to listen for Flutter SizeChanged notification and update controller
-            child: NotificationListener<SizeChangedLayoutNotification>(
-              onNotification: (notification) {
-                // Future.microtask(() => controller?.updateDimensions(qrKey));
-                return false;
-              },
-              child: SizeChangedLayoutNotifier(
-                key: const Key('qr-size-notifier'),
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Text('Scan a code'),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }

@@ -32,11 +32,9 @@ dependencies:
   flutter_compass: ^0.5.1
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1
-  qr_code_scanner: ^0.3.0
   sensors: ^0.4.1+1
 
   # -- Data --
-  #file_picker: ^2.1.6
   image_gallery_saver: ^1.6.7
   media_gallery: ^0.1.5
   path: ^1.7.0
@@ -57,6 +55,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.3.2
   google_fonts: ^1.1.1
   im_stepper: ^0.1.2+9
+  photo_view: ^0.10.3
   rive: ^0.6.2
   simple_animations: ^2.4.0
 

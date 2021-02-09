@@ -9,8 +9,8 @@ class SonrHeaderBar extends StatelessWidget {
   // Properties
   final SonrText title;
   final _SonrDialogHeaderType type;
-  final SonrButton leading;
-  final SonrButton action;
+  final Widget leading;
+  final Widget action;
   final Widget flexibleSpace;
 
   // Sliver Attributes
@@ -55,7 +55,7 @@ class SonrHeaderBar extends StatelessWidget {
   factory SonrHeaderBar.action({@required SonrText title, @required SonrButton action}) {
     return SonrHeaderBar(
       title: title,
-      type: _SonrDialogHeaderType.Leading,
+      type: _SonrDialogHeaderType.Action,
       action: action,
     );
   }
