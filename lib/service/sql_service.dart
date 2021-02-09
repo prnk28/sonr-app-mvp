@@ -1,15 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/model_card.dart';
-import 'package:sonr_app/data/sql_contact.dart';
-import 'package:sonr_app/data/sql_meta.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-const DATABASE_PATH = 'cards.db';
-final String metaTable = "files";
-final String contactTable = "contacts";
+// ** Constant Values
+const DATABASE_PATH = 'transferCards.db';
+const CARD_TABLE = "transfers";
 
+// ** Card Model for Transferred Data ** //
+final String cardColumnId = '_id'; // integer primary key autoincrement
+final String cardColumnPayload = "payload"; // text
+final String cardColumnPlatform = "platform"; // text
+final String cardColumnPreview = "preview"; // blob
+final String cardColumnReceived = 'received'; // integer -> DateTime
+final String cardColumnUserName = 'username'; // text
+final String cardColumnFirstName = 'firstName'; // text
+final String cardColumnLastName = 'lastName'; // text
+final String cardColumnContact = 'contact'; // text -> JSON
+final String cardColumnMetadata = 'metadata'; // text -> JSON
+
+// ** SQL Card Service ** //
 class SQLService extends GetxService {
   // Database Reference
   Database _db;
@@ -22,142 +34,103 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 2, onCreate: (Database db, int version) async {
-      // Create Meta Table
-      await db.execute('''
-create table $metaTable (
-  $fileColumnId integer primary key autoincrement,
-  $fileColumnName text,
-  $fileColumnPath text,
-  $fileColumnSize integer,
-  $fileColumnMime text,
-  $fileColumnReceived integer,
-  $fileColumnThumbnail blob,
-  $fileColumnOwner text)
-''');
-
+    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
       // Create Cards Table
       await db.execute('''
-create table $contactTable (
-  $contactColumnId integer primary key autoincrement,
-  $contactColumnFirstName text not null,
-  $contactColumnLastName text not null,
-  $contactColumnData text not null,
-  $contactColumnlastOpened integer not null)
+create table $CARD_TABLE (
+  $cardColumnId integer primary key autoincrement,
+  $cardColumnPayload integer not null,
+  $cardColumnPlatform integer not null,
+  $cardColumnPreview blob,
+  $cardColumnReceived integer not null,
+  $cardColumnUserName text not null,
+  $cardColumnFirstName text not null,
+  $cardColumnLastName text not null,
+  $cardColumnContact text,
+  $cardColumnMetadata text)
 ''');
     });
     return this;
   }
 
-  // ** Close SQL Database ** //
-  onClose() async {
-    await _db.close();
-  }
+  // ^ Insert TransferCard into SQL DB ^ //
+  Future<TransferCard> storeCard(TransferCard card) async {
+    card.id = await _db.insert(CARD_TABLE, {
+      // General
+      cardColumnPayload: card.payload.value,
+      cardColumnPlatform: card.platform.value,
+      cardColumnPreview: Uint8List.fromList(card.preview),
+      cardColumnReceived: card.received,
 
-  // ^ Insert Metadata into SQL DB ^ //
-  Future<Metadata> storeFile(Metadata metadata) async {
-    metadata.id = await _db.insert(metaTable, {
-      fileColumnName: metadata.name,
-      fileColumnPath: metadata.path,
-      fileColumnSize: metadata.size,
-      fileColumnMime: metadata.mime.writeToJson(),
-      fileColumnReceived: metadata.received,
-      fileColumnThumbnail: metadata.thumbnail,
-      fileColumnOwner: metadata.owner.writeToJson(),
+      // Owner Properties
+      cardColumnUserName: card.username,
+      cardColumnFirstName: card.firstName,
+      cardColumnLastName: card.lastName,
+
+      // Transfer Properties
+      cardColumnContact: card.contact.writeToJson(),
+      cardColumnMetadata: card.metadata.writeToJson(),
     });
-    return metadata;
+    return card;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
-  Future deleteFile(int id) async {
-    var i = await _db.delete(metaTable, where: '$fileColumnId = ?', whereArgs: [id]);
+  Future deleteCard(int id) async {
+    var i = await _db.delete(CARD_TABLE, where: '$cardColumnId = ?', whereArgs: [id]);
     return i;
   }
 
-  // ^ Get All Files ^ //
-  Future<List<MetaSQL>> fetchFiles() async {
+  // ^ Get All Cards ^ //
+  Future<List<TransferCard>> fetchAll() async {
     // Init List
-    List<MetaSQL> result = <MetaSQL>[];
+    List<TransferCard> result = <TransferCard>[];
+
+    // Query SQL
     List<Map> records = await _db.query(
-      metaTable,
+      CARD_TABLE,
       columns: [
-        fileColumnId,
-        fileColumnName,
-        fileColumnPath,
-        fileColumnSize,
-        fileColumnMime,
-        fileColumnReceived,
-        fileColumnThumbnail,
-        fileColumnOwner,
+        cardColumnId,
+        cardColumnPayload,
+        cardColumnPlatform,
+        cardColumnPreview,
+        cardColumnReceived,
+        cardColumnUserName,
+        cardColumnFirstName,
+        cardColumnLastName,
+        cardColumnContact,
+        cardColumnMetadata,
       ],
     );
+
+    // Validate Record Length
     if (records.length > 0) {
-      // Convert Each Record into Object
-      records.forEach((element) {
-        // Implement SQL Bindings for Metadata Protobuf
-        MetaSQL meta = MetaSQL.fromSQL(element);
-        result.add(meta);
+      records.forEach((e) {
+        // Create TransferCard Object
+        TransferCard card = new TransferCard();
+        card.id = e[cardColumnId];
+        card.payload = Payload.valueOf(e[cardColumnPayload]);
+        card.platform = Platform.valueOf(e[cardColumnPlatform]);
+
+        // Get Preview
+        Uint8List preview = e[cardColumnPreview];
+        card.preview = preview.toList();
+        card.received = e[cardColumnReceived];
+        card.username = e[cardColumnUserName];
+        card.firstName = e[cardColumnFirstName];
+        card.lastName = e[cardColumnLastName];
+        card.contact = Contact.fromJson(e[cardColumnContact]);
+        card.metadata = Metadata.fromJson(e[cardColumnMetadata]);
+
+        // Add to List
+        result.add(card);
       });
     }
     // Update All Files
     return result;
   }
 
-  // ^ Insert Contact into SQL DB ^ //
-  Future<Contact> storeContact(Contact contact) async {
-    await _db.insert(contactTable, ContactSQL(contact).toSQL());
-    return contact;
-  }
-
-  // ^ Delete a Contact from SQL DB ^ //
-  Future deleteContact(int id) async {
-    var i = await _db.delete(contactTable, where: '$fileColumnId = ?', whereArgs: [id]);
-    return i;
-  }
-
-  // ^ Update Contact in DB ^ //
-  Future updateContact(ContactSQL contact) async {
-    await _db.update(contactTable, contact.toSQL(), where: '$fileColumnId = ?', whereArgs: [contact.id]);
-  }
-
-  // ^ Get All Contacts ^ //
-  Future<List<ContactSQL>> fetchContacts() async {
-    // Init List
-    List<ContactSQL> result = <ContactSQL>[];
-    List<Map> records = await _db.query(
-      contactTable,
-      columns: [contactColumnId, contactColumnFirstName, contactColumnLastName, contactColumnData, contactColumnlastOpened],
-    );
-    if (records.length > 0) {
-      // Convert Each Record into Object
-      records.forEach((element) {
-        // Implement SQL Bindings for Metadata Protobuf
-        ContactSQL meta = ContactSQL.fromSQL(element);
-        result.add(meta);
-      });
-    }
-
-    // Update All Files
-    return result;
-  }
-
-  // ^ Returns all Transfers ^ //
-  Future<List<CardModel>> fetchAll() async {
-    // Retreive Data
-    var result = <CardModel>[];
-    var contacts = await fetchContacts();
-    var media = await fetchFiles();
-
-    // Convert Contacts to Cards
-    contacts.forEach((c) {
-      result.add(CardModel.fromContactSQL(c));
-    });
-
-    // Convert Media to Cards
-    media.forEach((m) {
-      result.add(CardModel.fromMetaSQL(m));
-    });
-
-    return result;
+  // ** Close SQL Database ** //
+  onClose() async {
+    await _db.close();
   }
 }

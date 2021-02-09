@@ -47,7 +47,7 @@ class _YoutubeViewState extends State<YoutubeView> {
 
   // ^ Fetches Data ^ //
   _fetch() async {
-    var res = await Get.find<SocialMediaService>().getYoutube(widget.item.showcase);
+    var res = await Get.find<SocialMediaService>().getYoutube(widget.item.links.postLink);
     setState(() {
       video = res;
       fetched = true;

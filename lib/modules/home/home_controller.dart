@@ -1,6 +1,5 @@
 // import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/model_card.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
@@ -15,19 +14,27 @@ const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 
 
 class HomeController extends GetxController {
   // Properties
-  final cards = <CardModel>[].obs;
-  final allCards = <CardModel>[].obs;
+  final cards = <TransferCard>[].obs;
+  final allCards = <TransferCard>[].obs;
 
   // Widget Elements
   final isExpanded = false.obs;
   final pageIndex = 0.obs;
+  final pageOffset = 0.0.obs;
   final toggleIndex = 0.obs;
 
   // References
+  PageController pageController;
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   @override
   void onInit() {
+    // Set PageController
+    pageController = PageController(viewportFraction: 0.75);
+    pageController.addListener(() {
+      pageOffset(pageController.page);
+    });
+
     // Fetch Data
     Get.find<SQLService>().fetchAll().then((data) {
       data.forEach((c) => allCards.add(c));
@@ -127,7 +134,7 @@ class HomeController extends GetxController {
 
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
-    Get.find<SonrService>().process(Payload.CONTACT);
+    Get.find<SonrService>().setPayload(Payload.CONTACT);
 
     // Close Share Button
     Get.find<HomeController>().toggleShareExpand();
@@ -137,14 +144,9 @@ class HomeController extends GetxController {
   }
 
   // ^ Adds a Card to Screen ^ //
-  void addCard(CardModel card) {
+  void addCard(TransferCard card) {
     allCards.add(card);
     allCards.refresh();
-  }
-
-  // ^ Opens Card with Hero ^ //
-  void openCard(CardModel card) {
-    // TODO
   }
 }
 

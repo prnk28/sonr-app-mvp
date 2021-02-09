@@ -448,7 +448,7 @@ class Url {
 
   Url.fromJson(Map<String, dynamic> json) {
     if (json['urls'] != null) {
-      urls = new List<Urls>();
+      urls = <Urls>[];
       json['urls'].forEach((v) {
         urls.add(new Urls.fromJson(v));
       });

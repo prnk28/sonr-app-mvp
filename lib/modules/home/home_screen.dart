@@ -66,7 +66,7 @@ class _HomeView extends GetView<HomeController> {
               height: 500, // card height
               child: PageView.builder(
                   itemCount: controller.allCards.length,
-                  controller: PageController(viewportFraction: 0.7),
+                  controller: controller.pageController,
                   onPageChanged: (int index) => controller.pageIndex(index),
                   itemBuilder: (_, idx) {
                     return Obx(() {
@@ -75,6 +75,7 @@ class _HomeView extends GetView<HomeController> {
                           tween: (0.85).tweenTo(0.95),
                           duration: 200.milliseconds,
                           builder: (context, child, value) {
+                            // Offset => controller.pageOffset.value - idx
                             return Transform.scale(
                               scale: value,
                               child: TransferItem(controller.allCards[idx]),

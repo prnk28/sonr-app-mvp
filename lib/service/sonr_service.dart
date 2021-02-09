@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as Pkg;
@@ -7,7 +6,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/model_user.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
 import 'sql_service.dart';
 
@@ -25,16 +24,16 @@ class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
   final direction = 0.0.obs;
-  final peers = Map<String, Peer>().obs;
   final olc = "".obs;
+  final peers = Map<String, Peer>().obs;
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
 
   // @ Set References
   Node _node;
-  PeerController _peerController;
-  bool _processed = false;
   String _url;
+  PeerController _peerController;
+  InviteRequest_FileInfo _file;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -57,10 +56,10 @@ class SonrService extends GetxService {
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Connected, _handleConnected);
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
+    _node.assignCallback(CallbackEvent.Directed, _handleDirect);
     _node.assignCallback(CallbackEvent.Invited, _handleInvite);
     _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
     _node.assignCallback(CallbackEvent.Received, _handleReceived);
-    _node.assignCallback(CallbackEvent.Queued, _handleQueued);
     _node.assignCallback(CallbackEvent.Responded, _handleResponded);
     _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
@@ -75,15 +74,19 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Process-File Event ^
-  void process(Payload type, {File file, String url, bool isExtern = false, int duration = 0, String thumbPath = ""}) async {
+  void setPayload(Payload type, {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = ""}) async {
     // Set Payload Type
     payload(type);
+    print(type.toString());
 
     // File Payload
-    if (payload.value == Payload.FILE) {
-      assert(file != null);
-
-      _node.processFile(false, file.path);
+    if (payload.value == Payload.MEDIA) {
+      assert(path != null);
+      _file = InviteRequest_FileInfo();
+      _file.path = path;
+      _file.hasThumbnail = hasThumbnail;
+      _file.duration = duration;
+      _file.thumbpath = thumbPath;
     }
 
     // Link Payload
@@ -99,11 +102,9 @@ class SonrService extends GetxService {
     _peerController = c;
 
     // File Payload
-    if (payload.value == Payload.FILE) {
-      // Check Status
-      if (_processed) {
-        await _node.inviteFile(c.peer);
-      }
+    if (payload.value == Payload.MEDIA) {
+      assert(_file != null);
+      await _node.inviteFile(c.peer, _file);
     }
 
     // Contact Payload
@@ -129,12 +130,6 @@ class SonrService extends GetxService {
     await _node.respond(decision);
   }
 
-  // ^ Save and Reset Status ^
-  void saveContact(Contact c) async {
-    // Save Card
-    Get.find<SQLService>().storeContact(c);
-  }
-
   // **************************
   // ******* Callbacks ********
   // **************************
@@ -147,16 +142,20 @@ class SonrService extends GetxService {
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
-      // Update Peers List
+      // Update Lobby Data
+      olc(data.olc);
       peers(data.peers);
     }
   }
 
-  // ^ File has Succesfully Queued ^ //
-  void _handleQueued(dynamic data) async {
-    if (data is Preview) {
-      // Update data
-      _processed = true;
+  // ^ Node Has Been Directed from Other Device ^ //
+  void _handleDirect(dynamic data) async {
+    // Check Type
+    if (data is TransferCard) {
+      // Get.find<SonrCardController>().state(CardState.Invitation);
+      HapticFeedback.heavyImpact();
+      print(data.toString());
+      // Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -166,19 +165,7 @@ class SonrService extends GetxService {
     if (data is AuthInvite) {
       Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
-
-      // Check Payload Type
-      switch (data.payload) {
-        case Payload.CONTACT:
-          Get.dialog(SonrCard.fromInviteContact(data.contact), barrierColor: K_DIALOG_COLOR);
-          break;
-        case Payload.FILE:
-          Get.dialog(SonrCard.fromInviteFile(data), barrierColor: K_DIALOG_COLOR);
-          break;
-        case Payload.URL:
-          Get.dialog(SonrCard.fromInviteUrl(data.url, data.from.profile.firstName), barrierColor: K_DIALOG_COLOR);
-          break;
-      }
+      Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -188,7 +175,7 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
-        Get.dialog(SonrCard.fromReplyContact(data.contact));
+        Get.dialog(SonrCard.fromReply(data));
       } else {
         // For File
         if (data.decision) {
@@ -233,14 +220,13 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   void _handleReceived(dynamic data) {
-    if (data is Metadata) {
+    if (data is TransferCard) {
       // Reset Data
       progress(0.0);
-      print(data.toString());
 
       // Save Card
-      Get.find<SQLService>().storeFile(data);
-      Get.find<DeviceService>().saveMediaFromMeta(data);
+      Get.find<SQLService>().storeCard(data);
+      Get.find<DeviceService>().saveMediaFromCard(data);
       Get.find<SonrCardController>().received(data);
       HapticFeedback.vibrate();
     }

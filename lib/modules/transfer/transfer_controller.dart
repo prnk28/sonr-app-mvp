@@ -15,10 +15,7 @@ enum LobbyState {
 class TransferController extends GetxController {
   // @ Properties
   final Rx<Gradient> gradient = FlutterGradients.findByName(FlutterGradientNames.octoberSilence, type: GradientType.linear).obs;
-
-  // @ References
   final inactiveGradient = FlutterGradients.findByName(FlutterGradientNames.octoberSilence, type: GradientType.linear);
-
   final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
 
   // @ Direction Properties
@@ -31,9 +28,7 @@ class TransferController extends GetxController {
   final heading = "".obs;
 
   // @ Lobby Properties
-  final isEmpty = true.obs;
-  bool _isEmpty = true;
-  RxList<PeerBubble> stackItems = <PeerBubble>[].obs;
+  final stackItems = <PeerBubble>[].obs;
 
   // ^ Controller Constructer ^
   TransferController() {
@@ -69,13 +64,9 @@ class TransferController extends GetxController {
 
   // ^ Create Peer Item from Data ^ //
   addPeer(String id, Peer peer) {
-    // Update State if already unchecked
-    if (_isEmpty) {
-      isEmpty(_isEmpty = false);
-    }
-
     // Create Bubble Validate not Duplicate
     if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
+      // Add to Stack Items
       stackItems.add(PeerBubble(peer, stackItems.length - 1));
       stackItems.refresh();
     }

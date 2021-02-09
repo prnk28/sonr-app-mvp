@@ -41,7 +41,7 @@ class LobbyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // @ Listen to Peers Updates
+      // @ Listen to Lobby Updates
       Get.find<SonrService>().peers().forEach((id, peer) {
         controller.addPeer(id, peer);
       });
