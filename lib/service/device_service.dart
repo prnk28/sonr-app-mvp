@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonr_app/data/model_user.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_core/sonr_core.dart' hide User;
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
 

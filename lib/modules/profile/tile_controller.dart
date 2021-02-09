@@ -103,7 +103,7 @@ class TileController extends GetxController {
     // Validate
     // if (currentTile.value.hasType() && step.value == TileStep.StepThree) {
     // Set Position
-    currentTile.value.position = Get.find<ProfileController>().socials.length - 1;
+    // TODO: currentTile.value.position = Get.find<ProfileController>().socials.length - 1;
 
     // Add Tile to Contact and Save
     Get.find<ProfileController>().saveSocialTile(currentTile.value);

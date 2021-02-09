@@ -16,7 +16,7 @@ class ProfileController extends GetxController {
   final phone = Get.find<DeviceService>().user.contact.phone.obs;
   final email = Get.find<DeviceService>().user.contact.email.obs;
   final website = Get.find<DeviceService>().user.contact.website.obs;
-  final profilePic = Get.find<DeviceService>().user.contact.profilePic.obs;
+  final picture = Get.find<DeviceService>().user.contact.picture.obs;
   final socials = Get.find<DeviceService>().user.contact.socials.obs;
   final focusTileIndex = (-2).obs;
 
@@ -44,7 +44,7 @@ class ProfileController extends GetxController {
     var imgBytes = await image.readAsBytes();
 
     // Set Profile Pic
-    profilePic(imgBytes.toList());
+    picture(imgBytes.toList());
 
     // Save Contact
     saveChanges();
@@ -102,8 +102,8 @@ class ProfileController extends GetxController {
     Get.find<DeviceService>().contact.value.phone = phone.value;
     Get.find<DeviceService>().contact.value.email = email.value;
     Get.find<DeviceService>().contact.value.website = website.value;
-    Get.find<DeviceService>().contact.value.profilePic.clear();
-    Get.find<DeviceService>().contact.value.profilePic = profilePic;
+    Get.find<DeviceService>().contact.value.picture.clear();
+    Get.find<DeviceService>().contact.value.picture = picture;
 
     // Update Socials
     Get.find<DeviceService>().contact.value.socials.clear();

@@ -131,7 +131,7 @@ class CameraPickerController extends GetxController {
     // Save Photo
     Get.find<DeviceService>().savePhoto(capturePath.value);
 
-    Get.find<SonrService>().process(Payload.MEDIA, file: File(capturePath.value));
+    Get.find<SonrService>().setPayload(Payload.MEDIA, path: capturePath.value);
 
     // Close Share Button
     Get.find<HomeController>().toggleShareExpand();

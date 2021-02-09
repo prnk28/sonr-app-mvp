@@ -126,7 +126,7 @@ class HomeController extends GetxController {
 
   // ^ Queues a Contact for Transfer ^ //
   void queueContact() {
-    Get.find<SonrService>().process(Payload.CONTACT);
+    Get.find<SonrService>().setPayload(Payload.CONTACT);
 
     // Close Share Button
     Get.find<HomeController>().toggleShareExpand();

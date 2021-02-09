@@ -7,7 +7,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/model_user.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
 import 'sql_service.dart';
 
@@ -35,6 +35,7 @@ class SonrService extends GetxService {
   PeerController _peerController;
   bool _processed = false;
   String _url;
+  InviteRequest_FileInfo _file;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -60,7 +61,6 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Invited, _handleInvite);
     _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
     _node.assignCallback(CallbackEvent.Received, _handleReceived);
-    _node.assignCallback(CallbackEvent.Queued, _handleQueued);
     _node.assignCallback(CallbackEvent.Responded, _handleResponded);
     _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
@@ -75,15 +75,19 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Process-File Event ^
-  void process(Payload type, {File file, String url, bool isExtern = false, int duration = 0, String thumbPath = ""}) async {
+  void setPayload(Payload type, {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = ""}) async {
     // Set Payload Type
     payload(type);
+    print(type.toString());
 
     // File Payload
     if (payload.value == Payload.MEDIA) {
-      assert(file != null);
-
-      _node.processFile(false, file.path);
+      assert(path != null);
+      _file = InviteRequest_FileInfo();
+      _file.path = path;
+      _file.hasThumbnail = hasThumbnail;
+      _file.duration = duration;
+      _file.thumbpath = thumbPath;
     }
 
     // Link Payload
@@ -102,7 +106,7 @@ class SonrService extends GetxService {
     if (payload.value == Payload.MEDIA) {
       // Check Status
       if (_processed) {
-        await _node.inviteFile(c.peer);
+        await _node.inviteFile(c.peer, _file);
       }
     }
 
@@ -146,18 +150,11 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ File has Succesfully Queued ^ //
-  void _handleQueued(dynamic data) async {
-    if (data is TransferCard) {
-      // Update data
-      _processed = true;
-    }
-  }
-
   // ^ Node Has Been Invited ^ //
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
+      print(data.toProto3Json());
       Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);

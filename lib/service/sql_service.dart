@@ -6,15 +6,15 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 // ** Constant Values
-const DATABASE_PATH = 'cards.db';
-const CARD_TABLE = "cards";
+const DATABASE_PATH = 'transferCards.db';
+const CARD_TABLE = "transfers";
 
 // ** Card Model for Transferred Data ** //
 final String cardColumnId = '_id'; // integer primary key autoincrement
 final String cardColumnPayload = "payload"; // text
 final String cardColumnPlatform = "platform"; // text
 final String cardColumnPreview = "preview"; // blob
-final String cardColumnLastOpened = 'lastOpened'; // integer -> DateTime
+final String cardColumnReceived = 'received'; // integer -> DateTime
 final String cardColumnUserName = 'username'; // text
 final String cardColumnFirstName = 'firstName'; // text
 final String cardColumnLastName = 'lastName'; // text
@@ -34,7 +34,7 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 3, onCreate: (Database db, int version) async {
+    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
       // Create Cards Table
       await db.execute('''
 create table $CARD_TABLE (
@@ -42,7 +42,7 @@ create table $CARD_TABLE (
   $cardColumnPayload text not null,
   $cardColumnPlatform text not null,
   $cardColumnPreview blob,
-  $cardColumnLastOpened integer not null,
+  $cardColumnReceived integer not null,
   $cardColumnUserName text not null,
   $cardColumnFirstName text not null,
   $cardColumnLastName text not null,
@@ -59,7 +59,7 @@ create table $CARD_TABLE (
       cardColumnPayload: card.payload.toString(),
       cardColumnPlatform: card.platform.toString(),
       cardColumnPreview: Uint8List.fromList(card.preview),
-      cardColumnLastOpened: card.lastOpened,
+      cardColumnReceived: card.received,
       cardColumnUserName: card.username,
       cardColumnFirstName: card.firstName,
       cardColumnLastName: card.lastName,
@@ -88,7 +88,7 @@ create table $CARD_TABLE (
         cardColumnPayload,
         cardColumnPlatform,
         cardColumnPreview,
-        cardColumnLastOpened,
+        cardColumnReceived,
         cardColumnUserName,
         cardColumnFirstName,
         cardColumnLastName,
@@ -106,12 +106,12 @@ create table $CARD_TABLE (
         card.payload = e[cardColumnPayload];
         card.platform = e[cardColumnPlatform];
         card.preview = e[cardColumnPreview];
-        card.lastOpened = e[cardColumnLastOpened];
+        card.received = e[cardColumnReceived];
         card.username = e[cardColumnUserName];
         card.firstName = e[cardColumnFirstName];
         card.lastName = e[cardColumnLastName];
-        card.contact = e[cardColumnContact];
-        card.metadata = e[cardColumnMetadata];
+        card.contact = Contact.fromJson(e[cardColumnContact]);
+        card.metadata = Metadata.fromJson(e[cardColumnMetadata]);
 
         // Add to List
         result.add(card);

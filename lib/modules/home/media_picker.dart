@@ -306,7 +306,7 @@ class MediaPickerController extends GetxController {
   confirmSelectedFile() async {
     // Retreive File and Process
     File mediaFile = await selectedFile.value.getFile();
-    Get.find<SonrService>().process(Payload.MEDIA, file: mediaFile);
+    Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path);
 
     // Close Share Button
     Get.find<HomeController>().toggleShareExpand();
