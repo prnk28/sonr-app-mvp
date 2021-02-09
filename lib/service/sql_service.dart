@@ -105,7 +105,6 @@ create table $CARD_TABLE (
     // Validate Record Length
     if (records.length > 0) {
       records.forEach((e) {
-        print(e);
         // Create TransferCard Object
         TransferCard card = new TransferCard();
         card.id = e[cardColumnId];

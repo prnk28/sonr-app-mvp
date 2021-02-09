@@ -2,8 +2,6 @@ import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-import 'media_picker.dart';
-
 class ShareButton extends GetView<HomeController> {
   final expandedView = _ExpandedView();
   final defaultView = _DefaultView();

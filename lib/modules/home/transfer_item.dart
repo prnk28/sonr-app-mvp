@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -14,16 +16,23 @@ class TransferItem extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // @ Return View
     return GestureDetector(
-        onTap: () async {
-          controller.toggleShareExpand(options: ToggleForced(false));
-        },
-        child: Neumorphic(
-            style: NeumorphicStyle(intensity: 0.85),
-            margin: EdgeInsets.all(4),
-            child: Container(
-              height: 75,
-              child: buildCard(card),
-            )));
+      onTap: () async {
+        controller.toggleShareExpand(options: ToggleForced(false));
+      },
+      child: Neumorphic(
+        style: NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+        margin: EdgeInsets.all(4),
+        child: Container(
+          height: 75,
+          child: buildCard(card),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+            fit: BoxFit.cover,
+            image: MemoryImage(card.metadata.thumbnail),
+          )),
+        ),
+      ),
+    );
   }
 
   // ^ Method Creates Card Widget ^ //
@@ -41,13 +50,16 @@ class TransferItem extends GetView<HomeController> {
 
   // @ Method Builds Media Content from Metadata ^ //
   Widget _buildMediaItem(Metadata metadata, TransferCard card) {
-    return Hero(
-      tag: metadata.id,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrText.normal(metadata.mime.type.toString()),
-        SonrText.normal("Owner: " + card.firstName),
-        Image.memory(metadata.thumbnail),
-      ]),
+    return new Stack(
+      children: <Widget>[
+        Hero(
+          tag: metadata.id,
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SonrText.normal(metadata.mime.type.toString()),
+            SonrText.normal("Owner: " + card.firstName),
+          ]),
+        ),
+      ],
     );
   }
 

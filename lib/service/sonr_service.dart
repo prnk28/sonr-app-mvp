@@ -25,16 +25,15 @@ class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
   final direction = 0.0.obs;
-  final peers = Map<String, Peer>().obs;
   final olc = "".obs;
+  final peers = Map<String, Peer>().obs;
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
 
   // @ Set References
   Node _node;
-  PeerController _peerController;
-  // bool _processed = false;
   String _url;
+  PeerController _peerController;
   InviteRequest_FileInfo _file;
 
   // ^ Updates Node^ //
@@ -58,6 +57,7 @@ class SonrService extends GetxService {
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Connected, _handleConnected);
     _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
+    _node.assignCallback(CallbackEvent.Directed, _handleDirect);
     _node.assignCallback(CallbackEvent.Invited, _handleInvite);
     _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
     _node.assignCallback(CallbackEvent.Received, _handleReceived);
@@ -104,10 +104,8 @@ class SonrService extends GetxService {
 
     // File Payload
     if (payload.value == Payload.MEDIA) {
-      // Check Status
-      //if (_processed) {
+      assert(_file != null);
       await _node.inviteFile(c.peer, _file);
-      // }
     }
 
     // Contact Payload
@@ -145,8 +143,20 @@ class SonrService extends GetxService {
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
-      // Update Peers List
+      // Update Lobby Data
+      olc(data.olc);
       peers(data.peers);
+    }
+  }
+
+  // ^ Node Has Been Directed from Other Device ^ //
+  void _handleDirect(dynamic data) async {
+    // Check Type
+    if (data is TransferCard) {
+      // Get.find<SonrCardController>().state(CardState.Invitation);
+      HapticFeedback.heavyImpact();
+      print(data.toString());
+      // Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -154,7 +164,6 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      print(data.toProto3Json());
       Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
@@ -215,7 +224,6 @@ class SonrService extends GetxService {
     if (data is TransferCard) {
       // Reset Data
       progress(0.0);
-      print(data.toString());
 
       // Save Card
       Get.find<SQLService>().storeCard(data);

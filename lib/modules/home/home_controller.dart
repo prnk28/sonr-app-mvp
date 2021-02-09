@@ -20,13 +20,21 @@ class HomeController extends GetxController {
   // Widget Elements
   final isExpanded = false.obs;
   final pageIndex = 0.obs;
+  final pageOffset = 0.0.obs;
   final toggleIndex = 0.obs;
 
   // References
+  PageController pageController;
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   @override
   void onInit() {
+    // Set PageController
+    pageController = PageController(viewportFraction: 0.75);
+    pageController.addListener(() {
+      pageOffset(pageController.page);
+    });
+
     // Fetch Data
     Get.find<SQLService>().fetchAll().then((data) {
       data.forEach((c) => allCards.add(c));
@@ -139,11 +147,6 @@ class HomeController extends GetxController {
   void addCard(TransferCard card) {
     allCards.add(card);
     allCards.refresh();
-  }
-
-  // ^ Opens Card with Hero ^ //
-  void openCard(TransferCard card) {
-    // TODO
   }
 }
 
