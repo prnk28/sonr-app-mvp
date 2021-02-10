@@ -125,6 +125,31 @@ create table $CARD_TABLE (
     return result;
   }
 
+  // ^ Get Media Cards ^ //
+  Future<List<TransferCard>> fetchMedia() async {
+    // Init List
+    List<TransferCard> result = <TransferCard>[];
+
+    // Query SQL
+    List<Map> records = await _db.query(
+      CARD_TABLE,
+      columns: cardColumns,
+    );
+
+    // Validate Record Length
+    if (records.length > 0) {
+      records.forEach((e) {
+        // Create TransferCard Object
+        var card = createTransferCard(e);
+
+        // Add to List
+        result.add(card);
+      });
+    }
+    // Update All Files
+    return result;
+  }
+
   // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
   Future<Map<QueryType, List<TransferCard>>> search(String args) async {
     // Initialize Map
@@ -151,6 +176,13 @@ create table $CARD_TABLE (
         });
       }
 
+      // Sort by Date
+      result.sort((a, b) {
+        var aDate = DateTime.fromMillisecondsSinceEpoch(a.received.toInt());
+        var bDate = DateTime.fromMillisecondsSinceEpoch(b.received.toInt());
+        return aDate.compareTo(bDate);
+      });
+
       // Add Result to Map
       results[type] = result;
     });
@@ -167,7 +199,7 @@ create table $CARD_TABLE (
 
     // Get Map Enum Value
     String payload = e[cardColumnPayload].toString().toUpperCase();
-    String platform = e[cardColumnPlatform].toString().toUpperCase();
+    String platform = e[cardColumnPlatform].toString().capitalizeFirst;
 
     // Set Enum Value
     c.payload = Payload.values.firstWhere((p) => p.toString() == payload);

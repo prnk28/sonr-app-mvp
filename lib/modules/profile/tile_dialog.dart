@@ -37,7 +37,7 @@ class TileDialog extends GetWidget<TileController> {
                     topButtons = Container();
 
                     // Bottom Buttons
-                    
+
                     bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                       // @ Bottom Left Close/Cancel Button
                       SonrButton.close(() {
@@ -345,7 +345,7 @@ class _SetSizePosState extends State<_SetTypeView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Icon Option
-              AnimatedTileRadio("Icon", groupValue: _groupValue, onChanged: (value) {
+              AnimatedTileRadio("Link", groupValue: _groupValue, onChanged: (value) {
                 //widget.controller.currentTile.value.type = value;
                 widget.controller.currentTile.refresh();
                 setState(() {

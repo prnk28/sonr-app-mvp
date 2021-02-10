@@ -10,7 +10,7 @@ import 'package:sonr_app/data/model_user.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart' hide User;
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
@@ -173,13 +173,13 @@ class DeviceService extends GetxService {
     final path = card.metadata.path;
 
     // Save Image to Gallery
-    await ImageGallerySaver.saveFile(path);
+    await GallerySaver.saveImage(path, albumName: "Sonr");
   }
 
   // ^ Saves Photo to Gallery ^ //
-  Future savePhoto(String mediaPath) async {
+  Future savePhoto(String path) async {
     // Save Image to Gallery
-    await ImageGallerySaver.saveFile(mediaPath);
+    await GallerySaver.saveImage(path, albumName: "Sonr");
   }
 
   // ^ RequestPermission Event ^ //

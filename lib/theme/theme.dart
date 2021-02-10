@@ -11,7 +11,7 @@ export 'text.dart';
 export '../widgets/actor.dart';
 export '../widgets/animation.dart';
 export '../widgets/card.dart';
-export '../widgets/overlay.dart';
+export '../widgets/edit.dart';
 export '../widgets/painter.dart';
 export '../widgets/radio.dart';
 export '../widgets/sheet.dart';

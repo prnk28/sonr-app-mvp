@@ -139,6 +139,7 @@ class _CardItemView extends StatelessWidget {
             decoration: card.payload == Payload.MEDIA
                 ? BoxDecoration(
                     image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
                     fit: BoxFit.cover,
                     image: MemoryImage(card.metadata.thumbnail),
                   ))
@@ -408,11 +409,13 @@ class _FileItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Metadata metadata = card.metadata;
+    DateTime received = DateTime.fromMillisecondsSinceEpoch(card.received.toInt() * 1000);
+    print(received.toString());
     return Stack(
       children: <Widget>[
         Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SonrText.normal(metadata.mime.type.toString()),
-          SonrText.normal("Owner: " + card.firstName),
+          SonrText.normal(metadata.mime.type.toString(), color: Colors.white),
+          SonrText.normal("Owner: " + card.firstName, color: Colors.white),
         ]),
       ],
     );

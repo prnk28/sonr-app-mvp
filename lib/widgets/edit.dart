@@ -1,23 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-// ** Alert Dialog View ** //
-class SonrAlertDialog extends StatelessWidget {
-  SonrAlertDialog();
-
-  factory SonrAlertDialog.alertOneButton() {
-    return SonrAlertDialog();
-  }
-
-  factory SonrAlertDialog.alertTwoButton() {
-    return SonrAlertDialog();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
 
 // ** Edit Sheet View for Profile ** //
 enum EditType { Color, ColorCombo, TextField }
