@@ -9,7 +9,6 @@ export 'home_screen.dart';
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.create<TransferCardController>(() => TransferCardController());
     Get.put<RiveActorController>(RiveActorController('assets/animations/tile_preview.riv'));
     Get.put<CameraPickerController>(CameraPickerController(), permanent: true);
     Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
