@@ -5,7 +5,8 @@ import 'package:sonr_app/theme/theme.dart';
 const double K_ITEM_SPACING = 12;
 
 class ShareButton extends GetView<HomeController> {
-  const ShareButton();
+  final expandedView = _ExpandedView();
+  final defaultView = _DefaultView();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class ShareButton extends GetView<HomeController> {
             duration: 200.milliseconds,
             child: Center(
               child: NeumorphicButton(
-                  child: controller.isExpanded.value ? const _ExpandedView() : const _DefaultView(),
+                  child: controller.isExpanded.value ? expandedView : defaultView,
                   onPressed: controller.toggleShareExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
@@ -36,8 +37,6 @@ class ShareButton extends GetView<HomeController> {
 }
 
 class _DefaultView extends StatelessWidget {
-  const _DefaultView();
-
   @override
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -52,13 +51,12 @@ class _DefaultView extends StatelessWidget {
 }
 
 class _ExpandedView extends StatelessWidget {
-  const _ExpandedView();
   @override
   Widget build(BuildContext context) {
     return PlayAnimation<double>(
         tween: (0.0).tweenTo(1.0),
-        duration: 100.milliseconds,
-        delay: 100.milliseconds,
+        duration: 150.milliseconds,
+        delay: 150.milliseconds,
         builder: (context, child, value) {
           return Container(
             width: Get.width / 2 + 165,
@@ -73,7 +71,7 @@ class _ExpandedView extends StatelessWidget {
                       depth: 8,
                       intensity: 0.4,
                     ),
-                    child: const _ShareButtonRow())),
+                    child: _ShareButtonRow())),
           );
         });
   }
