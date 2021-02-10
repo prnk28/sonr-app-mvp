@@ -97,20 +97,17 @@ class SonrCard extends GetWidget<TransferCardController> {
           child: _CardItemView(card, controller),
         );
       });
-    }
-
-    // * Invited Card * //
-    else if (type == CardType.Invite) {
-      controller.invited();
-      return _CardDialogView(invite.card, invite.payload, controller, false);
-    }
-
-    // * Replied Card * //
-    else if (type == CardType.Reply) {
-      return _CardDialogView(reply.card, reply.payload, controller, true);
     } else {
-      print("Error with Card Type");
-      return Container();
+      // * Invited Card * //
+      if (type == CardType.Invite) {
+        controller.invited();
+        return _CardDialogView(invite.card, invite.payload, controller, false);
+      }
+
+      // * Replied Card * //
+      else {
+        return _CardDialogView(reply.card, reply.payload, controller, true);
+      }
     }
   }
 }

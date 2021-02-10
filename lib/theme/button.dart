@@ -156,7 +156,7 @@ class SonrButton extends StatelessWidget {
 
     // Create View
     if (isDisabled) {
-      var child = SonrAnimatedWidget(child: hasIcon ? _buildIconView(iconChild, textChild) : textChild);
+      var child = SonrAnimatedWidget(child: hasIcon ? _buildIconView(iconChild, textChild) : textChild, state: AnimState.Await);
       return NeumorphicButton(
         onPressed: () {
           HapticFeedback.lightImpact();

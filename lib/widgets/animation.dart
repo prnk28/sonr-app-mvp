@@ -41,6 +41,7 @@ class SonrAnimatedWidget extends GetWidget<AnimatedController> {
             switchInCurve: Curves.fastLinearToSlowEaseIn,
             transitionBuilder: (Widget child, Animation<double> animation) {
               final offsetAnimation = controller.slideAnimation(animation, switcher);
+              print("Sliding");
               return ClipRect(
                 child: SlideTransition(
                   position: offsetAnimation,
@@ -174,17 +175,22 @@ class AnimatedController extends GetxController {
 
   // ^ Get Animated Offset for SlideSwitcher Method ^ //
   Animation<Offset> slideAnimation(Animation<double> animation, AnimSwitch switcher) {
+    // Slide Up
     if (switcher == AnimSwitch.SlideUp) {
       return TweenSequence([
         TweenSequenceItem(tween: Tween<Offset>(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0)), weight: 1),
         TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
       ]).animate(animation);
-    } else if (switcher == AnimSwitch.SlideDown) {
+    }
+    // Slide Down
+    else if (switcher == AnimSwitch.SlideDown) {
       return TweenSequence([
         TweenSequenceItem(tween: Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0)), weight: 1),
         TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
       ]).animate(animation);
-    } else if (switcher == AnimSwitch.SlideLeft) {
+    }
+    // Slide Left
+    else if (switcher == AnimSwitch.SlideLeft) {
       return TweenSequence([
         TweenSequenceItem(tween: Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset(0.0, 0.0)), weight: 1),
         TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 3),
