@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -42,6 +44,27 @@ class SonrText extends StatelessWidget {
   // ^ Description Text with Provided Data
   factory SonrText.description(String text, {Color color, double size, Key key}) {
     return SonrText(text, weight: FontWeight.bold, size: size ?? 24, key: key, color: color ?? Colors.grey);
+  }
+
+  // ^ Date Text with Provided Data
+  factory SonrText.date(DateTime date, {Color color, double size, Key key}) {
+    // Formatters
+    final dateFormat = new DateFormat.yMd();
+    final timeFormat = new DateFormat.jm();
+
+    // Get String
+    String dateText = dateFormat.format(date);
+    String timeText = timeFormat.format(date);
+
+    return SonrText("",
+        isRich: true,
+        richText: RichText(
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.fade,
+            text: TextSpan(children: [
+              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 14, color: Colors.black)),
+              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black)),
+            ])));
   }
 
   // ^ Header Text with Provided Data
@@ -186,6 +209,41 @@ class SonrText extends StatelessWidget {
   // ^ Replace Character in given String with given Index ^
   static String replaceCharAt(String oldString, int index, String newChar) {
     return oldString.substring(0, index) + newChar + oldString.substring(index + 1);
+  }
+
+  // ^ Convert a Size in Bytes to Text String ^
+  static String convertSizeToText(int size) {
+    // @ Less than 1KB
+    if (size < pow(10, 3)) {
+      return "$size B";
+    }
+    // @ Less than 1MB
+    else if (size >= pow(10, 3) && size < pow(10, 6)) {
+      // Adjust Size Value, Return String
+      var adjusted = size / pow(10, 3);
+      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
+    }
+    // @ Less than 1GB
+    else if (size >= pow(10, 6) && size < pow(10, 9)) {
+      // Adjust Size Value, Return String
+      var adjusted = size / pow(10, 6);
+      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
+    }
+    // @ Greater than GB
+    else {
+      // Adjust Size Value, Return String
+      var adjusted = size / pow(10, 9);
+      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
+    }
+  }
+
+  // ^ Convert a Boolean Value to English Text String ^
+  static String convertBoolToText(bool val) {
+    if (val) {
+      return "YES";
+    } else {
+      return "NO";
+    }
   }
 }
 

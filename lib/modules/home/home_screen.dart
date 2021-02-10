@@ -18,13 +18,13 @@ class HomeScreen extends GetView<HomeController> {
     return SonrScaffold.appBarLeadingAction(
         resizeToAvoidBottomPadding: false,
         title: "Home",
-        leading: SonrButton.circleIcon(
-          SonrIcon.profile,
-          () => Get.offNamed("/profile"),
+        leading: SonrButton.circle(
+          icon: SonrIcon.profile,
+          onPressed: () => Get.offNamed("/profile"),
         ),
-        action: SonrButton.circleIcon(
-          SonrIcon.search,
-          () => Get.dialog(SearchDialog()),
+        action: SonrButton.circle(
+          icon: SonrIcon.search,
+          onPressed: () => Get.dialog(SearchDialog()),
         ),
         floatingActionButton: ShareButton(),
         body: GestureDetector(onTap: () => controller.toggleShareExpand(options: ToggleForced(false)), child: _HomeView()));
@@ -83,7 +83,7 @@ class ExpandedView extends StatelessWidget {
         width: Get.width,
         child: GestureDetector(
           onTap: () {
-            Get.back();
+            Get.back(closeOverlays: true);
           },
           child: Hero(
             tag: card.id,

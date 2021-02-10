@@ -33,9 +33,12 @@ class _SliverViews extends GetView<ProfileController> {
         slivers: [
           // @ Builds Profile Header
           SonrHeaderBar.sliver(
-              leading: SonrButton.circleIcon(SonrIcon.close, () => Get.offNamed("/home/profile"),
-                  intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
-              action: SonrButton.circleIcon(SonrIcon.more, () => {}, intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
+              leading: SonrButton.circle(
+                  icon: SonrIcon.close,
+                  onPressed: () => Get.offNamed("/home/profile"),
+                  intensity: 0.85,
+                  shadowLightColor: Colors.lightBlueAccent[50]),
+              action: SonrButton.circle(icon: SonrIcon.more, onPressed: () => {}, intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
               flexibleSpace: ContactHeader()),
 
           SliverPadding(padding: EdgeInsets.all(14)),

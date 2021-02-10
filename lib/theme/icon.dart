@@ -130,7 +130,7 @@ class SonrIcon extends StatelessWidget {
 
   static SonrIcon get cancel => SonrIcon(_SonrIconData.cancel, IconType.Normal, Colors.black, null);
 
-  static SonrIcon get info => SonrIcon(_SonrIconData.info, IconType.Normal, Colors.black, null);
+  static SonrIcon get info => SonrIcon.gradient(_SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
 
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
 

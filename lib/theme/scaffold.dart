@@ -5,6 +5,7 @@ class SonrScaffold extends StatelessWidget {
   final Widget appBar;
   final Widget floatingActionButton;
   final bool resizeToAvoidBottomPadding;
+  final Function bodyAction;
 
   factory SonrScaffold.appBarAction(
       {@required String title, @required SonrButton action, Widget body, Widget floatingActionButton, bool resizeToAvoidBottomPadding = true}) {
@@ -50,7 +51,7 @@ class SonrScaffold extends StatelessWidget {
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
-  SonrScaffold({Key key, this.body, this.appBar, this.floatingActionButton, this.resizeToAvoidBottomPadding}) : super(key: key);
+  SonrScaffold({Key key, this.body, this.appBar, this.floatingActionButton, this.resizeToAvoidBottomPadding, this.bodyAction}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return NeumorphicTheme(

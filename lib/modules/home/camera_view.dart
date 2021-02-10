@@ -66,9 +66,12 @@ class CameraView extends GetView<CameraPickerController> {
               alignment: Alignment.bottomCenter,
               padding: EdgeInsets.only(bottom: 25),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                SonrButton.circle(SonrText.normal(""), () {
-                  controller.capturePhoto();
-                }, icon: SonrIcon.gradient(Icons.camera, FlutterGradientNames.alchemistLab)),
+                SonrButton.circle(
+                    text: SonrText.normal(""),
+                    onPressed: () {
+                      controller.capturePhoto();
+                    },
+                    icon: SonrIcon.gradient(Icons.camera, FlutterGradientNames.alchemistLab)),
               ]),
             ),
             Container(

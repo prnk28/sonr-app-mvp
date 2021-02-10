@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import '../theme/color.dart';
-import '../theme/icon.dart';
-import '../theme/text.dart';
+import 'color.dart';
+import 'icon.dart';
+import 'text.dart';
 
 enum HapticFeedbackType { Light, Medium, Heavy, Selection }
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -30,45 +30,92 @@ class SonrButton extends StatelessWidget {
       : super(key: key);
 
   // * Rectangle Button * //
-  factory SonrButton.rectangle(SonrText text, Function onPressed,
-      {EdgeInsets margin = EdgeInsets.zero,
+  factory SonrButton.rectangle(
+      {@required Function onPressed,
+      EdgeInsets margin = EdgeInsets.zero,
+      SonrText text,
       SonrIcon icon,
       Color color = K_BASE_COLOR,
       NeumorphicShape shape = NeumorphicShape.concave,
       double radius = 20,
       double intensity = 0.85,
+      Color shadowLightColor,
+      Color shadowDarkColor,
       WidgetPosition iconPosition = WidgetPosition.Left,
       HapticFeedbackType haptic = HapticFeedbackType.Light}) {
-    if (icon != null) {
+    // Icon AND Text
+    if (icon != null && text != null) {
       return SonrButton(
           true, text, color, margin, shape, 8, intensity, NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)), onPressed, haptic,
           icon: icon, iconPosition: iconPosition);
-    } else {
+    }
+    // Icon ONLY
+    else if (icon != null && text == null) {
+      return SonrButton(
+          true, text, color, margin, shape, 8, intensity, NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)), onPressed, haptic,
+          icon: icon, iconPosition: WidgetPosition.Center);
+    }
+    // TEXT ONLY
+    else {
       return SonrButton(
           false, text, color, margin, shape, 8, intensity, NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)), onPressed, haptic);
     }
   }
 
-  // * Circle Button * //
-  factory SonrButton.circle(SonrText text, Function onPressed,
-      {SonrIcon icon,
+  // * Circle Style Button * //
+  factory SonrButton.circle(
+      {@required Function onPressed,
+      SonrIcon icon,
+      SonrText text,
       double intensity = 0.85,
       EdgeInsets margin = EdgeInsets.zero,
+      Color shadowLightColor,
+      Color shadowDarkColor,
       WidgetPosition iconPosition = WidgetPosition.Left,
       HapticFeedbackType haptic = HapticFeedbackType.Light}) {
-    if (icon != null) {
+    // Icon AND Text
+    if (icon != null && text != null) {
       return SonrButton(true, text, K_BASE_COLOR, margin, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.circle(), onPressed, haptic,
           icon: icon, iconPosition: iconPosition);
-    } else {
+    }
+    // Icon ONLY
+    else if (icon != null && text == null) {
+      return SonrButton(true, null, K_BASE_COLOR, EdgeInsets.zero, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.circle(), onPressed,
+          HapticFeedbackType.Medium,
+          icon: icon, iconPosition: WidgetPosition.Center, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor);
+    }
+    // TEXT ONLY
+    else {
       return SonrButton(false, text, K_BASE_COLOR, margin, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.circle(), onPressed, haptic);
     }
   }
 
-  // * Rectangle Button * //
-  factory SonrButton.circleIcon(SonrIcon icon, Function onPressed, {double intensity = 0.85, Color shadowLightColor, Color shadowDarkColor}) {
-    return SonrButton(true, null, K_BASE_COLOR, EdgeInsets.zero, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.circle(), onPressed,
-        HapticFeedbackType.Medium,
-        icon: icon, iconPosition: WidgetPosition.Center, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor);
+  // * Stadium Style Button * //
+  factory SonrButton.stadium(
+      {@required Function onPressed,
+      SonrIcon icon,
+      SonrText text,
+      double intensity = 0.85,
+      EdgeInsets margin = EdgeInsets.zero,
+      Color shadowLightColor,
+      Color shadowDarkColor,
+      WidgetPosition iconPosition = WidgetPosition.Left,
+      HapticFeedbackType haptic = HapticFeedbackType.Light}) {
+    // Icon AND Text
+    if (icon != null && text != null) {
+      return SonrButton(true, text, K_BASE_COLOR, margin, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.stadium(), onPressed, haptic,
+          icon: icon, iconPosition: iconPosition);
+    }
+    // Icon ONLY
+    else if (icon != null && text == null) {
+      return SonrButton(true, null, K_BASE_COLOR, EdgeInsets.zero, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.stadium(), onPressed,
+          HapticFeedbackType.Medium,
+          icon: icon, iconPosition: WidgetPosition.Center, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor);
+    }
+    // TEXT ONLY
+    else {
+      return SonrButton(false, text, K_BASE_COLOR, margin, NeumorphicShape.flat, 8, intensity, NeumorphicBoxShape.stadium(), onPressed, haptic);
+    }
   }
 
   // * Accept Menu Button * //

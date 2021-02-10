@@ -11,7 +11,11 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 enum CardType { None, Invite, InProgress, Reply, Received, Item }
-const K_BOTTOM_MARGIN = {Payload.CONTACT: 90.0, Payload.MEDIA: 180.0, Payload.URL: 450.0};
+const K_CARD_MARGIN = {
+  Payload.CONTACT: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 90),
+  Payload.MEDIA: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180),
+  Payload.URL: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450)
+};
 
 // * ------------------------ * //
 // * ---- Card View --------- * //
@@ -26,6 +30,7 @@ class SonrCard extends GetWidget<TransferCardController> {
   final TransferCard card;
   final int index;
 
+  // ** Constructer ** //
   SonrCard({
     Key key,
     @required this.type,
@@ -35,21 +40,20 @@ class SonrCard extends GetWidget<TransferCardController> {
     this.index,
   });
 
+  // @ Factory for Invite Protobuf Data
   factory SonrCard.fromInvite(AuthInvite invite) {
-    return SonrCard(invite: invite, type: CardType.Invite);
+    return SonrCard(invite: invite, type: CardType.Invite, card: invite.card);
   }
 
+  // @ Factory for Reply Protobuf Data
   factory SonrCard.fromReply(AuthReply reply) {
-    return SonrCard(reply: reply, type: CardType.Reply);
+    return SonrCard(reply: reply, type: CardType.Reply, card: reply.card);
   }
 
+  // @ Factory for SQL TransferCard Data
   factory SonrCard.fromItem(TransferCard card, int index) {
-    print("Card Payload Value: ${card.payload.toString()}");
-    return SonrCard(
-      type: CardType.Item,
-      card: card,
-      index: index,
-    );
+    print("Card Type: ${card.status.toString()}");
+    return SonrCard(type: CardType.Item, card: card, index: index);
   }
 
   @override
@@ -99,12 +103,12 @@ class SonrCard extends GetWidget<TransferCardController> {
     // * Invited Card * //
     else if (type == CardType.Invite) {
       controller.invited();
-      return _CardPopupView(invite.card, invite.payload, controller, false);
+      return _CardDialogView(invite.card, invite.payload, controller, false);
     }
 
     // * Replied Card * //
     else if (type == CardType.Reply) {
-      return _CardPopupView(reply.card, reply.payload, controller, true);
+      return _CardDialogView(reply.card, reply.payload, controller, true);
     } else {
       print("Error with Card Type");
       return Container();
@@ -139,7 +143,7 @@ class _CardItemView extends StatelessWidget {
             decoration: card.payload == Payload.MEDIA
                 ? BoxDecoration(
                     image: DecorationImage(
-                    colorFilter: ColorFilter.mode(Colors.black38, BlendMode.colorBurn),
+                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
                     fit: BoxFit.cover,
                     image: MemoryImage(card.metadata.thumbnail),
                   ))
@@ -153,13 +157,13 @@ class _CardItemView extends StatelessWidget {
 }
 
 // ^ BASE: Card Invite/Reply/Progress View ^ //
-class _CardPopupView extends StatelessWidget {
+class _CardDialogView extends StatelessWidget {
   final Payload payload;
   final TransferCard card;
   final TransferCardController controller;
   final bool isReply;
 
-  const _CardPopupView(this.card, this.payload, this.controller, this.isReply);
+  const _CardDialogView(this.card, this.payload, this.controller, this.isReply);
   @override
   Widget build(BuildContext context) {
     // Initialize Views
@@ -170,7 +174,7 @@ class _CardPopupView extends StatelessWidget {
     };
 
     return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: K_BOTTOM_MARGIN[payload]),
+        margin: K_CARD_MARGIN[payload],
         borderRadius: BorderRadius.circular(40),
         backendColor: Colors.transparent,
         child: Neumorphic(
@@ -215,11 +219,13 @@ class _ContactInviteView extends StatelessWidget {
       !isReply
           ? Align(
               alignment: Alignment.bottomCenter,
-              child: SonrButton.rectangle(SonrText.normal("Send yours back"), () {
-                // Emit Event
-                controller.acceptContact(card, true);
-                Get.back();
-              }))
+              child: SonrButton.rectangle(
+                  text: SonrText.normal("Send yours back"),
+                  onPressed: () {
+                    // Emit Event
+                    controller.acceptContact(card, true);
+                    Get.back();
+                  }))
           : Container()
     ]);
   }
@@ -263,10 +269,7 @@ class _URLInviteView extends StatelessWidget {
           // @ Indent View
           Expanded(
             child: Neumorphic(
-                style: NeumorphicStyle(
-                  depth: -8,
-                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                ),
+                style: SonrStyle.indented,
                 margin: EdgeInsets.all(10),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -408,15 +411,30 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card);
   @override
   Widget build(BuildContext context) {
-    Metadata metadata = card.metadata;
     DateTime received = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
-    print(received.toString());
     return Stack(
       children: <Widget>[
-        Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SonrText.normal(metadata.mime.type.toString(), color: Colors.white),
-          SonrText.normal("Owner: " + card.firstName, color: Colors.white),
-        ]),
+        // Time Stamp
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Neumorphic(
+              style: SonrStyle.timeStamp,
+              child: SonrText.date(received),
+              padding: EdgeInsets.all(10),
+            ),
+          ),
+        ),
+
+        // Info Button
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SonrButton.circle(
+                  icon: SonrIcon.info, onPressed: () => SonrOverlay.fromMetaCard(card: card, context: context), shadowLightColor: Colors.black38)),
+        ),
       ],
     );
   }

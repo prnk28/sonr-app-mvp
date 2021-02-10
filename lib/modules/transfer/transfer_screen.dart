@@ -12,7 +12,7 @@ class TransferScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SonrScaffold.appBarLeading(
         title: Get.find<SonrService>().olc.value,
-        leading: SonrButton.circleIcon(SonrIcon.close, () => Get.offNamed("/home/transfer")),
+        leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer")),
         body: SafeArea(
             child: Stack(
           children: <Widget>[
