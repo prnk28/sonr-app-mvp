@@ -132,7 +132,7 @@ class CameraPickerController extends GetxController {
   // ^ Continue with Capture ^ //
   continuePhoto() async {
     // Save Photo
-    Get.find<DeviceService>().savePhoto(capturePath.value);
+    Get.find<DeviceService>().savePhotoFromCamera(capturePath.value);
 
     Get.find<SonrService>().setPayload(Payload.MEDIA, path: capturePath.value);
 

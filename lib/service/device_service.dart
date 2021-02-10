@@ -173,11 +173,32 @@ class DeviceService extends GetxService {
     final path = card.metadata.path;
 
     // Save Image to Gallery
-    await GallerySaver.saveImage(path, albumName: "Sonr");
+    if (card.metadata.mime.type == MIME_Type.image) {
+      var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Photo to your Device's Gallery");
+      } else {
+        SonrSnack.error("Unable to save Photo to your Gallery");
+      }
+    }
+
+    // Save Video to Gallery
+    if (card.metadata.mime.type == MIME_Type.video) {
+      var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Video to your Device's Gallery");
+      } else {
+        SonrSnack.error("Unable to save Vido to your Gallery");
+      }
+    }
   }
 
   // ^ Saves Photo to Gallery ^ //
-  Future savePhoto(String path) async {
+  Future savePhotoFromCamera(String path) async {
     // Save Image to Gallery
     await GallerySaver.saveImage(path, albumName: "Sonr");
   }
