@@ -29,7 +29,7 @@ initServices() async {
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.create<TransferCardController>(() => TransferCardController(), permanent: false);
+    Get.create<TransferCardController>(() => TransferCardController());
   }
 }
 
