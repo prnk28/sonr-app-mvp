@@ -175,10 +175,7 @@ class _CardDialogView extends StatelessWidget {
         backendColor: Colors.transparent,
         child: Neumorphic(
           style: NeumorphicStyle(color: K_BASE_COLOR),
-          child: AnimatedContainer(
-            duration: 1.seconds,
-            child: viewForPayload[payload],
-          ),
+          child: viewForPayload[payload],
         ));
   }
 }
@@ -345,59 +342,56 @@ class _FileInviteProgress extends HookWidget {
     controller.repeat();
 
     // Reactive to Progress
-    return SonrAnimatedWidget(
-      state: AnimState.Controlled,
-      child: Obx(() {
-        if (Get.find<SonrService>().progress.value < 1.0) {
-          return Stack(
-            alignment: Alignment.center,
-            key: UniqueKey(),
-            children: <Widget>[
-              SizedBox(
-                height: boxHeight,
-                width: boxWidth,
-                child: AnimatedBuilder(
-                  animation: controller,
-                  builder: (BuildContext context, Widget child) {
-                    return CustomPaint(
-                      painter: WavePainter(
-                        iconKey: iconKey,
-                        waveAnimation: controller,
-                        percent: Get.find<SonrService>().progress.value,
-                        boxHeight: boxHeight,
-                        gradient: color,
-                      ),
-                    );
-                  },
-                ),
+    return Obx(() {
+      if (Get.find<SonrService>().progress.value < 1.0) {
+        return Stack(
+          alignment: Alignment.center,
+          key: UniqueKey(),
+          children: <Widget>[
+            SizedBox(
+              height: boxHeight,
+              width: boxWidth,
+              child: AnimatedBuilder(
+                animation: controller,
+                builder: (BuildContext context, Widget child) {
+                  return CustomPaint(
+                    painter: WavePainter(
+                      iconKey: iconKey,
+                      waveAnimation: controller,
+                      percent: Get.find<SonrService>().progress.value,
+                      boxHeight: boxHeight,
+                      gradient: color,
+                    ),
+                  );
+                },
               ),
-              SizedBox(
-                height: boxHeight,
-                width: boxWidth,
-                child: ShaderMask(
-                  blendMode: BlendMode.srcOut,
-                  shaderCallback: (bounds) => LinearGradient(
-                    colors: [K_BASE_COLOR],
-                    stops: [0.0],
-                  ).createShader(bounds),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    child: Center(
-                      child: Icon(iconData, key: iconKey, size: 250),
-                    ),
+            ),
+            SizedBox(
+              height: boxHeight,
+              width: boxWidth,
+              child: ShaderMask(
+                blendMode: BlendMode.srcOut,
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: [K_BASE_COLOR],
+                  stops: [0.0],
+                ).createShader(bounds),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Icon(iconData, key: iconKey, size: 250),
                   ),
                 ),
-              )
-            ],
-          );
-        }
-        controller.stop();
-        controller.dispose();
-        return Container();
-      }),
-    );
+              ),
+            )
+          ],
+        );
+      }
+      controller.stop();
+      controller.dispose();
+      return Container();
+    });
   }
 }
 

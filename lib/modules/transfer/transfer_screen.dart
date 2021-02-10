@@ -48,10 +48,10 @@ class LobbyView extends GetView<TransferController> {
       // Present Text
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
-          duration: 200.milliseconds,
-          delay: 200.milliseconds,
+          duration: 150.milliseconds,
+          delay: 150.milliseconds,
           builder: (context, child, value) {
-            return AnimatedOpacity(opacity: value, duration: 200.milliseconds, child: Stack(children: List.from(controller.stackItems)));
+            return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: Stack(children: List.from(controller.stackItems)));
           });
     });
   }

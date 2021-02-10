@@ -31,6 +31,7 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
+    Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
 

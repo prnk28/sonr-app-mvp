@@ -27,13 +27,12 @@ class HomeController extends GetxController {
   final toggleIndex = 0.obs;
 
   // References
-  PageController pageController;
+  final pageController = PageController(viewportFraction: 0.8);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   @override
   void onInit() {
     // Set PageController
-    pageController = PageController(viewportFraction: 0.75, keepPage: false);
     pageController.addListener(() {
       pageOffset(pageController.page);
     });
