@@ -2,9 +2,10 @@ import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+const double K_ITEM_SPACING = 12;
+
 class ShareButton extends GetView<HomeController> {
-  final expandedView = _ExpandedView();
-  final defaultView = _DefaultView();
+  const ShareButton();
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class ShareButton extends GetView<HomeController> {
             duration: 200.milliseconds,
             child: Center(
               child: NeumorphicButton(
-                  child: controller.isExpanded.value ? expandedView : defaultView,
+                  child: controller.isExpanded.value ? const _ExpandedView() : const _DefaultView(),
                   onPressed: controller.toggleShareExpand,
                   style: NeumorphicStyle(
                     color: Colors.black87,
@@ -35,6 +36,8 @@ class ShareButton extends GetView<HomeController> {
 }
 
 class _DefaultView extends StatelessWidget {
+  const _DefaultView();
+
   @override
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -49,15 +52,14 @@ class _DefaultView extends StatelessWidget {
 }
 
 class _ExpandedView extends StatelessWidget {
+  const _ExpandedView();
   @override
   Widget build(BuildContext context) {
-    final double spacing = 12;
     return PlayAnimation<double>(
         tween: (0.0).tweenTo(1.0),
         duration: 100.milliseconds,
         delay: 100.milliseconds,
         builder: (context, child, value) {
-          final controller = Get.find<HomeController>();
           return Container(
             width: Get.width / 2 + 165,
             height: 130,
@@ -65,61 +67,68 @@ class _ExpandedView extends StatelessWidget {
                 opacity: value,
                 duration: 150.milliseconds,
                 child: NeumorphicTheme(
-                  theme: NeumorphicThemeData(
-                    baseColor: Color.fromRGBO(239, 238, 238, 1.0),
-                    lightSource: LightSource.top,
-                    depth: 8,
-                    intensity: 0.4,
-                  ),
-                  child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      verticalDirection: VerticalDirection.up,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            height: Get.height,
-                            child: _AnimatedButtonOption(
-                              onPressed: () {
-                                controller.openCamera();
-                              },
-                              type: ArtboardType.Camera,
-                            ),
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.all(spacing)),
-                        Expanded(
-                          child: Container(
-                            height: Get.height,
-                            child: _AnimatedButtonOption(
-                              onPressed: () {
-                                controller.openMediaPicker();
-                              },
-                              type: ArtboardType.Gallery,
-                            ),
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.all(spacing)),
-                        Expanded(
-                          child: Container(
-                            height: Get.height,
-                            child: _AnimatedButtonOption(
-                              onPressed: () {
-                                controller.queueContact();
-                              },
-                              type: ArtboardType.Contact,
-                            ),
-                          ),
-                        )
-                      ]),
-                )),
+                    theme: NeumorphicThemeData(
+                      baseColor: Color.fromRGBO(239, 238, 238, 1.0),
+                      lightSource: LightSource.top,
+                      depth: 8,
+                      intensity: 0.4,
+                    ),
+                    child: const _ShareButtonRow())),
           );
         });
   }
 }
 
-class _AnimatedButtonOption extends StatelessWidget {
+class _ShareButtonRow extends GetView<HomeController> {
+  const _ShareButtonRow();
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        mainAxisSize: MainAxisSize.max,
+        verticalDirection: VerticalDirection.up,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Expanded(
+            child: Container(
+              height: Get.height,
+              child: _ShareButtonItem(
+                onPressed: () {
+                  controller.openCamera();
+                },
+                type: ArtboardType.Camera,
+              ),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(K_ITEM_SPACING)),
+          Expanded(
+            child: Container(
+              height: Get.height,
+              child: _ShareButtonItem(
+                onPressed: () {
+                  controller.openMediaPicker();
+                },
+                type: ArtboardType.Gallery,
+              ),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(K_ITEM_SPACING)),
+          Expanded(
+            child: Container(
+              height: Get.height,
+              child: _ShareButtonItem(
+                onPressed: () {
+                  controller.queueContact();
+                },
+                type: ArtboardType.Contact,
+              ),
+            ),
+          )
+        ]);
+  }
+}
+
+class _ShareButtonItem extends StatelessWidget {
   // Properties
   final ArtboardType type;
   final Function onPressed;
@@ -127,7 +136,7 @@ class _AnimatedButtonOption extends StatelessWidget {
   // Method to Return Type
   String get _typeText => type.toString().split('.').last;
 
-  const _AnimatedButtonOption({Key key, this.type, this.onPressed}) : super(key: key);
+  const _ShareButtonItem({Key key, this.type, this.onPressed}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
