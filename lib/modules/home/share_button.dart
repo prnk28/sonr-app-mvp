@@ -12,6 +12,7 @@ class ShareButton extends GetView<HomeController> {
       return Align(
         alignment: Alignment.bottomCenter,
         child: AnimatedContainer(
+            curve: Curves.easeInBack,
             padding: EdgeInsetsDirectional.only(start: 30),
             width: controller.isExpanded.value ? Get.width / 2 + 165 : Get.width / 2 + 30,
             height: controller.isExpanded.value ? 130 : 70,

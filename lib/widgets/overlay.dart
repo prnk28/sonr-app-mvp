@@ -18,11 +18,11 @@ class SonrOverlay {
   // ^ Builds Overlay based on Metadata from Transfer Card ^ //
   factory SonrOverlay.fromMetaCard({@required BuildContext context, @required TransferCard card}) {
     // Extract Data
+    bool hasSaved = true;
     var metadata = card.metadata;
     var mimeType = metadata.mime.type.toString().capitalizeFirst;
-    var platform = card.platform.toString();
     var size = SonrText.convertSizeToText(metadata.size);
-    var hasExported = SonrText.convertBoolToText(true);
+    var hasExported = SonrText.convertBoolToText(hasSaved);
 
     // Build Overlay View
     return SonrOverlay(
@@ -31,18 +31,19 @@ class SonrOverlay {
         padding: const EdgeInsets.all(24.0),
         child: Neumorphic(
           style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 40),
+          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
             SonrText.header("$mimeType From"),
 
             // Owner
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("${card.firstName} ${card.lastName}", size: 16),
-              SonrText.normal(" on $platform device"),
+            Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SonrIcon.platform(IconType.Normal, card.platform, color: Colors.grey[600], size: 18),
+              SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
             ]),
 
             Divider(),
+            Padding(padding: EdgeInsets.all(4)),
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -58,6 +59,13 @@ class SonrOverlay {
               SonrText.normal("$size", size: 16),
             ]),
 
+            // File Mime Value
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SonrText.bold("Kind ", size: 16),
+              Spacer(),
+              SonrText.normal("${metadata.mime.value}", size: 16),
+            ]),
+
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Saved to Gallery ", size: 16),
@@ -65,10 +73,23 @@ class SonrOverlay {
               SonrText.normal("$hasExported", size: 16),
             ]),
 
+            Padding(padding: EdgeInsets.all(4)),
             Divider(),
 
-            // File Mime Value
-            SonrText.normal("${metadata.mime.value}", size: 16),
+            // Save File to Device
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              SonrButton.rectangle(
+                isDisabled: true,
+                onPressed: () {},
+                text: SonrText.normal("Delete"),
+                icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+              ),
+              SonrButton.rectangle(
+                onPressed: () {},
+                text: SonrText.normal("Save"),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: Colors.black),
+              ),
+            ]),
           ]),
         ),
       ),

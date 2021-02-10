@@ -57,7 +57,7 @@ dependencies:
   im_stepper: ^0.1.2+9
   photo_view: ^0.10.3
   rive: ^0.6.2
-  simple_animations: ^2.4.0
+  simple_animations: ^2.5.0
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:

@@ -88,6 +88,31 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
+  // ^ Peer Data Platform to Icon
+  factory SonrIcon.platform(IconType type, Platform platform, {Color color, double size = 30}) {
+    // Set Color
+    _IconGradientWData result = _SonrIconData.devices[platform];
+
+    // Get Icon
+    if (result != null) {
+      return SonrIcon(
+        result._data,
+        type,
+        color,
+        result.gradient,
+        size: size,
+      );
+    } else {
+      return SonrIcon(
+        Icons.device_unknown,
+        type,
+        color,
+        FlutterGradientNames.viciousStance,
+        size: size,
+      );
+    }
+  }
+
   // ^ Payload Data from Metadata
   factory SonrIcon.preview(IconType type, TransferCard card,
       {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {

@@ -52,7 +52,6 @@ class SonrCard extends GetWidget<TransferCardController> {
 
   // @ Factory for SQL TransferCard Data
   factory SonrCard.fromItem(TransferCard card, int index) {
-    print("Card Type: ${card.status.toString()}");
     return SonrCard(type: CardType.Item, card: card, index: index);
   }
 
@@ -349,7 +348,7 @@ class _FileInviteProgress extends HookWidget {
     controller.repeat();
 
     // Reactive to Progress
-    return SlideUpAnimatedSwitcher(
+    return SonrAnimatedWidget(
       child: Obx(() {
         if (Get.find<SonrService>().progress.value < 1.0) {
           return Stack(

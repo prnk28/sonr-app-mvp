@@ -182,6 +182,7 @@ class SonrText extends StatelessWidget {
                 ),
             child: Text(
               text,
+              overflow: TextOverflow.ellipsis,
               textAlign: isCentered ? TextAlign.center : TextAlign.start,
               style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: size ?? 32.0, color: Colors.white),
             )),

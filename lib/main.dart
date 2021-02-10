@@ -30,6 +30,7 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
+    Get.create<AnimatedController>(() => AnimatedController());
   }
 }
 
