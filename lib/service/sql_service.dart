@@ -8,6 +8,14 @@ import 'package:sqflite/sqflite.dart';
 // ** Constant Values
 const DATABASE_PATH = 'transferCards.db';
 const CARD_TABLE = "transfers";
+enum QueryType { Payload, Platform, FirstName, LastName, Username }
+final cardColumnForType = {
+  QueryType.Payload: cardColumnPayload,
+  QueryType.Platform: cardColumnPlatform,
+  QueryType.FirstName: cardColumnFirstName,
+  QueryType.LastName: cardColumnLastName,
+  QueryType.Username: cardColumnUserName,
+};
 
 // ** Card Model for Transferred Data ** //
 final String cardColumnId = '_id'; // integer primary key autoincrement
@@ -20,6 +28,18 @@ final String cardColumnFirstName = 'firstName'; // text
 final String cardColumnLastName = 'lastName'; // text
 final String cardColumnContact = 'contact'; // text -> JSON
 final String cardColumnMetadata = 'metadata'; // text -> JSON
+final cardColumns = [
+  cardColumnId,
+  cardColumnPayload,
+  cardColumnPlatform,
+  cardColumnPreview,
+  cardColumnReceived,
+  cardColumnUserName,
+  cardColumnFirstName,
+  cardColumnLastName,
+  cardColumnContact,
+  cardColumnMetadata,
+];
 
 // ** SQL Card Service ** //
 class SQLService extends GetxService {
@@ -34,13 +54,13 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
+    _db = await openDatabase(_dbPath, version: 2, onCreate: (Database db, int version) async {
       // Create Cards Table
       await db.execute('''
 create table $CARD_TABLE (
   $cardColumnId integer primary key autoincrement,
-  $cardColumnPayload integer not null,
-  $cardColumnPlatform integer not null,
+  $cardColumnPayload text not null,
+  $cardColumnPlatform text not null,
   $cardColumnPreview blob,
   $cardColumnReceived integer not null,
   $cardColumnUserName text not null,
@@ -57,15 +77,15 @@ create table $CARD_TABLE (
   Future<TransferCard> storeCard(TransferCard card) async {
     card.id = await _db.insert(CARD_TABLE, {
       // General
-      cardColumnPayload: card.payload.value,
-      cardColumnPlatform: card.platform.value,
+      cardColumnPayload: card.payload.toString().toLowerCase(),
+      cardColumnPlatform: card.platform.toString().toLowerCase(),
       cardColumnPreview: Uint8List.fromList(card.preview),
       cardColumnReceived: card.received,
 
       // Owner Properties
-      cardColumnUserName: card.username,
-      cardColumnFirstName: card.firstName,
-      cardColumnLastName: card.lastName,
+      cardColumnUserName: card.username.toLowerCase(),
+      cardColumnFirstName: card.firstName.toLowerCase(),
+      cardColumnLastName: card.lastName.toLowerCase(),
 
       // Transfer Properties
       cardColumnContact: card.contact.writeToJson(),
@@ -88,38 +108,14 @@ create table $CARD_TABLE (
     // Query SQL
     List<Map> records = await _db.query(
       CARD_TABLE,
-      columns: [
-        cardColumnId,
-        cardColumnPayload,
-        cardColumnPlatform,
-        cardColumnPreview,
-        cardColumnReceived,
-        cardColumnUserName,
-        cardColumnFirstName,
-        cardColumnLastName,
-        cardColumnContact,
-        cardColumnMetadata,
-      ],
+      columns: cardColumns,
     );
 
     // Validate Record Length
     if (records.length > 0) {
       records.forEach((e) {
         // Create TransferCard Object
-        TransferCard card = new TransferCard();
-        card.id = e[cardColumnId];
-        card.payload = Payload.valueOf(e[cardColumnPayload]);
-        card.platform = Platform.valueOf(e[cardColumnPlatform]);
-
-        // Get Preview
-        Uint8List preview = e[cardColumnPreview];
-        card.preview = preview.toList();
-        card.received = e[cardColumnReceived];
-        card.username = e[cardColumnUserName];
-        card.firstName = e[cardColumnFirstName];
-        card.lastName = e[cardColumnLastName];
-        card.contact = Contact.fromJson(e[cardColumnContact]);
-        card.metadata = Metadata.fromJson(e[cardColumnMetadata]);
+        var card = createTransferCard(e);
 
         // Add to List
         result.add(card);
@@ -127,6 +123,66 @@ create table $CARD_TABLE (
     }
     // Update All Files
     return result;
+  }
+
+  // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
+  Future<Map<QueryType, List<TransferCard>>> search(String args) async {
+    // Initialize Map
+    Map<QueryType, List<TransferCard>> results = {};
+    String queryStr = args.toLowerCase();
+
+    // Iterate through Query Columns
+    QueryType.values.forEach((type) async {
+      // Initialize Result
+      List<TransferCard> result = <TransferCard>[];
+      String whereRows = cardColumnForType[type] + ' LIKE ?';
+
+      // Query SQL
+      List<Map> records = await _db.query(CARD_TABLE, columns: cardColumns, where: whereRows, whereArgs: ['%$queryStr%']);
+
+      // Validate Record Length
+      if (records.length > 0) {
+        records.forEach((e) {
+          // Create TransferCard Object
+          var card = createTransferCard(e);
+
+          // Add to List
+          result.add(card);
+        });
+      }
+
+      // Add Result to Map
+      results[type] = result;
+    });
+
+    // Update All Files
+    return results;
+  }
+
+  // ^ Helper Method to Generate Transfer Card ^ //
+  TransferCard createTransferCard(Map<dynamic, dynamic> e) {
+    // Create TransferCard Object
+    TransferCard c = new TransferCard();
+    c.id = e[cardColumnId];
+
+    // Get Map Enum Value
+    String payload = e[cardColumnPayload].toString().toUpperCase();
+    String platform = e[cardColumnPlatform].toString().toUpperCase();
+
+    // Set Enum Value
+    c.payload = Payload.values.firstWhere((p) => p.toString() == payload);
+    c.platform = Platform.values.firstWhere((p) => p.toString() == platform);
+
+    // Get Preview
+    Uint8List preview = e[cardColumnPreview];
+    c.preview = preview.toList();
+    c.received = e[cardColumnReceived];
+    c.username = e[cardColumnUserName];
+    c.firstName = e[cardColumnFirstName].toString().capitalizeFirst;
+    c.lastName = e[cardColumnLastName].toString().capitalizeFirst;
+    c.contact = Contact.fromJson(e[cardColumnContact]);
+    c.metadata = Metadata.fromJson(e[cardColumnMetadata]);
+    return c;
   }
 
   // ** Close SQL Database ** //

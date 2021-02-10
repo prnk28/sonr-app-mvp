@@ -24,3 +24,9 @@ export 'package:supercharged/supercharged.dart';
 export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
+class SonrStyle {
+  static get cardItem => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+}

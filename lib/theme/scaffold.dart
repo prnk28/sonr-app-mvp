@@ -4,30 +4,53 @@ class SonrScaffold extends StatelessWidget {
   final Widget body;
   final Widget appBar;
   final Widget floatingActionButton;
+  final bool resizeToAvoidBottomPadding;
 
-  factory SonrScaffold.appBarAction({@required String title, @required SonrButton action, Widget body, Widget floatingActionButton}) {
-    return SonrScaffold(
-        body: body, floatingActionButton: floatingActionButton, appBar: NeumorphicAppBar(title: SonrText.appBar(title), actions: [action]));
-  }
-
-  factory SonrScaffold.appBarLeading({@required String title, @required SonrButton leading, Widget body, Widget floatingActionButton}) {
-    return SonrScaffold(
-        body: body, floatingActionButton: floatingActionButton, appBar: NeumorphicAppBar(title: SonrText.appBar(title), leading: leading));
-  }
-
-  factory SonrScaffold.appBarTitle({@required String title, Widget body, Widget floatingActionButton}) {
-    return SonrScaffold(body: body, floatingActionButton: floatingActionButton, appBar: NeumorphicAppBar(title: SonrText.appBar(title)));
-  }
-
-  factory SonrScaffold.appBarLeadingAction(
-      {@required String title, @required SonrButton leading, @required SonrButton action, Widget body, Widget floatingActionButton}) {
+  factory SonrScaffold.appBarAction(
+      {@required String title, @required SonrButton action, Widget body, Widget floatingActionButton, bool resizeToAvoidBottomPadding = true}) {
     return SonrScaffold(
         body: body,
         floatingActionButton: floatingActionButton,
-        appBar: NeumorphicAppBar(title: SonrText.appBar(title), leading: leading, actions: [action]));
+        appBar: NeumorphicAppBar(title: SonrText.appBar(title), actions: [action]),
+        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
-  SonrScaffold({Key key, this.body, this.appBar, this.floatingActionButton}) : super(key: key);
+  factory SonrScaffold.appBarLeading(
+      {@required String title, @required SonrButton leading, Widget body, Widget floatingActionButton, bool resizeToAvoidBottomPadding = true}) {
+    return SonrScaffold(
+        body: body,
+        floatingActionButton: floatingActionButton,
+        appBar: NeumorphicAppBar(title: SonrText.appBar(title), leading: leading),
+        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+  }
+
+  factory SonrScaffold.appBarTitle({@required String title, Widget body, Widget floatingActionButton, bool resizeToAvoidBottomPadding = true}) {
+    return SonrScaffold(
+        body: body,
+        floatingActionButton: floatingActionButton,
+        appBar: NeumorphicAppBar(title: SonrText.appBar(title)),
+        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+  }
+
+  factory SonrScaffold.appBarLeadingAction(
+      {@required String title,
+      @required SonrButton leading,
+      @required SonrButton action,
+      Widget body,
+      Widget floatingActionButton,
+      bool resizeToAvoidBottomPadding = true}) {
+    return SonrScaffold(
+        body: body,
+        floatingActionButton: floatingActionButton,
+        appBar: NeumorphicAppBar(
+          title: SonrText.appBar(title),
+          leading: leading,
+          actions: [action],
+        ),
+        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+  }
+
+  SonrScaffold({Key key, this.body, this.appBar, this.floatingActionButton, this.resizeToAvoidBottomPadding}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return NeumorphicTheme(

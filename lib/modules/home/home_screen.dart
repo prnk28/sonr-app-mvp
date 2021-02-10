@@ -16,6 +16,7 @@ class HomeScreen extends GetView<HomeController> {
     Get.find<DeviceService>().checkInitialShare();
 
     return SonrScaffold.appBarLeadingAction(
+        resizeToAvoidBottomPadding: false,
         title: "Home",
         leading: SonrButton.circleIcon(
           SonrIcon.profile,
@@ -98,4 +99,3 @@ class ExpandedView extends StatelessWidget {
     );
   }
 }
-

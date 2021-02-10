@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -46,6 +44,7 @@ class SonrCard extends GetWidget<TransferCardController> {
   }
 
   factory SonrCard.fromItem(TransferCard card, int index) {
+    print("Card Payload Value: ${card.payload.toString()}");
     return SonrCard(
       type: CardType.Item,
       card: card,
@@ -117,8 +116,9 @@ class SonrCard extends GetWidget<TransferCardController> {
 class _CardItemView extends StatelessWidget {
   final TransferCard card;
   final TransferCardController controller;
+  final bool beginGlow;
 
-  _CardItemView(this.card, this.controller);
+  _CardItemView(this.card, this.controller, {this.beginGlow = false});
   @override
   Widget build(BuildContext context) {
     // Initialize Views
@@ -126,7 +126,7 @@ class _CardItemView extends StatelessWidget {
 
     // Create View
     return Neumorphic(
-      style: NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20))),
+      style: SonrStyle.cardItem,
       margin: EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {

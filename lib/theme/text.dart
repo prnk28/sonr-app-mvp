@@ -31,37 +31,21 @@ class SonrText extends StatelessWidget {
 
   // ^ Normal Text with Provided Data
   factory SonrText.normal(String text, {Color color, double size, Key key}) {
-    return SonrText(text,
-        weight: FontWeight.w500,
-        size: size ?? 16,
-        key: key,
-        color: color ?? Colors.black);
+    return SonrText(text, weight: FontWeight.w500, size: size ?? 16, key: key, color: color ?? Colors.black);
   }
 
   // ^ Bold Text with Provided Data
   factory SonrText.bold(String text, {Color color, double size, Key key}) {
-    return SonrText(text,
-        weight: FontWeight.bold,
-        size: size ?? 32,
-        key: key,
-        color: color ?? Colors.black);
+    return SonrText(text, weight: FontWeight.bold, size: size ?? 32, key: key, color: color ?? Colors.black);
   }
 
   // ^ Description Text with Provided Data
-  factory SonrText.description(String text,
-      {Color color, double size, Key key}) {
-    return SonrText(text,
-        weight: FontWeight.bold,
-        size: size ?? 24,
-        key: key,
-        color: color ?? Colors.grey);
+  factory SonrText.description(String text, {Color color, double size, Key key}) {
+    return SonrText(text, weight: FontWeight.bold, size: size ?? 24, key: key, color: color ?? Colors.grey);
   }
 
   // ^ Header Text with Provided Data
-  factory SonrText.header(String text,
-      {FlutterGradientNames gradient = FlutterGradientNames.viciousStance,
-      double size,
-      Key key}) {
+  factory SonrText.header(String text, {FlutterGradientNames gradient = FlutterGradientNames.viciousStance, double size, Key key}) {
     return SonrText(
       text,
       isGradient: true,
@@ -74,22 +58,12 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Gradient Text with Provided Data
-  factory SonrText.gradient(String text, FlutterGradientNames gradient,
-      {Color color, FontWeight weight, double size, Key key}) {
-    return SonrText(text,
-        isGradient: true,
-        weight: FontWeight.bold,
-        size: size ?? 40,
-        key: key,
-        gradient: FlutterGradients.findByName(gradient));
+  factory SonrText.gradient(String text, FlutterGradientNames gradient, {Color color, FontWeight weight, double size, Key key}) {
+    return SonrText(text, isGradient: true, weight: FontWeight.bold, size: size ?? 40, key: key, gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ AppBar Text with Provided Data
-  factory SonrText.appBar(String text,
-      {Color color,
-      double size,
-      FlutterGradientNames gradient = FlutterGradientNames.premiumDark,
-      Key key}) {
+  factory SonrText.appBar(String text, {Color color, double size, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
     return SonrText(
       text,
       isGradient: true,
@@ -102,17 +76,9 @@ class SonrText extends StatelessWidget {
 
   // ^ Gradient Text with Provided Data
   factory SonrText.initials(Peer peer,
-      {Color color,
-      FlutterGradientNames gradient = FlutterGradientNames.glassWater,
-      FontWeight weight,
-      double size,
-      Key key}) {
+      {Color color, FlutterGradientNames gradient = FlutterGradientNames.glassWater, FontWeight weight, double size, Key key}) {
     return SonrText(peer.profile.firstName[0].toUpperCase(),
-        isGradient: true,
-        weight: FontWeight.bold,
-        size: size ?? 36,
-        key: key,
-        gradient: FlutterGradients.findByName(gradient));
+        isGradient: true, weight: FontWeight.bold, size: size ?? 36, key: key, gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ Rich Text with FirstName and Invite
@@ -123,19 +89,10 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(
-                  text: type.capitalizeFirst,
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 26,
-                      color: Colors.black)),
+              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: Colors.black)),
               TextSpan(
                   text: " from ${firstName.capitalizeFirst}",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 22,
-                      color: Colors.blue[900])),
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
             ])));
   }
 
@@ -158,9 +115,7 @@ class SonrText extends StatelessWidget {
     for (int i = 0; i <= segmentCount - 1; i++) {
       // Check if final Segment
       if (i == segmentCount - 1) {
-        directories > 0
-            ? path += path += "/${uri.pathSegments[i]}"
-            : path += uri.pathSegments[i];
+        directories > 0 ? path += path += "/${uri.pathSegments[i]}" : path += uri.pathSegments[i];
       } else {
         directories += 1;
         path += ".";
@@ -205,10 +160,7 @@ class SonrText extends StatelessWidget {
             child: Text(
               text,
               textAlign: isCentered ? TextAlign.center : TextAlign.start,
-              style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  fontSize: size ?? 32.0,
-                  color: Colors.white),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: size ?? 32.0, color: Colors.white),
             )),
       );
     }
@@ -219,11 +171,7 @@ class SonrText extends StatelessWidget {
     }
 
     // @ Normal Type Text
-    return Text(text,
-        style: GoogleFonts.poppins(
-            fontWeight: weight,
-            fontSize: size ?? 16,
-            color: color ?? findTextColor()));
+    return Text(text, style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^
@@ -237,9 +185,7 @@ class SonrText extends StatelessWidget {
 
   // ^ Replace Character in given String with given Index ^
   static String replaceCharAt(String oldString, int index, String newChar) {
-    return oldString.substring(0, index) +
-        newChar +
-        oldString.substring(index + 1);
+    return oldString.substring(0, index) + newChar + oldString.substring(index + 1);
   }
 }
 
@@ -249,6 +195,7 @@ class SonrTextField extends StatefulWidget {
   final String hint;
   final String value;
   final FocusNode focus;
+  final TextCapitalization textCapitalization;
 
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
@@ -259,7 +206,8 @@ class SonrTextField extends StatefulWidget {
       @required this.value,
       this.onChanged,
       this.focus,
-      this.onEditingComplete});
+      this.onEditingComplete,
+      this.textCapitalization = TextCapitalization.none});
 
   @override
   _SonrTextFieldState createState() => _SonrTextFieldState();
@@ -282,7 +230,7 @@ class _SonrTextFieldState extends State<SonrTextField> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
           child: Text(
-            this.widget.label,
+            widget.label,
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: NeumorphicTheme.defaultTextColor(context),
@@ -297,17 +245,16 @@ class _SonrTextFieldState extends State<SonrTextField> {
           ),
           padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
           child: TextField(
+            textCapitalization: widget.textCapitalization,
             focusNode: widget.focus,
             onEditingComplete: () {
-              this.widget.onEditingComplete();
+              widget.onEditingComplete();
             },
             onChanged: (value) {
-              this.widget.onChanged(value);
+              widget.onChanged(value);
             },
             controller: _controller,
-            decoration: InputDecoration.collapsed(
-                hintText: this.widget.hint,
-                hintStyle: TextStyle(color: Colors.black38)),
+            decoration: InputDecoration.collapsed(hintText: this.widget.hint, hintStyle: TextStyle(color: Colors.black38)),
           ),
         )
       ],
