@@ -409,7 +409,7 @@ class _FileItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Metadata metadata = card.metadata;
-    DateTime received = DateTime.fromMillisecondsSinceEpoch(card.received.toInt() * 1000);
+    DateTime received = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
     print(received.toString());
     return Stack(
       children: <Widget>[

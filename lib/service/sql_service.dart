@@ -178,8 +178,8 @@ create table $CARD_TABLE (
 
       // Sort by Date
       result.sort((a, b) {
-        var aDate = DateTime.fromMillisecondsSinceEpoch(a.received.toInt());
-        var bDate = DateTime.fromMillisecondsSinceEpoch(b.received.toInt());
+        var aDate = DateTime.fromMillisecondsSinceEpoch(a.received * 1000);
+        var bDate = DateTime.fromMillisecondsSinceEpoch(b.received * 1000);
         return aDate.compareTo(bDate);
       });
 
