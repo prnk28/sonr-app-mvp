@@ -16,7 +16,7 @@ class SonrOverlay {
   OverlayEntry overlay, overlayBackground;
 
   // ^ Builds Overlay based on Metadata from Transfer Card ^ //
-  factory SonrOverlay.fromMetaCard({@required BuildContext context, @required TransferCard card}) {
+  factory SonrOverlay.fromMetaCardInfo({@required BuildContext context, @required TransferCard card}) {
     // Extract Data
     bool hasSaved = true;
     var metadata = card.metadata;
@@ -113,7 +113,7 @@ class SonrOverlay {
               sigmaY: 5.0,
             ),
             child: Container(
-              color: Colors.black.withOpacity(0.4),
+              color: K_OVERLAY_COLOR,
             ),
           ),
         ),

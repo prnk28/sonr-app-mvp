@@ -140,7 +140,7 @@ class _AnimatedButtonOption extends StatelessWidget {
               depth: 12,
               color: HexColor.fromHex("EFEEEE"),
               boxShape: NeumorphicBoxShape.circle()),
-          child: RiveActor.fromType(
+          child: SonrRiveWidget.fromType(
             type: type,
             width: Get.width,
             height: Get.height,

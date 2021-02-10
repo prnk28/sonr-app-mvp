@@ -346,6 +346,7 @@ class _FileInviteProgress extends HookWidget {
 
     // Reactive to Progress
     return SonrAnimatedWidget(
+      state: AnimState.Controlled,
       child: Obx(() {
         if (Get.find<SonrService>().progress.value < 1.0) {
           return Stack(
@@ -407,7 +408,6 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card);
   @override
   Widget build(BuildContext context) {
-    DateTime received = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
     return Stack(
       children: <Widget>[
         // Time Stamp
@@ -417,7 +417,7 @@ class _FileItemView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Neumorphic(
               style: SonrStyle.timeStamp,
-              child: SonrText.date(received),
+              child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000)),
               padding: EdgeInsets.all(10),
             ),
           ),
@@ -429,7 +429,9 @@ class _FileItemView extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SonrButton.circle(
-                  icon: SonrIcon.info, onPressed: () => SonrOverlay.fromMetaCard(card: card, context: context), shadowLightColor: Colors.black38)),
+                  icon: SonrIcon.info,
+                  onPressed: () => SonrOverlay.fromMetaCardInfo(card: card, context: context),
+                  shadowLightColor: Colors.black38)),
         ),
       ],
     );

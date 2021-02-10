@@ -8,7 +8,6 @@ export 'snackbar.dart';
 export 'text.dart';
 
 // Global UI Widgets
-export '../widgets/actor.dart';
 export '../widgets/animation.dart';
 export '../widgets/card.dart';
 export '../widgets/edit.dart';
@@ -28,8 +27,6 @@ export 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'color.dart';
-
-
 
 class SonrStyle {
   static get cardItem => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
