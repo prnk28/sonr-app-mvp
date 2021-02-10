@@ -1,13 +1,13 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:sonr_app/modules/home/share_button.dart';
+import 'package:flutter/material.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'home_controller.dart';
-import 'package:flutter/material.dart';
-import 'transfer_item.dart';
+import 'search_dialog.dart';
+import 'share_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
   @override
@@ -23,7 +23,7 @@ class HomeScreen extends GetView<HomeController> {
         ),
         action: SonrButton.circleIcon(
           SonrIcon.search,
-          () => print("Search"),
+          () => Get.dialog(SearchDialog()),
         ),
         floatingActionButton: ShareButton(),
         body: GestureDetector(onTap: () => controller.toggleShareExpand(options: ToggleForced(false)), child: _HomeView()));
@@ -42,31 +42,28 @@ class _HomeView extends GetView<HomeController> {
           margin: EdgeInsets.only(left: 30, right: 30),
           child: Obx(() => NeumorphicToggle(
                 selectedIndex: controller.toggleIndex.value,
-                onChanged: (val) => controller.toggleIndex(val),
+                onChanged: (val) => controller.setCardFilter(val),
                 thumb: Center(child: Obx(() => controller.getToggleCategory())),
                 children: [
                   ToggleElement(),
                   ToggleElement(),
                   ToggleElement(),
-                  ToggleElement(),
+                  //ToggleElement(),
                 ],
               )),
         ),
       ),
-      Obx(() => GestureDetector(
-            onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
-            child: Container(
-              padding: EdgeInsets.only(top: 15),
-              margin: EdgeInsets.all(10),
-              height: 500, // card height
-              child: PageView.builder(
-                  itemCount: controller.allCards.length,
-                  controller: controller.pageController,
-                  onPageChanged: (int index) => controller.pageIndex(index),
-                  itemBuilder: (_, idx) {
-                    return SonrCard.fromItem(controller.allCards[idx], idx);
-                  }),
-            ),
+      Obx(() => Container(
+            padding: EdgeInsets.only(top: 15),
+            margin: EdgeInsets.all(10),
+            height: 500, // card height
+            child: PageView.builder(
+                itemCount: controller.visibleCards.length,
+                controller: controller.pageController,
+                onPageChanged: (int index) => controller.pageIndex(index),
+                itemBuilder: (_, idx) {
+                  return SonrCard.fromItem(controller.visibleCards[idx], idx);
+                }),
           ))
     ]);
   }
@@ -101,3 +98,4 @@ class ExpandedView extends StatelessWidget {
     );
   }
 }
+

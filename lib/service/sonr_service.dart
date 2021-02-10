@@ -4,6 +4,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/model_user.dart';
+import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart' hide User;
@@ -163,8 +164,6 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      Get.find<TransferCardController>().state(CardType.Invite);
-      HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
@@ -224,10 +223,12 @@ class SonrService extends GetxService {
       // Reset Data
       progress(0.0);
 
+      Get.back();
+
       // Save Card
       Get.find<SQLService>().storeCard(data);
       Get.find<DeviceService>().saveMediaFromCard(data);
-      Get.find<TransferCardController>().received(data);
+      Get.find<HomeController>().addCard(data);
       HapticFeedback.vibrate();
     }
   }

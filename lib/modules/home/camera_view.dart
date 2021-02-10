@@ -13,7 +13,7 @@ import 'package:sonr_core/sonr_core.dart';
 
 import 'home_controller.dart';
 
-class CameraPicker extends GetView<CameraPickerController> {
+class CameraView extends GetView<CameraPickerController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {

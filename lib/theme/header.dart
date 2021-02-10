@@ -37,14 +37,14 @@ class SonrHeaderBar extends StatelessWidget {
       this.expandedHeight})
       : super(key: key);
 
-  factory SonrHeaderBar.title({@required SonrText title}) {
+  factory SonrHeaderBar.title({@required Widget title}) {
     return SonrHeaderBar(
       title: title,
       type: _SonrDialogHeaderType.Title,
     );
   }
 
-  factory SonrHeaderBar.leading({@required SonrText title, @required SonrButton leading}) {
+  factory SonrHeaderBar.leading({@required Widget title, @required Widget leading}) {
     return SonrHeaderBar(
       title: title,
       type: _SonrDialogHeaderType.Leading,
@@ -52,7 +52,7 @@ class SonrHeaderBar extends StatelessWidget {
     );
   }
 
-  factory SonrHeaderBar.action({@required SonrText title, @required SonrButton action}) {
+  factory SonrHeaderBar.action({@required Widget title, @required Widget action}) {
     return SonrHeaderBar(
       title: title,
       type: _SonrDialogHeaderType.Action,
@@ -60,7 +60,7 @@ class SonrHeaderBar extends StatelessWidget {
     );
   }
 
-  factory SonrHeaderBar.twoButton({@required SonrText title, @required SonrButton leading, @required SonrButton action}) {
+  factory SonrHeaderBar.twoButton({@required Widget title, @required Widget leading, @required Widget action}) {
     return SonrHeaderBar(
       title: title,
       type: _SonrDialogHeaderType.TwoButton,
@@ -69,14 +69,14 @@ class SonrHeaderBar extends StatelessWidget {
     );
   }
 
-  factory SonrHeaderBar.closeAccept({@required SonrText title, @required Function onCancel, @required Function onAccept}) {
+  factory SonrHeaderBar.closeAccept({@required Widget title, @required Function onCancel, @required Function onAccept}) {
     return SonrHeaderBar(
         title: title, type: _SonrDialogHeaderType.CloseAccept, leading: SonrButton.close(onCancel), action: SonrButton.accept(onAccept));
   }
 
   factory SonrHeaderBar.sliver(
-      {@required SonrButton leading,
-      @required SonrButton action,
+      {@required Widget leading,
+      @required Widget action,
       @required Widget flexibleSpace,
       pinned: true,
       floating: true,

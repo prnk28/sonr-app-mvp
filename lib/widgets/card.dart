@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -98,6 +99,7 @@ class SonrCard extends GetWidget<TransferCardController> {
 
     // * Invited Card * //
     else if (type == CardType.Invite) {
+      controller.invited();
       return _CardPopupView(invite.card, invite.payload, controller, false);
     }
 
@@ -134,11 +136,13 @@ class _CardItemView extends StatelessWidget {
           tag: card.id,
           child: Container(
             height: 75,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              fit: BoxFit.cover,
-              image: MemoryImage(card.metadata.thumbnail),
-            )),
+            decoration: card.payload == Payload.MEDIA
+                ? BoxDecoration(
+                    image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: MemoryImage(card.metadata.thumbnail),
+                  ))
+                : null,
             child: viewForPayload[card.payload],
           ),
         ),
@@ -316,10 +320,6 @@ class _FileInviteView extends StatelessWidget {
       else if (controller.state.value == CardType.InProgress) {
         child = _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, card).data);
       }
-      // @ Check State of Card --> Completed Transfer
-      else if (controller.state.value == CardType.Received) {
-        child = _FileInviteComplete(controller.card, controller);
-      }
 
       return AnimatedContainer(duration: Duration(seconds: 1), child: child);
     });
@@ -400,44 +400,6 @@ class _FileInviteProgress extends HookWidget {
   }
 }
 
-// ^ File Received View ^ //
-class _FileInviteComplete extends StatelessWidget {
-  final TransferCard card;
-  final TransferCardController controller;
-
-  const _FileInviteComplete(this.card, this.controller, {Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    // @ Non-Image Type
-    return Column(mainAxisSize: MainAxisSize.max, children: [
-      // @ Header
-      SonrHeaderBar.title(
-        title: SonrText.header("Completed"),
-      ),
-      Padding(padding: EdgeInsets.all(8)),
-      SlideDownAnimatedSwitcher(
-        child: Container(
-          key: UniqueKey(),
-          margin: EdgeInsets.only(left: 20, right: 20, top: 45, bottom: 65),
-          child: FittedBox(
-              alignment: Alignment.center,
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 1,
-                    minHeight: 1,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: card.metadata.mime.type == MIME_Type.image
-                        ? Container(width: 300, height: 200, child: Image.file(File(card.metadata.path)))
-                        : Text(card.metadata.mime.toString()),
-                  ))),
-        ),
-      ),
-    ]);
-  }
-}
-
 // ^ TransferCard File Item Details ^ //
 class _FileItemView extends StatelessWidget {
   final TransferCard card;
@@ -482,8 +444,8 @@ class TransferCardController extends GetxController {
   final hasLeftFocus = false.obs;
 
   // References
-  bool _initialized;
-  bool _accepted;
+  bool _initialized = false;
+  bool _accepted = false;
   TransferCard card;
   int index;
 
@@ -516,6 +478,12 @@ class TransferCardController extends GetxController {
     isFocused(index == 0);
   }
 
+  // ^ Sets Card for Invited Data for this Widget ^
+  invited() {
+    state(CardType.Invite);
+    HapticFeedback.heavyImpact();
+  }
+
   // ^ Accept File Invite Request ^ //
   acceptFile() {
     state(CardType.InProgress);
@@ -546,15 +514,6 @@ class TransferCardController extends GetxController {
 
     Get.back();
     state(CardType.None);
-  }
-
-  // ^ Set File after Transfer^ //
-  received(TransferCard card) {
-    state(CardType.Received);
-    card = card;
-
-    // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(card);
   }
 
   // ^ Expands Transfer Card into Hero ^ //
