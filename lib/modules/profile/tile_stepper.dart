@@ -15,42 +15,55 @@ class TileCreateStepper extends GetView<TileStepperController> {
   @override
   Widget build(BuildContext context) {
     // Update State
-    controller.start();
     return NeumorphicBackground(
         backendColor: Colors.transparent,
         margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
         borderRadius: BorderRadius.circular(40),
-        child: Material(
-          color: Colors.transparent,
-          child: Neumorphic(
+        child: SonrScaffold(
+          //color: Colors.transparent,
+          body: Neumorphic(
             style: NeumorphicStyle(color: K_BASE_COLOR),
             child: Obx(() {
               // Get Details for Step
               var details = _TileStepDetails(controller: controller, step: controller.step.value);
 
-              // Build View
-              return AnimatedContainer(
-                  width: 352,
-                  height: Get.height - details.heightModifier(),
-                  duration: 1500.milliseconds,
-                  child: Column(children: [
-                    // Top Buttons
-                    SonrButton.close(() {
-                      Get.back();
-                    }),
+              // Build PageView
+              return Column(children: [
+                // Top Buttons
+                SonrButton.close(() {
+                  Get.back();
+                }),
 
-                    // Current View
-                    Padding(padding: EdgeInsets.all(5)),
-                    Align(key: UniqueKey(), alignment: Alignment.topCenter, child: Container(child: details.currentView)),
+                // Current View
+                Padding(padding: EdgeInsets.all(5)),
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: 352,
+                      height: Get.height - details.heightModifier(),
+                      child: PageView.builder(
+                        controller: controller.pageController,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (_, idx) {
+                          if (idx == 0) {
+                            return _DropdownAddView();
+                          } else if (idx == 1) {
+                            return _SetInfoView();
+                          } else {
+                            return _SetTypeView();
+                          }
+                        },
+                      ),
+                    )),
 
-                    // Bottom Buttons
-                    Spacer(),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: details.bottomButtons,
-                    ),
-                    Padding(padding: EdgeInsets.all(15))
-                  ]));
+                // Bottom Buttons
+                Spacer(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: details.bottomButtons,
+                ),
+                Padding(padding: EdgeInsets.all(15))
+              ]);
             }),
           ),
         ));
@@ -187,7 +200,7 @@ class _SetInfoView extends GetView<TileStepperController> {
                     label: _getLabelHintText(controller.provider.value).first,
                     hint: _getLabelHintText(controller.provider.value).last,
                     autoCorrect: false,
-                    autoFocus: true,
+                    // TODO autoFocus: false,
                     value: controller.username.value,
                     onChanged: (String value) {
                       controller.username(value);
@@ -340,30 +353,28 @@ class TileStepperController extends GetxController {
 
   // References
   final step = 0.obs;
-
-  // ^ Start New Tile Creation ^ //
-  start() {
-    step(1);
-  }
+  final pageController = PageController();
 
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (step.value == 1) {
+    if (step.value == 0) {
       // Move to Next Step
       if (provider.value != null && hasSetProvider.value) {
-        step(2);
+        step(1);
+        pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       } else {
         // Display Error Snackbar
         SonrSnack.missing("Select a provider first");
       }
     }
     // @ Step 3
-    else if (step.value == 2) {
+    else if (step.value == 1) {
       // Update State
       if (username.value != "") {
         if (await Get.find<SocialMediaService>().validate(provider.value, username.value)) {
-          step(3);
+          step(2);
+          pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         }
       } else {
         // Display Error Snackbar
@@ -375,16 +386,18 @@ class TileStepperController extends GetxController {
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
     // First Step
-    if (step.value == 1) {
-      step(1);
+    if (step.value == 0) {
+      step(0);
     }
     // Step 2
-    else if (step.value == 2) {
-      step(1);
+    else if (step.value == 1) {
+      step(0);
+      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
     }
     // Step 3
-    else if (step.value == 3) {
-      step(2);
+    else if (step.value == 2) {
+      step(1);
+      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
     }
   }
 
@@ -455,21 +468,22 @@ class _TileStepDetails {
   _TileStepDetails({@required this.step, @required this.controller});
 
   // Adjusted Container Height
+  final kBaseModifier = 260.0;
   double heightModifier() {
-    if (step == 1) {
-      return 200;
-    } else if (step == 2) {
-      return 250;
+    if (step == 0) {
+      return 200 + kBaseModifier;
+    } else if (step == 1) {
+      return 250 + kBaseModifier;
     } else {
-      return 350;
+      return 350 + kBaseModifier;
     }
   }
 
   // ^ Presented View by Step ^
   Widget get currentView {
-    if (step == 3) {
+    if (step == 2) {
       return _SetTypeView();
-    } else if (controller.step.value == 2) {
+    } else if (controller.step.value == 1) {
       return _SetInfoView();
     } else {
       return _DropdownAddView();
@@ -479,7 +493,7 @@ class _TileStepDetails {
   // ^ Bottom Buttons for View by Step ^
   Widget get bottomButtons {
     //  Step Three: Cancel and Confirm
-    if (step == 3) {
+    if (step == 2) {
       return SonrButton.stadium(
         text: SonrText.normal("Save"),
         onPressed: controller.saveTile,
@@ -488,7 +502,7 @@ class _TileStepDetails {
       );
     }
     // Step Two: Dual Bottom Buttons, Back and Next
-    else if (controller.step.value == 2) {
+    else if (controller.step.value == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         SonrButton.stadium(text: SonrText.normal("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
         SonrButton.stadium(text: SonrText.normal("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
