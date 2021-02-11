@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'icon.dart';
+
 class SonrText extends StatelessWidget {
   final String text;
   final Color color;
@@ -249,11 +251,13 @@ class SonrText extends StatelessWidget {
 }
 
 // ^ Builds Neumorphic Text Field ^ //
-class SonrTextField extends StatefulWidget {
+class SonrTextField extends StatelessWidget {
   final String label;
   final String hint;
   final String value;
-  final FocusNode focus;
+  final FocusNode focusNode;
+  final bool autoFocus;
+  final bool autoCorrect;
   final TextCapitalization textCapitalization;
 
   final ValueChanged<String> onChanged;
@@ -264,59 +268,103 @@ class SonrTextField extends StatefulWidget {
       @required this.hint,
       @required this.value,
       this.onChanged,
-      this.focus,
+      this.focusNode,
       this.onEditingComplete,
+      this.autoFocus = false,
+      this.autoCorrect = true,
       this.textCapitalization = TextCapitalization.none});
 
   @override
-  _SonrTextFieldState createState() => _SonrTextFieldState();
+  Widget build(BuildContext context) {
+    return ValueBuilder<String>(
+      initialValue: value,
+      builder: (value, updateFn) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: NeumorphicTheme.defaultTextColor(context),
+                ),
+              ),
+            ),
+            Neumorphic(
+              margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+              style: NeumorphicStyle(
+                depth: NeumorphicTheme.embossDepth(context),
+                boxShape: NeumorphicBoxShape.stadium(),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+              child: TextField(
+                autofocus: autoFocus,
+                autocorrect: autoCorrect,
+                textCapitalization: textCapitalization,
+                focusNode: focusNode,
+                onEditingComplete: onEditingComplete,
+                onChanged: updateFn,
+                decoration: InputDecoration.collapsed(hintText: hint, hintStyle: TextStyle(color: Colors.black38)),
+              ),
+            )
+          ],
+        );
+      },
+      onUpdate: onChanged,
+    );
+  }
 }
 
-class _SonrTextFieldState extends State<SonrTextField> {
-  TextEditingController _controller;
+// ^ Builds Neumorphic Text Field for Search ^ //
+class SonrSearchField extends StatelessWidget {
+  final String value;
+  final ValueChanged<String> onChanged;
+  final Function onEditingComplete;
+  final Iterable<String> autofillHints;
 
-  @override
-  void initState() {
-    _controller = TextEditingController(text: widget.value);
-    super.initState();
-  }
+  SonrSearchField({
+    @required this.value,
+    this.onChanged,
+    this.onEditingComplete,
+    this.autofillHints,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-          child: Text(
-            widget.label,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: NeumorphicTheme.defaultTextColor(context),
-            ),
-          ),
-        ),
-        Neumorphic(
-          margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-          style: NeumorphicStyle(
-            depth: NeumorphicTheme.embossDepth(context),
-            boxShape: NeumorphicBoxShape.stadium(),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-          child: TextField(
-            textCapitalization: widget.textCapitalization,
-            focusNode: widget.focus,
-            onEditingComplete: () {
-              widget.onEditingComplete();
-            },
-            onChanged: (value) {
-              widget.onChanged(value);
-            },
-            controller: _controller,
-            decoration: InputDecoration.collapsed(hintText: this.widget.hint, hintStyle: TextStyle(color: Colors.black38)),
-          ),
-        )
-      ],
+    return ValueBuilder<String>(
+      initialValue: value,
+      builder: (value, updateFn) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Neumorphic(
+                margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+                style: NeumorphicStyle(
+                  depth: NeumorphicTheme.embossDepth(context),
+                  boxShape: NeumorphicBoxShape.stadium(),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                child: Row(children: [
+                  SonrIcon.gradient(Icons.search, FlutterGradientNames.amourAmour, size: 28),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: TextField(
+                        autofillHints: autofillHints,
+                        autofocus: true,
+                        onEditingComplete: onEditingComplete,
+                        onChanged: updateFn,
+                        decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
+                      ),
+                    ),
+                  ),
+                ]))
+          ],
+        );
+      },
+      onUpdate: onChanged,
     );
   }
 }

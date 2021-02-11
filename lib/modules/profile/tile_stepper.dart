@@ -21,109 +21,58 @@ class TileCreateStepper extends GetView<TileStepperController> {
         margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
         borderRadius: BorderRadius.circular(40),
         child: Material(
-            color: Colors.transparent,
-            child: Neumorphic(
-              style: NeumorphicStyle(color: K_BASE_COLOR),
-              child: Container(
-                width: 352,
-                height: Get.height - 200,
-                child: Obx(() {
-                  Widget topButtons;
-                  Widget bottomButtons;
-                  Widget currentView;
+          color: Colors.transparent,
+          child: Neumorphic(
+            style: NeumorphicStyle(color: K_BASE_COLOR),
+            child: Obx(() {
+              // Get Details for Step
+              var details = _TileStepDetails(controller: controller, step: controller.step.value);
 
-                  // @ Step Three: No Buttom Buttons, Cancel and Confirm
-                  if (controller.step.value == 3) {
+              // Build View
+              return AnimatedContainer(
+                  width: 352,
+                  height: Get.height - details.heightModifier(),
+                  duration: 1500.milliseconds,
+                  child: Column(children: [
                     // Top Buttons
-                    currentView = _SetTypeView();
-                    topButtons = Container();
-
-                    // Bottom Buttons
-                    bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      // @ Bottom Left Close/Cancel Button
-                      SonrButton.close(() {
-                        Get.back();
-                      }),
-                      // @ Bottom Right Confirm Button
-                      SonrButton.accept(() {
-                        controller.saveTile();
-                        Get.back(closeOverlays: true);
-                      }),
-                    ]);
-                  }
-                  // @ Step Two: Dual Bottom Buttons, Back and Next, Cancel Top Button
-                  else if (controller.step.value == 2) {
-                    currentView = _SetInfoView();
-                    topButtons = SonrButton.close(() {
+                    SonrButton.close(() {
                       Get.back();
-                    });
-
-                    // Bottom Buttons
-                    bottomButtons = Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      SonrButton.rectangle(text: SonrText.normal("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
-                      SonrButton.rectangle(
-                          text: SonrText.normal("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
-                    ]);
-                  }
-                  // @ Step One: Top Cancel Button, Bottom wide Next Button
-                  else {
-                    // Initialize List of Options
-                    var options = <Contact_SocialTile_Provider>[];
-
-                    // Iterate through All Options
-                    Contact_SocialTile_Provider.values.forEach((provider) {
-                      if (!Get.find<ProfileController>().socials.any((tile) => tile.provider == provider)) {
-                        options.add(provider);
-                      }
-                    });
-
-                    currentView = _DropdownAddView(options);
-
-                    // Top Buttons
-                    topButtons = SonrButton.close(() {
-                      Get.back();
-                    });
-
-                    // Bottom Buttons
-                    bottomButtons = SonrButton.rectangle(
-                        text: SonrText.normal("Next", size: 22),
-                        onPressed: controller.nextStep,
-                        icon: SonrIcon.forward,
-                        margin: EdgeInsets.only(left: 60, right: 80),
-                        iconPosition: WidgetPosition.Right);
-                  }
-
-                  // ^ Build View ^ //
-                  return Column(children: [
-                    // Top Buttons
-                    topButtons,
+                    }),
 
                     // Current View
                     Padding(padding: EdgeInsets.all(5)),
-                    Align(key: UniqueKey(), alignment: Alignment.topCenter, child: Container(child: currentView)),
+                    Align(key: UniqueKey(), alignment: Alignment.topCenter, child: Container(child: details.currentView)),
 
                     // Bottom Buttons
                     Spacer(),
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: bottomButtons,
+                      child: details.bottomButtons,
                     ),
                     Padding(padding: EdgeInsets.all(15))
-                  ]);
-                }),
-              ),
-            )));
+                  ]));
+            }),
+          ),
+        ));
   }
 }
 
 // ^ Step 1 Select Provider ^ //
 class _DropdownAddView extends GetView<TileStepperController> {
-  final List<Contact_SocialTile_Provider> options;
-  _DropdownAddView(this.options, {Key key}) : super(key: key);
-
   // Build View As Stateless
   @override
   Widget build(BuildContext context) {
+    // Initialize List of Options
+    var options = <Contact_SocialTile_Provider>[];
+
+    // Iterate through All Options
+    Contact_SocialTile_Provider.values.forEach((provider) {
+      if (!Get.find<ProfileController>().socials.any((tile) => tile.provider == provider)) {
+        options.add(provider);
+      }
+    });
+
+    // Build View
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -147,8 +96,13 @@ class _DropdownAddView extends GetView<TileStepperController> {
                 // @ ValueBuilder for DropDown
                 child: ValueBuilder<Contact_SocialTile_Provider>(
                   onUpdate: (value) {
+                    // Set Provider
                     controller.provider(value);
                     controller.provider.refresh();
+
+                    // Notify Provider Set
+                    controller.hasSetProvider(true);
+                    controller.hasSetProvider.refresh();
                   },
                   builder: (item, updateFn) {
                     return DropDown<Contact_SocialTile_Provider>(
@@ -156,7 +110,7 @@ class _DropdownAddView extends GetView<TileStepperController> {
                       isExpanded: true,
                       initialValue: item,
                       items: options,
-                      customWidgets: List<Widget>.generate(options.length, (index) => _buildOptionWidget(index)),
+                      customWidgets: List<Widget>.generate(options.length, (index) => _buildOptionWidget(options, index)),
                       hint: Text("Select...",
                           style: GoogleFonts.poppins(
                             fontSize: 16,
@@ -209,7 +163,7 @@ class _DropdownAddView extends GetView<TileStepperController> {
   }
 
   // @ Builds option at index
-  _buildOptionWidget(int index) {
+  _buildOptionWidget(List<Contact_SocialTile_Provider> options, int index) {
     var item = options.elementAt(index);
     return Row(children: [SonrIcon.social(IconType.Normal, item), Padding(padding: EdgeInsets.all(4)), Text(item.toString())]);
   }
@@ -232,6 +186,8 @@ class _SetInfoView extends GetView<TileStepperController> {
                 () => SonrTextField(
                     label: _getLabelHintText(controller.provider.value).first,
                     hint: _getLabelHintText(controller.provider.value).last,
+                    autoCorrect: false,
+                    autoFocus: true,
                     value: controller.username.value,
                     onChanged: (String value) {
                       controller.username(value);
@@ -377,6 +333,7 @@ class TileStepperController extends GetxController {
   // Properties
   final username = "".obs;
   final isPrivate = false.obs;
+  final hasSetProvider = false.obs;
   final provider = Rx<Contact_SocialTile_Provider>();
   final type = Rx<Contact_SocialTile_Type>();
   final radioGroupValue = "".obs;
@@ -394,7 +351,7 @@ class TileStepperController extends GetxController {
     // @ Step 2
     if (step.value == 1) {
       // Move to Next Step
-      if (provider.value != null) {
+      if (provider.value != null && hasSetProvider.value) {
         step(2);
       } else {
         // Display Error Snackbar
@@ -451,6 +408,7 @@ class TileStepperController extends GetxController {
 
       // Save to Profile
       Get.find<ProfileController>().saveSocialTile(tile);
+      Get.back(closeOverlays: true);
     } else {
       // Display Error Snackbar
       SonrSnack.missing("Pick a Tile Type", isLast: true);
@@ -486,5 +444,64 @@ class TileStepperController extends GetxController {
   // ^ Helper to Display Tile Options ^ //
   bool doesProviderAllowFeed(Contact_SocialTile_Provider provider) {
     return (provider == Contact_SocialTile_Provider.Twitter || provider == Contact_SocialTile_Provider.Medium);
+  }
+}
+
+// ** Returns View Details by Step ** //
+class _TileStepDetails {
+  final int step;
+  final TileStepperController controller;
+
+  _TileStepDetails({@required this.step, @required this.controller});
+
+  // Adjusted Container Height
+  double heightModifier() {
+    if (step == 1) {
+      return 200;
+    } else if (step == 2) {
+      return 250;
+    } else {
+      return 350;
+    }
+  }
+
+  // ^ Presented View by Step ^
+  Widget get currentView {
+    if (step == 3) {
+      return _SetTypeView();
+    } else if (controller.step.value == 2) {
+      return _SetInfoView();
+    } else {
+      return _DropdownAddView();
+    }
+  }
+
+  // ^ Bottom Buttons for View by Step ^
+  Widget get bottomButtons {
+    //  Step Three: Cancel and Confirm
+    if (step == 3) {
+      return SonrButton.stadium(
+        text: SonrText.normal("Save"),
+        onPressed: controller.saveTile,
+        icon: SonrIcon.success,
+        margin: EdgeInsets.only(left: 60, right: 80),
+      );
+    }
+    // Step Two: Dual Bottom Buttons, Back and Next
+    else if (controller.step.value == 2) {
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrButton.stadium(text: SonrText.normal("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
+        SonrButton.stadium(text: SonrText.normal("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+      ]);
+    }
+    // Step One: Top Cancel Button
+    else {
+      return SonrButton.stadium(
+          text: SonrText.normal("Next", size: 22),
+          onPressed: controller.nextStep,
+          icon: SonrIcon.forward,
+          margin: EdgeInsets.only(left: 60, right: 80),
+          iconPosition: WidgetPosition.Right);
+    }
   }
 }

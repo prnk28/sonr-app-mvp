@@ -7,7 +7,7 @@ class SearchDialog extends GetView<SearchDialogController> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 420),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 600),
         borderRadius: BorderRadius.circular(20),
         backendColor: Colors.transparent,
         child: Neumorphic(
@@ -27,8 +27,11 @@ class SearchDialog extends GetView<SearchDialogController> {
                   Spacer(),
                   Material(
                     color: Colors.transparent,
-                    child: SonrTextField(
-                        hint: "Search here..", label: "Find a Card", value: controller.searchText.value, onChanged: controller.textFieldChanged),
+                    child: Obx(() => SonrSearchField(
+                          value: controller.searchText.value,
+                          onChanged: controller.textFieldChanged,
+                          autofillHints: controller.resultsList,
+                        )),
                   ),
                   Spacer()
                 ]))));
@@ -38,6 +41,7 @@ class SearchDialog extends GetView<SearchDialogController> {
 class SearchDialogController extends GetxController {
   final searchText = "".obs;
   final searchResults = Map<QueryType, List<TransferCard>>().obs;
+  final resultsList = <String>[].obs;
 
   textFieldChanged(String query) {
     searchText(query);
@@ -54,6 +58,13 @@ class SearchDialogController extends GetxController {
       // Logging
       searchResults.forEach((type, result) {
         print("$type based Card Results: ${result.length}");
+        if (result.length > 0) {
+          result.forEach((card) {
+            resultsList.add(card.payload.toString());
+            resultsList.add(card.firstName.toString());
+            resultsList.add(card.lastName.toString());
+          });
+        }
       });
     });
   }

@@ -129,13 +129,10 @@ class SonrHeaderBar extends StatelessWidget {
           flexibleSpace: flexibleSpace,
           toolbarHeight: kToolbarHeight + 32 * 2,
           expandedHeight: expandedHeight,
-          title: Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[leading, Spacer(), action],
-            ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[leading, Spacer(), action],
           ),
         );
         break;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart' hide Platform;
@@ -13,41 +14,37 @@ class ProfileScreen extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     // Build View
     return SonrScaffold(
-        body: _SliverViews(),
         floatingActionButton: NeumorphicFloatingActionButton(
             child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
             style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
             onPressed: () {
               Get.dialog(TileCreateStepper(), barrierColor: K_DIALOG_COLOR);
-            }));
-  }
-}
+            }),
+        body: NeumorphicBackground(
+            backendColor: Colors.transparent,
+            child: CustomScrollView(
+              slivers: [
+                // @ Builds Profile Header
+                SonrHeaderBar.sliver(
+                    leading: SonrButton.circle(
+                        icon: SonrIcon.close,
+                        onPressed: () => Get.offNamed("/home/profile"),
+                        intensity: 0.85,
+                        shadowLightColor: Colors.lightBlueAccent[100]),
+                    action: SonrButton.circle(
+                      icon: SonrIcon.more,
+                      onPressed: () => {},
+                      intensity: 0.85,
+                      shadowLightColor: Colors.lightBlueAccent[100],
+                    ),
+                    flexibleSpace: ContactHeader()),
 
-class _SliverViews extends GetView<ProfileController> {
-  @override
-  Widget build(BuildContext context) {
-    // Create View
-    return NeumorphicBackground(
-      backendColor: Colors.transparent,
-      child: CustomScrollView(
-        slivers: [
-          // @ Builds Profile Header
-          SonrHeaderBar.sliver(
-              leading: SonrButton.circle(
-                  icon: SonrIcon.close,
-                  onPressed: () => Get.offNamed("/home/profile"),
-                  intensity: 0.85,
-                  shadowLightColor: Colors.lightBlueAccent[50]),
-              action: SonrButton.circle(icon: SonrIcon.more, onPressed: () => {}, intensity: 0.85, shadowLightColor: Colors.lightBlueAccent[50]),
-              flexibleSpace: ContactHeader()),
+                SliverPadding(padding: EdgeInsets.all(14)),
 
-          SliverPadding(padding: EdgeInsets.all(14)),
-
-          // @ Builds List of Social Tile
-          Obx(() => SocialsGrid(controller.socials, controller.focusTileIndex.value)),
-        ],
-      ),
-    );
+                // @ Builds List of Social Tile
+                Obx(() => SocialsGrid(controller.socials, controller.focusTileIndex.value)),
+              ],
+            )));
   }
 }
 
@@ -79,5 +76,81 @@ class SocialsGrid extends StatelessWidget {
                 return StaggeredTile.count(2, 2);
               }
             }));
+  }
+}
+
+class ContactHeader extends GetView<ProfileController> {
+  @override
+  Widget build(BuildContext context) {
+    return FlexibleSpaceBar(
+      titlePadding: EdgeInsets.only(bottom: 24),
+      title: _buildTitle(),
+      centerTitle: true,
+      background: NeumorphicBackground(
+        backendColor: Colors.transparent,
+        child: ClipPath(
+          clipper: OvalBottomBorderClipper(),
+          child: Neumorphic(
+            style: NeumorphicStyle(color: Colors.lightBlue[100]),
+            child: GestureDetector(
+              onLongPress: () async {
+                print("Launch Color picker to change header");
+                HapticFeedback.heavyImpact();
+              },
+              child: Container(
+                height: 285, // Same Header Color
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // @ Avatar
+                    _AvatarField(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ^ Builds Flexible SpaceBar Title ^ //
+  _buildTitle() {
+    return GestureDetector(
+        onLongPress: () async {
+          print("Launch Text Dialog to Update Name");
+          Get.dialog(EditDialog.textField("Name", "Enter your First Name", controller.firstName.value, text: "Text", onChanged: (val) {
+            controller.firstName(val);
+          }));
+          HapticFeedback.heavyImpact();
+        },
+        child: SonrText.normal(controller.firstName.value + " " + controller.lastName.value, color: HexColor.fromHex("FFFDFA"), size: 24));
+  }
+}
+
+class _AvatarField extends GetView<ProfileController> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () async {
+        print("Launch Profile Pic Camera View");
+        HapticFeedback.heavyImpact();
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Neumorphic(
+          padding: EdgeInsets.all(10),
+          style: NeumorphicStyle(
+            boxShape: NeumorphicBoxShape.circle(),
+            depth: -10,
+          ),
+          child: Icon(
+            Icons.insert_emoticon,
+            size: 120,
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ),
+      ),
+    );
   }
 }

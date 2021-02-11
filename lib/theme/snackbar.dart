@@ -17,8 +17,8 @@ class SonrSnack {
         snackStyle: SnackStyle.FLOATING,
         duration: Duration(milliseconds: time),
         snackPosition: SnackPosition.BOTTOM,
-        forwardAnimationCurve: Curves.bounceIn,
-        reverseAnimationCurve: Curves.easeOut,
+        forwardAnimationCurve: Curves.easeInCirc,
+        reverseAnimationCurve: Curves.elasticInOut,
         backgroundColor: color,
         icon: icon,
         colorText: Colors.white);
@@ -26,7 +26,7 @@ class SonrSnack {
 
   // ^ Succesful Operation ^ //
   factory SonrSnack.success(String message) {
-    return SonrSnack("Success!!", message, SonrIcon.success, Colors.green, 1250);
+    return SonrSnack("Success!!", message, SonrIcon.success, Colors.green, 2600);
   }
 
   // ^ Missing Data ^ //
@@ -35,21 +35,21 @@ class SonrSnack {
     final random = new Random();
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
 
-    return SonrSnack(isLast ? "Almost There!" : list[random.nextInt(list.length)], message, SonrIcon.missing, Colors.redAccent, 1500);
+    return SonrSnack(isLast ? "Almost There!" : list[random.nextInt(list.length)], message, SonrIcon.missing, Colors.redAccent, 2600);
   }
 
   // ^ Invalid Operation ^ //
   factory SonrSnack.invalid(String message) {
-    return SonrSnack("Uh Oh!", message, SonrIcon.missing, Colors.orange, 1250);
+    return SonrSnack("Uh Oh!", message, SonrIcon.missing, Colors.orange, 2600);
   }
 
   // ^ Cancelled Operation ^ //
   factory SonrSnack.cancelled(String message) {
-    return SonrSnack("Cancelled.", message, SonrIcon.cancel, Colors.yellow, 1250);
+    return SonrSnack("Cancelled.", message, SonrIcon.cancel, Colors.yellow, 2600);
   }
 
   // ^ Error on Operation ^ //
   factory SonrSnack.error(String message) {
-    return SonrSnack("Error.", message, SonrIcon.error, Colors.red, 1500);
+    return SonrSnack("Error.", message, SonrIcon.error, Colors.red, 2600);
   }
 }

@@ -24,7 +24,7 @@ class RegisterScreen extends GetView<RegisterController> {
                         label: "First Name",
                         hint: "Enter your first name",
                         value: controller.firstName.value,
-                        textCapitalization: TextCapitalization.characters,
+                        textCapitalization: TextCapitalization.words,
                         onChanged: (String value) {
                           controller.firstName(value);
                         }),
@@ -36,7 +36,7 @@ class RegisterScreen extends GetView<RegisterController> {
                         label: "Last Name",
                         hint: "Enter your last name",
                         value: controller.lastName.value,
-                        textCapitalization: TextCapitalization.characters,
+                        textCapitalization: TextCapitalization.words,
                         onChanged: (String value) {
                           controller.lastName(value);
                         }),
