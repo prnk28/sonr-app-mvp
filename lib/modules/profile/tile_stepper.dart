@@ -25,18 +25,17 @@ class TileCreateStepper extends GetView<TileStepperController> {
           leading: SonrButton.circle(
               onPressed: () {
                 Get.back();
+                controller.reset();
               },
               icon: SonrIcon.close),
           body: Container(
-            margin: EdgeInsets.all(6),
+            margin: EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 25),
             child: Obx(() {
               // Get Details for Step
               var details = _TileStepDetails(controller: controller, step: controller.step.value);
 
               // Build PageView
               return Column(children: [
-                // Current View
-                Padding(padding: EdgeInsets.all(5)),
                 Align(
                     alignment: Alignment.topCenter,
                     child: Container(
@@ -62,7 +61,6 @@ class TileCreateStepper extends GetView<TileStepperController> {
                   alignment: Alignment.bottomCenter,
                   child: details.bottomButtons,
                 ),
-                Padding(padding: EdgeInsets.all(15))
               ]);
             }),
           ),
@@ -192,30 +190,30 @@ class _SetInfoView extends GetView<TileStepperController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      // @ InfoGraph
-      _InfoText(index: 2, text: _getInfoText(controller.provider.value)),
-      Padding(padding: EdgeInsets.all(20)),
-      (controller.getAuthType() == SocialAuthType.Link)
-          ? Obx(
-              () => SonrTextField(
-                  label: _getLabelHintText(controller.provider.value).first,
-                  hint: _getLabelHintText(controller.provider.value).last,
-                  autoCorrect: false,
-                  // TODO autoFocus: false,
-                  value: controller.username.value,
-                  onChanged: (String value) {
-                    controller.username(value);
-                  },
-                  onEditingComplete: () {
-                    controller.nextStep();
-                  }),
-            )
-          : Neumorphic(
-              style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
-              margin: EdgeInsets.only(left: 14, right: 14),
-              child: Container(width: Get.width - 80, margin: EdgeInsets.only(left: 12, right: 12), child: Container()))
-    ]);
+    return Container(
+      margin: EdgeInsets.only(right: 4),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        // @ InfoGraph
+        _InfoText(index: 2, text: _getInfoText(controller.provider.value)),
+        Padding(padding: EdgeInsets.all(20)),
+        (controller.getAuthType() == SocialAuthType.Link)
+            ? Obx(
+                () => SonrTextField(
+                    label: _getLabelHintText(controller.provider.value).first,
+                    hint: _getLabelHintText(controller.provider.value).last,
+                    autoCorrect: false,
+                    // TODO autoFocus: false,
+                    value: controller.username.value,
+                    onChanged: (String value) {
+                      controller.username(value);
+                    },
+                    onEditingComplete: () {
+                      controller.nextStep();
+                    }),
+              )
+            : Container()
+      ]),
+    );
   }
 
   _getInfoText(Contact_SocialTile_Provider provider) {
@@ -263,11 +261,12 @@ class _SetTypeView extends GetView<TileStepperController> {
       child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.center, children: [
         // @ InfoGraph
         _InfoText(index: 3, text: "Set your Tile's type"),
-        Padding(padding: EdgeInsets.all(20)),
+        Divider(),
+        Padding(padding: EdgeInsets.all(8)),
 
         // @ Toggle Buttons for Widget Size
         Container(
-            height: 200,
+            height: 100,
             width: Get.width,
             child: Obx(() => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -422,12 +421,24 @@ class TileStepperController extends GetxController {
       );
 
       // Save to Profile
+      reset();
       Get.find<ProfileController>().saveSocialTile(tile);
       Get.back(closeOverlays: true);
     } else {
       // Display Error Snackbar
       SonrSnack.missing("Pick a Tile Type", isLast: true);
     }
+  }
+
+  // ^ Resets current info ^
+  reset() {
+    username("");
+    isPrivate(false);
+    hasSetProvider(false);
+    provider(null);
+    type(null);
+    radioGroupValue("");
+    step(0);
   }
 
   // ^ Determine Auth Type ^
