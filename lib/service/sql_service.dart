@@ -193,28 +193,23 @@ create table $CARD_TABLE (
 
   // ^ Helper Method to Generate Transfer Card ^ //
   TransferCard createTransferCard(Map<dynamic, dynamic> e) {
-    // Create TransferCard Object
-    TransferCard c = new TransferCard();
-    c.id = e[cardColumnId];
-
-    // Get Map Enum Value
+    // Clean Data
     String payload = e[cardColumnPayload].toString().toUpperCase();
     String platform = e[cardColumnPlatform].toString().capitalizeFirst;
-
-    // Set Enum Value
-    c.payload = Payload.values.firstWhere((p) => p.toString() == payload);
-    c.platform = Platform.values.firstWhere((p) => p.toString() == platform);
-
-    // Get Preview
     Uint8List preview = e[cardColumnPreview];
-    c.preview = preview.toList();
-    c.received = e[cardColumnReceived];
-    c.username = e[cardColumnUserName];
-    c.firstName = e[cardColumnFirstName].toString().capitalizeFirst;
-    c.lastName = e[cardColumnLastName].toString().capitalizeFirst;
-    c.contact = Contact.fromJson(e[cardColumnContact]);
-    c.metadata = Metadata.fromJson(e[cardColumnMetadata]);
-    return c;
+
+    // Create TransferCard Object
+    return TransferCard(
+        id: e[cardColumnId],
+        payload: Payload.values.firstWhere((p) => p.toString() == payload),
+        platform: Platform.values.firstWhere((p) => p.toString() == platform),
+        preview: preview.toList(),
+        received: e[cardColumnReceived],
+        username: e[cardColumnUserName],
+        firstName: e[cardColumnFirstName].toString().capitalizeFirst,
+        lastName: e[cardColumnLastName].toString().capitalizeFirst,
+        contact: Contact.fromJson(e[cardColumnContact]),
+        metadata: Metadata.fromJson(e[cardColumnMetadata]));
   }
 
   // ** Close SQL Database ** //

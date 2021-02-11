@@ -47,7 +47,7 @@ class SocialMediaService extends GetxService {
         break;
       case Contact_SocialTile_Provider.Twitter:
         TwitterUserModel data = await getTwitterUser(query);
-        return data.errors.isNotEmpty;
+        return data.errors == null;
         break;
       case Contact_SocialTile_Provider.YouTube:
         YoutubeModel data = await getYoutube(query);
@@ -57,18 +57,27 @@ class SocialMediaService extends GetxService {
     return false;
   }
 
-  // // ^ Get a Social Auth ^ //
-  // List<String> getAuth(Contact_SocialTile_Provider provider) {
-  //   var result = _prefs.getStringList(provider.toString());
-  //   return result;
-  // }
-
-  // // ^ Save a Social Auth ^ //
-  // Future<bool> saveAuth(
-  //     Contact_SocialTile_Provider provider, List<String> auth) async {
-  //   var result = await _prefs.setStringList(provider.toString(), auth);
-  //   return result;
-  // }
+  // ^ Get Link to Users Social Profile ^ //
+  String getProfileLink(Contact_SocialTile_Provider prv, String username) {
+    switch (prv) {
+      case Contact_SocialTile_Provider.Medium:
+        return "https://medium.com/@$username";
+        break;
+      case Contact_SocialTile_Provider.Spotify:
+        return "";
+        break;
+      case Contact_SocialTile_Provider.TikTok:
+        return "";
+        break;
+      case Contact_SocialTile_Provider.Twitter:
+        return "https://twitter.com/$username";
+        break;
+      case Contact_SocialTile_Provider.YouTube:
+        return "";
+        break;
+    }
+    return "";
+  }
 
   // * ------------------- * //
   // * ---- Retreival ---- * //

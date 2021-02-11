@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/profile/tile_dialog.dart';
 import 'package:sonr_core/models/models.dart' hide Platform;
-import 'tile_item.dart';
+import 'social_tile.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'header_view.dart';
+import 'tile_stepper.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   @override
@@ -18,7 +18,7 @@ class ProfileScreen extends GetView<ProfileController> {
             child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
             style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
             onPressed: () {
-              Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
+              Get.dialog(TileCreateStepper(), barrierColor: K_DIALOG_COLOR);
             }));
   }
 }

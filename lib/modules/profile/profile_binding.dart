@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/profile/tile_controller.dart';
+import 'social_tile.dart';
+import 'tile_stepper.dart';
 import 'profile_controller.dart';
 export 'profile_screen.dart';
 
@@ -7,6 +8,7 @@ class ProfileBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<ProfileController>(ProfileController());
+    Get.put<TileStepperController>(TileStepperController());
     Get.create<TileController>(() => TileController());
   }
 }
