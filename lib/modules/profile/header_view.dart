@@ -7,7 +7,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'profile_controller.dart';
 
 const double _K_CONTAINER_HEIGHT = 285;
-const double _K_TITLE_FONT_SIZE = 24;
 
 class ContactHeader extends GetView<ProfileController> {
   @override
@@ -28,7 +27,7 @@ class ContactHeader extends GetView<ProfileController> {
                 HapticFeedback.heavyImpact();
               },
               child: Container(
-                height: _K_CONTAINER_HEIGHT, // Same Header Color
+                height: 285, // Same Header Color
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -55,7 +54,7 @@ class ContactHeader extends GetView<ProfileController> {
           HapticFeedback.heavyImpact();
         },
         child: SonrText.normal(controller.firstName.value + " " + controller.lastName.value,
-            color: HexColor.fromHex("FFFDFA"), size: _K_TITLE_FONT_SIZE));
+            color: HexColor.fromHex("FFFDFA"), size: 24));
   }
 }
 

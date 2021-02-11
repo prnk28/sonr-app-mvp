@@ -55,7 +55,7 @@ class SocialsGrid extends StatelessWidget {
   final List<Contact_SocialTile> tiles;
   final int focusedIndex;
 
-  const SocialsGrid(
+  SocialsGrid(
     this.tiles,
     this.focusedIndex, {
     Key key,
