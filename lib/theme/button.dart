@@ -4,6 +4,8 @@ import 'theme.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
+final kTopLeftButton = EdgeInsets.only(top: 14, right: 14, left: 5, bottom: 5);
+final kTopRightButton = EdgeInsets.only(top: 14, right: 5, left: 14, bottom: 5);
 
 class SonrButton extends StatelessWidget {
   final bool hasIcon;
@@ -15,6 +17,7 @@ class SonrButton extends StatelessWidget {
   final SonrIcon icon;
   final WidgetPosition iconPosition;
   final EdgeInsets margin;
+  final EdgeInsets padding;
   final NeumorphicShape shape;
   final double intensity;
   final Function onPressed;
@@ -22,40 +25,80 @@ class SonrButton extends StatelessWidget {
 
   // * Constructer * //
   const SonrButton(this.hasIcon, this.text, this.color, this.margin, this.shape, this.intensity, this.boxShape, this.onPressed,
-      {this.icon, this.iconPosition, Key key, this.shadowLightColor, this.shadowDarkColor, this.type});
+      {this.icon, this.iconPosition, Key key, this.shadowLightColor, this.shadowDarkColor, this.type, this.padding});
 
   // * Rectangle Button * //
-  factory SonrButton.rectangle({
-    @required Function onPressed,
-    SonrText text,
-    SonrIcon icon,
-    Color shadowLightColor,
-    Color shadowDarkColor,
-    Color color = K_BASE_COLOR,
-    double radius = 20,
-    double intensity = 0.85,
-    bool isDisabled = false,
-    EdgeInsets margin = EdgeInsets.zero,
-    NeumorphicShape shape = NeumorphicShape.concave,
-    WidgetPosition iconPosition = WidgetPosition.Left,
-  }) {
+  factory SonrButton.rectangle(
+      {@required Function onPressed,
+      SonrText text,
+      SonrIcon icon,
+      Color shadowLightColor,
+      Color shadowDarkColor,
+      Color color = K_BASE_COLOR,
+      double radius = 20,
+      double intensity = 0.85,
+      bool isDisabled = false,
+      EdgeInsets margin = EdgeInsets.zero,
+      NeumorphicShape shape = NeumorphicShape.concave,
+      WidgetPosition iconPosition = WidgetPosition.Left,
+      EdgeInsets padding = EdgeInsets.zero}) {
     // Icon AND Text
     if (icon != null && text != null) {
       var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-      return SonrButton(true, text, color, margin, shape, intensity, NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)), onPressed,
-          icon: icon, iconPosition: iconPosition, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor, type: type);
+      return SonrButton(
+        true,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
+        onPressed,
+        icon: icon,
+        iconPosition: iconPosition,
+        shadowDarkColor: shadowDarkColor,
+        shadowLightColor: shadowLightColor,
+        type: type,
+        padding: padding,
+      );
     }
     // Icon ONLY
     else if (icon != null && text == null) {
       var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-      return SonrButton(true, text, color, margin, shape, intensity, NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)), onPressed,
-          icon: icon, iconPosition: WidgetPosition.Center, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor, type: type);
+      return SonrButton(
+        true,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
+        onPressed,
+        icon: icon,
+        iconPosition: WidgetPosition.Center,
+        shadowDarkColor: shadowDarkColor,
+        shadowLightColor: shadowLightColor,
+        type: type,
+        padding: padding,
+      );
     }
     // TEXT ONLY
     else {
       var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-      return SonrButton(false, text, color, margin, shape, intensity, NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)), onPressed,
-          shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor, type: type);
+      return SonrButton(
+        false,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
+        onPressed,
+        shadowDarkColor: shadowDarkColor,
+        shadowLightColor: shadowLightColor,
+        type: type,
+        padding: padding,
+      );
     }
   }
 
@@ -70,6 +113,7 @@ class SonrButton extends StatelessWidget {
     bool isDisabled = false,
     double intensity = 0.85,
     EdgeInsets margin = EdgeInsets.zero,
+    EdgeInsets padding = EdgeInsets.zero,
     NeumorphicShape shape = NeumorphicShape.flat,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -77,18 +121,43 @@ class SonrButton extends StatelessWidget {
     if (icon != null && text != null) {
       var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
       return SonrButton(true, text, color, margin, shape, intensity, NeumorphicBoxShape.circle(), onPressed,
-          icon: icon, iconPosition: iconPosition, type: type);
+          icon: icon, iconPosition: iconPosition, type: type, padding: padding);
     }
     // Icon ONLY
     else if (icon != null && text == null) {
       var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-      return SonrButton(true, null, color, margin, shape, intensity, NeumorphicBoxShape.circle(), onPressed,
-          icon: icon, iconPosition: WidgetPosition.Center, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor, type: type);
+      return SonrButton(
+        true,
+        null,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.circle(),
+        onPressed,
+        icon: icon,
+        iconPosition: WidgetPosition.Center,
+        shadowDarkColor: shadowDarkColor,
+        shadowLightColor: shadowLightColor,
+        type: type,
+        padding: padding,
+      );
     }
     // TEXT ONLY
     else {
       var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-      return SonrButton(false, text, color, margin, shape, intensity, NeumorphicBoxShape.circle(), onPressed, type: type);
+      return SonrButton(
+        false,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.circle(),
+        onPressed,
+        type: type,
+        padding: padding,
+      );
     }
   }
 
@@ -103,25 +172,63 @@ class SonrButton extends StatelessWidget {
     bool isDisabled = false,
     double intensity = 0.85,
     EdgeInsets margin = EdgeInsets.zero,
+    EdgeInsets padding = EdgeInsets.zero,
     NeumorphicShape shape = NeumorphicShape.flat,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Icon AND Text
     if (icon != null && text != null) {
       var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-      return SonrButton(true, text, color, margin, shape, intensity, NeumorphicBoxShape.stadium(), onPressed,
-          icon: icon, iconPosition: iconPosition, type: type);
+      return SonrButton(
+        true,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.stadium(),
+        onPressed,
+        icon: icon,
+        iconPosition: iconPosition,
+        type: type,
+        padding: padding,
+      );
     }
     // Icon ONLY
     else if (icon != null && text == null) {
       var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-      return SonrButton(true, null, color, margin, shape, intensity, NeumorphicBoxShape.stadium(), onPressed,
-          icon: icon, iconPosition: WidgetPosition.Center, shadowDarkColor: shadowDarkColor, shadowLightColor: shadowLightColor, type: type);
+      return SonrButton(
+        true,
+        null,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.stadium(),
+        onPressed,
+        icon: icon,
+        iconPosition: WidgetPosition.Center,
+        shadowDarkColor: shadowDarkColor,
+        shadowLightColor: shadowLightColor,
+        type: type,
+        padding: padding,
+      );
     }
     // TEXT ONLY
     else {
       var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-      return SonrButton(false, text, color, margin, shape, intensity, NeumorphicBoxShape.stadium(), onPressed, type: type);
+      return SonrButton(
+        false,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        NeumorphicBoxShape.stadium(),
+        onPressed,
+        type: type,
+        padding: padding,
+      );
     }
   }
 

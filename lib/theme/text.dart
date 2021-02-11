@@ -1,13 +1,17 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sonr_app/service/sql_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'button.dart';
 import 'icon.dart';
 
 class SonrText extends StatelessWidget {
@@ -317,18 +321,52 @@ class SonrTextField extends StatelessWidget {
   }
 }
 
+enum SearchFieldType { Username, Cards }
+
 // ^ Builds Neumorphic Text Field for Search ^ //
 class SonrSearchField extends StatelessWidget {
   final String value;
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
   final Iterable<String> autofillHints;
+  final SearchFieldType type;
+  final Widget suggestion;
 
-  SonrSearchField({
+  factory SonrSearchField.forUsername({
+    @required Widget suggestion,
+    @required String value,
+    ValueChanged<String> onChanged,
+    Function onEditingComplete,
+    Iterable<String> autofillHints,
+    Function onSuggestionTap,
+  }) {
+    return SonrSearchField(SearchFieldType.Username, value: value);
+  }
+
+  factory SonrSearchField.forCards({
+    @required Widget suggestion,
+    @required String value,
+    ValueChanged<String> onChanged,
+    Function onEditingComplete,
+    Iterable<String> autofillHints,
+  }) {
+    return SonrSearchField(
+      SearchFieldType.Cards,
+      value: value,
+      suggestion: suggestion,
+      onChanged: onChanged,
+      onEditingComplete: onEditingComplete,
+      autofillHints: autofillHints,
+    );
+  }
+
+  SonrSearchField(
+    this.type, {
     @required this.value,
     this.onChanged,
     this.onEditingComplete,
     this.autofillHints,
+    this.suggestion,
   });
 
   @override
@@ -346,20 +384,26 @@ class SonrSearchField extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.stadium(),
                 ),
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                child: Row(children: [
-                  SonrIcon.gradient(Icons.search, FlutterGradientNames.amourAmour, size: 28),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
-                      child: TextField(
-                        autofillHints: autofillHints,
-                        autofocus: true,
-                        onEditingComplete: onEditingComplete,
-                        onChanged: updateFn,
-                        decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
-                      ),
-                    ),
-                  ),
+                child: Stack(children: [
+                  Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        SonrIcon.gradient(Icons.search, FlutterGradientNames.amourAmour, size: 30),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: TextField(
+                              autofillHints: autofillHints,
+                              showCursor: false,
+                              autofocus: true,
+                              onEditingComplete: onEditingComplete,
+                              onChanged: updateFn,
+                              decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
+                            ),
+                          ),
+                        ),
+                      ])),
+                  Align(alignment: Alignment.centerRight, child: suggestion)
                 ]))
           ],
         );

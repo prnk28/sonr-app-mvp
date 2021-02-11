@@ -6,7 +6,6 @@ import 'package:sonr_core/models/models.dart' hide Platform;
 import 'social_tile.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'header_view.dart';
 import 'tile_stepper.dart';
 
 class ProfileScreen extends GetView<ProfileController> {

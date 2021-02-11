@@ -24,49 +24,94 @@ class HomeScreen extends GetView<HomeController> {
         ),
         action: SonrButton.circle(
           icon: SonrIcon.search,
-          onPressed: () => Get.dialog(SearchDialog()),
+          onPressed: () => Get.dialog(SearchDialog(), barrierDismissible: true, useRootNavigator: false),
         ),
         floatingActionButton: ShareButton(),
-        body: GestureDetector(onTap: () => controller.toggleShareExpand(options: ToggleForced(false)), child: _HomeView()));
+        body: Container(
+          width: Get.width,
+          height: Get.height,
+          child: Column(children: [
+            GestureDetector(
+              onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(left: 30, right: 30),
+                child: Obx(() => NeumorphicToggle(
+                      selectedIndex: controller.toggleIndex.value,
+                      onChanged: (val) => controller.setCardFilter(val),
+                      thumb: Center(child: Obx(() => controller.getToggleCategory())),
+                      children: [
+                        ToggleElement(),
+                        ToggleElement(),
+                        ToggleElement(),
+                        //ToggleElement(),
+                      ],
+                    )),
+              ),
+            ),
+            TransferCardGrid()
+          ]),
+        ));
   }
 }
 
-// ** Home Screen Content ** //
-class _HomeView extends GetView<HomeController> {
+class TransferCardGrid extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      GestureDetector(
-        onTap: () => controller.toggleShareExpand,
-        child: Container(
-          padding: EdgeInsets.only(top: 10),
-          margin: EdgeInsets.only(left: 30, right: 30),
-          child: Obx(() => NeumorphicToggle(
-                selectedIndex: controller.toggleIndex.value,
-                onChanged: (val) => controller.setCardFilter(val),
-                thumb: Center(child: Obx(() => controller.getToggleCategory())),
-                children: [
-                  ToggleElement(),
-                  ToggleElement(),
-                  ToggleElement(),
-                  //ToggleElement(),
-                ],
-              )),
-        ),
-      ),
-      Obx(() => Container(
-            padding: EdgeInsets.only(top: 15),
-            margin: EdgeInsets.all(10),
-            height: 500, // card height
-            child: PageView.builder(
-                itemCount: controller.visibleCards.length,
-                controller: controller.pageController,
-                onPageChanged: (int index) => controller.pageIndex(index),
-                itemBuilder: (_, idx) {
-                  return SonrCard.fromItem(controller.visibleCards[idx], idx);
-                }),
-          ))
-    ]);
+    return Obx(() {
+      // Initialize
+      return Container(
+        padding: EdgeInsets.only(top: 15),
+        margin: EdgeInsets.all(10),
+        height: 500, // card height
+        child: PageView.builder(
+            itemCount: getCardList(controller).length,
+            controller: controller.pageController,
+            onPageChanged: (int index) => controller.pageIndex(index),
+            itemBuilder: (_, idx) {
+              return Obx(() {
+                if (idx == controller.pageIndex.value) {
+                  return PlayAnimation<double>(
+                    tween: (0.85).tweenTo(0.95),
+                    duration: 200.milliseconds,
+                    builder: (context, child, value) {
+                      return Transform.scale(
+                        scale: value,
+                        child: SonrCard.fromItem(getCardList(controller)[idx], idx),
+                      );
+                    },
+                  );
+                } else if (idx == controller.pageIndex.value) {
+                  return PlayAnimation<double>(
+                    tween: (0.95).tweenTo(0.85),
+                    duration: 200.milliseconds,
+                    builder: (context, child, value) {
+                      return Transform.scale(
+                        scale: value,
+                        child: SonrCard.fromItem(getCardList(controller)[idx], idx),
+                      );
+                    },
+                  );
+                } else {
+                  return Transform.scale(
+                    scale: 0.85,
+                    child: SonrCard.fromItem(getCardList(controller)[idx], idx),
+                  );
+                }
+              });
+            }),
+      );
+    });
+  }
+
+  List<TransferCard> getCardList(HomeController controller) {
+    if (controller.toggleIndex.value == 1) {
+      return controller.mediaCards();
+    } else if (controller.toggleIndex.value == 2) {
+      return controller.contactCards;
+    } else {
+      return controller.allCards;
+    }
   }
 }
 

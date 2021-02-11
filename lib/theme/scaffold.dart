@@ -69,6 +69,12 @@ class SonrScaffold extends StatelessWidget {
           depth: 6,
           intensity: 0.85,
         ),
-        child: Scaffold(backgroundColor: K_BASE_COLOR, body: body, appBar: appBar, floatingActionButton: floatingActionButton));
+        child: Scaffold(
+          backgroundColor: K_BASE_COLOR,
+          body: body,
+          appBar: appBar,
+          floatingActionButton: floatingActionButton,
+          resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
+        ));
   }
 }

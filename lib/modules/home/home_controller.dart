@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'camera_view.dart';
+import 'home_screen.dart';
 import 'media_sheet.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -17,7 +18,7 @@ class HomeController extends GetxController {
   final allCards = <TransferCard>[].obs;
   final contactCards = <TransferCard>[].obs;
   final mediaCards = <TransferCard>[].obs;
-  final visibleCards = <TransferCard>[].obs;
+  // final visibleCards = <TransferCard>[].obs;
 
   // Widget Elements
   final isExpanded = false.obs;
@@ -27,7 +28,7 @@ class HomeController extends GetxController {
   final toggleIndex = 0.obs;
 
   // References
-  final pageController = PageController(viewportFraction: 0.8);
+  final pageController = PageController(viewportFraction: 0.8, keepPage: false);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   @override
@@ -39,8 +40,6 @@ class HomeController extends GetxController {
 
     // Fetch Data
     refreshCards();
-    visibleCards(allCards);
-    visibleCards.refresh();
     super.onInit();
   }
 
@@ -71,18 +70,6 @@ class HomeController extends GetxController {
     allCards.refresh();
     mediaCards.refresh();
     contactCards.refresh();
-
-    // Set Visible
-    if (toggleIndex.value == 1) {
-      visibleCards(mediaCards);
-      visibleCards.refresh();
-    } else if (toggleIndex.value == 2) {
-      visibleCards(contactCards);
-      visibleCards.refresh();
-    } else {
-      visibleCards(allCards);
-      visibleCards.refresh();
-    }
   }
 
   // ^ Helper Method for Category Filter ^ //
@@ -114,16 +101,6 @@ class HomeController extends GetxController {
     HapticFeedback.mediumImpact();
 
     // Change Category
-    if (toggleIndex.value == 1) {
-      visibleCards(mediaCards);
-      visibleCards.refresh();
-    } else if (toggleIndex.value == 2) {
-      visibleCards(contactCards);
-      visibleCards.refresh();
-    } else {
-      visibleCards(allCards);
-      visibleCards.refresh();
-    }
     pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
   }
 
@@ -202,8 +179,10 @@ class HomeController extends GetxController {
   void addCard(TransferCard card) {
     // Add to All Cards
     allCards.add(card);
-    visibleCards(allCards);
-    visibleCards.refresh();
+    allCards.refresh();
+
+    // Update Toggle
+    setCardFilter(0);
 
     // Shift to Item
     pageController.animateToPage(allCards.length - 1, duration: 800.milliseconds, curve: Curves.bounceIn);

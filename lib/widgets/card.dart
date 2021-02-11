@@ -31,14 +31,7 @@ class SonrCard extends GetWidget<TransferCardController> {
   final int index;
 
   // ** Constructer ** //
-  SonrCard({
-    Key key,
-    @required this.type,
-    this.invite,
-    this.reply,
-    this.card,
-    this.index,
-  });
+  SonrCard({Key key, @required this.type, this.invite, this.reply, this.card, this.index});
 
   // @ Factory for Invite Protobuf Data
   factory SonrCard.fromInvite(AuthInvite invite) {
@@ -62,41 +55,32 @@ class SonrCard extends GetWidget<TransferCardController> {
       // Initialize TransferItem Controller
       controller.initialize(card, index);
 
-      // Return View
-      return Obx(() {
-        // @ Current Card is in Focus
-        if (controller.isFocused.value) {
-          return PlayAnimation<double>(
-            tween: (0.85).tweenTo(0.95),
-            duration: 200.milliseconds,
-            builder: (context, child, value) {
-              return Transform.scale(
-                scale: value,
-                child: _CardItemView(card, controller),
-              );
-            },
-          );
-        }
+      // Initialize Views
+      final viewForPayload = {Payload.MEDIA: _FileItemView(card), Payload.CONTACT: _ContactItemView(card)};
 
-        if (controller.hasLeftFocus.value) {
-          return PlayAnimation<double>(
-            tween: (0.95).tweenTo(0.85),
-            duration: 200.milliseconds,
-            builder: (context, child, value) {
-              return Transform.scale(
-                scale: value,
-                child: _CardItemView(card, controller),
-              );
-            },
-          );
-        }
-
-        // @ Current Card is Out of Focus
-        return Transform.scale(
-          scale: 0.85,
-          child: _CardItemView(card, controller),
-        );
-      });
+      // Create View
+      return Neumorphic(
+        style: SonrStyle.cardItem,
+        margin: EdgeInsets.all(4),
+        child: GestureDetector(
+          onTap: controller.openCard,
+          child: Hero(
+            tag: card.id,
+            child: Container(
+              height: 75,
+              decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
+                  ? BoxDecoration(
+                      image: DecorationImage(
+                      colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
+                      fit: BoxFit.cover,
+                      image: MemoryImage(card.metadata.thumbnail),
+                    ))
+                  : null,
+              child: viewForPayload[card.payload],
+            ),
+          ),
+        ),
+      );
     } else {
       // * Invited Card * //
       if (type == CardType.Invite) {
@@ -117,8 +101,9 @@ class _CardItemView extends StatelessWidget {
   final TransferCard card;
   final TransferCardController controller;
   final bool beginGlow;
+  final Function onPressed;
 
-  _CardItemView(this.card, this.controller, {this.beginGlow = false});
+  _CardItemView(this.card, this.controller, {this.beginGlow = false, this.onPressed});
   @override
   Widget build(BuildContext context) {
     // Initialize Views
@@ -129,9 +114,7 @@ class _CardItemView extends StatelessWidget {
       style: SonrStyle.cardItem,
       margin: EdgeInsets.all(4),
       child: GestureDetector(
-        onTap: () {
-          controller.openCard();
-        },
+        onTap: onPressed,
         child: Hero(
           tag: card.id,
           child: Container(
@@ -453,42 +436,16 @@ class _ContactItemView extends StatelessWidget {
 class TransferCardController extends GetxController {
   // Properties
   final state = CardType.None.obs;
-  final isFocused = false.obs;
-  final hasLeftFocus = false.obs;
 
   // References
-  bool _initialized = false;
   bool _accepted = false;
   TransferCard card;
   int index;
-
-  // ^  Check if Focused ^
-  TransferCardController() {
-    Get.find<HomeController>().pageIndex.listen((currIdx) {
-      if (_initialized) {
-        // Check if No Longer Focused
-        if (isFocused.value) {
-          // Set to Scale Down
-          hasLeftFocus(index == currIdx);
-
-          // Reset after Delay
-          Future.delayed(200.milliseconds, () {
-            hasLeftFocus(false);
-          });
-        }
-
-        // Update Focused
-        isFocused(index == currIdx);
-      }
-    });
-  }
 
   // ^ Sets TransferCard Data for this Widget ^
   initialize(TransferCard card, int index) {
     this.card = card;
     this.index = index;
-    _initialized = true;
-    isFocused(index == 0);
   }
 
   // ^ Sets Card for Invited Data for this Widget ^
@@ -531,12 +488,12 @@ class TransferCardController extends GetxController {
 
   // ^ Expands Transfer Card into Hero ^ //
   openCard() {
-    if (isFocused.value) {
-      // Close Share Menu
-      Get.find<HomeController>().toggleShareExpand(options: ToggleForced(false));
+    //if (isFocused.value) {
+    // Close Share Menu
+    Get.find<HomeController>().toggleShareExpand(options: ToggleForced(false));
 
-      // Push to Page
-      Get.to(ExpandedView(card: card), transition: Transition.fadeIn);
-    }
+    // Push to Page
+    Get.to(ExpandedView(card: card), transition: Transition.fadeIn);
+    //}
   }
 }

@@ -30,6 +30,7 @@ class SonrOverlay {
       overlayWidget: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Neumorphic(
+          margin: EdgeInsets.only(left: 6, right: 6),
           style: SonrStyle.overlay,
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -49,7 +50,12 @@ class SonrOverlay {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Name ", size: 16),
               Spacer(),
-              SonrText.normal("${metadata.name}", size: 16),
+              Container(
+                alignment: Alignment.centerRight,
+                child: SonrText.normal("${metadata.name}", size: 16),
+                width: Get.width - 220,
+                height: 22,
+              ),
             ]),
 
             // File Size

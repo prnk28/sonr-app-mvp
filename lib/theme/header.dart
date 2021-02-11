@@ -6,11 +6,12 @@ enum _SonrDialogHeaderType { Title, Leading, Action, TwoButton, CloseAccept, Sli
 
 class SonrHeaderBar extends StatelessWidget {
   // Properties
-  final SonrText title;
+  final Widget title;
   final _SonrDialogHeaderType type;
   final Widget leading;
   final Widget action;
   final Widget flexibleSpace;
+  final double height;
 
   // Sliver Attributes
   final bool pinned;
@@ -33,7 +34,8 @@ class SonrHeaderBar extends StatelessWidget {
       this.snap,
       this.primary,
       this.automaticallyImplyLeading,
-      this.expandedHeight})
+      this.expandedHeight,
+      this.height = kToolbarHeight + 16 * 2})
       : super(key: key);
 
   factory SonrHeaderBar.title({@required Widget title}) {
@@ -43,11 +45,12 @@ class SonrHeaderBar extends StatelessWidget {
     );
   }
 
-  factory SonrHeaderBar.leading({@required Widget title, @required Widget leading}) {
+  factory SonrHeaderBar.leading({@required Widget title, @required Widget leading, double height}) {
     return SonrHeaderBar(
       title: title,
       type: _SonrDialogHeaderType.Leading,
       leading: leading,
+      height: height,
     );
   }
 
@@ -108,7 +111,7 @@ class SonrHeaderBar extends StatelessWidget {
         items = [Expanded(child: Center(child: title))];
         break;
       case _SonrDialogHeaderType.Leading:
-        items = [leading, Expanded(child: Center(child: title)), Spacer()];
+        items = [leading, Spacer(), Center(child: title), Spacer()];
         break;
       case _SonrDialogHeaderType.Action:
         items = [Spacer(), Expanded(child: Center(child: title)), Spacer(), action];
@@ -139,7 +142,8 @@ class SonrHeaderBar extends StatelessWidget {
     }
 
     return Container(
-      height: kToolbarHeight + 16 * 2,
+      height: height,
+      padding: EdgeInsets.only(top: 5, bottom: 5),
       child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
