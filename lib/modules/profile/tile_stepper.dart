@@ -19,27 +19,27 @@ class TileCreateStepper extends GetView<TileStepperController> {
         backendColor: Colors.transparent,
         margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
         borderRadius: BorderRadius.circular(40),
-        child: SonrScaffold(
-          //color: Colors.transparent,
-          body: Neumorphic(
-            style: NeumorphicStyle(color: K_BASE_COLOR),
+        child: SonrScaffold.appBarLeading(
+          title: "",
+          resizeToAvoidBottomPadding: false,
+          leading: SonrButton.circle(
+              onPressed: () {
+                Get.back();
+              },
+              icon: SonrIcon.close),
+          body: Container(
+            margin: EdgeInsets.all(6),
             child: Obx(() {
               // Get Details for Step
               var details = _TileStepDetails(controller: controller, step: controller.step.value);
 
               // Build PageView
               return Column(children: [
-                // Top Buttons
-                SonrButton.close(() {
-                  Get.back();
-                }),
-
                 // Current View
                 Padding(padding: EdgeInsets.all(5)),
                 Align(
                     alignment: Alignment.topCenter,
                     child: Container(
-                      width: 352,
                       height: Get.height - details.heightModifier(),
                       child: PageView.builder(
                         controller: controller.pageController,
@@ -48,7 +48,7 @@ class TileCreateStepper extends GetView<TileStepperController> {
                           if (idx == 0) {
                             return _DropdownAddView();
                           } else if (idx == 1) {
-                            return _SetInfoView();
+                            return SingleChildScrollView(child: _SetInfoView());
                           } else {
                             return _SetTypeView();
                           }
@@ -86,92 +86,96 @@ class _DropdownAddView extends GetView<TileStepperController> {
     });
 
     // Build View
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // @ InfoGraph
-        _InfoText(index: 1, text: "Choose a Social Media to Add"),
-        Padding(padding: EdgeInsets.all(20)),
+    return Container(
+      margin: EdgeInsets.only(right: 4),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // @ InfoGraph
+          _InfoText(index: 1, text: "Choose a Social Media to Add"),
+          Padding(padding: EdgeInsets.all(20)),
 
-        // @ Drop Down
-        Neumorphic(
-            style: NeumorphicStyle(
-              depth: 8,
-              shape: NeumorphicShape.flat,
-              color: K_BASE_COLOR,
-            ),
-            margin: EdgeInsets.only(left: 14, right: 14),
-            child: Container(
-                width: Get.width - 80,
-                margin: EdgeInsets.only(left: 12, right: 12),
+          // @ Drop Down
+          Neumorphic(
+              style: NeumorphicStyle(
+                depth: 8,
+                shape: NeumorphicShape.flat,
+                color: K_BASE_COLOR,
+              ),
+              margin: EdgeInsets.only(left: 14, right: 14),
+              child: Container(
+                  width: Get.width - 80,
+                  margin: EdgeInsets.only(left: 12, right: 12),
 
-                // @ ValueBuilder for DropDown
-                child: ValueBuilder<Contact_SocialTile_Provider>(
-                  onUpdate: (value) {
-                    // Set Provider
-                    controller.provider(value);
-                    controller.provider.refresh();
+                  // @ ValueBuilder for DropDown
+                  child: ValueBuilder<Contact_SocialTile_Provider>(
+                    onUpdate: (value) {
+                      // Set Provider
+                      controller.provider(value);
+                      controller.provider.refresh();
 
-                    // Notify Provider Set
-                    controller.hasSetProvider(true);
-                    controller.hasSetProvider.refresh();
-                  },
-                  builder: (item, updateFn) {
-                    return DropDown<Contact_SocialTile_Provider>(
-                      showUnderline: false,
-                      isExpanded: true,
-                      initialValue: item,
-                      items: options,
-                      customWidgets: List<Widget>.generate(options.length, (index) => _buildOptionWidget(options, index)),
-                      hint: Text("Select...",
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.black26,
-                          )),
-                      onChanged: updateFn,
-                      isCleared: controller.provider.value == null,
-                    );
-                  },
-                ))),
-        // @ Public/Private Checker
-        Obx(() {
-          // Check Selected
-          if (controller.provider.value != null) {
-            // Check Privacy
-            if (controller.doesProviderAllowVisibility(controller.provider.value)) {
-              return Container(
-                padding: EdgeInsets.only(top: 25),
-                width: Get.width - 160,
-                margin: EdgeInsets.only(left: 12, right: 12),
-                child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  // @ Set Text
-                  SonrText.normal("Is your account Public?", size: 18),
+                      // Notify Provider Set
+                      controller.hasSetProvider(true);
+                      controller.hasSetProvider.refresh();
+                    },
+                    builder: (item, updateFn) {
+                      return DropDown<Contact_SocialTile_Provider>(
+                        showUnderline: false,
+                        isExpanded: true,
+                        initialValue: item,
+                        items: options,
+                        customWidgets: List<Widget>.generate(options.length, (index) => _buildOptionWidget(options, index)),
+                        hint: Text("Select...",
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black26,
+                            )),
+                        onChanged: updateFn,
+                        isCleared: controller.provider.value == null,
+                      );
+                    },
+                  ))),
+          // @ Public/Private Checker
+          Obx(() {
+            // Check Selected
+            if (controller.provider.value != null) {
+              // Check Privacy
+              if (controller.doesProviderAllowVisibility(controller.provider.value)) {
+                return Container(
+                  padding: EdgeInsets.only(top: 25),
+                  width: Get.width - 160,
+                  margin: EdgeInsets.only(left: 12, right: 12),
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                    // @ Set Text
+                    SonrText.normal("Is your account Private?", size: 18),
 
-                  // @ Create Check Box
-                  ValueBuilder<bool>(
-                      initialValue: false,
-                      onUpdate: (value) {
-                        controller.isPrivate(!value);
-                      },
-                      builder: (isPublic, updateFn) {
-                        return Container(
-                          width: 35,
-                          height: 35,
-                          child: NeumorphicCheckbox(
-                            onChanged: updateFn,
-                            value: isPublic,
-                          ),
-                        );
-                      })
-                ]),
-              );
+                    // @ Create Check Box
+                    ValueBuilder<bool>(
+                        initialValue: false,
+                        onUpdate: (value) {
+                          controller.isPrivate(value);
+                        },
+                        builder: (isPrivate, updateFn) {
+                          return Container(
+                            width: 40,
+                            height: 40,
+                            child: NeumorphicCheckbox(
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                              onChanged: updateFn,
+                              value: isPrivate,
+                            ),
+                          );
+                        })
+                  ]),
+                );
+              }
             }
-          }
-          return Container();
-        })
-      ],
+            return Container();
+          })
+        ],
+      ),
     );
   }
 
@@ -188,33 +192,30 @@ class _SetInfoView extends GetView<TileStepperController> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      reverse: true,
-      child: Column(children: [
-        // @ InfoGraph
-        _InfoText(index: 2, text: _getInfoText(controller.provider.value)),
-        Padding(padding: EdgeInsets.all(20)),
-        (controller.getAuthType() == SocialAuthType.Link)
-            ? Obx(
-                () => SonrTextField(
-                    label: _getLabelHintText(controller.provider.value).first,
-                    hint: _getLabelHintText(controller.provider.value).last,
-                    autoCorrect: false,
-                    // TODO autoFocus: false,
-                    value: controller.username.value,
-                    onChanged: (String value) {
-                      controller.username(value);
-                    },
-                    onEditingComplete: () {
-                      controller.nextStep();
-                    }),
-              )
-            : Neumorphic(
-                style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
-                margin: EdgeInsets.only(left: 14, right: 14),
-                child: Container(width: Get.width - 80, margin: EdgeInsets.only(left: 12, right: 12), child: Container()))
-      ]),
-    );
+    return Column(children: [
+      // @ InfoGraph
+      _InfoText(index: 2, text: _getInfoText(controller.provider.value)),
+      Padding(padding: EdgeInsets.all(20)),
+      (controller.getAuthType() == SocialAuthType.Link)
+          ? Obx(
+              () => SonrTextField(
+                  label: _getLabelHintText(controller.provider.value).first,
+                  hint: _getLabelHintText(controller.provider.value).last,
+                  autoCorrect: false,
+                  // TODO autoFocus: false,
+                  value: controller.username.value,
+                  onChanged: (String value) {
+                    controller.username(value);
+                  },
+                  onEditingComplete: () {
+                    controller.nextStep();
+                  }),
+            )
+          : Neumorphic(
+              style: NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat),
+              margin: EdgeInsets.only(left: 14, right: 14),
+              child: Container(width: Get.width - 80, margin: EdgeInsets.only(left: 12, right: 12), child: Container()))
+    ]);
   }
 
   _getInfoText(Contact_SocialTile_Provider provider) {
@@ -257,58 +258,59 @@ class _SetTypeView extends GetView<TileStepperController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      // @ InfoGraph
-      _InfoText(index: 3, text: "Set your Tile's type"),
-      Padding(padding: EdgeInsets.all(20)),
+    return Container(
+      margin: EdgeInsets.only(right: 4),
+      child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.center, children: [
+        // @ InfoGraph
+        _InfoText(index: 3, text: "Set your Tile's type"),
+        Padding(padding: EdgeInsets.all(20)),
 
-      // @ Toggle Buttons for Widget Size
-      Container(
-          constraints: BoxConstraints(maxWidth: Get.width - 80),
-          height: Get.height - 600,
-          width: Get.width,
-          child: Obx(() => Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  // Icon Option
-                  AnimatedTileRadio("Link", groupValue: controller.radioGroupValue.value, onChanged: (value) {
-                    // Update Group Value
-                    controller.radioGroupValue(value);
-                    controller.radioGroupValue.refresh();
+        // @ Toggle Buttons for Widget Size
+        Container(
+            height: 200,
+            width: Get.width,
+            child: Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    // Icon Option
+                    AnimatedTileRadio("Link", groupValue: controller.radioGroupValue.value, onChanged: (value) {
+                      // Update Group Value
+                      controller.radioGroupValue(value);
+                      controller.radioGroupValue.refresh();
 
-                    // Set Type
-                    var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
-                    controller.type(type);
-                  }),
+                      // Set Type
+                      var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
+                      controller.type(type);
+                    }),
 
-                  // Showcase Option
-                  AnimatedTileRadio("Post", groupValue: controller.radioGroupValue.value, onChanged: (value) {
-                    // Update Group Value
-                    controller.radioGroupValue(value);
-                    controller.radioGroupValue.refresh();
+                    // Showcase Option
+                    AnimatedTileRadio("Post", groupValue: controller.radioGroupValue.value, onChanged: (value) {
+                      // Update Group Value
+                      controller.radioGroupValue(value);
+                      controller.radioGroupValue.refresh();
 
-                    // Set Type
-                    var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
-                    controller.type(type);
-                  }),
+                      // Set Type
+                      var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
+                      controller.type(type);
+                    }),
 
-                  // Feed Option
-                  controller.doesProviderAllowFeed(controller.provider.value)
-                      ? AnimatedTileRadio("Feed", groupValue: controller.radioGroupValue.value, onChanged: (value) {
-                          // Update Group Value
-                          controller.radioGroupValue(value);
-                          controller.radioGroupValue.refresh();
+                    // Feed Option
+                    controller.doesProviderAllowFeed(controller.provider.value)
+                        ? AnimatedTileRadio("Feed", groupValue: controller.radioGroupValue.value, onChanged: (value) {
+                            // Update Group Value
+                            controller.radioGroupValue(value);
+                            controller.radioGroupValue.refresh();
 
-                          // Set Type
-                          var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
-                          controller.type(type);
-                        })
-                      : Container(),
-                ],
-              ))),
-    ]);
+                            // Set Type
+                            var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
+                            controller.type(type);
+                          })
+                        : Container(),
+                  ],
+                ))),
+      ]),
+    );
   }
 }
 
@@ -404,7 +406,7 @@ class TileStepperController extends GetxController {
   // ^ Finish and Save new Tile ^ //
   saveTile() {
     // Validate
-    if (type.value != null && step.value == 3) {
+    if (type.value != null && step.value == 2) {
       // Set Acquired Data
       var position = Contact_SocialTile_Position(index: Get.find<ProfileController>().socials.length - 1);
       var links = Contact_SocialTile_Links(userLink: Get.find<SocialMediaService>().getProfileLink(provider.value, username.value));
@@ -475,7 +477,7 @@ class _TileStepDetails {
     } else if (step == 1) {
       return 250 + kBaseModifier;
     } else {
-      return 350 + kBaseModifier;
+      return 160 + kBaseModifier;
     }
   }
 
