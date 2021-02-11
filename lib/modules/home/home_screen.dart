@@ -38,7 +38,7 @@ class HomeScreen extends GetView<HomeController> {
                 margin: EdgeInsets.only(left: 30, right: 30),
                 child: Obx(() => NeumorphicToggle(
                       selectedIndex: controller.toggleIndex.value,
-                      onChanged: (val) => controller.setCardFilter(val),
+                      onChanged: (val) => controller.setToggleCategory(val),
                       thumb: Center(child: Obx(() => controller.getToggleCategory())),
                       children: [
                         ToggleElement(),

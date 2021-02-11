@@ -6,6 +6,8 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
+import 'home_controller.dart';
+
 class SearchDialog extends GetView<SearchDialogController> {
   @override
   Widget build(BuildContext context) {
@@ -66,8 +68,7 @@ class SonrSearchFieldCardSuggestion extends GetView<SearchDialogController> {
             style: SonrStyle.cardItem,
             onPressed: () {
               if (controller.foundSuggestion.value) {
-                print(controller.suggestion.value.id.toString() + " has been tapped");
-                HapticFeedback.mediumImpact();
+                controller.navigateToSuggestion(controller.suggestion.value);
               }
             },
             child: controller.foundSuggestion.value
@@ -125,6 +126,8 @@ class SearchDialogController extends GetxController {
   }
 
   navigateToSuggestion(TransferCard card) {
-    print(card.id.toString() + "hasBeenTapped");
+    print(card.id.toString() + " has been tapped");
+    Get.find<HomeController>().jumpToCard(card);
+    HapticFeedback.mediumImpact();
   }
 }

@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 import 'camera_view.dart';
-import 'home_screen.dart';
 import 'media_sheet.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -94,7 +93,7 @@ class HomeController extends GetxController {
   }
 
   // ^ Method for Setting Category Filter ^ //
-  setCardFilter(int index) {
+  setToggleCategory(int index) {
     toggleIndex(index);
 
     // Haptic Feedback
@@ -135,16 +134,21 @@ class HomeController extends GetxController {
     });
   }
 
-  // ^ Opens File Picker UI ^ //
-  void openFilePicker() async {
-    // // Await for Picker
-    // FilePickerResult result = await FilePicker.platform.pickFiles(
-    //     type: FileType.custom, allowedExtensions: K_ALLOWED_FILE_TYPES);
+  // ^ Finds Index of Card and Scrolls to It ^ //
+  void jumpToCard(TransferCard card) async {
+    // Get Index
+    var index = allCards.indexWhere((c) => c.id == card.id);
 
-    // // Get File
-    // if (result != null) {
-    //   File file = File(result.files.single.path);
-    // }
+    // Validate Index
+    if (index != -1) {
+      // Pop View
+      Get.back();
+
+      // Jump to Page
+      pageController.animateToPage(index, duration: 650.milliseconds, curve: Curves.bounceOut);
+    } else {
+      SonrSnack.error("Error finding the suggested card.");
+    }
   }
 
   // ^ Opens Media Picker UI ^ //
@@ -182,7 +186,7 @@ class HomeController extends GetxController {
     allCards.refresh();
 
     // Update Toggle
-    setCardFilter(0);
+    setToggleCategory(0);
 
     // Shift to Item
     pageController.animateToPage(allCards.length - 1, duration: 800.milliseconds, curve: Curves.bounceIn);
