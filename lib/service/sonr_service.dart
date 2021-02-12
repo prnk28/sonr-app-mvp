@@ -11,16 +11,6 @@ import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
 import 'sql_service.dart';
 
-// @ Enum to Handle Status
-enum SonrStatus {
-  Offline,
-  Ready, // Available
-  Processing, // Queuing File
-  Searching, // Searching -> Post Processing
-  Pending, // Pending Authorization
-  Busy, // In Transfer
-}
-
 class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
@@ -154,8 +144,6 @@ class SonrService extends GetxService {
     if (data is TransferCard) {
       // Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
-      print(data.toString());
-      // Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -163,7 +151,6 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      print(data.toString());
       HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }

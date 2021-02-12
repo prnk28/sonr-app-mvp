@@ -45,6 +45,9 @@ class SonrCard extends GetWidget<TransferCardController> {
 
   @override
   Widget build(BuildContext context) {
+    // Set Controller Type
+    controller.state(type);
+
     // * Completed Card * //
     if (type == CardType.Item) {
       // Initialize TransferItem Controller
@@ -78,7 +81,6 @@ class SonrCard extends GetWidget<TransferCardController> {
       );
     } else if (type == CardType.Invite) {
       // * Invited Card * //
-      controller.invited();
       return _CardDialogView(invite.card, invite.payload, controller, false);
     }
     // * Replied Card * //
@@ -417,7 +419,6 @@ class TransferCardController extends GetxController {
   // ^ Sets Card for Invited Data for this Widget ^
   invited() {
     state(CardType.Invite);
-    HapticFeedback.heavyImpact();
   }
 
   // ^ Accept File Invite Request ^ //
