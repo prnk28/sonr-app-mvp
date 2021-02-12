@@ -78,7 +78,6 @@ class SonrService extends GetxService {
   void setPayload(Payload type, {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = ""}) async {
     // Set Payload Type
     payload(type);
-    print(type.toString());
 
     // File Payload
     if (payload.value == Payload.MEDIA) {
@@ -164,6 +163,8 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
+      print(data.toString());
+      HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart' hide Platform;
+import 'edit_dialog.dart';
 import 'social_tile.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -117,13 +118,19 @@ class ContactHeader extends GetView<ProfileController> {
   _buildTitle() {
     return GestureDetector(
         onLongPress: () async {
-          print("Launch Text Dialog to Update Name");
-          Get.dialog(EditDialog.textField("Name", "Enter your First Name", controller.firstName.value, text: "Text", onChanged: (val) {
-            controller.firstName(val);
-          }));
+          Get.dialog(
+            EditDialog.nameField(
+                onSubmitted: (map) {
+                  controller.firstName(map["firstName"]);
+                  controller.lastName(map["lastName"]);
+                  controller.saveChanges();
+                },
+                firstValue: controller.firstName.value,
+                lastValue: controller.lastName.value),
+          );
           HapticFeedback.heavyImpact();
         },
-        child: SonrText.normal(controller.firstName.value + " " + controller.lastName.value, color: HexColor.fromHex("FFFDFA"), size: 24));
+        child: Obx(() => SonrText.normal(controller.firstName.value + " " + controller.lastName.value, color: HexColor.fromHex("FFFDFA"), size: 24)));
   }
 }
 

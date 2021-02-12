@@ -11,11 +11,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 enum CardType { None, Invite, InProgress, Reply, Received, Item }
-const K_CARD_MARGIN = {
-  Payload.CONTACT: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 90),
-  Payload.MEDIA: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180),
-  Payload.URL: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450)
-};
 
 // * ------------------------ * //
 // * ---- Card View --------- * //
@@ -81,57 +76,15 @@ class SonrCard extends GetWidget<TransferCardController> {
           ),
         ),
       );
-    } else {
+    } else if (type == CardType.Invite) {
       // * Invited Card * //
-      if (type == CardType.Invite) {
-        controller.invited();
-        return _CardDialogView(invite.card, invite.payload, controller, false);
-      }
-
-      // * Replied Card * //
-      else {
-        return _CardDialogView(reply.card, reply.payload, controller, true);
-      }
+      controller.invited();
+      return _CardDialogView(invite.card, invite.payload, controller, false);
     }
-  }
-}
-
-// ^ BASE: TransferCard Item View ^ //
-class _CardItemView extends StatelessWidget {
-  final TransferCard card;
-  final TransferCardController controller;
-  final bool beginGlow;
-  final Function onPressed;
-
-  _CardItemView(this.card, this.controller, {this.beginGlow = false, this.onPressed});
-  @override
-  Widget build(BuildContext context) {
-    // Initialize Views
-    final viewForPayload = {Payload.MEDIA: _FileItemView(card), Payload.CONTACT: _ContactItemView(card)};
-
-    // Create View
-    return Neumorphic(
-      style: SonrStyle.cardItem,
-      margin: EdgeInsets.all(4),
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Hero(
-          tag: card.id,
-          child: Container(
-            height: 75,
-            decoration: card.payload == Payload.MEDIA
-                ? BoxDecoration(
-                    image: DecorationImage(
-                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-                    fit: BoxFit.cover,
-                    image: MemoryImage(card.metadata.thumbnail),
-                  ))
-                : null,
-            child: viewForPayload[card.payload],
-          ),
-        ),
-      ),
-    );
+    // * Replied Card * //
+    else {
+      return _CardDialogView(reply.card, reply.payload, controller, true);
+    }
   }
 }
 
@@ -145,21 +98,34 @@ class _CardDialogView extends StatelessWidget {
   const _CardDialogView(this.card, this.payload, this.controller, this.isReply);
   @override
   Widget build(BuildContext context) {
-    // Initialize Views
-    final viewForPayload = {
-      Payload.MEDIA: _FileInviteView(card, controller),
-      Payload.CONTACT: _ContactInviteView(card, controller, isReply),
-      Payload.URL: _URLInviteView(card, controller)
-    };
-
     return NeumorphicBackground(
-        margin: K_CARD_MARGIN[payload],
+        margin: _buildPayloadMargin(),
         borderRadius: BorderRadius.circular(40),
         backendColor: Colors.transparent,
         child: Neumorphic(
           style: NeumorphicStyle(color: K_BASE_COLOR),
-          child: viewForPayload[payload],
+          child: _buildPayloadChild(),
         ));
+  }
+
+  Widget _buildPayloadChild() {
+    if (payload == Payload.MEDIA) {
+      return _FileInviteView(card, controller);
+    } else if (payload == Payload.CONTACT) {
+      return _ContactInviteView(card, controller, isReply);
+    } else {
+      return _URLInviteView(card, controller);
+    }
+  }
+
+  EdgeInsets _buildPayloadMargin() {
+    if (payload == Payload.MEDIA) {
+      return EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 90);
+    } else if (payload == Payload.CONTACT) {
+      return EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180);
+    } else {
+      return EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450);
+    }
   }
 }
 
@@ -488,12 +454,10 @@ class TransferCardController extends GetxController {
 
   // ^ Expands Transfer Card into Hero ^ //
   openCard() {
-    //if (isFocused.value) {
     // Close Share Menu
     Get.find<HomeController>().toggleShareExpand(options: ToggleForced(false));
 
     // Push to Page
     Get.to(ExpandedView(card: card), transition: Transition.fadeIn);
-    //}
   }
 }

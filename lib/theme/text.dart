@@ -263,14 +263,16 @@ class SonrTextField extends StatelessWidget {
   final bool autoFocus;
   final bool autoCorrect;
   final TextCapitalization textCapitalization;
+  final TextEditingController controller;
 
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
 
   SonrTextField(
-      {@required this.label,
-      @required this.hint,
+      {@required this.hint,
       @required this.value,
+      this.label,
+      this.controller,
       this.onChanged,
       this.focusNode,
       this.onEditingComplete,
@@ -286,16 +288,18 @@ class SonrTextField extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: NeumorphicTheme.defaultTextColor(context),
-                ),
-              ),
-            ),
+            label != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: NeumorphicTheme.defaultTextColor(context),
+                      ),
+                    ),
+                  )
+                : Container(),
             Neumorphic(
               margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
               style: NeumorphicStyle(
@@ -304,13 +308,15 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
+                controller: controller,
                 autofocus: autoFocus,
                 autocorrect: autoCorrect,
                 textCapitalization: textCapitalization,
                 focusNode: focusNode,
                 onEditingComplete: onEditingComplete,
                 onChanged: updateFn,
-                decoration: InputDecoration.collapsed(hintText: hint, hintStyle: TextStyle(color: Colors.black38)),
+                decoration:
+                    InputDecoration.collapsed(hintText: hint, hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.black38)),
               ),
             )
           ],

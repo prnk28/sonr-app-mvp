@@ -97,20 +97,19 @@ class ProfileController extends GetxController {
 
   // ^ Save Changed Values to Storage ^ //
   saveChanges() {
+    // Set Contact Values
     Get.find<DeviceService>().contact.value.firstName = firstName.value;
     Get.find<DeviceService>().contact.value.lastName = lastName.value;
     Get.find<DeviceService>().contact.value.phone = phone.value;
     Get.find<DeviceService>().contact.value.email = email.value;
     Get.find<DeviceService>().contact.value.website = website.value;
-    Get.find<DeviceService>().contact.value.picture.clear();
     Get.find<DeviceService>().contact.value.picture = picture;
-
-    // Update Socials
     Get.find<DeviceService>().contact.value.socials.clear();
-    socials.forEach((s) {
-      Get.find<DeviceService>().contact.value.socials.add(s);
-    });
+    Get.find<DeviceService>().contact.value.socials.addAll(socials);
+
+    // Refresh Contact
     Get.find<DeviceService>().contact.refresh();
+    print(Get.find<DeviceService>().contact.toString());
     update();
   }
 }
