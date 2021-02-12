@@ -179,12 +179,18 @@ class SonrIcon extends StatelessWidget {
 
   static SonrIcon get video => SonrIcon.gradient(_SonrIconData.video, FlutterGradientNames.glassWater, size: 28);
 
-  static Padding socialBadge(Contact_SocialTile_Provider prov) {
+  static Padding socialBadge(Contact_SocialTile_Provider prov,
+      {Alignment alignment = Alignment.bottomRight,
+      EdgeInsets padding = const EdgeInsets.only(
+        bottom: 8.0,
+        right: 8.0,
+      ),
+      double size = 30}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+      padding: padding,
       child: Align(
-        alignment: Alignment.bottomRight,
-        child: SonrIcon.social(IconType.Gradient, Contact_SocialTile_Provider.Medium, size: 30),
+        alignment: alignment,
+        child: SonrIcon.social(IconType.Gradient, prov, size: size),
       ),
     );
   }

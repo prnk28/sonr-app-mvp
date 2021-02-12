@@ -25,29 +25,25 @@ class EditDialog extends GetView<EditDialogController> {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 360),
-        borderRadius: BorderRadius.circular(20),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-            style: NeumorphicStyle(color: K_BASE_COLOR),
-            child: Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  // @ Top Banner
-                  SonrHeaderBar.twoButton(
-                      title: SonrText.header("Edit", size: 34),
-                      leading: SonrButton.circle(
-                          icon: SonrIcon.close,
-                          onPressed: () {
-                            Get.back();
-                          }),
-                      action: SonrButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)),
+    return Neumorphic(
+        style: NeumorphicStyle(color: K_BASE_COLOR),
+        child: Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              // @ Top Banner
+              SonrHeaderBar.twoButton(
+                  title: SonrText.header("Edit", size: 34),
+                  leading: SonrButton.circle(
+                      icon: SonrIcon.close,
+                      onPressed: () {
+                        Get.back();
+                      }),
+                  action: SonrButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)),
 
-                  // @ Window Content
+              // @ Window Content
 
-                  _buildView(),
-                ]))));
+              _buildView(),
+            ])));
   }
 
   // ^ Build View by EditType ^ //

@@ -396,23 +396,48 @@ class _ContactItemView extends StatelessWidget {
 
       // Quick Actions
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrButton.circle(
-            onPressed: () {},
-            text: SonrText.normal("Mobile"),
-            icon: SonrIcon.normal(Icons.phone, color: Colors.black),
-            iconPosition: WidgetPosition.Top),
-        SonrButton.circle(
-            onPressed: () {},
-            text: SonrText.normal("Message"),
-            icon: SonrIcon.normal(Icons.mail, color: Colors.black),
-            iconPosition: WidgetPosition.Top),
-        SonrButton.circle(
-            onPressed: () {},
-            text: SonrText.normal("Video"),
-            icon: SonrIcon.normal(Icons.video_call_rounded, color: Colors.black),
-            iconPosition: WidgetPosition.Top),
-      ])
-      // Row for Call,
+        SizedBox(
+          width: 78,
+          height: 78,
+          child: SonrButton.circle(
+              depth: 4,
+              onPressed: () {},
+              text: SonrText.normal("Mobile", size: 12, color: Colors.black45),
+              icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
+              iconPosition: WidgetPosition.Top),
+        ),
+        Padding(padding: EdgeInsets.all(6)),
+        SizedBox(
+          width: 78,
+          height: 78,
+          child: SonrButton.circle(
+              depth: 4,
+              onPressed: () {},
+              text: SonrText.normal("Text", size: 12, color: Colors.black45),
+              icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
+              iconPosition: WidgetPosition.Top),
+        ),
+        Padding(padding: EdgeInsets.all(6)),
+        SizedBox(
+            width: 78,
+            height: 78,
+            child: SonrButton.circle(
+                depth: 4,
+                onPressed: () {},
+                text: SonrText.normal("Video", size: 12, color: Colors.black45),
+                icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
+                iconPosition: WidgetPosition.Top)),
+      ]),
+
+      Divider(),
+      Padding(padding: EdgeInsets.all(4)),
+
+      // Brief Contact Card Info
+      Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: List<Widget>.generate(contact.socials.length, (index) {
+            return SonrIcon.social(IconType.Gradient, contact.socials[index].provider, size: 35);
+          }))
     ]);
   }
 }

@@ -132,15 +132,38 @@ class ExpandedView extends StatelessWidget {
           },
           child: Hero(
             tag: card.id,
-            child: Material(
-              color: Colors.transparent,
-              child: PhotoView(
-                imageProvider: MemoryImage(card.metadata.thumbnail),
-              ),
-            ),
+            child: Material(color: Colors.transparent, child: _buildExpandedChild()),
           ),
         ),
       ),
     );
+  }
+
+  // ^ Builds Expanded View by Card Type
+  Widget _buildExpandedChild() {
+    // @ Media Card =>
+    if (card.payload == Payload.MEDIA) {
+      // Photo File
+      if (card.metadata.mime.type == MIME_Type.image) {
+        return PhotoView(imageProvider: MemoryImage(card.metadata.thumbnail));
+      }
+      // TODO: Video File
+      else if (card.metadata.mime.type == MIME_Type.video) {
+        return Container();
+      }
+      // Other
+      else {
+        return Container();
+      }
+    }
+
+    // TODO: Contact Card =>
+    else if (card.payload == Payload.CONTACT) {
+      return Container(color: Colors.blue);
+    }
+    // TODO: Other Card =>
+    else {
+      return Container();
+    }
   }
 }

@@ -118,7 +118,7 @@ class ContactHeader extends GetView<ProfileController> {
   _buildTitle() {
     return GestureDetector(
         onLongPress: () async {
-          Get.dialog(
+          SonrDialog.small(
             EditDialog.nameField(
                 onSubmitted: (map) {
                   controller.firstName(map["firstName"]);
