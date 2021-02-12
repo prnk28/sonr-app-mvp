@@ -18,11 +18,10 @@ class SonrOverlay {
   // ^ Builds Overlay based on Metadata from Transfer Card ^ //
   factory SonrOverlay.fromMetaCardInfo({@required BuildContext context, @required TransferCard card}) {
     // Extract Data
-    bool hasSaved = true;
     var metadata = card.metadata;
     var mimeType = metadata.mime.type.toString().capitalizeFirst;
     var size = SonrText.convertSizeToText(metadata.size);
-    var hasExported = SonrText.convertBoolToText(hasSaved);
+    var hasExported = SonrText.convertBoolToText(card.hasExported);
 
     // Build Overlay View
     return SonrOverlay(

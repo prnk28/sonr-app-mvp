@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/register/register_controller.dart';
+import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_core/models/models.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
   @override
@@ -25,6 +26,7 @@ class RegisterScreen extends GetView<RegisterController> {
                         hint: "Enter your first name",
                         value: controller.firstName.value,
                         textCapitalization: TextCapitalization.words,
+                        autoFocus: true,
                         onChanged: (String value) {
                           controller.firstName(value);
                         }),
@@ -60,5 +62,30 @@ class RegisterScreen extends GetView<RegisterController> {
                 ),
               ))
         ]));
+  }
+}
+
+class RegisterController extends GetxController {
+  final firstName = "".obs;
+  final lastName = "".obs;
+
+  submit() {
+    if (_validate()) {
+      // Get Contact from Values
+      var contact = new Contact();
+      contact.firstName = firstName.value;
+      contact.lastName = lastName.value;
+
+      // Process data.
+      Get.find<DeviceService>().createUser(contact, "@Temp_Username");
+      FocusScope.of(Get.context).unfocus();
+      Get.offNamed("/home");
+    } else {
+      SonrSnack.error("Some fields are not correct");
+    }
+  }
+
+  _validate() {
+    return GetUtils.isAlphabetOnly(firstName.value) && GetUtils.isAlphabetOnly(lastName.value);
   }
 }
