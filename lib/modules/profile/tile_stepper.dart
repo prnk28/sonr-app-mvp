@@ -15,56 +15,52 @@ class TileCreateStepper extends GetView<TileStepperController> {
   @override
   Widget build(BuildContext context) {
     // Update State
-    return NeumorphicBackground(
-        backendColor: Colors.transparent,
-        margin: EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 150),
-        borderRadius: BorderRadius.circular(40),
-        child: SonrScaffold.appBarLeading(
-          title: "",
-          resizeToAvoidBottomPadding: false,
-          leading: SonrButton.circle(
-              onPressed: () {
-                Get.back();
-                controller.reset();
-              },
-              icon: SonrIcon.close),
-          body: Container(
-            margin: EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 25),
-            child: Obx(() {
-              // Get Details for Step
-              var details = _TileStepDetails(controller: controller, step: controller.step.value);
+    return SonrScaffold.appBarLeading(
+      title: "",
+      resizeToAvoidBottomPadding: false,
+      leading: SonrButton.circle(
+          onPressed: () {
+            controller.reset();
+            Get.back();
+          },
+          icon: SonrIcon.close),
+      body: Container(
+        margin: EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 25),
+        child: Obx(() {
+          // Get Details for Step
+          var details = _TileStepDetails(controller: controller, step: controller.step.value);
 
-              // Build PageView
-              return Column(children: [
-                Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      height: Get.height - details.heightModifier(),
-                      child: PageView.builder(
-                        controller: controller.pageController,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, idx) {
-                          if (idx == 0) {
-                            return _DropdownAddView();
-                          } else if (idx == 1) {
-                            return SingleChildScrollView(child: _SetInfoView());
-                          } else {
-                            return _SetTypeView();
-                          }
-                        },
-                      ),
-                    )),
+          // Build PageView
+          return Column(children: [
+            Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  height: Get.height - details.heightModifier(),
+                  child: PageView.builder(
+                    controller: controller.pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (_, idx) {
+                      if (idx == 0) {
+                        return _DropdownAddView();
+                      } else if (idx == 1) {
+                        return SingleChildScrollView(child: _SetInfoView());
+                      } else {
+                        return _SetTypeView();
+                      }
+                    },
+                  ),
+                )),
 
-                // Bottom Buttons
-                Spacer(),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: details.bottomButtons,
-                ),
-              ]);
-            }),
-          ),
-        ));
+            // Bottom Buttons
+            Spacer(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: details.bottomButtons,
+            ),
+          ]);
+        }),
+      ),
+    );
   }
 }
 
@@ -407,8 +403,8 @@ class TileStepperController extends GetxController {
     // Validate
     if (type.value != null && step.value == 2) {
       // Set Acquired Data
-      var position = Contact_SocialTile_Position(index: Get.find<ProfileController>().socials.length - 1);
-      var links = Contact_SocialTile_Links(userLink: Get.find<SocialMediaService>().getProfileLink(provider.value, username.value));
+      var position = Contact_SocialTile_Position(index: Get.find<ProfileController>().socials.length);
+      var links = Get.find<SocialMediaService>().getLinks(provider.value, username.value);
 
       // Create Tile from Values
       var tile = Contact_SocialTile(

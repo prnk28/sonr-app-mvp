@@ -1,7 +1,8 @@
 // Custom Theme Aspects
-export 'header.dart';
-export 'button.dart';
+export '../widgets/header.dart';
+export '../widgets/button.dart';
 export 'color.dart';
+export 'dialog.dart';
 export 'icon.dart';
 export 'scaffold.dart';
 export 'snackbar.dart';
@@ -9,7 +10,6 @@ export 'text.dart';
 
 // Global UI Widgets
 export '../widgets/animation.dart';
-export '../widgets/card.dart';
 export '../widgets/painter.dart';
 export '../widgets/radio.dart';
 export '../widgets/sheet.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'theme.dart';
+import '../theme/theme.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -22,10 +22,27 @@ class SonrButton extends StatelessWidget {
   final double intensity;
   final Function onPressed;
   final NeumorphicBoxShape boxShape;
+  final double depth;
 
   // * Constructer * //
-  const SonrButton(this.hasIcon, this.text, this.color, this.margin, this.shape, this.intensity, this.boxShape, this.onPressed,
-      {this.icon, this.iconPosition, Key key, this.shadowLightColor, this.shadowDarkColor, this.type, this.padding});
+  const SonrButton(
+    this.hasIcon,
+    this.text,
+    this.color,
+    this.margin,
+    this.shape,
+    this.intensity,
+    this.depth,
+    this.boxShape,
+    this.onPressed, {
+    this.icon,
+    this.iconPosition,
+    Key key,
+    this.shadowLightColor,
+    this.shadowDarkColor,
+    this.type,
+    this.padding,
+  });
 
   // * Rectangle Button * //
   factory SonrButton.rectangle(
@@ -35,6 +52,7 @@ class SonrButton extends StatelessWidget {
       Color shadowLightColor,
       Color shadowDarkColor,
       Color color = K_BASE_COLOR,
+      double depth = 8,
       double radius = 20,
       double intensity = 0.85,
       bool isDisabled = false,
@@ -52,6 +70,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
         onPressed,
         icon: icon,
@@ -72,6 +91,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
         onPressed,
         icon: icon,
@@ -92,6 +112,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
         onPressed,
         shadowDarkColor: shadowDarkColor,
@@ -111,6 +132,7 @@ class SonrButton extends StatelessWidget {
     Color shadowDarkColor,
     Color color = K_BASE_COLOR,
     bool isDisabled = false,
+    double depth = 8,
     double intensity = 0.85,
     EdgeInsets margin = EdgeInsets.zero,
     EdgeInsets padding = EdgeInsets.zero,
@@ -120,8 +142,21 @@ class SonrButton extends StatelessWidget {
     // Icon AND Text
     if (icon != null && text != null) {
       var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-      return SonrButton(true, text, color, margin, shape, intensity, NeumorphicBoxShape.circle(), onPressed,
-          icon: icon, iconPosition: iconPosition, type: type, padding: padding);
+      return SonrButton(
+        true,
+        text,
+        color,
+        margin,
+        shape,
+        intensity,
+        depth,
+        NeumorphicBoxShape.circle(),
+        onPressed,
+        icon: icon,
+        iconPosition: iconPosition,
+        type: type,
+        padding: padding,
+      );
     }
     // Icon ONLY
     else if (icon != null && text == null) {
@@ -133,6 +168,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.circle(),
         onPressed,
         icon: icon,
@@ -153,6 +189,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.circle(),
         onPressed,
         type: type,
@@ -171,6 +208,7 @@ class SonrButton extends StatelessWidget {
     Color color = K_BASE_COLOR,
     bool isDisabled = false,
     double intensity = 0.85,
+    double depth = 8,
     EdgeInsets margin = EdgeInsets.zero,
     EdgeInsets padding = EdgeInsets.zero,
     NeumorphicShape shape = NeumorphicShape.flat,
@@ -186,6 +224,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.stadium(),
         onPressed,
         icon: icon,
@@ -204,6 +243,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.stadium(),
         onPressed,
         icon: icon,
@@ -224,6 +264,7 @@ class SonrButton extends StatelessWidget {
         margin,
         shape,
         intensity,
+        depth,
         NeumorphicBoxShape.stadium(),
         onPressed,
         type: type,
@@ -288,7 +329,7 @@ class SonrButton extends StatelessWidget {
           },
           margin: margin,
           style: NeumorphicStyle(
-            depth: 8,
+            depth: depth,
             color: color,
             boxShape: boxShape,
             intensity: intensity,
