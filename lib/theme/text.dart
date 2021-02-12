@@ -38,22 +38,22 @@ class SonrText extends StatelessWidget {
       : super(key: key);
 
   // ^ Normal Text with Provided Data
-  factory SonrText.normal(String text, {Color color, double size, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size ?? 16, key: key, color: color ?? Colors.black);
+  factory SonrText.normal(String text, {Color color = Colors.black, double size = 16, Key key}) {
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: color);
   }
 
   // ^ Bold Text with Provided Data
-  factory SonrText.bold(String text, {Color color, double size, Key key}) {
-    return SonrText(text, weight: FontWeight.bold, size: size ?? 32, key: key, color: color ?? Colors.black);
+  factory SonrText.bold(String text, {Color color = Colors.black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.bold, size: size, key: key, color: color);
   }
 
   // ^ Description Text with Provided Data
-  factory SonrText.description(String text, {Color color, double size, Key key}) {
-    return SonrText(text, weight: FontWeight.bold, size: size ?? 24, key: key, color: color ?? Colors.grey);
+  factory SonrText.description(String text, {Color color = Colors.grey, double size = 24, Key key}) {
+    return SonrText(text, weight: FontWeight.bold, size: size, key: key, color: color);
   }
 
   // ^ Date Text with Provided Data
-  factory SonrText.date(DateTime date, {Color color, double size, Key key}) {
+  factory SonrText.date(DateTime date, {double size = 14, Key key}) {
     // Formatters
     final dateFormat = new DateFormat.yMd();
     final timeFormat = new DateFormat.jm();
@@ -68,36 +68,36 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 14, color: Colors.black)),
-              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black)),
+              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: Colors.black)),
+              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: Colors.black)),
             ])));
   }
 
   // ^ Header Text with Provided Data
-  factory SonrText.header(String text, {FlutterGradientNames gradient = FlutterGradientNames.viciousStance, double size, Key key}) {
+  factory SonrText.header(String text, {FlutterGradientNames gradient = FlutterGradientNames.viciousStance, double size = 40, Key key}) {
     return SonrText(
       text,
       isGradient: true,
       isCentered: true,
       weight: FontWeight.w800,
-      size: size ?? 40,
+      size: size,
       key: key,
       gradient: FlutterGradients.findByName(gradient),
     );
   }
 
   // ^ Gradient Text with Provided Data
-  factory SonrText.gradient(String text, FlutterGradientNames gradient, {Color color, FontWeight weight, double size, Key key}) {
-    return SonrText(text, isGradient: true, weight: FontWeight.bold, size: size ?? 40, key: key, gradient: FlutterGradients.findByName(gradient));
+  factory SonrText.gradient(String text, FlutterGradientNames gradient, {FontWeight weight = FontWeight.bold, double size = 40, Key key}) {
+    return SonrText(text, isGradient: true, weight: weight, size: size, key: key, gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ AppBar Text with Provided Data
-  factory SonrText.appBar(String text, {Color color, double size, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
+  factory SonrText.appBar(String text, {double size = 30, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
     return SonrText(
       text,
       isGradient: true,
       weight: FontWeight.w600,
-      size: size ?? 30,
+      size: size,
       key: key,
       gradient: FlutterGradients.findByName(gradient),
     );
@@ -105,9 +105,13 @@ class SonrText extends StatelessWidget {
 
   // ^ Gradient Text with Provided Data
   factory SonrText.initials(Peer peer,
-      {Color color, FlutterGradientNames gradient = FlutterGradientNames.glassWater, FontWeight weight, double size, Key key}) {
+      {Color color,
+      FlutterGradientNames gradient = FlutterGradientNames.glassWater,
+      FontWeight weight = FontWeight.bold,
+      double size = 36,
+      Key key}) {
     return SonrText(peer.profile.firstName[0].toUpperCase(),
-        isGradient: true, weight: FontWeight.bold, size: size ?? 36, key: key, gradient: FlutterGradients.findByName(gradient));
+        isGradient: true, weight: weight, size: size, key: key, gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ Rich Text with FirstName and Invite

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -363,9 +365,54 @@ class _ContactItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Contact contact = card.contact;
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      SonrText.normal(contact.firstName),
-      SonrText.normal(contact.lastName),
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Padding(padding: EdgeInsets.all(4)),
+      // Build Profile Pic
+      Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Neumorphic(
+          padding: EdgeInsets.all(10),
+          style: NeumorphicStyle(
+            boxShape: NeumorphicBoxShape.circle(),
+            depth: -10,
+          ),
+          child: contact.hasPicture()
+              ? Image.memory(Uint8List.fromList(contact.picture))
+              : Icon(
+                  Icons.insert_emoticon,
+                  size: 120,
+                  color: Colors.black.withOpacity(0.5),
+                ),
+        ),
+      ),
+
+      // Build Name
+      contact.hasLastName()
+          ? SonrText.gradient(contact.firstName + " " + contact.lastName, FlutterGradientNames.solidStone, size: 32)
+          : SonrText.gradient(contact.firstName, FlutterGradientNames.solidStone, size: 32),
+
+      Divider(),
+      Padding(padding: EdgeInsets.all(4)),
+
+      // Quick Actions
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrButton.circle(
+            onPressed: () {},
+            text: SonrText.normal("Mobile"),
+            icon: SonrIcon.normal(Icons.phone, color: Colors.black),
+            iconPosition: WidgetPosition.Top),
+        SonrButton.circle(
+            onPressed: () {},
+            text: SonrText.normal("Message"),
+            icon: SonrIcon.normal(Icons.mail, color: Colors.black),
+            iconPosition: WidgetPosition.Top),
+        SonrButton.circle(
+            onPressed: () {},
+            text: SonrText.normal("Video"),
+            icon: SonrIcon.normal(Icons.video_call_rounded, color: Colors.black),
+            iconPosition: WidgetPosition.Top),
+      ])
+      // Row for Call,
     ]);
   }
 }
