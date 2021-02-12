@@ -105,8 +105,6 @@ class _ContactInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(card.contact.toString());
-    print(card.contact.socials.length);
     // Display Info
     return Column(mainAxisSize: MainAxisSize.max, children: [
       // @ Basic Contact Info - Make Expandable
@@ -122,18 +120,20 @@ class _ContactInviteView extends StatelessWidget {
             SonrDialog.small(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               // @ Footer
               SonrHeaderBar.closeAccept(
-                title: SonrText.header("Send Back?"),
+                title: SonrText.header("Send Back?", size: 32),
                 onAccept: () {
                   controller.acceptContact(card, true);
-                  Get.back();
+                  Get.back(closeOverlays: true);
                 },
                 onCancel: () {
                   controller.acceptContact(card, false);
-                  Get.back();
+                  Get.back(closeOverlays: true);
                 },
               ),
               Divider(),
-              SonrText.normal("Would you like to send your contact card back to ${card.contact.firstName}")
+              Container(
+                  child: SonrText.normal("Would you like to send your contact card back to ${card.contact.firstName}"),
+                  margin: EdgeInsets.symmetric(horizontal: 4))
             ]));
           } else {
             controller.acceptContact(card, false);

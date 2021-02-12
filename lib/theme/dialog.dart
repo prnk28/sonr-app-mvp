@@ -56,7 +56,7 @@ class SonrDialog {
 
   // ^ Small Sized General Dialog - 1/4 Screen ^ //
   factory SonrDialog.small(Widget widget, {bool barrierDismissible = true, bool useRootNavigator = false, bool useSafeArea = true}) {
-    EdgeInsets margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 350);
+    EdgeInsets margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 400);
     return SonrDialog(widget, margin, barrierDismissible, useRootNavigator, useSafeArea);
   }
 

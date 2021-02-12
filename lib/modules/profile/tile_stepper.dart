@@ -403,8 +403,8 @@ class TileStepperController extends GetxController {
     // Validate
     if (type.value != null && step.value == 2) {
       // Set Acquired Data
-      var position = Contact_SocialTile_Position(index: Get.find<ProfileController>().socials.length - 1);
-      var links = Contact_SocialTile_Links(userLink: Get.find<SocialMediaService>().getProfileLink(provider.value, username.value));
+      var position = Contact_SocialTile_Position(index: Get.find<ProfileController>().socials.length);
+      var links = Get.find<SocialMediaService>().getLinks(provider.value, username.value);
 
       // Create Tile from Values
       var tile = Contact_SocialTile(

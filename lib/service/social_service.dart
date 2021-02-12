@@ -57,26 +57,30 @@ class SocialMediaService extends GetxService {
     return false;
   }
 
-  // ^ Get Link to Users Social Profile ^ //
-  String getProfileLink(Contact_SocialTile_Provider prv, String username) {
+  // ^ Get Links for User Social Profile ^ //
+  Contact_SocialTile_Links getLinks(Contact_SocialTile_Provider prv, String username) {
+    // Initialize
+    var links = Contact_SocialTile_Links();
+
+    // Check by provider
     switch (prv) {
       case Contact_SocialTile_Provider.Medium:
-        return "https://medium.com/@$username";
+        links.userLink = "https://medium.com/@$username";
         break;
       case Contact_SocialTile_Provider.Spotify:
-        return "";
+        links.userLink = "";
         break;
       case Contact_SocialTile_Provider.TikTok:
-        return "";
+        links.userLink = "";
         break;
       case Contact_SocialTile_Provider.Twitter:
-        return "https://twitter.com/$username";
+        links.userLink = "https://twitter.com/$username";
         break;
       case Contact_SocialTile_Provider.YouTube:
-        return "";
+        links.userLink = "";
         break;
     }
-    return "";
+    return links;
   }
 
   // * ------------------- * //
