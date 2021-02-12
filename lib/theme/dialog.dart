@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/card/invite_widget.dart';
+import 'package:sonr_app/modules/card/item_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -33,13 +35,13 @@ class SonrDialog {
     } else {
       margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450);
     }
-    return SonrDialog(SonrCard.fromInvite(invite), margin, false, true, true);
+    return SonrDialog(InviteCardView.fromInvite(invite), margin, false, true, true);
   }
 
   // ^ Reply with contact ^ //
   factory SonrDialog.reply(AuthReply reply) {
     EdgeInsets margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180);
-    return SonrDialog(SonrCard.fromReply(reply), margin, false, true, true);
+    return SonrDialog(InviteCardView.fromReply(reply), margin, false, true, true);
   }
 
   // ^ Large Sized General Dialog 3/4 Screen ^ //
