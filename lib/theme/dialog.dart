@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/card/invite_widget.dart';
-import 'package:sonr_app/modules/card/item_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 

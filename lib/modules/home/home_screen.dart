@@ -1,6 +1,5 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/card/item_view.dart';
 import 'package:sonr_app/service/device_service.dart';

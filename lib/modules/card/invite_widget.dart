@@ -8,7 +8,6 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-
 enum CardType { None, Invite, InProgress, Reply, Received, Item }
 
 class InviteCardView extends GetWidget<TransferCardController> {
@@ -19,11 +18,11 @@ class InviteCardView extends GetWidget<TransferCardController> {
   final bool isReply;
 
   // ** Constructer ** //
-  const InviteCardView({Key key, this.invite, this.reply, this.card, this.isReply = false}) : super(key: key);
+  const InviteCardView({Key key, this.invite, this.reply, this.card, this.isReply}) : super(key: key);
 
   // @ Factory for Invite Protobuf Data
   factory InviteCardView.fromInvite(AuthInvite invite) {
-    return InviteCardView(invite: invite, card: invite.card);
+    return InviteCardView(invite: invite, card: invite.card, isReply: false);
   }
 
   // @ Factory for Reply Protobuf Data
@@ -33,19 +32,13 @@ class InviteCardView extends GetWidget<TransferCardController> {
 
   @override
   Widget build(BuildContext context) {
-    // * Replied Card * //
-    if (isReply) {
-      return _ContactInviteView(card, controller, true);
-    }
-    // * Invited Card * //
-    else {
-      if (invite.payload == Payload.MEDIA) {
-        return _FileInviteView(card, controller);
-      } else if (invite.payload == Payload.CONTACT) {
-        return _ContactInviteView(card, controller, false);
-      } else {
-        return _URLInviteView(card, controller);
-      }
+    controller.invited();
+    if (invite.payload == Payload.MEDIA) {
+      return _FileInviteView(card, controller);
+    } else if (invite.payload == Payload.CONTACT) {
+      return _ContactInviteView(card, controller, isReply);
+    } else {
+      return _URLInviteView(card, controller);
     }
   }
 }
@@ -162,11 +155,9 @@ class _FileInviteView extends StatelessWidget {
   Widget build(BuildContext context) {
     // @ Display Info
     return Obx(() {
-      Widget child;
-
       // Check State of Card --> Invitation
       if (controller.state.value == CardType.Invite) {
-        child = Column(
+        return Column(
           mainAxisSize: MainAxisSize.max,
           key: UniqueKey(),
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -192,10 +183,9 @@ class _FileInviteView extends StatelessWidget {
       }
       // @ Check State of Card --> Transfer In Progress
       else if (controller.state.value == CardType.InProgress) {
-        child = _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, card).data);
+        return _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, card).data);
       }
-
-      return AnimatedContainer(duration: Duration(seconds: 1), child: child);
+      return Container();
     });
   }
 }
