@@ -81,52 +81,17 @@ class SonrCard extends GetWidget<TransferCardController> {
       );
     } else if (type == CardType.Invite) {
       // * Invited Card * //
-      return _CardDialogView(invite.card, invite.payload, controller, false);
+      if (invite.payload == Payload.MEDIA) {
+        return _FileInviteView(card, controller);
+      } else if (invite.payload == Payload.CONTACT) {
+        return _ContactInviteView(card, controller, false);
+      } else {
+        return _URLInviteView(card, controller);
+      }
     }
     // * Replied Card * //
     else {
-      return _CardDialogView(reply.card, reply.payload, controller, true);
-    }
-  }
-}
-
-// ^ BASE: Card Invite/Reply/Progress View ^ //
-class _CardDialogView extends StatelessWidget {
-  final Payload payload;
-  final TransferCard card;
-  final TransferCardController controller;
-  final bool isReply;
-
-  const _CardDialogView(this.card, this.payload, this.controller, this.isReply);
-  @override
-  Widget build(BuildContext context) {
-    return NeumorphicBackground(
-        margin: _buildPayloadMargin(),
-        borderRadius: BorderRadius.circular(40),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-          style: NeumorphicStyle(color: K_BASE_COLOR),
-          child: _buildPayloadChild(),
-        ));
-  }
-
-  Widget _buildPayloadChild() {
-    if (payload == Payload.MEDIA) {
-      return _FileInviteView(card, controller);
-    } else if (payload == Payload.CONTACT) {
-      return _ContactInviteView(card, controller, isReply);
-    } else {
-      return _URLInviteView(card, controller);
-    }
-  }
-
-  EdgeInsets _buildPayloadMargin() {
-    if (payload == Payload.MEDIA) {
-      return EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 90);
-    } else if (payload == Payload.CONTACT) {
-      return EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180);
-    } else {
-      return EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450);
+      return _ContactInviteView(card, controller, true);
     }
   }
 }
@@ -140,37 +105,44 @@ class _ContactInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(card.contact.toString());
+    print(card.contact.socials.length);
     // Display Info
     return Column(mainAxisSize: MainAxisSize.max, children: [
-      // @ Header
+      // @ Basic Contact Info - Make Expandable
+      SonrText.bold(card.contact.firstName),
+      SonrText.bold(card.contact.lastName),
+
+      // @ Footer
+      Divider(),
       SonrHeaderBar.closeAccept(
         title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
         onAccept: () {
-          controller.acceptContact(card, false);
-          Get.back();
+          if (!isReply) {
+            SonrDialog.small(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              // @ Footer
+              SonrHeaderBar.closeAccept(
+                title: SonrText.header("Send Back?"),
+                onAccept: () {
+                  controller.acceptContact(card, true);
+                  Get.back();
+                },
+                onCancel: () {
+                  controller.acceptContact(card, false);
+                  Get.back();
+                },
+              ),
+              Divider(),
+              SonrText.normal("Would you like to send your contact card back to ${card.contact.firstName}")
+            ]));
+          } else {
+            controller.acceptContact(card, false);
+          }
         },
         onCancel: () {
           Get.back();
         },
       ),
-      Padding(padding: EdgeInsets.all(8)),
-
-      // @ Basic Contact Info - Make Expandable
-      SonrText.bold(card.contact.firstName),
-      SonrText.bold(card.contact.lastName),
-
-      // @ Send Back Button
-      !isReply
-          ? Align(
-              alignment: Alignment.bottomCenter,
-              child: SonrButton.rectangle(
-                  text: SonrText.normal("Send yours back"),
-                  onPressed: () {
-                    // Emit Event
-                    controller.acceptContact(card, true);
-                    Get.back();
-                  }))
-          : Container()
     ]);
   }
 }
@@ -198,7 +170,7 @@ class _URLInviteView extends StatelessWidget {
           Get.back();
         },
       ),
-      Padding(padding: EdgeInsets.all(8)),
+      Divider(),
 
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,7 +217,12 @@ class _FileInviteView extends StatelessWidget {
           key: UniqueKey(),
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // @ Header
+            // @ Build Item from Metadata and Peer
+            Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
+            SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
+
+            // @ Footer
+            Divider(),
             SonrHeaderBar.closeAccept(
               title: SonrText.invite(card.payload.toString(), card.firstName),
               onAccept: () {
@@ -256,11 +233,6 @@ class _FileInviteView extends StatelessWidget {
                 Get.back();
               },
             ),
-            Padding(padding: EdgeInsets.all(8)),
-
-            // @ Build Item from Metadata and Peer
-            Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
-            SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
           ],
         );
       }

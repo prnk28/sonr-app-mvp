@@ -151,8 +151,10 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      HapticFeedback.heavyImpact();
-      Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
+      if (!Get.isDialogOpen) {
+        HapticFeedback.heavyImpact();
+        SonrDialog.invite(data);
+      }
     }
   }
 
@@ -162,7 +164,7 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
-        Get.dialog(SonrCard.fromReply(data));
+        SonrDialog.reply(data);
       } else {
         // For File
         if (data.decision) {

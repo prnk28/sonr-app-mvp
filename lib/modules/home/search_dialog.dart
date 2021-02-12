@@ -11,42 +11,38 @@ import 'home_controller.dart';
 class SearchDialog extends GetView<SearchDialogController> {
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572),
-        borderRadius: BorderRadius.circular(20),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-            style: NeumorphicStyle(color: K_BASE_COLOR),
-            child: Container(
-                width: Get.width - 60,
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Padding(padding: EdgeInsets.all(2)),
-                  // @ Top Banner
-                  SonrHeaderBar.leading(
-                      height: kToolbarHeight + 10,
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 8.0, right: 32),
-                        child: SonrText.header("Find Card", size: 32),
-                      ),
-                      leading: SonrButton.circle(
-                        onPressed: Get.back,
-                        icon: SonrIcon.close,
-                        padding: const EdgeInsets.only(top: 8),
-                      )),
-
-                  // @ Window Content
-                  Spacer(),
-                  Material(
-                    color: Colors.transparent,
-                    child: Obx(() => SonrSearchField.forCards(
-                          value: controller.searchText.value,
-                          onChanged: controller.textFieldChanged,
-                          suggestion: SonrSearchFieldCardSuggestion(),
-                        )),
+    return Neumorphic(
+        style: NeumorphicStyle(color: K_BASE_COLOR),
+        child: Container(
+            width: Get.width - 60,
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Padding(padding: EdgeInsets.all(2)),
+              // @ Top Banner
+              SonrHeaderBar.leading(
+                  height: kToolbarHeight + 10,
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 8.0, right: 32),
+                    child: SonrText.header("Find Card", size: 32),
                   ),
-                  Spacer()
-                ]))));
+                  leading: SonrButton.circle(
+                    onPressed: Get.back,
+                    icon: SonrIcon.close,
+                    padding: const EdgeInsets.only(top: 8),
+                  )),
+
+              // @ Window Content
+              Spacer(),
+              Material(
+                color: Colors.transparent,
+                child: Obx(() => SonrSearchField.forCards(
+                      value: controller.searchText.value,
+                      onChanged: controller.textFieldChanged,
+                      suggestion: SonrSearchFieldCardSuggestion(),
+                    )),
+              ),
+              Spacer()
+            ])));
   }
 }
 

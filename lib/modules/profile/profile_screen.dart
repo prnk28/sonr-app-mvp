@@ -18,7 +18,7 @@ class ProfileScreen extends GetView<ProfileController> {
             child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
             style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
             onPressed: () {
-              Get.dialog(TileCreateStepper(), barrierColor: K_DIALOG_COLOR);
+              SonrDialog.large(TileCreateStepper());
             }),
         body: NeumorphicBackground(
             backendColor: Colors.transparent,

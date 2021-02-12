@@ -11,7 +11,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'button.dart';
+import '../widgets/button.dart';
 import 'icon.dart';
 
 class SonrText extends StatelessWidget {
