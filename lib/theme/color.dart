@@ -8,6 +8,8 @@ import 'icon.dart';
 const Color K_BASE_COLOR = Color(0xffDDDDDD);
 const Color K_BASE_WHITE_COLOR = Color(0xffEFEEEE);
 const Color K_DIALOG_COLOR = Color.fromRGBO(0, 0, 0, 0.7);
+const Color K_OVERLAY_COLOR = Color.fromRGBO(0, 0, 0, 0.45);
+const Color K_BUTTON_DISABLED = Color.fromRGBO(179, 181, 181, 1.0);
 
 // ^ Find Icons color based on Theme - Light/Dark ^
 Color findIconsColor() {

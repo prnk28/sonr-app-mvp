@@ -66,7 +66,7 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
       return SimpleAnimation('Feed');
     }
     // Retreive Showcase Loop
-    else if (type == "Showcase") {
+    else if (type == "Post") {
       return SimpleAnimation('Showcase');
     }
     // Retreive Icon Loop

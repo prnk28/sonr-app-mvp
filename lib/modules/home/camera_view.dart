@@ -13,7 +13,7 @@ import 'package:sonr_core/sonr_core.dart';
 
 import 'home_controller.dart';
 
-class CameraPicker extends GetView<CameraPickerController> {
+class CameraView extends GetView<CameraPickerController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -66,9 +66,12 @@ class CameraPicker extends GetView<CameraPickerController> {
               alignment: Alignment.bottomCenter,
               padding: EdgeInsets.only(bottom: 25),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                SonrButton.circle(SonrText.normal(""), () {
-                  controller.capturePhoto();
-                }, icon: SonrIcon.gradient(Icons.camera, FlutterGradientNames.alchemistLab)),
+                SonrButton.circle(
+                    text: SonrText.normal(""),
+                    onPressed: () {
+                      controller.capturePhoto();
+                    },
+                    icon: SonrIcon.gradient(Icons.camera, FlutterGradientNames.alchemistLab)),
               ]),
             ),
             Container(
@@ -129,7 +132,7 @@ class CameraPickerController extends GetxController {
   // ^ Continue with Capture ^ //
   continuePhoto() async {
     // Save Photo
-    Get.find<DeviceService>().savePhoto(capturePath.value);
+    Get.find<DeviceService>().savePhotoFromCamera(capturePath.value);
 
     Get.find<SonrService>().setPayload(Payload.MEDIA, path: capturePath.value);
 

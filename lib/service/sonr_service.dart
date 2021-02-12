@@ -4,21 +4,12 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as Pkg;
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/model_user.dart';
+import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
 import 'sql_service.dart';
-
-// @ Enum to Handle Status
-enum SonrStatus {
-  Offline,
-  Ready, // Available
-  Processing, // Queuing File
-  Searching, // Searching -> Post Processing
-  Pending, // Pending Authorization
-  Busy, // In Transfer
-}
 
 class SonrService extends GetxService {
   // @ Set Properties
@@ -77,7 +68,6 @@ class SonrService extends GetxService {
   void setPayload(Payload type, {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = ""}) async {
     // Set Payload Type
     payload(type);
-    print(type.toString());
 
     // File Payload
     if (payload.value == Payload.MEDIA) {
@@ -154,8 +144,6 @@ class SonrService extends GetxService {
     if (data is TransferCard) {
       // Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
-      print(data.toString());
-      // Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
   }
 
@@ -163,7 +151,6 @@ class SonrService extends GetxService {
   void _handleInvite(dynamic data) async {
     // Check Type
     if (data is AuthInvite) {
-      Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
       Get.dialog(SonrCard.fromInvite(data), barrierColor: K_DIALOG_COLOR);
     }
@@ -224,10 +211,12 @@ class SonrService extends GetxService {
       // Reset Data
       progress(0.0);
 
+      Get.back();
+
       // Save Card
       Get.find<SQLService>().storeCard(data);
       Get.find<DeviceService>().saveMediaFromCard(data);
-      Get.find<SonrCardController>().received(data);
+      Get.find<HomeController>().addCard(data);
       HapticFeedback.vibrate();
     }
   }

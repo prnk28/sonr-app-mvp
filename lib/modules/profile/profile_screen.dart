@@ -1,75 +1,50 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:sonr_app/modules/profile/tile_dialog.dart';
 import 'package:sonr_core/models/models.dart' hide Platform;
-import 'tile_item.dart';
+import 'edit_dialog.dart';
+import 'social_tile.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'header_view.dart';
+import 'tile_stepper.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return SonrTheme(
-        child: Scaffold(
-      backgroundColor: NeumorphicTheme.baseColor(context),
-      body: _SliverViews(),
-      floatingActionButton: NeumorphicFloatingActionButton(
-          child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
-          style: NeumorphicStyle(intensity: 0.45, depth: 8, shape: NeumorphicShape.convex),
-          onPressed: () {
-            Get.dialog(TileDialog(), barrierColor: K_DIALOG_COLOR);
-          }),
-    ));
-  }
-}
+    return SonrScaffold(
+        floatingActionButton: NeumorphicFloatingActionButton(
+            child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
+            style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
+            onPressed: () {
+              Get.dialog(TileCreateStepper(), barrierColor: K_DIALOG_COLOR);
+            }),
+        body: NeumorphicBackground(
+            backendColor: Colors.transparent,
+            child: CustomScrollView(
+              slivers: [
+                // @ Builds Profile Header
+                SonrHeaderBar.sliver(
+                    leading: SonrButton.circle(
+                        icon: SonrIcon.close,
+                        onPressed: () => Get.offNamed("/home/profile"),
+                        intensity: 0.85,
+                        shadowLightColor: Colors.lightBlueAccent[100]),
+                    action: SonrButton.circle(
+                      icon: SonrIcon.more,
+                      onPressed: () => {},
+                      intensity: 0.85,
+                      shadowLightColor: Colors.lightBlueAccent[100],
+                    ),
+                    flexibleSpace: ContactHeader()),
 
-class _SliverViews extends GetView<ProfileController> {
-  @override
-  Widget build(BuildContext context) {
-    // Create View
-    return NeumorphicBackground(
-      backendColor: Colors.transparent,
-      child: CustomScrollView(
-        slivers: [
-          // @ Builds Profile Header
-          SliverAppBar(
-            pinned: true,
-            floating: true,
-            snap: true,
-            primary: true,
-            automaticallyImplyLeading: false,
-            toolbarHeight: kToolbarHeight + 16 * 2,
-            flexibleSpace: ContactHeader(),
-            expandedHeight: 285,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                // @ Close Button
-                Padding(
-                    padding: EdgeInsets.only(left: 4.0),
-                    child: SonrButton.appBar(SonrIcon.close, () => Get.offNamed("/home/profile"), intensity: 0.4)),
+                SliverPadding(padding: EdgeInsets.all(14)),
 
-                // @ More Button
-                Padding(
-                    padding: EdgeInsets.only(right: 4.0),
-                    child: SonrButton.appBar(SonrIcon.settings, () => {Get.dialog(_QRScanner())}, intensity: 0.4)),
+                // @ Builds List of Social Tile
+                Obx(() => SocialsGrid(controller.socials, controller.focusTileIndex.value)),
               ],
-            ),
-          ),
-
-          SliverPadding(padding: EdgeInsets.all(14)),
-
-          // @ Builds List of Social Tile
-          Obx(() => SocialsGrid(controller.socials, controller.focusTileIndex.value)),
-        ],
-      ),
-    );
+            )));
   }
 }
 
@@ -77,7 +52,7 @@ class SocialsGrid extends StatelessWidget {
   final List<Contact_SocialTile> tiles;
   final int focusedIndex;
 
-  const SocialsGrid(
+  SocialsGrid(
     this.tiles,
     this.focusedIndex, {
     Key key,
@@ -104,74 +79,84 @@ class SocialsGrid extends StatelessWidget {
   }
 }
 
-class _QRScanner extends StatefulWidget {
-  @override
-  _QRScannerState createState() => _QRScannerState();
-}
-
-class _QRScannerState extends State<_QRScanner> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode result;
-  QRViewController controller;
-
-  // In order to get hot reload to work we need to pause the camera if the platform
-  // is android, or resume the camera if the platform is iOS.
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller.resumeCamera();
-    }
-  }
-
+class ContactHeader extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            // To ensure the Scanner view is properly sizes after rotation
-            // we need to listen for Flutter SizeChanged notification and update controller
-            child: NotificationListener<SizeChangedLayoutNotification>(
-              onNotification: (notification) {
-                // Future.microtask(() => controller?.updateDimensions(qrKey));
-                return false;
+    return FlexibleSpaceBar(
+      titlePadding: EdgeInsets.only(bottom: 24),
+      title: _buildTitle(),
+      centerTitle: true,
+      background: NeumorphicBackground(
+        backendColor: Colors.transparent,
+        child: ClipPath(
+          clipper: OvalBottomBorderClipper(),
+          child: Neumorphic(
+            style: NeumorphicStyle(color: Colors.lightBlue[100]),
+            child: GestureDetector(
+              onLongPress: () async {
+                print("Launch Color picker to change header");
+                HapticFeedback.heavyImpact();
               },
-              child: SizeChangedLayoutNotifier(
-                key: const Key('qr-size-notifier'),
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
+              child: Container(
+                height: 285, // Same Header Color
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // @ Avatar
+                    _AvatarField(),
+                  ],
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Text('Scan a code'),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
+  // ^ Builds Flexible SpaceBar Title ^ //
+  _buildTitle() {
+    return GestureDetector(
+        onLongPress: () async {
+          Get.dialog(
+            EditDialog.nameField(
+                onSubmitted: (map) {
+                  controller.firstName(map["firstName"]);
+                  controller.lastName(map["lastName"]);
+                  controller.saveChanges();
+                },
+                firstValue: controller.firstName.value,
+                lastValue: controller.lastName.value),
+          );
+          HapticFeedback.heavyImpact();
+        },
+        child: Obx(() => SonrText.normal(controller.firstName.value + " " + controller.lastName.value, color: HexColor.fromHex("FFFDFA"), size: 24)));
   }
+}
 
+class _AvatarField extends GetView<ProfileController> {
   @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () async {
+        print("Launch Profile Pic Camera View");
+        HapticFeedback.heavyImpact();
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Neumorphic(
+          padding: EdgeInsets.all(10),
+          style: NeumorphicStyle(
+            boxShape: NeumorphicBoxShape.circle(),
+            depth: -10,
+          ),
+          child: Icon(
+            Icons.insert_emoticon,
+            size: 120,
+            color: Colors.black.withOpacity(0.2),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -10,29 +10,28 @@ class TransferScreen extends StatelessWidget {
   // @ Initialize
   @override
   Widget build(BuildContext context) {
-    return SonrTheme(
-        child: Scaffold(
-            appBar: SonrAppBar.leading(Get.find<SonrService>().olc.value, SonrButton.appBar(SonrIcon.close, () => Get.offNamed("/home/transfer"))),
-            backgroundColor: NeumorphicTheme.baseColor(context),
-            body: SafeArea(
-                child: Stack(
-              children: <Widget>[
-                // @ Range Lines
-                Padding(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: CustomPaint(
-                      size: Size(Get.width, Get.height),
-                      painter: ZonePainter(),
-                      child: Container(),
-                    )),
+    return SonrScaffold.appBarLeading(
+        title: Get.find<SonrService>().olc.value,
+        leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer")),
+        body: SafeArea(
+            child: Stack(
+          children: <Widget>[
+            // @ Range Lines
+            Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: CustomPaint(
+                  size: Size(Get.width, Get.height),
+                  painter: ZonePainter(),
+                  child: Container(),
+                )),
 
-                // @ Lobby View
-                LobbyView(),
+            // @ Lobby View
+            LobbyView(),
 
-                // @ Compass View
-                CompassView(),
-              ],
-            ))));
+            // @ Compass View
+            CompassView(),
+          ],
+        )));
   }
 }
 
@@ -49,10 +48,10 @@ class LobbyView extends GetView<TransferController> {
       // Present Text
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
-          duration: 200.milliseconds,
-          delay: 200.milliseconds,
+          duration: 150.milliseconds,
+          delay: 150.milliseconds,
           builder: (context, child, value) {
-            return AnimatedOpacity(opacity: value, duration: 200.milliseconds, child: Stack(children: List.from(controller.stackItems)));
+            return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: Stack(children: List.from(controller.stackItems)));
           });
     });
   }

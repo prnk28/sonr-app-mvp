@@ -11,7 +11,7 @@ import 'package:media_gallery/media_gallery.dart';
 import 'home_controller.dart';
 
 // ** MediaPicker Dialog View ** //
-class MediaPicker extends GetView<MediaPickerController> {
+class MediaSheet extends GetView<MediaPickerController> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(

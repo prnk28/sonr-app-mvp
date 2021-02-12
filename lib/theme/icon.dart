@@ -88,6 +88,31 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
+  // ^ Peer Data Platform to Icon
+  factory SonrIcon.platform(IconType type, Platform platform, {Color color, double size = 30}) {
+    // Set Color
+    _IconGradientWData result = _SonrIconData.devices[platform];
+
+    // Get Icon
+    if (result != null) {
+      return SonrIcon(
+        result._data,
+        type,
+        color,
+        result.gradient,
+        size: size,
+      );
+    } else {
+      return SonrIcon(
+        Icons.device_unknown,
+        type,
+        color,
+        FlutterGradientNames.viciousStance,
+        size: size,
+      );
+    }
+  }
+
   // ^ Payload Data from Metadata
   factory SonrIcon.preview(IconType type, TransferCard card,
       {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
@@ -130,13 +155,15 @@ class SonrIcon extends StatelessWidget {
 
   static SonrIcon get cancel => SonrIcon(_SonrIconData.cancel, IconType.Normal, Colors.black, null);
 
-  static SonrIcon get info => SonrIcon(_SonrIconData.info, IconType.Normal, Colors.black, null);
+  static SonrIcon get info => SonrIcon.gradient(_SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
 
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
 
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
 
   static SonrIcon get close => SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36);
+
+  static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
 
   static SonrIcon get profile => SonrIcon.gradient(Icons.person_outline, FlutterGradientNames.itmeoBranding, size: 36);
 

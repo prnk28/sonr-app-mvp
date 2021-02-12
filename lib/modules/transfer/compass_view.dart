@@ -327,14 +327,13 @@ class _CompassBulb extends StatelessWidget {
                 duration: Duration(seconds: 1),
                 decoration: BoxDecoration(gradient: gradient),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  SlideDownAnimatedSwitcher(
-                      duration: Duration(seconds: 3),
+                  SonrAnimatedSwitcher.slideDown(
                       child: SonrText.gradient(
-                        direction,
-                        FlutterGradientNames.glassWater,
-                        key: ValueKey<String>(direction),
-                      )),
-                  FadeAnimatedSwitcher(
+                    direction,
+                    FlutterGradientNames.glassWater,
+                    key: ValueKey<String>(direction),
+                  )),
+                  SonrAnimatedSwitcher.fade(
                       child: SonrText.gradient(
                     heading,
                     FlutterGradientNames.glassWater,

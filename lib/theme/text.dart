@@ -1,10 +1,18 @@
+import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:sonr_app/service/sql_service.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'button.dart';
+import 'icon.dart';
 
 class SonrText extends StatelessWidget {
   final String text;
@@ -31,37 +39,42 @@ class SonrText extends StatelessWidget {
 
   // ^ Normal Text with Provided Data
   factory SonrText.normal(String text, {Color color, double size, Key key}) {
-    return SonrText(text,
-        weight: FontWeight.w500,
-        size: size ?? 16,
-        key: key,
-        color: color ?? Colors.black);
+    return SonrText(text, weight: FontWeight.w500, size: size ?? 16, key: key, color: color ?? Colors.black);
   }
 
   // ^ Bold Text with Provided Data
   factory SonrText.bold(String text, {Color color, double size, Key key}) {
-    return SonrText(text,
-        weight: FontWeight.bold,
-        size: size ?? 32,
-        key: key,
-        color: color ?? Colors.black);
+    return SonrText(text, weight: FontWeight.bold, size: size ?? 32, key: key, color: color ?? Colors.black);
   }
 
   // ^ Description Text with Provided Data
-  factory SonrText.description(String text,
-      {Color color, double size, Key key}) {
-    return SonrText(text,
-        weight: FontWeight.bold,
-        size: size ?? 24,
-        key: key,
-        color: color ?? Colors.grey);
+  factory SonrText.description(String text, {Color color, double size, Key key}) {
+    return SonrText(text, weight: FontWeight.bold, size: size ?? 24, key: key, color: color ?? Colors.grey);
+  }
+
+  // ^ Date Text with Provided Data
+  factory SonrText.date(DateTime date, {Color color, double size, Key key}) {
+    // Formatters
+    final dateFormat = new DateFormat.yMd();
+    final timeFormat = new DateFormat.jm();
+
+    // Get String
+    String dateText = dateFormat.format(date);
+    String timeText = timeFormat.format(date);
+
+    return SonrText("",
+        isRich: true,
+        richText: RichText(
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.fade,
+            text: TextSpan(children: [
+              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 14, color: Colors.black)),
+              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black)),
+            ])));
   }
 
   // ^ Header Text with Provided Data
-  factory SonrText.header(String text,
-      {FlutterGradientNames gradient = FlutterGradientNames.viciousStance,
-      double size,
-      Key key}) {
+  factory SonrText.header(String text, {FlutterGradientNames gradient = FlutterGradientNames.viciousStance, double size, Key key}) {
     return SonrText(
       text,
       isGradient: true,
@@ -74,22 +87,12 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Gradient Text with Provided Data
-  factory SonrText.gradient(String text, FlutterGradientNames gradient,
-      {Color color, FontWeight weight, double size, Key key}) {
-    return SonrText(text,
-        isGradient: true,
-        weight: FontWeight.bold,
-        size: size ?? 40,
-        key: key,
-        gradient: FlutterGradients.findByName(gradient));
+  factory SonrText.gradient(String text, FlutterGradientNames gradient, {Color color, FontWeight weight, double size, Key key}) {
+    return SonrText(text, isGradient: true, weight: FontWeight.bold, size: size ?? 40, key: key, gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ AppBar Text with Provided Data
-  factory SonrText.appBar(String text,
-      {Color color,
-      double size,
-      FlutterGradientNames gradient = FlutterGradientNames.premiumDark,
-      Key key}) {
+  factory SonrText.appBar(String text, {Color color, double size, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
     return SonrText(
       text,
       isGradient: true,
@@ -102,17 +105,9 @@ class SonrText extends StatelessWidget {
 
   // ^ Gradient Text with Provided Data
   factory SonrText.initials(Peer peer,
-      {Color color,
-      FlutterGradientNames gradient = FlutterGradientNames.glassWater,
-      FontWeight weight,
-      double size,
-      Key key}) {
+      {Color color, FlutterGradientNames gradient = FlutterGradientNames.glassWater, FontWeight weight, double size, Key key}) {
     return SonrText(peer.profile.firstName[0].toUpperCase(),
-        isGradient: true,
-        weight: FontWeight.bold,
-        size: size ?? 36,
-        key: key,
-        gradient: FlutterGradients.findByName(gradient));
+        isGradient: true, weight: FontWeight.bold, size: size ?? 36, key: key, gradient: FlutterGradients.findByName(gradient));
   }
 
   // ^ Rich Text with FirstName and Invite
@@ -123,19 +118,10 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(
-                  text: type.capitalizeFirst,
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 26,
-                      color: Colors.black)),
+              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: Colors.black)),
               TextSpan(
                   text: " from ${firstName.capitalizeFirst}",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.normal,
-                      fontStyle: FontStyle.italic,
-                      fontSize: 22,
-                      color: Colors.blue[900])),
+                  style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
             ])));
   }
 
@@ -158,9 +144,7 @@ class SonrText extends StatelessWidget {
     for (int i = 0; i <= segmentCount - 1; i++) {
       // Check if final Segment
       if (i == segmentCount - 1) {
-        directories > 0
-            ? path += path += "/${uri.pathSegments[i]}"
-            : path += uri.pathSegments[i];
+        directories > 0 ? path += path += "/${uri.pathSegments[i]}" : path += uri.pathSegments[i];
       } else {
         directories += 1;
         path += ".";
@@ -204,11 +188,9 @@ class SonrText extends StatelessWidget {
                 ),
             child: Text(
               text,
+              overflow: TextOverflow.ellipsis,
               textAlign: isCentered ? TextAlign.center : TextAlign.start,
-              style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  fontSize: size ?? 32.0,
-                  color: Colors.white),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: size ?? 32.0, color: Colors.white),
             )),
       );
     }
@@ -219,11 +201,7 @@ class SonrText extends StatelessWidget {
     }
 
     // @ Normal Type Text
-    return Text(text,
-        style: GoogleFonts.poppins(
-            fontWeight: weight,
-            fontSize: size ?? 16,
-            color: color ?? findTextColor()));
+    return Text(text, style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^
@@ -237,80 +215,206 @@ class SonrText extends StatelessWidget {
 
   // ^ Replace Character in given String with given Index ^
   static String replaceCharAt(String oldString, int index, String newChar) {
-    return oldString.substring(0, index) +
-        newChar +
-        oldString.substring(index + 1);
+    return oldString.substring(0, index) + newChar + oldString.substring(index + 1);
+  }
+
+  // ^ Convert a Size in Bytes to Text String ^
+  static String convertSizeToText(int size) {
+    // @ Less than 1KB
+    if (size < pow(10, 3)) {
+      return "$size B";
+    }
+    // @ Less than 1MB
+    else if (size >= pow(10, 3) && size < pow(10, 6)) {
+      // Adjust Size Value, Return String
+      var adjusted = size / pow(10, 3);
+      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
+    }
+    // @ Less than 1GB
+    else if (size >= pow(10, 6) && size < pow(10, 9)) {
+      // Adjust Size Value, Return String
+      var adjusted = size / pow(10, 6);
+      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
+    }
+    // @ Greater than GB
+    else {
+      // Adjust Size Value, Return String
+      var adjusted = size / pow(10, 9);
+      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
+    }
+  }
+
+  // ^ Convert a Boolean Value to English Text String ^
+  static String convertBoolToText(bool val) {
+    if (val) {
+      return "YES";
+    } else {
+      return "NO";
+    }
   }
 }
 
 // ^ Builds Neumorphic Text Field ^ //
-class SonrTextField extends StatefulWidget {
+class SonrTextField extends StatelessWidget {
   final String label;
   final String hint;
   final String value;
-  final FocusNode focus;
+  final FocusNode focusNode;
+  final bool autoFocus;
+  final bool autoCorrect;
+  final TextCapitalization textCapitalization;
+  final TextEditingController controller;
 
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
 
   SonrTextField(
-      {@required this.label,
-      @required this.hint,
+      {@required this.hint,
       @required this.value,
+      this.label,
+      this.controller,
       this.onChanged,
-      this.focus,
-      this.onEditingComplete});
-
-  @override
-  _SonrTextFieldState createState() => _SonrTextFieldState();
-}
-
-class _SonrTextFieldState extends State<SonrTextField> {
-  TextEditingController _controller;
-
-  @override
-  void initState() {
-    _controller = TextEditingController(text: widget.value);
-    super.initState();
-  }
+      this.focusNode,
+      this.onEditingComplete,
+      this.autoFocus = false,
+      this.autoCorrect = true,
+      this.textCapitalization = TextCapitalization.none});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-          child: Text(
-            this.widget.label,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: NeumorphicTheme.defaultTextColor(context),
-            ),
-          ),
-        ),
-        Neumorphic(
-          margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-          style: NeumorphicStyle(
-            depth: NeumorphicTheme.embossDepth(context),
-            boxShape: NeumorphicBoxShape.stadium(),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-          child: TextField(
-            focusNode: widget.focus,
-            onEditingComplete: () {
-              this.widget.onEditingComplete();
-            },
-            onChanged: (value) {
-              this.widget.onChanged(value);
-            },
-            controller: _controller,
-            decoration: InputDecoration.collapsed(
-                hintText: this.widget.hint,
-                hintStyle: TextStyle(color: Colors.black38)),
-          ),
-        )
-      ],
+    return ValueBuilder<String>(
+      initialValue: value,
+      builder: (value, updateFn) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            label != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: NeumorphicTheme.defaultTextColor(context),
+                      ),
+                    ),
+                  )
+                : Container(),
+            Neumorphic(
+              margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+              style: NeumorphicStyle(
+                depth: NeumorphicTheme.embossDepth(context),
+                boxShape: NeumorphicBoxShape.stadium(),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+              child: TextField(
+                controller: controller,
+                autofocus: autoFocus,
+                autocorrect: autoCorrect,
+                textCapitalization: textCapitalization,
+                focusNode: focusNode,
+                onEditingComplete: onEditingComplete,
+                onChanged: updateFn,
+                decoration:
+                    InputDecoration.collapsed(hintText: hint, hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.black38)),
+              ),
+            )
+          ],
+        );
+      },
+      onUpdate: onChanged,
+    );
+  }
+}
+
+enum SearchFieldType { Username, Cards }
+
+// ^ Builds Neumorphic Text Field for Search ^ //
+class SonrSearchField extends StatelessWidget {
+  final String value;
+  final ValueChanged<String> onChanged;
+  final Function onEditingComplete;
+  final Iterable<String> autofillHints;
+  final SearchFieldType type;
+  final Widget suggestion;
+
+  factory SonrSearchField.forUsername({
+    @required Widget suggestion,
+    @required String value,
+    ValueChanged<String> onChanged,
+    Function onEditingComplete,
+    Iterable<String> autofillHints,
+    Function onSuggestionTap,
+  }) {
+    return SonrSearchField(SearchFieldType.Username, value: value);
+  }
+
+  factory SonrSearchField.forCards({
+    @required Widget suggestion,
+    @required String value,
+    ValueChanged<String> onChanged,
+    Function onEditingComplete,
+    Iterable<String> autofillHints,
+  }) {
+    return SonrSearchField(
+      SearchFieldType.Cards,
+      value: value,
+      suggestion: suggestion,
+      onChanged: onChanged,
+      onEditingComplete: onEditingComplete,
+      autofillHints: autofillHints,
+    );
+  }
+
+  SonrSearchField(
+    this.type, {
+    @required this.value,
+    this.onChanged,
+    this.onEditingComplete,
+    this.autofillHints,
+    this.suggestion,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueBuilder<String>(
+      initialValue: value,
+      builder: (value, updateFn) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Neumorphic(
+                margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
+                style: NeumorphicStyle(
+                  depth: NeumorphicTheme.embossDepth(context),
+                  boxShape: NeumorphicBoxShape.stadium(),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                child: Stack(children: [
+                  Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                        SonrIcon.gradient(Icons.search, FlutterGradientNames.amourAmour, size: 30),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: TextField(
+                              autofillHints: autofillHints,
+                              showCursor: false,
+                              autofocus: true,
+                              onEditingComplete: onEditingComplete,
+                              onChanged: updateFn,
+                              decoration: InputDecoration.collapsed(hintText: "Search...", hintStyle: TextStyle(color: Colors.black38)),
+                            ),
+                          ),
+                        ),
+                      ])),
+                  Align(alignment: Alignment.centerRight, child: suggestion)
+                ]))
+          ],
+        );
+      },
+      onUpdate: onChanged,
     );
   }
 }

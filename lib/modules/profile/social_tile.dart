@@ -1,20 +1,23 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
-import 'package:sonr_app/modules/profile/tile_controller.dart';
+import 'package:sonr_app/modules/social/medium_view.dart';
+import 'package:sonr_app/modules/social/twitter_view.dart';
+import 'package:sonr_app/modules/social/youtube_view.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+
+enum TileState { None, Dragging, Editing, Expanded }
 
 // ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {
   final Contact_SocialTile item;
   final int index;
-  SocialTileItem(this.item, this.index) {
-    controller.initTile(item, index);
-  }
+  SocialTileItem(this.item, this.index);
   @override
   Widget build(BuildContext context) {
+    controller.initialize(item, index);
     return Stack(children: [
       // Draggable Aspect
       LongPressDraggable(
@@ -89,5 +92,40 @@ class SocialTileItem extends GetWidget<TileController> {
       return YoutubeView(item, index);
     }
     return Container();
+  }
+}
+
+class TileController extends GetxController {
+  // Properties
+  final currentTile = Rx<Contact_SocialTile>();
+  final state = TileState.None.obs;
+
+  // References
+  int index;
+  bool _isEditing = false;
+
+  // ^ Create New Tile ^ //
+  initialize(Contact_SocialTile value, int index) async {
+    // Set Tile
+    currentTile(value);
+    index = index;
+  }
+
+  // ^ Toggle Editing Mode ^ //
+  editTile() {
+    _isEditing = !_isEditing;
+    if (_isEditing) {
+      state(TileState.Editing);
+    } else {
+      currentTile(Contact_SocialTile());
+      state(TileState.None);
+    }
+    update(["SocialTile"]);
+  }
+
+  // ^ Removes Current Tile ^ //
+  deleteTile() {
+    // Remove Tile from Contact and Save
+    Get.find<ProfileController>().removeSocialTile(currentTile.value);
   }
 }

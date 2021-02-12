@@ -6,43 +6,69 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import 'camera_picker.dart';
-import 'media_picker.dart';
+import 'camera_view.dart';
+import 'media_sheet.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
   // Properties
-  final cards = <TransferCard>[].obs;
   final allCards = <TransferCard>[].obs;
+  final contactCards = <TransferCard>[].obs;
+  final mediaCards = <TransferCard>[].obs;
+  // final visibleCards = <TransferCard>[].obs;
 
   // Widget Elements
   final isExpanded = false.obs;
   final pageIndex = 0.obs;
+
   final pageOffset = 0.0.obs;
   final toggleIndex = 0.obs;
 
   // References
-  PageController pageController;
+  final pageController = PageController(viewportFraction: 0.8, keepPage: false);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   @override
   void onInit() {
     // Set PageController
-    pageController = PageController(viewportFraction: 0.75);
     pageController.addListener(() {
       pageOffset(pageController.page);
     });
 
     // Fetch Data
-    Get.find<SQLService>().fetchAll().then((data) {
-      data.forEach((c) => allCards.add(c));
+    refreshCards();
+    super.onInit();
+  }
+
+  // ^ Method Refreshes TransferCards ^ //
+  Future<void> refreshCards() async {
+    // Reset Cards
+    allCards.clear();
+    contactCards.clear();
+    mediaCards.clear();
+
+    // Fetch Data
+    var data = await Get.find<SQLService>().fetchAll();
+
+    // Iterate Data
+    data.forEach((c) {
+      // Add to All
+      allCards.add(c);
+
+      // Check Type
+      if (c.payload == Payload.MEDIA) {
+        mediaCards.add(c);
+      } else if (c.payload == Payload.CONTACT) {
+        contactCards.add(c);
+      }
     });
 
     // Refresh Cards
     allCards.refresh();
-    super.onInit();
+    mediaCards.refresh();
+    contactCards.refresh();
   }
 
   // ^ Helper Method for Category Filter ^ //
@@ -66,6 +92,17 @@ class HomeController extends GetxController {
     }
   }
 
+  // ^ Method for Setting Category Filter ^ //
+  setToggleCategory(int index) {
+    toggleIndex(index);
+
+    // Haptic Feedback
+    HapticFeedback.mediumImpact();
+
+    // Change Category
+    pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+  }
+
   // ^ Toggles Expanded Share Button ^ //
   void toggleShareExpand({ToggleForced options}) {
     // Force Toggle
@@ -80,12 +117,6 @@ class HomeController extends GetxController {
     }
   }
 
-  // ^ Opens Hero View of Card ^ //
-  void openExpandedCard() {
-    // Close Share Menu if Open
-    toggleShareExpand(options: ToggleForced(false));
-  }
-
   // ^ Opens Camera Picker ^ //
   void openCamera() async {
     // Check for Permssions
@@ -95,7 +126,7 @@ class HomeController extends GetxController {
         toggleShareExpand(options: ToggleForced(false));
 
         // Show Picker
-        Get.dialog(CameraPicker());
+        Get.dialog(CameraView());
       } else {
         // Display Error
         SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -103,16 +134,21 @@ class HomeController extends GetxController {
     });
   }
 
-  // ^ Opens File Picker UI ^ //
-  void openFilePicker() async {
-    // // Await for Picker
-    // FilePickerResult result = await FilePicker.platform.pickFiles(
-    //     type: FileType.custom, allowedExtensions: K_ALLOWED_FILE_TYPES);
+  // ^ Finds Index of Card and Scrolls to It ^ //
+  void jumpToCard(TransferCard card) async {
+    // Get Index
+    var index = allCards.indexWhere((c) => c.id == card.id);
 
-    // // Get File
-    // if (result != null) {
-    //   File file = File(result.files.single.path);
-    // }
+    // Validate Index
+    if (index != -1) {
+      // Pop View
+      Get.back();
+
+      // Jump to Page
+      pageController.animateToPage(index, duration: 650.milliseconds, curve: Curves.bounceOut);
+    } else {
+      SonrSnack.error("Error finding the suggested card.");
+    }
   }
 
   // ^ Opens Media Picker UI ^ //
@@ -124,7 +160,7 @@ class HomeController extends GetxController {
         toggleShareExpand(options: ToggleForced(true));
 
         // Display Bottom Sheet
-        Get.bottomSheet(MediaPicker(), isDismissible: false);
+        Get.bottomSheet(MediaSheet(), isDismissible: false);
       } else {
         // Display Error
         SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -145,8 +181,15 @@ class HomeController extends GetxController {
 
   // ^ Adds a Card to Screen ^ //
   void addCard(TransferCard card) {
+    // Add to All Cards
     allCards.add(card);
     allCards.refresh();
+
+    // Update Toggle
+    setToggleCategory(0);
+
+    // Shift to Item
+    pageController.animateToPage(allCards.length - 1, duration: 800.milliseconds, curve: Curves.bounceIn);
   }
 }
 

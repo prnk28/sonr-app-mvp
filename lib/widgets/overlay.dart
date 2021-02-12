@@ -1,127 +1,141 @@
-import 'package:get/get.dart';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_core/sonr_core.dart';
+import 'package:get/get.dart';
 
-// ** Alert Dialog View ** //
-class SonrAlertDialog extends StatelessWidget {
-  SonrAlertDialog();
+class SonrOverlay {
+  // Properties
+  final BuildContext context;
+  final Widget overlayWidget;
+  final Function builder;
 
-  factory SonrAlertDialog.alertOneButton() {
-    return SonrAlertDialog();
-  }
+  // References
+  Function removeOverlay;
+  OverlayEntry overlay, overlayBackground;
 
-  factory SonrAlertDialog.alertTwoButton() {
-    return SonrAlertDialog();
-  }
+  // ^ Builds Overlay based on Metadata from Transfer Card ^ //
+  factory SonrOverlay.fromMetaCardInfo({@required BuildContext context, @required TransferCard card}) {
+    // Extract Data
+    var metadata = card.metadata;
+    var mimeType = metadata.mime.type.toString().capitalizeFirst;
+    var size = SonrText.convertSizeToText(metadata.size);
+    var hasExported = SonrText.convertBoolToText(card.hasExported);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+    // Build Overlay View
+    return SonrOverlay(
+      context: context,
+      overlayWidget: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Neumorphic(
+          margin: EdgeInsets.only(left: 6, right: 6),
+          style: SonrStyle.overlay,
+          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            // File Type
+            SonrText.header("$mimeType From"),
 
-// ** Edit Sheet View for Profile ** //
-enum EditType { Color, ColorCombo, TextField }
+            // Owner
+            Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SonrIcon.platform(IconType.Normal, card.platform, color: Colors.grey[600], size: 18),
+              SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
+            ]),
 
-class EditDialog extends StatelessWidget {
-  final Function(dynamic) onChanged;
-  final EditType type;
-  final String headerText;
-  final String textfieldLabel;
-  final String textfieldHint;
-  final String textfieldValue;
-  EditDialog(this.type, this.headerText, this.onChanged, {this.textfieldLabel, this.textfieldHint, this.textfieldValue});
+            Divider(),
+            Padding(padding: EdgeInsets.all(4)),
 
-  factory EditDialog.colorPicker({@required String text, @required Function(dynamic) onChanged}) {
-    return EditDialog(EditType.Color, text, onChanged);
-  }
+            // File Name
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SonrText.bold("Name ", size: 16),
+              Spacer(),
+              Container(
+                alignment: Alignment.centerRight,
+                child: SonrText.normal("${metadata.name}", size: 16),
+                width: Get.width - 220,
+                height: 22,
+              ),
+            ]),
 
-  factory EditDialog.colorComboPicker({@required String text, @required Function(dynamic) onChanged}) {
-    return EditDialog(EditType.ColorCombo, text, onChanged);
-  }
+            // File Size
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SonrText.bold("Size ", size: 16),
+              Spacer(),
+              SonrText.normal("$size", size: 16),
+            ]),
 
-  factory EditDialog.textField(String label, String hint, String value, {@required String text, @required Function(dynamic) onChanged}) {
-    return EditDialog(
-      EditType.TextField,
-      text,
-      onChanged,
-      textfieldLabel: label,
-      textfieldHint: hint,
-      textfieldValue: value,
+            // File Mime Value
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SonrText.bold("Kind ", size: 16),
+              Spacer(),
+              SonrText.normal("${metadata.mime.value}", size: 16),
+            ]),
+
+            // File Exported
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SonrText.bold("Saved to Gallery ", size: 16),
+              Spacer(),
+              SonrText.normal("$hasExported", size: 16),
+            ]),
+
+            Padding(padding: EdgeInsets.all(4)),
+            Divider(),
+
+            // Save File to Device
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              SonrButton.rectangle(
+                isDisabled: true,
+                onPressed: () {},
+                text: SonrText.normal("Delete"),
+                icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+              ),
+              SonrButton.rectangle(
+                onPressed: () {},
+                text: SonrText.normal("Save"),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: Colors.black),
+              ),
+            ]),
+          ]),
+        ),
+      ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return NeumorphicBackground(
-        margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 200),
-        borderRadius: BorderRadius.circular(20),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-            style: NeumorphicStyle(color: K_BASE_COLOR),
+  // ** Constructer ** //
+  SonrOverlay({@required this.context, this.overlayWidget, this.builder}) {
+    assert((overlayWidget != null && builder == null) || (overlayWidget == null && builder != null));
+    removeOverlay = () {
+      overlayBackground.remove();
+      overlay.remove();
+    };
+    overlayBackground = OverlayEntry(
+      builder: (context) => Positioned.fill(
+        child: GestureDetector(
+          onTap: () => removeOverlay(),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 5.0,
+              sigmaY: 5.0,
+            ),
             child: Container(
-                width: _getSize().width,
-                height: _getSize().height,
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  // @ Top Banner
-                  Expanded(
-                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      // Bottom Left Close/Cancel Button
-                      SonrButton.close(() {
-                        Get.back();
-                      }),
-
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: SonrText.header("Edit + $headerText", size: 24),
-                      ),
-
-                      // Bottom Right Confirm Button
-                      SonrButton.accept(() {
-                        Get.back();
-                      }),
-                    ]),
-                  ),
-
-                  // @ Window Content
-                  Spacer(),
-                  _buildView(),
-                  Spacer()
-                ]))));
+              color: K_OVERLAY_COLOR,
+            ),
+          ),
+        ),
+      ),
+    );
+    if (overlayWidget != null)
+      overlay = OverlayEntry(
+        builder: (context) => Column(mainAxisAlignment: MainAxisAlignment.center, children: [overlayWidget]),
+      );
+    else
+      overlay = OverlayEntry(
+        builder: (context) => Column(mainAxisAlignment: MainAxisAlignment.center, children: [builder(removeOverlay)]),
+      );
+    buildOverlay(context);
   }
 
-  // ^ Build View by EditType ^ //
-  Widget _buildView() {
-    switch (type) {
-      case EditType.Color:
-        return Container();
-        break;
-      case EditType.ColorCombo:
-        return Container();
-        break;
-      case EditType.TextField:
-        return Material(
-          color: Colors.transparent,
-          child: SonrTextField(hint: textfieldHint, label: textfieldLabel, value: textfieldValue, onChanged: onChanged),
-        );
-        break;
-    }
-    return Container();
-  }
-
-  // ^ Get Window Size by EditType ^ //
-  Size _getSize() {
-    switch (type) {
-      case EditType.Color:
-        return Size(Get.width - 60, Get.height / 3 + 150);
-        break;
-      case EditType.ColorCombo:
-        return Size(Get.width - 60, Get.height / 4 + 95);
-        break;
-      case EditType.TextField:
-        return Size(Get.width - 60, 80);
-        break;
-    }
-    return Size(0, 0);
+  void buildOverlay(BuildContext context) {
+    Overlay.of(context).insertAll([overlayBackground, overlay]);
   }
 }
