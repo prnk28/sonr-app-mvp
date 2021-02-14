@@ -24,7 +24,14 @@ class HomeScreen extends GetView<HomeController> {
         ),
         action: SonrButton.circle(
           icon: SonrIcon.search,
-          onPressed: () => SonrDialog.search(SearchDialog()),
+          onPressed: () => Get.dialog(
+            SearchDialog(),
+            barrierDismissible: true,
+            useRootNavigator: false,
+            useSafeArea: true,
+            barrierColor: K_DIALOG_COLOR,
+            transitionCurve: Curves.bounceInOut,
+          ),
         ),
         floatingActionButton: ShareButton(),
         body: Container(

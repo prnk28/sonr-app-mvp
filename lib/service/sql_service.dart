@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/model_search.dart';
 import 'package:sonr_app/data/tuple.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
@@ -11,6 +10,14 @@ import 'package:sqflite/sqflite.dart';
 const DATABASE_PATH = 'transferCards.db';
 const CARD_TABLE = "transfers";
 const K_QUERY_CATEGORY_COUNT = 5;
+enum QueryCategory { Payload, Platform, FirstName, LastName, Username }
+final cardColumnForType = {
+  QueryCategory.Payload: cardColumnPayload,
+  QueryCategory.Platform: cardColumnPlatform,
+  QueryCategory.FirstName: cardColumnFirstName,
+  QueryCategory.LastName: cardColumnLastName,
+  QueryCategory.Username: cardColumnUserName,
+};
 
 // ** Card Model for Transferred Data ** //
 final String cardColumnId = '_id'; // integer primary key autoincrement
@@ -116,7 +123,7 @@ create table $CARD_TABLE (
         result.add(card);
       });
     }
-    // Update All Files
+    // Return All Files
     return result;
   }
 
@@ -141,7 +148,7 @@ create table $CARD_TABLE (
         result.add(card);
       });
     }
-    // Update All Files
+    // Return all Media
     return result;
   }
 
@@ -153,22 +160,56 @@ create table $CARD_TABLE (
       columns: cardColumns,
     );
 
-    // Update All Files
+    // Return Length
     return records.length;
   }
 
   // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
-  Future<QueryCardResult> search(String args) async {
-    // Initialize
+  Future<List<TransferCard>> query(String args) async {
+    // Initialize Map
+    List<TransferCard> result = <TransferCard>[];
     String queryStr = args.toLowerCase();
-    var count = await getCount();
-    var results = new QueryCardResult(count, queryStr);
 
     // Iterate through Query Columns
-    QueryCardResult.categories.forEach((category, column) async {
+    QueryCategory.values.forEach((type) async {
       // Initialize Result
       List<TransferCard> result = <TransferCard>[];
-      String whereRows = column + ' LIKE ?';
+      String whereRows = cardColumnForType[type] + ' LIKE ?';
+
+      // Query SQL
+      List<Map> records = await _db.query(CARD_TABLE, columns: cardColumns, where: whereRows, whereArgs: ['%$queryStr%']);
+
+      // Validate Record Length
+      if (records.length > 0) {
+        records.forEach((e) {
+          // Add to List
+          result.add(cardFromMap(e));
+        });
+      }
+    });
+
+    // Sort by Date
+    result.sort((a, b) {
+      var aDate = DateTime.fromMillisecondsSinceEpoch(a.received * 1000);
+      var bDate = DateTime.fromMillisecondsSinceEpoch(b.received * 1000);
+      return aDate.compareTo(bDate);
+    });
+
+    // Update All Files
+    return result;
+  }
+
+  // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
+  Future<Map<QueryCategory, List<TransferCard>>> search(String args) async {
+    // Initialize Map
+    Map<QueryCategory, List<TransferCard>> results = {};
+    String queryStr = args.toLowerCase();
+
+    // Iterate through Query Columns
+    QueryCategory.values.forEach((type) async {
+      // Initialize Result
+      List<TransferCard> result = <TransferCard>[];
+      String whereRows = cardColumnForType[type] + ' LIKE ?';
 
       // Query SQL
       List<Map> records = await _db.query(CARD_TABLE, columns: cardColumns, where: whereRows, whereArgs: ['%$queryStr%']);
@@ -192,7 +233,7 @@ create table $CARD_TABLE (
       });
 
       // Add Result to Map
-      results.setResult(category, result);
+      results[type] = result;
     });
 
     // Update All Files
