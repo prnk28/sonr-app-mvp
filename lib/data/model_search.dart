@@ -84,15 +84,6 @@ class QueryCardResult {
     }
   }
 
-  // ^ GETTER: Returns Total Map ^
-  Map<String, List<TransferCard>> get total {
-    var map = Map<String, List<TransferCard>>();
-    QueryCardResult.categories.keys.forEach((element) {
-      map[element] = getResult(element);
-    });
-    return map;
-  }
-
   // ^ GETTER: Returns Suggestion ^ //
   Tuple<String, TransferCard> get suggestion {
     // @ Initialize
@@ -121,6 +112,27 @@ class QueryCardResult {
     else {
       return Tuple("None", TransferCard());
     }
+  }
+
+  // ^ GETTER: Returns Total Results with Category ^
+  List<Tuple<String, TransferCard>> get results {
+    var list = [];
+    QueryCardResult.categories.keys.forEach((category) {
+      var items = getResult(category);
+      items.forEach((element) {
+        list.add(Tuple(category, element));
+      });
+    });
+    return list;
+  }
+
+  // ^ GETTER: Returns Total Map ^
+  Map<String, List<TransferCard>> get total {
+    var map = Map<String, List<TransferCard>>();
+    QueryCardResult.categories.keys.forEach((element) {
+      map[element] = getResult(element);
+    });
+    return map;
   }
 
   // ^ GETTER: Checks if Suggestion has been found ^ //

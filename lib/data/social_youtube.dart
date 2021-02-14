@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 // ^ API Endpoints ^ //
-const YOUTUBE_API_SEARCH =
-    "https://youtube.googleapis.com/youtube/v3/search?q=";
+const YOUTUBE_API_SEARCH = "https://youtube.googleapis.com/youtube/v3/search?q=";
 const YOUTUBE_KEY = "&key=";
 
 // ^ Model ^ //
@@ -14,13 +13,7 @@ class YoutubeModel {
   PageInfo pageInfo;
   List<VideoList> items;
 
-  YoutubeModel(
-      {this.kind,
-      this.etag,
-      this.nextPageToken,
-      this.regionCode,
-      this.pageInfo,
-      this.items});
+  YoutubeModel({this.kind, this.etag, this.nextPageToken, this.regionCode, this.pageInfo, this.items});
 
   YoutubeModel.fromResponse(dynamic respBody) {
     Map<String, dynamic> json = jsonDecode(respBody);
@@ -28,9 +21,7 @@ class YoutubeModel {
     etag = json['etag'];
     nextPageToken = json['nextPageToken'];
     regionCode = json['regionCode'];
-    pageInfo = json['pageInfo'] != null
-        ? new PageInfo.fromJson(json['pageInfo'])
-        : null;
+    pageInfo = json['pageInfo'] != null ? new PageInfo.fromJson(json['pageInfo']) : null;
     if (json['items'] != null) {
       items = <VideoList>[];
       json['items'].forEach((v) {
@@ -86,8 +77,7 @@ class VideoList {
     kind = json['kind'];
     etag = json['etag'];
     id = json['id'] != null ? new Id.fromJson(json['id']) : null;
-    video =
-        json['snippet'] != null ? new Video.fromJson(json['snippet']) : null;
+    video = json['snippet'] != null ? new Video.fromJson(json['snippet']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -148,9 +138,7 @@ class Video {
     channelId = json['channelId'];
     title = json['title'];
     description = json['description'];
-    thumbnails = json['thumbnails'] != null
-        ? new Thumbnails.fromJson(json['thumbnails'])
-        : null;
+    thumbnails = json['thumbnails'] != null ? new Thumbnails.fromJson(json['thumbnails']) : null;
     channelTitle = json['channelTitle'];
     liveBroadcastContent = json['liveBroadcastContent'];
     publishTime = json['publishTime'];
@@ -180,10 +168,8 @@ class Thumbnails {
   Thumbnails({this.normal, this.medium, this.high});
 
   Thumbnails.fromJson(Map<String, dynamic> json) {
-    normal =
-        json['default'] != null ? new Default.fromJson(json['default']) : null;
-    medium =
-        json['medium'] != null ? new Default.fromJson(json['medium']) : null;
+    normal = json['default'] != null ? new Default.fromJson(json['default']) : null;
+    medium = json['medium'] != null ? new Default.fromJson(json['medium']) : null;
     high = json['high'] != null ? new Default.fromJson(json['high']) : null;
   }
 
