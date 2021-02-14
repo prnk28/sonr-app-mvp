@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:get/get.dart' hide Node;
+import 'package:sonr_app/data/model_search.dart';
+import 'package:sonr_app/data/tuple.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,14 +10,7 @@ import 'package:sqflite/sqflite.dart';
 // ** Constant Values
 const DATABASE_PATH = 'transferCards.db';
 const CARD_TABLE = "transfers";
-enum QueryType { Payload, Platform, FirstName, LastName, Username }
-final cardColumnForType = {
-  QueryType.Payload: cardColumnPayload,
-  QueryType.Platform: cardColumnPlatform,
-  QueryType.FirstName: cardColumnFirstName,
-  QueryType.LastName: cardColumnLastName,
-  QueryType.Username: cardColumnUserName,
-};
+const K_QUERY_CATEGORY_COUNT = 5;
 
 // ** Card Model for Transferred Data ** //
 final String cardColumnId = '_id'; // integer primary key autoincrement
@@ -115,7 +110,7 @@ create table $CARD_TABLE (
     if (records.length > 0) {
       records.forEach((e) {
         // Create TransferCard Object
-        var card = createTransferCard(e);
+        var card = cardFromMap(e);
 
         // Add to List
         result.add(card);
@@ -140,7 +135,7 @@ create table $CARD_TABLE (
     if (records.length > 0) {
       records.forEach((e) {
         // Create TransferCard Object
-        var card = createTransferCard(e);
+        var card = cardFromMap(e);
 
         // Add to List
         result.add(card);
@@ -150,17 +145,30 @@ create table $CARD_TABLE (
     return result;
   }
 
+  // ^ Get Total Card Count ^ //
+  Future<int> getCount() async {
+    // Query SQL
+    List<Map> records = await _db.query(
+      CARD_TABLE,
+      columns: cardColumns,
+    );
+
+    // Update All Files
+    return records.length;
+  }
+
   // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
-  Future<Map<QueryType, List<TransferCard>>> search(String args) async {
-    // Initialize Map
-    Map<QueryType, List<TransferCard>> results = {};
+  Future<QueryCardResult> search(String args) async {
+    // Initialize
     String queryStr = args.toLowerCase();
+    var count = await getCount();
+    var results = new QueryCardResult(count, queryStr);
 
     // Iterate through Query Columns
-    QueryType.values.forEach((type) async {
+    QueryCardResult.categories.forEach((category, column) async {
       // Initialize Result
       List<TransferCard> result = <TransferCard>[];
-      String whereRows = cardColumnForType[type] + ' LIKE ?';
+      String whereRows = column + ' LIKE ?';
 
       // Query SQL
       List<Map> records = await _db.query(CARD_TABLE, columns: cardColumns, where: whereRows, whereArgs: ['%$queryStr%']);
@@ -169,7 +177,7 @@ create table $CARD_TABLE (
       if (records.length > 0) {
         records.forEach((e) {
           // Create TransferCard Object
-          var card = createTransferCard(e);
+          var card = cardFromMap(e);
 
           // Add to List
           result.add(card);
@@ -184,7 +192,7 @@ create table $CARD_TABLE (
       });
 
       // Add Result to Map
-      results[type] = result;
+      results.setResult(category, result);
     });
 
     // Update All Files
@@ -192,7 +200,7 @@ create table $CARD_TABLE (
   }
 
   // ^ Helper Method to Generate Transfer Card ^ //
-  TransferCard createTransferCard(Map<dynamic, dynamic> e) {
+  TransferCard cardFromMap(Map<dynamic, dynamic> e) {
     // Clean Data
     String payload = e[cardColumnPayload].toString().toUpperCase();
     String platform = e[cardColumnPlatform].toString().capitalizeFirst;

@@ -369,7 +369,7 @@ class TileStepperController extends GetxController {
     else if (step.value == 1) {
       // Update State
       if (username.value != "") {
-        if (await Get.find<SocialMediaService>().validate(provider.value, username.value)) {
+        if (await Get.find<SocialMediaService>().validate(provider.value, username.value, isPrivate.value)) {
           step(2);
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         }

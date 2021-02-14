@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/data/model_search.dart';
 import 'package:sonr_app/data/social_medium.dart';
 import 'package:sonr_app/data/social_twitter.dart';
 import 'package:sonr_app/data/social_youtube.dart';
@@ -33,11 +34,12 @@ class SocialMediaService extends GetxService {
   // * ---- Authentication ---- * //
   // * ------------------------ * //
   // ^ Simple Username Validation ^ //
-  Future<bool> validate(Contact_SocialTile_Provider prv, String query) async {
+  Future<bool> validate(Contact_SocialTile_Provider prv, String query, bool isPrivate) async {
+    QueryUsernameResult result;
     switch (prv) {
       case Contact_SocialTile_Provider.Medium:
-        MediumModel data = await getMedium(query);
-        return data.status == "ok";
+        result = QueryUsernameResult(query, prv, isPrivate, await getMedium(query));
+        return result.isValid;
         break;
       case Contact_SocialTile_Provider.Spotify:
         // TODO
@@ -46,12 +48,12 @@ class SocialMediaService extends GetxService {
         // TODO
         break;
       case Contact_SocialTile_Provider.Twitter:
-        TwitterUserModel data = await getTwitterUser(query);
-        return data.errors == null;
+        result = QueryUsernameResult(query, prv, isPrivate, await getTwitterUser(query));
+        return result.isValid;
         break;
       case Contact_SocialTile_Provider.YouTube:
-        YoutubeModel data = await getYoutube(query);
-        return data.items.isNotEmpty;
+        result = QueryUsernameResult(query, prv, isPrivate, await getYoutube(query));
+        return result.isValid;
         break;
     }
     return false;

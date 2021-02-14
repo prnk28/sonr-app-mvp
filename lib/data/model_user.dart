@@ -12,8 +12,7 @@ class User {
   List<SettingsItem> settings = <SettingsItem>[];
 
   // Get User Position
-  Future<Pkg.Position> get position => Pkg.Geolocator.getCurrentPosition(
-      desiredAccuracy: Pkg.LocationAccuracy.high);
+  Future<Pkg.Position> get position => Pkg.Geolocator.getCurrentPosition(desiredAccuracy: Pkg.LocationAccuracy.high);
 
   // Default Constructer
   User(this.contact, this.username, {this.settings});
@@ -34,8 +33,7 @@ class User {
       });
 
       // Set User
-      user = new User(Contact.fromJson(map["contact"]), map["username"],
-          settings: settings);
+      user = new User(Contact.fromJson(map["contact"]), map["username"], settings: settings);
     } else {
       user = new User(Contact.fromJson(map["contact"]), map["username"]);
     }
@@ -85,8 +83,7 @@ class SettingsItem {
   factory SettingsItem.fromJson(String jsonData) {
     // Initialize
     var map = json.decode(jsonData);
-    SettingsItem si = new SettingsItem(map["name"],
-        isActive: map["active"], value: map["value"]);
+    SettingsItem si = new SettingsItem(map["name"], isActive: map["active"], value: map["value"]);
     return si;
   }
 
