@@ -11,7 +11,7 @@ class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold.appBarLeading(
-        title: "${Get.find<SonrService>().peers().length} Peer(s)",
+        title: _buildTitle(Get.find<SonrService>().peers().length),
         leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer")),
         body: SafeArea(
             child: Stack(
@@ -32,6 +32,16 @@ class TransferScreen extends StatelessWidget {
             CompassView(),
           ],
         ))));
+  }
+
+  String _buildTitle(int peerCount) {
+    if (peerCount == 0) {
+      return "Nobody Here";
+    } else if (peerCount == 1) {
+      return "1 Person";
+    } else {
+      return "$peerCount People";
+    }
   }
 }
 
