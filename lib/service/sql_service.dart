@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:get/get.dart' hide Node;
+import 'package:intl/intl.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -9,14 +10,16 @@ import 'package:sqflite/sqflite.dart';
 const DATABASE_PATH = 'transferCards.db';
 const CARD_TABLE = "transfers";
 const K_QUERY_CATEGORY_COUNT = 5;
-enum QueryCategory { Payload, Platform, FirstName, LastName, Username, Received }
+enum QueryCategory { Payload, Platform, FirstName, LastName, Username, Month, Day, Year }
 final cardColumnForType = {
   QueryCategory.Payload: cardColumnPayload,
   QueryCategory.Platform: cardColumnPlatform,
   QueryCategory.FirstName: cardColumnFirstName,
   QueryCategory.LastName: cardColumnLastName,
   QueryCategory.Username: cardColumnUserName,
-  QueryCategory.Received: cardColumnReceived,
+  QueryCategory.Month: cardColumnMonth,
+  QueryCategory.Year: cardColumnYear,
+  QueryCategory.Day: cardColumnDay,
 };
 
 // ** Card Model for Transferred Data ** //
@@ -25,6 +28,9 @@ final String cardColumnPayload = "payload"; // text
 final String cardColumnPlatform = "platform"; // text
 final String cardColumnPreview = "preview"; // blob
 final String cardColumnReceived = 'received'; // integer -> DateTime
+final String cardColumnMonth = 'month'; // integer -> DateTime
+final String cardColumnDay = 'day'; // integer -> DateTime
+final String cardColumnYear = 'year'; // integer -> DateTime
 final String cardColumnUserName = 'username'; // text
 final String cardColumnFirstName = 'firstName'; // text
 final String cardColumnLastName = 'lastName'; // text
@@ -36,6 +42,9 @@ final cardColumns = [
   cardColumnPlatform,
   cardColumnPreview,
   cardColumnReceived,
+  cardColumnMonth,
+  cardColumnYear,
+  cardColumnDay,
   cardColumnUserName,
   cardColumnFirstName,
   cardColumnLastName,
@@ -65,6 +74,9 @@ create table $CARD_TABLE (
   $cardColumnPlatform text not null,
   $cardColumnPreview blob,
   $cardColumnReceived integer not null,
+  $cardColumnMonth text not null,
+  $cardColumnYear integer not null,
+  $cardColumnDay integer not null,
   $cardColumnUserName text not null,
   $cardColumnFirstName text not null,
   $cardColumnLastName text not null,
@@ -77,12 +89,21 @@ create table $CARD_TABLE (
 
   // ^ Insert TransferCard into SQL DB ^ //
   Future<TransferCard> storeCard(TransferCard card) async {
+    // Format Received Date
+    var date = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
+    var formatter = new DateFormat('MMMM');
+    var month = formatter.format(date);
+
+    // Insert Card
     card.id = await _db.insert(CARD_TABLE, {
       // General
       cardColumnPayload: card.payload.toString().toLowerCase(),
       cardColumnPlatform: card.platform.toString().toLowerCase(),
       cardColumnPreview: Uint8List.fromList(card.preview),
       cardColumnReceived: card.received,
+      cardColumnMonth: month,
+      cardColumnYear: date.year,
+      cardColumnDay: date.day,
 
       // Owner Properties
       cardColumnUserName: card.username.toLowerCase(),
@@ -127,31 +148,6 @@ create table $CARD_TABLE (
     return result;
   }
 
-  // ^ Get Media Cards ^ //
-  Future<List<TransferCard>> fetchMedia() async {
-    // Init List
-    List<TransferCard> result = <TransferCard>[];
-
-    // Query SQL
-    List<Map> records = await _db.query(
-      CARD_TABLE,
-      columns: cardColumns,
-    );
-
-    // Validate Record Length
-    if (records.length > 0) {
-      records.forEach((e) {
-        // Create TransferCard Object
-        var card = cardFromMap(e);
-
-        // Add to List
-        result.add(card);
-      });
-    }
-    // Return all Media
-    return result;
-  }
-
   // ^ Get Total Card Count ^ //
   Future<int> getCount() async {
     // Query SQL
@@ -162,41 +158,6 @@ create table $CARD_TABLE (
 
     // Return Length
     return records.length;
-  }
-
-  // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
-  Future<List<TransferCard>> query(String args) async {
-    // Initialize Map
-    List<TransferCard> result = <TransferCard>[];
-    String queryStr = args.toLowerCase();
-
-    // Iterate through Query Columns
-    QueryCategory.values.forEach((type) async {
-      // Initialize Result
-      List<TransferCard> result = <TransferCard>[];
-      String whereRows = cardColumnForType[type] + ' LIKE ?';
-
-      // Query SQL
-      List<Map> records = await _db.query(CARD_TABLE, columns: cardColumns, where: whereRows, whereArgs: ['%$queryStr%']);
-
-      // Validate Record Length
-      if (records.length > 0) {
-        records.forEach((e) {
-          // Add to List
-          result.add(cardFromMap(e));
-        });
-      }
-    });
-
-    // Sort by Date
-    result.sort((a, b) {
-      var aDate = DateTime.fromMillisecondsSinceEpoch(a.received * 1000);
-      var bDate = DateTime.fromMillisecondsSinceEpoch(b.received * 1000);
-      return aDate.compareTo(bDate);
-    });
-
-    // Update All Files
-    return result;
   }
 
   // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //

@@ -163,11 +163,13 @@ class _SonrSearchCardListItem extends GetView<SearchCardController> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SonrIcon.payload(
-                IconType.Gradient,
-                card.payload,
-                size: 50,
-              ),
+              (card.metadata.mime.type == MIME_Type.image)
+                  ? Container(child: Image.memory(Uint8List.fromList(card.preview), fit: BoxFit.cover), width: 50, height: 50)
+                  : SonrIcon.payload(
+                      IconType.Gradient,
+                      card.payload,
+                      size: 50,
+                    ),
               SonrText.search(controller.searchText.value, card.payload.toString()),
             ],
           ),
