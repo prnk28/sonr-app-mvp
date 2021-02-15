@@ -129,6 +129,30 @@ class SonrText extends StatelessWidget {
             ])));
   }
 
+  // ^ Rich Text with FirstName and Invite
+  factory SonrText.search(String query, String value, {Color color = Colors.black, double size = 16, Key key}) {
+    // Text Contains Query
+    if (value.toLowerCase().contains(query.toLowerCase())) {
+      query = query.toLowerCase();
+      value = value.toLowerCase();
+      return SonrText("",
+          isRich: true,
+          richText: RichText(
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.fade,
+              text: TextSpan(children: [
+                TextSpan(
+                    text: value.substring(value.indexOf(query), query.length).toUpperCase(),
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: size, color: Colors.blue[500])),
+                TextSpan(
+                    text: value.substring(value.indexOf(query) + query.length),
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontSize: size, color: color)),
+              ])));
+    } else {
+      return SonrText(value, weight: FontWeight.w500, size: size, key: key, color: color);
+    }
+  }
+
   // ^ Rich Text with Provided Data as URL
   factory SonrText.url(String text) {
     // Initialize
