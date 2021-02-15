@@ -92,7 +92,6 @@ create table $CARD_TABLE (
     // Format Received Date
     var date = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
     var formatter = new DateFormat('MMMM');
-    var month = formatter.format(date);
 
     // Insert Card
     card.id = await _db.insert(CARD_TABLE, {
@@ -101,7 +100,7 @@ create table $CARD_TABLE (
       cardColumnPlatform: card.platform.toString().toLowerCase(),
       cardColumnPreview: Uint8List.fromList(card.preview),
       cardColumnReceived: card.received,
-      cardColumnMonth: month,
+      cardColumnMonth: formatter.format(date),
       cardColumnYear: date.year,
       cardColumnDay: date.day,
 

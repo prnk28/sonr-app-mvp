@@ -23,16 +23,21 @@ class HomeScreen extends GetView<HomeController> {
           onPressed: () => Get.offNamed("/profile"),
         ),
         action: SonrButton.circle(
-          icon: SonrIcon.search,
-          onPressed: () => Get.dialog(
-            SearchDialog(),
-            barrierDismissible: true,
-            useRootNavigator: false,
-            useSafeArea: true,
-            barrierColor: K_DIALOG_COLOR,
-            transitionCurve: Curves.bounceInOut,
-          ),
-        ),
+            icon: SonrIcon.search,
+            onPressed: () {
+              if (controller.allCards.length > 0) {
+                Get.dialog(
+                  SearchDialog(),
+                  barrierDismissible: true,
+                  useRootNavigator: false,
+                  useSafeArea: true,
+                  barrierColor: K_DIALOG_COLOR,
+                  transitionCurve: Curves.bounceInOut,
+                );
+              } else {
+                SonrSnack.error("No Cards Found");
+              }
+            }),
         floatingActionButton: ShareButton(),
         body: Container(
           width: Get.width,
