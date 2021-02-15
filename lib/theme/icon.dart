@@ -76,6 +76,8 @@ class SonrIcon extends StatelessWidget {
     IconData data;
     if (payload == Payload.CONTACT) {
       data = _SonrIconData.contact;
+    } else if (payload == Payload.MEDIA) {
+      data = _SonrIconData.video;
     } else {
       data = _SonrIconData.url;
     }

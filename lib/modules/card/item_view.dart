@@ -34,7 +34,7 @@ class ItemCardView extends StatelessWidget {
 
     // Create View
     return Neumorphic(
-      style: SonrStyle.cardItem,
+      style: SonrStyle.normal,
       margin: EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {

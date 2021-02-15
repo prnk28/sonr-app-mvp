@@ -11,6 +11,6 @@ class HomeBinding implements Bindings {
     Get.put<CameraPickerController>(CameraPickerController(), permanent: true);
     Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
     Get.put<HomeController>(HomeController(), permanent: true);
-    Get.put<SearchDialogController>(SearchDialogController());
+    Get.lazyPut<SearchCardController>(() => SearchCardController());
   }
 }

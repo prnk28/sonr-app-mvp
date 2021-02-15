@@ -10,8 +10,8 @@ class TransferScreen extends StatelessWidget {
   // @ Initialize
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold.appBarLeading(
-        title: Get.find<SonrService>().olc.value,
+    return Obx(() => SonrScaffold.appBarLeading(
+        title: "${Get.find<SonrService>().peers().length} Peer(s)",
         leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer")),
         body: SafeArea(
             child: Stack(
@@ -31,7 +31,7 @@ class TransferScreen extends StatelessWidget {
             // @ Compass View
             CompassView(),
           ],
-        )));
+        ))));
   }
 }
 

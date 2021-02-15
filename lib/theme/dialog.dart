@@ -13,8 +13,9 @@ class SonrDialog {
 
   // ^ Default Constructer ^ //
   SonrDialog(this.view, this.margin, this.barrierDismissible, this.useRootNavigator, this.useSafeArea) {
+    var childView = _SonrDialogView(view, margin);
     Get.dialog(
-      _SonrDialogView(view, margin),
+      childView,
       barrierDismissible: barrierDismissible,
       useRootNavigator: useRootNavigator,
       useSafeArea: useSafeArea,

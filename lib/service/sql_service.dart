@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:get/get.dart' hide Node;
+import 'package:intl/intl.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,13 +9,17 @@ import 'package:sqflite/sqflite.dart';
 // ** Constant Values
 const DATABASE_PATH = 'transferCards.db';
 const CARD_TABLE = "transfers";
-enum QueryType { Payload, Platform, FirstName, LastName, Username }
+const K_QUERY_CATEGORY_COUNT = 5;
+enum QueryCategory { Payload, Platform, FirstName, LastName, Username, Month, Day, Year }
 final cardColumnForType = {
-  QueryType.Payload: cardColumnPayload,
-  QueryType.Platform: cardColumnPlatform,
-  QueryType.FirstName: cardColumnFirstName,
-  QueryType.LastName: cardColumnLastName,
-  QueryType.Username: cardColumnUserName,
+  QueryCategory.Payload: cardColumnPayload,
+  QueryCategory.Platform: cardColumnPlatform,
+  QueryCategory.FirstName: cardColumnFirstName,
+  QueryCategory.LastName: cardColumnLastName,
+  QueryCategory.Username: cardColumnUserName,
+  QueryCategory.Month: cardColumnMonth,
+  QueryCategory.Year: cardColumnYear,
+  QueryCategory.Day: cardColumnDay,
 };
 
 // ** Card Model for Transferred Data ** //
@@ -23,6 +28,9 @@ final String cardColumnPayload = "payload"; // text
 final String cardColumnPlatform = "platform"; // text
 final String cardColumnPreview = "preview"; // blob
 final String cardColumnReceived = 'received'; // integer -> DateTime
+final String cardColumnMonth = 'month'; // integer -> DateTime
+final String cardColumnDay = 'day'; // integer -> DateTime
+final String cardColumnYear = 'year'; // integer -> DateTime
 final String cardColumnUserName = 'username'; // text
 final String cardColumnFirstName = 'firstName'; // text
 final String cardColumnLastName = 'lastName'; // text
@@ -34,6 +42,9 @@ final cardColumns = [
   cardColumnPlatform,
   cardColumnPreview,
   cardColumnReceived,
+  cardColumnMonth,
+  cardColumnYear,
+  cardColumnDay,
   cardColumnUserName,
   cardColumnFirstName,
   cardColumnLastName,
@@ -63,6 +74,9 @@ create table $CARD_TABLE (
   $cardColumnPlatform text not null,
   $cardColumnPreview blob,
   $cardColumnReceived integer not null,
+  $cardColumnMonth text not null,
+  $cardColumnYear integer not null,
+  $cardColumnDay integer not null,
   $cardColumnUserName text not null,
   $cardColumnFirstName text not null,
   $cardColumnLastName text not null,
@@ -75,12 +89,20 @@ create table $CARD_TABLE (
 
   // ^ Insert TransferCard into SQL DB ^ //
   Future<TransferCard> storeCard(TransferCard card) async {
+    // Format Received Date
+    var date = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
+    var formatter = new DateFormat('MMMM');
+
+    // Insert Card
     card.id = await _db.insert(CARD_TABLE, {
       // General
       cardColumnPayload: card.payload.toString().toLowerCase(),
       cardColumnPlatform: card.platform.toString().toLowerCase(),
       cardColumnPreview: Uint8List.fromList(card.preview),
       cardColumnReceived: card.received,
+      cardColumnMonth: formatter.format(date),
+      cardColumnYear: date.year,
+      cardColumnDay: date.day,
 
       // Owner Properties
       cardColumnUserName: card.username.toLowerCase(),
@@ -115,49 +137,36 @@ create table $CARD_TABLE (
     if (records.length > 0) {
       records.forEach((e) {
         // Create TransferCard Object
-        var card = createTransferCard(e);
+        var card = cardFromMap(e);
 
         // Add to List
         result.add(card);
       });
     }
-    // Update All Files
+    // Return All Files
     return result;
   }
 
-  // ^ Get Media Cards ^ //
-  Future<List<TransferCard>> fetchMedia() async {
-    // Init List
-    List<TransferCard> result = <TransferCard>[];
-
+  // ^ Get Total Card Count ^ //
+  Future<int> getCount() async {
     // Query SQL
     List<Map> records = await _db.query(
       CARD_TABLE,
       columns: cardColumns,
     );
 
-    // Validate Record Length
-    if (records.length > 0) {
-      records.forEach((e) {
-        // Create TransferCard Object
-        var card = createTransferCard(e);
-
-        // Add to List
-        result.add(card);
-      });
-    }
-    // Update All Files
-    return result;
+    // Return Length
+    return records.length;
   }
 
   // ^ Query Cards by Type: Payload, Platform, Username, FirstName, LastName ^ //
-  Future<Map<QueryType, List<TransferCard>>> search(String args) async {
+  Future<Map<QueryCategory, List<TransferCard>>> search(String args) async {
     // Initialize Map
-    Map<QueryType, List<TransferCard>> results = {};
+    Map<QueryCategory, List<TransferCard>> results = {};
     String queryStr = args.toLowerCase();
 
     // Iterate through Query Columns
-    QueryType.values.forEach((type) async {
+    QueryCategory.values.forEach((type) async {
       // Initialize Result
       List<TransferCard> result = <TransferCard>[];
       String whereRows = cardColumnForType[type] + ' LIKE ?';
@@ -169,7 +178,7 @@ create table $CARD_TABLE (
       if (records.length > 0) {
         records.forEach((e) {
           // Create TransferCard Object
-          var card = createTransferCard(e);
+          var card = cardFromMap(e);
 
           // Add to List
           result.add(card);
@@ -192,7 +201,7 @@ create table $CARD_TABLE (
   }
 
   // ^ Helper Method to Generate Transfer Card ^ //
-  TransferCard createTransferCard(Map<dynamic, dynamic> e) {
+  TransferCard cardFromMap(Map<dynamic, dynamic> e) {
     // Clean Data
     String payload = e[cardColumnPayload].toString().toUpperCase();
     String platform = e[cardColumnPlatform].toString().capitalizeFirst;
