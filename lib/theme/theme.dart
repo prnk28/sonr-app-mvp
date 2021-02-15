@@ -13,7 +13,6 @@ export '../widgets/animation.dart';
 export '../widgets/painter.dart';
 export '../widgets/radio.dart';
 export '../widgets/sheet.dart';
-export '../widgets/overlay.dart';
 
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';

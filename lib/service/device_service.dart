@@ -168,7 +168,7 @@ class DeviceService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  Future saveMediaFromCard(TransferCard card) async {
+  Future<bool> saveMediaFromCard(TransferCard card) async {
     // Get Data from Media
     final path = card.metadata.path;
 
@@ -182,6 +182,7 @@ class DeviceService extends GetxService {
       } else {
         SonrSnack.error("Unable to save Photo to your Gallery");
       }
+      return result;
     }
 
     // Save Video to Gallery
@@ -194,7 +195,9 @@ class DeviceService extends GetxService {
       } else {
         SonrSnack.error("Unable to save Vido to your Gallery");
       }
+      return result;
     }
+    return false;
   }
 
   // ^ Saves Photo to Gallery ^ //

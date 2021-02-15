@@ -5,6 +5,7 @@ import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'expanded_view.dart';
+import 'info_view.dart';
 
 // * ------------------------ * //
 // * ---- Card View --------- * //

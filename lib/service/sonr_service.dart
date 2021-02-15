@@ -142,7 +142,6 @@ class SonrService extends GetxService {
   void _handleDirect(dynamic data) async {
     // Check Type
     if (data is TransferCard) {
-      // Get.find<SonrCardController>().state(CardState.Invitation);
       HapticFeedback.heavyImpact();
     }
   }
@@ -197,7 +196,7 @@ class SonrService extends GetxService {
     // Reset Peer/Auth
     if (data is Peer) {
       // Provide Feedback
-      HapticFeedback.vibrate();
+      HapticFeedback.heavyImpact();
       _peerController.playCompleted();
 
       // Reset References
@@ -208,18 +207,19 @@ class SonrService extends GetxService {
   }
 
   // ^ Mark as Received File ^ //
-  void _handleReceived(dynamic data) {
+  Future<void> _handleReceived(dynamic data) async {
     if (data is TransferCard) {
       // Reset Data
       progress(0.0);
-
       Get.back();
 
       // Save Card
-      Get.find<SQLService>().storeCard(data);
-      Get.find<DeviceService>().saveMediaFromCard(data);
-      Get.find<HomeController>().addCard(data);
-      HapticFeedback.vibrate();
+      Get.find<DeviceService>().saveMediaFromCard(data).then((value) {
+        data.hasExported = value;
+        Get.find<SQLService>().storeCard(data);
+        Get.find<HomeController>().addCard(data);
+      });
+      HapticFeedback.heavyImpact();
     }
   }
 
