@@ -28,7 +28,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'color.dart';
 
 class SonrStyle {
-  static get cardItem => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+  static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get overlay => NeumorphicStyle(
       intensity: 0.85,

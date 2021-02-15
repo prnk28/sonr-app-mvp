@@ -13,7 +13,7 @@ class SearchDialog extends GetView<SearchCardController> {
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(
           margin: controller.viewMargin.value,
-          duration: 400.milliseconds,
+          duration: 250.milliseconds,
           child: NeumorphicBackground(
               borderRadius: BorderRadius.circular(30),
               backendColor: Colors.transparent,
@@ -39,7 +39,6 @@ class SearchDialog extends GetView<SearchCardController> {
                                   ),
                                   leading: SonrButton.circle(
                                     onPressed: () {
-                                      controller.reset();
                                       Get.back();
                                     },
                                     icon: SonrIcon.close,
@@ -53,7 +52,7 @@ class SearchDialog extends GetView<SearchCardController> {
                                 child: Obx(() => SonrSearchField.forCards(
                                       value: controller.searchText.value,
                                       onChanged: controller.textFieldChanged,
-                                      suggestion: _SonrSearchCardSuggestion(),
+                                      suggestion: controller.hasResults.value ? _SonrSearchCardSuggestion() : Container(),
                                     )),
                               ),
                               Spacer()
@@ -85,7 +84,7 @@ class _SonrSearchCardSuggestion extends GetView<SearchCardController> {
           height: 42,
           child: NeumorphicButton(
               padding: EdgeInsets.all(0),
-              style: SonrStyle.cardItem,
+              style: SonrStyle.normal,
               onPressed: () {
                 if (controller.hasResults.value) {
                   controller.navigateToCard(suggestedCard);
@@ -114,7 +113,7 @@ class _SonrSearchCardSuggestion extends GetView<SearchCardController> {
   }
 
   _buildOtherSuggestedView(TransferCard suggestedCard) {
-    return Text(suggestedCard.payload.toString());
+    return SonrText.normal(suggestedCard.payload.toString().capitalizeFirst);
   }
 }
 
@@ -124,26 +123,19 @@ class _SonrSearchCardListView extends GetView<SearchCardController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // Build Card List
-      var cardList = <TransferCard>[];
-      controller.results.values.forEach((element) {
-        cardList.addAll(element);
-      });
-      cardList = Set.of(cardList).toList();
-
       // Build View
       return Container(
-        height: controller.hasResults.value ? 300 : 1,
-        child: controller.hasResults.value
+        height: controller.listHeight.value,
+        child: controller.hasList.value
             ? Neumorphic(
                 style: SonrStyle.indented,
                 child: ListView.builder(
-                  itemCount: cardList.length,
+                  itemCount: controller.cardList.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                        child: _SonrSearchCardListItem(cardList[index]),
+                        child: _SonrSearchCardListItem(controller.cardList[index]),
                         onTap: () {
-                          controller.navigateToCard(cardList[index]);
+                          controller.navigateToCard(controller.cardList[index]);
                         });
                   },
                 ),
@@ -164,20 +156,41 @@ class _SonrSearchCardListItem extends GetView<SearchCardController> {
     return Container(
       height: 125,
       width: Get.width - 20,
-      padding: EdgeInsets.only(top: 10),
-      child: Column(children: [
-        Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          SonrIcon.payload(
-            IconType.Gradient,
-            card.payload,
-            size: 40,
+      padding: EdgeInsets.only(bottom: 10, top: 10, left: 6, right: 6),
+      child: Neumorphic(
+        style: SonrStyle.normal,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SonrIcon.payload(
+                IconType.Gradient,
+                card.payload,
+                size: 50,
+              ),
+              SonrText.search(controller.searchText.value, card.payload.toString()),
+            ],
           ),
-          SonrText.search(controller.searchText.value, card.payload.toString()),
-          SonrText.search(controller.searchText.value, card.firstName.toString()),
-          SonrText.search(controller.searchText.value, card.lastName.toString()),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SonrText.header("from"),
+              SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000)),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(children: [
+                SonrText.search(controller.searchText.value, card.firstName.toString()),
+                SonrText.normal(" "),
+                SonrText.search(controller.searchText.value, card.lastName.toString())
+              ]),
+              SonrText.normal(card.platform.toString())
+            ],
+          ),
         ]),
-        Divider()
-      ]),
+      ),
     );
   }
 }
@@ -187,9 +200,12 @@ class SearchCardController extends GetxController {
   // Properties
   final searchText = "".obs;
   final hasResults = false.obs;
+  final hasList = false.obs;
   final suggestion = Rx<TransferCard>();
   final results = Map<QueryCategory, List<TransferCard>>().obs;
   final viewMargin = EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572).obs;
+  final listHeight = 0.0.obs;
+  final cardList = <TransferCard>[].obs;
 
   // References
   int _lowestQueryCount = 9223372036854775807;
@@ -211,28 +227,42 @@ class SearchCardController extends GetxController {
         // Check Results
         if (results.length > 0) {
           hasResults(true);
-          viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 145));
         } else {
           hasResults(false);
-          viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572));
         }
 
         // Find Suggestions
         results.forEach((type, result) {
+          // Update Card List
+          cardList.addAll(result);
+
+          // Find Query Types
           if (result.length < _lowestQueryCount && result.length > 0) {
             _minQueryType = type;
             _lowestQueryCount = result.length;
           }
         });
 
+        // Set Card List
+        if (cardList.length > 0) {
+          hasList(true);
+          cardList.refresh();
+        } else {
+          hasList(false);
+          cardList.refresh();
+        }
+
         // Set Optimal Suggestion
         if (hasResults.value) {
+          cardList(Set.of(cardList).toList());
           suggestion(results[_minQueryType].last);
+          cardList.refresh();
         }
       } else {
         hasResults(false);
-        viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572));
+        hasList(false);
       }
+      _setMarginForResults();
     });
   }
 
@@ -240,15 +270,21 @@ class SearchCardController extends GetxController {
   navigateToCard(TransferCard card) {
     HapticFeedback.mediumImpact();
     Get.find<HomeController>().jumpToCard(card);
-    reset();
   }
 
-  // ^ Resets controller Data ^ //
-  reset() {
-    hasResults(false);
-    suggestion(null);
-    results(null);
-    searchText("");
-    viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572));
+  // ^ Method Updates View Margin ^ //
+  _setMarginForResults() {
+    if (results.length > 0) {
+      if (cardList.length > 2) {
+        viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 275));
+        listHeight(300);
+      } else {
+        viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 375));
+        listHeight(230);
+      }
+    } else {
+      hasResults(false);
+      viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572));
+    }
   }
 }

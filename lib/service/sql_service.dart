@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/tuple.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -10,13 +9,14 @@ import 'package:sqflite/sqflite.dart';
 const DATABASE_PATH = 'transferCards.db';
 const CARD_TABLE = "transfers";
 const K_QUERY_CATEGORY_COUNT = 5;
-enum QueryCategory { Payload, Platform, FirstName, LastName, Username }
+enum QueryCategory { Payload, Platform, FirstName, LastName, Username, Received }
 final cardColumnForType = {
   QueryCategory.Payload: cardColumnPayload,
   QueryCategory.Platform: cardColumnPlatform,
   QueryCategory.FirstName: cardColumnFirstName,
   QueryCategory.LastName: cardColumnLastName,
   QueryCategory.Username: cardColumnUserName,
+  QueryCategory.Received: cardColumnReceived,
 };
 
 // ** Card Model for Transferred Data ** //
