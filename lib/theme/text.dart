@@ -1,17 +1,13 @@
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../widgets/button.dart';
 import 'icon.dart';
 
 class SonrText extends StatelessWidget {

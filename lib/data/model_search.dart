@@ -2,7 +2,6 @@ import 'package:sonr_app/data/social_medium.dart';
 import 'package:sonr_app/data/social_twitter.dart';
 import 'package:sonr_app/data/social_youtube.dart';
 import 'package:sonr_app/data/tuple.dart';
-import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ************************************** //
