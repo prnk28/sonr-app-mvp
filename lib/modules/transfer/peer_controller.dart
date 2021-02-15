@@ -39,7 +39,7 @@ class PeerController extends GetxController {
         if (id == peer.id) {
           difference((userDirection.value - value.position.direction).abs());
           direction(value.position.direction);
-          offset(calculateOffset(value.device));
+          offset(calculateOffset(value.platform));
           proximity(value.position.proximity);
         }
       });
@@ -84,7 +84,7 @@ class PeerController extends GetxController {
     isContentVisible(true);
     difference((userDirection.value - peerVal.position.direction).abs());
     direction(peerVal.position.direction);
-    offset(calculateOffset(peerVal.device));
+    offset(calculateOffset(peerVal.platform));
     proximity(peerVal.position.proximity);
   }
 
@@ -179,8 +179,8 @@ class PeerController extends GetxController {
   }
 
   // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset(Device device) {
-    if (device.platform == Platform.MacOS) {
+  Offset calculateOffset(Platform platform) {
+    if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
       var pos = Tangent.fromAngle(Offset(difference.value, Get.height / 5), direction.value);
       return pos.position;
     } else {

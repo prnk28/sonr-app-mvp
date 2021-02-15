@@ -48,7 +48,7 @@ class SonrIcon extends StatelessWidget {
   // ^ Peer Data Platform to Icon
   factory SonrIcon.device(IconType type, Peer peer, {Color color, double size = 30}) {
     // Set Color
-    _IconGradientWData result = _SonrIconData.devices[peer.device.platform];
+    _IconGradientWData result = _SonrIconData.devices[peer.platform];
 
     // Get Icon
     if (result != null) {
