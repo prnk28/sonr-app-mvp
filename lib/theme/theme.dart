@@ -33,7 +33,7 @@ class SonrStyle {
       intensity: 0.85,
       depth: 8,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      color: K_BASE_COLOR,
+      color: SonrColor.base,
       shadowLightColor: Colors.black38);
-  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: K_BASE_COLOR);
+  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
 }

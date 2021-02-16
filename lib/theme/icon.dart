@@ -29,12 +29,12 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.neumorphic(IconData data, {double size = 30, Color color = K_BASE_COLOR}) {
+  factory SonrIcon.neumorphic(IconData data, {double size = 30, Color color = SonrColor.base}) {
     return SonrIcon(data, IconType.Neumorphic, color, null, size: size);
   }
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.normal(IconData data, {double size = 24, Color color = K_BASE_COLOR}) {
+  factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.base}) {
     return SonrIcon(data, IconType.Normal, color, null, size: size);
   }
 

@@ -100,11 +100,11 @@ class _ContactInviteView extends StatelessWidget {
               SonrHeaderBar.closeAccept(
                 title: SonrText.header("Send Back?", size: 32),
                 onAccept: () {
-                  controller.acceptContact(card, true);
+                  controller.acceptTransfer(card, sendBackContact: true);
                   Get.back(closeOverlays: true);
                 },
                 onCancel: () {
-                  controller.acceptContact(card, false);
+                  controller.acceptTransfer(card, sendBackContact: false);
                   Get.back(closeOverlays: true);
                 },
               ),
@@ -114,7 +114,7 @@ class _ContactInviteView extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 4))
             ]));
           } else {
-            controller.acceptContact(card, false);
+            controller.acceptTransfer(card, sendBackContact: false);
           }
         },
         onCancel: () {

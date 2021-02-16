@@ -51,7 +51,7 @@ class SonrButton extends StatelessWidget {
       SonrIcon icon,
       Color shadowLightColor,
       Color shadowDarkColor,
-      Color color = K_BASE_COLOR,
+      Color color = SonrColor.base,
       double depth = 8,
       double radius = 20,
       double intensity = 0.85,
@@ -130,7 +130,7 @@ class SonrButton extends StatelessWidget {
     SonrText text,
     Color shadowLightColor,
     Color shadowDarkColor,
-    Color color = K_BASE_COLOR,
+    Color color = SonrColor.base,
     bool isDisabled = false,
     double depth = 8,
     double intensity = 0.85,
@@ -205,7 +205,7 @@ class SonrButton extends StatelessWidget {
     SonrText text,
     Color shadowLightColor,
     Color shadowDarkColor,
-    Color color = K_BASE_COLOR,
+    Color color = SonrColor.base,
     bool isDisabled = false,
     double intensity = 0.85,
     double depth = 8,
@@ -283,16 +283,16 @@ class SonrButton extends StatelessWidget {
     // Update Children
     switch (type) {
       case _ButtonType.DisabledIcon:
-        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: K_BUTTON_DISABLED);
+        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabledButton);
         isDisabled = true;
         break;
       case _ButtonType.DisabledText:
-        textChild = SonrText.normal(text.text, size: text.size, color: K_BUTTON_DISABLED);
+        textChild = SonrText.normal(text.text, size: text.size, color: SonrColor.disabledButton);
         isDisabled = true;
         break;
       case _ButtonType.DisabledIconText:
-        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: K_BUTTON_DISABLED);
-        textChild = SonrText.normal(text.text, size: text.size, color: K_BUTTON_DISABLED);
+        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabledButton);
+        textChild = SonrText.normal(text.text, size: text.size, color: SonrColor.disabledButton);
         isDisabled = true;
         break;
       default:
@@ -375,7 +375,7 @@ class SonrButton extends StatelessWidget {
               bottom: padBottom,
             ),
             child: NeumorphicButton(
-                style: NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(), color: K_BASE_COLOR, shape: NeumorphicShape.flat, depth: 8),
+                style: NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base, shape: NeumorphicShape.flat, depth: 8),
                 child: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife),
                 onPressed: () {
                   HapticFeedback.lightImpact();
@@ -396,7 +396,7 @@ class SonrButton extends StatelessWidget {
               bottom: padBottom,
             ),
             child: NeumorphicButton(
-                style: NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(), color: K_BASE_COLOR, shape: NeumorphicShape.flat, depth: 8),
+                style: NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base, shape: NeumorphicShape.flat, depth: 8),
                 child: SonrIcon.gradient(
                   Icons.close,
                   FlutterGradientNames.phoenixStart,

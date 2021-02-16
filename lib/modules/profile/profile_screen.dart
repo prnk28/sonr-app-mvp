@@ -130,7 +130,8 @@ class ContactHeader extends GetView<ProfileController> {
           );
           HapticFeedback.heavyImpact();
         },
-        child: Obx(() => SonrText.normal(controller.firstName.value + " " + controller.lastName.value, color: HexColor.fromHex("FFFDFA"), size: 24)));
+        child:
+            Obx(() => SonrText.normal(controller.firstName.value + " " + controller.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24)));
   }
 }
 

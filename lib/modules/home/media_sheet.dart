@@ -18,7 +18,7 @@ class MediaSheet extends GetView<MediaPickerController> {
       borderRadius: BorderRadius.circular(40),
       backendColor: Colors.transparent,
       child: Neumorphic(
-          style: NeumorphicStyle(color: K_BASE_COLOR),
+          style: NeumorphicStyle(color: SonrColor.base),
           child: Column(children: [
             // Header Buttons
             _MediaDropdownDialogBar(onCancel: () => Get.back(), onAccept: () => controller.confirmSelectedFile()),
@@ -60,7 +60,7 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
                 style: NeumorphicStyle(
                   depth: 8,
                   shape: NeumorphicShape.flat,
-                  color: K_BASE_COLOR,
+                  color: SonrColor.base,
                 ),
                 margin: EdgeInsets.only(left: 14, right: 14),
                 child: Container(
@@ -172,9 +172,9 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
   @override
   Widget build(BuildContext context) {
     // Initialize Styles
-    final defaultStyle = NeumorphicStyle(color: K_BASE_COLOR);
+    final defaultStyle = NeumorphicStyle(color: SonrColor.base);
     final pressedStyle = NeumorphicStyle(
-        color: K_BASE_COLOR, disableDepth: true, intensity: 0, border: NeumorphicBorder(isEnabled: true, width: 4, color: Colors.greenAccent));
+        color: SonrColor.base, disableDepth: true, intensity: 0, border: NeumorphicBorder(isEnabled: true, width: 4, color: Colors.greenAccent));
 
     // Build Button
     return NeumorphicButton(

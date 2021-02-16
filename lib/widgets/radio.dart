@@ -41,7 +41,7 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
     return Column(children: [
       NeumorphicRadio(
         style: NeumorphicRadioStyle(
-            unselectedColor: K_BASE_COLOR, selectedColor: K_BASE_COLOR, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
         child: SizedBox(
           height: 60,
           width: 60,

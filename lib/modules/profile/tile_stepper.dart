@@ -95,7 +95,7 @@ class _DropdownAddView extends GetView<TileStepperController> {
               style: NeumorphicStyle(
                 depth: 8,
                 shape: NeumorphicShape.flat,
-                color: K_BASE_COLOR,
+                color: SonrColor.base,
               ),
               margin: EdgeInsets.only(left: 14, right: 14),
               child: Container(

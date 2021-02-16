@@ -29,7 +29,7 @@ class HomeScreen extends GetView<HomeController> {
                   barrierDismissible: true,
                   useRootNavigator: false,
                   useSafeArea: true,
-                  barrierColor: K_DIALOG_COLOR,
+                  barrierColor: SonrColor.dialogBackground,
                   transitionCurve: Curves.bounceInOut,
                 );
               } else {

@@ -57,7 +57,7 @@ class ShareSheet extends StatelessWidget {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         backendColor: Colors.transparent,
         child: Neumorphic(
-            style: NeumorphicStyle(color: K_BASE_COLOR),
+            style: NeumorphicStyle(color: SonrColor.base),
             child: Container(
                 width: size.width,
                 height: size.height,
@@ -102,7 +102,7 @@ class _ShareSheetContentView extends StatelessWidget {
       child: Neumorphic(
           margin: EdgeInsets.only(top: 4, bottom: 4, left: 8),
           style: NeumorphicStyle(
-            color: K_BASE_COLOR,
+            color: SonrColor.base,
             boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
           ),
           child: isUrl ? _buildItemWithIcon() : _buildOnlyItem()),

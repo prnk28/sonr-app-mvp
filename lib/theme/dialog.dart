@@ -19,7 +19,7 @@ class SonrDialog {
       barrierDismissible: barrierDismissible,
       useRootNavigator: useRootNavigator,
       useSafeArea: useSafeArea,
-      barrierColor: K_DIALOG_COLOR,
+      barrierColor: SonrColor.dialogBackground,
       transitionCurve: Curves.bounceInOut,
     );
   }
@@ -91,7 +91,7 @@ class _SonrDialogView extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         backendColor: Colors.transparent,
         child: Neumorphic(
-          style: NeumorphicStyle(color: K_BASE_COLOR),
+          style: NeumorphicStyle(color: SonrColor.base),
           child: view,
         ));
   }

@@ -143,9 +143,9 @@ class _ShareButtonItem extends StatelessWidget {
           style: NeumorphicStyle(
               surfaceIntensity: 0.3,
               shape: NeumorphicShape.convex,
-              shadowDarkColor: HexColor.fromHex("333333"),
+              shadowDarkColor: SonrColor.fromHex("333333"),
               depth: 12,
-              color: HexColor.fromHex("EFEEEE"),
+              color: SonrColor.fromHex("EFEEEE"),
               boxShape: NeumorphicBoxShape.circle()),
           child: SonrRiveWidget.fromType(
             type: type,

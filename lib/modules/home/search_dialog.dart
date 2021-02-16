@@ -18,11 +18,11 @@ class SearchDialog extends GetView<SearchCardController> {
               borderRadius: BorderRadius.circular(30),
               backendColor: Colors.transparent,
               child: Neumorphic(
-                style: NeumorphicStyle(color: K_BASE_COLOR),
+                style: NeumorphicStyle(color: SonrColor.base),
                 child: Container(
                   child: Column(children: [
                     Neumorphic(
-                        style: NeumorphicStyle(color: K_BASE_COLOR),
+                        style: NeumorphicStyle(color: SonrColor.base),
                         child: Container(
                           width: Get.width - 60,
                           margin: EdgeInsets.only(left: 10, right: 10),

@@ -43,7 +43,7 @@ class DeviceService extends GetxService {
     // @ Listen to Incoming File
     _intentDataStreamSubscription = intent.ReceiveSharingIntent.getMediaStream().listen((List<intent.SharedMediaFile> data) {
       if (!Get.isBottomSheetOpen && hasUser) {
-        Get.bottomSheet(ShareSheet.media(data), barrierColor: K_DIALOG_COLOR, isDismissible: false);
+        Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.dialogBackground, isDismissible: false);
       }
     }, onError: (err) {
       print("getIntentDataStream error: $err");
@@ -52,7 +52,7 @@ class DeviceService extends GetxService {
     // @ Listen to Incoming Text
     _intentDataStreamSubscription = intent.ReceiveSharingIntent.getTextStream().listen((String text) {
       if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
-        Get.bottomSheet(ShareSheet.url(text), barrierColor: K_DIALOG_COLOR, isDismissible: false);
+        Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.dialogBackground, isDismissible: false);
       }
     }, onError: (err) {
       print("getLinkStream error: $err");
@@ -149,7 +149,7 @@ class DeviceService extends GetxService {
     // @ Check for Media
     if (incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.media(incomingMedia), barrierColor: K_DIALOG_COLOR, isDismissible: false);
+      Get.bottomSheet(ShareSheet.media(incomingMedia), barrierColor: SonrColor.dialogBackground, isDismissible: false);
 
       // Reset Incoming
       incomingMedia.clear();
@@ -159,7 +159,7 @@ class DeviceService extends GetxService {
     // @ Check for Text
     if (incomingText.value != "" && GetUtils.isURL(incomingText.value) && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(incomingText.value), barrierColor: K_DIALOG_COLOR, isDismissible: false);
+      Get.bottomSheet(ShareSheet.url(incomingText.value), barrierColor: SonrColor.dialogBackground, isDismissible: false);
 
       // Reset Incoming
       incomingText("");

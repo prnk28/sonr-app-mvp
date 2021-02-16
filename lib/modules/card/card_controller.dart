@@ -6,6 +6,7 @@ import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/service/timer_service.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 export 'contact_view.dart';
@@ -14,7 +15,7 @@ export 'media_view.dart';
 export 'url_view.dart';
 export 'progress_view.dart';
 
-enum CardType { None, Invite, Reply, GridItem }
+enum CardType { None, Invite, Reply, GridItem, Info }
 
 class TransferCardController extends GetxController {
   // Properties
@@ -24,16 +25,12 @@ class TransferCardController extends GetxController {
   int index;
 
   // References
-  bool _accepted = false;
+  bool _isUsingTimer = false;
   final _kMinimumDuration = 250.milliseconds;
   final _kAnimationDuration = 1750.milliseconds;
-  bool _isUsingTimer = false;
 
   // ^ Handle Transfer Progress ^
   TransferCardController() {
-    // @ Start Timer
-    Get.find<TimerService>().start(intervals: [_kMinimumDuration], stopTime: _kAnimationDuration);
-
     // @ Listen for Minimum Timer
     Get.find<TimerService>().timerIntervals.listen((data) {
       data.forEach((time, status) {
@@ -80,42 +77,42 @@ class TransferCardController extends GetxController {
     state(CardType.Invite);
   }
 
-  // ^ Accept File Invite Request ^ //
-  acceptFile(IconData iconData) {
-    Get.back();
-    Get.dialog(
-      ProgressView(this, iconData),
-      useRootNavigator: false,
-      useSafeArea: false,
-      barrierDismissible: false,
-      transitionDuration: 100.milliseconds,
-    );
-    Get.find<SonrService>().respond(true);
-    _accepted = true;
-  }
-
   // ^ Accept Contact Invite Request ^ //
-  acceptContact(TransferCard c, bool sb) {
-    // Check if Send Back
-    if (sb) {
+  acceptTransfer(TransferCard card, {bool sendBackContact = false}) {
+    // Check Card Type
+    if (card.payload == Payload.CONTACT) {
+      // Check if Send Back
+      if (sendBackContact) {
+        Get.find<SonrService>().respond(true);
+      }
+
+      // Save Card
+      Get.find<SQLService>().storeCard(card);
+      Get.find<HomeController>().addCard(card);
+    } else {
       Get.find<SonrService>().respond(true);
+      Get.find<TimerService>().start(intervals: [_kMinimumDuration], stopTime: _kAnimationDuration);
+      Get.back();
+      Get.dialog(
+        ProgressView(this, SonrIcon.preview(IconType.Thumbnail, card).data),
+        useRootNavigator: false,
+        useSafeArea: false,
+        barrierDismissible: false,
+        transitionDuration: 100.milliseconds,
+      );
     }
-
-    // Save Card
-    Get.find<SQLService>().storeCard(c);
-
-    // Add to Cards Display Last Card
-    Get.find<HomeController>().addCard(c);
   }
 
   // ^ Decline Invite Request ^ //
   declineInvite() {
     // Check if accepted
-    if (!_accepted) {
-      Get.find<SonrService>().respond(false);
-    }
-
+    Get.find<SonrService>().respond(false);
     Get.back();
     state(CardType.None);
+  }
+
+  // ^ Method to Present Card Overlay Info
+  showCardInfo(BuildContext context, Widget infoWidget) {
+    SonrOverlay(overlayWidget: infoWidget, context: context);
   }
 }

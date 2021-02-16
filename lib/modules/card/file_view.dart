@@ -55,7 +55,7 @@ class FileCard extends GetWidget<TransferCardController> {
                         image: MemoryImage(card.metadata.thumbnail),
                       ))
                     : null,
-                child: _FileItemView(card),
+                child: _FileItemView(card, controller),
               ),
             ),
           ),
@@ -84,7 +84,7 @@ class _FileInviteView extends StatelessWidget {
         SonrHeaderBar.closeAccept(
           title: SonrText.invite(card.payload.toString(), card.firstName),
           onAccept: () {
-            controller.acceptFile(SonrIcon.preview(IconType.Thumbnail, card).data);
+            controller.acceptTransfer(card);
           },
           onCancel: () {
             controller.declineInvite();
@@ -103,8 +103,9 @@ class _FileInviteView extends StatelessWidget {
 // ^ TransferCard Media Item Details ^ //
 class _FileItemView extends StatelessWidget {
   final TransferCard card;
+  final TransferCardController controller;
 
-  _FileItemView(this.card);
+  _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -125,7 +126,13 @@ class _FileItemView extends StatelessWidget {
         // Info Button
         Align(
           alignment: Alignment.topRight,
-          child: Padding(padding: const EdgeInsets.all(8.0), child: _FileInfoButton(card)),
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SonrButton.circle(
+                icon: SonrIcon.info,
+                onPressed: () => controller.showCardInfo(context, _FileCardInfo(card)),
+                shadowLightColor: Colors.black38,
+              )),
         ),
       ],
     );
@@ -159,21 +166,13 @@ class _FileCardExpanded extends StatelessWidget {
   }
 }
 
-// ^ Overlay View for File Info with Button
-class _FileInfoButton extends StatelessWidget {
+// ^ Overlay View for File Info
+class _FileCardInfo extends StatelessWidget {
   final TransferCard card;
-  _FileInfoButton(this.card);
+  _FileCardInfo(this.card);
 
   @override
   Widget build(BuildContext context) {
-    return SonrButton.circle(
-      icon: SonrIcon.info,
-      onPressed: () => SonrOverlay(overlayWidget: _buildOverlayView(), context: context),
-      shadowLightColor: Colors.black38,
-    );
-  }
-
-  Widget _buildOverlayView() {
     // Extract Data
     var metadata = card.metadata;
     var mimeType = metadata.mime.type.toString().capitalizeFirst;

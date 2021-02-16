@@ -1,11 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_app/service/timer_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 import 'card_controller.dart';
 
 class ProgressView extends HookWidget {
@@ -13,7 +8,7 @@ class ProgressView extends HookWidget {
   final IconData iconData;
   final double boxHeight = Get.height / 2;
   final double boxWidth = Get.width;
-  final Gradient color = randomProgressGradient();
+  final Gradient color = SonrColor.randomGradient();
   final TransferCardController cardController;
 
   // Constructer
@@ -60,7 +55,7 @@ class ProgressView extends HookWidget {
               child: ShaderMask(
                 blendMode: BlendMode.srcOut,
                 shaderCallback: (bounds) => LinearGradient(
-                  colors: [K_BASE_COLOR],
+                  colors: [SonrColor.base],
                   stops: [0.0],
                 ).createShader(bounds),
                 child: Container(

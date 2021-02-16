@@ -64,13 +64,13 @@ class SonrScaffold extends StatelessWidget {
           intensity: 0.5,
         ),
         theme: NeumorphicThemeData(
-          baseColor: K_BASE_COLOR,
+          baseColor: SonrColor.base,
           lightSource: LightSource.topLeft,
           depth: 6,
           intensity: 0.85,
         ),
         child: Scaffold(
-          backgroundColor: K_BASE_COLOR,
+          backgroundColor: SonrColor.base,
           body: body,
           appBar: appBar,
           floatingActionButton: floatingActionButton,

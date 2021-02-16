@@ -26,7 +26,7 @@ class EditDialog extends GetView<EditDialogController> {
   @override
   Widget build(BuildContext context) {
     return Neumorphic(
-        style: NeumorphicStyle(color: K_BASE_COLOR),
+        style: NeumorphicStyle(color: SonrColor.base),
         child: Container(
             margin: EdgeInsets.only(left: 10, right: 10),
             child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

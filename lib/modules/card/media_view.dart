@@ -56,7 +56,7 @@ class MediaCard extends GetWidget<TransferCardController> {
                         image: MemoryImage(card.metadata.thumbnail),
                       ))
                     : null,
-                child: _MediaItemView(card),
+                child: _MediaItemView(card, controller),
               ),
             ),
           ),
@@ -85,7 +85,7 @@ class _MediaInviteView extends StatelessWidget {
         SonrHeaderBar.closeAccept(
           title: SonrText.invite(card.payload.toString(), card.firstName),
           onAccept: () {
-            controller.acceptFile(SonrIcon.preview(IconType.Thumbnail, card).data);
+            controller.acceptTransfer(card);
           },
           onCancel: () {
             controller.declineInvite();
@@ -104,8 +104,9 @@ class _MediaInviteView extends StatelessWidget {
 // ^ TransferCard Media Item Details ^ //
 class _MediaItemView extends StatelessWidget {
   final TransferCard card;
+  final TransferCardController controller;
 
-  _MediaItemView(this.card);
+  _MediaItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -126,7 +127,13 @@ class _MediaItemView extends StatelessWidget {
         // Info Button
         Align(
           alignment: Alignment.topRight,
-          child: Padding(padding: const EdgeInsets.all(8.0), child: _MediaInfoButton(card)),
+          child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SonrButton.circle(
+                icon: SonrIcon.info,
+                onPressed: () => controller.showCardInfo(context, _MediaCardInfo(card)),
+                shadowLightColor: Colors.black38,
+              )),
         ),
       ],
     );
@@ -160,21 +167,13 @@ class _MediaCardExpanded extends StatelessWidget {
   }
 }
 
-// ^ Overlay View for Media Info with Button
-class _MediaInfoButton extends StatelessWidget {
+// ^ Overlay View for Media Info
+class _MediaCardInfo extends StatelessWidget {
   final TransferCard card;
-  _MediaInfoButton(this.card);
+  _MediaCardInfo(this.card);
 
   @override
   Widget build(BuildContext context) {
-    return SonrButton.circle(
-      icon: SonrIcon.info,
-      onPressed: () => SonrOverlay(overlayWidget: _buildOverlayView(), context: context),
-      shadowLightColor: Colors.black38,
-    );
-  }
-
-  Widget _buildOverlayView() {
     // Extract Data
     var metadata = card.metadata;
     var mimeType = metadata.mime.type.toString().capitalizeFirst;
