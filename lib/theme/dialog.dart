@@ -72,10 +72,28 @@ class SonrDialog {
     return SonrDialog(widget, margin, barrierDismissible, useRootNavigator, useSafeArea);
   }
 
-  // ^ Small Sized General Dialog - 1/4 Screen ^ //
-  factory SonrDialog.search(Widget widget, {bool barrierDismissible = true, bool useRootNavigator = false, bool useSafeArea = true}) {
-    EdgeInsets margin = EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 572);
-    return SonrDialog(widget, margin, barrierDismissible, useRootNavigator, useSafeArea);
+  // ^ Search Custom Dialog ^ //
+  static void search(Widget widget) {
+    Get.dialog(
+      widget,
+      barrierDismissible: true,
+      useRootNavigator: false,
+      useSafeArea: true,
+      barrierColor: SonrColor.dialogBackground,
+      transitionCurve: Curves.bounceInOut,
+    );
+  }
+
+  // ^ Transfer Custom Dialog ^ //
+  static void transfer(Widget widget) {
+    Get.dialog(
+      widget,
+      barrierDismissible: false,
+      useRootNavigator: true,
+      useSafeArea: false,
+      barrierColor: SonrColor.dialogBackground,
+      transitionCurve: Curves.bounceInOut,
+    );
   }
 }
 

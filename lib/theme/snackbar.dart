@@ -13,15 +13,17 @@ class SonrSnack {
 
   // ^ Default Constructer ^ //
   SonrSnack(this.title, this.message, this.icon, this.color, this.time) {
-    Get.snackbar(title, message,
-        snackStyle: SnackStyle.FLOATING,
-        duration: Duration(milliseconds: time),
-        snackPosition: SnackPosition.BOTTOM,
-        forwardAnimationCurve: Curves.easeInCirc,
-        reverseAnimationCurve: Curves.elasticInOut,
-        backgroundColor: color,
-        icon: icon,
-        colorText: Colors.white);
+    if (!Get.isSnackbarOpen) {
+      Get.snackbar(title, message,
+          snackStyle: SnackStyle.FLOATING,
+          duration: Duration(milliseconds: time),
+          snackPosition: SnackPosition.BOTTOM,
+          forwardAnimationCurve: Curves.easeInCirc,
+          reverseAnimationCurve: Curves.elasticInOut,
+          backgroundColor: color,
+          icon: icon,
+          colorText: Colors.white);
+    }
   }
 
   // ^ Succesful Operation ^ //

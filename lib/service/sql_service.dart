@@ -65,7 +65,7 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 2, onCreate: (Database db, int version) async {
+    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
       // Create Cards Table
       await db.execute('''
 create table $CARD_TABLE (

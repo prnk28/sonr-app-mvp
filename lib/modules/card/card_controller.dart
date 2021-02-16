@@ -79,7 +79,7 @@ class TransferCardController extends GetxController {
     else {
       Get.find<SonrService>().respond(true);
       Get.back();
-      Get.dialog(ProgressView(this, card));
+      SonrDialog.transfer(ProgressView(this, card));
     }
   }
 
