@@ -8,28 +8,27 @@ import 'card_controller.dart';
 class ProgressView extends HookWidget {
   //  Properties
   final TransferCard card;
-  final double iconSize = 250;
   final Gradient gradient = SonrColor.randomGradient();
   final TransferCardController cardController;
+  final Duration duration;
 
   // Constructer
-  ProgressView(this.cardController, this.card) : super(key: GlobalKey());
+  ProgressView(this.cardController, this.card, {this.duration = const Duration(milliseconds: 1400)}) : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
     // Inject Hook Controller
     final iconKey = GlobalKey();
-    final hookController = useAnimationController(duration: Duration(milliseconds: 2000));
+    final hookController = useAnimationController(duration: duration);
     hookController.forward();
 
     // Handle Animation Completed
-    Future.delayed(Duration(milliseconds: 2000), () {
+    Future.delayed(duration, () {
       cardController.animationCompleted(true);
     });
 
     // Reactive to Progress
     return Container(
-        color: Colors.black.withOpacity(0.4),
         width: Get.width,
         height: Get.height,
         child: Stack(
@@ -51,7 +50,7 @@ class ProgressView extends HookWidget {
         animation: hookController,
         builder: (BuildContext context, Widget child) {
           return Opacity(
-            opacity: 0.8,
+            opacity: 0.75,
             child: CustomPaint(
               painter: WavePainter(
                 iconKey: iconKey,
@@ -93,24 +92,20 @@ class ProgressView extends HookWidget {
 
   // ^ Method Builds Shader Box ^ //
   Widget buildTransferIcon(AnimationController hookController, GlobalKey<State<StatefulWidget>> iconKey) {
-    // Build Widget
     return Stack(alignment: Alignment.center, children: [
       Obx(() {
         if (cardController.displayProgress.value) {
-          return Container(
-              child: CircularProgressIndicator(strokeWidth: 6, value: Get.find<SonrService>().progress.value),
-              width: iconSize + 20,
-              height: iconSize + 20);
+          return Container(child: CircularProgressIndicator(strokeWidth: 6, value: Get.find<SonrService>().progress.value), width: 270, height: 270);
         } else {
           return Container();
         }
       }),
       PlayAnimation(
         tween: 0.0.tweenTo(1.0),
-        delay: 1000.milliseconds,
-        duration: 250.milliseconds,
+        delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
+        duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
         builder: (context, child, value) {
-          return Icon(SonrIcon.dataFromCard(card), key: iconKey, size: iconSize / 1.5, color: Colors.white.withOpacity(value));
+          return Icon(SonrIcon.dataFromCard(card), key: iconKey, size: 165, color: Colors.white.withOpacity(value));
         },
       )
     ]);

@@ -193,7 +193,7 @@ class DeviceService extends GetxService {
       if (result) {
         SonrSnack.success("Saved Video to your Device's Gallery");
       } else {
-        SonrSnack.error("Unable to save Vido to your Gallery");
+        SonrSnack.error("Unable to save Video to your Gallery");
       }
       return result;
     }

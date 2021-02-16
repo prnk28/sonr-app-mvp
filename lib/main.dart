@@ -113,23 +113,36 @@ class _AppState extends State<App> {
 // ignore: non_constant_identifier_names
 List<GetPage> get K_PAGES => [
       // ** Home Page ** //
-      GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.zoom, binding: HomeBinding()),
+      GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.zoom, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Incoming File ** //
-      GetPage(name: '/home/incoming', page: () => HomeScreen(), transition: Transition.cupertinoDialog, binding: HomeBinding()),
+      GetPage(
+          maintainState: false,
+          name: '/home/completed',
+          page: () => HomeScreen(),
+          transition: Transition.fade,
+          curve: Curves.easeIn,
+          transitionDuration: 200.milliseconds,
+          binding: HomeBinding()),
 
       // ** Home Page - Back ** //
-      GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, binding: HomeBinding()),
+      GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Back ** //
-      GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, binding: HomeBinding()),
+      GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Register Page ** //
-      GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, binding: RegisterBinding()),
+      GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
 
       // ** Transfer Page ** //
-      GetPage(name: '/transfer', page: () => TransferScreen(), transition: Transition.downToUp, binding: TransferBinding()),
+      GetPage(name: '/transfer', page: () => TransferScreen(), transition: Transition.downToUp, curve: Curves.easeIn, binding: TransferBinding()),
 
       // ** Profile Page ** //
-      GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, fullscreenDialog: true, binding: ProfileBinding()),
+      GetPage(
+          name: '/profile',
+          page: () => ProfileScreen(),
+          transition: Transition.upToDown,
+          curve: Curves.easeIn,
+          fullscreenDialog: true,
+          binding: ProfileBinding()),
     ];

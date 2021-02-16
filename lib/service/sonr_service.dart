@@ -122,20 +122,27 @@ class SonrService extends GetxService {
     await _node.respond(decision);
   }
 
-  // ^ Completed Receive Transfer ^
+  // ^ Save Card after Completed Receive Transfer ^
   void completed() {
-    // Save Card
+    // Feedback
+    HapticFeedback.heavyImpact();
+
+    // Save Card to Gallery
     Get.find<DeviceService>().saveMediaFromCard(_receivedCard).then((value) {
+      // Set Values and Store in SQL
       _receivedCard.hasExported = value;
       Get.find<SQLService>().storeCard(_receivedCard);
-      Get.find<HomeController>().addCard(_receivedCard);
-    });
 
-    // Reset Parameters
-    progress(0.0);
-    received(false);
-    HapticFeedback.heavyImpact();
-    _receivedCard = null;
+      // Present Home Controller
+      Get.offAndToNamed('/home/completed').then((value) {
+        Get.find<HomeController>().addCard(_receivedCard);
+      });
+
+      // Reset Parameters
+      progress(0.0);
+      received(false);
+      _receivedCard = null;
+    });
   }
 
   // **************************
