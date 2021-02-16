@@ -1,7 +1,7 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:sonr_app/modules/card/item_view.dart';
+import 'package:sonr_app/modules/card/grid_item.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -89,7 +89,7 @@ class TransferCardGrid extends GetView<HomeController> {
                     builder: (context, child, value) {
                       return Transform.scale(
                         scale: value,
-                        child: ItemCardView.fromItem(getCardList(controller)[idx], idx),
+                        child: GridItemCardView.fromItem(getCardList(controller)[idx], idx),
                       );
                     },
                   );
@@ -100,14 +100,14 @@ class TransferCardGrid extends GetView<HomeController> {
                     builder: (context, child, value) {
                       return Transform.scale(
                         scale: value,
-                        child: ItemCardView.fromItem(getCardList(controller)[idx], idx),
+                        child: GridItemCardView.fromItem(getCardList(controller)[idx], idx),
                       );
                     },
                   );
                 } else {
                   return Transform.scale(
                     scale: 0.85,
-                    child: ItemCardView.fromItem(getCardList(controller)[idx], idx),
+                    child: GridItemCardView.fromItem(getCardList(controller)[idx], idx),
                   );
                 }
               });

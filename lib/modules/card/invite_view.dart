@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:sonr_app/modules/card/progress_view.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
@@ -34,7 +35,7 @@ class InviteCardView extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     controller.invited();
     if (invite.payload == Payload.MEDIA) {
-      return _FileInviteView(card, controller);
+      return _MediaInviteView(card, controller);
     } else if (invite.payload == Payload.CONTACT) {
       return _ContactInviteView(card, controller, isReply);
     } else {
@@ -54,11 +55,7 @@ class _ContactInviteView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Display Info
     return Column(mainAxisSize: MainAxisSize.max, children: [
-      // @ Basic Contact Info - Make Expandable
-      SonrText.bold(card.contact.firstName),
-      SonrText.bold(card.contact.lastName),
-
-      // @ Footer
+      // @ Header
       Divider(),
       SonrHeaderBar.closeAccept(
         title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
@@ -90,6 +87,10 @@ class _ContactInviteView extends StatelessWidget {
           Get.back();
         },
       ),
+
+      // @ Basic Contact Info - Make Expandable
+      SonrText.bold(card.contact.firstName),
+      SonrText.bold(card.contact.lastName),
     ]);
   }
 }
@@ -146,6 +147,39 @@ class _URLInviteView extends StatelessWidget {
 }
 
 // ^ File Invite Builds from Invite Protobuf ^ //
+class _MediaInviteView extends StatelessWidget {
+  final TransferCard card;
+  final TransferCardController controller;
+  _MediaInviteView(this.card, this.controller);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      key: UniqueKey(),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // @ Header
+        SonrHeaderBar.closeAccept(
+          title: SonrText.invite(card.payload.toString(), card.firstName),
+          onAccept: () {
+            controller.acceptFile(SonrIcon.preview(IconType.Thumbnail, card).data);
+          },
+          onCancel: () {
+            controller.declineInvite();
+            Get.back();
+          },
+        ),
+        Divider(),
+        // @ Build Item from Metadata and Peer
+        Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
+        SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
+      ],
+    );
+  }
+}
+
+// ^ File Invite Builds from Invite Protobuf ^ //
 class _FileInviteView extends StatelessWidget {
   final TransferCard card;
   final TransferCardController controller;
@@ -153,112 +187,28 @@ class _FileInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // @ Display Info
-    return Obx(() {
-      // Check State of Card --> Invitation
-      if (controller.state.value == CardType.Invite) {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          key: UniqueKey(),
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // @ Build Item from Metadata and Peer
-            Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
-            SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
-
-            // @ Footer
-            Divider(),
-            SonrHeaderBar.closeAccept(
-              title: SonrText.invite(card.payload.toString(), card.firstName),
-              onAccept: () {
-                controller.acceptFile();
-              },
-              onCancel: () {
-                controller.declineInvite();
-                Get.back();
-              },
-            ),
-          ],
-        );
-      }
-      // @ Check State of Card --> Transfer In Progress
-      else if (controller.state.value == CardType.InProgress) {
-        return _FileInviteProgress(SonrIcon.preview(IconType.Thumbnail, card).data);
-      }
-      return Container();
-    });
-  }
-}
-
-// ^ File Invite Progress (Hook Widget) from SonrService Progress ^ //
-class _FileInviteProgress extends HookWidget {
-  // Required Properties
-  final IconData iconData;
-  final double boxHeight = Get.height / 3;
-  final double boxWidth = Get.width;
-  final Gradient color = randomProgressGradient();
-
-  // Constructer
-  _FileInviteProgress(this.iconData) : super(key: GlobalKey());
-
-  @override
-  Widget build(BuildContext context) {
-    // Hook Controller
-    final controller = useAnimationController(duration: Duration(seconds: 1));
-    final iconKey = GlobalKey();
-    controller.repeat();
-
-    // Reactive to Progress
-    return Obx(() {
-      if (Get.find<SonrService>().progress.value < 1.0) {
-        return Stack(
-          alignment: Alignment.center,
-          key: UniqueKey(),
-          children: <Widget>[
-            SizedBox(
-              height: boxHeight,
-              width: boxWidth,
-              child: AnimatedBuilder(
-                animation: controller,
-                builder: (BuildContext context, Widget child) {
-                  return CustomPaint(
-                    painter: WavePainter(
-                      iconKey: iconKey,
-                      waveAnimation: controller,
-                      percent: Get.find<SonrService>().progress.value,
-                      boxHeight: boxHeight,
-                      gradient: color,
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: boxHeight,
-              width: boxWidth,
-              child: ShaderMask(
-                blendMode: BlendMode.srcOut,
-                shaderCallback: (bounds) => LinearGradient(
-                  colors: [K_BASE_COLOR],
-                  stops: [0.0],
-                ).createShader(bounds),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                  ),
-                  child: Center(
-                    child: Icon(iconData, key: iconKey, size: 250),
-                  ),
-                ),
-              ),
-            )
-          ],
-        );
-      }
-      controller.stop();
-      controller.dispose();
-      return Container();
-    });
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      key: UniqueKey(),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // @ Header
+        SonrHeaderBar.closeAccept(
+          title: SonrText.invite(card.payload.toString(), card.firstName),
+          onAccept: () {
+            controller.acceptFile(SonrIcon.preview(IconType.Thumbnail, card).data);
+          },
+          onCancel: () {
+            controller.declineInvite();
+            Get.back();
+          },
+        ),
+        Divider(),
+        // @ Build Item from Metadata and Peer
+        Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
+        SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
+      ],
+    );
   }
 }
 
@@ -286,8 +236,16 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept File Invite Request ^ //
-  acceptFile() {
+  acceptFile(IconData iconData) {
     state(CardType.InProgress);
+    Get.back();
+    Get.dialog(
+      ProgressView(iconData),
+      useRootNavigator: false,
+      useSafeArea: false,
+      barrierDismissible: false,
+      transitionDuration: 100.milliseconds,
+    );
     Get.find<SonrService>().respond(true);
     _accepted = true;
   }
@@ -316,7 +274,4 @@ class TransferCardController extends GetxController {
     Get.back();
     state(CardType.None);
   }
-
-  // ^ Expands Transfer Card into Hero ^ //
-  openCard() {}
 }

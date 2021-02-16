@@ -6,7 +6,7 @@ import 'package:sonr_app/service/social_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-import 'modules/card/invite_widget.dart';
+import 'modules/card/invite_view.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
@@ -24,6 +24,7 @@ initServices() async {
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SocialMediaService().init());
   await Get.putAsync(() => DeviceService().init());
+  await Get.putAsync(() => SQLService().init());
 }
 
 // ^ Initial Controller Bindings ^ //

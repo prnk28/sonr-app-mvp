@@ -5,12 +5,12 @@ import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'expanded_view.dart';
-import 'info_view.dart';
+import 'info_overlay.dart';
 
 // * ------------------------ * //
 // * ---- Card View --------- * //
 // * ------------------------ * //
-class ItemCardView extends StatelessWidget {
+class GridItemCardView extends StatelessWidget {
   // Properties
 
   // References
@@ -20,16 +20,15 @@ class ItemCardView extends StatelessWidget {
   final int index;
 
   // ** Constructer ** //
-  ItemCardView({Key key, this.invite, this.reply, this.card, this.index});
+  GridItemCardView({Key key, this.invite, this.reply, this.card, this.index});
 
   // @ Factory for SQL TransferCard Data
-  factory ItemCardView.fromItem(TransferCard card, int index) {
-    return ItemCardView(card: card, index: index);
+  factory GridItemCardView.fromItem(TransferCard card, int index) {
+    return GridItemCardView(card: card, index: index);
   }
 
   @override
   Widget build(BuildContext context) {
-    // * Completed Card * //
     // Initialize Views
     final viewForPayload = {Payload.MEDIA: _FileItemView(card), Payload.CONTACT: _ContactItemView(card)};
 
