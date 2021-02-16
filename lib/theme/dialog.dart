@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/card/invite_view.dart';
+import 'package:sonr_app/modules/card/card_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -35,13 +35,23 @@ class SonrDialog {
     } else {
       margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450);
     }
-    return SonrDialog(InviteCardView.fromInvite(invite), margin, false, true, true);
+
+    // Check Payload
+    if (invite.payload == Payload.MEDIA) {
+      return SonrDialog(MediaCard.invite(invite: invite), margin, false, true, true);
+    } else if (invite.payload == Payload.CONTACT) {
+      return SonrDialog(ContactCard.invite(invite: invite), margin, false, true, true);
+    } else if (invite.payload == Payload.URL) {
+      return SonrDialog(URLCard.invite(invite: invite), margin, false, true, true);
+    } else {
+      return SonrDialog(FileCard.invite(invite: invite), margin, false, true, true);
+    }
   }
 
   // ^ Reply with contact ^ //
   factory SonrDialog.reply(AuthReply reply) {
     EdgeInsets margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180);
-    return SonrDialog(InviteCardView.fromReply(reply), margin, false, true, true);
+    return SonrDialog(ContactCard.reply(reply: reply), margin, false, true, true);
   }
 
   // ^ Large Sized General Dialog 3/4 Screen ^ //

@@ -92,6 +92,17 @@ class HomeController extends GetxController {
     }
   }
 
+  // ^ Method for Returning Current Card List ^ //
+  List<TransferCard> getCardList() {
+    if (toggleIndex.value == 1) {
+      return mediaCards;
+    } else if (toggleIndex.value == 2) {
+      return contactCards;
+    } else {
+      return allCards;
+    }
+  }
+
   // ^ Method for Setting Category Filter ^ //
   setToggleCategory(int index) {
     toggleIndex(index);

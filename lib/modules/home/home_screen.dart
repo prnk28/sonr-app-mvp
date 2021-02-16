@@ -1,7 +1,5 @@
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:sonr_app/modules/card/grid_item.dart';
+import 'package:sonr_app/modules/card/card_controller.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -77,7 +75,7 @@ class TransferCardGrid extends GetView<HomeController> {
         margin: EdgeInsets.all(10),
         height: 500, // card height
         child: PageView.builder(
-            itemCount: getCardList(controller).length,
+            itemCount: controller.getCardList().length,
             controller: controller.pageController,
             onPageChanged: (int index) => controller.pageIndex(index),
             itemBuilder: (_, idx) {
@@ -89,7 +87,7 @@ class TransferCardGrid extends GetView<HomeController> {
                     builder: (context, child, value) {
                       return Transform.scale(
                         scale: value,
-                        child: GridItemCardView.fromItem(getCardList(controller)[idx], idx),
+                        child: buildCard(controller, idx),
                       );
                     },
                   );
@@ -100,14 +98,14 @@ class TransferCardGrid extends GetView<HomeController> {
                     builder: (context, child, value) {
                       return Transform.scale(
                         scale: value,
-                        child: GridItemCardView.fromItem(getCardList(controller)[idx], idx),
+                        child: buildCard(controller, idx),
                       );
                     },
                   );
                 } else {
                   return Transform.scale(
                     scale: 0.85,
-                    child: GridItemCardView.fromItem(getCardList(controller)[idx], idx),
+                    child: buildCard(controller, idx),
                   );
                 }
               });
@@ -116,13 +114,26 @@ class TransferCardGrid extends GetView<HomeController> {
     });
   }
 
-  List<TransferCard> getCardList(HomeController controller) {
+  Widget buildCard(HomeController controller, int index) {
+    // Get Card List
+    List<TransferCard> list;
     if (controller.toggleIndex.value == 1) {
-      return controller.mediaCards();
+      list = controller.mediaCards();
     } else if (controller.toggleIndex.value == 2) {
-      return controller.contactCards;
+      list = controller.contactCards;
     } else {
-      return controller.allCards;
+      list = controller.allCards;
+    }
+
+    // Determin CardView
+    if (list[index].payload == Payload.MEDIA) {
+      return MediaCard.item(card: list[index]);
+    } else if (list[index].payload == Payload.CONTACT) {
+      return ContactCard.item(card: list[index]);
+    } else if (list[index].payload == Payload.URL) {
+      return URLCard.item(card: list[index]);
+    } else {
+      return FileCard.item(card: list[index]);
     }
   }
 }

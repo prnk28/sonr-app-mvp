@@ -6,22 +6,23 @@ import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/timer_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'card_controller.dart';
+
 class ProgressView extends HookWidget {
   // Required Properties
   final IconData iconData;
   final double boxHeight = Get.height / 2;
   final double boxWidth = Get.width;
   final Gradient color = randomProgressGradient();
+  final TransferCardController cardController;
 
   // Constructer
-  ProgressView(this.iconData) : super(key: GlobalKey());
+  ProgressView(this.cardController, this.iconData) : super(key: GlobalKey());
 
   @override
   Widget build(BuildContext context) {
     // Inject Progress Controller and Hook Controller
-    final progressController = Get.put(ProgressController());
     final hookController = useAnimationController(duration: Duration(seconds: 1));
-
     final iconKey = GlobalKey();
     hookController.repeat();
 
@@ -45,7 +46,7 @@ class ProgressView extends HookWidget {
                     painter: WavePainter(
                       iconKey: iconKey,
                       waveAnimation: hookController,
-                      percent: progressController.progress.value,
+                      percent: cardController.progress.value,
                       boxHeight: boxHeight,
                       gradient: color,
                     ),
@@ -76,57 +77,5 @@ class ProgressView extends HookWidget {
         );
       }),
     );
-  }
-}
-
-class ProgressController extends GetxController {
-  // Properties
-  RxDouble progress = 0.0.obs;
-
-  // Duration Constants in Ms
-  final kMinimumDuration = 250.milliseconds;
-  final kAnimationDuration = 1750.milliseconds;
-
-  // References
-  var _isUsingTimer = false;
-
-  // ^ Constructer converts progress/duration to percentage ^ //
-  ProgressController() {
-    // @ Start Timer
-    Get.find<TimerService>().start(intervals: [kMinimumDuration], stopTime: kAnimationDuration);
-
-    // @ Listen for Minimum Timer
-    Get.find<TimerService>().timerIntervals.listen((data) {
-      data.forEach((time, status) {
-        // Check if Transfer Completed Before Animation
-        if (time == kMinimumDuration && status && Get.find<SonrService>().progress.round() == 1) {
-          _isUsingTimer = true;
-          progress = Get.find<TimerService>().progress;
-        }
-        // Set Progress for Transfer
-        else {
-          _isUsingTimer = false;
-          progress = Get.find<SonrService>().progress;
-        }
-      });
-    });
-
-    // @ Listen for Timer Complete
-    Get.find<TimerService>().elapsed.listen((value) {
-      if (_isUsingTimer) {
-        if (value == kAnimationDuration) {
-          Get.back();
-        }
-      }
-    });
-
-    // @ Listen for Transfer Complete
-    Get.find<SonrService>().progress.listen((value) {
-      if (!_isUsingTimer) {
-        if (value == 1.0) {
-          Get.back();
-        }
-      }
-    });
   }
 }
