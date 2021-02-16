@@ -53,7 +53,7 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // @ Top Left Close/Cancel Button
-            SonrButton.close(onCancel),
+            SonrButton.circle(onPressed: onCancel, icon: SonrIcon.close),
 
             // @ Drop Down
             Neumorphic(
@@ -85,7 +85,7 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
                     ))),
 
             // @ Top Right Confirm Button
-            SonrButton.accept(onAccept)
+            SonrButton.circle(onPressed: onAccept, icon: SonrIcon.accept),
           ]),
     );
   }

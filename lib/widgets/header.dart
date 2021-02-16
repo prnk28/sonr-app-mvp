@@ -73,7 +73,10 @@ class SonrHeaderBar extends StatelessWidget {
 
   factory SonrHeaderBar.closeAccept({Widget title, @required Function onCancel, @required Function onAccept}) {
     return SonrHeaderBar(
-        title: title, type: _SonrDialogHeaderType.CloseAccept, leading: SonrButton.close(onCancel), action: SonrButton.accept(onAccept));
+        title: title,
+        type: _SonrDialogHeaderType.CloseAccept,
+        leading: SonrButton.circle(onPressed: onCancel, icon: SonrIcon.close),
+        action: SonrButton.circle(onPressed: onAccept, icon: SonrIcon.accept));
   }
 
   factory SonrHeaderBar.sliver(

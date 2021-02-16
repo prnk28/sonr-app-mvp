@@ -361,49 +361,4 @@ class SonrButton extends StatelessWidget {
     }
     return Container();
   }
-
-  // * Accept Menu Button * //
-  static Widget accept(Function onPressed,
-      {Alignment alignment = Alignment.topLeft, double padTop = 14, double padRight = 5, double padLeft = 14, double padBottom = 5}) {
-    return Align(
-        alignment: Alignment.topLeft,
-        child: Padding(
-            padding: EdgeInsets.only(
-              top: padTop,
-              right: padRight,
-              left: padLeft,
-              bottom: padBottom,
-            ),
-            child: NeumorphicButton(
-                style: NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base, shape: NeumorphicShape.flat, depth: 8),
-                child: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife),
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                  onPressed();
-                })));
-  }
-
-  // * Close Menu Button * //
-  static Widget close(Function onPressed,
-      {Alignment alignment = Alignment.topRight, double padTop = 14, double padRight = 14, double padLeft = 5, double padBottom = 5}) {
-    return Align(
-        alignment: Alignment.topLeft,
-        child: Padding(
-            padding: EdgeInsets.only(
-              top: padTop,
-              right: padRight,
-              left: padLeft,
-              bottom: padBottom,
-            ),
-            child: NeumorphicButton(
-                style: NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base, shape: NeumorphicShape.flat, depth: 8),
-                child: SonrIcon.gradient(
-                  Icons.close,
-                  FlutterGradientNames.phoenixStart,
-                ),
-                onPressed: () {
-                  HapticFeedback.lightImpact();
-                  onPressed();
-                })));
-  }
 }

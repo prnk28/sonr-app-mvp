@@ -34,14 +34,18 @@ class CameraView extends GetView<CameraPickerController> {
               padding: EdgeInsets.only(bottom: 25),
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 // Left Button - Cancel and Retake
-                SonrButton.close(() {
-                  controller.clearPhoto();
-                }),
+                SonrButton.circle(
+                    onPressed: () {
+                      controller.clearPhoto();
+                    },
+                    icon: SonrIcon.accept),
 
                 // Right Button - Continue and Accept
-                SonrButton.accept(() {
-                  controller.continuePhoto();
-                }),
+                SonrButton.circle(
+                    onPressed: () {
+                      controller.continuePhoto();
+                    },
+                    icon: SonrIcon.close),
               ]),
             ),
           ],
@@ -77,11 +81,11 @@ class CameraView extends GetView<CameraPickerController> {
             Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.only(left: 10),
-              child: SonrButton.close(
-                () {
-                  Get.back();
-                },
-              ),
+              child: SonrButton.circle(
+                  onPressed: () {
+                    controller.continuePhoto();
+                  },
+                  icon: SonrIcon.close),
             ),
           ],
         );

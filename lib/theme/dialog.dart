@@ -71,30 +71,6 @@ class SonrDialog {
     EdgeInsets margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 400);
     return SonrDialog(widget, margin, barrierDismissible, useRootNavigator, useSafeArea);
   }
-
-  // ^ Search Custom Dialog ^ //
-  static void search(Widget widget) {
-    Get.dialog(
-      widget,
-      barrierDismissible: true,
-      useRootNavigator: false,
-      useSafeArea: true,
-      barrierColor: SonrColor.dialogBackground,
-      transitionCurve: Curves.bounceInOut,
-    );
-  }
-
-  // ^ Transfer Custom Dialog ^ //
-  static void transfer(Widget widget) {
-    Get.dialog(
-      widget,
-      barrierDismissible: false,
-      useRootNavigator: true,
-      useSafeArea: false,
-      barrierColor: SonrColor.dialogBackground,
-      transitionCurve: Curves.bounceInOut,
-    );
-  }
 }
 
 class _SonrDialogView extends StatelessWidget {

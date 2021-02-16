@@ -66,17 +66,12 @@ class ShareSheet extends StatelessWidget {
                   // @ Top Banner
                   Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     // Bottom Left Close/Cancel Button
-                    SonrButton.close(() {
-                      Get.back();
-                    }),
+                    SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
                     SonrText.header("Share", size: 40),
 
                     // @ Top Right Confirm Button
-                    SonrButton.accept(() {
-                      // Go to Transfer
-                      Get.offNamed("/transfer");
-                    }),
+                    SonrButton.circle(onPressed: () => Get.offNamed("/transfer"), icon: SonrIcon.accept),
                   ]),
 
                   // @ Window Content

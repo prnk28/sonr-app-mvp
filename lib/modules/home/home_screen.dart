@@ -24,7 +24,14 @@ class HomeScreen extends GetView<HomeController> {
             icon: SonrIcon.search,
             onPressed: () {
               if (controller.allCards.length > 0) {
-                SonrDialog.search(SearchDialog());
+                Get.dialog(
+                  SearchDialog(),
+                  barrierDismissible: true,
+                  useRootNavigator: false,
+                  useSafeArea: true,
+                  barrierColor: SonrColor.dialogBackground,
+                  transitionCurve: Curves.bounceInOut,
+                );
               } else {
                 SonrSnack.error("No Cards Found");
               }
