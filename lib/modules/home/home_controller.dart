@@ -17,7 +17,6 @@ class HomeController extends GetxController {
   final allCards = <TransferCard>[].obs;
   final contactCards = <TransferCard>[].obs;
   final mediaCards = <TransferCard>[].obs;
-  // final visibleCards = <TransferCard>[].obs;
 
   // Widget Elements
   final isExpanded = false.obs;

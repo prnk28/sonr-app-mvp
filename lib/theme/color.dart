@@ -16,13 +16,13 @@ class SonrColor {
   // ^ Generates Random Gradient for Progress View ^ //
   static Gradient randomGradient() {
     var opts = [
-      FlutterGradients.amyCrisp(),
-      FlutterGradients.sugarLollipop(),
-      FlutterGradients.summerGames(),
-      FlutterGradients.supremeSky(),
-      FlutterGradients.juicyCake(),
-      FlutterGradients.northMiracle(),
-      FlutterGradients.seaLord()
+      FlutterGradients.amyCrisp(tileMode: TileMode.mirror, radius: 1.5),
+      FlutterGradients.sugarLollipop(tileMode: TileMode.mirror, radius: 1.5),
+      FlutterGradients.summerGames(tileMode: TileMode.mirror, radius: 1.5),
+      FlutterGradients.supremeSky(tileMode: TileMode.mirror, radius: 1.5),
+      FlutterGradients.juicyCake(tileMode: TileMode.mirror, radius: 1.5),
+      FlutterGradients.northMiracle(tileMode: TileMode.mirror, radius: 1.5),
+      FlutterGradients.seaLord(tileMode: TileMode.mirror, radius: 1.5)
     ];
 
     // Generates a new Random object

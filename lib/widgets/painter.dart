@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sonr_core/models/models.dart';
 
 const double K_ANGLE = pi;
@@ -11,32 +10,28 @@ class WavePainter extends CustomPainter {
   final GlobalKey iconKey;
   final Animation<double> waveAnimation;
   final double percent;
-  final double boxHeight;
+  final double height;
+  final double width;
   final Gradient gradient;
 
   WavePainter({
     @required this.iconKey,
     this.waveAnimation,
     this.percent,
-    this.boxHeight,
+    this.height,
+    this.width,
     this.gradient,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final RenderBox iconBox = iconKey.currentContext.findRenderObject();
-    final iconHeight = iconBox.size.height;
-    final baseHeight =
-        (boxHeight / 2) + (iconHeight / 2) - (percent * iconHeight);
-
-    final width = size.width ?? 325;
-    final height = size.height ?? 325;
+    final baseHeight = (height) - (percent * height);
     final path = Path();
     path.moveTo(0.0, baseHeight);
     for (var i = 0.0; i < width; i++) {
       path.lineTo(
         i,
-        baseHeight + sin((i / width * _pi2) + (waveAnimation.value * _pi2)) * 8,
+        baseHeight + sin((i / width * _pi2) + (waveAnimation.value * _pi2)) * 16,
       );
     }
 
@@ -53,20 +48,6 @@ class WavePainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
-  }
-}
-
-class ZoneView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Padding(
-        padding: EdgeInsets.only(bottom: 5),
-        child: CustomPaint(
-          size: Size(Get.width, Get.height),
-          painter: ZonePainter(),
-          child: Container(),
-        ));
   }
 }
 
@@ -87,14 +68,11 @@ class ZonePainter extends CustomPainter {
     paint.strokeWidth = 1;
 
     // Draw Zone Arcs
-    canvas.drawArc(_rectByZone(Position_Proximity.Immediate), K_ANGLE, K_ANGLE,
-        false, paint);
+    canvas.drawArc(_rectByZone(Position_Proximity.Immediate), K_ANGLE, K_ANGLE, false, paint);
 
-    canvas.drawArc(
-        _rectByZone(Position_Proximity.Near), K_ANGLE, K_ANGLE, false, paint);
+    canvas.drawArc(_rectByZone(Position_Proximity.Near), K_ANGLE, K_ANGLE, false, paint);
 
-    canvas.drawArc(_rectByZone(Position_Proximity.Distant), K_ANGLE, K_ANGLE,
-        false, paint);
+    canvas.drawArc(_rectByZone(Position_Proximity.Distant), K_ANGLE, K_ANGLE, false, paint);
   }
 
   Rect _rectByZone(Position_Proximity proximity) {

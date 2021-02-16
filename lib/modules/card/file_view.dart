@@ -4,7 +4,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import 'card_controller.dart';
-import '../../widgets/overlay.dart';
 
 class FileCard extends GetWidget<TransferCardController> {
   // References

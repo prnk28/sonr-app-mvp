@@ -8,7 +8,8 @@ class SonrOverlay {
   // Properties
   final BuildContext context;
   final Widget overlayWidget;
-  final Function builder;
+  final Duration duration;
+  final Duration entryDuration;
 
   // References
   Function removeOverlay;
@@ -66,8 +67,11 @@ class SonrOverlay {
   }
 
   // ** Constructer ** //
-  SonrOverlay({@required this.context, this.overlayWidget, this.builder}) {
-    assert((overlayWidget != null && builder == null) || (overlayWidget == null && builder != null));
+  SonrOverlay(
+      {@required this.context,
+      @required this.overlayWidget,
+      this.duration = const Duration(milliseconds: 250),
+      this.entryDuration = const Duration(milliseconds: 350)}) {
     removeOverlay = () {
       overlayBackground.remove();
       overlay.remove();
@@ -75,7 +79,7 @@ class SonrOverlay {
     overlayBackground = OverlayEntry(builder: (context) {
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(5.0),
-          duration: 250.milliseconds,
+          duration: duration,
           curve: Curves.easeIn,
           builder: (context, child, value) {
             return Positioned.fill(
@@ -89,11 +93,11 @@ class SonrOverlay {
                     child: PlayAnimation<double>(
                         curve: Curves.easeIn,
                         tween: (0.0).tweenTo(1.0),
-                        duration: 250.milliseconds,
+                        duration: duration,
                         builder: (context, child, value) {
                           return AnimatedOpacity(
                             opacity: value,
-                            duration: 250.milliseconds,
+                            duration: duration,
                             child: Container(
                               color: SonrColor.overlayBackground,
                             ),
@@ -103,18 +107,46 @@ class SonrOverlay {
             );
           });
     });
-    if (overlayWidget != null)
-      overlay = OverlayEntry(
-        builder: (context) => Column(mainAxisAlignment: MainAxisAlignment.center, children: [overlayWidget]),
-      );
-    else
-      overlay = OverlayEntry(
-        builder: (context) => Column(mainAxisAlignment: MainAxisAlignment.center, children: [builder(removeOverlay)]),
-      );
+    overlay = OverlayEntry(builder: (context) {
+      return _SonrOverlayView(
+          duration: duration,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [overlayWidget],
+          ));
+    });
     buildOverlay(context);
   }
 
   void buildOverlay(BuildContext context) {
     Overlay.of(context).insertAll([overlayBackground, overlay]);
+  }
+}
+
+class _SonrOverlayView extends StatefulWidget {
+  final Widget child;
+  final Duration duration;
+  const _SonrOverlayView({Key key, @required this.child, this.duration = const Duration(milliseconds: 1500)}) : super(key: key);
+  @override
+  _SonrOverlayViewState createState() => _SonrOverlayViewState();
+}
+
+class _SonrOverlayViewState extends State<_SonrOverlayView> with AnimationMixin {
+  Animation<Offset> position;
+
+  void initState() {
+    position = Offset(0.0, -1.0).tweenTo(Offset.zero).animatedBy(controller);
+    controller.duration = widget.duration;
+    controller.play();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(position: position, child: widget.child);
+  }
+
+  void play() {
+    controller.play();
   }
 }

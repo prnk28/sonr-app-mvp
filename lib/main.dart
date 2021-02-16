@@ -24,7 +24,6 @@ initServices() async {
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SocialMediaService().init());
   await Get.putAsync(() => DeviceService().init());
-  await Get.putAsync(() => SQLService().init());
 }
 
 // ^ Initial Controller Bindings ^ //

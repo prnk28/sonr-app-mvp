@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 
-enum AnimType { None, Shake, FadeIn, FadeOut }
+enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
 enum ArtboardType { Camera, Gallery, Contact, Feed }
@@ -74,6 +74,17 @@ class SonrAnimatedWidget extends GetWidget<AnimatedController> {
           builder: (context, child, value) {
             return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: child);
           });
+    } else if (animation == AnimType.SlideIn) {
+      return TweenAnimationBuilder<Offset>(
+        key: key,
+        tween: Tween(begin: Offset.zero, end: Offset(0.0, 1.0)),
+        duration: 1.seconds,
+        builder: (context, animation, child) => Transform.translate(
+          offset: animation,
+          child: child,
+        ),
+        child: child,
+      );
     }
     return child;
   }

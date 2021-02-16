@@ -17,36 +17,61 @@ class SonrIcon extends StatelessWidget {
   final Color color;
   final List<int> thumbnail;
 
-  SonrIcon(this.data, this.type, this.color, this.gradient, {this.thumbnail, this.size});
+  SonrIcon(this.data, this.type, this.color, this.gradient, {this.thumbnail, this.size, Key key}) : super(key: key);
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.gradient(
-    IconData data,
-    FlutterGradientNames gradient, {
-    double size = 40,
-  }) {
-    return SonrIcon(data, IconType.Gradient, Colors.white, gradient, size: size);
+  factory SonrIcon.gradient(IconData data, FlutterGradientNames gradient, {double size = 40, Key key}) {
+    return SonrIcon(
+      data,
+      IconType.Gradient,
+      Colors.white,
+      gradient,
+      size: size,
+      key: key,
+    );
   }
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.neumorphic(IconData data, {double size = 30, Color color = SonrColor.base}) {
-    return SonrIcon(data, IconType.Neumorphic, color, null, size: size);
+  factory SonrIcon.neumorphic(IconData data, {double size = 30, Color color = SonrColor.base, Key key}) {
+    return SonrIcon(
+      data,
+      IconType.Neumorphic,
+      color,
+      null,
+      size: size,
+      key: key,
+    );
   }
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.base}) {
-    return SonrIcon(data, IconType.Normal, color, null, size: size);
+  factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.base, Key key}) {
+    return SonrIcon(
+      data,
+      IconType.Normal,
+      color,
+      null,
+      size: size,
+      key: key,
+    );
   }
 
   // ^ Social Type Icon
-  factory SonrIcon.social(IconType type, Contact_SocialTile_Provider social, {double size = 24, Color color = Colors.black, bool alternate = false}) {
+  factory SonrIcon.social(IconType type, Contact_SocialTile_Provider social,
+      {double size = 24, Color color = Colors.black, bool alternate = false, Key key}) {
     // Init Icon Data
     _IconGradientWData result = _SonrIconData.socials[social];
-    return SonrIcon(result.data(alternate), type, color, result.gradient, size: size);
+    return SonrIcon(
+      result.data(alternate),
+      type,
+      color,
+      result.gradient,
+      size: size,
+      key: key,
+    );
   }
 
   // ^ Peer Data Platform to Icon
-  factory SonrIcon.device(IconType type, Peer peer, {Color color, double size = 30}) {
+  factory SonrIcon.device(IconType type, Peer peer, {Color color, double size = 30, Key key}) {
     // Set Color
     _IconGradientWData result = _SonrIconData.devices[peer.platform];
 
@@ -66,13 +91,14 @@ class SonrIcon extends StatelessWidget {
         color,
         FlutterGradientNames.viciousStance,
         size: size,
+        key: key,
       );
     }
   }
 
   // ^ Payload Data File Type to Icon with Preview
   factory SonrIcon.payload(IconType type, Payload payload,
-      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
+      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
     IconData data;
     if (payload == Payload.CONTACT) {
       data = _SonrIconData.contact;
@@ -87,11 +113,12 @@ class SonrIcon extends StatelessWidget {
       color,
       gradient,
       size: size,
+      key: key,
     );
   }
 
   // ^ Peer Data Platform to Icon
-  factory SonrIcon.platform(IconType type, Platform platform, {Color color, double size = 30}) {
+  factory SonrIcon.platform(IconType type, Platform platform, {Color color, double size = 30, Key key}) {
     // Set Color
     _IconGradientWData result = _SonrIconData.devices[platform];
 
@@ -103,6 +130,7 @@ class SonrIcon extends StatelessWidget {
         color,
         result.gradient,
         size: size,
+        key: key,
       );
     } else {
       return SonrIcon(
@@ -111,13 +139,14 @@ class SonrIcon extends StatelessWidget {
         color,
         FlutterGradientNames.viciousStance,
         size: size,
+        key: key,
       );
     }
   }
 
   // ^ Payload Data from Metadata
   factory SonrIcon.preview(IconType type, TransferCard card,
-      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice}) {
+      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
     return SonrIcon(
       _SonrIconData.files[card.properties.mime.type],
       type,
@@ -125,16 +154,12 @@ class SonrIcon extends StatelessWidget {
       gradient,
       thumbnail: card.preview,
       size: size,
+      key: key,
     );
   }
 
   // ^ Payload Data File Type to Icon
-  factory SonrIcon.share({
-    IconType type = IconType.Gradient,
-    bool isUrl = false,
-    double size = 40,
-    Color color = Colors.black,
-  }) {
+  factory SonrIcon.share({IconType type = IconType.Gradient, bool isUrl = false, double size = 40, Color color = Colors.black, Key key}) {
     // Set Icon for URL and Media
     IconData data = isUrl ? _SonrIconData.url : _SonrIconData.video;
     FlutterGradientNames gradient = isUrl ? FlutterGradientNames.magicRay : FlutterGradientNames.octoberSilence;
@@ -145,40 +170,26 @@ class SonrIcon extends StatelessWidget {
       color,
       gradient,
       size: size,
+      key: key,
     );
   }
 
   // ^ UI Icons ^ //
   static SonrIcon get success => SonrIcon(_SonrIconData.success, IconType.Normal, Colors.black, null);
-
   static SonrIcon get missing => SonrIcon(_SonrIconData.missing, IconType.Normal, Colors.black, null);
-
   static SonrIcon get error => SonrIcon(_SonrIconData.error, IconType.Normal, Colors.black, null);
-
   static SonrIcon get cancel => SonrIcon(_SonrIconData.cancel, IconType.Normal, Colors.black, null);
-
   static SonrIcon get info => SonrIcon.gradient(_SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
-
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
-
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
-
   static SonrIcon get close => SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36);
-
   static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
-
   static SonrIcon get profile => SonrIcon.gradient(Icons.person_outline, FlutterGradientNames.itmeoBranding, size: 36);
-
   static SonrIcon get search => SonrIcon.gradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
-
   static SonrIcon get more => SonrIcon.gradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
-
   static SonrIcon get settings => SonrIcon.gradient(_SonrIconData.gear, FlutterGradientNames.northMiracle, size: 36);
-
   static SonrIcon get multiSettings => SonrIcon.gradient(_SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
-
   static SonrIcon get send => SonrIcon.gradient(_SonrIconData.paperPlane, FlutterGradientNames.glassWater, size: 24);
-
   static SonrIcon get video => SonrIcon.gradient(_SonrIconData.video, FlutterGradientNames.glassWater, size: 28);
 
   static Padding socialBadge(Contact_SocialTile_Provider prov,
@@ -195,6 +206,11 @@ class SonrIcon extends StatelessWidget {
         child: SonrIcon.social(IconType.Gradient, prov, size: size),
       ),
     );
+  }
+
+  // ^ Method Returns Icon Data given TransferCard ^ //
+  static IconData dataFromCard(TransferCard card) {
+    return _SonrIconData.files[card.properties.mime.type];
   }
 
   // ^ Build View of Icon ^ //

@@ -14,6 +14,7 @@ import 'sql_service.dart';
 class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
+  final received = false.obs;
   final direction = 0.0.obs;
   final olc = "".obs;
   final peers = Map<String, Peer>().obs;
@@ -25,6 +26,7 @@ class SonrService extends GetxService {
   String _url;
   PeerController _peerController;
   InviteRequest_FileInfo _file;
+  TransferCard _receivedCard;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -120,6 +122,22 @@ class SonrService extends GetxService {
     await _node.respond(decision);
   }
 
+  // ^ Completed Receive Transfer ^
+  void completed() {
+    // Save Card
+    Get.find<DeviceService>().saveMediaFromCard(_receivedCard).then((value) {
+      _receivedCard.hasExported = value;
+      Get.find<SQLService>().storeCard(_receivedCard);
+      Get.find<HomeController>().addCard(_receivedCard);
+    });
+
+    // Reset Parameters
+    progress(0.0);
+    received(false);
+    HapticFeedback.heavyImpact();
+    _receivedCard = null;
+  }
+
   // **************************
   // ******* Callbacks ********
   // **************************
@@ -201,25 +219,17 @@ class SonrService extends GetxService {
 
       // Reset References
       _url = null;
-      payload(null);
       _peerController = null;
+      payload(null);
     }
   }
 
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(dynamic data) async {
     if (data is TransferCard) {
-      // Reset Data
-      progress(0.0);
-      Get.back();
-
-      // Save Card
-      Get.find<DeviceService>().saveMediaFromCard(data).then((value) {
-        data.hasExported = value;
-        Get.find<SQLService>().storeCard(data);
-        Get.find<HomeController>().addCard(data);
-      });
-      HapticFeedback.heavyImpact();
+      // Set Data
+      received(true);
+      _receivedCard = data;
     }
   }
 
