@@ -29,11 +29,11 @@ class SonrDialog {
     // Find Margin for Payload
     EdgeInsets margin;
     if (invite.payload == Payload.MEDIA) {
-      margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 90);
+      margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 200);
     } else if (invite.payload == Payload.CONTACT) {
-      margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 180);
+      margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 230);
     } else {
-      margin = EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 450);
+      margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 500);
     }
 
     // Check Payload

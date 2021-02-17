@@ -45,7 +45,7 @@ class SonrText extends StatelessWidget {
 
   // ^ Description Text with Provided Data
   factory SonrText.description(String text, {Color color = Colors.grey, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.bold, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.normal, size: size, key: key, color: color);
   }
 
   // ^ Date Text with Provided Data

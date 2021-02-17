@@ -247,10 +247,10 @@ class SonrIcon extends StatelessWidget {
       case IconType.Thumbnail:
         if (thumbnail != null) {
           result = ClipRRect(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+              borderRadius: BorderRadius.circular(20),
               child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  alignment: Alignment.bottomCenter,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
                   child: ConstrainedBox(
                       constraints: BoxConstraints(minWidth: 1, minHeight: 1, maxWidth: 200, maxHeight: 200), // here
                       child: Image.memory(thumbnail))));
