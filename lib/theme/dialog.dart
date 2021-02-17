@@ -32,8 +32,10 @@ class SonrDialog {
       margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 200);
     } else if (invite.payload == Payload.CONTACT) {
       margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 230);
-    } else {
+    } else if (invite.payload == Payload.URL) {
       margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 500);
+    } else {
+      margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 220);
     }
 
     // Check Payload
