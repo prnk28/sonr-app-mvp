@@ -1,13 +1,14 @@
 // import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import 'camera_view.dart';
-import 'media_sheet.dart';
+import '../media/camera_view.dart';
+import '../media/picker_sheet.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
@@ -127,23 +128,6 @@ class HomeController extends GetxController {
     }
   }
 
-  // ^ Opens Camera Picker ^ //
-  void openCamera() async {
-    // Check for Permssions
-    Get.find<DeviceService>().requestPermission(PermissionType.Camera).then((result) {
-      if (result) {
-        // Toggle Share Expand
-        toggleShareExpand(options: ToggleForced(false));
-
-        // Show Picker
-        Get.dialog(CameraView());
-      } else {
-        // Display Error
-        SonrSnack.error("Sonr isnt permitted to access your media.");
-      }
-    });
-  }
-
   // ^ Finds Index of Card and Scrolls to It ^ //
   void jumpToCard(TransferCard card) async {
     // Get Index
@@ -161,21 +145,34 @@ class HomeController extends GetxController {
     }
   }
 
+  // ^ Opens Camera Picker ^ //
+  void openCamera() async {
+    // Check for Permssions
+    if (await Permission.camera.request().isGranted) {
+      // Toggle Share Expand
+      toggleShareExpand(options: ToggleForced(false));
+
+      // Show Picker
+      Get.dialog(CameraView(), useSafeArea: false);
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+    }
+  }
+
   // ^ Opens Media Picker UI ^ //
   void openMediaPicker() async {
     // Check for Permssions
-    Get.find<DeviceService>().requestPermission(PermissionType.Gallery).then((result) {
-      if (result) {
-        // Toggle Share Expand
-        toggleShareExpand(options: ToggleForced(true));
+    if (await Permission.photos.request().isGranted) {
+      // Toggle Share Expand
+      toggleShareExpand(options: ToggleForced(true));
 
-        // Display Bottom Sheet
-        Get.bottomSheet(MediaSheet(), isDismissible: false);
-      } else {
-        // Display Error
-        SonrSnack.error("Sonr isnt permitted to access your media.");
-      }
-    });
+      // Display Bottom Sheet
+      Get.bottomSheet(MediaSheet(), isDismissible: false);
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+    }
   }
 
   // ^ Queues a Contact for Transfer ^ //

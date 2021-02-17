@@ -1,17 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:media_gallery/media_gallery.dart';
-import 'home_controller.dart';
+import 'media_controller.dart';
 
 // ** MediaPicker Dialog View ** //
-class MediaSheet extends GetView<MediaPickerController> {
+class MediaSheet extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(
@@ -23,6 +20,7 @@ class MediaSheet extends GetView<MediaPickerController> {
             // Header Buttons
             _MediaDropdownDialogBar(onCancel: () => Get.back(), onAccept: () => controller.confirmSelectedFile()),
             Obx(() {
+              controller.fetchMedia();
               if (controller.loaded.value) {
                 return _MediaGrid();
               } else {
@@ -35,7 +33,7 @@ class MediaSheet extends GetView<MediaPickerController> {
 }
 
 // ** Create Media Album Dropdown Bar ** //
-class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
+class _MediaDropdownDialogBar extends GetView<MediaController> {
   // Properties
   final Function onCancel;
   final Function onAccept;
@@ -104,16 +102,16 @@ class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
 }
 
 // ** Create Media Grid ** //
-class _MediaGrid extends GetView<MediaPickerController> {
+class _MediaGrid extends GetView<MediaController> {
   _MediaGrid();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return Container(
-        width: 330,
+        width: Get.width - 10,
         height: 368,
         child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
             itemCount: controller.allMedias.length,
             itemBuilder: (context, index) {
               return _MediaPickerItem(controller.allMedias[index]);
@@ -141,7 +139,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
   // Listen to Selected File
   @override
   void initState() {
-    selectedStream = Get.find<MediaPickerController>().selectedFile.listen((val) {
+    selectedStream = Get.find<MediaController>().selectedFile.listen((val) {
       if (widget.mediaFile == val) {
         if (!isPressed) {
           if (mounted) {
@@ -172,28 +170,30 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
   @override
   Widget build(BuildContext context) {
     // Initialize Styles
-    final defaultStyle = NeumorphicStyle(color: SonrColor.base);
-    final pressedStyle = NeumorphicStyle(
-        color: SonrColor.base, disableDepth: true, intensity: 0, border: NeumorphicBorder(isEnabled: true, width: 4, color: Colors.greenAccent));
+    final defaultStyle = NeumorphicStyle(intensity: 0.85, color: SonrColor.baseWhite);
+    final pressedStyle = NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
 
     // Build Button
     return NeumorphicButton(
+      padding: EdgeInsets.zero,
       style: isPressed ? pressedStyle : defaultStyle,
       onPressed: () {
-        Get.find<MediaPickerController>().selectedFile(widget.mediaFile);
+        Get.find<MediaController>().selectedFile(widget.mediaFile);
       },
       child: Stack(
         alignment: Alignment.center,
         fit: StackFit.expand,
         children: [
           FutureBuilder(
-              future: widget.mediaFile.getThumbnail(),
+              future: widget.mediaFile.getThumbnail(width: 200, height: 200),
               builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
                 if (snapshot.hasData) {
-                  return Image.memory(
-                    Uint8List.fromList(snapshot.data),
-                    fit: BoxFit.cover,
-                  );
+                  return DecoratedBox(
+                      child: Image.memory(
+                        Uint8List.fromList(snapshot.data),
+                        fit: BoxFit.cover,
+                      ),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)));
                 } else if (snapshot.hasError) {
                   return Icon(Icons.error, color: Colors.red, size: 24);
                 } else {
@@ -203,115 +203,21 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
                   );
                 }
               }),
-          widget.mediaFile.mediaType == MediaType.video ? SonrIcon.video : const SizedBox()
+          widget.mediaFile.mediaType == MediaType.video ? SonrIcon.video : const SizedBox(),
+          _buildSelectedBadge()
         ],
       ),
     );
   }
-}
 
-// ** MediaPicker GetXController ** //
-class MediaPickerController extends GetxController {
-  final allCollections = Rx<List<MediaCollection>>();
-  final mediaCollection = Rx<MediaCollection>();
-  final allMedias = <Media>[].obs;
-  final selectedFile = Rx<Media>();
-  final hasGallery = false.obs;
-  final loaded = false.obs;
-
-  @override
-  onInit() async {
-    fetch();
-    super.onInit();
-  }
-
-  // ^ Retreive Albums ^ //
-  fetch() async {
-    // Get Collections
-    List<MediaCollection> collections = await MediaGallery.listMediaCollections(
-      mediaTypes: [MediaType.image, MediaType.video],
-    );
-
-    allCollections(collections);
-
-    // List Collections
-    collections.forEach((element) {
-      // Set Has Gallery
-      if (element.count > 0) {
-        hasGallery(true);
-      }
-
-      // Check for Master Collection
-      if (element.isAllCollection) {
-        // Assign Values
-        mediaCollection(element);
-      }
-    });
-
-    if (mediaCollection.value.count > 0) {
-      // Get Images
-      final MediaPage imagePage = await mediaCollection.value.getMedias(
-        mediaType: MediaType.image,
-        take: 500,
-      );
-
-      // Get Videos
-      final MediaPage videoPage = await mediaCollection.value.getMedias(
-        mediaType: MediaType.video,
-        take: 500,
-      );
-
-      // Combine Media
-      final List<Media> combined = [
-        ...imagePage.items,
-        ...videoPage.items,
-      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
-
-      // Set All Media
-      allMedias.assignAll(combined);
+  _buildSelectedBadge() {
+    if (isPressed) {
+      return Container(
+          alignment: Alignment.bottomRight,
+          padding: EdgeInsets.only(right: 4, bottom: 4),
+          child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40));
+    } else {
+      return Container();
     }
-    loaded(true);
-  }
-
-  // ^ Method Updates the Current Media Collection ^ //
-  updateMediaCollection(MediaCollection collection) async {
-    // Reset Loaded
-    loaded(false);
-    mediaCollection(collection);
-
-    // Get Images
-    final MediaPage imagePage = await mediaCollection.value.getMedias(
-      mediaType: MediaType.image,
-      take: 500,
-    );
-
-    // Get Videos
-    final MediaPage videoPage = await mediaCollection.value.getMedias(
-      mediaType: MediaType.video,
-      take: 500,
-    );
-
-    // Combine Media
-    final List<Media> combined = [
-      ...imagePage.items,
-      ...videoPage.items,
-    ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
-
-    // Set All Media
-    allMedias.assignAll(combined);
-    loaded(true);
-  }
-
-  // ^ Process Selected File ^ //
-  confirmSelectedFile() async {
-    // Retreive File and Process
-    File mediaFile = await selectedFile.value.getFile();
-    Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path);
-
-    // Close Share Button
-    Get.find<HomeController>().toggleShareExpand();
-
-    // Go to Transfer
-    Get.offNamed("/transfer");
   }
 }

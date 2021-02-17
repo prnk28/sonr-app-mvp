@@ -206,35 +206,6 @@ class DeviceService extends GetxService {
     await GallerySaver.saveImage(path, albumName: "Sonr");
   }
 
-  // ^ RequestPermission Event ^ //
-  Future<bool> requestPermission(PermissionType type) async {
-    switch (type) {
-      case PermissionType.Location:
-        return await Permission.locationWhenInUse.request().isGranted;
-        break;
-
-      case PermissionType.Camera:
-        return await Permission.camera.request().isGranted;
-        break;
-
-      case PermissionType.Gallery:
-        return await Permission.photos.request().isGranted;
-        break;
-
-      case PermissionType.Notifications:
-        return await Permission.notification.request().isGranted;
-        break;
-
-      case PermissionType.Sound:
-        return await Permission.microphone.request().isGranted;
-        break;
-
-      default:
-        return false;
-        break;
-    }
-  }
-
   // ^ Launch a URL Event ^ //
   launchURL(String url) async {
     if (await canLaunch(url)) {
