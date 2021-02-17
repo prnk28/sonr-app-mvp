@@ -14,12 +14,12 @@ class FileCard extends GetWidget<TransferCardController> {
   final TransferCard card;
 
   // ** Factory -> Invite Dialog View ** //
-  factory FileCard.invite({@required AuthInvite invite}) {
+  factory FileCard.invite(AuthInvite invite) {
     return FileCard(CardType.Invite, invite: invite, card: invite.card);
   }
 
   // ** Factory -> Grid Item View ** //
-  factory FileCard.item({@required TransferCard card}) {
+  factory FileCard.item(TransferCard card) {
     return FileCard(CardType.GridItem, card: card);
   }
 
@@ -81,84 +81,89 @@ class _FileInviteView extends StatelessWidget {
     var size = SonrText.convertSizeToText(card.properties.size);
 
     // Build View
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      key: UniqueKey(),
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(children: [
-          // Build Profile Pic
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0, left: 8),
-            child: Neumorphic(
-              padding: EdgeInsets.all(4),
-              style: NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.circle(),
-                depth: -10,
+    return Container(
+      margin: EdgeInsets.all(8),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        key: UniqueKey(),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(children: [
+            // Build Profile Pic
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4.0, left: 8),
+                child: Neumorphic(
+                  padding: EdgeInsets.all(4),
+                  style: NeumorphicStyle(
+                    boxShape: NeumorphicBoxShape.circle(),
+                    depth: -10,
+                  ),
+                  child: invite.from.profile.hasPicture()
+                      ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+                      : Icon(
+                          Icons.insert_emoticon,
+                          size: 100,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                ),
               ),
-              child: invite.from.profile.hasPicture()
-                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                  : Icon(
-                      Icons.insert_emoticon,
-                      size: 100,
-                      color: Colors.black.withOpacity(0.5),
-                    ),
             ),
-          ),
-          // Create Spacing
-          Padding(padding: EdgeInsets.all(6)),
-          // From Information
-          Column(children: [
-            invite.from.profile.hasLastName()
-                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 38)
-                : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
-            Row(children: [
-              SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-              SonrText.normal("   $size", size: 18)
+            // Create Spacing
+            Padding(padding: EdgeInsets.all(6)),
+            // From Information
+            Column(children: [
+              invite.from.profile.hasLastName()
+                  ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 38)
+                  : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
+              Row(children: [
+                SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+                SonrText.normal("   $size", size: 18)
+              ]),
             ]),
           ]),
-        ]),
-        Divider(),
-        Container(
-          width: Get.width - 50,
-          height: Get.height / 3,
-          child: Neumorphic(
-              padding: EdgeInsets.all(8),
-              style: NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                depth: -10,
-              ),
-              child: SonrIcon.payload(
-                IconType.Gradient,
-                invite.payload,
-                gradient: SonrColor.payloadGradient(invite.payload),
-                size: (Get.height / 3),
-              )),
-        ),
-        Padding(padding: EdgeInsets.all(4)),
-        // Accept Button
-        Container(
-          width: Get.width / 2.75,
-          child: SonrButton.stadium(
-            onPressed: () {
-              controller.acceptTransfer(card);
-            },
-            icon: SonrIcon.accept,
-            text: SonrText.medium("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+          Divider(),
+          Container(
+            width: Get.width - 50,
+            height: Get.height / 3,
+            child: Neumorphic(
+                padding: EdgeInsets.all(8),
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                  depth: -10,
+                ),
+                child: SonrIcon.payload(
+                  IconType.Gradient,
+                  invite.payload,
+                  gradient: SonrColor.payloadGradient(invite.payload),
+                  size: (Get.height / 3),
+                )),
           ),
-        ),
-        Padding(padding: EdgeInsets.all(2)),
-        // Decline Button
-        TextButton(
-            onPressed: () {
-              controller.declineInvite();
-              Get.back();
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
-            )),
-      ],
+          Padding(padding: EdgeInsets.all(4)),
+          // Accept Button
+          Container(
+            width: Get.width / 2.75,
+            child: SonrButton.stadium(
+              onPressed: () {
+                controller.acceptTransfer(card);
+              },
+              icon: SonrIcon.accept,
+              text: SonrText.medium("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+            ),
+          ),
+          Padding(padding: EdgeInsets.all(2)),
+          // Decline Button
+          TextButton(
+              onPressed: () {
+                controller.declineInvite();
+                Get.back();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
+              )),
+        ],
+      ),
     );
   }
 }
@@ -193,7 +198,7 @@ class _FileItemView extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: SonrButton.circle(
                 icon: SonrIcon.info,
-                onPressed: () => controller.showCardInfo(context, _FileCardInfo(card)),
+                onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
                 shadowLightColor: Colors.black38,
               )),
         ),

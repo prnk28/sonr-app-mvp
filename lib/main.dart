@@ -76,8 +76,6 @@ class _AppState extends State<App> {
     return GetMaterialApp(
       getPages: K_PAGES,
       initialBinding: InitialBinding(),
-      navigatorKey: Get.key,
-      navigatorObservers: [GetObserver()],
       themeMode: ThemeMode.light,
       home: Scaffold(
           backgroundColor: Colors.black,

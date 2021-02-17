@@ -22,9 +22,6 @@ class TransferCardController extends GetxController {
   final animationCompleted = false.obs;
   final displayProgress = false.obs;
 
-  // References
-  SonrOverlay _sendBackPrompt;
-
   // ^ Handle Transfer Progress ^
   TransferCardController() {
     // @ Listen for Transfer Complete
@@ -64,24 +61,22 @@ class TransferCardController extends GetxController {
     Get.offAllNamed('/home/completed').then((value) {
       Get.find<HomeController>().addCard(card);
     });
-
-    // Close Overlay
-    if (closeOverlay) {
-      SonrOverlay.back();
-    }
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  promptSendBack(BuildContext context, TransferCard card) {
-    SonrOverlay.question(context, title: "Send Back", description: "Would you like to send your contact back?", onDecision: (result) {
-      acceptContact(card, sendBackContact: result, closeOverlay: true);
-    });
+  promptSendBack(TransferCard card) {
+    SonrOverlay.question(
+        title: "Send Back",
+        description: "Would you like to send your contact back?",
+        onDecision: (result) {
+          acceptContact(card, sendBackContact: result, closeOverlay: true);
+        });
   }
 
   // ^ Accept Transfer Invite Request ^ //
   acceptTransfer(TransferCard card) {
     Get.find<SonrService>().respond(true);
-    Get.back();
+    SonrOverlay.back();
     Get.dialog(ProgressView(this, card), barrierDismissible: false);
   }
 
@@ -89,11 +84,11 @@ class TransferCardController extends GetxController {
   declineInvite() {
     // Check if accepted
     Get.find<SonrService>().respond(false);
-    Get.back();
+    SonrOverlay.back();
   }
 
   // ^ Method to Present Card Overlay Info
-  showCardInfo(BuildContext context, Widget infoWidget) {
-    SonrOverlay.open(context, infoWidget);
+  showCardInfo(Widget infoWidget) {
+    SonrOverlay.open(infoWidget);
   }
 }

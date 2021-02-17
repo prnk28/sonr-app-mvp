@@ -7,6 +7,7 @@ import 'package:sonr_app/data/model_user.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
 import 'sql_service.dart';
@@ -177,7 +178,7 @@ class SonrService extends GetxService {
     if (data is AuthInvite) {
       if (!Get.isDialogOpen) {
         HapticFeedback.heavyImpact();
-        SonrDialog.invite(data);
+        SonrOverlay.invite(data);
       }
     }
   }
@@ -188,7 +189,7 @@ class SonrService extends GetxService {
       // Check if Sent Back Contact
       if (data.payload == Payload.CONTACT) {
         HapticFeedback.vibrate();
-        SonrDialog.reply(data);
+        SonrOverlay.reply(data);
       } else {
         // For File
         if (data.decision) {

@@ -15,50 +15,58 @@ class TileCreateStepper extends GetView<TileStepperController> {
   @override
   Widget build(BuildContext context) {
     // Update State
-    return SonrScaffold.appBarLeading(
-      title: "",
-      resizeToAvoidBottomPadding: false,
-      leading: SonrButton.circle(
-          onPressed: () {
-            controller.reset();
-            Get.back();
-          },
-          icon: SonrIcon.close),
-      body: Container(
-        margin: EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 25),
-        child: Obx(() {
-          // Get Details for Step
-          var details = _TileStepDetails(controller: controller, step: controller.step.value);
+    return NeumorphicBackground(
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 100),
+      borderRadius: BorderRadius.circular(30),
+      backendColor: Colors.transparent,
+      child: Neumorphic(
+        style: NeumorphicStyle(color: SonrColor.base),
+        child: SonrScaffold.appBarLeading(
+          title: "",
+          resizeToAvoidBottomPadding: false,
+          leading: SonrButton.circle(
+              onPressed: () {
+                controller.reset();
+                Get.back();
+              },
+              icon: SonrIcon.close),
+          body: Container(
+            margin: EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 25),
+            child: Obx(() {
+              // Get Details for Step
+              var details = _TileStepDetails(controller: controller, step: controller.step.value);
 
-          // Build PageView
-          return Column(children: [
-            Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: Get.height - details.heightModifier(),
-                  child: PageView.builder(
-                    controller: controller.pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (_, idx) {
-                      if (idx == 0) {
-                        return _DropdownAddView();
-                      } else if (idx == 1) {
-                        return SingleChildScrollView(child: _SetInfoView());
-                      } else {
-                        return _SetTypeView();
-                      }
-                    },
-                  ),
-                )),
+              // Build PageView
+              return Column(children: [
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: Get.height - details.heightModifier(),
+                      child: PageView.builder(
+                        controller: controller.pageController,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (_, idx) {
+                          if (idx == 0) {
+                            return _DropdownAddView();
+                          } else if (idx == 1) {
+                            return SingleChildScrollView(child: _SetInfoView());
+                          } else {
+                            return _SetTypeView();
+                          }
+                        },
+                      ),
+                    )),
 
-            // Bottom Buttons
-            Spacer(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: details.bottomButtons,
-            ),
-          ]);
-        }),
+                // Bottom Buttons
+                //Spacer(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: details.bottomButtons,
+                ),
+              ]);
+            }),
+          ),
+        ),
       ),
     );
   }
@@ -143,7 +151,7 @@ class _DropdownAddView extends GetView<TileStepperController> {
                   margin: EdgeInsets.only(left: 12, right: 12),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                     // @ Set Text
-                    SonrText.medium("Is your account Private?", size: 18),
+                    SonrText.normal("Is your account Private?", size: 18),
 
                     // @ Create Check Box
                     ValueBuilder<bool>(
@@ -254,15 +262,15 @@ class _SetTypeView extends GetView<TileStepperController> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(right: 4),
-      child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
         // @ InfoGraph
         _InfoText(index: 3, text: "Set your Tile's type"),
         Divider(),
-        Padding(padding: EdgeInsets.all(8)),
+        //Padding(padding: EdgeInsets.all(8)),
 
         // @ Toggle Buttons for Widget Size
         Container(
-            height: 100,
+            height: 85,
             width: Get.width,
             child: Obx(() => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -317,24 +325,19 @@ class _InfoText extends StatelessWidget {
   const _InfoText({Key key, @required this.index, @required this.text}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: Get.width - 80),
-      child: Center(
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Padding(padding: EdgeInsets.all(14)),
-          Text(index.toString(), style: GoogleFonts.poppins(fontSize: 108, fontWeight: FontWeight.w900, color: Colors.black38)),
-          Padding(padding: EdgeInsets.all(8)),
-          Expanded(
-            child: Text(text,
-                style: GoogleFonts.poppins(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                )),
-          ),
-        ]),
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Padding(padding: EdgeInsets.all(14)),
+      Text(index.toString(), style: GoogleFonts.poppins(fontSize: 108, fontWeight: FontWeight.w900, color: Colors.black38)),
+      Padding(padding: EdgeInsets.all(8)),
+      Expanded(
+        child: Text(text,
+            style: GoogleFonts.poppins(
+              fontSize: 34,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            )),
       ),
-    );
+    ]);
   }
 }
 
@@ -372,6 +375,10 @@ class TileStepperController extends GetxController {
         if (await Get.find<SocialMediaService>().validate(provider.value, username.value, isPrivate.value)) {
           step(2);
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+          FocusScopeNode currentFocus = FocusScope.of(Get.context);
+          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
         }
       } else {
         // Display Error Snackbar
@@ -484,7 +491,7 @@ class _TileStepDetails {
     } else if (step == 1) {
       return 250 + kBaseModifier;
     } else {
-      return 160 + kBaseModifier;
+      return 200 + kBaseModifier;
     }
   }
 
@@ -504,7 +511,7 @@ class _TileStepDetails {
     //  Step Three: Cancel and Confirm
     if (step == 2) {
       return SonrButton.stadium(
-        text: SonrText.medium("Save"),
+        text: SonrText.semibold("Save"),
         onPressed: controller.saveTile,
         icon: SonrIcon.success,
         margin: EdgeInsets.only(left: 60, right: 80),
@@ -513,14 +520,14 @@ class _TileStepDetails {
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (controller.step.value == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrButton.stadium(text: SonrText.medium("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
-        SonrButton.stadium(text: SonrText.medium("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+        SonrButton.stadium(text: SonrText.normal("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
+        SonrButton.stadium(text: SonrText.normal("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
       return SonrButton.stadium(
-          text: SonrText.medium("Next", size: 22),
+          text: SonrText.normal("Next", size: 22),
           onPressed: controller.nextStep,
           icon: SonrIcon.forward,
           margin: EdgeInsets.only(left: 60, right: 80),

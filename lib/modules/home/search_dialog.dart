@@ -39,7 +39,7 @@ class SearchDialog extends GetView<SearchCardController> {
                                   ),
                                   leading: SonrButton.circle(
                                     onPressed: () {
-                                      Get.back();
+                                      SonrOverlay.back();
                                     },
                                     icon: SonrIcon.close,
                                     padding: const EdgeInsets.only(top: 8),

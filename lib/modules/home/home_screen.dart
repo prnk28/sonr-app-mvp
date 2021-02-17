@@ -24,13 +24,9 @@ class HomeScreen extends GetView<HomeController> {
             icon: SonrIcon.search,
             onPressed: () {
               if (controller.allCards.length > 0) {
-                Get.dialog(
+                SonrOverlay.open(
                   SearchDialog(),
                   barrierDismissible: true,
-                  useRootNavigator: false,
-                  useSafeArea: true,
-                  barrierColor: SonrColor.dialogBackground,
-                  transitionCurve: Curves.bounceInOut,
                 );
               } else {
                 SonrSnack.error("No Cards Found");
@@ -70,46 +66,49 @@ class TransferCardGrid extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // Initialize
-      return Container(
-        padding: EdgeInsets.only(top: 15),
-        margin: EdgeInsets.all(10),
-        height: 500, // card height
-        child: PageView.builder(
-            itemCount: controller.getCardList().length,
-            controller: controller.pageController,
-            onPageChanged: (int index) => controller.pageIndex(index),
-            itemBuilder: (_, idx) {
-              return Obx(() {
-                if (idx == controller.pageIndex.value) {
-                  return PlayAnimation<double>(
-                    tween: (0.85).tweenTo(0.95),
-                    duration: 200.milliseconds,
-                    builder: (context, child, value) {
-                      return Transform.scale(
-                        scale: value,
-                        child: buildCard(controller, idx),
-                      );
-                    },
-                  );
-                } else if (idx == controller.pageIndex.value) {
-                  return PlayAnimation<double>(
-                    tween: (0.95).tweenTo(0.85),
-                    duration: 200.milliseconds,
-                    builder: (context, child, value) {
-                      return Transform.scale(
-                        scale: value,
-                        child: buildCard(controller, idx),
-                      );
-                    },
-                  );
-                } else {
-                  return Transform.scale(
-                    scale: 0.85,
-                    child: buildCard(controller, idx),
-                  );
-                }
-              });
-            }),
+      return GestureDetector(
+        onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
+        child: Container(
+          padding: EdgeInsets.only(top: 15),
+          margin: EdgeInsets.all(10),
+          height: 500, // card height
+          child: PageView.builder(
+              itemCount: controller.getCardList().length,
+              controller: controller.pageController,
+              onPageChanged: (int index) => controller.pageIndex(index),
+              itemBuilder: (_, idx) {
+                return Obx(() {
+                  if (idx == controller.pageIndex.value) {
+                    return PlayAnimation<double>(
+                      tween: (0.85).tweenTo(0.95),
+                      duration: 200.milliseconds,
+                      builder: (context, child, value) {
+                        return Transform.scale(
+                          scale: value,
+                          child: buildCard(controller, idx),
+                        );
+                      },
+                    );
+                  } else if (idx == controller.pageIndex.value) {
+                    return PlayAnimation<double>(
+                      tween: (0.95).tweenTo(0.85),
+                      duration: 200.milliseconds,
+                      builder: (context, child, value) {
+                        return Transform.scale(
+                          scale: value,
+                          child: buildCard(controller, idx),
+                        );
+                      },
+                    );
+                  } else {
+                    return Transform.scale(
+                      scale: 0.85,
+                      child: buildCard(controller, idx),
+                    );
+                  }
+                });
+              }),
+        ),
       );
     });
   }
@@ -127,13 +126,13 @@ class TransferCardGrid extends GetView<HomeController> {
 
     // Determin CardView
     if (list[index].payload == Payload.MEDIA) {
-      return MediaCard.item(card: list[index]);
+      return MediaCard.item(list[index]);
     } else if (list[index].payload == Payload.CONTACT) {
-      return ContactCard.item(card: list[index]);
+      return ContactCard.item(list[index]);
     } else if (list[index].payload == Payload.URL) {
-      return URLCard.item(card: list[index]);
+      return URLCard.item(list[index]);
     } else {
-      return FileCard.item(card: list[index]);
+      return FileCard.item(list[index]);
     }
   }
 }

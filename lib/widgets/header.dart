@@ -45,9 +45,9 @@ class SonrHeaderBar extends StatelessWidget {
     );
   }
 
-  factory SonrHeaderBar.leading({@required Widget title, @required Widget leading, double height}) {
+  factory SonrHeaderBar.leading({Widget title, @required Widget leading, double height}) {
     return SonrHeaderBar(
-      title: title,
+      title: title ?? Container(),
       type: _SonrDialogHeaderType.Leading,
       leading: leading,
       height: height,

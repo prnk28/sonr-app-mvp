@@ -17,17 +17,17 @@ class ContactCard extends GetWidget<TransferCardController> {
   final TransferCard card;
 
   // ** Factory -> Invite Dialog View ** //
-  factory ContactCard.invite({@required AuthInvite invite}) {
+  factory ContactCard.invite(AuthInvite invite) {
     return ContactCard(CardType.Invite, invite: invite, card: invite.card);
   }
 
   // ** Factory -> Invite Dialog View ** //
-  factory ContactCard.reply({@required AuthReply reply}) {
+  factory ContactCard.reply(AuthReply reply) {
     return ContactCard(CardType.Reply, reply: reply, card: reply.card);
   }
 
   // ** Factory -> Grid Item View ** //
-  factory ContactCard.item({@required TransferCard card}) {
+  factory ContactCard.item(TransferCard card) {
     return ContactCard(CardType.GridItem, card: card);
   }
 
@@ -149,7 +149,7 @@ class _ContactInviteView extends StatelessWidget {
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
           // Decline Button
           TextButton(
-              onPressed: () => Get.back(),
+              onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
@@ -159,8 +159,9 @@ class _ContactInviteView extends StatelessWidget {
             width: Get.width / 2.75,
             child: SonrButton.stadium(
               onPressed: () {
+                SonrOverlay.back();
                 if (!isReply) {
-                  controller.promptSendBack(context, card);
+                  controller.promptSendBack(card);
                 } else {
                   controller.acceptContact(card, sendBackContact: false);
                 }

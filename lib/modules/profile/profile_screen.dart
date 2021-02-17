@@ -18,7 +18,7 @@ class ProfileScreen extends GetView<ProfileController> {
             child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
             style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
             onPressed: () {
-              SonrDialog.large(TileCreateStepper());
+              Get.dialog(TileCreateStepper());
             }),
         body: NeumorphicBackground(
             backendColor: Colors.transparent,
@@ -118,7 +118,7 @@ class ContactHeader extends GetView<ProfileController> {
   _buildTitle() {
     return GestureDetector(
         onLongPress: () async {
-          SonrDialog.small(
+          SonrOverlay.open(
             EditDialog.nameField(
                 onSubmitted: (map) {
                   controller.firstName(map["firstName"]);

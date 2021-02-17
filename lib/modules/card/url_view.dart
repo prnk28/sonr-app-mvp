@@ -13,12 +13,12 @@ class URLCard extends GetWidget<TransferCardController> {
   final TransferCard card;
 
   // ** Factory -> Invite Dialog View ** //
-  factory URLCard.invite({@required AuthInvite invite}) {
+  factory URLCard.invite(AuthInvite invite) {
     return URLCard(CardType.Invite, invite: invite, card: invite.card);
   }
 
   // ** Factory -> Grid Item View ** //
-  factory URLCard.item({@required TransferCard card}) {
+  factory URLCard.item(TransferCard card) {
     return URLCard(CardType.GridItem, card: card);
   }
 

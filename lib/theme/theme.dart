@@ -2,7 +2,6 @@
 export '../widgets/header.dart';
 export '../widgets/button.dart';
 export 'color.dart';
-export 'dialog.dart';
 export 'icon.dart';
 export 'scaffold.dart';
 export 'snackbar.dart';
@@ -13,6 +12,7 @@ export '../widgets/animation.dart';
 export '../widgets/painter.dart';
 export '../widgets/radio.dart';
 export '../widgets/sheet.dart';
+export '../widgets/overlay.dart';
 
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';

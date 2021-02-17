@@ -38,7 +38,7 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(mainAxisSize: MainAxisSize.min, children: [
       NeumorphicRadio(
         style: NeumorphicRadioStyle(
             unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),

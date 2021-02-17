@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:sonr_app/theme/theme.dart';
 
 class SonrScaffold extends StatelessWidget {
