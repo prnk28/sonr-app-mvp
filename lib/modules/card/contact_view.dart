@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
@@ -88,44 +89,118 @@ class _ContactInviteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Display Info
-    return Column(mainAxisSize: MainAxisSize.max, children: [
-      // @ Header
-      Divider(),
-      SonrHeaderBar.closeAccept(
-        title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
-        onAccept: () {
-          if (!isReply) {
-            SonrDialog.small(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              // @ Footer
-              SonrHeaderBar.closeAccept(
-                title: SonrText.header("Send Back?", size: 32),
-                onAccept: () {
-                  controller.acceptTransfer(card, sendBackContact: true);
-                  Get.back(closeOverlays: true);
-                },
-                onCancel: () {
-                  controller.acceptTransfer(card, sendBackContact: false);
-                  Get.back(closeOverlays: true);
-                },
+    return Container(
+      margin: EdgeInsets.all(6),
+      child: Column(children: [
+        Row(children: [
+          // @ Photo
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4.0, left: 8),
+              child: Neumorphic(
+                padding: EdgeInsets.all(4),
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: -10,
+                ),
+                child: card.contact.hasPicture()
+                    ? Image.memory(Uint8List.fromList(card.contact.picture))
+                    : Icon(
+                        Icons.insert_emoticon,
+                        size: 100,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
               ),
-              Divider(),
-              Container(
-                  child: SonrText.normal("Would you like to send your contact card back to ${card.contact.firstName}"),
-                  margin: EdgeInsets.symmetric(horizontal: 4))
-            ]));
-          } else {
-            controller.acceptTransfer(card, sendBackContact: false);
-          }
-        },
-        onCancel: () {
-          Get.back();
-        },
-      ),
+            ),
+          ),
+          VerticalDivider(),
+          Padding(padding: EdgeInsets.all(4)),
+          // @ Content
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            child: Column(children: [
+              // Name
+              Row(children: [
+                SonrText.bold(card.contact.firstName + " "),
+                SonrText.light(card.contact.lastName),
+              ]),
 
-      // @ Basic Contact Info - Make Expandable
-      SonrText.bold(card.contact.firstName),
-      SonrText.bold(card.contact.lastName),
-    ]);
+              // Phone/ Website
+              Row(children: [
+                SonrIcon.platform(IconType.Neumorphic, card.platform, color: Colors.grey[700], size: 20),
+                // Hide PhoneNumber
+                Padding(padding: EdgeInsets.all(10)),
+                card.contact.hasPhone() ? SonrText.light(card.contact.phone, size: 16) : SonrText.light("1-555-555-5555", size: 16),
+                card.contact.hasWebsite() ? SonrText.normal(card.contact.website) : SonrText.normal(card.contact.website),
+              ]),
+            ]),
+          ),
+          // SonrHeaderBar.closeAccept(
+          //   title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
+          //   onAccept: () {
+          //     if (!isReply) {
+          //       SonrDialog.small(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          //         // @ Footer
+          //         SonrHeaderBar.closeAccept(
+          //           title: SonrText.header("Send Back?", size: 32),
+          //           onAccept: () {
+          //             controller.acceptTransfer(card, sendBackContact: true);
+          //             Get.back(closeOverlays: true);
+          //           },
+          //           onCancel: () {
+          //             controller.acceptTransfer(card, sendBackContact: false);
+          //             Get.back(closeOverlays: true);
+          //           },
+          //         ),
+          //         Divider(),
+          //         Container(
+          //             child: SonrText.normal("Would you like to send your contact card back to ${card.contact.firstName}"),
+          //             margin: EdgeInsets.symmetric(horizontal: 4))
+          //       ]));
+          //     } else {
+          //       controller.acceptTransfer(card, sendBackContact: false);
+          //     }
+          //   },
+          //   onCancel: () {
+          //     Get.back();
+          //   },
+          // ),
+        ]),
+        // Social Media
+        Container(
+          margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
+          child: Row(
+              children: List.generate(card.contact.socials.length, (index) {
+            return SonrIcon.social(IconType.Gradient, card.contact.socials[index].provider, size: 32);
+          })),
+        ),
+        Divider(),
+        Padding(padding: EdgeInsets.all(4)),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          // Decline Button
+          TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: SonrText.normal("Decline", color: Colors.redAccent, size: 18),
+              )),
+          // Accept Button
+          Container(
+            width: Get.width / 2.75,
+            child: SonrButton.stadium(
+              onPressed: () {
+                controller.acceptTransfer(card, sendBackContact: false);
+                Get.back();
+              },
+              icon: SonrIcon.accept,
+              text: SonrText.normal("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+            ),
+          ),
+        ])
+      ]),
+    );
   }
 }
 

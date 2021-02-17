@@ -31,7 +31,7 @@ class SonrDialog {
     if (invite.payload == Payload.MEDIA) {
       margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 200);
     } else if (invite.payload == Payload.CONTACT) {
-      margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 230);
+      margin = EdgeInsets.only(left: 20, right: 20, top: 150, bottom: 320);
     } else if (invite.payload == Payload.URL) {
       margin = EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 500);
     } else {
@@ -42,7 +42,7 @@ class SonrDialog {
     if (invite.payload == Payload.MEDIA) {
       return SonrDialog(MediaCard.invite(invite: invite), margin, false, true, true);
     } else if (invite.payload == Payload.CONTACT) {
-      return SonrDialog(ContactCard.invite(invite: invite), margin, false, true, true);
+      return SonrDialog(ContactCard.invite(invite: invite), margin, true, true, true);
     } else if (invite.payload == Payload.URL) {
       return SonrDialog(URLCard.invite(invite: invite), margin, false, true, true);
     } else {

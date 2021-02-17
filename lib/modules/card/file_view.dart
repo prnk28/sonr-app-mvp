@@ -138,13 +138,13 @@ class _FileInviteView extends StatelessWidget {
         Padding(padding: EdgeInsets.all(4)),
         // Accept Button
         Container(
-          width: Get.width / 2,
+          width: Get.width / 2.75,
           child: SonrButton.stadium(
             onPressed: () {
               controller.acceptTransfer(card);
             },
             icon: SonrIcon.accept,
-            text: SonrText.normal("Accept", size: 24, color: Colors.black.withOpacity(0.85)),
+            text: SonrText.normal("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
           ),
         ),
         Padding(padding: EdgeInsets.all(2)),
@@ -156,7 +156,7 @@ class _FileInviteView extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: SonrText.normal("Decline", color: Colors.grey[700]),
+              child: SonrText.normal("Decline", color: Colors.redAccent, size: 18),
             )),
       ],
     );

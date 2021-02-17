@@ -43,6 +43,11 @@ class SonrText extends StatelessWidget {
     return SonrText(text, weight: FontWeight.bold, size: size, key: key, color: color);
   }
 
+  // ^ Bold Text with Provided Data
+  factory SonrText.light(String text, {Color color = Colors.black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: color);
+  }
+
   // ^ Description Text with Provided Data
   factory SonrText.description(String text, {Color color = Colors.grey, double size = 24, Key key}) {
     return SonrText(text, weight: FontWeight.normal, size: size, key: key, color: color);
