@@ -73,7 +73,11 @@ class TransferCardController extends GetxController {
 
       // Save Card
       Get.find<SQLService>().storeCard(card);
-      Get.find<HomeController>().addCard(card);
+
+      // Return to HomeScreen
+      Get.offAndToNamed('/home/completed').then((value) {
+        Get.find<HomeController>().addCard(card);
+      });
     }
     // @ File Transfer Accepted
     else {

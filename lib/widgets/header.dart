@@ -146,7 +146,7 @@ class SonrHeaderBar extends StatelessWidget {
 
     return Container(
       height: height,
-      padding: EdgeInsets.only(top: 5, bottom: 5),
+      padding: EdgeInsets.only(top: 0, bottom: 15, left: 14, right: 14),
       child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,

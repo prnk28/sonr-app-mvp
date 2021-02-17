@@ -7,7 +7,7 @@ const double K_ANGLE = pi;
 // ^ Wave Painter for File Progress ^ //
 class WavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
-  final GlobalKey iconKey;
+  final Key iconKey;
   final Animation<double> waveAnimation;
   final double percent;
   final double height;

@@ -13,12 +13,12 @@ class ProgressView extends HookWidget {
   final Duration duration;
 
   // Constructer
-  ProgressView(this.cardController, this.card, {this.duration = const Duration(milliseconds: 1400)}) : super(key: GlobalKey());
+  ProgressView(this.cardController, this.card, {this.duration = const Duration(milliseconds: 1400)}) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
     // Inject Hook Controller
-    final iconKey = GlobalKey();
+    final iconKey = UniqueKey();
     final hookController = useAnimationController(duration: duration);
     hookController.forward();
 
@@ -42,7 +42,7 @@ class ProgressView extends HookWidget {
   }
 
   // ^ Method Builds Wave Painter Canvas ^ //
-  Widget buildPainter(AnimationController hookController, GlobalKey<State<StatefulWidget>> iconKey) {
+  Widget buildPainter(AnimationController hookController, Key iconKey) {
     return SizedBox(
       height: Get.height,
       width: Get.width,
@@ -50,7 +50,7 @@ class ProgressView extends HookWidget {
         animation: hookController,
         builder: (BuildContext context, Widget child) {
           return Opacity(
-            opacity: 0.75,
+            opacity: 0.85,
             child: CustomPaint(
               painter: WavePainter(
                 iconKey: iconKey,
@@ -68,7 +68,7 @@ class ProgressView extends HookWidget {
   }
 
   // ^ Method Builds Shader Box ^ //
-  Widget buildShaderMask(AnimationController hookController, GlobalKey<State<StatefulWidget>> iconKey) {
+  Widget buildShaderMask(AnimationController hookController, Key iconKey) {
     return SizedBox(
       height: Get.width,
       width: Get.height,
@@ -91,7 +91,7 @@ class ProgressView extends HookWidget {
   }
 
   // ^ Method Builds Shader Box ^ //
-  Widget buildTransferIcon(AnimationController hookController, GlobalKey<State<StatefulWidget>> iconKey) {
+  Widget buildTransferIcon(AnimationController hookController, UniqueKey iconKey) {
     return Stack(alignment: Alignment.center, children: [
       Obx(() {
         if (cardController.displayProgress.value) {
