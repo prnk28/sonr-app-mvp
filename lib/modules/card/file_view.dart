@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -28,7 +30,7 @@ class FileCard extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _FileInviteView(card, controller);
+        return _FileInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
         return Neumorphic(
@@ -69,31 +71,93 @@ class FileCard extends GetWidget<TransferCardController> {
 // ^ File Invite Builds from Invite Protobuf ^ //
 class _FileInviteView extends StatelessWidget {
   final TransferCard card;
+  final AuthInvite invite;
   final TransferCardController controller;
-  _FileInviteView(this.card, this.controller);
+  _FileInviteView(this.card, this.controller, this.invite);
 
   @override
   Widget build(BuildContext context) {
+    // Extract Data
+    var size = SonrText.convertSizeToText(card.properties.size);
+
+    // Build View
     return Column(
       mainAxisSize: MainAxisSize.max,
       key: UniqueKey(),
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // @ Header
-        SonrHeaderBar.closeAccept(
-          title: SonrText.invite(card.payload.toString(), card.firstName),
-          onAccept: () {
-            controller.acceptTransfer(card);
-          },
-          onCancel: () {
-            controller.declineInvite();
-            Get.back();
-          },
-        ),
+        Row(children: [
+          // Build Profile Pic
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, left: 8),
+            child: Neumorphic(
+              padding: EdgeInsets.all(4),
+              style: NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.circle(),
+                depth: -10,
+              ),
+              child: invite.from.profile.hasPicture()
+                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+                  : Icon(
+                      Icons.insert_emoticon,
+                      size: 100,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+            ),
+          ),
+          // Create Spacing
+          Padding(padding: EdgeInsets.all(6)),
+          // From Information
+          Column(children: [
+            invite.from.profile.hasLastName()
+                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 38)
+                : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
+            Row(children: [
+              SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+              SonrText.description("   $size", size: 18)
+            ]),
+          ]),
+        ]),
         Divider(),
-        // @ Build Item from Metadata and Peer
-        Expanded(child: SonrIcon.preview(IconType.Thumbnail, card)),
-        SonrText.normal(card.properties.mime.type.toString().capitalizeFirst, size: 22),
+        Container(
+          width: Get.width - 50,
+          height: Get.height / 3,
+          child: Neumorphic(
+              padding: EdgeInsets.all(8),
+              style: NeumorphicStyle(
+                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                depth: -10,
+              ),
+              child: SonrIcon.payload(
+                IconType.Gradient,
+                invite.payload,
+                gradient: SonrColor.payloadGradient(invite.payload),
+                size: (Get.height / 3),
+              )),
+        ),
+        Padding(padding: EdgeInsets.all(4)),
+        // Accept Button
+        Container(
+          width: Get.width / 2,
+          child: SonrButton.stadium(
+            onPressed: () {
+              controller.acceptTransfer(card);
+            },
+            icon: SonrIcon.accept,
+            text: SonrText.normal("Accept", size: 24, color: Colors.black.withOpacity(0.85)),
+          ),
+        ),
+        Padding(padding: EdgeInsets.all(2)),
+        // Decline Button
+        TextButton(
+            onPressed: () {
+              controller.declineInvite();
+              Get.back();
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: SonrText.normal("Decline", color: Colors.grey[700]),
+            )),
       ],
     );
   }

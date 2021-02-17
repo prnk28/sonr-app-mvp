@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'icon.dart';
 
 class SonrColor {
@@ -23,6 +24,25 @@ class SonrColor {
       FlutterGradients.juicyCake(tileMode: TileMode.mirror, radius: 1.5),
       FlutterGradients.northMiracle(tileMode: TileMode.mirror, radius: 1.5),
       FlutterGradients.seaLord(tileMode: TileMode.mirror, radius: 1.5)
+    ];
+
+    // Generates a new Random object
+    final _random = new Random();
+
+    // Generate a random index based on the list length
+    return opts[_random.nextInt(opts.length)];
+  }
+
+  // ^ Generates Random Gradient for Progress View ^ //
+  static FlutterGradientNames payloadGradient(Payload payload) {
+    var opts = [
+      FlutterGradientNames.itmeoBranding,
+      FlutterGradientNames.norseBeauty,
+      FlutterGradientNames.summerGames,
+      FlutterGradientNames.healthyWater,
+      FlutterGradientNames.frozenHeat,
+      FlutterGradientNames.mindCrawl,
+      FlutterGradientNames.seashore
     ];
 
     // Generates a new Random object
