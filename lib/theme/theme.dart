@@ -1,6 +1,6 @@
 // Custom Theme Aspects
 export '../widgets/header.dart';
-export '../widgets/button.dart';
+export 'button.dart';
 export 'color.dart';
 export 'icon.dart';
 export 'scaffold.dart';

@@ -14,61 +14,62 @@ enum SocialAuthType { Link, OAuth }
 class TileCreateStepper extends GetView<TileStepperController> {
   @override
   Widget build(BuildContext context) {
-    // Update State
-    return NeumorphicBackground(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 100),
-      borderRadius: BorderRadius.circular(30),
-      backendColor: Colors.transparent,
-      child: Neumorphic(
-        style: NeumorphicStyle(color: SonrColor.base),
-        child: SonrScaffold.appBarLeading(
-          title: "",
-          resizeToAvoidBottomPadding: false,
-          leading: SonrButton.circle(
-              onPressed: () {
-                controller.reset();
-                Get.back();
-              },
-              icon: SonrIcon.close),
-          body: Container(
-            margin: EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 25),
-            child: Obx(() {
-              // Get Details for Step
-              var details = _TileStepDetails(controller: controller, step: controller.step.value);
-
-              // Build PageView
-              return Column(children: [
-                Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      height: Get.height - details.heightModifier(),
-                      child: PageView.builder(
-                        controller: controller.pageController,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (_, idx) {
-                          if (idx == 0) {
-                            return _DropdownAddView();
-                          } else if (idx == 1) {
-                            return SingleChildScrollView(child: _SetInfoView());
-                          } else {
-                            return _SetTypeView();
-                          }
-                        },
-                      ),
-                    )),
+    return Obx(() {
+      // Get Details for Step
+      var details = _TileStepDetails(controller: controller, step: controller.step.value);
+      // Update State
+      return AnimatedContainer(
+        duration: 250.milliseconds,
+        margin: EdgeInsets.symmetric(vertical: details.verticalMarginModifier(), horizontal: 6),
+        child: NeumorphicBackground(
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 100),
+          borderRadius: BorderRadius.circular(30),
+          backendColor: Colors.transparent,
+          child: Neumorphic(
+            style: NeumorphicStyle(color: SonrColor.base),
+            child: Material(
+              color: Colors.transparent,
+              child: Column(children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.only(top: 8, left: 8),
+                  child: SonrButton.circle(
+                      icon: SonrIcon.close,
+                      onPressed: () {
+                        controller.reset();
+                        Get.back();
+                      }),
+                ),
+                Container(
+                  height: Get.height - details.heightModifier(),
+                  child: PageView.builder(
+                    controller: controller.pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (_, idx) {
+                      if (idx == 0) {
+                        return _DropdownAddView();
+                      } else if (idx == 1) {
+                        return SingleChildScrollView(child: _SetInfoView());
+                      } else {
+                        return _SetTypeView();
+                      }
+                    },
+                  ),
+                ),
 
                 // Bottom Buttons
-                //Spacer(),
+                Spacer(),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: details.bottomButtons,
                 ),
-              ]);
-            }),
+                Spacer(),
+              ]),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -483,15 +484,26 @@ class _TileStepDetails {
 
   _TileStepDetails({@required this.step, @required this.controller});
 
-  // Adjusted Container Height
+  // ^ Adjusted Container Height ^
   final kBaseModifier = 260.0;
-  double heightModifier() {
+  double heightModifier({double toolbarModifier}) {
     if (step == 0) {
       return 200 + kBaseModifier;
     } else if (step == 1) {
       return 250 + kBaseModifier;
     } else {
       return 200 + kBaseModifier;
+    }
+  }
+
+  // ^ Adjusted Container Margin ^
+  double verticalMarginModifier() {
+    if (step == 0) {
+      return 10;
+    } else if (step == 1) {
+      return 15;
+    } else {
+      return 10;
     }
   }
 
@@ -520,14 +532,15 @@ class _TileStepDetails {
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (controller.step.value == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrButton.stadium(text: SonrText.normal("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
-        SonrButton.stadium(text: SonrText.normal("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+        SonrButton.stadium(text: SonrText.semibold("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
+        SonrButton.stadium(
+            text: SonrText.semibold("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
       return SonrButton.stadium(
-          text: SonrText.normal("Next", size: 22),
+          text: SonrText.semibold("Next", size: 22),
           onPressed: controller.nextStep,
           icon: SonrIcon.forward,
           margin: EdgeInsets.only(left: 60, right: 80),

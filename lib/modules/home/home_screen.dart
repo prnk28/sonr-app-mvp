@@ -73,6 +73,7 @@ class TransferCardGrid extends GetView<HomeController> {
           margin: EdgeInsets.all(10),
           height: 500, // card height
           child: PageView.builder(
+              reverse: true,
               itemCount: controller.getCardList().length,
               controller: controller.pageController,
               onPageChanged: (int index) => controller.pageIndex(index),

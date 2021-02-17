@@ -39,7 +39,7 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Normal(w400) Text with Provided Data
-  factory SonrText.normal(String text, {Color color = Colors.grey, double size = 24, Key key}) {
+  factory SonrText.normal(String text, {Color color = Colors.black, double size = 24, Key key}) {
     return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: color);
   }
 
@@ -303,6 +303,7 @@ class SonrTextField extends StatelessWidget {
   final bool autoCorrect;
   final TextCapitalization textCapitalization;
   final TextEditingController controller;
+  final TextInputAction textInputAction;
 
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
@@ -315,6 +316,7 @@ class SonrTextField extends StatelessWidget {
       this.onChanged,
       this.focusNode,
       this.onEditingComplete,
+      this.textInputAction = TextInputAction.done,
       this.autoFocus = false,
       this.autoCorrect = true,
       this.textCapitalization = TextCapitalization.none});
@@ -349,6 +351,7 @@ class SonrTextField extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 autofocus: autoFocus,
+                textInputAction: textInputAction,
                 autocorrect: autoCorrect,
                 textCapitalization: textCapitalization,
                 focusNode: focusNode,

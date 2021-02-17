@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class SonrOverlay extends GetxController {
       {Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300),
       bool barrierDismissible: true,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
     // Create Overlay
 
@@ -41,17 +43,20 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Question ^ //
-  static question(
+  static Future<bool> question(
       {@required String title,
       @required String description,
-      @required Function(bool) onDecision,
       String acceptTitle = "Yes!",
       String declineTitle = "No",
       bool barrierDismissible: true,
       bool closeOnResponse = true,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
       Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
+    // Create Future Completer
+    var completer = new Completer<bool>();
+
     // Create Overlay
     var questionOverlay = _SonrOverlayEntry(
         entryLocation,
@@ -62,7 +67,9 @@ class SonrOverlay extends GetxController {
           count,
           title,
           description,
-          onDecision,
+          (result) {
+            completer.complete(result);
+          },
           acceptTitle,
           declineTitle,
           closeOnResponse,
@@ -71,6 +78,7 @@ class SonrOverlay extends GetxController {
     // Add Overlay to List
     _controller.currentOverlay(questionOverlay);
     _controller.overlays.add(questionOverlay);
+    return completer.future;
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
@@ -80,6 +88,7 @@ class SonrOverlay extends GetxController {
       String buttonText = "Okay",
       bool barrierDismissible: true,
       bool closeOnResponse = true,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
       Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
@@ -106,6 +115,7 @@ class SonrOverlay extends GetxController {
   static invite(AuthInvite invite,
       {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
       bool barrierDismissible: false,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
@@ -126,6 +136,7 @@ class SonrOverlay extends GetxController {
   static reply(AuthReply reply,
       {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
       bool barrierDismissible: false,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
@@ -232,6 +243,7 @@ class _SonrOverlayEntry {
   final double blur;
   final Color backgroundColor;
   final bool barrierDismissible;
+  final MainAxisAlignment mainAxisAlignment;
 
   // References
   Function dismiss;
@@ -239,7 +251,7 @@ class _SonrOverlayEntry {
 
   // ** Constructer ** //
   _SonrOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
-      {this.blur = 5.0, this.backgroundColor = SonrColor.overlayBackground}) {
+      {this.blur = 5.0, this.backgroundColor = SonrColor.overlayBackground, this.mainAxisAlignment = MainAxisAlignment.center}) {
     dismiss = () {
       overlayBackground.remove();
       overlay.remove();
@@ -278,7 +290,7 @@ class _SonrOverlayEntry {
     overlay = OverlayEntry(builder: (context) {
       return _BaseOverlayView(
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: mainAxisAlignment,
             children: [overlayWidget],
           ),
           entryDuration,

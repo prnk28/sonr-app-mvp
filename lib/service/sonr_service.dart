@@ -15,7 +15,7 @@ import 'sql_service.dart';
 class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
-  final received = false.obs;
+  final received = Rx<TransferCard>();
   final direction = 0.0.obs;
   final olc = "".obs;
   final peers = Map<String, Peer>().obs;
@@ -27,7 +27,6 @@ class SonrService extends GetxService {
   String _url;
   PeerController _peerController;
   InviteRequest_FileInfo _file;
-  TransferCard _receivedCard;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -124,26 +123,24 @@ class SonrService extends GetxService {
   }
 
   // ^ Save Card after Completed Receive Transfer ^
-  void completed() {
+  void completed(TransferCard card) async {
     // Feedback
     HapticFeedback.heavyImpact();
 
     // Save Card to Gallery
-    Get.find<DeviceService>().saveMediaFromCard(_receivedCard).then((value) {
-      // Set Values and Store in SQL
-      _receivedCard.hasExported = value;
-      Get.find<SQLService>().storeCard(_receivedCard);
+    card.hasExported = await Get.find<DeviceService>().saveMediaFromCard(card);
 
-      // Present Home Controller
-      Get.offAndToNamed('/home/completed').then((value) {
-        Get.find<HomeController>().addCard(_receivedCard);
-      });
+    // Store In SQL
+    Get.find<SQLService>().storeCard(card);
 
-      // Reset Parameters
-      progress(0.0);
-      received(false);
-      _receivedCard = null;
+    // Present Home Controller
+    Get.offAndToNamed('/home/completed').then((value) {
+      Get.find<HomeController>().addCard(card);
     });
+
+    // Reset Parameters
+    progress(0.0);
+    received(null);
   }
 
   // **************************
@@ -236,8 +233,7 @@ class SonrService extends GetxService {
   Future<void> _handleReceived(dynamic data) async {
     if (data is TransferCard) {
       // Set Data
-      received(true);
-      _receivedCard = data;
+      received(data);
     }
   }
 

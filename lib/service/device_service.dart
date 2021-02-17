@@ -171,33 +171,37 @@ class DeviceService extends GetxService {
   Future<bool> saveMediaFromCard(TransferCard card) async {
     // Get Data from Media
     final path = card.metadata.path;
+    if (card.hasMetadata()) {
+// Save Image to Gallery
+      if (card.metadata.mime.type == MIME_Type.image) {
+        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
 
-    // Save Image to Gallery
-    if (card.metadata.mime.type == MIME_Type.image) {
-      var result = await GallerySaver.saveImage(path, albumName: "Sonr");
-
-      // Visualize Result
-      if (result) {
-        SonrSnack.success("Saved Photo to your Device's Gallery");
-      } else {
-        SonrSnack.error("Unable to save Photo to your Gallery");
+        // Visualize Result
+        if (result) {
+          SonrSnack.success("Saved Photo to your Device's Gallery");
+        } else {
+          SonrSnack.error("Unable to save Photo to your Gallery");
+        }
+        return result;
       }
-      return result;
-    }
 
-    // Save Video to Gallery
-    if (card.metadata.mime.type == MIME_Type.video) {
-      var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+      // Save Video to Gallery
+      if (card.metadata.mime.type == MIME_Type.video) {
+        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
 
-      // Visualize Result
-      if (result) {
-        SonrSnack.success("Saved Video to your Device's Gallery");
-      } else {
-        SonrSnack.error("Unable to save Video to your Gallery");
+        // Visualize Result
+        if (result) {
+          SonrSnack.success("Saved Video to your Device's Gallery");
+        } else {
+          SonrSnack.error("Unable to save Video to your Gallery");
+        }
+        return result;
       }
-      return result;
+      return false;
+    } else {
+      SonrSnack.success("Unable to save Media to Gallery");
+      return false;
     }
-    return false;
   }
 
   // ^ Saves Photo to Gallery ^ //

@@ -18,29 +18,28 @@ enum CardType { None, Invite, Reply, GridItem, Info }
 
 class TransferCardController extends GetxController {
   // Properties
-  final transferCompleted = false.obs;
+  final Rx<TransferCard> receivedCard = Get.find<SonrService>().received;
   final animationCompleted = false.obs;
   final displayProgress = false.obs;
 
   // ^ Handle Transfer Progress ^
   TransferCardController() {
-    // @ Listen for Transfer Complete
-    Get.find<SonrService>().received.listen((result) {
-      transferCompleted(result);
-      if (animationCompleted.value && !result) {
+    // @ Listen for Animation Complete
+    animationCompleted.listen((result) {
+      // Transfer NOT Completed, Animation Completed
+      if (receivedCard.value == null && result) {
         displayProgress(true);
-      } else if (animationCompleted.value && result) {
-        Get.find<SonrService>().completed();
+      } else if (receivedCard.value != null && result) {
+        Get.find<SonrService>().completed(receivedCard.value);
         Get.back();
       }
     });
 
     // @ Listen for Animation Complete
-    animationCompleted.listen((result) {
-      if (Get.find<SonrService>().received.value && !result) {
-        displayProgress(true);
-      } else if (Get.find<SonrService>().received.value && result) {
-        Get.find<SonrService>().completed();
+    receivedCard.listen((result) {
+      // Transfer Completed, Animation Completed
+      if (animationCompleted.value && result != null) {
+        Get.find<SonrService>().completed(result);
         Get.back();
       }
     });
@@ -64,20 +63,29 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  promptSendBack(TransferCard card) {
-    SonrOverlay.question(
-        title: "Send Back",
-        description: "Would you like to send your contact back?",
-        onDecision: (result) {
-          acceptContact(card, sendBackContact: result, closeOverlay: true);
-        });
+  promptSendBack(TransferCard card) async {
+    var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
+    acceptContact(card, sendBackContact: result, closeOverlay: true);
   }
 
   // ^ Accept Transfer Invite Request ^ //
   acceptTransfer(TransferCard card) {
     Get.find<SonrService>().respond(true);
     SonrOverlay.back();
-    Get.dialog(ProgressView(this, card), barrierDismissible: false);
+
+    // Get Estimated Duration - Size in Bytes / 5mb in Bytes
+    var averageBytes = card.properties.size / 5000000;
+    Duration duration;
+
+    // Set Duration for Animation
+    if (averageBytes < 1) {
+      duration = Duration(milliseconds: 1400);
+    } else {
+      var time = averageBytes * 1000 + 400;
+      duration = Duration(milliseconds: time.round());
+    }
+
+    Get.dialog(ProgressView(this, card, duration: duration), barrierDismissible: false);
   }
 
   // ^ Decline Invite Request ^ //
