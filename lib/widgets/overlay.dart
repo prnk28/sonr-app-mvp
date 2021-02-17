@@ -4,6 +4,142 @@ import 'package:flutter/material.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:get/get.dart';
 
+// ** Class Controls Active Overlays ** //
+class SonrOverlay extends GetxController {
+  final overlays = <_SonrOverlayWidget>[].obs;
+  final currentOverlay = Rx<_SonrOverlayWidget>();
+
+  // References
+  static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
+  static int get count => Get.find<SonrOverlay>().overlays.length;
+
+  // ^ Static Method Finds Overlay Controller and Opens View ^ //
+  static open(BuildContext context, Widget view) {
+    var overlay = _SonrOverlayWidget(context: context, overlayWidget: view);
+    Get.find<SonrOverlay>().currentOverlay(overlay);
+    Get.find<SonrOverlay>().overlays.add(overlay);
+  }
+
+  // ^ Static Method Finds Overlay Controller and Prompts Question ^ //
+  static question(BuildContext context,
+      {@required String title,
+      @required String description,
+      @required Function(bool) onDecision,
+      String acceptTitle = "Yes!",
+      String declineTitle = "No",
+      bool closeOnResponse = false}) {
+    // Set Current Overlay
+    var questionOverlay = _SonrOverlayWidget(
+        context: context,
+        overlayWidget: _SonrOverlayQuestionView(
+          count,
+          title,
+          description,
+          onDecision,
+          acceptTitle,
+          declineTitle,
+        ));
+
+    // Add Overlay
+    Get.find<SonrOverlay>().currentOverlay(questionOverlay);
+    Get.find<SonrOverlay>().overlays.add(questionOverlay);
+  }
+
+  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
+  static alert(BuildContext context,
+      {@required String title, @required String description, String buttonText = "Okay", bool closeOnResponse = false}) {
+    // Set Current Overlay
+    var alertOverlay = _SonrOverlayWidget(
+        context: context,
+        overlayWidget: _SonrOverlayAlertView(
+          count,
+          title,
+          description,
+          buttonText,
+        ));
+
+    // Add Overlay
+    Get.find<SonrOverlay>().currentOverlay(alertOverlay);
+    Get.find<SonrOverlay>().overlays.add(alertOverlay);
+  }
+
+  // ^ Static Method Pops Current Overlay ^ //
+  static back() {
+    if (isOpen) {
+      // Pop Current Overlay
+      if (Get.find<SonrOverlay>().currentOverlay.value != null) {
+        Get.find<SonrOverlay>().currentOverlay.value.dismiss();
+      }
+
+      // Refresh List
+      Get.find<SonrOverlay>().overlays.removeLast();
+      Get.find<SonrOverlay>().overlays.refresh();
+    } else {
+      print("Overlay is not open");
+    }
+  }
+
+  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
+  static pop({int backUntil = 1}) {
+    if (isOpen) {
+      // Validate PopCount is less than List Length
+      if (backUntil > count) {
+        backUntil = count;
+      }
+
+      // Reverse Iterate Count and Remove
+      for (var i = 0; i <= count; i++) {
+        Get.find<SonrOverlay>().overlays[i].dismiss();
+        Get.find<SonrOverlay>().overlays.removeLast();
+      }
+
+      // Refresh List
+      Get.find<SonrOverlay>().currentOverlay(Get.find<SonrOverlay>().overlays[count - 1]);
+      Get.find<SonrOverlay>().overlays.refresh();
+    } else {
+      print("Overlay is not open");
+    }
+  }
+
+  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
+  static popAt(int index) {
+    if (isOpen) {
+      // Validate PopCount is less than List Length
+      if (index <= count - 1) {
+        Get.find<SonrOverlay>().overlays[index].dismiss();
+        Get.find<SonrOverlay>().overlays.removeAt(index);
+      } else {
+        print("Invalid Index");
+      }
+
+      // Refresh List
+      Get.find<SonrOverlay>().currentOverlay(Get.find<SonrOverlay>().overlays[count - 1]);
+      Get.find<SonrOverlay>().overlays.refresh();
+    } else {
+      print("Overlay is not open");
+    }
+  }
+
+  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
+  static closeAll() {
+    if (isOpen) {
+      // Iterate through Overlays
+      Get.find<SonrOverlay>().overlays.forEach((overlay) {
+        overlay.dismiss();
+      });
+
+      // Clear List
+      Get.find<SonrOverlay>().overlays.clear();
+      Get.find<SonrOverlay>().currentOverlay(null);
+
+      // Refresh List
+      Get.find<SonrOverlay>().overlays.refresh();
+    } else {
+      print("Overlay is not open");
+    }
+  }
+}
+
 // ** Class Presents Overlay Widget Entry on Context ** //
 class _SonrOverlayWidget {
   // Properties
@@ -203,141 +339,5 @@ class _SonrBaseOverlayViewState extends State<_SonrBaseOverlayView> with Animati
 
   void play() {
     controller.play();
-  }
-}
-
-// ** Class Controls Active Overlays ** //
-class SonrOverlay extends GetxController {
-  final overlays = <_SonrOverlayWidget>[].obs;
-  final currentOverlay = Rx<_SonrOverlayWidget>();
-
-  // References
-  static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
-  static int get count => Get.find<SonrOverlay>().overlays.length;
-
-  // ^ Static Method Finds Overlay Controller and Opens View ^ //
-  static open(BuildContext context, Widget view) {
-    var overlay = _SonrOverlayWidget(context: context, overlayWidget: view);
-    Get.find<SonrOverlay>().currentOverlay(overlay);
-    Get.find<SonrOverlay>().overlays.add(overlay);
-  }
-
-  // ^ Static Method Finds Overlay Controller and Prompts Question ^ //
-  static question(BuildContext context,
-      {@required String title,
-      @required String description,
-      @required Function(bool) onDecision,
-      String acceptTitle = "Yes!",
-      String declineTitle = "No",
-      bool closeOnResponse = false}) {
-    // Set Current Overlay
-    var questionOverlay = _SonrOverlayWidget(
-        context: context,
-        overlayWidget: _SonrOverlayQuestionView(
-          count,
-          title,
-          description,
-          onDecision,
-          acceptTitle,
-          declineTitle,
-        ));
-
-    // Add Overlay
-    Get.find<SonrOverlay>().currentOverlay(questionOverlay);
-    Get.find<SonrOverlay>().overlays.add(questionOverlay);
-  }
-
-  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
-  static alert(BuildContext context,
-      {@required String title, @required String description, String buttonText = "Okay", bool closeOnResponse = false}) {
-    // Set Current Overlay
-    var alertOverlay = _SonrOverlayWidget(
-        context: context,
-        overlayWidget: _SonrOverlayAlertView(
-          count,
-          title,
-          description,
-          buttonText,
-        ));
-
-    // Add Overlay
-    Get.find<SonrOverlay>().currentOverlay(alertOverlay);
-    Get.find<SonrOverlay>().overlays.add(alertOverlay);
-  }
-
-  // ^ Static Method Pops Current Overlay ^ //
-  static back() {
-    if (isOpen) {
-      // Pop Current Overlay
-      if (Get.find<SonrOverlay>().currentOverlay.value != null) {
-        Get.find<SonrOverlay>().currentOverlay.value.dismiss();
-      }
-
-      // Refresh List
-      Get.find<SonrOverlay>().overlays.removeLast();
-      Get.find<SonrOverlay>().overlays.refresh();
-    } else {
-      print("Overlay is not open");
-    }
-  }
-
-  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
-  static pop({int backUntil = 1}) {
-    if (isOpen) {
-      // Validate PopCount is less than List Length
-      if (backUntil > count) {
-        backUntil = count;
-      }
-
-      // Reverse Iterate Count and Remove
-      for (var i = 0; i <= count; i++) {
-        Get.find<SonrOverlay>().overlays[i].dismiss();
-        Get.find<SonrOverlay>().overlays.removeLast();
-      }
-
-      // Refresh List
-      Get.find<SonrOverlay>().currentOverlay(Get.find<SonrOverlay>().overlays[count - 1]);
-      Get.find<SonrOverlay>().overlays.refresh();
-    } else {
-      print("Overlay is not open");
-    }
-  }
-
-  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
-  static popAt(int index) {
-    if (isOpen) {
-      // Validate PopCount is less than List Length
-      if (index <= count - 1) {
-        Get.find<SonrOverlay>().overlays[index].dismiss();
-        Get.find<SonrOverlay>().overlays.removeAt(index);
-      } else {
-        print("Invalid Index");
-      }
-
-      // Refresh List
-      Get.find<SonrOverlay>().currentOverlay(Get.find<SonrOverlay>().overlays[count - 1]);
-      Get.find<SonrOverlay>().overlays.refresh();
-    } else {
-      print("Overlay is not open");
-    }
-  }
-
-  // ^ Static Method Finds Overlay Controller and Prompts Alert ^ //
-  static closeAll() {
-    if (isOpen) {
-      // Iterate through Overlays
-      Get.find<SonrOverlay>().overlays.forEach((overlay) {
-        overlay.dismiss();
-      });
-
-      // Clear List
-      Get.find<SonrOverlay>().overlays.clear();
-      Get.find<SonrOverlay>().currentOverlay(null);
-
-      // Refresh List
-      Get.find<SonrOverlay>().overlays.refresh();
-    } else {
-      print("Overlay is not open");
-    }
   }
 }
