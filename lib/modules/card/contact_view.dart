@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import 'card_controller.dart';
@@ -88,7 +89,6 @@ class _ContactInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Display Info
     return Container(
       margin: EdgeInsets.all(6),
       child: Column(children: [
@@ -131,40 +131,10 @@ class _ContactInviteView extends StatelessWidget {
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
                 card.contact.hasPhone() ? SonrText.light(card.contact.phone, size: 16) : SonrText.light("1-555-555-5555", size: 16),
-                card.contact.hasWebsite() ? SonrText.normal(card.contact.website) : SonrText.normal(card.contact.website),
+                card.contact.hasWebsite() ? SonrText.medium(card.contact.website) : SonrText.medium(card.contact.website),
               ]),
             ]),
           ),
-          // SonrHeaderBar.closeAccept(
-          //   title: SonrText.invite(Payload.CONTACT.toString(), card.contact.firstName),
-          //   onAccept: () {
-          //     if (!isReply) {
-          //       SonrDialog.small(Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          //         // @ Footer
-          //         SonrHeaderBar.closeAccept(
-          //           title: SonrText.header("Send Back?", size: 32),
-          //           onAccept: () {
-          //             controller.acceptTransfer(card, sendBackContact: true);
-          //             Get.back(closeOverlays: true);
-          //           },
-          //           onCancel: () {
-          //             controller.acceptTransfer(card, sendBackContact: false);
-          //             Get.back(closeOverlays: true);
-          //           },
-          //         ),
-          //         Divider(),
-          //         Container(
-          //             child: SonrText.normal("Would you like to send your contact card back to ${card.contact.firstName}"),
-          //             margin: EdgeInsets.symmetric(horizontal: 4))
-          //       ]));
-          //     } else {
-          //       controller.acceptTransfer(card, sendBackContact: false);
-          //     }
-          //   },
-          //   onCancel: () {
-          //     Get.back();
-          //   },
-          // ),
         ]),
         // Social Media
         Container(
@@ -179,23 +149,24 @@ class _ContactInviteView extends StatelessWidget {
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
           // Decline Button
           TextButton(
-              onPressed: () {
-                Get.back();
-              },
+              onPressed: () => Get.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.normal("Decline", color: Colors.redAccent, size: 18),
+                child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
               )),
           // Accept Button
           Container(
             width: Get.width / 2.75,
             child: SonrButton.stadium(
               onPressed: () {
-                controller.acceptTransfer(card, sendBackContact: false);
-                Get.back();
+                if (!isReply) {
+                  controller.promptSendBack(context, card);
+                } else {
+                  controller.acceptContact(card, sendBackContact: false);
+                }
               },
               icon: SonrIcon.accept,
-              text: SonrText.normal("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+              text: SonrText.medium("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
             ),
           ),
         ])
@@ -249,7 +220,7 @@ class _ContactItemView extends StatelessWidget {
           child: SonrButton.circle(
               depth: 4,
               onPressed: () {},
-              text: SonrText.normal("Mobile", size: 12, color: Colors.black45),
+              text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
               icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
               iconPosition: WidgetPosition.Top),
         ),
@@ -260,7 +231,7 @@ class _ContactItemView extends StatelessWidget {
           child: SonrButton.circle(
               depth: 4,
               onPressed: () {},
-              text: SonrText.normal("Text", size: 12, color: Colors.black45),
+              text: SonrText.medium("Text", size: 12, color: Colors.black45),
               icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
               iconPosition: WidgetPosition.Top),
         ),
@@ -271,7 +242,7 @@ class _ContactItemView extends StatelessWidget {
             child: SonrButton.circle(
                 depth: 4,
                 onPressed: () {},
-                text: SonrText.normal("Video", size: 12, color: Colors.black45),
+                text: SonrText.medium("Video", size: 12, color: Colors.black45),
                 icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
                 iconPosition: WidgetPosition.Top)),
       ]),

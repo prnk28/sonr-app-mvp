@@ -111,8 +111,8 @@ class _MediumViewState extends State<MediumView> {
           children: [
             ClipPath(clipper: WaveClipperOne(), child: Image.network(post.thumbnail)),
             SonrText.gradient(post.title, FlutterGradientNames.premiumDark, size: 20),
-            SonrText.description(_cleanDescription(post.title.length, post.description), size: 14),
-            SonrText.normal(_cleanDate(post.pubDate), size: 14)
+            SonrText.normal(_cleanDescription(post.title.length, post.description), size: 14),
+            SonrText.medium(_cleanDate(post.pubDate), size: 14)
           ],
         ),
       ),

@@ -33,24 +33,34 @@ class SonrText extends StatelessWidget {
       this.size})
       : super(key: key);
 
-  // ^ Normal Text with Provided Data
-  factory SonrText.normal(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: color);
-  }
-
-  // ^ Bold Text with Provided Data
-  factory SonrText.bold(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.bold, size: size, key: key, color: color);
-  }
-
-  // ^ Bold Text with Provided Data
+  // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = Colors.black, double size = 32, Key key}) {
     return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: color);
   }
 
-  // ^ Description Text with Provided Data
-  factory SonrText.description(String text, {Color color = Colors.grey, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.normal, size: size, key: key, color: color);
+  // ^ Normal(w400) Text with Provided Data
+  factory SonrText.normal(String text, {Color color = Colors.grey, double size = 24, Key key}) {
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: color);
+  }
+
+  // ^ Medium(w500) Text with Provided Data -- Default Text
+  factory SonrText.medium(String text, {Color color = Colors.black, double size = 16, Key key}) {
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: color);
+  }
+
+  // ^ SemiBold(w600) Text with Provided Data -- Button Text
+  factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: color);
+  }
+
+  // ^ Bold(w700) Text with Provided Data -- Header Text
+  factory SonrText.bold(String text, {Color color = Colors.black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: color);
+  }
+
+  // ^ Black(w800) Text with Provided Data
+  factory SonrText.black(String text, {Color color = Colors.black, double size = 16, Key key}) {
+    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: color);
   }
 
   // ^ Date Text with Provided Data
@@ -80,7 +90,7 @@ class SonrText extends StatelessWidget {
       text,
       isGradient: true,
       isCentered: true,
-      weight: FontWeight.w800,
+      weight: FontWeight.w700,
       size: size,
       key: key,
       gradient: FlutterGradients.findByName(gradient),

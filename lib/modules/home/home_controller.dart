@@ -79,16 +79,16 @@ class HomeController extends GetxController {
     // Change Category
     if (toggleIndex.value == 0) {
       category(ToggleFilter.All);
-      return SonrText.normal("All");
+      return SonrText.medium("All");
     } else if (toggleIndex.value == 1) {
       category(ToggleFilter.Media);
-      return SonrText.normal("Media");
+      return SonrText.medium("Media");
     } else if (toggleIndex.value == 2) {
       category(ToggleFilter.Media);
-      return SonrText.normal("Contacts");
+      return SonrText.medium("Contacts");
     } else {
       category(ToggleFilter.Links);
-      return SonrText.normal("Links");
+      return SonrText.medium("Links");
     }
   }
 

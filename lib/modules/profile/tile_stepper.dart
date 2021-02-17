@@ -143,7 +143,7 @@ class _DropdownAddView extends GetView<TileStepperController> {
                   margin: EdgeInsets.only(left: 12, right: 12),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                     // @ Set Text
-                    SonrText.normal("Is your account Private?", size: 18),
+                    SonrText.medium("Is your account Private?", size: 18),
 
                     // @ Create Check Box
                     ValueBuilder<bool>(
@@ -504,7 +504,7 @@ class _TileStepDetails {
     //  Step Three: Cancel and Confirm
     if (step == 2) {
       return SonrButton.stadium(
-        text: SonrText.normal("Save"),
+        text: SonrText.medium("Save"),
         onPressed: controller.saveTile,
         icon: SonrIcon.success,
         margin: EdgeInsets.only(left: 60, right: 80),
@@ -513,14 +513,14 @@ class _TileStepDetails {
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (controller.step.value == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrButton.stadium(text: SonrText.normal("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
-        SonrButton.stadium(text: SonrText.normal("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+        SonrButton.stadium(text: SonrText.medium("Back"), onPressed: controller.previousStep, icon: SonrIcon.back),
+        SonrButton.stadium(text: SonrText.medium("Next"), onPressed: controller.nextStep, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
       return SonrButton.stadium(
-          text: SonrText.normal("Next", size: 22),
+          text: SonrText.medium("Next", size: 22),
           onPressed: controller.nextStep,
           icon: SonrIcon.forward,
           margin: EdgeInsets.only(left: 60, right: 80),

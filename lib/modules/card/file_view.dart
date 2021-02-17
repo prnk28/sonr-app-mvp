@@ -114,7 +114,7 @@ class _FileInviteView extends StatelessWidget {
                 : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
             Row(children: [
               SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-              SonrText.description("   $size", size: 18)
+              SonrText.normal("   $size", size: 18)
             ]),
           ]),
         ]),
@@ -144,7 +144,7 @@ class _FileInviteView extends StatelessWidget {
               controller.acceptTransfer(card);
             },
             icon: SonrIcon.accept,
-            text: SonrText.normal("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+            text: SonrText.medium("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
           ),
         ),
         Padding(padding: EdgeInsets.all(2)),
@@ -156,7 +156,7 @@ class _FileInviteView extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: SonrText.normal("Decline", color: Colors.redAccent, size: 18),
+              child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
             )),
       ],
     );
@@ -268,7 +268,7 @@ class _FileCardInfo extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: SonrText.normal("${metadata.name}", size: 16),
+                child: SonrText.medium("${metadata.name}", size: 16),
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -278,21 +278,21 @@ class _FileCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Size ", size: 16),
               Spacer(),
-              SonrText.normal("$size", size: 16),
+              SonrText.medium("$size", size: 16),
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Kind ", size: 16),
               Spacer(),
-              SonrText.normal("${metadata.mime.value}", size: 16),
+              SonrText.medium("${metadata.mime.value}", size: 16),
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Saved to Gallery ", size: 16),
               Spacer(),
-              SonrText.normal("$hasExported", size: 16),
+              SonrText.medium("$hasExported", size: 16),
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
@@ -303,12 +303,12 @@ class _FileCardInfo extends StatelessWidget {
               SonrButton.rectangle(
                 isDisabled: true,
                 onPressed: () {},
-                text: SonrText.normal("Delete"),
+                text: SonrText.medium("Delete"),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               SonrButton.rectangle(
                 onPressed: () {},
-                text: SonrText.normal("Save"),
+                text: SonrText.medium("Save"),
                 icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: Colors.black),
               ),
             ]),

@@ -101,7 +101,7 @@ class _TwitterViewState extends State<TwitterView> {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [SonrText.description(tweet.text, size: 14), SonrText.normal(_cleanDate(tweet.createdAt), size: 14)],
+          children: [SonrText.normal(tweet.text, size: 14), SonrText.medium(_cleanDate(tweet.createdAt), size: 14)],
         ),
       ),
     );
@@ -121,7 +121,7 @@ class _TwitterViewState extends State<TwitterView> {
               width: 55,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [ClipOval(child: Image.network(user.data.first.profilePicUrl)), SonrText.normal(user.data.first.username, size: 10)]),
+                  children: [ClipOval(child: Image.network(user.data.first.profilePicUrl)), SonrText.medium(user.data.first.username, size: 10)]),
             ),
             Container(
               width: 265,
@@ -129,7 +129,7 @@ class _TwitterViewState extends State<TwitterView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SonrText.gradient(_cleanDate(tweet.createdAt), FlutterGradientNames.premiumDark, size: 20),
-                  SonrText.description(tweet.text, size: 14),
+                  SonrText.normal(tweet.text, size: 14),
                 ],
               ),
             ),

@@ -85,7 +85,7 @@ class _YoutubeViewState extends State<YoutubeView> {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [SonrText.description(video.video.title, size: 14), SonrText.normal(_cleanDate(video.video.publishTime), size: 14)],
+          children: [SonrText.normal(video.video.title, size: 14), SonrText.medium(_cleanDate(video.video.publishTime), size: 14)],
         ),
       ),
     );

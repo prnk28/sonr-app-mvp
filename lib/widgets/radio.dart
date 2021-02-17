@@ -55,7 +55,7 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
         onChanged: widget.onChanged,
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.normal(widget.type.toString(), size: 14, color: Colors.black),
+      SonrText.medium(widget.type.toString(), size: 14, color: Colors.black),
     ]);
   }
 

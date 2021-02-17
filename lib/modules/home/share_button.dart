@@ -156,7 +156,7 @@ class _ShareButtonItem extends StatelessWidget {
         ),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.normal(_typeText, size: 14, color: Colors.white),
+      SonrText.medium(_typeText, size: 14, color: Colors.white),
     ]);
   }
 }

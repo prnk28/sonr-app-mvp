@@ -113,7 +113,7 @@ class _SonrSearchCardSuggestion extends GetView<SearchCardController> {
   }
 
   _buildOtherSuggestedView(TransferCard suggestedCard) {
-    return SonrText.normal(suggestedCard.payload.toString().capitalizeFirst);
+    return SonrText.medium(suggestedCard.payload.toString().capitalizeFirst);
   }
 }
 
@@ -185,7 +185,7 @@ class _SonrSearchCardListItem extends GetView<SearchCardController> {
             children: [
               Row(children: [
                 SonrText.search(controller.searchText.value, card.firstName.toString()),
-                SonrText.normal(" "),
+                SonrText.medium(" "),
                 SonrText.search(controller.searchText.value, card.lastName.toString())
               ]),
               SonrText.search(controller.searchText.value, card.platform.toString())

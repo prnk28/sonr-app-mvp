@@ -18,14 +18,12 @@ enum CardType { None, Invite, Reply, GridItem, Info }
 
 class TransferCardController extends GetxController {
   // Properties
-  final state = CardType.None.obs;
   final transferCompleted = false.obs;
   final animationCompleted = false.obs;
   final displayProgress = false.obs;
 
   // References
-  int index;
-  TransferCard card;
+  SonrOverlay _sendBackPrompt;
 
   // ^ Handle Transfer Progress ^
   TransferCardController() {
@@ -36,7 +34,7 @@ class TransferCardController extends GetxController {
         displayProgress(true);
       } else if (animationCompleted.value && result) {
         Get.find<SonrService>().completed();
-        Get.back(closeOverlays: true);
+        Get.back();
       }
     });
 
@@ -46,45 +44,45 @@ class TransferCardController extends GetxController {
         displayProgress(true);
       } else if (Get.find<SonrService>().received.value && result) {
         Get.find<SonrService>().completed();
-        Get.back(closeOverlays: true);
+        Get.back();
       }
     });
   }
 
-  // ^ Sets TransferCard Data for this Widget ^
-  initialize(TransferCard card, int index) {
-    this.card = card;
-    this.index = index;
-  }
-
-  // ^ Sets Card for Invited Data for this Widget ^
-  invited() {
-    state(CardType.Invite);
-  }
-
   // ^ Accept Contact Invite Request ^ //
-  acceptTransfer(TransferCard card, {bool sendBackContact = false}) {
-    // @ Contact Card Accepted
-    if (card.payload == Payload.CONTACT) {
-      // Check if Send Back
-      if (sendBackContact) {
-        Get.find<SonrService>().respond(true);
-      }
+  acceptContact(TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
+    // Save Card
+    Get.find<SQLService>().storeCard(card);
 
-      // Save Card
-      Get.find<SQLService>().storeCard(card);
-
-      // Return to HomeScreen
-      Get.offAndToNamed('/home/completed').then((value) {
-        Get.find<HomeController>().addCard(card);
-      });
-    }
-    // @ File Transfer Accepted
-    else {
+    // Check if Send Back
+    if (sendBackContact) {
       Get.find<SonrService>().respond(true);
-      Get.back();
-      Get.dialog(ProgressView(this, card), barrierDismissible: false);
     }
+
+    // Return to HomeScreen
+    Get.back();
+    Get.offAllNamed('/home/completed').then((value) {
+      Get.find<HomeController>().addCard(card);
+    });
+
+    // Close Overlay
+    if (closeOverlay) {
+      SonrOverlay.back();
+    }
+  }
+
+  // ^ Accept Transfer Invite Request ^ //
+  promptSendBack(BuildContext context, TransferCard card) {
+    SonrOverlay.question(context, title: "Send Back", description: "Would you like to send your contact back?", onDecision: (result) {
+      acceptContact(card, sendBackContact: result, closeOverlay: true);
+    });
+  }
+
+  // ^ Accept Transfer Invite Request ^ //
+  acceptTransfer(TransferCard card) {
+    Get.find<SonrService>().respond(true);
+    Get.back();
+    Get.dialog(ProgressView(this, card), barrierDismissible: false);
   }
 
   // ^ Decline Invite Request ^ //
@@ -92,11 +90,10 @@ class TransferCardController extends GetxController {
     // Check if accepted
     Get.find<SonrService>().respond(false);
     Get.back();
-    state(CardType.None);
   }
 
   // ^ Method to Present Card Overlay Info
   showCardInfo(BuildContext context, Widget infoWidget) {
-    SonrOverlay(overlayWidget: infoWidget, context: context);
+    SonrOverlay.open(context, infoWidget);
   }
 }

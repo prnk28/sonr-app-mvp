@@ -71,7 +71,7 @@ class CameraView extends GetView<MediaController> {
                   padding: const EdgeInsets.only(left: 14.0),
                   child: SonrButton.rectangle(
                       intensity: 0.5,
-                      text: SonrText.normal(""),
+                      text: SonrText.medium(""),
                       onPressed: () async {
                         // Check for Permssions
                         if (await Permission.photos.request().isGranted) {
@@ -86,7 +86,7 @@ class CameraView extends GetView<MediaController> {
                 ),
                 SonrButton.circle(
                     intensity: 0.5,
-                    text: SonrText.normal(""),
+                    text: SonrText.medium(""),
                     onPressed: () {
                       controller.capturePhoto();
                     },

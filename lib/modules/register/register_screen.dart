@@ -50,7 +50,7 @@ class RegisterScreen extends GetView<RegisterController> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: SonrButton.rectangle(
-                          text: SonrText.normal("Submit"),
+                          text: SonrText.medium("Submit"),
                           onPressed: () {
                             controller.submit();
                           },

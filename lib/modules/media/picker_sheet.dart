@@ -93,7 +93,7 @@ class _MediaDropdownDialogBar extends GetView<MediaController> {
     var item = controller.allCollections.value.elementAt(index);
     return Row(children: [
       Padding(padding: EdgeInsets.all(4)),
-      SonrText.normal(
+      SonrText.medium(
         item.name,
         color: Colors.black,
       )

@@ -11,6 +11,7 @@ import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
+import 'widgets/overlay.dart';
 
 // ^ Main Method ^ //
 void main() async {
@@ -32,6 +33,7 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
+    Get.put(SonrOverlay());
     Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
