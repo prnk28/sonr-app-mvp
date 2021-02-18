@@ -18,7 +18,6 @@ enum CardType { None, Invite, Reply, GridItem, Info }
 class TransferCardController extends GetxController {
   // Properties
   final animationCompleted = false.obs;
-  final displayProgress = false.obs;
 
   // ^ Handle Transfer Progress ^
   TransferCardController() {

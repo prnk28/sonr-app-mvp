@@ -40,6 +40,7 @@ dependencies:
   path: ^1.7.0
   path_provider: ^1.6.7
   shared_preferences: ^0.5.12+4
+  video_player: ^1.0.1
 
   # -- Network --
   receive_sharing_intent: ^1.4.2

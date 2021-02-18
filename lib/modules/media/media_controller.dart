@@ -11,9 +11,13 @@ import 'package:sonr_core/models/models.dart';
 import 'package:media_gallery/media_gallery.dart';
 import '../home/home_controller.dart';
 import 'preview_controller.dart';
-import 'preview_view.dart';
+
+enum CameraControllerState { Default, Ready, Loading, Recording, Captured }
 
 class MediaController extends GetxController {
+  // State Properties
+  final state = Rx<CameraControllerState>(CameraControllerState.Default);
+
   // Camera Properties
   final videoDuration = 0.obs;
   final videoInProgress = false.obs;
@@ -52,8 +56,17 @@ class MediaController extends GetxController {
     });
   }
 
+  // ^ Update Camera State ^ //
+  setState(CameraControllerState newState) {
+    state(newState);
+    state.refresh();
+  }
+
   // ^ Captures Photo ^ //
   capturePhoto() async {
+    // Update State
+    setState(CameraControllerState.Loading);
+
     // Set Path
     var now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
@@ -62,36 +75,48 @@ class MediaController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(path);
-    Get.find<PreviewController>().capturePath(path);
-    Get.find<PreviewController>().hasCapture(true);
-    SonrOverlay.open(MediaPreviewView());
+    Get.find<PreviewController>().setPhoto(path);
+
+    // Update State
+    setState(CameraControllerState.Captured);
   }
 
   // ^ Captures Video ^ //
   startCaptureVideo() async {
+    // Update State
+    setState(CameraControllerState.Loading);
+
     // Set Path
     var now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
     var docs = await getApplicationDocumentsDirectory();
     var path = docs.path + "/SONR_VIDEO_" + formattedDate + ".mp4";
-    Get.find<PreviewController>().capturePath(path);
+    Get.find<PreviewController>().initVideo(path);
 
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
     videoInProgress(true);
     stopwatch.start();
     await videoController.recordVideo(path);
+
+    // Update State
+    setState(CameraControllerState.Recording);
   }
 
   // ^ Stops Video Capture ^ //
   stopCaptureVideo() async {
+    // Close Parameters
     videoInProgress(false);
     stopwatch.stop();
     videoDuration(stopwatch.elapsedMilliseconds);
 
+    // Save Video
     await videoController.stopRecordingVideo();
-    Get.find<PreviewController>().hasCapture(true);
+    Get.find<PreviewController>().setVideo();
     stopwatch.reset();
+
+    // Update State
+    setState(CameraControllerState.Captured);
   }
 
   // ^ Flip Camera ^ //

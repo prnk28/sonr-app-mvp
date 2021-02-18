@@ -6,7 +6,7 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import '../media/camera_view.dart';
+import '../media/media_camera.dart';
 import '../media/picker_sheet.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -150,7 +150,7 @@ class HomeController extends GetxController {
       toggleShareExpand(options: ToggleForced(false));
 
       // Show Picker
-      Get.dialog(CameraView(), useSafeArea: false);
+      Get.dialog(MediaCameraView(), useSafeArea: false);
     } else {
       // Display Error
       SonrSnack.error("Sonr isnt permitted to access your media.");

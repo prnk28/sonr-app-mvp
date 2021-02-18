@@ -15,15 +15,15 @@ class SonrColor {
   static const Color disabledButton = Color.fromRGBO(179, 181, 181, 1.0);
 
   // ^ Generates Random Gradient for Progress View ^ //
-  static Gradient randomGradient() {
+  static FlutterGradientNames randomGradient() {
     var opts = [
-      FlutterGradients.amyCrisp(tileMode: TileMode.mirror, radius: 1.5),
-      FlutterGradients.sugarLollipop(tileMode: TileMode.mirror, radius: 1.5),
-      FlutterGradients.summerGames(tileMode: TileMode.mirror, radius: 1.5),
-      FlutterGradients.supremeSky(tileMode: TileMode.mirror, radius: 1.5),
-      FlutterGradients.juicyCake(tileMode: TileMode.mirror, radius: 1.5),
-      FlutterGradients.northMiracle(tileMode: TileMode.mirror, radius: 1.5),
-      FlutterGradients.seaLord(tileMode: TileMode.mirror, radius: 1.5)
+      FlutterGradientNames.amyCrisp,
+      FlutterGradientNames.sugarLollipop,
+      FlutterGradientNames.summerGames,
+      FlutterGradientNames.supremeSky,
+      FlutterGradientNames.juicyCake,
+      FlutterGradientNames.northMiracle,
+      FlutterGradientNames.seaLord
     ];
 
     // Generates a new Random object

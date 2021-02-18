@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' hide LinearGradient;
 
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
@@ -304,5 +305,99 @@ class SonrAnimatedSwitcher extends StatelessWidget {
         ),
       );
     };
+  }
+}
+
+// ^ File Invite Progress (Hook Widget) from SonrService Progress ^ //
+class SonrAnimatedWaveIcon extends HookWidget {
+  // Properties
+  final IconData iconData;
+  final double size;
+  final RxDouble percentage;
+  final Duration duration;
+  final Function onCompleted;
+  final bool usePercentage;
+
+  // References
+  final FlutterGradientNames gradientName = SonrColor.randomGradient();
+
+  // Constructer
+  SonrAnimatedWaveIcon(this.iconData,
+      {this.usePercentage = false, this.percentage, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
+      : super(key: GlobalKey());
+
+  @override
+  Widget build(BuildContext context) {
+    // Hook Controller
+    final controller = useAnimationController(duration: Duration(seconds: 1));
+    final iconKey = GlobalKey();
+    controller.play();
+
+    // Reactive to Progress
+    return Obx(() {
+      if (!_checkCompleted(controller)) {
+        return Stack(
+          alignment: Alignment.center,
+          key: UniqueKey(),
+          children: <Widget>[
+            SizedBox(
+              height: size,
+              width: size,
+              child: AnimatedBuilder(
+                animation: controller,
+                builder: (BuildContext context, Widget child) {
+                  return CustomPaint(
+                    painter: IconWavePainter(
+                      iconKey: iconKey,
+                      waveAnimation: controller,
+                      percent: usePercentage ? percentage.value : controller.value,
+                      gradient: FlutterGradients.findByName(gradientName),
+                      boxHeight: size,
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: size,
+              width: size,
+              child: ShaderMask(
+                blendMode: BlendMode.srcOut,
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: [SonrColor.base],
+                  stops: [0.0],
+                ).createShader(bounds),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      iconData,
+                      size: size * 0.8,
+                      key: iconKey,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
+      } else {
+        // Animation Completed
+        controller.stop();
+        controller.dispose();
+        onCompleted();
+        return SonrIcon.gradient(iconData, gradientName, size: size * 0.8);
+      }
+    });
+  }
+
+  _checkCompleted(AnimationController controller) {
+    if (usePercentage) {
+      return percentage.value >= 1.0;
+    } else {
+      return controller.value >= 1.0;
+    }
   }
 }

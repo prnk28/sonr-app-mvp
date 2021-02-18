@@ -8,7 +8,7 @@ import 'card_controller.dart';
 class ProgressView extends HookWidget {
   //  Properties
   final TransferCard card;
-  final Gradient gradient = SonrColor.randomGradient();
+  final FlutterGradientNames gradientName = SonrColor.randomGradient();
   final TransferCardController cardController;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
@@ -19,7 +19,6 @@ class ProgressView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // Inject Hook Controller
-    final iconKey = UniqueKey();
     final hookController = useAnimationController(duration: duration);
     hookController.forward();
 
@@ -36,14 +35,14 @@ class ProgressView extends HookWidget {
           alignment: Alignment.center,
           key: UniqueKey(),
           children: <Widget>[
-            buildPainter(hookController, iconKey, utilizeProgress),
-            buildShaderMask(hookController, iconKey),
+            buildPainter(hookController, utilizeProgress),
+            buildShaderMask(hookController, utilizeProgress),
           ],
         ));
   }
 
   // ^ Method Builds Wave Painter Canvas ^ //
-  Widget buildPainter(AnimationController hookController, Key iconKey, bool utilizeProgress) {
+  Widget buildPainter(AnimationController hookController, bool utilizeProgress) {
     return SizedBox(
       height: Get.height,
       width: Get.width,
@@ -55,22 +54,20 @@ class ProgressView extends HookWidget {
               child: utilizeProgress
                   ? Obx(() => CustomPaint(
                         painter: WavePainter(
-                          iconKey: iconKey,
                           waveAnimation: hookController,
                           percent: Get.find<SonrService>().progress.value,
                           height: Get.height,
                           width: Get.width,
-                          gradient: gradient,
+                          gradient: FlutterGradients.findByName(gradientName),
                         ),
                       ))
                   : CustomPaint(
                       painter: WavePainter(
-                        iconKey: iconKey,
                         waveAnimation: hookController,
                         percent: hookController.value,
                         height: Get.height,
                         width: Get.width,
-                        gradient: gradient,
+                        gradient: FlutterGradients.findByName(gradientName),
                       ),
                     ));
         },
@@ -79,7 +76,7 @@ class ProgressView extends HookWidget {
   }
 
   // ^ Method Builds Shader Box ^ //
-  Widget buildShaderMask(AnimationController hookController, Key iconKey) {
+  Widget buildShaderMask(AnimationController hookController, bool utilizeProgress) {
     return SizedBox(
       height: Get.width,
       width: Get.height,
@@ -94,7 +91,7 @@ class ProgressView extends HookWidget {
             color: Colors.transparent,
           ),
           child: Center(
-            child: buildTransferIcon(hookController, iconKey),
+            child: buildTransferIcon(hookController, utilizeProgress),
           ),
         ),
       ),
@@ -102,23 +99,31 @@ class ProgressView extends HookWidget {
   }
 
   // ^ Method Builds Shader Box ^ //
-  Widget buildTransferIcon(AnimationController hookController, UniqueKey iconKey) {
-    return Stack(alignment: Alignment.center, children: [
-      Obx(() {
-        if (cardController.displayProgress.value) {
-          return Container(child: CircularProgressIndicator(strokeWidth: 6, value: Get.find<SonrService>().progress.value), width: 270, height: 270);
-        } else {
-          return Container();
+  Widget buildTransferIcon(AnimationController hookController, bool utilizeProgress) {
+    return Center(
+      child: Obx(() {
+        if (utilizeProgress) {
+          if (Get.find<SonrService>().progress.value >= 0.5) {
+            return PlayAnimation(
+              tween: 0.0.tweenTo(1.0),
+              duration: Duration(milliseconds: 200),
+              builder: (context, child, value) {
+                return Icon(SonrIcon.dataFromCard(card), size: 165, color: Colors.white.withOpacity(value));
+              },
+            );
+          } else {
+            return Container();
+          }
         }
+        return PlayAnimation(
+          tween: 0.0.tweenTo(1.0),
+          delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
+          duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
+          builder: (context, child, value) {
+            return Icon(SonrIcon.dataFromCard(card), size: 165, color: Colors.white.withOpacity(value));
+          },
+        );
       }),
-      PlayAnimation(
-        tween: 0.0.tweenTo(1.0),
-        delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
-        duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-        builder: (context, child, value) {
-          return Icon(SonrIcon.dataFromCard(card), key: iconKey, size: 165, color: Colors.white.withOpacity(value));
-        },
-      )
-    ]);
+    );
   }
 }

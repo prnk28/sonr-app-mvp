@@ -8,7 +8,7 @@ import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'media_controller.dart';
 
-class CameraView extends GetView<MediaController> {
+class MediaCameraView extends GetView<MediaController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -38,7 +38,9 @@ class CameraView extends GetView<MediaController> {
             },
             child: CameraAwesome(
               onPermissionsResult: (bool result) {},
-              onCameraStarted: () {},
+              onCameraStarted: () {
+                controller.setState(CameraControllerState.Ready);
+              },
               onOrientationChanged: (CameraOrientations newOrientation) {},
               sensor: controller.sensor,
               zoom: controller.zoomNotifier,

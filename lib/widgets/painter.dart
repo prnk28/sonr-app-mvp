@@ -4,10 +4,59 @@ import 'package:sonr_core/models/models.dart';
 
 const double K_ANGLE = pi;
 
+// ^ Icon Wave Painter ^ //
+class IconWavePainter extends CustomPainter {
+  final _pi2 = 2 * pi;
+  final GlobalKey iconKey;
+  final Animation<double> waveAnimation;
+  final double percent;
+  final double boxHeight;
+  final Gradient gradient;
+
+  IconWavePainter({
+    @required this.iconKey,
+    this.waveAnimation,
+    this.percent,
+    this.boxHeight,
+    this.gradient,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final RenderBox iconBox = iconKey.currentContext.findRenderObject();
+    final iconHeight = iconBox.size.height;
+    final baseHeight = (boxHeight / 2) + (iconHeight / 2) - (percent * iconHeight);
+
+    final width = size.width ?? 325;
+    final height = size.height ?? 325;
+    final path = Path();
+    path.moveTo(0.0, baseHeight);
+    for (var i = 0.0; i < width; i++) {
+      path.lineTo(
+        i,
+        baseHeight + sin((i / width * _pi2) + (waveAnimation.value * _pi2)) * 8,
+      );
+    }
+
+    path.lineTo(width, height);
+    path.lineTo(0.0, height);
+    path.close();
+    final wavePaint = Paint()
+      ..shader = gradient.createShader(
+        Rect.fromLTWH(0, 0, width, height),
+      );
+    canvas.drawPath(path, wavePaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
 // ^ Wave Painter for File Progress ^ //
 class WavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
-  final Key iconKey;
   final Animation<double> waveAnimation;
   final double percent;
   final double height;
@@ -15,7 +64,6 @@ class WavePainter extends CustomPainter {
   final Gradient gradient;
 
   WavePainter({
-    @required this.iconKey,
     this.waveAnimation,
     this.percent,
     this.height,
