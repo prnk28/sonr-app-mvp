@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -8,51 +9,55 @@ class MediaPreviewView extends GetView<PreviewController> {
   @override
   Widget build(BuildContext context) {
     // @ Build View
-    return NeumorphicBackground(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-        borderRadius: BorderRadius.circular(30),
+    return Obx(() {
+      if (controller.captureReady.value) {
+        return Stack(
+          children: [
+            // Preview
+            Expanded(
+              child: controller.isVideo.value ? _VideoCapturePlayer(path: controller.capturePath) : _PhotoCaptureView(path: controller.capturePath),
+            ),
+
+            // Buttons
+            _CaptureToolsView()
+          ],
+        );
+      } else {
+        return Center(child: CircularProgressIndicator());
+      }
+    });
+  }
+}
+
+class _CaptureToolsView extends GetView<PreviewController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      child: NeumorphicBackground(
         backendColor: Colors.transparent,
         child: Neumorphic(
-          style: NeumorphicStyle(color: SonrColor.base),
-          child: Obx(() {
-            // @ Display Current Media
-            if (controller.captureReady.value) {
-              return Column(
-                children: [
-                  // Preview
-                  Expanded(
-                    child: controller.isVideo.value
-                        ? _VideoCapturePlayer(path: controller.capturePath)
-                        : _PhotoCaptureView(path: controller.capturePath),
-                  ),
+          padding: EdgeInsets.only(top: 20, bottom: 40),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            // Left Button - Cancel and Retake
+            SonrButton.circle(
+                onPressed: () {
+                  HapticFeedback.heavyImpact();
+                  controller.clear();
+                },
+                icon: SonrIcon.close),
 
-                  // Buttons
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.only(bottom: 25),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      // Left Button - Cancel and Retake
-                      SonrButton.circle(
-                          onPressed: () {
-                            controller.clear();
-                          },
-                          icon: SonrIcon.close),
-
-                      // Right Button - Continue and Accept
-                      SonrButton.circle(
-                          onPressed: () {
-                            controller.continueMedia();
-                          },
-                          icon: SonrIcon.accept),
-                    ]),
-                  ),
-                ],
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          }),
-        ));
+            // Right Button - Continue and Accept
+            SonrButton.circle(
+                onPressed: () {
+                  HapticFeedback.heavyImpact();
+                  controller.continueMedia();
+                },
+                icon: SonrIcon.accept),
+          ]),
+        ),
+      ),
+    );
   }
 }
 

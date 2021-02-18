@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class SonrScaffold extends StatelessWidget {
@@ -6,6 +7,7 @@ class SonrScaffold extends StatelessWidget {
   final Widget floatingActionButton;
   final bool resizeToAvoidBottomPadding;
   final Function bodyAction;
+  final Color backgroundColor;
 
   factory SonrScaffold.appBarAction(
       {@required String title, @required SonrButton action, Widget body, Widget floatingActionButton, bool resizeToAvoidBottomPadding = true}) {
@@ -51,11 +53,19 @@ class SonrScaffold extends StatelessWidget {
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
-  SonrScaffold({Key key, this.body, this.appBar, this.floatingActionButton, this.resizeToAvoidBottomPadding, this.bodyAction}) : super(key: key);
+  SonrScaffold({
+    Key key,
+    this.body,
+    this.appBar,
+    this.floatingActionButton,
+    this.resizeToAvoidBottomPadding,
+    this.bodyAction,
+    this.backgroundColor = SonrColor.base,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return NeumorphicTheme(
-        themeMode: ThemeMode.light, //or dark / system
+        themeMode: ThemeMode.system, //or dark / system
         darkTheme: NeumorphicThemeData(
           baseColor: Color.fromRGBO(239, 238, 238, 1.0),
           accentColor: Colors.green,
@@ -70,7 +80,7 @@ class SonrScaffold extends StatelessWidget {
           intensity: 0.85,
         ),
         child: Scaffold(
-          backgroundColor: SonrColor.base,
+          backgroundColor: backgroundColor,
           body: body,
           appBar: appBar,
           floatingActionButton: floatingActionButton,

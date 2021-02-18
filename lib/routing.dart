@@ -1,6 +1,4 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/social_service.dart';
 import 'package:sonr_app/service/sql_service.dart';

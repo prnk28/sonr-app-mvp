@@ -1,18 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/social_service.dart';
-import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-
-import 'modules/card/card_controller.dart';
-import 'modules/home/home_binding.dart';
-import 'modules/profile/profile_binding.dart';
-import 'modules/register/register_binding.dart';
-import 'modules/transfer/transfer_binding.dart';
 import 'routing.dart';
-import 'widgets/overlay.dart';
 
 // ^ Main Method ^ //
 void main() async {
@@ -59,8 +49,7 @@ class _AppState extends State<App> {
     return GetMaterialApp(
       getPages: K_PAGES,
       initialBinding: InitialBinding(),
-      themeMode: ThemeMode.light,
-      home: Scaffold(
+      home: SonrScaffold(
           backgroundColor: Colors.black,
           body: Stack(
             alignment: Alignment.topCenter,
