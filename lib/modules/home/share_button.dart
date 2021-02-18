@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/modules/home/home_controller.dart';
-import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -216,7 +215,7 @@ class ShareButtonController extends GetxController {
       close();
 
       // Display Bottom Sheet
-      Get.bottomSheet(MediaSheet(), isDismissible: false);
+      Get.bottomSheet(MediaPickerSheet(), isDismissible: false);
     } else {
       // Display Error
       SonrSnack.error("Sonr isnt permitted to access your media.");

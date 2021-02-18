@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:media_gallery/media_gallery.dart';
-import 'media_controller.dart';
+import 'package:sonr_core/sonr_core.dart';
 
-// ** MediaPicker Dialog View ** //
-class MediaSheet extends GetView<MediaController> {
+// ** MediaPicker Sheet View ** //
+class MediaPickerSheet extends GetView<MediaPickerController> {
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(
@@ -33,7 +35,7 @@ class MediaSheet extends GetView<MediaController> {
 }
 
 // ** Create Media Album Dropdown Bar ** //
-class _MediaDropdownDialogBar extends GetView<MediaController> {
+class _MediaDropdownDialogBar extends GetView<MediaPickerController> {
   // Properties
   final Function onCancel;
   final Function onAccept;
@@ -102,7 +104,7 @@ class _MediaDropdownDialogBar extends GetView<MediaController> {
 }
 
 // ** Create Media Grid ** //
-class _MediaGrid extends GetView<MediaController> {
+class _MediaGrid extends GetView<MediaPickerController> {
   _MediaGrid();
   @override
   Widget build(BuildContext context) {
@@ -141,7 +143,7 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
   // Listen to Selected File
   @override
   void initState() {
-    selectedStream = Get.find<MediaController>().selectedMediaIndex.listen((val) {
+    selectedStream = Get.find<MediaPickerController>().selectedMediaIndex.listen((val) {
       if (widget.index != val && isPressed) {
         setState(() {
           isPressed = false;
@@ -172,11 +174,11 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
           isPressed = !isPressed;
 
           if (isPressed) {
-            Get.find<MediaController>().selectedMediaIndex(widget.index);
-            Get.find<MediaController>().setMediaPickerItem(widget.mediaFile, thumbnail);
+            Get.find<MediaPickerController>().selectedMediaIndex(widget.index);
+            Get.find<MediaPickerController>().setMediaPickerItem(widget.mediaFile, thumbnail);
           } else {
-            Get.find<MediaController>().selectedMediaIndex(-1);
-            Get.find<MediaController>().setMediaPickerItem(null, null);
+            Get.find<MediaPickerController>().selectedMediaIndex(-1);
+            Get.find<MediaPickerController>().setMediaPickerItem(null, null);
           }
         });
       },
@@ -222,6 +224,117 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
           child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40));
     } else {
       return Container();
+    }
+  }
+}
+
+// ** Media Picker Controller ** //
+class MediaPickerController extends GetxController {
+  // Properties
+  final allCollections = Rx<List<MediaCollection>>();
+  final mediaCollection = Rx<MediaCollection>();
+  final allMedias = <Media>[].obs;
+  final selectedMediaIndex = (-1).obs;
+  final hasGallery = false.obs;
+  final loaded = false.obs;
+
+  // References
+  Media _selectedMedia;
+  Uint8List _selectedThumbnail;
+
+  // ^ Retreive Albums ^ //
+  fetchMedia() async {
+    // Get Collections
+    List<MediaCollection> collections = await MediaGallery.listMediaCollections(
+      mediaTypes: [MediaType.image, MediaType.video],
+    );
+
+    allCollections(collections);
+
+    // List Collections
+    collections.forEach((element) {
+      // Set Has Gallery
+      if (element.count > 0) {
+        hasGallery(true);
+      }
+
+      // Check for Master Collection
+      if (element.isAllCollection) {
+        // Assign Values
+        mediaCollection(element);
+      }
+    });
+
+    if (mediaCollection.value.count > 0) {
+      // Get Images
+      final MediaPage imagePage = await mediaCollection.value.getMedias(
+        mediaType: MediaType.image,
+        take: 500,
+      );
+
+      // Get Videos
+      final MediaPage videoPage = await mediaCollection.value.getMedias(
+        mediaType: MediaType.video,
+        take: 500,
+      );
+
+      // Combine Media
+      final List<Media> combined = [
+        ...imagePage.items,
+        ...videoPage.items,
+      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+
+      // Set All Media
+      allMedias.assignAll(combined);
+    }
+    loaded(true);
+  }
+
+  // ^ Method Updates the Current Media Collection ^ //
+  updateMediaCollection(MediaCollection collection) async {
+    // Reset Loaded
+    loaded(false);
+    mediaCollection(collection);
+
+    // Get Images
+    final MediaPage imagePage = await mediaCollection.value.getMedias(
+      mediaType: MediaType.image,
+      take: 500,
+    );
+
+    // Get Videos
+    final MediaPage videoPage = await mediaCollection.value.getMedias(
+      mediaType: MediaType.video,
+      take: 500,
+    );
+
+    // Combine Media
+    final List<Media> combined = [
+      ...imagePage.items,
+      ...videoPage.items,
+    ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+
+    // Set All Media
+    allMedias.assignAll(combined);
+    loaded(true);
+  }
+
+  // ^ Set Media from Picker
+  setMediaPickerItem(Media media, Uint8List thumb) {
+    _selectedMedia = media;
+    _selectedThumbnail = thumb;
+  }
+
+  // ^ Process Selected File ^ //
+  confirmSelectedFile() async {
+    // Validate File
+    if (_selectedMedia != null) {
+      // Retreive File and Process
+      File mediaFile = await _selectedMedia.getFile();
+      Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail);
+
+      // Go to Transfer
+      Get.offNamed("/transfer");
     }
   }
 }

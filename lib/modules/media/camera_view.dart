@@ -4,11 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'media_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
-class MediaCameraView extends GetView<MediaController> {
+import 'camera_screen.dart';
+
+class CameraView extends GetView<CameraController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -36,10 +39,13 @@ class MediaCameraView extends GetView<MediaController> {
                 controller.zoomLevel(adjustedScale);
               }
             },
+            onHorizontalDragUpdate: (details) {
+              print("Drag Horizontal: ${details.delta}");
+            },
             child: CameraAwesome(
               onPermissionsResult: (bool result) {},
               onCameraStarted: () {
-                controller.setState(CameraControllerState.Ready);
+                CameraScreenController.ready();
               },
               onOrientationChanged: (CameraOrientations newOrientation) {},
               sensor: controller.sensor,
@@ -47,6 +53,7 @@ class MediaCameraView extends GetView<MediaController> {
               photoSize: controller.photoSize,
               switchFlashMode: controller.switchFlash,
               captureMode: controller.captureMode,
+              brightness: controller.brightness,
             ),
           ),
           // Button Tools View
@@ -82,7 +89,7 @@ class MediaCameraView extends GetView<MediaController> {
   }
 }
 
-class _CameraToolsView extends GetView<MediaController> {
+class _CameraToolsView extends GetView<CameraController> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -93,12 +100,13 @@ class _CameraToolsView extends GetView<MediaController> {
           padding: EdgeInsets.only(top: 20, bottom: 40),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Switch Camera
-            GestureDetector(
-                child: SonrIcon.neumorphic(Icons.swap_vertical_circle_sharp, size: 36, style: NeumorphicStyle(color: Colors.grey)),
+            Obx(() => GestureDetector(
+                child: SonrIcon.neumorphic(controller.isFlipped.value ? Icons.camera_front_rounded : Icons.swap_vertical_circle_sharp,
+                    size: 36, style: NeumorphicStyle(color: Colors.grey)),
                 onTap: () async {
                   HapticFeedback.heavyImpact();
                   controller.toggleCameraSensor();
-                }),
+                })),
 
             // Neumorphic Camera Button Stack
             _CaptureButton(),
@@ -111,7 +119,7 @@ class _CameraToolsView extends GetView<MediaController> {
                   // Check for Permssions
                   if (await Permission.photos.request().isGranted) {
                     // Display Bottom Sheet
-                    Get.bottomSheet(MediaSheet(), isDismissible: true);
+                    Get.bottomSheet(MediaPickerSheet(), isDismissible: true);
                   } else {
                     // Display Error
                     SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -124,7 +132,7 @@ class _CameraToolsView extends GetView<MediaController> {
   }
 }
 
-class _CaptureButton extends GetView<MediaController> {
+class _CaptureButton extends GetView<CameraController> {
   @override
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
@@ -179,5 +187,94 @@ class _CaptureButton extends GetView<MediaController> {
         ),
       ),
     ]);
+  }
+}
+
+// ** Camera View Controller ** //
+class CameraController extends GetxController {
+  // Properties
+  final doubleZoomed = false.obs;
+  final isFlipped = false.obs;
+  final videoDuration = 0.obs;
+  final videoInProgress = false.obs;
+  final zoomLevel = 0.0.obs;
+
+  // Notifiers
+  ValueNotifier<double> brightness = ValueNotifier(1);
+  ValueNotifier<CaptureModes> captureMode = ValueNotifier(CaptureModes.PHOTO);
+  ValueNotifier<Size> photoSize = ValueNotifier(Size(Get.width, Get.height));
+  ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.BACK);
+  ValueNotifier<CameraFlashes> switchFlash = ValueNotifier(CameraFlashes.NONE);
+  ValueNotifier<double> zoomNotifier = ValueNotifier(0);
+
+  // Controllers
+  PictureController pictureController = new PictureController();
+  VideoController videoController = new VideoController();
+  Stopwatch stopwatch = new Stopwatch();
+
+  // ** Constructer ** //
+  CameraController() {
+    zoomLevel.listen((value) {
+      zoomNotifier.value = 1.0 / value;
+    });
+  }
+
+  // ^ Captures Photo ^ //
+  capturePhoto() async {
+    // Update State
+    CameraScreenController.loading();
+
+    // Set Path
+    var now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
+    var docs = await getApplicationDocumentsDirectory();
+    var path = docs.path + "/SONR_PICTURE_" + formattedDate + ".jpeg";
+
+    // Capture Photo
+    await pictureController.takePicture(path);
+    CameraScreenController.setPhoto(path);
+  }
+
+  // ^ Captures Video ^ //
+  startCaptureVideo() async {
+    // Set Path
+    var now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
+    var docs = await getApplicationDocumentsDirectory();
+    var path = docs.path + "/SONR_VIDEO_" + formattedDate + ".mp4";
+    CameraScreenController.recording(path);
+
+    // Capture Photo
+    captureMode.value = CaptureModes.VIDEO;
+    videoInProgress(true);
+    stopwatch.start();
+    await videoController.recordVideo(path);
+  }
+
+  // ^ Stops Video Capture ^ //
+  stopCaptureVideo() async {
+    // Close Parameters
+    videoInProgress(false);
+    stopwatch.stop();
+    videoDuration(stopwatch.elapsedMilliseconds);
+
+    // Save Video
+    await videoController.stopRecordingVideo();
+    stopwatch.reset();
+
+    // Update State
+    CameraScreenController.completeVideo();
+  }
+
+  // ^ Flip Camera ^ //
+  toggleCameraSensor() async {
+    // Toggle
+    isFlipped(!isFlipped.value);
+
+    if (isFlipped.value) {
+      sensor.value = Sensors.FRONT;
+    } else {
+      sensor.value = Sensors.BACK;
+    }
   }
 }
