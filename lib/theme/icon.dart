@@ -16,8 +16,9 @@ class SonrIcon extends StatelessWidget {
   final FlutterGradientNames gradient;
   final Color color;
   final List<int> thumbnail;
+  final NeumorphicStyle style;
 
-  SonrIcon(this.data, this.type, this.color, this.gradient, {this.thumbnail, this.size, Key key}) : super(key: key);
+  SonrIcon(this.data, this.type, this.color, this.gradient, {this.thumbnail, this.style, this.size, Key key}) : super(key: key);
 
   // ^ Gradient Icon with Provided Data
   factory SonrIcon.gradient(IconData data, FlutterGradientNames gradient, {double size = 40, Key key}) {
@@ -32,14 +33,15 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.neumorphic(IconData data, {double size = 30, Color color = SonrColor.base, Key key}) {
+  factory SonrIcon.neumorphic(IconData data, {double size = 30, NeumorphicStyle style = const NeumorphicStyle(color: SonrColor.base), Key key}) {
     return SonrIcon(
       data,
       IconType.Neumorphic,
-      color,
+      SonrColor.base,
       null,
       size: size,
       key: key,
+      style: style,
     );
   }
 
@@ -220,7 +222,7 @@ class SonrIcon extends StatelessWidget {
     switch (type) {
       // @ Creates Neumorphic Icon
       case IconType.Neumorphic:
-        result = NeumorphicIcon((data), size: size, style: NeumorphicStyle(color: color));
+        result = NeumorphicIcon((data), size: size, style: style);
         break;
 
       // @ Creates Normal Icon

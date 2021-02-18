@@ -19,6 +19,8 @@ class MediaController extends GetxController {
   final videoInProgress = false.obs;
   final hasCapture = false.obs;
   final capturePath = "".obs;
+  final zoomLevel = 0.0.obs;
+  final doubleZoomed = false.obs;
 
   // Media Picker Properties
   final allCollections = Rx<List<MediaCollection>>();
@@ -37,9 +39,17 @@ class MediaController extends GetxController {
   ValueNotifier<CameraFlashes> switchFlash = ValueNotifier(CameraFlashes.NONE);
   ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.BACK);
   ValueNotifier<Size> photoSize = ValueNotifier(null);
+  ValueNotifier<double> zoomNotifier = ValueNotifier(0);
 
   // Controllers
   PictureController pictureController = new PictureController();
+
+  // ** Constructer ** //
+  MediaController() {
+    zoomLevel.listen((value) {
+      zoomNotifier.value = 1.0 / value;
+    });
+  }
 
   // ^ Captures Photo ^ //
   capturePhoto() async {
