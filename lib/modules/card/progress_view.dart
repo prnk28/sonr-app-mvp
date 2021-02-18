@@ -10,10 +10,11 @@ class ProgressView extends HookWidget {
   final TransferCard card;
   final Gradient gradient = SonrColor.randomGradient();
   final TransferCardController cardController;
-  final Duration duration;
+  final Duration duration = const Duration(milliseconds: 1500);
+  final bool utilizeProgress;
 
   // Constructer
-  ProgressView(this.cardController, this.card, {this.duration = const Duration(milliseconds: 1400)}) : super(key: UniqueKey());
+  ProgressView(this.cardController, this.card, this.utilizeProgress) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -35,14 +36,14 @@ class ProgressView extends HookWidget {
           alignment: Alignment.center,
           key: UniqueKey(),
           children: <Widget>[
-            buildPainter(hookController, iconKey),
+            buildPainter(hookController, iconKey, utilizeProgress),
             buildShaderMask(hookController, iconKey),
           ],
         ));
   }
 
   // ^ Method Builds Wave Painter Canvas ^ //
-  Widget buildPainter(AnimationController hookController, Key iconKey) {
+  Widget buildPainter(AnimationController hookController, Key iconKey, bool utilizeProgress) {
     return SizedBox(
       height: Get.height,
       width: Get.width,
@@ -50,18 +51,28 @@ class ProgressView extends HookWidget {
         animation: hookController,
         builder: (BuildContext context, Widget child) {
           return Opacity(
-            opacity: 0.85,
-            child: CustomPaint(
-              painter: WavePainter(
-                iconKey: iconKey,
-                waveAnimation: hookController,
-                percent: hookController.value,
-                height: Get.height,
-                width: Get.width,
-                gradient: gradient,
-              ),
-            ),
-          );
+              opacity: 0.85,
+              child: utilizeProgress
+                  ? Obx(() => CustomPaint(
+                        painter: WavePainter(
+                          iconKey: iconKey,
+                          waveAnimation: hookController,
+                          percent: Get.find<SonrService>().progress.value,
+                          height: Get.height,
+                          width: Get.width,
+                          gradient: gradient,
+                        ),
+                      ))
+                  : CustomPaint(
+                      painter: WavePainter(
+                        iconKey: iconKey,
+                        waveAnimation: hookController,
+                        percent: hookController.value,
+                        height: Get.height,
+                        width: Get.width,
+                        gradient: gradient,
+                      ),
+                    ));
         },
       ),
     );

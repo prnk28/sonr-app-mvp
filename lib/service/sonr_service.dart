@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as Pkg;
@@ -15,7 +16,6 @@ import 'sql_service.dart';
 class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
-  final received = Rx<TransferCard>();
   final direction = 0.0.obs;
   final olc = "".obs;
   final peers = Map<String, Peer>().obs;
@@ -67,7 +67,8 @@ class SonrService extends GetxService {
   // ******* Events ********
   // ***********************
   // ^ Process-File Event ^
-  void setPayload(Payload type, {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = ""}) async {
+  void setPayload(Payload type,
+      {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = "", Uint8List thumbnailData}) async {
     // Set Payload Type
     payload(type);
 
@@ -79,6 +80,7 @@ class SonrService extends GetxService {
       _file.hasThumbnail = hasThumbnail;
       _file.duration = duration;
       _file.thumbpath = thumbPath;
+      _file.thumbdata = thumbnailData;
     }
 
     // Link Payload
@@ -120,27 +122,6 @@ class SonrService extends GetxService {
   void respond(bool decision) async {
     // Send Response
     await _node.respond(decision);
-  }
-
-  // ^ Save Card after Completed Receive Transfer ^
-  void completed(TransferCard card) async {
-    // Feedback
-    HapticFeedback.heavyImpact();
-
-    // Save Card to Gallery
-    card.hasExported = await Get.find<DeviceService>().saveMediaFromCard(card);
-
-    // Store In SQL
-    Get.find<SQLService>().storeCard(card);
-
-    // Present Home Controller
-    Get.offAndToNamed('/home/completed').then((value) {
-      Get.find<HomeController>().addCard(card);
-    });
-
-    // Reset Parameters
-    progress(0.0);
-    received(null);
   }
 
   // **************************
@@ -232,8 +213,19 @@ class SonrService extends GetxService {
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(dynamic data) async {
     if (data is TransferCard) {
-      // Set Data
-      received(data);
+      // Feedback
+      HapticFeedback.heavyImpact();
+
+      // Save Card to Gallery
+      data.hasExported = await Get.find<DeviceService>().saveMediaFromCard(data);
+
+      // Store In SQL
+      Get.find<SQLService>().storeCard(data);
+
+      // Reset Parameters
+      Future.delayed(500.milliseconds, () {
+        progress(0.0);
+      });
     }
   }
 

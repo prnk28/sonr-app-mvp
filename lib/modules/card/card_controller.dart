@@ -18,7 +18,6 @@ enum CardType { None, Invite, Reply, GridItem, Info }
 
 class TransferCardController extends GetxController {
   // Properties
-  final Rx<TransferCard> receivedCard = Get.find<SonrService>().received;
   final animationCompleted = false.obs;
   final displayProgress = false.obs;
 
@@ -26,22 +25,8 @@ class TransferCardController extends GetxController {
   TransferCardController() {
     // @ Listen for Animation Complete
     animationCompleted.listen((result) {
-      // Transfer NOT Completed, Animation Completed
-      if (receivedCard.value == null && result) {
-        displayProgress(true);
-      } else if (receivedCard.value != null && result) {
-        Get.find<SonrService>().completed(receivedCard.value);
-        Get.back();
-      }
-    });
-
-    // @ Listen for Animation Complete
-    receivedCard.listen((result) {
-      // Transfer Completed, Animation Completed
-      if (animationCompleted.value && result != null) {
-        Get.find<SonrService>().completed(result);
-        Get.back();
-      }
+      // Present Home Controller
+      Get.offAndToNamed('/home/completed');
     });
   }
 
@@ -57,9 +42,9 @@ class TransferCardController extends GetxController {
 
     // Return to HomeScreen
     Get.back();
-    Get.offAllNamed('/home/completed').then((value) {
-      Get.find<HomeController>().addCard(card);
-    });
+
+    // Present Home Controller
+    Get.offAndToNamed('/home/completed');
   }
 
   // ^ Accept Transfer Invite Request ^ //
@@ -73,19 +58,7 @@ class TransferCardController extends GetxController {
     Get.find<SonrService>().respond(true);
     SonrOverlay.back();
 
-    // Get Estimated Duration - Size in Bytes / 5mb in Bytes
-    var averageBytes = card.properties.size / 5000000;
-    Duration duration;
-
-    // Set Duration for Animation
-    if (averageBytes < 1) {
-      duration = Duration(milliseconds: 1400);
-    } else {
-      var time = averageBytes * 1000 + 400;
-      duration = Duration(milliseconds: time.round());
-    }
-
-    Get.dialog(ProgressView(this, card, duration: duration), barrierDismissible: false);
+    Get.dialog(ProgressView(this, card, card.properties.size > 5000000), barrierDismissible: false);
   }
 
   // ^ Decline Invite Request ^ //

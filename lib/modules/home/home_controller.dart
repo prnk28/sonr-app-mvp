@@ -22,28 +22,21 @@ class HomeController extends GetxController {
   // Widget Elements
   final isExpanded = false.obs;
   final pageIndex = 0.obs;
-
-  final pageOffset = 0.0.obs;
   final toggleIndex = 0.obs;
 
   // References
-  final pageController = PageController(viewportFraction: 0.8, keepPage: false);
+  PageController pageController;
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   @override
   void onInit() {
-    // Set PageController
-    pageController.addListener(() {
-      pageOffset(pageController.page);
-    });
-
     // Fetch Data
     refreshCards();
     super.onInit();
   }
 
   // ^ Method Refreshes TransferCards ^ //
-  Future<void> refreshCards() async {
+  Future<void> refreshCards({bool jumpToLatest = false}) async {
     // Reset Cards
     allCards.clear();
     contactCards.clear();
@@ -69,6 +62,11 @@ class HomeController extends GetxController {
     allCards.refresh();
     mediaCards.refresh();
     contactCards.refresh();
+
+    // Check for Jump
+    if (jumpToLatest) {
+      pageController.animateToPage(allCards.length - 1, duration: 650.milliseconds, curve: Curves.bounceOut);
+    }
   }
 
   // ^ Helper Method for Category Filter ^ //

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -23,12 +24,14 @@ class MediaController extends GetxController {
   final allCollections = Rx<List<MediaCollection>>();
   final mediaCollection = Rx<MediaCollection>();
   final allMedias = <Media>[].obs;
-  final selectedFile = Rx<Media>();
+  final selectedMediaIndex = (-1).obs;
   final hasGallery = false.obs;
   final loaded = false.obs;
 
   // References
   bool _isFlipped = false;
+  Media _selectedMedia;
+  Uint8List _selectedThumbnail;
 
   // Notifiers
   ValueNotifier<CameraFlashes> switchFlash = ValueNotifier(CameraFlashes.NONE);
@@ -161,16 +164,26 @@ class MediaController extends GetxController {
     loaded(true);
   }
 
+  // ^ Set Media from Picker
+  setMedia(Media media, Uint8List thumb) {
+    _selectedMedia = media;
+    _selectedThumbnail = thumb;
+  }
+
   // ^ Process Selected File ^ //
   confirmSelectedFile() async {
-    // Retreive File and Process
-    File mediaFile = await selectedFile.value.getFile();
-    Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path);
+    // Validate File
+    if (_selectedMedia != null) {
+      // Retreive File and Process
+      File mediaFile = await _selectedMedia.getFile();
+      Get.find<SonrService>()
+          .setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail, hasThumbnail: _selectedThumbnail != null);
 
-    // Close Share Button
-    Get.find<HomeController>().toggleShareExpand();
+      // Close Share Button
+      Get.find<HomeController>().toggleShareExpand();
 
-    // Go to Transfer
-    Get.offNamed("/transfer");
+      // Go to Transfer
+      Get.offNamed("/transfer");
+    }
   }
 }

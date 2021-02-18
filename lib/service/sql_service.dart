@@ -144,7 +144,7 @@ create table $CARD_TABLE (
       });
     }
     // Return All Files
-    return result;
+    return result.reversed.toList();
   }
 
   // ^ Get Total Card Count ^ //
@@ -185,15 +185,8 @@ create table $CARD_TABLE (
         });
       }
 
-      // Sort by Date
-      result.sort((a, b) {
-        var aDate = DateTime.fromMillisecondsSinceEpoch(a.received * 1000);
-        var bDate = DateTime.fromMillisecondsSinceEpoch(b.received * 1000);
-        return aDate.compareTo(bDate);
-      });
-
       // Add Result to Map
-      results[type] = result;
+      results[type] = result.reversed.toList();
     });
 
     // Update All Files
@@ -210,8 +203,8 @@ create table $CARD_TABLE (
     // Create TransferCard Object
     return TransferCard(
         id: e[cardColumnId],
-        payload: Payload.values.firstWhere((p) => p.toString() == payload),
-        platform: Platform.values.firstWhere((p) => p.toString() == platform),
+        payload: Payload.values.firstWhere((p) => p.toString() == payload, orElse: () => Payload.UNDEFINED),
+        platform: Platform.values.firstWhere((p) => p.toString() == platform, orElse: () => Platform.Unknown),
         preview: preview.toList(),
         received: e[cardColumnReceived],
         username: e[cardColumnUserName],

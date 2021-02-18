@@ -76,7 +76,8 @@ class _MediaDropdownDialogBar extends GetView<MediaController> {
                           isExpanded: true,
                           initialValue: controller.mediaCollection.value,
                           items: controller.allCollections.value,
-                          customWidgets: List<Widget>.generate(controller.allCollections.value.length, (index) => _buildOptionWidget(index)),
+                          customWidgets: controller.allCollections.value ??
+                              List<Widget>.generate(controller.allCollections.value.length, (index) => _buildOptionWidget(index)),
                           onChanged: updateFn,
                         );
                       },
@@ -114,7 +115,7 @@ class _MediaGrid extends GetView<MediaController> {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
             itemCount: controller.allMedias.length,
             itemBuilder: (context, index) {
-              return _MediaPickerItem(controller.allMedias[index]);
+              return _MediaPickerItem(controller.allMedias[index], index);
             }),
       );
     });
@@ -124,7 +125,8 @@ class _MediaGrid extends GetView<MediaController> {
 // ** MediaPicker Item Widget ** //
 class _MediaPickerItem extends StatefulWidget {
   final Media mediaFile;
-  _MediaPickerItem(this.mediaFile);
+  final int index;
+  _MediaPickerItem(this.mediaFile, this.index);
 
   @override
   _MediaPickerItemState createState() => _MediaPickerItemState();
@@ -134,28 +136,17 @@ class _MediaPickerItem extends StatefulWidget {
 class _MediaPickerItemState extends State<_MediaPickerItem> {
   // Pressed Property
   bool isPressed = false;
-  StreamSubscription<Media> selectedStream;
+  StreamSubscription<int> selectedStream;
+  Uint8List thumbnail;
 
   // Listen to Selected File
   @override
   void initState() {
-    selectedStream = Get.find<MediaController>().selectedFile.listen((val) {
-      if (widget.mediaFile == val) {
-        if (!isPressed) {
-          if (mounted) {
-            setState(() {
-              isPressed = true;
-            });
-          }
-        }
-      } else {
-        if (isPressed) {
-          if (mounted) {
-            setState(() {
-              isPressed = false;
-            });
-          }
-        }
+    selectedStream = Get.find<MediaController>().selectedMediaIndex.listen((val) {
+      if (widget.index != val && isPressed) {
+        setState(() {
+          isPressed = false;
+        });
       }
     });
     super.initState();
@@ -178,7 +169,17 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
       padding: EdgeInsets.zero,
       style: isPressed ? pressedStyle : defaultStyle,
       onPressed: () {
-        Get.find<MediaController>().selectedFile(widget.mediaFile);
+        setState(() {
+          isPressed = !isPressed;
+
+          if (isPressed) {
+            Get.find<MediaController>().selectedMediaIndex(widget.index);
+            Get.find<MediaController>().setMedia(widget.mediaFile, thumbnail);
+          } else {
+            Get.find<MediaController>().selectedMediaIndex(-1);
+            Get.find<MediaController>().setMedia(null, null);
+          }
+        });
       },
       child: Stack(
         alignment: Alignment.center,
@@ -188,6 +189,10 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
               future: widget.mediaFile.getThumbnail(width: 200, height: 200),
               builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
                 if (snapshot.hasData) {
+                  // Set Thumbnail
+                  thumbnail = Uint8List.fromList(snapshot.data);
+
+                  // Create Box
                   return DecoratedBox(
                       child: Image.memory(
                         Uint8List.fromList(snapshot.data),
@@ -220,4 +225,6 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
       return Container();
     }
   }
+
+  _setThumbnailData(Uint8List thumbnail) {}
 }

@@ -64,8 +64,13 @@ class HomeScreen extends GetView<HomeController> {
 class TransferCardGrid extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
+    // Create Page Controller
+    final pageController = PageController(viewportFraction: 0.8, keepPage: false);
+    controller.pageController = pageController;
+    controller.refreshCards();
+
+    // Build View
     return Obx(() {
-      // Initialize
       return GestureDetector(
         onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
         child: Container(
@@ -73,9 +78,8 @@ class TransferCardGrid extends GetView<HomeController> {
           margin: EdgeInsets.all(10),
           height: 500, // card height
           child: PageView.builder(
-              reverse: true,
               itemCount: controller.getCardList().length,
-              controller: controller.pageController,
+              controller: pageController,
               onPageChanged: (int index) => controller.pageIndex(index),
               itemBuilder: (_, idx) {
                 return Obx(() {
