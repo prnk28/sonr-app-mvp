@@ -76,8 +76,7 @@ class _MediaDropdownDialogBar extends GetView<MediaController> {
                           isExpanded: true,
                           initialValue: controller.mediaCollection.value,
                           items: controller.allCollections.value,
-                          customWidgets: controller.allCollections.value ??
-                              List<Widget>.generate(controller.allCollections.value.length, (index) => _buildOptionWidget(index)),
+                          customWidgets: List<Widget>.generate(controller.allCollections.value.length, (index) => _buildOptionWidget(index)),
                           onChanged: updateFn,
                         );
                       },
