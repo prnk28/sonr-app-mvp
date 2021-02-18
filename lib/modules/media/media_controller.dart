@@ -222,9 +222,6 @@ class MediaController extends GetxController {
       File mediaFile = await _selectedMedia.getFile();
       Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail);
 
-      // Close Share Button
-      Get.find<HomeController>().toggleShareExpand();
-
       // Go to Transfer
       Get.offNamed("/transfer");
     }

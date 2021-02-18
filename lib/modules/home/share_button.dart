@@ -1,10 +1,20 @@
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_core/sonr_core.dart';
 
+// @ Widget Constants
 const double K_ITEM_SPACING = 12;
+const double K_EXPANDED_HEIGHT = 130;
+const double K_EXPANDED_WIDTH = 165;
+const double K_DEFAULT_HEIGHT = 70;
+const double K_DEFAULT_WIDTH = 30;
+const Duration K_ANIMATION_DURATION = const Duration(milliseconds: 200);
 
-class ShareButton extends GetView<HomeController> {
+class ShareButton extends GetView<ShareButtonController> {
   final expandedView = _ExpandedView();
   final defaultView = _DefaultView();
 
@@ -16,26 +26,22 @@ class ShareButton extends GetView<HomeController> {
         child: AnimatedContainer(
             curve: Curves.easeInBack,
             padding: EdgeInsetsDirectional.only(start: 30),
-            width: controller.isExpanded.value ? Get.width / 2 + 165 : Get.width / 2 + 30,
-            height: controller.isExpanded.value ? 130 : 70,
-            duration: 200.milliseconds,
+            width: controller.isExpanded.value ? Get.width / 2 + K_EXPANDED_WIDTH : Get.width / 2 + K_DEFAULT_WIDTH,
+            height: controller.isExpanded.value ? K_EXPANDED_HEIGHT : K_DEFAULT_HEIGHT,
+            duration: K_ANIMATION_DURATION,
             child: Center(
               child: NeumorphicButton(
-                  child: controller.isExpanded.value ? expandedView : defaultView,
-                  onPressed: controller.toggleShareExpand,
-                  style: NeumorphicStyle(
-                    color: Colors.black87,
-                    surfaceIntensity: 0.6,
-                    intensity: 0.75,
-                    depth: 8,
-                    boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
-                  )),
+                child: controller.isExpanded.value ? expandedView : defaultView,
+                onPressed: controller.toggle,
+                style: SonrStyle.shareButton,
+              ),
             )),
       );
     });
   }
 }
 
+// ** Close Share Button View ** //
 class _DefaultView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -50,6 +56,7 @@ class _DefaultView extends StatelessWidget {
   }
 }
 
+// ** Expanded Share Button View ** //
 class _ExpandedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -77,7 +84,8 @@ class _ExpandedView extends StatelessWidget {
   }
 }
 
-class _ShareButtonRow extends GetView<HomeController> {
+// ** Share Button Row ** //
+class _ShareButtonRow extends GetView<ShareButtonController> {
   const _ShareButtonRow();
   @override
   Widget build(BuildContext context) {
@@ -92,7 +100,7 @@ class _ShareButtonRow extends GetView<HomeController> {
               height: Get.height,
               child: _ShareButtonItem(
                 onPressed: () {
-                  controller.openCamera();
+                  controller.presentCamera();
                 },
                 type: ArtboardType.Camera,
               ),
@@ -104,7 +112,7 @@ class _ShareButtonRow extends GetView<HomeController> {
               height: Get.height,
               child: _ShareButtonItem(
                 onPressed: () {
-                  controller.openMediaPicker();
+                  controller.presentMediaPicker();
                 },
                 type: ArtboardType.Gallery,
               ),
@@ -126,6 +134,7 @@ class _ShareButtonRow extends GetView<HomeController> {
   }
 }
 
+// ** Share Button Item View ** //
 class _ShareButtonItem extends StatelessWidget {
   // Properties
   final ArtboardType type;
@@ -158,5 +167,70 @@ class _ShareButtonItem extends StatelessWidget {
       Padding(padding: EdgeInsets.only(top: 4)),
       SonrText.medium(_typeText, size: 14, color: Colors.white),
     ]);
+  }
+}
+
+// ** Share Button Controller ** //
+class ShareButtonController extends GetxController {
+  // Properties
+  final isExpanded = false.obs;
+
+  // ^ Close Share Button ^ //
+  static void close() {
+    HapticFeedback.heavyImpact();
+    Get.find<ShareButtonController>().isExpanded(false);
+  }
+
+  // ^ Expand Share Button ^ //
+  void expand() {
+    HapticFeedback.heavyImpact();
+    Get.find<ShareButtonController>().isExpanded(true);
+  }
+
+  // ^ Toggles Expanded Share Button ^ //
+  void toggle() {
+    HapticFeedback.heavyImpact();
+    Get.find<ShareButtonController>().isExpanded(!isExpanded.value);
+  }
+
+  // ^ Opens Camera Picker ^ //
+  void presentCamera() async {
+    // Check for Permssions
+    if (await Permission.camera.request().isGranted) {
+      // Toggle Share Expand
+      close();
+
+      // Go to Camera View
+      Get.offNamed("/transfer");
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+    }
+  }
+
+  // ^ Opens Media Picker UI ^ //
+  void presentMediaPicker() async {
+    // Check for Permssions
+    if (await Permission.photos.request().isGranted) {
+      // Toggle Share Expand
+      close();
+
+      // Display Bottom Sheet
+      Get.bottomSheet(MediaSheet(), isDismissible: false);
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+    }
+  }
+
+  // ^ Queues a Contact for Transfer ^ //
+  void queueContact() {
+    Get.find<SonrService>().setPayload(Payload.CONTACT);
+
+    // Close Share Button
+    close();
+
+    // Go to Transfer
+    Get.offNamed("/transfer");
   }
 }

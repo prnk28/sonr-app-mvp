@@ -1,13 +1,9 @@
 // import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
-import '../media/media_camera.dart';
-import '../media/picker_sheet.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
@@ -111,20 +107,6 @@ class HomeController extends GetxController {
     pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
   }
 
-  // ^ Toggles Expanded Share Button ^ //
-  void toggleShareExpand({ToggleForced options}) {
-    // Force Toggle
-    if (options != null) {
-      // Toggle Options
-      HapticFeedback.heavyImpact();
-      isExpanded(options.value);
-    } else {
-      // Toggle
-      HapticFeedback.heavyImpact();
-      isExpanded(!isExpanded.value);
-    }
-  }
-
   // ^ Finds Index of Card and Scrolls to It ^ //
   void jumpToCard(TransferCard card) async {
     // Get Index
@@ -140,47 +122,6 @@ class HomeController extends GetxController {
     } else {
       SonrSnack.error("Error finding the suggested card.");
     }
-  }
-
-  // ^ Opens Camera Picker ^ //
-  void openCamera() async {
-    // Check for Permssions
-    if (await Permission.camera.request().isGranted) {
-      // Toggle Share Expand
-      toggleShareExpand(options: ToggleForced(false));
-
-      // Show Picker
-      Get.dialog(MediaCameraView(), useSafeArea: false);
-    } else {
-      // Display Error
-      SonrSnack.error("Sonr isnt permitted to access your media.");
-    }
-  }
-
-  // ^ Opens Media Picker UI ^ //
-  void openMediaPicker() async {
-    // Check for Permssions
-    if (await Permission.photos.request().isGranted) {
-      // Toggle Share Expand
-      toggleShareExpand(options: ToggleForced(true));
-
-      // Display Bottom Sheet
-      Get.bottomSheet(MediaSheet(), isDismissible: false);
-    } else {
-      // Display Error
-      SonrSnack.error("Sonr isnt permitted to access your media.");
-    }
-  }
-
-  // ^ Queues a Contact for Transfer ^ //
-  void queueContact() {
-    Get.find<SonrService>().setPayload(Payload.CONTACT);
-
-    // Close Share Button
-    Get.find<HomeController>().toggleShareExpand();
-
-    // Go to Transfer
-    Get.offNamed("/transfer");
   }
 
   // ^ Adds a Card to Screen ^ //

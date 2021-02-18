@@ -8,7 +8,7 @@ import 'package:sonr_core/sonr_core.dart';
 
 import 'home_controller.dart';
 
-class SearchDialog extends GetView<SearchCardController> {
+class SearchView extends GetView<SearchCardController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(

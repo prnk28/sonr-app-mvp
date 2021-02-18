@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/modules/home/share_button.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -50,7 +51,7 @@ class ContactCard extends GetWidget<TransferCardController> {
           child: GestureDetector(
             onTap: () {
               // Close Share Menu
-              Get.find<HomeController>().toggleShareExpand(options: ToggleForced(false));
+              ShareButtonController.close();
 
               // Push to Page
               Get.to(_ContactCardExpanded(card), transition: Transition.fadeIn);

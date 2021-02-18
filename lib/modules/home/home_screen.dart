@@ -4,7 +4,7 @@ import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'home_controller.dart';
-import 'search_dialog.dart';
+import 'search_view.dart';
 import 'share_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -25,7 +25,7 @@ class HomeScreen extends GetView<HomeController> {
             onPressed: () {
               if (controller.allCards.length > 0) {
                 SonrOverlay.open(
-                  SearchDialog(),
+                  SearchView(),
                   barrierDismissible: true,
                 );
               } else {
@@ -38,7 +38,7 @@ class HomeScreen extends GetView<HomeController> {
           height: Get.height,
           child: Column(children: [
             GestureDetector(
-              onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
+              onTap: () => ShareButtonController.close(),
               child: Container(
                 padding: EdgeInsets.only(top: 10),
                 margin: EdgeInsets.only(left: 30, right: 30),
@@ -72,7 +72,7 @@ class TransferCardGrid extends GetView<HomeController> {
     // Build View
     return Obx(() {
       return GestureDetector(
-        onTap: () => controller.toggleShareExpand(options: ToggleForced(false)),
+        onTap: () => ShareButtonController.close(),
         child: Container(
           padding: EdgeInsets.only(top: 15),
           margin: EdgeInsets.all(10),
