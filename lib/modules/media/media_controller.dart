@@ -176,8 +176,7 @@ class MediaController extends GetxController {
     if (_selectedMedia != null) {
       // Retreive File and Process
       File mediaFile = await _selectedMedia.getFile();
-      Get.find<SonrService>()
-          .setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail, hasThumbnail: _selectedThumbnail != null);
+      Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail);
 
       // Close Share Button
       Get.find<HomeController>().toggleShareExpand();
