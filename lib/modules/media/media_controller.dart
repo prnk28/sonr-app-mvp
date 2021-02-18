@@ -64,7 +64,7 @@ class MediaController extends GetxController {
     await pictureController.takePicture(path);
     Get.find<PreviewController>().capturePath(path);
     Get.find<PreviewController>().hasCapture(true);
-    Get.dialog(MediaPreviewView());
+    SonrOverlay.open(MediaPreviewView());
   }
 
   // ^ Captures Video ^ //
