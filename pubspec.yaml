@@ -28,7 +28,7 @@ dependencies:
   url_launcher: ^5.7.10
 
   # -- Device --
-  camerawesome:
+  camerawesome: ^0.2.1+2
   flutter_compass: ^0.5.1
   geolocator: ^6.0.0+4
   permission_handler: ^5.0.1+1

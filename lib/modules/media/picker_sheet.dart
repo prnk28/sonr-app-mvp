@@ -173,10 +173,10 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
 
           if (isPressed) {
             Get.find<MediaController>().selectedMediaIndex(widget.index);
-            Get.find<MediaController>().setMedia(widget.mediaFile, thumbnail);
+            Get.find<MediaController>().setMediaPickerItem(widget.mediaFile, thumbnail);
           } else {
             Get.find<MediaController>().selectedMediaIndex(-1);
-            Get.find<MediaController>().setMedia(null, null);
+            Get.find<MediaController>().setMediaPickerItem(null, null);
           }
         });
       },
@@ -224,6 +224,4 @@ class _MediaPickerItemState extends State<_MediaPickerItem> {
       return Container();
     }
   }
-
-  _setThumbnailData(Uint8List thumbnail) {}
 }

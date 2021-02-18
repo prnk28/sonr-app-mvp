@@ -1,7 +1,6 @@
 // import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';

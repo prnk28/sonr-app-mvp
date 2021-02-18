@@ -4,21 +4,19 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:media_gallery/media_gallery.dart';
 import '../home/home_controller.dart';
+import 'preview_controller.dart';
+import 'preview_view.dart';
 
-// ** MediaPicker GetXController ** //
 class MediaController extends GetxController {
   // Camera Properties
   final videoDuration = 0.obs;
   final videoInProgress = false.obs;
-  final hasCapture = false.obs;
-  final capturePath = "".obs;
   final zoomLevel = 0.0.obs;
   final doubleZoomed = false.obs;
 
@@ -38,11 +36,14 @@ class MediaController extends GetxController {
   // Notifiers
   ValueNotifier<CameraFlashes> switchFlash = ValueNotifier(CameraFlashes.NONE);
   ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.BACK);
-  ValueNotifier<Size> photoSize = ValueNotifier(null);
+  ValueNotifier<Size> photoSize = ValueNotifier(Size(Get.width, Get.height));
   ValueNotifier<double> zoomNotifier = ValueNotifier(0);
+  ValueNotifier<CaptureModes> captureMode = ValueNotifier(CaptureModes.PHOTO);
 
   // Controllers
   PictureController pictureController = new PictureController();
+  VideoController videoController = new VideoController();
+  Stopwatch stopwatch = new Stopwatch();
 
   // ** Constructer ** //
   MediaController() {
@@ -61,28 +62,36 @@ class MediaController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(path);
-    capturePath(path);
-    hasCapture(true);
+    Get.find<PreviewController>().capturePath(path);
+    Get.find<PreviewController>().hasCapture(true);
+    Get.dialog(MediaPreviewView());
   }
 
-  // ^ Clear Current Photo ^ //
-  clearPhoto() async {
-    hasCapture(false);
-    capturePath("");
+  // ^ Captures Video ^ //
+  startCaptureVideo() async {
+    // Set Path
+    var now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
+    var docs = await getApplicationDocumentsDirectory();
+    var path = docs.path + "/SONR_VIDEO_" + formattedDate + ".mp4";
+    Get.find<PreviewController>().capturePath(path);
+
+    // Capture Photo
+    captureMode.value = CaptureModes.VIDEO;
+    videoInProgress(true);
+    stopwatch.start();
+    await videoController.recordVideo(path);
   }
 
-  // ^ Continue with Capture ^ //
-  continuePhoto() async {
-    // Save Photo
-    Get.find<DeviceService>().savePhotoFromCamera(capturePath.value);
+  // ^ Stops Video Capture ^ //
+  stopCaptureVideo() async {
+    videoInProgress(false);
+    stopwatch.stop();
+    videoDuration(stopwatch.elapsedMilliseconds);
 
-    Get.find<SonrService>().setPayload(Payload.MEDIA, path: capturePath.value);
-
-    // Close Share Button
-    Get.find<HomeController>().toggleShareExpand();
-
-    // Go to Transfer
-    Get.offNamed("/transfer");
+    await videoController.stopRecordingVideo();
+    Get.find<PreviewController>().hasCapture(true);
+    stopwatch.reset();
   }
 
   // ^ Flip Camera ^ //
@@ -175,7 +184,7 @@ class MediaController extends GetxController {
   }
 
   // ^ Set Media from Picker
-  setMedia(Media media, Uint8List thumb) {
+  setMediaPickerItem(Media media, Uint8List thumb) {
     _selectedMedia = media;
     _selectedThumbnail = thumb;
   }
