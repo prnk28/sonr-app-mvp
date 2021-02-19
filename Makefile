@@ -15,6 +15,9 @@ all: Makefile
 run:
 	cd $(PROJECT_DIR) && $(RUN)
 
+profile:
+	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl
+
 ## release   :   Run Mobile App for Release Mode
 release:
 	cd $(PROJECT_DIR) && rm -rf build
@@ -25,8 +28,8 @@ release:
 ## build     :   Builds IPA and APK
 build:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDIOS)
-	cd $(PROJECT_DIR) && $(BUILDANDROID)
+	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path flutter_01.sksl.json
+	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path flutter_01.sksl.json
 
 ## clean     :   Cleans Project Cache and Build Folder
 clean:
