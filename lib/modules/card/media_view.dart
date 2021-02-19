@@ -37,9 +37,6 @@ class MediaCard extends GetWidget<TransferCardController> {
           margin: EdgeInsets.all(4),
           child: GestureDetector(
             onTap: () {
-              // Close Share Menu
-              ShareButtonController.close();
-
               // Push to Page
               Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
             },

@@ -8,9 +8,6 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/media/camera_binding.dart';
-import 'modules/media/camera_view.dart';
-import 'modules/media/picker_sheet.dart';
-import 'modules/media/preview_view.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
@@ -39,9 +36,79 @@ class InitialBinding implements Bindings {
     Get.put(SonrOverlay());
     Get.put(SonrPositionedOverlay());
     Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
-    Get.put<CameraController>(CameraController(), permanent: true);
-    Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
-    Get.lazyPut<PreviewController>(() => PreviewController());
+  }
+}
+
+// ^ Root App Widget ^ //
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  Artboard _riveArtboard;
+  @override
+  void initState() {
+    super.initState();
+    // Load the RiveFile from the binary data.
+    rootBundle.load('assets/animations/splash_screen.riv').then(
+      (data) async {
+        // Await Loading
+        final file = RiveFile();
+        if (file.import(data)) {
+          // Retreive Artboard
+          final artboard = file.mainArtboard;
+
+          // Determine Animation by Tile Type
+          artboard.addController(SimpleAnimation('Default'));
+          setState(() => _riveArtboard = artboard);
+
+          // Add Delay before switching screens
+          Future.delayed(2.seconds).then((_) {
+            Get.offNamed("/home");
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      getPages: K_PAGES,
+      initialBinding: InitialBinding(),
+      navigatorKey: Get.key,
+      navigatorObservers: [GetObserver()],
+      themeMode: ThemeMode.light,
+      home: Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              // @ Rive Animation
+              Container(
+                  width: Get.width,
+                  height: Get.height,
+                  child: Center(
+                      child: _riveArtboard == null
+                          ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
+                          : Rive(artboard: _riveArtboard))),
+
+              // @ Fade Animation of Text
+              PlayAnimation<double>(
+                  tween: (0.0).tweenTo(1.0),
+                  duration: 400.milliseconds,
+                  delay: 1.seconds,
+                  builder: (context, child, value) {
+                    return AnimatedOpacity(
+                        opacity: value,
+                        duration: 400.milliseconds,
+                        child:
+                            Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", gradient: FlutterGradientNames.glassWater)));
+                  }),
+            ],
+          )),
+    );
   }
 }
 
@@ -84,107 +151,11 @@ List<GetPage> get K_PAGES => [
           name: '/camera',
           maintainState: false,
           page: () => MediaScreen(),
-          transition: Transition.downToUp,
-          curve: Curves.easeIn,
-          fullscreenDialog: true,
-          binding: CameraBinding()),
-
-      // ** Camera Page - Profile Picture View ** //
-      GetPage(
-          name: '/camera/avatar',
-          maintainState: false,
-          page: () => MediaScreen(),
-          transition: Transition.downToUp,
-          curve: Curves.easeIn,
-          fullscreenDialog: true,
-          binding: CameraBinding()),
-
-      // ** Camera Page - QR Code Scanner ** //
-      GetPage(
-          name: '/camera/qr',
-          maintainState: false,
-          page: () => MediaScreen(),
-          transition: Transition.downToUp,
+          transition: Transition.fade,
           curve: Curves.easeIn,
           fullscreenDialog: true,
           binding: CameraBinding()),
 
       // ** Profile Page ** //
-      GetPage(
-          name: '/profile',
-          page: () => ProfileScreen(),
-          transition: Transition.upToDown,
-          curve: Curves.easeIn,
-          fullscreenDialog: true,
-          binding: ProfileBinding()),
+      GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),
     ];
-
-// ^ Root App Widget ^ //
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  Artboard _riveArtboard;
-  @override
-  void initState() {
-    super.initState();
-    // Load the RiveFile from the binary data.
-    rootBundle.load('assets/animations/splash_screen.riv').then(
-      (data) async {
-        // Await Loading
-        final file = RiveFile();
-        if (file.import(data)) {
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          setState(() => _riveArtboard = artboard);
-
-          // Add Delay before switching screens
-          Future.delayed(2.seconds).then((_) {
-            Get.offNamed("/home");
-          });
-        }
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      getPages: K_PAGES,
-      initialBinding: InitialBinding(),
-      home: SonrScaffold(
-          backgroundColor: Colors.black,
-          body: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              // @ Rive Animation
-              Container(
-                  width: Get.width,
-                  height: Get.height,
-                  child: Center(
-                      child: _riveArtboard == null
-                          ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
-                          : Rive(artboard: _riveArtboard))),
-
-              // @ Fade Animation of Text
-              PlayAnimation<double>(
-                  tween: (0.0).tweenTo(1.0),
-                  duration: 400.milliseconds,
-                  delay: 1.seconds,
-                  builder: (context, child, value) {
-                    return AnimatedOpacity(
-                        opacity: value,
-                        duration: 400.milliseconds,
-                        child:
-                            Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", gradient: FlutterGradientNames.glassWater)));
-                  }),
-            ],
-          )),
-    );
-  }
-}

@@ -210,6 +210,12 @@ class DeviceService extends GetxService {
     await GallerySaver.saveImage(path, albumName: "Sonr");
   }
 
+  // ^ Saves Photo to Gallery ^ //
+  Future saveVideoFromCamera(String path) async {
+    // Save Image to Gallery
+    await GallerySaver.saveImage(path, albumName: "Sonr");
+  }
+
   // ^ Launch a URL Event ^ //
   launchURL(String url) async {
     if (await canLaunch(url)) {

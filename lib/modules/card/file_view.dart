@@ -36,9 +36,6 @@ class FileCard extends GetWidget<TransferCardController> {
           margin: EdgeInsets.all(4),
           child: GestureDetector(
             onTap: () {
-              // Close Share Menu
-              ShareButtonController.close();
-
               // Push to Page
               Get.to(_FileCardExpanded(card), transition: Transition.fadeIn);
             },

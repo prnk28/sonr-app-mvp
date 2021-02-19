@@ -1,5 +1,8 @@
 // import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/service/sql_service.dart';
 import 'package:flutter/services.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -15,7 +18,7 @@ class HomeController extends GetxController {
   final mediaCards = <TransferCard>[].obs;
 
   // Widget Elements
-  final isExpanded = false.obs;
+  final isShareExpanded = false.obs;
   final pageIndex = 0.obs;
   final toggleIndex = 0.obs;
 
@@ -136,9 +139,63 @@ class HomeController extends GetxController {
     // Shift to Item
     pageController.animateToPage(allCards.length - 1, duration: 800.milliseconds, curve: Curves.bounceIn);
   }
-}
 
-class ToggleForced {
-  final bool value;
-  ToggleForced(this.value);
+  // ^ Close Share Button ^ //
+  void closeShare() {
+    HapticFeedback.heavyImpact();
+    isShareExpanded(false);
+  }
+
+  // ^ Expand Share Button ^ //
+  void expandShare() {
+    HapticFeedback.heavyImpact();
+    isShareExpanded(true);
+  }
+
+  // ^ Toggles Expanded Share Button ^ //
+  void toggleShare() {
+    HapticFeedback.heavyImpact();
+    isShareExpanded(!isShareExpanded.value);
+  }
+
+  // ^ Opens Camera Picker ^ //
+  void presentCamera() async {
+    // Check for Permssions
+    if (await Permission.camera.request().isGranted) {
+      // Toggle Share Expand
+      closeShare();
+
+      // Go to Camera View
+      Get.offNamed("/camera");
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+    }
+  }
+
+  // ^ Opens Media Picker UI ^ //
+  void presentMediaPicker() async {
+    // Check for Permssions
+    if (await Permission.photos.request().isGranted) {
+      // Toggle Share Expand
+      closeShare();
+
+      // Display Bottom Sheet
+      //Get.bottomSheet(PickerSheet(), isDismissible: false);
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+    }
+  }
+
+  // ^ Queues a Contact for Transfer ^ //
+  void queueContact() {
+    Get.find<SonrService>().setPayload(Payload.CONTACT);
+
+    // Close Share Button
+    closeShare();
+
+    // Go to Transfer
+    Get.offNamed("/transfer");
+  }
 }

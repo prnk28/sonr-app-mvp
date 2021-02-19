@@ -38,7 +38,7 @@ class HomeScreen extends GetView<HomeController> {
           height: Get.height,
           child: Column(children: [
             GestureDetector(
-              onTap: () => ShareButtonController.close(),
+              onTap: () => controller.closeShare(),
               child: Container(
                 padding: EdgeInsets.only(top: 10),
                 margin: EdgeInsets.only(left: 30, right: 30),
@@ -72,7 +72,7 @@ class TransferCardGrid extends GetView<HomeController> {
     // Build View
     return Obx(() {
       return GestureDetector(
-        onTap: () => ShareButtonController.close(),
+        onTap: () => controller.closeShare(),
         child: Container(
           padding: EdgeInsets.only(top: 15),
           margin: EdgeInsets.all(10),
