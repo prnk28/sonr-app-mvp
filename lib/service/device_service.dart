@@ -13,9 +13,13 @@ enum DeviceStatus { Success, NoUser, NoLocation }
 
 class DeviceService extends GetxService {
   // Status/Sensor Properties
-  final direction = 0.0.obs;
-  final position = Rx<Position>();
-  final startStatus = Rx<DeviceStatus>();
+  final _direction = 0.0.obs;
+  final _position = Rx<Position>();
+  final _status = Rx<DeviceStatus>();
+
+  static RxDouble get direction => Get.find<DeviceService>()._direction;
+  static Rx<Position> get position => Get.find<DeviceService>()._position;
+  static Rx<DeviceStatus> get status => Get.find<DeviceService>()._status;
 
   // Permission Properties
   final cameraPermitted = false.obs;
@@ -34,40 +38,29 @@ class DeviceService extends GetxService {
   Future<DeviceService> init() async {
     await setPermissionStatus();
     await refreshLocation();
-    start();
-    return this;
-  }
 
-  // ^ Method to Connect User Event ^
-  void start() async {
     // @ 1. Check for Location
-    locationPermitted(await Permission.locationWhenInUse.request().isGranted);
     if (locationPermitted.value) {
       if (UserService.exists.value) {
-        // Initialize Dependent Services
-        Get.putAsync(() => SonrService().init(position.value, UserService.current));
-        startStatus(DeviceStatus.Success);
+        _status(DeviceStatus.Success);
       } else {
-        startStatus(DeviceStatus.NoUser);
+        _status(DeviceStatus.NoUser);
       }
     } else {
-      startStatus(DeviceStatus.NoLocation);
+      _status(DeviceStatus.NoLocation);
     }
+    return this;
   }
 
   // ^ CreateUser Event ^
   void createUser(Contact contact, String username) async {
     // Set Sonr Controller
+    locationPermitted(await Permission.locationWhenInUse.request().isGranted);
     // @ 1. Check for Location
     if (locationPermitted.value) {
       // Save Current Contact
-      var user = await UserService.saveChanges(providedContact: contact);
-
-      // Get Current Location
-      var location = await refreshLocation();
-
-      // Initialize Dependent Services
-      Get.putAsync(() => SonrService().init(location, user));
+      await UserService.saveChanges(providedContact: contact);
+      SonrService.connect();
       Get.offNamed("/home");
     } else {
       print("Location Permission Denied");
@@ -104,29 +97,33 @@ class DeviceService extends GetxService {
   // ************************* //
   // ** Permission Requests ** //
   // ************************* //
-
-  Future<bool> requestCamera() async {
+  static Future<bool> requestCamera() async {
     var result = await Permission.camera.request();
+    Get.find<DeviceService>().cameraPermitted(result == PermissionStatus.granted);
     return result == PermissionStatus.granted;
   }
 
-  Future<bool> requestGallery() async {
+  static Future<bool> requestGallery() async {
     var result = await Permission.mediaLibrary.request();
+    Get.find<DeviceService>().galleryPermitted(result == PermissionStatus.granted);
     return result == PermissionStatus.granted;
   }
 
-  Future<bool> requestLocation() async {
+  static Future<bool> requestLocation() async {
     var result = await Permission.locationWhenInUse.request();
+    Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
     return result == PermissionStatus.granted;
   }
 
-  Future<bool> requestMicrophone() async {
+  static Future<bool> requestMicrophone() async {
     var result = await Permission.microphone.request();
+    Get.find<DeviceService>().microphonePermitted(result == PermissionStatus.granted);
     return result == PermissionStatus.granted;
   }
 
-  Future<bool> requestNotifications() async {
+  static Future<bool> requestNotifications() async {
     var result = await Permission.notification.request();
+    Get.find<DeviceService>().notificationPermitted(result == PermissionStatus.granted);
     return result == PermissionStatus.granted;
   }
 }

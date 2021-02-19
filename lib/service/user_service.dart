@@ -179,15 +179,17 @@ class UserService extends GetxService {
       var profileJson = _prefs.getString("user");
       user = User.fromJson(profileJson);
       user.contact = contact;
+
+      // @ Save to SharedPreferences, Update SonrNode
+      _prefs.setString("user", user.writeToJson());
+      SonrService.setContact(contact);
     }
     // Create New User with Contact
     else {
       user = new User(contact: contact);
+      _prefs.setString("user", user.writeToJson());
     }
 
-    // @ Save to SharedPreferences, Update SonrNode
-    _prefs.setString("user", user.writeToJson());
-    Get.find<SonrService>().setContact(contact);
     return user;
   }
 }

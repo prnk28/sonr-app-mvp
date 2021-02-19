@@ -16,7 +16,7 @@ class TransferController extends GetxController {
   final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
 
   // @ Direction Properties
-  final RxDouble direction = Get.find<DeviceService>().direction;
+  final RxDouble direction = DeviceService.direction;
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
 

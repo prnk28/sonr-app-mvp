@@ -13,7 +13,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Position_Proximity>();
 
   // References
-  final RxDouble userDirection = Get.find<DeviceService>().direction;
+  final RxDouble userDirection = DeviceService.direction;
   var peer = Peer();
   int index;
 
@@ -87,7 +87,7 @@ class PeerController extends GetxController {
   invite() {
     if (!_isInvited) {
       // Perform Invite
-      Get.find<SonrService>().invite(this);
+      SonrService.invite(this);
 
       // Check for File
       if (Get.find<SonrService>().payload.value == Payload.MEDIA) {

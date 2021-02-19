@@ -20,11 +20,12 @@ void main() async {
 
 // ^ Services (Files, Contacts) ^ //
 initServices() async {
+  await Get.putAsync(() => UserService().init()); // First Required Service
+  await Get.putAsync(() => DeviceService().init()); // Second Required Service
+  await Get.putAsync(() => MediaService().init());
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SocialMediaService().init());
-  await Get.putAsync(() => UserService().init());
-  await Get.putAsync(() => DeviceService().init());
-  await Get.putAsync(() => MediaService().init());
+  await Get.putAsync(() => SonrService().init()); // Last Initialized Service
 }
 
 // ^ Initial Controller Bindings ^ //
@@ -36,9 +37,6 @@ class InitialBinding implements Bindings {
     Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
     Get.lazyPut<RiveWidgetController>(() => RiveWidgetController('assets/animations/tile_preview.riv'), fenix: true);
-    // Get.put(SonrOverlay());
-    // Get.put(SonrPositionedOverlay());
-    // Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
 
@@ -74,7 +72,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     // Listen to Device Start Status
-    Get.find<DeviceService>().startStatus.listen((status) {
+    DeviceService.status.listen((status) {
       switch (status) {
         case DeviceStatus.Success:
           Get.offNamed("/home");

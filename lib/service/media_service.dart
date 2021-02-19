@@ -104,13 +104,13 @@ class MediaService extends GetxService {
     // @ Get Initial Media
     if (totalCollection.count > 0) {
       // Get Images
-      final MediaPage imagePage = await totalCollection.value.getMedias(
+      final MediaPage imagePage = await totalCollection.getMedias(
         mediaType: MediaType.image,
         take: 500,
       );
 
       // Get Videos
-      final MediaPage videoPage = await totalCollection.value.getMedias(
+      final MediaPage videoPage = await totalCollection.getMedias(
         mediaType: MediaType.video,
         take: 500,
       );

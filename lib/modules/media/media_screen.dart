@@ -88,9 +88,9 @@ class MediaController extends GetxController {
 
       // Check for Thumbnail
       if (Get.find<MediaController>()._selectedThumbnail != null) {
-        Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: Get.find<MediaController>()._selectedThumbnail);
+        SonrService.queueMedia(mediaFile.path, thumbnailData: Get.find<MediaController>()._selectedThumbnail);
       } else {
-        Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path);
+        SonrService.queueMedia(mediaFile.path);
       }
 
       // Go to Transfer
@@ -109,11 +109,11 @@ class MediaController extends GetxController {
     if (isVideo) {
       // Save Video
       MediaService.saveCapture(videoPath, isVideo);
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: videoPath);
+      SonrService.queueMedia(videoPath);
     } else {
       // Save Photo
       MediaService.saveCapture(photoPath, isVideo);
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: photoPath);
+      SonrService.queueMedia(photoPath);
     }
 
     // Go to Transfer
