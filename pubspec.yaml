@@ -51,6 +51,7 @@ dependencies:
     path: ../plugin/
 
   # -- UI/UX --
+  better_player: ^0.0.55
   flutter_custom_clippers: ^1.1.2
   flutter_dropdown: ^0.0.8
   flutter_gradients: ^1.0.0+2

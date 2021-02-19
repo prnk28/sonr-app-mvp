@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -5,7 +7,7 @@ import 'camera_view.dart';
 import 'preview_view.dart';
 
 // @ Constants
-enum MediaScreenState { Default, Ready, Loading, Recording, Captured }
+enum MediaScreenState { Default, Camera, Loading, Captured }
 
 class MediaScreen extends GetView<MediaScreenController> {
   @override
@@ -22,12 +24,15 @@ class MediaScreen extends GetView<MediaScreenController> {
 
 // ** Main Camera Screen Controller ** //
 class MediaScreenController extends GetxController {
-  // State Properties
+  // Properties
   final state = Rx<MediaScreenState>(MediaScreenState.Default);
+
+  // References
+  var _videoPath = "";
 
   // ^ Set State to Ready ^ //
   static ready() {
-    Get.find<MediaScreenController>().state(MediaScreenState.Ready);
+    Get.find<MediaScreenController>().state(MediaScreenState.Camera);
     Get.find<MediaScreenController>().state.refresh();
   }
 
@@ -39,9 +44,7 @@ class MediaScreenController extends GetxController {
 
   // ^ Set State to Recording, Set Video Capture Path ^ //
   static recording(String path) {
-    Get.find<PreviewController>().initVideo(path);
-    Get.find<MediaScreenController>().state(MediaScreenState.Recording);
-    Get.find<MediaScreenController>().state.refresh();
+    Get.find<MediaScreenController>()._videoPath = path;
   }
 
   // ^ Set State to Captured, Set Photo Capture Path ^ //
@@ -52,8 +55,14 @@ class MediaScreenController extends GetxController {
   }
 
   // ^ Set State to Captured, Set Video Capture Path ^ //
-  static completeVideo() {
-    Get.find<PreviewController>().setVideo();
+  static completeVideo(int milliseconds) async {
+    print("----------------------------------");
+    print("VIDEO RECORDED");
+    print(
+        "==> has been recorded : ${File(Get.find<MediaScreenController>()._videoPath).exists} | path : ${Get.find<MediaScreenController>()._videoPath}");
+    print("----------------------------------");
+    await Future.delayed(Duration(milliseconds: 300));
+    Get.find<PreviewController>().setVideo(Get.find<MediaScreenController>()._videoPath);
     Get.find<MediaScreenController>().state(MediaScreenState.Captured);
     Get.find<MediaScreenController>().state.refresh();
   }

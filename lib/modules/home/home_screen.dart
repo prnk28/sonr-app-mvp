@@ -23,7 +23,7 @@ class HomeScreen extends GetView<HomeController> {
         action: SonrButton.circle(
             icon: SonrIcon.search,
             onPressed: () {
-              if (controller.allCards.length > 0) {
+              if (controller.cards.length > 0) {
                 SonrOverlay.show(
                   SearchView(),
                   barrierDismissible: true,
@@ -67,7 +67,6 @@ class TransferCardGrid extends GetView<HomeController> {
     // Create Page Controller
     final pageController = PageController(viewportFraction: 0.8, keepPage: false);
     controller.pageController = pageController;
-    controller.refreshCards();
 
     // Build View
     return Obx(() {
@@ -120,14 +119,7 @@ class TransferCardGrid extends GetView<HomeController> {
 
   Widget buildCard(HomeController controller, int index) {
     // Get Card List
-    List<TransferCard> list;
-    if (controller.toggleIndex.value == 1) {
-      list = controller.mediaCards();
-    } else if (controller.toggleIndex.value == 2) {
-      list = controller.contactCards;
-    } else {
-      list = controller.allCards;
-    }
+    List<TransferCard> list = controller.getCardList();
 
     // Determin CardView
     if (list[index].payload == Payload.MEDIA) {

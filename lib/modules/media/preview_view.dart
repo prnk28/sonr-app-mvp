@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
@@ -8,28 +9,29 @@ import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/models/models.dart';
+import 'package:better_player/better_player.dart';
 
 class MediaPreviewView extends GetView<PreviewController> {
   @override
   Widget build(BuildContext context) {
     // @ Build View
-    return Obx(() {
-      if (controller.captureReady.value) {
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Obx(() {
         return Stack(
           children: [
             // Preview
-            Expanded(
-              child: controller.isVideo.value ? _VideoCapturePlayer(path: controller.capturePath) : _PhotoCaptureView(path: controller.capturePath),
-            ),
+            controller.isVideo.value
+                ? _VideoCapturePlayer(file: File(controller.videoPath))
+                : Positioned.fill(child: _PhotoCaptureView(path: controller.photoPath)),
 
             // Buttons
             _CaptureToolsView()
           ],
         );
-      } else {
-        return Center(child: CircularProgressIndicator());
-      }
-    });
+      }),
+    );
   }
 }
 
@@ -81,102 +83,85 @@ class _PhotoCaptureView extends StatelessWidget {
 }
 
 // ** Captured Video View ** //
-class _VideoCapturePlayer extends StatefulWidget {
-  final String path;
-
-  const _VideoCapturePlayer({Key key, @required this.path}) : super(key: key);
-  @override
-  _VideoCapturePlayerState createState() => _VideoCapturePlayerState();
-}
-
-class _VideoCapturePlayerState extends State<_VideoCapturePlayer> {
-  VideoPlayerController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.file(File(widget.path))
-      ..initialize().then((_) {
-        setState(() {
-          _controller.setLooping(true);
-        });
-      });
-  }
-
+class _VideoCapturePlayer extends StatelessWidget {
+  final File file;
+  const _VideoCapturePlayer({Key key, @required this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return _controller.value.initialized
-        ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
-          )
-        : Center(child: CircularProgressIndicator());
+    return Container(
+        width: Get.width,
+        height: Get.height,
+        child: AspectRatio(
+            aspectRatio: 9 / 16,
+            child: BetterPlayer.file(file.path,
+                betterPlayerConfiguration: BetterPlayerConfiguration(
+                  controlsConfiguration: BetterPlayerControlsConfiguration(),
+                  allowedScreenSleep: false,
+                  autoPlay: true,
+                  looping: true,
+                  aspectRatio: 9 / 16,
+                ))));
   }
 }
 
 // ** Preview Capture View Controller ** //
 class PreviewController extends GetxController {
   // Properties
-  final captureReady = false.obs;
   final isVideo = false.obs;
 
-  // Current Captures Path
-  String get capturePath {
-    // Video Path
-    if (captureReady.value && isVideo.value) {
-      return _videoCapturePath;
-    }
-    // Photo Path
-    else if (captureReady.value && !isVideo.value) {
-      return _photoCapturePath;
-    }
-    return "";
-  }
-
   // References
-  String _photoCapturePath = "";
-  String _videoCapturePath = "";
+  String photoPath = "";
+  String videoPath = "";
 
   // ^ Clear Current Photo ^ //
   clear() async {
-    captureReady(false);
+    // Reset Properties
     isVideo(false);
-    _photoCapturePath = "";
-    _videoCapturePath = "";
+    photoPath = "";
+    videoPath = "";
+
+    // Get Temp Directories
+    Directory temp = await getTemporaryDirectory();
+    var videoDir = Directory('${temp.path}/videos');
+    var photoDir = Directory('${temp.path}/photos');
+
+    // Clear Temp Photo Directory
+    if (await photoDir.exists()) {
+      await photoDir.delete(recursive: true);
+    }
+
+    // Clear Temp Video Directory
+    if (await videoDir.exists()) {
+      await videoDir.delete(recursive: true);
+    }
     MediaScreenController.ready();
   }
 
-  // ^ Set Initial Video Path ^ //
-  initVideo(String path) {
-    isVideo(true);
-    _videoCapturePath = path;
-  }
-
   // ^ Video Completed Recording ^ //
-  setVideo() async {
-    captureReady(true);
+  setVideo(String path) async {
+    videoPath = path;
+    isVideo(true);
   }
 
   // ^ Set Photo and Capture Ready ^ //
   setPhoto(String path) {
-    _photoCapturePath = path;
+    photoPath = path;
     isVideo(false);
-    captureReady(true);
   }
 
   // ^ Continue with Media Capture ^ //
   continueMedia() async {
     if (isVideo.value) {
       // Save Video
-      Get.find<DeviceService>().savePhotoFromCamera(_videoCapturePath);
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: _videoCapturePath);
+      Get.find<DeviceService>().savePhotoFromCamera(videoPath);
+      Get.find<SonrService>().setPayload(Payload.MEDIA, path: videoPath);
 
       // Go to Transfer
       Get.offNamed("/transfer");
     } else {
       // Save Photo
-      Get.find<DeviceService>().savePhotoFromCamera(_photoCapturePath);
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: _photoCapturePath);
+      Get.find<DeviceService>().savePhotoFromCamera(photoPath);
+      Get.find<SonrService>().setPayload(Payload.MEDIA, path: photoPath);
 
       // Go to Transfer
       Get.offNamed("/transfer");

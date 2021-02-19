@@ -58,6 +58,10 @@ class SQLService extends GetxService {
   Database _db;
   String _dbPath;
 
+  final cards = <TransferCard>[].obs;
+  final contacts = <TransferCard>[].obs;
+  final media = <TransferCard>[].obs;
+
   // ** Initialize CardService ** //
   Future<SQLService> init() async {
     // Get a location using getDatabasesPath
@@ -84,6 +88,7 @@ create table $CARD_TABLE (
   $cardColumnMetadata text)
 ''');
     });
+    refresh();
     return this;
   }
 
@@ -113,17 +118,20 @@ create table $CARD_TABLE (
       cardColumnContact: card.contact.writeToJson(),
       cardColumnMetadata: card.metadata.writeToJson(),
     });
+
+    // Refresh Cards and Return
+    refresh();
     return card;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
-  Future deleteCard(int id) async {
-    var i = await _db.delete(CARD_TABLE, where: '$cardColumnId = ?', whereArgs: [id]);
-    return i;
+  void deleteCard(int id) async {
+    await _db.delete(CARD_TABLE, where: '$cardColumnId = ?', whereArgs: [id]);
+    refresh();
   }
 
   // ^ Get All Cards ^ //
-  Future<List<TransferCard>> fetchAll() async {
+  void refresh() async {
     // Init List
     List<TransferCard> result = <TransferCard>[];
 
@@ -143,8 +151,29 @@ create table $CARD_TABLE (
         result.add(card);
       });
     }
-    // Return All Files
-    return result.reversed.toList();
+    // Group Cards
+    var allCards = result.reversed.toList();
+    var contactList = <TransferCard>[];
+    var mediaList = <TransferCard>[];
+
+    // Organize Cards
+    allCards.forEach((c) {
+      if (c.payload == Payload.MEDIA) {
+        mediaList.add(c);
+      } else if (c.payload == Payload.CONTACT) {
+        contactList.add(c);
+      }
+    });
+
+    // Update Reactive Lists
+    cards(allCards);
+    contacts(contactList);
+    media(mediaList);
+
+    // Refresh Lists
+    cards.refresh();
+    contacts.refresh();
+    media.refresh();
   }
 
   // ^ Get Total Card Count ^ //

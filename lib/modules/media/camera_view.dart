@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:camerawesome/models/orientations.dart';
 import 'package:flutter/services.dart';
@@ -74,7 +77,7 @@ class CameraView extends GetView<CameraController> {
               padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
               child: Neumorphic(
                 style: SonrStyle.timeStamp,
-                child: SonrText.duration(controller.stopwatch.elapsed),
+                child: SonrText.duration(controller.videoDuration.value),
                 padding: EdgeInsets.all(10),
               ),
             );
@@ -212,7 +215,10 @@ class CameraController extends GetxController {
   // Controllers
   PictureController pictureController = new PictureController();
   VideoController videoController = new VideoController();
-  Stopwatch stopwatch = new Stopwatch();
+
+  // Video Duration Handling
+  Stopwatch _stopwatch = new Stopwatch();
+  Timer _timer;
 
   // ** Constructer ** //
   CameraController() {
@@ -223,14 +229,10 @@ class CameraController extends GetxController {
 
   // ^ Captures Photo ^ //
   capturePhoto() async {
-    // Update State
-    MediaScreenController.loading();
-
     // Set Path
-    var now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
-    var docs = await getApplicationDocumentsDirectory();
-    var path = docs.path + "/SONR_PICTURE_" + formattedDate + ".jpeg";
+    var temp = await getTemporaryDirectory();
+    var photoDir = await Directory('${temp.path}/photos').create(recursive: true);
+    var path = '${photoDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
     // Capture Photo
     await pictureController.takePicture(path);
@@ -240,32 +242,37 @@ class CameraController extends GetxController {
   // ^ Captures Video ^ //
   startCaptureVideo() async {
     // Set Path
-    var now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
-    var docs = await getApplicationDocumentsDirectory();
-    var path = docs.path + "/SONR_VIDEO_" + formattedDate + ".mp4";
+    var temp = await getTemporaryDirectory();
+    var videoDir = await Directory('${temp.path}/videos').create(recursive: true);
+    var path = '${videoDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
     MediaScreenController.recording(path);
 
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
-    videoInProgress(true);
-    stopwatch.start();
     await videoController.recordVideo(path);
+    videoInProgress(true);
+
+    _stopwatch.start();
+    _timer = new Timer.periodic(new Duration(milliseconds: 50), (timer) {
+      videoDuration(_stopwatch.elapsedMilliseconds);
+    });
   }
 
   // ^ Stops Video Capture ^ //
   stopCaptureVideo() async {
-    // Close Parameters
-    videoInProgress(false);
-    stopwatch.stop();
-    videoDuration(stopwatch.elapsedMilliseconds);
-
     // Save Video
     await videoController.stopRecordingVideo();
-    stopwatch.reset();
+    var duration = videoDuration.value;
+
+    // Reset Duration Management
+    _stopwatch.reset();
+    _timer.cancel();
+    videoDuration(0);
+    videoInProgress(false);
 
     // Update State
-    MediaScreenController.completeVideo();
+    captureMode.value = CaptureModes.PHOTO;
+    MediaScreenController.completeVideo(duration);
   }
 
   // ^ Flip Camera ^ //

@@ -85,15 +85,15 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Date Text with Provided Data
-  factory SonrText.duration(Duration duration, {double size = 14, Key key}) {
+  factory SonrText.duration(int milliseconds, {double size = 14, Key key}) {
+    int seconds = milliseconds ~/ 1000;
     return SonrText("",
         isRich: true,
         richText: RichText(
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(
-                  text: duration.inSeconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: Colors.black)),
+              TextSpan(text: seconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: Colors.black)),
               TextSpan(text: "  s", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: Colors.black)),
             ])));
   }
