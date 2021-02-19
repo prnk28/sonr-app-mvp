@@ -15,12 +15,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
+enum StartStatus { Success, NoUser, NoLocation }
 
 class DeviceService extends GetxService {
   // Properties
   final contact = Rx<Contact>();
   final incomingMedia = <SharedMediaFile>[].obs;
   final incomingText = "".obs;
+  final startStatus = Rx<StartStatus>();
 
   // References
   StreamSubscription _intentDataStreamSubscription;
@@ -96,7 +98,6 @@ class DeviceService extends GetxService {
   void start() async {
     // @ 1. Check for Location
     if (hasLocation = await Permission.locationWhenInUse.request().isGranted) {
-      // @ 2. Get Profile
       if (hasUser) {
         // Get Json Value
         var profileJson = _prefs.getString("user");
@@ -111,15 +112,15 @@ class DeviceService extends GetxService {
 
           // Initialize Dependent Services
           Get.putAsync(() => SonrService().init(position, user));
-          Get.offNamed("/home");
+          startStatus(StartStatus.Success);
         } else {
-          Get.offNamed("/register");
+          startStatus(StartStatus.NoUser);
         }
       } else {
-        Get.offNamed("/register");
+        startStatus(StartStatus.NoUser);
       }
     } else {
-      print("Location Permission Denied");
+      startStatus(StartStatus.NoLocation);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/transfer/peer_widget.dart';
 import 'package:sonr_app/service/sonr_service.dart';
@@ -33,7 +34,8 @@ class TransferController extends GetxController {
   // ^ Controller Constructer ^
   TransferController() {
     // @ Update Direction
-    Get.find<SonrService>().direction.listen((newDir) {
+    FlutterCompass.events.listen((dir) {
+      var newDir = dir.headingForCameraMode;
       // Update String Elements
       if ((direction.value - newDir).abs() > 6) {
         string(_directionString(newDir));

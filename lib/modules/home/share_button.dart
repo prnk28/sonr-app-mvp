@@ -93,7 +93,6 @@ class _ShareButtonRow extends GetView<HomeController> {
         children: [
           Expanded(
             child: Container(
-              height: Get.height,
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.presentCamera();
@@ -105,7 +104,6 @@ class _ShareButtonRow extends GetView<HomeController> {
           Padding(padding: EdgeInsets.all(K_ITEM_SPACING)),
           Expanded(
             child: Container(
-              height: Get.height,
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.presentMediaPicker();
@@ -117,7 +115,6 @@ class _ShareButtonRow extends GetView<HomeController> {
           Padding(padding: EdgeInsets.all(K_ITEM_SPACING)),
           Expanded(
             child: Container(
-              height: Get.height,
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.queueContact();

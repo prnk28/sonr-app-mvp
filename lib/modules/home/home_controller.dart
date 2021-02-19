@@ -165,7 +165,7 @@ class HomeController extends GetxController {
       closeShare();
 
       // Go to Camera View
-      Get.offNamed("/camera");
+      Get.toNamed("/camera");
     } else {
       // Display Error
       SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -195,6 +195,6 @@ class HomeController extends GetxController {
     closeShare();
 
     // Go to Transfer
-    Get.offNamed("/transfer");
+    Get.toNamed("/transfer");
   }
 }

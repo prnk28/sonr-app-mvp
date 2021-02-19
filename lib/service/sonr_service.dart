@@ -15,7 +15,6 @@ import 'sql_service.dart';
 class SonrService extends GetxService {
   // @ Set Properties
   final connected = false.obs;
-  final direction = 0.0.obs;
   final olc = "".obs;
   final peers = Map<String, Peer>().obs;
   final progress = 0.0.obs;
@@ -31,9 +30,8 @@ class SonrService extends GetxService {
   SonrService() {
     FlutterCompass.events.listen((dir) {
       // Get Current Direction and Update Cubit
-      if (connected.value && !this.isClosed) {
+      if (connected.value) {
         // Update Direction
-        direction(dir.heading);
         _node.update(dir.headingForCameraMode);
       }
     });
@@ -56,8 +54,6 @@ class SonrService extends GetxService {
     _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
     connected(true);
-
-    // Return Service
     return this;
   }
 
@@ -126,10 +122,7 @@ class SonrService extends GetxService {
   // ******* Callbacks ********
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
-  void _handleConnected(dynamic data) {
-    // Set Connected, Send first Update
-    _node.update(direction.value);
-  }
+  void _handleConnected(dynamic data) {}
 
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(dynamic data) {

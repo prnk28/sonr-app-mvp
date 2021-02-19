@@ -24,7 +24,7 @@ class TransferCardController extends GetxController {
     // @ Listen for Animation Complete
     animationCompleted.listen((result) {
       // Present Home Controller
-      Get.offAndToNamed('/home/completed');
+      Get.offNamed('/home');
     });
   }
 
@@ -42,7 +42,9 @@ class TransferCardController extends GetxController {
     Get.back();
 
     // Present Home Controller
-    Get.offAndToNamed('/home/completed');
+    if (Get.currentRoute != "/transfer") {
+      Get.offNamed('/home');
+    }
   }
 
   // ^ Accept Transfer Invite Request ^ //

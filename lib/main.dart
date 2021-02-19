@@ -33,8 +33,12 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
-    Get.put(SonrOverlay());
-    Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
+    Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
+    Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
+    Get.lazyPut<RiveWidgetController>(() => RiveWidgetController('assets/animations/tile_preview.riv'), fenix: true);
+    // Get.put(SonrOverlay());
+    // Get.put(SonrPositionedOverlay());
+    // Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
 
@@ -48,7 +52,6 @@ class _AppState extends State<App> {
   Artboard _riveArtboard;
   @override
   void initState() {
-    super.initState();
     // Load the RiveFile from the binary data.
     rootBundle.load('assets/animations/splash_screen.riv').then(
       (data) async {
@@ -64,10 +67,26 @@ class _AppState extends State<App> {
         }
       },
     );
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Listen to Device Start Status
+    Get.find<DeviceService>().startStatus.listen((status) {
+      switch (status) {
+        case StartStatus.Success:
+          Get.offNamed("/home");
+          break;
+        case StartStatus.NoUser:
+          Get.offNamed("/register");
+          break;
+        case StartStatus.NoLocation:
+          SonrSnack.error("Location Permissions Required for Sonr");
+          break;
+      }
+    });
     return GetMaterialApp(
       getPages: K_PAGES,
       initialBinding: InitialBinding(),
@@ -110,10 +129,7 @@ class _AppState extends State<App> {
 // ignore: non_constant_identifier_names
 List<GetPage> get K_PAGES => [
       // ** Home Page ** //
-      GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.zoom, curve: Curves.easeIn, binding: HomeBinding()),
-
-      // ** Home Page - Completed File ** //
-      GetPage(name: '/home/completed', page: () => HomeScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: HomeBinding()),
+      GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Back from Transfer ** //
       GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),

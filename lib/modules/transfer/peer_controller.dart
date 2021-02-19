@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'dart:ui';
 import 'package:flutter/services.dart';
+import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/service/sonr_service.dart';
@@ -18,7 +19,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Position_Proximity>();
 
   // References
-  final RxDouble userDirection = Get.find<SonrService>().direction;
+  final userDirection = 0.0.obs;
   var peer = Peer();
   int index;
 
@@ -33,6 +34,10 @@ class PeerController extends GetxController {
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
 
   PeerController() {
+    FlutterCompass.events.listen((dir) {
+      userDirection(dir.headingForCameraMode);
+    });
+
     // Listen to this peers updates
     Get.find<SonrService>().peers.listen((lob) {
       lob.forEach((id, value) {
