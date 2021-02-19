@@ -173,7 +173,7 @@ class DeviceService extends GetxService {
     // Get Data from Media
     final path = card.metadata.path;
     if (card.hasMetadata()) {
-// Save Image to Gallery
+      // Save Image to Gallery
       if (card.metadata.mime.type == MIME_Type.image) {
         var result = await GallerySaver.saveImage(path, albumName: "Sonr");
 
@@ -187,8 +187,8 @@ class DeviceService extends GetxService {
       }
 
       // Save Video to Gallery
-      if (card.metadata.mime.type == MIME_Type.video) {
-        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+      else if (card.metadata.mime.type == MIME_Type.video) {
+        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
 
         // Visualize Result
         if (result) {
