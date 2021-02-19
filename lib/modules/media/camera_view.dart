@@ -4,88 +4,86 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/modules/media/media_picker.dart';
+import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'camera_screen.dart';
+import 'media_screen.dart';
 
 class CameraView extends GetView<CameraController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Stack(
-        children: [
-          GestureDetector(
-            onDoubleTap: () {
-              // Update Double Zoomed
-              controller.doubleZoomed(!controller.doubleZoomed.value);
+    return Stack(
+      children: [
+        GestureDetector(
+          onDoubleTap: () {
+            // Update Double Zoomed
+            controller.doubleZoomed(!controller.doubleZoomed.value);
 
-              // Set Zoom Level
-              if (controller.doubleZoomed.value) {
-                controller.zoomLevel(0.25);
-              } else {
-                controller.zoomLevel(0.0);
-              }
-            },
-            onScaleUpdate: (ScaleUpdateDetails scaleDetails) {
-              // Calculate Scale
-              var factor = 1.0 / scaleDetails.scale;
-              var adjustedScale = 1 - factor;
-
-              // Set Zoom Level
-              if (scaleDetails.pointerCount > 1) {
-                controller.zoomLevel(adjustedScale);
-              }
-            },
-            onHorizontalDragUpdate: (details) {
-              print("Drag Horizontal: ${details.delta}");
-            },
-            child: CameraAwesome(
-              onPermissionsResult: (bool result) {},
-              onCameraStarted: () {
-                CameraScreenController.ready();
-              },
-              onOrientationChanged: (CameraOrientations newOrientation) {},
-              sensor: controller.sensor,
-              zoom: controller.zoomNotifier,
-              photoSize: controller.photoSize,
-              switchFlashMode: controller.switchFlash,
-              captureMode: controller.captureMode,
-              brightness: controller.brightness,
-            ),
-          ),
-          // Button Tools View
-          _CameraToolsView(),
-          Container(
-            alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
-            child: SonrButton.circle(
-                intensity: 0.5,
-                onPressed: () {
-                  Get.back();
-                },
-                icon: SonrIcon.close),
-          ),
-          Obx(() {
-            if (controller.videoInProgress.value) {
-              return Container(
-                alignment: Alignment.topRight,
-                padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
-                child: Neumorphic(
-                  style: SonrStyle.timeStamp,
-                  child: SonrText.duration(controller.stopwatch.elapsed),
-                  padding: EdgeInsets.all(10),
-                ),
-              );
+            // Set Zoom Level
+            if (controller.doubleZoomed.value) {
+              controller.zoomLevel(0.25);
             } else {
-              return Container();
+              controller.zoomLevel(0.0);
             }
-          })
-        ],
-      );
-    });
+          },
+          onScaleUpdate: (ScaleUpdateDetails scaleDetails) {
+            // Calculate Scale
+            var factor = 1.0 / scaleDetails.scale;
+            var adjustedScale = 1 - factor;
+
+            // Set Zoom Level
+            if (scaleDetails.pointerCount > 1) {
+              controller.zoomLevel(adjustedScale);
+            }
+          },
+          onHorizontalDragUpdate: (details) {
+            print("Drag Horizontal: ${details.delta}");
+          },
+          child: CameraAwesome(
+            onPermissionsResult: (bool result) {},
+            onCameraStarted: () {
+              MediaScreenController.ready();
+            },
+            onOrientationChanged: (CameraOrientations newOrientation) {},
+            sensor: controller.sensor,
+            zoom: controller.zoomNotifier,
+            photoSize: controller.photoSize,
+            switchFlashMode: controller.switchFlash,
+            captureMode: controller.captureMode,
+            brightness: controller.brightness,
+          ),
+        ),
+        // Button Tools View
+        _CameraToolsView(),
+        Container(
+          alignment: Alignment.topLeft,
+          padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
+          child: SonrButton.circle(
+              intensity: 0.5,
+              onPressed: () {
+                Get.offNamed("/home");
+              },
+              icon: SonrIcon.close),
+        ),
+        Obx(() {
+          if (controller.videoInProgress.value) {
+            return Container(
+              alignment: Alignment.topRight,
+              padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
+              child: Neumorphic(
+                style: SonrStyle.timeStamp,
+                child: SonrText.duration(controller.stopwatch.elapsed),
+                padding: EdgeInsets.all(10),
+              ),
+            );
+          } else {
+            return Container();
+          }
+        })
+      ],
+    );
   }
 }
 
@@ -119,7 +117,7 @@ class _CameraToolsView extends GetView<CameraController> {
                   // Check for Permssions
                   if (await Permission.photos.request().isGranted) {
                     // Display Bottom Sheet
-                    Get.bottomSheet(MediaPickerSheet(), isDismissible: true);
+                    Get.bottomSheet(PickerSheet(), isDismissible: true);
                   } else {
                     // Display Error
                     SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -222,7 +220,7 @@ class CameraController extends GetxController {
   // ^ Captures Photo ^ //
   capturePhoto() async {
     // Update State
-    CameraScreenController.loading();
+    MediaScreenController.loading();
 
     // Set Path
     var now = DateTime.now();
@@ -232,7 +230,7 @@ class CameraController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(path);
-    CameraScreenController.setPhoto(path);
+    MediaScreenController.setPhoto(path);
   }
 
   // ^ Captures Video ^ //
@@ -242,7 +240,7 @@ class CameraController extends GetxController {
     String formattedDate = DateFormat('yyyy-MM-dd–jms').format(now);
     var docs = await getApplicationDocumentsDirectory();
     var path = docs.path + "/SONR_VIDEO_" + formattedDate + ".mp4";
-    CameraScreenController.recording(path);
+    MediaScreenController.recording(path);
 
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
@@ -263,7 +261,7 @@ class CameraController extends GetxController {
     stopwatch.reset();
 
     // Update State
-    CameraScreenController.completeVideo();
+    MediaScreenController.completeVideo();
   }
 
   // ^ Flip Camera ^ //

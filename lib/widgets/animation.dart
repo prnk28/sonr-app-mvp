@@ -308,22 +308,19 @@ class SonrAnimatedSwitcher extends StatelessWidget {
   }
 }
 
-// ^ File Invite Progress (Hook Widget) from SonrService Progress ^ //
+// ^ Sonr Animated Wave Icon for Screen Transitions ^ //
 class SonrAnimatedWaveIcon extends HookWidget {
   // Properties
   final IconData iconData;
   final double size;
-  final RxDouble percentage;
   final Duration duration;
   final Function onCompleted;
-  final bool usePercentage;
 
   // References
   final FlutterGradientNames gradientName = SonrColor.randomGradient();
 
   // Constructer
-  SonrAnimatedWaveIcon(this.iconData,
-      {this.usePercentage = false, this.percentage, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
+  SonrAnimatedWaveIcon(this.iconData, {this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
       : super(key: GlobalKey());
 
   @override
@@ -334,70 +331,127 @@ class SonrAnimatedWaveIcon extends HookWidget {
     controller.play();
 
     // Reactive to Progress
-    return Obx(() {
-      if (!_checkCompleted(controller)) {
-        return Stack(
-          alignment: Alignment.center,
-          key: UniqueKey(),
-          children: <Widget>[
-            SizedBox(
-              height: size,
-              width: size,
-              child: AnimatedBuilder(
-                animation: controller,
-                builder: (BuildContext context, Widget child) {
-                  return CustomPaint(
-                    painter: IconWavePainter(
-                      iconKey: iconKey,
-                      waveAnimation: controller,
-                      percent: usePercentage ? percentage.value : controller.value,
-                      gradient: FlutterGradients.findByName(gradientName),
-                      boxHeight: size,
-                    ),
-                  );
-                },
+    return Stack(
+      alignment: Alignment.center,
+      key: UniqueKey(),
+      children: <Widget>[
+        SizedBox(
+          height: size,
+          width: size,
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (BuildContext context, Widget child) {
+              return CustomPaint(
+                painter: IconWavePainter(
+                  iconKey: iconKey,
+                  waveAnimation: controller,
+                  percent: controller.value,
+                  gradient: FlutterGradients.findByName(gradientName),
+                  boxHeight: size,
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: size,
+          width: size,
+          child: ShaderMask(
+            blendMode: BlendMode.srcOut,
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [SonrColor.base],
+              stops: [0.0],
+            ).createShader(bounds),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
               ),
-            ),
-            SizedBox(
-              height: size,
-              width: size,
-              child: ShaderMask(
-                blendMode: BlendMode.srcOut,
-                shaderCallback: (bounds) => LinearGradient(
-                  colors: [SonrColor.base],
-                  stops: [0.0],
-                ).createShader(bounds),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      iconData,
-                      size: size * 0.8,
-                      key: iconKey,
-                    ),
-                  ),
+              child: Center(
+                child: Icon(
+                  iconData,
+                  size: size * 0.8,
+                  key: iconKey,
                 ),
               ),
-            )
-          ],
-        );
-      } else {
-        // Animation Completed
-        controller.stop();
-        controller.dispose();
-        onCompleted();
-        return SonrIcon.gradient(iconData, gradientName, size: size * 0.8);
-      }
-    });
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+// ^ Sonr Animated Tile for Radio Option ^ //
+class AnimatedTileRadio extends StatefulWidget {
+  // Properties
+  final String type;
+  final ValueChanged<dynamic> onChanged;
+  final dynamic groupValue;
+
+  const AnimatedTileRadio(this.type, {Key key, @required this.onChanged, @required this.groupValue}) : super(key: key);
+
+  @override
+  _AnimatedTileRadioState createState() => _AnimatedTileRadioState();
+}
+
+class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
+  Artboard _riveArtboard;
+  @override
+  void initState() {
+    super.initState();
+    // Load the RiveFile from the binary data.
+    rootBundle.load('assets/animations/tile_preview.riv').then(
+      (data) async {
+        // Await Loading
+        final file = RiveFile();
+        if (file.import(data)) {
+          // Retreive Artboard
+          final artboard = file.mainArtboard;
+
+          // Determine Animation by Tile Type
+          artboard.addController(_riveControllerByType(widget.type));
+          setState(() => _riveArtboard = artboard);
+        }
+      },
+    );
   }
 
-  _checkCompleted(AnimationController controller) {
-    if (usePercentage) {
-      return percentage.value >= 1.0;
-    } else {
-      return controller.value >= 1.0;
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      NeumorphicRadio(
+        style: NeumorphicRadioStyle(
+            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+        child: SizedBox(
+          height: 60,
+          width: 60,
+          child: Center(
+              child: _riveArtboard == null
+                  ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
+                  : Rive(artboard: _riveArtboard)),
+        ),
+        value: widget.type,
+        groupValue: widget.groupValue,
+        onChanged: widget.onChanged,
+      ),
+      Padding(padding: EdgeInsets.only(top: 4)),
+      SonrText.medium(widget.type.toString(), size: 14, color: Colors.black),
+    ]);
+  }
+
+  // ^ Get Animation Controller By Type ^ //
+  SimpleAnimation _riveControllerByType(String type) {
+    // Retreive Feed Loop
+    if (type == "Feed") {
+      return SimpleAnimation('Feed');
+    }
+    // Retreive Showcase Loop
+    else if (type == "Post") {
+      return SimpleAnimation('Showcase');
+    }
+    // Retreive Icon Loop
+    else {
+      return SimpleAnimation('Icon');
     }
   }
 }

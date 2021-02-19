@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/service/social_service.dart';
-import 'package:sonr_app/widgets/radio.dart';
+import 'package:sonr_app/widgets/view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
@@ -100,46 +100,20 @@ class _DropdownAddView extends GetView<TileStepperController> {
           Padding(padding: EdgeInsets.all(20)),
 
           // @ Drop Down
-          Neumorphic(
-              style: NeumorphicStyle(
-                depth: 8,
-                shape: NeumorphicShape.flat,
-                color: SonrColor.base,
-              ),
-              margin: EdgeInsets.only(left: 14, right: 14),
-              child: Container(
-                  width: Get.width - 80,
-                  margin: EdgeInsets.only(left: 12, right: 12),
+          SonrDropdown.social(
+            options,
+            onChanged: (index) {
+              // Set Provider
+              controller.provider(options[index]);
+              controller.provider.refresh();
 
-                  // @ ValueBuilder for DropDown
-                  child: ValueBuilder<Contact_SocialTile_Provider>(
-                    onUpdate: (value) {
-                      // Set Provider
-                      controller.provider(value);
-                      controller.provider.refresh();
-
-                      // Notify Provider Set
-                      controller.hasSetProvider(true);
-                      controller.hasSetProvider.refresh();
-                    },
-                    builder: (item, updateFn) {
-                      return DropDown<Contact_SocialTile_Provider>(
-                        showUnderline: false,
-                        isExpanded: true,
-                        initialValue: item,
-                        items: options,
-                        customWidgets: List<Widget>.generate(options.length, (index) => _buildOptionWidget(options, index)),
-                        hint: Text("Select...",
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black26,
-                            )),
-                        onChanged: updateFn,
-                        isCleared: controller.provider.value == null,
-                      );
-                    },
-                  ))),
+              // Notify Provider Set
+              controller.hasSetProvider(true);
+              controller.hasSetProvider.refresh();
+            },
+            width: Get.width - 80,
+            margin: EdgeInsets.only(left: 12, right: 12),
+          ),
           // @ Public/Private Checker
           Obx(() {
             // Check Selected
@@ -439,8 +413,8 @@ class TileStepperController extends GetxController {
     username("");
     isPrivate(false);
     hasSetProvider(false);
-    provider(null);
-    type(null);
+    provider.nil();
+    type.nil();
     radioGroupValue("");
     step(0);
   }

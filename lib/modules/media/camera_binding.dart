@@ -1,16 +1,16 @@
 import 'package:get/get.dart';
-import 'camera_screen.dart';
-import 'media_picker.dart';
+import 'media_screen.dart';
+import 'picker_sheet.dart';
 import 'preview_view.dart';
 import 'camera_view.dart';
-export 'camera_screen.dart';
+export 'media_screen.dart';
 
 class CameraBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<CameraScreenController>(CameraScreenController(), permanent: true);
-    Get.put<CameraController>(CameraController());
-    Get.put<MediaPickerController>(MediaPickerController());
+    Get.put<MediaScreenController>(MediaScreenController(), permanent: true);
+    Get.put<CameraController>(CameraController(), permanent: true);
+    Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
     Get.lazyPut<PreviewController>(() => PreviewController());
   }
 }

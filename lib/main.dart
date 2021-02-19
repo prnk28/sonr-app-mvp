@@ -13,7 +13,6 @@ import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
 import 'widgets/overlay.dart';
 
-
 // ^ Main Method ^ //
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +34,7 @@ class InitialBinding implements Bindings {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
     Get.put(SonrOverlay());
+    Get.put(SonrPositionedOverlay());
     Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
@@ -77,7 +77,7 @@ List<GetPage> get K_PAGES => [
       GetPage(
           name: '/camera',
           maintainState: false,
-          page: () => CameraScreen(),
+          page: () => MediaScreen(),
           transition: Transition.downToUp,
           curve: Curves.easeIn,
           fullscreenDialog: true,
@@ -87,7 +87,7 @@ List<GetPage> get K_PAGES => [
       GetPage(
           name: '/camera/avatar',
           maintainState: false,
-          page: () => CameraScreen(),
+          page: () => MediaScreen(),
           transition: Transition.downToUp,
           curve: Curves.easeIn,
           fullscreenDialog: true,
@@ -97,7 +97,7 @@ List<GetPage> get K_PAGES => [
       GetPage(
           name: '/camera/qr',
           maintainState: false,
-          page: () => CameraScreen(),
+          page: () => MediaScreen(),
           transition: Transition.downToUp,
           curve: Curves.easeIn,
           fullscreenDialog: true,

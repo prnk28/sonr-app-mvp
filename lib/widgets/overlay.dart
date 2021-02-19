@@ -7,6 +7,8 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
 
+import 'form.dart';
+
 // @ Overlay Entry Location Enum - Top is Default
 enum OverlayEntryLocation {
   Top,
@@ -17,8 +19,9 @@ enum OverlayEntryLocation {
 
 // ** Class Controls Active Overlays ** //
 class SonrOverlay extends GetxController {
-  final overlays = <_SonrOverlayEntry>[].obs;
-  final currentOverlay = Rx<_SonrOverlayEntry>();
+  // Fixed Properties
+  final overlays = <_SonrFixedOverlayEntry>[].obs;
+  final currentOverlay = Rx<_SonrFixedOverlayEntry>();
 
   // References
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
@@ -33,8 +36,7 @@ class SonrOverlay extends GetxController {
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
     // Create Overlay
-
-    var overlay = _SonrOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view);
+    var overlay = _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view);
 
     // Add Overlay to List
     _controller.currentOverlay(overlay);
@@ -58,7 +60,7 @@ class SonrOverlay extends GetxController {
     var completer = new Completer<bool>();
 
     // Create Overlay
-    var questionOverlay = _SonrOverlayEntry(
+    var questionOverlay = _SonrFixedOverlayEntry(
         entryLocation,
         backgroundDuration,
         entryDuration,
@@ -93,7 +95,7 @@ class SonrOverlay extends GetxController {
       Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Overlay
-    var alertOverlay = _SonrOverlayEntry(
+    var alertOverlay = _SonrFixedOverlayEntry(
         entryLocation,
         backgroundDuration,
         entryDuration,
@@ -119,7 +121,7 @@ class SonrOverlay extends GetxController {
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
-    var cardOverlay = _SonrOverlayEntry(
+    var cardOverlay = _SonrFixedOverlayEntry(
       entryLocation,
       backgroundDuration,
       entryDuration,
@@ -140,7 +142,7 @@ class SonrOverlay extends GetxController {
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
-    var cardOverlay = _SonrOverlayEntry(
+    var cardOverlay = _SonrFixedOverlayEntry(
         entryLocation,
         backgroundDuration,
         entryDuration,
@@ -223,7 +225,7 @@ class SonrOverlay extends GetxController {
 
       // Clear List
       _controller.overlays.clear();
-      _controller.currentOverlay(null);
+      _controller.currentOverlay.nil();
 
       // Refresh List
       _controller.overlays.refresh();
@@ -233,8 +235,69 @@ class SonrOverlay extends GetxController {
   }
 }
 
+// ** Class Controls Active Overlays ** //
+class SonrPositionedOverlay extends GetxController {
+  // Positioned Properties
+  final overlays = <_SonrPositionedOverlayEntry>[].obs;
+  final currentOverlay = Rx<_SonrPositionedOverlayEntry>();
+
+  // References
+  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;
+  static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
+  static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
+
+  // ^ Opens View at Position with Size ^ //
+  static open(Widget view, Size size, Offset position,
+      {bool barrierDismissible = true,
+      Duration entryDuration = const Duration(milliseconds: 200),
+      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
+    // Create Overlay
+    var overlay = _SonrPositionedOverlayEntry(size, position, view, barrierDismissible);
+
+    // Add Overlay to List
+    _controller.currentOverlay(overlay);
+    _controller.overlays.add(overlay);
+  }
+
+  static dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
+      {Duration entryDuration = const Duration(milliseconds: 200),
+      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
+      double height,
+      double width,
+      EdgeInsets margin}) {
+    // Get Position
+    RenderBox renderBox = key.currentContext.findRenderObject();
+    var size = renderBox.size;
+    var position = renderBox.localToGlobal(Offset.zero);
+
+    // Create Overlay
+    var overlay = _SonrPositionedOverlayEntry(
+        size, position, _DropdownOverlayView(count, items, key, onChanged, height: height, width: width, margin: margin), true);
+
+    // Add Overlay to List
+    _controller.currentOverlay(overlay);
+    _controller.overlays.add(overlay);
+  }
+
+  // ^ Method Pops Current Overlay ^ //
+  static back() {
+    if (isOpen) {
+      // Pop Current Overlay
+      if (_controller.currentOverlay.value != null) {
+        _controller.currentOverlay.value.dismiss();
+      }
+
+      // Refresh List
+      _controller.overlays.removeLast();
+      _controller.overlays.refresh();
+    } else {
+      print("Overlay is not open");
+    }
+  }
+}
+
 // ** Class Presents Overlay Widget Entry on Context ** //
-class _SonrOverlayEntry {
+class _SonrFixedOverlayEntry {
   // Properties
   final OverlayEntryLocation entryLocation;
   final Duration backgroundDuration;
@@ -250,7 +313,7 @@ class _SonrOverlayEntry {
   OverlayEntry overlay, overlayBackground;
 
   // ** Constructer ** //
-  _SonrOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
+  _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
       {this.blur = 5.0, this.backgroundColor = SonrColor.overlayBackground, this.mainAxisAlignment = MainAxisAlignment.center}) {
     dismiss = () {
       overlayBackground.remove();
@@ -296,6 +359,44 @@ class _SonrOverlayEntry {
           entryDuration,
           entryLocation);
     });
+    buildOverlay();
+  }
+
+  void buildOverlay() {
+    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
+  }
+}
+
+// ** Class Presents Positioned Overlay Widget Entry on Context ** //
+class _SonrPositionedOverlayEntry {
+  // Properties
+  final Widget widget;
+  final bool barrierDismissible;
+  final Size size;
+  final Offset position;
+
+  // References
+  Function dismiss;
+  OverlayEntry overlay, overlayBackground;
+
+  // ** Constructer ** //
+  _SonrPositionedOverlayEntry(this.size, this.position, this.widget, this.barrierDismissible) {
+    dismiss = () {
+      overlayBackground.remove();
+      overlay.remove();
+    };
+    overlayBackground = OverlayEntry(builder: (context) {
+      return Positioned.fill(
+        child: GestureDetector(
+          onTap: () => barrierDismissible ? SonrPositionedOverlay.back() : () {},
+        ),
+      );
+    });
+    overlay = OverlayEntry(
+      builder: (context) {
+        return Positioned(top: position.dy + size.height, left: position.dx, width: size.width, child: widget);
+      },
+    );
     buildOverlay();
   }
 
@@ -394,6 +495,55 @@ class _AlertOverlayView extends StatelessWidget {
               ]),
             ]),
           )),
+    );
+  }
+}
+
+// ** Class Builds Dropdown View Widget for Positioned Overlay ** //
+class _DropdownOverlayView extends StatelessWidget {
+  final int index; // Index of Overlay
+  final List<SonrDropdownItem> items;
+  final GlobalKey parentKey;
+  final ValueChanged<int> onChanged;
+  final double height;
+  final double width;
+  final EdgeInsets margin;
+
+  // Constructer
+  _DropdownOverlayView(this.index, this.items, this.parentKey, this.onChanged, {this.height, this.width, this.margin});
+
+  @override
+  Widget build(BuildContext context) {
+    RenderBox renderBox = parentKey.currentContext.findRenderObject();
+    var size = renderBox.size;
+    return Padding(
+      padding: const EdgeInsets.only(top: 15.0),
+      child: Container(
+        height: height ?? (items.length * size.height) / 1.5 + 20,
+        width: width ?? size.width,
+        child: Neumorphic(
+          margin: margin ?? EdgeInsets.symmetric(horizontal: 12),
+          style: SonrStyle.dropDownBox,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: items.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: NeumorphicButton(
+                  style: SonrStyle.flat,
+                  padding: EdgeInsets.all(10),
+                  onPressed: () {
+                    onChanged(index);
+                    SonrPositionedOverlay.back();
+                  },
+                  child: Stack(children: [items[index]]),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }

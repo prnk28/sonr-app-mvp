@@ -179,7 +179,7 @@ class SonrService extends GetxService {
 
           // Reset References
           _url = null;
-          payload(null);
+          payload.nil();
           _peerController = null;
         }
       }
@@ -205,7 +205,7 @@ class SonrService extends GetxService {
       // Reset References
       _url = null;
       _peerController = null;
-      payload(null);
+      payload.nil();
     }
   }
 

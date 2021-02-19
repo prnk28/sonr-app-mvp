@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/modules/media/media_picker.dart';
+import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -200,7 +200,7 @@ class ShareButtonController extends GetxController {
       close();
 
       // Go to Camera View
-      Get.offNamed("/transfer");
+      Get.offNamed("/camera");
     } else {
       // Display Error
       SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -215,7 +215,7 @@ class ShareButtonController extends GetxController {
       close();
 
       // Display Bottom Sheet
-      Get.bottomSheet(MediaPickerSheet(), isDismissible: false);
+      Get.bottomSheet(PickerSheet(), isDismissible: false);
     } else {
       // Display Error
       SonrSnack.error("Sonr isnt permitted to access your media.");

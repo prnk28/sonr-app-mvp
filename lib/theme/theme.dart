@@ -10,9 +10,10 @@ export 'text.dart';
 // Global UI Widgets
 export '../widgets/animation.dart';
 export '../widgets/painter.dart';
-export '../widgets/radio.dart';
+export '../widgets/view.dart';
 export '../widgets/sheet.dart';
 export '../widgets/overlay.dart';
+export '../widgets/form.dart';
 
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';
@@ -30,6 +31,11 @@ class SonrStyle {
   static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+  static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
+  static get dropDownItem =>
+      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+  static get dropDownBox =>
+      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base, shadowLightColor: Colors.black38);
   static get overlay => NeumorphicStyle(
       intensity: 0.85,
       depth: 8,
