@@ -73,7 +73,7 @@ class WavePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final baseHeight = (height) - (percent * height);
+    final baseHeight = (height + 10) - (percent * height);
     final path = Path();
     path.moveTo(0.0, baseHeight);
     for (var i = 0.0; i < width; i++) {
