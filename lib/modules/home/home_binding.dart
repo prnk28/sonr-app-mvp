@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/search_view.dart';
-import 'package:sonr_app/modules/home/share_button.dart';
 import 'home_controller.dart';
 export 'home_screen.dart';
 

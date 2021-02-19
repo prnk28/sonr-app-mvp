@@ -105,9 +105,9 @@ class SonrDropdown extends StatelessWidget {
             () => NeumorphicButton(
                 margin: EdgeInsets.symmetric(horizontal: 5),
                 style: SonrStyle.flat,
-                child: Center(child: _buildSelected(selectedIndex.value, Get.find<SonrPositionedOverlay>().overlays.length > 0)),
+                child: Center(child: _buildSelected(selectedIndex.value, SonrOverlay.isDropdownOpen)),
                 onPressed: () {
-                  SonrPositionedOverlay.dropdown(items, _dropKey, (newIndex) {
+                  SonrOverlay.dropdown(items, _dropKey, (newIndex) {
                     selectedIndex(newIndex);
                     onChanged(newIndex);
                   }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);

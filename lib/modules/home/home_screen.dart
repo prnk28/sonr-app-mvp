@@ -24,7 +24,7 @@ class HomeScreen extends GetView<HomeController> {
             icon: SonrIcon.search,
             onPressed: () {
               if (controller.allCards.length > 0) {
-                SonrOverlay.open(
+                SonrOverlay.show(
                   SearchView(),
                   barrierDismissible: true,
                 );

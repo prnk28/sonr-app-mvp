@@ -22,26 +22,83 @@ class SonrOverlay extends GetxController {
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrFixedOverlayEntry>();
+  final currentDropdown = Rx<_SonrPositionedOverlayEntry>();
 
   // References
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
+  static bool get isDropdownOpen => Get.find<SonrOverlay>().currentDropdown.value != null;
   static int get count => Get.find<SonrOverlay>().overlays.length;
   static SonrOverlay get _controller => Get.find<SonrOverlay>();
 
-  // ^ Method Finds Overlay Controller and Opens View ^ //
-  static open(Widget view,
-      {Duration backgroundDuration = const Duration(milliseconds: 200),
-      Duration entryDuration = const Duration(milliseconds: 300),
+  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
+  static alert(
+      {@required String title,
+      @required String description,
+      String buttonText = "Okay",
       bool barrierDismissible: true,
+      bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
+      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
+      Duration backgroundDuration = const Duration(milliseconds: 200),
+      Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Overlay
-    var overlay = _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view);
+    var alertOverlay = _SonrFixedOverlayEntry(
+        entryLocation,
+        backgroundDuration,
+        entryDuration,
+        barrierDismissible,
+        _AlertOverlayView(
+          count,
+          title,
+          description,
+          buttonText,
+          closeOnResponse,
+        ));
 
     // Add Overlay to List
-    _controller.currentOverlay(overlay);
-    _controller.overlays.add(overlay);
-    return Container();
+    _controller.currentOverlay(alertOverlay);
+    _controller.overlays.add(alertOverlay);
+  }
+
+  // ^ Method Places Dropdown by Key Position ^ //
+  static dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
+      {Duration entryDuration = const Duration(milliseconds: 200),
+      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
+      double height,
+      double width,
+      EdgeInsets margin}) {
+    // Get Position
+    RenderBox renderBox = key.currentContext.findRenderObject();
+    var size = renderBox.size;
+    var position = renderBox.localToGlobal(Offset.zero);
+
+    // Create Overlay
+    var overlay = _SonrPositionedOverlayEntry(
+        size, position, _DropdownOverlayView(count, items, key, onChanged, height: height, width: width, margin: margin), true);
+
+    // Add Overlay to List
+    _controller.currentDropdown(overlay);
+  }
+
+  // ^ Method Finds Overlay Controller and Prompts Invite ^ //
+  static invite(AuthInvite invite,
+      {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
+      bool barrierDismissible: false,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
+      Duration backgroundDuration = const Duration(milliseconds: 250),
+      Duration entryDuration = const Duration(milliseconds: 350)}) {
+    // Create Overlay
+    var cardOverlay = _SonrFixedOverlayEntry(
+      entryLocation,
+      backgroundDuration,
+      entryDuration,
+      barrierDismissible,
+      _InviteReplyOverlayView(count, false, invite: invite),
+    );
+
+    // Add Overlay to List
+    _controller.currentOverlay(cardOverlay);
+    _controller.overlays.add(cardOverlay);
   }
 
   // ^ Method Finds Overlay Controller and Prompts Question ^ //
@@ -83,57 +140,6 @@ class SonrOverlay extends GetxController {
     return completer.future;
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static alert(
-      {@required String title,
-      @required String description,
-      String buttonText = "Okay",
-      bool barrierDismissible: true,
-      bool closeOnResponse = true,
-      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
-      Duration backgroundDuration = const Duration(milliseconds: 200),
-      Duration entryDuration = const Duration(milliseconds: 300)}) {
-    // Create Overlay
-    var alertOverlay = _SonrFixedOverlayEntry(
-        entryLocation,
-        backgroundDuration,
-        entryDuration,
-        barrierDismissible,
-        _AlertOverlayView(
-          count,
-          title,
-          description,
-          buttonText,
-          closeOnResponse,
-        ));
-
-    // Add Overlay to List
-    _controller.currentOverlay(alertOverlay);
-    _controller.overlays.add(alertOverlay);
-  }
-
-  // ^ Method Finds Overlay Controller and Prompts Invite ^ //
-  static invite(AuthInvite invite,
-      {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
-      bool barrierDismissible: false,
-      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration backgroundDuration = const Duration(milliseconds: 250),
-      Duration entryDuration = const Duration(milliseconds: 350)}) {
-    // Create Overlay
-    var cardOverlay = _SonrFixedOverlayEntry(
-      entryLocation,
-      backgroundDuration,
-      entryDuration,
-      barrierDismissible,
-      _InviteReplyOverlayView(count, false, invite: invite),
-    );
-
-    // Add Overlay to List
-    _controller.currentOverlay(cardOverlay);
-    _controller.overlays.add(cardOverlay);
-  }
-
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
   static reply(AuthReply reply,
       {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
@@ -158,6 +164,22 @@ class SonrOverlay extends GetxController {
     _controller.overlays.add(cardOverlay);
   }
 
+  // ^ Method Finds Overlay Controller and Opens View ^ //
+  static show(Widget view,
+      {Duration backgroundDuration = const Duration(milliseconds: 200),
+      Duration entryDuration = const Duration(milliseconds: 300),
+      bool barrierDismissible: true,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
+      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
+    // Create Overlay
+    var overlay = _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view);
+
+    // Add Overlay to List
+    _controller.currentOverlay(overlay);
+    _controller.overlays.add(overlay);
+    return Container();
+  }
+
   // ^ Method Pops Current Overlay ^ //
   static back() {
     if (isOpen) {
@@ -174,25 +196,12 @@ class SonrOverlay extends GetxController {
     }
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static pop({int backUntil = 1}) {
-    if (isOpen) {
-      // Validate PopCount is less than List Length
-      if (backUntil > count) {
-        backUntil = count;
-      }
-
-      // Reverse Iterate Count and Remove
-      for (var i = 0; i <= count; i++) {
-        _controller.overlays[i].dismiss();
-        _controller.overlays.removeLast();
-      }
-
-      // Refresh List
-      _controller.currentOverlay(_controller.overlays[count - 1]);
-      _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
+  // ^ Method Pops Current Dropdown ^ //
+  static pop() {
+    // Pop Current Overlay
+    if (_controller.currentOverlay.value != null) {
+      _controller.currentDropdown.value.dismiss();
+      _controller.currentDropdown.nil();
     }
   }
 
@@ -235,176 +244,6 @@ class SonrOverlay extends GetxController {
   }
 }
 
-// ** Class Controls Active Overlays ** //
-class SonrPositionedOverlay extends GetxController {
-  // Positioned Properties
-  final overlays = <_SonrPositionedOverlayEntry>[].obs;
-  final currentOverlay = Rx<_SonrPositionedOverlayEntry>();
-
-  // References
-  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;
-  static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
-  static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
-
-  // ^ Opens View at Position with Size ^ //
-  static open(Widget view, Size size, Offset position,
-      {bool barrierDismissible = true,
-      Duration entryDuration = const Duration(milliseconds: 200),
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
-    // Create Overlay
-    var overlay = _SonrPositionedOverlayEntry(size, position, view, barrierDismissible);
-
-    // Add Overlay to List
-    _controller.currentOverlay(overlay);
-    _controller.overlays.add(overlay);
-  }
-
-  static dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
-      {Duration entryDuration = const Duration(milliseconds: 200),
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
-      double height,
-      double width,
-      EdgeInsets margin}) {
-    // Get Position
-    RenderBox renderBox = key.currentContext.findRenderObject();
-    var size = renderBox.size;
-    var position = renderBox.localToGlobal(Offset.zero);
-
-    // Create Overlay
-    var overlay = _SonrPositionedOverlayEntry(
-        size, position, _DropdownOverlayView(count, items, key, onChanged, height: height, width: width, margin: margin), true);
-
-    // Add Overlay to List
-    _controller.currentOverlay(overlay);
-    _controller.overlays.add(overlay);
-  }
-
-  // ^ Method Pops Current Overlay ^ //
-  static back() {
-    if (isOpen) {
-      // Pop Current Overlay
-      if (_controller.currentOverlay.value != null) {
-        _controller.currentOverlay.value.dismiss();
-      }
-
-      // Refresh List
-      _controller.overlays.removeLast();
-      _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
-    }
-  }
-}
-
-// ** Class Presents Overlay Widget Entry on Context ** //
-class _SonrFixedOverlayEntry {
-  // Properties
-  final OverlayEntryLocation entryLocation;
-  final Duration backgroundDuration;
-  final Duration entryDuration;
-  final Widget overlayWidget;
-  final double blur;
-  final Color backgroundColor;
-  final bool barrierDismissible;
-  final MainAxisAlignment mainAxisAlignment;
-
-  // References
-  Function dismiss;
-  OverlayEntry overlay, overlayBackground;
-
-  // ** Constructer ** //
-  _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
-      {this.blur = 5.0, this.backgroundColor = SonrColor.overlayBackground, this.mainAxisAlignment = MainAxisAlignment.center}) {
-    dismiss = () {
-      overlayBackground.remove();
-      overlay.remove();
-    };
-    overlayBackground = OverlayEntry(builder: (context) {
-      return PlayAnimation<double>(
-          tween: (0.0).tweenTo(blur),
-          duration: backgroundDuration,
-          curve: Curves.easeIn,
-          builder: (context, child, value) {
-            return Positioned.fill(
-              child: GestureDetector(
-                onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: value,
-                      sigmaY: value,
-                    ),
-                    child: PlayAnimation<double>(
-                        curve: Curves.easeIn,
-                        tween: (0.0).tweenTo(1.0),
-                        duration: backgroundDuration,
-                        builder: (context, child, value) {
-                          return AnimatedOpacity(
-                            opacity: value,
-                            duration: backgroundDuration,
-                            child: Container(
-                              color: backgroundColor,
-                            ),
-                          );
-                        })),
-              ),
-            );
-          });
-    });
-    overlay = OverlayEntry(builder: (context) {
-      return _BaseOverlayView(
-          Column(
-            mainAxisAlignment: mainAxisAlignment,
-            children: [overlayWidget],
-          ),
-          entryDuration,
-          entryLocation);
-    });
-    buildOverlay();
-  }
-
-  void buildOverlay() {
-    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
-  }
-}
-
-// ** Class Presents Positioned Overlay Widget Entry on Context ** //
-class _SonrPositionedOverlayEntry {
-  // Properties
-  final Widget widget;
-  final bool barrierDismissible;
-  final Size size;
-  final Offset position;
-
-  // References
-  Function dismiss;
-  OverlayEntry overlay, overlayBackground;
-
-  // ** Constructer ** //
-  _SonrPositionedOverlayEntry(this.size, this.position, this.widget, this.barrierDismissible) {
-    dismiss = () {
-      overlayBackground.remove();
-      overlay.remove();
-    };
-    overlayBackground = OverlayEntry(builder: (context) {
-      return Positioned.fill(
-        child: GestureDetector(
-          onTap: () => barrierDismissible ? SonrPositionedOverlay.back() : () {},
-        ),
-      );
-    });
-    overlay = OverlayEntry(
-      builder: (context) {
-        return Positioned(top: position.dy + size.height, left: position.dx, width: size.width, child: widget);
-      },
-    );
-    buildOverlay();
-  }
-
-  void buildOverlay() {
-    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
-  }
-}
-
 // ** Class Builds Base Animated Overlay View ** //
 class _BaseOverlayView extends StatefulWidget {
   final Widget child;
@@ -419,7 +258,7 @@ class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin 
   Animation<Offset> position;
 
   void initState() {
-    position = tweenForEntryLocation(widget.entryLocation);
+    position = SonrAnimation.tweenForEntryLocation(widget.entryLocation).animatedBy(controller);
     controller.duration = widget.duration;
     controller.play();
     super.initState();
@@ -428,24 +267,6 @@ class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin 
   @override
   Widget build(BuildContext context) {
     return SlideTransition(position: position, child: widget.child);
-  }
-
-  // ^ Method to Retreive Animation by Location - Default is Top ^ //
-  Animation<Offset> tweenForEntryLocation(OverlayEntryLocation entryLocation) {
-    switch (entryLocation) {
-      case OverlayEntryLocation.Bottom:
-        return Offset(0.0, 1.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-      case OverlayEntryLocation.Left:
-        return Offset(-1.0, 0.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-      case OverlayEntryLocation.Right:
-        return Offset(1.0, 0.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-      default:
-        return Offset(0.0, -1.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-    }
   }
 }
 
@@ -535,7 +356,7 @@ class _DropdownOverlayView extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   onPressed: () {
                     onChanged(index);
-                    SonrPositionedOverlay.back();
+                    SonrOverlay.pop();
                   },
                   child: Stack(children: [items[index]]),
                 ),
@@ -655,5 +476,114 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
             ]),
           )),
     );
+  }
+}
+
+// ** Class Presents Overlay Widget Entry on Context ** //
+class _SonrFixedOverlayEntry {
+  // Properties
+  final OverlayEntryLocation entryLocation;
+  final Duration backgroundDuration;
+  final Duration entryDuration;
+  final Widget overlayWidget;
+  final double blur;
+  final Color backgroundColor;
+  final bool barrierDismissible;
+  final MainAxisAlignment mainAxisAlignment;
+
+  // References
+  Function dismiss;
+  OverlayEntry overlay, overlayBackground;
+
+  // ** Constructer ** //
+  _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
+      {this.blur = 5.0, this.backgroundColor = SonrColor.overlayBackground, this.mainAxisAlignment = MainAxisAlignment.center}) {
+    dismiss = () {
+      overlayBackground.remove();
+      overlay.remove();
+    };
+    overlayBackground = OverlayEntry(builder: (context) {
+      return PlayAnimation<double>(
+          tween: (0.0).tweenTo(blur),
+          duration: backgroundDuration,
+          curve: Curves.easeIn,
+          builder: (context, child, value) {
+            return Positioned.fill(
+              child: GestureDetector(
+                onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: value,
+                      sigmaY: value,
+                    ),
+                    child: PlayAnimation<double>(
+                        curve: Curves.easeIn,
+                        tween: (0.0).tweenTo(1.0),
+                        duration: backgroundDuration,
+                        builder: (context, child, value) {
+                          return AnimatedOpacity(
+                            opacity: value,
+                            duration: backgroundDuration,
+                            child: Container(
+                              color: backgroundColor,
+                            ),
+                          );
+                        })),
+              ),
+            );
+          });
+    });
+    overlay = OverlayEntry(builder: (context) {
+      return _BaseOverlayView(
+          Column(
+            mainAxisAlignment: mainAxisAlignment,
+            children: [overlayWidget],
+          ),
+          entryDuration,
+          entryLocation);
+    });
+    buildOverlay();
+  }
+
+  void buildOverlay() {
+    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
+  }
+}
+
+// ** Class Presents Positioned Overlay Widget Entry on Context ** //
+class _SonrPositionedOverlayEntry {
+  // Properties
+  final Widget widget;
+  final bool barrierDismissible;
+  final Size size;
+  final Offset position;
+
+  // References
+  Function dismiss;
+  OverlayEntry overlay, overlayBackground;
+
+  // ** Constructer ** //
+  _SonrPositionedOverlayEntry(this.size, this.position, this.widget, this.barrierDismissible) {
+    dismiss = () {
+      overlayBackground.remove();
+      overlay.remove();
+    };
+    overlayBackground = OverlayEntry(builder: (context) {
+      return Positioned.fill(
+        child: GestureDetector(
+          onTap: () => barrierDismissible ? SonrOverlay.pop() : () {},
+        ),
+      );
+    });
+    overlay = OverlayEntry(
+      builder: (context) {
+        return Positioned(top: position.dy + size.height, left: position.dx, width: size.width, child: widget);
+      },
+    );
+    buildOverlay();
+  }
+
+  void buildOverlay() {
+    Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
   }
 }

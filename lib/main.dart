@@ -34,7 +34,6 @@ class InitialBinding implements Bindings {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
     Get.put(SonrOverlay());
-    Get.put(SonrPositionedOverlay());
     Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
@@ -62,11 +61,6 @@ class _AppState extends State<App> {
           // Determine Animation by Tile Type
           artboard.addController(SimpleAnimation('Default'));
           setState(() => _riveArtboard = artboard);
-
-          // Add Delay before switching screens
-          Future.delayed(2.seconds).then((_) {
-            Get.offNamed("/home");
-          });
         }
       },
     );
@@ -119,14 +113,7 @@ List<GetPage> get K_PAGES => [
       GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.zoom, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Completed File ** //
-      GetPage(
-          maintainState: false,
-          name: '/home/completed',
-          page: () => HomeScreen(),
-          transition: Transition.fade,
-          curve: Curves.easeIn,
-          transitionDuration: 200.milliseconds,
-          binding: HomeBinding()),
+      GetPage(name: '/home/completed', page: () => HomeScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Back from Transfer ** //
       GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),
@@ -138,23 +125,10 @@ List<GetPage> get K_PAGES => [
       GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
 
       // ** Transfer Page ** //
-      GetPage(
-          name: '/transfer',
-          page: () => TransferScreen(),
-          maintainState: false,
-          transition: Transition.downToUp,
-          curve: Curves.easeIn,
-          binding: TransferBinding()),
+      GetPage(name: '/transfer', page: () => TransferScreen(), transition: Transition.downToUp, curve: Curves.easeIn, binding: TransferBinding()),
 
       // ** Camera Page - Default Media View ** //
-      GetPage(
-          name: '/camera',
-          maintainState: false,
-          page: () => MediaScreen(),
-          transition: Transition.fade,
-          curve: Curves.easeIn,
-          fullscreenDialog: true,
-          binding: CameraBinding()),
+      GetPage(name: '/camera', page: () => MediaScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: CameraBinding()),
 
       // ** Profile Page ** //
       GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),

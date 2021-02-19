@@ -19,7 +19,6 @@ enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
 class DeviceService extends GetxService {
   // Properties
   final contact = Rx<Contact>();
-  final started = false.obs;
   final incomingMedia = <SharedMediaFile>[].obs;
   final incomingText = "".obs;
 
@@ -112,10 +111,11 @@ class DeviceService extends GetxService {
 
           // Initialize Dependent Services
           Get.putAsync(() => SonrService().init(position, user));
-          started(true);
+          Get.offNamed("/home");
+        } else {
+          Get.offNamed("/register");
         }
       } else {
-        // Push to Register Screen
         Get.offNamed("/register");
       }
     } else {
@@ -138,7 +138,7 @@ class DeviceService extends GetxService {
 
       // Initialize Dependent Services
       Get.putAsync(() => SonrService().init(position, user));
-      started(true);
+      Get.offNamed("/home");
     } else {
       print("Location Permission Denied");
     }

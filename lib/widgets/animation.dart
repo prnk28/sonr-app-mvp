@@ -409,7 +409,7 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
           final artboard = file.mainArtboard;
 
           // Determine Animation by Tile Type
-          artboard.addController(_riveControllerByType(widget.type));
+          artboard.addController(SonrAnimation.getRiveController(widget.type));
           setState(() => _riveArtboard = artboard);
         }
       },
@@ -438,9 +438,29 @@ class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
       SonrText.medium(widget.type.toString(), size: 14, color: Colors.black),
     ]);
   }
+}
+
+class SonrAnimation {
+  // ^ Method to Retreive Animation by Location - Default is Top ^ //
+  static Tween<Offset> tweenForEntryLocation(OverlayEntryLocation entryLocation) {
+    switch (entryLocation) {
+      case OverlayEntryLocation.Bottom:
+        return Offset(0.0, 1.0).tweenTo(Offset.zero);
+        break;
+      case OverlayEntryLocation.Left:
+        return Offset(-1.0, 0.0).tweenTo(Offset.zero);
+        break;
+      case OverlayEntryLocation.Right:
+        return Offset(1.0, 0.0).tweenTo(Offset.zero);
+        break;
+      default:
+        return Offset(0.0, -1.0).tweenTo(Offset.zero);
+        break;
+    }
+  }
 
   // ^ Get Animation Controller By Type ^ //
-  SimpleAnimation _riveControllerByType(String type) {
+  static SimpleAnimation getRiveController(String type) {
     // Retreive Feed Loop
     if (type == "Feed") {
       return SimpleAnimation('Feed');

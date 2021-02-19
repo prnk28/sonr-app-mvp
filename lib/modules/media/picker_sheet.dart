@@ -27,7 +27,7 @@ class PickerSheet extends GetView<MediaPickerController> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       //  Top Left Close/Cancel Button
-                      SonrButton.circle(onPressed: () => Get.back(closeOverlays: true), icon: SonrIcon.close),
+                      SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
                       // Drop Down
                       Obx(() => SonrDropdown.albums(controller.allCollections.value, width: Get.width - 200, onChanged: (index) {

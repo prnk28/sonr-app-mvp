@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/home/share_button.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
