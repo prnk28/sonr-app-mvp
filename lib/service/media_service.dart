@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -184,6 +185,13 @@ class MediaService extends GetxService {
 
   // ^ Saves Photo to Gallery ^ //
   static Future<bool> saveCapture(String path, bool isVideo) async {
+    // Validate Path
+    var file = File(path);
+    if (!await file.exists()) {
+      SonrSnack.error("Unable to save Captured Media to your Gallery");
+      return false;
+    }
+
     if (isVideo) {
       // Save Image to Gallery
       var result = await GallerySaver.saveVideo(path, albumName: "Sonr");

@@ -13,7 +13,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Position_Proximity>();
 
   // References
-  final RxDouble userDirection = DeviceService.direction;
+  final Rx<CompassEvent> userDirection = DeviceService.direction;
   var peer = Peer();
   int index;
 
@@ -32,7 +32,7 @@ class PeerController extends GetxController {
     Get.find<SonrService>().peers.listen((lob) {
       lob.forEach((id, value) {
         if (id == peer.id) {
-          difference((userDirection.value - value.position.direction).abs());
+          difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
           direction(value.position.direction);
           offset(calculateOffset(value.platform));
           proximity(value.position.proximity);
@@ -77,7 +77,7 @@ class PeerController extends GetxController {
     this.peer = peerVal;
     this.index = index;
     isContentVisible(true);
-    difference((userDirection.value - peerVal.position.direction).abs());
+    difference((userDirection.value.headingForCameraMode - peerVal.position.direction).abs());
     direction(peerVal.position.direction);
     offset(calculateOffset(peerVal.platform));
     proximity(peerVal.position.proximity);

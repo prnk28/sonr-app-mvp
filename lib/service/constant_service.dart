@@ -9,3 +9,4 @@ export 'package:sonr_app/modules/card/card_controller.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
+export 'package:flutter_compass/flutter_compass.dart';

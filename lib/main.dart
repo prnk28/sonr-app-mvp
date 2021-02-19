@@ -36,7 +36,7 @@ class InitialBinding implements Bindings {
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
-    Get.lazyPut<RiveWidgetController>(() => RiveWidgetController('assets/animations/tile_preview.riv'), fenix: true);
+    Get.lazyPut<RiveWidgetController>(() => RiveWidgetController(), fenix: true);
   }
 }
 
@@ -65,15 +65,11 @@ class _AppState extends State<App> {
         }
       },
     );
-
     super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     // Listen to Device Start Status
-    DeviceService.status.listen((status) {
-      switch (status) {
+    Future.delayed(2.seconds, () {
+      switch (DeviceService.status.value) {
         case DeviceStatus.Success:
           Get.offNamed("/home");
           break;
@@ -85,6 +81,10 @@ class _AppState extends State<App> {
           break;
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GetMaterialApp(
       getPages: K_PAGES,
       initialBinding: InitialBinding(),

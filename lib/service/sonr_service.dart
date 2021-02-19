@@ -31,7 +31,7 @@ class SonrService extends GetxService {
     DeviceService.direction.listen((dir) {
       if (connected.value) {
         // Update Direction
-        _node.update(dir);
+        _node.update(dir.headingForCameraMode);
       }
     });
   }
@@ -216,7 +216,7 @@ class SonrService extends GetxService {
   void _handleConnected(dynamic data) {
     print(data);
     // Update Direction
-    _node.update(DeviceService.direction.value);
+    _node.update(DeviceService.direction.value.headingForCameraMode);
   }
 
   // ^ Handle Lobby Update ^ //

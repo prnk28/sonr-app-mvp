@@ -17,7 +17,7 @@ class UserService extends GetxService {
   final _picture = Rx<Uint8List>();
   final _socials = <Contact_SocialTile>[].obs;
 
-  // **  Getter Methods **
+  // **  Getter Methods for Contact Properties **
   static RxBool get exists => Get.find<UserService>()._exists;
   static RxString get firstName => Get.find<UserService>()._firstName;
   static RxString get lastName => Get.find<UserService>()._lastName;

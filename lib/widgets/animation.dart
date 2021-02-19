@@ -9,7 +9,7 @@ import 'package:rive/rive.dart' hide LinearGradient;
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum ArtboardType { Camera, Gallery, Contact, Feed }
+enum ArtboardType { Camera, Gallery, Contact, Feed, Splash }
 
 class SonrAnimatedWidget extends GetWidget<AnimatedController> {
   final Widget child;
@@ -165,12 +165,18 @@ class AnimatedController extends GetxController {
 class SonrRiveWidget extends GetView<RiveWidgetController> {
   final double width;
   final double height;
-  final Artboard artboard;
-  const SonrRiveWidget(this.artboard, this.width, this.height);
+  final Artboard tileTypeArtboard;
+  final Artboard splashArtboard;
+  const SonrRiveWidget(this.width, this.height, {this.splashArtboard, this.tileTypeArtboard});
 
   factory SonrRiveWidget.fromType({@required ArtboardType type, double width = 55, double height = 55}) {
     final controller = Get.find<RiveWidgetController>();
-    return SonrRiveWidget(controller.getArtboard(type), width, height);
+    return SonrRiveWidget(width, height, tileTypeArtboard: controller.getArtboard(type));
+  }
+
+  factory SonrRiveWidget.splashScreen() {
+    final controller = Get.find<RiveWidgetController>();
+    return SonrRiveWidget(Get.width, Get.height, tileTypeArtboard: controller.getArtboard(ArtboardType.Splash));
   }
 
   @override
@@ -180,7 +186,7 @@ class SonrRiveWidget extends GetView<RiveWidgetController> {
         return SizedBox(
           height: height,
           width: width,
-          child: Center(child: Rive(artboard: artboard)),
+          child: Center(child: Rive(artboard: tileTypeArtboard)),
         );
       } else {
         return Container();
@@ -191,46 +197,76 @@ class SonrRiveWidget extends GetView<RiveWidgetController> {
 
 class RiveWidgetController extends GetxController {
   // References
-  ByteData _riveFileData;
-  final String path;
+  ByteData _splashData;
+  ByteData _tileTypeData;
+  final String _splashPath = 'assets/animations/splash_screen.riv';
+  final String _tilePath = 'assets/animations/tile_preview.riv';
+
+  // Properties
   final loaded = false.obs;
 
-  RiveWidgetController(this.path) {
-    // Load the RiveFile from the binary data.
-    rootBundle.load(path).then((data) async {
+  // ** Constructer ** //
+  void onInit() {
+    rootBundle.load(_splashPath).then((data) async {
       if (data != null) {
-        _riveFileData = data;
+        _splashData = data;
       }
     });
+
+    // Load the RiveFile from the binary data.
+    rootBundle.load(_tilePath).then((data) async {
+      if (data != null) {
+        _tileTypeData = data;
+      }
+    });
+    super.onInit();
   }
 
   // ^ Gets Pre Initialized Artboard by Type ^ //
   Artboard getArtboard(ArtboardType type) {
-    // @ Initialize File
-    final riveFile = RiveFile();
-    riveFile.import(_riveFileData);
-    final artboard = riveFile.mainArtboard;
+    // @ Splash Screen
+    if (type == ArtboardType.Splash) {
+      // Initialize File
+      final riveFile = RiveFile();
+      riveFile.import(_splashData);
 
-    // @ Add Controller
-    if (type == ArtboardType.Camera) {
-      artboard.addController(SimpleAnimation('Camera'));
+      // Get Artboard
+      final artboard = riveFile.mainArtboard;
+      artboard.addController(SimpleAnimation('Default'));
+
+      // Return Board
+      loaded(true);
+      return artboard;
     }
-    // Retreive Showcase Loop
-    else if (type == ArtboardType.Gallery) {
-      artboard.addController(SimpleAnimation('Showcase'));
-    }
-    // Retreive Showcase Loop
-    else if (type == ArtboardType.Feed) {
-      artboard.addController(SimpleAnimation('Feed'));
-    }
-    // Retreive Icon Loop
+
+    // @ Radio Tyle Option
     else {
-      artboard.addController(SimpleAnimation('Icon'));
-    }
+      // Initialize File
+      final riveFile = RiveFile();
+      riveFile.import(_tileTypeData);
+      final artboard = riveFile.mainArtboard;
 
-    // @ Return Board
-    loaded(true);
-    return artboard;
+      // Retreive Camera
+      if (type == ArtboardType.Camera) {
+        artboard.addController(SimpleAnimation('Camera'));
+      }
+      // Retreive Showcase Loop
+      else if (type == ArtboardType.Gallery) {
+        artboard.addController(SimpleAnimation('Showcase'));
+      }
+      // Retreive Showcase Loop
+      else if (type == ArtboardType.Feed) {
+        artboard.addController(SimpleAnimation('Feed'));
+      }
+      // Retreive Icon Loop
+      else {
+        artboard.addController(SimpleAnimation('Icon'));
+      }
+
+      // @ Return Board
+      loaded(true);
+      return artboard;
+    }
   }
 }
 

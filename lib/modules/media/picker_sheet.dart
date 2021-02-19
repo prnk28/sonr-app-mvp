@@ -12,51 +12,44 @@ class PickerSheet extends GetView<MediaPickerController> {
       backendColor: Colors.transparent,
       child: Neumorphic(
           style: NeumorphicStyle(color: SonrColor.base),
-          child: Obx(() {
-            return Column(children: [
-              // @ Header Buttons
-              Container(
-                  height: kToolbarHeight + 16 * 2,
-                  child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        //  Top Left Close/Cancel Button
-                        SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
+          child: Column(children: [
+            // @ Header Buttons
+            Container(
+                height: kToolbarHeight + 16 * 2,
+                child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      //  Top Left Close/Cancel Button
+                      SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
-                        // Drop Down
-                        Obx(() {
-                          if (controller.loaded.value) {
-                            return SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, onChanged: (index) {
-                              controller.setMediaCollection(MediaService.gallery[index]);
-                            });
-                          }
-                          return NeumorphicProgressIndeterminate();
-                        }),
+                      // Drop Down
+                      SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, onChanged: (index) {
+                        controller.setMediaCollection(MediaService.gallery[index]);
+                      }),
 
-                        // Top Right Confirm Button
-                        SonrButton.circle(onPressed: () => MediaController.confirmSelection(), icon: SonrIcon.accept),
-                      ])),
+                      // Top Right Confirm Button
+                      SonrButton.circle(onPressed: () => MediaController.confirmSelection(), icon: SonrIcon.accept),
+                    ])),
 
-              // @ Grid View
-              Obx(() {
-                if (controller.loaded.value) {
-                  return Container(
-                    width: Get.width - 10,
-                    height: 368,
-                    child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                        itemCount: controller.currentMedia.length,
-                        itemBuilder: (context, index) {
-                          return _SonrMediaButton(controller.currentMedia[index], index);
-                        }),
-                  );
-                }
-                return NeumorphicProgressIndeterminate();
-              }),
-            ]);
-          })),
+            // @ Grid View
+            Obx(() {
+              if (controller.loaded.value) {
+                return Container(
+                  width: Get.width - 10,
+                  height: 368,
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                      itemCount: controller.currentMedia.length,
+                      itemBuilder: (context, index) {
+                        return _SonrMediaButton(controller.currentMedia[index], index);
+                      }),
+                );
+              }
+              return NeumorphicProgressIndeterminate();
+            }),
+          ])),
     );
   }
 }

@@ -53,13 +53,13 @@ class MediaController extends GetxController {
 
   // ^ Set State to Recording, Set Video Capture Path ^ //
   static recording(String path) {
-    Get.find<MediaController>().._isVideo = true;
+    Get.find<MediaController>()._isVideo = true;
     Get.find<MediaController>()._videoCapturePath = path;
   }
 
   // ^ Set State to Captured, Set Photo Capture Path ^ //
   static setPhoto(String path) {
-    Get.find<MediaController>().._isVideo = false;
+    Get.find<MediaController>()._isVideo = false;
     Get.find<PreviewController>().setPhoto(path);
     Get.find<MediaController>().state(MediaScreenState.Captured);
     Get.find<MediaController>().state.refresh();
@@ -72,7 +72,7 @@ class MediaController extends GetxController {
 
   // ^ Set State to Captured, Set Video Capture Path ^ //
   static completeVideo(int milliseconds) async {
-    Get.find<MediaController>().._isVideo = true;
+    Get.find<MediaController>()._isVideo = true;
     await Future.delayed(Duration(milliseconds: 300));
     Get.find<PreviewController>().setVideo(Get.find<MediaController>()._videoCapturePath);
     Get.find<MediaController>().state(MediaScreenState.Captured);

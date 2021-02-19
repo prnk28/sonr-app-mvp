@@ -16,7 +16,6 @@ class TransferController extends GetxController {
   final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
 
   // @ Direction Properties
-  final RxDouble direction = DeviceService.direction;
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
 
@@ -26,26 +25,25 @@ class TransferController extends GetxController {
 
   // @ Lobby Properties
   final stackItems = <PeerBubble>[].obs;
+  final direction = 0.0.obs;
 
   // ^ Controller Constructer ^
   TransferController() {
     // @ Update Direction
-    direction.listen((newDir) {
+    DeviceService.direction.listen((newDir) {
       // Update String Elements
-      if ((direction.value - newDir).abs() > 6) {
-        string(_directionString(newDir));
-        heading(_headingString(newDir));
-      }
+      string(_directionString(newDir.headingForCameraMode));
+      heading(_headingString(newDir.headingForCameraMode));
 
       // Reference
-      direction(newDir);
-      angle(((newDir ?? 0) * (pi / 180) * -1));
+      direction(newDir.headingForCameraMode);
+      angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
 
       // Calculate Degrees
-      if (newDir + 90 > 360) {
-        degrees(newDir - 270);
+      if (newDir.headingForCameraMode + 90 > 360) {
+        degrees(newDir.headingForCameraMode - 270);
       } else {
-        degrees(newDir + 90);
+        degrees(newDir.headingForCameraMode + 90);
       }
     });
 

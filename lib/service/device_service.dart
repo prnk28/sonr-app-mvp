@@ -13,11 +13,11 @@ enum DeviceStatus { Success, NoUser, NoLocation }
 
 class DeviceService extends GetxService {
   // Status/Sensor Properties
-  final _direction = 0.0.obs;
+  final _direction = Rx<CompassEvent>();
   final _position = Rx<Position>();
   final _status = Rx<DeviceStatus>();
 
-  static RxDouble get direction => Get.find<DeviceService>()._direction;
+  static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static Rx<Position> get position => Get.find<DeviceService>()._position;
   static Rx<DeviceStatus> get status => Get.find<DeviceService>()._status;
 
@@ -28,12 +28,6 @@ class DeviceService extends GetxService {
   final microphonePermitted = false.obs;
   final notificationPermitted = false.obs;
 
-  DeviceService() {
-    FlutterCompass.events.listen((dir) {
-      direction(dir.headingForCameraMode);
-    });
-  }
-
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
     await setPermissionStatus();
@@ -42,6 +36,7 @@ class DeviceService extends GetxService {
     // @ 1. Check for Location
     if (locationPermitted.value) {
       if (UserService.exists.value) {
+        _direction.bindStream(FlutterCompass.events);
         _status(DeviceStatus.Success);
       } else {
         _status(DeviceStatus.NoUser);
@@ -51,6 +46,7 @@ class DeviceService extends GetxService {
     }
     return this;
   }
+
 
   // ^ CreateUser Event ^
   void createUser(Contact contact, String username) async {
@@ -79,8 +75,8 @@ class DeviceService extends GetxService {
   // ^ Refresh User Location Position ^ //
   Future<Position> refreshLocation() async {
     if (locationPermitted.value) {
-      position(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
-      return position.value;
+      _position(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
+      return _position.value;
     }
     return null;
   }
@@ -110,8 +106,14 @@ class DeviceService extends GetxService {
   }
 
   static Future<bool> requestLocation() async {
+    // Request
     var result = await Permission.locationWhenInUse.request();
     Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
+
+    // Bind Direction Stream
+    if (result == PermissionStatus.granted) {
+      Get.find<DeviceService>()._direction.bindStream(FlutterCompass.events);
+    }
     return result == PermissionStatus.granted;
   }
 

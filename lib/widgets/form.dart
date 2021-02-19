@@ -97,30 +97,30 @@ class SonrDropdown extends StatelessWidget {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
     return ObxValue<RxInt>((selectedIndex) {
       return Container(
-          key: _dropKey,
-          width: width,
-          margin: margin,
-          height: height,
-          child: Obx(
-            () => NeumorphicButton(
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                style: SonrStyle.flat,
-                child: Center(child: _buildSelected(selectedIndex.value, Get.find<SonrPositionedOverlay>().overlays.length > 0)),
-                onPressed: () {
-                  SonrPositionedOverlay.dropdown(items, _dropKey, (newIndex) {
-                    selectedIndex(newIndex);
-                    onChanged(newIndex);
-                  }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
-                }),
-          ));
+        key: _dropKey,
+        width: width,
+        margin: margin,
+        height: height,
+        child: NeumorphicButton(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            style: SonrStyle.flat,
+            child: Center(child: _buildSelected(selectedIndex.value, Get.find<SonrPositionedOverlay>().overlays.length > 0)),
+            onPressed: () {
+              SonrPositionedOverlay.dropdown(items, _dropKey, (newIndex) {
+                selectedIndex(newIndex);
+                onChanged(newIndex);
+              }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
+            }),
+      );
     }, index);
   }
 
   _buildSelected(int idx, bool isOpen) {
     // @ Default Widget
     if (idx == -1) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        SonrText.medium(title, color: Colors.black87, size: height / 3),
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Expanded(child: SonrText.medium(title, color: Colors.black87, size: height / 3)),
+        Padding(padding: EdgeInsets.all(4)),
         isOpen
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
             : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
@@ -131,13 +131,15 @@ class SonrDropdown extends StatelessWidget {
     else {
       var item = items[idx];
       if (selectedIconPosition == WidgetPosition.Left) {
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
           item.hasIcon ? item.icon : Container(),
-          SonrText.medium(item.text, color: Colors.black87, size: height / 3),
+          Padding(padding: EdgeInsets.all(4)),
+          Expanded(child: SonrText.medium(item.text, color: Colors.black87, size: height / 3)),
         ]);
       } else {
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SonrText.medium(item.text, color: Colors.black87, size: height / 3),
+        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Expanded(child: SonrText.medium(item.text, color: Colors.black87, size: height / 3)),
+          Padding(padding: EdgeInsets.all(4)),
           item.hasIcon ? item.icon : Container(),
         ]);
       }
