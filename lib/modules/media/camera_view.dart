@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:camerawesome/models/orientations.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'media_screen.dart';
 
 class CameraView extends GetView<CameraController> {

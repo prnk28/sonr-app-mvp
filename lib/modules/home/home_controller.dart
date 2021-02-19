@@ -1,11 +1,6 @@
-// import 'package:file_picker/file_picker.dart';
-import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_app/service/sql_service.dart';
-import 'package:flutter/services.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];

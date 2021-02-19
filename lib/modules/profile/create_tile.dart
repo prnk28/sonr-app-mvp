@@ -1,10 +1,6 @@
-import 'package:get/get.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
-import 'package:sonr_app/service/social_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_app/service/constant_service.dart';
 
 // ** Builds Add Social Form Dialog ** //
 class CreateTileStepper extends GetView<ProfileController> {

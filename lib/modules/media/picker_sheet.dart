@@ -1,10 +1,6 @@
-import 'dart:typed_data';
-import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
-import 'package:sonr_app/service/media_service.dart';
-import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:flutter/material.dart';
 import 'package:media_gallery/media_gallery.dart';
 
 // ** MediaPicker Sheet View ** //

@@ -1,11 +1,6 @@
 import 'dart:typed_data';
-
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:sonr_app/service/sql_service.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
-
 import 'home_controller.dart';
 
 class SearchView extends GetView<SearchCardController> {

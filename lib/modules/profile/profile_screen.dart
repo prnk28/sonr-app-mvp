@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:get/get.dart';
-import 'package:sonr_app/service/user_service.dart';
-import 'package:sonr_core/models/models.dart' hide Platform;
+import 'package:sonr_app/service/constant_service.dart';
 import 'edit_dialog.dart';
 import 'tile_item.dart';
 import 'profile_controller.dart';
@@ -120,9 +116,7 @@ class ContactHeader extends GetView<ProfileController> {
     return GestureDetector(
         onLongPress: () async {
           SonrOverlay.show(
-            EditDialog.nameField(
-                firstValue: UserService.firstName.value,
-                lastValue: UserService.lastName.value),
+            EditDialog.nameField(firstValue: UserService.firstName.value, lastValue: UserService.lastName.value),
           );
           HapticFeedback.heavyImpact();
         },

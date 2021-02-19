@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
-import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:better_player/better_player.dart';
 

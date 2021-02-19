@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';

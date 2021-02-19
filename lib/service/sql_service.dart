@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:get/get.dart' hide Node;
 import 'package:intl/intl.dart';
 import 'package:sonr_core/sonr_core.dart';

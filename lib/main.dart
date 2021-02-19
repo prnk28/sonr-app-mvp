@@ -1,11 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/service/media_service.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/social_service.dart';
-import 'package:sonr_app/service/sql_service.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/media/camera_binding.dart';
@@ -25,6 +22,7 @@ void main() async {
 initServices() async {
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SocialMediaService().init());
+  await Get.putAsync(() => UserService().init());
   await Get.putAsync(() => DeviceService().init());
   await Get.putAsync(() => MediaService().init());
 }

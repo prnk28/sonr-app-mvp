@@ -1,8 +1,6 @@
-import 'package:sonr_core/sonr_core.dart';
 import 'peer_controller.dart';
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 

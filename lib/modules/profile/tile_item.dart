@@ -1,15 +1,8 @@
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:sonr_app/data/social_medium.dart';
-import 'package:sonr_app/data/social_twitter.dart';
-import 'package:sonr_app/data/social_youtube.dart';
+import 'package:sonr_app/data/data_constant.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
-import 'package:sonr_app/modules/profile/social_view.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/social_service.dart';
-import 'package:sonr_app/service/user_service.dart';
+import 'social_view.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
 
 // ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {

@@ -1,12 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_core/models/models.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_app/service/constant_service.dart';
 
 class PeerController extends GetxController {
   // Properties

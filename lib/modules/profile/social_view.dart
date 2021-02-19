@@ -1,10 +1,6 @@
-import 'package:get/get.dart';
-import 'package:sonr_app/data/social_medium.dart';
-import 'package:sonr_app/data/social_twitter.dart';
-import 'package:sonr_app/data/social_youtube.dart';
-import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/data/data_constant.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
 import 'tile_item.dart';
 
 class SocialView extends StatelessWidget {

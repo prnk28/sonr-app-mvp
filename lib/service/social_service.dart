@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/model_search.dart';
-import 'package:sonr_app/data/social_medium.dart';
-import 'package:sonr_app/data/social_twitter.dart';
-import 'package:sonr_app/data/social_youtube.dart';
+import 'package:sonr_app/data/data_constant.dart';
 import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -71,7 +68,7 @@ class SocialMediaService extends GetxService {
           'Accept': 'application/json',
           'Authorization': 'Bearer $_twitterBearer',
         });
-        
+
         result = QueryUsernameResult(query, prv, isPrivate, TwitterUserModel.fromResponse(userResp));
         return result.isValid;
         break;

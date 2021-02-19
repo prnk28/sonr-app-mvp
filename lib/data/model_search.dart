@@ -1,7 +1,4 @@
-import 'package:sonr_app/data/social_medium.dart';
-import 'package:sonr_app/data/social_twitter.dart';
-import 'package:sonr_app/data/social_youtube.dart';
-import 'package:sonr_app/data/tuple.dart';
+import 'data_constant.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ************************************** //
