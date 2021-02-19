@@ -10,7 +10,6 @@ export 'text.dart';
 // Global UI Widgets
 export '../widgets/animation.dart';
 export '../widgets/painter.dart';
-export '../widgets/view.dart';
 export '../widgets/sheet.dart';
 export '../widgets/overlay.dart';
 export '../widgets/form.dart';

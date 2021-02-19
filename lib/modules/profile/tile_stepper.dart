@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/service/social_service.dart';
-import 'package:sonr_app/widgets/view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:flutter_dropdown/flutter_dropdown.dart';
 
 enum SocialAuthType { Link, OAuth }
 
@@ -154,12 +152,6 @@ class _DropdownAddView extends GetView<TileStepperController> {
         ],
       ),
     );
-  }
-
-  // @ Builds option at index
-  _buildOptionWidget(List<Contact_SocialTile_Provider> options, int index) {
-    var item = options.elementAt(index);
-    return Row(children: [SonrIcon.social(IconType.Normal, item), Padding(padding: EdgeInsets.all(4)), Text(item.toString())]);
   }
 }
 

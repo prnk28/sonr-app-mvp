@@ -8,6 +8,9 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/media/camera_binding.dart';
+import 'modules/media/camera_view.dart';
+import 'modules/media/picker_sheet.dart';
+import 'modules/media/preview_view.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
@@ -36,6 +39,9 @@ class InitialBinding implements Bindings {
     Get.put(SonrOverlay());
     Get.put(SonrPositionedOverlay());
     Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
+    Get.put<CameraController>(CameraController(), permanent: true);
+    Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
+    Get.lazyPut<PreviewController>(() => PreviewController());
   }
 }
 

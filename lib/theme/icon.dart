@@ -295,19 +295,26 @@ class _SonrIconData {
   static const IconData iphone = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData gear = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData params = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData picture = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData sonr = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData screenshot = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData ok_circled = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData cancel_circled = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData help_circled = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData info_circled = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData panorama = IconData(0xe88c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData github = IconData(0xf09b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData doc_text = IconData(0xf0f6, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData github_alt = IconData(0xf113, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData youtube = IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData instagram = IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  // ignore: unused_field
   static const IconData file_audio = IconData(0xf1c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData paperPlane = IconData(0xf1d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData medium_fill = IconData(0xf23a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
