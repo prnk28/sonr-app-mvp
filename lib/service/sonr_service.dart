@@ -11,6 +11,7 @@ import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
 import 'sql_service.dart';
+export 'package:sonr_core/sonr_core.dart';
 
 class SonrService extends GetxService {
   // @ Set Properties
@@ -19,6 +20,7 @@ class SonrService extends GetxService {
   final peers = Map<String, Peer>().obs;
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
+  final direction = 0.0.obs;
 
   // @ Set References
   Node _node;
@@ -29,6 +31,7 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     FlutterCompass.events.listen((dir) {
+      direction(dir.headingForCameraMode);
       // Get Current Direction and Update Cubit
       if (connected.value) {
         // Update Direction

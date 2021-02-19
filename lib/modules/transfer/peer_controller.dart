@@ -19,7 +19,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Position_Proximity>();
 
   // References
-  final userDirection = 0.0.obs;
+  final RxDouble userDirection = Get.find<SonrService>().direction;
   var peer = Peer();
   int index;
 
@@ -34,10 +34,6 @@ class PeerController extends GetxController {
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
 
   PeerController() {
-    FlutterCompass.events.listen((dir) {
-      userDirection(dir.headingForCameraMode);
-    });
-
     // Listen to this peers updates
     Get.find<SonrService>().peers.listen((lob) {
       lob.forEach((id, value) {

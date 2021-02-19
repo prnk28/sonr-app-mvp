@@ -8,7 +8,7 @@ export 'media_screen.dart';
 class CameraBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<MediaScreenController>(MediaScreenController(), permanent: true);
+    Get.put<MediaController>(MediaController(), permanent: true);
     Get.put<CameraController>(CameraController(), permanent: true);
     Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
     Get.lazyPut<PreviewController>(() => PreviewController());

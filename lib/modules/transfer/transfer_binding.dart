@@ -7,6 +7,6 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.create<PeerController>(() => PeerController());
-    Get.put<TransferController>(TransferController());
+    Get.put<TransferController>(TransferController(), permanent: true);
   }
 }

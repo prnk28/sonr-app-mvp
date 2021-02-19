@@ -1,12 +1,10 @@
-import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/modules/media/camera_binding.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_core/sonr_core.dart';
+
 
 // ** MediaPicker Sheet View ** //
 class PickerSheet extends GetView<MediaPickerController> {
@@ -35,7 +33,7 @@ class PickerSheet extends GetView<MediaPickerController> {
                           })),
 
                       // Top Right Confirm Button
-                      SonrButton.circle(onPressed: () => controller.confirm(), icon: SonrIcon.accept),
+                      SonrButton.circle(onPressed: () => MediaController.confirmSelection(), icon: SonrIcon.accept),
                     ])),
 
             // @ Grid View
@@ -128,10 +126,6 @@ class MediaPickerController extends GetxController {
 
   static RxInt get selectedIndex => Get.find<MediaPickerController>().currentIndex;
 
-  // References
-  Media _selectedMedia;
-  Uint8List _selectedThumbnail;
-
   // ^ Initial Method ^ //
   void onInit() {
     retreiveAlbums();
@@ -145,26 +139,7 @@ class MediaPickerController extends GetxController {
 
   // ^ Retreive Albums ^ //
   retreiveAlbums() async {
-    // Get Collections
-    List<MediaCollection> collections = await MediaGallery.listMediaCollections(
-      mediaTypes: [MediaType.image, MediaType.video],
-    );
 
-    allCollections(collections);
-
-    // List Collections
-    collections.forEach((element) {
-      // Set Has Gallery
-      if (element.count > 0) {
-        hasGallery(true);
-      }
-
-      // Check for Master Collection
-      if (element.isAllCollection) {
-        // Assign Values
-        collection(element);
-      }
-    });
 
     if (collection.value.count > 0) {
       // Get Images
@@ -222,27 +197,7 @@ class MediaPickerController extends GetxController {
 
   // ^ Set Media from Picker
   static select(int index, Media media, Uint8List thumb) {
-    Get.find<MediaPickerController>()._selectedMedia = media;
-    Get.find<MediaPickerController>()._selectedThumbnail = thumb;
+    MediaController.selectMedia(index, media, thumb);
     Get.find<MediaPickerController>().currentIndex(index);
-  }
-
-  // ^ Process Selected File ^ //
-  confirm() async {
-    // Validate File
-    if (_selectedMedia != null) {
-      // Retreive File and Process
-      File mediaFile = await _selectedMedia.getFile();
-
-      // Check for Thumbnail
-      if (_selectedThumbnail != null) {
-        Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail);
-      } else {
-        Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path);
-      }
-
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    }
   }
 }

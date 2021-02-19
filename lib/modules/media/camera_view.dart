@@ -46,7 +46,7 @@ class CameraView extends GetView<CameraController> {
           child: CameraAwesome(
             onPermissionsResult: (bool result) {},
             onCameraStarted: () {
-              MediaScreenController.ready();
+              MediaController.ready();
             },
             onOrientationChanged: (CameraOrientations newOrientation) {},
             sensor: controller.sensor,
@@ -235,7 +235,7 @@ class CameraController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(path);
-    MediaScreenController.setPhoto(path);
+    MediaController.setPhoto(path);
   }
 
   // ^ Captures Video ^ //
@@ -244,7 +244,7 @@ class CameraController extends GetxController {
     var temp = await getTemporaryDirectory();
     var videoDir = await Directory('${temp.path}/videos').create(recursive: true);
     var path = '${videoDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
-    MediaScreenController.recording(path);
+    MediaController.recording(path);
 
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
@@ -271,7 +271,7 @@ class CameraController extends GetxController {
 
     // Update State
     captureMode.value = CaptureModes.PHOTO;
-    MediaScreenController.completeVideo(duration);
+    MediaController.completeVideo(duration);
   }
 
   // ^ Flip Camera ^ //

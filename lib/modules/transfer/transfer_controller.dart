@@ -20,7 +20,7 @@ class TransferController extends GetxController {
   final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
 
   // @ Direction Properties
-  final direction = 0.0.obs;
+  final RxDouble direction = Get.find<SonrService>().direction;
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
 
@@ -34,8 +34,7 @@ class TransferController extends GetxController {
   // ^ Controller Constructer ^
   TransferController() {
     // @ Update Direction
-    FlutterCompass.events.listen((dir) {
-      var newDir = dir.headingForCameraMode;
+    direction.listen((newDir) {
       // Update String Elements
       if ((direction.value - newDir).abs() > 6) {
         string(_directionString(newDir));
