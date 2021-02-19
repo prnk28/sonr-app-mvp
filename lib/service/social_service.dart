@@ -6,11 +6,14 @@ import 'package:sonr_app/data/model_search.dart';
 import 'package:sonr_app/data/social_medium.dart';
 import 'package:sonr_app/data/social_twitter.dart';
 import 'package:sonr_app/data/social_youtube.dart';
+import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
 
 // ** Handles SocialMedia ** //
 const K_FB_GRAPH = 'https://graph.facebook.com/v2.12/';
+
+enum SocialAuthType { Link, OAuth }
 
 class SocialMediaService extends GetxService {
   String _twitterBearer;
@@ -28,6 +31,20 @@ class SocialMediaService extends GetxService {
     _twitterSecret = result["twitterSecret"];
     _youtubeKey = result["youtubeKey"];
     return this;
+  }
+
+  // ** Return Current User Object **
+  static List<Contact_SocialTile_Provider> get options {
+    // Initialize
+    var options = <Contact_SocialTile_Provider>[];
+
+    // Iterate through All Options
+    Contact_SocialTile_Provider.values.forEach((provider) {
+      if (!UserService.socials.any((tile) => tile.provider == provider)) {
+        options.add(provider);
+      }
+    });
+    return options;
   }
 
   // * ------------------------ * //
@@ -48,7 +65,14 @@ class SocialMediaService extends GetxService {
         // TODO
         break;
       case Contact_SocialTile_Provider.Twitter:
-        result = QueryUsernameResult(query, prv, isPrivate, await getTwitterUser(query));
+        // Perform Request
+        final userResp = await get(TWITTER_API_USERS + query + TWITTER_FIELDS_USERS, headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $_twitterBearer',
+        });
+        
+        result = QueryUsernameResult(query, prv, isPrivate, TwitterUserModel.fromResponse(userResp));
         return result.isValid;
         break;
       case Contact_SocialTile_Provider.YouTube:
@@ -105,7 +129,7 @@ class SocialMediaService extends GetxService {
   }
 
   // ^ Retreive Profile/ Tweets ^ //
-  Future<TweetsModel> getTweets(String username) async {
+  Future<TwitterModel> getTwitter(String username) async {
     // Valid Status
     final tweetResp = await get(TWITTER_API_TWEETS + username + TWITTER_FIELDS_TWEETS, headers: {
       'Content-Type': 'application/json',
@@ -113,19 +137,6 @@ class SocialMediaService extends GetxService {
       'Authorization': 'Bearer $_twitterBearer',
     });
 
-    if (tweetResp.statusCode == 200) {
-      return TweetsModel.fromResponse(tweetResp.body);
-    }
-
-    // ! Invalid Code
-    else {
-      SonrSnack.error("Something went wrong");
-      return null;
-    }
-  }
-
-  // ^ Retreive Profile/ Tweets ^ //
-  Future<TwitterUserModel> getTwitterUser(String username) async {
     // Perform Request
     final userResp = await get(TWITTER_API_USERS + username + TWITTER_FIELDS_USERS, headers: {
       'Content-Type': 'application/json',
@@ -133,13 +144,10 @@ class SocialMediaService extends GetxService {
       'Authorization': 'Bearer $_twitterBearer',
     });
 
-    // Valid Status
-    if (userResp.statusCode == 200) {
-      return TwitterUserModel.fromResponse(userResp.body);
-    }
-
-    // ! Invalid Code
-    else {
+    // Check Response
+    if (tweetResp.statusCode == 200 && userResp.statusCode == 200) {
+      return TwitterModel.fromResponses(tweetResp.body, userResp.body);
+    } else {
       SonrSnack.error("Something went wrong");
       return null;
     }

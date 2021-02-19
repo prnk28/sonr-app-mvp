@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ** Edit Sheet View for Profile ** //
@@ -17,7 +17,7 @@ class EditDialog extends GetView<EditDialogController> {
     );
   }
 
-  factory EditDialog.nameField({@required Function(Map<String, String>) onSubmitted, @required String firstValue, @required String lastValue}) {
+  factory EditDialog.nameField({@required String firstValue, @required String lastValue}) {
     return EditDialog(
       EditType.NameField,
     );
@@ -75,7 +75,7 @@ class EditDialog extends GetView<EditDialogController> {
                     label: "First Name",
                     autoFocus: true,
                     textInputAction: TextInputAction.next,
-                    controller: TextEditingController(text: Get.find<ProfileController>().firstName.value),
+                    controller: TextEditingController(text: UserService.firstName.value),
                     value: controller.editFirstName.value,
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(lastNameFocus);
@@ -86,7 +86,7 @@ class EditDialog extends GetView<EditDialogController> {
                     label: "Last Name",
                     focusNode: lastNameFocus,
                     textInputAction: TextInputAction.next,
-                    controller: TextEditingController(text: Get.find<ProfileController>().lastName.value),
+                    controller: TextEditingController(text: UserService.lastName.value),
                     value: controller.editLastName.value,
                     onEditingComplete: () {
                       FocusScope.of(context).requestFocus(phoneFocus);
@@ -97,7 +97,7 @@ class EditDialog extends GetView<EditDialogController> {
                     label: "Phone",
                     focusNode: phoneFocus,
                     textInputAction: TextInputAction.done,
-                    controller: TextEditingController(text: Get.find<ProfileController>().phone.value),
+                    controller: TextEditingController(text: UserService.phone.value),
                     value: controller.editLastName.value,
                     onEditingComplete: () {
                       FocusScopeNode currentFocus = FocusScope.of(Get.context);
@@ -124,9 +124,9 @@ class EditDialogController extends GetxController {
   // ^ Initialize the Controller ^ //
   void onInit() async {
     // Get Initial Values
-    var firstInitial = Get.find<ProfileController>().firstName.value;
-    var lastInitial = Get.find<ProfileController>().lastName.value;
-    var phoneInitial = Get.find<ProfileController>().phone.value;
+    var firstInitial = UserService.firstName.value;
+    var lastInitial = UserService.lastName.value;
+    var phoneInitial = UserService.phone.value;
 
     // Set Values
     editFirstName(firstInitial);
@@ -138,10 +138,10 @@ class EditDialogController extends GetxController {
   // ^ Completed Editing ^ //
   void complete() {
     // Update Values in Profile Controller
-    Get.find<ProfileController>().firstName(editFirstName.value);
-    Get.find<ProfileController>().lastName(editLastName.value);
-    Get.find<ProfileController>().phone(editPhone.value);
-    Get.find<ProfileController>().saveChanges();
+    UserService.setFirstName(editFirstName.value);
+    UserService.setLastName(editLastName.value);
+    UserService.setPhone(editPhone.value);
+    UserService.saveChanges();
 
     // Close View
     SonrOverlay.back();

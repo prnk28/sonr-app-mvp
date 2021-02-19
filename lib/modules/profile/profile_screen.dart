@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_core/models/models.dart' hide Platform;
 import 'edit_dialog.dart';
-import 'social_tile.dart';
+import 'tile_item.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'tile_stepper.dart';
+import 'create_tile.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   @override
@@ -18,7 +19,7 @@ class ProfileScreen extends GetView<ProfileController> {
             child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
             style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
             onPressed: () {
-              Get.dialog(TileCreateStepper());
+              Get.dialog(CreateTileStepper());
             }),
         body: NeumorphicBackground(
             backendColor: Colors.transparent,
@@ -42,7 +43,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 SliverPadding(padding: EdgeInsets.all(14)),
 
                 // @ Builds List of Social Tile
-                Obx(() => SocialsGrid(controller.socials, controller.focusTileIndex.value)),
+                Obx(() => SocialsGrid(UserService.socials, controller.focusTileIndex.value)),
               ],
             )));
   }
@@ -120,18 +121,13 @@ class ContactHeader extends GetView<ProfileController> {
         onLongPress: () async {
           SonrOverlay.show(
             EditDialog.nameField(
-                onSubmitted: (map) {
-                  controller.firstName(map["firstName"]);
-                  controller.lastName(map["lastName"]);
-                  controller.saveChanges();
-                },
-                firstValue: controller.firstName.value,
-                lastValue: controller.lastName.value),
+                firstValue: UserService.firstName.value,
+                lastValue: UserService.lastName.value),
           );
           HapticFeedback.heavyImpact();
         },
         child:
-            Obx(() => SonrText.medium(controller.firstName.value + " " + controller.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24)));
+            Obx(() => SonrText.medium(UserService.firstName.value + " " + UserService.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24)));
   }
 }
 

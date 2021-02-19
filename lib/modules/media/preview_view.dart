@@ -4,10 +4,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_core/models/models.dart';
 import 'package:better_player/better_player.dart';
 
 class MediaPreviewView extends GetView<PreviewController> {

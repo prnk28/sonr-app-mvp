@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/service/media_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/social_service.dart';
@@ -25,6 +26,7 @@ initServices() async {
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SocialMediaService().init());
   await Get.putAsync(() => DeviceService().init());
+  await Get.putAsync(() => MediaService().init());
 }
 
 // ^ Initial Controller Bindings ^ //
@@ -76,13 +78,13 @@ class _AppState extends State<App> {
     // Listen to Device Start Status
     Get.find<DeviceService>().startStatus.listen((status) {
       switch (status) {
-        case StartStatus.Success:
+        case DeviceStatus.Success:
           Get.offNamed("/home");
           break;
-        case StartStatus.NoUser:
+        case DeviceStatus.NoUser:
           Get.offNamed("/register");
           break;
-        case StartStatus.NoLocation:
+        case DeviceStatus.NoLocation:
           SonrSnack.error("Location Permissions Required for Sonr");
           break;
       }

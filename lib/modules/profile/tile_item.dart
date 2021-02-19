@@ -1,14 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/data/social_medium.dart';
+import 'package:sonr_app/data/social_twitter.dart';
+import 'package:sonr_app/data/social_youtube.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
-import 'package:sonr_app/modules/social/medium_view.dart';
-import 'package:sonr_app/modules/social/twitter_view.dart';
-import 'package:sonr_app/modules/social/youtube_view.dart';
+import 'package:sonr_app/modules/profile/social_view.dart';
 import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-
-enum TileState { None, Dragging, Editing, Expanded }
 
 // ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {
@@ -17,17 +18,20 @@ class SocialTileItem extends GetWidget<TileController> {
   SocialTileItem(this.item, this.index);
   @override
   Widget build(BuildContext context) {
+    // Build View
     controller.initialize(item, index);
+
+    // Build View Controller
     return Stack(children: [
       // Draggable Aspect
       LongPressDraggable(
-          feedback: _buildView(controller.state.value == TileState.Editing, isDragging: true),
-          child: _buildView(controller.state.value == TileState.Editing),
+          feedback: _buildView(controller.isEditing.value, isDragging: true),
+          child: _buildView(controller.isEditing.value),
           data: item,
           childWhenDragging: Container(),
           onDragStarted: () {
             HapticFeedback.heavyImpact();
-            controller.state(TileState.Dragging);
+            controller.isDragging(true);
           }),
 
       DragTarget<Contact_SocialTile>(
@@ -36,16 +40,11 @@ class SocialTileItem extends GetWidget<TileController> {
         },
         // Only accept same tiles
         onWillAccept: (data) {
-          // if (data.type == this.item.type) {
           return true;
-          // } else {
-          //   return false;
-          // }
         },
         // Switch Index Positions with animation
         onAccept: (data) {
-          // Get Indexs
-          Get.find<ProfileController>().swapSocialTiles(item, data);
+          UserService.swapSocials(item, data);
         },
       ),
     ]);
@@ -71,61 +70,58 @@ class SocialTileItem extends GetWidget<TileController> {
         child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,
-          child: isDragging ? Icon(Icons.drag_indicator) : _setSocialView(),
+          child: isDragging ? Icon(Icons.drag_indicator) : SocialView(controller, item, index),
         ),
       ),
     );
   }
-
-  // ^ Builds Corresponding SocialView ^ //
-  Widget _setSocialView() {
-    // Medium Data
-    if (item.provider == Contact_SocialTile_Provider.Medium) {
-      return MediumView(item, index);
-    }
-    // Twitter Data
-    else if (item.provider == Contact_SocialTile_Provider.Twitter) {
-      return TwitterView(item, index);
-    }
-    // Youtube Data
-    else if (item.provider == Contact_SocialTile_Provider.YouTube) {
-      return YoutubeView(item, index);
-    }
-    return Container();
-  }
 }
 
 class TileController extends GetxController {
-  // Properties
-  final currentTile = Rx<Contact_SocialTile>();
-  final state = TileState.None.obs;
-
   // References
   int index;
-  bool _isEditing = false;
+  Contact_SocialTile tile;
+
+  // Properties
+  final isDragging = false.obs;
+  final isEditing = false.obs;
+  final isExpanded = false.obs;
+  final isFetched = false.obs;
+
+  // Social Media Properties
+  final medium = Rx<MediumModel>();
+  final twitter = Rx<TwitterModel>();
+  final youtube = Rx<YoutubeModel>();
 
   // ^ Create New Tile ^ //
   initialize(Contact_SocialTile value, int index) async {
     // Set Tile
-    currentTile(value);
+    tile = value;
     index = index;
+    fetchSocialData();
   }
 
-  // ^ Toggle Editing Mode ^ //
-  editTile() {
-    _isEditing = !_isEditing;
-    if (_isEditing) {
-      state(TileState.Editing);
-    } else {
-      currentTile(Contact_SocialTile());
-      state(TileState.None);
+  // ^ Fetch Data for Social Media ^ //
+  fetchSocialData() async {
+    // Medium Data
+    if (tile.provider == Contact_SocialTile_Provider.Medium) {
+      medium(await Get.find<SocialMediaService>().getMedium(tile.username));
+      isFetched(true);
     }
-    update(["SocialTile"]);
+    // Twitter Data
+    else if (tile.provider == Contact_SocialTile_Provider.Twitter) {
+      twitter(await Get.find<SocialMediaService>().getTwitter(tile.username));
+      isFetched(true);
+    }
+    // Youtube Data
+    else if (tile.provider == Contact_SocialTile_Provider.YouTube) {
+      youtube(await Get.find<SocialMediaService>().getYoutube(tile.links.postLink));
+      isFetched(true);
+    }
   }
 
   // ^ Removes Current Tile ^ //
   deleteTile() {
-    // Remove Tile from Contact and Save
-    Get.find<ProfileController>().removeSocialTile(currentTile.value);
+    UserService.deleteSocial(tile);
   }
 }

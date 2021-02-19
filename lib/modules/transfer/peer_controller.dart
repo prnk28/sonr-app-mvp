@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'dart:ui';
 import 'package:flutter/services.dart';
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -19,7 +18,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Position_Proximity>();
 
   // References
-  final RxDouble userDirection = Get.find<SonrService>().direction;
+  final RxDouble userDirection = Get.find<DeviceService>().direction;
   var peer = Peer();
   int index;
 

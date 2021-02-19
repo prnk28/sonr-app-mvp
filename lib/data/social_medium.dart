@@ -1,14 +1,17 @@
 import 'dart:convert';
 
 // ^ API Endpoints ^ //
-const MEDIUM_API_FEED =
-    'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@';
+const MEDIUM_API_FEED = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@';
 
 // ^ Model ^ //
 class MediumModel {
   String status;
   Feed feed;
   List<Post> posts;
+
+  bool get hasFeed => feed != null;
+  bool get hasPosts => posts != null;
+  int get count => posts != null ? posts.length : -1;
 
   MediumModel({this.status, this.feed, this.posts});
 
@@ -45,13 +48,7 @@ class Feed {
   String description;
   String image;
 
-  Feed(
-      {this.url,
-      this.title,
-      this.link,
-      this.author,
-      this.description,
-      this.image});
+  Feed({this.url, this.title, this.link, this.author, this.description, this.image});
 
   Feed.fromJson(Map<String, dynamic> json) {
     url = json['url'];
@@ -85,16 +82,7 @@ class Post {
   String content;
   List<String> categories;
 
-  Post(
-      {this.title,
-      this.pubDate,
-      this.link,
-      this.guid,
-      this.author,
-      this.thumbnail,
-      this.description,
-      this.content,
-      this.categories});
+  Post({this.title, this.pubDate, this.link, this.guid, this.author, this.thumbnail, this.description, this.content, this.categories});
 
   Post.fromJson(Map<String, dynamic> json) {
     title = json['title'];

@@ -315,12 +315,10 @@ class SonrAnimatedWaveIcon extends HookWidget {
   final double size;
   final Duration duration;
   final Function onCompleted;
-
-  // References
-  final FlutterGradientNames gradientName = SonrColor.randomGradient();
+  final FlutterGradientNames gradient;
 
   // Constructer
-  SonrAnimatedWaveIcon(this.iconData, {this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
+  SonrAnimatedWaveIcon(this.iconData, {this.gradient, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
       : super(key: GlobalKey());
 
   @override
@@ -346,7 +344,7 @@ class SonrAnimatedWaveIcon extends HookWidget {
                   iconKey: iconKey,
                   waveAnimation: controller,
                   percent: controller.value,
-                  gradient: FlutterGradients.findByName(gradientName),
+                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : FlutterGradients.findByName(SonrColor.randomGradient()),
                   boxHeight: size,
                 ),
               );

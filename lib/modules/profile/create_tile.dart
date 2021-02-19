@@ -6,10 +6,8 @@ import 'package:sonr_app/service/social_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-enum SocialAuthType { Link, OAuth }
-
 // ** Builds Add Social Form Dialog ** //
-class TileCreateStepper extends GetView<TileStepperController> {
+class CreateTileStepper extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -72,21 +70,13 @@ class TileCreateStepper extends GetView<TileStepperController> {
 }
 
 // ^ Step 1 Select Provider ^ //
-class _DropdownAddView extends GetView<TileStepperController> {
+class _DropdownAddView extends GetView<ProfileController> {
   // Build View As Stateless
   @override
   Widget build(BuildContext context) {
-    // Initialize List of Options
-    var options = <Contact_SocialTile_Provider>[];
-
-    // Iterate through All Options
-    Contact_SocialTile_Provider.values.forEach((provider) {
-      if (!Get.find<ProfileController>().socials.any((tile) => tile.provider == provider)) {
-        options.add(provider);
-      }
-    });
-
     // Build View
+    var options = SocialMediaService.options;
+
     return Container(
       margin: EdgeInsets.only(right: 4),
       child: Column(
@@ -156,7 +146,7 @@ class _DropdownAddView extends GetView<TileStepperController> {
 }
 
 // ^ Step 2 Connect to the provider API ^ //
-class _SetInfoView extends GetView<TileStepperController> {
+class _SetInfoView extends GetView<ProfileController> {
   _SetInfoView();
 
   @override
@@ -222,7 +212,7 @@ class _SetInfoView extends GetView<TileStepperController> {
 }
 
 // ^ Step 3 Set the Social Tile type ^ //
-class _SetTypeView extends GetView<TileStepperController> {
+class _SetTypeView extends GetView<ProfileController> {
   const _SetTypeView({Key key}) : super(key: key);
 
   @override
@@ -308,145 +298,10 @@ class _InfoText extends StatelessWidget {
   }
 }
 
-// ** Tile Creation Controller for Stepper ** //
-class TileStepperController extends GetxController {
-  // Properties
-  final username = "".obs;
-  final isPrivate = false.obs;
-  final hasSetProvider = false.obs;
-  final provider = Rx<Contact_SocialTile_Provider>();
-  final type = Rx<Contact_SocialTile_Type>();
-  final radioGroupValue = "".obs;
-
-  // References
-  final step = 0.obs;
-  final pageController = PageController();
-
-  // ^ Add Social Tile Move to Next Step ^ //
-  nextStep() async {
-    // @ Step 2
-    if (step.value == 0) {
-      // Move to Next Step
-      if (provider.value != null && hasSetProvider.value) {
-        step(1);
-        pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
-      } else {
-        // Display Error Snackbar
-        SonrSnack.missing("Select a provider first");
-      }
-    }
-    // @ Step 3
-    else if (step.value == 1) {
-      // Update State
-      if (username.value != "") {
-        if (await Get.find<SocialMediaService>().validate(provider.value, username.value, isPrivate.value)) {
-          step(2);
-          pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
-          FocusScopeNode currentFocus = FocusScope.of(Get.context);
-          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-            FocusManager.instance.primaryFocus.unfocus();
-          }
-        }
-      } else {
-        // Display Error Snackbar
-        SonrSnack.missing("Add your username or Link your account");
-      }
-    }
-  }
-
-  // ^ Add Social Tile Move to Next Step ^ //
-  previousStep() {
-    // First Step
-    if (step.value == 0) {
-      step(0);
-    }
-    // Step 2
-    else if (step.value == 1) {
-      step(0);
-      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
-    }
-    // Step 3
-    else if (step.value == 2) {
-      step(1);
-      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
-    }
-  }
-
-  // ^ Finish and Save new Tile ^ //
-  saveTile() {
-    // Validate
-    if (type.value != null && step.value == 2) {
-      // Set Acquired Data
-      var position = Contact_SocialTile_Position(index: Get.find<ProfileController>().socials.length);
-      var links = Get.find<SocialMediaService>().getLinks(provider.value, username.value);
-
-      // Create Tile from Values
-      var tile = Contact_SocialTile(
-        username: username.value,
-        isPrivate: isPrivate.value,
-        provider: provider.value,
-        type: type.value,
-        links: links,
-        position: position,
-      );
-
-      // Save to Profile
-      reset();
-      Get.find<ProfileController>().saveSocialTile(tile);
-      Get.back(closeOverlays: true);
-    } else {
-      // Display Error Snackbar
-      SonrSnack.missing("Pick a Tile Type", isLast: true);
-    }
-  }
-
-  // ^ Resets current info ^
-  reset() {
-    username("");
-    isPrivate(false);
-    hasSetProvider(false);
-    provider.nil();
-    type.nil();
-    radioGroupValue("");
-    step(0);
-  }
-
-  // ^ Determine Auth Type ^
-  getAuthType() {
-    if (!isPrivate.value) {
-      return SocialAuthType.Link;
-    } else {
-      // Link Item
-      if (provider.value == Contact_SocialTile_Provider.Medium ||
-          provider.value == Contact_SocialTile_Provider.Spotify ||
-          provider.value == Contact_SocialTile_Provider.YouTube) {
-        return SocialAuthType.Link;
-      }
-      // OAuth Item
-      else {
-        return SocialAuthType.OAuth;
-      }
-    }
-  }
-
-  // ^ Helper method to judge Privacy^ //
-  bool doesProviderAllowVisibility(Contact_SocialTile_Provider provider) {
-    return (provider == Contact_SocialTile_Provider.Twitter ||
-        provider == Contact_SocialTile_Provider.Spotify ||
-        provider == Contact_SocialTile_Provider.TikTok ||
-        provider == Contact_SocialTile_Provider.YouTube);
-  }
-
-  // ^ Helper to Display Tile Options ^ //
-  bool doesProviderAllowFeed(Contact_SocialTile_Provider provider) {
-    return (provider == Contact_SocialTile_Provider.Twitter || provider == Contact_SocialTile_Provider.Medium);
-  }
-}
-
 // ** Returns View Details by Step ** //
 class _TileStepDetails {
   final int step;
-  final TileStepperController controller;
+  final ProfileController controller;
 
   _TileStepDetails({@required this.step, @required this.controller});
 

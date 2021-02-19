@@ -1,8 +1,7 @@
 import 'dart:math';
-
-import 'package:flutter_compass/flutter_compass.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/transfer/peer_widget.dart';
+import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -20,7 +19,7 @@ class TransferController extends GetxController {
   final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
 
   // @ Direction Properties
-  final RxDouble direction = Get.find<SonrService>().direction;
+  final RxDouble direction = Get.find<DeviceService>().direction;
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
 

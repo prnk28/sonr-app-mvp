@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
-import 'package:flutter_compass/flutter_compass.dart';
-import 'package:geolocator/geolocator.dart' as Pkg;
+import 'package:geolocator/geolocator.dart' as Geo;
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/model_user.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
+import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/widgets/overlay.dart';
-import 'package:sonr_core/sonr_core.dart' hide User;
-import 'device_service.dart';
+import 'package:sonr_core/sonr_core.dart';
 import 'media_service.dart';
 import 'sql_service.dart';
 export 'package:sonr_core/sonr_core.dart';
@@ -21,7 +19,6 @@ class SonrService extends GetxService {
   final peers = Map<String, Peer>().obs;
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
-  final direction = 0.0.obs;
 
   // @ Set References
   Node _node;
@@ -31,20 +28,18 @@ class SonrService extends GetxService {
 
   // ^ Updates Node^ //
   SonrService() {
-    FlutterCompass.events.listen((dir) {
-      direction(dir.headingForCameraMode);
-      // Get Current Direction and Update Cubit
+    Get.find<DeviceService>().direction.listen((dir) {
       if (connected.value) {
         // Update Direction
-        _node.update(dir.headingForCameraMode);
+        _node.update(dir);
       }
     });
   }
 
   // ^ Initialize Service Method ^ //
-  Future<SonrService> init(Pkg.Position pos, User user) async {
+  Future<SonrService> init(Geo.Position pos, User user) async {
     // Create Worker
-    _node = await SonrCore.initialize(pos.latitude, pos.longitude, user.username, user.contact);
+    _node = await SonrCore.initialize(pos.latitude, pos.longitude, user.profile.username, user.contact);
 
     // Assign Node Callbacks
     _node.assignCallback(CallbackEvent.Connected, _handleConnected);
@@ -64,6 +59,11 @@ class SonrService extends GetxService {
   // ***********************
   // ******* Events ********
   // ***********************
+  // ^ Sets Contact for Node ^
+  void setContact(Contact contact) async {
+    await _node.setContact(contact);
+  }
+
   // ^ Process-File Event ^
   void setPayload(Payload type,
       {String path, String url, bool hasThumbnail = false, int duration = -1, String thumbPath = "", Uint8List thumbnailData}) async {

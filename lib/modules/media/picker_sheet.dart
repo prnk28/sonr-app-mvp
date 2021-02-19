@@ -1,10 +1,11 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
+import 'package:sonr_app/service/media_service.dart';
+import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:media_gallery/media_gallery.dart';
-
 
 // ** MediaPicker Sheet View ** //
 class PickerSheet extends GetView<MediaPickerController> {
@@ -15,54 +16,61 @@ class PickerSheet extends GetView<MediaPickerController> {
       backendColor: Colors.transparent,
       child: Neumorphic(
           style: NeumorphicStyle(color: SonrColor.base),
-          child: Column(children: [
-            // @ Header Buttons
-            Container(
-                height: kToolbarHeight + 16 * 2,
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      //  Top Left Close/Cancel Button
-                      SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
+          child: Obx(() {
+            return Column(children: [
+              // @ Header Buttons
+              Container(
+                  height: kToolbarHeight + 16 * 2,
+                  child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        //  Top Left Close/Cancel Button
+                        SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
-                      // Drop Down
-                      Obx(() => SonrDropdown.albums(controller.allCollections.value, width: Get.width - 200, onChanged: (index) {
-                            controller.refreshMedia(controller.allCollections.value[index]);
-                          })),
+                        // Drop Down
+                        Obx(() {
+                          if (controller.loaded.value) {
+                            return SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, onChanged: (index) {
+                              controller.setMediaCollection(MediaService.gallery[index]);
+                            });
+                          }
+                          return NeumorphicProgressIndeterminate();
+                        }),
 
-                      // Top Right Confirm Button
-                      SonrButton.circle(onPressed: () => MediaController.confirmSelection(), icon: SonrIcon.accept),
-                    ])),
+                        // Top Right Confirm Button
+                        SonrButton.circle(onPressed: () => MediaController.confirmSelection(), icon: SonrIcon.accept),
+                      ])),
 
-            // @ Grid View
-            Obx(() {
-              if (controller.loaded.value) {
-                return Container(
-                  width: Get.width - 10,
-                  height: 368,
-                  child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                      itemCount: controller.allMedias.length,
-                      itemBuilder: (context, index) {
-                        return _SonrMediaButton(controller.allMedias[index], index);
-                      }),
-                );
-              } else {
+              // @ Grid View
+              Obx(() {
+                if (controller.loaded.value) {
+                  return Container(
+                    width: Get.width - 10,
+                    height: 368,
+                    child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                        itemCount: controller.currentMedia.length,
+                        itemBuilder: (context, index) {
+                          return _SonrMediaButton(controller.currentMedia[index], index);
+                        }),
+                  );
+                }
                 return NeumorphicProgressIndeterminate();
-              }
-            }),
-          ])),
+              }),
+            ]);
+          })),
     );
   }
 }
 
 // ** Widget that Creates Button from Media and Index ** //
-class _SonrMediaButton extends StatelessWidget {
+class _SonrMediaButton extends GetView<MediaPickerController> {
   final Rx<Uint8List> thumbnail = Uint8List(0).obs;
   final Media media;
   final int index;
+  final isSelected = false.obs;
 
   // References
   final defaultStyle = NeumorphicStyle(intensity: 0.85, color: SonrColor.baseWhite);
@@ -71,41 +79,44 @@ class _SonrMediaButton extends StatelessWidget {
   _SonrMediaButton(this.media, this.index, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // Get Thumbnail
     _getThumbnail();
+
+    // Set Is Pressed Value
+    controller.currentIndex.listen((value) {
+      isSelected(value == index);
+    });
+
+    // Build View
     return ObxValue(
         (RxBool isPressed) => NeumorphicButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                isPressed(!isPressed.value);
-                MediaPickerController.select(index, media, thumbnail.value);
-              },
-              style: isPressed.value ? pressedStyle : defaultStyle,
-              child: Stack(
-                alignment: Alignment.center,
-                fit: StackFit.expand,
-                children: [
-                  Obx(() {
-                    if (thumbnail.value.length > 0) {
-                      return DecoratedBox(
-                          child: Image.memory(Uint8List.fromList(thumbnail.value), fit: BoxFit.cover),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)));
-                    } else {
-                      return CircularProgressIndicator();
-                    }
-                  }),
-                  media.mediaType == MediaType.video
-                      ? SonrIcon.gradient(SonrIcon.getMediaTypeData(media.mediaType), FlutterGradientNames.glassWater, size: 28)
-                      : const SizedBox(),
-                  isPressed.value
-                      ? Container(
-                          alignment: Alignment.bottomRight,
-                          padding: EdgeInsets.only(right: 4, bottom: 4),
-                          child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
-                      : Container()
-                ],
-              ),
-            ),
-        (MediaPickerController.selectedIndex.value == index).obs);
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              isPressed(!isPressed.value);
+              MediaPickerController.select(index, media, thumbnail.value);
+            },
+            style: isPressed.value ? pressedStyle : defaultStyle,
+            child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
+              Obx(() {
+                if (thumbnail.value.length > 0) {
+                  return DecoratedBox(
+                      child: Image.memory(Uint8List.fromList(thumbnail.value), fit: BoxFit.cover),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)));
+                } else {
+                  return SonrIcon.payload(IconType.Neumorphic, Payload.MEDIA);
+                }
+              }),
+              media.mediaType == MediaType.video
+                  ? SonrIcon.gradient(SonrIcon.getMediaTypeData(media.mediaType), FlutterGradientNames.glassWater, size: 28)
+                  : const SizedBox(),
+              isPressed.value
+                  ? Container(
+                      alignment: Alignment.bottomRight,
+                      padding: EdgeInsets.only(right: 4, bottom: 4),
+                      child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
+                  : Container()
+            ])),
+        isSelected);
   }
 
   _getThumbnail() async {
@@ -117,18 +128,17 @@ class _SonrMediaButton extends StatelessWidget {
 // ** Media Picker Controller ** //
 class MediaPickerController extends GetxController {
   // Properties
-  final allCollections = Rx<List<MediaCollection>>();
-  final allMedias = <Media>[].obs;
+  final currentMedia = <Media>[].obs;
   final collection = Rx<MediaCollection>();
   final currentIndex = (-1).obs;
-  final hasGallery = false.obs;
   final loaded = false.obs;
 
   static RxInt get selectedIndex => Get.find<MediaPickerController>().currentIndex;
 
   // ^ Initial Method ^ //
   void onInit() {
-    retreiveAlbums();
+    currentMedia(MediaService.totalMedia);
+    loaded(true);
     super.onInit();
   }
 
@@ -137,61 +147,17 @@ class MediaPickerController extends GetxController {
     return await media.getThumbnail(width: width, height: height, highQuality: highQuality);
   }
 
-  // ^ Retreive Albums ^ //
-  retreiveAlbums() async {
-
-
-    if (collection.value.count > 0) {
-      // Get Images
-      final MediaPage imagePage = await collection.value.getMedias(
-        mediaType: MediaType.image,
-        take: 500,
-      );
-
-      // Get Videos
-      final MediaPage videoPage = await collection.value.getMedias(
-        mediaType: MediaType.video,
-        take: 500,
-      );
-
-      // Combine Media
-      final List<Media> combined = [
-        ...imagePage.items,
-        ...videoPage.items,
-      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
-
-      // Set All Media
-      allMedias.assignAll(combined);
-    }
-    loaded(true);
-  }
-
   // ^ Method Updates the Current Media Collection ^ //
-  refreshMedia(MediaCollection updatedCollection) async {
-    // Reset Loaded
+  setMediaCollection(MediaCollection updatedCollection) async {
     loaded(false);
+    // Reset Loaded
     collection(updatedCollection);
 
-    // Get Images
-    final MediaPage imagePage = await collection.value.getMedias(
-      mediaType: MediaType.image,
-      take: 500,
-    );
-
-    // Get Videos
-    final MediaPage videoPage = await collection.value.getMedias(
-      mediaType: MediaType.video,
-      take: 500,
-    );
-
-    // Combine Media
-    final List<Media> combined = [
-      ...imagePage.items,
-      ...videoPage.items,
-    ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+    // Get Media
+    var result = await MediaService.getMediaFromCollection(updatedCollection);
 
     // Set All Media
-    allMedias.assignAll(combined);
+    currentMedia.assignAll(result);
     loaded(true);
   }
 

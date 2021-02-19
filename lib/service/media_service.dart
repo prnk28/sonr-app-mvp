@@ -1,12 +1,11 @@
 import 'dart:async';
-
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'sonr_service.dart';
+import 'user_service.dart';
 
 enum GalleryState { Initial, Loading, Ready }
 
@@ -14,10 +13,10 @@ class MediaService extends GetxService {
   // Reactive Instances
   final _gallery = <MediaCollection>[].obs;
   final _hasGallery = false.obs;
-  final _state = Rx<GalleryState>(GalleryState.Initial);
-  final _totalMedia = <Media>[].obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
+  final _state = Rx<GalleryState>(GalleryState.Initial);
+  final _totalMedia = <Media>[].obs;
 
   // Properties
   static RxList<MediaCollection> get gallery => Get.find<MediaService>()._gallery;
@@ -33,7 +32,7 @@ class MediaService extends GetxService {
   MediaService() {
     // @ Listen to Incoming File
     _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> data) {
-      if (!Get.isBottomSheetOpen && Get.find<DeviceService>().hasUser.value) {
+      if (!Get.isBottomSheetOpen && UserService.exists.value) {
         Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.dialogBackground, isDismissible: false);
       }
     }, onError: (err) {
@@ -42,7 +41,7 @@ class MediaService extends GetxService {
 
     // @ Listen to Incoming Text
     _externalTextStream = ReceiveSharingIntent.getTextStream().listen((String text) {
-      if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && Get.find<DeviceService>().hasUser.value) {
+      if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
         Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.dialogBackground, isDismissible: false);
       }
     }, onError: (err) {
@@ -184,7 +183,7 @@ class MediaService extends GetxService {
   }
 
   // ^ Saves Photo to Gallery ^ //
-  static Future saveCapture(String path, bool isVideo) async {
+  static Future<bool> saveCapture(String path, bool isVideo) async {
     if (isVideo) {
       // Save Image to Gallery
       var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
@@ -193,12 +192,14 @@ class MediaService extends GetxService {
       if (result) {
         SonrSnack.error("Unable to save Captured Photo to your Gallery");
       }
+      return result;
     } else {
       // Save Image to Gallery
       var result = await GallerySaver.saveImage(path, albumName: "Sonr");
       if (!result) {
         SonrSnack.error("Unable to save Captured Video to your Gallery");
       }
+      return result;
     }
   }
 
