@@ -27,7 +27,7 @@ class PickerSheet extends GetView<MediaPickerController> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       //  Top Left Close/Cancel Button
-                      SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
+                      SonrButton.circle(onPressed: () => Get.back(closeOverlays: true), icon: SonrIcon.close),
 
                       // Drop Down
                       Obx(() => SonrDropdown.albums(controller.allCollections.value, width: Get.width - 200, onChanged: (index) {
@@ -233,7 +233,13 @@ class MediaPickerController extends GetxController {
     if (_selectedMedia != null) {
       // Retreive File and Process
       File mediaFile = await _selectedMedia.getFile();
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail);
+
+      // Check for Thumbnail
+      if (_selectedThumbnail != null) {
+        Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path, thumbnailData: _selectedThumbnail);
+      } else {
+        Get.find<SonrService>().setPayload(Payload.MEDIA, path: mediaFile.path);
+      }
 
       // Go to Transfer
       Get.offNamed("/transfer");

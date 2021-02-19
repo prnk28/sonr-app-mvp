@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:sonr_app/modules/media/camera_binding.dart';
 import 'package:video_player/video_player.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -142,6 +143,7 @@ class PreviewController extends GetxController {
     isVideo(false);
     _photoCapturePath = "";
     _videoCapturePath = "";
+    MediaScreenController.ready();
   }
 
   // ^ Set Initial Video Path ^ //

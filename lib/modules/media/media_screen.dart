@@ -10,15 +10,13 @@ enum MediaScreenState { Default, Ready, Loading, Recording, Captured }
 class MediaScreen extends GetView<MediaScreenController> {
   @override
   Widget build(BuildContext context) {
-    //return Obx(() {
-    // if (controller.state.value == CameraScreenState.Default) {
-    //   return SonrAnimatedWaveIcon(Icons.camera_alt_outlined);
-    // } else if (controller.state.value == CameraScreenState.Captured) {
-    //   return MediaPreviewView();
-    // } else {
-    return CameraView();
-    //}
-    //});
+    return Obx(() {
+      if (controller.state.value == MediaScreenState.Captured) {
+        return MediaPreviewView();
+      } else {
+        return CameraView();
+      }
+    });
   }
 }
 

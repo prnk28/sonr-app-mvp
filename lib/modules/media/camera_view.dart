@@ -161,10 +161,14 @@ class _CaptureButton extends GetView<CameraController> {
                     controller.capturePhoto();
                   },
                   onLongPressStart: (LongPressStartDetails tapUpDetails) {
-                    controller.startCaptureVideo();
+                    if (GetPlatform.isIOS) {
+                      controller.startCaptureVideo();
+                    }
                   },
                   onLongPressEnd: (LongPressEndDetails tapUpDetails) {
-                    controller.stopCaptureVideo();
+                    if (GetPlatform.isIOS) {
+                      controller.stopCaptureVideo();
+                    }
                   },
                   child: Obx(
                     () => Neumorphic(

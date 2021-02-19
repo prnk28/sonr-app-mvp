@@ -64,7 +64,7 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NeumorphicTheme(
-        themeMode: ThemeMode.system, //or dark / system
+        themeMode: ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
           baseColor: Color.fromRGBO(239, 238, 238, 1.0),
           accentColor: Colors.green,
