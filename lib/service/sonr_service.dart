@@ -10,6 +10,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart' hide User;
 import 'device_service.dart';
+import 'media_service.dart';
 import 'sql_service.dart';
 export 'package:sonr_core/sonr_core.dart';
 
@@ -211,7 +212,7 @@ class SonrService extends GetxService {
       HapticFeedback.heavyImpact();
 
       // Save Card to Gallery
-      data.hasExported = await Get.find<DeviceService>().saveMediaFromCard(data);
+      data.hasExported = await MediaService.saveTransfer(data);
 
       // Store In SQL
       Get.find<SQLService>().storeCard(data);

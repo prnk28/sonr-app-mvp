@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/card/card_controller.dart';
-import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/media_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'home_controller.dart';
@@ -11,7 +11,7 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     // Check for Initial Media after connected
-    Get.find<DeviceService>().checkInitialShare();
+    MediaService.checkInitialShare();
 
     return SonrScaffold.appBarLeadingAction(
         resizeToAvoidBottomPadding: false,

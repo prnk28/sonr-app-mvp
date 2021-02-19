@@ -70,6 +70,13 @@ class MediaService extends GetxService {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    _externalMediaStream.cancel();
+    _externalTextStream.cancel();
+    super.onClose();
+  }
+
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
     // Get Collections

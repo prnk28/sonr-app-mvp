@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/media_service.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -108,11 +109,11 @@ class MediaController extends GetxController {
     // @ Check For Video
     if (isVideo) {
       // Save Video
-      Get.find<DeviceService>().saveCapture(videoPath, isVideo);
+      MediaService.saveCapture(videoPath, isVideo);
       Get.find<SonrService>().setPayload(Payload.MEDIA, path: videoPath);
     } else {
       // Save Photo
-      Get.find<DeviceService>().saveCapture(photoPath, isVideo);
+      MediaService.saveCapture(photoPath, isVideo);
       Get.find<SonrService>().setPayload(Payload.MEDIA, path: photoPath);
     }
 

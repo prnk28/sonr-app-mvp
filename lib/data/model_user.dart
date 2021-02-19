@@ -10,10 +10,7 @@ class User {
   final String username;
   Contact contact;
   List<SettingsItem> settings = <SettingsItem>[];
-
-  // Get User Position
-  Future<Pkg.Position> get position => Pkg.Geolocator.getCurrentPosition(desiredAccuracy: Pkg.LocationAccuracy.high);
-
+  
   // Default Constructer
   User(this.contact, this.username, {this.settings});
 
