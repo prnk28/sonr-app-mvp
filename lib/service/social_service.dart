@@ -69,7 +69,7 @@ class SocialMediaService extends GetxService {
           'Authorization': 'Bearer $_twitterBearer',
         });
 
-        result = QueryUsernameResult(query, prv, isPrivate, TwitterUserModel.fromResponse(userResp));
+        result = QueryUsernameResult(query, prv, isPrivate, TwitterUserModel.fromResponse(userResp.body));
         return result.isValid;
         break;
       case Contact_SocialTile_Provider.YouTube:

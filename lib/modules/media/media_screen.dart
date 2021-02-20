@@ -1,13 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:get/get.dart';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_app/service/media_service.dart';
-import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
-
 import 'camera_view.dart';
 import 'preview_view.dart';
 

@@ -48,7 +48,7 @@ class SocialTileItem extends GetWidget<TileController> {
     // Theming View with Drag
     return GestureDetector(
       onTap: () {
-        Get.find<ProfileController>().toggleExpand(item);
+        controller.toggleExpand(index);
         HapticFeedback.lightImpact();
       },
       onDoubleTap: () {
@@ -71,10 +71,6 @@ class SocialTileItem extends GetWidget<TileController> {
 }
 
 class TileController extends GetxController {
-  // References
-  int index;
-  Contact_SocialTile tile;
-
   // Properties
   final isDragging = false.obs;
   final isEditing = false.obs;
@@ -87,15 +83,7 @@ class TileController extends GetxController {
   final youtube = Rx<YoutubeModel>();
 
   // ^ Create New Tile ^ //
-  initialize(Contact_SocialTile value, int index) async {
-    // Set Tile
-    tile = value;
-    index = index;
-    fetchSocialData();
-  }
-
-  // ^ Fetch Data for Social Media ^ //
-  fetchSocialData() async {
+  initialize(Contact_SocialTile tile, int i) async {
     // Medium Data
     if (tile.provider == Contact_SocialTile_Provider.Medium) {
       medium(await Get.find<SocialMediaService>().getMedium(tile.username));
@@ -114,7 +102,13 @@ class TileController extends GetxController {
   }
 
   // ^ Removes Current Tile ^ //
-  deleteTile() {
+  deleteTile(Contact_SocialTile tile) {
     UserService.deleteSocial(tile);
+  }
+
+  // ^ Toggles Between Expanded and Normal ^ //
+  toggleExpand(int index) {
+    isExpanded(!isExpanded.value);
+    Get.find<ProfileController>().toggleExpand(index, isExpanded.value);
   }
 }

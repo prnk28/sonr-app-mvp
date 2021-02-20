@@ -221,49 +221,16 @@ class _SetTypeView extends GetView<ProfileController> {
         _InfoText(index: 3, text: "Set your Tile's type"),
         Divider(),
         // @ Toggle Buttons for Widget Size
-        Container(
-            height: 85,
-            width: Get.width,
-            child: Obx(() => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    // Icon Option
-                    SonrAnimatedRadioItem(ArtboardType.Icon, "Link", groupValue: controller.radioGroupValue.value, onChanged: (value) {
-                      // Update Group Value
-                      controller.radioGroupValue(value);
-                      controller.radioGroupValue.refresh();
-
-                      // Set Type
-                      var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
-                      controller.type(type);
-                    }),
-
-                    // Showcase Option
-                    SonrAnimatedRadioItem(ArtboardType.Gallery, "Post", groupValue: controller.radioGroupValue.value, onChanged: (value) {
-                      // Update Group Value
-                      controller.radioGroupValue(value);
-                      controller.radioGroupValue.refresh();
-
-                      // Set Type
-                      var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
-                      controller.type(type);
-                    }),
-
-                    // Feed Option
-                    controller.doesProviderAllowFeed(controller.provider.value)
-                        ? SonrAnimatedRadioItem(ArtboardType.Feed, "Feed", groupValue: controller.radioGroupValue.value, onChanged: (value) {
-                            // Update Group Value
-                            controller.radioGroupValue(value);
-                            controller.radioGroupValue.refresh();
-
-                            // Set Type
-                            var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == value);
-                            controller.type(type);
-                          })
-                        : Container(),
-                  ],
-                ))),
+        SonrRadio(
+            options: [
+              SonrRadioRowOption.animated(ArtboardType.Icon, "Link"),
+              SonrRadioRowOption.animated(ArtboardType.Gallery, "Post"),
+              SonrRadioRowOption.animated(ArtboardType.Feed, "Feed"),
+            ],
+            onUpdated: (int index, String title) {
+              var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == title);
+              controller.type(type);
+            }),
       ]),
     );
   }

@@ -174,77 +174,79 @@ class SonrDropdownItem extends StatelessWidget {
   }
 }
 
-// ^ Builds Radio Item Widget ^ //
-class SonrAnimatedRadioItem extends StatelessWidget {
-  final ArtboardType type;
-  final String value;
-  final Function onChanged;
-  final dynamic groupValue;
+// ^ Stores SonrRadioRowOption Widget ^ //
+class SonrRadioRowOption {
+  final Widget child;
+  final String title;
+  SonrRadioRowOption({@required this.child, @required this.title});
 
-  const SonrAnimatedRadioItem(this.type, this.value, {this.onChanged, this.groupValue, Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      NeumorphicRadio(
-        style: NeumorphicRadioStyle(
-            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+  // * Animated Icon from Type * //
+  factory SonrRadioRowOption.animated(ArtboardType type, String title) {
+    return SonrRadioRowOption(
         child: RiveContainer(
           height: 60,
           width: 60,
           type: type,
         ),
-        value: value,
-        groupValue: groupValue,
-        onChanged: onChanged,
-      ),
-      Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(value, size: 14, color: Colors.black),
-    ]);
+        title: title);
+  }
+
+  // * Static Icon Child * //
+  factory SonrRadioRowOption.icon(SonrIcon icon, String title) {
+    return SonrRadioRowOption(child: icon, title: title);
+  }
+
+  // * Text Only Item * //
+  factory SonrRadioRowOption.normal(String title) {
+    return SonrRadioRowOption(child: Container(), title: title);
   }
 }
 
-class SonrRadioRowOption {
-  final Widget child;
-  final String title;
-  SonrRadioRowOption(this.child, this.title);
-}
-
 // ^ Builds Radio Item Widget ^ //
-class SonrRadioRow extends StatelessWidget {
-  final Function onUpdated;
+class SonrRadio extends StatelessWidget {
   final groupValue = (-1).obs;
   final List<SonrRadioRowOption> options;
+  final Function(int, String) onUpdated;
+  final double width;
+  final double height;
 
-  SonrRadioRow({this.onUpdated, this.options, Key key}) : super(key: key);
+  SonrRadio({@required this.options, Key key, @required this.onUpdated, this.width, this.height}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ObxValue<RxInt>(
-        (groupValue) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: List.generate(options.length, (index) {
-                return SonrRadioItem(
-                  index: index,
-                  groupValue: groupValue.value,
-                  title: options[index].title,
-                  child: options[index].child,
-                  onChanged: () => groupValue(index),
-                );
-              }),
-            ),
-        groupValue);
+    return Container(
+      width: width ?? Get.width,
+      height: height ?? 85,
+      child: ObxValue<RxInt>(
+          (groupValue) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: List.generate(options.length, (index) {
+                  return SonrRadioItem(
+                    value: index,
+                    groupValue: groupValue.value,
+                    title: options[index].title,
+                    child: options[index].child,
+                    onChanged: () {
+                      groupValue(index);
+                      onUpdated(index, options[index].title);
+                    },
+                  );
+                }),
+              ),
+          groupValue),
+    );
   }
 }
 
 class SonrRadioItem extends StatelessWidget {
-  final int index;
+  final int value;
   final int groupValue;
   final Function onChanged;
   final Widget child;
   final String title;
 
   const SonrRadioItem(
-      {@required this.index, @required this.title, @required this.groupValue, @required this.child, Key key, @required this.onChanged})
+      {@required this.value, @required this.title, @required this.groupValue, @required this.child, Key key, @required this.onChanged})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -253,9 +255,9 @@ class SonrRadioItem extends StatelessWidget {
         style: NeumorphicRadioStyle(
             unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
         child: child,
-        value: index,
+        value: value,
         groupValue: groupValue,
-        onChanged: onChanged,
+        onChanged: (i) => onChanged(),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
       SonrText.medium(title, size: 14, color: Colors.black),

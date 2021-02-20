@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:sonr_app/modules/media/camera_binding.dart';
 import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -57,6 +58,7 @@ class PickerSheet extends GetView<MediaPickerController> {
 // ** Widget that Creates Button from Media and Index ** //
 class _SonrMediaButton extends GetView<MediaPickerController> {
   final Rx<Uint8List> thumbnail = Uint8List(0).obs;
+  final file = Rx<File>();
   final Media media;
   final int index;
   final isSelected = false.obs;
@@ -77,35 +79,50 @@ class _SonrMediaButton extends GetView<MediaPickerController> {
     });
 
     // Build View
-    return ObxValue(
-        (RxBool isPressed) => NeumorphicButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              isPressed(!isPressed.value);
-              MediaPickerController.select(index, media, thumbnail.value);
-            },
-            style: isPressed.value ? pressedStyle : defaultStyle,
-            child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
-              Obx(() {
-                if (thumbnail.value.length > 0) {
-                  return DecoratedBox(
-                      child: Image.memory(Uint8List.fromList(thumbnail.value), fit: BoxFit.cover),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)));
-                } else {
-                  return SonrIcon.payload(IconType.Neumorphic, Payload.MEDIA);
-                }
-              }),
-              media.mediaType == MediaType.video
-                  ? SonrIcon.gradient(SonrIcon.getMediaTypeData(media.mediaType), FlutterGradientNames.glassWater, size: 28)
-                  : const SizedBox(),
-              isPressed.value
-                  ? Container(
-                      alignment: Alignment.bottomRight,
-                      padding: EdgeInsets.only(right: 4, bottom: 4),
-                      child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
-                  : Container()
-            ])),
-        isSelected);
+    return GestureDetector(
+      // onLongPress: () async {
+      //   if (file.isBlank) {
+      //     file(await media.getFile());
+      //     var result = await OpenFile.open(file.value.path);
+      //     print(result);
+      //   } else {
+      //     var result = await OpenFile.open(file.value.path);
+      //     print(result);
+      //   }
+      // },
+      child: ObxValue(
+          (RxBool isPressed) => NeumorphicButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                isPressed(!isPressed.value);
+                MediaPickerController.select(index, media, thumbnail.value);
+              },
+              style: isPressed.value ? pressedStyle : defaultStyle,
+              child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
+                Obx(() {
+                  if (thumbnail.value.length > 0) {
+                    return Hero(
+                      tag: media.id,
+                      child: DecoratedBox(
+                          child: Image.memory(Uint8List.fromList(thumbnail.value), fit: BoxFit.cover),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
+                    );
+                  } else {
+                    return SonrIcon.payload(IconType.Neumorphic, Payload.MEDIA);
+                  }
+                }),
+                media.mediaType == MediaType.video
+                    ? SonrIcon.gradient(SonrIcon.getMediaTypeData(media.mediaType), FlutterGradientNames.glassWater, size: 28)
+                    : const SizedBox(),
+                isPressed.value
+                    ? Container(
+                        alignment: Alignment.bottomRight,
+                        padding: EdgeInsets.only(right: 4, bottom: 4),
+                        child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
+                    : Container()
+              ])),
+          isSelected),
+    );
   }
 
   _getThumbnail() async {

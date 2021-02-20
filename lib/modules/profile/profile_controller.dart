@@ -11,14 +11,14 @@ enum ProfileState { Viewing, Editing }
 class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;
-  final focusTileIndex = (-2).obs;
+  final focused = FocusedTile(-1, false).obs;
+
   // Properties
   final username = "".obs;
   final isPrivate = false.obs;
   final hasSetProvider = false.obs;
   final provider = Rx<Contact_SocialTile_Provider>();
   final type = Rx<Contact_SocialTile_Type>();
-  final radioGroupValue = "".obs;
 
   // References
   final step = 0.obs;
@@ -26,7 +26,6 @@ class ProfileController extends GetxController {
 
   // References
   bool _isEditing = false;
-  bool _isExpanded = false;
 
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
@@ -113,7 +112,6 @@ class ProfileController extends GetxController {
     hasSetProvider(false);
     provider.nil();
     type.nil();
-    radioGroupValue("");
     step(0);
   }
 
@@ -163,13 +161,15 @@ class ProfileController extends GetxController {
   }
 
   // ^ Expand a Tile  ^ //
-  toggleExpand(Contact_SocialTile tile) {
-    _isExpanded = !_isExpanded;
-    if (_isExpanded) {
-      int idx = UserService.socials.indexOf(tile);
-      focusTileIndex(idx);
-    } else {
-      focusTileIndex(-2);
-    }
+  toggleExpand(int index, bool isExpanded) {
+    print("Index $index Expanded $isExpanded");
+    focused(FocusedTile(index, isExpanded));
+    update(['social-grid']);
   }
+}
+
+class FocusedTile {
+  final int index;
+  final bool isActive;
+  FocusedTile(this.index, this.isActive);
 }
