@@ -9,7 +9,7 @@ import 'package:rive/rive.dart' hide LinearGradient;
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum ArtboardType { Camera, Gallery, Contact, Feed, Splash }
+enum ArtboardType { Camera, Icon, Gallery, Contact, Feed, Splash }
 
 class SonrAnimatedWidget extends GetWidget<AnimatedController> {
   final Widget child;
@@ -162,111 +162,91 @@ class AnimatedController extends GetxController {
   }
 }
 
-class SonrRiveWidget extends GetView<RiveWidgetController> {
+// ^ Root App Widget ^ //
+class RiveContainer extends StatefulWidget {
   final double width;
   final double height;
-  final Artboard tileTypeArtboard;
-  final Artboard splashArtboard;
-  const SonrRiveWidget(this.width, this.height, {this.splashArtboard, this.tileTypeArtboard});
+  final ArtboardType type;
+  final Widget placeholder;
 
-  factory SonrRiveWidget.fromType({@required ArtboardType type, double width = 55, double height = 55}) {
-    final controller = Get.find<RiveWidgetController>();
-    return SonrRiveWidget(width, height, tileTypeArtboard: controller.getArtboard(type));
-  }
-
-  factory SonrRiveWidget.splashScreen() {
-    final controller = Get.find<RiveWidgetController>();
-    return SonrRiveWidget(Get.width, Get.height, tileTypeArtboard: controller.getArtboard(ArtboardType.Splash));
-  }
-
+  const RiveContainer({Key key, @required this.type, this.width = 55, this.height = 55, this.placeholder}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.loaded.value) {
-        return SizedBox(
-          height: height,
-          width: width,
-          child: Center(child: Rive(artboard: tileTypeArtboard)),
-        );
-      } else {
-        return Container();
-      }
-    });
-  }
+  _RiveContainer createState() => _RiveContainer();
 }
 
-class RiveWidgetController extends GetxController {
+class _RiveContainer extends State<RiveContainer> {
   // References
-  ByteData _splashData;
-  ByteData _tileTypeData;
   final String _splashPath = 'assets/animations/splash_screen.riv';
   final String _tilePath = 'assets/animations/tile_preview.riv';
 
   // Properties
-  final loaded = false.obs;
+  Artboard _riveArtboard;
 
-  // ** Constructer ** //
-  void onInit() {
-    rootBundle.load(_splashPath).then((data) async {
-      if (data != null) {
-        _splashData = data;
-      }
-    });
-
+  // ** Constructer Initial ** //
+  @override
+  void initState() {
     // Load the RiveFile from the binary data.
-    rootBundle.load(_tilePath).then((data) async {
-      if (data != null) {
-        _tileTypeData = data;
-      }
-    });
-    super.onInit();
+    if (widget.type == ArtboardType.Splash) {
+      rootBundle.load(_splashPath).then(
+        (data) async {
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
+
+            // Determine Animation by Tile Type
+            artboard.addController(SimpleAnimation('Default'));
+            setState(() => _riveArtboard = artboard);
+          }
+        },
+      );
+    } else {
+      rootBundle.load(_tilePath).then(
+        (data) async {
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
+
+            // Retreive Camera
+            if (widget.type == ArtboardType.Camera) {
+              artboard.addController(SimpleAnimation('Camera'));
+            }
+
+            // Retreive Showcase Loop
+            else if (widget.type == ArtboardType.Gallery) {
+              artboard.addController(SimpleAnimation('Showcase'));
+            }
+            // Retreive Showcase Loop
+            else if (widget.type == ArtboardType.Feed) {
+              artboard.addController(SimpleAnimation('Feed'));
+            }
+            // Retreive Icon Loop
+            else {
+              artboard.addController(SimpleAnimation('Icon'));
+            }
+            setState(() => _riveArtboard = artboard);
+          }
+        },
+      );
+    }
+    super.initState();
   }
 
-  // ^ Gets Pre Initialized Artboard by Type ^ //
-  Artboard getArtboard(ArtboardType type) {
-    // @ Splash Screen
-    if (type == ArtboardType.Splash) {
-      // Initialize File
-      final riveFile = RiveFile();
-      riveFile.import(_splashData);
-
-      // Get Artboard
-      final artboard = riveFile.mainArtboard;
-      artboard.addController(SimpleAnimation('Default'));
-
-      // Return Board
-      loaded(true);
-      return artboard;
-    }
-
-    // @ Radio Tyle Option
-    else {
-      // Initialize File
-      final riveFile = RiveFile();
-      riveFile.import(_tileTypeData);
-      final artboard = riveFile.mainArtboard;
-
-      // Retreive Camera
-      if (type == ArtboardType.Camera) {
-        artboard.addController(SimpleAnimation('Camera'));
-      }
-      // Retreive Showcase Loop
-      else if (type == ArtboardType.Gallery) {
-        artboard.addController(SimpleAnimation('Showcase'));
-      }
-      // Retreive Showcase Loop
-      else if (type == ArtboardType.Feed) {
-        artboard.addController(SimpleAnimation('Feed'));
-      }
-      // Retreive Icon Loop
-      else {
-        artboard.addController(SimpleAnimation('Icon'));
-      }
-
-      // @ Return Board
-      loaded(true);
-      return artboard;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.height,
+      width: widget.width,
+      child: Center(
+          child: _riveArtboard == null
+              ? widget.placeholder ?? Container()
+              : Rive(
+                  artboard: _riveArtboard,
+                )),
+    );
   }
 }
 
@@ -415,65 +395,6 @@ class SonrAnimatedWaveIcon extends HookWidget {
   }
 }
 
-// ^ Sonr Animated Tile for Radio Option ^ //
-class AnimatedTileRadio extends StatefulWidget {
-  // Properties
-  final String type;
-  final ValueChanged<dynamic> onChanged;
-  final dynamic groupValue;
-
-  const AnimatedTileRadio(this.type, {Key key, @required this.onChanged, @required this.groupValue}) : super(key: key);
-
-  @override
-  _AnimatedTileRadioState createState() => _AnimatedTileRadioState();
-}
-
-class _AnimatedTileRadioState extends State<AnimatedTileRadio> {
-  Artboard _riveArtboard;
-  @override
-  void initState() {
-    super.initState();
-    // Load the RiveFile from the binary data.
-    rootBundle.load('assets/animations/tile_preview.riv').then(
-      (data) async {
-        // Await Loading
-        final file = RiveFile();
-        if (file.import(data)) {
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SonrAnimation.getRiveController(widget.type));
-          setState(() => _riveArtboard = artboard);
-        }
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      NeumorphicRadio(
-        style: NeumorphicRadioStyle(
-            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
-        child: SizedBox(
-          height: 60,
-          width: 60,
-          child: Center(
-              child: _riveArtboard == null
-                  ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
-                  : Rive(artboard: _riveArtboard)),
-        ),
-        value: widget.type,
-        groupValue: widget.groupValue,
-        onChanged: widget.onChanged,
-      ),
-      Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(widget.type.toString(), size: 14, color: Colors.black),
-    ]);
-  }
-}
-
 class SonrAnimation {
   // ^ Method to Retreive Animation by Location - Default is Top ^ //
   static Tween<Offset> tweenForEntryLocation(OverlayEntryLocation entryLocation) {
@@ -490,22 +411,6 @@ class SonrAnimation {
       default:
         return Offset(0.0, -1.0).tweenTo(Offset.zero);
         break;
-    }
-  }
-
-  // ^ Get Animation Controller By Type ^ //
-  static SimpleAnimation getRiveController(String type) {
-    // Retreive Feed Loop
-    if (type == "Feed") {
-      return SimpleAnimation('Feed');
-    }
-    // Retreive Showcase Loop
-    else if (type == "Post") {
-      return SimpleAnimation('Showcase');
-    }
-    // Retreive Icon Loop
-    else {
-      return SimpleAnimation('Icon');
     }
   }
 }

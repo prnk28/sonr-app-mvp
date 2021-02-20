@@ -173,3 +173,32 @@ class SonrDropdownItem extends StatelessWidget {
     }
   }
 }
+
+// ^ Builds Radio Item Widget ^ //
+class SonrAnimatedRadioItem extends StatelessWidget {
+  final ArtboardType type;
+  final String value;
+  final Function onChanged;
+  final dynamic groupValue;
+
+  const SonrAnimatedRadioItem(this.type, this.value, {this.onChanged, this.groupValue, Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      NeumorphicRadio(
+        style: NeumorphicRadioStyle(
+            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+        child: RiveContainer(
+          height: 60,
+          width: 60,
+          type: type,
+        ),
+        value: value,
+        groupValue: groupValue,
+        onChanged: onChanged,
+      ),
+      Padding(padding: EdgeInsets.only(top: 4)),
+      SonrText.medium(value, size: 14, color: Colors.black),
+    ]);
+  }
+}

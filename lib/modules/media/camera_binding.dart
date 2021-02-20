@@ -10,7 +10,7 @@ class CameraBinding implements Bindings {
   void dependencies() {
     Get.put<MediaController>(MediaController(), permanent: true);
     Get.put<CameraController>(CameraController(), permanent: true);
-    Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
+    Get.put<MediaPickerController>(MediaPickerController());
     Get.lazyPut<PreviewController>(() => PreviewController());
   }
 }

@@ -14,11 +14,13 @@ export 'package:sonr_core/sonr_core.dart';
 
 class SonrService extends GetxService {
   // @ Set Properties
-  final connected = false.obs;
+  final _connected = false.obs;
   final olc = "".obs;
   final peers = Map<String, Peer>().obs;
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
+
+  static RxBool get connected => Get.find<SonrService>()._connected;
 
   // @ Set References
   Node _node;
@@ -29,7 +31,7 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     DeviceService.direction.listen((dir) {
-      if (connected.value) {
+      if (_connected.value) {
         // Update Direction
         _node.update(dir.headingForCameraMode);
       }
@@ -43,9 +45,13 @@ class SonrService extends GetxService {
     var user = UserService.current;
 
     // Validate Data
-    if (pos != null && !user.hasField(1)) {
+    if (pos != null) {
       // Create Worker
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, "", user.contact);
+      _node = await SonrCore.initialize(
+          pos.latitude,
+          pos.longitude,
+          user.hasProfile() ? user.profile.username : "@${user.contact.firstName.substring(0, 1)}${user.contact.lastName.substring(1)}",
+          user.contact);
 
       // Assign Node Callbacks
       _node.assignCallback(CallbackEvent.Connected, _handleConnected);
@@ -58,10 +64,10 @@ class SonrService extends GetxService {
       _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
       _node.assignCallback(CallbackEvent.Error, _handleSonrError);
 
-      connected(true);
+      _connected(true);
       return this;
     }
-    connected(false);
+    _connected(false);
     return this;
   }
 
@@ -91,9 +97,9 @@ class SonrService extends GetxService {
       contr._node.assignCallback(CallbackEvent.Transmitted, contr._handleTransmitted);
       contr._node.assignCallback(CallbackEvent.Error, contr._handleSonrError);
 
-      contr.connected(true);
+      contr._connected(true);
     } else {
-      contr.connected(false);
+      contr._connected(false);
     }
   }
 
@@ -102,7 +108,7 @@ class SonrService extends GetxService {
     // Get Data
     var snr = Get.find<SonrService>();
     // - Check Connected -
-    if (snr.connected.value) {
+    if (snr._connected.value) {
       await snr._node.setContact(contact);
     } else {
       SonrSnack.error("Not Connected to the Sonr Network");
@@ -115,7 +121,7 @@ class SonrService extends GetxService {
     var snr = Get.find<SonrService>();
 
     // - Check Connected -
-    if (snr.connected.value) {
+    if (snr._connected.value) {
       // Set Payload Type
       snr.payload(Payload.CONTACT);
     } else {
@@ -128,7 +134,7 @@ class SonrService extends GetxService {
     // Get Data
     var snr = Get.find<SonrService>();
     // - Check Connected -
-    if (snr.connected.value) {
+    if (snr._connected.value) {
       // Set Payload Type
       snr.payload(Payload.MEDIA);
 
@@ -150,7 +156,7 @@ class SonrService extends GetxService {
     var snr = Get.find<SonrService>();
 
     // - Check Connected -
-    if (snr.connected.value) {
+    if (snr._connected.value) {
       // Set Payload Type
       snr.payload(Payload.URL);
 
@@ -166,7 +172,7 @@ class SonrService extends GetxService {
     // Get Data
     var snr = Get.find<SonrService>();
 
-    if (snr.connected.value) {
+    if (snr._connected.value) {
       // Set For Animation
       snr._peerController = c;
 
@@ -201,7 +207,7 @@ class SonrService extends GetxService {
     // Get Data
     var snr = Get.find<SonrService>();
 
-    if (snr.connected.value) {
+    if (snr._connected.value) {
       // Send Response
       await snr._node.respond(decision);
     } else {

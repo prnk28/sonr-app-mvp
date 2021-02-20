@@ -24,6 +24,7 @@ class TransferCardController extends GetxController {
     // @ Listen for Animation Complete
     animationCompleted.listen((result) {
       // Present Home Controller
+      Get.back();
       Get.offNamed('/home');
     });
   }

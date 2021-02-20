@@ -1,3 +1,4 @@
+import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/service/constant_service.dart';
@@ -219,8 +220,6 @@ class _SetTypeView extends GetView<ProfileController> {
         // @ InfoGraph
         _InfoText(index: 3, text: "Set your Tile's type"),
         Divider(),
-        //Padding(padding: EdgeInsets.all(8)),
-
         // @ Toggle Buttons for Widget Size
         Container(
             height: 85,
@@ -230,7 +229,7 @@ class _SetTypeView extends GetView<ProfileController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     // Icon Option
-                    AnimatedTileRadio("Link", groupValue: controller.radioGroupValue.value, onChanged: (value) {
+                    SonrAnimatedRadioItem(ArtboardType.Icon, "Link", groupValue: controller.radioGroupValue.value, onChanged: (value) {
                       // Update Group Value
                       controller.radioGroupValue(value);
                       controller.radioGroupValue.refresh();
@@ -241,7 +240,7 @@ class _SetTypeView extends GetView<ProfileController> {
                     }),
 
                     // Showcase Option
-                    AnimatedTileRadio("Post", groupValue: controller.radioGroupValue.value, onChanged: (value) {
+                    SonrAnimatedRadioItem(ArtboardType.Gallery, "Post", groupValue: controller.radioGroupValue.value, onChanged: (value) {
                       // Update Group Value
                       controller.radioGroupValue(value);
                       controller.radioGroupValue.refresh();
@@ -253,7 +252,7 @@ class _SetTypeView extends GetView<ProfileController> {
 
                     // Feed Option
                     controller.doesProviderAllowFeed(controller.provider.value)
-                        ? AnimatedTileRadio("Feed", groupValue: controller.radioGroupValue.value, onChanged: (value) {
+                        ? SonrAnimatedRadioItem(ArtboardType.Feed, "Feed", groupValue: controller.radioGroupValue.value, onChanged: (value) {
                             // Update Group Value
                             controller.radioGroupValue(value);
                             controller.radioGroupValue.refresh();

@@ -36,7 +36,6 @@ class InitialBinding implements Bindings {
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
-    Get.lazyPut<RiveWidgetController>(() => RiveWidgetController(), fenix: true);
   }
 }
 
@@ -47,24 +46,8 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Artboard _riveArtboard;
   @override
   void initState() {
-    // Load the RiveFile from the binary data.
-    rootBundle.load('assets/animations/splash_screen.riv').then(
-      (data) async {
-        // Await Loading
-        final file = RiveFile();
-        if (file.import(data)) {
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          setState(() => _riveArtboard = artboard);
-        }
-      },
-    );
     super.initState();
 
     // Listen to Device Start Status
@@ -97,13 +80,12 @@ class _AppState extends State<App> {
             alignment: Alignment.topCenter,
             children: [
               // @ Rive Animation
-              Container(
-                  width: Get.width,
-                  height: Get.height,
-                  child: Center(
-                      child: _riveArtboard == null
-                          ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
-                          : Rive(artboard: _riveArtboard))),
+              RiveContainer(
+                type: ArtboardType.Splash,
+                width: Get.width,
+                height: Get.height,
+                placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+              ),
 
               // @ Fade Animation of Text
               PlayAnimation<double>(
