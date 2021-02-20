@@ -202,3 +202,63 @@ class SonrAnimatedRadioItem extends StatelessWidget {
     ]);
   }
 }
+
+class SonrRadioRowOption {
+  final Widget child;
+  final String title;
+  SonrRadioRowOption(this.child, this.title);
+}
+
+// ^ Builds Radio Item Widget ^ //
+class SonrRadioRow extends StatelessWidget {
+  final Function onUpdated;
+  final groupValue = (-1).obs;
+  final List<SonrRadioRowOption> options;
+
+  SonrRadioRow({this.onUpdated, this.options, Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ObxValue<RxInt>(
+        (groupValue) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: List.generate(options.length, (index) {
+                return SonrRadioItem(
+                  index: index,
+                  groupValue: groupValue.value,
+                  title: options[index].title,
+                  child: options[index].child,
+                  onChanged: () => groupValue(index),
+                );
+              }),
+            ),
+        groupValue);
+  }
+}
+
+class SonrRadioItem extends StatelessWidget {
+  final int index;
+  final int groupValue;
+  final Function onChanged;
+  final Widget child;
+  final String title;
+
+  const SonrRadioItem(
+      {@required this.index, @required this.title, @required this.groupValue, @required this.child, Key key, @required this.onChanged})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      NeumorphicRadio(
+        style: NeumorphicRadioStyle(
+            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+        child: child,
+        value: index,
+        groupValue: groupValue,
+        onChanged: onChanged,
+      ),
+      Padding(padding: EdgeInsets.only(top: 4)),
+      SonrText.medium(title, size: 14, color: Colors.black),
+    ]);
+  }
+}
