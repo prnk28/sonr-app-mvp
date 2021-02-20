@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:get/get.dart';
-import 'package:sonr_core/models/models.dart' hide Platform;
+import 'package:sonr_app/service/constant_service.dart';
 import 'edit_dialog.dart';
-import 'social_tile.dart';
+import 'tile_item.dart';
 import 'profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'tile_stepper.dart';
+import 'create_tile.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
   @override
@@ -18,7 +15,7 @@ class ProfileScreen extends GetView<ProfileController> {
             child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
             style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
             onPressed: () {
-              Get.dialog(TileCreateStepper());
+              Get.dialog(CreateTileStepper());
             }),
         body: NeumorphicBackground(
             backendColor: Colors.transparent,
@@ -42,40 +39,29 @@ class ProfileScreen extends GetView<ProfileController> {
                 SliverPadding(padding: EdgeInsets.all(14)),
 
                 // @ Builds List of Social Tile
-                Obx(() => SocialsGrid(controller.socials, controller.focusTileIndex.value)),
+                GetBuilder<ProfileController>(
+                    id: 'social-grid',
+                    builder: (_) {
+                      return SliverStaggeredGrid(
+                          delegate: SliverChildBuilderDelegate((context, index) {
+                            return SocialTileItem(UserService.socials[index], index);
+                          }),
+                          gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              mainAxisSpacing: 12.0,
+                              crossAxisSpacing: 6.0,
+                              staggeredTileCount: UserService.tileCount,
+                              staggeredTileBuilder: (index) {
+                                var focused = Get.find<ProfileController>().focused.value;
+                                if (focused.isActive) {
+                                  return focused.index == index ? StaggeredTile.count(4, 4) : StaggeredTile.count(2, 2);
+                                } else {
+                                  return StaggeredTile.count(2, 2);
+                                }
+                              }));
+                    })
               ],
             )));
-  }
-}
-
-class SocialsGrid extends StatelessWidget {
-  final List<Contact_SocialTile> tiles;
-  final int focusedIndex;
-
-  SocialsGrid(
-    this.tiles,
-    this.focusedIndex, {
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverStaggeredGrid(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          return AnimatedContainer(duration: Duration(milliseconds: 1500), child: SocialTileItem(tiles[index], index));
-        }),
-        gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            mainAxisSpacing: 12.0,
-            crossAxisSpacing: 6.0,
-            staggeredTileCount: tiles.length,
-            staggeredTileBuilder: (index) {
-              if (focusedIndex >= 0) {
-                return focusedIndex == index ? StaggeredTile.count(4, 4) : StaggeredTile.count(2, 2);
-              } else {
-                return StaggeredTile.count(2, 2);
-              }
-            }));
   }
 }
 
@@ -119,19 +105,12 @@ class ContactHeader extends GetView<ProfileController> {
     return GestureDetector(
         onLongPress: () async {
           SonrOverlay.show(
-            EditDialog.nameField(
-                onSubmitted: (map) {
-                  controller.firstName(map["firstName"]);
-                  controller.lastName(map["lastName"]);
-                  controller.saveChanges();
-                },
-                firstValue: controller.firstName.value,
-                lastValue: controller.lastName.value),
+            EditDialog.nameField(firstValue: UserService.firstName.value, lastValue: UserService.lastName.value),
           );
           HapticFeedback.heavyImpact();
         },
         child:
-            Obx(() => SonrText.medium(controller.firstName.value + " " + controller.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24)));
+            Obx(() => SonrText.medium(UserService.firstName.value + " " + UserService.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24)));
   }
 }
 

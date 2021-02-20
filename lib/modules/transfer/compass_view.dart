@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -327,13 +326,12 @@ class _CompassBulb extends StatelessWidget {
                 duration: Duration(seconds: 1),
                 decoration: BoxDecoration(gradient: gradient),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  SonrAnimatedSwitcher.slideDown(
-                      child: SonrText.gradient(
+                  SonrText.gradient(
                     direction,
                     FlutterGradientNames.glassWater,
                     key: ValueKey<String>(direction),
-                  )),
-                  SonrAnimatedSwitcher.fade(
+                  ),
+                  SonrAnimatedSwitcher.slideDown(
                       child: SonrText.gradient(
                     heading,
                     FlutterGradientNames.glassWater,

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 
@@ -95,7 +97,11 @@ class _ShareButtonRow extends GetView<HomeController> {
             child: Container(
               child: _ShareButtonItem(
                 onPressed: () {
-                  controller.presentCamera();
+                  // Toggle Share Expand
+                  controller.closeShare();
+
+                  // Go to Camera View
+                  Get.toNamed("/camera");
                 },
                 type: ArtboardType.Camera,
               ),
@@ -106,7 +112,8 @@ class _ShareButtonRow extends GetView<HomeController> {
             child: Container(
               child: _ShareButtonItem(
                 onPressed: () {
-                  controller.presentMediaPicker();
+                  controller.closeShare();
+                  Get.bottomSheet(PickerSheet(), isDismissible: false);
                 },
                 type: ArtboardType.Gallery,
               ),
@@ -117,7 +124,13 @@ class _ShareButtonRow extends GetView<HomeController> {
             child: Container(
               child: _ShareButtonItem(
                 onPressed: () {
-                  controller.queueContact();
+                  SonrService.queueContact();
+
+                  // Close Share Button
+                  controller.closeShare();
+
+                  // Go to Transfer
+                  Get.toNamed("/transfer");
                 },
                 type: ArtboardType.Contact,
               ),
@@ -149,7 +162,7 @@ class _ShareButtonItem extends StatelessWidget {
               depth: 12,
               color: SonrColor.fromHex("EFEEEE"),
               boxShape: NeumorphicBoxShape.circle()),
-          child: SonrRiveWidget.fromType(
+          child: RiveContainer(
             type: type,
             width: Get.width,
             height: Get.height,

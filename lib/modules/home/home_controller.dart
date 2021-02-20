@@ -1,11 +1,5 @@
-// import 'package:file_picker/file_picker.dart';
-import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_app/service/sql_service.dart';
-import 'package:flutter/services.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
@@ -22,6 +16,14 @@ class HomeController extends GetxController {
   // References
   PageController pageController;
   final category = Rx<ToggleFilter>(ToggleFilter.All);
+
+  onInit() {
+    if (!SonrService.connected.value) {
+      SonrService.connect();
+    }
+
+    super.onInit();
+  }
 
   // ^ Helper Method for Category Filter ^ //
   SonrText getToggleCategory() {
@@ -99,46 +101,5 @@ class HomeController extends GetxController {
   void toggleShare() {
     HapticFeedback.heavyImpact();
     isShareExpanded(!isShareExpanded.value);
-  }
-
-  // ^ Opens Camera Picker ^ //
-  void presentCamera() async {
-    // Check for Permssions
-    if (await Permission.camera.request().isGranted) {
-      // Toggle Share Expand
-      closeShare();
-
-      // Go to Camera View
-      Get.toNamed("/camera");
-    } else {
-      // Display Error
-      SonrSnack.error("Sonr isnt permitted to access your media.");
-    }
-  }
-
-  // ^ Opens Media Picker UI ^ //
-  void presentMediaPicker() async {
-    // Check for Permssions
-    if (await Permission.photos.request().isGranted) {
-      // Toggle Share Expand
-      closeShare();
-
-      // Display Bottom Sheet
-      //Get.bottomSheet(PickerSheet(), isDismissible: false);
-    } else {
-      // Display Error
-      SonrSnack.error("Sonr isnt permitted to access your media.");
-    }
-  }
-
-  // ^ Queues a Contact for Transfer ^ //
-  void queueContact() {
-    Get.find<SonrService>().setPayload(Payload.CONTACT);
-
-    // Close Share Button
-    closeShare();
-
-    // Go to Transfer
-    Get.toNamed("/transfer");
   }
 }

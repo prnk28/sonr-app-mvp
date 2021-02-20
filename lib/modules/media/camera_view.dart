@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:camerawesome/models/orientations.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'media_screen.dart';
 
 class CameraView extends GetView<CameraController> {
@@ -46,7 +44,7 @@ class CameraView extends GetView<CameraController> {
           child: CameraAwesome(
             onPermissionsResult: (bool result) {},
             onCameraStarted: () {
-              MediaScreenController.ready();
+              MediaController.ready();
             },
             onOrientationChanged: (CameraOrientations newOrientation) {},
             sensor: controller.sensor,
@@ -235,7 +233,7 @@ class CameraController extends GetxController {
 
     // Capture Photo
     await pictureController.takePicture(path);
-    MediaScreenController.setPhoto(path);
+    MediaController.setPhoto(path);
   }
 
   // ^ Captures Video ^ //
@@ -244,7 +242,7 @@ class CameraController extends GetxController {
     var temp = await getTemporaryDirectory();
     var videoDir = await Directory('${temp.path}/videos').create(recursive: true);
     var path = '${videoDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
-    MediaScreenController.recording(path);
+    MediaController.recording(path);
 
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
@@ -271,7 +269,7 @@ class CameraController extends GetxController {
 
     // Update State
     captureMode.value = CaptureModes.PHOTO;
-    MediaScreenController.completeVideo(duration);
+    MediaController.completeVideo(duration);
   }
 
   // ^ Flip Camera ^ //

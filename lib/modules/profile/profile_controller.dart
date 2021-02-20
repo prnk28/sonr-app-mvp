@@ -1,5 +1,5 @@
-import 'dart:io';
-import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/service/user_service.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -11,18 +11,140 @@ enum ProfileState { Viewing, Editing }
 class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;
-  final firstName = Get.find<DeviceService>().user.contact.firstName.obs;
-  final lastName = Get.find<DeviceService>().user.contact.lastName.obs;
-  final phone = Get.find<DeviceService>().user.contact.phone.obs;
-  final email = Get.find<DeviceService>().user.contact.email.obs;
-  final website = Get.find<DeviceService>().user.contact.website.obs;
-  final picture = Get.find<DeviceService>().user.contact.picture.obs;
-  final socials = Get.find<DeviceService>().user.contact.socials.obs;
-  final focusTileIndex = (-2).obs;
+  final focused = FocusedTile(-1, false).obs;
+
+  // Properties
+  final username = "".obs;
+  final isPrivate = false.obs;
+  final hasSetProvider = false.obs;
+  final provider = Rx<Contact_SocialTile_Provider>();
+  final type = Rx<Contact_SocialTile_Type>();
+
+  // References
+  final step = 0.obs;
+  final pageController = PageController();
 
   // References
   bool _isEditing = false;
-  bool _isExpanded = false;
+
+  // ^ Add Social Tile Move to Next Step ^ //
+  nextStep() async {
+    // @ Step 2
+    if (step.value == 0) {
+      // Move to Next Step
+      if (provider.value != null && hasSetProvider.value) {
+        step(1);
+        pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+      } else {
+        // Display Error Snackbar
+        SonrSnack.missing("Select a provider first");
+      }
+    }
+    // @ Step 3
+    else if (step.value == 1) {
+      // Update State
+      if (username.value != "") {
+        if (await Get.find<SocialMediaService>().validate(provider.value, username.value, isPrivate.value)) {
+          step(2);
+          pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+          FocusScopeNode currentFocus = FocusScope.of(Get.context);
+          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        }
+      } else {
+        // Display Error Snackbar
+        SonrSnack.missing("Add your username or Link your account");
+      }
+    }
+  }
+
+  // ^ Add Social Tile Move to Next Step ^ //
+  previousStep() {
+    // First Step
+    if (step.value == 0) {
+      step(0);
+    }
+    // Step 2
+    else if (step.value == 1) {
+      step(0);
+      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+    }
+    // Step 3
+    else if (step.value == 2) {
+      step(1);
+      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+    }
+  }
+
+  // ^ Finish and Save new Tile ^ //
+  saveTile() {
+    // Validate
+    if (type.value != null && step.value == 2) {
+      // Set Acquired Data
+      var position = Contact_SocialTile_Position(index: UserService.tileCount);
+      var links = Get.find<SocialMediaService>().getLinks(provider.value, username.value);
+
+      // Create Tile from Values
+      var tile = Contact_SocialTile(
+        username: username.value,
+        isPrivate: isPrivate.value,
+        provider: provider.value,
+        type: type.value,
+        links: links,
+        position: position,
+      );
+
+      // Save to Profile
+      reset();
+      UserService.addSocial(tile);
+      Get.back(closeOverlays: true);
+    } else {
+      // Display Error Snackbar
+      SonrSnack.missing("Pick a Tile Type", isLast: true);
+    }
+  }
+
+  // ^ Resets current info ^
+  reset() {
+    username("");
+    isPrivate(false);
+    hasSetProvider(false);
+    provider.nil();
+    type.nil();
+    step(0);
+  }
+
+  // ^ Determine Auth Type ^
+  getAuthType() {
+    if (!isPrivate.value) {
+      return SocialAuthType.Link;
+    } else {
+      // Link Item
+      if (provider.value == Contact_SocialTile_Provider.Medium ||
+          provider.value == Contact_SocialTile_Provider.Spotify ||
+          provider.value == Contact_SocialTile_Provider.YouTube) {
+        return SocialAuthType.Link;
+      }
+      // OAuth Item
+      else {
+        return SocialAuthType.OAuth;
+      }
+    }
+  }
+
+  // ^ Helper method to judge Privacy^ //
+  bool doesProviderAllowVisibility(Contact_SocialTile_Provider provider) {
+    return (provider == Contact_SocialTile_Provider.Twitter ||
+        provider == Contact_SocialTile_Provider.Spotify ||
+        provider == Contact_SocialTile_Provider.TikTok ||
+        provider == Contact_SocialTile_Provider.YouTube);
+  }
+
+  // ^ Helper to Display Tile Options ^ //
+  bool doesProviderAllowFeed(Contact_SocialTile_Provider provider) {
+    return (provider == Contact_SocialTile_Provider.Twitter || provider == Contact_SocialTile_Provider.Medium);
+  }
 
   ProfileController() {
     refresh();
@@ -38,92 +160,16 @@ class ProfileController extends GetxController {
     }
   }
 
-  // ^ Update User Profile Pic ^ //
-  setPicture(File image) async {
-    // Read Bytes from File into Ref
-    var imgBytes = await image.readAsBytes();
-
-    // Set Profile Pic
-    picture(imgBytes.toList());
-
-    // Save Contact
-    saveChanges();
-  }
-
   // ^ Expand a Tile  ^ //
-  toggleExpand(Contact_SocialTile tile) {
-    _isExpanded = !_isExpanded;
-    if (_isExpanded) {
-      int idx = socials.indexOf(tile);
-      focusTileIndex(idx);
-    } else {
-      focusTileIndex(-2);
-    }
-  }
-
-  // ^ Save a Social Tile  ^ //
-  saveSocialTile(Contact_SocialTile tile) {
-    // Add Tile to Contact
-    if (socials.any((t) => t.provider == tile.provider)) {
-      int index = socials.indexOf(tile);
-      socials[index] = tile;
-    } else {
-      socials.add(tile);
-    }
-
-    // Save Contact
-    saveChanges();
-    SonrSnack.success("Added new ${tile.provider.toString()} tile");
-  }
-
-  // ^ Remove a Social Tile ^ //
-  removeSocialTile(Contact_SocialTile tile) {
-    if (socials.contains(tile)) {
-      socials.remove(tile);
-    }
-
-    // Save Contact
-    saveChanges();
-  }
-
-  // ^ Swap Positions of Two Tiles ^ //
-  swapSocialTiles(Contact_SocialTile first, Contact_SocialTile second) {
-    int idxOne = socials.indexOf(first);
-    int idxTwo = socials.indexOf(second);
-    socials.swap(idxOne, idxTwo);
-    socials.refresh();
-    saveChanges();
-  }
-
-  // ^ Save Changed Values to Storage ^ //
-  saveChanges() {
-    // Set Contact Values
-    Get.find<DeviceService>().contact.value.firstName = firstName.value;
-    Get.find<DeviceService>().contact.value.lastName = lastName.value;
-    Get.find<DeviceService>().contact.value.phone = phone.value;
-    Get.find<DeviceService>().contact.value.email = email.value;
-    Get.find<DeviceService>().contact.value.website = website.value;
-    Get.find<DeviceService>().contact.value.picture = picture;
-    Get.find<DeviceService>().contact.value.socials.clear();
-    Get.find<DeviceService>().contact.value.socials.addAll(socials);
-
-    // Refresh Contact
-    Get.find<DeviceService>().contact.refresh();
-    print(Get.find<DeviceService>().contact.toString());
-    update();
+  toggleExpand(int index, bool isExpanded) {
+    print("Index $index Expanded $isExpanded");
+    focused(FocusedTile(index, isExpanded));
+    update(['social-grid']);
   }
 }
 
-// @ Dart Util to Swap Indexes In List //
-extension ListSwap<T> on List<T> {
-  void swap(int index1, int index2) {
-    var length = this.length;
-    RangeError.checkValidIndex(index1, this, "index1", length);
-    RangeError.checkValidIndex(index2, this, "index2", length);
-    if (index1 != index2) {
-      var tmp1 = this[index1];
-      this[index1] = this[index2];
-      this[index2] = tmp1;
-    }
-  }
+class FocusedTile {
+  final int index;
+  final bool isActive;
+  FocusedTile(this.index, this.isActive);
 }

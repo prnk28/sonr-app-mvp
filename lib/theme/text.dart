@@ -63,6 +63,34 @@ class SonrText extends StatelessWidget {
     return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: color);
   }
 
+  // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
+  factory SonrText.postDate(String pubDate, {FlutterGradientNames gradient = FlutterGradientNames.premiumDark, double size = 16, Key key}) {
+    // Clean Date
+    var date = DateTime.parse(pubDate);
+    var output = new DateFormat.yMMMMd('en_US');
+
+    // Return Text
+    return SonrText.gradient(output.format(date).toString(), gradient, size: size, key: key, weight: FontWeight.w500);
+  }
+
+  // ^ Normal(w400) Text with Provided Data
+  factory SonrText.postDescription(int titleLength, String postDesc, {Color color, double size = 14, Key key}) {
+    // Calculate Description length
+    int maxDesc = 118;
+    if (titleLength > 50) {
+      int factor = titleLength - 50;
+      maxDesc = maxDesc - factor;
+    }
+
+    // Clean from HTML Tags
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    String cleaned = postDesc.replaceAll(exp, '');
+
+    // Limit Characters
+    var text = cleaned.substring(0, maxDesc) + "...";
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: color ?? Colors.grey[800]);
+  }
+
   // ^ Date Text with Provided Data
   factory SonrText.date(DateTime date, {double size = 14, Key key}) {
     // Formatters

@@ -1,13 +1,7 @@
 import 'dart:async';
-
 import 'dart:ui';
-import 'package:flutter/services.dart';
-import 'package:flutter_compass/flutter_compass.dart';
-import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_core/models/models.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_app/service/constant_service.dart';
 
 class PeerController extends GetxController {
   // Properties
@@ -19,7 +13,7 @@ class PeerController extends GetxController {
   final proximity = Rx<Position_Proximity>();
 
   // References
-  final userDirection = 0.0.obs;
+  final Rx<CompassEvent> userDirection = DeviceService.direction;
   var peer = Peer();
   int index;
 
@@ -34,15 +28,11 @@ class PeerController extends GetxController {
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
 
   PeerController() {
-    FlutterCompass.events.listen((dir) {
-      userDirection(dir.headingForCameraMode);
-    });
-
     // Listen to this peers updates
     Get.find<SonrService>().peers.listen((lob) {
       lob.forEach((id, value) {
         if (id == peer.id) {
-          difference((userDirection.value - value.position.direction).abs());
+          difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
           direction(value.position.direction);
           offset(calculateOffset(value.platform));
           proximity(value.position.proximity);
@@ -87,7 +77,7 @@ class PeerController extends GetxController {
     this.peer = peerVal;
     this.index = index;
     isContentVisible(true);
-    difference((userDirection.value - peerVal.position.direction).abs());
+    difference((userDirection.value.headingForCameraMode - peerVal.position.direction).abs());
     direction(peerVal.position.direction);
     offset(calculateOffset(peerVal.platform));
     proximity(peerVal.position.proximity);
@@ -97,7 +87,7 @@ class PeerController extends GetxController {
   invite() {
     if (!_isInvited) {
       // Perform Invite
-      Get.find<SonrService>().invite(this);
+      SonrService.invite(this);
 
       // Check for File
       if (Get.find<SonrService>().payload.value == Payload.MEDIA) {

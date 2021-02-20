@@ -97,30 +97,30 @@ class SonrDropdown extends StatelessWidget {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
     return ObxValue<RxInt>((selectedIndex) {
       return Container(
-          key: _dropKey,
-          width: width,
-          margin: margin,
-          height: height,
-          child: Obx(
-            () => NeumorphicButton(
-                margin: EdgeInsets.symmetric(horizontal: 5),
-                style: SonrStyle.flat,
-                child: Center(child: _buildSelected(selectedIndex.value, Get.find<SonrPositionedOverlay>().overlays.length > 0)),
-                onPressed: () {
-                  SonrPositionedOverlay.dropdown(items, _dropKey, (newIndex) {
-                    selectedIndex(newIndex);
-                    onChanged(newIndex);
-                  }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
-                }),
-          ));
+        key: _dropKey,
+        width: width,
+        margin: margin,
+        height: height,
+        child: NeumorphicButton(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            style: SonrStyle.flat,
+            child: Center(child: _buildSelected(selectedIndex.value, Get.find<SonrPositionedOverlay>().overlays.length > 0)),
+            onPressed: () {
+              SonrPositionedOverlay.dropdown(items, _dropKey, (newIndex) {
+                selectedIndex(newIndex);
+                onChanged(newIndex);
+              }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
+            }),
+      );
     }, index);
   }
 
   _buildSelected(int idx, bool isOpen) {
     // @ Default Widget
     if (idx == -1) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        SonrText.medium(title, color: Colors.black87, size: height / 3),
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Expanded(child: SonrText.medium(title, color: Colors.black87, size: height / 3)),
+        Padding(padding: EdgeInsets.all(4)),
         isOpen
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
             : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
@@ -131,13 +131,15 @@ class SonrDropdown extends StatelessWidget {
     else {
       var item = items[idx];
       if (selectedIconPosition == WidgetPosition.Left) {
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
           item.hasIcon ? item.icon : Container(),
-          SonrText.medium(item.text, color: Colors.black87, size: height / 3),
+          Padding(padding: EdgeInsets.all(4)),
+          Expanded(child: SonrText.medium(item.text, color: Colors.black87, size: height / 3)),
         ]);
       } else {
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SonrText.medium(item.text, color: Colors.black87, size: height / 3),
+        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Expanded(child: SonrText.medium(item.text, color: Colors.black87, size: height / 3)),
+          Padding(padding: EdgeInsets.all(4)),
           item.hasIcon ? item.icon : Container(),
         ]);
       }
@@ -169,5 +171,96 @@ class SonrDropdownItem extends StatelessWidget {
     } else {
       return Row(children: [Padding(padding: EdgeInsets.all(4)), SonrText.medium(text, color: Colors.black)]);
     }
+  }
+}
+
+// ^ Stores SonrRadioRowOption Widget ^ //
+class SonrRadioRowOption {
+  final Widget child;
+  final String title;
+  SonrRadioRowOption({@required this.child, @required this.title});
+
+  // * Animated Icon from Type * //
+  factory SonrRadioRowOption.animated(ArtboardType type, String title) {
+    return SonrRadioRowOption(
+        child: RiveContainer(
+          height: 60,
+          width: 60,
+          type: type,
+        ),
+        title: title);
+  }
+
+  // * Static Icon Child * //
+  factory SonrRadioRowOption.icon(SonrIcon icon, String title) {
+    return SonrRadioRowOption(child: icon, title: title);
+  }
+
+  // * Text Only Item * //
+  factory SonrRadioRowOption.normal(String title) {
+    return SonrRadioRowOption(child: Container(), title: title);
+  }
+}
+
+// ^ Builds Radio Item Widget ^ //
+class SonrRadio extends StatelessWidget {
+  final groupValue = (-1).obs;
+  final List<SonrRadioRowOption> options;
+  final Function(int, String) onUpdated;
+  final double width;
+  final double height;
+
+  SonrRadio({@required this.options, Key key, @required this.onUpdated, this.width, this.height}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width ?? Get.width,
+      height: height ?? 85,
+      child: ObxValue<RxInt>(
+          (groupValue) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: List.generate(options.length, (index) {
+                  return SonrRadioItem(
+                    value: index,
+                    groupValue: groupValue.value,
+                    title: options[index].title,
+                    child: options[index].child,
+                    onChanged: () {
+                      groupValue(index);
+                      onUpdated(index, options[index].title);
+                    },
+                  );
+                }),
+              ),
+          groupValue),
+    );
+  }
+}
+
+class SonrRadioItem extends StatelessWidget {
+  final int value;
+  final int groupValue;
+  final Function onChanged;
+  final Widget child;
+  final String title;
+
+  const SonrRadioItem(
+      {@required this.value, @required this.title, @required this.groupValue, @required this.child, Key key, @required this.onChanged})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      NeumorphicRadio(
+        style: NeumorphicRadioStyle(
+            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+        child: child,
+        value: value,
+        groupValue: groupValue,
+        onChanged: (i) => onChanged(),
+      ),
+      Padding(padding: EdgeInsets.only(top: 4)),
+      SonrText.medium(title, size: 14, color: Colors.black),
+    ]);
   }
 }

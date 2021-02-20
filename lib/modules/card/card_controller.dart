@@ -24,6 +24,7 @@ class TransferCardController extends GetxController {
     // @ Listen for Animation Complete
     animationCompleted.listen((result) {
       // Present Home Controller
+      Get.back();
       Get.offNamed('/home');
     });
   }
@@ -35,7 +36,7 @@ class TransferCardController extends GetxController {
 
     // Check if Send Back
     if (sendBackContact) {
-      Get.find<SonrService>().respond(true);
+      SonrService.respond(true);
     }
 
     // Return to HomeScreen
@@ -55,7 +56,7 @@ class TransferCardController extends GetxController {
 
   // ^ Accept Transfer Invite Request ^ //
   acceptTransfer(TransferCard card) {
-    Get.find<SonrService>().respond(true);
+    SonrService.respond(true);
     SonrOverlay.back();
 
     Get.dialog(ProgressView(this, card, card.properties.size > 5000000), barrierDismissible: false);
@@ -64,7 +65,7 @@ class TransferCardController extends GetxController {
   // ^ Decline Invite Request ^ //
   declineInvite() {
     // Check if accepted
-    Get.find<SonrService>().respond(false);
+    SonrService.respond(false);
     SonrOverlay.back();
   }
 

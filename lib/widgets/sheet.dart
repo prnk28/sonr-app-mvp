@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:get/get.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';
@@ -17,7 +17,7 @@ class ShareSheet extends StatelessWidget {
   const ShareSheet({Key key, @required this.child, @required this.size, @required this.payloadType}) : super(key: key);
 
   // @ Bottom Sheet for Media
-  factory ShareSheet.media(List<intent.SharedMediaFile> sharedFiles) {
+  factory ShareSheet.media(List<SharedMediaFile> sharedFiles) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 3 + 150);
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
@@ -142,7 +142,7 @@ class _ShareSheetContentView extends StatelessWidget {
 
 // ** ShareSheet Item Widget ** //
 class _ShareItem extends StatelessWidget {
-  final List<intent.SharedMediaFile> sharedFiles;
+  final List<SharedMediaFile> sharedFiles;
   final Size size;
   final String urlText;
   final bool isURL;
@@ -153,7 +153,7 @@ class _ShareItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (isURL) {
       // Set Payload
-      Get.find<SonrService>().setPayload(Payload.URL, url: urlText);
+      SonrService.queueUrl(urlText);
     }
     // Return Widget
     return Container(
@@ -168,10 +168,8 @@ class _ShareItem extends StatelessWidget {
 
   _buildMediaView() {
     // Get Shared File
-    intent.SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
-
-    // Set Payload
-    Get.find<SonrService>().setPayload(Payload.MEDIA, path: sharedIntent.path);
+    SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+    SonrService.queueMedia(sharedIntent.path);
 
     // Create View
     return ClipRRect(

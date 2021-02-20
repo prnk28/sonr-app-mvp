@@ -1,10 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/social_service.dart';
-import 'package:sonr_app/service/sql_service.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/media/camera_binding.dart';
@@ -22,9 +20,12 @@ void main() async {
 
 // ^ Services (Files, Contacts) ^ //
 initServices() async {
+  await Get.putAsync(() => UserService().init()); // First Required Service
+  await Get.putAsync(() => DeviceService().init()); // Second Required Service
+  await Get.putAsync(() => MediaService().init());
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SocialMediaService().init());
-  await Get.putAsync(() => DeviceService().init());
+  await Get.putAsync(() => SonrService().init()); // Last Initialized Service
 }
 
 // ^ Initial Controller Bindings ^ //
@@ -35,10 +36,6 @@ class InitialBinding implements Bindings {
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
-    Get.lazyPut<RiveWidgetController>(() => RiveWidgetController('assets/animations/tile_preview.riv'), fenix: true);
-    // Get.put(SonrOverlay());
-    // Get.put(SonrPositionedOverlay());
-    // Get.put<RiveWidgetController>(RiveWidgetController('assets/animations/tile_preview.riv'), permanent: true);
   }
 }
 
@@ -49,44 +46,28 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Artboard _riveArtboard;
   @override
   void initState() {
-    // Load the RiveFile from the binary data.
-    rootBundle.load('assets/animations/splash_screen.riv').then(
-      (data) async {
-        // Await Loading
-        final file = RiveFile();
-        if (file.import(data)) {
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          setState(() => _riveArtboard = artboard);
-        }
-      },
-    );
-
     super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     // Listen to Device Start Status
-    Get.find<DeviceService>().startStatus.listen((status) {
-      switch (status) {
-        case StartStatus.Success:
+    Future.delayed(2.seconds, () {
+      switch (DeviceService.status.value) {
+        case DeviceStatus.Success:
           Get.offNamed("/home");
           break;
-        case StartStatus.NoUser:
+        case DeviceStatus.NoUser:
           Get.offNamed("/register");
           break;
-        case StartStatus.NoLocation:
+        case DeviceStatus.NoLocation:
           SonrSnack.error("Location Permissions Required for Sonr");
           break;
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GetMaterialApp(
       getPages: K_PAGES,
       initialBinding: InitialBinding(),
@@ -99,13 +80,12 @@ class _AppState extends State<App> {
             alignment: Alignment.topCenter,
             children: [
               // @ Rive Animation
-              Container(
-                  width: Get.width,
-                  height: Get.height,
-                  child: Center(
-                      child: _riveArtboard == null
-                          ? const SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent)))
-                          : Rive(artboard: _riveArtboard))),
+              RiveContainer(
+                type: ArtboardType.Splash,
+                width: Get.width,
+                height: Get.height,
+                placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+              ),
 
               // @ Fade Animation of Text
               PlayAnimation<double>(

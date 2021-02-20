@@ -2,12 +2,29 @@ import 'dart:convert';
 
 // ^ API Endpoints ^ //
 const TWITTER_API_USERS = "https://api.twitter.com/2/users/by?usernames=";
-const TWITTER_API_TWEETS =
-    "https://api.twitter.com/2/tweets/search/recent?query=from:";
-const TWITTER_FIELDS_USERS =
-    "&user.fields=created_at,description,entities,pinned_tweet_id,public_metrics,url,verified,profile_image_url";
-const TWITTER_FIELDS_TWEETS =
-    "&tweet.fields=created_at&expansions=author_id&user.fields=created_at";
+const TWITTER_API_TWEETS = "https://api.twitter.com/2/tweets/search/recent?query=from:";
+const TWITTER_FIELDS_USERS = "&user.fields=created_at,description,entities,pinned_tweet_id,public_metrics,url,verified,profile_image_url";
+const TWITTER_FIELDS_TWEETS = "&tweet.fields=created_at&expansions=author_id&user.fields=created_at";
+
+class TwitterModel {
+  final TwitterUserModel _user;
+  final TweetsModel _tweets;
+
+  bool get hasUser => _user != null;
+  bool get hasTweets => _tweets != null;
+  UserData get user => hasUser ? _user.data.first : null;
+  List<Tweet> get tweets => hasTweets ? _tweets.tweets : [];
+  int get count => hasTweets ? _tweets.tweets.length : -1;
+  String get username => hasUser ? _user.data.first.username : "";
+
+  TwitterModel(this._user, this._tweets);
+
+  factory TwitterModel.fromResponses(dynamic tweetsResponse, dynamic userResponse) {
+    var tweets = TweetsModel.fromResponse(tweetsResponse);
+    var user = TwitterUserModel.fromResponse(userResponse);
+    return TwitterModel(user, tweets);
+  }
+}
 
 // ^ Model ^ //
 class TweetsModel {
@@ -85,15 +102,7 @@ class Tweet {
   Entities entities;
   List<ReferencedTweets> referencedTweets;
 
-  Tweet(
-      {this.authorId,
-      this.conversationId,
-      this.createdAt,
-      this.id,
-      this.text,
-      this.attachments,
-      this.entities,
-      this.referencedTweets});
+  Tweet({this.authorId, this.conversationId, this.createdAt, this.id, this.text, this.attachments, this.entities, this.referencedTweets});
 
   Tweet.fromJson(Map<String, dynamic> json) {
     authorId = json['author_id'];
@@ -101,12 +110,8 @@ class Tweet {
     createdAt = json['created_at'];
     id = json['id'];
     text = json['text'];
-    attachments = json['attachments'] != null
-        ? new Attachments.fromJson(json['attachments'])
-        : null;
-    entities = json['entities'] != null
-        ? new Entities.fromJson(json['entities'])
-        : null;
+    attachments = json['attachments'] != null ? new Attachments.fromJson(json['attachments']) : null;
+    entities = json['entities'] != null ? new Entities.fromJson(json['entities']) : null;
     if (json['referenced_tweets'] != null) {
       referencedTweets = <ReferencedTweets>[];
       json['referenced_tweets'].forEach((v) {
@@ -129,8 +134,7 @@ class Tweet {
       data['entities'] = this.entities.toJson();
     }
     if (this.referencedTweets != null) {
-      data['referenced_tweets'] =
-          this.referencedTweets.map((v) => v.toJson()).toList();
+      data['referenced_tweets'] = this.referencedTweets.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -207,17 +211,7 @@ class Urls {
   String description;
   String unwoundUrl;
 
-  Urls(
-      {this.start,
-      this.end,
-      this.url,
-      this.expandedUrl,
-      this.displayUrl,
-      this.images,
-      this.status,
-      this.title,
-      this.description,
-      this.unwoundUrl});
+  Urls({this.start, this.end, this.url, this.expandedUrl, this.displayUrl, this.images, this.status, this.title, this.description, this.unwoundUrl});
 
   Urls.fromJson(Map<String, dynamic> json) {
     start = json['start'];
@@ -348,13 +342,7 @@ class Errors {
   String value;
   String type;
 
-  Errors(
-      {this.detail,
-      this.title,
-      this.resourceType,
-      this.parameter,
-      this.value,
-      this.type});
+  Errors({this.detail, this.title, this.resourceType, this.parameter, this.value, this.type});
 
   Errors.fromJson(Map<String, dynamic> json) {
     detail = json['detail'];
@@ -404,14 +392,10 @@ class UserData {
       this.profilePicUrl});
 
   UserData.fromJson(Map<String, dynamic> json) {
-    entities = json['entities'] != null
-        ? new Entities.fromJson(json['entities'])
-        : null;
+    entities = json['entities'] != null ? new Entities.fromJson(json['entities']) : null;
     createdAt = json['created_at'];
     description = json['description'];
-    publicMetrics = json['public_metrics'] != null
-        ? new PublicMetrics.fromJson(json['public_metrics'])
-        : null;
+    publicMetrics = json['public_metrics'] != null ? new PublicMetrics.fromJson(json['public_metrics']) : null;
     username = json['username'];
     pinnedTweetId = json['pinned_tweet_id'];
     id = json['id'];
@@ -493,11 +477,7 @@ class PublicMetrics {
   int tweetCount;
   int listedCount;
 
-  PublicMetrics(
-      {this.followersCount,
-      this.followingCount,
-      this.tweetCount,
-      this.listedCount});
+  PublicMetrics({this.followersCount, this.followingCount, this.tweetCount, this.listedCount});
 
   PublicMetrics.fromJson(Map<String, dynamic> json) {
     followersCount = json['followers_count'];

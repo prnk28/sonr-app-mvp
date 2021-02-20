@@ -1,224 +1,70 @@
 import 'dart:async';
-
-import 'package:geolocator/geolocator.dart' as Pkg;
+import 'package:flutter_compass/flutter_compass.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart' as intent;
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonr_app/data/model_user.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart' hide User;
-import 'package:gallery_saver/gallery_saver.dart';
+import 'package:sonr_app/service/sonr_service.dart' hide Position;
+import 'package:sonr_app/service/user_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
-enum StartStatus { Success, NoUser, NoLocation }
+enum DeviceStatus { Success, NoUser, NoLocation }
 
 class DeviceService extends GetxService {
-  // Properties
-  final contact = Rx<Contact>();
-  final incomingMedia = <SharedMediaFile>[].obs;
-  final incomingText = "".obs;
-  final startStatus = Rx<StartStatus>();
+  // Status/Sensor Properties
+  final _direction = Rx<CompassEvent>();
+  final _position = Rx<Position>();
+  final _status = Rx<DeviceStatus>();
 
-  // References
-  StreamSubscription _intentDataStreamSubscription;
-  SharedPreferences _prefs;
-  bool hasLocation;
-  bool hasUser;
-  Pkg.Position position;
-  User user;
+  static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
+  static Rx<Position> get position => Get.find<DeviceService>()._position;
+  static Rx<DeviceStatus> get status => Get.find<DeviceService>()._status;
 
-  DeviceService() {
-    // @ Save Contact Changes
-    contact.listen((updatedContact) {
-      if (hasUser) {
-        user.contact = updatedContact;
-        _prefs.setString("user", user.toJson());
-      }
-    });
-
-    // @ Listen to Incoming File
-    _intentDataStreamSubscription = intent.ReceiveSharingIntent.getMediaStream().listen((List<intent.SharedMediaFile> data) {
-      if (!Get.isBottomSheetOpen && hasUser) {
-        Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.dialogBackground, isDismissible: false);
-      }
-    }, onError: (err) {
-      print("getIntentDataStream error: $err");
-    });
-
-    // @ Listen to Incoming Text
-    _intentDataStreamSubscription = intent.ReceiveSharingIntent.getTextStream().listen((String text) {
-      if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && hasUser) {
-        Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.dialogBackground, isDismissible: false);
-      }
-    }, onError: (err) {
-      print("getLinkStream error: $err");
-    });
-  }
-
-  @override
-  void onInit() {
-    // @ For sharing images coming from outside the app while the app is closed
-    intent.ReceiveSharingIntent.getInitialMedia().then((List<intent.SharedMediaFile> data) {
-      if (data != null) {
-        incomingMedia(data);
-        incomingMedia.refresh();
-      }
-    });
-
-    // @ For sharing or opening urls/text coming from outside the app while the app is closed
-    intent.ReceiveSharingIntent.getInitialText().then((String text) {
-      if (text != null) {
-        incomingText(text);
-        incomingText.refresh();
-      }
-    });
-    super.onInit();
-  }
+  // Permission Properties
+  final cameraPermitted = false.obs;
+  final galleryPermitted = false.obs;
+  final locationPermitted = false.obs;
+  final microphonePermitted = false.obs;
+  final notificationPermitted = false.obs;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
-    // Init Shared Preferences
-    _prefs = await SharedPreferences.getInstance();
+    await setPermissionStatus();
+    await refreshLocation();
 
-    // Check Location Status
-    hasLocation = await Permission.locationWhenInUse.serviceStatus == ServiceStatus.enabled;
-
-    // Check User Status
-    hasUser = _prefs.containsKey("user");
-    start();
+    // @ 1. Check for Location
+    if (locationPermitted.value) {
+      if (UserService.exists.value) {
+        _direction.bindStream(FlutterCompass.events);
+        _status(DeviceStatus.Success);
+      } else {
+        _status(DeviceStatus.NoUser);
+      }
+    } else {
+      _status(DeviceStatus.NoLocation);
+    }
     return this;
   }
 
-  // ^ Method to Connect User Event ^
-  void start() async {
-    // @ 1. Check for Location
-    if (hasLocation = await Permission.locationWhenInUse.request().isGranted) {
-      if (hasUser) {
-        // Get Json Value
-        var profileJson = _prefs.getString("user");
-
-        // Get Profile object
-        user = User.fromJson(profileJson);
-        contact(user.contact);
-
-        if (user != null) {
-          // Get Current Position
-          position = await user.position;
-
-          // Initialize Dependent Services
-          Get.putAsync(() => SonrService().init(position, user));
-          startStatus(StartStatus.Success);
-        } else {
-          startStatus(StartStatus.NoUser);
-        }
-      } else {
-        startStatus(StartStatus.NoUser);
-      }
-    } else {
-      startStatus(StartStatus.NoLocation);
-    }
-  }
 
   // ^ CreateUser Event ^
   void createUser(Contact contact, String username) async {
     // Set Sonr Controller
+    locationPermitted(await Permission.locationWhenInUse.request().isGranted);
     // @ 1. Check for Location
-    if (await Permission.locationWhenInUse.request().isGranted) {
-      // Get Data and Save in SharedPrefs
-      user = User(contact, username);
-      _prefs.setString("user", user.toJson());
-      hasUser = true;
-
-      // Get Current Position
-      position = await user.position;
-
-      // Initialize Dependent Services
-      Get.putAsync(() => SonrService().init(position, user));
+    if (locationPermitted.value) {
+      // Save Current Contact
+      await UserService.saveChanges(providedContact: contact);
+      SonrService.connect();
       Get.offNamed("/home");
     } else {
       print("Location Permission Denied");
     }
   }
 
-  // ^ Checks for Initial Media/Text to Share ^ //
-  void checkInitialShare() {
-    // @ Check for Media
-    if (incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
-      // Open Sheet
-      Get.bottomSheet(ShareSheet.media(incomingMedia), barrierColor: SonrColor.dialogBackground, isDismissible: false);
-
-      // Reset Incoming
-      incomingMedia.clear();
-      incomingMedia.refresh();
-    }
-
-    // @ Check for Text
-    if (incomingText.value != "" && GetUtils.isURL(incomingText.value) && !Get.isBottomSheetOpen) {
-      // Open Sheet
-      Get.bottomSheet(ShareSheet.url(incomingText.value), barrierColor: SonrColor.dialogBackground, isDismissible: false);
-
-      // Reset Incoming
-      incomingText("");
-      incomingText.refresh();
-    }
-  }
-
-  // ^ Saves Received Media to Gallery ^ //
-  Future<bool> saveMediaFromCard(TransferCard card) async {
-    // Get Data from Media
-    final path = card.metadata.path;
-    if (card.hasMetadata()) {
-      // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image) {
-        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
-
-        // Visualize Result
-        if (result) {
-          SonrSnack.success("Saved Photo to your Device's Gallery");
-        } else {
-          SonrSnack.error("Unable to save Photo to your Gallery");
-        }
-        return result;
-      }
-
-      // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video) {
-        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
-
-        // Visualize Result
-        if (result) {
-          SonrSnack.success("Saved Video to your Device's Gallery");
-        } else {
-          SonrSnack.error("Unable to save Video to your Gallery");
-        }
-        return result;
-      }
-      return false;
-    } else {
-      SonrSnack.success("Unable to save Media to Gallery");
-      return false;
-    }
-  }
-
-  // ^ Saves Photo to Gallery ^ //
-  Future savePhotoFromCamera(String path) async {
-    // Save Image to Gallery
-    await GallerySaver.saveImage(path, albumName: "Sonr");
-  }
-
-  // ^ Saves Photo to Gallery ^ //
-  Future saveVideoFromCamera(String path) async {
-    // Save Image to Gallery
-    await GallerySaver.saveImage(path, albumName: "Sonr");
-  }
-
   // ^ Launch a URL Event ^ //
-  launchURL(String url) async {
+  Future launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -226,9 +72,60 @@ class DeviceService extends GetxService {
     }
   }
 
-  @override
-  void onClose() {
-    _intentDataStreamSubscription.cancel();
-    super.onClose();
+  // ^ Refresh User Location Position ^ //
+  Future<Position> refreshLocation() async {
+    if (locationPermitted.value) {
+      _position(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
+      return _position.value;
+    }
+    return null;
+  }
+
+  // ^ Sets Permission Status from Service ^ //
+  Future setPermissionStatus() async {
+    cameraPermitted(await Permission.camera.isGranted);
+    galleryPermitted(await Permission.mediaLibrary.isGranted);
+    locationPermitted(await Permission.locationWhenInUse.isGranted);
+    microphonePermitted(await Permission.microphone.isGranted);
+    notificationPermitted(await Permission.notification.isGranted);
+  }
+
+  // ************************* //
+  // ** Permission Requests ** //
+  // ************************* //
+  static Future<bool> requestCamera() async {
+    var result = await Permission.camera.request();
+    Get.find<DeviceService>().cameraPermitted(result == PermissionStatus.granted);
+    return result == PermissionStatus.granted;
+  }
+
+  static Future<bool> requestGallery() async {
+    var result = await Permission.mediaLibrary.request();
+    Get.find<DeviceService>().galleryPermitted(result == PermissionStatus.granted);
+    return result == PermissionStatus.granted;
+  }
+
+  static Future<bool> requestLocation() async {
+    // Request
+    var result = await Permission.locationWhenInUse.request();
+    Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
+
+    // Bind Direction Stream
+    if (result == PermissionStatus.granted) {
+      Get.find<DeviceService>()._direction.bindStream(FlutterCompass.events);
+    }
+    return result == PermissionStatus.granted;
+  }
+
+  static Future<bool> requestMicrophone() async {
+    var result = await Permission.microphone.request();
+    Get.find<DeviceService>().microphonePermitted(result == PermissionStatus.granted);
+    return result == PermissionStatus.granted;
+  }
+
+  static Future<bool> requestNotifications() async {
+    var result = await Permission.notification.request();
+    Get.find<DeviceService>().notificationPermitted(result == PermissionStatus.granted);
+    return result == PermissionStatus.granted;
   }
 }

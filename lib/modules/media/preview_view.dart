@@ -1,13 +1,7 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
-import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/service/device_service.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_core/models/models.dart';
 import 'package:better_player/better_player.dart';
 
 class MediaPreviewView extends GetView<PreviewController> {
@@ -56,7 +50,7 @@ class _CaptureToolsView extends GetView<PreviewController> {
             SonrButton.circle(
                 onPressed: () {
                   HapticFeedback.heavyImpact();
-                  controller.continueMedia();
+                  MediaController.confirmCaptured();
                 },
                 icon: SonrIcon.accept),
           ]),
@@ -133,7 +127,7 @@ class PreviewController extends GetxController {
     if (await videoDir.exists()) {
       await videoDir.delete(recursive: true);
     }
-    MediaScreenController.ready();
+    MediaController.ready();
   }
 
   // ^ Video Completed Recording ^ //
@@ -146,24 +140,5 @@ class PreviewController extends GetxController {
   setPhoto(String path) {
     photoPath = path;
     isVideo(false);
-  }
-
-  // ^ Continue with Media Capture ^ //
-  continueMedia() async {
-    if (isVideo.value) {
-      // Save Video
-      Get.find<DeviceService>().savePhotoFromCamera(videoPath);
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: videoPath);
-
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    } else {
-      // Save Photo
-      Get.find<DeviceService>().savePhotoFromCamera(photoPath);
-      Get.find<SonrService>().setPayload(Payload.MEDIA, path: photoPath);
-
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    }
   }
 }
