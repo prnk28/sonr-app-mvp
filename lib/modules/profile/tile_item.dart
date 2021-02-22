@@ -1,4 +1,4 @@
-import 'package:sonr_app/data/data_constant.dart';
+import 'package:sonr_app/data/constant_data.dart';
 import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'social_view.dart';

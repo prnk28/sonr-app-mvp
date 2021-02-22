@@ -1,4 +1,4 @@
-import 'package:sonr_app/data/data_constant.dart';
+import 'package:sonr_app/data/constant_data.dart';
 import 'package:sonr_app/service/constant_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'tile_item.dart';

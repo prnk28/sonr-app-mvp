@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/sonr_service.dart' hide Position;
 import 'package:sonr_app/service/user_service.dart';
+import 'package:sonr_app/widgets/overlay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
@@ -34,19 +35,19 @@ class DeviceService extends GetxService {
     await refreshLocation();
 
     // @ 1. Check for Location
-    if (locationPermitted.value) {
-      if (UserService.exists.value) {
-        _direction.bindStream(FlutterCompass.events);
+    if (UserService.exists.value) {
+      if (locationPermitted.value) {
         _status(DeviceStatus.Success);
+        _direction.bindStream(FlutterCompass.events);
       } else {
-        _status(DeviceStatus.NoUser);
+        _status(DeviceStatus.NoLocation);
       }
     } else {
-      _status(DeviceStatus.NoLocation);
+      _status(DeviceStatus.NoUser);
     }
+
     return this;
   }
-
 
   // ^ CreateUser Event ^
   void createUser(Contact contact, String username) async {
@@ -94,38 +95,89 @@ class DeviceService extends GetxService {
   // ** Permission Requests ** //
   // ************************* //
   static Future<bool> requestCamera() async {
-    var result = await Permission.camera.request();
-    Get.find<DeviceService>().cameraPermitted(result == PermissionStatus.granted);
-    return result == PermissionStatus.granted;
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+
+    if (decision) {
+      var result = await Permission.camera.request();
+      Get.find<DeviceService>().cameraPermitted(result == PermissionStatus.granted);
+      return result == PermissionStatus.granted;
+    } else {
+      return false;
+    }
   }
 
   static Future<bool> requestGallery() async {
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr needs your Permission to access your phones Gallery.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+
+    if (decision) {
+    } else {
+      return false;
+    }
+
     var result = await Permission.mediaLibrary.request();
     Get.find<DeviceService>().galleryPermitted(result == PermissionStatus.granted);
     return result == PermissionStatus.granted;
   }
 
   static Future<bool> requestLocation() async {
-    // Request
-    var result = await Permission.locationWhenInUse.request();
-    Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr requires location in order to find devices in your area.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
 
-    // Bind Direction Stream
-    if (result == PermissionStatus.granted) {
-      Get.find<DeviceService>()._direction.bindStream(FlutterCompass.events);
+    if (decision) {
+      // Request
+      var result = await Permission.locationWhenInUse.request();
+      Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
+
+      // Bind Direction Stream
+      if (result == PermissionStatus.granted) {
+        Get.find<DeviceService>()._direction.bindStream(FlutterCompass.events);
+      }
+      return result == PermissionStatus.granted;
+    } else {
+      return false;
     }
-    return result == PermissionStatus.granted;
   }
 
   static Future<bool> requestMicrophone() async {
-    var result = await Permission.microphone.request();
-    Get.find<DeviceService>().microphonePermitted(result == PermissionStatus.granted);
-    return result == PermissionStatus.granted;
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr uses your microphone in order to communicate with other devices.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+
+    if (decision) {
+      var result = await Permission.microphone.request();
+      Get.find<DeviceService>().microphonePermitted(result == PermissionStatus.granted);
+      return result == PermissionStatus.granted;
+    } else {
+      return false;
+    }
   }
 
   static Future<bool> requestNotifications() async {
-    var result = await Permission.notification.request();
-    Get.find<DeviceService>().notificationPermitted(result == PermissionStatus.granted);
-    return result == PermissionStatus.granted;
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr would like to send you Notifications for Transfer Invites.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+
+    if (decision) {
+      var result = await Permission.notification.request();
+      Get.find<DeviceService>().notificationPermitted(result == PermissionStatus.granted);
+      return result == PermissionStatus.granted;
+    } else {
+      return false;
+    }
   }
 }

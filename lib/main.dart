@@ -61,6 +61,11 @@ class _AppState extends State<App> {
           break;
         case DeviceStatus.NoLocation:
           SonrSnack.error("Location Permissions Required for Sonr");
+          DeviceService.requestLocation().then((value) {
+            if (value) {
+              Get.offNamed("/home");
+            }
+          });
           break;
       }
     });

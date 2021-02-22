@@ -20,6 +20,7 @@ class SonrService extends GetxService {
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
 
+  static int get lobbySize => Get.find<SonrService>().peers.length;
   static RxBool get connected => Get.find<SonrService>()._connected;
 
   // @ Set References
