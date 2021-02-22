@@ -31,19 +31,21 @@ class TransferController extends GetxController {
   TransferController() {
     // @ Update Direction
     DeviceService.direction.listen((newDir) {
-      // Update String Elements
-      string(_directionString(newDir.headingForCameraMode));
-      heading(_headingString(newDir.headingForCameraMode));
+      if (!this.isClosed) {
+        // Update String Elements
+        string(_directionString(newDir.headingForCameraMode));
+        heading(_headingString(newDir.headingForCameraMode));
 
-      // Reference
-      direction(newDir.headingForCameraMode);
-      angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
+        // Reference
+        direction(newDir.headingForCameraMode);
+        angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
 
-      // Calculate Degrees
-      if (newDir.headingForCameraMode + 90 > 360) {
-        degrees(newDir.headingForCameraMode - 270);
-      } else {
-        degrees(newDir.headingForCameraMode + 90);
+        // Calculate Degrees
+        if (newDir.headingForCameraMode + 90 > 360) {
+          degrees(newDir.headingForCameraMode - 270);
+        } else {
+          degrees(newDir.headingForCameraMode + 90);
+        }
       }
     });
 
