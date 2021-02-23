@@ -1,6 +1,6 @@
 import 'peer_controller.dart';
 import 'dart:ui';
-import 'package:sonr_app/service/constant_service.dart';
+import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:rive/rive.dart';
 

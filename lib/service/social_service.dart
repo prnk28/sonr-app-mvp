@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/constant_data.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/models/models.dart';

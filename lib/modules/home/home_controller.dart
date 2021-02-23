@@ -1,4 +1,4 @@
-import 'package:sonr_app/service/constant_service.dart';
+import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }

@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:sonr_app/service/constant_service.dart';
+import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 

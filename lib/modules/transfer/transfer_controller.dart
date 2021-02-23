@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:sonr_app/modules/transfer/peer_widget.dart';
-import 'package:sonr_app/service/constant_service.dart';
+import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum LobbyState {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/service/constant_service.dart';
+import 'package:sonr_app/service/service.dart';
 
 class PeerController extends GetxController {
   // Properties
