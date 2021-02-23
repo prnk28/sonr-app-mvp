@@ -55,6 +55,7 @@ class UserService extends GetxService {
       // Get Json Value
       var profileJson = _prefs.getString("user");
       var user = User.fromJson(profileJson);
+      
 
       // Set Contact Values
       _firstName(user.contact.firstName);
