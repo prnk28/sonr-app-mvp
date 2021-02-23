@@ -1,6 +1,4 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';

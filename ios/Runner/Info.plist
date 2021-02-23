@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>For Flutter</string>
+	<string>USed for proximity communications</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -40,10 +40,6 @@
 	<string>Privacy - Location When In Use Usage Description</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_dartobservatory._tcp</string>
-	</array>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>For Beacons usage</string>
 	<key>NSCameraUsageDescription</key>

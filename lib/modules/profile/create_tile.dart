@@ -1,4 +1,3 @@
-import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/service/service.dart';

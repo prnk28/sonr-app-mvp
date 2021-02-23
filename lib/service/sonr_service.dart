@@ -104,18 +104,6 @@ class SonrService extends GetxService {
     }
   }
 
-  // ^ Refresh Current Lobby ^ //
-  static void refresh() async {
-    // Get Data
-    var snr = Get.find<SonrService>();
-    // - Check Connected -
-    if (snr._connected.value) {
-      await snr._node.refresh();
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-    }
-  }
-
   // ^ Sets Contact for Node ^
   static void setContact(Contact contact) async {
     // Get Data
