@@ -197,25 +197,6 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static popAt(int index) {
-    if (isOpen) {
-      // Validate PopCount is less than List Length
-      if (index <= count - 1) {
-        _controller.overlays[index].dismiss();
-        _controller.overlays.removeAt(index);
-      } else {
-        print("Invalid Index");
-      }
-
-      // Refresh List
-      _controller.currentOverlay(_controller.overlays[count - 1]);
-      _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
-    }
-  }
-
-  // ^ Method Finds Overlay Controller and Prompts Alert ^ //
   static closeAll() {
     if (isOpen) {
       // Iterate through Overlays
@@ -469,7 +450,7 @@ class _AlertOverlayView extends StatelessWidget {
                   child: SonrButton.stadium(
                     onPressed: () {
                       if (closeOnResponse) {
-                        SonrOverlay.popAt(index);
+                        SonrOverlay.back();
                       }
                     },
                     icon: SonrIcon.accept,
@@ -613,7 +594,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                     onPressed: () {
                       onDecision(false);
                       if (closeOnResponse) {
-                        SonrOverlay.popAt(index);
+                        SonrOverlay.back();
                       }
                     },
                     child: Padding(
@@ -628,7 +609,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                     onPressed: () {
                       onDecision(true);
                       if (closeOnResponse) {
-                        SonrOverlay.popAt(index);
+                        SonrOverlay.back();
                       }
                     },
                     icon: SonrIcon.accept,
