@@ -33,10 +33,12 @@ class SonrOverlay extends GetxController {
       {Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300),
       bool barrierDismissible: true,
+      bool disableAnimation: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
     // Create Overlay
-    var overlay = _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view);
+    var overlay =
+        _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view, disableAnimation: disableAnimation);
 
     // Add Overlay to List
     _controller.currentOverlay(overlay);
@@ -287,6 +289,7 @@ class _SonrFixedOverlayEntry {
   final double blur;
   final Color backgroundColor;
   final bool barrierDismissible;
+  final bool disableAnimation;
   final MainAxisAlignment mainAxisAlignment;
 
   // References
@@ -295,7 +298,10 @@ class _SonrFixedOverlayEntry {
 
   // ** Constructer ** //
   _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
-      {this.blur = 5.0, this.backgroundColor = SonrColor.overlayBackground, this.mainAxisAlignment = MainAxisAlignment.center}) {
+      {this.blur = 5.0,
+      this.backgroundColor = SonrColor.overlayBackground,
+      this.mainAxisAlignment = MainAxisAlignment.center,
+      this.disableAnimation = false}) {
     dismiss = () {
       overlayBackground.remove();
       overlay.remove();
@@ -322,7 +328,8 @@ class _SonrFixedOverlayEntry {
             children: [overlayWidget],
           ),
           entryDuration,
-          entryLocation);
+          entryLocation,
+          disableAnimation);
     });
     buildOverlay();
   }
@@ -375,7 +382,8 @@ class _BaseOverlayView extends StatefulWidget {
   final Widget child;
   final Duration duration;
   final OverlayEntryLocation entryLocation;
-  const _BaseOverlayView(this.child, this.duration, this.entryLocation);
+  final bool disableAnimation;
+  const _BaseOverlayView(this.child, this.duration, this.entryLocation, this.disableAnimation);
   @override
   _BaseOverlayViewState createState() => _BaseOverlayViewState();
 }
@@ -392,7 +400,12 @@ class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin 
 
   @override
   Widget build(BuildContext context) {
-    return SlideTransition(position: position, child: widget.child);
+    return widget.disableAnimation
+        ? widget.child
+        : SlideTransition(
+            position: position,
+            child: widget.child,
+          );
   }
 
   // ^ Method to Retreive Animation by Location - Default is Top ^ //

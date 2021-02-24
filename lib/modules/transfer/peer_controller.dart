@@ -1,21 +1,26 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/service.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 class PeerController extends GetxController {
   // Properties
-  final isContentVisible = false.obs;
   final artboard = Rx<Artboard>();
   final difference = 0.0.obs;
   final direction = 0.0.obs;
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
+  final contentAnimation = Rx<Triple<Tween<double>, Duration, Duration>>();
 
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
-  var peer = Peer();
-  int index;
+  final RxMap<String, Peer> peers = SonrService.peers;
+  final enabledContent = Triple((0.0).tweenTo(1.0), 500.milliseconds, 500.milliseconds);
+  final disabledContent = Triple((1.0).tweenTo(0.0), 500.milliseconds, 100.milliseconds);
+  final Peer peer;
+  final int index;
 
   // Checkers
   var _isInvited = false;
@@ -24,21 +29,15 @@ class PeerController extends GetxController {
   var _inProgress = false;
   var _hasCompleted = false;
 
-  // Animations
+  // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
-
-  PeerController() {
-    // Listen to this peers updates
-    Get.find<SonrService>().peers.listen((lob) {
-      lob.forEach((id, value) {
-        if (id == peer.id) {
-          difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
-          direction(value.position.direction);
-          offset(calculateOffset(value.platform));
-          proximity(value.position.proximity);
-        }
-      });
-    });
+  StreamSubscription<Map<String, Peer>> peerStream;
+  PeerController(this.peer, this.index) {
+    contentAnimation(enabledContent);
+    difference((userDirection.value.headingForCameraMode - peer.position.direction).abs());
+    direction(peer.position.direction);
+    offset(calculateOffset(peer.platform));
+    proximity(peer.position.proximity);
   }
 
   @override
@@ -69,18 +68,12 @@ class PeerController extends GetxController {
       // Observable Artboard
       this.artboard(artboard);
     }
+    peerStream = SonrService.peers.listen(_handlePeerUpdate);
     super.onInit();
   }
 
-  // ^ Sets Peer for this Widget ^
-  initialize(Peer peerVal, int index) {
-    this.peer = peerVal;
-    this.index = index;
-    isContentVisible(true);
-    difference((userDirection.value.headingForCameraMode - peerVal.position.direction).abs());
-    direction(peerVal.position.direction);
-    offset(calculateOffset(peerVal.platform));
-    proximity(peerVal.position.proximity);
+  void onDispose() {
+    peerStream.cancel();
   }
 
   // ^ Handle User Invitation ^
@@ -91,7 +84,7 @@ class PeerController extends GetxController {
 
       // Check for File
       if (Get.find<SonrService>().payload.value == Payload.MEDIA) {
-        isContentVisible(true);
+        contentAnimation(enabledContent);
         _pending.instance.animation.loop = Loop.pingPong;
         _pending.isActive = _isInvited = !_isInvited;
       }
@@ -105,7 +98,7 @@ class PeerController extends GetxController {
   // ^ Handle Accepted ^
   playAccepted() async {
     // Update Visibility
-    isContentVisible(false);
+    contentAnimation(disabledContent);
 
     // Start Animation
     _pending.instance.animation.loop = Loop.oneShot;
@@ -121,7 +114,7 @@ class PeerController extends GetxController {
   // ^ Handle Denied ^
   playDenied() async {
     // Update Visibility
-    isContentVisible(false);
+    contentAnimation(disabledContent);
 
     // Start Animation
     _pending.instance.animation.loop = Loop.oneShot;
@@ -137,7 +130,7 @@ class PeerController extends GetxController {
   // ^ Handle Completed ^
   playCompleted() async {
     // Update Visibility
-    isContentVisible(false);
+    contentAnimation(disabledContent);
 
     // Start Complete Animation
     _sending.instance.animation.loop = Loop.oneShot;
@@ -150,6 +143,19 @@ class PeerController extends GetxController {
     });
   }
 
+  _handlePeerUpdate(Map<String, Peer> lobby) {
+    // Initialize
+    lobby.forEach((id, value) {
+      // Update Direction
+      if (id == peer.id) {
+        difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
+        direction(value.position.direction);
+        offset(calculateOffset(value.platform));
+        proximity(value.position.proximity);
+      }
+    });
+  }
+
   // ^ Temporary: Workaround to handle Bubble States ^ //
   _reset() async {
     // Call Finish
@@ -157,7 +163,7 @@ class PeerController extends GetxController {
     _hasCompleted = false;
     _inProgress = false;
     _isInvited = false;
-    isContentVisible(true);
+    contentAnimation(enabledContent);
 
     // Remove Sending/Complete
     artboard.value.removeController(_sending);

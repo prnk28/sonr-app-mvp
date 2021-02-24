@@ -15,12 +15,12 @@ export 'package:sonr_core/sonr_core.dart';
 class SonrService extends GetxService {
   // @ Set Properties
   final _connected = false.obs;
-  final olc = "".obs;
-  final peers = Map<String, Peer>().obs;
+  final _peers = Map<String, Peer>().obs;
+  final _lobbySize = 0.obs;
   final progress = 0.0.obs;
   final payload = Rx<Payload>();
-
-  static int get lobbySize => Get.find<SonrService>().peers.length;
+  static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
+  static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static RxBool get connected => Get.find<SonrService>()._connected;
 
   // @ Set References
@@ -28,6 +28,7 @@ class SonrService extends GetxService {
   String _url;
   PeerController _peerController;
   InviteRequest_FileInfo _file;
+  var _completed = new Completer<TransferCard>();
 
   // ^ Updates Node^ //
   SonrService() {
@@ -216,6 +217,16 @@ class SonrService extends GetxService {
     }
   }
 
+  static Future<TransferCard> completed() async {
+    // Get Data
+    var snr = Get.find<SonrService>();
+    if (snr._connected.value) {
+      return snr._completed.future;
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
+    }
+  }
+
   // **************************
   // ******* Callbacks ********
   // **************************
@@ -230,8 +241,8 @@ class SonrService extends GetxService {
   void _handleRefresh(dynamic data) {
     if (data is Lobby) {
       // Update Lobby Data
-      olc(data.olc);
-      peers(data.peers);
+      _peers(data.peers);
+      _lobbySize(data.peers.length);
     }
   }
 
@@ -311,6 +322,7 @@ class SonrService extends GetxService {
 
       // Save Card to Gallery
       data.hasExported = await MediaService.saveTransfer(data);
+      _completed.complete(data);
 
       // Store In SQL
       Get.find<SQLService>().storeCard(data);
@@ -318,6 +330,7 @@ class SonrService extends GetxService {
       // Reset Parameters
       Future.delayed(500.milliseconds, () {
         progress(0.0);
+        _completed = new Completer<TransferCard>();
       });
     }
   }

@@ -11,7 +11,6 @@ import 'package:sonr_core/models/models.dart';
 const K_FB_GRAPH = 'https://graph.facebook.com/v2.12/';
 
 enum SocialAuthType { Link, OAuth }
-
 class SocialMediaService extends GetxService {
   String _twitterBearer;
   // ignore: unused_field

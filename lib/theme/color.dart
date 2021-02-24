@@ -14,6 +14,9 @@ class SonrColor {
   static const Color overlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
   static const Color disabledButton = Color.fromRGBO(179, 181, 181, 1.0);
 
+  static Gradient get activeBulb => FlutterGradients.findByName(FlutterGradientNames.summerGames);
+  static Gradient get inactiveBulb => FlutterGradients.findByName(FlutterGradientNames.octoberSilence);
+
   // ^ Generates Random Gradient for Progress View ^ //
   static FlutterGradientNames randomGradient() {
     var opts = [

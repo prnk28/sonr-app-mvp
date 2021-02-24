@@ -1,17 +1,20 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'compass_view.dart';
+import 'peer_widget.dart';
 import 'transfer_controller.dart';
 
-class TransferScreen extends StatelessWidget {
+class TransferScreen extends GetView<TransferController> {
   // @ Initialize
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold.appBarLeading(
-        title: _buildTitle(Get.find<SonrService>().peers().length),
+        title: controller.title.value,
         leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer")),
         body: SafeArea(
             child: Stack(
@@ -26,43 +29,70 @@ class TransferScreen extends StatelessWidget {
                 )),
 
             // @ Lobby View
-            LobbyView(),
+            PlayAnimation<double>(
+                tween: (0.0).tweenTo(1.0),
+                duration: 150.milliseconds,
+                builder: (context, child, value) {
+                  return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: LobbyStack());
+                }),
 
             // @ Compass View
             CompassView(),
           ],
         ))));
   }
-
-  String _buildTitle(int peerCount) {
-    if (peerCount == 0) {
-      return "Nobody Here";
-    } else if (peerCount == 1) {
-      return "1 Person";
-    } else {
-      return "$peerCount People";
-    }
-  }
+}
+class LobbyStack extends StatefulWidget {
+  @override
+  _LobbyStackState createState() => _LobbyStackState();
 }
 
-class LobbyView extends GetView<TransferController> {
-  LobbyView({Key key}) : super(key: key);
+class _LobbyStackState extends State<LobbyStack> {
+  // References
+  int lobbySize = 0;
+  StreamSubscription<Map<String, Peer>> peerStream;
+  List<PeerBubble> stackChildren = <PeerBubble>[];
+
+  // * Initial State * //
+  @override
+  void initState() {
+    peerStream = SonrService.peers.listen(_handlePeerUpdate);
+    super.initState();
+  }
+
+  // * On Dispose * //
+  @override
+  void dispose() {
+    peerStream.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      // @ Listen to Lobby Updates
-      Get.find<SonrService>().peers().forEach((id, peer) {
-        controller.addPeer(id, peer);
+    return Stack(children: stackChildren);
+  }
+
+  // ^ Updates Stack Children ^ //
+  _handlePeerUpdate(Map<String, Peer> lobby) {
+    // Initialize
+    var children = <PeerBubble>[];
+
+    // Check if Lobby has Changed
+    if (lobby.length != lobbySize) {
+      // Clear List
+      stackChildren.clear();
+
+      // Iterate through peers and IDs
+      lobby.forEach((id, peer) {
+        // Add to Stack Items
+        children.add(PeerBubble(peer, stackChildren.length - 1));
       });
 
-      // Present Text
-      return PlayAnimation<double>(
-          tween: (0.0).tweenTo(1.0),
-          duration: 150.milliseconds,
-          delay: 150.milliseconds,
-          builder: (context, child, value) {
-            return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: Stack(children: List.from(controller.stackItems)));
-          });
-    });
+      // Update View
+      setState(() {
+        lobbySize = lobby.length;
+        stackChildren = children;
+      });
+    }
   }
 }

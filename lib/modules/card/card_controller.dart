@@ -20,14 +20,7 @@ class TransferCardController extends GetxController {
   final animationCompleted = false.obs;
 
   // ^ Handle Transfer Progress ^
-  TransferCardController() {
-    // @ Listen for Animation Complete
-    animationCompleted.listen((result) {
-      // Present Home Controller
-      Get.back();
-      Get.offNamed('/home');
-    });
-  }
+  TransferCardController();
 
   // ^ Accept Contact Invite Request ^ //
   acceptContact(TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
@@ -59,7 +52,25 @@ class TransferCardController extends GetxController {
     SonrService.respond(true);
     SonrOverlay.back();
 
-    Get.dialog(ProgressView(this, card, card.properties.size > 5000000), barrierDismissible: false);
+    SonrOverlay.show(
+      ProgressView(this, card, card.properties.size > 5000000),
+      barrierDismissible: false,
+      disableAnimation: true,
+    );
+
+    if (card.properties.size > 5000000) {
+      // Handle Card Received
+      SonrService.completed().then((value) {
+        SonrOverlay.back();
+        Get.offNamed('/home');
+      });
+    } else {
+      // Handle Animation Completed
+      Future.delayed(1550.milliseconds, () {
+        SonrOverlay.back();
+        Get.offNamed('/home');
+      });
+    }
   }
 
   // ^ Decline Invite Request ^ //

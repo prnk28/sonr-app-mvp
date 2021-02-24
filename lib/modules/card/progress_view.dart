@@ -22,11 +22,6 @@ class ProgressView extends HookWidget {
     final hookController = useAnimationController(duration: duration);
     hookController.forward();
 
-    // Handle Animation Completed
-    Future.delayed(duration, () {
-      cardController.animationCompleted(true);
-    });
-
     // Reactive to Progress
     return Container(
         width: Get.width,
@@ -101,29 +96,27 @@ class ProgressView extends HookWidget {
   // ^ Method Builds Shader Box ^ //
   Widget buildTransferIcon(AnimationController hookController, bool utilizeProgress) {
     return Center(
-      child: Obx(() {
-        if (utilizeProgress) {
-          if (Get.find<SonrService>().progress.value >= 0.5) {
-            return PlayAnimation(
-              tween: 0.0.tweenTo(1.0),
-              duration: Duration(milliseconds: 200),
-              builder: (context, child, value) {
-                return Icon(SonrIcon.getCardData(card), size: 165, color: Colors.white.withOpacity(value));
-              },
-            );
-          } else {
-            return Container();
-          }
-        }
-        return PlayAnimation(
-          tween: 0.0.tweenTo(1.0),
-          delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
-          duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-          builder: (context, child, value) {
-            return Icon(SonrIcon.getCardData(card), size: 165, color: Colors.white.withOpacity(value));
-          },
-        );
-      }),
-    );
+        child: utilizeProgress
+            ? Obx(() {
+                if (Get.find<SonrService>().progress.value >= 0.5) {
+                  return PlayAnimation(
+                    tween: 0.0.tweenTo(1.0),
+                    duration: Duration(milliseconds: 200),
+                    builder: (context, child, value) {
+                      return Icon(SonrIcon.getCardData(card), size: 165, color: Colors.white.withOpacity(value));
+                    },
+                  );
+                } else {
+                  return Container();
+                }
+              })
+            : PlayAnimation(
+                tween: 0.0.tweenTo(1.0),
+                delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
+                duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
+                builder: (context, child, value) {
+                  return Icon(SonrIcon.getCardData(card), size: 165, color: Colors.white.withOpacity(value));
+                },
+              ));
   }
 }

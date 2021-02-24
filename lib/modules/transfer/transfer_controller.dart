@@ -1,87 +1,69 @@
+import 'dart:async';
 import 'dart:math';
-import 'package:sonr_app/modules/transfer/peer_widget.dart';
 import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-enum LobbyState {
-  Empty,
-  Active,
-  Busy,
-}
-
 class TransferController extends GetxController {
   // @ Properties
-  final Rx<Gradient> gradient = FlutterGradients.findByName(FlutterGradientNames.octoberSilence, type: GradientType.linear).obs;
-  final inactiveGradient = FlutterGradients.findByName(FlutterGradientNames.octoberSilence, type: GradientType.linear);
-  final activeGradient = FlutterGradients.findByName(FlutterGradientNames.summerGames, type: GradientType.linear);
+  final Rx<Gradient> gradient = SonrColor.inactiveBulb.obs;
+  final title = "Nobody Here".obs;
 
   // @ Direction Properties
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
+  final direction = 0.0.obs;
 
   // @ String Properties
   final string = "".obs;
   final heading = "".obs;
 
-  // @ Lobby Properties
-  final stackItems = <PeerBubble>[].obs;
-  final direction = 0.0.obs;
+  // References
+  StreamSubscription<CompassEvent> compassStream;
+  StreamSubscription<int> lobbySizeStream;
+  List<String> peerIDs = <String>[];
 
   // ^ Controller Constructer ^
-  TransferController() {
-    // @ Update Direction
-    DeviceService.direction.listen((newDir) {
-      // Update String Elements
-      string(_directionString(newDir.headingForCameraMode));
-      heading(_headingString(newDir.headingForCameraMode));
-
-      // Reference
-      direction(newDir.headingForCameraMode);
-      angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
-
-      // Calculate Degrees
-      if (newDir.headingForCameraMode + 90 > 360) {
-        degrees(newDir.headingForCameraMode - 270);
-      } else {
-        degrees(newDir.headingForCameraMode + 90);
-      }
-    });
-
-    // @ Check Peers Length
-    Get.find<SonrService>().peers.listen((lob) {
-      if (lob.length > 0) {
-        gradient(activeGradient);
-      } else {
-        gradient(inactiveGradient);
-      }
-    });
+  void onInit() {
+    compassStream = DeviceService.direction.stream.listen(_handleCompassUpdate);
+    lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeUpdate);
+    super.onInit();
   }
 
-  // ^ Create Peer Item from Data ^ //
-  addPeer(String id, Peer peer) {
-    // Create Bubble Validate not Duplicate
-    if (!stackItems.any((pb) => pb.controller.peer.id == id)) {
-      // Add to Stack Items
-      stackItems.add(PeerBubble(peer, stackItems.length - 1));
-      stackItems.refresh();
+  // ^ On Dispose ^ //
+  void onDispose() {
+    compassStream.cancel();
+    lobbySizeStream.cancel();
+  }
+
+  // ^ Handle Compass Update ^ //
+  _handleCompassUpdate(CompassEvent newDir) {
+    // Update String Elements
+    string(_directionString(newDir.headingForCameraMode));
+    heading(_headingString(newDir.headingForCameraMode));
+
+    // Reference
+    direction(newDir.headingForCameraMode);
+    angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
+
+    // Calculate Degrees
+    if (newDir.headingForCameraMode + 90 > 360) {
+      degrees(newDir.headingForCameraMode - 270);
+    } else {
+      degrees(newDir.headingForCameraMode + 90);
     }
-    stackItems.refresh();
   }
 
-  // ^ Remove Peer Item from ID ^ //
-  removePeer(String id) {
-    // Find Bubble
-    PeerBubble bubble = stackItems.firstWhere(
-      (pb) => pb.controller.peer.id == id,
-      orElse: () {
-        return null;
-      },
-    );
-
-    // Update Stack
-    if (bubble != null) {
-      stackItems.remove(bubble);
-      stackItems.refresh();
+  // ^ Handle Lobby Size Update ^ //
+  _handleLobbySizeUpdate(int size) {
+    if (size == 0) {
+      title("Nobody Here");
+      gradient(SonrColor.inactiveBulb);
+    } else if (size == 1) {
+      title("1 Person");
+      gradient(SonrColor.activeBulb);
+    } else {
+      title("$size People");
+      gradient(SonrColor.activeBulb);
     }
   }
 
