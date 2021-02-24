@@ -73,3 +73,41 @@ class SonrColor {
     }
   }
 }
+
+extension GradientValue on FlutterGradientNames {
+  Gradient linear({TileMode tileMode = TileMode.repeated}) {
+    return FlutterGradients.findByName(this, tileMode: tileMode);
+  }
+
+  Gradient radial(
+      {AlignmentGeometry center = Alignment.center,
+      double radius = 0.5,
+      double startAngle = 0.0,
+      double endAngle = pi * 2,
+      TileMode tileMode = TileMode.repeated}) {
+    return FlutterGradients.findByName(
+      this,
+      type: GradientType.radial,
+      tileMode: tileMode,
+      radius: radius,
+      startAngle: startAngle,
+      endAngle: endAngle,
+    );
+  }
+
+  Gradient sweep(
+      {AlignmentGeometry center = Alignment.center,
+      double radius = 0.5,
+      double startAngle = 0.0,
+      double endAngle = pi * 2,
+      TileMode tileMode = TileMode.repeated}) {
+    return FlutterGradients.findByName(
+      this,
+      type: GradientType.sweep,
+      tileMode: tileMode,
+      radius: radius,
+      startAngle: startAngle,
+      endAngle: endAngle,
+    );
+  }
+}

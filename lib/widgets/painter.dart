@@ -4,6 +4,21 @@ import 'package:sonr_core/models/models.dart';
 
 const double K_ANGLE = pi;
 
+// ^ Offset Extension for Common Locations ^ //
+extension SonrOffset on Offset {
+  static const Offset Top = Offset(0.0, -1.0);
+  static const Offset Bottom = Offset(0.0, 1.0);
+  static const Offset Left = Offset(-1.0, 0.0);
+  static const Offset Right = Offset(1.0, 0.0);
+
+  static Offset fromDegrees(double deg) {
+    var rad = (deg * pi) / 180.0;
+    var dx = cos(rad);
+    var dy = sin(rad);
+    return Offset(dx, dy);
+  }
+}
+
 // ^ Icon Wave Painter ^ //
 class IconWavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
@@ -59,36 +74,32 @@ class WavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
   final Animation<double> waveAnimation;
   final double percent;
-  final double height;
-  final double width;
   final Gradient gradient;
 
   WavePainter({
     this.waveAnimation,
     this.percent,
-    this.height,
-    this.width,
     this.gradient,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    final baseHeight = (height + 10) - (percent * height);
+    final baseHeight = (size.height + 10) - (percent * size.height);
     final path = Path();
     path.moveTo(0.0, baseHeight);
-    for (var i = 0.0; i < width; i++) {
+    for (var i = 0.0; i < size.width; i++) {
       path.lineTo(
         i,
-        baseHeight + sin((i / width * _pi2) + (waveAnimation.value * _pi2)) * 16,
+        baseHeight + sin((i / size.width * _pi2) + (waveAnimation.value * _pi2)) * 16,
       );
     }
 
-    path.lineTo(width, height);
-    path.lineTo(0.0, height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0.0, size.height);
     path.close();
     final wavePaint = Paint()
       ..shader = gradient.createShader(
-        Rect.fromLTWH(0, 0, width, height),
+        Rect.fromCenter(center: Offset.zero, width: size.width, height: size.height),
       );
     canvas.drawPath(path, wavePaint);
   }

@@ -392,23 +392,3 @@ class SonrAnimatedWaveIcon extends HookWidget {
     );
   }
 }
-
-class SonrAnimation {
-  // ^ Method to Retreive Animation by Location - Default is Top ^ //
-  static Tween<Offset> tweenForEntryLocation(OverlayEntryLocation entryLocation) {
-    switch (entryLocation) {
-      case OverlayEntryLocation.Bottom:
-        return Offset(0.0, 1.0).tweenTo(Offset.zero);
-        break;
-      case OverlayEntryLocation.Left:
-        return Offset(-1.0, 0.0).tweenTo(Offset.zero);
-        break;
-      case OverlayEntryLocation.Right:
-        return Offset(1.0, 0.0).tweenTo(Offset.zero);
-        break;
-      default:
-        return Offset(0.0, -1.0).tweenTo(Offset.zero);
-        break;
-    }
-  }
-}

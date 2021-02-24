@@ -152,7 +152,7 @@ class SonrText extends StatelessWidget {
       weight: FontWeight.w600,
       size: size,
       key: key,
-      gradient: FlutterGradients.findByName(gradient),
+      gradient: gradient.linear(),
     );
   }
 
@@ -164,7 +164,7 @@ class SonrText extends StatelessWidget {
       double size = 36,
       Key key}) {
     return SonrText(peer.profile.firstName[0].toUpperCase(),
-        isGradient: true, weight: weight, size: size, key: key, gradient: FlutterGradients.findByName(gradient));
+        isGradient: true, weight: weight, size: size, key: key, gradient: gradient.linear());
   }
 
   // ^ Rich Text with FirstName and Invite

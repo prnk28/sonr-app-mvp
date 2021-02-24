@@ -9,14 +9,6 @@ import 'package:sonr_core/sonr_core.dart';
 
 import 'form.dart';
 
-// @ Overlay Entry Location Enum - Top is Default
-enum OverlayEntryLocation {
-  Top,
-  Bottom,
-  Left,
-  Right,
-}
-
 // ** Class Controls Active Overlays ** //
 class SonrOverlay extends GetxController {
   // Fixed Properties
@@ -35,7 +27,7 @@ class SonrOverlay extends GetxController {
       bool barrierDismissible: true,
       bool disableAnimation: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
+      Offset entryLocation = SonrOffset.Top}) {
     // Create Overlay
     var overlay =
         _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view, disableAnimation: disableAnimation);
@@ -55,7 +47,7 @@ class SonrOverlay extends GetxController {
       bool barrierDismissible: true,
       bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
+      Offset entryLocation = SonrOffset.Top,
       Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Future Completer
@@ -93,7 +85,7 @@ class SonrOverlay extends GetxController {
       bool barrierDismissible: true,
       bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
+      Offset entryLocation = SonrOffset.Top,
       Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Overlay
@@ -117,14 +109,13 @@ class SonrOverlay extends GetxController {
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
   static invite(AuthInvite invite,
-      {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
-      bool barrierDismissible: false,
+      {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
     var cardOverlay = _SonrFixedOverlayEntry(
-      entryLocation,
+      SonrOffset.fromDegrees(invite.from.position.antipodal),
       backgroundDuration,
       entryDuration,
       barrierDismissible,
@@ -138,14 +129,13 @@ class SonrOverlay extends GetxController {
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
   static reply(AuthReply reply,
-      {OverlayEntryLocation entryLocation = OverlayEntryLocation.Left,
-      bool barrierDismissible: false,
+      {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
     var cardOverlay = _SonrFixedOverlayEntry(
-        entryLocation,
+        SonrOffset.fromDegrees(reply.from.position.antipodal),
         backgroundDuration,
         entryDuration,
         barrierDismissible,
@@ -230,10 +220,14 @@ class SonrPositionedOverlay extends GetxController {
   static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
 
   // ^ Opens View at Position with Size ^ //
-  static open(Widget view, Size size, Offset position,
-      {bool barrierDismissible = true,
-      Duration entryDuration = const Duration(milliseconds: 200),
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top}) {
+  static open(
+    Widget view,
+    Size size,
+    Offset position, {
+    bool barrierDismissible = true,
+    Duration entryDuration = const Duration(milliseconds: 200),
+    Offset entryLocation = SonrOffset.Top,
+  }) {
     // Create Overlay
     var overlay = _SonrPositionedOverlayEntry(size, position, view, barrierDismissible);
 
@@ -244,7 +238,7 @@ class SonrPositionedOverlay extends GetxController {
 
   static dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
       {Duration entryDuration = const Duration(milliseconds: 200),
-      OverlayEntryLocation entryLocation = OverlayEntryLocation.Top,
+      Offset entryLocation = SonrOffset.Top,
       double height,
       double width,
       EdgeInsets margin}) {
@@ -282,7 +276,7 @@ class SonrPositionedOverlay extends GetxController {
 // ** Class Presents Overlay Widget Entry on Context ** //
 class _SonrFixedOverlayEntry {
   // Properties
-  final OverlayEntryLocation entryLocation;
+  final Offset entryLocation;
   final Duration backgroundDuration;
   final Duration entryDuration;
   final Widget overlayWidget;
@@ -381,7 +375,7 @@ class _SonrPositionedOverlayEntry {
 class _BaseOverlayView extends StatefulWidget {
   final Widget child;
   final Duration duration;
-  final OverlayEntryLocation entryLocation;
+  final Offset entryLocation;
   final bool disableAnimation;
   const _BaseOverlayView(this.child, this.duration, this.entryLocation, this.disableAnimation);
   @override
@@ -392,7 +386,7 @@ class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin 
   Animation<Offset> position;
 
   void initState() {
-    position = tweenForEntryLocation(widget.entryLocation);
+    position = widget.entryLocation.tweenTo(Offset.zero).animatedBy(controller);
     controller.duration = widget.duration;
     controller.play();
     super.initState();
@@ -406,24 +400,6 @@ class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin 
             position: position,
             child: widget.child,
           );
-  }
-
-  // ^ Method to Retreive Animation by Location - Default is Top ^ //
-  Animation<Offset> tweenForEntryLocation(OverlayEntryLocation entryLocation) {
-    switch (entryLocation) {
-      case OverlayEntryLocation.Bottom:
-        return Offset(0.0, 1.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-      case OverlayEntryLocation.Left:
-        return Offset(-1.0, 0.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-      case OverlayEntryLocation.Right:
-        return Offset(1.0, 0.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-      default:
-        return Offset(0.0, -1.0).tweenTo(Offset.zero).animatedBy(controller);
-        break;
-    }
   }
 }
 
