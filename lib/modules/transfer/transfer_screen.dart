@@ -42,6 +42,7 @@ class TransferScreen extends GetView<TransferController> {
         ))));
   }
 }
+
 class LobbyStack extends StatefulWidget {
   @override
   _LobbyStackState createState() => _LobbyStackState();
@@ -56,7 +57,13 @@ class _LobbyStackState extends State<LobbyStack> {
   // * Initial State * //
   @override
   void initState() {
+    // Set Stream
     peerStream = SonrService.peers.listen(_handlePeerUpdate);
+
+    // Add Initial Data
+    if (SonrService.peers.length > 0) {
+      _handlePeerUpdate(SonrService.peers);
+    }
     super.initState();
   }
 
