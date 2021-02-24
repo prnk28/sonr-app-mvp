@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:sonr_core/models/models.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 const double K_ANGLE = pi;
 

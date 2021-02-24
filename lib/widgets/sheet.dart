@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;

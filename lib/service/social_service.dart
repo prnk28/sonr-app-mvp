@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 // ** Handles SocialMedia ** //
 const K_FB_GRAPH = 'https://graph.facebook.com/v2.12/';

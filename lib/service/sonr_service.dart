@@ -217,14 +217,15 @@ class SonrService extends GetxService {
     }
   }
 
+  // ^ Async Function notifies transfer complete ^ //
   static Future<TransferCard> completed() async {
     // Get Data
     var snr = Get.find<SonrService>();
-    if (snr._connected.value) {
-      return snr._completed.future;
-    } else {
+    if (!snr._connected.value) {
       SonrSnack.error("Not Connected to the Sonr Network");
+      snr._completed.completeError("");
     }
+    return snr._completed.future;
   }
 
   // **************************

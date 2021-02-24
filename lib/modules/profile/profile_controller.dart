@@ -2,7 +2,6 @@ import 'package:sonr_app/service/social_service.dart';
 import 'package:sonr_app/service/user_service.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // @ PeerStatus Enum

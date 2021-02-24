@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/data/data.dart';

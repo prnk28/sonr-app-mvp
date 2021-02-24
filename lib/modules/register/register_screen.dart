@@ -1,6 +1,6 @@
 import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/models/models.dart';
+import 'package:sonr_core/sonr_core.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
   @override
