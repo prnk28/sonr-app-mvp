@@ -50,19 +50,17 @@ class LobbyStack extends StatefulWidget {
 class _LobbyStackState extends State<LobbyStack> {
   // References
   int lobbySize = 0;
-  StreamSubscription<Map<String, Peer>> peerStream;
   List<PeerBubble> stackChildren = <PeerBubble>[];
+  StreamSubscription<Map<String, Peer>> peerStream;
 
   // * Initial State * //
   @override
   void initState() {
+    // Add Initial Data
+    _handlePeerUpdate(SonrService.peers);
+
     // Set Stream
     peerStream = SonrService.peers.listen(_handlePeerUpdate);
-
-    // Add Initial Data
-    if (SonrService.peers.length > 0) {
-      _handlePeerUpdate(SonrService.peers);
-    }
     super.initState();
   }
 

@@ -24,8 +24,14 @@ class TransferController extends GetxController {
 
   // ^ Controller Constructer ^
   void onInit() {
+    // Set Initial Value
+    _handleCompassUpdate(DeviceService.direction.value);
+    _handleLobbySizeUpdate(SonrService.lobbySize.value);
+
+    // Add Stream Handlers
     compassStream = DeviceService.direction.stream.listen(_handleCompassUpdate);
     lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeUpdate);
+
     super.onInit();
   }
 
