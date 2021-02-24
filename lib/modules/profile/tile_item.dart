@@ -1,6 +1,6 @@
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_core/sonr_social.dart';
 import 'social_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -86,17 +86,17 @@ class TileController extends GetxController {
   initialize(Contact_SocialTile tile, int i) async {
     // Medium Data
     if (tile.provider == Contact_SocialTile_Provider.Medium) {
-      medium(await Get.find<SocialMediaService>().getMedium(tile.username));
+      medium(await MediumController.getUser(tile.username));
       isFetched(true);
     }
     // Twitter Data
     else if (tile.provider == Contact_SocialTile_Provider.Twitter) {
-      twitter(await Get.find<SocialMediaService>().getTwitter(tile.username));
+      twitter(await TwitterController.getUser(tile.username));
       isFetched(true);
     }
     // Youtube Data
     else if (tile.provider == Contact_SocialTile_Provider.YouTube) {
-      youtube(await Get.find<SocialMediaService>().getYoutube(tile.links.postLink));
+      youtube(await YoutubeController.searchVideo(tile.links.postLink));
       isFetched(true);
     }
   }

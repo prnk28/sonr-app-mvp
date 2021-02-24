@@ -29,27 +29,6 @@ class MediaService extends GetxService {
   StreamSubscription _externalMediaStream;
   StreamSubscription _externalTextStream;
 
-  // ** Constructer ** //
-  MediaService() {
-    // @ Listen to Incoming File
-    _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen((List<SharedMediaFile> data) {
-      if (!Get.isBottomSheetOpen && UserService.exists.value) {
-        Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.dialogBackground, isDismissible: false);
-      }
-    }, onError: (err) {
-      print("getIntentDataStream error: $err");
-    });
-
-    // @ Listen to Incoming Text
-    _externalTextStream = ReceiveSharingIntent.getTextStream().listen((String text) {
-      if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
-        Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.dialogBackground, isDismissible: false);
-      }
-    }, onError: (err) {
-      print("getLinkStream error: $err");
-    });
-  }
-
   @override
   void onInit() {
     // @ For sharing images coming from outside the app while the app is closed
@@ -67,6 +46,12 @@ class MediaService extends GetxService {
         _incomingText.refresh();
       }
     });
+
+    // @ Listen to Incoming Text
+    _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
+
+    // @ Listen to Incoming File
+    _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
     super.onInit();
   }
 
@@ -187,27 +172,28 @@ class MediaService extends GetxService {
   static Future<bool> saveCapture(String path, bool isVideo) async {
     // Validate Path
     var file = File(path);
-    if (!await file.exists()) {
+    var exists = await file.exists();
+    if (!exists) {
       SonrSnack.error("Unable to save Captured Media to your Gallery");
       return false;
-    }
-
-    if (isVideo) {
-      // Save Image to Gallery
-      var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
-
-      // Visualize Result
-      if (result) {
-        SonrSnack.error("Unable to save Captured Photo to your Gallery");
-      }
-      return result;
     } else {
-      // Save Image to Gallery
-      var result = await GallerySaver.saveImage(path, albumName: "Sonr");
-      if (!result) {
-        SonrSnack.error("Unable to save Captured Video to your Gallery");
+      if (isVideo) {
+        // Save Image to Gallery
+        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
+
+        // Visualize Result
+        if (result) {
+          SonrSnack.error("Unable to save Captured Photo to your Gallery");
+        }
+        return result;
+      } else {
+        // Save Image to Gallery
+        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+        if (!result) {
+          SonrSnack.error("Unable to save Captured Video to your Gallery");
+        }
+        return result;
       }
-      return result;
     }
   }
 
@@ -245,6 +231,20 @@ class MediaService extends GetxService {
     } else {
       SonrSnack.success("Unable to save Media to Gallery");
       return false;
+    }
+  }
+
+  // ^ Saves Received Media to Gallery ^ //
+  _handleSharedFiles(List<SharedMediaFile> data) async {
+    if (!Get.isBottomSheetOpen && UserService.exists.value) {
+      Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.dialogBackground, isDismissible: false);
+    }
+  }
+
+  // ^ Saves Received Media to Gallery ^ //
+  _handleSharedText(String text) async {
+    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
+      Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.dialogBackground, isDismissible: false);
     }
   }
 }

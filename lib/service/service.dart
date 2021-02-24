@@ -1,6 +1,5 @@
 export 'device_service.dart';
 export 'media_service.dart';
-export 'social_service.dart';
 export 'sonr_service.dart';
 export 'sql_service.dart';
 export 'user_service.dart';

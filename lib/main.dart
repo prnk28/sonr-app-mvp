@@ -22,7 +22,6 @@ initServices() async {
   await Get.putAsync(() => DeviceService().init()); // Second Required Service
   await Get.putAsync(() => MediaService().init());
   await Get.putAsync(() => SQLService().init());
-  await Get.putAsync(() => SocialMediaService().init());
   await Get.putAsync(() => SonrService().init()); // Last Initialized Service
 }
 

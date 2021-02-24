@@ -49,4 +49,19 @@ class SonrStyle {
         depth: 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
       );
+
+  static get bubbleDecoration => BoxDecoration(shape: BoxShape.circle, boxShadow: [
+        BoxShadow(
+          color: Color.fromRGBO(167, 179, 190, 1.0),
+          offset: Offset(0, 2),
+          blurRadius: 6,
+          spreadRadius: 0.5,
+        ),
+        BoxShadow(
+          color: Color.fromRGBO(248, 252, 255, 0.5),
+          offset: Offset(-2, 0),
+          blurRadius: 6,
+          spreadRadius: 0.5,
+        ),
+      ]);
 }

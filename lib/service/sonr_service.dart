@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -12,23 +13,17 @@ import 'sql_service.dart';
 import 'user_service.dart';
 export 'package:sonr_core/sonr_core.dart';
 
-class SonrService extends GetxService {
+class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
   final _connected = false.obs;
   final _peers = Map<String, Peer>().obs;
   final _lobbySize = 0.obs;
-  final progress = 0.0.obs;
-  final payload = Rx<Payload>();
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static RxBool get connected => Get.find<SonrService>()._connected;
 
   // @ Set References
   Node _node;
-  String _url;
-  PeerController _peerController;
-  InviteRequest_FileInfo _file;
-  var _completed = new Completer<TransferCard>();
 
   // ^ Updates Node^ //
   SonrService() {
@@ -56,15 +51,16 @@ class SonrService extends GetxService {
           user.contact);
 
       // Assign Node Callbacks
-      _node.assignCallback(CallbackEvent.Connected, _handleConnected);
-      _node.assignCallback(CallbackEvent.Refreshed, _handleRefresh);
-      _node.assignCallback(CallbackEvent.Directed, _handleDirect);
-      _node.assignCallback(CallbackEvent.Invited, _handleInvite);
-      _node.assignCallback(CallbackEvent.Progressed, _handleProgress);
-      _node.assignCallback(CallbackEvent.Received, _handleReceived);
-      _node.assignCallback(CallbackEvent.Responded, _handleResponded);
-      _node.assignCallback(CallbackEvent.Transmitted, _handleTransmitted);
-      _node.assignCallback(CallbackEvent.Error, _handleSonrError);
+      _node.assignCallbacks(
+          connected: _handleConnected,
+          refreshed: _handleRefresh,
+          directed: _handleDirect,
+          invited: _handleInvite,
+          replied: _handleResponded,
+          progressed: _handleProgress,
+          received: _handleReceived,
+          transmitted: _handleTransmitted,
+          error: _handleSonrError);
 
       _connected(true);
       return this;
@@ -89,16 +85,18 @@ class SonrService extends GetxService {
       contr._node = await SonrCore.initialize(pos.latitude, pos.longitude, "", user.contact);
 
       // Assign Node Callbacks
-      contr._node.assignCallback(CallbackEvent.Connected, contr._handleConnected);
-      contr._node.assignCallback(CallbackEvent.Refreshed, contr._handleRefresh);
-      contr._node.assignCallback(CallbackEvent.Directed, contr._handleDirect);
-      contr._node.assignCallback(CallbackEvent.Invited, contr._handleInvite);
-      contr._node.assignCallback(CallbackEvent.Progressed, contr._handleProgress);
-      contr._node.assignCallback(CallbackEvent.Received, contr._handleReceived);
-      contr._node.assignCallback(CallbackEvent.Responded, contr._handleResponded);
-      contr._node.assignCallback(CallbackEvent.Transmitted, contr._handleTransmitted);
-      contr._node.assignCallback(CallbackEvent.Error, contr._handleSonrError);
+      contr._node.assignCallbacks(
+          connected: contr._handleConnected,
+          refreshed: contr._handleRefresh,
+          directed: contr._handleDirect,
+          invited: contr._handleInvite,
+          replied: contr._handleResponded,
+          progressed: contr._handleProgress,
+          received: contr._handleReceived,
+          transmitted: contr._handleTransmitted,
+          error: contr._handleSonrError);
 
+      // Set Connected
       contr._connected(true);
     } else {
       contr._connected(false);
@@ -125,7 +123,7 @@ class SonrService extends GetxService {
     // - Check Connected -
     if (snr._connected.value) {
       // Set Payload Type
-      snr.payload(Payload.CONTACT);
+      snr.addToQueue(TransferQueueItem.contact());
     } else {
       SonrSnack.error("Not Connected to the Sonr Network");
     }
@@ -138,15 +136,7 @@ class SonrService extends GetxService {
     // - Check Connected -
     if (snr._connected.value) {
       // Set Payload Type
-      snr.payload(Payload.MEDIA);
-
-      // Media Payload
-      snr._file = InviteRequest_FileInfo();
-      snr._file.path = path;
-      snr._file.hasThumbnail = hasThumbnail;
-      snr._file.duration = duration;
-      snr._file.thumbpath = thumbPath;
-      snr._file.thumbdata = thumbnailData;
+      snr.addToQueue(TransferQueueItem.media(path, hasThumbnail, duration, thumbPath, thumbnailData));
     } else {
       SonrSnack.error("Not Connected to the Sonr Network");
     }
@@ -160,10 +150,7 @@ class SonrService extends GetxService {
     // - Check Connected -
     if (snr._connected.value) {
       // Set Payload Type
-      snr.payload(Payload.URL);
-
-      // URL Link Payload
-      snr._url = url;
+      snr.addToQueue(TransferQueueItem.url(url));
     } else {
       SonrSnack.error("Not Connected to the Sonr Network");
     }
@@ -175,24 +162,24 @@ class SonrService extends GetxService {
     var snr = Get.find<SonrService>();
 
     if (snr._connected.value) {
-      // Set For Animation
-      snr._peerController = c;
+      // Set Peer Controller
+      snr.currentInvited(c);
 
       // File Payload
-      if (snr.payload.value == Payload.MEDIA) {
-        assert(snr._file != null);
-        await snr._node.inviteFile(c.peer, snr._file);
+      if (snr.payload == Payload.MEDIA) {
+        assert(snr.currentTransfer.media != null);
+        await snr._node.inviteFile(c.peer, snr.currentTransfer.media);
       }
 
       // Contact Payload
-      else if (snr.payload.value == Payload.CONTACT) {
+      else if (snr.payload == Payload.CONTACT) {
         await snr._node.inviteContact(c.peer);
       }
 
       // Link Payload
-      else if (snr.payload.value == Payload.URL) {
-        assert(snr._url != null);
-        await snr._node.inviteLink(c.peer, snr._url);
+      else if (snr.payload == Payload.URL) {
+        assert(snr.currentTransfer.url != null);
+        await snr._node.inviteLink(c.peer, snr.currentTransfer.url);
       }
 
       // No Payload
@@ -223,17 +210,16 @@ class SonrService extends GetxService {
     var snr = Get.find<SonrService>();
     if (!snr._connected.value) {
       SonrSnack.error("Not Connected to the Sonr Network");
-      snr._completed.completeError("");
+      snr.received.completeError("Error Transferring File");
     }
-    return snr._completed.future;
+    return snr.received.future;
   }
 
   // **************************
   // ******* Callbacks ********
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
-  void _handleConnected(dynamic data) {
-    print(data);
+  void _handleConnected() {
     // Update Direction
     _node.update(DeviceService.direction.value.headingForCameraMode);
   }
@@ -275,19 +261,7 @@ class SonrService extends GetxService {
         SonrOverlay.reply(data);
       } else {
         // For File
-        if (data.decision) {
-          _peerController.playAccepted();
-          HapticFeedback.lightImpact();
-        } else {
-          // Play Animation
-          _peerController.playDenied();
-          HapticFeedback.mediumImpact();
-
-          // Reset References
-          _url = null;
-          payload.nil();
-          _peerController = null;
-        }
+        currentDecided(data.decision);
       }
     }
   }
@@ -296,7 +270,7 @@ class SonrService extends GetxService {
   void _handleProgress(dynamic data) async {
     if (data is double) {
       // Update Data
-      this.progress(data);
+      currentProgressed(data);
     }
   }
 
@@ -305,13 +279,7 @@ class SonrService extends GetxService {
     // Reset Peer/Auth
     if (data is Peer) {
       // Provide Feedback
-      HapticFeedback.heavyImpact();
-      _peerController.playCompleted();
-
-      // Reset References
-      _url = null;
-      _peerController = null;
-      payload.nil();
+      currentCompleted();
     }
   }
 
@@ -323,16 +291,10 @@ class SonrService extends GetxService {
 
       // Save Card to Gallery
       data.hasExported = await MediaService.saveTransfer(data);
-      _completed.complete(data);
+      received.complete(data);
 
       // Store In SQL
       Get.find<SQLService>().storeCard(data);
-
-      // Reset Parameters
-      Future.delayed(500.milliseconds, () {
-        progress(0.0);
-        _completed = new Completer<TransferCard>();
-      });
     }
   }
 

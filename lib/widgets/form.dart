@@ -11,6 +11,63 @@ class SonrForm extends StatelessWidget {
   }
 }
 
+// ^ Builds Neumorphic Checkbox with Label ^ //
+class SonrCheckbox extends StatelessWidget {
+  final String label;
+  final double labelSize;
+  final bool initialValue;
+  final Function(bool) onUpdate;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
+  final double rowWidth;
+  final double width;
+  final double height;
+  final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisAlignment mainAxisAlignment;
+  const SonrCheckbox({
+    @required this.onUpdate,
+    Key key,
+    this.label,
+    this.labelSize = 18,
+    this.initialValue = false,
+    this.padding = const EdgeInsets.only(top: 25),
+    this.margin = const EdgeInsets.only(left: 12, right: 12),
+    this.width = 40,
+    this.height = 40,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisAlignment = MainAxisAlignment.spaceEvenly,
+    this.rowWidth,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding,
+      width: rowWidth ?? Get.width - 160,
+      margin: margin,
+      child: Row(crossAxisAlignment: crossAxisAlignment, mainAxisAlignment: mainAxisAlignment, children: [
+        // @ Set Text
+        label ?? SonrText.normal(label, size: labelSize),
+
+        // @ Create Check Box
+        ValueBuilder<bool>(
+            initialValue: initialValue,
+            onUpdate: onUpdate,
+            builder: (newValue, updateFn) {
+              return Container(
+                width: width,
+                height: height,
+                child: NeumorphicCheckbox(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  onChanged: updateFn,
+                  value: newValue,
+                ),
+              );
+            })
+      ]),
+    );
+  }
+}
+
 // ^ Builds Overlay Based Positional Dropdown Menu ^ //
 class SonrDropdown extends StatelessWidget {
   // Properties

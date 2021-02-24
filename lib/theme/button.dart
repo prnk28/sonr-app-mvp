@@ -123,6 +123,69 @@ class SonrButton extends StatelessWidget {
     }
   }
 
+  // * Flat Button * //
+  factory SonrButton.flat({
+    @required Function onPressed,
+    SonrText text,
+    SonrIcon icon,
+    Color color = SonrColor.base,
+    bool isDisabled = false,
+    WidgetPosition iconPosition = WidgetPosition.Left,
+  }) {
+    // Icon AND Text
+    if (icon != null && text != null) {
+      var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
+      return SonrButton(
+        true,
+        text,
+        color,
+        const EdgeInsets.all(4),
+        NeumorphicShape.flat,
+        0,
+        0,
+        NeumorphicBoxShape.rect(),
+        onPressed,
+        icon: icon,
+        iconPosition: iconPosition,
+        type: type,
+      );
+    }
+    // Icon ONLY
+    else if (icon != null && text == null) {
+      var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
+      return SonrButton(
+        true,
+        text,
+        color,
+        const EdgeInsets.all(4),
+        NeumorphicShape.flat,
+        0,
+        0,
+        NeumorphicBoxShape.rect(),
+        onPressed,
+        icon: icon,
+        iconPosition: WidgetPosition.Center,
+        type: type,
+      );
+    }
+    // TEXT ONLY
+    else {
+      var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
+      return SonrButton(
+        false,
+        text,
+        color,
+        const EdgeInsets.all(4),
+        NeumorphicShape.flat,
+        0,
+        0,
+        NeumorphicBoxShape.rect(),
+        onPressed,
+        type: type,
+      );
+    }
+  }
+
   // * Circle Style Button * //
   factory SonrButton.circle({
     @required Function onPressed,
@@ -362,4 +425,3 @@ class SonrButton extends StatelessWidget {
     return Container();
   }
 }
-

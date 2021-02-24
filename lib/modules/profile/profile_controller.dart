@@ -1,4 +1,5 @@
-import 'package:sonr_app/service/social_service.dart';
+import 'package:sonr_app/data/data.dart';
+import 'package:sonr_core/sonr_social.dart';
 import 'package:sonr_app/service/user_service.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -11,93 +12,120 @@ class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
-
-  // Properties
-  final username = "".obs;
-  final isPrivate = false.obs;
-  final hasSetProvider = false.obs;
-  final provider = Rx<Contact_SocialTile_Provider>();
-  final type = Rx<Contact_SocialTile_Type>();
+  final options = <Contact_SocialTile_Provider>[].obs;
 
   // References
-  final step = 0.obs;
+  final step = Rx<TileStep>();
   final pageController = PageController();
 
   // References
   bool _isEditing = false;
 
+  // ** Initialize Method ** //
+  onInit() async {
+    step(TileStep(nextStep, previousStep, saveTile));
+    options(SonrSocial.options(UserService.socials));
+    super.onInit();
+  }
+
+  // -- Set Privacy -- //
+  isPrivate(bool value) {
+    step.update((val) {
+      val.isPrivate = value;
+    });
+  }
+
+  // -- Set Current Provider -- //
+  provider(int index) {
+    step.update((val) {
+      val.provider = options[index];
+    });
+  }
+
+  // -- Set Tile Type -- //
+  type(Contact_SocialTile_Type type) {
+    step.update((val) {
+      val.type = type;
+    });
+  }
+
+  // -- Set Social User -- //
+  user(SocialUser user) {
+    step.update((val) {
+      val.user = user;
+    });
+  }
+
   // ^ Add Social Tile Move to Next Step ^ //
   nextStep() async {
     // @ Step 2
-    if (step.value == 0) {
-      // Move to Next Step
-      if (provider.value != null && hasSetProvider.value) {
-        step(1);
-        pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+    if (step.value.current == 0) {
+      if (step.value.hasProvider) {
+        step.update((val) {
+          val.current = 1;
+          pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+        });
       } else {
         // Display Error Snackbar
         SonrSnack.missing("Select a provider first");
       }
     }
     // @ Step 3
-    else if (step.value == 1) {
+    else if (step.value.current == 1) {
       // Update State
-      if (username.value != "") {
-        if (await Get.find<SocialMediaService>().validate(provider.value, username.value, isPrivate.value)) {
-          step(2);
+      if (step.value.hasUser) {
+        step.update((val) {
+          val.current = 2;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
-          FocusScopeNode currentFocus = FocusScope.of(Get.context);
-          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-            FocusManager.instance.primaryFocus.unfocus();
-          }
+        });
+
+        FocusScopeNode currentFocus = FocusScope.of(Get.context);
+        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus.unfocus();
         }
-      } else {
-        // Display Error Snackbar
-        SonrSnack.missing("Add your username or Link your account");
       }
+    } else {
+      // Display Error Snackbar
+      SonrSnack.missing("Add your username or Link your account");
     }
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
   previousStep() {
-    // First Step
-    if (step.value == 0) {
-      step(0);
-    }
     // Step 2
-    else if (step.value == 1) {
-      step(0);
-      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+    if (step.value.current == 1) {
+      step.update((val) {
+        val.current = 0;
+        pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+      });
     }
     // Step 3
-    else if (step.value == 2) {
-      step(1);
-      pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+    else if (step.value.current == 2) {
+      step.update((val) {
+        val.current = 1;
+        pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
+      });
     }
   }
 
   // ^ Finish and Save new Tile ^ //
   saveTile() {
     // Validate
-    if (type.value != null && step.value == 2) {
-      // Set Acquired Data
-      var position = Contact_SocialTile_Position(index: UserService.tileCount);
-      var links = Get.find<SocialMediaService>().getLinks(provider.value, username.value);
-
+    if (step.value.hasType && step.value.current == 2) {
       // Create Tile from Values
       var tile = Contact_SocialTile(
-        username: username.value,
-        isPrivate: isPrivate.value,
-        provider: provider.value,
-        type: type.value,
-        links: links,
-        position: position,
+        username: step.value.user.username,
+        isPrivate: step.value.isPrivate,
+        provider: step.value.provider,
+        type: step.value.type,
+        links: step.value.links,
+        position: Contact_SocialTile_Position(index: UserService.tileCount),
       );
 
       // Save to Profile
-      reset();
       UserService.addSocial(tile);
       Get.back(closeOverlays: true);
+      reset();
     } else {
       // Display Error Snackbar
       SonrSnack.missing("Pick a Tile Type", isLast: true);
@@ -106,47 +134,7 @@ class ProfileController extends GetxController {
 
   // ^ Resets current info ^
   reset() {
-    username("");
-    isPrivate(false);
-    hasSetProvider(false);
-    provider.nil();
-    type.nil();
-    step(0);
-  }
-
-  // ^ Determine Auth Type ^
-  getAuthType() {
-    if (!isPrivate.value) {
-      return SocialAuthType.Link;
-    } else {
-      // Link Item
-      if (provider.value == Contact_SocialTile_Provider.Medium ||
-          provider.value == Contact_SocialTile_Provider.Spotify ||
-          provider.value == Contact_SocialTile_Provider.YouTube) {
-        return SocialAuthType.Link;
-      }
-      // OAuth Item
-      else {
-        return SocialAuthType.OAuth;
-      }
-    }
-  }
-
-  // ^ Helper method to judge Privacy^ //
-  bool doesProviderAllowVisibility(Contact_SocialTile_Provider provider) {
-    return (provider == Contact_SocialTile_Provider.Twitter ||
-        provider == Contact_SocialTile_Provider.Spotify ||
-        provider == Contact_SocialTile_Provider.TikTok ||
-        provider == Contact_SocialTile_Provider.YouTube);
-  }
-
-  // ^ Helper to Display Tile Options ^ //
-  bool doesProviderAllowFeed(Contact_SocialTile_Provider provider) {
-    return (provider == Contact_SocialTile_Provider.Twitter || provider == Contact_SocialTile_Provider.Medium);
-  }
-
-  ProfileController() {
-    refresh();
+    step(TileStep(nextStep, previousStep, saveTile));
   }
 
   // ^ Toggle Editing Mode ^ //
@@ -165,10 +153,4 @@ class ProfileController extends GetxController {
     focused(FocusedTile(index, isExpanded));
     update(['social-grid']);
   }
-}
-
-class FocusedTile {
-  final int index;
-  final bool isActive;
-  FocusedTile(this.index, this.isActive);
 }

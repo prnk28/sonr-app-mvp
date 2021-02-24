@@ -1,6 +1,6 @@
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_core/sonr_social.dart';
 import 'tile_item.dart';
 
 class SocialView extends StatelessWidget {
@@ -55,52 +55,20 @@ class SocialView extends StatelessWidget {
 
   // ** Builds Expanded Tile View - List/Grid ** //
   _buildExpanded(Contact_SocialTile_Provider provider) {
-    switch (provider) {
-      // @ Medium
-      case Contact_SocialTile_Provider.Medium:
-        return ListView.separated(
-          shrinkWrap: true,
-          itemCount: controller.medium.value.count,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (BuildContext context, int index) {
-            return _MediumItem(controller.medium.value, index, false);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              width: 25,
-              height: 25,
-            );
-          },
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: controller.twitter.value.count,
+      scrollDirection: provider == Contact_SocialTile_Provider.Twitter ? Axis.vertical : Axis.horizontal,
+      itemBuilder: (BuildContext context, int index) {
+        return _TweetItem(controller.twitter.value, index, false);
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return SizedBox(
+          width: 25,
+          height: 25,
         );
-        break;
-
-      // @ Twitter
-      case Contact_SocialTile_Provider.Twitter:
-        return ListView.separated(
-          shrinkWrap: true,
-          itemCount: controller.twitter.value.count,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (BuildContext context, int index) {
-            return _TweetItem(controller.twitter.value, index, false);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return SizedBox(
-              width: 25,
-              height: 25,
-            );
-          },
-        );
-        break;
-
-      // Youtube
-      case Contact_SocialTile_Provider.YouTube:
-        break;
-
-      // Other
-      default:
-        return Container();
-        break;
-    }
+      },
+    );
   }
 }
 

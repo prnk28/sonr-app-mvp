@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/service.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -13,6 +12,8 @@ class PeerController extends GetxController {
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
   final contentAnimation = Rx<Triple<Tween<double>, Duration, Duration>>();
+  final bubbleSize = Size(90, 90).obs;
+  final expanded = false.obs;
 
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
@@ -83,7 +84,7 @@ class PeerController extends GetxController {
       SonrService.invite(this);
 
       // Check for File
-      if (Get.find<SonrService>().payload.value == Payload.MEDIA) {
+      if (Get.find<SonrService>().payload == Payload.MEDIA) {
         contentAnimation(enabledContent);
         _pending.instance.animation.loop = Loop.pingPong;
         _pending.isActive = _isInvited = !_isInvited;
@@ -92,6 +93,14 @@ class PeerController extends GetxController {
       else {
         playCompleted();
       }
+    }
+  }
+
+  // ^ Handle User Tap
+  select() {
+    if (!_isInvited) {
+      expanded(!expanded.value);
+      expanded.value ? bubbleSize(Size(90, 90)) : bubbleSize(Size(200, 350));
     }
   }
 

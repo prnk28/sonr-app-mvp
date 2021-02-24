@@ -19,9 +19,6 @@ class TransferCardController extends GetxController {
   // Properties
   final animationCompleted = false.obs;
 
-  // ^ Handle Transfer Progress ^
-  TransferCardController();
-
   // ^ Accept Contact Invite Request ^ //
   acceptContact(TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
     // Save Card
@@ -66,7 +63,7 @@ class TransferCardController extends GetxController {
       });
     } else {
       // Handle Animation Completed
-      Future.delayed(1550.milliseconds, () {
+      Future.delayed(1600.milliseconds, () {
         SonrOverlay.back();
         Get.offNamed('/home');
       });

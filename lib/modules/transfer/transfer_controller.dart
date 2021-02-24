@@ -20,7 +20,6 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
-  List<String> peerIDs = <String>[];
 
   // ^ Controller Constructer ^
   void onInit() {
