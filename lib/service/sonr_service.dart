@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';

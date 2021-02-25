@@ -1,4 +1,4 @@
-import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_core/sonr_social.dart';
 import 'package:sonr_app/service/user_service.dart';
 import 'package:get/get.dart';

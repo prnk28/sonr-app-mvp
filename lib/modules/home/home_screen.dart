@@ -1,4 +1,4 @@
-import 'package:sonr_app/service/service.dart';
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'search_view.dart';

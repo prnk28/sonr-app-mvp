@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_app/service/service.dart';
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'camera_view.dart';
 import 'preview_view.dart';

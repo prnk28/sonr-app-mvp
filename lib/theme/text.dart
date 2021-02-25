@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
-import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/constants.dart';
 
 class SonrText extends StatelessWidget {
   final String text;

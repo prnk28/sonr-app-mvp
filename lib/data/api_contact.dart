@@ -6,7 +6,7 @@ import 'package:sonr_core/sonr_core.dart';
 
 extension ContactUtils on Contact {
   String get tempUsername {
-    return "@${this.firstName.substring(0, 1)}${this.lastName.substring(1)}";
+    return "@TempUsername";
   }
 
   SonrText get phoneNumber {

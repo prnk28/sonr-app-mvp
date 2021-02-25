@@ -24,6 +24,7 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/widgets/painter.dart';
 import 'color.dart';
 
 class SonrStyle {
@@ -49,6 +50,8 @@ class SonrStyle {
         depth: 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
       );
+
+  static get expandedBubble => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.path(ExpandedBubblePainter()));
 
   static get bubbleDecoration => BoxDecoration(shape: BoxShape.circle, boxShadow: [
         BoxShadow(

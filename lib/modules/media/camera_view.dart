@@ -10,6 +10,7 @@ import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'media_screen.dart';
+import 'package:sonr_app/data/constants.dart';
 
 class CameraView extends GetView<CameraController> {
   @override

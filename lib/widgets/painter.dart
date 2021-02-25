@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 const double K_ANGLE = pi;
@@ -17,6 +18,38 @@ extension SonrOffset on Offset {
     var dy = sin(rad);
     return Offset(dx, dy);
   }
+}
+
+// ^ Expanded Bubble Painter ^ //
+class ExpandedBubblePainter extends NeumorphicPathProvider {
+  @override
+  bool shouldReclip(NeumorphicPathProvider oldClipper) {
+    return true;
+  }
+
+  @override
+  Path getPath(Size size) {
+    return Path()
+      ..moveTo(size.width * 0.2000000, size.height * 0.2000000)
+      ..quadraticBezierTo(size.width * -0.0002200, size.height * 0.1989600, 0, size.height * 0.3000000)
+      ..lineTo(0, size.height * 0.9000000)
+      ..quadraticBezierTo(size.width * 0.0002800, size.height * 0.9993200, size.width * 0.2000000, size.height)
+      ..quadraticBezierTo(size.width * 0.1980000, size.height * 1.0025000, size.width * 0.2000000, size.height)
+      ..lineTo(size.width * 0.8000000, size.height)
+      ..quadraticBezierTo(size.width * 0.8022800, size.height * 1.0046800, size.width * 0.8000000, size.height)
+      ..quadraticBezierTo(size.width * 1.0006800, size.height * 1.0005600, size.width, size.height * 0.9000000)
+      ..lineTo(size.width, size.height * 0.3000000)
+      ..quadraticBezierTo(size.width * 0.9955000, size.height * 0.1994000, size.width * 0.8000000, size.height * 0.2000000)
+      ..quadraticBezierTo(size.width * 0.8008200, size.height * 0.1991600, size.width * 0.8000000, size.height * 0.2000000)
+      ..lineTo(size.width * 0.7000000, size.height * 0.2000000)
+      ..quadraticBezierTo(size.width * 0.7034200, size.height * 0.0004400, size.width * 0.5000000, 0)
+      ..quadraticBezierTo(size.width * 0.3006400, size.height * -0.0016400, size.width * 0.3000000, size.height * 0.2000000)
+      ..quadraticBezierTo(size.width * 0.1984200, size.height * 0.1971600, size.width * 0.2000000, size.height * 0.2000000)
+      ..close();
+  }
+
+  @override
+  bool get oneGradientPerPath => false;
 }
 
 // ^ Icon Wave Painter ^ //
