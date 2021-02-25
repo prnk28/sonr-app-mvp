@@ -20,7 +20,7 @@ class ProgressView extends HookWidget {
   Widget build(BuildContext context) {
     // Inject Hook Controller
     final hookController = useAnimationController(duration: duration);
-    hookController.forward();
+    hookController.loop();
 
     // Reactive to Progress
     return Container(
@@ -51,7 +51,7 @@ class ProgressView extends HookWidget {
                         size: Size(Get.width, Get.height),
                         painter: WavePainter(
                           waveAnimation: hookController,
-                          percent: Get.find<SonrService>().progress.value,
+                          percent: SonrService.progress.value,
                           gradient: gradient.linear(tileMode: TileMode.clamp),
                         ),
                       ))
@@ -96,7 +96,7 @@ class ProgressView extends HookWidget {
     return Center(
         child: utilizeProgress
             ? Obx(() {
-                if (Get.find<SonrService>().progress.value >= 0.5) {
+                if (SonrService.progress.value >= 0.5) {
                   return PlayAnimation(
                     tween: 0.0.tweenTo(1.0),
                     duration: Duration(milliseconds: 200),

@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
@@ -133,7 +134,7 @@ class SonrIcon extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: ConstrainedBox(
                       constraints: BoxConstraints(minWidth: 1, minHeight: 1, maxWidth: 200, maxHeight: 200), // here
-                      child: Image.memory(thumbnail))));
+                      child: Image.memory(Uint8List.fromList(thumbnail)))));
         } else {
           result = Icon(data, size: size);
         }

@@ -14,7 +14,6 @@ class TransferQueue {
   bool get isQueueEmpty => transferQueue.length == 0;
   bool get isQueueNotEmpty => transferQueue.length > 0;
   int get queueSize => transferQueue.length;
-  RxDouble get progress => isQueueNotEmpty ? currentTransfer.progress : RxDouble(0.0);
 
   // References
   var _received = new Completer<TransferCard>();

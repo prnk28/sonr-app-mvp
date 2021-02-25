@@ -18,11 +18,12 @@ class SonrService extends GetxService with TransferQueue {
   final _connected = false.obs;
   final _peers = Map<String, Peer>().obs;
   final _lobbySize = 0.obs;
+  final _progress = 0.0.obs;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static RxBool get connected => Get.find<SonrService>()._connected;
   static SonrService get to => Get.find<SonrService>();
-
+  static RxDouble get progress => Get.find<SonrService>()._progress;
   // @ Set References
   Node _node;
 
@@ -217,7 +218,7 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Transfer Has Updated Progress ^ //
   void _handleProgress(double data) async {
-    currentProgressed(data);
+    _progress(data);
   }
 
   // ^ Resets Peer Info Event ^

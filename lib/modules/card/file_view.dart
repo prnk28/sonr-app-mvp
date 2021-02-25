@@ -48,7 +48,7 @@ class FileCard extends GetWidget<TransferCardController> {
                         image: DecorationImage(
                         colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
                         fit: BoxFit.cover,
-                        image: MemoryImage(card.metadata.thumbnail),
+                        image: MemoryImage(Uint8List.fromList(card.metadata.thumbnail)),
                       ))
                     : null,
                 child: _FileItemView(card, controller),
