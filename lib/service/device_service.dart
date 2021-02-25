@@ -41,20 +41,6 @@ class DeviceService extends GetxService {
     return this;
   }
 
-  // ^ CreateUser Event ^
-  void createUser(Contact contact, String username) async {
-    // Set Sonr Controller
-    // @ 1. Check for Location
-    if (locationPermitted.value) {
-      // Save Current Contact
-
-      SonrService.connect();
-      Get.offNamed("/home");
-    } else {
-      print("Location Permission Denied");
-    }
-  }
-
   // ^ Method Determins LaunchPage ^
   static LaunchPage getLaunchPage() {
     if (!UserService.exists.value) {

@@ -75,7 +75,6 @@ class RegisterController extends GetxController {
       contact.lastName = lastName.value;
 
       // Process data.
-      Get.find<DeviceService>().createUser(contact, "@Temp_Username");
       await UserService.saveChanges(providedContact: contact);
       FocusScope.of(Get.context).unfocus();
       DeviceService.requestLocation().then((value) {
