@@ -64,13 +64,14 @@ class EditDialog extends GetView<EditDialogController> {
         final lastNameFocus = FocusNode();
         final phoneFocus = FocusNode();
         final scroller = ScrollController();
+        var hintName = SonrText.hintName();
         return Material(
             color: Colors.transparent,
             child: SingleChildScrollView(
               controller: scroller,
               child: Column(children: [
                 SonrTextField(
-                    hint: "David",
+                    hint: hintName.item1,
                     label: "First Name",
                     autoFocus: true,
                     textInputAction: TextInputAction.next,
@@ -81,7 +82,7 @@ class EditDialog extends GetView<EditDialogController> {
                     },
                     onChanged: (val) => controller.editFirstName(val)),
                 SonrTextField(
-                    hint: "Chaum",
+                    hint: hintName.item2,
                     label: "Last Name",
                     focusNode: lastNameFocus,
                     textInputAction: TextInputAction.next,

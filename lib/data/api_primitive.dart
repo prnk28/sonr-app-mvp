@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:sonr_app/theme/theme.dart';
 
+import 'constants.dart';
+
 extension DataUtils on int {
   String sizeText() {
     // @ Less than 1KB

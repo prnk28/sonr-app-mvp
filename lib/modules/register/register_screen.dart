@@ -5,6 +5,7 @@ import 'package:sonr_core/sonr_core.dart';
 class RegisterScreen extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
+    var hintName = SonrText.hintName();
     return SonrScaffold.appBarTitle(
         title: "Sonr",
         body: Column(children: <Widget>[
@@ -20,7 +21,7 @@ class RegisterScreen extends GetView<RegisterController> {
                     // ****************** //
                     SonrTextField(
                         label: "First Name",
-                        hint: "Enter your first name",
+                        hint: hintName.item1,
                         value: controller.firstName.value,
                         textCapitalization: TextCapitalization.words,
                         autoFocus: true,
@@ -33,7 +34,7 @@ class RegisterScreen extends GetView<RegisterController> {
                     // ***************** //
                     SonrTextField(
                         label: "Last Name",
-                        hint: "Enter your last name",
+                        hint: hintName.item2,
                         value: controller.lastName.value,
                         textCapitalization: TextCapitalization.words,
                         onChanged: (String value) {
@@ -66,7 +67,7 @@ class RegisterController extends GetxController {
   final firstName = "".obs;
   final lastName = "".obs;
 
-  submit() {
+  submit() async {
     if (_validate()) {
       // Get Contact from Values
       var contact = new Contact();
@@ -75,8 +76,13 @@ class RegisterController extends GetxController {
 
       // Process data.
       Get.find<DeviceService>().createUser(contact, "@Temp_Username");
+      await UserService.saveChanges(providedContact: contact);
       FocusScope.of(Get.context).unfocus();
-      Get.offNamed("/home");
+      DeviceService.requestLocation().then((value) {
+        if (value) {
+          Get.offNamed("/home");
+        }
+      });
     } else {
       SonrSnack.error("Some fields are not correct");
     }

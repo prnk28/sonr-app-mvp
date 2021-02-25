@@ -49,19 +49,24 @@ class _AppState extends State<App> {
 
     // Listen to Device Start Status
     Future.delayed(2.seconds, () {
-      switch (DeviceService.status.value) {
-        case DeviceStatus.Success:
+      var page = DeviceService.getLaunchPage();
+      switch (page) {
+        case LaunchPage.Home:
           Get.offNamed("/home");
           break;
-        case DeviceStatus.NoUser:
+        case LaunchPage.Register:
           Get.offNamed("/register");
           break;
-        case DeviceStatus.NoLocation:
-          SonrSnack.error("Location Permissions Required for Sonr");
+        case LaunchPage.PermissionLocation:
           DeviceService.requestLocation().then((value) {
             if (value) {
               Get.offNamed("/home");
             }
+          });
+          break;
+        case LaunchPage.PermissionNetwork:
+          DeviceService.triggerNetwork().then((value) {
+            Get.offNamed("/home");
           });
           break;
       }

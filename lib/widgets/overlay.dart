@@ -78,7 +78,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static alert(
+  static Future alert(
       {@required String title,
       @required String description,
       String buttonText = "Okay",
@@ -88,6 +88,9 @@ class SonrOverlay extends GetxController {
       Offset entryLocation = SonrOffset.Top,
       Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
+    // Create Future Completer
+    var completer = new Completer();
+
     // Create Overlay
     var alertOverlay = _SonrFixedOverlayEntry(
         entryLocation,
@@ -100,11 +103,15 @@ class SonrOverlay extends GetxController {
           description,
           buttonText,
           closeOnResponse,
+          () {
+            completer.complete();
+          },
         ));
 
     // Add Overlay to List
     _controller.currentOverlay(alertOverlay);
     _controller.overlays.add(alertOverlay);
+    return completer.future;
   }
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
@@ -410,9 +417,10 @@ class _AlertOverlayView extends StatelessWidget {
   final String description;
   final String buttonText;
   final bool closeOnResponse;
+  final Function onPressed;
 
   // Constructer
-  _AlertOverlayView(this.index, this.title, this.description, this.buttonText, this.closeOnResponse);
+  _AlertOverlayView(this.index, this.title, this.description, this.buttonText, this.closeOnResponse, this.onPressed);
 
   @override
   Widget build(BuildContext context) {
@@ -438,6 +446,7 @@ class _AlertOverlayView extends StatelessWidget {
                   width: Get.width / 3,
                   child: SonrButton.stadium(
                     onPressed: () {
+                      onPressed();
                       if (closeOnResponse) {
                         SonrOverlay.back();
                       }

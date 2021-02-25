@@ -236,6 +236,24 @@ class SonrText extends StatelessWidget {
       return Colors.black;
     }
   }
+
+  // ^ Returns Random Hint Name ^
+  static Tuple<String, String> hintName() {
+    return <Tuple<String, String>>[
+      Tuple("Steve", "Jobs"),
+      Tuple("Michelangelo", "Buonarroti"),
+      Tuple("Albert", "Einstein"),
+      Tuple("Douglas", "Engelbart"),
+      Tuple("Kendrick", "Lamar"),
+      Tuple("David", "Chaum"),
+      Tuple("Ada", "Lovelace"),
+      Tuple("Madam", "Curie"),
+      Tuple("Amelia", "Earhart"),
+      Tuple("Oprah", "Winfrey"),
+      Tuple("Maya", "Angelou"),
+      Tuple("Frida", "Kahlo"),
+    ].random();
+  }
 }
 
 // ^ Builds Neumorphic Text Field ^ //

@@ -3,6 +3,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonr_app/service/sonr_service.dart' hide Position;
 import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/widgets/overlay.dart';
@@ -10,57 +11,60 @@ import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
-enum DeviceStatus { Success, NoUser, NoLocation }
+enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 
 class DeviceService extends GetxService {
   // Status/Sensor Properties
   final _direction = Rx<CompassEvent>();
   final _position = Rx<Position>();
-  final _status = Rx<DeviceStatus>();
 
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static Rx<Position> get position => Get.find<DeviceService>()._position;
-  static Rx<DeviceStatus> get status => Get.find<DeviceService>()._status;
 
   // Permission Properties
   final cameraPermitted = false.obs;
   final galleryPermitted = false.obs;
   final locationPermitted = false.obs;
   final microphonePermitted = false.obs;
+  final networkTriggered = false.obs;
   final notificationPermitted = false.obs;
+
+  // References
+  SharedPreferences _prefs;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
+    _prefs = await SharedPreferences.getInstance();
     await setPermissionStatus();
     await refreshLocation();
-
-    // @ 1. Check for Location
-    if (UserService.exists.value) {
-      if (locationPermitted.value) {
-        _status(DeviceStatus.Success);
-        _direction.bindStream(FlutterCompass.events);
-      } else {
-        _status(DeviceStatus.NoLocation);
-      }
-    } else {
-      _status(DeviceStatus.NoUser);
-    }
-
+    _direction.bindStream(FlutterCompass.events);
     return this;
   }
 
   // ^ CreateUser Event ^
   void createUser(Contact contact, String username) async {
     // Set Sonr Controller
-    locationPermitted(await Permission.locationWhenInUse.request().isGranted);
     // @ 1. Check for Location
     if (locationPermitted.value) {
       // Save Current Contact
-      await UserService.saveChanges(providedContact: contact);
+
       SonrService.connect();
       Get.offNamed("/home");
     } else {
       print("Location Permission Denied");
+    }
+  }
+
+  // ^ Method Determins LaunchPage ^
+  static LaunchPage getLaunchPage() {
+    if (!UserService.exists.value) {
+      return LaunchPage.Register;
+    } else {
+      if (Get.find<DeviceService>().locationPermitted.value) {
+        return LaunchPage.Home;
+      } else {
+        return LaunchPage.PermissionLocation;
+      }
     }
   }
 
@@ -84,6 +88,7 @@ class DeviceService extends GetxService {
 
   // ^ Sets Permission Status from Service ^ //
   Future setPermissionStatus() async {
+    networkTriggered(_prefs.containsKey("location-triggered"));
     cameraPermitted(await Permission.camera.isGranted);
     galleryPermitted(await Permission.mediaLibrary.isGranted);
     locationPermitted(await Permission.locationWhenInUse.isGranted);
@@ -94,6 +99,7 @@ class DeviceService extends GetxService {
   // ************************* //
   // ** Permission Requests ** //
   // ************************* //
+  // ^ Request Camera optional overlay ^ //
   static Future<bool> requestCamera() async {
     var decision = await SonrOverlay.question(
         title: 'Requires Permission',
@@ -110,6 +116,7 @@ class DeviceService extends GetxService {
     }
   }
 
+  // ^ Request Gallery optional overlay ^ //
   static Future<bool> requestGallery() async {
     var decision = await SonrOverlay.question(
         title: 'Requires Permission',
@@ -127,6 +134,7 @@ class DeviceService extends GetxService {
     return result == PermissionStatus.granted;
   }
 
+  // ^ Request Location optional overlay ^ //
   static Future<bool> requestLocation() async {
     var decision = await SonrOverlay.question(
         title: 'Requires Permission',
@@ -138,17 +146,13 @@ class DeviceService extends GetxService {
       // Request
       var result = await Permission.locationWhenInUse.request();
       Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
-
-      // Bind Direction Stream
-      if (result == PermissionStatus.granted) {
-        Get.find<DeviceService>()._direction.bindStream(FlutterCompass.events);
-      }
       return result == PermissionStatus.granted;
     } else {
       return false;
     }
   }
 
+  // ^ Request Microphone optional overlay ^ //
   static Future<bool> requestMicrophone() async {
     var decision = await SonrOverlay.question(
         title: 'Requires Permission',
@@ -165,6 +169,7 @@ class DeviceService extends GetxService {
     }
   }
 
+  // ^ Request Notifications optional overlay ^ //
   static Future<bool> requestNotifications() async {
     var decision = await SonrOverlay.question(
         title: 'Requires Permission',
@@ -179,5 +184,19 @@ class DeviceService extends GetxService {
     } else {
       return false;
     }
+  }
+
+  // ^ Trigger iOS Local Network with Alert ^ //
+  static Future triggerNetwork() async {
+    await SonrOverlay.alert(
+        title: 'Requires Permission',
+        description: 'Sonr uses your microphone in order to communicate with other devices.',
+        buttonText: "Continue",
+        barrierDismissible: false);
+
+    await SonrCore.requestLocalNetwork();
+    Get.find<DeviceService>()._prefs.setBool("location-triggered", true);
+    Get.find<DeviceService>().networkTriggered(true);
+    return true;
   }
 }
