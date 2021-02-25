@@ -94,7 +94,7 @@ class _URLInviteView extends StatelessWidget {
           // @ Sonr Icon
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: SonrIcon.share(isUrl: true),
+            child: SonrIcon.url,
           ),
 
           // @ Indent View

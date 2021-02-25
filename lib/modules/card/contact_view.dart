@@ -123,7 +123,7 @@ class _ContactInviteView extends StatelessWidget {
 
               // Phone/ Website
               Row(children: [
-                SonrIcon.platform(IconType.Neumorphic, card.platform, color: Colors.grey[700], size: 20),
+                card.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
                 card.contact.hasPhone() ? SonrText.light(card.contact.phone, size: 16) : SonrText.light("1-555-555-5555", size: 16),
@@ -137,7 +137,7 @@ class _ContactInviteView extends StatelessWidget {
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
           child: Row(
               children: List.generate(card.contact.socials.length, (index) {
-            return SonrIcon.social(IconType.Gradient, card.contact.socials[index].provider, size: 32);
+            return card.contact.socials[index].provider.icon(IconType.Gradient, size: 32);
           })),
         ),
         Divider(),
@@ -251,7 +251,7 @@ class _ContactItemView extends StatelessWidget {
       Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List<Widget>.generate(contact.socials.length, (index) {
-            return SonrIcon.social(IconType.Gradient, contact.socials[index].provider, size: 35);
+            return contact.socials[index].provider.icon(IconType.Gradient, size: 35);
           }))
     ]);
   }

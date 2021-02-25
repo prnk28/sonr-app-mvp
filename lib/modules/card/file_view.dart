@@ -126,9 +126,8 @@ class _FileInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: SonrIcon.payload(
+                child: invite.payload.icon(
                   IconType.Gradient,
-                  invite.payload,
                   gradient: SonrColor.payloadGradient(invite.payload),
                   size: (Get.height / 3),
                 )),
@@ -254,7 +253,7 @@ class _FileCardInfo extends StatelessWidget {
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrIcon.platform(IconType.Normal, card.platform, color: Colors.grey[600], size: 18),
+              card.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
               SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
             ]),
 

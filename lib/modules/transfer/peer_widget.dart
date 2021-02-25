@@ -64,7 +64,7 @@ class _PeerView extends StatelessWidget {
             ),
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
         Padding(padding: EdgeInsets.all(8)),
-        SonrIcon.device(IconType.Gradient, controller.peer, size: 24),
+        controller.peer.platform.icon(IconType.Gradient, size: 24),
         SonrText.initials(controller.peer),
         Padding(padding: EdgeInsets.all(8)),
       ])
@@ -73,7 +73,7 @@ class _PeerView extends StatelessWidget {
 
   _buildExpandedView() {
     return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrIcon.device(IconType.Gradient, controller.peer, size: 32),
+      controller.peer.platform.icon(IconType.Gradient, size: 32),
       SonrText.initials(controller.peer),
       Padding(padding: EdgeInsets.all(8)),
       Row(children: [

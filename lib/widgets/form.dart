@@ -91,7 +91,7 @@ class SonrDropdown extends StatelessWidget {
   factory SonrDropdown.social(List<Contact_SocialTile_Provider> data,
       {@required ValueChanged<int> onChanged, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
-      return SonrDropdownItem(true, data[index].toString(), icon: SonrIcon.social(IconType.Gradient, data[index]));
+      return SonrDropdownItem(true, data[index].toString(), icon: data[index].icon(IconType.Gradient));
     });
     return SonrDropdown(items, "Choose", onChanged, margin, width ?? Get.width - 250, height);
   }

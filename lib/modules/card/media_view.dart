@@ -250,7 +250,7 @@ class _MediaCardInfo extends StatelessWidget {
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrIcon.platform(IconType.Normal, card.platform, color: Colors.grey[600], size: 18),
+              card.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
               SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
             ]),
 

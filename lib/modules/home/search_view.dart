@@ -160,9 +160,8 @@ class _SonrSearchCardListItem extends GetView<SearchCardController> {
             children: [
               (card.metadata.mime.type == MIME_Type.image)
                   ? Container(child: Image.memory(Uint8List.fromList(card.preview), fit: BoxFit.cover), width: 50, height: 50)
-                  : SonrIcon.payload(
+                  : card.payload.icon(
                       IconType.Gradient,
-                      card.payload,
                       size: 50,
                     ),
               SonrText.search(controller.searchText.value, card.payload.toString()),

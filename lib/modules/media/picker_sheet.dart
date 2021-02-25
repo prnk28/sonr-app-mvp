@@ -108,11 +108,11 @@ class _SonrMediaButton extends GetView<MediaPickerController> {
                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
                     );
                   } else {
-                    return SonrIcon.payload(IconType.Neumorphic, Payload.MEDIA);
+                    return Payload.MEDIA.icon(IconType.Neumorphic);
                   }
                 }),
                 media.mediaType == MediaType.video
-                    ? SonrIcon.gradient(SonrIcon.getMediaTypeData(media.mediaType), FlutterGradientNames.glassWater, size: 28)
+                    ? SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.glassWater, size: 28)
                     : const SizedBox(),
                 isPressed.value
                     ? Container(

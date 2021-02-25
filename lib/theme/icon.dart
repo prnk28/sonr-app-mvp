@@ -58,100 +58,11 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
-  // ^ Social Type Icon
-  factory SonrIcon.social(IconType type, Contact_SocialTile_Provider social,
-      {double size = 24, Color color = Colors.black, bool alternate = false, Key key}) {
-    // Init Icon Data
-    _IconGradientWData result = _SonrIconData.socials[social];
-    return SonrIcon(
-      result.data(alternate),
-      type,
-      color,
-      result.gradient,
-      size: size,
-      key: key,
-    );
-  }
-
-  // ^ Peer Data Platform to Icon
-  factory SonrIcon.device(IconType type, Peer peer, {Color color, double size = 30, Key key}) {
-    // Set Color
-    _IconGradientWData result = _SonrIconData.devices[peer.platform];
-
-    // Get Icon
-    if (result != null) {
-      return SonrIcon(
-        result._data,
-        type,
-        color,
-        result.gradient,
-        size: size,
-      );
-    } else {
-      return SonrIcon(
-        Icons.device_unknown,
-        type,
-        color,
-        FlutterGradientNames.viciousStance,
-        size: size,
-        key: key,
-      );
-    }
-  }
-
-  // ^ Payload Data File Type to Icon with Preview
-  factory SonrIcon.payload(IconType type, Payload payload,
-      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
-    IconData data;
-    if (payload == Payload.CONTACT) {
-      data = _SonrIconData.contact;
-    } else if (payload == Payload.MEDIA) {
-      data = _SonrIconData.video;
-    } else {
-      data = _SonrIconData.url;
-    }
-    return SonrIcon(
-      data,
-      type,
-      color,
-      gradient,
-      size: size,
-      key: key,
-    );
-  }
-
-  // ^ Peer Data Platform to Icon
-  factory SonrIcon.platform(IconType type, Platform platform, {Color color, double size = 30, Key key}) {
-    // Set Color
-    _IconGradientWData result = _SonrIconData.devices[platform];
-
-    // Get Icon
-    if (result != null) {
-      return SonrIcon(
-        result._data,
-        type,
-        color,
-        result.gradient,
-        size: size,
-        key: key,
-      );
-    } else {
-      return SonrIcon(
-        Icons.device_unknown,
-        type,
-        color,
-        FlutterGradientNames.viciousStance,
-        size: size,
-        key: key,
-      );
-    }
-  }
-
   // ^ Payload Data from Metadata
   factory SonrIcon.preview(IconType type, TransferCard card,
       {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
     return SonrIcon(
-      _SonrIconData.files[card.properties.mime.type],
+      card.properties.mime.type.gradientData.data,
       type,
       color,
       gradient,
@@ -161,29 +72,13 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
-  // ^ Payload Data File Type to Icon
-  factory SonrIcon.share({IconType type = IconType.Gradient, bool isUrl = false, double size = 40, Color color = Colors.black, Key key}) {
-    // Set Icon for URL and Media
-    IconData data = isUrl ? _SonrIconData.url : _SonrIconData.video;
-    FlutterGradientNames gradient = isUrl ? FlutterGradientNames.magicRay : FlutterGradientNames.octoberSilence;
-
-    return SonrIcon(
-      data,
-      type,
-      color,
-      gradient,
-      size: size,
-      key: key,
-    );
-  }
-
   // ^ UI Icons ^ //
-  static SonrIcon get success => SonrIcon(_SonrIconData.success, IconType.Normal, Colors.black, null);
-  static SonrIcon get missing => SonrIcon(_SonrIconData.missing, IconType.Normal, Colors.black, null);
-  static SonrIcon get error => SonrIcon(_SonrIconData.error, IconType.Normal, Colors.black, null);
-  static SonrIcon get cancel => SonrIcon(_SonrIconData.cancel, IconType.Normal, Colors.black, null);
-  static SonrIcon get clear => SonrIcon.gradient(_SonrIconData.cancel, FlutterGradientNames.happyMemories, size: 20);
-  static SonrIcon get info => SonrIcon.gradient(_SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
+  static SonrIcon get success => SonrIcon(SonrIconData.success, IconType.Normal, Colors.black, null);
+  static SonrIcon get missing => SonrIcon(SonrIconData.missing, IconType.Normal, Colors.black, null);
+  static SonrIcon get error => SonrIcon(SonrIconData.error, IconType.Normal, Colors.black, null);
+  static SonrIcon get cancel => SonrIcon(SonrIconData.cancel, IconType.Normal, Colors.black, null);
+  static SonrIcon get clear => SonrIcon.gradient(SonrIconData.cancel, FlutterGradientNames.happyMemories, size: 20);
+  static SonrIcon get info => SonrIcon.gradient(SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
   static SonrIcon get close => SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36);
@@ -191,46 +86,14 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get profile => SonrIcon.gradient(Icons.person_outline, FlutterGradientNames.itmeoBranding, size: 36);
   static SonrIcon get search => SonrIcon.gradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
   static SonrIcon get more => SonrIcon.gradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
-  static SonrIcon get settings => SonrIcon.gradient(_SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
-  static SonrIcon get multiSettings => SonrIcon.gradient(_SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
-  static SonrIcon get send => SonrIcon.gradient(_SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
-  static SonrIcon get sonr => SonrIcon.gradient(_SonrIconData.sonr, FlutterGradientNames.magicRay, size: 20);
-  static SonrIcon get screenshots => SonrIcon.gradient(_SonrIconData.screenshot, FlutterGradientNames.happyAcid, size: 20);
-  static SonrIcon get panorama => SonrIcon.gradient(_SonrIconData.panorama, FlutterGradientNames.fabledSunset, size: 20);
-
-  static Padding socialBadge(Contact_SocialTile_Provider prov,
-      {Alignment alignment = Alignment.bottomRight,
-      EdgeInsets padding = const EdgeInsets.only(
-        bottom: 8.0,
-        right: 8.0,
-      ),
-      double size = 30}) {
-    return Padding(
-      padding: padding,
-      child: Align(
-        alignment: alignment,
-        child: SonrIcon.social(IconType.Gradient, prov, size: size),
-      ),
-    );
-  }
-
-  // ^ Method Returns Icon Data given TransferCard ^ //
-  static IconData getCardData(TransferCard card) {
-    return _SonrIconData.files[card.properties.mime.type];
-  }
-
-  // ^ Method Returns Icon Data given MediaType ^ //
-  static IconData getMediaTypeData(MediaType type) {
-    switch (type) {
-      case MediaType.image:
-        return _SonrIconData.video;
-        break;
-      case MediaType.video:
-        return _SonrIconData.photo;
-        break;
-    }
-    return Icons.radio_button_unchecked_outlined;
-  }
+  static SonrIcon get settings => SonrIcon.gradient(SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
+  static SonrIcon get multiSettings => SonrIcon.gradient(SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
+  static SonrIcon get send => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
+  static SonrIcon get sonr => SonrIcon.gradient(SonrIconData.sonr, FlutterGradientNames.magicRay, size: 20);
+  static SonrIcon get screenshots => SonrIcon.gradient(SonrIconData.screenshot, FlutterGradientNames.happyAcid, size: 20);
+  static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.fabledSunset, size: 20);
+  static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
+  static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 40);
 
   // ^ Build View of Icon ^ //
   @override
@@ -282,8 +145,8 @@ class SonrIcon extends StatelessWidget {
   }
 }
 
-class _SonrIconData {
-  _SonrIconData._();
+class SonrIconData {
+  SonrIconData._();
 
   static const _kFontFam = 'SonrIcons';
   static const _kFontPkg = null;
@@ -322,46 +185,160 @@ class _SonrIconData {
   static const IconData twitter = IconData(0xf309, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData medium = IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData video = IconData(0xf87c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-
-  // ^ SocialProvider to Icon Map ^ //
-  static Map<Contact_SocialTile_Provider, _IconGradientWData> socials = {
-    Contact_SocialTile_Provider.Spotify: _IconGradientWData(_SonrIconData.spotify, FlutterGradientNames.newLife),
-    Contact_SocialTile_Provider.TikTok: _IconGradientWData(_SonrIconData.tiktok, FlutterGradientNames.premiumDark),
-    Contact_SocialTile_Provider.Instagram: _IconGradientWData(_SonrIconData.instagram, FlutterGradientNames.ripeMalinka),
-    Contact_SocialTile_Provider.Twitter: _IconGradientWData(_SonrIconData.twitter, FlutterGradientNames.partyBliss, alt: _SonrIconData.twitter_rt),
-    Contact_SocialTile_Provider.YouTube: _IconGradientWData(_SonrIconData.youtube, FlutterGradientNames.loveKiss, alt: _SonrIconData.youtube_text),
-    Contact_SocialTile_Provider.Medium:
-        _IconGradientWData(_SonrIconData.medium, FlutterGradientNames.eternalConstance, alt: _SonrIconData.medium_fill),
-    Contact_SocialTile_Provider.Facebook:
-        _IconGradientWData(_SonrIconData.facebook, FlutterGradientNames.perfectBlue, alt: _SonrIconData.facebook_fill),
-    Contact_SocialTile_Provider.Snapchat: _IconGradientWData(_SonrIconData.snapchat, FlutterGradientNames.sunnyMorning, alt: _SonrIconData.snapchat),
-    Contact_SocialTile_Provider.Github: _IconGradientWData(_SonrIconData.github, FlutterGradientNames.solidStone, alt: _SonrIconData.github_alt),
-  };
-
-  // ^ Device Platform to Icon Map ^ //
-  static Map<Platform, _IconGradientWData> devices = {
-    Platform.Android: _IconGradientWData(_SonrIconData.android, FlutterGradientNames.glassWater),
-    Platform.iOS: _IconGradientWData(_SonrIconData.iphone, FlutterGradientNames.glassWater),
-    Platform.MacOS: _IconGradientWData(_SonrIconData.mac, FlutterGradientNames.glassWater),
-    Platform.Windows: _IconGradientWData(_SonrIconData.windows, FlutterGradientNames.glassWater),
-  };
-
-  // ^ File Type to Icon Map ^ //
-  static Map<MIME_Type, IconData> files = {
-    MIME_Type.audio: _SonrIconData.audio_file,
-    MIME_Type.image: _SonrIconData.photo,
-    MIME_Type.text: _SonrIconData.document,
-    MIME_Type.video: _SonrIconData.video,
-  };
 }
 
-class _IconGradientWData {
+class IconGradientData {
   final FlutterGradientNames gradient;
   final IconData _data;
   final IconData alt;
-  const _IconGradientWData(this._data, this.gradient, {this.alt});
-
-  IconData data(bool isAlt) {
+  const IconGradientData(this._data, this.gradient, {this.alt});
+  IconData dataWithAlt(bool isAlt) {
     return isAlt ? alt : _data;
+  }
+
+  IconData get data {
+    return _data;
+  }
+}
+
+extension MimeIcon on MIME_Type {
+  // -- Returns IconData with Gradient -- //
+  IconGradientData get gradientData {
+    switch (this) {
+      case MIME_Type.audio:
+        return IconGradientData(SonrIconData.audio_file, FlutterGradientNames.glassWater);
+        break;
+      case MIME_Type.image:
+        return IconGradientData(SonrIconData.photo, FlutterGradientNames.glassWater);
+        break;
+      case MIME_Type.text:
+        return IconGradientData(SonrIconData.document, FlutterGradientNames.glassWater);
+        break;
+      case MIME_Type.video:
+        return IconGradientData(SonrIconData.video, FlutterGradientNames.glassWater);
+        break;
+      default:
+        return IconGradientData(Icons.radio_button_unchecked_outlined, FlutterGradientNames.viciousStance);
+        break;
+    }
+  }
+}
+
+extension PayloadIcon on Payload {
+  // -- Returns Icon Widget -- //
+  SonrIcon icon(IconType type,
+      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
+    IconData data;
+    if (this == Payload.CONTACT) {
+      data = SonrIconData.contact;
+    } else if (this == Payload.MEDIA) {
+      data = SonrIconData.video;
+    } else {
+      data = SonrIconData.url;
+    }
+    return SonrIcon(
+      data,
+      type,
+      color,
+      gradient,
+      size: size,
+      key: key,
+    );
+  }
+}
+
+extension PlatformIcon on Platform {
+  // -- Returns Icon Widget -- //
+  SonrIcon icon(IconType type, {Color color, double size = 30, Key key}) {
+    IconGradientData gradientData;
+    switch (this) {
+      case Platform.Android:
+        gradientData = IconGradientData(SonrIconData.android, FlutterGradientNames.glassWater);
+        break;
+      case Platform.iOS:
+        gradientData = IconGradientData(SonrIconData.iphone, FlutterGradientNames.glassWater);
+        break;
+      case Platform.MacOS:
+        gradientData = IconGradientData(SonrIconData.mac, FlutterGradientNames.glassWater);
+        break;
+      case Platform.Windows:
+        gradientData = IconGradientData(SonrIconData.windows, FlutterGradientNames.glassWater);
+        break;
+      default:
+        gradientData = IconGradientData(Icons.device_unknown, FlutterGradientNames.viciousStance);
+        break;
+    }
+    return SonrIcon(
+      gradientData.data,
+      type,
+      color,
+      gradientData.gradient,
+      size: size,
+      key: key,
+    );
+  }
+}
+
+extension SocialTileIcon on Contact_SocialTile_Provider {
+  Padding badge(
+      {Alignment alignment = Alignment.bottomRight,
+      EdgeInsets padding = const EdgeInsets.only(
+        bottom: 8.0,
+        right: 8.0,
+      ),
+      double size = 30}) {
+    return Padding(
+      padding: padding,
+      child: Align(
+        alignment: alignment,
+        child: this.icon(IconType.Gradient, size: size),
+      ),
+    );
+  }
+
+  // -- Returns Icon with Gradient -- //
+  SonrIcon icon(IconType type, {double size = 24, Color color = Colors.black, bool alternate = false, Key key}) {
+    IconGradientData gradientData;
+    switch (this) {
+      case Contact_SocialTile_Provider.Spotify:
+        gradientData = IconGradientData(SonrIconData.spotify, FlutterGradientNames.newLife);
+        break;
+      case Contact_SocialTile_Provider.TikTok:
+        gradientData = IconGradientData(SonrIconData.tiktok, FlutterGradientNames.premiumDark);
+        break;
+      case Contact_SocialTile_Provider.Instagram:
+        gradientData = IconGradientData(SonrIconData.instagram, FlutterGradientNames.ripeMalinka);
+        break;
+      case Contact_SocialTile_Provider.Twitter:
+        gradientData = IconGradientData(SonrIconData.twitter, FlutterGradientNames.partyBliss, alt: SonrIconData.twitter_rt);
+        break;
+      case Contact_SocialTile_Provider.YouTube:
+        gradientData = IconGradientData(SonrIconData.youtube, FlutterGradientNames.loveKiss, alt: SonrIconData.youtube_text);
+        break;
+      case Contact_SocialTile_Provider.Medium:
+        gradientData = IconGradientData(SonrIconData.medium, FlutterGradientNames.eternalConstance, alt: SonrIconData.medium_fill);
+        break;
+      case Contact_SocialTile_Provider.Facebook:
+        gradientData = IconGradientData(SonrIconData.facebook, FlutterGradientNames.perfectBlue, alt: SonrIconData.facebook_fill);
+        break;
+      case Contact_SocialTile_Provider.Snapchat:
+        gradientData = IconGradientData(SonrIconData.snapchat, FlutterGradientNames.sunnyMorning, alt: SonrIconData.snapchat);
+        break;
+      case Contact_SocialTile_Provider.Github:
+        gradientData = IconGradientData(SonrIconData.github, FlutterGradientNames.solidStone, alt: SonrIconData.github_alt);
+        break;
+      default:
+        gradientData = IconGradientData(Icons.device_unknown, FlutterGradientNames.viciousStance);
+        break;
+    }
+
+    return SonrIcon(
+      gradientData.dataWithAlt(alternate),
+      type,
+      color,
+      gradientData.gradient,
+      size: size,
+      key: key,
+    );
   }
 }

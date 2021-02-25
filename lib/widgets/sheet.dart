@@ -122,7 +122,7 @@ class _ShareSheetContentView extends StatelessWidget {
         // @ Sonr Icon
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: SonrIcon.share(isUrl: isUrl),
+          child: isUrl ? SonrIcon.url : SonrIcon.video,
         ),
 
         // @ Indent View
