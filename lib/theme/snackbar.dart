@@ -1,7 +1,7 @@
-import 'dart:math';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/data/data.dart';
 
 class SonrSnack {
   // Properties
@@ -34,10 +34,8 @@ class SonrSnack {
   // ^ Missing Data ^ //
   factory SonrSnack.missing(String message, {bool isLast = false}) {
     // Get Missing Title
-    final random = new Random();
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
-
-    return SonrSnack(isLast ? "Almost There!" : list[random.nextInt(list.length)], message, SonrIcon.missing, Colors.redAccent, 2600);
+    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcon.missing, Colors.redAccent, 2600);
   }
 
   // ^ Invalid Operation ^ //

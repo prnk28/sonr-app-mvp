@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
@@ -6,9 +5,9 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
+import 'package:sonr_app/data/data.dart';
 
 class SonrText extends StatelessWidget {
   final String text;
@@ -65,11 +64,8 @@ class SonrText extends StatelessWidget {
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
   factory SonrText.postDate(String pubDate, {FlutterGradientNames gradient = FlutterGradientNames.premiumDark, double size = 16, Key key}) {
-    // Clean Date
     var date = DateTime.parse(pubDate);
     var output = new DateFormat.yMMMMd('en_US');
-
-    // Return Text
     return SonrText.gradient(output.format(date).toString(), gradient, size: size, key: key, weight: FontWeight.w500);
   }
 
@@ -156,17 +152,6 @@ class SonrText extends StatelessWidget {
     );
   }
 
-  // ^ Gradient Text with Provided Data
-  factory SonrText.initials(Peer peer,
-      {Color color,
-      FlutterGradientNames gradient = FlutterGradientNames.glassWater,
-      FontWeight weight = FontWeight.bold,
-      double size = 36,
-      Key key}) {
-    return SonrText(peer.profile.firstName[0].toUpperCase(),
-        isGradient: true, weight: weight, size: size, key: key, gradient: gradient.linear());
-  }
-
   // ^ Rich Text with FirstName and Invite
   factory SonrText.invite(String type, String firstName) {
     return SonrText("",
@@ -208,54 +193,12 @@ class SonrText extends StatelessWidget {
 
   // ^ Rich Text with Provided Data as URL
   factory SonrText.url(String text) {
-    // Initialize
-    Uri uri = Uri.parse(text);
-    int segmentCount = uri.pathSegments.length;
-    String host = uri.host;
-    String path = "/";
-
-    // Check host for Sub
-    if (host.contains("mobile")) {
-      host = host.substring(5);
-      replaceCharAt(host, 0, "m");
-    }
-
-    // Create Path
-    int directories = 0;
-    for (int i = 0; i <= segmentCount - 1; i++) {
-      // Check if final Segment
-      if (i == segmentCount - 1) {
-        directories > 0 ? path += path += "/${uri.pathSegments[i]}" : path += uri.pathSegments[i];
-      } else {
-        directories += 1;
-        path += ".";
-      }
-    }
-
-    // Return With Rich Text
     return SonrText(text,
         isRich: true,
         richText: RichText(
-            overflow: TextOverflow.fade,
-            text: TextSpan(children: [
-              TextSpan(
-                  text: host,
-                  style: GoogleFonts.poppins(
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dotted,
-                      fontWeight: FontWeight.w300,
-                      fontSize: 16,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.blueGrey[300])),
-              TextSpan(
-                  text: path,
-                  style: GoogleFonts.poppins(
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dotted,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                      color: Colors.blue[600])),
-            ])));
+          overflow: TextOverflow.fade,
+          text: TextSpan(children: text.urlText),
+        ));
   }
 
   @override
@@ -291,46 +234,6 @@ class SonrText extends StatelessWidget {
       return Colors.white;
     } else {
       return Colors.black;
-    }
-  }
-
-  // ^ Replace Character in given String with given Index ^
-  static String replaceCharAt(String oldString, int index, String newChar) {
-    return oldString.substring(0, index) + newChar + oldString.substring(index + 1);
-  }
-
-  // ^ Convert a Size in Bytes to Text String ^
-  static String convertSizeToText(int size) {
-    // @ Less than 1KB
-    if (size < pow(10, 3)) {
-      return "$size B";
-    }
-    // @ Less than 1MB
-    else if (size >= pow(10, 3) && size < pow(10, 6)) {
-      // Adjust Size Value, Return String
-      var adjusted = size / pow(10, 3);
-      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
-    }
-    // @ Less than 1GB
-    else if (size >= pow(10, 6) && size < pow(10, 9)) {
-      // Adjust Size Value, Return String
-      var adjusted = size / pow(10, 6);
-      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
-    }
-    // @ Greater than GB
-    else {
-      // Adjust Size Value, Return String
-      var adjusted = size / pow(10, 9);
-      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
-    }
-  }
-
-  // ^ Convert a Boolean Value to English Text String ^
-  static String convertBoolToText(bool val) {
-    if (val) {
-      return "YES";
-    } else {
-      return "NO";
     }
   }
 }

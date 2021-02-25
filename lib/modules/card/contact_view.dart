@@ -1,11 +1,10 @@
 import 'dart:typed_data';
 import 'dart:ui';
-
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart';
-
+import 'package:sonr_app/data/data.dart';
 import 'card_controller.dart';
 
 class ContactCard extends GetWidget<TransferCardController> {
@@ -99,13 +98,7 @@ class _ContactInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.circle(),
                   depth: -10,
                 ),
-                child: card.contact.hasPicture()
-                    ? Image.memory(Uint8List.fromList(card.contact.picture))
-                    : Icon(
-                        Icons.insert_emoticon,
-                        size: 100,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
+                child: card.contact.profilePicture,
               ),
             ),
           ),
@@ -116,18 +109,15 @@ class _ContactInviteView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              Row(children: [
-                SonrText.bold(card.contact.firstName + " "),
-                SonrText.light(card.contact.lastName),
-              ]),
+              card.contact.headerName,
 
               // Phone/ Website
               Row(children: [
                 card.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
-                card.contact.hasPhone() ? SonrText.light(card.contact.phone, size: 16) : SonrText.light("1-555-555-5555", size: 16),
-                card.contact.hasWebsite() ? SonrText.medium(card.contact.website) : SonrText.medium(card.contact.website),
+                card.contact.phoneNumber,
+                card.contact.webSite,
               ]),
             ]),
           ),
@@ -202,10 +192,7 @@ class _ContactItemView extends StatelessWidget {
       ),
 
       // Build Name
-      contact.hasLastName()
-          ? SonrText.gradient(contact.firstName + " " + contact.lastName, FlutterGradientNames.solidStone, size: 32)
-          : SonrText.gradient(contact.firstName, FlutterGradientNames.solidStone, size: 32),
-
+      contact.fullName,
       Divider(),
       Padding(padding: EdgeInsets.all(4)),
 

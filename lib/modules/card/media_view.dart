@@ -4,6 +4,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
+import 'package:sonr_app/data/data.dart';
 
 class MediaCard extends GetWidget<TransferCardController> {
   // References
@@ -73,7 +74,7 @@ class _MediaInviteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Extract Data
-    var size = SonrText.convertSizeToText(card.properties.size);
+    var size = card.properties.size.sizeText();
 
     // Build View
     return Container(
@@ -234,8 +235,8 @@ class _MediaCardInfo extends StatelessWidget {
     // Extract Data
     var metadata = card.metadata;
     var mimeType = metadata.mime.type.toString().capitalizeFirst;
-    var size = SonrText.convertSizeToText(metadata.size);
-    var hasExported = SonrText.convertBoolToText(card.hasExported);
+    var size = metadata.size.sizeText();
+    var hasExported = card.hasExported.valToEn();
 
     // Build Overlay View
     return Padding(

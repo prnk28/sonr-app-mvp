@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:sonr_app/data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -28,12 +29,8 @@ class SonrColor {
       FlutterGradientNames.northMiracle,
       FlutterGradientNames.seaLord
     ];
-
-    // Generates a new Random object
-    final _random = new Random();
-
     // Generate a random index based on the list length
-    return opts[_random.nextInt(opts.length)];
+    return opts.random();
   }
 
   // ^ Generates Random Gradient for Progress View ^ //
@@ -48,11 +45,8 @@ class SonrColor {
       FlutterGradientNames.seashore
     ];
 
-    // Generates a new Random object
-    final _random = new Random();
-
     // Generate a random index based on the list length
-    return opts[_random.nextInt(opts.length)];
+    return opts.random();
   }
 
   // ^ Returns Color from Hexidecimal ^ //

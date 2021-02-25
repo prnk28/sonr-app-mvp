@@ -33,6 +33,7 @@ class ProfileController extends GetxController {
     step.update((val) {
       val.isPrivate = value;
     });
+    step.refresh();
   }
 
   // -- Set Current Provider -- //
@@ -40,6 +41,7 @@ class ProfileController extends GetxController {
     step.update((val) {
       val.provider = options[index];
     });
+    step.refresh();
   }
 
   // -- Set Tile Type -- //
@@ -47,6 +49,7 @@ class ProfileController extends GetxController {
     step.update((val) {
       val.type = type;
     });
+    step.refresh();
   }
 
   // -- Set Social User -- //
@@ -54,6 +57,7 @@ class ProfileController extends GetxController {
     step.update((val) {
       val.user = user;
     });
+    step.refresh();
   }
 
   // ^ Add Social Tile Move to Next Step ^ //
@@ -65,6 +69,7 @@ class ProfileController extends GetxController {
           val.current = 1;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         });
+        step.refresh();
       } else {
         // Display Error Snackbar
         SonrSnack.missing("Select a provider first");
@@ -78,6 +83,7 @@ class ProfileController extends GetxController {
           val.current = 2;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
         });
+        step.refresh();
 
         FocusScopeNode currentFocus = FocusScope.of(Get.context);
         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
@@ -98,6 +104,7 @@ class ProfileController extends GetxController {
         val.current = 0;
         pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       });
+      step.refresh();
     }
     // Step 3
     else if (step.value.current == 2) {
@@ -105,6 +112,7 @@ class ProfileController extends GetxController {
         val.current = 1;
         pageController.previousPage(duration: 500.milliseconds, curve: Curves.easeOutBack);
       });
+      step.refresh();
     }
   }
 
@@ -135,6 +143,7 @@ class ProfileController extends GetxController {
   // ^ Resets current info ^
   reset() {
     step(TileStep(nextStep, previousStep, saveTile));
+    step.refresh();
   }
 
   // ^ Toggle Editing Mode ^ //

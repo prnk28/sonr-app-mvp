@@ -18,8 +18,8 @@ class PeerController extends GetxController {
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
   final RxMap<String, Peer> peers = SonrService.peers;
-  final enabledContent = Triple((0.0).tweenTo(1.0), 500.milliseconds, 500.milliseconds);
-  final disabledContent = Triple((1.0).tweenTo(0.0), 500.milliseconds, 100.milliseconds);
+  final enabledContent = Triple((0.0).tweenTo(1.0), 250.milliseconds, 250.milliseconds);
+  final disabledContent = Triple((1.0).tweenTo(0.0), 250.milliseconds, 100.milliseconds);
   final Peer peer;
   final int index;
 
@@ -96,12 +96,23 @@ class PeerController extends GetxController {
     }
   }
 
-  // ^ Handle User Tap
-  select() {
-    if (!_isInvited) {
-      expanded(!expanded.value);
-      expanded.value ? bubbleSize(Size(90, 90)) : bubbleSize(Size(200, 350));
+  // ^ Toggle Expanded View
+  toggleExpand() {
+    expanded(!expanded.value);
+    if (expanded.value) {
+      HapticFeedback.heavyImpact();
     }
+  }
+
+  // ^ Force Close Expanded View
+  closeExpand() {
+    expanded(false);
+    HapticFeedback.mediumImpact();
+  }
+
+  // ^ Force Open Expanded View
+  openExpand() {
+    expanded(true);
   }
 
   // ^ Handle Accepted ^
