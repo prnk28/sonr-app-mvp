@@ -61,6 +61,7 @@ class ShareSheet extends StatelessWidget {
             child: Container(
                 width: size.width,
                 height: size.height,
+                padding: EdgeInsets.only(top: 6),
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   // @ Top Banner

@@ -73,43 +73,46 @@ class _URLInviteView extends StatelessWidget {
     final name = card.firstName;
     final url = card.url;
 
-    return Column(mainAxisSize: MainAxisSize.max, children: [
-      // @ Header
-      SonrHeaderBar.closeAccept(
-        title: SonrText.invite(Payload.URL.toString(), name),
-        onAccept: () {
-          SonrOverlay.back();
-          Get.find<DeviceService>().launchURL(url);
-        },
-        onCancel: () {
-          SonrOverlay.back();
-        },
-      ),
-      Divider(),
+    return Container(
+      padding: EdgeInsets.only(top: 6),
+      child: Column(mainAxisSize: MainAxisSize.max, children: [
+        // @ Header
+        SonrHeaderBar.closeAccept(
+          title: SonrText.invite(Payload.URL.toString(), name),
+          onAccept: () {
+            SonrOverlay.back();
+            Get.find<DeviceService>().launchURL(url);
+          },
+          onCancel: () {
+            SonrOverlay.back();
+          },
+        ),
+        Divider(),
 
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // @ Sonr Icon
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: SonrIcon.url,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // @ Sonr Icon
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: SonrIcon.url,
+            ),
 
-          // @ Indent View
-          Expanded(
-            child: Neumorphic(
-                style: SonrStyle.indented,
-                margin: EdgeInsets.all(10),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SonrText.url(url),
-                )),
-          ),
-        ],
-      ),
-    ]);
+            // @ Indent View
+            Expanded(
+              child: Neumorphic(
+                  style: SonrStyle.indented,
+                  margin: EdgeInsets.all(10),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SonrText.url(url),
+                  )),
+            ),
+          ],
+        ),
+      ]),
+    );
   }
 }
 
