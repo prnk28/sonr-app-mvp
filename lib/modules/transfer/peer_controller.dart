@@ -206,13 +206,6 @@ class PeerController extends GetxController {
       return Offset.zero;
     } else {
       return SonrOffset.fromDegrees(difference.value);
-      // if (proximity.value == Position_Proximity.Immediate) {
-      //   var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
-      //   return pos.position;
-      // } else {
-      //   var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
-      //   return pos.position;
-      // }
     }
   }
 }

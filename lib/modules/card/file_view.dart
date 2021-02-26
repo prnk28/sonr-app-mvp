@@ -150,7 +150,6 @@ class _FileInviteView extends StatelessWidget {
           TextButton(
               onPressed: () {
                 controller.declineInvite();
-                Get.back();
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),

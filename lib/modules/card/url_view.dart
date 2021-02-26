@@ -78,11 +78,11 @@ class _URLInviteView extends StatelessWidget {
       SonrHeaderBar.closeAccept(
         title: SonrText.invite(Payload.URL.toString(), name),
         onAccept: () {
-          Get.back();
+          SonrOverlay.back();
           Get.find<DeviceService>().launchURL(url);
         },
         onCancel: () {
-          Get.back();
+          SonrOverlay.back();
         },
       ),
       Divider(),
