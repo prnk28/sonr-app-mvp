@@ -19,8 +19,8 @@ class SonrColor {
   static Gradient get inactiveBulb => FlutterGradients.findByName(FlutterGradientNames.octoberSilence);
 
   // ^ Generates Random Gradient for Progress View ^ //
-  static FlutterGradientNames randomGradient() {
-    var opts = [
+  static Gradient progressGradient() {
+    var name = [
       FlutterGradientNames.amyCrisp,
       FlutterGradientNames.sugarLollipop,
       FlutterGradientNames.summerGames,
@@ -28,14 +28,13 @@ class SonrColor {
       FlutterGradientNames.juicyCake,
       FlutterGradientNames.northMiracle,
       FlutterGradientNames.seaLord
-    ];
-    // Generate a random index based on the list length
-    return opts.random();
+    ].random();
+    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
   }
 
-  // ^ Generates Random Gradient for Progress View ^ //
-  static FlutterGradientNames payloadGradient(Payload payload) {
-    var opts = [
+  // ^ Generates Random Gradient for Invite View ^ //
+  static FlutterGradientNames payloadGradientName(Payload payload) {
+    return [
       FlutterGradientNames.itmeoBranding,
       FlutterGradientNames.norseBeauty,
       FlutterGradientNames.summerGames,
@@ -43,10 +42,7 @@ class SonrColor {
       FlutterGradientNames.frozenHeat,
       FlutterGradientNames.mindCrawl,
       FlutterGradientNames.seashore
-    ];
-
-    // Generate a random index based on the list length
-    return opts.random();
+    ].random();
   }
 
   // ^ Returns Color from Hexidecimal ^ //

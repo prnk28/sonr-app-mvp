@@ -8,7 +8,7 @@ import 'card_controller.dart';
 class ProgressView extends HookWidget {
   //  Properties
   final TransferCard card;
-  final FlutterGradientNames gradient = SonrColor.randomGradient();
+  final Gradient gradient = SonrColor.progressGradient();
   final TransferCardController cardController;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
@@ -52,7 +52,7 @@ class ProgressView extends HookWidget {
                         painter: WavePainter(
                           waveAnimation: hookController,
                           percent: SonrService.progress.value,
-                          gradient: gradient.linear(tileMode: TileMode.clamp),
+                          gradient: gradient,
                         ),
                       ))
                   : CustomPaint(
@@ -60,7 +60,7 @@ class ProgressView extends HookWidget {
                       painter: WavePainter(
                         waveAnimation: hookController,
                         percent: hookController.value,
-                        gradient: gradient.linear(tileMode: TileMode.clamp),
+                        gradient: gradient,
                       ),
                     ));
         },

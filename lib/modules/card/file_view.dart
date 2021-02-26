@@ -72,10 +72,6 @@ class _FileInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract Data
-    var size = card.properties.size.sizeText();
-
-    // Build View
     return Container(
       margin: EdgeInsets.all(8),
       child: Column(
@@ -113,7 +109,7 @@ class _FileInviteView extends StatelessWidget {
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
               Row(children: [
                 SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                SonrText.normal("   $size", size: 18)
+                SonrText.normal("   ${card.properties.size.sizeText()}", size: 18)
               ]),
             ]),
           ]),
@@ -129,7 +125,7 @@ class _FileInviteView extends StatelessWidget {
                 ),
                 child: invite.payload.icon(
                   IconType.Gradient,
-                  gradient: SonrColor.payloadGradient(invite.payload),
+                  gradient: SonrColor.payloadGradientName(invite.payload),
                   size: (Get.height / 3),
                 )),
           ),
