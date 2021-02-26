@@ -2,7 +2,6 @@ import 'peer_controller.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/data/constants.dart';
 
 // ^ PeerBubble Utilizes Peer Controller ^ //
 class PeerBubble extends StatelessWidget {
@@ -16,8 +15,8 @@ class PeerBubble extends StatelessWidget {
         init: PeerController(peer, index),
         builder: (controller) {
           return AnimatedPositioned(
-              top: controller.expanded.value ? 25.0 : controller.offset.value.dy,
-              left: controller.expanded.value ? 100.0 : controller.offset.value.dx,
+              top: controller.expanded.value ? 25.0 : 35.0,
+              left: controller.expanded.value ? 100.0 : 100,
               duration: 150.milliseconds,
               child: AnimatedContainer(
                 width: controller.expanded.value ? 200 : 90,

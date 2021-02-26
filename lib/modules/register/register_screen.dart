@@ -50,6 +50,7 @@ class RegisterScreen extends GetView<RegisterController> {
                         child: SonrButton.rectangle(
                           text: SonrText.medium("Submit"),
                           onPressed: () {
+                            FocusScope.of(Get.context).unfocus();
                             controller.submit();
                           },
                           margin: EdgeInsets.only(top: 12),
@@ -76,9 +77,9 @@ class RegisterController extends GetxController {
 
       // Process data.
       await UserService.saveChanges(providedContact: contact);
-      FocusScope.of(Get.context).unfocus();
       DeviceService.requestLocation().then((value) {
         if (value) {
+          SonrService.connect();
           Get.offNamed("/home");
         }
       });

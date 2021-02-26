@@ -7,7 +7,7 @@ import 'package:sonr_app/theme/theme.dart';
 class PeerController extends GetxController {
   // Properties
   final artboard = Rx<Artboard>();
-  final antipodal = 0.0.obs;
+  final difference = 0.0.obs;
   final direction = 0.0.obs;
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
@@ -35,7 +35,7 @@ class PeerController extends GetxController {
   StreamSubscription<Map<String, Peer>> peerStream;
   PeerController(this.peer, this.index) {
     contentAnimation(enabledContent);
-    antipodal(peer.position.antipodal);
+    difference(peer.position.antipodal);
     direction(peer.position.direction);
     offset(calculateOffset(peer.platform));
     proximity(peer.position.proximity);
@@ -169,7 +169,7 @@ class PeerController extends GetxController {
     lobby.forEach((id, value) {
       // Update Direction
       if (id == peer.id && !_isInvited) {
-        antipodal((userDirection.value.headingForCameraMode - value.position.direction).abs());
+        difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
         direction(value.position.direction);
         offset(calculateOffset(value.platform));
         proximity(value.position.proximity);
@@ -203,16 +203,16 @@ class PeerController extends GetxController {
   // ^ Calculate Peer Offset from Line ^ //
   Offset calculateOffset(Platform platform) {
     if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
-      var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
-      return pos.position;
+      return Offset.zero;
     } else {
-      if (proximity.value == Position_Proximity.Immediate) {
-        var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
-        return pos.position;
-      } else {
-        var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
-        return pos.position;
-      }
+      return SonrOffset.fromDegrees(difference.value);
+      // if (proximity.value == Position_Proximity.Immediate) {
+      //   var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
+      //   return pos.position;
+      // } else {
+      //   var pos = Tangent.fromAngle(SonrOffset.fromDegrees(antipodal.value), direction.value);
+      //   return pos.position;
+      // }
     }
   }
 }

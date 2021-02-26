@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -16,7 +17,7 @@ extension SonrOffset on Offset {
     var rad = (deg * pi) / 180.0;
     var dx = cos(rad);
     var dy = sin(rad);
-    return Offset(dx, dy);
+    return Offset(dx * (Get.width / 4), dy * (Get.height / 8));
   }
 }
 
