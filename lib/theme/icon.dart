@@ -58,14 +58,27 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data from Metadata
-  factory SonrIcon.preview(IconType type, TransferCard card,
+  factory SonrIcon.preview(TransferCard card,
       {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
     return SonrIcon(
       card.properties.mime.type.gradientData.data,
-      type,
+      IconType.Thumbnail,
       color,
       gradient,
       thumbnail: card.preview,
+      size: size,
+      key: key,
+    );
+  }
+
+  // ^ Payload Data from Mime
+  factory SonrIcon.mime(MIME mime,
+      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
+    return SonrIcon(
+      mime.type.gradientData.data,
+      IconType.Gradient,
+      color,
+      gradient,
       size: size,
       key: key,
     );
@@ -208,19 +221,19 @@ extension MimeIcon on MIME_Type {
   IconGradientData get gradientData {
     switch (this) {
       case MIME_Type.audio:
-        return IconGradientData(SonrIconData.audio_file, FlutterGradientNames.glassWater);
+        return IconGradientData(SonrIconData.audio_file, FlutterGradientNames.flyingLemon);
         break;
       case MIME_Type.image:
-        return IconGradientData(SonrIconData.photo, FlutterGradientNames.glassWater);
+        return IconGradientData(SonrIconData.photo, FlutterGradientNames.juicyCake);
         break;
       case MIME_Type.text:
-        return IconGradientData(SonrIconData.document, FlutterGradientNames.glassWater);
+        return IconGradientData(SonrIconData.document, FlutterGradientNames.farawayRiver);
         break;
       case MIME_Type.video:
-        return IconGradientData(SonrIconData.video, FlutterGradientNames.glassWater);
+        return IconGradientData(SonrIconData.video, FlutterGradientNames.nightCall);
         break;
       default:
-        return IconGradientData(Icons.radio_button_unchecked_outlined, FlutterGradientNames.viciousStance);
+        return IconGradientData(Icons.file_copy_outlined, FlutterGradientNames.strictNovember);
         break;
     }
   }

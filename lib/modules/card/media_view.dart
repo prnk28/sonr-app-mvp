@@ -88,7 +88,7 @@ class _MediaInviteView extends StatelessWidget {
             // Build Profile Pic
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 4.0, left: 8),
+                padding: const EdgeInsets.only(top: 4.0, left: 8, right: 4),
                 child: Neumorphic(
                   padding: EdgeInsets.all(4),
                   style: NeumorphicStyle(
@@ -128,7 +128,7 @@ class _MediaInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: SonrIcon.preview(IconType.Thumbnail, card)),
+                child: card.preview.isNotEmpty ? SonrIcon.preview(card) : SonrIcon.mime(card.properties.mime)),
           ),
           Padding(padding: EdgeInsets.all(4)),
           // Accept Button
