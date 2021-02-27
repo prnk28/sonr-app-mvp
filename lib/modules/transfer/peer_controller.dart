@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 import 'peer_widget.dart';
 
 class PeerController extends GetxController {
@@ -22,8 +21,8 @@ class PeerController extends GetxController {
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
   final RxMap<String, Peer> peers = SonrService.peers;
-  final enabledContent = Triple((0.0).tweenTo(1.0), 200.milliseconds, 200.milliseconds);
-  final disabledContent = Triple((1.0).tweenTo(0.0), 50.milliseconds, 100.milliseconds);
+  final enabledContent = Triple((0.0).tweenTo(1.0), 250.milliseconds, 250.milliseconds);
+  final disabledContent = Triple((1.0).tweenTo(0.0), 250.milliseconds, 100.milliseconds);
 
   // Checkers
   var _isInvited = false;

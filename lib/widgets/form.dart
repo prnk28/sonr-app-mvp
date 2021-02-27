@@ -100,7 +100,7 @@ class SonrDropdown extends StatelessWidget {
   factory SonrDropdown.albums(List<MediaCollection> data,
       {@required ValueChanged<int> onChanged, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
-      if (data[index] != null) {
+      if (data[index].name != null) {
         // Initialize
         var collection = data[index];
         var hasIcon = false;
@@ -140,11 +140,13 @@ class SonrDropdown extends StatelessWidget {
             hasIcon = true;
             icon = SonrIcon.gradient(Icons.timelapse, FlutterGradientNames.crystalline, size: 20);
             break;
+          default:
+            hasIcon = false;
         }
         // Return Item
         return SonrDropdownItem(hasIcon, collection.name, icon: icon);
       } else {
-        return SonrDropdownItem(false, "");
+        return null;
       }
     });
     return SonrDropdown(items, "All", onChanged, margin, width ?? Get.width - 250, height, selectedIconPosition: WidgetPosition.Left);
@@ -155,6 +157,7 @@ class SonrDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
+    items.removeWhere((value) => value == null);
     return ObxValue<RxInt>((selectedIndex) {
       return Container(
         key: _dropKey,

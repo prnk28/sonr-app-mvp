@@ -31,27 +31,27 @@ class PeerBubble extends StatelessWidget {
                     delay: controller.contentAnimation.value.item3,
                     builder: (context, child, value) {
                       return Obx(() {
-                        return AnimatedOpacity(
-                          opacity: value,
-                          duration: controller.contentAnimation.value.item2,
-                          child: GestureDetector(
-                            onTap: () => controller.invite(),
-                            onLongPress: () => controller.expandDetails(),
-                            child: Stack(alignment: Alignment.center, children: [
-                              controller.artboard.value == null
-                                  ? Container()
-                                  : Rive(
-                                      artboard: controller.artboard.value,
-                                      alignment: Alignment.center,
-                                      fit: BoxFit.cover,
-                                    ),
-                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                Padding(padding: EdgeInsets.all(8)),
-                                controller.peer.initials,
-                                Padding(padding: EdgeInsets.all(8)),
-                              ])
-                            ]),
-                          ),
+                        return GestureDetector(
+                          onTap: () => controller.invite(),
+                          onLongPress: () => controller.expandDetails(),
+                          child: Stack(alignment: Alignment.center, children: [
+                            controller.artboard.value == null
+                                ? Container()
+                                : Rive(
+                                    artboard: controller.artboard.value,
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                  ),
+                            AnimatedOpacity(
+                                opacity: value,
+                                duration: controller.contentAnimation.value.item2,
+                                child:
+                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                  Padding(padding: EdgeInsets.all(8)),
+                                  controller.peer.initials,
+                                  Padding(padding: EdgeInsets.all(8)),
+                                ])),
+                          ]),
                         );
                       });
                     }),
