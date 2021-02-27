@@ -190,7 +190,7 @@ class SonrDropdown extends StatelessWidget {
       ]);
     }
 
-    // Selected Widget
+    // @ Selected Widget
     else {
       var item = items[idx];
       if (selectedIconPosition == WidgetPosition.Left) {
