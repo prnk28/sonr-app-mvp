@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,9 +19,12 @@ enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 class DeviceService extends GetxService {
   // Status/Sensor Properties
   final _direction = Rx<CompassEvent>();
+  final _isDarkMode = false.obs;
   final _position = Rx<Position>();
 
+  // Getters for Global References
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
+  static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
   static Rx<Position> get position => Get.find<DeviceService>()._position;
 
   // Permission Properties
@@ -34,10 +40,16 @@ class DeviceService extends GetxService {
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
+    // Get Preferences and Set Status
     _prefs = await SharedPreferences.getInstance();
     await setPermissionStatus();
     await refreshLocation();
+
+    // Bind Direction Stream
     _direction.bindStream(FlutterCompass.events);
+
+    // Set Android Status Bar
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
     return this;
   }
 

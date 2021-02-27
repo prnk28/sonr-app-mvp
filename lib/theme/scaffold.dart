@@ -67,10 +67,9 @@ class SonrScaffold extends StatelessWidget {
         themeMode: ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
           baseColor: Color.fromRGBO(239, 238, 238, 1.0),
-          accentColor: Colors.green,
           lightSource: LightSource.topLeft,
-          depth: 4,
-          intensity: 0.5,
+          depth: 6,
+          intensity: 0.85,
         ),
         theme: NeumorphicThemeData(
           baseColor: SonrColor.base,

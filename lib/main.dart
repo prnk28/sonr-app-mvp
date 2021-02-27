@@ -45,8 +45,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   void initState() {
-    // Set Android Status Bar
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     super.initState();
 
     // Listen to Device Start Status
