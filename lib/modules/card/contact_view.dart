@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
