@@ -43,18 +43,20 @@ class TransferController extends GetxController {
   // ^ Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
     // Update String Elements
-    string(newDir.headingForCameraMode.direction);
-    heading(newDir.headingForCameraMode.heading);
+    if (newDir != null) {
+      string(newDir.headingForCameraMode.direction);
+      heading(newDir.headingForCameraMode.heading);
 
-    // Reference
-    direction(newDir.headingForCameraMode);
-    angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
+      // Reference
+      direction(newDir.headingForCameraMode);
+      angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
 
-    // Calculate Degrees
-    if (newDir.headingForCameraMode + 90 > 360) {
-      degrees(newDir.headingForCameraMode - 270);
-    } else {
-      degrees(newDir.headingForCameraMode + 90);
+      // Calculate Degrees
+      if (newDir.headingForCameraMode + 90 > 360) {
+        degrees(newDir.headingForCameraMode - 270);
+      } else {
+        degrees(newDir.headingForCameraMode + 90);
+      }
     }
   }
 
