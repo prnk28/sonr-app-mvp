@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'constants.dart';
+
 extension DataUtils on int {
   String sizeText() {
     // @ Less than 1KB
@@ -25,6 +27,31 @@ extension DataUtils on int {
       var adjusted = this / pow(10, 9);
       return "${double.parse((adjusted).toStringAsFixed(2))} GB";
     }
+  }
+}
+
+extension DoubleUtils on double {
+  // ^ Retreives Direction String ^ //
+  String get direction {
+    // Calculated
+    var adjustedDegrees = this.round();
+    final unit = "°";
+
+    // @ Convert To String
+    if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
+      return "0" + "0" + adjustedDegrees.toString() + unit;
+    } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
+      return "0" + adjustedDegrees.toString() + unit;
+    } else {
+      return adjustedDegrees.toString() + unit;
+    }
+  }
+
+  // ^ Retreives Heading String ^ //
+  String get heading {
+    var adjustedDesignation = ((this / 22.5) + 0.5).toInt();
+    var compassEnum = Position_Heading.values[(adjustedDesignation % 16)];
+    return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }
 

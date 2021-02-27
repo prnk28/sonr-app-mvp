@@ -4,6 +4,8 @@ import 'package:rive/rive.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'peer_widget.dart';
+
 class PeerController extends GetxController {
   // Properties
   final artboard = Rx<Artboard>();
@@ -12,8 +14,6 @@ class PeerController extends GetxController {
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
   final contentAnimation = Rx<Triple<Tween<double>, Duration, Duration>>();
-  final bubbleSize = Size(90, 90).obs;
-  final expanded = false.obs;
 
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
@@ -97,22 +97,9 @@ class PeerController extends GetxController {
   }
 
   // ^ Toggle Expanded View
-  toggleExpand() {
-    expanded(!expanded.value);
-    if (expanded.value) {
-      HapticFeedback.heavyImpact();
-    }
-  }
-
-  // ^ Force Close Expanded View
-  closeExpand() {
-    expanded(false);
-    HapticFeedback.mediumImpact();
-  }
-
-  // ^ Force Open Expanded View
-  openExpand() {
-    expanded(true);
+  showExpanded() {
+    Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.dialogBackground);
+    HapticFeedback.heavyImpact();
   }
 
   // ^ Handle Accepted ^

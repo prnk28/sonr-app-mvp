@@ -125,7 +125,7 @@ class _FileInviteView extends StatelessWidget {
                 ),
                 child: invite.payload.icon(
                   IconType.Gradient,
-                  gradient: SonrColor.payloadGradientName(invite.payload),
+                  gradient: invite.payload.gradientName,
                   size: (Get.height / 3),
                 )),
           ),

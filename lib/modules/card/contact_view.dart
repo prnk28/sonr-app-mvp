@@ -176,19 +176,12 @@ class _ContactItemView extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.only(top: 4.0),
         child: Neumorphic(
-          padding: EdgeInsets.all(10),
-          style: NeumorphicStyle(
-            boxShape: NeumorphicBoxShape.circle(),
-            depth: -10,
-          ),
-          child: contact.hasPicture()
-              ? Image.memory(Uint8List.fromList(contact.picture))
-              : Icon(
-                  Icons.insert_emoticon,
-                  size: 120,
-                  color: Colors.black.withOpacity(0.5),
-                ),
-        ),
+            padding: EdgeInsets.all(10),
+            style: NeumorphicStyle(
+              boxShape: NeumorphicBoxShape.circle(),
+              depth: -10,
+            ),
+            child: contact.profilePicture),
       ),
 
       // Build Name

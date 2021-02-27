@@ -1,7 +1,6 @@
 import 'peer_controller.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:rive/rive.dart';
 
 // ^ PeerBubble Utilizes Peer Controller ^ //
 class PeerBubble extends StatelessWidget {
@@ -15,97 +14,124 @@ class PeerBubble extends StatelessWidget {
         init: PeerController(peer, index),
         builder: (controller) {
           return AnimatedPositioned(
-              top: controller.expanded.value ? 25.0 : 35.0,
-              left: controller.expanded.value ? 100.0 : 100,
+              top: 35.0,
+              left: 100,
               duration: 150.milliseconds,
               child: AnimatedContainer(
-                width: controller.expanded.value ? 200 : 90,
-                height: controller.expanded.value ? 220 : 90,
-                decoration: controller.expanded.value ? BoxDecoration() : SonrStyle.bubbleDecoration,
+                width: 90,
+                height: 90,
+                decoration: SonrStyle.bubbleDecoration,
                 duration: 200.milliseconds,
-                child: controller.expanded.value ? _PeerExpandedView(controller) : _PeerDefaultView(controller),
+                child: PlayAnimation<double>(
+                    tween: controller.contentAnimation.value.item1,
+                    duration: controller.contentAnimation.value.item2,
+                    delay: controller.contentAnimation.value.item3,
+                    builder: (context, child, value) {
+                      return Obx(() {
+                        return AnimatedOpacity(
+                          opacity: value,
+                          duration: controller.contentAnimation.value.item2,
+                          child: GestureDetector(
+                            onTap: () => controller.invite(),
+                            onLongPress: () => controller.showExpanded(),
+                            child: Stack(alignment: Alignment.center, children: [
+                              controller.artboard.value.view,
+                              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                Padding(padding: EdgeInsets.all(8)),
+                                controller.peer.initials,
+                                Padding(padding: EdgeInsets.all(8)),
+                              ])
+                            ]),
+                          ),
+                        );
+                      });
+                    }),
               ));
         });
   }
 }
 
-// ^ PeerBubble Receives Peer Controller and Builds View ^ //
-class _PeerDefaultView extends StatelessWidget {
+// ^ PeerSheetView Displays Extended Peer Details ^ //
+class PeerSheetView extends StatelessWidget {
   final PeerController controller;
-  const _PeerDefaultView(this.controller, {Key key}) : super(key: key);
+  const PeerSheetView(this.controller, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PlayAnimation<double>(
-        tween: controller.contentAnimation.value.item1,
-        duration: controller.contentAnimation.value.item2,
-        delay: controller.contentAnimation.value.item3,
-        builder: (context, child, value) {
-          return Obx(() {
-            return AnimatedOpacity(
-              opacity: value,
-              duration: controller.contentAnimation.value.item2,
-              child: GestureDetector(
-                onTap: () => controller.invite(),
-                onLongPress: () => controller.toggleExpand(),
-                onDoubleTap: () => controller.toggleExpand(),
-                child: Stack(alignment: Alignment.center, children: [
-                  controller.artboard.value == null
-                      ? Container()
-                      : Rive(
-                          artboard: controller.artboard.value,
-                          alignment: Alignment.center,
-                          fit: BoxFit.contain,
-                        ),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    Padding(padding: EdgeInsets.all(8)),
-                    controller.peer.platform.icon(IconType.Gradient, size: 24),
-                    controller.peer.initials(),
-                    Padding(padding: EdgeInsets.all(8)),
-                  ])
+    return Container(
+        height: Get.height / 3 + 25,
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        child: GestureDetector(
+          onTap: () => Get.back(),
+          child: Stack(children: [
+            // Window
+            Container(
+              margin: EdgeInsets.only(top: 60),
+              child: Neumorphic(
+                style: SonrStyle.overlay,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  // Close Button / Position Info
+                  Align(
+                      heightFactor: 0.9,
+                      alignment: Alignment.topRight,
+                      child: Container(
+                          width: 100,
+                          padding: EdgeInsets.all(10),
+                          child: Neumorphic(
+                            padding: EdgeInsets.all(4),
+                            style: SonrStyle.compassStamp,
+                            child: Row(children: [
+                              SonrIcon.normal(
+                                SonrIconData.compass,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              Obx(() => SonrText.light(
+                                    " " + controller.direction.value.direction,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ))
+                            ]),
+                          ))),
+
+                  // Peer Information
+                  controller.peer.fullName,
+                  controller.peer.platformExpanded,
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 90, vertical: 10),
+                      child: SonrButton.rectangle(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          shape: NeumorphicShape.convex,
+                          depth: 4,
+                          onPressed: () {
+                            controller.invite();
+                            Get.back();
+                          },
+                          icon: SonrIcon.invite,
+                          text: SonrText.semibold("Invite", size: 24))),
+                  Spacer()
                 ]),
               ),
-            );
-          });
-        });
-  }
-}
+            ),
 
-class _PeerExpandedView extends StatelessWidget {
-  final PeerController controller;
-  const _PeerExpandedView(this.controller, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PlayAnimation<double>(
-        tween: 0.0.tweenTo(1.0),
-        duration: 100.milliseconds,
-        delay: 200.milliseconds,
-        builder: (context, child, value) {
-          return AnimatedOpacity(
-              opacity: value,
-              duration: 100.milliseconds,
-              child: GestureDetector(
-                onTap: () => controller.toggleExpand(),
-                child: Neumorphic(
-                  style: SonrStyle.expandedBubble,
-                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                    Container(
-                        alignment: Alignment.topRight,
-                        child: SonrButton.flat(
-                            onPressed: () {
-                              controller.closeExpand();
-                            },
-                            icon: SonrIcon.close)),
-                    controller.peer.platform.icon(IconType.Gradient, size: 32),
-                    controller.peer.initials(),
-                    // Padding(padding: EdgeInsets.all(8)),
-                    Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20),
-                        child: SonrButton.stadium(onPressed: controller.invite, icon: SonrIcon.accept, text: SonrText.semibold("Invite")))
-                  ]),
+            // Profile Pic
+            Align(
+              alignment: Alignment.topCenter,
+              child: Neumorphic(
+                padding: EdgeInsets.all(4),
+                style: NeumorphicStyle(
+                  shadowLightColor: Colors.black38,
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: 10,
+                  color: SonrColor.base,
                 ),
-              ));
-        });
+                child: Neumorphic(
+                  style: NeumorphicStyle(intensity: 0.5, depth: -8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base),
+                  child: controller.peer.profilePicture,
+                ),
+              ),
+            ),
+          ]),
+        ));
   }
 }

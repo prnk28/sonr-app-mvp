@@ -82,6 +82,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
   static SonrIcon get close => SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36);
   static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
+  static SonrIcon get invite => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.aquaGuidance, size: 28);
   static SonrIcon get profile => SonrIcon.gradient(Icons.person_outline, FlutterGradientNames.itmeoBranding, size: 36);
   static SonrIcon get search => SonrIcon.gradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
   static SonrIcon get more => SonrIcon.gradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
@@ -166,6 +167,8 @@ class SonrIconData {
   static const IconData sonr = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData screenshot = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData success = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData invite = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData compass = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cancel = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData missing = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData info = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);

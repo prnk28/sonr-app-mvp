@@ -43,8 +43,8 @@ class TransferController extends GetxController {
   // ^ Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
     // Update String Elements
-    string(_directionString(newDir.headingForCameraMode));
-    heading(_headingString(newDir.headingForCameraMode));
+    string(newDir.headingForCameraMode.direction);
+    heading(newDir.headingForCameraMode.heading);
 
     // Reference
     direction(newDir.headingForCameraMode);
@@ -70,28 +70,5 @@ class TransferController extends GetxController {
       title("$size People");
       gradient(SonrColor.activeBulb);
     }
-  }
-
-  // ^ Retreives Direction String ^ //
-  _directionString(double dir) {
-    // Calculated
-    var adjustedDegrees = dir.round();
-    final unit = "°";
-
-    // @ Convert To String
-    if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
-      return "0" + "0" + adjustedDegrees.toString() + unit;
-    } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
-      return "0" + adjustedDegrees.toString() + unit;
-    } else {
-      return adjustedDegrees.toString() + unit;
-    }
-  }
-
-  // ^ Retreives Heading String ^ //
-  _headingString(double dir) {
-    var adjustedDesignation = ((dir / 22.5) + 0.5).toInt();
-    var compassEnum = Position_Heading.values[(adjustedDesignation % 16)];
-    return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }

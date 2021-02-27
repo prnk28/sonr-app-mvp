@@ -32,19 +32,6 @@ class SonrColor {
     return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
   }
 
-  // ^ Generates Random Gradient for Invite View ^ //
-  static FlutterGradientNames payloadGradientName(Payload payload) {
-    return [
-      FlutterGradientNames.itmeoBranding,
-      FlutterGradientNames.norseBeauty,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.healthyWater,
-      FlutterGradientNames.frozenHeat,
-      FlutterGradientNames.mindCrawl,
-      FlutterGradientNames.seashore
-    ].random();
-  }
-
   // ^ Returns Color from Hexidecimal ^ //
   static Color fromHex(String hexString) {
     final buffer = StringBuffer();

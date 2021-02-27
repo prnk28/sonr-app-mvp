@@ -24,35 +24,9 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/widgets/painter.dart';
 import 'color.dart';
 
 class SonrStyle {
-  static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
-  static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
-  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
-  static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
-  static get dropDownItem =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
-  static get dropDownBox =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base, shadowLightColor: Colors.black38);
-  static get overlay => NeumorphicStyle(
-      intensity: 0.85,
-      depth: 8,
-      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      color: SonrColor.base,
-      shadowLightColor: Colors.black38);
-
-  static get shareButton => NeumorphicStyle(
-        color: Colors.black87,
-        surfaceIntensity: 0.6,
-        intensity: 0.75,
-        depth: 8,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
-      );
-
-  static get expandedBubble => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.path(ExpandedBubblePainter()));
-
   static get bubbleDecoration => BoxDecoration(shape: BoxShape.circle, boxShadow: [
         BoxShadow(
           color: Color.fromRGBO(167, 179, 190, 1.0),
@@ -67,4 +41,38 @@ class SonrStyle {
           spreadRadius: 0.5,
         ),
       ]);
+
+  static get compassStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
+
+  static get dropDownBox =>
+      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base, shadowLightColor: Colors.black38);
+
+  static get dropDownItem =>
+      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+
+  static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
+
+  static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+
+  static get overlay => NeumorphicStyle(
+      intensity: 0.85,
+      depth: 8,
+      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+      color: SonrColor.base,
+      shadowLightColor: Colors.black38);
+
+  static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+
+  static get photo =>
+      NeumorphicStyle(intensity: 0.85, depth: 8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base, shadowLightColor: Colors.black38);
+
+  static get shareButton => NeumorphicStyle(
+        color: Colors.black87,
+        surfaceIntensity: 0.6,
+        intensity: 0.75,
+        depth: 8,
+        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
+      );
+
+  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
 }
