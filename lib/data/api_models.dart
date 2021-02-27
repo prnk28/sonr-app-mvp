@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:rive/rive.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/text.dart';
 import 'package:sonr_app/theme/theme.dart';
