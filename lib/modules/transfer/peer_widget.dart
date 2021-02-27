@@ -1,6 +1,10 @@
+import 'package:rive/rive.dart';
+
 import 'peer_controller.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
+
+const double K_BUBBLE_SIZE = 90;
 
 // ^ PeerBubble Utilizes Peer Controller ^ //
 class PeerBubble extends StatelessWidget {
@@ -17,11 +21,10 @@ class PeerBubble extends StatelessWidget {
               top: 35.0,
               left: 100,
               duration: 150.milliseconds,
-              child: AnimatedContainer(
-                width: 90,
-                height: 90,
+              child: Container(
+                width: K_BUBBLE_SIZE,
+                height: K_BUBBLE_SIZE,
                 decoration: SonrStyle.bubbleDecoration,
-                duration: 200.milliseconds,
                 child: PlayAnimation<double>(
                     tween: controller.contentAnimation.value.item1,
                     duration: controller.contentAnimation.value.item2,
@@ -33,9 +36,15 @@ class PeerBubble extends StatelessWidget {
                           duration: controller.contentAnimation.value.item2,
                           child: GestureDetector(
                             onTap: () => controller.invite(),
-                            onLongPress: () => controller.showExpanded(),
+                            onLongPress: () => controller.expandDetails(),
                             child: Stack(alignment: Alignment.center, children: [
-                              controller.artboard.value.view,
+                              controller.artboard.value == null
+                                  ? Container()
+                                  : Rive(
+                                      artboard: controller.artboard.value,
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.cover,
+                                    ),
                               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
                                 Padding(padding: EdgeInsets.all(8)),
                                 controller.peer.initials,

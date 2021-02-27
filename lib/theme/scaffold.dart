@@ -70,7 +70,7 @@ class SonrScaffold extends StatelessWidget {
           baseColor: SonrColor.baseDark,
           lightSource: LightSource.topLeft,
           shadowDarkColor: Colors.black.withOpacity(0.7),
-          shadowLightColor: SonrColor.fromHex("(#3A3A3A").withOpacity(0.7),
+          shadowLightColor: SonrColor.fromHex("#3A3A3A").withOpacity(0.7),
           depth: 6,
           intensity: 0.85,
         ),

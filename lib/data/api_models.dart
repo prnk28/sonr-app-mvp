@@ -105,15 +105,3 @@ extension PayloadUtils on Payload {
     ].random();
   }
 }
-
-extension ArtboardUtils on Artboard {
-  Widget get view {
-    return this == null
-        ? Container()
-        : Rive(
-            artboard: this,
-            alignment: Alignment.center,
-            fit: BoxFit.contain,
-          );
-  }
-}

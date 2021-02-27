@@ -8,6 +8,10 @@ import 'peer_widget.dart';
 
 class PeerController extends GetxController {
   // Properties
+  final Peer peer;
+  final int index;
+
+  // Reactive Elements
   final artboard = Rx<Artboard>();
   final difference = 0.0.obs;
   final direction = 0.0.obs;
@@ -18,10 +22,8 @@ class PeerController extends GetxController {
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
   final RxMap<String, Peer> peers = SonrService.peers;
-  final enabledContent = Triple((0.0).tweenTo(1.0), 250.milliseconds, 250.milliseconds);
-  final disabledContent = Triple((1.0).tweenTo(0.0), 250.milliseconds, 100.milliseconds);
-  final Peer peer;
-  final int index;
+  final enabledContent = Triple((0.0).tweenTo(1.0), 200.milliseconds, 200.milliseconds);
+  final disabledContent = Triple((1.0).tweenTo(0.0), 50.milliseconds, 100.milliseconds);
 
   // Checkers
   var _isInvited = false;
@@ -97,7 +99,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Toggle Expanded View
-  showExpanded() {
+  expandDetails() {
     Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.dialogBackground);
     HapticFeedback.heavyImpact();
   }

@@ -100,49 +100,52 @@ class SonrDropdown extends StatelessWidget {
   factory SonrDropdown.albums(List<MediaCollection> data,
       {@required ValueChanged<int> onChanged, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
-      // Initialize
-      var collection = data[index];
-      var hasIcon = false;
-      var icon;
+      if (data[index] != null) {
+        // Initialize
+        var collection = data[index];
+        var hasIcon = false;
+        var icon;
 
-      // Set Icon for Generated Albums
-      switch (collection.name.toLowerCase()) {
-        case "all":
-          hasIcon = true;
-          icon = SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20);
-          break;
-        case "sonr":
-          hasIcon = true;
-          icon = SonrIcon.sonr;
-          break;
-        case "download":
-          hasIcon = true;
-          icon = SonrIcon.gradient(Icons.download_rounded, FlutterGradientNames.orangeJuice, size: 20);
-          break;
-        case "screenshots":
-          hasIcon = true;
-          icon = SonrIcon.screenshots;
-          break;
-        case "movies":
-          hasIcon = true;
-          icon = SonrIcon.gradient(Icons.movie_creation_outlined, FlutterGradientNames.lilyMeadow, size: 20);
-          break;
-        case "panoramas":
-          hasIcon = true;
-          icon = SonrIcon.panorama;
-          break;
-        case "favorites":
-          hasIcon = true;
-          icon = SonrIcon.gradient(Icons.star_half_rounded, FlutterGradientNames.fruitBlend, size: 20);
-          break;
-        case "recents":
-          hasIcon = true;
-          icon = SonrIcon.gradient(Icons.timelapse, FlutterGradientNames.crystalline, size: 20);
-          break;
+        // Set Icon for Generated Albums
+        switch (collection.name.toLowerCase()) {
+          case "all":
+            hasIcon = true;
+            icon = SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20);
+            break;
+          case "sonr":
+            hasIcon = true;
+            icon = SonrIcon.sonr;
+            break;
+          case "download":
+            hasIcon = true;
+            icon = SonrIcon.gradient(Icons.download_rounded, FlutterGradientNames.orangeJuice, size: 20);
+            break;
+          case "screenshots":
+            hasIcon = true;
+            icon = SonrIcon.screenshots;
+            break;
+          case "movies":
+            hasIcon = true;
+            icon = SonrIcon.gradient(Icons.movie_creation_outlined, FlutterGradientNames.lilyMeadow, size: 20);
+            break;
+          case "panoramas":
+            hasIcon = true;
+            icon = SonrIcon.panorama;
+            break;
+          case "favorites":
+            hasIcon = true;
+            icon = SonrIcon.gradient(Icons.star_half_rounded, FlutterGradientNames.fruitBlend, size: 20);
+            break;
+          case "recents":
+            hasIcon = true;
+            icon = SonrIcon.gradient(Icons.timelapse, FlutterGradientNames.crystalline, size: 20);
+            break;
+        }
+        // Return Item
+        return SonrDropdownItem(hasIcon, collection.name, icon: icon);
+      } else {
+        return SonrDropdownItem(false, "");
       }
-
-      // Return Item
-      return SonrDropdownItem(hasIcon, collection.name, icon: icon);
     });
     return SonrDropdown(items, "All", onChanged, margin, width ?? Get.width - 250, height, selectedIconPosition: WidgetPosition.Left);
   }

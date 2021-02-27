@@ -12,7 +12,7 @@ class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
-  final options = <Contact_SocialTile_Provider>[].obs;
+  final options = SonrSocial.options(UserService.socials);
 
   // References
   final step = Rx<TileStep>();
@@ -24,7 +24,6 @@ class ProfileController extends GetxController {
   // ** Initialize Method ** //
   onInit() async {
     step(TileStep(nextStep, previousStep, saveTile));
-    options(SonrSocial.options(UserService.socials));
     super.onInit();
   }
 
