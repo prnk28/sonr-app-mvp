@@ -3,9 +3,9 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
+  final hintName = SonrText.hintName();
   @override
   Widget build(BuildContext context) {
-    var hintName = SonrText.hintName();
     return SonrScaffold.appBarTitle(
         title: "Sonr",
         body: Column(children: <Widget>[

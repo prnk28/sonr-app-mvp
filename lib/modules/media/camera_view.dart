@@ -174,7 +174,7 @@ class _CaptureButton extends GetView<CameraController> {
                   child: Obx(
                     () => Neumorphic(
                         style: NeumorphicStyle(
-                            color: SonrColor.baseWhite,
+                            color: SonrColor.base,
                             depth: 14,
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),

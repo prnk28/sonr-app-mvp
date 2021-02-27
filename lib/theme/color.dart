@@ -9,7 +9,6 @@ import 'icon.dart';
 class SonrColor {
   // ** General Theme Color Properties ** //
   static const Color base = Color(0xffDDDDDD);
-  static const Color baseWhite = Color(0xffEFEEEE);
   static const Color dialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color overlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
   static const Color disabledButton = Color.fromRGBO(179, 181, 181, 1.0);

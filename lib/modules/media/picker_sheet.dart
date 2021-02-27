@@ -64,7 +64,7 @@ class _SonrMediaButton extends GetView<MediaPickerController> {
   final isSelected = false.obs;
 
   // References
-  final defaultStyle = NeumorphicStyle(intensity: 0.85, color: SonrColor.baseWhite);
+  final defaultStyle = NeumorphicStyle(intensity: 0.85, color: SonrColor.base);
   final pressedStyle = NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
 
   _SonrMediaButton(this.media, this.index, {Key key}) : super(key: key);
