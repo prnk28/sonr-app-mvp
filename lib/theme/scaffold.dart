@@ -1,3 +1,4 @@
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class SonrScaffold extends StatelessWidget {
@@ -64,10 +65,12 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NeumorphicTheme(
-        themeMode: ThemeMode.light, //or dark / system
+        themeMode: DeviceService.isDarkMode.value ? ThemeMode.dark : ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
-          baseColor: Color.fromRGBO(239, 238, 238, 1.0),
+          baseColor: SonrColor.baseDark,
           lightSource: LightSource.topLeft,
+          shadowDarkColor: Colors.black.withOpacity(0.7),
+          shadowLightColor: SonrColor.fromHex("(#3A3A3A").withOpacity(0.7),
           depth: 6,
           intensity: 0.85,
         ),

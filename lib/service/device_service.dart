@@ -48,8 +48,10 @@ class DeviceService extends GetxService {
     // Bind Direction Stream
     _direction.bindStream(FlutterCompass.events);
 
-    // Set Android Status Bar
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
+    // Set Android Status Bar by Dark Mode
+    _isDarkMode.value
+        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light))
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
     return this;
   }
 
