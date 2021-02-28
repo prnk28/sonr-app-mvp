@@ -20,7 +20,6 @@ enum CardType { None, Invite, Reply, GridItem, Info }
 class TransferCardController extends GetxController {
   // Properties
   final animationCompleted = false.obs;
-  final urlMetadata = Rx<URLData>();
 
   // ^ Accept Contact Invite Request ^ //
   acceptContact(TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
@@ -72,12 +71,6 @@ class TransferCardController extends GetxController {
     // Check if accepted
     SonrService.respond(false);
     SonrOverlay.back();
-  }
-
-  // ^ Fetch Metadata for URL invite ^ //
-  fetchURLMeta(String url) async {
-    var data = await MetaFetch.extract(url);
-    urlMetadata(URLData(data));
   }
 
   // ^ Accept Transfer Invite Request ^ //

@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
+import 'package:metadata_fetch/metadata_fetch.dart' as MetaFetch;
 
 class URLCard extends GetWidget<TransferCardController> {
   // References
@@ -63,16 +65,29 @@ class URLCard extends GetWidget<TransferCardController> {
 }
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
-class _URLInviteView extends StatelessWidget {
+class _URLInviteView extends StatefulWidget {
   final TransferCardController controller;
   final TransferCard card;
   _URLInviteView(this.card, this.controller);
 
   @override
+  __URLInviteViewState createState() => __URLInviteViewState();
+}
+
+class __URLInviteViewState extends State<_URLInviteView> {
+  URLData urlData;
+  bool urlDataLoaded = false;
+
+  @override
+  void initState() {
+    fetchURLData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final name = card.firstName;
-    final url = card.url;
-    controller.fetchURLMeta(url);
+    final name = widget.card.firstName;
+    final url = widget.card.url;
 
     return Container(
       padding: EdgeInsets.only(top: 6),
@@ -105,12 +120,12 @@ class _URLInviteView extends StatelessWidget {
               child: Obx(() => Neumorphic(
                   style: SonrStyle.indented,
                   margin: EdgeInsets.all(10),
-                  child: controller.urlMetadata != null
+                  child: urlDataLoaded
                       ? Column(children: [
-                          Image.network(controller.urlMetadata.value.image),
+                          Image.network(urlData.image),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: SonrText.url(controller.urlMetadata.value),
+                            child: SonrText.url(urlData),
                           )
                         ])
                       : Container())),
@@ -119,6 +134,15 @@ class _URLInviteView extends StatelessWidget {
         ),
       ]),
     );
+  }
+
+  fetchURLData() async {
+    var data = await MetaFetch.extract(widget.card.url);
+
+    setState(() {
+      urlData = URLData(data);
+      urlDataLoaded = true;
+    });
   }
 }
 
