@@ -229,7 +229,7 @@ class SonrText extends StatelessWidget {
               fontStyle: FontStyle.italic,
               color: Colors.blueGrey[300])),
       TextSpan(
-          text: path,
+          text: directories > 0 ? path : "",
           style: GoogleFonts.poppins(
               decoration: TextDecoration.underline,
               decorationStyle: TextDecorationStyle.dotted,

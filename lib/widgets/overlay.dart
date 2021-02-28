@@ -586,7 +586,8 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
               ),
               Padding(padding: EdgeInsets.all(4)),
               Divider(),
-              Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Padding(padding: EdgeInsets.all(4)),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 // Decline Button
                 TextButton(
                     onPressed: () {
@@ -595,14 +596,11 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                         SonrOverlay.back();
                       }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: SonrText.semibold(declineTitle, color: Colors.redAccent),
-                    )),
-                Padding(padding: EdgeInsets.all(2)),
+                    child: SonrText.semibold(declineTitle, color: Colors.redAccent, size: 18)),
                 // Accept Button
                 Container(
-                  width: Get.width / 2.75,
+                  width: Get.width / 2.5,
+                  height: 50,
                   child: SonrButton.stadium(
                     onPressed: () {
                       onDecision(true);
@@ -610,8 +608,8 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                         SonrOverlay.back();
                       }
                     },
-                    icon: SonrIcon.accept,
-                    text: SonrText.semibold(acceptTitle),
+                    icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                    text: SonrText.semibold(acceptTitle, size: 18, color: Colors.black.withOpacity(0.85)),
                   ),
                 ),
               ]),

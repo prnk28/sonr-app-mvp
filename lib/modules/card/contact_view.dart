@@ -137,11 +137,12 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
+                child: SonrText.semibold("Decline", color: Colors.redAccent, size: 18),
               )),
           // Accept Button
           Container(
-            width: Get.width / 2.75,
+            width: Get.width / 3,
+            height: 50,
             child: SonrButton.stadium(
               onPressed: () {
                 SonrOverlay.back();
@@ -151,8 +152,8 @@ class _ContactInviteView extends StatelessWidget {
                   controller.acceptContact(card, sendBackContact: false);
                 }
               },
-              icon: SonrIcon.accept,
-              text: SonrText.medium("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+              icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+              text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
             ),
           ),
         ])

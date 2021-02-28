@@ -12,6 +12,8 @@ import 'package:sonr_app/service/user_service.dart';
 import 'package:sonr_app/widgets/overlay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../theme/theme.dart';
+
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
 enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
@@ -71,9 +73,10 @@ class DeviceService extends GetxService {
   // ^ Launch a URL Event ^ //
   Future launchURL(String url) async {
     if (await canLaunch(url)) {
+      SonrOverlay.back();
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      SonrSnack.error("Could not launch the URL.");
     }
   }
 

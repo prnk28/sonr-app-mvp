@@ -66,52 +66,57 @@ class TransferCardGrid extends GetView<HomeController> {
     controller.pageController = pageController;
 
     // Build View
-    return Obx(() {
-      return GestureDetector(
+    return GestureDetector(
         onTap: () => controller.closeShare(),
         child: Container(
-          padding: EdgeInsets.only(top: 15),
-          margin: EdgeInsets.all(10),
-          height: 500, // card height
-          child: PageView.builder(
-              itemCount: controller.getCardList().length,
-              controller: pageController,
-              onPageChanged: (int index) => controller.pageIndex(index),
-              itemBuilder: (_, idx) {
-                return Obx(() {
-                  if (idx == controller.pageIndex.value) {
-                    return PlayAnimation<double>(
-                      tween: (0.85).tweenTo(0.95),
-                      duration: 200.milliseconds,
-                      builder: (context, child, value) {
+            padding: EdgeInsets.only(top: 15),
+            margin: EdgeInsets.all(10),
+            height: 500,
+            child: Obx(() {
+              if (controller.status.value == HomeState.Loading) {
+                return Center(child: CircularProgressIndicator());
+              } else if (controller.status.value == HomeState.None) {
+                return Center(child: SonrText.bold("No Cards Found!", color: Colors.grey[500]));
+              } else {
+                return PageView.builder(
+                  itemCount: controller.getCardList().length,
+                  controller: pageController,
+                  onPageChanged: (int index) => controller.pageIndex(index),
+                  itemBuilder: (_, idx) {
+                    return Obx(() {
+                      if (idx == controller.pageIndex.value) {
+                        return PlayAnimation<double>(
+                          tween: (0.85).tweenTo(0.95),
+                          duration: 200.milliseconds,
+                          builder: (context, child, value) {
+                            return Transform.scale(
+                              scale: value,
+                              child: buildCard(controller, idx),
+                            );
+                          },
+                        );
+                      } else if (idx == controller.pageIndex.value) {
+                        return PlayAnimation<double>(
+                          tween: (0.95).tweenTo(0.85),
+                          duration: 200.milliseconds,
+                          builder: (context, child, value) {
+                            return Transform.scale(
+                              scale: value,
+                              child: buildCard(controller, idx),
+                            );
+                          },
+                        );
+                      } else {
                         return Transform.scale(
-                          scale: value,
+                          scale: 0.85,
                           child: buildCard(controller, idx),
                         );
-                      },
-                    );
-                  } else if (idx == controller.pageIndex.value) {
-                    return PlayAnimation<double>(
-                      tween: (0.95).tweenTo(0.85),
-                      duration: 200.milliseconds,
-                      builder: (context, child, value) {
-                        return Transform.scale(
-                          scale: value,
-                          child: buildCard(controller, idx),
-                        );
-                      },
-                    );
-                  } else {
-                    return Transform.scale(
-                      scale: 0.85,
-                      child: buildCard(controller, idx),
-                    );
-                  }
-                });
-              }),
-        ),
-      );
-    });
+                      }
+                    });
+                  },
+                );
+              }
+            })));
   }
 
   Widget buildCard(HomeController controller, int index) {

@@ -231,11 +231,11 @@ class SonrService extends GetxService with TransferQueue {
     HapticFeedback.heavyImpact();
 
     // Save Card to Gallery
-    data.hasExported = await MediaService.saveTransfer(data);
-    received.complete(data);
-
-    // Store In SQL
-    Get.find<SQLService>().storeCard(data);
+    MediaService.saveTransfer(data).then((value) {
+      data.hasExported = value;
+      received.complete(data);
+      Get.find<SQLService>().storeCard(data);
+    });
   }
 
   // ^ An Error Has Occurred ^ //

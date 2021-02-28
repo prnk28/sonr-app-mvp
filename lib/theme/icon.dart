@@ -106,7 +106,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get screenshots => SonrIcon.gradient(SonrIconData.screenshot, FlutterGradientNames.happyAcid, size: 20);
   static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.fabledSunset, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
-  static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 40);
+  static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
 
   // ^ Build View of Icon ^ //
   @override

@@ -263,7 +263,7 @@ class SonrButton extends StatelessWidget {
 
   // * Stadium Style Button * //
   factory SonrButton.stadium({
-    @required Function onPressed,
+    Function onPressed,
     SonrIcon icon,
     SonrText text,
     Color shadowLightColor,
@@ -388,7 +388,9 @@ class SonrButton extends StatelessWidget {
       return NeumorphicButton(
           onPressed: () {
             HapticFeedback.mediumImpact();
-            onPressed();
+            if (onPressed != null) {
+              onPressed();
+            }
           },
           margin: margin,
           style: NeumorphicStyle(

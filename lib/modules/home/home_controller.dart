@@ -1,12 +1,17 @@
+import 'dart:async';
+
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
+enum HomeState { Loading, Ready, None, New }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
   // Properties
   final cards = RxList<TransferCard>(Get.find<SQLService>().cards);
+  final status = Rx<HomeState>();
+  final category = Rx<ToggleFilter>(ToggleFilter.All);
 
   // Widget Elements
   final isShareExpanded = false.obs;
@@ -15,14 +20,52 @@ class HomeController extends GetxController {
 
   // References
   PageController pageController;
-  final category = Rx<ToggleFilter>(ToggleFilter.All);
 
+  StreamSubscription<List<TransferCard>> cardStream;
+
+  // ^ Controller Constructer ^
   onInit() {
+    // Connect
     if (!SonrService.connected.value) {
       SonrService.connect();
     }
 
+    // Add Stream Handlers
+    cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
+
+    // Set Initial Status
+    if (cards.length > 0) {
+      status(HomeState.Ready);
+    } else {
+      status(HomeState.None);
+    }
     super.onInit();
+  }
+
+  // ^ On Dispose ^ //
+  void onDispose() {
+    cardStream.cancel();
+  }
+
+  // ^ Handle Cards Update ^ //
+  _handleCardStream(List<TransferCard> onData) {
+    status(HomeState.Loading);
+    if (onData.length > 0) {
+      // Check if Card Added
+      if (onData.length > cards.length) {
+        cards(onData);
+        cards.length == 1 ? status(HomeState.Ready) : status(HomeState.New);
+      }
+      // Set Cards
+      else {
+        cards(onData);
+        status(HomeState.Ready);
+      }
+    }
+    // No Cards Available
+    else {
+      status(HomeState.None);
+    }
   }
 
   // ^ Helper Method for Category Filter ^ //

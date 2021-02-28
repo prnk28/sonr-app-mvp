@@ -129,28 +129,28 @@ class _FileInviteView extends StatelessWidget {
                   size: (Get.height / 3),
                 )),
           ),
-          Padding(padding: EdgeInsets.all(4)),
-          // Accept Button
-          Container(
-            width: Get.width / 2.75,
-            child: SonrButton.stadium(
-              onPressed: () {
-                controller.acceptTransfer(card);
-              },
-              icon: SonrIcon.accept,
-              text: SonrText.medium("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+          Divider(),
+                  Padding(padding: EdgeInsets.all(4)),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            // Decline Button
+            TextButton(
+                onPressed: () => controller.declineInvite(),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: SonrText.semibold("Decline", color: Colors.red[600], size: 18),
+                )),
+            // Accept Button
+            Container(
+              width: Get.width / 3,
+              height: 50,
+              child: SonrButton.stadium(
+                onPressed: () => controller.acceptTransfer(card),
+                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+              ),
             ),
-          ),
-          Padding(padding: EdgeInsets.all(2)),
-          // Decline Button
-          TextButton(
-              onPressed: () {
-                controller.declineInvite();
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.medium("Decline", color: Colors.redAccent, size: 18),
-              )),
+          ]),
+          Padding(padding: EdgeInsets.only(top: 14)),
         ],
       ),
     );

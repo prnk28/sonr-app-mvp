@@ -26,21 +26,9 @@ class SonrSnack {
     }
   }
 
-  // ^ Succesful Operation ^ //
-  factory SonrSnack.success(String message) {
-    return SonrSnack("Success!!", message, SonrIcon.success, Colors.green, 2600);
-  }
-
-  // ^ Missing Data ^ //
-  factory SonrSnack.missing(String message, {bool isLast = false}) {
-    // Get Missing Title
-    final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
-    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcon.missing, Colors.redAccent, 2600);
-  }
-
-  // ^ Invalid Operation ^ //
-  factory SonrSnack.invalid(String message) {
-    return SonrSnack("Uh Oh!", message, SonrIcon.missing, Colors.orange, 2600);
+  // ^ Custom Alert ^ //
+  factory SonrSnack.alert({@required String title, @required String message, @required Icon icon, Color color = Colors.orange}) {
+    return SonrSnack(title, message, icon, color, 2600);
   }
 
   // ^ Cancelled Operation ^ //
@@ -51,5 +39,22 @@ class SonrSnack {
   // ^ Error on Operation ^ //
   factory SonrSnack.error(String message) {
     return SonrSnack("Error.", message, SonrIcon.error, Colors.red, 2600);
+  }
+
+  // ^ Invalid Operation ^ //
+  factory SonrSnack.invalid(String message) {
+    return SonrSnack("Uh Oh!", message, SonrIcon.missing, Colors.orange[900], 2600);
+  }
+
+  // ^ Missing Data ^ //
+  factory SonrSnack.missing(String message, {bool isLast = false}) {
+    // Get Missing Title
+    final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
+    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcon.missing, Colors.redAccent, 2600);
+  }
+
+  // ^ Succesful Operation ^ //
+  factory SonrSnack.success(String message) {
+    return SonrSnack("Success!!", message, SonrIcon.success, Colors.green, 2600);
   }
 }
