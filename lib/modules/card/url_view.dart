@@ -4,7 +4,6 @@ import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
-import 'package:metadata_fetch/metadata_fetch.dart' as MetaFetch;
 
 class URLCard extends GetWidget<TransferCardController> {
   // References
@@ -65,39 +64,22 @@ class URLCard extends GetWidget<TransferCardController> {
 }
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
-class _URLInviteView extends StatefulWidget {
+class _URLInviteView extends StatelessWidget {
   final TransferCardController controller;
   final TransferCard card;
   _URLInviteView(this.card, this.controller);
 
   @override
-  __URLInviteViewState createState() => __URLInviteViewState();
-}
-
-class __URLInviteViewState extends State<_URLInviteView> {
-  URLData urlData;
-  bool urlDataLoaded = false;
-
-  @override
-  void initState() {
-    fetchURLData();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final name = widget.card.firstName;
-    final url = widget.card.url;
-
     return Container(
       padding: EdgeInsets.only(top: 6),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         SonrHeaderBar.closeAccept(
-          title: SonrText.invite(Payload.URL.toString(), name),
+          title: SonrText.invite(Payload.URL.toString(), card.firstName),
           onAccept: () {
             SonrOverlay.back();
-            Get.find<DeviceService>().launchURL(url);
+            Get.find<DeviceService>().launchURL(card.url.link);
           },
           onCancel: () {
             SonrOverlay.back();
@@ -117,32 +99,33 @@ class __URLInviteViewState extends State<_URLInviteView> {
 
             // @ Indent View
             Expanded(
-              child: Obx(() => Neumorphic(
-                  style: SonrStyle.indented,
-                  margin: EdgeInsets.all(10),
-                  child: urlDataLoaded
-                      ? Column(children: [
-                          Image.network(urlData.image),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: SonrText.url(urlData),
-                          )
-                        ])
-                      : Container())),
-            ),
+                child: Neumorphic(
+              style: SonrStyle.indented,
+              margin: EdgeInsets.all(10),
+              child: _buildURLView(card.url),
+            )),
           ],
         ),
       ]),
     );
   }
 
-  fetchURLData() async {
-    var data = await MetaFetch.extract(widget.card.url);
-
-    setState(() {
-      urlData = URLData(data);
-      urlDataLoaded = true;
-    });
+  Widget _buildURLView(URLLink data) {
+    print(data.toString());
+    if (data.images.isNotEmpty) {
+      return Column(children: [
+        Image.network(data.images.first.url),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SonrText.url(card.url.link),
+        )
+      ]);
+    } else {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SonrText.url(card.url.link),
+      );
+    }
   }
 }
 

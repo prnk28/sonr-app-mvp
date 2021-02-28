@@ -1,6 +1,4 @@
 import 'dart:math';
-import 'package:sonr_app/theme/theme.dart';
-
 import 'constants.dart';
 
 extension DataUtils on int {
@@ -30,7 +28,7 @@ extension DataUtils on int {
   }
 }
 
-extension DoubleUtils on double {
+extension DirectionUtils on double {
   // ^ Retreives Direction String ^ //
   String get direction {
     // Calculated
@@ -55,20 +53,21 @@ extension DoubleUtils on double {
   }
 }
 
-extension BoolUtils on bool {
-  String valToEn() {
-    if (this) {
-      return "YES";
-    } else {
-      return "NO";
-    }
-  }
-}
-
-extension ListUtils on List {
+extension ListUtils<T> on List<T> {
   random() {
     final rand = new Random();
     return this[rand.nextInt(this.length)];
+  }
+
+  void swap(int index1, int index2) {
+    var length = this.length;
+    RangeError.checkValidIndex(index1, this, "index1", length);
+    RangeError.checkValidIndex(index2, this, "index2", length);
+    if (index1 != index2) {
+      var tmp1 = this[index1];
+      this[index1] = this[index2];
+      this[index2] = tmp1;
+    }
   }
 }
 

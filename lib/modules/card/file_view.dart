@@ -232,9 +232,9 @@ class _FileCardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     // Extract Data
     var metadata = card.metadata;
-    var mimeType = metadata.mime.type.toString().capitalizeFirst;
-    var size = card.properties.size.sizeText();
-    var hasExported = card.hasExported.valToEn();
+    var mimeType = card.metaMimeString;
+    var size = card.metaSizeString;
+    var hasExported = card.hasExportedString;
 
     // Build Overlay View
     return Padding(

@@ -7,7 +7,6 @@ import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:metadata_fetch/metadata_fetch.dart' as MetaFetch;
 
 export 'contact_view.dart';
 export 'file_view.dart';

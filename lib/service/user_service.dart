@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/data/constants.dart';
 
 class UserService extends GetxService {
   // ** User Reactive Properties **
@@ -55,7 +55,6 @@ class UserService extends GetxService {
       // Get Json Value
       var profileJson = _prefs.getString("user");
       var user = User.fromJson(profileJson);
-      
 
       // Set Contact Values
       _firstName(user.contact.firstName);
@@ -192,19 +191,5 @@ class UserService extends GetxService {
     }
 
     return user;
-  }
-}
-
-// @ Dart Util to Swap Indexes In List //
-extension ListSwap<T> on List<T> {
-  void swap(int index1, int index2) {
-    var length = this.length;
-    RangeError.checkValidIndex(index1, this, "index1", length);
-    RangeError.checkValidIndex(index2, this, "index2", length);
-    if (index1 != index2) {
-      var tmp1 = this[index1];
-      this[index1] = this[index2];
-      this[index2] = tmp1;
-    }
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/text.dart';
@@ -102,5 +103,57 @@ extension PayloadUtils on Payload {
       FlutterGradientNames.mindCrawl,
       FlutterGradientNames.seashore
     ].random();
+  }
+}
+
+// ^ TransferCard Model Extensions ^ //
+extension TransferCardUtils on TransferCard {
+  String get hasExportedString {
+    if (this.hasExported) {
+      return "YES";
+    } else {
+      return "NO";
+    }
+  }
+
+  String get inviteSizeString {
+    return this.properties.size.sizeText();
+  }
+
+  String get metaSizeString {
+    // @ Less than 1KB
+    if (this.metadata.size < pow(10, 3)) {
+      return "$this B";
+    }
+    // @ Less than 1MB
+    else if (this.metadata.size >= pow(10, 3) && this.metadata.size < pow(10, 6)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.metadata.size / pow(10, 3);
+      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
+    }
+    // @ Less than 1GB
+    else if (this.metadata.size >= pow(10, 6) && this.metadata.size < pow(10, 9)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.metadata.size / pow(10, 6);
+      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
+    }
+    // @ Greater than GB
+    else {
+      // Adjust Size Value, Return String
+      var adjusted = this.metadata.size / pow(10, 9);
+      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
+    }
+  }
+
+  String get metaMimeString {
+    return this.metadata.mime.type.toString().capitalizeFirst;
+  }
+
+  SonrText get ownerNameText {
+    return SonrText.bold(" ${this.firstName} ${this.lastName}", size: 16, color: Colors.grey[600]);
+  }
+
+  SonrIcon get ownerPlatformIcon {
+    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
   }
 }

@@ -245,7 +245,6 @@ class SonrService extends GetxService with TransferQueue {
 }
 
 extension SonrSnackbarAction on RxBool {
-  // Presents Snack Bar for RxBool if not Connected
   bool get conn {
     if (this.value) {
       return true;

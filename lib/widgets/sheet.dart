@@ -5,12 +5,11 @@ import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:metadata_fetch/metadata_fetch.dart' as MetaFetch;
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
 
-// ** Share from External App BottomSheet View ** //
+// ^ Share from External App BottomSheet View ^ //
 class ShareSheet extends StatelessWidget {
   // Properties
   final Widget child;
@@ -25,14 +24,7 @@ class ShareSheet extends StatelessWidget {
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
-    return ShareSheet(
-        child: _ShareSheetContentView(
-          size: content,
-          isUrl: false,
-          child: _ShareItem(false, sharedFiles: sharedFiles, size: content),
-        ),
-        size: window,
-        payloadType: Payload.MEDIA);
+    return ShareSheet(child: _ShareItemMedia(sharedFiles: sharedFiles, size: content), size: window, payloadType: Payload.MEDIA);
   }
 
   // @ Bottom Sheet for URL
@@ -42,17 +34,8 @@ class ShareSheet extends StatelessWidget {
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
-    return ShareSheet(
-        child: _ShareSheetContentView(
-          size: content,
-          isUrl: true,
-          child: _ShareItem(true, urlText: value, size: content),
-        ),
-        size: window,
-        payloadType: Payload.URL);
+    return ShareSheet(child: _ShareItemURL(urlText: value, size: content), size: window, payloadType: Payload.URL);
   }
-
-  // ^ Build Widget View ^ //
   @override
   Widget build(BuildContext context) {
     return NeumorphicBackground(
@@ -79,45 +62,64 @@ class ShareSheet extends StatelessWidget {
 
                   // @ Window Content
                   Spacer(),
-                  child,
+                  Container(
+                    width: size.width,
+                    height: size.height,
+                    child: Neumorphic(
+                        margin: EdgeInsets.only(top: 4, bottom: 4, left: 8),
+                        style: NeumorphicStyle(
+                          color: SonrColor.base,
+                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
+                        ),
+                        child: child),
+                  ),
                   Spacer()
                 ]))));
   }
 }
 
-// ** ShareSheet Content Builder View ** //
-class _ShareSheetContentView extends StatelessWidget {
-  final Widget child;
-  final bool isUrl;
+// ^ Share Item Media View ^ //
+class _ShareItemMedia extends StatelessWidget {
+  final List<SharedMediaFile> sharedFiles;
   final Size size;
-  const _ShareSheetContentView({Key key, @required this.child, @required this.size, @required this.isUrl}) : super(key: key);
 
+  const _ShareItemMedia({Key key, this.sharedFiles, this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size.width,
-      height: size.height,
-      child: Neumorphic(
-          margin: EdgeInsets.only(top: 4, bottom: 4, left: 8),
-          style: NeumorphicStyle(
-            color: SonrColor.base,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-          ),
-          child: isUrl ? _buildItemWithIcon() : _buildOnlyItem()),
-    );
-  }
+    // Get Shared File
+    SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+    SonrService.queueMedia(sharedIntent.path);
 
-  _buildOnlyItem() {
     return Neumorphic(
         style: NeumorphicStyle(
           depth: -8,
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
         ),
         margin: EdgeInsets.all(10),
-        child: child);
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 1,
+                  minHeight: 1,
+                  maxHeight: size.height - 20,
+                ),
+                child: Image.file(File(sharedIntent.path)),
+              )),
+        ));
   }
+}
 
-  _buildItemWithIcon() {
+// ^ Share Item URL View ^ //
+class _ShareItemURL extends StatelessWidget {
+  final String urlText;
+  final Size size;
+  const _ShareItemURL({Key key, this.urlText, this.size}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    SonrService.queueUrl(urlText);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -125,7 +127,7 @@ class _ShareSheetContentView extends StatelessWidget {
         // @ Sonr Icon
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: isUrl ? SonrIcon.url : SonrIcon.video,
+          child: SonrIcon.url,
         ),
 
         // @ Indent View
@@ -136,82 +138,12 @@ class _ShareSheetContentView extends StatelessWidget {
                 boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
               ),
               margin: EdgeInsets.all(10),
-              child: child),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SonrText.url(urlText),
+              )),
         ),
       ],
-    );
-  }
-}
-
-// ** ShareSheet Item Widget ** //
-class _ShareItem extends StatefulWidget {
-  final List<SharedMediaFile> sharedFiles;
-  final Size size;
-  final String urlText;
-  final bool isURL;
-
-  const _ShareItem(this.isURL, {@required this.size, this.sharedFiles, this.urlText, Key key}) : super(key: key);
-
-  @override
-  __ShareItemState createState() => __ShareItemState();
-}
-
-class __ShareItemState extends State<_ShareItem> {
-  URLData urlData;
-  bool urlDataLoaded = false;
-
-  @override
-  void initState() {
-    fetchURLData();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.isURL) {
-      // Set Payload
-      SonrService.queueUrl(widget.urlText);
-    }
-    // Return Widget
-    return Container(
-        margin: EdgeInsets.all(8),
-        child: urlDataLoaded
-            ? widget.isURL
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SonrText.url(urlData),
-                  )
-                : _buildMediaView()
-            : Container());
-  }
-
-  fetchURLData() async {
-    var data = await MetaFetch.extract(widget.urlText);
-
-    setState(() {
-      urlData = URLData(data);
-      urlDataLoaded = true;
-    });
-  }
-
-  _buildMediaView() {
-    // Get Shared File
-    SharedMediaFile sharedIntent = widget.sharedFiles.length > 1 ? widget.sharedFiles.last : widget.sharedFiles.first;
-    SonrService.queueMedia(sharedIntent.path);
-
-    // Create View
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: FittedBox(
-          fit: BoxFit.fitWidth,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 1,
-              minHeight: 1,
-              maxHeight: widget.size.height - 20,
-            ),
-            child: Image.file(File(sharedIntent.path)),
-          )),
     );
   }
 }

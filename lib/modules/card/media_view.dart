@@ -73,9 +73,6 @@ class _MediaInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract Data
-    var size = card.properties.size.sizeText();
-
     // Build View
     return Container(
       margin: EdgeInsets.all(8),
@@ -114,7 +111,7 @@ class _MediaInviteView extends StatelessWidget {
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
               Row(children: [
                 SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                SonrText.normal("   $size", size: 18)
+                SonrText.normal("   ${card.inviteSizeString}", size: 18)
               ]),
             ]),
           ]),
@@ -255,9 +252,9 @@ class _MediaCardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     // Extract Data
     var metadata = card.metadata;
-    var mimeType = metadata.mime.type.toString().capitalizeFirst;
-    var size = metadata.size.sizeText();
-    var hasExported = card.hasExported.valToEn();
+    var mimeType = card.metaMimeString;
+    var size = card.metaSizeString;
+    var hasExported = card.hasExportedString;
 
     // Build Overlay View
     return Padding(
@@ -271,10 +268,10 @@ class _MediaCardInfo extends StatelessWidget {
             SonrText.header("$mimeType From"),
 
             // Owner
-            Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              card.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
-              SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
-            ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [card.ownerPlatformIcon, card.ownerNameText]),
 
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
@@ -285,7 +282,7 @@ class _MediaCardInfo extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: SonrText.medium("${metadata.name}", size: 16),
+                child: SonrText.medium("${card.metadata.name}", size: 16),
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -317,10 +314,32 @@ class _MediaCardInfo extends StatelessWidget {
 
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              SonrButton.rectangle(
-                isDisabled: true,
-                onPressed: () {},
-                text: SonrText.medium("Delete"),
+              SonrButton.flat(
+                onPressed: () async {
+                  if (card.hasExported) {
+                    Get.find<SQLService>().deleteCard(card.id);
+                    SonrSnack.success("Deleted $mimeType from Sonr, it's still available in your gallery.");
+                    SonrOverlay.back();
+                  } else {
+                    // Prompt Question
+                    SonrOverlay.question(
+                            title: "Delete",
+                            description: "Are you sure you want to delete this Card, it has not saved to your gallery yet.",
+                            acceptTitle: "Continue",
+                            declineTitle: "Cancel")
+                        .then((result) {
+                      // Handle Response
+                      if (result) {
+                        Get.find<SQLService>().deleteCard(card.id);
+                        SonrSnack.success("Deleted $mimeType from Sonr.");
+                        SonrOverlay.closeAll();
+                      } else {
+                        SonrOverlay.closeAll();
+                      }
+                    });
+                  }
+                },
+                text: SonrText.medium("Delete", color: Colors.redAccent),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               SonrButton.rectangle(
