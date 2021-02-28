@@ -75,4 +75,6 @@ class SonrStyle {
       );
 
   static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+
+  static get timeStampDark => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.baseDark);
 }

@@ -88,7 +88,7 @@ class _MediaInviteView extends StatelessWidget {
             // Build Profile Pic
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 4.0, left: 8, right: 4),
+                padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
                 child: Neumorphic(
                   padding: EdgeInsets.all(4),
                   style: NeumorphicStyle(
@@ -108,7 +108,7 @@ class _MediaInviteView extends StatelessWidget {
             // Create Spacing
             Padding(padding: EdgeInsets.all(6)),
             // From Information
-            Column(children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               invite.from.profile.hasLastName()
                   ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
@@ -120,17 +120,17 @@ class _MediaInviteView extends StatelessWidget {
           ]),
           Divider(),
           Container(
-            width: Get.width - 50,
-            height: Get.height / 3,
+            width: card.preview.isNotEmpty ? Get.width - 50 : Get.width - 150,
+            height: card.preview.isNotEmpty ? Get.height / 3 : Get.height / 5,
             child: Neumorphic(
                 padding: EdgeInsets.all(8),
                 style: NeumorphicStyle(
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: card.preview.isNotEmpty ? SonrIcon.preview(card) : SonrIcon.mime(card.properties.mime)),
+                child: card.preview.isNotEmpty ? SonrIcon.preview(card) : SonrIcon.mime(card.properties.mime, size: 60)),
           ),
-          Padding(padding: EdgeInsets.all(4)),
+          Padding(padding: EdgeInsets.all(10)),
           // Accept Button
           Container(
             width: Get.width / 2,
@@ -168,14 +168,36 @@ class _MediaItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
+        // Display Mime Type if Not Image
+        card.metadata.mime.type != MIME_Type.image
+            ? Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: Get.width - 200,
+                    height: Get.height / 5,
+                    child: Neumorphic(
+                        padding: EdgeInsets.all(8),
+                        style: NeumorphicStyle(
+                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                          depth: -10,
+                        ),
+                        child: SonrIcon.mime(card.metadata.mime, size: 60)),
+                  ),
+                ),
+              )
+            : Container(),
+
         // Time Stamp
         Align(
           alignment: Alignment.bottomLeft,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Neumorphic(
-              style: SonrStyle.timeStamp,
-              child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000)),
+              style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+              child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
+                  color: card.metadata.mime.type == MIME_Type.image ? Colors.black : Colors.white),
               padding: EdgeInsets.all(10),
             ),
           ),

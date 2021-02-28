@@ -88,7 +88,7 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Date Text with Provided Data
-  factory SonrText.date(DateTime date, {double size = 14, Key key}) {
+  factory SonrText.date(DateTime date, {double size = 14, Key key, Color color = Colors.black}) {
     // Formatters
     final dateFormat = new DateFormat.yMd();
     final timeFormat = new DateFormat.jm();
@@ -103,8 +103,8 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: Colors.black)),
-              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: Colors.black)),
+              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: color)),
+              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: color)),
             ])));
   }
 

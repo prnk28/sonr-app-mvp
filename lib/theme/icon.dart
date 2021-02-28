@@ -233,7 +233,7 @@ extension MimeIcon on MIME_Type {
         return IconGradientData(SonrIconData.video, FlutterGradientNames.nightCall);
         break;
       default:
-        return IconGradientData(Icons.file_copy_outlined, FlutterGradientNames.strictNovember);
+        return IconGradientData(Icons.file_copy_outlined, FlutterGradientNames.newRetrowave);
         break;
     }
   }
