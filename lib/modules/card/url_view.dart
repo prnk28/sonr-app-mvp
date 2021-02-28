@@ -72,6 +72,7 @@ class _URLInviteView extends StatelessWidget {
   Widget build(BuildContext context) {
     final name = card.firstName;
     final url = card.url;
+    controller.fetchURLMeta(url);
 
     return Container(
       padding: EdgeInsets.only(top: 6),
@@ -101,13 +102,18 @@ class _URLInviteView extends StatelessWidget {
 
             // @ Indent View
             Expanded(
-              child: Neumorphic(
+              child: Obx(() => Neumorphic(
                   style: SonrStyle.indented,
                   margin: EdgeInsets.all(10),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SonrText.url(url),
-                  )),
+                  child: controller.urlMetadata != null
+                      ? Column(children: [
+                          Image.network(controller.urlMetadata.value.image),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SonrText.url(controller.urlMetadata.value),
+                          )
+                        ])
+                      : Container())),
             ),
           ],
         ),

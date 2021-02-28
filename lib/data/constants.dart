@@ -1,5 +1,6 @@
 export 'mixin_queue.dart';
 export 'model_tile.dart';
+export 'model_url.dart';
 export 'api_models.dart';
 export 'api_primitive.dart';
 export '../service/device_service.dart';

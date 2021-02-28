@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:metadata_fetch/metadata_fetch.dart' as MetaFetch;
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
@@ -142,7 +144,7 @@ class _ShareSheetContentView extends StatelessWidget {
 }
 
 // ** ShareSheet Item Widget ** //
-class _ShareItem extends StatelessWidget {
+class _ShareItem extends StatefulWidget {
   final List<SharedMediaFile> sharedFiles;
   final Size size;
   final String urlText;
@@ -151,25 +153,50 @@ class _ShareItem extends StatelessWidget {
   const _ShareItem(this.isURL, {@required this.size, this.sharedFiles, this.urlText, Key key}) : super(key: key);
 
   @override
+  __ShareItemState createState() => __ShareItemState();
+}
+
+class __ShareItemState extends State<_ShareItem> {
+  URLData urlData;
+  bool urlDataLoaded = false;
+
+  @override
+  void initState() {
+    fetchURLData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (isURL) {
+    if (widget.isURL) {
       // Set Payload
-      SonrService.queueUrl(urlText);
+      SonrService.queueUrl(widget.urlText);
     }
     // Return Widget
     return Container(
         margin: EdgeInsets.all(8),
-        child: isURL
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SonrText.url(urlText),
-              )
-            : _buildMediaView());
+        child: urlDataLoaded
+            ? widget.isURL
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SonrText.url(urlData),
+                  )
+                : _buildMediaView()
+            : Container());
+  }
+
+  fetchURLData() async {
+    var data = await MetaFetch.extract(widget.urlText);
+
+    setState(() {
+      urlData = URLData(data);
+      urlDataLoaded = true;
+    });
   }
 
   _buildMediaView() {
     // Get Shared File
-    SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+    SharedMediaFile sharedIntent = widget.sharedFiles.length > 1 ? widget.sharedFiles.last : widget.sharedFiles.first;
     SonrService.queueMedia(sharedIntent.path);
 
     // Create View
@@ -181,7 +208,7 @@ class _ShareItem extends StatelessWidget {
             constraints: BoxConstraints(
               minWidth: 1,
               minHeight: 1,
-              maxHeight: size.height - 20,
+              maxHeight: widget.size.height - 20,
             ),
             child: Image.file(File(sharedIntent.path)),
           )),

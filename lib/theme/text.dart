@@ -192,12 +192,12 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Rich Text with Provided Data as URL
-  factory SonrText.url(String text) {
-    return SonrText(text,
+  factory SonrText.url(URLData url) {
+    return SonrText("",
         isRich: true,
         richText: RichText(
           overflow: TextOverflow.fade,
-          text: TextSpan(children: text.urlText),
+          text: TextSpan(children: url.displayText),
         ));
   }
 
