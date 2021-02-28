@@ -4,7 +4,7 @@ import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
-enum HomeState { Loading, Ready, None, New }
+enum HomeState { Loading, Ready, None, New, First }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
@@ -37,7 +37,11 @@ class HomeController extends GetxController {
     if (cards.length > 0) {
       status(HomeState.Ready);
     } else {
-      status(HomeState.None);
+      if (UserService.isNewUser.value) {
+        status(HomeState.First);
+      } else {
+        status(HomeState.None);
+      }
     }
     super.onInit();
   }
@@ -55,6 +59,9 @@ class HomeController extends GetxController {
       if (onData.length > cards.length) {
         cards(onData);
         cards.length == 1 ? status(HomeState.Ready) : status(HomeState.New);
+        if (status.value == HomeState.New) {
+          pageController.animateToPage(cards.length - 1, duration: 650.milliseconds, curve: Curves.bounceOut);
+        }
       }
       // Set Cards
       else {
@@ -91,12 +98,16 @@ class HomeController extends GetxController {
 
   // ^ Method for Returning Current Card List ^ //
   List<TransferCard> getCardList() {
-    if (toggleIndex.value == 1) {
-      return Get.find<SQLService>().media;
-    } else if (toggleIndex.value == 2) {
-      return Get.find<SQLService>().contacts;
+    if (status.value != HomeState.None) {
+      if (toggleIndex.value == 1) {
+        return Get.find<SQLService>().media;
+      } else if (toggleIndex.value == 2) {
+        return Get.find<SQLService>().contacts;
+      } else {
+        return Get.find<SQLService>().cards;
+      }
     } else {
-      return Get.find<SQLService>().cards;
+      return [];
     }
   }
 
@@ -108,7 +119,9 @@ class HomeController extends GetxController {
     HapticFeedback.mediumImpact();
 
     // Change Category
-    pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+    if (status.value == HomeState.Ready) {
+      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+    }
   }
 
   // ^ Finds Index of Card and Scrolls to It ^ //

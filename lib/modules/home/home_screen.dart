@@ -73,11 +73,26 @@ class TransferCardGrid extends GetView<HomeController> {
             margin: EdgeInsets.all(10),
             height: 500,
             child: Obx(() {
+              // Loading Cards
               if (controller.status.value == HomeState.Loading) {
                 return Center(child: CircularProgressIndicator());
-              } else if (controller.status.value == HomeState.None) {
+              }
+
+              // New User
+              else if (controller.status.value == HomeState.First) {
+                return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  SonrText.header("Welcome to Sonr", gradient: FlutterGradientNames.magicRay, size: 36),
+                  SonrText.normal("Share to begin viewing your Cards!", color: Colors.black.withOpacity(0.7), size: 18)
+                ]);
+              }
+
+              // Zero Cards
+              else if (controller.status.value == HomeState.None) {
                 return Center(child: SonrText.bold("No Cards Found!", color: Colors.grey[500]));
-              } else {
+              }
+
+              // Build Cards
+              else {
                 return PageView.builder(
                   itemCount: controller.getCardList().length,
                   controller: pageController,

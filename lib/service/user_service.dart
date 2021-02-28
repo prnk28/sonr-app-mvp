@@ -7,6 +7,7 @@ import 'package:sonr_app/data/constants.dart';
 class UserService extends GetxService {
   // ** User Reactive Properties **
   final _exists = false.obs;
+  final _isNewUser = false.obs;
 
   // ** Contact Reactive Properties **
   final _firstName = "".obs;
@@ -19,6 +20,7 @@ class UserService extends GetxService {
 
   // **  Getter Methods for Contact Properties **
   static RxBool get exists => Get.find<UserService>()._exists;
+  static RxBool get isNewUser => Get.find<UserService>()._isNewUser;
   static RxString get firstName => Get.find<UserService>()._firstName;
   static RxString get lastName => Get.find<UserService>()._lastName;
   static RxString get phone => Get.find<UserService>()._phone;
@@ -151,9 +153,10 @@ class UserService extends GetxService {
   }
 
   // ^ Method to Save Changes ^ //
-  static Future<User> saveChanges({Contact providedContact}) async {
+  static Future<User> saveChanges({Contact providedContact, bool isNewUser = false}) async {
     // @ Initialize
     var controller = Get.find<UserService>();
+    controller._isNewUser(isNewUser);
 
     // @ Check if Contact was Provided
     var contact = providedContact ??

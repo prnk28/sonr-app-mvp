@@ -76,7 +76,7 @@ class RegisterController extends GetxController {
       contact.lastName = lastName.value;
 
       // Process data.
-      await UserService.saveChanges(providedContact: contact);
+      await UserService.saveChanges(providedContact: contact, isNewUser: true);
       DeviceService.requestLocation().then((value) {
         if (value) {
           SonrService.connect();
