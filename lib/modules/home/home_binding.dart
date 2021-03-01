@@ -9,8 +9,8 @@ class HomeBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<MediaController>(MediaController(), permanent: true);
-    Get.put<MediaPickerController>(MediaPickerController());
-    Get.put<HomeController>(HomeController());
+    Get.put<MediaPickerController>(MediaPickerController(), permanent: true);
+    Get.put<HomeController>(HomeController(), permanent: true);
     Get.lazyPut<SearchCardController>(() => SearchCardController());
   }
 }

@@ -3,11 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 
-enum IconType { Neumorphic, Normal, Gradient, Thumbnail }
+enum IconType { Neumorphic, Normal, Gradient, Thumbnail, NeumorphicGradient }
 
 class SonrIcon extends StatelessWidget {
   final IconData data;
@@ -32,12 +33,12 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
-  // ^ Gradient Icon with Provided Data
-  factory SonrIcon.neumorphic(IconData data, {double size = 30, NeumorphicStyle style = const NeumorphicStyle(color: SonrColor.base), Key key}) {
+  // ^ Neumorphic Icon with Provided Data
+  factory SonrIcon.neumorphic(IconData data, {double size = 30, NeumorphicStyle style = SonrStyle.gradientIcon, Key key}) {
     return SonrIcon(
       data,
       IconType.Neumorphic,
-      SonrColor.base,
+      Colors.white,
       null,
       size: size,
       key: key,
@@ -45,7 +46,21 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
-  // ^ Gradient Icon with Provided Data
+  // ^ Neumorphic Gradient Icon with Provided Data
+  factory SonrIcon.neumorphicGradient(IconData data, FlutterGradientNames gradient,
+      {double size = 30, NeumorphicStyle style = SonrStyle.gradientIcon, Key key}) {
+    return SonrIcon(
+      data,
+      IconType.NeumorphicGradient,
+      Colors.white,
+      null,
+      size: size,
+      key: key,
+      style: style,
+    );
+  }
+
+  // ^ Normal Icon with Provided Data
   factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.base, Key key}) {
     return SonrIcon(
       data,
@@ -57,7 +72,7 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
-  // ^ Payload Data from Metadata
+  // ^ Payload Data from TransferCard
   factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = Colors.black, Key key}) {
     IconGradientData iconData;
     switch (card.properties.mime.type) {
@@ -89,7 +104,7 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data from Mime
-  factory SonrIcon.mime(MIME mime,
+  factory SonrIcon.withMime(MIME mime,
       {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
     return SonrIcon(
       mime.type.gradientData.data,
@@ -138,6 +153,18 @@ class SonrIcon extends StatelessWidget {
       // @ Creates Normal Icon
       case IconType.Normal:
         result = Icon(data, size: size, color: color);
+
+        break;
+
+      // @ Creates Neumorphic Gradient Icon
+      case IconType.NeumorphicGradient:
+        result = ShaderMask(
+            blendMode: BlendMode.modulate,
+            shaderCallback: (bounds) {
+              var grad = FlutterGradients.findByName(gradient, tileMode: TileMode.clamp);
+              return grad.createShader(bounds);
+            },
+            child: NeumorphicIcon((data), size: size, style: style));
         break;
 
       // @ Creates Gradient Icon
@@ -269,25 +296,33 @@ extension MimeIcon on MIME_Type {
 
 extension PayloadIcon on Payload {
   // -- Returns Icon Widget -- //
-  SonrIcon icon(IconType type,
-      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
+  SonrIcon icon(IconType type, {double size = 30, Color color = Colors.white, Key key, NeumorphicStyle style = SonrStyle.gradientIcon}) {
     IconData data;
+    FlutterGradientNames gradient;
     if (this == Payload.CONTACT) {
       data = SonrIconData.contact;
+      gradient = FlutterGradientNames.colorfulPeach;
     } else if (this == Payload.MEDIA) {
       data = SonrIconData.video;
+      gradient = FlutterGradientNames.loveKiss;
     } else if (this == Payload.URL) {
       data = SonrIconData.url;
+      gradient = FlutterGradientNames.partyBliss;
     } else if (this == Payload.PDF) {
       data = SonrIconData.pdf;
+      gradient = FlutterGradientNames.royalGarden;
     } else if (this == Payload.SPREADSHEET) {
       data = SonrIconData.spreadsheet;
+      gradient = FlutterGradientNames.itmeoBranding;
     } else if (this == Payload.PRESENTATION) {
       data = SonrIconData.presentation;
+      gradient = FlutterGradientNames.orangeJuice;
     } else if (this == Payload.TEXT) {
       data = SonrIconData.document;
+      gradient = FlutterGradientNames.spaceShift;
     } else {
       data = SonrIconData.file_unknown;
+      gradient = FlutterGradientNames.midnightBloom;
     }
     return SonrIcon(
       data,
@@ -295,6 +330,7 @@ extension PayloadIcon on Payload {
       color,
       gradient,
       size: size,
+      style: style,
       key: key,
     );
   }
@@ -302,7 +338,7 @@ extension PayloadIcon on Payload {
 
 extension PlatformIcon on Platform {
   // -- Returns Icon Widget -- //
-  SonrIcon icon(IconType type, {Color color, double size = 30, Key key}) {
+  SonrIcon icon(IconType type, {Color color, double size = 30, Key key, NeumorphicStyle style = const NeumorphicStyle(color: SonrColor.base)}) {
     IconGradientData gradientData;
     switch (this) {
       case Platform.Android:
@@ -321,14 +357,7 @@ extension PlatformIcon on Platform {
         gradientData = IconGradientData(Icons.device_unknown, FlutterGradientNames.viciousStance);
         break;
     }
-    return SonrIcon(
-      gradientData.data,
-      type,
-      color,
-      gradientData.gradient,
-      size: size,
-      key: key,
-    );
+    return SonrIcon(gradientData.data, type, color, gradientData.gradient, size: size, key: key, style: style);
   }
 }
 

@@ -9,7 +9,6 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // Check for Initial Media after connected
     MediaService.checkInitialShare();
-
     return SonrScaffold.appBarLeadingAction(
         resizeToAvoidBottomPadding: false,
         title: "Home",

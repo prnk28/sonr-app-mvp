@@ -52,6 +52,9 @@ class SonrStyle {
 
   static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
 
+  static const gradientIcon =
+       NeumorphicStyle(color: SonrColor.base, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
+
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   static get overlay => NeumorphicStyle(

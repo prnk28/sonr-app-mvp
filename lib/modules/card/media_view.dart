@@ -100,7 +100,7 @@ class _MediaInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.mime(card.properties.mime, size: 60)),
+                child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.properties.mime, size: 60)),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -175,7 +175,7 @@ class _MediaItemView extends StatelessWidget {
                                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                                   depth: -10,
                                 ),
-                                child: SonrIcon.mime(card.metadata.mime, size: 60)),
+                                child: SonrIcon.withMime(card.metadata.mime, size: 60)),
                           ),
                         ),
                       )

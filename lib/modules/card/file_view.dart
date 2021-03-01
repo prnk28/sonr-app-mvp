@@ -103,7 +103,6 @@ class _FileInviteView extends StatelessWidget {
                 ),
                 child: invite.payload.icon(
                   IconType.Gradient,
-                  gradient: invite.payload.gradientName,
                   size: (Get.height / 3),
                 )),
           ),
@@ -162,12 +161,20 @@ class _FileItemView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Neumorphic(
-                      style: SonrStyle.timeStamp,
-                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000)),
+                      style: SonrStyle.timeStampDark,
+                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
                       padding: EdgeInsets.all(10),
                     ),
                   ),
                 ),
+
+                // File Icon
+                Align(
+                    alignment: Alignment.center,
+                    child: Neumorphic(
+                        padding: EdgeInsets.all(20),
+                        style: SonrStyle.indented,
+                        child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
 
                 // Info Button
                 Align(
