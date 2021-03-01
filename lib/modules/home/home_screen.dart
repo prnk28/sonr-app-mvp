@@ -45,10 +45,13 @@ class HomeScreen extends GetView<HomeController> {
                   child: Obx(() => NeumorphicToggle(
                         selectedIndex: controller.toggleIndex.value,
                         onChanged: (val) => controller.setToggleCategory(val),
-                        thumb: Center(child: Obx(() => buildView())),
+                        thumb: GestureDetector(
+                            onTap: () => controller.jumpToStart(),
+                            onLongPress: () => controller.jumpToEnd(),
+                            child: Center(child: Obx(() => buildView()))),
                         children: [
-                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
                           ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.disabled, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
                           ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.disabled, size: 16))),
                           //ToggleElement(),
                         ],
@@ -66,26 +69,13 @@ class HomeScreen extends GetView<HomeController> {
   Widget buildView() {
     // Change Category
     if (controller.toggleIndex.value == 0) {
-      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrIcon.gradient(SonrIconData.all_categories, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
-        //Padding(padding: EdgeInsets.all(6)),
-        // SonrText.medium("All", size: 16),
-      ]);
+      return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
     } else if (controller.toggleIndex.value == 1) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.media, FlutterGradientNames.premiumDark, size: 20, color: Colors.black.withOpacity(0.7)),
-        // SonrText.medium("Media", size: 16),
-      ]);
+      return SonrIcon.neumorphicGradient(SonrIconData.all_categories, FlutterGradientNames.eternalConstance, size: 22.5);
     } else if (controller.toggleIndex.value == 2) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.friends, FlutterGradientNames.premiumDark, size: 18, color: Colors.black.withOpacity(0.7)),
-        // SonrText.medium("Friends", size: 16),
-      ]);
+      return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
     } else {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
-        // SonrText.medium("Links", size: 16),
-      ]);
+      return SonrIcon.neumorphicGradient(SonrIconData.url, FlutterGradientNames.sugarLollipop, size: 24);
     }
   }
 }

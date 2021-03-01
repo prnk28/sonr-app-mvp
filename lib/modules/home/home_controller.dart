@@ -16,7 +16,7 @@ class HomeController extends GetxController {
   // Widget Elements
   final isShareExpanded = false.obs;
   final pageIndex = 0.obs;
-  final toggleIndex = 0.obs;
+  final toggleIndex = 1.obs;
 
   // References
   PageController pageController;
@@ -44,6 +44,7 @@ class HomeController extends GetxController {
   // ^ On Dispose ^ //
   void onDispose() {
     cardStream.cancel();
+    toggleIndex(1);
   }
 
   // ^ Handle Cards Update ^ //
@@ -76,11 +77,11 @@ class HomeController extends GetxController {
   List<TransferCard> getCardList() {
     if (status.value != HomeState.None) {
       if (toggleIndex.value == 1) {
-        return Get.find<SQLService>().media;
+        return Get.find<SQLService>().cards;
       } else if (toggleIndex.value == 2) {
         return Get.find<SQLService>().contacts;
       } else {
-        return Get.find<SQLService>().cards;
+        return Get.find<SQLService>().media;
       }
     } else {
       return [];
@@ -115,6 +116,20 @@ class HomeController extends GetxController {
       pageController.animateToPage(index, duration: 650.milliseconds, curve: Curves.bounceOut);
     } else {
       SonrSnack.error("Error finding the suggested card.");
+    }
+  }
+
+  // ^ Finds Index of Card and Scrolls to It ^ //
+  void jumpToStart() async {
+    if (status.value != HomeState.None) {
+      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+    }
+  }
+
+  // ^ Finds Index of Card and Scrolls to It ^ //
+  void jumpToEnd() async {
+    if (status.value != HomeState.None) {
+      pageController.animateToPage(cards.length - 1, duration: 650.milliseconds, curve: Curves.bounceOut);
     }
   }
 
