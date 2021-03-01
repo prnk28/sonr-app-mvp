@@ -249,8 +249,10 @@ extension PayloadIcon on Payload {
       data = SonrIconData.contact;
     } else if (this == Payload.MEDIA) {
       data = SonrIconData.video;
-    } else {
+    } else if (this == Payload.URL) {
       data = SonrIconData.url;
+    } else {
+      data = SonrIconData.document;
     }
     return SonrIcon(
       data,

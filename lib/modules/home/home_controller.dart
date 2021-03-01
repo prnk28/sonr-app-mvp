@@ -20,7 +20,6 @@ class HomeController extends GetxController {
 
   // References
   PageController pageController;
-
   StreamSubscription<List<TransferCard>> cardStream;
 
   // ^ Controller Constructer ^

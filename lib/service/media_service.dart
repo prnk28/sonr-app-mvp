@@ -226,8 +226,9 @@ class MediaService extends GetxService {
           SonrSnack.error("Unable to save Video to your Gallery");
         }
         return result;
+      } else {
+        return false;
       }
-      return false;
     } else {
       SonrSnack.success("Unable to save Media to Gallery");
       return false;

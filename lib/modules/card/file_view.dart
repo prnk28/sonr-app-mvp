@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
+import 'package:open_file/open_file.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
@@ -31,26 +32,17 @@ class FileCard extends GetWidget<TransferCardController> {
         return _FileInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return Neumorphic(
-          style: SonrStyle.normal,
-          margin: EdgeInsets.all(4),
-          child: GestureDetector(
-            onTap: () {
-              // Push to Page
-              Get.to(_FileCardExpanded(card), transition: Transition.fadeIn);
-            },
+        return GestureDetector(
+          onTap: () {
+            OpenFile.open(card.metadata.path);
+          },
+          child: Neumorphic(
+            style: SonrStyle.normal,
+            margin: EdgeInsets.all(4),
             child: Hero(
               tag: card.id,
               child: Container(
                 height: 75,
-                decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
-                    ? BoxDecoration(
-                        image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-                        fit: BoxFit.cover,
-                        image: MemoryImage(Uint8List.fromList(card.metadata.thumbnail)),
-                      ))
-                    : null,
                 child: _FileItemView(card, controller),
               ),
             ),
@@ -130,7 +122,7 @@ class _FileInviteView extends StatelessWidget {
                 )),
           ),
           Divider(),
-                  Padding(padding: EdgeInsets.all(4)),
+          Padding(padding: EdgeInsets.all(4)),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Decline Button
             TextButton(
