@@ -156,7 +156,7 @@ class PeerController extends GetxController {
     // Initialize
     lobby.forEach((id, value) {
       // Update Direction
-      if (id == peer.id && !_isInvited) {
+      if (id == peer.id.peer && !_isInvited) {
         difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
         direction(value.position.direction);
         offset(calculateOffset(value.platform));
