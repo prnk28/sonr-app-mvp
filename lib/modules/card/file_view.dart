@@ -11,6 +11,7 @@ class FileCard extends GetWidget<TransferCardController> {
   final CardType type;
   final AuthInvite invite;
   final TransferCard card;
+  final bool isNewItem;
 
   // ** Factory -> Invite Dialog View ** //
   factory FileCard.invite(AuthInvite invite) {
@@ -18,12 +19,12 @@ class FileCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory FileCard.item(TransferCard card) {
-    return FileCard(CardType.GridItem, card: card);
+  factory FileCard.item(TransferCard card, {bool isNewItem = false}) {
+    return FileCard(CardType.GridItem, card: card, isNewItem: isNewItem);
   }
 
   // ** Constructer ** //
-  const FileCard(this.type, {Key key, this.invite, this.card}) : super(key: key);
+  const FileCard(this.type, {Key key, this.invite, this.card, this.isNewItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

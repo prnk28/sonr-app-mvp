@@ -29,6 +29,7 @@ class UserService extends GetxService {
   static Rx<Uint8List> get picture => Get.find<UserService>()._picture;
   static RxList<Contact_SocialTile> get socials => Get.find<UserService>()._socials;
   static int get tileCount => Get.find<UserService>()._socials.length;
+  static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
 
   // ** Return Current User Object **
   static User get current {

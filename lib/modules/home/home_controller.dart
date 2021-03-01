@@ -24,11 +24,6 @@ class HomeController extends GetxController {
 
   // ^ Controller Constructer ^
   onInit() {
-    // Connect
-    if (!SonrService.connected.value) {
-      SonrService.connect();
-    }
-
     // Add Stream Handlers
     cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
 
@@ -38,6 +33,7 @@ class HomeController extends GetxController {
     } else {
       if (UserService.isNewUser.value) {
         status(HomeState.First);
+        SonrService.connect();
       } else {
         status(HomeState.None);
       }
@@ -58,9 +54,6 @@ class HomeController extends GetxController {
       if (onData.length > cards.length) {
         cards(onData);
         cards.length == 1 ? status(HomeState.Ready) : status(HomeState.New);
-        if (status.value == HomeState.New) {
-          pageController.animateToPage(cards.length - 1, duration: 650.milliseconds, curve: Curves.bounceOut);
-        }
       }
       // Set Cards
       else {
@@ -80,7 +73,7 @@ class HomeController extends GetxController {
     if (toggleIndex.value == 0) {
       category(ToggleFilter.All);
       return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrIcon.gradient(Icons.all_inclusive_rounded, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
+        SonrIcon.gradient(SonrIconData.all_categories, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
         Padding(padding: EdgeInsets.all(6)),
         SonrText.medium("All", size: 16),
       ]);

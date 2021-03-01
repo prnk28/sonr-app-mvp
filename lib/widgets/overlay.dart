@@ -3,10 +3,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/card/card_controller.dart';
+import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
-
+import '../data/constants.dart';
 import 'form.dart';
 
 // ** Class Controls Active Overlays ** //
@@ -21,7 +22,7 @@ class SonrOverlay extends GetxController {
   static SonrOverlay get _controller => Get.find<SonrOverlay>();
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
-  static show(Widget view,
+  static void show(Widget view,
       {Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300),
       bool barrierDismissible: true,
@@ -35,7 +36,19 @@ class SonrOverlay extends GetxController {
     // Add Overlay to List
     _controller.currentOverlay(overlay);
     _controller.overlays.add(overlay);
-    return Container();
+  }
+
+  // ^ Method Finds Overlay Controller and Prompts Question ^ //
+  static void edit(EditType type, Widget child) {
+    // Feedback
+    HapticFeedback.heavyImpact();
+    // Create Overlay
+    var editOverlay =
+        _SonrFixedOverlayEntry(SonrOffset.Top, Duration(milliseconds: 200), Duration(milliseconds: 300), true, child, disableAnimation: true);
+
+    // Add Overlay to List
+    _controller.currentOverlay(editOverlay);
+    _controller.overlays.add(editOverlay);
   }
 
   // ^ Method Finds Overlay Controller and Prompts Question ^ //
@@ -78,7 +91,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static Future alert(
+  static Future<bool> alert(
       {@required String title,
       @required String description,
       String buttonText = "Okay",
@@ -115,7 +128,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
-  static invite(AuthInvite invite,
+  static void invite(AuthInvite invite,
       {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
@@ -135,7 +148,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
-  static reply(AuthReply reply,
+  static void reply(AuthReply reply,
       {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
@@ -158,7 +171,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Pops Current Overlay ^ //
-  static back() {
+  static void back() {
     if (isOpen) {
       // Pop Current Overlay
       if (_controller.currentOverlay.value != null) {
@@ -174,7 +187,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static pop({int backUntil = 1}) {
+  static void pop({int backUntil = 1}) {
     if (isOpen) {
       // Validate PopCount is less than List Length
       if (backUntil > count) {
@@ -196,7 +209,7 @@ class SonrOverlay extends GetxController {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static closeAll() {
+  static void closeAll() {
     if (isOpen) {
       // Iterate through Overlays
       _controller.overlays.forEach((overlay) {
@@ -227,7 +240,7 @@ class SonrPositionedOverlay extends GetxController {
   static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
 
   // ^ Opens View at Position with Size ^ //
-  static open(
+  static void open(
     Widget view,
     Size size,
     Offset position, {
@@ -243,7 +256,7 @@ class SonrPositionedOverlay extends GetxController {
     _controller.overlays.add(overlay);
   }
 
-  static dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
+  static void dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
       {Duration entryDuration = const Duration(milliseconds: 200),
       Offset entryLocation = SonrOffset.Top,
       double height,
@@ -264,7 +277,7 @@ class SonrPositionedOverlay extends GetxController {
   }
 
   // ^ Method Pops Current Overlay ^ //
-  static back() {
+  static void back() {
     if (isOpen) {
       // Pop Current Overlay
       if (_controller.currentOverlay.value != null) {

@@ -182,6 +182,8 @@ class SonrIconData {
 
   static const _kFontFam = 'SonrIcons';
   static const _kFontPkg = null;
+
+  static const IconData all_categories = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData spotify = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData friends = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData youtube = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);

@@ -39,15 +39,10 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
-    // Get Data
-    var pos = DeviceService.position.value;
-    var user = UserService.current;
-
-    // Validate Data
-    if (pos != null) {
+    // Validate Location
+    if (DeviceService.hasPosition) {
       // Create Worker
-      _node =
-          await SonrCore.initialize(pos.latitude, pos.longitude, user.hasProfile() ? user.profile.username : user.contact.tempUsername, user.contact);
+      _node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
 
       // Set Callbacks
       _node.onConnected = _handleConnected;
@@ -71,14 +66,10 @@ class SonrService extends GetxService with TransferQueue {
   // ***********************
   // ^ Connect to Sonr Network ^
   static connect() async {
-    // Get Data
-    var pos = DeviceService.position.value;
-    var user = UserService.current;
-
-    // Validate Data
-    if (pos != null && !user.hasField(1)) {
+    // Validate Location
+    if (DeviceService.hasPosition && !to._connected.value) {
       // Create Worker
-      to._node = await SonrCore.initialize(pos.latitude, pos.longitude, "", user.contact);
+      to._node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
 
       // Set Callbacks
       to._node.onConnected = to._handleConnected;
@@ -93,8 +84,6 @@ class SonrService extends GetxService with TransferQueue {
 
       // Set Connected
       to._connected(true);
-    } else {
-      to._connected(false);
     }
   }
 
@@ -210,7 +199,9 @@ class SonrService extends GetxService with TransferQueue {
     if (data.type == AuthReply_Type.Contact) {
       HapticFeedback.vibrate();
       SonrOverlay.reply(data);
-    } else if (data.type == AuthReply_Type.Cancel) {
+    }
+    // For Cancel
+    else if (data.type == AuthReply_Type.Cancel) {
       HapticFeedback.vibrate();
       currentDecided(false);
     } else {
@@ -244,6 +235,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ An Error Has Occurred ^ //
   void _handleError(ErrorMessage data) async {
     print(data.method + "() - " + data.message);
+    SonrSnack.error("Internal Error Occurred");
   }
 }
 

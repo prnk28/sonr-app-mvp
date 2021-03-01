@@ -106,7 +106,7 @@ class TransferCardGrid extends GetView<HomeController> {
                           builder: (context, child, value) {
                             return Transform.scale(
                               scale: value,
-                              child: buildCard(controller, idx),
+                              child: buildCard(idx),
                             );
                           },
                         );
@@ -117,14 +117,14 @@ class TransferCardGrid extends GetView<HomeController> {
                           builder: (context, child, value) {
                             return Transform.scale(
                               scale: value,
-                              child: buildCard(controller, idx),
+                              child: buildCard(idx),
                             );
                           },
                         );
                       } else {
                         return Transform.scale(
                           scale: 0.85,
-                          child: buildCard(controller, idx),
+                          child: buildCard(idx),
                         );
                       }
                     });
@@ -134,19 +134,25 @@ class TransferCardGrid extends GetView<HomeController> {
             })));
   }
 
-  Widget buildCard(HomeController controller, int index) {
+  Widget buildCard(int index) {
     // Get Card List
     List<TransferCard> list = controller.getCardList();
+    bool isNew = false;
+
+    // Check if New Card
+    if (controller.status.value == HomeState.New) {
+      isNew = index == list.length - 1;
+    }
 
     // Determin CardView
     if (list[index].payload == Payload.MEDIA) {
-      return MediaCard.item(list[index]);
+      return MediaCard.item(list[index], isNewItem: isNew);
     } else if (list[index].payload == Payload.CONTACT) {
-      return ContactCard.item(list[index]);
+      return ContactCard.item(list[index], isNewItem: isNew);
     } else if (list[index].payload == Payload.URL) {
-      return URLCard.item(list[index]);
+      return URLCard.item(list[index], isNewItem: isNew);
     } else {
-      return FileCard.item(list[index]);
+      return FileCard.item(list[index], isNewItem: isNew);
     }
   }
 }

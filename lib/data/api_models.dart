@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_app/theme/text.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -40,6 +41,25 @@ extension ContactUtils on Contact {
 
   Widget get webSite {
     return this.hasWebsite() ? SonrText.medium(this.website) : Container();
+  }
+}
+
+// ^ Edit Sheet View for Profile ^ //
+enum EditType { ColorCombo, NameField }
+
+extension EditTypeUtils on EditType {
+  Widget get view {
+    switch (this) {
+      case EditType.ColorCombo:
+        return EditColorsView();
+        break;
+      case EditType.NameField:
+        return EditNameView();
+        break;
+      default:
+        return Container();
+        break;
+    }
   }
 }
 

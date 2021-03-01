@@ -10,6 +10,7 @@ class URLCard extends GetWidget<TransferCardController> {
   final CardType type;
   final AuthInvite invite;
   final TransferCard card;
+  final bool isNewItem;
 
   // ** Factory -> Invite Dialog View ** //
   factory URLCard.invite(AuthInvite invite) {
@@ -17,12 +18,12 @@ class URLCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory URLCard.item(TransferCard card) {
-    return URLCard(CardType.GridItem, card: card);
+  factory URLCard.item(TransferCard card, {bool isNewItem = false}) {
+    return URLCard(CardType.GridItem, card: card, isNewItem: isNewItem);
   }
 
   // ** Constructer ** //
-  const URLCard(this.type, {Key key, this.invite, this.card}) : super(key: key);
+  const URLCard(this.type, {Key key, this.invite, this.card, this.isNewItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -247,12 +248,18 @@ class _URLInviteView extends StatelessWidget {
       ]);
     }
 
-    return Neumorphic(
-      style: SonrStyle.indented,
-      margin: EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: SonrText.url(card.url.link),
+    return GestureDetector(
+      onLongPress: () {
+        Clipboard.setData(new ClipboardData(text: data.link));
+        SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+      },
+      child: Neumorphic(
+        style: SonrStyle.indented,
+        margin: EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SonrText.url(card.url.link),
+        ),
       ),
     );
   }

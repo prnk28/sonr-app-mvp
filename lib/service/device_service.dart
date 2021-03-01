@@ -27,7 +27,9 @@ class DeviceService extends GetxService {
   // Getters for Global References
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
-  static Rx<Position> get position => Get.find<DeviceService>()._position;
+  static double get lat => Get.find<DeviceService>()._position.value.latitude;
+  static double get lon => Get.find<DeviceService>()._position.value.longitude;
+  static bool get hasPosition => Get.find<DeviceService>()._position.value != null;
 
   // Permission Properties
   final cameraPermitted = false.obs;

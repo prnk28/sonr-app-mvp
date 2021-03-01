@@ -11,6 +11,7 @@ class MediaCard extends GetWidget<TransferCardController> {
   final CardType type;
   final AuthInvite invite;
   final TransferCard card;
+  final bool isNewItem;
 
   // ** Factory -> Invite Dialog View ** //
   factory MediaCard.invite(AuthInvite invite) {
@@ -18,12 +19,12 @@ class MediaCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory MediaCard.item(TransferCard card) {
-    return MediaCard(CardType.GridItem, card: card);
+  factory MediaCard.item(TransferCard card, {bool isNewItem = false}) {
+    return MediaCard(CardType.GridItem, card: card, isNewItem: isNewItem);
   }
 
   // ** Constructer ** //
-  const MediaCard(this.type, {Key key, this.invite, this.card}) : super(key: key);
+  const MediaCard(this.type, {Key key, this.invite, this.card, this.isNewItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

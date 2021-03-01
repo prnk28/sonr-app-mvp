@@ -12,6 +12,7 @@ class ContactCard extends GetWidget<TransferCardController> {
   final AuthInvite invite;
   final AuthReply reply;
   final TransferCard card;
+  final bool isNewItem;
 
   // ** Factory -> Invite Dialog View ** //
   factory ContactCard.invite(AuthInvite invite) {
@@ -24,12 +25,12 @@ class ContactCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory ContactCard.item(TransferCard card) {
-    return ContactCard(CardType.GridItem, card: card);
+  factory ContactCard.item(TransferCard card, {bool isNewItem = false}) {
+    return ContactCard(CardType.GridItem, card: card, isNewItem: isNewItem);
   }
 
   // ** Constructer ** //
-  const ContactCard(this.type, {Key key, this.invite, this.reply, this.card}) : super(key: key);
+  const ContactCard(this.type, {Key key, this.invite, this.reply, this.card, this.isNewItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

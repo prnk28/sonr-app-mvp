@@ -103,12 +103,10 @@ class ContactHeader extends GetView<ProfileController> {
   // ^ Builds Flexible SpaceBar Title ^ //
   _buildTitle() {
     return GestureDetector(
-        onLongPress: () async {
-          SonrOverlay.show(
-            EditDialog.nameField(firstValue: UserService.firstName.value, lastValue: UserService.lastName.value),
-          );
-          HapticFeedback.heavyImpact();
-        },
+        onLongPress: () async => SonrOverlay.edit(
+              EditType.NameField,
+              EditDialog.nameField(),
+            ),
         child:
             Obx(() => SonrText.medium(UserService.firstName.value + " " + UserService.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24)));
   }
