@@ -100,7 +100,7 @@ class _FileInviteView extends StatelessWidget {
                   ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 38)
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
               Row(children: [
-                SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+                SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
                 SonrText.normal("   ${card.properties.size.sizeText()}", size: 18)
               ]),
             ]),
