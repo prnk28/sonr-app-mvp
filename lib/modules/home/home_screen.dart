@@ -7,8 +7,12 @@ import 'share_button.dart';
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    // Check for Initial Media after connected
+    // Initialize
     MediaService.checkInitialShare();
+    controller.toggleIndex(1);
+    controller.toggleIndex.refresh();
+
+    // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
         resizeToAvoidBottomPadding: false,
         title: "Home",
@@ -46,7 +50,7 @@ class HomeScreen extends GetView<HomeController> {
                         selectedIndex: controller.toggleIndex.value,
                         onChanged: (val) => controller.setToggleCategory(val),
                         thumb: GestureDetector(
-                            onTap: () => controller.jumpToStart(),
+                            onDoubleTap: () => controller.jumpToStart(),
                             onLongPress: () => controller.jumpToEnd(),
                             child: Center(child: Obx(() => buildView()))),
                         children: [
@@ -92,7 +96,6 @@ class TransferCardGrid extends GetView<HomeController> {
         onTap: () => controller.closeShare(),
         child: Container(
             padding: EdgeInsets.only(top: 15),
-            //margin: EdgeInsets.all(10),
             height: 500,
             child: Obx(() {
               // Loading Cards
