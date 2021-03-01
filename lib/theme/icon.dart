@@ -58,9 +58,8 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data from Metadata
-  factory SonrIcon.withPreview(TransferCard card,
-      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
-    var iconData;
+  factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = Colors.black, Key key}) {
+    IconGradientData iconData;
     switch (card.properties.mime.type) {
       case MIME_Type.audio:
         iconData = IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
@@ -79,10 +78,10 @@ class SonrIcon extends StatelessWidget {
         break;
     }
     return SonrIcon(
-      iconData,
+      iconData.data,
       IconType.Thumbnail,
       color,
-      gradient,
+      iconData.gradient,
       thumbnail: card.preview,
       size: size,
       key: key,

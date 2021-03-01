@@ -15,11 +15,12 @@ class PeerBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<PeerController>(
+        assignId: true,
         init: PeerController(peer, index),
         builder: (controller) {
           return AnimatedPositioned(
-              top: 35.0,
-              left: 100,
+              top: [35.0, 45.0, 25.0].random(),
+              left: 200 / (index + 1),
               duration: 150.milliseconds,
               child: Container(
                 width: K_BUBBLE_SIZE,
