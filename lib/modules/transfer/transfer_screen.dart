@@ -14,7 +14,11 @@ class TransferScreen extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold.appBarLeading(
         title: controller.title.value,
-        leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer")),
+        leading: SonrButton.circle(
+          icon: SonrIcon.close,
+          onPressed: () => Get.offNamed("/home/transfer"),
+          shape: NeumorphicShape.convex,
+        ),
         body: SafeArea(
             child: Stack(
           children: <Widget>[

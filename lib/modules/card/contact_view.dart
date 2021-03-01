@@ -42,6 +42,9 @@ class ContactCard extends GetWidget<TransferCardController> {
         return _ContactInviteView(card, controller, true);
         break;
       case CardType.GridItem:
+        if (isNewItem) {
+          print("New Card");
+        }
         return _ContactItemView(card, controller);
         break;
       default:

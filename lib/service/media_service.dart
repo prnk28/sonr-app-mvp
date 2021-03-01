@@ -168,6 +168,58 @@ class MediaService extends GetxService {
     ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
   }
 
+  // ^ Method Refreshes Gallery ^ //
+  static void refreshGallery() async {
+    var controller = Get.find<MediaService>();
+    // Get Collections
+    controller._state(GalleryState.Loading);
+    List<MediaCollection> collections = await MediaGallery.listMediaCollections(
+      mediaTypes: [MediaType.image, MediaType.video],
+    );
+
+    // Set Gallery
+    controller._gallery(collections);
+
+    // @ List Collections
+    var totalCollection;
+    collections.forEach((element) {
+      // Set Has Gallery
+      if (element.count > 0) {
+        controller._hasGallery(true);
+      }
+
+      // Check for Master Collection
+      if (element.isAllCollection) {
+        totalCollection = element;
+      }
+    });
+
+    // @ Get Initial Media
+    if (totalCollection.count > 0) {
+      // Get Images
+      final MediaPage imagePage = await totalCollection.getMedias(
+        mediaType: MediaType.image,
+        take: 500,
+      );
+
+      // Get Videos
+      final MediaPage videoPage = await totalCollection.getMedias(
+        mediaType: MediaType.video,
+        take: 500,
+      );
+
+      // Combine Media
+      final List<Media> combined = [
+        ...imagePage.items,
+        ...videoPage.items,
+      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+
+      // Set All Media
+      controller._totalMedia.assignAll(combined);
+    }
+    controller._state(GalleryState.Ready);
+  }
+
   // ^ Saves Photo to Gallery ^ //
   static Future<bool> saveCapture(String path, bool isVideo) async {
     // Validate Path

@@ -25,10 +25,12 @@ class ProfileScreen extends GetView<ProfileController> {
                 SonrHeaderBar.sliver(
                     leading: SonrButton.circle(
                         icon: SonrIcon.close,
+                        shape: NeumorphicShape.convex,
                         onPressed: () => Get.offNamed("/home/profile"),
                         intensity: 0.85,
                         shadowLightColor: Colors.lightBlueAccent[100]),
                     action: SonrButton.circle(
+                      shape: NeumorphicShape.convex,
                       icon: SonrIcon.more,
                       onPressed: () => {},
                       intensity: 0.85,

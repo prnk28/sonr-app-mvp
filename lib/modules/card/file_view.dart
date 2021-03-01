@@ -33,6 +33,9 @@ class FileCard extends GetWidget<TransferCardController> {
         return _FileInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
+        if (isNewItem) {
+          print("New Card");
+        }
         return _FileItemView(card, controller);
       default:
         return Container();

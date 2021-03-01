@@ -173,14 +173,19 @@ class _CaptureButton extends GetView<CameraController> {
                   },
                   child: Obx(
                     () => Neumorphic(
+                        child: Center(
+                            child: SonrIcon.neumorphicGradient(
+                          SonrIconData.camera,
+                          FlutterGradientNames.premiumDark,
+                          size: 40,
+                        )),
                         style: NeumorphicStyle(
-                            color: SonrColor.base,
                             depth: 14,
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value
                                 ? NeumorphicBorder(color: Colors.redAccent, width: 4)
-                                : NeumorphicBorder(color: Colors.black, width: 2))),
+                                : NeumorphicBorder(color: Colors.black, width: 0))),
                   ),
                 ),
                 // Interior Compass

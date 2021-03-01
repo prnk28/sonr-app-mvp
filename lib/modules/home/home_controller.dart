@@ -54,6 +54,11 @@ class HomeController extends GetxController {
       if (onData.length > cards.length) {
         cards(onData);
         cards.length == 1 ? status(HomeState.Ready) : status(HomeState.New);
+
+        // Check Status
+        if (status.value == HomeState.New) {
+          pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+        }
       }
       // Set Cards
       else {
@@ -64,37 +69,6 @@ class HomeController extends GetxController {
     // No Cards Available
     else {
       status(HomeState.None);
-    }
-  }
-
-  // ^ Helper Method for Category Filter ^ //
-  Widget getToggleCategory() {
-    // Change Category
-    if (toggleIndex.value == 0) {
-      category(ToggleFilter.All);
-      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrIcon.gradient(SonrIconData.all_categories, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
-        Padding(padding: EdgeInsets.all(6)),
-        SonrText.medium("All", size: 16),
-      ]);
-    } else if (toggleIndex.value == 1) {
-      category(ToggleFilter.Media);
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.media, FlutterGradientNames.premiumDark, size: 20, color: Colors.black.withOpacity(0.7)),
-        SonrText.medium("Media", size: 16),
-      ]);
-    } else if (toggleIndex.value == 2) {
-      category(ToggleFilter.Media);
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.friends, FlutterGradientNames.premiumDark, size: 18, color: Colors.black.withOpacity(0.7)),
-        SonrText.medium("Friends", size: 16),
-      ]);
-    } else {
-      category(ToggleFilter.Links);
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
-        SonrText.medium("Links", size: 16),
-      ]);
     }
   }
 
@@ -116,6 +90,7 @@ class HomeController extends GetxController {
   // ^ Method for Setting Category Filter ^ //
   setToggleCategory(int index) {
     toggleIndex(index);
+    category(ToggleFilter.values[index]);
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();

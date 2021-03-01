@@ -346,16 +346,16 @@ class SonrButton extends StatelessWidget {
     // Update Children
     switch (type) {
       case _ButtonType.DisabledIcon:
-        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabledButton);
+        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabled);
         isDisabled = true;
         break;
       case _ButtonType.DisabledText:
-        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.disabledButton);
+        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.disabled);
         isDisabled = true;
         break;
       case _ButtonType.DisabledIconText:
-        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabledButton);
-        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.disabledButton);
+        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabled);
+        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.disabled);
         isDisabled = true;
         break;
       default:

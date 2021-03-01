@@ -15,9 +15,11 @@ class HomeScreen extends GetView<HomeController> {
         leading: SonrButton.circle(
           icon: SonrIcon.profile,
           onPressed: () => Get.offNamed("/profile"),
+          shape: NeumorphicShape.convex,
         ),
         action: SonrButton.circle(
             icon: SonrIcon.search,
+            shape: NeumorphicShape.convex,
             onPressed: () {
               if (controller.status.value != HomeState.None) {
                 SonrOverlay.show(
@@ -29,31 +31,62 @@ class HomeScreen extends GetView<HomeController> {
               }
             }),
         floatingActionButton: ShareButton(),
-        body: Container(
-          width: Get.width,
-          height: Get.height,
-          child: Column(children: [
-            GestureDetector(
-              onTap: () => controller.closeShare(),
-              child: Container(
-                padding: EdgeInsets.only(top: 10),
-                margin: EdgeInsets.only(left: 30, right: 30),
-                child: Obx(() => NeumorphicToggle(
-                      selectedIndex: controller.toggleIndex.value,
-                      onChanged: (val) => controller.setToggleCategory(val),
-                      thumb: Center(child: Obx(() => controller.getToggleCategory())),
-                      children: [
-                        ToggleElement(),
-                        ToggleElement(),
-                        ToggleElement(),
-                        //ToggleElement(),
-                      ],
-                    )),
+        body: NeumorphicBackground(
+          backendColor: Colors.transparent,
+          child: Container(
+            width: Get.width,
+            height: Get.height,
+            child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              GestureDetector(
+                onTap: () => controller.closeShare(),
+                child: Container(
+                  padding: EdgeInsets.only(top: 10),
+                  margin: EdgeInsets.only(left: 30, right: 30),
+                  child: Obx(() => NeumorphicToggle(
+                        selectedIndex: controller.toggleIndex.value,
+                        onChanged: (val) => controller.setToggleCategory(val),
+                        thumb: Center(child: Obx(() => buildView())),
+                        children: [
+                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.disabled, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.disabled, size: 16))),
+                          //ToggleElement(),
+                        ],
+                      )),
+                ),
               ),
-            ),
-            TransferCardGrid()
-          ]),
+              TransferCardGrid(),
+              Spacer()
+            ]),
+          ),
         ));
+  }
+
+  // ^ Helper Method for Category Filter ^ //
+  Widget buildView() {
+    // Change Category
+    if (controller.toggleIndex.value == 0) {
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrIcon.gradient(SonrIconData.all_categories, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
+        //Padding(padding: EdgeInsets.all(6)),
+        // SonrText.medium("All", size: 16),
+      ]);
+    } else if (controller.toggleIndex.value == 1) {
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrIcon.gradient(SonrIconData.media, FlutterGradientNames.premiumDark, size: 20, color: Colors.black.withOpacity(0.7)),
+        // SonrText.medium("Media", size: 16),
+      ]);
+    } else if (controller.toggleIndex.value == 2) {
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrIcon.gradient(SonrIconData.friends, FlutterGradientNames.premiumDark, size: 18, color: Colors.black.withOpacity(0.7)),
+        // SonrText.medium("Friends", size: 16),
+      ]);
+    } else {
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
+        // SonrText.medium("Links", size: 16),
+      ]);
+    }
   }
 }
 
@@ -69,7 +102,7 @@ class TransferCardGrid extends GetView<HomeController> {
         onTap: () => controller.closeShare(),
         child: Container(
             padding: EdgeInsets.only(top: 15),
-            margin: EdgeInsets.all(10),
+            //margin: EdgeInsets.all(10),
             height: 500,
             child: Obx(() {
               // Loading Cards
@@ -140,7 +173,7 @@ class TransferCardGrid extends GetView<HomeController> {
 
     // Check if New Card
     if (controller.status.value == HomeState.New) {
-      isNew = index == list.length - 1;
+      isNew = index == 0;
     }
 
     // Determin CardView

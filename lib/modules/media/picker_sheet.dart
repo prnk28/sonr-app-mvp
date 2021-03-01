@@ -143,6 +143,7 @@ class MediaPickerController extends GetxController {
 
   // ^ Initial Method ^ //
   void onInit() {
+    MediaService.refreshGallery();
     currentMedia(MediaService.totalMedia);
     loaded(true);
     super.onInit();

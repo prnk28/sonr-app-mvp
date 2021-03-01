@@ -9,10 +9,11 @@ import 'icon.dart';
 class SonrColor {
   // ** General Theme Color Properties ** //
   static const Color base = Color(0xffDDDDDD);
+  static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
   static const Color baseDark = Color(0xff1A1A1A);
   static const Color dialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color overlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
-  static const Color disabledButton = Color.fromRGBO(179, 181, 181, 1.0);
+  static const Color disabled = Color.fromRGBO(179, 181, 181, 1.0);
 
   static Gradient get activeBulb => FlutterGradients.findByName(FlutterGradientNames.summerGames);
   static Gradient get inactiveBulb => FlutterGradients.findByName(FlutterGradientNames.octoberSilence);

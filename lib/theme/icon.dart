@@ -53,7 +53,7 @@ class SonrIcon extends StatelessWidget {
       data,
       IconType.NeumorphicGradient,
       Colors.white,
-      null,
+      gradient,
       size: size,
       key: key,
       style: style,
@@ -125,12 +125,14 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get info => SonrIcon.gradient(SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
-  static SonrIcon get close => SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36);
+  static SonrIcon get close => SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
   static SonrIcon get invite => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.aquaGuidance, size: 28);
-  static SonrIcon get profile => SonrIcon.neumorphicGradient(Icons.person_outline, FlutterGradientNames.itmeoBranding, size: 36);
-  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
-  static SonrIcon get more => SonrIcon.gradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
+  static SonrIcon get profile =>
+      SonrIcon.neumorphicGradient(SonrIconData.profile, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
+  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
+  static SonrIcon get more =>
+      SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get settings => SonrIcon.gradient(SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get multiSettings => SonrIcon.gradient(SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get send => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
@@ -210,6 +212,7 @@ class SonrIconData {
   static const _kFontPkg = null;
 
   static const IconData all_categories = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData profile = IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData spotify = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData friends = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData youtube = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
