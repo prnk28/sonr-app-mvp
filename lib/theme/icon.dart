@@ -21,11 +21,11 @@ class SonrIcon extends StatelessWidget {
   SonrIcon(this.data, this.type, this.color, this.gradient, {this.thumbnail, this.style, this.size, Key key}) : super(key: key);
 
   // ^ Gradient Icon with Provided Data
-  factory SonrIcon.gradient(IconData data, FlutterGradientNames gradient, {double size = 40, Key key}) {
+  factory SonrIcon.gradient(IconData data, FlutterGradientNames gradient, {double size = 40, Key key, Color color = Colors.white}) {
     return SonrIcon(
       data,
       IconType.Gradient,
-      Colors.white,
+      color,
       gradient,
       size: size,
       key: key,
@@ -126,14 +126,15 @@ class SonrIcon extends StatelessWidget {
       // @ Creates Gradient Icon
       case IconType.Gradient:
         result = ShaderMask(
+          blendMode: BlendMode.modulate,
           shaderCallback: (bounds) {
-            var grad = FlutterGradients.findByName(gradient);
+            var grad = FlutterGradients.findByName(gradient, tileMode: TileMode.clamp);
             return grad.createShader(bounds);
           },
           child: Icon(
             data,
             size: size,
-            color: Colors.white,
+            color: color,
           ),
         );
         break;

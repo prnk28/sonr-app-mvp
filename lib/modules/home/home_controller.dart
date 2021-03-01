@@ -76,23 +76,33 @@ class HomeController extends GetxController {
   }
 
   // ^ Helper Method for Category Filter ^ //
-  SonrText getToggleCategory() {
-    // Haptic Feedback
-    HapticFeedback.mediumImpact();
-
+  Widget getToggleCategory() {
     // Change Category
     if (toggleIndex.value == 0) {
       category(ToggleFilter.All);
-      return SonrText.medium("All");
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrIcon.gradient(Icons.all_inclusive_rounded, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        Padding(padding: EdgeInsets.all(6)),
+        SonrText.medium("All", size: 16),
+      ]);
     } else if (toggleIndex.value == 1) {
       category(ToggleFilter.Media);
-      return SonrText.medium("Media");
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrText.medium("Media", size: 16),
+      ]);
     } else if (toggleIndex.value == 2) {
       category(ToggleFilter.Media);
-      return SonrText.medium("Contacts");
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrIcon.gradient(SonrIconData.contact, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrText.medium("Friends", size: 16),
+      ]);
     } else {
       category(ToggleFilter.Links);
-      return SonrText.medium("Links");
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrText.medium("Links", size: 16),
+      ]);
     }
   }
 
