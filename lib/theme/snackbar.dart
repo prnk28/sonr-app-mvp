@@ -18,8 +18,8 @@ class SonrSnack {
           snackStyle: SnackStyle.FLOATING,
           duration: Duration(milliseconds: time),
           snackPosition: SnackPosition.BOTTOM,
-          forwardAnimationCurve: Curves.easeInCirc,
-          reverseAnimationCurve: Curves.elasticInOut,
+          forwardAnimationCurve: Curves.elasticIn,
+          reverseAnimationCurve: Curves.elasticOut,
           backgroundColor: color,
           icon: icon,
           colorText: Colors.white);
