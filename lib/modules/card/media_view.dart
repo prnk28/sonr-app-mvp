@@ -32,31 +32,7 @@ class MediaCard extends GetWidget<TransferCardController> {
         return _MediaInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return Neumorphic(
-          style: SonrStyle.normal,
-          margin: EdgeInsets.all(4),
-          child: GestureDetector(
-            onTap: () {
-              // Push to Page
-              Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
-            },
-            child: Hero(
-              tag: card.id,
-              child: Container(
-                height: 75,
-                decoration: card.metadata.mime.type == MIME_Type.image
-                    ? BoxDecoration(
-                        image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-                        fit: BoxFit.cover,
-                        image: MemoryImage(card.metadata.thumbnail),
-                      ))
-                    : null,
-                child: _MediaItemView(card, controller),
-              ),
-            ),
-          ),
-        );
+        return _MediaItemView(card, controller);
       default:
         return Container();
         break;
@@ -123,7 +99,7 @@ class _MediaInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: card.preview.isNotEmpty ? SonrIcon.preview(card) : SonrIcon.mime(card.properties.mime, size: 60)),
+                child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.mime(card.properties.mime, size: 60)),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -161,55 +137,79 @@ class _MediaItemView extends StatelessWidget {
   _MediaItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        // Display Mime Type if Not Image
-        card.metadata.mime.type != MIME_Type.image
-            ? Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: Get.width - 200,
-                    height: Get.height / 5,
-                    child: Neumorphic(
-                        padding: EdgeInsets.all(8),
-                        style: NeumorphicStyle(
-                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                          depth: -10,
+    return GestureDetector(
+      onTap: () {
+        // Push to Page
+        Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
+      },
+      child: Neumorphic(
+        style: SonrStyle.normal,
+        margin: EdgeInsets.all(4),
+        child: Hero(
+          tag: card.id,
+          child: Container(
+            height: 75,
+            decoration: card.metadata.mime.type == MIME_Type.image
+                ? BoxDecoration(
+                    image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
+                    fit: BoxFit.cover,
+                    image: MemoryImage(card.metadata.thumbnail),
+                  ))
+                : null,
+            child: Stack(
+              children: <Widget>[
+                // Display Mime Type if Not Image
+                card.metadata.mime.type != MIME_Type.image
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: Get.width - 200,
+                            height: Get.height / 5,
+                            child: Neumorphic(
+                                padding: EdgeInsets.all(8),
+                                style: NeumorphicStyle(
+                                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                                  depth: -10,
+                                ),
+                                child: SonrIcon.mime(card.metadata.mime, size: 60)),
+                          ),
                         ),
-                        child: SonrIcon.mime(card.metadata.mime, size: 60)),
+                      )
+                    : Container(),
+
+                // Time Stamp
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Neumorphic(
+                      style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
+                          color: card.metadata.mime.type == MIME_Type.image ? Colors.black : Colors.white),
+                      padding: EdgeInsets.all(10),
+                    ),
                   ),
                 ),
-              )
-            : Container(),
 
-        // Time Stamp
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Neumorphic(
-              style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-              child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                  color: card.metadata.mime.type == MIME_Type.image ? Colors.black : Colors.white),
-              padding: EdgeInsets.all(10),
+                // Info Button
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SonrButton.circle(
+                        icon: SonrIcon.info,
+                        onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
+                        shadowLightColor: Colors.black38,
+                      )),
+                ),
+              ],
             ),
           ),
         ),
-
-        // Info Button
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SonrButton.circle(
-                icon: SonrIcon.info,
-                onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
-                shadowLightColor: Colors.black38,
-              )),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -32,22 +32,7 @@ class FileCard extends GetWidget<TransferCardController> {
         return _FileInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return GestureDetector(
-          onTap: () {
-            OpenFile.open(card.metadata.path);
-          },
-          child: Neumorphic(
-            style: SonrStyle.normal,
-            margin: EdgeInsets.all(4),
-            child: Hero(
-              tag: card.id,
-              child: Container(
-                height: 75,
-                child: _FileItemView(card, controller),
-              ),
-            ),
-          ),
-        );
+        return _FileItemView(card, controller);
       default:
         return Container();
         break;
@@ -157,56 +142,44 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        // Time Stamp
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Neumorphic(
-              style: SonrStyle.timeStamp,
-              child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000)),
-              padding: EdgeInsets.all(10),
-            ),
-          ),
-        ),
-
-        // Info Button
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SonrButton.circle(
-                icon: SonrIcon.info,
-                onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
-                shadowLightColor: Colors.black38,
-              )),
-        ),
-      ],
-    );
-  }
-}
-
-// ^ Widget for Expanded File View
-class _FileCardExpanded extends StatelessWidget {
-  final TransferCard card;
-  const _FileCardExpanded(this.card);
-  @override
-  Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: Get.back,
-      child: SizedBox(
-        width: Get.width,
-        child: GestureDetector(
-          onTap: () {
-            Get.back(closeOverlays: true);
-          },
-          child: Hero(
-            tag: card.id,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(color: Colors.green),
+      onTap: () {
+        OpenFile.open(card.metadata.path);
+      },
+      child: Neumorphic(
+        style: SonrStyle.normal,
+        margin: EdgeInsets.all(4),
+        child: Hero(
+          tag: card.id,
+          child: Container(
+            height: 75,
+            child: Stack(
+              children: <Widget>[
+                // Time Stamp
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Neumorphic(
+                      style: SonrStyle.timeStamp,
+                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000)),
+                      padding: EdgeInsets.all(10),
+                    ),
+                  ),
+                ),
+
+                // Info Button
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SonrButton.circle(
+                        icon: SonrIcon.info,
+                        onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
+                        shadowLightColor: Colors.black38,
+                      )),
+                ),
+              ],
             ),
           ),
         ),

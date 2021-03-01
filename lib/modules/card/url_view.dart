@@ -31,35 +31,42 @@ class URLCard extends GetWidget<TransferCardController> {
         return _URLInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return Neumorphic(
-          style: SonrStyle.normal,
-          margin: EdgeInsets.all(4),
-          child: GestureDetector(
-            onTap: () {
-              // Push to Page
-              Get.to(_URLCardExpanded(card), transition: Transition.fadeIn);
-            },
-            child: Hero(
-              tag: card.id,
-              child: Container(
-                height: 75,
-                decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
-                    ? BoxDecoration(
-                        image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-                        fit: BoxFit.cover,
-                        image: MemoryImage(card.metadata.thumbnail),
-                      ))
-                    : null,
-                child: Container(),
-              ),
-            ),
-          ),
-        );
+        return _URLItemView(card);
       default:
         return Container();
         break;
     }
+  }
+}
+
+// ^ Widget for Expanded Media View
+class _URLItemView extends StatelessWidget {
+  final TransferCard card;
+  const _URLItemView(this.card);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Get.find<DeviceService>().launchURL(card.url.link),
+      child: Neumorphic(
+        style: SonrStyle.normal,
+        margin: EdgeInsets.all(4),
+        child: Hero(
+          tag: card.id,
+          child: Container(
+            height: 75,
+            decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
+                ? BoxDecoration(
+                    image: DecorationImage(
+                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
+                    fit: BoxFit.cover,
+                    image: MemoryImage(card.metadata.thumbnail),
+                  ))
+                : null,
+            child: Container(),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -117,7 +124,7 @@ class _URLInviteView extends StatelessWidget {
 
         // @ Actions
         Divider(),
-                Padding(padding: EdgeInsets.all(4)),
+        Padding(padding: EdgeInsets.all(4)),
         Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           // Decline Button
           TextButton(
@@ -142,9 +149,8 @@ class _URLInviteView extends StatelessWidget {
     );
   }
 
+  // ^ Method to Build View from Data ^ //
   Widget _buildURLView(URLLink data) {
-    print(data.toString());
-
     // Check open graph images
     if (data.images.length > 0) {
       return Column(children: [
@@ -247,35 +253,6 @@ class _URLInviteView extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: SonrText.url(card.url.link),
-      ),
-    );
-  }
-
-  copyURL() {}
-}
-
-// ^ Widget for Expanded Media View
-class _URLCardExpanded extends StatelessWidget {
-  final TransferCard card;
-  const _URLCardExpanded(this.card);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: Get.back,
-      child: SizedBox(
-        width: Get.width,
-        child: GestureDetector(
-          onTap: () {
-            Get.back(closeOverlays: true);
-          },
-          child: Hero(
-            tag: card.id,
-            child: Material(
-              color: Colors.transparent,
-              child: Container(color: Colors.red),
-            ),
-          ),
-        ),
       ),
     );
   }

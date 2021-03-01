@@ -58,10 +58,28 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data from Metadata
-  factory SonrIcon.preview(TransferCard card,
+  factory SonrIcon.withPreview(TransferCard card,
       {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
+    var iconData;
+    switch (card.properties.mime.type) {
+      case MIME_Type.audio:
+        iconData = IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
+        break;
+      case MIME_Type.image:
+        iconData = IconGradientData(SonrIconData.photo, FlutterGradientNames.juicyCake);
+        break;
+      case MIME_Type.text:
+        iconData = IconGradientData(SonrIconData.document, FlutterGradientNames.farawayRiver);
+        break;
+      case MIME_Type.video:
+        iconData = IconGradientData(SonrIconData.video, FlutterGradientNames.nightCall);
+        break;
+      default:
+        iconData = IconGradientData(SonrIconData.file_unknown, FlutterGradientNames.newRetrowave);
+        break;
+    }
     return SonrIcon(
-      card.properties.mime.type.gradientData.data,
+      iconData,
       IconType.Thumbnail,
       color,
       gradient,
@@ -165,9 +183,10 @@ class SonrIconData {
   static const _kFontFam = 'SonrIcons';
   static const _kFontPkg = null;
   static const IconData spotify = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData twitter_rt = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData youtube_text = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData friends = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData youtube = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData tiktok = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData compass = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData android = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData url = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData contact = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -180,27 +199,34 @@ class SonrIconData {
   static const IconData photo = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData sonr = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData screenshot = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData success = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData document = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData invite = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData compass = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData video = IconData(0xe812, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData audio = IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData videocamera = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData success = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData spreadsheet = IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData pdf = IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData cancel = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData presentation = IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData missing = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData info = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData panorama = IconData(0xe88c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData github = IconData(0xf09b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData document = IconData(0xf0f6, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData github_alt = IconData(0xf113, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData youtube = IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData camera = IconData(0xf039, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData github_alt = IconData(0xf09b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData file_unknown = IconData(0xf0f6, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData github = IconData(0xf113, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData youtube_alt = IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData instagram = IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData audio_file = IconData(0xf1c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData share = IconData(0xf1d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData medium_fill = IconData(0xf23a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData snapchat = IconData(0xf2ad, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData medium = IconData(0xf23a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData snapchat = IconData(0xf2ac, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData snapchat_alt = IconData(0xf2ad, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData facebook = IconData(0xf300, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData facebook_fill = IconData(0xf301, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData twitter = IconData(0xf309, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData medium = IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData video = IconData(0xf87c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData medium_alt = IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData media = IconData(0xf87c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
 
 class IconGradientData {
@@ -222,7 +248,7 @@ extension MimeIcon on MIME_Type {
   IconGradientData get gradientData {
     switch (this) {
       case MIME_Type.audio:
-        return IconGradientData(SonrIconData.audio_file, FlutterGradientNames.flyingLemon);
+        return IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
         break;
       case MIME_Type.image:
         return IconGradientData(SonrIconData.photo, FlutterGradientNames.juicyCake);
@@ -234,7 +260,7 @@ extension MimeIcon on MIME_Type {
         return IconGradientData(SonrIconData.video, FlutterGradientNames.nightCall);
         break;
       default:
-        return IconGradientData(Icons.file_copy_outlined, FlutterGradientNames.newRetrowave);
+        return IconGradientData(SonrIconData.file_unknown, FlutterGradientNames.newRetrowave);
         break;
     }
   }
@@ -251,8 +277,16 @@ extension PayloadIcon on Payload {
       data = SonrIconData.video;
     } else if (this == Payload.URL) {
       data = SonrIconData.url;
-    } else {
+    } else if (this == Payload.PDF) {
+      data = SonrIconData.pdf;
+    } else if (this == Payload.SPREADSHEET) {
+      data = SonrIconData.spreadsheet;
+    } else if (this == Payload.PRESENTATION) {
+      data = SonrIconData.presentation;
+    } else if (this == Payload.TEXT) {
       data = SonrIconData.document;
+    } else {
+      data = SonrIconData.file_unknown;
     }
     return SonrIcon(
       data,
@@ -328,25 +362,25 @@ extension SocialTileIcon on Contact_SocialTile_Provider {
         gradientData = IconGradientData(SonrIconData.instagram, FlutterGradientNames.ripeMalinka);
         break;
       case Contact_SocialTile_Provider.Twitter:
-        gradientData = IconGradientData(SonrIconData.twitter, FlutterGradientNames.partyBliss, alt: SonrIconData.twitter_rt);
+        gradientData = IconGradientData(SonrIconData.twitter, FlutterGradientNames.partyBliss);
         break;
       case Contact_SocialTile_Provider.YouTube:
-        gradientData = IconGradientData(SonrIconData.youtube, FlutterGradientNames.loveKiss, alt: SonrIconData.youtube_text);
+        gradientData = IconGradientData(SonrIconData.youtube, FlutterGradientNames.loveKiss, alt: SonrIconData.youtube_alt);
         break;
       case Contact_SocialTile_Provider.Medium:
-        gradientData = IconGradientData(SonrIconData.medium, FlutterGradientNames.eternalConstance, alt: SonrIconData.medium_fill);
+        gradientData = IconGradientData(SonrIconData.medium, FlutterGradientNames.eternalConstance, alt: SonrIconData.medium_alt);
         break;
       case Contact_SocialTile_Provider.Facebook:
         gradientData = IconGradientData(SonrIconData.facebook, FlutterGradientNames.perfectBlue, alt: SonrIconData.facebook_fill);
         break;
       case Contact_SocialTile_Provider.Snapchat:
-        gradientData = IconGradientData(SonrIconData.snapchat, FlutterGradientNames.sunnyMorning, alt: SonrIconData.snapchat);
+        gradientData = IconGradientData(SonrIconData.snapchat, FlutterGradientNames.sunnyMorning, alt: SonrIconData.snapchat_alt);
         break;
       case Contact_SocialTile_Provider.Github:
         gradientData = IconGradientData(SonrIconData.github, FlutterGradientNames.solidStone, alt: SonrIconData.github_alt);
         break;
       default:
-        gradientData = IconGradientData(Icons.device_unknown, FlutterGradientNames.viciousStance);
+        gradientData = IconGradientData(Icons.error, FlutterGradientNames.viciousStance);
         break;
     }
 
