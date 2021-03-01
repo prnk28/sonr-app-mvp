@@ -20,7 +20,7 @@ class HomeScreen extends GetView<HomeController> {
         action: SonrButton.circle(
             icon: SonrIcon.search,
             onPressed: () {
-              if (controller.cards.length > 0) {
+              if (controller.status.value != HomeState.None) {
                 SonrOverlay.show(
                   SearchView(),
                   barrierDismissible: true,

@@ -80,26 +80,26 @@ class HomeController extends GetxController {
     if (toggleIndex.value == 0) {
       category(ToggleFilter.All);
       return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrIcon.gradient(Icons.all_inclusive_rounded, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrIcon.gradient(Icons.all_inclusive_rounded, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
         Padding(padding: EdgeInsets.all(6)),
         SonrText.medium("All", size: 16),
       ]);
     } else if (toggleIndex.value == 1) {
       category(ToggleFilter.Media);
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrIcon.gradient(SonrIconData.media, FlutterGradientNames.premiumDark, size: 20, color: Colors.black.withOpacity(0.7)),
         SonrText.medium("Media", size: 16),
       ]);
     } else if (toggleIndex.value == 2) {
       category(ToggleFilter.Media);
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.contact, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrIcon.gradient(SonrIconData.friends, FlutterGradientNames.premiumDark, size: 18, color: Colors.black.withOpacity(0.7)),
         SonrText.medium("Friends", size: 16),
       ]);
     } else {
       category(ToggleFilter.Links);
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.premiumDark, size: 22, color: Colors.black),
+        SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.premiumDark, size: 22, color: Colors.black.withOpacity(0.7)),
         SonrText.medium("Links", size: 16),
       ]);
     }
