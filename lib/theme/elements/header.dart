@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/theme/theme.dart';
+import '../style/style.dart';
 
 enum _SonrDialogHeaderType { Title, Leading, Action, TwoButton, CloseAccept, Sliver }
 

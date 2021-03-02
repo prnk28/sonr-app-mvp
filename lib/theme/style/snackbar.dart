@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
+import 'style.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/constants.dart';
 
 class SonrSnack {
   // Properties
@@ -9,14 +9,14 @@ class SonrSnack {
   final String title;
   final String message;
   final Widget icon;
-  final int time;
+  final int duration;
 
   // ^ Default Constructer ^ //
-  SonrSnack(this.title, this.message, this.icon, this.color, this.time) {
+  SonrSnack(this.title, this.message, this.icon, this.color, this.duration) {
     if (!Get.isSnackbarOpen) {
       Get.snackbar(title, message,
           snackStyle: SnackStyle.FLOATING,
-          duration: Duration(milliseconds: time),
+          duration: Duration(milliseconds: duration),
           snackPosition: SnackPosition.BOTTOM,
           reverseAnimationCurve: Curves.elasticOut,
           backgroundColor: color,

@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/media/picker_sheet.dart';
-import 'package:sonr_app/service/sonr_service.dart';
+import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
-import 'package:sonr_app/data/constants.dart';
 
 // @ Widget Constants
 const double K_ITEM_SPACING = 12;
@@ -102,7 +100,10 @@ class _ShareButtonRow extends GetView<HomeController> {
                   controller.closeShare();
 
                   // Go to Camera View
-                  Get.toNamed("/camera");
+                  Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+                    SonrService.queueMedia(file);
+                    Get.toNamed("/transfer");
+                  }), transition: Transition.downToUp);
                 },
                 type: ArtboardType.Camera,
               ),
@@ -114,7 +115,10 @@ class _ShareButtonRow extends GetView<HomeController> {
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.closeShare();
-                  Get.bottomSheet(PickerSheet(), isDismissible: false);
+                  Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
+                    SonrService.queueMedia(file);
+                    Get.toNamed("/transfer");
+                  }), isDismissible: false);
                 },
                 type: ArtboardType.Gallery,
               ),

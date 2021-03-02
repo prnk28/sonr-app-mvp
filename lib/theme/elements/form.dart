@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_app/theme/theme.dart';
+import '../style/style.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class SonrForm extends StatelessWidget {
@@ -84,8 +84,7 @@ class SonrDropdown extends StatelessWidget {
 
   // References
   final List<SonrDropdownItem> items;
-  final String title;
-  final RxInt index = (-1).obs;
+  final SonrDropdownItem initial;
 
   // * Builds Social Media Dropdown * //
   factory SonrDropdown.social(List<Contact_SocialTile_Provider> data,
@@ -93,7 +92,7 @@ class SonrDropdown extends StatelessWidget {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].icon(IconType.Gradient));
     });
-    return SonrDropdown(items, "Choose", onChanged, margin, width ?? Get.width - 250, height);
+    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), onChanged, margin, width ?? Get.width - 250, height);
   }
 
   // * Builds Albums Dropdown * //
@@ -149,16 +148,23 @@ class SonrDropdown extends StatelessWidget {
         return null;
       }
     });
-    return SonrDropdown(items, "All", onChanged, margin, width ?? Get.width - 250, height, selectedIconPosition: WidgetPosition.Left);
+    return SonrDropdown(
+        items,
+        SonrDropdownItem(true, "All", icon: SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20)),
+        onChanged,
+        margin,
+        width ?? Get.width - 250,
+        height,
+        selectedIconPosition: WidgetPosition.Left);
   }
 
-  SonrDropdown(this.items, this.title, this.onChanged, this.margin, this.width, this.height,
+  const SonrDropdown(this.items, this.initial, this.onChanged, this.margin, this.width, this.height,
       {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right});
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
     items.removeWhere((value) => value == null);
-    return ObxValue<RxInt>((selectedIndex) {
+    return ObxValue((RxInt index) {
       return Container(
         key: _dropKey,
         width: width,
@@ -167,24 +173,26 @@ class SonrDropdown extends StatelessWidget {
         child: NeumorphicButton(
             margin: EdgeInsets.symmetric(horizontal: 5),
             style: SonrStyle.flat,
-            child: Center(child: _buildSelected(selectedIndex.value, Get.find<SonrPositionedOverlay>().overlays.length > 0)),
+            child: Center(child: _buildSelected(index.value)),
             onPressed: () {
-              SonrPositionedOverlay.dropdown(items, _dropKey, (newIndex) {
-                selectedIndex(newIndex);
-                onChanged(newIndex);
+              SonrPositionedOverlay.dropdown(items, _dropKey, (idx) {
+                index(idx);
+                index.refresh();
+                onChanged(index.value);
               }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
             }),
       );
-    }, index);
+    }, (-1).obs);
   }
 
-  _buildSelected(int idx, bool isOpen) {
+  _buildSelected(int index) {
     // @ Default Widget
-    if (idx == -1) {
+    if (index == -1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Expanded(child: SonrText.medium(title, color: Colors.black87, size: height / 3)),
+        initial.hasIcon ? initial.icon : Container(),
         Padding(padding: EdgeInsets.all(4)),
-        isOpen
+        Expanded(child: SonrText.medium(initial.text, color: Colors.black87, size: height / 3)),
+        Get.find<SonrPositionedOverlay>().overlays.length > 0
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
             : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
       ]);
@@ -192,7 +200,7 @@ class SonrDropdown extends StatelessWidget {
 
     // @ Selected Widget
     else {
-      var item = items[idx];
+      var item = items[index];
       if (selectedIconPosition == WidgetPosition.Left) {
         return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
           item.hasIcon ? item.icon : Container(),

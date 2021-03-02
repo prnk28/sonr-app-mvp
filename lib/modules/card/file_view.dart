@@ -4,7 +4,6 @@ import 'package:open_file/open_file.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
-import 'package:sonr_app/data/constants.dart';
 
 class FileCard extends GetWidget<TransferCardController> {
   // References
@@ -205,9 +204,8 @@ class _FileCardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     // Extract Data
     var metadata = card.metadata;
-    var mimeType = card.metaMimeString;
+    var payload = card.payloadString;
     var size = card.metaSizeString;
-    var hasExported = card.hasExportedString;
 
     // Build Overlay View
     return Padding(
@@ -218,7 +216,7 @@ class _FileCardInfo extends StatelessWidget {
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            SonrText.header("$mimeType From"),
+            SonrText.header("$payload From"),
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -255,13 +253,6 @@ class _FileCardInfo extends StatelessWidget {
               SonrText.medium("${metadata.mime.value}", size: 16),
             ]),
 
-            // File Exported
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Saved to Gallery ", size: 16),
-              Spacer(),
-              SonrText.medium("$hasExported", size: 16),
-            ]),
-
             Padding(padding: EdgeInsets.all(4)),
             Divider(),
 
@@ -269,7 +260,25 @@ class _FileCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               SonrButton.rectangle(
                 isDisabled: true,
-                onPressed: () {},
+                onPressed: () {
+                  // Prompt Question
+                  SonrOverlay.question(
+                          entryLocation: SonrOffset.Bottom,
+                          title: "Delete",
+                          description: "Are you sure you want to delete this Card?",
+                          acceptTitle: "Continue",
+                          declineTitle: "Cancel")
+                      .then((result) {
+                    // Handle Response
+                    if (result) {
+                      Get.find<SQLService>().deleteCard(card.id);
+                      SonrSnack.success("Deleted File from Sonr.");
+                      SonrOverlay.closeAll();
+                    } else {
+                      SonrOverlay.closeAll();
+                    }
+                  });
+                },
                 text: SonrText.medium("Delete"),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),

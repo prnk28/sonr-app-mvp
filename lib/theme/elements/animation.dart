@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import '../style/style.dart';
 import 'package:rive/rive.dart' hide LinearGradient;
 
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }

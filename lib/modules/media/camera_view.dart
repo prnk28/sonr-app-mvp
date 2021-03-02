@@ -6,15 +6,44 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
-import 'media_screen.dart';
-import 'package:sonr_app/data/constants.dart';
+
+import 'capture_preview.dart';
+
+enum CameraViewType { Default, Preview, Avatar, QRCode }
 
 class CameraView extends GetView<CameraController> {
+  // Properties
+  final Function(MediaFile file) onMediaSelected;
+  final CameraViewType type;
+  CameraView({@required this.onMediaSelected, this.type = CameraViewType.Default});
+
+  factory CameraView.withPreview({@required Function(MediaFile file) onMediaSelected}) {
+    return CameraView(onMediaSelected: onMediaSelected, type: CameraViewType.Preview);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Listen to Updates
+    controller.hasCaptured.listen((val) {
+      if (val) {
+        if (type == CameraViewType.Default) {
+          onMediaSelected(controller.getMediaFile());
+        } else if (type == CameraViewType.Preview) {
+          Get.dialog(
+              MediaPreviewView(
+                  mediaFile: controller.getMediaFile(),
+                  onDecision: (value) {
+                    value ? controller.continueWithCapture(onMediaSelected) : controller.clearFromPreview();
+                  }),
+              barrierDismissible: false);
+        }
+      }
+    });
+
+    // Build View
     return Stack(
       children: [
         GestureDetector(
@@ -43,11 +72,6 @@ class CameraView extends GetView<CameraController> {
             print("Drag Horizontal: ${details.delta}");
           },
           child: CameraAwesome(
-            onPermissionsResult: (bool result) {},
-            onCameraStarted: () {
-              MediaController.ready();
-            },
-            onOrientationChanged: (CameraOrientations newOrientation) {},
             sensor: controller.sensor,
             zoom: controller.zoomNotifier,
             photoSize: controller.photoSize,
@@ -64,7 +88,7 @@ class CameraView extends GetView<CameraController> {
           child: SonrButton.circle(
               intensity: 0.5,
               onPressed: () {
-                Get.offNamed("/home");
+                Get.back();
               },
               icon: SonrIcon.close),
         ),
@@ -118,7 +142,10 @@ class _CameraToolsView extends GetView<CameraController> {
                   // Check for Permssions
                   if (await Permission.photos.request().isGranted) {
                     // Display Bottom Sheet
-                    Get.bottomSheet(PickerSheet(), isDismissible: true);
+                    Get.bottomSheet(MediaPickerSheet(onMediaSelected: (MediaFile file) {
+                      SonrService.queueMedia(file);
+                      Get.offNamed("/transfer");
+                    }), isDismissible: true);
                   } else {
                     // Display Error
                     SonrSnack.error("Sonr isnt permitted to access your media.");
@@ -206,6 +233,12 @@ class CameraController extends GetxController {
   final videoDuration = 0.obs;
   final videoInProgress = false.obs;
   final zoomLevel = 0.0.obs;
+  final hasCaptured = false.obs;
+
+  // References
+  var _isVideo = false;
+  var _photoCapturePath = "";
+  var _videoCapturePath = "";
 
   // Notifiers
   ValueNotifier<double> brightness = ValueNotifier(1);
@@ -230,29 +263,52 @@ class CameraController extends GetxController {
     });
   }
 
+  clearFromPreview() async {
+    hasCaptured(false);
+    _photoCapturePath = "";
+    _videoCapturePath = "";
+    _isVideo = false;
+    Get.back();
+  }
+
+  continueWithCapture(Function(MediaFile file) selected) {
+    Get.back();
+    selected(getMediaFile());
+    _photoCapturePath = "";
+    _videoCapturePath = "";
+    _isVideo = false;
+    hasCaptured(false);
+  }
+
   // ^ Captures Photo ^ //
   capturePhoto() async {
     // Set Path
-    var temp = await getTemporaryDirectory();
+    var temp = await getApplicationDocumentsDirectory();
     var photoDir = await Directory('${temp.path}/photos').create(recursive: true);
-    var path = '${photoDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    _photoCapturePath = '${photoDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    _isVideo = false;
 
     // Capture Photo
-    await pictureController.takePicture(path);
-    MediaController.setPhoto(path);
+    await pictureController.takePicture(_photoCapturePath);
+    hasCaptured(true);
+  }
+
+  // ^ Returns Captured Media File ^ //
+  MediaFile getMediaFile() {
+    return MediaFile.capture(_isVideo ? _videoCapturePath : _photoCapturePath, _isVideo, videoDuration.value);
   }
 
   // ^ Captures Video ^ //
   startCaptureVideo() async {
     // Set Path
-    var temp = await getTemporaryDirectory();
+    var temp = await getApplicationDocumentsDirectory();
     var videoDir = await Directory('${temp.path}/videos').create(recursive: true);
-    var path = '${videoDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
-    MediaController.recording(path);
+    _videoCapturePath = '${videoDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+    _isVideo = true;
 
     // Capture Photo
     captureMode.value = CaptureModes.VIDEO;
-    await videoController.recordVideo(path);
+    await videoController.recordVideo(_videoCapturePath);
     videoInProgress(true);
 
     _stopwatch.start();
@@ -265,17 +321,14 @@ class CameraController extends GetxController {
   stopCaptureVideo() async {
     // Save Video
     await videoController.stopRecordingVideo();
-    var duration = videoDuration.value;
 
     // Reset Duration Management
     _stopwatch.reset();
     _timer.cancel();
-    videoDuration(0);
-    videoInProgress(false);
 
     // Update State
     captureMode.value = CaptureModes.PHOTO;
-    MediaController.completeVideo(duration);
+    hasCaptured(true);
   }
 
   // ^ Flip Camera ^ //

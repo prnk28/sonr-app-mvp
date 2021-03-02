@@ -1,9 +1,7 @@
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/widgets/overlay.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/data/constants.dart';
 import 'card_controller.dart';
 
 class ContactCard extends GetWidget<TransferCardController> {

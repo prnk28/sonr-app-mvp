@@ -1,4 +1,3 @@
-import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class EditDialog extends GetView<EditDialogController> {

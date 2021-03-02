@@ -4,7 +4,6 @@ import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
-import 'package:sonr_app/data/constants.dart';
 
 class MediaCard extends GetWidget<TransferCardController> {
   // References
@@ -322,6 +321,7 @@ class _MediaCardInfo extends StatelessWidget {
                   } else {
                     // Prompt Question
                     SonrOverlay.question(
+                            entryLocation: SonrOffset.Bottom,
                             title: "Delete",
                             description: "Are you sure you want to delete this Card, it has not saved to your gallery yet.",
                             acceptTitle: "Continue",

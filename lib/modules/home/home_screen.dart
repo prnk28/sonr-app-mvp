@@ -1,4 +1,3 @@
-import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
@@ -7,18 +6,13 @@ import 'share_button.dart';
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    // Initialize
-    MediaService.checkInitialShare();
-    controller.toggleIndex(1);
-    controller.toggleIndex.refresh();
-
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
         resizeToAvoidBottomPadding: false,
         title: "Home",
         leading: SonrButton.circle(
           icon: SonrIcon.profile,
-          onPressed: () => Get.offNamed("/profile"),
+          onPressed: () => Get.toNamed("/profile"),
           shape: NeumorphicShape.convex,
         ),
         action: SonrButton.circle(

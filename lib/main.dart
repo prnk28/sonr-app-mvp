@@ -1,13 +1,10 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
-import 'modules/media/camera_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
-import 'widgets/overlay.dart';
 
 // ^ Main Method ^ //
 void main() async {
@@ -31,6 +28,7 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
+    Get.lazyPut<CameraController>(() => CameraController());
     Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
   }
@@ -116,40 +114,16 @@ class _AppState extends State<App> {
 // ignore: non_constant_identifier_names
 List<GetPage> get K_PAGES => [
       // ** Home Page ** //
-      GetPage(
-          name: '/home',
-          page: () => HomeScreen(),
-          maintainState: false,
-          transition: Transition.topLevel,
-          curve: Curves.easeIn,
-          binding: HomeBinding()),
+      GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.topLevel, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Back from Transfer ** //
-      GetPage(
-          name: '/home/transfer',
-          page: () => HomeScreen(),
-          maintainState: false,
-          transition: Transition.upToDown,
-          curve: Curves.easeIn,
-          binding: HomeBinding()),
+      GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Home Page - Back from Profile ** //
-      GetPage(
-          name: '/home/profile',
-          page: () => HomeScreen(),
-          maintainState: false,
-          transition: Transition.downToUp,
-          curve: Curves.easeIn,
-          binding: HomeBinding()),
+      GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeIn, binding: HomeBinding()),
 
       // ** Register Page ** //
-      GetPage(
-          name: '/register',
-          page: () => RegisterScreen(),
-          maintainState: false,
-          transition: Transition.fade,
-          curve: Curves.easeIn,
-          binding: RegisterBinding()),
+      GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
 
       // ** Transfer Page ** //
       GetPage(
@@ -159,15 +133,6 @@ List<GetPage> get K_PAGES => [
           transition: Transition.downToUp,
           curve: Curves.easeIn,
           binding: TransferBinding()),
-
-      // ** Camera Page - Default Media View ** //
-      GetPage(
-          name: '/camera',
-          page: () => MediaScreen(),
-          maintainState: false,
-          transition: Transition.fade,
-          curve: Curves.easeIn,
-          binding: CameraBinding()),
 
       // ** Profile Page ** //
       GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),

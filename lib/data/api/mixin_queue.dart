@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
+
+import '../model/model_file.dart';
 
 class TransferQueue {
   // Properties
@@ -132,13 +133,12 @@ class TransferQueueItem {
     return TransferQueueItem(Payload.CONTACT);
   }
 
-  factory TransferQueueItem.media(String path, bool hasThumbnail, int duration, String thumbPath, Uint8List thumbnailData) {
+  factory TransferQueueItem.media(MediaFile media) {
     var file = InviteRequest_FileInfo(
-      path: path,
-      hasThumbnail: hasThumbnail,
-      duration: duration,
-      thumbpath: thumbPath,
-      thumbdata: thumbnailData,
+      path: media.path,
+      duration: media.duration,
+      thumbnail: media.thumbnail,
+      isVideo: media.isVideo,
     );
     return TransferQueueItem(Payload.MEDIA, media: file);
   }

@@ -169,7 +169,7 @@ class MediaService extends GetxService {
   }
 
   // ^ Method Refreshes Gallery ^ //
-  static void refreshGallery() async {
+  static Future refreshGallery() async {
     var controller = Get.find<MediaService>();
     // Get Collections
     controller._state(GalleryState.Loading);

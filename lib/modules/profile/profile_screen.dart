@@ -1,9 +1,8 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'edit_dialog.dart';
 import 'tile_item.dart';
 import 'profile_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
 import 'create_tile.dart';
 
 class ProfileScreen extends GetView<ProfileController> {
@@ -26,7 +25,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     leading: SonrButton.circle(
                         icon: SonrIcon.close,
                         shape: NeumorphicShape.convex,
-                        onPressed: () => Get.offNamed("/home/profile"),
+                        onPressed: () => Get.back(),
                         intensity: 0.85,
                         shadowLightColor: Colors.lightBlueAccent[100]),
                     action: SonrButton.circle(

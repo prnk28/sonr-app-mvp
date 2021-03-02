@@ -1,6 +1,5 @@
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_core/sonr_social.dart';
 
 // ** Builds Add Social Form Dialog ** //

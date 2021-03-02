@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/modules/transfer/peer_controller.dart';
-import 'package:sonr_app/service/device_service.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/widgets/overlay.dart';
+import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'media_service.dart';
 import 'sql_service.dart';
@@ -104,10 +100,10 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Set Payload for Media ^ //
-  static queueMedia(String path, {bool hasThumbnail = false, int duration = -1, String thumbPath = "", Uint8List thumbnailData}) async {
+  static queueMedia(MediaFile media) async {
     // - Check Connected -
     if (to._connected.conn) {
-      to.addToQueue(TransferQueueItem.media(path, hasThumbnail, duration, thumbPath, thumbnailData));
+      to.addToQueue(TransferQueueItem.media(media));
     }
   }
 

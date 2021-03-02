@@ -1,9 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/modules/profile/edit_dialog.dart';
-import 'package:sonr_app/theme/text.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ^ Contact Model Extensions ^ //
@@ -175,5 +173,12 @@ extension TransferCardUtils on TransferCard {
 
   SonrIcon get ownerPlatformIcon {
     return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
+  }
+
+  String get payloadString {
+    if (this.payload == Payload.PDF) {
+      return this.payload.toString();
+    }
+    return this.payload.toString().capitalizeFirst;
   }
 }

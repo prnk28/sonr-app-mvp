@@ -1,5 +1,5 @@
-import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'style.dart';
 
 class SonrScaffold extends StatelessWidget {
   final Widget body;

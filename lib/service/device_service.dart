@@ -7,12 +7,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonr_app/service/sonr_service.dart' hide Position;
-import 'package:sonr_app/service/user_service.dart';
-import 'package:sonr_app/widgets/overlay.dart';
+import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
-
-import '../theme/theme.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
