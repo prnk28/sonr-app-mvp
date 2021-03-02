@@ -11,6 +11,7 @@ class ProfileController extends GetxController {
   final state = ProfileState.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
   final options = SonrSocial.options(UserService.socials);
+  final dropdownIndex = (-1).obs;
 
   // References
   final step = Rx<TileStep>();
@@ -61,7 +62,8 @@ class ProfileController extends GetxController {
   nextStep() async {
     // @ Step 2
     if (step.value.current == 0) {
-      if (step.value.hasProvider) {
+      if (dropdownIndex.value != -1) {
+        provider(dropdownIndex.value);
         step.update((val) {
           val.current = 1;
           pageController.nextPage(duration: 500.milliseconds, curve: Curves.easeOutBack);

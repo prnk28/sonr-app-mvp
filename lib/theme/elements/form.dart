@@ -71,7 +71,6 @@ class SonrCheckbox extends StatelessWidget {
 // ^ Builds Overlay Based Positional Dropdown Menu ^ //
 class SonrDropdown extends StatelessWidget {
   // Properties
-  final ValueChanged<int> onChanged;
   final EdgeInsets margin;
   final double width;
   final double height;
@@ -85,19 +84,20 @@ class SonrDropdown extends StatelessWidget {
   // References
   final List<SonrDropdownItem> items;
   final SonrDropdownItem initial;
+  final RxInt index;
 
   // * Builds Social Media Dropdown * //
   factory SonrDropdown.social(List<Contact_SocialTile_Provider> data,
-      {@required ValueChanged<int> onChanged, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
+      {@required RxInt index, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].icon(IconType.Gradient));
     });
-    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), onChanged, margin, width ?? Get.width - 250, height);
+    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), index, margin, width ?? Get.width - 250, height);
   }
 
   // * Builds Albums Dropdown * //
   factory SonrDropdown.albums(List<MediaCollection> data,
-      {@required ValueChanged<int> onChanged, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
+      {@required RxInt index, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       if (data[index].name != null) {
         // Initialize
@@ -151,38 +151,37 @@ class SonrDropdown extends StatelessWidget {
     return SonrDropdown(
         items,
         SonrDropdownItem(true, "All", icon: SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20)),
-        onChanged,
+        index,
         margin,
         width ?? Get.width - 250,
         height,
         selectedIconPosition: WidgetPosition.Left);
   }
 
-  const SonrDropdown(this.items, this.initial, this.onChanged, this.margin, this.width, this.height,
+  SonrDropdown(this.items, this.initial, this.index, this.margin, this.width, this.height,
       {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right});
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
     items.removeWhere((value) => value == null);
-    return ObxValue((RxInt index) {
+    return Obx(() {
       return Container(
         key: _dropKey,
         width: width,
         margin: margin,
         height: height,
         child: NeumorphicButton(
-            margin: EdgeInsets.symmetric(horizontal: 5),
+            margin: EdgeInsets.symmetric(horizontal: 3),
             style: SonrStyle.flat,
-            child: Center(child: _buildSelected(index.value)),
+            child: _buildSelected(index.value),
             onPressed: () {
-              SonrPositionedOverlay.dropdown(items, _dropKey, (idx) {
-                index(idx);
+              SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {
+                index(newIdx);
                 index.refresh();
-                onChanged(index.value);
               }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
             }),
       );
-    }, (-1).obs);
+    });
   }
 
   _buildSelected(int index) {
@@ -202,17 +201,25 @@ class SonrDropdown extends StatelessWidget {
     else {
       var item = items[index];
       if (selectedIconPosition == WidgetPosition.Left) {
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          item.hasIcon ? item.icon : Container(),
-          Padding(padding: EdgeInsets.all(4)),
-          Expanded(child: SonrText.medium(item.text, color: Colors.black87, size: height / 3)),
-        ]);
+        return Row(
+            textBaseline: TextBaseline.alphabetic,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              item.hasIcon ? item.icon : Container(),
+              Padding(padding: EdgeInsets.only(right: 6)),
+              SonrText.medium(item.text, color: Colors.black87, size: 18),
+            ]);
       } else {
-        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Expanded(child: SonrText.medium(item.text, color: Colors.black87, size: height / 3)),
-          Padding(padding: EdgeInsets.all(4)),
-          item.hasIcon ? item.icon : Container(),
-        ]);
+        return Row(
+            textBaseline: TextBaseline.alphabetic,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SonrText.medium(item.text, color: Colors.black87, size: 18),
+              Padding(padding: EdgeInsets.only(right: 6)),
+              item.hasIcon ? item.icon : Container(),
+            ]);
       }
     }
   }

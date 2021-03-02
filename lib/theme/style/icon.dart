@@ -385,7 +385,7 @@ extension SocialTileIcon on Contact_SocialTile_Provider {
   }
 
   // -- Returns Icon with Gradient -- //
-  SonrIcon icon(IconType type, {double size = 24, Color color = Colors.black, bool alternate = false, Key key}) {
+  SonrIcon icon(IconType type, {double size = 24, Color color = Colors.white, bool alternate = false, Key key}) {
     IconGradientData gradientData;
     switch (this) {
       case Contact_SocialTile_Provider.Spotify:

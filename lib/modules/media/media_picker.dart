@@ -14,9 +14,13 @@ class MediaPickerSheet extends StatefulWidget {
 class _MediaPickerSheetState extends State<MediaPickerSheet> {
   ValueNotifier<MediaGalleryItem> _selectedItem = ValueNotifier<MediaGalleryItem>(null);
   ValueNotifier<List<Media>> _mediaList = ValueNotifier<List<Media>>(MediaService.totalMedia);
+  final RxInt index = (-1).obs;
 
   @override
   Widget build(BuildContext context) {
+    index.listen((val) {
+      setMediaCollection(val);
+    });
     return NeumorphicBackground(
       borderRadius: BorderRadius.circular(40),
       backendColor: Colors.transparent,
@@ -35,9 +39,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
                       SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
                       // Drop Down
-                      SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, onChanged: (index) {
-                        setMediaCollection(index);
-                      }),
+                      SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, index: index),
 
                       // Top Right Confirm Button
                       SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),

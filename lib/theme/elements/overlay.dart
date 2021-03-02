@@ -255,7 +255,7 @@ class SonrPositionedOverlay extends GetxController {
     _controller.overlays.add(overlay);
   }
 
-  static void dropdown(List<SonrDropdownItem> items, GlobalKey key, ValueChanged<int> onChanged,
+  static void dropdown(List<SonrDropdownItem> items, GlobalKey key, Function(int idx) onChanged,
       {Duration entryDuration = const Duration(milliseconds: 200),
       Offset entryLocation = SonrOffset.Top,
       double height,
@@ -479,7 +479,7 @@ class _DropdownOverlayView extends StatelessWidget {
   final int index; // Index of Overlay
   final List<SonrDropdownItem> items;
   final GlobalKey parentKey;
-  final ValueChanged<int> onChanged;
+  final Function(int idx) onChanged;
   final double height;
   final double width;
   final EdgeInsets margin;

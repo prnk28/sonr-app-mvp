@@ -81,7 +81,7 @@ class DropdownAddView extends GetView<ProfileController> {
           // @ Drop Down
           SonrDropdown.social(
             controller.options,
-            onChanged: (index) => controller.provider(index),
+            index: controller.dropdownIndex,
             width: Get.width - 80,
             margin: EdgeInsets.only(left: 12, right: 12),
           ),

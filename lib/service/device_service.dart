@@ -89,7 +89,7 @@ class DeviceService extends GetxService {
 
   // ^ Sets Permission Status from Service ^ //
   Future setPermissionStatus() async {
-    networkTriggered(_prefs.containsKey("location-triggered"));
+    networkTriggered(_prefs.containsKey("network-triggered"));
     cameraPermitted(await Permission.camera.isGranted);
     galleryPermitted(await Permission.mediaLibrary.isGranted);
     locationPermitted(await Permission.locationWhenInUse.isGranted);
@@ -196,7 +196,7 @@ class DeviceService extends GetxService {
         barrierDismissible: false);
 
     await SonrCore.requestLocalNetwork();
-    Get.find<DeviceService>()._prefs.setBool("location-triggered", true);
+    Get.find<DeviceService>()._prefs.setBool("network-triggered", true);
     Get.find<DeviceService>().networkTriggered(true);
     return true;
   }
