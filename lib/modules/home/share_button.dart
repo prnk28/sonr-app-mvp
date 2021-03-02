@@ -114,7 +114,7 @@ class _ShareButtonRow extends GetView<HomeController> {
                   controller.closeShare();
                   Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                     SonrService.queueMedia(file);
-                    Get.to("/transfer");
+                    Get.offNamed("/transfer");
                   }), isDismissible: false);
                 },
                 type: ArtboardType.Gallery,

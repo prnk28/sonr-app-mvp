@@ -7,7 +7,7 @@ export 'home_screen.dart';
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<MediaController>(MediaController());
+    Get.put<MediaController>(MediaController(), permanent: true);
     Get.put<HomeController>(HomeController());
     Get.lazyPut<SearchCardController>(() => SearchCardController());
   }

@@ -1,80 +1,81 @@
 import 'package:sonr_app/core/core.dart';
-import 'package:sonr_app/core/core.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
 import 'share_button.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return GetX<HomeController>(
-        init: HomeController(),
-        builder: (controller) {
-          return SonrScaffold.appBarLeadingAction(
-              resizeToAvoidBottomPadding: false,
-              title: "Home",
-              leading: SonrButton.circle(
-                icon: SonrIcon.profile,
-                onPressed: () => Get.offNamed("/profile"),
-                shape: NeumorphicShape.convex,
-              ),
-              action: SonrButton.circle(
-                  icon: SonrIcon.search,
-                  shape: NeumorphicShape.convex,
-                  onPressed: () {
-                    if (controller.status.value != HomeState.None) {
-                      SonrOverlay.show(
-                        SearchView(),
-                        barrierDismissible: true,
-                      );
-                    } else {
-                      SonrSnack.error("No Cards Found");
-                    }
-                  }),
-              floatingActionButton: ShareButton(),
-              body: NeumorphicBackground(
-                backendColor: Colors.transparent,
+    // Initialize
+    MediaService.checkInitialShare();
+    controller.toggleIndex(1);
+    controller.toggleIndex.refresh();
+
+    // Build Scaffold
+    return SonrScaffold.appBarLeadingAction(
+        resizeToAvoidBottomPadding: false,
+        title: "Home",
+        leading: SonrButton.circle(
+          icon: SonrIcon.profile,
+          onPressed: () => Get.offNamed("/profile"),
+          shape: NeumorphicShape.convex,
+        ),
+        action: SonrButton.circle(
+            icon: SonrIcon.search,
+            shape: NeumorphicShape.convex,
+            onPressed: () {
+              if (controller.status.value != HomeState.None) {
+                SonrOverlay.show(
+                  SearchView(),
+                  barrierDismissible: true,
+                );
+              } else {
+                SonrSnack.error("No Cards Found");
+              }
+            }),
+        floatingActionButton: ShareButton(),
+        body: NeumorphicBackground(
+          backendColor: Colors.transparent,
+          child: Container(
+            width: Get.width,
+            height: Get.height,
+            child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              GestureDetector(
+                onTap: () => controller.closeShare(),
                 child: Container(
-                  width: Get.width,
-                  height: Get.height,
-                  child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    GestureDetector(
-                      onTap: () => controller.closeShare(),
-                      child: Container(
-                        padding: EdgeInsets.only(top: 10),
-                        margin: EdgeInsets.only(left: 30, right: 30),
-                        child: Obx(() => NeumorphicToggle(
-                              selectedIndex: controller.toggleIndex.value,
-                              onChanged: (val) => controller.setToggleCategory(val),
-                              thumb: GestureDetector(
-                                  onDoubleTap: () => controller.jumpToStart(),
-                                  onLongPress: () => controller.jumpToEnd(),
-                                  child: Center(child: buildView(controller.toggleIndex.value))),
-                              children: [
-                                ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.disabled, size: 16))),
-                                ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
-                                ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.disabled, size: 16))),
-                                //ToggleElement(),
-                              ],
-                            )),
-                      ),
-                    ),
-                    TransferCardGrid(controller),
-                    Spacer()
-                  ]),
+                  padding: EdgeInsets.only(top: 10),
+                  margin: EdgeInsets.only(left: 30, right: 30),
+                  child: Obx(() => NeumorphicToggle(
+                        selectedIndex: controller.toggleIndex.value,
+                        onChanged: (val) => controller.setToggleCategory(val),
+                        thumb: GestureDetector(
+                            onDoubleTap: () => controller.jumpToStart(),
+                            onLongPress: () => controller.jumpToEnd(),
+                            child: Center(child: Obx(() => buildView()))),
+                        children: [
+                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.disabled, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.disabled, size: 16))),
+                          //ToggleElement(),
+                        ],
+                      )),
                 ),
-              ));
-        });
+              ),
+              TransferCardGrid(),
+              Spacer()
+            ]),
+          ),
+        ));
   }
 
   // ^ Helper Method for Category Filter ^ //
-  Widget buildView(int idx) {
+  Widget buildView() {
     // Change Category
-    if (idx == 0) {
+    if (controller.toggleIndex.value == 0) {
       return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
-    } else if (idx == 1) {
+    } else if (controller.toggleIndex.value == 1) {
       return SonrIcon.neumorphicGradient(SonrIconData.all_categories, FlutterGradientNames.eternalConstance, size: 22.5);
-    } else if (idx == 2) {
+    } else if (controller.toggleIndex.value == 2) {
       return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
     } else {
       return SonrIcon.neumorphicGradient(SonrIconData.url, FlutterGradientNames.sugarLollipop, size: 24);
@@ -82,10 +83,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class TransferCardGrid extends StatelessWidget {
-  final HomeController controller;
-
-  const TransferCardGrid(this.controller, {Key key}) : super(key: key);
+class TransferCardGrid extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     // Create Page Controller

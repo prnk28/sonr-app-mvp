@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:sonr_app/core/core.dart';
-import 'package:sonr_app/core/core.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
@@ -21,12 +20,7 @@ class HomeController extends GetxController {
   // References
   PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
-
-  // ^ Controller Constructer ^
-  onInit() {
-    // Add Stream Handlers
-    cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
-
+  HomeController() {
     // Set Initial Status
     if (cards.length > 0) {
       status(HomeState.Ready);
@@ -38,6 +32,12 @@ class HomeController extends GetxController {
         status(HomeState.None);
       }
     }
+  }
+
+  // ^ Controller Constructer ^
+  onInit() {
+    // Add Stream Handlers
+    cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
 
     // Initialize
     MediaService.checkInitialShare();
