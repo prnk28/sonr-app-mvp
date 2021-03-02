@@ -5,7 +5,7 @@ import 'dart:io';
 
 // ^ MediaPicker Sheet View ^ //
 class PickerSheet extends StatelessWidget {
-  final Function(File file) onMediaSelected;
+  final Function(MediaFile file) onMediaSelected;
   PickerSheet({@required this.onMediaSelected});
 
   @override
@@ -45,13 +45,13 @@ class PickerSheet extends StatelessWidget {
                             height: 368,
                             child: GridView.builder(
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                                itemCount: controller.currentMedia.length,
+                                itemCount: controller.album.length,
                                 itemBuilder: (context, index) {
-                                  return _SonrMediaButton(
-                                    MediaGalleryItem(index, controller.currentMedia[index]),
-                                    controller.selectedIndex.value == index,
-                                    (idx) => controller.selectedIndex(idx),
-                                  );
+                                  return Obx(() => _SonrMediaButton(
+                                        MediaGalleryItem(index, controller.album[index]),
+                                        controller.selectedItem.value.index == index,
+                                        (item) => controller.selectedItem(item),
+                                      ));
                                 }),
                           ))
                       : NeumorphicProgressIndeterminate(),
@@ -65,7 +65,7 @@ class PickerSheet extends StatelessWidget {
 class _SonrMediaButton extends StatefulWidget {
   // Files
   final MediaGalleryItem item;
-  final Function(int) onTap;
+  final Function(MediaGalleryItem) onTap;
   final bool isSelected;
 
   _SonrMediaButton(this.item, this.isSelected, this.onTap, {Key key}) : super(key: key);
@@ -78,7 +78,6 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
   File file;
   Uint8List thumbnail;
   bool loaded = false;
-  OpenResult openResult;
 
   @override
   void initState() {
@@ -94,22 +93,13 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
     });
   }
 
-  Future openFile() async {
-    if (file == null) {
-      file = await widget.item.media.getFile();
-      openResult = await OpenFile.open(file.path);
-    } else {
-      openResult = await OpenFile.open(file.path);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () => openFile(),
+      onLongPress: () => widget.item.openFile(),
       child: NeumorphicButton(
           padding: EdgeInsets.zero,
-          onPressed: () => widget.onTap(widget.item.index),
+          onPressed: () => widget.onTap(widget.item),
           style: widget.isSelected ? SonrStyle.mediaButtonPressed : SonrStyle.mediaButtonDefault,
           child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
             loaded
@@ -135,17 +125,17 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
 // ^ Media Picker Controller ^ //
 class MediaPickerController extends GetxController {
   // Properties
-  final currentMedia = <Media>[].obs;
+  final album = <Media>[].obs;
   final collection = Rx<MediaCollection>();
-  final selectedIndex = (-1).obs;
+  final selectedItem = Rx<MediaGalleryItem>();
   final loaded = false.obs;
-  final Function(File) onMediaSelected;
+  final Function(MediaFile) onMediaSelected;
   MediaPickerController(this.onMediaSelected);
 
   //  Initial Method
   void onInit() {
     MediaService.refreshGallery().then((value) {
-      currentMedia(MediaService.totalMedia);
+      album(MediaService.totalMedia);
       loaded(true);
     });
     super.onInit();
@@ -161,13 +151,17 @@ class MediaPickerController extends GetxController {
     var result = await MediaService.getMediaFromCollection(updatedCollection);
 
     // Set All Media
-    currentMedia.assignAll(result);
+    album.assignAll(result);
     loaded(true);
   }
 
-  // Set Media from Picker
+  // Confirm Selected File
   confirm() async {
-    selectedIndex.value != -1 ? onMediaSelected(await currentMedia[selectedIndex.value].getFile()) : SonrSnack.invalid("No Media Selected");
-    Get.back();
+    if (selectedItem.value != null) {
+      onMediaSelected(await selectedItem.value.getMediaFile());
+      Get.back();
+    } else {
+      SonrSnack.invalid("No Media Selected");
+    }
   }
 }

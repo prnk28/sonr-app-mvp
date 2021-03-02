@@ -9,9 +9,12 @@ class MediaGalleryItem {
   // Media Properties
   final int index;
   final Media media;
+  File file;
+  OpenResult openResult;
   MediaType get type => media.mediaType;
 
   // Thumbnail Properties
+  Uint8List thumbnail;
   final bool highQuality;
   final double maxWidth;
   final double maxHeight;
@@ -19,6 +22,8 @@ class MediaGalleryItem {
   // Constructer + Methods
   MediaGalleryItem(this.index, this.media, {this.maxWidth = 320, this.maxHeight = 320, this.highQuality = false});
   Widget getIcon() => type == MediaType.video ? SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.glassWater, size: 28) : Container();
+
+  // Gets Media Thumbnail
   Future<Uint8List> getThumbnail() async {
     // Get Ratio
     var ratio = min(maxWidth / media.width, maxHeight / media.height);
@@ -27,7 +32,26 @@ class MediaGalleryItem {
     var thumbWidth = (media.width * ratio).round();
     var thumbHeight = (media.height * ratio).round();
 
-    return await media.getThumbnail(width: thumbWidth, height: thumbHeight, highQuality: highQuality);
+    return thumbnail = await media.getThumbnail(width: thumbWidth, height: thumbHeight, highQuality: highQuality);
+  }
+
+  // Gets Media file
+  Future<MediaFile> getMediaFile() async {
+    if (file == null) {
+      return MediaFile(file = await media.getFile(), thumbnail, type == MediaType.video, 0);
+    } else {
+      return MediaFile(file, thumbnail, type == MediaType.video, 0);
+    }
+  }
+
+  // Opens MediaFile
+  Future openFile() async {
+    if (file == null) {
+      file = await media.getFile();
+      openResult = await OpenFile.open(file.path);
+    } else {
+      openResult = await OpenFile.open(file.path);
+    }
   }
 }
 
@@ -35,8 +59,12 @@ class MediaGalleryItem {
 class MediaFile {
   // Media Properties
   final File _file;
-  
+  final Uint8List thumbnail;
+  final bool isVideo;
+  final int duration;
+
+  String get path => _file.path;
 
   // Constructer
-  MediaFile(this._file);
+  MediaFile(this._file, this.thumbnail, this.isVideo, this.duration);
 }
