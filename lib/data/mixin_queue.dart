@@ -132,12 +132,12 @@ class TransferQueueItem {
     return TransferQueueItem(Payload.CONTACT);
   }
 
-  factory TransferQueueItem.media(String path, int duration, String thumbPath, Uint8List thumbnailData) {
+  factory TransferQueueItem.media(String path, Uint8List thumbnailData, {int duration = 0, bool isVideo = false}) {
     var file = InviteRequest_FileInfo(
       path: path,
       duration: duration,
-      thumbpath: thumbPath,
-      thumbdata: thumbnailData,
+      thumbnail: thumbnailData,
+      isVideo: isVideo,
     );
     return TransferQueueItem(Payload.MEDIA, media: file);
   }

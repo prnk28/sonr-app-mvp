@@ -104,10 +104,10 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Set Payload for Media ^ //
-  static queueMedia(String path, {int duration = -1, String thumbPath = "", Uint8List thumbnailData}) async {
+  static queueMedia(String path, {Uint8List thumbnailData, int duration = 0, bool isVideo = false}) async {
     // - Check Connected -
     if (to._connected.conn) {
-      to.addToQueue(TransferQueueItem.media(path, duration, thumbPath, thumbnailData));
+      to.addToQueue(TransferQueueItem.media(path, thumbnailData, duration: duration, isVideo: isVideo));
     }
   }
 

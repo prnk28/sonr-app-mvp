@@ -10,7 +10,11 @@ const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
 
 class SonrSheet {
-  
+  final Widget child;
+
+  SonrSheet(this.child){
+    Get.dialog(child, );
+  }
 }
 
 
