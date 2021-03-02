@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/core/core.dart';
-import 'package:sonr_app/service/sonr_service.dart';
 import '../theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 

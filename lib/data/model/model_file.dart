@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/core/core.dart';
-import '../core/core.dart';
+import '../../core/core.dart';
 
 // ^ Media Picker Item Data ^ //
 class MediaGalleryItem {

@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/picker_sheet.dart';
-import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/core/core.dart';
 import 'home_controller.dart';
-import 'package:sonr_app/core/core.dart';
 
 // @ Widget Constants
 const double K_ITEM_SPACING = 12;

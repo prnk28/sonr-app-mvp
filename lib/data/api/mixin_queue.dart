@@ -6,7 +6,7 @@ import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 
-import 'model_file.dart';
+import '../model/model_file.dart';
 
 class TransferQueue {
   // Properties

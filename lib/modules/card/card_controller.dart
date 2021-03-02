@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/core/core.dart';
 import 'package:sonr_app/modules/card/progress_view.dart';
-import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_app/service/sql_service.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 export 'contact_view.dart';

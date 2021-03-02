@@ -1,5 +1,5 @@
 import 'dart:math';
-import '../core/core.dart';
+import '../../core/core.dart';
 
 extension DataUtils on int {
   String sizeText() {

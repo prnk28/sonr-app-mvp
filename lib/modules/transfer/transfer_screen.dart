@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/sonr_service.dart';
 import 'package:sonr_app/core/core.dart';
 import 'compass_view.dart';
 import 'peer_widget.dart';
