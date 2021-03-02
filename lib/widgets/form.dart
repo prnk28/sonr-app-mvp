@@ -84,7 +84,7 @@ class SonrDropdown extends StatelessWidget {
 
   // References
   final List<SonrDropdownItem> items;
-  final String title;
+  final SonrDropdownItem initial;
   final RxInt index = (-1).obs;
 
   // * Builds Social Media Dropdown * //
@@ -93,7 +93,7 @@ class SonrDropdown extends StatelessWidget {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].icon(IconType.Gradient));
     });
-    return SonrDropdown(items, "Choose", onChanged, margin, width ?? Get.width - 250, height);
+    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), onChanged, margin, width ?? Get.width - 250, height);
   }
 
   // * Builds Albums Dropdown * //
@@ -149,10 +149,17 @@ class SonrDropdown extends StatelessWidget {
         return null;
       }
     });
-    return SonrDropdown(items, "All", onChanged, margin, width ?? Get.width - 250, height, selectedIconPosition: WidgetPosition.Left);
+    return SonrDropdown(
+        items,
+        SonrDropdownItem(true, "All", icon: SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20)),
+        onChanged,
+        margin,
+        width ?? Get.width - 250,
+        height,
+        selectedIconPosition: WidgetPosition.Left);
   }
 
-  SonrDropdown(this.items, this.title, this.onChanged, this.margin, this.width, this.height,
+  SonrDropdown(this.items, this.initial, this.onChanged, this.margin, this.width, this.height,
       {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right});
   @override
   Widget build(BuildContext context) {
@@ -182,8 +189,9 @@ class SonrDropdown extends StatelessWidget {
     // @ Default Widget
     if (idx == -1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Expanded(child: SonrText.medium(title, color: Colors.black87, size: height / 3)),
+        initial.hasIcon ? initial.icon : Container(),
         Padding(padding: EdgeInsets.all(4)),
+        Expanded(child: SonrText.medium(initial.text, color: Colors.black87, size: height / 3)),
         isOpen
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
             : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),

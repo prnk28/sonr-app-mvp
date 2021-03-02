@@ -176,4 +176,11 @@ extension TransferCardUtils on TransferCard {
   SonrIcon get ownerPlatformIcon {
     return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
   }
+
+  String get payloadString {
+    if (this.payload == Payload.PDF) {
+      return this.payload.toString();
+    }
+    return this.payload.toString().capitalizeFirst;
+  }
 }

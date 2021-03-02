@@ -205,9 +205,8 @@ class _FileCardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     // Extract Data
     var metadata = card.metadata;
-    var mimeType = card.metaMimeString;
+    var payload = card.payloadString;
     var size = card.metaSizeString;
-    var hasExported = card.hasExportedString;
 
     // Build Overlay View
     return Padding(
@@ -218,7 +217,7 @@ class _FileCardInfo extends StatelessWidget {
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            SonrText.header("$mimeType From"),
+            SonrText.header("$payload From"),
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -253,13 +252,6 @@ class _FileCardInfo extends StatelessWidget {
               SonrText.bold("Kind ", size: 16),
               Spacer(),
               SonrText.medium("${metadata.mime.value}", size: 16),
-            ]),
-
-            // File Exported
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Saved to Gallery ", size: 16),
-              Spacer(),
-              SonrText.medium("$hasExported", size: 16),
             ]),
 
             Padding(padding: EdgeInsets.all(4)),

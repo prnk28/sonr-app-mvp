@@ -80,16 +80,16 @@ class _SonrMediaButton extends GetView<MediaPickerController> {
 
     // Build View
     return GestureDetector(
-      // onLongPress: () async {
-      //   if (file.isBlank) {
-      //     file(await media.getFile());
-      //     var result = await OpenFile.open(file.value.path);
-      //     print(result);
-      //   } else {
-      //     var result = await OpenFile.open(file.value.path);
-      //     print(result);
-      //   }
-      // },
+      onLongPress: () async {
+        if (file.isBlank) {
+          file(await media.getFile());
+          var result = await OpenFile.open(file.value.path);
+          print(result);
+        } else {
+          var result = await OpenFile.open(file.value.path);
+          print(result);
+        }
+      },
       child: ObxValue(
           (RxBool isPressed) => NeumorphicButton(
               padding: EdgeInsets.zero,
@@ -143,9 +143,10 @@ class MediaPickerController extends GetxController {
 
   // ^ Initial Method ^ //
   void onInit() {
-    MediaService.refreshGallery();
-    currentMedia(MediaService.totalMedia);
-    loaded(true);
+    MediaService.refreshGallery().then((value) {
+      currentMedia(MediaService.totalMedia);
+      loaded(true);
+    });
     super.onInit();
   }
 

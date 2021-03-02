@@ -50,7 +50,7 @@ class RegisterScreen extends GetView<RegisterController> {
                         child: SonrButton.rectangle(
                           text: SonrText.medium("Submit"),
                           onPressed: () {
-                            FocusScope.of(Get.context).unfocus();
+                            FocusScope.of(context).unfocus();
                             controller.submit();
                           },
                           margin: EdgeInsets.only(top: 12),
