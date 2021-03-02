@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:sonr_app/core/core.dart';
 import 'package:better_player/better_player.dart';
-
 class MediaPreviewView extends StatelessWidget {
   final MediaFile mediaFile;
   final Function(bool decision) onDecision;

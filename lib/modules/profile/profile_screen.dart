@@ -3,7 +3,6 @@ import 'package:sonr_app/core/core.dart';
 import 'edit_dialog.dart';
 import 'tile_item.dart';
 import 'profile_controller.dart';
-import 'package:sonr_app/core/core.dart';
 import 'create_tile.dart';
 
 class ProfileScreen extends GetView<ProfileController> {

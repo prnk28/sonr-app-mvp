@@ -100,7 +100,7 @@ class _ShareButtonRow extends GetView<HomeController> {
                   controller.closeShare();
 
                   // Go to Camera View
-                  Get.to(CameraView(onMediaSelected: (MediaFile file) {
+                  Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
                     SonrService.queueMedia(file);
                     Get.offNamed("/transfer");
                   }), transition: Transition.downToUp);

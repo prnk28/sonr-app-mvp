@@ -1,7 +1,5 @@
 import 'package:rive/rive.dart';
-
 import 'peer_controller.dart';
-import 'package:sonr_app/core/core.dart';
 import 'package:sonr_app/core/core.dart';
 
 const double K_BUBBLE_SIZE = 90;

@@ -10,15 +10,40 @@ import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/core/core.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'capture_preview.dart';
+
+enum CameraViewType { Default, Preview, Avatar, QRCode }
+
 class CameraView extends GetView<CameraController> {
+  // Properties
   final Function(MediaFile file) onMediaSelected;
-  CameraView({@required this.onMediaSelected});
+  final CameraViewType type;
+  CameraView({@required this.onMediaSelected, this.type = CameraViewType.Default});
+
+  factory CameraView.withPreview({@required Function(MediaFile file) onMediaSelected}) {
+    return CameraView(onMediaSelected: onMediaSelected, type: CameraViewType.Preview);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Listen to Updates
     controller.hasCaptured.listen((val) {
       if (val) {
-        onMediaSelected(controller.getMediaFile());
+        if (type == CameraViewType.Default) {
+          onMediaSelected(controller.getMediaFile());
+        } else if (type == CameraViewType.Preview) {
+          Get.dialog(
+              MediaPreviewView(
+                  mediaFile: controller.getMediaFile(),
+                  onDecision: (value) {
+                    if (value) {
+                      onMediaSelected(controller.getMediaFile());
+                    } else {
+                      Get.back();
+                    }
+                  }),
+              barrierDismissible: false);
+        }
       }
     });
 

@@ -1,5 +1,4 @@
 import 'package:sonr_app/core/core.dart';
-import 'package:sonr_app/core/core.dart';
 
 class EditDialog extends GetView<EditDialogController> {
   final String headerText;
