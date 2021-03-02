@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:sonr_app/core/core.dart';
 import 'package:better_player/better_player.dart';
+
 class MediaPreviewView extends StatelessWidget {
   final MediaFile mediaFile;
   final Function(bool decision) onDecision;
@@ -8,10 +9,9 @@ class MediaPreviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      top: false,
-      bottom: false,
-      child: Obx(() {
-        return Stack(
+        top: false,
+        bottom: false,
+        child: Stack(
           children: [
             mediaFile.isVideo
                 // Video Player View
@@ -64,8 +64,6 @@ class MediaPreviewView extends StatelessWidget {
               ),
             )
           ],
-        );
-      }),
-    );
+        ));
   }
 }

@@ -15,7 +15,7 @@ class TransferScreen extends GetView<TransferController> {
         title: controller.title.value,
         leading: SonrButton.circle(
           icon: SonrIcon.close,
-          onPressed: () => Get.back(),
+          onPressed: () => Get.offNamed("/home/transfer"),
           shape: NeumorphicShape.convex,
         ),
         body: SafeArea(

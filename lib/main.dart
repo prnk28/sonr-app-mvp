@@ -153,7 +153,6 @@ List<GetPage> get K_PAGES => [
       GetPage(
           name: '/transfer',
           page: () => TransferScreen(),
-          fullscreenDialog: true,
           maintainState: false,
           transition: Transition.downToUp,
           curve: Curves.easeIn,

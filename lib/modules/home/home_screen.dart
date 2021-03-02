@@ -6,11 +6,6 @@ import 'share_button.dart';
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    // Initialize
-    MediaService.checkInitialShare();
-    controller.toggleIndex(1);
-    controller.toggleIndex.refresh();
-
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
         resizeToAvoidBottomPadding: false,

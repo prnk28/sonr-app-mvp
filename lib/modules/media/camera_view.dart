@@ -39,7 +39,7 @@ class CameraView extends GetView<CameraController> {
                     if (value) {
                       onMediaSelected(controller.getMediaFile());
                     } else {
-                      Get.back();
+                      controller.clearFromPreview();
                     }
                   }),
               barrierDismissible: false);
@@ -94,7 +94,7 @@ class CameraView extends GetView<CameraController> {
           child: SonrButton.circle(
               intensity: 0.5,
               onPressed: () {
-                Get.offNamed("/home");
+                Get.back();
               },
               icon: SonrIcon.close),
         ),
@@ -267,6 +267,14 @@ class CameraController extends GetxController {
     zoomLevel.listen((value) {
       zoomNotifier.value = 1.0 / value;
     });
+  }
+
+  clearFromPreview() async {
+    hasCaptured(false);
+    _photoCapturePath = "";
+    _videoCapturePath = "";
+    _isVideo = false;
+    Get.back();
   }
 
   // ^ Captures Photo ^ //
