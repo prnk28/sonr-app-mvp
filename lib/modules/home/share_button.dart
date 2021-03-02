@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/media/picker_sheet.dart';
+import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/core/core.dart';
 import 'home_controller.dart';
 
