@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
-import 'package:camerawesome/models/orientations.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -9,10 +8,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'capture_preview.dart';
 
-enum CameraViewType { Default, Preview, Avatar, QRCode }
+enum CameraViewType { Default, Preview }
 
 class CameraView extends GetView<CameraController> {
   // Properties
@@ -124,8 +122,9 @@ class _CameraToolsView extends GetView<CameraController> {
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Switch Camera
             Obx(() => GestureDetector(
-                child: SonrIcon.neumorphic(controller.isFlipped.value ? Icons.camera_front_rounded : Icons.swap_vertical_circle_sharp,
-                    size: 36, style: NeumorphicStyle(color: Colors.grey)),
+                child: SonrIcon.neumorphicGradient(
+                    controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded, FlutterGradientNames.loveKiss,
+                    size: 36),
                 onTap: () async {
                   HapticFeedback.heavyImpact();
                   controller.toggleCameraSensor();
@@ -136,7 +135,11 @@ class _CameraToolsView extends GetView<CameraController> {
 
             // Media Gallery Picker
             GestureDetector(
-                child: SonrIcon.neumorphic(Icons.perm_media, size: 36, style: NeumorphicStyle(color: Colors.grey)),
+                child: SonrIcon.neumorphicGradient(
+                  Icons.perm_media,
+                  FlutterGradientNames.octoberSilence,
+                  size: 36,
+                ),
                 onTap: () async {
                   HapticFeedback.heavyImpact();
                   // Check for Permssions

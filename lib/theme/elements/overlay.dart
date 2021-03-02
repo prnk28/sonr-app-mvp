@@ -491,35 +491,49 @@ class _DropdownOverlayView extends StatelessWidget {
   Widget build(BuildContext context) {
     RenderBox renderBox = parentKey.currentContext.findRenderObject();
     var size = renderBox.size;
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
-      child: Container(
-        height: (items.length * size.height) / 1.5 + height,
-        width: size.width + width,
-        child: Neumorphic(
-          margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-          style: SonrStyle.dropDownBox,
-          child: ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: NeumorphicButton(
-                  style: SonrStyle.flat,
-                  padding: EdgeInsets.all(10),
-                  onPressed: () {
-                    onChanged(index);
-                    SonrPositionedOverlay.back();
-                  },
-                  child: Stack(children: [items[index]]),
-                ),
-              );
-            },
+    return Stack(children: [
+      Container(
+        padding: EdgeInsets.only(right: 45),
+        alignment: Alignment.topRight,
+        child: ClipPath(
+          clipper: ArrowClipper(),
+          child: Container(
+            width: 17,
+            height: 17,
+            color: Colors.white,
           ),
         ),
       ),
-    );
+      Padding(
+        padding: const EdgeInsets.only(top: 15.0),
+        child: Container(
+          height: (items.length * size.height) / 1.5 + height,
+          width: size.width + width,
+          child: Neumorphic(
+            margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
+            style: SonrStyle.dropDownBox,
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: NeumorphicButton(
+                    style: SonrStyle.flat,
+                    padding: EdgeInsets.all(10),
+                    onPressed: () {
+                      onChanged(index);
+                      SonrPositionedOverlay.back();
+                    },
+                    child: Stack(children: [items[index]]),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      )
+    ]);
   }
 }
 

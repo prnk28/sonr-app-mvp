@@ -25,7 +25,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
       borderRadius: BorderRadius.circular(40),
       backendColor: Colors.transparent,
       child: SonrScaffold.appBarLeadingCustom(
-          leading: IconButton(
+          leading: SonrButton.flat(
               onPressed: () => Get.back(),
               icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 40, style: SonrStyle.appBarIcon)),
           floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),

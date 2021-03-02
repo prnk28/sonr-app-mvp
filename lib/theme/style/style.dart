@@ -21,7 +21,7 @@ export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
 export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
-export 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+export 'package:flutter_custom_clippers/flutter_custom_clippers.dart' hide ArrowClipper;
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'color.dart';

@@ -21,6 +21,23 @@ extension SonrOffset on Offset {
   }
 }
 
+// ^ Arrow Painter for Dropdown ^ //
+class ArrowClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.moveTo(0, size.height);
+    path.lineTo(size.width / 2, size.height / 4);
+    path.lineTo(size.width, size.height);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
 // ^ Expanded Bubble Painter ^ //
 class ExpandedBubblePainter extends NeumorphicPathProvider {
   @override
