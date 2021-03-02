@@ -32,9 +32,6 @@ class URLCard extends GetWidget<TransferCardController> {
         return _URLInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        if (isNewItem) {
-          print("New Card");
-        }
         return _URLItemView(card);
       default:
         return Container();

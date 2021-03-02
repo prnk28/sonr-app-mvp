@@ -33,9 +33,6 @@ class MediaCard extends GetWidget<TransferCardController> {
         return _MediaInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        if (isNewItem) {
-          print("New Card");
-        }
         return _MediaItemView(card, controller);
       default:
         return Container();
