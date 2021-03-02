@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:math';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/core/core.dart';
-import '../../core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
+import '../../theme/theme.dart';
 
 // ^ Media Picker Item Data ^ //
 class MediaGalleryItem {

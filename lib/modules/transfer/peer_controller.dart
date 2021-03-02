@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
 
 class PeerController extends GetxController {

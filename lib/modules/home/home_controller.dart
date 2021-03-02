@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }

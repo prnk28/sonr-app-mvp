@@ -1,5 +1,5 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'edit_dialog.dart';
 import 'tile_item.dart';
 import 'profile_controller.dart';

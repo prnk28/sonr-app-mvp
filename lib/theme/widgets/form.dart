@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:media_gallery/media_gallery.dart';
-import '../theme/theme.dart';
+import '../style/style.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class SonrForm extends StatelessWidget {

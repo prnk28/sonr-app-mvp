@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';

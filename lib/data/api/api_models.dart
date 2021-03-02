@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_core/sonr_core.dart';
 

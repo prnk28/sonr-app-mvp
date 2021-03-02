@@ -1,4 +1,4 @@
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
 import 'share_button.dart';

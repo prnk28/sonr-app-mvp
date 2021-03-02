@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:get/get.dart';
-import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
 

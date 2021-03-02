@@ -3,10 +3,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/card/card_controller.dart';
-import '../theme/theme.dart';
+import '../style/style.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
-import '../core.dart';
+import '../theme.dart';
 import 'form.dart';
 
 // ** Class Controls Active Overlays ** //

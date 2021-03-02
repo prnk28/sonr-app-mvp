@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/core/core.dart';
-import '../theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
+import '../style/style.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
