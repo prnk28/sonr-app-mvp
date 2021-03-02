@@ -1,5 +1,5 @@
 // Custom Theme Aspects
-export '../widgets/header.dart';
+export '../elements/header.dart';
 export 'button.dart';
 export 'color.dart';
 export 'icon.dart';
@@ -8,11 +8,11 @@ export 'snackbar.dart';
 export 'text.dart';
 
 // Global UI Widgets
-export '../widgets/animation.dart';
-export '../widgets/painter.dart';
-export '../widgets/sheet.dart';
-export '../widgets/overlay.dart';
-export '../widgets/form.dart';
+export '../elements/animation.dart';
+export '../elements/painter.dart';
+export '../elements/sheet.dart';
+export '../elements/overlay.dart';
+export '../elements/form.dart';
 
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';
