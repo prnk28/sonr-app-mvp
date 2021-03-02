@@ -24,32 +24,17 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
     return NeumorphicBackground(
       borderRadius: BorderRadius.circular(40),
       backendColor: Colors.transparent,
-      child: Neumorphic(
-          style: NeumorphicStyle(color: SonrColor.base),
-          child: Column(children: [
-            // @ Header Buttons
-            Container(
-                height: kToolbarHeight + 16 * 2,
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      //  Top Left Close/Cancel Button
-                      SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
-
-                      // Drop Down
-                      SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, index: index),
-
-                      // Top Right Confirm Button
-                      SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
-                    ])),
-
+      child: SonrScaffold.appBarLeadingCustom(
+          leading: IconButton(
+              onPressed: () => Get.back(),
+              icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 40, style: SonrStyle.appBarIcon)),
+          floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
+          body: Column(children: [
             // @ Create Grid View
             ValueListenableBuilder(
                 builder: (BuildContext context, List<Media> list, Widget child) {
                   return Container(
-                    width: Get.width - 10,
+                    margin: EdgeInsets.symmetric(horizontal: 10),
                     height: 368,
                     child: GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
@@ -68,7 +53,8 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
                   );
                 },
                 valueListenable: _mediaList),
-          ])),
+          ]),
+          middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 140, index: index, margin: EdgeInsets.only(left: 12, right: 12))),
     );
   }
 

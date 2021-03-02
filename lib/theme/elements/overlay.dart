@@ -485,7 +485,7 @@ class _DropdownOverlayView extends StatelessWidget {
   final EdgeInsets margin;
 
   // Constructer
-  _DropdownOverlayView(this.index, this.items, this.parentKey, this.onChanged, {this.height, this.width, this.margin});
+  _DropdownOverlayView(this.index, this.items, this.parentKey, this.onChanged, {this.height = 20, this.width = 20, this.margin});
 
   @override
   Widget build(BuildContext context) {
@@ -494,10 +494,10 @@ class _DropdownOverlayView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
       child: Container(
-        height: height ?? (items.length * size.height) / 1.5 + 20,
-        width: width ?? size.width,
+        height: (items.length * size.height) / 1.5 + height,
+        width: size.width + width,
         child: Neumorphic(
-          margin: margin ?? EdgeInsets.symmetric(horizontal: 12),
+          margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
           style: SonrStyle.dropDownBox,
           child: ListView.builder(
             padding: EdgeInsets.zero,

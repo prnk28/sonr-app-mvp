@@ -74,6 +74,7 @@ class SonrDropdown extends StatelessWidget {
   final EdgeInsets margin;
   final double width;
   final double height;
+  final int selectedFlex;
 
   // Overlay Properties
   final double overlayHeight;
@@ -92,7 +93,8 @@ class SonrDropdown extends StatelessWidget {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].icon(IconType.Gradient));
     });
-    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), index, margin, width ?? Get.width - 250, height);
+    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), index, margin, width ?? Get.width - 250, height,
+        overlayWidth: 20, overlayHeight: -80, selectedFlex: 6, selectedIconPosition: WidgetPosition.Left);
   }
 
   // * Builds Albums Dropdown * //
@@ -155,11 +157,14 @@ class SonrDropdown extends StatelessWidget {
         margin,
         width ?? Get.width - 250,
         height,
+        overlayWidth: 70,
+        overlayHeight: 100,
+        selectedFlex: 2,
         selectedIconPosition: WidgetPosition.Left);
   }
 
   SonrDropdown(this.items, this.initial, this.index, this.margin, this.width, this.height,
-      {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right});
+      {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right, this.selectedFlex});
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
@@ -187,13 +192,16 @@ class SonrDropdown extends StatelessWidget {
   _buildSelected(int index) {
     // @ Default Widget
     if (index == -1) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Spacer(),
         initial.hasIcon ? initial.icon : Container(),
         Padding(padding: EdgeInsets.all(4)),
-        Expanded(child: SonrText.medium(initial.text, color: Colors.black87, size: height / 3)),
+        SonrText.medium(initial.text, color: Colors.black87, size: 18),
+        Spacer(flex: selectedFlex),
         Get.find<SonrPositionedOverlay>().overlays.length > 0
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
             : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
+        Spacer(),
       ]);
     }
 
@@ -201,25 +209,26 @@ class SonrDropdown extends StatelessWidget {
     else {
       var item = items[index];
       if (selectedIconPosition == WidgetPosition.Left) {
-        return Row(
-            textBaseline: TextBaseline.alphabetic,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              item.hasIcon ? item.icon : Container(),
-              Padding(padding: EdgeInsets.only(right: 6)),
-              SonrText.medium(item.text, color: Colors.black87, size: 18),
-            ]);
+        return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Spacer(),
+          item.hasIcon ? item.icon : Container(),
+          Padding(padding: EdgeInsets.only(right: 10)),
+          SonrText.medium(item.text, color: Colors.black87, size: 18),
+          Spacer(flex: selectedFlex),
+          Get.find<SonrPositionedOverlay>().overlays.length > 0
+              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
+              : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
+          Spacer(),
+        ]);
       } else {
-        return Row(
-            textBaseline: TextBaseline.alphabetic,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SonrText.medium(item.text, color: Colors.black87, size: 18),
-              Padding(padding: EdgeInsets.only(right: 6)),
-              item.hasIcon ? item.icon : Container(),
-            ]);
+        return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          SonrText.medium(item.text, color: Colors.black87, size: 18),
+          Padding(padding: EdgeInsets.only(right: 6)),
+          item.hasIcon ? item.icon : Container(),
+          Get.find<SonrPositionedOverlay>().overlays.length > 0
+              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
+              : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
+        ]);
       }
     }
   }
