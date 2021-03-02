@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -28,4 +29,14 @@ class MediaGalleryItem {
 
     return await media.getThumbnail(width: thumbWidth, height: thumbHeight, highQuality: highQuality);
   }
+}
+
+// ^ Media Picker Selected File ^ //
+class MediaFile {
+  // Media Properties
+  final File _file;
+  
+
+  // Constructer
+  MediaFile(this._file);
 }

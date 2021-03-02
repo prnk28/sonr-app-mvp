@@ -114,7 +114,9 @@ class _ShareButtonRow extends GetView<HomeController> {
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.closeShare();
-                  Get.bottomSheet(PickerSheet(), isDismissible: false);
+                  Get.bottomSheet(PickerSheet(onMediaSelected: (file) {
+                    
+                  }), isDismissible: false);
                 },
                 type: ArtboardType.Gallery,
               ),

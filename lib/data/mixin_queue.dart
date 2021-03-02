@@ -132,10 +132,9 @@ class TransferQueueItem {
     return TransferQueueItem(Payload.CONTACT);
   }
 
-  factory TransferQueueItem.media(String path, bool hasThumbnail, int duration, String thumbPath, Uint8List thumbnailData) {
+  factory TransferQueueItem.media(String path, int duration, String thumbPath, Uint8List thumbnailData) {
     var file = InviteRequest_FileInfo(
       path: path,
-      hasThumbnail: hasThumbnail,
       duration: duration,
       thumbpath: thumbPath,
       thumbdata: thumbnailData,

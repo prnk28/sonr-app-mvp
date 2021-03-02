@@ -9,6 +9,12 @@ import 'package:sonr_core/sonr_core.dart';
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
 
+class SonrSheet {
+  
+}
+
+
+
 // ^ Share from External App BottomSheet View ^ //
 class ShareSheet extends StatelessWidget {
   // Properties

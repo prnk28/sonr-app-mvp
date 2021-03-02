@@ -5,8 +5,8 @@ import 'dart:io';
 
 // ^ MediaPicker Sheet View ^ //
 class PickerSheet extends StatelessWidget {
-  final Function(File) onMediaSelected;
-  PickerSheet({this.onMediaSelected});
+  final Function(File file) onMediaSelected;
+  PickerSheet({@required this.onMediaSelected});
 
   @override
   Widget build(BuildContext context) {
