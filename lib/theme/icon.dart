@@ -125,14 +125,8 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get info => SonrIcon.gradient(SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
-  static SonrIcon get close => SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36, style: SonrStyle.appBarIcon);
-  static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
+
   static SonrIcon get invite => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.aquaGuidance, size: 28);
-  static SonrIcon get profile =>
-      SonrIcon.neumorphicGradient(SonrIconData.profile, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
-  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
-  static SonrIcon get more =>
-      SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get settings => SonrIcon.gradient(SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get multiSettings => SonrIcon.gradient(SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get send => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
@@ -141,6 +135,15 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.fabledSunset, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
   static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
+
+  // ^ AppBar Icons ^ //
+  static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36, style: SonrStyle.appBarIcon);
+  static SonrIcon get profile =>
+      SonrIcon.neumorphicGradient(SonrIconData.profile, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
+  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
+  static SonrIcon get more =>
+      SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
+  static SonrIcon get close => SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 36, style: SonrStyle.appBarIcon);
 
   // ^ Build View of Icon ^ //
   @override
