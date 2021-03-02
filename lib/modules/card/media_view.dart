@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/core/core.dart';
 
 class MediaCard extends GetWidget<TransferCardController> {
   // References

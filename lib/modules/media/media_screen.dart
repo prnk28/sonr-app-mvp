@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/core/core.dart';
 import 'camera_view.dart';
 import 'preview_view.dart';
 
@@ -73,25 +73,6 @@ class MediaController extends GetxController {
     Get.find<MediaController>().state.refresh();
   }
 
-  // ^ Confirm with Media Picker Collection ^ //
-  static confirmSelection() async {
-    // Validate File
-    if (Get.find<MediaController>()._selectedMedia != null) {
-      // Retreive File and Process
-      File mediaFile = await Get.find<MediaController>()._selectedMedia.getFile();
-
-      // Check for Thumbnail
-      if (Get.find<MediaController>()._selectedThumbnail != null) {
-        SonrService.queueMedia(mediaFile.path, thumbnailData: Get.find<MediaController>()._selectedThumbnail);
-      } else {
-        SonrService.queueMedia(mediaFile.path);
-      }
-
-      // Go to Transfer
-      Get.offNamed("/transfer");
-    }
-  }
-
   // ^ Confirm with Captured Media ^ //
   static confirmCaptured() {
     // @ Get Data
@@ -103,11 +84,11 @@ class MediaController extends GetxController {
     if (isVideo) {
       // Save Video
       MediaService.saveCapture(videoPath, isVideo);
-      SonrService.queueMedia(videoPath);
+      //SonrService.queueMedia(videoPath);
     } else {
       // Save Photo
       MediaService.saveCapture(photoPath, isVideo);
-      SonrService.queueMedia(photoPath);
+      //SonrService.queueMedia(photoPath);
     }
 
     // Go to Transfer

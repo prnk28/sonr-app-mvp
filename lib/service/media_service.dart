@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'sonr_service.dart';

@@ -6,6 +6,8 @@ import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
 
+import 'model_file.dart';
+
 class TransferQueue {
   // Properties
   List<TransferQueueItem> transferQueue = <TransferQueueItem>[];
@@ -132,12 +134,12 @@ class TransferQueueItem {
     return TransferQueueItem(Payload.CONTACT);
   }
 
-  factory TransferQueueItem.media(String path, Uint8List thumbnailData, {int duration = 0, bool isVideo = false}) {
+  factory TransferQueueItem.media(MediaFile media) {
     var file = InviteRequest_FileInfo(
-      path: path,
-      duration: duration,
-      thumbnail: thumbnailData,
-      isVideo: isVideo,
+      path: media.path,
+      duration: media.duration,
+      thumbnail: media.thumbnail,
+      isVideo: media.isVideo,
     );
     return TransferQueueItem(Payload.MEDIA, media: file);
   }

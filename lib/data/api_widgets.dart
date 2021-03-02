@@ -1,5 +1,4 @@
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 
 // ^ Edge Insets Helper Extensions ^ //
 extension EdgeInsetsX on EdgeInsets {

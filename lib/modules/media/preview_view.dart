@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/core/core.dart';
 import 'package:sonr_app/modules/media/camera_binding.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'package:better_player/better_player.dart';
 
 class MediaPreviewView extends GetView<PreviewController> {

@@ -1,9 +1,9 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/core/core.dart';
 import 'edit_dialog.dart';
 import 'tile_item.dart';
 import 'profile_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'create_tile.dart';
 
 class ProfileScreen extends GetView<ProfileController> {

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/core/core.dart';
 import 'home_controller.dart';
 
 class SearchView extends GetView<SearchCardController> {

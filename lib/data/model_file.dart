@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_app/theme/theme.dart';
-import 'constants.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/core/core.dart';
+import '../core/core.dart';
 
 // ^ Media Picker Item Data ^ //
 class MediaGalleryItem {
@@ -67,4 +68,24 @@ class MediaFile {
 
   // Constructer
   MediaFile(this._file, this.thumbnail, this.isVideo, this.duration);
+
+  factory MediaFile.externalShare(SharedMediaFile mediaShared) {
+    // Initialize
+    int duration = 0;
+    Uint8List thumbnail = Uint8List(0);
+    File file = File(mediaShared.path);
+    bool isVideo = mediaShared.type == SharedMediaType.VIDEO;
+
+    // Get Video Thumbnail
+    if (isVideo) {
+      duration = mediaShared.duration;
+      File thumbFile = File(mediaShared.thumbnail);
+      thumbFile.readAsBytes().then((value) {
+        thumbnail = value;
+      });
+    }
+
+    // Return MediaFile
+    return MediaFile(file, thumbnail, isVideo, duration);
+  }
 }

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/picker_sheet.dart';
 import 'package:sonr_app/service/sonr_service.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'home_controller.dart';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/core/core.dart';
 
 // @ Widget Constants
 const double K_ITEM_SPACING = 12;
@@ -114,8 +114,9 @@ class _ShareButtonRow extends GetView<HomeController> {
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.closeShare();
-                  Get.bottomSheet(PickerSheet(onMediaSelected: (file) {
-                    
+                  Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
+                    SonrService.queueMedia(file);
+                    Get.to("/transfer");
                   }), isDismissible: false);
                 },
                 type: ArtboardType.Gallery,

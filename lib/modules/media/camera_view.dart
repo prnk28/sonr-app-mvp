@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/modules/media/picker_sheet.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'package:path_provider/path_provider.dart';
 import 'media_screen.dart';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/core/core.dart';
 
 class CameraView extends GetView<CameraController> {
   @override
@@ -118,7 +118,7 @@ class _CameraToolsView extends GetView<CameraController> {
                   // Check for Permssions
                   if (await Permission.photos.request().isGranted) {
                     // Display Bottom Sheet
-                    Get.bottomSheet(PickerSheet(), isDismissible: true);
+                    Get.bottomSheet(MediaPickerSheet(), isDismissible: true);
                   } else {
                     // Display Error
                     SonrSnack.error("Sonr isnt permitted to access your media.");

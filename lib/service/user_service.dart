@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonr_app/data/constants.dart';
+import 'package:sonr_app/core/core.dart';
 
 class UserService extends GetxService {
   // ** User Reactive Properties **

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
+import 'package:sonr_app/core/core.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
@@ -38,6 +38,11 @@ class HomeController extends GetxController {
         status(HomeState.None);
       }
     }
+
+    // Initialize
+    MediaService.checkInitialShare();
+    toggleIndex(1);
+    toggleIndex.refresh();
     super.onInit();
   }
 

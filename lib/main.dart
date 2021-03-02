@@ -1,13 +1,11 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/data/constants.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/core/core.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/media/camera_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
-import 'widgets/overlay.dart';
 
 // ^ Main Method ^ //
 void main() async {
@@ -155,6 +153,7 @@ List<GetPage> get K_PAGES => [
       GetPage(
           name: '/transfer',
           page: () => TransferScreen(),
+          fullscreenDialog: true,
           maintainState: false,
           transition: Transition.downToUp,
           curve: Curves.easeIn,
