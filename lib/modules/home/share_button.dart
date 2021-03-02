@@ -102,7 +102,7 @@ class _ShareButtonRow extends GetView<HomeController> {
                   // Go to Camera View
                   Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
                     SonrService.queueMedia(file);
-                    Get.offNamed("/transfer");
+                    Get.toNamed("/transfer");
                   }), transition: Transition.downToUp);
                 },
                 type: ArtboardType.Camera,
@@ -117,7 +117,7 @@ class _ShareButtonRow extends GetView<HomeController> {
                   controller.closeShare();
                   Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                     SonrService.queueMedia(file);
-                    Get.offNamed("/transfer");
+                    Get.toNamed("/transfer");
                   }), isDismissible: false);
                 },
                 type: ArtboardType.Gallery,

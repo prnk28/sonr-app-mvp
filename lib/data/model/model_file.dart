@@ -33,7 +33,7 @@ class MediaGalleryItem {
     var thumbWidth = (media.width * ratio).round();
     var thumbHeight = (media.height * ratio).round();
 
-    return thumbnail = await media.getThumbnail(width: thumbWidth, height: thumbHeight, highQuality: highQuality);
+    return thumbnail = await media.getThumbnail(width: thumbWidth, height: thumbHeight, highQuality: true);
   }
 
   // Gets Media file

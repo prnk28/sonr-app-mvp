@@ -25,7 +25,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     leading: SonrButton.circle(
                         icon: SonrIcon.close,
                         shape: NeumorphicShape.convex,
-                        onPressed: () => Get.offNamed("/home/profile"),
+                        onPressed: () => Get.back(),
                         intensity: 0.85,
                         shadowLightColor: Colors.lightBlueAccent[100]),
                     action: SonrButton.circle(

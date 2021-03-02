@@ -12,7 +12,7 @@ class HomeScreen extends GetView<HomeController> {
         title: "Home",
         leading: SonrButton.circle(
           icon: SonrIcon.profile,
-          onPressed: () => Get.offNamed("/profile"),
+          onPressed: () => Get.toNamed("/profile"),
           shape: NeumorphicShape.convex,
         ),
         action: SonrButton.circle(

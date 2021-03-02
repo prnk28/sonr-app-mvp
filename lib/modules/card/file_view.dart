@@ -260,7 +260,25 @@ class _FileCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               SonrButton.rectangle(
                 isDisabled: true,
-                onPressed: () {},
+                onPressed: () {
+                  // Prompt Question
+                  SonrOverlay.question(
+                          entryLocation: SonrOffset.Bottom,
+                          title: "Delete",
+                          description: "Are you sure you want to delete this Card?",
+                          acceptTitle: "Continue",
+                          declineTitle: "Cancel")
+                      .then((result) {
+                    // Handle Response
+                    if (result) {
+                      Get.find<SQLService>().deleteCard(card.id);
+                      SonrSnack.success("Deleted File from Sonr.");
+                      SonrOverlay.closeAll();
+                    } else {
+                      SonrOverlay.closeAll();
+                    }
+                  });
+                },
                 text: SonrText.medium("Delete"),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),

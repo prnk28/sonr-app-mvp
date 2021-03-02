@@ -36,11 +36,7 @@ class CameraView extends GetView<CameraController> {
               MediaPreviewView(
                   mediaFile: controller.getMediaFile(),
                   onDecision: (value) {
-                    if (value) {
-                      onMediaSelected(controller.getMediaFile());
-                    } else {
-                      controller.clearFromPreview();
-                    }
+                    value ? controller.continueWithCapture(onMediaSelected) : controller.clearFromPreview();
                   }),
               barrierDismissible: false);
         }
@@ -76,8 +72,6 @@ class CameraView extends GetView<CameraController> {
             print("Drag Horizontal: ${details.delta}");
           },
           child: CameraAwesome(
-            onPermissionsResult: (bool result) {},
-            onOrientationChanged: (CameraOrientations newOrientation) {},
             sensor: controller.sensor,
             zoom: controller.zoomNotifier,
             photoSize: controller.photoSize,
@@ -275,6 +269,15 @@ class CameraController extends GetxController {
     _videoCapturePath = "";
     _isVideo = false;
     Get.back();
+  }
+
+  continueWithCapture(Function(MediaFile file) selected) {
+    Get.back();
+    selected(getMediaFile());
+    _photoCapturePath = "";
+    _videoCapturePath = "";
+    _isVideo = false;
+    hasCaptured(false);
   }
 
   // ^ Captures Photo ^ //

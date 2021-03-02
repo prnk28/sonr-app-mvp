@@ -321,6 +321,7 @@ class _MediaCardInfo extends StatelessWidget {
                   } else {
                     // Prompt Question
                     SonrOverlay.question(
+                            entryLocation: SonrOffset.Bottom,
                             title: "Delete",
                             description: "Are you sure you want to delete this Card, it has not saved to your gallery yet.",
                             acceptTitle: "Continue",
