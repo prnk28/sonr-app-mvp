@@ -67,6 +67,9 @@ class SonrStyle {
       color: SonrColor.base,
       shadowLightColor: Colors.black38);
 
+  static get mediaButtonDefault => NeumorphicStyle(intensity: 0.85, color: SonrColor.base);
+  static get mediaButtonPressed => NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
+
   static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   static get photo =>

@@ -1,7 +1,9 @@
 export 'mixin_queue.dart';
 export 'model_tile.dart';
+export 'model_file.dart';
 export 'api_models.dart';
 export 'api_primitive.dart';
+export 'api_widgets.dart';
 export '../service/device_service.dart';
 export '../service/media_service.dart';
 export '../service/sonr_service.dart';

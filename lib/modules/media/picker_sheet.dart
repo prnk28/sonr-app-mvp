@@ -1,147 +1,148 @@
-import 'dart:io';
-import 'package:sonr_app/modules/media/camera_binding.dart';
 import 'package:sonr_app/data/constants.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:media_gallery/media_gallery.dart';
+import 'dart:io';
 
-// ** MediaPicker Sheet View ** //
-class PickerSheet extends GetView<MediaPickerController> {
+// ^ MediaPicker Sheet View ^ //
+class PickerSheet extends StatelessWidget {
+  final Function(File) onMediaSelected;
+  PickerSheet({this.onMediaSelected});
+
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-      borderRadius: BorderRadius.circular(40),
-      backendColor: Colors.transparent,
-      child: Neumorphic(
-          style: NeumorphicStyle(color: SonrColor.base),
-          child: Column(children: [
-            // @ Header Buttons
-            Container(
-                height: kToolbarHeight + 16 * 2,
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      //  Top Left Close/Cancel Button
-                      SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
+    return GetX<MediaPickerController>(
+        init: MediaPickerController(onMediaSelected),
+        builder: (controller) {
+          return NeumorphicBackground(
+            borderRadius: BorderRadius.circular(40),
+            backendColor: Colors.transparent,
+            child: Neumorphic(
+                style: NeumorphicStyle(color: SonrColor.base),
+                child: Column(children: [
+                  // @ Header Buttons
+                  Container(
+                      height: kToolbarHeight + 16 * 2,
+                      child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            //  Top Left Close/Cancel Button
+                            SonrButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
-                      // Drop Down
-                      SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, onChanged: (index) {
-                        controller.setMediaCollection(MediaService.gallery[index]);
-                      }),
+                            // Drop Down
+                            SonrDropdown.albums(MediaService.gallery, width: Get.width - 200, onChanged: (index) {
+                              controller.setMediaCollection(MediaService.gallery[index]);
+                            }),
 
-                      // Top Right Confirm Button
-                      SonrButton.circle(onPressed: () => MediaController.confirmSelection(), icon: SonrIcon.accept),
-                    ])),
+                            // Top Right Confirm Button
+                            SonrButton.circle(onPressed: () => controller.confirm(), icon: SonrIcon.accept),
+                          ])),
 
-            // @ Grid View
-            Obx(() {
-              if (controller.loaded.value) {
-                return Container(
-                  width: Get.width - 10,
-                  height: 368,
-                  child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                      itemCount: controller.currentMedia.length,
-                      itemBuilder: (context, index) {
-                        return _SonrMediaButton(controller.currentMedia[index], index);
-                      }),
-                );
-              }
-              return NeumorphicProgressIndeterminate();
-            }),
+                  controller.loaded.value
+                      ? Obx(() => Container(
+                            width: Get.width - 10,
+                            height: 368,
+                            child: GridView.builder(
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                                itemCount: controller.currentMedia.length,
+                                itemBuilder: (context, index) {
+                                  return _SonrMediaButton(
+                                    MediaGalleryItem(index, controller.currentMedia[index]),
+                                    controller.selectedIndex.value == index,
+                                    (idx) => controller.selectedIndex(idx),
+                                  );
+                                }),
+                          ))
+                      : NeumorphicProgressIndeterminate(),
+                ])),
+          );
+        });
+  }
+}
+
+// ^ Widget that Creates Button from Media and Index ^ //
+class _SonrMediaButton extends StatefulWidget {
+  // Files
+  final MediaGalleryItem item;
+  final Function(int) onTap;
+  final bool isSelected;
+
+  _SonrMediaButton(this.item, this.isSelected, this.onTap, {Key key}) : super(key: key);
+
+  @override
+  _SonrMediaButtonState createState() => _SonrMediaButtonState();
+}
+
+class _SonrMediaButtonState extends State<_SonrMediaButton> {
+  File file;
+  Uint8List thumbnail;
+  bool loaded = false;
+  OpenResult openResult;
+
+  @override
+  void initState() {
+    getThumbnail();
+    super.initState();
+  }
+
+  void getThumbnail() async {
+    var data = await widget.item.getThumbnail();
+    setState(() {
+      thumbnail = data;
+      loaded = true;
+    });
+  }
+
+  Future openFile() async {
+    if (file == null) {
+      file = await widget.item.media.getFile();
+      openResult = await OpenFile.open(file.path);
+    } else {
+      openResult = await OpenFile.open(file.path);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPress: () => openFile(),
+      child: NeumorphicButton(
+          padding: EdgeInsets.zero,
+          onPressed: () => widget.onTap(widget.item.index),
+          style: widget.isSelected ? SonrStyle.mediaButtonPressed : SonrStyle.mediaButtonDefault,
+          child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
+            loaded
+                ? Hero(
+                    tag: widget.item.media.id,
+                    child: DecoratedBox(
+                        child: Image.memory(Uint8List.fromList(thumbnail), fit: BoxFit.cover),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
+                  )
+                : Payload.MEDIA.icon(IconType.Neumorphic),
+            widget.item.getIcon(),
+            widget.isSelected
+                ? Container(
+                    alignment: Alignment.bottomRight,
+                    padding: EdgeInsets.only(right: 4, bottom: 4),
+                    child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
+                : Container()
           ])),
     );
   }
 }
 
-// ** Widget that Creates Button from Media and Index ** //
-class _SonrMediaButton extends GetView<MediaPickerController> {
-  final Rx<Uint8List> thumbnail = Uint8List(0).obs;
-  final file = Rx<File>();
-  final Media media;
-  final int index;
-  final isSelected = false.obs;
-
-  // References
-  final defaultStyle = NeumorphicStyle(intensity: 0.85, color: SonrColor.base);
-  final pressedStyle = NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
-
-  _SonrMediaButton(this.media, this.index, {Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    // Get Thumbnail
-    _getThumbnail();
-
-    // Set Is Pressed Value
-    controller.currentIndex.listen((value) {
-      isSelected(value == index);
-    });
-
-    // Build View
-    return GestureDetector(
-      onLongPress: () async {
-        if (file.isBlank) {
-          file(await media.getFile());
-          var result = await OpenFile.open(file.value.path);
-          print(result);
-        } else {
-          var result = await OpenFile.open(file.value.path);
-          print(result);
-        }
-      },
-      child: ObxValue(
-          (RxBool isPressed) => NeumorphicButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                isPressed(!isPressed.value);
-                MediaPickerController.select(index, media, thumbnail.value);
-              },
-              style: isPressed.value ? pressedStyle : defaultStyle,
-              child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
-                Obx(() {
-                  if (thumbnail.value.length > 0) {
-                    return Hero(
-                      tag: media.id,
-                      child: DecoratedBox(
-                          child: Image.memory(Uint8List.fromList(thumbnail.value), fit: BoxFit.cover),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
-                    );
-                  } else {
-                    return Payload.MEDIA.icon(IconType.Neumorphic);
-                  }
-                }),
-                media.mediaType == MediaType.video
-                    ? SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.glassWater, size: 28)
-                    : const SizedBox(),
-                isPressed.value
-                    ? Container(
-                        alignment: Alignment.bottomRight,
-                        padding: EdgeInsets.only(right: 4, bottom: 4),
-                        child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
-                    : Container()
-              ])),
-          isSelected),
-    );
-  }
-
-  _getThumbnail() async {
-    var thumbBytes = await MediaPickerController.retreiveThumbnail(media);
-    thumbnail(thumbBytes);
-  }
-}
-
-// ** Media Picker Controller ** //
+// ^ Media Picker Controller ^ //
 class MediaPickerController extends GetxController {
   // Properties
   final currentMedia = <Media>[].obs;
   final collection = Rx<MediaCollection>();
-  final currentIndex = (-1).obs;
+  final selectedIndex = (-1).obs;
   final loaded = false.obs;
+  final Function(File) onMediaSelected;
+  MediaPickerController(this.onMediaSelected);
 
-  static RxInt get selectedIndex => Get.find<MediaPickerController>().currentIndex;
-
-  // ^ Initial Method ^ //
+  //  Initial Method
   void onInit() {
     MediaService.refreshGallery().then((value) {
       currentMedia(MediaService.totalMedia);
@@ -150,12 +151,7 @@ class MediaPickerController extends GetxController {
     super.onInit();
   }
 
-  // ^ Retreive Albums ^ //
-  static Future<Uint8List> retreiveThumbnail(Media media, {int width = 200, int height = 200, bool highQuality = false}) async {
-    return await media.getThumbnail(width: width, height: height, highQuality: highQuality);
-  }
-
-  // ^ Method Updates the Current Media Collection ^ //
+  // Method Updates the Current Media Collection
   setMediaCollection(MediaCollection updatedCollection) async {
     loaded(false);
     // Reset Loaded
@@ -169,9 +165,9 @@ class MediaPickerController extends GetxController {
     loaded(true);
   }
 
-  // ^ Set Media from Picker
-  static select(int index, Media media, Uint8List thumb) {
-    MediaController.selectMedia(index, media, thumb);
-    Get.find<MediaPickerController>().currentIndex(index);
+  // Set Media from Picker
+  confirm() async {
+    selectedIndex.value != -1 ? onMediaSelected(await currentMedia[selectedIndex.value].getFile()) : SonrSnack.invalid("No Media Selected");
+    Get.back();
   }
 }
