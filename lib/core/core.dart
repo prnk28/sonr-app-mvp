@@ -17,3 +17,4 @@ export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
 export 'theme/theme.dart';
+export '../modules/media/camera_view.dart';

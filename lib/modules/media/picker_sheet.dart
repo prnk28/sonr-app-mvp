@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:sonr_app/core/core.dart';
-import 'package:sonr_app/core/core.dart';
 import 'package:media_gallery/media_gallery.dart';
 import 'dart:io';
 

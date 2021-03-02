@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:sonr_app/core/core.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
-import 'modules/media/camera_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
@@ -29,6 +28,7 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
+    Get.lazyPut<CameraController>(() => CameraController());
     Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
   }
@@ -158,15 +158,6 @@ List<GetPage> get K_PAGES => [
           transition: Transition.downToUp,
           curve: Curves.easeIn,
           binding: TransferBinding()),
-
-      // ** Camera Page - Default Media View ** //
-      GetPage(
-          name: '/camera',
-          page: () => MediaScreen(),
-          maintainState: false,
-          transition: Transition.fade,
-          curve: Curves.easeIn,
-          binding: CameraBinding()),
 
       // ** Profile Page ** //
       GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),

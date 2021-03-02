@@ -88,4 +88,8 @@ class MediaFile {
     // Return MediaFile
     return MediaFile(file, thumbnail, isVideo, duration);
   }
+
+  factory MediaFile.capture(String path, bool isVideo, int duration) {
+    return MediaFile(File(path), Uint8List(0), isVideo, duration);
+  }
 }
