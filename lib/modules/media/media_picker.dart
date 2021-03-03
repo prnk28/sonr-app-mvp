@@ -17,6 +17,12 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
   final RxInt index = (-1).obs;
 
   @override
+  void initState() {
+    MediaService.refreshGallery();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     index.listen((val) {
       setMediaCollection(val);
