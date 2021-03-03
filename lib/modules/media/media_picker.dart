@@ -135,7 +135,7 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
           padding: EdgeInsets.zero,
           onPressed: () => widget.onTap(widget.item),
           style: widget.isSelected ? SonrStyle.mediaButtonPressed : SonrStyle.mediaButtonDefault,
-          child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
+          child: Stack(fit: StackFit.expand, children: [
             loaded && thumbnail != null
                 ? Hero(
                     tag: widget.item.media.id,
@@ -143,7 +143,11 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
                         child: Image.memory(thumbnail, fit: BoxFit.cover), decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
                   )
                 : Payload.MEDIA.icon(IconType.Neumorphic),
-            widget.item.getIcon(),
+            Align(
+                child: widget.item.type == MediaType.video
+                    ? SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.glassWater, size: 36)
+                    : Container(),
+                alignment: Alignment.center),
             widget.isSelected
                 ? Container(
                     alignment: Alignment.bottomRight,
