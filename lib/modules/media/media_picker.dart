@@ -150,8 +150,8 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
                 alignment: Alignment.center),
             widget.isSelected
                 ? Container(
-                    alignment: Alignment.bottomRight,
-                    padding: EdgeInsets.only(right: 4, bottom: 4),
+                    alignment: Alignment.bottomLeft,
+                    padding: EdgeInsets.only(left: 4, bottom: 4),
                     child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
                 : Container()
           ])),
