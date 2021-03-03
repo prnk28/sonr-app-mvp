@@ -25,39 +25,43 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
       borderRadius: BorderRadius.circular(40),
       backendColor: Colors.transparent,
       child: SonrScaffold.appBarLeadingCustom(
-          leading: SonrButton.flat(
-              onPressed: () => Get.back(),
-              icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 40, style: SonrStyle.appBarIcon)),
-          floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
-          body: Column(children: [
-            // @ Create Grid View
-            ValueListenableBuilder(
-                builder: (BuildContext context, List<Media> list, Widget child) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    height: 368,
-                    child: SonrAnimatedSwitcher.fade(
-                      child: GridView.builder(
-                          key: ValueKey<List<Media>>(list),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            return ValueListenableBuilder(
-                                builder: (BuildContext context, MediaGalleryItem selected, Widget child) {
-                                  return _SonrMediaButton(
-                                    MediaGalleryItem(index, list[index]),
-                                    checkSelected(index, selected),
-                                    (item) => select(item),
-                                  );
-                                },
-                                valueListenable: _selectedItem);
-                          }),
-                    ),
-                  );
-                },
-                valueListenable: _mediaList),
-          ]),
-          middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 140, index: index, margin: EdgeInsets.only(left: 12, right: 12))),
+        leading: SonrButton.rectangle(
+            radius: 20,
+            shape: NeumorphicShape.convex,
+            onPressed: () => Get.back(),
+            icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38, style: SonrStyle.appBarIcon)),
+        floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
+        middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 100, index: index, margin: EdgeInsets.only(left: 12, right: 12)),
+        body: Column(children: [
+          // @ Create Grid View
+          ValueListenableBuilder(
+              builder: (BuildContext context, List<Media> list, Widget child) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  height: 368,
+                  child: SonrAnimatedSwitcher.fade(
+                    duration: 2800.milliseconds,
+                    child: GridView.builder(
+                        key: ValueKey<List<Media>>(list),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                        itemCount: list != null ? list.length : 0,
+                        itemBuilder: (context, index) {
+                          return ValueListenableBuilder(
+                              builder: (BuildContext context, MediaGalleryItem selected, Widget child) {
+                                return _SonrMediaButton(
+                                  MediaGalleryItem(index, list[index]),
+                                  checkSelected(index, selected),
+                                  (item) => select(item),
+                                );
+                              },
+                              valueListenable: _selectedItem);
+                        }),
+                  ),
+                );
+              },
+              valueListenable: _mediaList),
+        ]),
+      ),
     );
   }
 

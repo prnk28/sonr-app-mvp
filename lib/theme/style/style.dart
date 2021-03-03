@@ -44,11 +44,14 @@ class SonrStyle {
 
   static get compassStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
-  static get dropDownBox =>
+  static get dropDownBackground =>
       NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base, shadowLightColor: Colors.black38);
 
   static get dropDownItem =>
       NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+
+  static get dropDownFlat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
+  static get dropDownCurved => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
 
   static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
 
@@ -59,7 +62,6 @@ class SonrStyle {
       NeumorphicStyle(color: SonrColor.base, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.85, depth: 2, surfaceIntensity: 0.6);
 
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
-
   static get overlay => NeumorphicStyle(
       intensity: 0.85,
       depth: 8,

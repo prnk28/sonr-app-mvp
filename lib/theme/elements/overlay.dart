@@ -511,7 +511,7 @@ class _DropdownOverlayView extends StatelessWidget {
           width: size.width + width,
           child: Neumorphic(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            style: SonrStyle.dropDownBox,
+            style: SonrStyle.dropDownBackground,
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,

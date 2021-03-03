@@ -75,6 +75,7 @@ class SonrDropdown extends StatelessWidget {
   final double width;
   final double height;
   final int selectedFlex;
+  final NeumorphicStyle style;
 
   // Overlay Properties
   final double overlayHeight;
@@ -93,8 +94,19 @@ class SonrDropdown extends StatelessWidget {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].icon(IconType.Gradient));
     });
-    return SonrDropdown(items, SonrDropdownItem(false, "Choose..."), index, margin, width ?? Get.width - 250, height,
-        overlayWidth: 20, overlayHeight: -80, selectedFlex: 6, selectedIconPosition: WidgetPosition.Left);
+    return SonrDropdown(
+      items,
+      SonrDropdownItem(false, "Choose..."),
+      index,
+      margin,
+      width ?? Get.width - 250,
+      height,
+      overlayWidth: 20,
+      overlayHeight: -80,
+      selectedFlex: 6,
+      selectedIconPosition: WidgetPosition.Left,
+      style: SonrStyle.dropDownFlat,
+    );
   }
 
   // * Builds Albums Dropdown * //
@@ -157,6 +169,7 @@ class SonrDropdown extends StatelessWidget {
         margin,
         width ?? Get.width - 250,
         height,
+        style: SonrStyle.dropDownCurved,
         overlayWidth: 70,
         overlayHeight: 100,
         selectedFlex: 2,
@@ -164,7 +177,7 @@ class SonrDropdown extends StatelessWidget {
   }
 
   SonrDropdown(this.items, this.initial, this.index, this.margin, this.width, this.height,
-      {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right, this.selectedFlex});
+      {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right, this.selectedFlex, this.style});
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
@@ -177,7 +190,7 @@ class SonrDropdown extends StatelessWidget {
         height: height,
         child: NeumorphicButton(
             margin: EdgeInsets.symmetric(horizontal: 3),
-            style: SonrStyle.flat,
+            style: style,
             child: SonrAnimatedSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
             onPressed: () {
               SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {

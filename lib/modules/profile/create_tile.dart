@@ -21,15 +21,13 @@ class CreateTileStepper extends GetView<ProfileController> {
               color: Colors.transparent,
               child: Column(children: [
                 Container(
-                  alignment: Alignment.topLeft,
-                  padding: EdgeInsets.only(top: 8, left: 8),
-                  child: SonrButton.circle(
-                      icon: SonrIcon.close,
-                      onPressed: () {
-                        controller.reset();
-                        Get.back();
-                      }),
-                ),
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(top: 8, left: 8),
+                    child: SonrButton.rectangle(
+                        radius: 20,
+                        shape: NeumorphicShape.convex,
+                        onPressed: () => Get.back(),
+                        icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38, style: SonrStyle.appBarIcon))),
                 Container(
                   height: controller.step.value.height,
                   child: PageView.builder(
