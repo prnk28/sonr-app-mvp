@@ -136,7 +136,7 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
           onPressed: () => widget.onTap(widget.item),
           style: widget.isSelected ? SonrStyle.mediaButtonPressed : SonrStyle.mediaButtonDefault,
           child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
-            loaded && thumbnail.length > 0
+            loaded && thumbnail != null
                 ? Hero(
                     tag: widget.item.media.id,
                     child: DecoratedBox(
