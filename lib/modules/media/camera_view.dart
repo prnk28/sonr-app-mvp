@@ -121,14 +121,16 @@ class _CameraToolsView extends GetView<CameraController> {
           padding: EdgeInsets.only(top: 20, bottom: 40),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Switch Camera
-            Obx(() => GestureDetector(
-                child: SonrIcon.neumorphicGradient(
-                    controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded, FlutterGradientNames.loveKiss,
-                    size: 36),
-                onTap: () async {
-                  HapticFeedback.heavyImpact();
-                  controller.toggleCameraSensor();
-                })),
+            Obx(() {
+              var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
+              return GestureDetector(
+                  child: SonrAnimatedSwitcher.slideUp(
+                      child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
+                  onTap: () async {
+                    HapticFeedback.heavyImpact();
+                    controller.toggleCameraSensor();
+                  });
+            }),
 
             // Neumorphic Camera Button Stack
             _CaptureButton(),

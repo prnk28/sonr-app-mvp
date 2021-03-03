@@ -76,6 +76,6 @@ class TransferCardController extends GetxController {
 
   // ^ Method to Present Card Overlay Info
   showCardInfo(Widget infoWidget) {
-    SonrOverlay.show(infoWidget);
+    SonrOverlay.show(infoWidget, disableAnimation: true, barrierDismissible: true);
   }
 }

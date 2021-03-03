@@ -36,20 +36,23 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: 10),
                     height: 368,
-                    child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                        itemCount: list.length,
-                        itemBuilder: (context, index) {
-                          return ValueListenableBuilder(
-                              builder: (BuildContext context, MediaGalleryItem selected, Widget child) {
-                                return _SonrMediaButton(
-                                  MediaGalleryItem(index, list[index]),
-                                  checkSelected(index, selected),
-                                  (item) => select(item),
-                                );
-                              },
-                              valueListenable: _selectedItem);
-                        }),
+                    child: SonrAnimatedSwitcher.fade(
+                      child: GridView.builder(
+                          key: ValueKey<List<Media>>(list),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return ValueListenableBuilder(
+                                builder: (BuildContext context, MediaGalleryItem selected, Widget child) {
+                                  return _SonrMediaButton(
+                                    MediaGalleryItem(index, list[index]),
+                                    checkSelected(index, selected),
+                                    (item) => select(item),
+                                  );
+                                },
+                                valueListenable: _selectedItem);
+                          }),
+                    ),
                   );
                 },
                 valueListenable: _mediaList),
@@ -104,16 +107,14 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
 
   @override
   void initState() {
-    getThumbnail();
-    super.initState();
-  }
-
-  void getThumbnail() async {
-    var data = await widget.item.getThumbnail();
-    setState(() {
-      thumbnail = data;
-      loaded = true;
+    widget.item.getThumbnail().then((data) {
+      if (!mounted) return;
+      setState(() {
+        thumbnail = data;
+        loaded = true;
+      });
     });
+    super.initState();
   }
 
   @override

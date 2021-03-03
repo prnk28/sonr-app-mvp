@@ -178,7 +178,7 @@ class SonrDropdown extends StatelessWidget {
         child: NeumorphicButton(
             margin: EdgeInsets.symmetric(horizontal: 3),
             style: SonrStyle.flat,
-            child: _buildSelected(index.value),
+            child: SonrAnimatedSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
             onPressed: () {
               SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {
                 index(newIdx);
@@ -189,7 +189,7 @@ class SonrDropdown extends StatelessWidget {
     });
   }
 
-  _buildSelected(int index) {
+  Widget _buildSelected(int index) {
     // @ Default Widget
     if (index == -1) {
       return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
