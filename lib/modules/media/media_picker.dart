@@ -22,7 +22,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
       setMediaCollection(val);
     });
     return NeumorphicBackground(
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       backendColor: Colors.transparent,
       child: SonrScaffold.appBarLeadingCustom(
         leading: SonrButton.rectangle(
@@ -38,7 +38,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
               builder: (BuildContext context, List<Media> list, Widget child) {
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
-                  height: 368,
+                  height: Get.height / 2 + 80,
                   child: SonrAnimatedSwitcher.fade(
                     duration: 2800.milliseconds,
                     child: GridView.builder(
@@ -130,12 +130,11 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
           onPressed: () => widget.onTap(widget.item),
           style: widget.isSelected ? SonrStyle.mediaButtonPressed : SonrStyle.mediaButtonDefault,
           child: Stack(alignment: Alignment.center, fit: StackFit.expand, children: [
-            loaded
+            loaded && thumbnail.length > 0
                 ? Hero(
                     tag: widget.item.media.id,
                     child: DecoratedBox(
-                        child: Image.memory(Uint8List.fromList(thumbnail), fit: BoxFit.cover),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
+                        child: Image.memory(thumbnail, fit: BoxFit.cover), decoration: BoxDecoration(borderRadius: BorderRadius.circular(8))),
                   )
                 : Payload.MEDIA.icon(IconType.Neumorphic),
             widget.item.getIcon(),
