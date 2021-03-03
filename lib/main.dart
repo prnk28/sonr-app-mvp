@@ -28,8 +28,8 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
-    Get.put<CameraController>(CameraController(), permanent: true);
-    Get.put<SonrOverlay>(SonrOverlay(), permanent: true);
+    Get.lazyPut<CameraController>(() => CameraController());
+    Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
   }
 }
