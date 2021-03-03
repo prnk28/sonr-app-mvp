@@ -152,7 +152,7 @@ class _MediaItemView extends StatelessWidget {
             decoration: card.metadata.mime.type == MIME_Type.image
                 ? BoxDecoration(
                     image: DecorationImage(
-                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
+                    colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
                     fit: BoxFit.cover,
                     image: MemoryImage(card.metadata.thumbnail),
                   ))
