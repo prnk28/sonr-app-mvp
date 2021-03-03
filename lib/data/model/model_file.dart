@@ -22,7 +22,6 @@ class MediaGalleryItem {
 
   // Constructer + Methods
   MediaGalleryItem(this.index, this.media, {this.maxWidth = 320, this.maxHeight = 320, this.highQuality = false});
-  Widget getIcon() => type == MediaType.video ? SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.glassWater, size: 28) : Container();
 
   // Gets Media Thumbnail
   Future<Uint8List> getThumbnail() async {
