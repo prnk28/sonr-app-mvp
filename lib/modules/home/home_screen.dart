@@ -43,10 +43,13 @@ class HomeScreen extends GetView<HomeController> {
                   child: Obx(() => NeumorphicToggle(
                         selectedIndex: controller.toggleIndex.value,
                         onChanged: (val) => controller.setToggleCategory(val),
-                        thumb: GestureDetector(
-                            onDoubleTap: () => controller.jumpToStart(),
-                            onLongPress: () => controller.jumpToEnd(),
-                            child: Center(child: Obx(() => buildView()))),
+                        thumb: SonrAnimatedSwitcher.fade(
+                          child: GestureDetector(
+                              key: ValueKey<int>(controller.toggleIndex.value),
+                              onDoubleTap: () => controller.jumpToStart(),
+                              onLongPress: () => controller.jumpToEnd(),
+                              child: Center(child: Obx(() => buildView()))),
+                        ),
                         children: [
                           ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.disabled, size: 16))),
                           ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
