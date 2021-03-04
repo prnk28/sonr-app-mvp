@@ -2,7 +2,7 @@ import 'package:rive/rive.dart';
 import 'peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-const double K_BUBBLE_SIZE = 90;
+const double K_BUBBLE_SIZE = 80;
 
 // ^ PeerBubble Utilizes Peer Controller ^ //
 class PeerBubble extends StatelessWidget {
@@ -17,43 +17,37 @@ class PeerBubble extends StatelessWidget {
         init: PeerController(peer, index),
         builder: (controller) {
           return AnimatedPositioned(
-              top: controller.offset.value.dy,
-              left: controller.offset.value.dx,
+              width: K_BUBBLE_SIZE,
+              height: K_BUBBLE_SIZE,
+              top: controller.offset.value.dy - (ZonePathProvider.size / 2),
+              left: controller.offset.value.dx - (ZonePathProvider.size / 2),
               duration: 150.milliseconds,
               child: Container(
                 width: K_BUBBLE_SIZE,
                 height: K_BUBBLE_SIZE,
                 decoration: SonrStyle.bubbleDecoration,
-                child: PlayAnimation<double>(
-                    tween: controller.contentAnimation.value.item1,
-                    duration: controller.contentAnimation.value.item2,
-                    delay: controller.contentAnimation.value.item3,
-                    builder: (context, child, value) {
-                      return Obx(() {
-                        return GestureDetector(
-                          onTap: () => controller.invite(),
-                          onLongPress: () => controller.expandDetails(),
-                          child: Stack(alignment: Alignment.center, children: [
-                            controller.artboard.value == null
-                                ? Container()
-                                : Rive(
-                                    artboard: controller.artboard.value,
-                                    alignment: Alignment.center,
-                                    fit: BoxFit.cover,
-                                  ),
-                            AnimatedOpacity(
-                                opacity: value,
-                                duration: controller.contentAnimation.value.item2,
-                                child:
-                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                  Padding(padding: EdgeInsets.all(8)),
-                                  controller.peer.initials,
-                                  Padding(padding: EdgeInsets.all(8)),
-                                ])),
-                          ]),
-                        );
-                      });
-                    }),
+                child: Obx(() {
+                  return GestureDetector(
+                    onTap: () => controller.invite(),
+                    onLongPress: () => controller.expandDetails(),
+                    child: Stack(alignment: Alignment.center, children: [
+                      controller.artboard.value == null
+                          ? Container()
+                          : Rive(
+                              artboard: controller.artboard.value,
+                              alignment: Alignment.center,
+                              fit: BoxFit.cover,
+                            ),
+                      AnimatedVisibility(
+                          isVisible: controller.isVisible,
+                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                            Padding(padding: EdgeInsets.all(8)),
+                            controller.peer.initials,
+                            Padding(padding: EdgeInsets.all(8)),
+                          ])),
+                    ]),
+                  );
+                }),
               ));
         });
   }

@@ -14,13 +14,11 @@ class PeerController extends GetxController {
   final direction = 0.0.obs;
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
-  final contentAnimation = Rx<Triple<Tween<double>, Duration, Duration>>();
+  final isVisible = true.obs;
 
   // References
   final Rx<CompassEvent> userDirection = DeviceService.direction;
   final RxMap<String, Peer> peers = SonrService.peers;
-  final enabledContent = Triple((0.0).tweenTo(1.0), 250.milliseconds, 250.milliseconds);
-  final disabledContent = Triple((1.0).tweenTo(0.0), 250.milliseconds, 100.milliseconds);
 
   // Checkers
   var _isInvited = false;
@@ -33,7 +31,7 @@ class PeerController extends GetxController {
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   StreamSubscription<Map<String, Peer>> peerStream;
   PeerController(this.peer, this.index) {
-    contentAnimation(enabledContent);
+    isVisible(true);
     direction(peer.position.direction);
     offset(calculateOffset());
     proximity(peer.position.proximity);
@@ -83,7 +81,6 @@ class PeerController extends GetxController {
 
       // Check for File
       if (Get.find<SonrService>().payload == Payload.MEDIA) {
-        contentAnimation(enabledContent);
         _pending.instance.animation.loop = Loop.pingPong;
         _pending.isActive = _isInvited = !_isInvited;
       }
@@ -103,7 +100,7 @@ class PeerController extends GetxController {
   // ^ Handle Accepted ^
   playAccepted() async {
     // Update Visibility
-    contentAnimation(disabledContent);
+    isVisible(false);
 
     // Start Animation
     _pending.instance.animation.loop = Loop.oneShot;
@@ -118,9 +115,6 @@ class PeerController extends GetxController {
 
   // ^ Handle Denied ^
   playDenied() async {
-    // Update Visibility
-    contentAnimation(disabledContent);
-
     // Start Animation
     _pending.instance.animation.loop = Loop.oneShot;
     _denied.isActive = _hasDenied = !_hasDenied;
@@ -135,7 +129,7 @@ class PeerController extends GetxController {
   // ^ Handle Completed ^
   playCompleted() async {
     // Update Visibility
-    contentAnimation(disabledContent);
+    isVisible(true);
 
     // Start Complete Animation
     _sending.instance.animation.loop = Loop.oneShot;
@@ -168,7 +162,7 @@ class PeerController extends GetxController {
     _hasCompleted = false;
     _inProgress = false;
     _isInvited = false;
-    contentAnimation(enabledContent);
+    isVisible(true);
 
     // Remove Sending/Complete
     artboard.value.removeController(_sending);

@@ -131,17 +131,20 @@ extension SonrOffset on Offset {
   }
 
   static Offset fromProximity(Position_Proximity prox, double dir) {
-    // Get Path Metric
-    PathMetric pathMetric = ZonePathProvider(prox, widgetSize: 90).path.computeMetrics().elementAt(0);
+    // Get Differential Data
+    var diff = (DeviceService.direction.value.headingForCameraMode - dir).abs();
+    var diffRad = (diff * pi) / 180.0;
+    diffRad += pi / 2;
 
-    // Determine Point on Path
-    double adjustedNorth = DeviceService.direction.value.headingForCameraMode;
-    double posOnPath = (adjustedNorth - dir).clamp(0, ZonePathProvider.length(90));
-    print(posOnPath);
+    // Convert Rad to Point on Path
+    var path = ZonePathProvider(prox);
+    var metrics = path.getPath(Get.size).computeMetrics().elementAt(0);
+    var point = diffRad * metrics.length;
 
-    // Get Position on Path
-    Tangent pos = pathMetric.getTangentForOffset(posOnPath);
-    return pos.position;
+    // Get Tanget for Point
+    var tangent = metrics.getTangentForOffset(point);
+    var calcPos = tangent.position;
+    return Offset(calcPos.dx.clamp(0, Get.width), calcPos.dy);
   }
 }
 
@@ -188,57 +191,69 @@ class WavePainter extends CustomPainter {
 
 // ^ Provides Zone Path by Position Proximity ^ //
 class ZonePathProvider extends NeumorphicPathProvider {
+  // References
   final Position_Proximity proximity;
-  final double widgetSize;
+  ZonePathProvider(this.proximity);
 
-  ZonePathProvider(this.proximity, {this.widgetSize = 0});
-  Path get path => getPath(Size.infinite);
-  static double length(double angle) => angle * sqrt((Get.height / 2 * Get.height / 2) / 2);
+  // ^ Returns Path Size ^
+  static double get size {
+    final ThemeData themeData = Theme.of(Get.context);
+    final MaterialTapTargetSize effectiveMaterialTapTargetSize = themeData.checkboxTheme.materialTapTargetSize ?? themeData.materialTapTargetSize;
+    final VisualDensity effectiveVisualDensity = themeData.checkboxTheme.visualDensity ?? themeData.visualDensity;
+    Size size;
+    switch (effectiveMaterialTapTargetSize) {
+      case MaterialTapTargetSize.padded:
+        size = const Size(kMinInteractiveDimension, kMinInteractiveDimension);
+        break;
+      case MaterialTapTargetSize.shrinkWrap:
+        size = const Size(kMinInteractiveDimension - 8.0, kMinInteractiveDimension - 8.0);
+        break;
+    }
+    size += effectiveVisualDensity.baseSizeAdjustment;
+    return size.longestSide;
+  }
+
+  // ^ Constructs Path ^ //
+  @override
+  Path getPath(Size size) {
+    // Initialize Bounds
+    final double height = (Get.height / 2);
+    final double radius = sqrt((Get.height / 2 * Get.height / 2) / 2);
+
+    // Bottom Zone
+    if (proximity == Position_Proximity.Immediate) {
+      // Build Rect
+      var immediateRect = Rect.fromCircle(center: Offset(Get.width / 2, height + 80), radius: radius);
+      Path path = new Path();
+      path.addArc(immediateRect, pi, pi);
+      return path;
+      // Return Path
+    }
+    // Middle Zone
+    else if (proximity == Position_Proximity.Near) {
+      // Build Rect
+      var nearRect = Rect.fromCircle(center: Offset(Get.width / 2, height), radius: radius);
+
+      // Return Path
+      Path path = new Path();
+      path.addArc(nearRect, pi, pi);
+      return path;
+    }
+    // Top Zone
+    else {
+      // Build Rect
+      var distantRect = Rect.fromCircle(center: Offset(Get.width / 2, height - 80), radius: radius);
+
+      // Return Path
+      Path path = new Path();
+      path.addArc(distantRect, pi, pi);
+      return path;
+    }
+  }
 
   @override
   bool shouldReclip(NeumorphicPathProvider oldClipper) {
     return true;
-  }
-
-  @override
-  Path getPath(Size size) {
-    // Initialize Bounds
-    final double height = (Get.height / 2) + (widgetSize / 2);
-    final double radius = sqrt((Get.height / 2 * Get.height / 2) / 2);
-
-    // Build Rects
-    var distantRect = Rect.fromCircle(center: Offset(Get.width / 2, height - 120), radius: radius);
-    var nearRect = Rect.fromCircle(center: Offset(Get.width / 2, height - 20), radius: radius);
-    var immediateRect = Rect.fromCircle(center: Offset(Get.width / 2, height + 80), radius: radius);
-
-    // Check Proximity Status
-    switch (proximity) {
-      case Position_Proximity.Immediate:
-        Path path = new Path();
-        path.addArc(immediateRect, pi, pi);
-        return path;
-        break;
-      case Position_Proximity.Near:
-        Path path = new Path();
-        path.addArc(nearRect, pi, pi);
-        return path;
-        break;
-      case Position_Proximity.Distant:
-        Path path = new Path();
-        path.addArc(distantRect, pi, pi);
-        return path;
-        break;
-      default:
-        return Path()
-          ..moveTo(0, 0)
-          ..lineTo(Get.width / 2, 0)
-          ..lineTo(Get.width, height / 2)
-          ..lineTo(Get.width / 2, height / 2)
-          ..lineTo(Get.width, height)
-          ..lineTo(0, height)
-          ..close();
-        break;
-    }
   }
 
   @override

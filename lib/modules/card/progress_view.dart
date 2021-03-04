@@ -46,12 +46,15 @@ class ProgressView extends HookWidget {
           return Opacity(
               opacity: 0.85,
               child: utilizeProgress
-                  ? Obx(() => CustomPaint(
-                        size: Size(Get.width, Get.height),
-                        painter: WavePainter(
-                          waveAnimation: hookController,
-                          percent: SonrService.progress.value,
-                          gradient: gradient,
+                  ? Obx(() => GestureDetector(
+                        onTap: () => SonrOverlay.back(),
+                        child: CustomPaint(
+                          size: Size(Get.width, Get.height),
+                          painter: WavePainter(
+                            waveAnimation: hookController,
+                            percent: SonrService.progress.value,
+                            gradient: gradient,
+                          ),
                         ),
                       ))
                   : CustomPaint(
