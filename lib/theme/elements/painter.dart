@@ -144,7 +144,7 @@ extension SonrOffset on Offset {
     // Get Tanget for Point
     var tangent = metrics.getTangentForOffset(point);
     var calcPos = tangent.position;
-    return Offset(calcPos.dx.clamp(0, Get.width), calcPos.dy);
+    return Offset(calcPos.dx.clamp(40, Get.width - 40), calcPos.dy);
   }
 }
 
