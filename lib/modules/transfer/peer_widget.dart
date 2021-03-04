@@ -38,13 +38,20 @@ class PeerBubble extends StatelessWidget {
                               alignment: Alignment.center,
                               fit: BoxFit.cover,
                             ),
-                      AnimatedVisibility(
-                          isVisible: controller.isVisible,
-                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                            Padding(padding: EdgeInsets.all(8)),
-                            controller.peer.initials,
-                            Padding(padding: EdgeInsets.all(8)),
-                          ])),
+                      PlayAnimation<double>(
+                          tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
+                          duration: Duration(milliseconds: 250),
+                          delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
+                          builder: (context, child, value) => AnimatedOpacity(
+                                opacity: value,
+                                duration: Duration(milliseconds: 250),
+                                child:
+                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                  Padding(padding: EdgeInsets.all(8)),
+                                  controller.peer.initials,
+                                  Padding(padding: EdgeInsets.all(8)),
+                                ]),
+                              )),
                     ]),
                   );
                 }),

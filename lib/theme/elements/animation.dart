@@ -375,43 +375,6 @@ class SonrAnimatedSwitcher extends StatelessWidget {
   }
 }
 
-class AnimatedVisibility extends StatelessWidget {
-  final RxBool isVisible;
-  final Duration visibleDuration;
-  final Duration visibleDelay;
-  final Duration invisibleDuration;
-  final Duration invisibleDelay;
-  final Widget child;
-  const AnimatedVisibility(
-      {Key key,
-      @required this.isVisible,
-      @required this.child,
-      this.visibleDuration = const Duration(milliseconds: 250),
-      this.visibleDelay = const Duration(milliseconds: 250),
-      this.invisibleDuration = const Duration(milliseconds: 250),
-      this.invisibleDelay = const Duration(milliseconds: 100)})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      if (isVisible.value) {
-        return PlayAnimation<double>(
-            tween: (0.0).tweenTo(1.0),
-            duration: visibleDuration,
-            delay: visibleDelay,
-            builder: (context, child, value) => AnimatedOpacity(opacity: value, duration: visibleDuration, child: child));
-      } else {
-        return PlayAnimation<double>(
-            tween: (1.0).tweenTo(0.0),
-            duration: invisibleDuration,
-            delay: invisibleDelay,
-            builder: (context, child, value) => AnimatedOpacity(opacity: value, duration: invisibleDuration, child: child));
-      }
-    });
-  }
-}
-
 // ^ Sonr Animated Wave Icon for Screen Transitions ^ //
 class SonrAnimatedWaveIcon extends HookWidget {
   // Properties

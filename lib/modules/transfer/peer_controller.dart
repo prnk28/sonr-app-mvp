@@ -13,17 +13,21 @@ class PeerController extends GetxController {
   // Reactive Elements
   final RxMap<String, Peer> peers = SonrService.peers;
   final artboard = Rx<Artboard>();
-  final peerDir = 0.0.obs;
-  final userDir = 0.0.obs;
-  final offset = Offset(0, 0).obs;
-  final proximity = Rx<Position_Proximity>();
-  final heading = Rx<Position_Heading>();
+  final counter = 0.0.obs;
+  final diffRad = 0.0.obs;
+  final facing = Rx<Position_Heading>();
+  final hasCompleted = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
+  final isWithin = false.obs;
+  final offset = Offset(0, 0).obs;
+  final peerDir = 0.0.obs;
+  final proximity = Rx<Position_Proximity>();
+  final userDir = 0.0.obs;
 
   // References
   StreamSubscription<CompassEvent> compassStream;
-  StreamSubscription<int> stopwatchStream;
+  Timer _timer;
 
   // Checkers
   var _isInvited = false;
@@ -75,7 +79,6 @@ class PeerController extends GetxController {
     _handlePeerUpdate(SonrService.peers);
 
     // Add Stream Handlers
-    isFacing.listen(_handleFacing);
     compassStream = DeviceService.direction.stream.listen(_handleCompassUpdate);
     peerStream = SonrService.peers.listen(_handlePeerUpdate);
     super.onInit();
@@ -84,7 +87,16 @@ class PeerController extends GetxController {
   void onDispose() {
     compassStream.cancel();
     peerStream.cancel();
-    stopwatchStream.cancel();
+  }
+
+  // ^ Calculate Peer Offset from Line ^ //
+  Offset calculateOffset() {
+    Platform platform = peer.platform;
+    if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
+      return Offset.zero;
+    } else {
+      return SonrOffset.fromProximity(proximity.value, facing.value, diffRad.value);
+    }
   }
 
   // ^ Handle User Invitation ^
@@ -135,7 +147,7 @@ class PeerController extends GetxController {
 
     // Update After Delay
     Future.delayed(Duration(milliseconds: 1000)).then((_) {
-      // Call Finish
+      hasCompleted(true);
       _reset();
     });
   }
@@ -144,6 +156,7 @@ class PeerController extends GetxController {
   playCompleted() async {
     // Update Visibility
     isVisible(true);
+    hasCompleted(true);
 
     // Start Complete Animation
     _sending.instance.animation.loop = Loop.oneShot;
@@ -158,41 +171,48 @@ class PeerController extends GetxController {
 
   // ^ Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
-    if (newDir != null) {
+    if (newDir != null && !hasCompleted.value) {
       userDir(newDir.headingForCameraMode);
       offset(calculateOffset());
     }
   }
 
-  // ^ Handle Facing Update ^ //
-  _handleFacing(bool facing) {
-    if (facing != isFacing.value) {
-      print("Facing Update: $facing");
-      if (facing) {
-        stopwatchStream = stopWatchStream().listen((newTick) {
-          print("stopwatchStream Update: ${(newTick % 60).floor()}");
-          if ((newTick % 60).floor() == 3 && isFacing.value) {
-            invite();
-          }
-        });
+  // ^ Handle Facing Check ^ //
+  _handleFacingUpdate() {
+    // Check if Facing
+    var newIsFacing = facing.value == Position_Heading.NNE;
+    if (isFacing.value != newIsFacing) {
+      // Check New Result
+      if (newIsFacing) {
+        _startTimer();
+        isFacing(facing.value == Position_Heading.NNE);
       } else {
-        stopwatchStream.cancel();
+        _stopTimer();
       }
     }
   }
 
   // ^ Handle Peer Position ^ //
   _handlePeerUpdate(Map<String, Peer> lobby) {
-    // Initialize
-    lobby.forEach((id, value) {
-      // Update Direction
-      if (id == peer.id.peer && !_isInvited) {
-        peerDir(value.position.direction);
-        heading(value.position.heading);
-        proximity(value.position.proximity);
-        offset(calculateOffset());
-      }
-    });
+    if (!hasCompleted.value) {
+      // Initialize
+      lobby.forEach((id, value) {
+        // Update Direction
+        if (id == peer.id.peer && !_isInvited) {
+          peerDir(value.position.direction);
+          proximity(value.position.proximity);
+
+          // Set Diff Radians
+          diffRad(((userDir.value - peerDir.value).abs() * pi) / 180.0);
+
+          // Set Facing
+          var adjustedDesignation = (((userDir.value - peerDir.value).abs() / 11.25) + 0.25).toInt();
+          facing(Position_Heading.values[(adjustedDesignation % 32)]);
+          offset(calculateOffset());
+          _handleFacingUpdate();
+        }
+      });
+    }
   }
 
   // ^ Temporary: Workaround to handle Bubble States ^ //
@@ -218,49 +238,31 @@ class PeerController extends GetxController {
     _complete.isActive = _hasCompleted;
   }
 
-  // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset() {
-    Platform platform = peer.platform;
-    if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
-      return Offset.zero;
-    } else {
-      // Get Differential Data
-      var diffRad = ((userDir.value - peerDir.value).abs() * pi) / 180.0;
-      return SonrOffset.fromProximity(proximity.value, heading.value, diffRad);
+  // ^ Begin Facing Invite Check ^ //
+  void _startTimer() {
+    _timer = Timer.periodic(500.milliseconds, (_) {
+      // Add MS to Counter
+      counter(counter.value += 500);
+
+      // Check if Facing
+      if (counter.value == 3500) {
+        if (isFacing.value && !hasCompleted.value && !_inProgress) {
+          invite();
+          _stopTimer();
+        } else {
+          _stopTimer();
+        }
+      }
+    });
+  }
+
+  // ^ Stop Timer for Facing Check ^ //
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+      isFacing(false);
+      counter(0);
     }
   }
-}
-
-Stream<int> stopWatchStream() {
-  StreamController<int> streamController;
-  Timer timer;
-  Duration timerInterval = Duration(seconds: 1);
-  int counter = 0;
-
-  void stopTimer() {
-    if (timer != null) {
-      timer.cancel();
-      timer = null;
-      counter = 0;
-      streamController.close();
-    }
-  }
-
-  void tick(_) {
-    counter++;
-    streamController.add(counter);
-  }
-
-  void startTimer() {
-    timer = Timer.periodic(timerInterval, tick);
-  }
-
-  streamController = StreamController<int>(
-    onListen: startTimer,
-    onCancel: stopTimer,
-    onResume: startTimer,
-    onPause: stopTimer,
-  );
-
-  return streamController.stream;
 }

@@ -42,7 +42,7 @@ class TransferController extends GetxController {
   // ^ Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
     // Update String Elements
-    if (newDir != null) {
+    if (newDir != null && !isClosed) {
       string(newDir.headingForCameraMode.direction);
       heading(newDir.headingForCameraMode.heading);
 
