@@ -164,15 +164,15 @@ class PeerController extends GetxController {
 
   // ^ Handle Compass Update ^ //
   _handleFacing(bool facing) {
+    print(facing);
     if (facing != isFacing.value) {
       if (facing) {
-        timer = Timer(3.seconds, () {
+        Timer(3.seconds, () {
+          print("Timer Complete");
           if (isFacing.value) {
             invite();
           }
         });
-      } else {
-        timer.cancel();
       }
     }
   }
