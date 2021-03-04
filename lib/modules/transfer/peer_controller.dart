@@ -11,7 +11,6 @@ class PeerController extends GetxController {
 
   // Reactive Elements
   final artboard = Rx<Artboard>();
-  final difference = 0.0.obs;
   final direction = 0.0.obs;
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
@@ -35,9 +34,8 @@ class PeerController extends GetxController {
   StreamSubscription<Map<String, Peer>> peerStream;
   PeerController(this.peer, this.index) {
     contentAnimation(enabledContent);
-    difference(peer.position.antipodal);
     direction(peer.position.direction);
-    offset(calculateOffset(peer.platform));
+    offset(calculateOffset());
     proximity(peer.position.proximity);
   }
 
@@ -156,9 +154,8 @@ class PeerController extends GetxController {
     lobby.forEach((id, value) {
       // Update Direction
       if (id == peer.id.peer && !_isInvited) {
-        difference((userDirection.value.headingForCameraMode - value.position.direction).abs());
         direction(value.position.direction);
-        offset(calculateOffset(value.platform));
+        offset(calculateOffset());
         proximity(value.position.proximity);
       }
     });
@@ -188,11 +185,12 @@ class PeerController extends GetxController {
   }
 
   // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset(Platform platform) {
+  Offset calculateOffset() {
+    Platform platform = peer.platform;
     if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
       return Offset.zero;
     } else {
-      return SonrOffset.fromDegrees(difference.value);
+      return SonrOffset.fromProximity(proximity.value, direction.value);
     }
   }
 }

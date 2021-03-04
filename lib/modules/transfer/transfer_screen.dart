@@ -24,10 +24,12 @@ class TransferScreen extends GetView<TransferController> {
             // @ Range Lines
             Padding(
                 padding: EdgeInsets.only(bottom: 5),
-                child: CustomPaint(
-                  size: Size(Get.width, Get.height),
-                  painter: ZonePainter(),
-                  child: Container(),
+                child: Stack(
+                  children: [
+                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
+                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
+                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
+                  ],
                 )),
 
             // @ Lobby View

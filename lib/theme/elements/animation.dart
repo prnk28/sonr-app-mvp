@@ -12,12 +12,9 @@ enum ArtboardType { Camera, Icon, Gallery, Contact, Feed, Splash }
 class RipplesAnimation extends StatefulWidget {
   const RipplesAnimation({
     Key key,
-    this.size = 600.0,
-    this.color = SonrColor.Blue,
     @required this.child,
   }) : super(key: key);
-  final double size;
-  final Color color;
+
   final Widget child;
   @override
   _RipplesAnimationState createState() => _RipplesAnimationState();
@@ -42,16 +39,23 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final size = 400.0;
     return Center(
       child: CustomPaint(
         painter: CirclePainter(
           _controller,
-          color: widget.color,
         ),
         child: SizedBox(
-          width: widget.size * 4.125,
-          height: widget.size * 4.125,
-          child: widget.child,
+          width: size * 4.125,
+          height: size * 4.125,
+          child: ScaleTransition(
+              scale: Tween(begin: 0.98, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: _controller,
+                  curve: const CurveWave(),
+                ),
+              ),
+              child: widget.child),
         ),
       ),
     );

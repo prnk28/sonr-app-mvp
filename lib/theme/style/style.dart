@@ -24,6 +24,7 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter_custom_clippers/flutter_custom_clippers.dart' hide ArrowClipper;
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import '../theme.dart';
 import 'color.dart';
 
 class SonrStyle {
@@ -88,4 +89,17 @@ class SonrStyle {
   static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
 
   static get timeStampDark => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.baseDark);
+
+  static zonePath({@required Position_Proximity proximity}) => NeumorphicStyle(
+        border: NeumorphicBorder(
+          color: SonrColor.Grey,
+          width: 1,
+        ),
+        depth: 8,
+        color: SonrColor.White,
+        surfaceIntensity: 0.6,
+        shape: NeumorphicShape.flat,
+        intensity: 0.85,
+        boxShape: NeumorphicBoxShape.path(ZonePathProvider(proximity)),
+      );
 }

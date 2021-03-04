@@ -1,25 +1,11 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../style/style.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-const double K_ANGLE = pi;
-
-// ^ Offset Extension for Common Locations ^ //
-extension SonrOffset on Offset {
-  static const Offset Top = Offset(0.0, -1.0);
-  static const Offset Bottom = Offset(0.0, 1.0);
-  static const Offset Left = Offset(-1.0, 0.0);
-  static const Offset Right = Offset(1.0, 0.0);
-
-  static Offset fromDegrees(double deg) {
-    var rad = (deg * pi) / 180.0;
-    var dx = cos(rad);
-    var dy = sin(rad);
-    return Offset(dx * (Get.width / 4), dy * (Get.height / 8));
-  }
-}
+import '../theme.dart';
 
 // ^ Arrow Painter for Dropdown ^ //
 class ArrowClipper extends CustomClipper<Path> {
@@ -40,25 +26,25 @@ class ArrowClipper extends CustomClipper<Path> {
 
 // ^ Circle Ripple Painter ^ //
 class CirclePainter extends CustomPainter {
-  CirclePainter(
-    this._animation, {
-    @required this.color,
-  }) : super(repaint: _animation);
-  final Color color;
+  CirclePainter(this._animation) : super(repaint: _animation);
+
   final Animation<double> _animation;
+
   void circle(Canvas canvas, Rect rect, double value) {
-    final double opacity = (1.0 - (value / 4.0)).clamp(0.0, 1.0);
-    final Color _color = color.withOpacity(opacity);
+    final double opacity = (0.8 - (value / 3.5)).clamp(0.0, 0.8);
+    final Color _color = SonrColor.Red.withOpacity(opacity);
     final double size = rect.width / 2;
     final double area = size * size;
-    final double radius = sqrt(area * value / 4);
+    final double radius = sqrt(area * value / 2);
     final Paint paint = Paint()..color = _color;
+    // paint.style = PaintingStyle.stroke;
+    // paint.strokeWidth = 20;
     canvas.drawCircle(rect.center, radius, paint);
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Rect rect = Rect.fromLTRB(0.0, 0.0, size.width, size.height);
+    final Rect rect = Rect.fromLTRB(0.0, 0.0, Get.width, size.height);
     for (int wave = 3; wave >= 0; wave--) {
       circle(canvas, rect, wave + _animation.value);
     }
@@ -68,6 +54,7 @@ class CirclePainter extends CustomPainter {
   bool shouldRepaint(CirclePainter oldDelegate) => true;
 }
 
+// ^ Curved Wave for Animation Curve ^ //
 class CurveWave extends Curve {
   const CurveWave();
   @override
@@ -77,38 +64,6 @@ class CurveWave extends Curve {
     }
     return sin(t * pi);
   }
-}
-
-// ^ Expanded Bubble Painter ^ //
-class ExpandedBubblePainter extends NeumorphicPathProvider {
-  @override
-  bool shouldReclip(NeumorphicPathProvider oldClipper) {
-    return true;
-  }
-
-  @override
-  Path getPath(Size size) {
-    return Path()
-      ..moveTo(size.width * 0.2000000, size.height * 0.2000000)
-      ..quadraticBezierTo(size.width * -0.0002200, size.height * 0.1989600, 0, size.height * 0.3000000)
-      ..lineTo(0, size.height * 0.9000000)
-      ..quadraticBezierTo(size.width * 0.0002800, size.height * 0.9993200, size.width * 0.2000000, size.height)
-      ..quadraticBezierTo(size.width * 0.1980000, size.height * 1.0025000, size.width * 0.2000000, size.height)
-      ..lineTo(size.width * 0.8000000, size.height)
-      ..quadraticBezierTo(size.width * 0.8022800, size.height * 1.0046800, size.width * 0.8000000, size.height)
-      ..quadraticBezierTo(size.width * 1.0006800, size.height * 1.0005600, size.width, size.height * 0.9000000)
-      ..lineTo(size.width, size.height * 0.3000000)
-      ..quadraticBezierTo(size.width * 0.9955000, size.height * 0.1994000, size.width * 0.8000000, size.height * 0.2000000)
-      ..quadraticBezierTo(size.width * 0.8008200, size.height * 0.1991600, size.width * 0.8000000, size.height * 0.2000000)
-      ..lineTo(size.width * 0.7000000, size.height * 0.2000000)
-      ..quadraticBezierTo(size.width * 0.7034200, size.height * 0.0004400, size.width * 0.5000000, 0)
-      ..quadraticBezierTo(size.width * 0.3006400, size.height * -0.0016400, size.width * 0.3000000, size.height * 0.2000000)
-      ..quadraticBezierTo(size.width * 0.1984200, size.height * 0.1971600, size.width * 0.2000000, size.height * 0.2000000)
-      ..close();
-  }
-
-  @override
-  bool get oneGradientPerPath => false;
 }
 
 // ^ Icon Wave Painter ^ //
@@ -161,6 +116,35 @@ class IconWavePainter extends CustomPainter {
   }
 }
 
+// ^ Offset Extension for Common Locations ^ //
+extension SonrOffset on Offset {
+  static const Offset Top = Offset(0.0, -1.0);
+  static const Offset Bottom = Offset(0.0, 1.0);
+  static const Offset Left = Offset(-1.0, 0.0);
+  static const Offset Right = Offset(1.0, 0.0);
+
+  static Offset fromDegrees(double deg) {
+    var rad = (deg * pi) / 180.0;
+    var dx = cos(rad);
+    var dy = sin(rad);
+    return Offset(dx * (Get.width / 4), dy * (Get.height / 8));
+  }
+
+  static Offset fromProximity(Position_Proximity prox, double dir) {
+    // Get Path Metric
+    PathMetric pathMetric = ZonePathProvider(prox, widgetSize: 90).path.computeMetrics().elementAt(0);
+
+    // Determine Point on Path
+    double adjustedNorth = DeviceService.direction.value.headingForCameraMode;
+    double posOnPath = (adjustedNorth - dir).clamp(0, ZonePathProvider.length(90));
+    print(posOnPath);
+
+    // Get Position on Path
+    Tangent pos = pathMetric.getTangentForOffset(posOnPath);
+    return pos.position;
+  }
+}
+
 // ^ Wave Painter for File Progress ^ //
 class WavePainter extends CustomPainter {
   final _pi2 = 2 * pi;
@@ -202,73 +186,61 @@ class WavePainter extends CustomPainter {
   }
 }
 
-// ^ Zone Painter for Transfer View Lines ^ //
-class ZonePainter extends CustomPainter {
-  // Size Reference
-  var _currentSize;
+// ^ Provides Zone Path by Position Proximity ^ //
+class ZonePathProvider extends NeumorphicPathProvider {
+  final Position_Proximity proximity;
+  final double widgetSize;
+
+  ZonePathProvider(this.proximity, {this.widgetSize = 0});
+  Path get path => getPath(Size.infinite);
+  static double length(double angle) => angle * sqrt((Get.height / 2 * Get.height / 2) / 2);
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // Initialize
-    _currentSize = size;
-
-    // Setup Paint
-    var paint = Paint();
-    paint.color = SonrColor.Grey;
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 1;
-
-    // Draw Zone Arcs
-    canvas.drawArc(_rectByZone(Position_Proximity.Immediate), K_ANGLE, K_ANGLE, false, paint);
-
-    canvas.drawArc(_rectByZone(Position_Proximity.Near), K_ANGLE, K_ANGLE, false, paint);
-
-    canvas.drawArc(_rectByZone(Position_Proximity.Distant), K_ANGLE, K_ANGLE, false, paint);
-  }
-
-  Rect _rectByZone(Position_Proximity proximity) {
-    switch (proximity) {
-      case Position_Proximity.Immediate:
-        return Rect.fromLTRB(0, 200, _currentSize.width, 400);
-        break;
-      case Position_Proximity.Near:
-        return Rect.fromLTRB(0, 100, _currentSize.width, 300);
-        break;
-      case Position_Proximity.Distant:
-        return Rect.fromLTRB(0, 0, _currentSize.width, 150);
-        break;
-      default:
-        return Rect.fromLTRB(0, 100, _currentSize.width, 300);
-        break;
-    }
+  bool shouldReclip(NeumorphicPathProvider oldClipper) {
+    return true;
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  Path getPath(Size size) {
+    // Initialize Bounds
+    final double height = (Get.height / 2) + (widgetSize / 2);
+    final double radius = sqrt((Get.height / 2 * Get.height / 2) / 2);
 
-  static Path getBubblePath(double sizeWidth, Position_Proximity proximity) {
+    // Build Rects
+    var distantRect = Rect.fromCircle(center: Offset(Get.width / 2, height - 120), radius: radius);
+    var nearRect = Rect.fromCircle(center: Offset(Get.width / 2, height - 20), radius: radius);
+    var immediateRect = Rect.fromCircle(center: Offset(Get.width / 2, height + 80), radius: radius);
+
     // Check Proximity Status
     switch (proximity) {
       case Position_Proximity.Immediate:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 120, sizeWidth, 400), K_ANGLE, K_ANGLE);
+        path.addArc(immediateRect, pi, pi);
         return path;
         break;
       case Position_Proximity.Near:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 50, sizeWidth, 220), K_ANGLE, K_ANGLE);
+        path.addArc(nearRect, pi, pi);
         return path;
         break;
       case Position_Proximity.Distant:
         Path path = new Path();
-        path.addArc(Rect.fromLTRB(0, 0, sizeWidth, 150), K_ANGLE, K_ANGLE);
+        path.addArc(distantRect, pi, pi);
         return path;
         break;
       default:
-        return null;
+        return Path()
+          ..moveTo(0, 0)
+          ..lineTo(Get.width / 2, 0)
+          ..lineTo(Get.width, height / 2)
+          ..lineTo(Get.width / 2, height / 2)
+          ..lineTo(Get.width, height)
+          ..lineTo(0, height)
+          ..close();
         break;
     }
   }
+
+  @override
+  bool get oneGradientPerPath => true;
 }

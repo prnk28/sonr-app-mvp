@@ -17,8 +17,8 @@ class PeerBubble extends StatelessWidget {
         init: PeerController(peer, index),
         builder: (controller) {
           return AnimatedPositioned(
-              top: 35.0,
-              left: 100,
+              top: controller.offset.value.dy,
+              left: controller.offset.value.dx,
               duration: 150.milliseconds,
               child: Container(
                 width: K_BUBBLE_SIZE,
