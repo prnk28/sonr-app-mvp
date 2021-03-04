@@ -109,6 +109,38 @@ extension PeerUtils on Peer {
   }
 }
 
+extension ProximityUtils on Position_Proximity {
+  double get maxHeight {
+    // Bottom Zone
+    if (this == Position_Proximity.Immediate) {
+      return 235;
+    }
+    // Middle Zone
+    else if (this == Position_Proximity.Near) {
+      return 150;
+    }
+    // Top Zone
+    else {
+      return 75;
+    }
+  }
+
+  double get topOffset {
+    // Bottom Zone
+    if (this == Position_Proximity.Immediate) {
+      return 185;
+    }
+    // Middle Zone
+    else if (this == Position_Proximity.Near) {
+      return 100;
+    }
+    // Top Zone
+    else {
+      return 25;
+    }
+  }
+}
+
 // ^ Payload Model Extensions ^ //
 extension PayloadUtils on Payload {
   FlutterGradientNames get gradientName {

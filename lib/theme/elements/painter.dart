@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../style/style.dart';
+import '../../data/data.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import '../theme.dart';
@@ -32,7 +33,7 @@ class CirclePainter extends CustomPainter {
 
   void circle(Canvas canvas, Rect rect, double value) {
     final double opacity = (0.8 - (value / 3.5)).clamp(0.0, 0.8);
-    final Color _color = SonrColor.Red.withOpacity(opacity);
+    final Color _color = SonrColor.Blue.withOpacity(opacity);
     final double size = rect.width / 2;
     final double area = size * size;
     final double radius = sqrt(area * value / 2);
@@ -130,12 +131,7 @@ extension SonrOffset on Offset {
     return Offset(dx * (Get.width / 4), dy * (Get.height / 8));
   }
 
-  static Offset fromProximity(Position_Proximity prox, double dir) {
-    // Get Differential Data
-    var diff = (DeviceService.direction.value.headingForCameraMode - dir).abs();
-    var diffRad = (diff * pi) / 180.0;
-    diffRad += pi / 2;
-
+  static Offset fromProximity(Position_Proximity prox, Position_Heading facing, double diffRad) {
     // Convert Rad to Point on Path
     var path = ZonePathProvider(prox);
     var metrics = path.getPath(Get.size).computeMetrics().elementAt(0);
@@ -144,7 +140,17 @@ extension SonrOffset on Offset {
     // Get Tanget for Point
     var tangent = metrics.getTangentForOffset(point);
     var calcPos = tangent.position;
-    return Offset(calcPos.dx.clamp(40, Get.width - 40), calcPos.dy);
+
+    // Top of View
+    if (facing == Position_Heading.NNE) {
+      return Offset(180, prox.topOffset);
+    } else if (facing == Position_Heading.NE) {
+      return Offset(270, prox.topOffset + 20);
+    } else if (facing == Position_Heading.N) {
+      return Offset(90, prox.topOffset + 20);
+    } else {
+      return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZonePathProvider.proximityMaxHeight(prox), calcPos.dy).toDouble());
+    }
   }
 }
 
@@ -213,6 +219,11 @@ class ZonePathProvider extends NeumorphicPathProvider {
     return size.longestSide;
   }
 
+  // ^ Returns Path Size ^
+  static double arcLength(double angle) {
+    return sqrt((Get.height / 2 * Get.height / 2) / 2) * angle;
+  }
+
   // ^ Constructs Path ^ //
   @override
   Path getPath(Size size) {
@@ -248,6 +259,21 @@ class ZonePathProvider extends NeumorphicPathProvider {
       Path path = new Path();
       path.addArc(distantRect, pi, pi);
       return path;
+    }
+  }
+
+  static double proximityMaxHeight(Position_Proximity proximity) {
+    // Bottom Zone
+    if (proximity == Position_Proximity.Immediate) {
+      return 235;
+    }
+    // Middle Zone
+    else if (proximity == Position_Proximity.Near) {
+      return 150;
+    }
+    // Top Zone
+    else {
+      return 75;
     }
   }
 

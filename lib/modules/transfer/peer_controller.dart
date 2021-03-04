@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -10,15 +11,18 @@ class PeerController extends GetxController {
   final int index;
 
   // Reactive Elements
+  final RxMap<String, Peer> peers = SonrService.peers;
   final artboard = Rx<Artboard>();
-  final direction = 0.0.obs;
+  final peerDir = 0.0.obs;
+  final userDir = 0.0.obs;
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
+  final isFacing = false.obs;
   final isVisible = true.obs;
 
   // References
-  final Rx<CompassEvent> userDirection = DeviceService.direction;
-  final RxMap<String, Peer> peers = SonrService.peers;
+  StreamSubscription<CompassEvent> compassStream;
+  Timer timer;
 
   // Checkers
   var _isInvited = false;
@@ -32,7 +36,7 @@ class PeerController extends GetxController {
   StreamSubscription<Map<String, Peer>> peerStream;
   PeerController(this.peer, this.index) {
     isVisible(true);
-    direction(peer.position.direction);
+    peerDir(peer.position.direction);
     offset(calculateOffset());
     proximity(peer.position.proximity);
   }
@@ -65,11 +69,19 @@ class PeerController extends GetxController {
       // Observable Artboard
       this.artboard(artboard);
     }
+    // Set Initial Values
+    _handleCompassUpdate(DeviceService.direction.value);
+    _handlePeerUpdate(SonrService.peers);
+
+    // Add Stream Handlers
+    isFacing.listen(_handleFacing);
+    compassStream = DeviceService.direction.stream.listen(_handleCompassUpdate);
     peerStream = SonrService.peers.listen(_handlePeerUpdate);
     super.onInit();
   }
 
   void onDispose() {
+    compassStream.cancel();
     peerStream.cancel();
   }
 
@@ -142,13 +154,36 @@ class PeerController extends GetxController {
     });
   }
 
+  // ^ Handle Compass Update ^ //
+  _handleCompassUpdate(CompassEvent newDir) {
+    if (newDir != null) {
+      userDir(newDir.headingForCameraMode);
+      offset(calculateOffset());
+    }
+  }
+
+  // ^ Handle Compass Update ^ //
+  _handleFacing(bool facing) {
+    if (facing != isFacing.value) {
+      if (facing) {
+        timer = Timer(3.seconds, () {
+          if (isFacing.value) {
+            invite();
+          }
+        });
+      } else {
+        timer.cancel();
+      }
+    }
+  }
+
   // ^ Handle Peer Position ^ //
   _handlePeerUpdate(Map<String, Peer> lobby) {
     // Initialize
     lobby.forEach((id, value) {
       // Update Direction
       if (id == peer.id.peer && !_isInvited) {
-        direction(value.position.direction);
+        peerDir(value.position.direction);
         offset(calculateOffset());
         proximity(value.position.proximity);
       }
@@ -184,7 +219,13 @@ class PeerController extends GetxController {
     if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
       return Offset.zero;
     } else {
-      return SonrOffset.fromProximity(proximity.value, direction.value);
+      // Get Differential Data
+      var diffRad = ((userDir.value - peerDir.value).abs() * pi) / 180.0;
+      // Get Facing Difference Designation
+      var adjustedDesignation = (((userDir.value - peerDir.value).abs() / 22.5) + 0.5).toInt();
+      var facing = Position_Heading.values[(adjustedDesignation % 16)];
+      isFacing(facing == Position_Heading.NNE);
+      return SonrOffset.fromProximity(proximity.value, facing, diffRad);
     }
   }
 }
