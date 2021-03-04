@@ -51,7 +51,7 @@ class SonrButton extends StatelessWidget {
       SonrIcon icon,
       Color shadowLightColor,
       Color shadowDarkColor,
-      Color color = SonrColor.base,
+      Color color = SonrColor.White,
       double depth = 8,
       double radius = 20,
       double intensity = 0.85,
@@ -128,7 +128,7 @@ class SonrButton extends StatelessWidget {
     @required Function onPressed,
     SonrText text,
     SonrIcon icon,
-    Color color = SonrColor.base,
+    Color color = SonrColor.White,
     bool isDisabled = false,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -193,7 +193,7 @@ class SonrButton extends StatelessWidget {
     SonrText text,
     Color shadowLightColor,
     Color shadowDarkColor,
-    Color color = SonrColor.base,
+    Color color = SonrColor.White,
     bool isDisabled = false,
     double depth = 8,
     double intensity = 0.85,
@@ -268,7 +268,7 @@ class SonrButton extends StatelessWidget {
     SonrText text,
     Color shadowLightColor,
     Color shadowDarkColor,
-    Color color = SonrColor.base,
+    Color color = SonrColor.White,
     bool isDisabled = false,
     double intensity = 0.85,
     double depth = 8,
@@ -346,16 +346,16 @@ class SonrButton extends StatelessWidget {
     // Update Children
     switch (type) {
       case _ButtonType.DisabledIcon:
-        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabled);
+        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
         isDisabled = true;
         break;
       case _ButtonType.DisabledText:
-        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.disabled);
+        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.Grey);
         isDisabled = true;
         break;
       case _ButtonType.DisabledIconText:
-        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.disabled);
-        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.disabled);
+        iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
+        textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.Grey);
         isDisabled = true;
         break;
       default:

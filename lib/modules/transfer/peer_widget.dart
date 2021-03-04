@@ -131,10 +131,10 @@ class PeerSheetView extends StatelessWidget {
                   shadowLightColor: Colors.black38,
                   boxShape: NeumorphicBoxShape.circle(),
                   depth: 10,
-                  color: SonrColor.base,
+                  color: SonrColor.White,
                 ),
                 child: Neumorphic(
-                  style: NeumorphicStyle(intensity: 0.5, depth: -8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base),
+                  style: NeumorphicStyle(intensity: 0.5, depth: -8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.White),
                   child: controller.peer.profilePicture,
                 ),
               ),

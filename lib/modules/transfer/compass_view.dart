@@ -15,31 +15,33 @@ class CompassView extends GetView<TransferController> {
             // Compass Total
             AspectRatio(
               aspectRatio: 1,
-              child: Neumorphic(
-                margin: EdgeInsets.all(14),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                ),
+              child: RipplesAnimation(
                 child: Neumorphic(
+                  margin: EdgeInsets.all(14),
                   style: NeumorphicStyle(
-                    depth: 14,
                     boxShape: NeumorphicBoxShape.circle(),
                   ),
-                  margin: EdgeInsets.all(20),
                   child: Neumorphic(
                     style: NeumorphicStyle(
-                      depth: -8,
+                      depth: 14,
                       boxShape: NeumorphicBoxShape.circle(),
                     ),
-                    margin: EdgeInsets.all(10),
-                    // Interior Compass
-                    child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
-                      // Center Circle
-                      _CompassBulb(controller.string.value, controller.heading.value, controller.gradient.value),
+                    margin: EdgeInsets.all(20),
+                    child: Neumorphic(
+                      style: NeumorphicStyle(
+                        depth: -8,
+                        boxShape: NeumorphicBoxShape.circle(),
+                      ),
+                      margin: EdgeInsets.all(10),
+                      // Interior Compass
+                      child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
+                        // Center Circle
+                        _CompassBulb(controller.string.value, controller.heading.value, controller.gradient.value),
 
-                      // Spokes
-                      _Spokes(controller.angle.value),
-                    ]),
+                        // Spokes
+                        _Spokes(controller.angle.value),
+                      ]),
+                    ),
                   ),
                 ),
               ),

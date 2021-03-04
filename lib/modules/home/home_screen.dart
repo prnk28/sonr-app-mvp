@@ -51,9 +51,9 @@ class HomeScreen extends GetView<HomeController> {
                               child: Center(child: Obx(() => buildView()))),
                         ),
                         children: [
-                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.disabled, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.disabled, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.disabled, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
                           //ToggleElement(),
                         ],
                       )),

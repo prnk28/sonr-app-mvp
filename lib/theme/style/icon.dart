@@ -61,7 +61,7 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Normal Icon with Provided Data
-  factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.base, Key key}) {
+  factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.White, Key key}) {
     return SonrIcon(
       data,
       IconType.Normal,
@@ -344,7 +344,7 @@ extension PayloadIcon on Payload {
 
 extension PlatformIcon on Platform {
   // -- Returns Icon Widget -- //
-  SonrIcon icon(IconType type, {Color color, double size = 30, Key key, NeumorphicStyle style = const NeumorphicStyle(color: SonrColor.base)}) {
+  SonrIcon icon(IconType type, {Color color, double size = 30, Key key, NeumorphicStyle style = const NeumorphicStyle(color: SonrColor.White)}) {
     IconGradientData gradientData;
     switch (this) {
       case Platform.Android:

@@ -69,7 +69,7 @@ class SonrScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.resizeToAvoidBottomPadding,
     this.bodyAction,
-    this.backgroundColor = SonrColor.base,
+    this.backgroundColor = SonrColor.White,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class SonrScaffold extends StatelessWidget {
           intensity: 0.85,
         ),
         theme: NeumorphicThemeData(
-          baseColor: SonrColor.base,
+          baseColor: SonrColor.White,
           lightSource: LightSource.topLeft,
           depth: 6,
           intensity: 0.85,

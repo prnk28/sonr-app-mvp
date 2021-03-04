@@ -353,7 +353,7 @@ class SonrRadioItem extends StatelessWidget {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       NeumorphicRadio(
         style: NeumorphicRadioStyle(
-            unselectedColor: SonrColor.base, selectedColor: SonrColor.base, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
+            unselectedColor: SonrColor.White, selectedColor: SonrColor.White, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(4))),
         child: child,
         value: value,
         groupValue: groupValue,

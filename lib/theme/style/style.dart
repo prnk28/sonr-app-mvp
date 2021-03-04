@@ -45,37 +45,37 @@ class SonrStyle {
   static get compassStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
   static get dropDownBackground =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base, shadowLightColor: Colors.black38);
+      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.White, shadowLightColor: Colors.black38);
 
   static get dropDownItem =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
 
-  static get dropDownFlat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
-  static get dropDownCurved => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+  static get dropDownFlat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.White);
+  static get dropDownCurved => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
 
-  static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.base);
+  static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.White);
 
   static const gradientIcon =
-      NeumorphicStyle(color: SonrColor.base, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
 
   static get appBarIcon =>
-      NeumorphicStyle(color: SonrColor.base, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.85, depth: 2, surfaceIntensity: 0.6);
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.85, depth: 2, surfaceIntensity: 0.6);
 
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get overlay => NeumorphicStyle(
       intensity: 0.85,
       depth: 8,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      color: SonrColor.base,
+      color: SonrColor.White,
       shadowLightColor: Colors.black38);
 
-  static get mediaButtonDefault => NeumorphicStyle(intensity: 0.85, color: SonrColor.base);
+  static get mediaButtonDefault => NeumorphicStyle(intensity: 0.85, color: SonrColor.White);
   static get mediaButtonPressed => NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
 
   static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   static get photo =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.base, shadowLightColor: Colors.black38);
+      NeumorphicStyle(intensity: 0.85, depth: 8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.White, shadowLightColor: Colors.black38);
 
   static get shareButton => NeumorphicStyle(
         color: Colors.black87,
@@ -85,7 +85,7 @@ class SonrStyle {
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
       );
 
-  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.base);
+  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
 
   static get timeStampDark => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.baseDark);
 }

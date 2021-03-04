@@ -2,12 +2,61 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import '../style/style.dart';
-import 'package:rive/rive.dart' hide LinearGradient;
+import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
 enum ArtboardType { Camera, Icon, Gallery, Contact, Feed, Splash }
+
+class RipplesAnimation extends StatefulWidget {
+  const RipplesAnimation({
+    Key key,
+    this.size = 600.0,
+    this.color = SonrColor.Blue,
+    @required this.child,
+  }) : super(key: key);
+  final double size;
+  final Color color;
+  final Widget child;
+  @override
+  _RipplesAnimationState createState() => _RipplesAnimationState();
+}
+
+class _RipplesAnimationState extends State<RipplesAnimation> with TickerProviderStateMixin {
+  AnimationController _controller;
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CustomPaint(
+        painter: CirclePainter(
+          _controller,
+          color: widget.color,
+        ),
+        child: SizedBox(
+          width: widget.size * 4.125,
+          height: widget.size * 4.125,
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+}
 
 class SonrAnimatedWidget extends GetWidget<AnimatedController> {
   final Widget child;
@@ -371,7 +420,7 @@ class SonrAnimatedWaveIcon extends HookWidget {
           child: ShaderMask(
             blendMode: BlendMode.srcOut,
             shaderCallback: (bounds) => LinearGradient(
-              colors: [SonrColor.base],
+              colors: [SonrColor.White],
               stops: [0.0],
             ).createShader(bounds),
             child: Container(

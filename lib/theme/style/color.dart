@@ -8,13 +8,19 @@ import 'icon.dart';
 
 class SonrColor {
   // ** General Theme Color Properties ** //
-  static const Color base = Color(0xffDDDDDD);
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
   static const Color baseDark = Color(0xff1A1A1A);
   static const Color dialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color overlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
-  static const Color disabled = Color.fromRGBO(179, 181, 181, 1.0);
 
+  // ** Color Pallette ** //
+  static const Color Red = Color(0xffF04C63);
+  static const Color Grey = Color(0xffC6C4C4);
+  static const Color Blue = Color(0xff51C5DD);
+  static const Color White = Color(0xffF7F6F6);
+  static const Color Navy = Color(0xff0A4F70);
+
+  // ** Bulb Gradients ** //
   static Gradient get activeBulb => FlutterGradients.findByName(FlutterGradientNames.summerGames);
   static Gradient get inactiveBulb => FlutterGradients.findByName(FlutterGradientNames.octoberSilence);
 

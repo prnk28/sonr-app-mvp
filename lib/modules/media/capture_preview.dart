@@ -16,7 +16,7 @@ class MediaPreviewView extends StatelessWidget {
             width: Get.width - 20,
             height: Get.height / 3 + 150,
             padding: EdgeInsets.only(top: 6),
-            color: SonrColor.base,
+            color: SonrColor.White,
             child: Column(
               children: [
                 mediaFile.isVideo

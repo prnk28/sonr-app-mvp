@@ -16,7 +16,7 @@ class CreateTileStepper extends GetView<ProfileController> {
           borderRadius: BorderRadius.circular(30),
           backendColor: Colors.transparent,
           child: Neumorphic(
-            style: NeumorphicStyle(color: SonrColor.base),
+            style: NeumorphicStyle(color: SonrColor.White),
             child: Material(
               color: Colors.transparent,
               child: Column(children: [

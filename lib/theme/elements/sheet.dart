@@ -41,7 +41,7 @@ class ShareSheet extends StatelessWidget {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         backendColor: Colors.transparent,
         child: Neumorphic(
-            style: NeumorphicStyle(color: SonrColor.base),
+            style: NeumorphicStyle(color: SonrColor.White),
             child: Container(
                 width: size.width,
                 height: size.height,
@@ -67,7 +67,7 @@ class ShareSheet extends StatelessWidget {
                     child: Neumorphic(
                         margin: EdgeInsets.only(top: 4, bottom: 4, left: 8),
                         style: NeumorphicStyle(
-                          color: SonrColor.base,
+                          color: SonrColor.White,
                           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
                         ),
                         child: child),

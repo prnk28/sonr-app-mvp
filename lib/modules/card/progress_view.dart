@@ -75,7 +75,7 @@ class ProgressView extends HookWidget {
       child: ShaderMask(
         blendMode: BlendMode.srcATop,
         shaderCallback: (bounds) => LinearGradient(
-          colors: [SonrColor.base],
+          colors: [SonrColor.White],
           stops: [0.0],
         ).createShader(bounds),
         child: Container(

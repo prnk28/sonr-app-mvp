@@ -28,7 +28,7 @@ class EditDialog extends GetView<EditDialogController> {
             borderRadius: BorderRadius.circular(30),
             backendColor: Colors.transparent,
             child: Neumorphic(
-                style: NeumorphicStyle(color: SonrColor.base),
+                style: NeumorphicStyle(color: SonrColor.White),
                 child: Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

@@ -38,6 +38,47 @@ class ArrowClipper extends CustomClipper<Path> {
   }
 }
 
+// ^ Circle Ripple Painter ^ //
+class CirclePainter extends CustomPainter {
+  CirclePainter(
+    this._animation, {
+    @required this.color,
+  }) : super(repaint: _animation);
+  final Color color;
+  final Animation<double> _animation;
+  void circle(Canvas canvas, Rect rect, double value) {
+    final double opacity = (1.0 - (value / 4.0)).clamp(0.0, 1.0);
+    final Color _color = color.withOpacity(opacity);
+    final double size = rect.width / 2;
+    final double area = size * size;
+    final double radius = sqrt(area * value / 4);
+    final Paint paint = Paint()..color = _color;
+    canvas.drawCircle(rect.center, radius, paint);
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Rect rect = Rect.fromLTRB(0.0, 0.0, size.width, size.height);
+    for (int wave = 3; wave >= 0; wave--) {
+      circle(canvas, rect, wave + _animation.value);
+    }
+  }
+
+  @override
+  bool shouldRepaint(CirclePainter oldDelegate) => true;
+}
+
+class CurveWave extends Curve {
+  const CurveWave();
+  @override
+  double transform(double t) {
+    if (t == 0 || t == 1) {
+      return 0.01;
+    }
+    return sin(t * pi);
+  }
+}
+
 // ^ Expanded Bubble Painter ^ //
 class ExpandedBubblePainter extends NeumorphicPathProvider {
   @override
@@ -173,7 +214,7 @@ class ZonePainter extends CustomPainter {
 
     // Setup Paint
     var paint = Paint();
-    paint.color = Colors.grey[400];
+    paint.color = SonrColor.Grey;
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 1;
 
