@@ -17,12 +17,13 @@ class PeerController extends GetxController {
   final userDir = 0.0.obs;
   final offset = Offset(0, 0).obs;
   final proximity = Rx<Position_Proximity>();
+  final heading = Rx<Position_Heading>();
   final isFacing = false.obs;
   final isVisible = true.obs;
 
   // References
   StreamSubscription<CompassEvent> compassStream;
-  Timer timer;
+  StreamSubscription<int> stopwatchStream;
 
   // Checkers
   var _isInvited = false;
@@ -83,6 +84,7 @@ class PeerController extends GetxController {
   void onDispose() {
     compassStream.cancel();
     peerStream.cancel();
+    stopwatchStream.cancel();
   }
 
   // ^ Handle User Invitation ^
@@ -162,17 +164,19 @@ class PeerController extends GetxController {
     }
   }
 
-  // ^ Handle Compass Update ^ //
+  // ^ Handle Facing Update ^ //
   _handleFacing(bool facing) {
-    print(facing);
     if (facing != isFacing.value) {
+      print("Facing Update: $facing");
       if (facing) {
-        Timer(3.seconds, () {
-          print("Timer Complete");
-          if (isFacing.value) {
+        stopwatchStream = stopWatchStream().listen((newTick) {
+          print("stopwatchStream Update: ${(newTick % 60).floor()}");
+          if ((newTick % 60).floor() == 3 && isFacing.value) {
             invite();
           }
         });
+      } else {
+        stopwatchStream.cancel();
       }
     }
   }
@@ -184,8 +188,9 @@ class PeerController extends GetxController {
       // Update Direction
       if (id == peer.id.peer && !_isInvited) {
         peerDir(value.position.direction);
-        offset(calculateOffset());
+        heading(value.position.heading);
         proximity(value.position.proximity);
+        offset(calculateOffset());
       }
     });
   }
@@ -221,11 +226,41 @@ class PeerController extends GetxController {
     } else {
       // Get Differential Data
       var diffRad = ((userDir.value - peerDir.value).abs() * pi) / 180.0;
-      // Get Facing Difference Designation
-      var adjustedDesignation = (((userDir.value - peerDir.value).abs() / 22.5) + 0.5).toInt();
-      var facing = Position_Heading.values[(adjustedDesignation % 16)];
-      isFacing(facing == Position_Heading.NNE);
-      return SonrOffset.fromProximity(proximity.value, facing, diffRad);
+      return SonrOffset.fromProximity(proximity.value, heading.value, diffRad);
     }
   }
+}
+
+Stream<int> stopWatchStream() {
+  StreamController<int> streamController;
+  Timer timer;
+  Duration timerInterval = Duration(seconds: 1);
+  int counter = 0;
+
+  void stopTimer() {
+    if (timer != null) {
+      timer.cancel();
+      timer = null;
+      counter = 0;
+      streamController.close();
+    }
+  }
+
+  void tick(_) {
+    counter++;
+    streamController.add(counter);
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(timerInterval, tick);
+  }
+
+  streamController = StreamController<int>(
+    onListen: startTimer,
+    onCancel: stopTimer,
+    onResume: startTimer,
+    onPause: stopTimer,
+  );
+
+  return streamController.stream;
 }

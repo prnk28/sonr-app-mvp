@@ -31,7 +31,6 @@ dependencies:
   flutter_compass: ^0.5.1
   geolocator: ^6.2.1
   permission_handler: ^5.1.0+2
-  stop_watch_timer: ^1.0.0
 
   # -- Data --
   better_player: ^0.0.55

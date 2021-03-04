@@ -47,8 +47,8 @@ extension DirectionUtils on double {
 
   // ^ Retreives Heading String ^ //
   String get heading {
-    var adjustedDesignation = ((this / 22.5) + 0.5).toInt();
-    var compassEnum = Position_Heading.values[(adjustedDesignation % 16)];
+    var adjustedDesignation = ((this / 11.25) + 0.25).toInt();
+    var compassEnum = Position_Heading.values[(adjustedDesignation % 32)];
     return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }

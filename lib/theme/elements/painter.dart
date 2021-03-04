@@ -144,6 +144,10 @@ extension SonrOffset on Offset {
     // Top of View
     if (facing == Position_Heading.NNE) {
       return Offset(180, prox.topOffset);
+    } else if (facing == Position_Heading.NEbN) {
+      return Offset(225, prox.topOffset + 10);
+    } else if (facing == Position_Heading.NbE) {
+      return Offset(135, prox.topOffset + 10);
     } else if (facing == Position_Heading.NE) {
       return Offset(270, prox.topOffset + 20);
     } else if (facing == Position_Heading.N) {
