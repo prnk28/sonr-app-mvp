@@ -40,7 +40,8 @@ class TransferController extends GetxController {
     lobbySizeStream.cancel();
   }
 
-  setFacingPeer(bool value) {
+  // ^ User is Facing or No longer Facing a Peer ^ //
+  void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
   }
