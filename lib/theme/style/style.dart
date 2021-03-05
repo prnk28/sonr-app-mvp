@@ -73,7 +73,11 @@ class SonrStyle {
   static get mediaButtonDefault => NeumorphicStyle(intensity: 0.85, color: SonrColor.White);
   static get mediaButtonPressed => NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
 
-  static get normal => NeumorphicStyle(intensity: 0.85, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+  static get normal => NeumorphicStyle(
+      intensity: 0.85,
+      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+      shadowDarkColor: SonrColor.ShadowDark,
+      shadowLightColor: SonrColor.ShadowLight);
 
   static get photo =>
       NeumorphicStyle(intensity: 0.85, depth: 8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.White, shadowLightColor: Colors.black38);
@@ -88,7 +92,7 @@ class SonrStyle {
 
   static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
 
-  static get timeStampDark => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.baseDark);
+  static get timeStampDark => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.Dark);
 
   static zonePath({@required Position_Proximity proximity}) => NeumorphicStyle(
         border: NeumorphicBorder(

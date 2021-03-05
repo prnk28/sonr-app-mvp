@@ -32,12 +32,11 @@ class CirclePainter extends CustomPainter {
   final Animation<double> _animation;
 
   void circle(Canvas canvas, Rect rect, double value) {
-    final double opacity = (0.8 - (value / 3.5)).clamp(0.0, 0.8);
-    final Color _color = SonrColor.Blue.withOpacity(opacity);
+    final double opacity = (1 - (value / 3.5)).clamp(0.0, 0.8);
     final double size = rect.width / 2;
     final double area = size * size;
     final double radius = sqrt(area * value / 2);
-    final Paint paint = Paint()..color = _color;
+    final Paint paint = Paint()..color = SonrColor.Red.withOpacity(opacity);
     // paint.style = PaintingStyle.stroke;
     // paint.strokeWidth = 20;
     canvas.drawCircle(rect.center, radius, paint);

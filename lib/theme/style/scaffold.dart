@@ -76,7 +76,7 @@ class SonrScaffold extends StatelessWidget {
     return NeumorphicTheme(
         themeMode: DeviceService.isDarkMode.value ? ThemeMode.dark : ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
-          baseColor: SonrColor.baseDark,
+          baseColor: SonrColor.Dark,
           lightSource: LightSource.topLeft,
           shadowDarkColor: Colors.black.withOpacity(0.7),
           shadowLightColor: SonrColor.fromHex("#3A3A3A").withOpacity(0.7),

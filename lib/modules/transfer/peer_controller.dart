@@ -27,7 +27,6 @@ class PeerController extends GetxController {
   final userPos = Rx<CompassEvent>();
 
   // References
-  StreamSubscription<CompassEvent> compassStream;
   Timer _timer;
 
   // Checkers
@@ -44,6 +43,11 @@ class PeerController extends GetxController {
     isVisible(true);
     position(peer.position);
     offset(_calculateOffset());
+
+    // Update Peer Periodically
+    Timer.periodic(250.milliseconds, (timer) {
+      _handleCompassUpdate(DeviceService.direction.value);
+    });
   }
 
   @override
@@ -75,17 +79,14 @@ class PeerController extends GetxController {
       this.artboard(artboard);
     }
     // Set Initial Values
-    _handleCompassUpdate(DeviceService.direction.value);
     _handlePeerUpdate(SonrService.peers);
 
     // Add Stream Handlers
-    compassStream = DeviceService.direction.stream.listen(_handleCompassUpdate);
     peerStream = SonrService.peers.listen(_handlePeerUpdate);
     super.onInit();
   }
 
   void onDispose() {
-    compassStream.cancel();
     peerStream.cancel();
   }
 
@@ -94,6 +95,7 @@ class PeerController extends GetxController {
     if (!_isInvited) {
       // Perform Invite
       SonrService.invite(this);
+      Get.find<TransferController>().setFacingPeer(false);
 
       // Check for File
       if (Get.find<SonrService>().payload == Payload.MEDIA) {
@@ -109,7 +111,7 @@ class PeerController extends GetxController {
 
   // ^ Toggle Expanded View
   expandDetails() {
-    Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.dialogBackground);
+    Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.DialogBackground);
     HapticFeedback.heavyImpact();
   }
 

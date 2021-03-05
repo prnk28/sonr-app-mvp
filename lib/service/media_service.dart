@@ -122,7 +122,7 @@ class MediaService extends GetxService {
     // @ Check for Media
     if (controller._incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.media(controller._incomingMedia), barrierColor: SonrColor.dialogBackground, isDismissible: false);
+      Get.bottomSheet(ShareSheet.media(controller._incomingMedia), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 
       // Reset Incoming
       controller._incomingMedia.clear();
@@ -132,7 +132,7 @@ class MediaService extends GetxService {
     // @ Check for Text
     if (controller._incomingText.value != "" && GetUtils.isURL(controller._incomingText.value) && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(controller._incomingText.value), barrierColor: SonrColor.dialogBackground, isDismissible: false);
+      Get.bottomSheet(ShareSheet.url(controller._incomingText.value), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 
       // Reset Incoming
       controller._incomingText("");
@@ -290,14 +290,14 @@ class MediaService extends GetxService {
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedFiles(List<SharedMediaFile> data) async {
     if (!Get.isBottomSheetOpen && UserService.exists.value) {
-      Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.dialogBackground, isDismissible: false);
+      Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
-      Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.dialogBackground, isDismissible: false);
+      Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 }

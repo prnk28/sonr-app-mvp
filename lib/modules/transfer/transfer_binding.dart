@@ -5,6 +5,6 @@ export 'transfer_screen.dart';
 class TransferBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<TransferController>(TransferController());
+    Get.put<TransferController>(TransferController(), permanent: true);
   }
 }

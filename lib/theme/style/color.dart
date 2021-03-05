@@ -9,9 +9,9 @@ import 'icon.dart';
 class SonrColor {
   // ** General Theme Color Properties ** //
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
-  static const Color baseDark = Color(0xff1A1A1A);
-  static const Color dialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
-  static const Color overlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
+  static const Color Dark = Color(0xff1A1A1A);
+  static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
+  static const Color OverlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
 
   // ** Color Pallette ** //
   static const Color Red = Color(0xffF04C63);

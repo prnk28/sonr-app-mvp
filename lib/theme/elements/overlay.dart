@@ -132,18 +132,20 @@ class SonrOverlay extends GetxController {
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
-    // Create Overlay
-    var cardOverlay = _SonrFixedOverlayEntry(
-      SonrOffset.fromDegrees(invite.from.position.facingAntipodal),
-      backgroundDuration,
-      entryDuration,
-      barrierDismissible,
-      _InviteReplyOverlayView(count, false, invite: invite),
-    );
+    if (!isOpen) {
+      // Create Overlay
+      var cardOverlay = _SonrFixedOverlayEntry(
+        SonrOffset.fromDegrees(invite.from.position.facingAntipodal),
+        backgroundDuration,
+        entryDuration,
+        barrierDismissible,
+        _InviteReplyOverlayView(count, false, invite: invite),
+      );
 
-    // Add Overlay to List
-    _controller.currentOverlay(cardOverlay);
-    _controller.overlays.add(cardOverlay);
+      // Add Overlay to List
+      _controller.currentOverlay(cardOverlay);
+      _controller.overlays.add(cardOverlay);
+    }
   }
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
@@ -152,21 +154,23 @@ class SonrOverlay extends GetxController {
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
-    // Create Overlay
-    var cardOverlay = _SonrFixedOverlayEntry(
-        SonrOffset.fromDegrees(reply.from.position.facingAntipodal),
-        backgroundDuration,
-        entryDuration,
-        barrierDismissible,
-        _InviteReplyOverlayView(
-          count,
-          true,
-          reply: reply,
-        ));
+    if (!isOpen) {
+      // Create Overlay
+      var cardOverlay = _SonrFixedOverlayEntry(
+          SonrOffset.fromDegrees(reply.from.position.facingAntipodal),
+          backgroundDuration,
+          entryDuration,
+          barrierDismissible,
+          _InviteReplyOverlayView(
+            count,
+            true,
+            reply: reply,
+          ));
 
-    // Add Overlay to List
-    _controller.currentOverlay(cardOverlay);
-    _controller.overlays.add(cardOverlay);
+      // Add Overlay to List
+      _controller.currentOverlay(cardOverlay);
+      _controller.overlays.add(cardOverlay);
+    }
   }
 
   // ^ Method Pops Current Overlay ^ //
@@ -312,7 +316,7 @@ class _SonrFixedOverlayEntry {
   // ** Constructer ** //
   _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
       {this.blur = 5.0,
-      this.backgroundColor = SonrColor.overlayBackground,
+      this.backgroundColor = SonrColor.OverlayBackground,
       this.mainAxisAlignment = MainAxisAlignment.center,
       this.disableAnimation = false}) {
     dismiss = () {
