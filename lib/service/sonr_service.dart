@@ -28,7 +28,7 @@ class SonrService extends GetxService with TransferQueue {
     DeviceService.direction.listen((dir) {
       if (_connected.value) {
         // Update Direction
-        _node.update(dir.headingForCameraMode);
+        _node.update(dir.headingForCameraMode, dir.heading);
       }
     });
   }
@@ -167,7 +167,7 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
   void _handleConnected() {
-    _node.update(DeviceService.direction.value.headingForCameraMode);
+    _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
   }
 
   // ^ Handle Lobby Update ^ //

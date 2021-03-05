@@ -96,7 +96,7 @@ class PeerSheetView extends StatelessWidget {
                                 size: 20,
                               ),
                               Obx(() => SonrText.light(
-                                    " " + controller.peerDir.value.direction,
+                                    " " + controller.position.value.facing.direction,
                                     color: Colors.white,
                                     size: 20,
                                   ))

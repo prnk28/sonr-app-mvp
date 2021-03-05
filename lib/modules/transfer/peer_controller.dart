@@ -14,15 +14,15 @@ class PeerController extends GetxController {
   final RxMap<String, Peer> peers = SonrService.peers;
   final artboard = Rx<Artboard>();
   final counter = 0.0.obs;
+  final diffDesg = Rx<Position_Designation>();
   final diffRad = 0.0.obs;
-  final facing = Rx<Position_Heading>();
+
   final hasCompleted = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
-  final peerDir = 0.0.obs;
-  final proximity = Rx<Position_Proximity>();
+  final position = Rx<Position>();
   final userDir = 0.0.obs;
 
   // References
@@ -41,9 +41,8 @@ class PeerController extends GetxController {
   StreamSubscription<Map<String, Peer>> peerStream;
   PeerController(this.peer, this.index) {
     isVisible(true);
-    peerDir(peer.position.direction);
+    position(peer.position);
     offset(calculateOffset());
-    proximity(peer.position.proximity);
   }
 
   @override
@@ -97,7 +96,7 @@ class PeerController extends GetxController {
       if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
         return Offset.zero;
       } else {
-        return SonrOffset.fromProximity(proximity.value, facing.value, diffRad.value);
+        return SonrOffset.fromPosition(position.value, diffDesg.value, diffRad.value);
       }
     }
   }
@@ -179,11 +178,11 @@ class PeerController extends GetxController {
       userDir(newDir.heading);
 
       // Set Diff Radians
-      diffRad(((userDir.value - peerDir.value).abs() * pi) / 180.0);
+      diffRad(((userDir.value - position.value.facing).abs() * pi) / 180.0);
 
       // Set Facing
-      var adjustedDesignation = (((userDir.value - peerDir.value).abs() / 11.25) + 0.25).toInt();
-      facing(Position_Heading.values[(adjustedDesignation % 32)]);
+      var adjustedDesignation = (((userDir.value - position.value.facing).abs() / 11.25) + 0.25).toInt();
+      diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
       offset(calculateOffset());
       _handleFacingUpdate();
     }
@@ -196,15 +195,14 @@ class PeerController extends GetxController {
       lobby.forEach((id, value) {
         // Update Direction
         if (id == peer.id.peer && !_isInvited) {
-          peerDir(value.position.antipodal);
-          proximity(value.position.proximity);
+          position(value.position);
 
-          // Set Diff Radians
-          diffRad(((userDir.value - peerDir.value).abs() * pi) / 180.0);
+          // Set Diff Values
+          var adjustedDesignation = (((userDir.value - position.value.facing).abs() / 11.25) + 0.25).toInt();
+          diffRad(((userDir.value - position.value.facing).abs() * pi) / 180.0);
+          diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
 
           // Set Facing
-          var adjustedDesignation = (((userDir.value - peerDir.value).abs() / 11.25) + 0.25).toInt();
-          facing(Position_Heading.values[(adjustedDesignation % 32)]);
           offset(calculateOffset());
           _handleFacingUpdate();
         }
@@ -215,12 +213,14 @@ class PeerController extends GetxController {
   // ^ Handle Facing Check ^ //
   _handleFacingUpdate() {
     // Check if Facing
-    var newIsFacing = facing.value == Position_Heading.NNE || facing.value == Position_Heading.NEbN || facing.value == Position_Heading.NbE;
+    var newIsFacing =
+        diffDesg.value == Position_Designation.NNE || diffDesg.value == Position_Designation.NEbN || diffDesg.value == Position_Designation.NbE;
     if (isFacing.value != newIsFacing) {
       // Check New Result
       if (newIsFacing) {
         _startTimer();
-        isFacing(facing.value == Position_Heading.NNE || facing.value == Position_Heading.NEbN || facing.value == Position_Heading.NbE);
+        isFacing(
+            diffDesg.value == Position_Designation.NNE || diffDesg.value == Position_Designation.NEbN || diffDesg.value == Position_Designation.NbE);
       } else {
         _stopTimer();
       }

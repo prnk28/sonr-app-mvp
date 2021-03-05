@@ -134,7 +134,7 @@ class SonrOverlay extends GetxController {
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
     var cardOverlay = _SonrFixedOverlayEntry(
-      SonrOffset.fromDegrees(invite.from.position.antipodal),
+      SonrOffset.fromDegrees(invite.from.position.facingAntipodal),
       backgroundDuration,
       entryDuration,
       barrierDismissible,
@@ -154,7 +154,7 @@ class SonrOverlay extends GetxController {
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     // Create Overlay
     var cardOverlay = _SonrFixedOverlayEntry(
-        SonrOffset.fromDegrees(reply.from.position.antipodal),
+        SonrOffset.fromDegrees(reply.from.position.facingAntipodal),
         backgroundDuration,
         entryDuration,
         barrierDismissible,
