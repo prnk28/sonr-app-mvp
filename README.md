@@ -20,6 +20,12 @@ Peer Discovery Protocols in Sonr
 - https://stackoverflow.com/questions/20153280/android-transmit-a-signal-using-ultrasound
 
 
+# Colors
+<div align="center">
+    <img src=".meta/colors.png" alt="Sonr-Color-Pallete"/>
+  <br>
+</div>
+
 ### Strategy
 - Add slide to Send Feature to increase volume
 - Flutter Audio as Stream: https://pub.dev/packages/sound_stream
@@ -30,8 +36,6 @@ Peer Discovery Protocols in Sonr
 Offline P2P File Sharing:
 - Send Files as chunk with sound, warn user slow transfer speeds
 - Implement Dual Diagonal Infusion
-
-Market as: Rudimentary form of Human Communication
 
 ## BLE
 *TODO*
