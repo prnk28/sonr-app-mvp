@@ -221,14 +221,12 @@ class PeerController extends GetxController {
     offset(_calculateOffset());
 
     // Check if Facing
-    var newIsFacing =
-        diffDesg.value == Position_Designation.NNE || diffDesg.value == Position_Designation.NEbN || diffDesg.value == Position_Designation.NbE;
+    var newIsFacing = diffDesg.value.isFacing(position.value.proximity);
     if (isFacing.value != newIsFacing) {
       // Check New Result
       if (newIsFacing) {
         _startTimer();
-        isFacing(
-            diffDesg.value == Position_Designation.NNE || diffDesg.value == Position_Designation.NEbN || diffDesg.value == Position_Designation.NbE);
+        isFacing(diffDesg.value.isFacing(position.value.proximity));
       } else {
         _stopTimer();
       }

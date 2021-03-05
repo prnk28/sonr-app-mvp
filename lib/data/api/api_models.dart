@@ -62,6 +62,17 @@ extension EditTypeUtils on EditType {
 }
 
 // ^ Peer Model Extensions ^ //
+extension DesignationUtils on Position_Designation {
+  bool isFacing(Position_Proximity prox) {
+    if (prox == Position_Proximity.Distant) {
+      return this == Position_Designation.NNE || this == Position_Designation.NEbN || this == Position_Designation.NbE;
+    } else {
+      return this == Position_Designation.NNE || this == Position_Designation.NEbN || this == Position_Designation.NbE;
+    }
+  }
+}
+
+// ^ Peer Model Extensions ^ //
 extension PeerUtils on Peer {
   SonrText get initials {
     var first = this.profile.firstName[0].toUpperCase();
