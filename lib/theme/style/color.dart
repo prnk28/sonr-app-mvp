@@ -19,6 +19,8 @@ class SonrColor {
   static const Color Blue = Color(0xff51C5DD);
   static const Color White = Color(0xffF7F6F6);
   static const Color Navy = Color(0xff0A4F70);
+  static const Color ShadowLight = Color(0x00d2c6);
+  static const Color ShadowDark = Color(0x00ffff);
 
   // ** Bulb Gradients ** //
   static Gradient get activeBulb => FlutterGradients.findByName(FlutterGradientNames.summerGames);
