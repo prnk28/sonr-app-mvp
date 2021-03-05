@@ -6,6 +6,7 @@ class TransferController extends GetxController {
   // @ Properties
   final Rx<Gradient> gradient = SonrColor.inactiveBulb.obs;
   final title = "Nobody Here".obs;
+  final isFacingPeer = false.obs;
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -37,6 +38,11 @@ class TransferController extends GetxController {
   void onDispose() {
     compassStream.cancel();
     lobbySizeStream.cancel();
+  }
+
+  setFacingPeer(bool value) {
+    isFacingPeer(value);
+    isFacingPeer.refresh();
   }
 
   // ^ Handle Compass Update ^ //

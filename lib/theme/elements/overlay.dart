@@ -622,7 +622,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                         SonrOverlay.back();
                       }
                     },
-                    child: SonrText.semibold(declineTitle, color: Colors.redAccent, size: 18)),
+                    child: SonrText.semibold(declineTitle, color: SonrColor.Red, size: 18)),
                 // Accept Button
                 Container(
                   width: Get.width / 2.5,

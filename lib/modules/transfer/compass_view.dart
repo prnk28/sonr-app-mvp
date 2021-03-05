@@ -15,36 +15,11 @@ class CompassView extends GetView<TransferController> {
             // Compass Total
             AspectRatio(
               aspectRatio: 1,
-              child: RipplesAnimation(
-                child: Neumorphic(
-                  margin: EdgeInsets.all(14),
-                  style: NeumorphicStyle(
-                    boxShape: NeumorphicBoxShape.circle(),
-                  ),
-                  child: Neumorphic(
-                    style: NeumorphicStyle(
-                      depth: 14,
-                      boxShape: NeumorphicBoxShape.circle(),
-                    ),
-                    margin: EdgeInsets.all(20),
-                    child: Neumorphic(
-                      style: NeumorphicStyle(
-                        depth: -8,
-                        boxShape: NeumorphicBoxShape.circle(),
-                      ),
-                      margin: EdgeInsets.all(10),
-                      // Interior Compass
-                      child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
-                        // Center Circle
-                        _CompassBulb(controller.string.value, controller.heading.value, controller.gradient.value),
-
-                        // Spokes
-                        _Spokes(controller.angle.value),
-                      ]),
-                    ),
-                  ),
-                ),
-              ),
+              child: controller.isFacingPeer.value
+                  ? RipplesAnimation(
+                      child: _CompassView(),
+                    )
+                  : _CompassView(),
             ),
 
             // Ticker
@@ -72,6 +47,42 @@ class CompassView extends GetView<TransferController> {
                 )),
           ]));
     });
+  }
+}
+
+class _CompassView extends GetView<TransferController> {
+  const _CompassView({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Neumorphic(
+      margin: EdgeInsets.all(14),
+      style: NeumorphicStyle(
+        boxShape: NeumorphicBoxShape.circle(),
+      ),
+      child: Neumorphic(
+        style: NeumorphicStyle(
+          depth: 14,
+          boxShape: NeumorphicBoxShape.circle(),
+        ),
+        margin: EdgeInsets.all(20),
+        child: Neumorphic(
+          style: NeumorphicStyle(
+            depth: -8,
+            boxShape: NeumorphicBoxShape.circle(),
+          ),
+          margin: EdgeInsets.all(10),
+          // Interior Compass
+          child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
+            // Center Circle
+            _CompassBulb(controller.string.value, controller.heading.value, controller.gradient.value),
+
+            // Spokes
+            _Spokes(controller.angle.value),
+          ]),
+        ),
+      ),
+    );
   }
 }
 

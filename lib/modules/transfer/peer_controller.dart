@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
+import 'transfer_controller.dart';
 
 class PeerController extends GetxController {
   // Properties
@@ -23,7 +24,7 @@ class PeerController extends GetxController {
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
   final position = Rx<Position>();
-  final userDir = 0.0.obs;
+  final userPos = Rx<CompassEvent>();
 
   // References
   StreamSubscription<CompassEvent> compassStream;
@@ -42,7 +43,7 @@ class PeerController extends GetxController {
   PeerController(this.peer, this.index) {
     isVisible(true);
     position(peer.position);
-    offset(calculateOffset());
+    offset(_calculateOffset());
   }
 
   @override
@@ -86,19 +87,6 @@ class PeerController extends GetxController {
   void onDispose() {
     compassStream.cancel();
     peerStream.cancel();
-  }
-
-  // ^ Calculate Peer Offset from Line ^ //
-  Offset calculateOffset() {
-    if (_isInvited) {
-      return offset.value;
-    } else {
-      if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
-        return Offset.zero;
-      } else {
-        return SonrOffset.fromPosition(position.value, diffDesg.value, diffRad.value);
-      }
-    }
   }
 
   // ^ Handle User Invitation ^
@@ -171,19 +159,33 @@ class PeerController extends GetxController {
     });
   }
 
+  // ^ Calculate Peer Offset from Line ^ //
+  Offset _calculateOffset() {
+    if (_isInvited) {
+      return offset.value;
+    } else {
+      if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
+        return Offset.zero;
+      } else {
+        return SonrOffset.fromPosition(position.value, diffDesg.value, diffRad.value);
+      }
+    }
+  }
+
   // ^ Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
     if (newDir != null && !hasCompleted.value && !isClosed) {
       // Update Direction
-      userDir(newDir.heading);
+      userPos(newDir);
 
-      // Set Diff Radians
-      diffRad(((userDir.value - position.value.facing).abs() * pi) / 180.0);
+      // Set Diff Radians from Heading Vals
+      diffRad(((userPos.value.heading - position.value.facingAntipodal).abs() * pi) / 180.0);
 
-      // Set Facing
-      var adjustedDesignation = (((userDir.value - position.value.facing).abs() / 11.25) + 0.25).toInt();
+      // Set Designation with Facing Vals
+      var adjustedDesignation = (((userPos.value.headingForCameraMode - position.value.facing).abs() / 11.25) + 0.25).toInt();
       diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
-      offset(calculateOffset());
+
+      // Handle Changes
       _handleFacingUpdate();
     }
   }
@@ -197,13 +199,14 @@ class PeerController extends GetxController {
         if (id == peer.id.peer && !_isInvited) {
           position(value.position);
 
-          // Set Diff Values
-          var adjustedDesignation = (((userDir.value - position.value.facing).abs() / 11.25) + 0.25).toInt();
-          diffRad(((userDir.value - position.value.facing).abs() * pi) / 180.0);
+          // Set Diff Radians from Heading Vals
+          diffRad(((userPos.value.heading - position.value.headingAntipodal).abs() * pi) / 180.0);
+
+          // Set Designation with Facing Vals
+          var adjustedDesignation = (((userPos.value.headingForCameraMode - position.value.facing).abs() / 11.25) + 0.25).toInt();
           diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
 
-          // Set Facing
-          offset(calculateOffset());
+          // Handle Changes
           _handleFacingUpdate();
         }
       });
@@ -212,6 +215,9 @@ class PeerController extends GetxController {
 
   // ^ Handle Facing Check ^ //
   _handleFacingUpdate() {
+    // Find Offset
+    offset(_calculateOffset());
+
     // Check if Facing
     var newIsFacing =
         diffDesg.value == Position_Designation.NNE || diffDesg.value == Position_Designation.NEbN || diffDesg.value == Position_Designation.NbE;
@@ -252,12 +258,13 @@ class PeerController extends GetxController {
 
   // ^ Begin Facing Invite Check ^ //
   void _startTimer() {
+    Get.find<TransferController>().setFacingPeer(true);
     _timer = Timer.periodic(500.milliseconds, (_) {
       // Add MS to Counter
       counter(counter.value += 500);
 
       // Check if Facing
-      if (counter.value == 3500) {
+      if (counter.value == 2500) {
         if (isFacing.value && !hasCompleted.value && !_inProgress) {
           invite();
           _stopTimer();
@@ -271,6 +278,7 @@ class PeerController extends GetxController {
   // ^ Stop Timer for Facing Check ^ //
   void _stopTimer() {
     if (_timer != null) {
+      Get.find<TransferController>().setFacingPeer(false);
       _timer.cancel();
       _timer = null;
       isFacing(false);

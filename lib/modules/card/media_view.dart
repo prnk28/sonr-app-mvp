@@ -338,7 +338,7 @@ class _MediaCardInfo extends StatelessWidget {
                     });
                   }
                 },
-                text: SonrText.medium("Delete", color: Colors.redAccent),
+                text: SonrText.medium("Delete", color: SonrColor.Red),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               SonrButton.rectangle(

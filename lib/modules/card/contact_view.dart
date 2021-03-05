@@ -112,7 +112,7 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold("Decline", color: Colors.redAccent, size: 18),
+                child: SonrText.semibold("Decline", color: SonrColor.Red, size: 18),
               )),
           // Accept Button
           Container(
