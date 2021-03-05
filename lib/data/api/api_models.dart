@@ -66,7 +66,7 @@ extension PeerUtils on Peer {
   SonrText get initials {
     var first = this.profile.firstName[0].toUpperCase();
     var last = this.profile.lastName[0].toUpperCase();
-    return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 36, gradient: FlutterGradientNames.glassWater.linear());
+    return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 34, gradient: FlutterGradientNames.glassWater.linear());
   }
 
   SonrIcon get platformIcon {

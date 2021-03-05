@@ -223,7 +223,9 @@ class SonrService extends GetxService with TransferQueue {
     // Save Card to Gallery
     MediaService.saveTransfer(data).then((value) {
       data.hasExported = value;
-      received.complete(data);
+      if (!received.isCompleted) {
+        received.complete(data);
+      }
       Get.find<SQLService>().storeCard(data);
     });
   }

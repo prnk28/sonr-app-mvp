@@ -91,11 +91,14 @@ class PeerController extends GetxController {
 
   // ^ Calculate Peer Offset from Line ^ //
   Offset calculateOffset() {
-    Platform platform = peer.platform;
-    if (platform == Platform.MacOS || platform == Platform.Windows || platform == Platform.Web || platform == Platform.Linux) {
-      return Offset.zero;
+    if (_isInvited) {
+      return offset.value;
     } else {
-      return SonrOffset.fromProximity(proximity.value, facing.value, diffRad.value);
+      if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
+        return Offset.zero;
+      } else {
+        return SonrOffset.fromProximity(proximity.value, facing.value, diffRad.value);
+      }
     }
   }
 
@@ -171,24 +174,18 @@ class PeerController extends GetxController {
 
   // ^ Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
-    if (newDir != null && !hasCompleted.value) {
-      userDir(newDir.headingForCameraMode);
-      offset(calculateOffset());
-    }
-  }
+    if (newDir != null && !hasCompleted.value && !isClosed) {
+      // Update Direction
+      userDir(newDir.heading);
 
-  // ^ Handle Facing Check ^ //
-  _handleFacingUpdate() {
-    // Check if Facing
-    var newIsFacing = facing.value == Position_Heading.NNE;
-    if (isFacing.value != newIsFacing) {
-      // Check New Result
-      if (newIsFacing) {
-        _startTimer();
-        isFacing(facing.value == Position_Heading.NNE);
-      } else {
-        _stopTimer();
-      }
+      // Set Diff Radians
+      diffRad(((userDir.value - peerDir.value).abs() * pi) / 180.0);
+
+      // Set Facing
+      var adjustedDesignation = (((userDir.value - peerDir.value).abs() / 11.25) + 0.25).toInt();
+      facing(Position_Heading.values[(adjustedDesignation % 32)]);
+      offset(calculateOffset());
+      _handleFacingUpdate();
     }
   }
 
@@ -199,7 +196,7 @@ class PeerController extends GetxController {
       lobby.forEach((id, value) {
         // Update Direction
         if (id == peer.id.peer && !_isInvited) {
-          peerDir(value.position.direction);
+          peerDir(value.position.antipodal);
           proximity(value.position.proximity);
 
           // Set Diff Radians
@@ -212,6 +209,21 @@ class PeerController extends GetxController {
           _handleFacingUpdate();
         }
       });
+    }
+  }
+
+  // ^ Handle Facing Check ^ //
+  _handleFacingUpdate() {
+    // Check if Facing
+    var newIsFacing = facing.value == Position_Heading.NNE || facing.value == Position_Heading.NEbN || facing.value == Position_Heading.NbE;
+    if (isFacing.value != newIsFacing) {
+      // Check New Result
+      if (newIsFacing) {
+        _startTimer();
+        isFacing(facing.value == Position_Heading.NNE || facing.value == Position_Heading.NEbN || facing.value == Position_Heading.NbE);
+      } else {
+        _stopTimer();
+      }
     }
   }
 

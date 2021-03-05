@@ -142,16 +142,12 @@ extension SonrOffset on Offset {
     var calcPos = tangent.position;
 
     // Top of View
-    if (facing == Position_Heading.NNE) {
+    if (facing == Position_Heading.NNE || facing == Position_Heading.NEbN || facing == Position_Heading.NbE) {
       return Offset(180, prox.topOffset);
-    } else if (facing == Position_Heading.NEbN) {
-      return Offset(210, prox.topOffset + 10);
-    } else if (facing == Position_Heading.NbE) {
-      return Offset(150, prox.topOffset + 10);
     } else if (facing == Position_Heading.NE) {
-      return Offset(225, prox.topOffset + 20);
+      return Offset(270, prox.topOffset + 20);
     } else if (facing == Position_Heading.N) {
-      return Offset(135, prox.topOffset + 20);
+      return Offset(90, prox.topOffset + 20);
     } else {
       return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZonePathProvider.proximityMaxHeight(prox), calcPos.dy).toDouble());
     }
