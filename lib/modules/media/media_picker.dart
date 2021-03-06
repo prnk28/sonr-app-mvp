@@ -12,6 +12,7 @@ class MediaPickerSheet extends StatefulWidget {
 }
 
 class _MediaPickerSheetState extends State<MediaPickerSheet> {
+  ValueNotifier<bool> _hasSelected = ValueNotifier<bool>(false);
   ValueNotifier<MediaGalleryItem> _selectedItem = ValueNotifier<MediaGalleryItem>(null);
   ValueNotifier<List<Media>> _mediaList = ValueNotifier<List<Media>>(MediaService.totalMedia);
   final RxInt index = (-1).obs;
@@ -36,7 +37,28 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
             shape: NeumorphicShape.convex,
             onPressed: () => Get.back(),
             icon: SonrIcon.normal(Icons.close, color: SonrColor.Red, size: 38)),
-        floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
+        floatingActionButton: ValueListenableBuilder(
+            builder: (BuildContext context, bool status, Widget child) {
+              if (status) {
+                return PlayAnimation(
+                  tween: Offset(0, 100).tweenTo(Offset(0, 0)),
+                  duration: 100.milliseconds,
+                  builder: (context, child, value) {
+                    return Transform.translate(
+                        offset: value,
+                        child: SonrButton.rectangle(
+                          depth: 10,
+                          onPressed: () => confirm(),
+                          icon: SonrIcon.neumorphic(Icons.check, size: 36),
+                          color: Colors.green,
+                        ));
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+            valueListenable: _hasSelected),
         middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 100, index: index, margin: EdgeInsets.only(left: 12, right: 12)),
         body: ValueListenableBuilder(
             builder: (BuildContext context, List<Media> list, Widget child) {
@@ -83,6 +105,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
 
   select(MediaGalleryItem item) async {
     _selectedItem.value = item;
+    _hasSelected.value = true;
   }
 
   confirm() async {
@@ -146,10 +169,7 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
                     : Container(),
                 alignment: Alignment.center),
             widget.isSelected
-                ? Container(
-                    alignment: Alignment.bottomLeft,
-                    padding: EdgeInsets.only(left: 4, bottom: 4),
-                    child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
+                ? Container(alignment: Alignment.center, child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
                 : Container()
           ])),
     );

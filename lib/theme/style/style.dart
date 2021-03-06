@@ -60,7 +60,7 @@ class SonrStyle {
       NeumorphicStyle(color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
 
   static get appBarIcon =>
-      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.85, depth: 2, surfaceIntensity: 0.6);
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
 
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get overlay => NeumorphicStyle(

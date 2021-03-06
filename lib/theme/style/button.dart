@@ -187,7 +187,7 @@ class SonrButton extends StatelessWidget {
   }
 
   // * Circle Style Button * //
-  factory SonrButton.circle({
+  factory SonrButton. circle({
     @required Function onPressed,
     SonrIcon icon,
     SonrText text,

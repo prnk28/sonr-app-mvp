@@ -17,9 +17,9 @@ class SonrColor {
   static const Color Red = Color(0xffF04C63);
   static const Color Grey = Color(0xffC6C4C4);
   static const Color Blue = Color(0xff51C5DD);
-  static const Color White = Color(0xffF7F6F6);
+  static const Color White = Color(0xffE0E0E0);
   static const Color Navy = Color(0xff0A4F70);
-  static const Color ShadowLight = Color.fromRGBO(198, 196, 196, 0.5);
+  static const Color ShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
   static const Color ShadowDark = Color.fromRGBO(0, 0, 0, 0.6);
 
   // ** Bulb Gradients ** //

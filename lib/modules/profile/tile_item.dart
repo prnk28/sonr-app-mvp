@@ -10,36 +10,38 @@ class SocialTileItem extends GetWidget<TileController> {
   SocialTileItem(this.item, this.index);
   @override
   Widget build(BuildContext context) {
-    // Build View
-    controller.initialize(item, index);
+    return GetX<TileController>(
+      assignId: true,
+      init: TileController(item, index),
+      builder: (controller) {
+        return Stack(children: [
+          // Draggable Aspect
+          LongPressDraggable(
+              feedback: _buildView(controller.isEditing.value, isDragging: true),
+              child: _buildView(controller.isEditing.value),
+              data: item,
+              childWhenDragging: Container(),
+              onDragStarted: () {
+                HapticFeedback.heavyImpact();
+                controller.isDragging(true);
+              }),
 
-    // Build View Controller
-    return Stack(children: [
-      // Draggable Aspect
-      LongPressDraggable(
-          feedback: _buildView(controller.isEditing.value, isDragging: true),
-          child: _buildView(controller.isEditing.value),
-          data: item,
-          childWhenDragging: Container(),
-          onDragStarted: () {
-            HapticFeedback.heavyImpact();
-            controller.isDragging(true);
-          }),
-
-      DragTarget<Contact_SocialTile>(
-        builder: (context, candidateData, rejectedData) {
-          return Container();
-        },
-        // Only accept same tiles
-        onWillAccept: (data) {
-          return true;
-        },
-        // Switch Index Positions with animation
-        onAccept: (data) {
-          UserService.swapSocials(item, data);
-        },
-      ),
-    ]);
+          DragTarget<Contact_SocialTile>(
+            builder: (context, candidateData, rejectedData) {
+              return Container();
+            },
+            // Only accept same tiles
+            onWillAccept: (data) {
+              return true;
+            },
+            // Switch Index Positions with animation
+            onAccept: (data) {
+              UserService.swapSocials(item, data);
+            },
+          ),
+        ]);
+      },
+    );
   }
 
   // ^ Builds Neumorohic Item ^ //
@@ -80,9 +82,13 @@ class TileController extends GetxController {
   final medium = Rx<MediumModel>();
   final twitter = Rx<TwitterModel>();
   final youtube = Rx<YoutubeModel>();
+  final Contact_SocialTile tile;
+  final int index;
+
+  TileController(this.tile, this.index);
 
   // ^ Create New Tile ^ //
-  initialize(Contact_SocialTile tile, int i) async {
+  onInit() async {
     // Medium Data
     if (tile.provider == Contact_SocialTile_Provider.Medium) {
       medium(await MediumController.getUser(tile.username));
@@ -98,6 +104,7 @@ class TileController extends GetxController {
       youtube(await YoutubeController.searchVideo(tile.links.postLink));
       isFetched(true);
     }
+    super.onInit();
   }
 
   // ^ Removes Current Tile ^ //
