@@ -17,7 +17,7 @@ enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 class DeviceService extends GetxService {
   // Status/Sensor Properties
   final _direction = Rx<CompassEvent>();
-  final _isDarkMode = false.obs;
+  final _isDarkMode = true.obs;
   final _position = Rx<Position>();
 
   // Getters for Global References

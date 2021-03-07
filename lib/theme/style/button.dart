@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/service/device_service.dart';
 import 'style.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
@@ -75,8 +76,8 @@ class SonrButton extends StatelessWidget {
         onPressed,
         icon: icon,
         iconPosition: iconPosition,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -96,8 +97,8 @@ class SonrButton extends StatelessWidget {
         onPressed,
         icon: icon,
         iconPosition: WidgetPosition.Center,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -115,8 +116,8 @@ class SonrButton extends StatelessWidget {
         depth,
         NeumorphicBoxShape.roundRect(BorderRadius.circular(radius)),
         onPressed,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -187,7 +188,7 @@ class SonrButton extends StatelessWidget {
   }
 
   // * Circle Style Button * //
-  factory SonrButton. circle({
+  factory SonrButton.circle({
     @required Function onPressed,
     SonrIcon icon,
     SonrText text,
@@ -217,8 +218,8 @@ class SonrButton extends StatelessWidget {
         onPressed,
         icon: icon,
         iconPosition: iconPosition,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -238,8 +239,8 @@ class SonrButton extends StatelessWidget {
         onPressed,
         icon: icon,
         iconPosition: WidgetPosition.Center,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -258,8 +259,8 @@ class SonrButton extends StatelessWidget {
         NeumorphicBoxShape.circle(),
         onPressed,
         type: type,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         padding: padding,
       );
     }
@@ -295,8 +296,8 @@ class SonrButton extends StatelessWidget {
         NeumorphicBoxShape.stadium(),
         onPressed,
         icon: icon,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         iconPosition: iconPosition,
         type: type,
         padding: padding,
@@ -317,8 +318,8 @@ class SonrButton extends StatelessWidget {
         onPressed,
         icon: icon,
         iconPosition: WidgetPosition.Center,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -336,8 +337,8 @@ class SonrButton extends StatelessWidget {
         depth,
         NeumorphicBoxShape.stadium(),
         onPressed,
-        shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-        shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+        shadowDarkColor: shadowDarkColor ?? SonrColor.LightModeShadowDark,
+        shadowLightColor: shadowLightColor ?? SonrColor.LightModeShadowLight,
         type: type,
         padding: padding,
       );
@@ -403,11 +404,11 @@ class SonrButton extends StatelessWidget {
           margin: margin,
           style: NeumorphicStyle(
             depth: depth,
-            color: color,
+            color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
             boxShape: boxShape,
-            intensity: intensity,
-            shadowDarkColor: shadowDarkColor ?? SonrColor.ShadowDark,
-            shadowLightColor: shadowLightColor ?? SonrColor.ShadowLight,
+            intensity: DeviceService.isDarkMode.value ? 0.6 : 0.85,
+            shadowDarkColor: DeviceService.isDarkMode.value ? SonrColor.DarkModeShadowDark : SonrColor.LightModeShadowDark,
+            shadowLightColor: DeviceService.isDarkMode.value ? SonrColor.DarkModeShadowLight : SonrColor.LightModeShadowLight,
           ),
           padding: const EdgeInsets.all(12.0),
           child: hasIcon ? _buildIconView(iconChild, textChild) : textChild);

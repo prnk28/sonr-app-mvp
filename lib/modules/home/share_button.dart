@@ -15,6 +15,16 @@ class ShareButton extends GetView<HomeController> {
   final expandedView = _ExpandedView();
   final defaultView = _DefaultView();
 
+  final kDefaultBoxDecoration = BoxDecoration(
+    gradient: SonrColor.mainGradient,
+    borderRadius: BorderRadius.circular(32),
+  );
+
+  final kExpandedBoxDecoration = BoxDecoration(
+    gradient: SonrColor.mainGradient,
+    borderRadius: BorderRadius.circular(40),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -26,7 +36,9 @@ class ShareButton extends GetView<HomeController> {
             width: controller.isShareExpanded.value ? Get.width / 2 + K_EXPANDED_WIDTH : Get.width / 2 + K_DEFAULT_WIDTH,
             height: controller.isShareExpanded.value ? K_EXPANDED_HEIGHT : K_DEFAULT_HEIGHT,
             duration: K_ANIMATION_DURATION,
-            child: Center(
+            child: Container(
+              decoration: controller.isShareExpanded.value ? kExpandedBoxDecoration : kDefaultBoxDecoration,
+              padding: EdgeInsets.all(2.5),
               child: NeumorphicButton(
                 child: controller.isShareExpanded.value ? expandedView : defaultView,
                 onPressed: controller.toggleShare,
