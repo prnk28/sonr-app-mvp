@@ -419,8 +419,8 @@ class SonrButton extends StatelessWidget {
           color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
           boxShape: boxShape,
           intensity: DeviceService.isDarkMode.value ? 0.6 : 0.85,
-          shadowDarkColor: DeviceService.isDarkMode.value ? SonrColor.DarkModeShadowDark : SonrColor.LightModeShadowDark,
-          shadowLightColor: DeviceService.isDarkMode.value ? SonrColor.DarkModeShadowLight : SonrColor.LightModeShadowLight,
+          shadowDarkColor: SonrColor.LightModeShadowDark,
+          shadowLightColor: SonrColor.LightModeShadowLight,
         ),
         padding: const EdgeInsets.all(12.0),
         onPressed: () {
