@@ -423,14 +423,13 @@ class SonrButton extends StatelessWidget {
           shadowLightColor: DeviceService.isDarkMode.value ? SonrColor.DarkModeShadowLight : SonrColor.LightModeShadowLight,
         ),
         padding: const EdgeInsets.all(12.0),
-        onPressed: () {},
+        onPressed: () {
+          if (onPressed != null) {
+            HapticFeedback.mediumImpact();
+            onPressed();
+          }
+        },
         child: GestureDetector(
-          onTap: () {
-            if (onPressed != null) {
-              HapticFeedback.mediumImpact();
-              onPressed();
-            }
-          },
           onLongPress: () {
             if (onLongPressed != null) {
               HapticFeedback.heavyImpact();
