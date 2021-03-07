@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/service/device_service.dart';
 import 'style.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'color.dart';
@@ -110,8 +109,8 @@ class SonrIcon extends StatelessWidget {
     return SonrIcon(
       mime.type.gradientData.data,
       IconType.Gradient,
-      DeviceService.isDarkMode.value ? Colors.white : Colors.black,
-      DeviceService.isDarkMode.value ? FlutterGradientNames.orangeJuice : FlutterGradientNames.solidStone,
+      color,
+      gradient,
       size: size,
       key: key,
     );

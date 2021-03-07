@@ -45,17 +45,7 @@ class ProfileScreen extends GetView<ProfileController> {
                     builder: (_) {
                       return SliverStaggeredGrid(
                           delegate: SliverChildBuilderDelegate((context, index) {
-                            return ExpansionPanelList(animationDuration: Duration(seconds: 1), children: [
-                              ExpansionPanel(
-                                  headerBuilder: (context, isExpanded) {
-                                    //if (isExpanded) {
-                                    //   if(controller.focused.value.index == index){
-                                    return SocialTileItem(UserService.socials[index], index);
-                                    //   }
-                                    // } else {}
-                                  },
-                                  body: SocialTileItem(UserService.socials[index], index))
-                            ]);
+                            return SocialTileItem(UserService.socials[index], index);
                           }),
                           gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4,
@@ -142,7 +132,7 @@ class _AvatarField extends GetView<ProfileController> {
           child: Icon(
             Icons.insert_emoticon,
             size: 120,
-            color: DeviceService.isDarkMode.value ? Colors.white.withOpacity(0.75) : Colors.black.withOpacity(0.5),
+            color: Colors.black.withOpacity(0.2),
           ),
         ),
       ),

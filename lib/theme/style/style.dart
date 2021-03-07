@@ -60,7 +60,7 @@ class SonrStyle {
       NeumorphicStyle(color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
 
   static get appBarIcon =>
-      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.85, depth: 2, surfaceIntensity: 0.6);
 
   static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get overlay => NeumorphicStyle(
@@ -74,10 +74,10 @@ class SonrStyle {
   static get mediaButtonPressed => NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
 
   static get normal => NeumorphicStyle(
-      intensity: DeviceService.isDarkMode.value ? 0.6 : 0.85,
+      intensity: 0.85,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      shadowDarkColor: SonrColor.LightModeShadowDark,
-      shadowLightColor: SonrColor.LightModeShadowLight);
+      shadowDarkColor: SonrColor.ShadowDark,
+      shadowLightColor: SonrColor.ShadowLight);
 
   static get photo =>
       NeumorphicStyle(intensity: 0.85, depth: 8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.White, shadowLightColor: Colors.black38);
@@ -96,11 +96,11 @@ class SonrStyle {
 
   static zonePath({@required Position_Proximity proximity}) => NeumorphicStyle(
         border: NeumorphicBorder(
-          color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Grey,
+          color: SonrColor.Grey,
           width: 1,
         ),
         depth: 8,
-        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+        color: SonrColor.White,
         surfaceIntensity: 0.6,
         shape: NeumorphicShape.flat,
         intensity: 0.85,

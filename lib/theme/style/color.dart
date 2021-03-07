@@ -9,30 +9,22 @@ import 'icon.dart';
 class SonrColor {
   // ** General Theme Color Properties ** //
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
+  static const Color Dark = Color(0xff1A1A1A);
   static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color OverlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
 
   // ** Color Pallette ** //
-  static const Color Dark = Color(0xff1B1B1B);
   static const Color Red = Color(0xffF04C63);
   static const Color Grey = Color(0xffC6C4C4);
   static const Color Blue = Color(0xff51C5DD);
-  static const Color White = Color(0xffE0E0E0);
+  static const Color White = Color(0xffF7F6F6);
   static const Color Navy = Color(0xff0A4F70);
-  static const Color LightModeShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
-  static const Color LightModeShadowDark = Color(0xff0F0F0F);
-  static const Color DarkModeShadowLight = Color.fromRGBO(150, 150, 150, 0.6);
-  static const Color DarkModeShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
+  static const Color ShadowLight = Color.fromRGBO(198, 196, 196, 0.5);
+  static const Color ShadowDark = Color.fromRGBO(0, 0, 0, 0.6);
 
-  // ** Gradients ** //
+  // ** Bulb Gradients ** //
   static Gradient get activeBulb => FlutterGradients.findByName(FlutterGradientNames.summerGames);
   static Gradient get inactiveBulb => FlutterGradients.findByName(FlutterGradientNames.octoberSilence);
-  static Gradient get mainGradient => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
-
-  // ^ ThemeMode Handling ^ //
-  static Color get currentNeumorphic {
-    return DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White;
-  }
 
   // ^ Generates Random Gradient for Progress View ^ //
   static Gradient progressGradient() {

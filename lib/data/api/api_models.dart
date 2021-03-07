@@ -22,13 +22,9 @@ extension ContactUtils on Contact {
   }
 
   SonrText get fullName {
-    // Determine Gradient
-    var gradient = DeviceService.isDarkMode.value ? FlutterGradientNames.fruitBlend : FlutterGradientNames.solidStone;
-
-    // Return Name
     return this.hasLastName()
-        ? SonrText.gradient(this.firstName + " " + this.lastName, gradient, size: 32)
-        : SonrText.gradient(this.firstName, gradient, size: 32);
+        ? SonrText.gradient(this.firstName + " " + this.lastName, FlutterGradientNames.solidStone, size: 32)
+        : SonrText.gradient(this.firstName, FlutterGradientNames.solidStone, size: 32);
   }
 
   Widget get profilePicture {
@@ -37,7 +33,7 @@ extension ContactUtils on Contact {
         : Icon(
             Icons.insert_emoticon,
             size: 120,
-            color: DeviceService.isDarkMode.value ? Colors.white.withOpacity(0.75) : Colors.black.withOpacity(0.5),
+            color: Colors.black.withOpacity(0.5),
           );
   }
 
