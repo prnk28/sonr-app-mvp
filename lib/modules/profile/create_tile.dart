@@ -16,7 +16,7 @@ class CreateTileStepper extends GetView<ProfileController> {
           borderRadius: BorderRadius.circular(30),
           backendColor: Colors.transparent,
           child: Neumorphic(
-            style: NeumorphicStyle(color: SonrColor.White),
+            style: SonrStyle.normal,
             child: Material(
               color: Colors.transparent,
               child: Column(children: [
@@ -154,14 +154,16 @@ class _InfoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
       Padding(padding: EdgeInsets.all(14)),
-      Text(index.toString(), style: GoogleFonts.poppins(fontSize: 108, fontWeight: FontWeight.w900, color: Colors.black38)),
+      Text(index.toString(),
+          style: GoogleFonts.poppins(
+              fontSize: 108, fontWeight: FontWeight.w900, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
       Padding(padding: EdgeInsets.all(8)),
       Expanded(
         child: Text(text,
             style: GoogleFonts.poppins(
               fontSize: 34,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: DeviceService.isDarkMode.value ? Colors.white : Colors.black,
             )),
       ),
     ]);

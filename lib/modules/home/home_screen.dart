@@ -13,6 +13,7 @@ class HomeScreen extends GetView<HomeController> {
         leading: SonrButton.circle(
           icon: SonrIcon.profile,
           onPressed: () => Get.toNamed("/profile"),
+          onLongPressed: () => DeviceService.toggleDarkMode(),
           shape: NeumorphicShape.convex,
         ),
         action: SonrButton.circle(
@@ -72,7 +73,9 @@ class HomeScreen extends GetView<HomeController> {
     if (controller.toggleIndex.value == 0) {
       return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
     } else if (controller.toggleIndex.value == 1) {
-      return SonrIcon.neumorphicGradient(SonrIconData.all_categories, FlutterGradientNames.eternalConstance, size: 22.5);
+      return SonrIcon.neumorphicGradient(
+          SonrIconData.all_categories, DeviceService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+          size: 22.5);
     } else if (controller.toggleIndex.value == 2) {
       return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
     } else {

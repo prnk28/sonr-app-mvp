@@ -131,7 +131,7 @@ class SonrText extends StatelessWidget {
       weight: FontWeight.w700,
       size: size,
       key: key,
-      gradient: FlutterGradients.findByName(gradient),
+      gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear(),
     );
   }
 
@@ -363,8 +363,10 @@ class SonrTextField extends StatelessWidget {
                 focusNode: focusNode,
                 onEditingComplete: onEditingComplete,
                 onChanged: updateFn,
-                decoration:
-                    InputDecoration.collapsed(hintText: hint, hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.black38)),
+                decoration: InputDecoration.collapsed(
+                    hintText: hint,
+                    hintStyle:
+                        GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
               ),
             )
           ],

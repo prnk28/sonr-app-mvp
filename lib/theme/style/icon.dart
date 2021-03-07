@@ -35,7 +35,7 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Neumorphic Icon with Provided Data
-  factory SonrIcon.neumorphic(IconData data, {double size = 30, NeumorphicStyle style = SonrStyle.gradientIcon, Key key}) {
+  factory SonrIcon.neumorphic(IconData data, {double size = 30, NeumorphicStyle style, Key key}) {
     return SonrIcon(
       data,
       IconType.Neumorphic,
@@ -43,13 +43,12 @@ class SonrIcon extends StatelessWidget {
       null,
       size: size,
       key: key,
-      style: style,
+      style: style ?? SonrStyle.gradientIcon,
     );
   }
 
   // ^ Neumorphic Gradient Icon with Provided Data
-  factory SonrIcon.neumorphicGradient(IconData data, FlutterGradientNames gradient,
-      {double size = 30, NeumorphicStyle style = SonrStyle.gradientIcon, Key key}) {
+  factory SonrIcon.neumorphicGradient(IconData data, FlutterGradientNames gradient, {double size = 30, NeumorphicStyle style, Key key}) {
     return SonrIcon(
       data,
       IconType.NeumorphicGradient,
@@ -57,7 +56,7 @@ class SonrIcon extends StatelessWidget {
       gradient,
       size: size,
       key: key,
-      style: style,
+      style: style ?? SonrStyle.gradientIcon,
     );
   }
 
@@ -131,9 +130,9 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get settings => SonrIcon.gradient(SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get multiSettings => SonrIcon.gradient(SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get send => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
-  static SonrIcon get sonr => SonrIcon.gradient(SonrIconData.sonr, FlutterGradientNames.magicRay, size: 20);
+  static SonrIcon get sonr => SonrIcon.gradient(SonrIconData.sonr, FlutterGradientNames.fabledSunset, size: 20);
   static SonrIcon get screenshots => SonrIcon.gradient(SonrIconData.screenshot, FlutterGradientNames.happyAcid, size: 20);
-  static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.fabledSunset, size: 20);
+  static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.aboveTheSky, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
   static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
 
@@ -303,7 +302,7 @@ extension MimeIcon on MIME_Type {
 
 extension PayloadIcon on Payload {
   // -- Returns Icon Widget -- //
-  SonrIcon icon(IconType type, {double size = 30, Color color = Colors.white, Key key, NeumorphicStyle style = SonrStyle.gradientIcon}) {
+  SonrIcon icon(IconType type, {double size = 30, Color color = Colors.white, Key key, NeumorphicStyle style}) {
     IconData data;
     FlutterGradientNames gradient;
     if (this == Payload.CONTACT) {
@@ -337,7 +336,7 @@ extension PayloadIcon on Payload {
       color,
       gradient,
       size: size,
-      style: style,
+      style: style ?? SonrStyle.gradientIcon,
       key: key,
     );
   }

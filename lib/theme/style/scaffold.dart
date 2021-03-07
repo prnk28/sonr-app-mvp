@@ -29,12 +29,18 @@ class SonrScaffold extends StatelessWidget {
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
-  factory SonrScaffold.appBarLeadingCustom(
-      {@required Widget middle, @required Widget leading, Widget body, Widget floatingActionButton, bool resizeToAvoidBottomPadding = true}) {
+  factory SonrScaffold.appBarCustom(
+      {@required Widget middle,
+      @required Widget leading,
+      Widget action,
+      Widget body,
+      Widget floatingActionButton,
+      bool resizeToAvoidBottomPadding = true}) {
     return SonrScaffold(
         body: body,
         floatingActionButton: floatingActionButton,
-        appBar: NeumorphicAppBar(color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: middle, leading: leading),
+        appBar: NeumorphicAppBar(
+            color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: middle, leading: leading, actions: [action]),
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 

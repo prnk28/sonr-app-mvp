@@ -17,7 +17,7 @@ enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 class DeviceService extends GetxService {
   // Status/Sensor Properties
   final _direction = Rx<CompassEvent>();
-  final _isDarkMode = true.obs;
+  final _isDarkMode = false.obs;
   final _position = Rx<Position>();
 
   // Getters for Global References
@@ -198,6 +198,13 @@ class DeviceService extends GetxService {
     await SonrCore.requestLocalNetwork();
     Get.find<DeviceService>()._prefs.setBool("network-triggered", true);
     Get.find<DeviceService>().networkTriggered(true);
+    return true;
+  }
+
+  // ^ Trigger iOS Local Network with Alert ^ //
+  static toggleDarkMode() async {
+    Get.find<DeviceService>()._isDarkMode(!Get.find<DeviceService>()._isDarkMode.value);
+    Get.find<DeviceService>()._isDarkMode.refresh();
     return true;
   }
 }
