@@ -34,7 +34,7 @@ release:
 beta:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDIOS) --release --no-codesign
+	cd $(PROJECT_DIR) && $(BUILDIOS) --release
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane beta
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
