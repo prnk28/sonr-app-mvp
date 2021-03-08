@@ -34,10 +34,15 @@ release:
 beta:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && flutter build ios --release --no-codesign
+	cd $(PROJECT_DIR) && $(BUILDIOS) --release --no-codesign
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane beta
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
+
+	cd $(PROJECT_DIR) && $(BUILDANDROID) --release
+	@echo "Finished Building Sonr Android ➡ " && date
+	cd $(ANDROID_DIR) && fastlane beta
+	@echo "Finished Uploading Sonr Android to AppStore Connect ➡ " && date
 
 ## ios           :   Builds IPA for iOS
 ios:
