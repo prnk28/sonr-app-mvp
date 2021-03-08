@@ -33,6 +33,7 @@ build: build-ipa build-apk
 build-ipa:
 	@cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(BUILDIOS) --release
+	cd /Users/prad/Sonr/app/build/ios/archive/ && open .
 # cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 
 ## build-apk     :   Builds APK for Android
