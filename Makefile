@@ -30,8 +30,8 @@ release:
 	cd $(PROJECT_DIR) && flutter pub get
 	cd $(PROJECT_DIR) && $(RUN) --release
 
-## beta          :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
-beta:
+## deploy-beta   :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
+deploy-beta:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(BUILDIOS) --release
@@ -41,7 +41,7 @@ beta:
 
 	cd $(PROJECT_DIR) && $(BUILDANDROID) --release
 	@echo "Finished Building Sonr Android ➡ " && date
-	cd $(ANDROID_DIR) && fastlane beta
+	cd $(ANDROID_DIR) && fastlane alpha
 	@echo "Finished Uploading Sonr Android to AppStore Connect ➡ " && date
 
 ## ios           :   Builds IPA for iOS
