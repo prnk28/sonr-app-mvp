@@ -1,7 +1,7 @@
 # Plugin Vars
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
-BUILDIOS=$(FLUTTER) build ios
+BUILDIOS=$(FLUTTER) build ipa
 BUILDANDROID=$(FLUTTER) build apk
 CLEAN=$(FLUTTER) clean
 PROJECT_DIR=/Users/prad/Sonr/app
@@ -32,12 +32,14 @@ build: build-ipa build-apk
 ## build-ipa     :   Builds IPA for iOS
 build-ipa:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE)
+	cd $(PROJECT_DIR) && $(BUILDIOS) --release
+# cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 
 ## build-apk     :   Builds APK for Android
 build-apk:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
+	cd $(PROJECT_DIR) && $(BUILDANDROID) --release
+# cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE) --release
 
 ## clean         :   Cleans Project Cache and Build Folder
 clean:
