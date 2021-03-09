@@ -237,7 +237,7 @@ class _Spoke extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
-                            color: DeviceService.isDarkMode.value ? Colors.white70 : Colors.black54,
+                            color: Colors.black54,
                           )))),
             ],
           ));

@@ -11,6 +11,11 @@
 .svn/
 .github/
 assets/keys.json
+android/fastlane-keys.json
+fastlane/
+Runner.app.*
+Runner.ipa
+Gemfile
 
 # IntelliJ related
 *.iml

@@ -42,6 +42,7 @@ class HomeScreen extends GetView<HomeController> {
                   padding: EdgeInsets.only(top: 10),
                   margin: EdgeInsets.only(left: 30, right: 30),
                   child: Obx(() => NeumorphicToggle(
+                        style: NeumorphicToggleStyle(depth: 20, backgroundColor: SonrColor.White),
                         selectedIndex: controller.toggleIndex.value,
                         onChanged: (val) => controller.setToggleCategory(val),
                         thumb: SonrAnimatedSwitcher.fade(
@@ -52,9 +53,9 @@ class HomeScreen extends GetView<HomeController> {
                               child: Center(child: Obx(() => buildView()))),
                         ),
                         children: [
-                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.White, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.White, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.White, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
+                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
                           //ToggleElement(),
                         ],
                       )),

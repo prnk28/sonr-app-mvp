@@ -34,32 +34,32 @@ class SonrText extends StatelessWidget {
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: color);
   }
 
   // ^ Normal(w400) Text with Provided Data
   factory SonrText.normal(String text, {Color color = Colors.black, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: color);
   }
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
   factory SonrText.medium(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: color);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white70 : Colors.black87);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: color);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
   factory SonrText.bold(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: color);
   }
 
   // ^ Black(w800) Text with Provided Data
   factory SonrText.black(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: color);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
@@ -142,12 +142,14 @@ class SonrText extends StatelessWidget {
 
   // ^ AppBar Text with Provided Data
   factory SonrText.appBar(String text, {double size = 30, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
-    return SonrText(text,
-        isGradient: true,
-        weight: FontWeight.w600,
-        size: size,
-        key: key,
-        gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.premiumWhite.linear() : FlutterGradientNames.premiumDark.linear());
+    return SonrText(
+      text,
+      isGradient: true,
+      weight: FontWeight.w600,
+      size: size,
+      key: key,
+      gradient: gradient.linear(),
+    );
   }
 
   // ^ Rich Text with FirstName and Invite
