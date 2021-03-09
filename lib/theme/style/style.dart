@@ -28,21 +28,6 @@ import '../theme.dart';
 import 'color.dart';
 
 class SonrStyle {
-  static get bubbleDecoration => BoxDecoration(shape: BoxShape.circle, boxShadow: [
-        BoxShadow(
-          color: Color.fromRGBO(167, 179, 190, 1.0),
-          offset: Offset(0, 2),
-          blurRadius: 6,
-          spreadRadius: 0.5,
-        ),
-        BoxShadow(
-          color: Color.fromRGBO(248, 252, 255, 0.5),
-          offset: Offset(-2, 0),
-          blurRadius: 6,
-          spreadRadius: 0.5,
-        ),
-      ]);
-
   static get compassStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
   static get dropDownBackground => NeumorphicStyle(
@@ -84,12 +69,8 @@ class SonrStyle {
   static get gradientIcon =>
       NeumorphicStyle(color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
 
-  static get appBarIcon => NeumorphicStyle(
-      color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark,
-      shadowLightColor: SonrColor.neuoIconShadow,
-      intensity: 0.65,
-      depth: 2,
-      surfaceIntensity: 0.6);
+  static get appBarIcon =>
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
 
   static get indented => NeumorphicStyle(
       color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,

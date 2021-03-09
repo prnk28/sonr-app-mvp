@@ -44,10 +44,14 @@ class _DefaultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       SonrIcon.send,
-      SonrText.header(
+      SonrText(
         "Share",
+        isGradient: true,
+        isCentered: true,
+        weight: FontWeight.w700,
         size: 32,
-        gradient: FlutterGradientNames.glassWater,
+        key: key,
+        gradient: FlutterGradientNames.glassWater.linear(),
       )
     ]);
   }
@@ -176,7 +180,7 @@ class _ShareButtonItem extends StatelessWidget {
         ),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(_typeText, size: 14, color: Colors.white),
+      SonrText(_typeText, weight: FontWeight.w500, size: 14, key: key, color: Colors.white),
     ]);
   }
 }

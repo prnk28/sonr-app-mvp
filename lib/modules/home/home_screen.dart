@@ -42,7 +42,7 @@ class HomeScreen extends GetView<HomeController> {
                   padding: EdgeInsets.only(top: 10),
                   margin: EdgeInsets.only(left: 30, right: 30),
                   child: Obx(() => NeumorphicToggle(
-                        style: NeumorphicToggleStyle(depth: 20, backgroundColor: SonrColor.White),
+                        style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
                         selectedIndex: controller.toggleIndex.value,
                         onChanged: (val) => controller.setToggleCategory(val),
                         thumb: SonrAnimatedSwitcher.fade(
