@@ -3,6 +3,8 @@ import 'package:sonr_core/sonr_core.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
   final hintName = SonrText.hintName();
+  final lastNameFocus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return SonrScaffold.appBarTitle(
@@ -24,6 +26,9 @@ class RegisterScreen extends GetView<RegisterController> {
                         value: controller.firstName.value,
                         textCapitalization: TextCapitalization.words,
                         autoFocus: true,
+                        onEditingComplete: () {
+                          FocusScope.of(context).requestFocus(lastNameFocus);
+                        },
                         onChanged: (String value) {
                           controller.firstName(value);
                         }),
@@ -36,6 +41,14 @@ class RegisterScreen extends GetView<RegisterController> {
                         hint: hintName.item2,
                         value: controller.lastName.value,
                         textCapitalization: TextCapitalization.words,
+                        focusNode: lastNameFocus,
+                        onEditingComplete: () {
+                          FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                            FocusManager.instance.primaryFocus.unfocus();
+                            controller.submit();
+                          }
+                        },
                         onChanged: (String value) {
                           controller.lastName(value);
                         }),
@@ -49,8 +62,11 @@ class RegisterScreen extends GetView<RegisterController> {
                         child: SonrButton.rectangle(
                           text: SonrText.medium("Submit"),
                           onPressed: () {
-                            FocusScope.of(context).unfocus();
-                            controller.submit();
+                            FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                            if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                              FocusManager.instance.primaryFocus.unfocus();
+                              controller.submit();
+                            }
                           },
                           margin: EdgeInsets.only(top: 12),
                         ),
