@@ -207,9 +207,9 @@ class _SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.header("Settings", size: 36),
+                      child: SonrText.header("Settings", size: 45),
                     ),
-                    Padding(padding: EdgeInsetsX.top(20)),
+                    Padding(padding: EdgeInsetsX.top(28)),
 
                     // @ Dark Mode
                     Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -218,6 +218,10 @@ class _SettingsSheet extends StatelessWidget {
 
                           // Dark Mode Switch
                           NeumorphicSwitch(
+                            style: NeumorphicSwitchStyle(
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            ),
                             value: DeviceService.isDarkMode.value,
                             onChanged: (val) => DeviceService.toggleDarkMode(),
                           )
@@ -231,6 +235,10 @@ class _SettingsSheet extends StatelessWidget {
 
                           // Dark Mode Switch
                           NeumorphicSwitch(
+                            style: NeumorphicSwitchStyle(
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            ),
                             value: DeviceService.hasPointToShare.value,
                             onChanged: (val) async {
                               if (val) {
@@ -256,6 +264,28 @@ class _SettingsSheet extends StatelessWidget {
                             },
                           )
                         ])),
+                    Spacer(),
+
+                    // @ Bug Reporter
+                    Align(
+                        heightFactor: 0.9,
+                        alignment: Alignment.topCenter,
+                        child: SonrButton.rectangle(
+                            margin: EdgeInsetsX.horizontal(65),
+                            onPressed: () {},
+                            text: SonrText.normal("Report"),
+                            icon: SonrIcon.normal(
+                              Icons.bug_report,
+                              color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark,
+                            ))),
+                    Padding(padding: EdgeInsetsX.top(20)),
+
+                    // @ Version Number
+                    Align(
+                      heightFactor: 0.9,
+                      alignment: Alignment.topCenter,
+                      child: SonrText.light("Closed Alpha - 0.9.0 Build 4", size: 16),
+                    ),
                     Padding(padding: EdgeInsetsX.top(20)),
                   ]),
                 ))))

@@ -23,8 +23,8 @@ class SonrColor {
   static const Color LightModeShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
 
   // ** Gradients ** //
-  static Gradient get activeBulb => FlutterGradients.findByName(FlutterGradientNames.summerGames);
-  static Gradient get inactiveBulb => FlutterGradients.findByName(FlutterGradientNames.octoberSilence);
+  static Gradient get lightModeBulb => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
+  static Gradient get darkModeBulb => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
   static Gradient get mainGradient => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
 
   // ^ ThemeMode Handling ^ //
