@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppleMusicUsageDescription </key>
-	<string>Same as Calendars</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Ultrasonic Sound Detection</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Probably a bug lmfao</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Import Export Contacts</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
