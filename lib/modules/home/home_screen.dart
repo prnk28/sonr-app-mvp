@@ -11,8 +11,8 @@ class HomeScreen extends GetView<HomeController> {
         resizeToAvoidBottomPadding: false,
         title: "Home",
         leading: SonrButton.circle(
-          icon: SonrIcon.settings,
-          onPressed: () => Get.dialog(_SettingsPaneDialog()),
+          icon: SonrIcon.more,
+          onPressed: () => Get.bottomSheet(_SettingsSheet()),
           onLongPressed: () => DeviceService.toggleDarkMode(),
           shape: NeumorphicShape.convex,
         ),
@@ -183,21 +183,62 @@ class TransferCardGrid extends GetView<HomeController> {
   }
 }
 
-class _SettingsPaneDialog extends StatelessWidget {
+class _SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: Get.height / 3 + 25,
-        margin: EdgeInsets.symmetric(horizontal: 30),
-        child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Stack(children: [
-              // Window
-              Container(
-                  margin: EdgeInsets.only(top: 60),
-                  child: Neumorphic(
-                    style: SonrStyle.overlay,
-                  ))
-            ])));
+    return NeumorphicBackground(
+      borderRadius: BorderRadius.circular(20),
+      margin: EdgeInsets.only(left: 15, right: 15, top: 75),
+      backendColor: Colors.transparent,
+      child: Stack(children: [
+        Container(
+            width: Get.width,
+            child: Obx(() => Neumorphic(
+                style: NeumorphicStyle(
+                  intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+                  depth: DeviceService.isDarkMode.value ? 6 : 8,
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                  color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                ),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(children: [
+                    // @ Title of Pane
+                    Align(
+                      heightFactor: 0.9,
+                      alignment: Alignment.topCenter,
+                      child: SonrText.header("Settings", size: 36),
+                    ),
+                    Padding(padding: EdgeInsetsX.top(20)),
+
+                    // @ Dark Mode
+                    Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          // Dark Mode Title
+                          SonrText.medium("Dark Mode"),
+
+                          // Dark Mode Switch
+                          NeumorphicSwitch(
+                            value: DeviceService.isDarkMode.value,
+                            onChanged: (val) => DeviceService.toggleDarkMode(),
+                          )
+                        ])),
+                    Padding(padding: EdgeInsetsX.top(20)),
+
+                    // @ Dark Mode
+                    Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          // Dark Mode Title
+                          SonrText.medium("Dark Mode"),
+
+                          // Dark Mode Switch
+                          NeumorphicSwitch(
+                            value: DeviceService.isDarkMode.value,
+                            onChanged: (val) => DeviceService.toggleDarkMode(),
+                          )
+                        ])),
+                    Padding(padding: EdgeInsetsX.top(20)),
+                  ]),
+                ))))
+      ]),
+    );
   }
 }
