@@ -1,0 +1,1 @@
+Shift the paradigm for file sharing. Sonr is a software that uses ultrasonic sound, bluetooth, and rendezvous discovery to share files from any device to any device.

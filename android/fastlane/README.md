@@ -26,16 +26,6 @@ Runs all the tests
 fastlane android alpha
 ```
 Upload Binary to closed alpha
-### android beta
-```
-fastlane android beta
-```
-Upload Binary to open beta
-### android deploy
-```
-fastlane android deploy
-```
-Deploy a new version to the Google Play
 
 ----
 
