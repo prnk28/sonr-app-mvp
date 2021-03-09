@@ -53,9 +53,13 @@ class DeviceService extends GetxService {
 
     // Set Android Status Bar by Dark Mode
     _isDarkMode(_box.read(_key) ?? false);
+
+    // Update Android and iOS Status Bar
     _isDarkMode.value
-        ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light))
-        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
+        ? SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
     return this;
   }
 
@@ -213,9 +217,21 @@ class DeviceService extends GetxService {
 
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
+    // Update Value
     Get.find<DeviceService>()._isDarkMode(!Get.find<DeviceService>()._isDarkMode.value);
     Get.find<DeviceService>()._isDarkMode.refresh();
+
+    // Update Android and iOS Status Bar
+    Get.find<DeviceService>()._isDarkMode.value
+        ? SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
+
+    // Update Theme
     Get.changeThemeMode(Get.find<DeviceService>()._loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
+
+    // Save Preference
     Get.find<DeviceService>()._saveThemeToBox(!Get.find<DeviceService>()._loadThemeFromBox());
     return true;
   }

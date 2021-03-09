@@ -227,12 +227,25 @@ class _SettingsSheet extends StatelessWidget {
                     // @ Dark Mode
                     Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           // Dark Mode Title
-                          SonrText.medium("Dark Mode"),
+                          SonrText.medium("Point and Share"),
 
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             value: DeviceService.isDarkMode.value,
-                            onChanged: (val) => DeviceService.toggleDarkMode(),
+                            onChanged: (val) async {
+                              if (val) {
+                                SonrOverlay.question(
+                                        barrierDismissible: false,
+                                        title: "Wait!",
+                                        description:
+                                            "Point and Share is still experimental, performance may not be stable. \n Do you still want to continue?",
+                                        acceptTitle: "Continue",
+                                        declineTitle: "Cancel")
+                                    .then((value) {
+                                  // Handle Response
+                                });
+                              }
+                            },
                           )
                         ])),
                     Padding(padding: EdgeInsetsX.top(20)),
