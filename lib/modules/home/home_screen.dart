@@ -11,8 +11,8 @@ class HomeScreen extends GetView<HomeController> {
         resizeToAvoidBottomPadding: false,
         title: "Home",
         leading: SonrButton.circle(
-          icon: SonrIcon.profile,
-          onPressed: () => Get.toNamed("/profile"),
+          icon: SonrIcon.settings,
+          onPressed: () => Get.dialog(_SettingsPaneDialog()),
           onLongPressed: () => DeviceService.toggleDarkMode(),
           shape: NeumorphicShape.convex,
         ),
@@ -180,5 +180,24 @@ class TransferCardGrid extends GetView<HomeController> {
     } else {
       return FileCard.item(list[index], isNewItem: isNew);
     }
+  }
+}
+
+class _SettingsPaneDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: Get.height / 3 + 25,
+        margin: EdgeInsets.symmetric(horizontal: 30),
+        child: GestureDetector(
+            onTap: () => Get.back(),
+            child: Stack(children: [
+              // Window
+              Container(
+                  margin: EdgeInsets.only(top: 60),
+                  child: Neumorphic(
+                    style: SonrStyle.overlay,
+                  ))
+            ])));
   }
 }
