@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Sound Detection</string>
+	<key>NSAppleMusicUsageDescription </key>
+	<string>No Clue Ignore</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>No Clue Ignore</string>
+	<key>NSContactsUsageDescription</key>
+	<string>No Clue Ignore</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

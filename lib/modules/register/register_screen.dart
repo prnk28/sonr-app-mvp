@@ -10,7 +10,7 @@ class RegisterScreen extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold.appBarTitle(
-        title: "Sonr",
+        title: "Register",
         body: Column(children: <Widget>[
           Form(
             child: Column(
@@ -64,7 +64,7 @@ class RegisterScreen extends GetView<RegisterController> {
                 // ***************** //
                 SonrTextField(
                     label: "Email Address",
-                    hint: hintName.item2,
+                    hint: "${hintName.item1.toLowerCase()}_${hintName.item2.toLowerCase()}@email.com",
                     status: controller.emailStatus,
                     value: controller.lastName.value,
                     textInputAction: TextInputAction.done,
@@ -89,7 +89,9 @@ class RegisterScreen extends GetView<RegisterController> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: SonrButton.rectangle(
-                      text: SonrText.medium("Submit"),
+                      margin: EdgeInsetsX.horizontal(120),
+                      icon: SonrIcon.accept,
+                      text: SonrText.semibold("Submit"),
                       onPressed: () {
                         FocusScopeNode currentFocus = FocusScope.of(Get.context);
                         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
@@ -97,7 +99,7 @@ class RegisterScreen extends GetView<RegisterController> {
                           controller.submit();
                         }
                       },
-                      margin: EdgeInsets.only(top: 12),
+                      //margin: EdgeInsets.only(top: 12),
                     ),
                   ),
                 )
