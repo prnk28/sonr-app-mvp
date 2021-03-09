@@ -75,6 +75,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Wiredash(
+      options: WiredashOptionsData(praiseButton: false, screenshotStep: false),
       navigatorKey: Get.key,
       projectId: 'sonr-g4dd5i0',
       secret: 'ksir492giek9pqyt3yjz6gwl2klc47paxp1w9wpof7z6g52v',

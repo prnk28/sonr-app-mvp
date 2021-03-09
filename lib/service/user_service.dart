@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:wiredash/wiredash.dart';
 
 class UserService extends GetxService {
   // ** User Reactive Properties **
@@ -26,10 +27,12 @@ class UserService extends GetxService {
   static RxString get phone => Get.find<UserService>()._phone;
   static RxString get email => Get.find<UserService>()._email;
   static RxString get website => Get.find<UserService>()._website;
+
   static Rx<Uint8List> get picture => Get.find<UserService>()._picture;
   static RxList<Contact_SocialTile> get socials => Get.find<UserService>()._socials;
   static int get tileCount => Get.find<UserService>()._socials.length;
   static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
+  static String get wireID => "${Get.find<UserService>()._firstName.value}-${Get.find<UserService>()._lastName.value}";
 
   // ** Return Current User Object **
   static User get current {

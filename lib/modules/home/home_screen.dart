@@ -14,12 +14,11 @@ class HomeScreen extends GetView<HomeController> {
         leading: SonrButton.circle(
           icon: SonrIcon.more,
           onPressed: () => Get.bottomSheet(_SettingsSheet()),
-          onLongPressed: () => DeviceService.toggleDarkMode(),
-          shape: NeumorphicShape.convex,
+          shape: NeumorphicShape.flat,
         ),
         action: SonrButton.circle(
             icon: SonrIcon.search,
-            shape: NeumorphicShape.convex,
+            shape: NeumorphicShape.flat,
             onPressed: () {
               if (controller.status.value != HomeState.None) {
                 SonrOverlay.show(
@@ -187,10 +186,18 @@ class TransferCardGrid extends GetView<HomeController> {
 class _SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Set WireDash User
     Wiredash.of(context).setUserProperties(
-      userEmail: 'mail@example.com',
-      userId: 'custom-id',
+      userEmail: UserService.email.value,
+      userId: UserService.wireID,
     );
+
+    // Set WireDash Build
+    Wiredash.of(context).setBuildProperties(
+      buildNumber: '42',
+      buildVersion: '0.9.0',
+    );
+
     return NeumorphicBackground(
       borderRadius: BorderRadius.circular(20),
       margin: EdgeInsets.only(left: 15, right: 15, top: 75),
@@ -277,7 +284,7 @@ class _SettingsSheet extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: SonrButton.rectangle(
                             margin: EdgeInsetsX.horizontal(65),
-                            onPressed: () => Wiredash.of(context).show(),
+                            onPressed: () => Wiredash.of(context, ).show(),
                             text: SonrText.normal("Report"),
                             icon: SonrIcon.normal(
                               Icons.bug_report,
