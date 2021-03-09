@@ -4,7 +4,7 @@
 <dict>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Sound Detection</string>
-	<key>NSAppleMusicUsageDescription </key>
+	<key>NSAppleMusicUsageDescription</key>
 	<string>No Clue Ignore</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>No Clue Ignore</string>
