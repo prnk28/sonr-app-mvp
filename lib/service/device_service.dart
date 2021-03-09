@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,8 @@ class DeviceService extends GetxService {
   final notificationPermitted = false.obs;
 
   // References
+  final _box = GetStorage();
+  final _key = 'isDarkMode';
   SharedPreferences _prefs;
 
   // ^ Open SharedPreferences on Init ^ //
@@ -49,6 +52,7 @@ class DeviceService extends GetxService {
     _direction.bindStream(FlutterCompass.events);
 
     // Set Android Status Bar by Dark Mode
+    _isDarkMode(_box.read(_key) ?? false);
     _isDarkMode.value
         ? SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.light))
         : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark));
@@ -201,10 +205,18 @@ class DeviceService extends GetxService {
     return true;
   }
 
+  /// Load isDArkMode from local storage and if it's empty, returns false (that means default theme is light)
+  bool _loadThemeFromBox() => _box.read(_key) ?? false;
+
+  /// Save isDarkMode to local storage
+  _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode);
+
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
     Get.find<DeviceService>()._isDarkMode(!Get.find<DeviceService>()._isDarkMode.value);
     Get.find<DeviceService>()._isDarkMode.refresh();
+    Get.changeThemeMode(Get.find<DeviceService>()._loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
+    Get.find<DeviceService>()._saveThemeToBox(!Get.find<DeviceService>()._loadThemeFromBox());
     return true;
   }
 }

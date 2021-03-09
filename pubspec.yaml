@@ -23,6 +23,7 @@ dependencies:
   # -- Management --
   flutter_hooks: ^0.16.0
   get: ^3.25.4
+  get_storage: ^1.4.0
   intl: ^0.17.0
   url_launcher: ^6.0.2
 

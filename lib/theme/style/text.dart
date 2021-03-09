@@ -355,6 +355,7 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
