@@ -17,12 +17,14 @@ enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 
 class DeviceService extends GetxService {
   // Status/Sensor Properties
+  final _brightness = Rx<Brightness>();
   final _direction = Rx<CompassEvent>();
   final _isDarkMode = true.obs;
   final _hasPointToShare = false.obs;
   final _position = Rx<Position>();
 
   // Getters for Global References
+  static Rx<Brightness> get brightness => Get.find<DeviceService>()._brightness;
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
   static RxBool get hasPointToShare => Get.find<DeviceService>()._hasPointToShare;
@@ -55,6 +57,7 @@ class DeviceService extends GetxService {
     // Set Preferences
     _isDarkMode(_box.read("isDarkMode") ?? false);
     _hasPointToShare(_box.read("hasPointToShare") ?? false);
+    _brightness(_isDarkMode.value ? Brightness.dark : Brightness.light);
 
     // Update Android and iOS Status Bar
     _isDarkMode.value

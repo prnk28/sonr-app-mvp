@@ -284,7 +284,10 @@ class _SettingsSheet extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: SonrButton.rectangle(
                             margin: EdgeInsetsX.horizontal(65),
-                            onPressed: () => Wiredash.of(context, ).show(),
+                            onPressed: () {
+                              Get.back();
+                              Wiredash.of(context).show();
+                            },
                             text: SonrText.normal("Report"),
                             icon: SonrIcon.normal(
                               Icons.bug_report,

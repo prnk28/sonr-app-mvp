@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'data/data.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
@@ -75,7 +76,13 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return Wiredash(
-      options: WiredashOptionsData(praiseButton: false, screenshotStep: false),
+      theme: WiredashThemeData(fontFamily: "Poppins", brightness: DeviceService.brightness.value),
+      options: WiredashOptionsData(
+        praiseButton: false,
+        screenshotStep: false,
+        customTranslations: {const Locale.fromSubtags(languageCode: 'zh'): const SonrWiredashTranslation()},
+        locale: const Locale.fromSubtags(languageCode: 'zh'),
+      ),
       navigatorKey: Get.key,
       projectId: 'sonr-g4dd5i0',
       secret: 'ksir492giek9pqyt3yjz6gwl2klc47paxp1w9wpof7z6g52v',
