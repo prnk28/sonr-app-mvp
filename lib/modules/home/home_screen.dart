@@ -231,9 +231,10 @@ class _SettingsSheet extends StatelessWidget {
 
                           // Dark Mode Switch
                           NeumorphicSwitch(
-                            value: DeviceService.isDarkMode.value,
+                            value: DeviceService.hasPointToShare.value,
                             onChanged: (val) async {
                               if (val) {
+                                // Overlay Prompt
                                 SonrOverlay.question(
                                         barrierDismissible: false,
                                         title: "Wait!",
@@ -242,8 +243,15 @@ class _SettingsSheet extends StatelessWidget {
                                         acceptTitle: "Continue",
                                         declineTitle: "Cancel")
                                     .then((value) {
-                                  // Handle Response
+                                  // Check Result
+                                  if (value) {
+                                    DeviceService.togglePointToShare();
+                                  } else {
+                                    Get.back();
+                                  }
                                 });
+                              } else {
+                                DeviceService.togglePointToShare();
                               }
                             },
                           )
