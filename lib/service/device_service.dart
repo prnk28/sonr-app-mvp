@@ -19,11 +19,13 @@ class DeviceService extends GetxService {
   // Status/Sensor Properties
   final _direction = Rx<CompassEvent>();
   final _isDarkMode = true.obs;
+  final _hasPointToShare = false.obs;
   final _position = Rx<Position>();
 
   // Getters for Global References
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
+  static RxBool get hasPointToShare => Get.find<DeviceService>()._hasPointToShare;
   static double get lat => Get.find<DeviceService>()._position.value.latitude;
   static double get lon => Get.find<DeviceService>()._position.value.longitude;
   static bool get hasPosition => Get.find<DeviceService>()._position.value != null;
@@ -38,7 +40,6 @@ class DeviceService extends GetxService {
 
   // References
   final _box = GetStorage();
-  final _key = 'isDarkMode';
   SharedPreferences _prefs;
 
   // ^ Open SharedPreferences on Init ^ //
@@ -51,8 +52,9 @@ class DeviceService extends GetxService {
     // Bind Direction Stream
     _direction.bindStream(FlutterCompass.events);
 
-    // Set Android Status Bar by Dark Mode
-    _isDarkMode(_box.read(_key) ?? false);
+    // Set Preferences
+    _isDarkMode(_box.read("isDarkMode") ?? false);
+    _hasPointToShare(_box.read("hasPointToShare") ?? false);
 
     // Update Android and iOS Status Bar
     _isDarkMode.value
@@ -209,11 +211,9 @@ class DeviceService extends GetxService {
     return true;
   }
 
-  /// Load isDArkMode from local storage and if it's empty, returns false (that means default theme is light)
-  bool _loadThemeFromBox() => _box.read(_key) ?? false;
-
-  /// Save isDarkMode to local storage
-  _saveThemeToBox(bool isDarkMode) => _box.write(_key, isDarkMode);
+  // ^ BoxStorage Theme Mode Helper ^ //
+  bool _loadThemeFromBox() => _box.read("isDarkMode") ?? false;
+  _saveThemeToBox(bool isDarkMode) => _box.write("isDarkMode", isDarkMode);
 
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
@@ -233,6 +233,21 @@ class DeviceService extends GetxService {
 
     // Save Preference
     Get.find<DeviceService>()._saveThemeToBox(!Get.find<DeviceService>()._loadThemeFromBox());
+    return true;
+  }
+
+  // ^ BoxStorage Theme Mode Helper ^ //
+  bool _loadPointToShareFromBox() => _box.read("hasPointToShare") ?? false;
+  _savePointToShareToBox(bool hasPointToShare) => _box.write("hasPointToShare", hasPointToShare);
+
+  // ^ Trigger iOS Local Network with Alert ^ //
+  static togglePointToShare() async {
+    // Update Value
+    Get.find<DeviceService>()._hasPointToShare(!Get.find<DeviceService>()._hasPointToShare.value);
+    Get.find<DeviceService>()._hasPointToShare.refresh();
+
+    // Save Preference
+    Get.find<DeviceService>()._savePointToShareToBox(!Get.find<DeviceService>()._loadPointToShareFromBox());
     return true;
   }
 }
