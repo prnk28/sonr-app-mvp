@@ -5,6 +5,7 @@ import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
+import 'package:wiredash/wiredash.dart';
 
 // ^ Main Method ^ //
 void main() async {
@@ -73,39 +74,44 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      getPages: K_PAGES,
-      initialBinding: InitialBinding(),
+    return Wiredash(
       navigatorKey: Get.key,
-      navigatorObservers: [GetObserver()],
-      themeMode: ThemeMode.light,
-      home: Scaffold(
-          backgroundColor: Colors.black,
-          body: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              // @ Rive Animation
-              RiveContainer(
-                type: ArtboardType.Splash,
-                width: Get.width,
-                height: Get.height,
-                placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
-              ),
+      projectId: 'sonr-g4dd5i0',
+      secret: 'ksir492giek9pqyt3yjz6gwl2klc47paxp1w9wpof7z6g52v',
+      child: GetMaterialApp(
+        getPages: K_PAGES,
+        initialBinding: InitialBinding(),
+        navigatorKey: Get.key,
+        navigatorObservers: [GetObserver()],
+        themeMode: ThemeMode.light,
+        home: Scaffold(
+            backgroundColor: Colors.black,
+            body: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                // @ Rive Animation
+                RiveContainer(
+                  type: ArtboardType.Splash,
+                  width: Get.width,
+                  height: Get.height,
+                  placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+                ),
 
-              // @ Fade Animation of Text
-              PlayAnimation<double>(
-                  tween: (0.0).tweenTo(1.0),
-                  duration: 400.milliseconds,
-                  delay: 1.seconds,
-                  builder: (context, child, value) {
-                    return AnimatedOpacity(
-                        opacity: value,
-                        duration: 400.milliseconds,
-                        child:
-                            Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", gradient: FlutterGradientNames.glassWater)));
-                  }),
-            ],
-          )),
+                // @ Fade Animation of Text
+                PlayAnimation<double>(
+                    tween: (0.0).tweenTo(1.0),
+                    duration: 400.milliseconds,
+                    delay: 1.seconds,
+                    builder: (context, child, value) {
+                      return AnimatedOpacity(
+                          opacity: value,
+                          duration: 400.milliseconds,
+                          child:
+                              Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", gradient: FlutterGradientNames.glassWater)));
+                    }),
+              ],
+            )),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sonr_app/data/model/model_register.dart';
 import 'style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
@@ -310,7 +311,7 @@ class SonrTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final TextEditingController controller;
   final TextInputAction textInputAction;
-
+  final Rx<TextInputValidStatus> status;
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
 
@@ -318,6 +319,7 @@ class SonrTextField extends StatelessWidget {
       {@required this.hint,
       @required this.value,
       this.label,
+      this.status,
       this.controller,
       this.onChanged,
       this.focusNode,
@@ -329,6 +331,18 @@ class SonrTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return status != null
+        ? ObxValue<Rx<TextInputValidStatus>>((status) {
+            if (status.value == TextInputValidStatus.Invalid) {
+              return buildInvalid(context);
+            } else {
+              return buildDefault(context);
+            }
+          }, status)
+        : buildDefault(context);
+  }
+
+  Widget buildDefault(BuildContext context, {InputDecoration decoration, bool isError = false}) {
     return ValueBuilder<String>(
       initialValue: value,
       builder: (value, updateFn) {
@@ -338,14 +352,21 @@ class SonrTextField extends StatelessWidget {
             label != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: NeumorphicTheme.defaultTextColor(context),
+                    child: Row(children: [
+                      Text(
+                        label,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: NeumorphicTheme.defaultTextColor(context),
+                        ),
                       ),
-                    ),
-                  )
+                      isError
+                          ? Text(
+                              " *Error",
+                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrColor.Red),
+                            )
+                          : Container(),
+                    ]))
                 : Container(),
             Neumorphic(
               margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
@@ -364,10 +385,12 @@ class SonrTextField extends StatelessWidget {
                 focusNode: focusNode,
                 onEditingComplete: onEditingComplete,
                 onChanged: updateFn,
-                decoration: InputDecoration.collapsed(
-                    hintText: hint,
-                    hintStyle:
-                        GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
+                decoration: decoration != null
+                    ? decoration
+                    : InputDecoration.collapsed(
+                        hintText: hint,
+                        hintStyle: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -375,6 +398,30 @@ class SonrTextField extends StatelessWidget {
       },
       onUpdate: onChanged,
     );
+  }
+
+  Widget buildInvalid(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      key: key,
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: 1.seconds,
+      builder: (context, animation, child) => Transform.translate(
+        offset: shakeOffset(animation),
+        child: child,
+      ),
+      child: buildDefault(context,
+          isError: true,
+          decoration: InputDecoration.collapsed(
+              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrColor.Red, width: 4)),
+              hintText: hint,
+              hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38))),
+    );
+  }
+
+  // ^ Get Animated Offset for Shake Method ^ //
+  Offset shakeOffset(double animation) {
+    var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
+    return Offset(18 * shake, 0);
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
+import 'package:wiredash/wiredash.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
 import 'share_button.dart';
@@ -186,6 +187,10 @@ class TransferCardGrid extends GetView<HomeController> {
 class _SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Wiredash.of(context).setUserProperties(
+      userEmail: 'mail@example.com',
+      userId: 'custom-id',
+    );
     return NeumorphicBackground(
       borderRadius: BorderRadius.circular(20),
       margin: EdgeInsets.only(left: 15, right: 15, top: 75),
@@ -272,7 +277,7 @@ class _SettingsSheet extends StatelessWidget {
                         alignment: Alignment.topCenter,
                         child: SonrButton.rectangle(
                             margin: EdgeInsetsX.horizontal(65),
-                            onPressed: () {},
+                            onPressed: () => Wiredash.of(context).show(),
                             text: SonrText.normal("Report"),
                             icon: SonrIcon.normal(
                               Icons.bug_report,
