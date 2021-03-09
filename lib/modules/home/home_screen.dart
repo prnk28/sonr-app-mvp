@@ -231,7 +231,7 @@ class _SettingsSheet extends StatelessWidget {
                     // @ Dark Mode
                     Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                           // Dark Mode Title
-                          SonrText.medium("Point and Share"),
+                          SonrText.medium("Point To Share"),
 
                           // Dark Mode Switch
                           NeumorphicSwitch(
@@ -247,7 +247,7 @@ class _SettingsSheet extends StatelessWidget {
                                         barrierDismissible: false,
                                         title: "Wait!",
                                         description:
-                                            "Point and Share is still experimental, performance may not be stable. \n Do you still want to continue?",
+                                            "Point To Share is still experimental, performance may not be stable. \n Do you still want to continue?",
                                         acceptTitle: "Continue",
                                         declineTitle: "Cancel")
                                     .then((value) {
