@@ -35,25 +35,22 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
-    // Validate Location
-    if (Get.find<DeviceService>().locationPermitted.value && !UserService.exists.value) {
-      // Create Worker and get poisiton
-      var pos = await Get.find<DeviceService>().refreshLocation();
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+    var pos = await Get.find<DeviceService>().currentLocation();
+    // Create Worker and get poisiton
+    _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
 
-      // Set Callbacks
-      _node.onConnected = _handleConnected;
-      _node.onRefreshed = _handleRefresh;
-      _node.onDirected = _handleDirect;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
-      _connected(true);
-      return this;
-    }
+    // Set Callbacks
+    _node.onConnected = _handleConnected;
+    _node.onRefreshed = _handleRefresh;
+    _node.onDirected = _handleDirect;
+    _node.onInvited = _handleInvited;
+    _node.onReplied = _handleResponded;
+    _node.onProgressed = _handleProgress;
+    _node.onReceived = _handleReceived;
+    _node.onTransmitted = _handleTransmitted;
+    _node.onError = _handleError;
+    _connected(true);
+
     _connected.value ? print("Connected") : print("Failed to Connect.");
     return this;
   }

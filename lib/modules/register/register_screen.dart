@@ -135,7 +135,7 @@ class RegisterController extends GetxController {
       await UserService.saveChanges(providedContact: contact, isNewUser: true);
       var result = await Get.find<DeviceService>().requestLocation();
       if (result) {
-        await Get.find<DeviceService>().refreshLocation();
+        await Get.find<DeviceService>().currentLocation();
         Get.offNamed("/home");
       }
     }

@@ -36,7 +36,17 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  acceptTransfer(TransferCard card) {
+  acceptTransfer(TransferCard card) async {
+    if (Get.find<DeviceService>().galleryPermitted) {
+      _sendAcceptResponse(card);
+    } else {
+      await Get.find<DeviceService>()
+          .requestGallery(description: "Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
+      _sendAcceptResponse(card);
+    }
+  }
+
+  _sendAcceptResponse(TransferCard card) {
     SonrService.respond(true);
     SonrOverlay.back();
 

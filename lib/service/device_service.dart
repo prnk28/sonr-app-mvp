@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sonr_app/theme/theme.dart' hide Position;
+import 'package:sonr_app/theme/theme.dart' hide Position, Platform;
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
@@ -21,7 +21,6 @@ class DeviceService extends GetxService {
   final _direction = Rx<CompassEvent>();
   final _isDarkMode = true.obs;
   final _hasPointToShare = false.obs;
-  final _position = Rx<Position>();
 
   // Getters for Global References
   static Rx<Brightness> get brightness => Get.find<DeviceService>()._brightness;
@@ -29,25 +28,47 @@ class DeviceService extends GetxService {
   static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
   static RxBool get hasPointToShare => Get.find<DeviceService>()._hasPointToShare;
 
-  // Permission Properties
-  final cameraPermitted = false.obs;
-  final galleryPermitted = false.obs;
-  final locationPermitted = false.obs;
-  final microphonePermitted = false.obs;
-  final networkTriggered = false.obs;
-  final notificationPermitted = false.obs;
+  // Camera Permissions
+  bool get cameraPermitted => _box.read("cameraPermitted") ?? false;
+  _cameraPermittedToBox(bool val) {
+    _box.write("cameraPermitted", val);
+  }
+
+  // Gallery Permissions
+  bool get galleryPermitted => _box.read("galleryPermitted") ?? false;
+  _galleryPermittedToBox(bool val) {
+    _box.write("galleryPermitted", val);
+  }
+
+// Location Permissions
+  bool get locationPermitted => _box.read("locationPermitted") ?? false;
+  _locationPermittedToBox(bool val) {
+    _box.write("locationPermitted", val);
+  }
+
+  // Microphone Permissions
+  bool get microphonePermitted => _box.read("microphonePermitted") ?? false;
+  _microphonePermittedToBox(bool val) {
+    _box.write("microphonePermitted", val);
+  }
+
+  // Network Triggered
+  bool get networkTriggered => _box.read("networkTriggered") ?? false;
+  _networkTriggeredToBox(bool val) {
+    _box.write("networkTriggered", val);
+  }
+
+  // Network Triggered
+  bool get notificationPermitted => _box.read("notificationPermitted") ?? false;
+  _notificationPermittedToBox(bool val) {
+    _box.write("notificationPermitted", val);
+  }
 
   // References
   final _box = GetStorage();
-  SharedPreferences _prefs;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
-    // Get Preferences and Set Status
-    _prefs = await SharedPreferences.getInstance();
-    await setPermissionStatus();
-    await refreshLocation();
-
     // Bind Direction Stream
     _direction.bindStream(FlutterCompass.events);
 
@@ -70,7 +91,7 @@ class DeviceService extends GetxService {
     if (!UserService.exists.value) {
       return LaunchPage.Register;
     } else {
-      if (Get.find<DeviceService>().locationPermitted.value) {
+      if (Get.find<DeviceService>().locationPermitted) {
         return LaunchPage.Home;
       } else {
         return LaunchPage.PermissionLocation;
@@ -89,22 +110,13 @@ class DeviceService extends GetxService {
   }
 
   // ^ Refresh User Location Position ^ //
-  Future<Position> refreshLocation() async {
-    if (locationPermitted.value) {
-      _position(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
-      return _position.value;
+  Future<Position> currentLocation() async {
+    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    } else {
+      print("No Location Permissions");
+      return null;
     }
-    return null;
-  }
-
-  // ^ Sets Permission Status from Service ^ //
-  Future setPermissionStatus() async {
-    networkTriggered(_prefs.containsKey("network-triggered"));
-    cameraPermitted(await Permission.camera.isGranted);
-    galleryPermitted(await Permission.mediaLibrary.isGranted);
-    locationPermitted(await Permission.locationWhenInUse.isGranted);
-    microphonePermitted(await Permission.microphone.isGranted);
-    notificationPermitted(await Permission.notification.isGranted);
   }
 
   // ************************* //
@@ -112,166 +124,122 @@ class DeviceService extends GetxService {
   // ************************* //
   // ^ Request Camera optional overlay ^ //
   Future<bool> requestCamera() async {
-    // Create Future Completer
-    var completer = new Completer<bool>();
-
-    // Check
-    if (Get.find<DeviceService>().cameraPermitted.value) {
-      completer.complete(true);
-    }
-
     // Present Overlay
-    SonrOverlay.question(
-            title: 'Requires Permission',
-            description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
-            acceptTitle: "Allow",
-            declineTitle: "Decline")
-        .then((decision) {
-      // Check Overlay Decision
-      if (decision) {
-        Permission.camera.request().then((value) {
-          setPermissionStatus();
-          completer.complete(value == PermissionStatus.granted);
-        });
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+
+    if (decision) {
+      if (await Permission.camera.request().isGranted) {
+        _cameraPermittedToBox(true);
+        return true;
       } else {
-        completer.complete(false);
+        return false;
       }
-    });
-    return completer.future;
+    } else {
+      return false;
+    }
   }
 
   // ^ Request Gallery optional overlay ^ //
-  Future<bool> requestGallery() async {
-    // Create Future Completer
-    var completer = new Completer<bool>();
-
-    // Check If Exists
-    if (Get.find<DeviceService>().galleryPermitted.value) {
-      completer.complete(true);
-    }
-
+  Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     // Present Overlay
-    SonrOverlay.question(
-            title: 'Requires Permission',
-            description: 'Sonr needs your Permission to access your phones Gallery.',
-            acceptTitle: "Allow",
-            declineTitle: "Decline")
-        .then((decision) {
-      // Check Overlay Decision
-      if (decision) {
-        Permission.mediaLibrary.request().then((value) {
-          setPermissionStatus();
-          completer.complete(value == PermissionStatus.granted);
-        });
+    var decision = await SonrOverlay.question(title: 'Requires Permission', description: description, acceptTitle: "Allow", declineTitle: "Decline");
+    if (decision) {
+      if (Platform.isAndroid) {
+        if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
+          _galleryPermittedToBox(true);
+          return true;
+        } else {
+          return false;
+        }
       } else {
-        completer.complete(false);
+        if (await Permission.mediaLibrary.request().isGranted) {
+          _galleryPermittedToBox(true);
+          return true;
+        } else {
+          return false;
+        }
       }
-    });
-    return completer.future;
+    } else {
+      return false;
+    }
   }
 
   // ^ Request Location optional overlay ^ //
   Future<bool> requestLocation() async {
-    // Create Future Completer
-    var completer = new Completer<bool>();
-
-    // Check If Exists
-    if (Get.find<DeviceService>().locationPermitted.value) {
-      completer.complete(true);
-    }
-
     // Present Overlay
-    SonrOverlay.question(
-            title: 'Requires Permission',
-            description: 'Sonr requires location in order to find devices in your area.',
-            acceptTitle: "Allow",
-            declineTitle: "Decline")
-        .then((decision) {
-      // Check Overlay Decision
-      if (decision) {
-        // Request
-        Permission.locationWhenInUse.request().then((value) {
-          setPermissionStatus();
-          completer.complete(value == PermissionStatus.granted);
-        });
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr requires location in order to find devices in your area.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+    if (decision) {
+      if (await Permission.locationWhenInUse.request().isGranted) {
+        _locationPermittedToBox(true);
+        return true;
       } else {
-        completer.complete(false);
+        return false;
       }
-    });
-    return completer.future;
+    } else {
+      return false;
+    }
   }
 
   // ^ Request Microphone optional overlay ^ //
   Future<bool> requestMicrophone() async {
-    // Create Future Completer
-    var completer = new Completer<bool>();
-
-    // Check If Exists
-    if (Get.find<DeviceService>().microphonePermitted.value) {
-      completer.complete(true);
-    }
-
     // Present Overlay
-    SonrOverlay.question(
-            title: 'Requires Permission',
-            description: 'Sonr uses your microphone in order to communicate with other devices.',
-            acceptTitle: "Allow",
-            declineTitle: "Decline")
-        .then((decision) {
-      // Check Overlay Decision
-      if (decision) {
-        Permission.microphone.request().then((value) {
-          setPermissionStatus();
-          completer.complete(value == PermissionStatus.granted);
-        });
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr uses your microphone in order to communicate with other devices.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+    if (decision) {
+      if (await Permission.microphone.request().isGranted) {
+        _microphonePermittedToBox(true);
+        return true;
       } else {
-        completer.complete(false);
+        return false;
       }
-    });
-    return completer.future;
+    } else {
+      return false;
+    }
   }
 
   // ^ Request Notifications optional overlay ^ //
   Future<bool> requestNotifications() async {
-    // Create Future Completer
-    var completer = new Completer<bool>();
-
-    // Check If Exists
-    if (notificationPermitted.value) {
-      completer.complete(true);
-    }
-
     // Present Overlay
-    SonrOverlay.question(
-            title: 'Requires Permission',
-            description: 'Sonr would like to send you Notifications for Transfer Invites.',
-            acceptTitle: "Allow",
-            declineTitle: "Decline")
-        .then((decision) {
-      // Check Overlay Decision
-      if (decision) {
-        Permission.notification.request().then((value) {
-          setPermissionStatus();
-          completer.complete(value == PermissionStatus.granted);
-        });
+    var decision = await SonrOverlay.question(
+        title: 'Requires Permission',
+        description: 'Sonr would like to send you Notifications for Transfer Invites.',
+        acceptTitle: "Allow",
+        declineTitle: "Decline");
+    if (decision) {
+      if (await Permission.notification.request().isGranted) {
+        _notificationPermittedToBox(true);
+        return true;
       } else {
-        completer.complete(false);
+        return false;
       }
-    });
-    return completer.future;
+    } else {
+      return false;
+    }
   }
 
   // ^ Trigger iOS Local Network with Alert ^ //
   Future triggerNetwork() async {
-    await SonrOverlay.alert(
-        title: 'Requires Permission',
-        description: 'Sonr uses your microphone in order to communicate with other devices.',
-        buttonText: "Continue",
-        barrierDismissible: false);
+    if (!networkTriggered) {
+      await SonrOverlay.alert(
+          title: 'Requires Permission',
+          description: 'Sonr uses your microphone in order to communicate with other devices.',
+          buttonText: "Continue",
+          barrierDismissible: false);
 
-    await SonrCore.requestLocalNetwork();
-    Get.find<DeviceService>()._prefs.setBool("network-triggered", true);
-    Get.find<DeviceService>().networkTriggered(true);
+      await SonrCore.requestLocalNetwork();
+      _networkTriggeredToBox(true);
+    }
     return true;
   }
 
@@ -300,7 +268,7 @@ class DeviceService extends GetxService {
     return true;
   }
 
-  // ^ BoxStorage Theme Mode Helper ^ //
+  // ^ BoxStorage Point to Share Mode Helper ^ //
   bool _loadPointToShareFromBox() => _box.read("hasPointToShare") ?? false;
   _savePointToShareToBox(bool hasPointToShare) => _box.write("hasPointToShare", hasPointToShare);
 
