@@ -36,7 +36,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
     // Validate Location
-    if (DeviceService.hasPosition) {
+    if (DeviceService.hasPosition && !UserService.isNewUser.value) {
       // Create Worker
       _node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
 

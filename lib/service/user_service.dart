@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:wiredash/wiredash.dart';
 
 class UserService extends GetxService {
   // ** User Reactive Properties **
@@ -70,6 +69,8 @@ class UserService extends GetxService {
       _website(user.contact.website);
       _picture(Uint8List.fromList(user.contact.picture));
       _socials(user.contact.socials);
+    } else {
+      _isNewUser(true);
     }
     return this;
   }
