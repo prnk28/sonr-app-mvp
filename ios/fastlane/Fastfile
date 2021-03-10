@@ -18,6 +18,6 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    upload_to_testflight(skip_waiting_for_build_processing: true)
+    upload_to_testflight(app_identifier:"io.sonr.app", skip_submission: true)
   end
 end
