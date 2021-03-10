@@ -196,8 +196,8 @@ class UserService extends GetxService {
     else {
       user = new User(contact: contact);
       _prefs.setString("user", user.writeToJson());
+      _exists(true);
     }
-
     return user;
   }
 }

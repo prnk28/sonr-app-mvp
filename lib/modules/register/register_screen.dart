@@ -68,7 +68,6 @@ class RegisterScreen extends GetView<RegisterController> {
                     status: controller.emailStatus,
                     value: controller.lastName.value,
                     textInputAction: TextInputAction.done,
-                    textCapitalization: TextCapitalization.words,
                     focusNode: emailFocus,
                     autoCorrect: false,
                     onEditingComplete: () {
@@ -93,11 +92,7 @@ class RegisterScreen extends GetView<RegisterController> {
                       icon: SonrIcon.accept,
                       text: SonrText.semibold("Submit"),
                       onPressed: () {
-                        FocusScopeNode currentFocus = FocusScope.of(Get.context);
-                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                          FocusManager.instance.primaryFocus.unfocus();
-                          controller.submit();
-                        }
+                        controller.submit();
                       },
                       //margin: EdgeInsets.only(top: 12),
                     ),
@@ -130,14 +125,19 @@ class RegisterController extends GetxController {
       contact.lastName = lastName.value;
       contact.email = email.value;
 
+      // Remove Textfield Focus
+      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        FocusManager.instance.primaryFocus.unfocus();
+      }
+
       // Process data.
       await UserService.saveChanges(providedContact: contact, isNewUser: true);
-      DeviceService.requestLocation().then((value) {
-        if (value) {
-          SonrService.connect();
-          Get.offNamed("/home");
-        }
-      });
+      var result = await DeviceService.requestLocation();
+      if (result) {
+        await Get.find<DeviceService>().refreshLocation();
+        Get.offNamed("/home");
+      }
     }
   }
 

@@ -36,9 +36,10 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
     // Validate Location
-    if (DeviceService.hasPosition && !UserService.isNewUser.value) {
-      // Create Worker
-      _node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
+    if (Get.find<DeviceService>().locationPermitted.value && !UserService.exists.value) {
+      // Create Worker and get poisiton
+      var pos = await Get.find<DeviceService>().refreshLocation();
+      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
 
       // Set Callbacks
       _node.onConnected = _handleConnected;
@@ -51,36 +52,11 @@ class SonrService extends GetxService with TransferQueue {
       _node.onTransmitted = _handleTransmitted;
       _node.onError = _handleError;
       _connected(true);
+      print("Connected");
       return this;
     }
-    _connected(false);
+    print("Failed to Connect.");
     return this;
-  }
-
-  // ***********************
-  // ******* Events ********
-  // ***********************
-  // ^ Connect to Sonr Network ^
-  static connect() async {
-    // Validate Location
-    if (DeviceService.hasPosition && !to._connected.value) {
-      // Create Worker
-      to._node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
-
-      // Set Callbacks
-      to._node.onConnected = to._handleConnected;
-      to._node.onRefreshed = to._handleRefresh;
-      to._node.onDirected = to._handleDirect;
-      to._node.onInvited = to._handleInvited;
-      to._node.onReplied = to._handleResponded;
-      to._node.onProgressed = to._handleProgress;
-      to._node.onReceived = to._handleReceived;
-      to._node.onTransmitted = to._handleTransmitted;
-      to._node.onError = to._handleError;
-
-      // Set Connected
-      to._connected(true);
-    }
   }
 
   // ^ Sets Contact for Node ^

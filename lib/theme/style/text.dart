@@ -314,6 +314,7 @@ class SonrTextField extends StatelessWidget {
   final Rx<TextInputValidStatus> status;
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
+  final Iterable<String> autofillHints;
 
   SonrTextField(
       {@required this.hint,
@@ -327,7 +328,8 @@ class SonrTextField extends StatelessWidget {
       this.textInputAction = TextInputAction.done,
       this.autoFocus = false,
       this.autoCorrect = true,
-      this.textCapitalization = TextCapitalization.none});
+      this.textCapitalization = TextCapitalization.none,
+      this.autofillHints});
 
   @override
   Widget build(BuildContext context) {
@@ -383,6 +385,7 @@ class SonrTextField extends StatelessWidget {
                 autocorrect: autoCorrect,
                 textCapitalization: textCapitalization,
                 focusNode: focusNode,
+                autofillHints: autofillHints,
                 onEditingComplete: onEditingComplete,
                 onChanged: updateFn,
                 decoration: decoration != null

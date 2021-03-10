@@ -27,7 +27,6 @@ class HomeController extends GetxController {
     } else {
       if (UserService.isNewUser.value) {
         status(HomeState.First);
-        SonrService.connect();
       } else {
         status(HomeState.None);
       }
@@ -36,13 +35,15 @@ class HomeController extends GetxController {
 
   // ^ Controller Constructer ^
   onInit() {
+    // Initialize
+    checkConnection();
+
     // Add Stream Handlers
     cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
 
-    // Initialize
-    MediaService.checkInitialShare();
+    // Set View Properties
     toggleIndex(1);
-    toggleIndex.refresh();
+    pageIndex(0);
     super.onInit();
   }
 
@@ -50,6 +51,12 @@ class HomeController extends GetxController {
   void onDispose() {
     cardStream.cancel();
     toggleIndex(1);
+    pageIndex(0);
+  }
+
+  // ^ Verifies Connection Status ^ //
+  checkConnection() async {
+    MediaService.checkInitialShare();
   }
 
   // ^ Handle Cards Update ^ //
