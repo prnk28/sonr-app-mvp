@@ -104,7 +104,7 @@ class _ShareButtonRow extends GetView<HomeController> {
                   controller.closeShare();
 
                   // Check Permissions
-                  DeviceService.requestCamera().then((value) {
+                  Get.find<DeviceService>().requestCamera().then((value) {
                     // Go to Camera View
                     if (value) {
                       Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
@@ -129,9 +129,10 @@ class _ShareButtonRow extends GetView<HomeController> {
                   controller.closeShare();
 
                   // Check Permissions
-                  DeviceService.requestGallery().then((value) {
+                  Get.find<DeviceService>().requestGallery().then((value) {
                     // Present Sheet
                     if (value) {
+                      MediaService.refreshGallery();
                       Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                         SonrService.queueMedia(file);
                         Get.toNamed("/transfer");

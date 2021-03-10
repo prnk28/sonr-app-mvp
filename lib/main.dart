@@ -57,14 +57,14 @@ class _AppState extends State<App> {
           Get.offNamed("/register");
           break;
         case LaunchPage.PermissionLocation:
-          DeviceService.requestLocation().then((value) {
+          Get.find<DeviceService>().requestLocation().then((value) {
             if (value) {
               Get.offNamed("/home");
             }
           });
           break;
         case LaunchPage.PermissionNetwork:
-          DeviceService.triggerNetwork().then((value) {
+          Get.find<DeviceService>().triggerNetwork().then((value) {
             Get.offNamed("/home");
           });
           break;

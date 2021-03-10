@@ -52,10 +52,9 @@ class SonrService extends GetxService with TransferQueue {
       _node.onTransmitted = _handleTransmitted;
       _node.onError = _handleError;
       _connected(true);
-      print("Connected");
       return this;
     }
-    print("Failed to Connect.");
+    _connected.value ? print("Connected") : print("Failed to Connect.");
     return this;
   }
 

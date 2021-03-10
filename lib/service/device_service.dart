@@ -111,130 +111,158 @@ class DeviceService extends GetxService {
   // ** Permission Requests ** //
   // ************************* //
   // ^ Request Camera optional overlay ^ //
-  static Future<bool> requestCamera() async {
-    // Check If Exists
+  Future<bool> requestCamera() async {
+    // Create Future Completer
+    var completer = new Completer<bool>();
+
+    // Check
     if (Get.find<DeviceService>().cameraPermitted.value) {
-      return true;
+      completer.complete(true);
     }
 
     // Present Overlay
-    var decision = await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline");
-
-    // Check Overlay Decision
-    if (decision) {
-      var result = await Permission.camera.request();
-      Get.find<DeviceService>().cameraPermitted(result == PermissionStatus.granted);
-      return result == PermissionStatus.granted;
-    } else {
-      return false;
-    }
+    SonrOverlay.question(
+            title: 'Requires Permission',
+            description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
+            acceptTitle: "Allow",
+            declineTitle: "Decline")
+        .then((decision) {
+      // Check Overlay Decision
+      if (decision) {
+        Permission.camera.request().then((value) {
+          setPermissionStatus();
+          completer.complete(value == PermissionStatus.granted);
+        });
+      } else {
+        completer.complete(false);
+      }
+    });
+    return completer.future;
   }
 
   // ^ Request Gallery optional overlay ^ //
-  static Future<bool> requestGallery() async {
+  Future<bool> requestGallery() async {
+    // Create Future Completer
+    var completer = new Completer<bool>();
+
     // Check If Exists
     if (Get.find<DeviceService>().galleryPermitted.value) {
-      return true;
+      completer.complete(true);
     }
 
     // Present Overlay
-    var decision = await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr needs your Permission to access your phones Gallery.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline");
-
-    // Check Overlay Decision
-    if (decision) {
-      var result = await Permission.mediaLibrary.request();
-      Get.find<DeviceService>().galleryPermitted(result == PermissionStatus.granted);
-      MediaService.refreshGallery();
-      return result == PermissionStatus.granted;
-    } else {
-      return false;
-    }
+    SonrOverlay.question(
+            title: 'Requires Permission',
+            description: 'Sonr needs your Permission to access your phones Gallery.',
+            acceptTitle: "Allow",
+            declineTitle: "Decline")
+        .then((decision) {
+      // Check Overlay Decision
+      if (decision) {
+        Permission.mediaLibrary.request().then((value) {
+          setPermissionStatus();
+          completer.complete(value == PermissionStatus.granted);
+        });
+      } else {
+        completer.complete(false);
+      }
+    });
+    return completer.future;
   }
 
   // ^ Request Location optional overlay ^ //
-  static Future<bool> requestLocation() async {
+  Future<bool> requestLocation() async {
+    // Create Future Completer
+    var completer = new Completer<bool>();
+
     // Check If Exists
     if (Get.find<DeviceService>().locationPermitted.value) {
-      return true;
+      completer.complete(true);
     }
 
     // Present Overlay
-    var decision = await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr requires location in order to find devices in your area.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline");
-
-    // Check Overlay Decision
-    if (decision) {
-      // Request
-      var result = await Permission.locationWhenInUse.request();
-      Get.find<DeviceService>().locationPermitted(result == PermissionStatus.granted);
-      await Get.find<DeviceService>().refreshLocation();
-      return result == PermissionStatus.granted;
-    } else {
-      return false;
-    }
+    SonrOverlay.question(
+            title: 'Requires Permission',
+            description: 'Sonr requires location in order to find devices in your area.',
+            acceptTitle: "Allow",
+            declineTitle: "Decline")
+        .then((decision) {
+      // Check Overlay Decision
+      if (decision) {
+        // Request
+        Permission.locationWhenInUse.request().then((value) {
+          setPermissionStatus();
+          completer.complete(value == PermissionStatus.granted);
+        });
+      } else {
+        completer.complete(false);
+      }
+    });
+    return completer.future;
   }
 
   // ^ Request Microphone optional overlay ^ //
-  static Future<bool> requestMicrophone() async {
+  Future<bool> requestMicrophone() async {
+    // Create Future Completer
+    var completer = new Completer<bool>();
+
     // Check If Exists
     if (Get.find<DeviceService>().microphonePermitted.value) {
-      return true;
+      completer.complete(true);
     }
 
     // Present Overlay
-    var decision = await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr uses your microphone in order to communicate with other devices.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline");
-
-    // Check Overlay Decision
-    if (decision) {
-      var result = await Permission.microphone.request();
-      Get.find<DeviceService>().microphonePermitted(result == PermissionStatus.granted);
-      return result == PermissionStatus.granted;
-    } else {
-      return false;
-    }
+    SonrOverlay.question(
+            title: 'Requires Permission',
+            description: 'Sonr uses your microphone in order to communicate with other devices.',
+            acceptTitle: "Allow",
+            declineTitle: "Decline")
+        .then((decision) {
+      // Check Overlay Decision
+      if (decision) {
+        Permission.microphone.request().then((value) {
+          setPermissionStatus();
+          completer.complete(value == PermissionStatus.granted);
+        });
+      } else {
+        completer.complete(false);
+      }
+    });
+    return completer.future;
   }
 
   // ^ Request Notifications optional overlay ^ //
-  static Future<bool> requestNotifications() async {
+  Future<bool> requestNotifications() async {
+    // Create Future Completer
+    var completer = new Completer<bool>();
+
     // Check If Exists
-    if (Get.find<DeviceService>().notificationPermitted.value) {
-      return true;
+    if (notificationPermitted.value) {
+      completer.complete(true);
     }
 
     // Present Overlay
-    var decision = await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr would like to send you Notifications for Transfer Invites.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline");
-
-    // Check Overlay Decision
-    if (decision) {
-      var result = await Permission.notification.request();
-      Get.find<DeviceService>().notificationPermitted(result == PermissionStatus.granted);
-      return result == PermissionStatus.granted;
-    } else {
-      return false;
-    }
+    SonrOverlay.question(
+            title: 'Requires Permission',
+            description: 'Sonr would like to send you Notifications for Transfer Invites.',
+            acceptTitle: "Allow",
+            declineTitle: "Decline")
+        .then((decision) {
+      // Check Overlay Decision
+      if (decision) {
+        Permission.notification.request().then((value) {
+          setPermissionStatus();
+          completer.complete(value == PermissionStatus.granted);
+        });
+      } else {
+        completer.complete(false);
+      }
+    });
+    return completer.future;
   }
 
   // ^ Trigger iOS Local Network with Alert ^ //
-  static Future triggerNetwork() async {
+  Future triggerNetwork() async {
     await SonrOverlay.alert(
         title: 'Requires Permission',
         description: 'Sonr uses your microphone in order to communicate with other devices.',
