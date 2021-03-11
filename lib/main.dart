@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 import 'modules/card/card_controller.dart';
@@ -19,6 +20,7 @@ void main() async {
 
 // ^ Services (Files, Contacts) ^ //
 initServices() async {
+  await GetStorage.init();
   await Get.putAsync(() => UserService().init()); // First Required Service
   await Get.putAsync(() => DeviceService().init()); // Second Required Service
   await Get.putAsync(() => MediaService().init());
@@ -132,4 +134,3 @@ class _AppState extends State<App> {
     );
   }
 }
-

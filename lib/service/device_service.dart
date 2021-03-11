@@ -32,36 +32,42 @@ class DeviceService extends GetxService {
   bool get cameraPermitted => _box.read("cameraPermitted") ?? false;
   _cameraPermittedToBox(bool val) {
     _box.write("cameraPermitted", val);
+    _box.save();
   }
 
   // Gallery Permissions
   bool get galleryPermitted => _box.read("galleryPermitted") ?? false;
   _galleryPermittedToBox(bool val) {
     _box.write("galleryPermitted", val);
+    _box.save();
   }
 
 // Location Permissions
   bool get locationPermitted => _box.read("locationPermitted") ?? false;
   _locationPermittedToBox(bool val) {
     _box.write("locationPermitted", val);
+    _box.save();
   }
 
   // Microphone Permissions
   bool get microphonePermitted => _box.read("microphonePermitted") ?? false;
   _microphonePermittedToBox(bool val) {
     _box.write("microphonePermitted", val);
+    _box.save();
   }
 
   // Network Triggered
   bool get networkTriggered => _box.read("networkTriggered") ?? false;
   _networkTriggeredToBox(bool val) {
     _box.write("networkTriggered", val);
+    _box.save();
   }
 
   // Network Triggered
   bool get notificationPermitted => _box.read("notificationPermitted") ?? false;
   _notificationPermittedToBox(bool val) {
     _box.write("notificationPermitted", val);
+    _box.save();
   }
 
   // References
@@ -239,7 +245,10 @@ class DeviceService extends GetxService {
 
   // ^ BoxStorage Theme Mode Helper ^ //
   bool _loadThemeFromBox() => _box.read("isDarkMode") ?? false;
-  _saveThemeToBox(bool isDarkMode) => _box.write("isDarkMode", isDarkMode);
+  _saveThemeToBox(bool isDarkMode) {
+    _box.write("isDarkMode", isDarkMode);
+    _box.save();
+  }
 
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
