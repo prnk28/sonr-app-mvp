@@ -130,7 +130,7 @@ List<GetPage> get K_PAGES => [
       GetPage(
           name: '/home',
           page: () {
-            Get.putAsync(() => SonrService().init());
+            Get.putAsync(() => SonrService().init(), permanent: true);
             return HomeScreen();
           },
           transition: Transition.topLevel,

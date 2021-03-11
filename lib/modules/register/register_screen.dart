@@ -110,6 +110,7 @@ class RegisterController extends GetxController {
   final firstName = "".obs;
   final lastName = "".obs;
   final email = "".obs;
+  final isPending = false.obs;
 
   // Error Status
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
@@ -119,6 +120,7 @@ class RegisterController extends GetxController {
   // ^ Submits Contact ^ //
   submit() async {
     if (validate()) {
+      isPending(true);
       // Get Contact from Values
       var contact = new Contact();
       contact.firstName = firstName.value;
@@ -136,6 +138,7 @@ class RegisterController extends GetxController {
       var result = await Get.find<DeviceService>().requestLocation();
       if (result) {
         await Get.find<DeviceService>().currentLocation();
+        isPending(false);
         Get.offNamed("/home");
       }
     }

@@ -125,13 +125,11 @@ class DeviceService extends GetxService {
   // ^ Request Camera optional overlay ^ //
   Future<bool> requestCamera() async {
     // Present Overlay
-    var decision = await SonrOverlay.question(
+    if (await SonrOverlay.question(
         title: 'Requires Permission',
         description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
         acceptTitle: "Allow",
-        declineTitle: "Decline");
-
-    if (decision) {
+        declineTitle: "Decline")) {
       if (await Permission.camera.request().isGranted) {
         _cameraPermittedToBox(true);
         return true;
@@ -146,8 +144,7 @@ class DeviceService extends GetxService {
   // ^ Request Gallery optional overlay ^ //
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     // Present Overlay
-    var decision = await SonrOverlay.question(title: 'Requires Permission', description: description, acceptTitle: "Allow", declineTitle: "Decline");
-    if (decision) {
+    if (await SonrOverlay.question(title: 'Requires Permission', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
       if (Platform.isAndroid) {
         if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
           _galleryPermittedToBox(true);
@@ -156,7 +153,7 @@ class DeviceService extends GetxService {
           return false;
         }
       } else {
-        if (await Permission.mediaLibrary.request().isGranted) {
+        if (await Permission.photos.request().isGranted) {
           _galleryPermittedToBox(true);
           return true;
         } else {
@@ -171,12 +168,11 @@ class DeviceService extends GetxService {
   // ^ Request Location optional overlay ^ //
   Future<bool> requestLocation() async {
     // Present Overlay
-    var decision = await SonrOverlay.question(
+    if (await SonrOverlay.question(
         title: 'Requires Permission',
         description: 'Sonr requires location in order to find devices in your area.',
         acceptTitle: "Allow",
-        declineTitle: "Decline");
-    if (decision) {
+        declineTitle: "Decline")) {
       if (await Permission.locationWhenInUse.request().isGranted) {
         _locationPermittedToBox(true);
         return true;
@@ -191,12 +187,11 @@ class DeviceService extends GetxService {
   // ^ Request Microphone optional overlay ^ //
   Future<bool> requestMicrophone() async {
     // Present Overlay
-    var decision = await SonrOverlay.question(
+    if (await SonrOverlay.question(
         title: 'Requires Permission',
         description: 'Sonr uses your microphone in order to communicate with other devices.',
         acceptTitle: "Allow",
-        declineTitle: "Decline");
-    if (decision) {
+        declineTitle: "Decline")) {
       if (await Permission.microphone.request().isGranted) {
         _microphonePermittedToBox(true);
         return true;
@@ -211,12 +206,11 @@ class DeviceService extends GetxService {
   // ^ Request Notifications optional overlay ^ //
   Future<bool> requestNotifications() async {
     // Present Overlay
-    var decision = await SonrOverlay.question(
+    if (await SonrOverlay.question(
         title: 'Requires Permission',
         description: 'Sonr would like to send you Notifications for Transfer Invites.',
         acceptTitle: "Allow",
-        declineTitle: "Decline");
-    if (decision) {
+        declineTitle: "Decline")) {
       if (await Permission.notification.request().isGranted) {
         _notificationPermittedToBox(true);
         return true;

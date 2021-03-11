@@ -18,8 +18,13 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
 
   @override
   void initState() {
-    MediaService.refreshGallery();
+    refresh();
     super.initState();
+  }
+
+  refresh() async {
+    await MediaService.refreshGallery();
+    setState(() {});
   }
 
   @override

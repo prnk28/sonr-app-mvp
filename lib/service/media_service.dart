@@ -64,53 +64,56 @@ class MediaService extends GetxService {
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
-    // Get Collections
-    _state(GalleryState.Loading);
-    List<MediaCollection> collections = await MediaGallery.listMediaCollections(
-      mediaTypes: [MediaType.image, MediaType.video],
-    );
-
-    // Set Gallery
-    _gallery(collections);
-
-    // @ List Collections
-    var totalCollection;
-    collections.forEach((element) {
-      // Set Has Gallery
-      if (element.count > 0) {
-        _hasGallery(true);
-      }
-
-      // Check for Master Collection
-      if (element.isAllCollection) {
-        totalCollection = element;
-      }
-    });
-
-    // @ Get Initial Media
-    if (totalCollection.count > 0) {
-      // Get Images
-      final MediaPage imagePage = await totalCollection.getMedias(
-        mediaType: MediaType.image,
-        take: 500,
+    if (Get.find<DeviceService>().galleryPermitted) {
+      // Get Collections
+      _state(GalleryState.Loading);
+      List<MediaCollection> collections = await MediaGallery.listMediaCollections(
+        mediaTypes: [MediaType.image, MediaType.video],
       );
 
-      // Get Videos
-      final MediaPage videoPage = await totalCollection.getMedias(
-        mediaType: MediaType.video,
-        take: 500,
-      );
+      // Set Gallery
+      _gallery(collections);
 
-      // Combine Media
-      final List<Media> combined = [
-        ...imagePage.items,
-        ...videoPage.items,
-      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+      // @ List Collections
+      var totalCollection;
+      collections.forEach((element) {
+        // Set Has Gallery
+        if (element.count > 0) {
+          _hasGallery(true);
+        }
 
-      // Set All Media
-      _totalMedia.assignAll(combined);
+        // Check for Master Collection
+        if (element.isAllCollection) {
+          totalCollection = element;
+        }
+      });
+
+      // @ Get Initial Media
+      if (totalCollection.count > 0) {
+        // Get Images
+        final MediaPage imagePage = await totalCollection.getMedias(
+          mediaType: MediaType.image,
+          take: 500,
+        );
+
+        // Get Videos
+        final MediaPage videoPage = await totalCollection.getMedias(
+          mediaType: MediaType.video,
+          take: 500,
+        );
+
+        // Combine Media
+        final List<Media> combined = [
+          ...imagePage.items,
+          ...videoPage.items,
+        ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+
+        // Set All Media
+        _totalMedia.assignAll(combined);
+      }
+      _state(GalleryState.Ready);
     }
-    _state(GalleryState.Ready);
+
     return this;
   }
 
@@ -170,7 +173,7 @@ class MediaService extends GetxService {
 
   // ^ Method Refreshes Gallery ^ //
   static Future refreshGallery() async {
-    var controller = Get.find<MediaService>();
+    final controller = Get.find<MediaService>();
     // Get Collections
     controller._state(GalleryState.Loading);
     List<MediaCollection> collections = await MediaGallery.listMediaCollections(
@@ -255,7 +258,7 @@ class MediaService extends GetxService {
     final path = card.metadata.path;
     if (card.hasMetadata()) {
       // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image) {
+      if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted) {
         var result = await GallerySaver.saveImage(path, albumName: "Sonr");
 
         // Visualize Result
@@ -268,7 +271,7 @@ class MediaService extends GetxService {
       }
 
       // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video) {
+      else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted) {
         var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
 
         // Visualize Result

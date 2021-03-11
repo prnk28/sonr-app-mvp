@@ -36,17 +36,41 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  acceptTransfer(TransferCard card) async {
+  acceptTransfer(TransferCard card) {
     if (Get.find<DeviceService>().galleryPermitted) {
-      _sendAcceptResponse(card);
+      SonrService.respond(true);
+      SonrOverlay.back();
+
+      SonrOverlay.show(
+        ProgressView(this, card, card.properties.size > 5000000),
+        barrierDismissible: false,
+        disableAnimation: true,
+      );
+
+      if (card.properties.size > 5000000) {
+        // Handle Card Received
+        SonrService.completed().then((value) {
+          SonrOverlay.back();
+          Get.offNamed('/home');
+        });
+      } else {
+        // Handle Animation Completed
+        Future.delayed(1600.milliseconds, () {
+          SonrOverlay.back();
+          Get.offNamed('/home');
+        });
+      }
     } else {
-      await Get.find<DeviceService>()
-          .requestGallery(description: "Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
-      _sendAcceptResponse(card);
+      _promptAutoSave(card);
     }
   }
 
-  _sendAcceptResponse(TransferCard card) {
+  _promptAutoSave(TransferCard card) async {
+    // Await Permissions
+    await Get.find<DeviceService>()
+        .requestGallery(description: "Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
+
+    // Respond Peer
     SonrService.respond(true);
     SonrOverlay.back();
 
