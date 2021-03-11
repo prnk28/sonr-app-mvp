@@ -31,7 +31,7 @@ class TransferCardController extends GetxController {
 
     // Present Home Controller
     if (Get.currentRoute != "/transfer") {
-      Get.offNamed('/home');
+      Get.offNamed('/home/received');
     }
   }
 
@@ -50,13 +50,13 @@ class TransferCardController extends GetxController {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();
-        Get.offNamed('/home');
+        Get.offNamed('/home/received');
       });
     } else {
       // Handle Animation Completed
       Future.delayed(1600.milliseconds, () {
         SonrOverlay.back();
-        Get.offNamed('/home');
+        Get.offNamed('/home/received');
       });
     }
   }

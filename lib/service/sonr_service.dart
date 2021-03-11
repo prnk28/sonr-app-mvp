@@ -28,59 +28,31 @@ class SonrService extends GetxService with TransferQueue {
     Timer.periodic(500.milliseconds, (timer) {
       if (_connected.value) {
         // Update Direction
-        _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
+        DeviceService.direction.value ?? _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
       }
     });
   }
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
-    // Validate Location
-    if (DeviceService.hasPosition) {
-      // Create Worker
-      _node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
+    // Initialize
+    var pos = await Get.find<DeviceService>().currentLocation();
+    // await Get.find<DeviceService>().triggerNetwork();
 
-      // Set Callbacks
-      _node.onConnected = _handleConnected;
-      _node.onRefreshed = _handleRefresh;
-      _node.onDirected = _handleDirect;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
-      _connected(true);
-      return this;
-    }
-    _connected(false);
+    // Create Node
+    _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+    _node.onConnected = _handleConnected;
+    _node.onRefreshed = _handleRefresh;
+    _node.onDirected = _handleDirect;
+    _node.onInvited = _handleInvited;
+    _node.onReplied = _handleResponded;
+    _node.onProgressed = _handleProgress;
+    _node.onReceived = _handleReceived;
+    _node.onTransmitted = _handleTransmitted;
+    _node.onError = _handleError;
+    _connected(true);
+    _connected.value ? print("Connected") : print("Failed to Connect.");
     return this;
-  }
-
-  // ***********************
-  // ******* Events ********
-  // ***********************
-  // ^ Connect to Sonr Network ^
-  static connect() async {
-    // Validate Location
-    if (DeviceService.hasPosition && !to._connected.value) {
-      // Create Worker
-      to._node = await SonrCore.initialize(DeviceService.lat, DeviceService.lon, UserService.username, UserService.current.contact);
-
-      // Set Callbacks
-      to._node.onConnected = to._handleConnected;
-      to._node.onRefreshed = to._handleRefresh;
-      to._node.onDirected = to._handleDirect;
-      to._node.onInvited = to._handleInvited;
-      to._node.onReplied = to._handleResponded;
-      to._node.onProgressed = to._handleProgress;
-      to._node.onReceived = to._handleReceived;
-      to._node.onTransmitted = to._handleTransmitted;
-      to._node.onError = to._handleError;
-
-      // Set Connected
-      to._connected(true);
-    }
   }
 
   // ^ Sets Contact for Node ^

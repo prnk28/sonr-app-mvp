@@ -25,7 +25,6 @@ class PeerBubble extends StatelessWidget {
               child: Container(
                 width: K_BUBBLE_SIZE,
                 height: K_BUBBLE_SIZE,
-                decoration: SonrStyle.bubbleDecoration,
                 child: Obx(() {
                   return GestureDetector(
                     onTap: () => controller.invite(),

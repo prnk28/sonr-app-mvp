@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:media_gallery/media_gallery.dart';
+import 'package:sonr_app/service/device_service.dart';
 import '../style/style.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -123,7 +124,9 @@ class SonrDropdown extends StatelessWidget {
         switch (collection.name.toLowerCase()) {
           case "all":
             hasIcon = true;
-            icon = SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20);
+            icon = SonrIcon.gradient(
+                Icons.all_inbox_rounded, DeviceService.isDarkMode.value ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                size: 20);
             break;
           case "sonr":
             hasIcon = true;
@@ -164,7 +167,10 @@ class SonrDropdown extends StatelessWidget {
     });
     return SonrDropdown(
         items,
-        SonrDropdownItem(true, "All", icon: SonrIcon.gradient(Icons.all_inbox_rounded, FlutterGradientNames.premiumDark, size: 20)),
+        SonrDropdownItem(true, "All",
+            icon: SonrIcon.gradient(
+                Icons.all_inbox_rounded, DeviceService.isDarkMode.value ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                size: 20)),
         index,
         margin,
         width ?? Get.width - 250,
@@ -212,8 +218,8 @@ class SonrDropdown extends StatelessWidget {
         SonrText.medium(initial.text, color: Colors.black87, size: 18),
         Spacer(flex: selectedFlex),
         Get.find<SonrPositionedOverlay>().overlays.length > 0
-            ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
-            : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
+            ? SonrIcon.normal(Icons.arrow_upward_rounded, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black)
+            : SonrIcon.normal(Icons.arrow_downward_rounded, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
         Spacer(),
       ]);
     }
@@ -229,8 +235,8 @@ class SonrDropdown extends StatelessWidget {
           SonrText.medium(item.text, color: Colors.black87, size: 18),
           Spacer(flex: selectedFlex),
           Get.find<SonrPositionedOverlay>().overlays.length > 0
-              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
-              : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
+              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black)
+              : SonrIcon.normal(Icons.arrow_downward_rounded, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
           Spacer(),
         ]);
       } else {
@@ -239,8 +245,8 @@ class SonrDropdown extends StatelessWidget {
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon : Container(),
           Get.find<SonrPositionedOverlay>().overlays.length > 0
-              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: Colors.black)
-              : SonrIcon.normal(Icons.arrow_downward_rounded, color: Colors.black),
+              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black)
+              : SonrIcon.normal(Icons.arrow_downward_rounded, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
         ]);
       }
     }

@@ -26,10 +26,12 @@ class UserService extends GetxService {
   static RxString get phone => Get.find<UserService>()._phone;
   static RxString get email => Get.find<UserService>()._email;
   static RxString get website => Get.find<UserService>()._website;
+
   static Rx<Uint8List> get picture => Get.find<UserService>()._picture;
   static RxList<Contact_SocialTile> get socials => Get.find<UserService>()._socials;
   static int get tileCount => Get.find<UserService>()._socials.length;
   static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
+  static String get wireID => "${Get.find<UserService>()._firstName.value}-${Get.find<UserService>()._lastName.value}";
 
   // ** Return Current User Object **
   static User get current {
@@ -67,6 +69,8 @@ class UserService extends GetxService {
       _website(user.contact.website);
       _picture(Uint8List.fromList(user.contact.picture));
       _socials(user.contact.socials);
+    } else {
+      _isNewUser(true);
     }
     return this;
   }
@@ -192,8 +196,8 @@ class UserService extends GetxService {
     else {
       user = new User(contact: contact);
       _prefs.setString("user", user.writeToJson());
+      _exists(true);
     }
-
     return user;
   }
 }

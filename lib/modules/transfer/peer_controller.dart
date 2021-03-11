@@ -223,12 +223,15 @@ class PeerController extends GetxController {
     // Check if Facing
     var newIsFacing = diffDesg.value.isFacing(position.value.proximity);
     if (isFacing.value != newIsFacing) {
-      // Check New Result
-      if (newIsFacing) {
-        _startTimer();
-        isFacing(diffDesg.value.isFacing(position.value.proximity));
-      } else {
-        _stopTimer();
+      // Check if Device Permits PointToShare
+      if (DeviceService.hasPointToShare.value) {
+        // Check New Result
+        if (newIsFacing) {
+          _startTimer();
+          isFacing(diffDesg.value.isFacing(position.value.proximity));
+        } else {
+          _stopTimer();
+        }
       }
     }
   }

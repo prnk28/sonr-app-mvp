@@ -116,8 +116,10 @@ class _CameraToolsView extends GetView<CameraController> {
     return Container(
       alignment: Alignment.bottomCenter,
       child: NeumorphicBackground(
+        borderRadius: BorderRadius.circular(20),
         backendColor: Colors.transparent,
         child: Neumorphic(
+          style: SonrStyle.normal,
           padding: EdgeInsets.only(top: 20, bottom: 40),
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             // Switch Camera
@@ -175,17 +177,20 @@ class _CaptureButton extends GetView<CameraController> {
           child: Neumorphic(
             margin: EdgeInsets.all(14),
             style: NeumorphicStyle(
+              color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
               boxShape: NeumorphicBoxShape.circle(),
             ),
             child: Neumorphic(
               style: NeumorphicStyle(
                 depth: 14,
+                color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                 boxShape: NeumorphicBoxShape.circle(),
               ),
               margin: EdgeInsets.all(10),
               child: Neumorphic(
                 style: NeumorphicStyle(
                   depth: -8,
+                  color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                   boxShape: NeumorphicBoxShape.circle(),
                 ),
                 margin: EdgeInsets.all(14),
@@ -208,11 +213,12 @@ class _CaptureButton extends GetView<CameraController> {
                         child: Center(
                             child: SonrIcon.neumorphicGradient(
                           SonrIconData.camera,
-                          FlutterGradientNames.premiumDark,
+                          DeviceService.isDarkMode.value ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                           size: 40,
                         )),
                         style: NeumorphicStyle(
                             depth: 14,
+                            color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value

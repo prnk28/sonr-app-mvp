@@ -44,10 +44,14 @@ class _DefaultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       SonrIcon.send,
-      SonrText.header(
+      SonrText(
         "Share",
+        isGradient: true,
+        isCentered: true,
+        weight: FontWeight.w700,
         size: 32,
-        gradient: FlutterGradientNames.glassWater,
+        key: key,
+        gradient: FlutterGradientNames.glassWater.linear(),
       )
     ]);
   }
@@ -99,11 +103,26 @@ class _ShareButtonRow extends GetView<HomeController> {
                   // Toggle Share Expand
                   controller.closeShare();
 
-                  // Go to Camera View
-                  Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-                    SonrService.queueMedia(file);
-                    Get.toNamed("/transfer");
-                  }), transition: Transition.downToUp);
+                  // Check Permissions
+                  if (Get.find<DeviceService>().cameraPermitted) {
+                    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+                      SonrService.queueMedia(file);
+                      Get.toNamed("/transfer");
+                    }), transition: Transition.downToUp);
+                  } else {
+                    Get.find<DeviceService>().requestCamera().then((value) {
+                      // Go to Camera View
+                      if (value) {
+                        Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+                          SonrService.queueMedia(file);
+                          Get.toNamed("/transfer");
+                        }), transition: Transition.downToUp);
+                      } else {
+                        // Present Error
+                        SonrSnack.error("Sonr cannot open Camera without Permissions");
+                      }
+                    });
+                  }
                 },
                 type: ArtboardType.Camera,
               ),
@@ -115,10 +134,28 @@ class _ShareButtonRow extends GetView<HomeController> {
               child: _ShareButtonItem(
                 onPressed: () {
                   controller.closeShare();
-                  Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
-                    SonrService.queueMedia(file);
-                    Get.toNamed("/transfer");
-                  }), isDismissible: false);
+                  // Check Permissions
+                  if (Get.find<DeviceService>().galleryPermitted) {
+                    MediaService.refreshGallery();
+                    Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
+                      SonrService.queueMedia(file);
+                      Get.toNamed("/transfer");
+                    }), isDismissible: false);
+                  } else {
+                    Get.find<DeviceService>().requestGallery().then((value) {
+                      // Present Sheet
+                      if (value) {
+                        MediaService.refreshGallery();
+                        Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
+                          SonrService.queueMedia(file);
+                          Get.toNamed("/transfer");
+                        }), isDismissible: false);
+                      } else {
+                        // Present Error
+                        SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
+                      }
+                    });
+                  }
                 },
                 type: ArtboardType.Gallery,
               ),
@@ -176,7 +213,7 @@ class _ShareButtonItem extends StatelessWidget {
         ),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(_typeText, size: 14, color: Colors.white),
+      SonrText(_typeText, weight: FontWeight.w500, size: 14, key: key, color: Colors.white),
     ]);
   }
 }

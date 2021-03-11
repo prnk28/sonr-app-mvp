@@ -1,10 +1,14 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'data/data.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
 import 'modules/profile/profile_binding.dart';
 import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
+import 'package:wiredash/wiredash.dart';
+
+const bool K_TESTER_MODE = true;
 
 // ^ Main Method ^ //
 void main() async {
@@ -19,7 +23,6 @@ initServices() async {
   await Get.putAsync(() => DeviceService().init()); // Second Required Service
   await Get.putAsync(() => MediaService().init());
   await Get.putAsync(() => SQLService().init());
-  await Get.putAsync(() => SonrService().init()); // Last Initialized Service
 }
 
 // ^ Initial Controller Bindings ^ //
@@ -56,14 +59,14 @@ class _AppState extends State<App> {
           Get.offNamed("/register");
           break;
         case LaunchPage.PermissionLocation:
-          DeviceService.requestLocation().then((value) {
+          Get.find<DeviceService>().requestLocation().then((value) {
             if (value) {
               Get.offNamed("/home");
             }
           });
           break;
         case LaunchPage.PermissionNetwork:
-          DeviceService.triggerNetwork().then((value) {
+          Get.find<DeviceService>().triggerNetwork().then((value) {
             Get.offNamed("/home");
           });
           break;
@@ -73,6 +76,26 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    if (K_TESTER_MODE) {
+      return Wiredash(
+        theme: WiredashThemeData(fontFamily: "Poppins", brightness: DeviceService.brightness.value),
+        options: WiredashOptionsData(
+          praiseButton: false,
+          screenshotStep: false,
+          customTranslations: {const Locale.fromSubtags(languageCode: 'zh'): const SonrWiredashTranslation()},
+          locale: const Locale.fromSubtags(languageCode: 'zh'),
+        ),
+        navigatorKey: Get.key,
+        projectId: 'sonr-g4dd5i0',
+        secret: 'ksir492giek9pqyt3yjz6gwl2klc47paxp1w9wpof7z6g52v',
+        child: _buildSplashScreen(),
+      );
+    } else {
+      return _buildSplashScreen();
+    }
+  }
+
+  Widget _buildSplashScreen() {
     return GetMaterialApp(
       getPages: K_PAGES,
       initialBinding: InitialBinding(),
@@ -114,7 +137,25 @@ class _AppState extends State<App> {
 // ignore: non_constant_identifier_names
 List<GetPage> get K_PAGES => [
       // ** Home Page ** //
-      GetPage(name: '/home', page: () => HomeScreen(), transition: Transition.topLevel, curve: Curves.easeIn, binding: HomeBinding()),
+      GetPage(
+          name: '/home',
+          page: () {
+            Get.putAsync(() => SonrService().init(), permanent: true);
+            return HomeScreen();
+          },
+          transition: Transition.topLevel,
+          curve: Curves.easeIn,
+          binding: HomeBinding(),
+          middlewares: [GetMiddleware()]),
+
+      // ** Home Page ** //
+      GetPage(
+          name: '/home/received',
+          page: () => HomeScreen(),
+          transition: Transition.fadeIn,
+          curve: Curves.easeIn,
+          binding: HomeBinding(),
+          middlewares: [GetMiddleware()]),
 
       // ** Home Page - Back from Transfer ** //
       GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),

@@ -28,79 +28,100 @@ import '../theme.dart';
 import 'color.dart';
 
 class SonrStyle {
-  static get bubbleDecoration => BoxDecoration(shape: BoxShape.circle, boxShadow: [
-        BoxShadow(
-          color: Color.fromRGBO(167, 179, 190, 1.0),
-          offset: Offset(0, 2),
-          blurRadius: 6,
-          spreadRadius: 0.5,
-        ),
-        BoxShadow(
-          color: Color.fromRGBO(248, 252, 255, 0.5),
-          offset: Offset(-2, 0),
-          blurRadius: 6,
-          spreadRadius: 0.5,
-        ),
-      ]);
-
   static get compassStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
-  static get dropDownBackground =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, color: SonrColor.White, shadowLightColor: Colors.black38);
+  static get dropDownBackground => NeumorphicStyle(
+      intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+      depth: DeviceService.isDarkMode.value ? 6 : 8,
+      shape: NeumorphicShape.flat,
+      color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      shadowLightColor: Colors.black38);
 
-  static get dropDownItem =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
+  static get dropDownItem => NeumorphicStyle(
+        intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+        depth: DeviceService.isDarkMode.value ? 6 : 8,
+        shape: NeumorphicShape.flat,
+        boxShape: NeumorphicBoxShape.stadium(),
+        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      );
 
-  static get dropDownFlat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.White);
-  static get dropDownCurved => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
+  static get dropDownFlat => NeumorphicStyle(
+        intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+        depth: DeviceService.isDarkMode.value ? 6 : 8,
+        shape: NeumorphicShape.flat,
+        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      );
+  static get dropDownCurved => NeumorphicStyle(
+        intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+        depth: DeviceService.isDarkMode.value ? 6 : 8,
+        shape: NeumorphicShape.flat,
+        boxShape: NeumorphicBoxShape.stadium(),
+        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      );
 
-  static get flat => NeumorphicStyle(depth: 8, shape: NeumorphicShape.flat, color: SonrColor.White);
+  static get flat => NeumorphicStyle(
+        intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+        depth: DeviceService.isDarkMode.value ? 6 : 8,
+        shape: NeumorphicShape.flat,
+        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      );
 
-  static const gradientIcon =
+  static get gradientIcon =>
       NeumorphicStyle(color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: 6, surfaceIntensity: 0.6);
 
   static get appBarIcon =>
-      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.85, depth: 2, surfaceIntensity: 0.6);
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
 
-  static get indented => NeumorphicStyle(depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+  static get indented => NeumorphicStyle(
+      color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      depth: -8,
+      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get overlay => NeumorphicStyle(
-      intensity: 0.85,
-      depth: 8,
-      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      color: SonrColor.White,
-      shadowLightColor: Colors.black38);
+        intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+        depth: DeviceService.isDarkMode.value ? 6 : 8,
+        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      );
 
   static get mediaButtonDefault => NeumorphicStyle(intensity: 0.85, color: SonrColor.White);
   static get mediaButtonPressed => NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
 
   static get normal => NeumorphicStyle(
-      intensity: 0.85,
+      depth: DeviceService.isDarkMode.value ? 6 : 8,
+      color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      shadowDarkColor: SonrColor.ShadowDark,
-      shadowLightColor: SonrColor.ShadowLight);
+      shadowDarkColor: SonrColor.LightModeShadowDark,
+      shadowLightColor: SonrColor.LightModeShadowLight);
 
-  static get photo =>
-      NeumorphicStyle(intensity: 0.85, depth: 8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.White, shadowLightColor: Colors.black38);
+  static get photo => NeumorphicStyle(
+      intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+      depth: DeviceService.isDarkMode.value ? 6 : 8,
+      boxShape: NeumorphicBoxShape.circle(),
+      color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark,
+      shadowLightColor: Colors.black38);
 
   static get shareButton => NeumorphicStyle(
         color: Colors.black87,
         surfaceIntensity: 0.6,
-        intensity: 0.75,
+        intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
         depth: 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
       );
 
-  static get timeStamp => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.White);
+  static get timeStamp => NeumorphicStyle(
+      intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark);
 
-  static get timeStampDark => NeumorphicStyle(intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: SonrColor.Dark);
+  static get timeStampDark => NeumorphicStyle(
+      intensity: 0.4, depth: 8, boxShape: NeumorphicBoxShape.stadium(), color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark);
 
   static zonePath({@required Position_Proximity proximity}) => NeumorphicStyle(
         border: NeumorphicBorder(
-          color: SonrColor.Grey,
+          color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Grey,
           width: 1,
         ),
         depth: 8,
-        color: SonrColor.White,
+        color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
         surfaceIntensity: 0.6,
         shape: NeumorphicShape.flat,
         intensity: 0.85,

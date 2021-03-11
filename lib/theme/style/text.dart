@@ -4,6 +4,7 @@ import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sonr_app/data/model/model_register.dart';
 import 'style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
@@ -34,32 +35,32 @@ class SonrText extends StatelessWidget {
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
   }
 
   // ^ Normal(w400) Text with Provided Data
   factory SonrText.normal(String text, {Color color = Colors.black, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
   }
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
   factory SonrText.medium(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white70 : Colors.black87);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
   factory SonrText.bold(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
   }
 
   // ^ Black(w800) Text with Provided Data
   factory SonrText.black(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: color);
+    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
@@ -131,7 +132,7 @@ class SonrText extends StatelessWidget {
       weight: FontWeight.w700,
       size: size,
       key: key,
-      gradient: FlutterGradients.findByName(gradient),
+      gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear(),
     );
   }
 
@@ -142,14 +143,12 @@ class SonrText extends StatelessWidget {
 
   // ^ AppBar Text with Provided Data
   factory SonrText.appBar(String text, {double size = 30, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
-    return SonrText(
-      text,
-      isGradient: true,
-      weight: FontWeight.w600,
-      size: size,
-      key: key,
-      gradient: gradient.linear(),
-    );
+    return SonrText(text,
+        isGradient: true,
+        weight: FontWeight.w600,
+        size: size,
+        key: key,
+        gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.premiumWhite.linear() : FlutterGradientNames.premiumDark.linear());
   }
 
   // ^ Rich Text with FirstName and Invite
@@ -259,7 +258,7 @@ class SonrText extends StatelessWidget {
               text,
               overflow: TextOverflow.ellipsis,
               textAlign: isCentered ? TextAlign.center : TextAlign.start,
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: size ?? 32.0, color: Colors.white),
+              style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 32.0, color: Colors.white),
             )),
       );
     }
@@ -312,14 +311,16 @@ class SonrTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final TextEditingController controller;
   final TextInputAction textInputAction;
-
+  final Rx<TextInputValidStatus> status;
   final ValueChanged<String> onChanged;
   final Function onEditingComplete;
+  final Iterable<String> autofillHints;
 
   SonrTextField(
       {@required this.hint,
       @required this.value,
       this.label,
+      this.status,
       this.controller,
       this.onChanged,
       this.focusNode,
@@ -327,10 +328,23 @@ class SonrTextField extends StatelessWidget {
       this.textInputAction = TextInputAction.done,
       this.autoFocus = false,
       this.autoCorrect = true,
-      this.textCapitalization = TextCapitalization.none});
+      this.textCapitalization = TextCapitalization.none,
+      this.autofillHints});
 
   @override
   Widget build(BuildContext context) {
+    return status != null
+        ? ObxValue<Rx<TextInputValidStatus>>((status) {
+            if (status.value == TextInputValidStatus.Invalid) {
+              return buildInvalid(context);
+            } else {
+              return buildDefault(context);
+            }
+          }, status)
+        : buildDefault(context);
+  }
+
+  Widget buildDefault(BuildContext context, {InputDecoration decoration, bool isError = false}) {
     return ValueBuilder<String>(
       initialValue: value,
       builder: (value, updateFn) {
@@ -340,14 +354,21 @@ class SonrTextField extends StatelessWidget {
             label != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: NeumorphicTheme.defaultTextColor(context),
+                    child: Row(children: [
+                      Text(
+                        label,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: NeumorphicTheme.defaultTextColor(context),
+                        ),
                       ),
-                    ),
-                  )
+                      isError
+                          ? Text(
+                              " *Error",
+                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrColor.Red),
+                            )
+                          : Container(),
+                    ]))
                 : Container(),
             Neumorphic(
               margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
@@ -357,16 +378,22 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
                 autocorrect: autoCorrect,
                 textCapitalization: textCapitalization,
                 focusNode: focusNode,
+                autofillHints: autofillHints,
                 onEditingComplete: onEditingComplete,
                 onChanged: updateFn,
-                decoration:
-                    InputDecoration.collapsed(hintText: hint, hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: Colors.black38)),
+                decoration: decoration != null
+                    ? decoration
+                    : InputDecoration.collapsed(
+                        hintText: hint,
+                        hintStyle: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -374,6 +401,30 @@ class SonrTextField extends StatelessWidget {
       },
       onUpdate: onChanged,
     );
+  }
+
+  Widget buildInvalid(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      key: key,
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: 1.seconds,
+      builder: (context, animation, child) => Transform.translate(
+        offset: shakeOffset(animation),
+        child: child,
+      ),
+      child: buildDefault(context,
+          isError: true,
+          decoration: InputDecoration.collapsed(
+              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrColor.Red, width: 4)),
+              hintText: hint,
+              hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38))),
+    );
+  }
+
+  // ^ Get Animated Offset for Shake Method ^ //
+  Offset shakeOffset(double animation) {
+    var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
+    return Offset(18 * shake, 0);
   }
 }
 

@@ -4,7 +4,6 @@ import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {
   // @ Properties
-  final Rx<Gradient> gradient = SonrColor.inactiveBulb.obs;
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
 
@@ -70,13 +69,10 @@ class TransferController extends GetxController {
   _handleLobbySizeUpdate(int size) {
     if (size == 0) {
       title("Nobody Here");
-      gradient(SonrColor.inactiveBulb);
     } else if (size == 1) {
       title("1 Person");
-      gradient(SonrColor.activeBulb);
     } else {
       title("$size People");
-      gradient(SonrColor.activeBulb);
     }
   }
 }

@@ -75,7 +75,8 @@ class _CompassView extends GetView<TransferController> {
           // Interior Compass
           child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
             // Center Circle
-            _CompassBulb(controller.string.value, controller.heading.value, controller.gradient.value),
+            _CompassBulb(
+                controller.string.value, controller.heading.value, DeviceService.isDarkMode.value ? SonrColor.darkModeBulb : SonrColor.lightModeBulb),
 
             // Spokes
             _Spokes(controller.angle.value),
@@ -237,7 +238,7 @@ class _Spoke extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
-                            color: Colors.black54,
+                            color: DeviceService.isDarkMode.value ? Colors.white54 : Colors.black54,
                           )))),
             ],
           ));
@@ -342,12 +343,16 @@ class _CompassBulb extends StatelessWidget {
                   SonrText.gradient(
                     direction,
                     FlutterGradientNames.glassWater,
+                    weight: FontWeight.w900,
+                    size: 44,
                     key: ValueKey<String>(direction),
                   ),
                   SonrAnimatedSwitcher.slideDown(
                       child: SonrText.gradient(
                     heading,
                     FlutterGradientNames.glassWater,
+                    weight: FontWeight.w300,
+                    size: 24,
                     key: ValueKey<String>(heading),
                   ))
                 ]))));

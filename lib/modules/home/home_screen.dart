@@ -1,4 +1,6 @@
 import 'package:sonr_app/theme/theme.dart';
+import 'package:wiredash/wiredash.dart';
+import '../../main.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
 import 'share_button.dart';
@@ -8,63 +10,77 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
-        resizeToAvoidBottomPadding: false,
-        title: "Home",
-        leading: SonrButton.circle(
-          icon: SonrIcon.profile,
-          onPressed: () => Get.toNamed("/profile"),
-          shape: NeumorphicShape.convex,
-        ),
-        action: SonrButton.circle(
-            icon: SonrIcon.search,
-            shape: NeumorphicShape.convex,
-            onPressed: () {
-              if (controller.status.value != HomeState.None) {
-                SonrOverlay.show(
-                  SearchView(),
-                  barrierDismissible: true,
-                );
-              } else {
-                SonrSnack.error("No Cards Found");
-              }
-            }),
-        floatingActionButton: ShareButton(),
-        body: NeumorphicBackground(
-          backendColor: Colors.transparent,
-          child: Container(
-            width: Get.width,
-            height: Get.height,
-            child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              GestureDetector(
-                onTap: () => controller.closeShare(),
-                child: Container(
-                  padding: EdgeInsets.only(top: 10),
-                  margin: EdgeInsets.only(left: 30, right: 30),
-                  child: Obx(() => NeumorphicToggle(
-                        style: NeumorphicToggleStyle(depth: 20, backgroundColor: SonrColor.White),
-                        selectedIndex: controller.toggleIndex.value,
-                        onChanged: (val) => controller.setToggleCategory(val),
-                        thumb: SonrAnimatedSwitcher.fade(
-                          child: GestureDetector(
-                              key: ValueKey<int>(controller.toggleIndex.value),
-                              onDoubleTap: () => controller.jumpToStart(),
-                              onLongPress: () => controller.jumpToEnd(),
-                              child: Center(child: Obx(() => buildView()))),
-                        ),
-                        children: [
-                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
-                          //ToggleElement(),
-                        ],
-                      )),
-                ),
+      resizeToAvoidBottomPadding: false,
+      title: "Home",
+      leading: _buildLeadingByMode(),
+      action: SonrButton.circle(
+          icon: SonrIcon.search,
+          shape: NeumorphicShape.flat,
+          onPressed: () {
+            if (controller.status.value != HomeState.None) {
+              SonrOverlay.show(
+                SearchView(),
+                barrierDismissible: true,
+              );
+            } else {
+              SonrSnack.error("No Cards Found");
+            }
+          }),
+      floatingActionButton: ShareButton(),
+      body: NeumorphicBackground(
+        backendColor: Colors.transparent,
+        child: Container(
+          width: Get.width,
+          height: Get.height,
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            GestureDetector(
+              onTap: () => controller.closeShare(),
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(left: 30, right: 30),
+                child: Obx(() => NeumorphicToggle(
+                      style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                      selectedIndex: controller.toggleIndex.value,
+                      onChanged: (val) => controller.setToggleCategory(val),
+                      thumb: SonrAnimatedSwitcher.fade(
+                        child: GestureDetector(
+                            key: ValueKey<int>(controller.toggleIndex.value),
+                            onDoubleTap: () => controller.jumpToStart(),
+                            onLongPress: () => controller.jumpToEnd(),
+                            child: Center(child: Obx(() => buildView()))),
+                      ),
+                      children: [
+                        ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
+                        ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
+                        ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
+                        //ToggleElement(),
+                      ],
+                    )),
               ),
-              TransferCardGrid(),
-              Spacer()
-            ]),
-          ),
-        ));
+            ),
+            TransferCardGrid(),
+            Spacer()
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLeadingByMode() {
+    if (K_TESTER_MODE) {
+      return SonrButton.circle(
+        icon: SonrIcon.more,
+        onPressed: () => Get.bottomSheet(_SettingsSheet()),
+        shape: NeumorphicShape.flat,
+      );
+    } else {
+      return SonrButton.circle(
+        icon: SonrIcon.profile,
+        onPressed: () => Get.toNamed("/profile"),
+        onLongPressed: () => DeviceService.toggleDarkMode(),
+        shape: NeumorphicShape.flat,
+      );
+    }
   }
 
   // ^ Helper Method for Category Filter ^ //
@@ -73,7 +89,9 @@ class HomeScreen extends GetView<HomeController> {
     if (controller.toggleIndex.value == 0) {
       return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
     } else if (controller.toggleIndex.value == 1) {
-      return SonrIcon.neumorphicGradient(SonrIconData.all_categories, FlutterGradientNames.eternalConstance, size: 22.5);
+      return SonrIcon.neumorphicGradient(
+          SonrIconData.all_categories, DeviceService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+          size: 22.5);
     } else if (controller.toggleIndex.value == 2) {
       return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
     } else {
@@ -116,6 +134,7 @@ class TransferCardGrid extends GetView<HomeController> {
 
               // Build Cards
               else {
+                controller.promptAutoSave();
                 return PageView.builder(
                   itemCount: controller.getCardList().length,
                   controller: pageController,
@@ -177,5 +196,131 @@ class TransferCardGrid extends GetView<HomeController> {
     } else {
       return FileCard.item(list[index], isNewItem: isNew);
     }
+  }
+}
+
+class _SettingsSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Set WireDash User
+    Wiredash.of(context).setUserProperties(
+      userEmail: UserService.email.value,
+      userId: UserService.wireID,
+    );
+
+    // Set WireDash Build
+    Wiredash.of(context).setBuildProperties(
+      buildNumber: '42',
+      buildVersion: '0.9.0',
+    );
+
+    return NeumorphicBackground(
+      borderRadius: BorderRadius.circular(20),
+      margin: EdgeInsets.only(left: 15, right: 15, top: 75),
+      backendColor: Colors.transparent,
+      child: Stack(children: [
+        Container(
+            width: Get.width,
+            child: Obx(() => Neumorphic(
+                style: NeumorphicStyle(
+                  intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
+                  depth: DeviceService.isDarkMode.value ? 6 : 8,
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                  color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                ),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(children: [
+                    // @ Title of Pane
+                    Align(
+                      heightFactor: 0.9,
+                      alignment: Alignment.topCenter,
+                      child: SonrText.header("Settings", size: 45),
+                    ),
+                    Padding(padding: EdgeInsetsX.top(28)),
+
+                    // @ Dark Mode
+                    Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          // Dark Mode Title
+                          SonrText.medium("Dark Mode"),
+
+                          // Dark Mode Switch
+                          NeumorphicSwitch(
+                            style: NeumorphicSwitchStyle(
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            ),
+                            value: DeviceService.isDarkMode.value,
+                            onChanged: (val) => DeviceService.toggleDarkMode(),
+                          )
+                        ])),
+                    Padding(padding: EdgeInsetsX.top(20)),
+
+                    // @ Dark Mode
+                    Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          // Dark Mode Title
+                          SonrText.medium("Point To Share"),
+
+                          // Dark Mode Switch
+                          NeumorphicSwitch(
+                            style: NeumorphicSwitchStyle(
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            ),
+                            value: DeviceService.hasPointToShare.value,
+                            onChanged: (val) async {
+                              if (val) {
+                                // Overlay Prompt
+                                SonrOverlay.question(
+                                        barrierDismissible: false,
+                                        title: "Wait!",
+                                        description:
+                                            "Point To Share is still experimental, performance may not be stable. \n Do you still want to continue?",
+                                        acceptTitle: "Continue",
+                                        declineTitle: "Cancel")
+                                    .then((value) {
+                                  // Check Result
+                                  if (value) {
+                                    DeviceService.togglePointToShare();
+                                  } else {
+                                    Get.back();
+                                  }
+                                });
+                              } else {
+                                DeviceService.togglePointToShare();
+                              }
+                            },
+                          )
+                        ])),
+                    Spacer(),
+
+                    // @ Bug Reporter
+                    Align(
+                        heightFactor: 0.9,
+                        alignment: Alignment.topCenter,
+                        child: SonrButton.rectangle(
+                            margin: EdgeInsetsX.horizontal(65),
+                            onPressed: () {
+                              Get.back();
+                              Wiredash.of(context).show();
+                            },
+                            text: SonrText.normal("Report"),
+                            icon: SonrIcon.normal(
+                              Icons.bug_report,
+                              color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark,
+                            ))),
+                    Padding(padding: EdgeInsetsX.top(20)),
+
+                    // @ Version Number
+                    Align(
+                      heightFactor: 0.9,
+                      alignment: Alignment.topCenter,
+                      child: SonrText.light("Closed Alpha - 0.9.0 Build 44", size: 16),
+                    ),
+                    Padding(padding: EdgeInsetsX.top(20)),
+                  ]),
+                ))))
+      ]),
+    );
   }
 }

@@ -188,7 +188,7 @@ class _MediaItemView extends StatelessWidget {
                     child: Neumorphic(
                       style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
                       child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                          color: card.metadata.mime.type == MIME_Type.image ? Colors.black : Colors.white),
+                          color: card.metadata.mime.type == MIME_Type.image ? Colors.black : SonrColor.currentNeumorphic),
                       padding: EdgeInsets.all(10),
                     ),
                   ),
@@ -344,7 +344,7 @@ class _MediaCardInfo extends StatelessWidget {
               SonrButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: Colors.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
               ),
             ]),
           ]),

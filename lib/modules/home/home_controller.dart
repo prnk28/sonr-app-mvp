@@ -20,6 +20,8 @@ class HomeController extends GetxController {
   // References
   PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
+  bool _hasPromptedAutoSave = false;
+
   HomeController() {
     // Set Initial Status
     if (cards.length > 0) {
@@ -27,7 +29,6 @@ class HomeController extends GetxController {
     } else {
       if (UserService.isNewUser.value) {
         status(HomeState.First);
-        SonrService.connect();
       } else {
         status(HomeState.None);
       }
@@ -36,13 +37,15 @@ class HomeController extends GetxController {
 
   // ^ Controller Constructer ^
   onInit() {
+    // Initialize
+    MediaService.checkInitialShare();
+
     // Add Stream Handlers
     cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
 
-    // Initialize
-    MediaService.checkInitialShare();
+    // Set View Properties
     toggleIndex(1);
-    toggleIndex.refresh();
+    pageIndex(0);
     super.onInit();
   }
 
@@ -50,6 +53,19 @@ class HomeController extends GetxController {
   void onDispose() {
     cardStream.cancel();
     toggleIndex(1);
+    pageIndex(0);
+  }
+
+  // ^ Prompts first time user Auto Save ^ //
+  promptAutoSave() async {
+    if (!_hasPromptedAutoSave) {
+      Future.delayed(2400.milliseconds, () {
+        if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted && !SonrOverlay.isOpen) {
+          Get.find<DeviceService>().requestGallery(
+              description: "Next time Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
+        }
+      });
+    }
   }
 
   // ^ Handle Cards Update ^ //

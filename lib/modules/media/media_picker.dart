@@ -18,8 +18,13 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
 
   @override
   void initState() {
-    MediaService.refreshGallery();
+    refresh();
     super.initState();
+  }
+
+  refresh() async {
+    await MediaService.refreshGallery();
+    setState(() {});
   }
 
   @override
@@ -30,7 +35,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
     return NeumorphicBackground(
       borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       backendColor: Colors.transparent,
-      child: SonrScaffold.appBarLeadingCustom(
+      child: SonrScaffold.appBarCustom(
         leading: SonrButton.rectangle(
             radius: 20,
             shape: NeumorphicShape.convex,

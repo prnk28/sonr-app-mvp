@@ -38,10 +38,16 @@
 	<string>Privacy - Location When In Use Usage Description</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>No Clue Ignore</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>For Beacons usage</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>No Clue Ignore</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Requried for the App</string>
+	<key>NSContactsUsageDescription</key>
+	<string>No Clue Ignore</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Used for proximity communications</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -56,6 +62,8 @@
 	<string>A reason to get the permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Requried for the App</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Sound Detection</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
