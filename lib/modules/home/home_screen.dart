@@ -11,7 +11,7 @@ class HomeScreen extends GetView<HomeController> {
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
       resizeToAvoidBottomPadding: false,
-      title: "Home",
+      title: SonrText.appBar("Home"),
       leading: _buildLeadingByMode(),
       action: SonrButton.circle(
           icon: SonrIcon.search,
@@ -47,7 +47,7 @@ class HomeScreen extends GetView<HomeController> {
                             key: ValueKey<int>(controller.toggleIndex.value),
                             onDoubleTap: () => controller.jumpToStart(),
                             onLongPress: () => controller.jumpToEnd(),
-                            child: Center(child: Obx(() => buildView()))),
+                            child: Center(child: Obx(() => _buildToggleView()))),
                       ),
                       children: [
                         ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
@@ -66,6 +66,7 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
+// ^ Helper Method for Test Mode Leading Button ^ //
   Widget _buildLeadingByMode() {
     if (K_TESTER_MODE) {
       return SonrButton.circle(
@@ -84,7 +85,7 @@ class HomeScreen extends GetView<HomeController> {
   }
 
   // ^ Helper Method for Category Filter ^ //
-  Widget buildView() {
+  Widget _buildToggleView() {
     // Change Category
     if (controller.toggleIndex.value == 0) {
       return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);

@@ -53,7 +53,7 @@ class SonrScaffold extends StatelessWidget {
   }
 
   factory SonrScaffold.appBarLeadingAction(
-      {@required String title,
+      {@required Widget title,
       @required SonrButton leading,
       @required SonrButton action,
       Widget body,
@@ -64,7 +64,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         appBar: NeumorphicAppBar(
           color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-          title: SonrText.appBar(title),
+          title: title,
           leading: leading,
           actions: [action],
         ),
