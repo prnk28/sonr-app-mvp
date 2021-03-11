@@ -11,7 +11,13 @@ class HomeScreen extends GetView<HomeController> {
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
       resizeToAvoidBottomPadding: false,
-      title: SonrText.appBar("Home"),
+      title: Obx(() => SonrAnimatedSwitcher.fade(
+            duration: 2.seconds,
+            child: GestureDetector(
+                key: ValueKey<String>(controller.titleText.value),
+                onTap: () => controller.swapTitleText("${SonrService.lobbySize.value} Nearby"),
+                child: SonrText.appBar(controller.titleText.value)),
+          )),
       leading: _buildLeadingByMode(),
       action: SonrButton.circle(
           icon: SonrIcon.search,
@@ -33,30 +39,27 @@ class HomeScreen extends GetView<HomeController> {
           width: Get.width,
           height: Get.height,
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            GestureDetector(
-              onTap: () => controller.closeShare(),
-              child: Container(
-                padding: EdgeInsets.only(top: 10),
-                margin: EdgeInsets.only(left: 30, right: 30),
-                child: Obx(() => NeumorphicToggle(
-                      style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
-                      selectedIndex: controller.toggleIndex.value,
-                      onChanged: (val) => controller.setToggleCategory(val),
-                      thumb: SonrAnimatedSwitcher.fade(
-                        child: GestureDetector(
-                            key: ValueKey<int>(controller.toggleIndex.value),
-                            onDoubleTap: () => controller.jumpToStart(),
-                            onLongPress: () => controller.jumpToEnd(),
-                            child: Center(child: Obx(() => _buildToggleView()))),
-                      ),
-                      children: [
-                        ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
-                        ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
-                        ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
-                        //ToggleElement(),
-                      ],
-                    )),
-              ),
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(left: 30, right: 30),
+              child: Obx(() => NeumorphicToggle(
+                    style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                    selectedIndex: controller.toggleIndex.value,
+                    onChanged: (val) => controller.setToggleCategory(val),
+                    thumb: SonrAnimatedSwitcher.fade(
+                      child: GestureDetector(
+                          key: ValueKey<int>(controller.toggleIndex.value),
+                          onDoubleTap: () => controller.jumpToStart(),
+                          onLongPress: () => controller.jumpToEnd(),
+                          child: Center(child: Obx(() => _buildToggleView()))),
+                    ),
+                    children: [
+                      ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
+                      ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
+                      ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
+                      //ToggleElement(),
+                    ],
+                  )),
             ),
             TransferCardGrid(),
             Spacer()
@@ -109,72 +112,70 @@ class TransferCardGrid extends GetView<HomeController> {
     controller.pageController = pageController;
 
     // Build View
-    return GestureDetector(
-        onTap: () => controller.closeShare(),
-        child: Container(
-            padding: EdgeInsets.only(top: 15),
-            height: 500,
-            child: Obx(() {
-              // Loading Cards
-              if (controller.status.value == HomeState.Loading) {
-                return Center(child: CircularProgressIndicator());
-              }
+    return Container(
+        padding: EdgeInsets.only(top: 15),
+        height: 500,
+        child: Obx(() {
+          // Loading Cards
+          if (controller.status.value == HomeState.Loading) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-              // New User
-              else if (controller.status.value == HomeState.First) {
-                return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  SonrText.header("Welcome to Sonr", gradient: FlutterGradientNames.magicRay, size: 36),
-                  SonrText.normal("Share to begin viewing your Cards!", color: Colors.black.withOpacity(0.7), size: 18)
-                ]);
-              }
+          // New User
+          else if (controller.status.value == HomeState.First) {
+            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SonrText.header("Welcome to Sonr", gradient: FlutterGradientNames.magicRay, size: 36),
+              SonrText.normal("Share to begin viewing your Cards!", color: Colors.black.withOpacity(0.7), size: 18)
+            ]);
+          }
 
-              // Zero Cards
-              else if (controller.status.value == HomeState.None) {
-                return Center(child: SonrText.bold("No Cards Found!", color: Colors.grey[500]));
-              }
+          // Zero Cards
+          else if (controller.status.value == HomeState.None) {
+            return Center(child: SonrText.bold("No Cards Found!", color: Colors.grey[500]));
+          }
 
-              // Build Cards
-              else {
-                controller.promptAutoSave();
-                return PageView.builder(
-                  itemCount: controller.getCardList().length,
-                  controller: pageController,
-                  onPageChanged: (int index) => controller.pageIndex(index),
-                  itemBuilder: (_, idx) {
-                    return Obx(() {
-                      if (idx == controller.pageIndex.value) {
-                        return PlayAnimation<double>(
-                          tween: (0.85).tweenTo(0.95),
-                          duration: 200.milliseconds,
-                          builder: (context, child, value) {
-                            return Transform.scale(
-                              scale: value,
-                              child: buildCard(idx),
-                            );
-                          },
-                        );
-                      } else if (idx == controller.pageIndex.value) {
-                        return PlayAnimation<double>(
-                          tween: (0.95).tweenTo(0.85),
-                          duration: 200.milliseconds,
-                          builder: (context, child, value) {
-                            return Transform.scale(
-                              scale: value,
-                              child: buildCard(idx),
-                            );
-                          },
-                        );
-                      } else {
+          // Build Cards
+          else {
+            controller.promptAutoSave();
+            return PageView.builder(
+              itemCount: controller.getCardList().length,
+              controller: pageController,
+              onPageChanged: (int index) => controller.pageIndex(index),
+              itemBuilder: (_, idx) {
+                return Obx(() {
+                  if (idx == controller.pageIndex.value) {
+                    return PlayAnimation<double>(
+                      tween: (0.85).tweenTo(0.95),
+                      duration: 200.milliseconds,
+                      builder: (context, child, value) {
                         return Transform.scale(
-                          scale: 0.85,
+                          scale: value,
                           child: buildCard(idx),
                         );
-                      }
-                    });
-                  },
-                );
-              }
-            })));
+                      },
+                    );
+                  } else if (idx == controller.pageIndex.value) {
+                    return PlayAnimation<double>(
+                      tween: (0.95).tweenTo(0.85),
+                      duration: 200.milliseconds,
+                      builder: (context, child, value) {
+                        return Transform.scale(
+                          scale: value,
+                          child: buildCard(idx),
+                        );
+                      },
+                    );
+                  } else {
+                    return Transform.scale(
+                      scale: 0.85,
+                      child: buildCard(idx),
+                    );
+                  }
+                });
+              },
+            );
+          }
+        }));
   }
 
   Widget buildCard(int index) {

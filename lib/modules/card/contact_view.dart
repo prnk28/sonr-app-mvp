@@ -145,94 +145,99 @@ class _ContactItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Contact contact = card.contact;
-    return GestureDetector(
-      onTap: () {
-        // Push to Page
-        Get.to(_ContactCardExpanded(card), transition: Transition.fadeIn);
-      },
-      child: Neumorphic(
-        style: SonrStyle.normal,
-        margin: EdgeInsets.all(4),
-        child: Hero(
-          tag: card.id,
-          child: Container(
-            height: 75,
-            decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
-                ? BoxDecoration(
-                    image: DecorationImage(
-                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-                    fit: BoxFit.cover,
-                    image: MemoryImage(card.metadata.thumbnail),
-                  ))
-                : null,
-            child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Padding(padding: EdgeInsets.all(4)),
-              // Build Profile Pic
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Neumorphic(
-                    padding: EdgeInsets.all(10),
-                    style: NeumorphicStyle(
-                      boxShape: NeumorphicBoxShape.circle(),
-                      depth: -10,
+    return SonrScaffold(
+        resizeToAvoidBottomPadding: false,
+        body: Container(
+          height: Get.height,
+          child: GestureDetector(
+            onTap: () {
+              // Push to Page
+              Get.to(_ContactCardExpanded(card), transition: Transition.fadeIn);
+            },
+            child: Neumorphic(
+              style: SonrStyle.normal,
+              margin: EdgeInsets.all(4),
+              child: Hero(
+                tag: card.id,
+                child: Container(
+                  height: 75,
+                  decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
+                      ? BoxDecoration(
+                          image: DecorationImage(
+                          colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
+                          fit: BoxFit.cover,
+                          image: MemoryImage(card.metadata.thumbnail),
+                        ))
+                      : null,
+                  child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Padding(padding: EdgeInsets.all(4)),
+                    // Build Profile Pic
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Neumorphic(
+                          padding: EdgeInsets.all(10),
+                          style: NeumorphicStyle(
+                            boxShape: NeumorphicBoxShape.circle(),
+                            depth: -10,
+                          ),
+                          child: contact.profilePicture),
                     ),
-                    child: contact.profilePicture),
+
+                    // Build Name
+                    contact.fullName,
+                    Divider(),
+                    Padding(padding: EdgeInsets.all(4)),
+
+                    // Quick Actions
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      SizedBox(
+                        width: 78,
+                        height: 78,
+                        child: SonrButton.circle(
+                            depth: 4,
+                            onPressed: () {},
+                            text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
+                            icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
+                            iconPosition: WidgetPosition.Top),
+                      ),
+                      Padding(padding: EdgeInsets.all(6)),
+                      SizedBox(
+                        width: 78,
+                        height: 78,
+                        child: SonrButton.circle(
+                            depth: 4,
+                            onPressed: () {},
+                            text: SonrText.medium("Text", size: 12, color: Colors.black45),
+                            icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
+                            iconPosition: WidgetPosition.Top),
+                      ),
+                      Padding(padding: EdgeInsets.all(6)),
+                      SizedBox(
+                          width: 78,
+                          height: 78,
+                          child: SonrButton.circle(
+                              depth: 4,
+                              onPressed: () {},
+                              text: SonrText.medium("Video", size: 12, color: Colors.black45),
+                              icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
+                              iconPosition: WidgetPosition.Top)),
+                    ]),
+
+                    Divider(),
+                    Padding(padding: EdgeInsets.all(4)),
+
+                    // Brief Contact Card Info
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List<Widget>.generate(contact.socials.length, (index) {
+                          return contact.socials[index].provider.icon(IconType.Gradient, size: 35);
+                        }))
+                  ]),
+                ),
               ),
-
-              // Build Name
-              contact.fullName,
-              Divider(),
-              Padding(padding: EdgeInsets.all(4)),
-
-              // Quick Actions
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: SonrButton.circle(
-                      depth: 4,
-                      onPressed: () {},
-                      text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
-                      icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
-                      iconPosition: WidgetPosition.Top),
-                ),
-                Padding(padding: EdgeInsets.all(6)),
-                SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: SonrButton.circle(
-                      depth: 4,
-                      onPressed: () {},
-                      text: SonrText.medium("Text", size: 12, color: Colors.black45),
-                      icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
-                      iconPosition: WidgetPosition.Top),
-                ),
-                Padding(padding: EdgeInsets.all(6)),
-                SizedBox(
-                    width: 78,
-                    height: 78,
-                    child: SonrButton.circle(
-                        depth: 4,
-                        onPressed: () {},
-                        text: SonrText.medium("Video", size: 12, color: Colors.black45),
-                        icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
-                        iconPosition: WidgetPosition.Top)),
-              ]),
-
-              Divider(),
-              Padding(padding: EdgeInsets.all(4)),
-
-              // Brief Contact Card Info
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List<Widget>.generate(contact.socials.length, (index) {
-                    return contact.socials[index].provider.icon(IconType.Gradient, size: 35);
-                  }))
-            ]),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 

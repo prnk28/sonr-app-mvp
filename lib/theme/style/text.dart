@@ -89,7 +89,7 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Date Text with Provided Data
-  factory SonrText.date(DateTime date, {double size = 14, Key key, Color color = Colors.black}) {
+  factory SonrText.date(DateTime date, {double size = 14, Key key, Color color = Colors.white}) {
     // Formatters
     final dateFormat = new DateFormat.yMd();
     final timeFormat = new DateFormat.jm();
@@ -104,8 +104,14 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: dateText, style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: color)),
-              TextSpan(text: "  $timeText", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: color)),
+              TextSpan(
+                  text: dateText,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w300, fontSize: size, color: DeviceService.isDarkMode.value ? Colors.black : Colors.white)),
+              TextSpan(
+                  text: "  $timeText",
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600, fontSize: size, color: DeviceService.isDarkMode.value ? Colors.black : Colors.white)),
             ])));
   }
 
@@ -274,7 +280,7 @@ class SonrText extends StatelessWidget {
 
   // ^ Find Text color based on Theme - Light/Dark ^
   static Color findTextColor() {
-    if (Get.isDarkMode) {
+    if (DeviceService.isDarkMode.value) {
       return Colors.white;
     } else {
       return Colors.black;

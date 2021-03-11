@@ -19,8 +19,8 @@ class SonrColor {
   static const Color Blue = Color(0xff51C5DD);
   static const Color White = Color(0xffE0E0E0);
   static const Color Navy = Color(0xff0A4F70);
-  static const Color LightModeShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
-  static const Color LightModeShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
+  static const Color ShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
+  static const Color ShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
 
   // ** Gradients ** //
   static Gradient get lightModeBulb => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
@@ -57,7 +57,7 @@ class SonrColor {
   // ^ Finds Current Theme Icon Color ^ //
   static Color icons() {
     final theme = NeumorphicTheme.of(Get.context);
-    if (Get.isDarkMode) {
+    if (DeviceService.isDarkMode.value) {
       return theme.current.accentColor;
     } else {
       return theme.current.accentColor;

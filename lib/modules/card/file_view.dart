@@ -141,57 +141,62 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        OpenFile.open(card.metadata.path);
-      },
-      child: Neumorphic(
-        style: SonrStyle.normal,
-        margin: EdgeInsets.all(4),
-        child: Hero(
-          tag: card.id,
-          child: Container(
-            height: 75,
-            child: Stack(
-              children: <Widget>[
-                // Time Stamp
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Neumorphic(
-                      style: SonrStyle.timeStampDark,
-                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
-                      padding: EdgeInsets.all(10),
-                    ),
+    return SonrScaffold(
+        resizeToAvoidBottomPadding: false,
+        body: Container(
+          height: Get.height,
+          child: GestureDetector(
+            onTap: () {
+              OpenFile.open(card.metadata.path);
+            },
+            child: Neumorphic(
+              style: SonrStyle.normal,
+              margin: EdgeInsets.all(4),
+              child: Hero(
+                tag: card.id,
+                child: Container(
+                  height: 75,
+                  child: Stack(
+                    children: <Widget>[
+                      // Time Stamp
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Neumorphic(
+                            style: SonrStyle.timeStampDark,
+                            child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
+                            padding: EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+
+                      // File Icon
+                      Align(
+                          alignment: Alignment.center,
+                          child: Neumorphic(
+                              padding: EdgeInsets.all(20),
+                              style: SonrStyle.indented,
+                              child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
+
+                      // Info Button
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SonrButton.circle(
+                              icon: SonrIcon.info,
+                              onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
+                              shadowLightColor: Colors.black38,
+                            )),
+                      ),
+                    ],
                   ),
                 ),
-
-                // File Icon
-                Align(
-                    alignment: Alignment.center,
-                    child: Neumorphic(
-                        padding: EdgeInsets.all(20),
-                        style: SonrStyle.indented,
-                        child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
-
-                // Info Button
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SonrButton.circle(
-                        icon: SonrIcon.info,
-                        onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
-                        shadowLightColor: Colors.black38,
-                      )),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 

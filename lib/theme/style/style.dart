@@ -91,8 +91,8 @@ class SonrStyle {
       color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
       intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      shadowDarkColor: SonrColor.LightModeShadowDark,
-      shadowLightColor: SonrColor.LightModeShadowLight);
+      shadowDarkColor: SonrColor.ShadowDark,
+      shadowLightColor: SonrColor.ShadowLight);
 
   static get photo => NeumorphicStyle(
       intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,

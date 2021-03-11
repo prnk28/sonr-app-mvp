@@ -53,7 +53,7 @@ class _AppState extends State<App> {
       var page = DeviceService.getLaunchPage();
       switch (page) {
         case LaunchPage.Home:
-          Get.offNamed("/home");
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
           break;
         case LaunchPage.Register:
           Get.offNamed("/register");
@@ -97,7 +97,7 @@ class _AppState extends State<App> {
 
   Widget _buildSplashScreen() {
     return GetMaterialApp(
-      getPages: K_PAGES,
+      getPages: pageRouting,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
@@ -133,48 +133,3 @@ class _AppState extends State<App> {
   }
 }
 
-// ^ Routing Information ^ //
-// ignore: non_constant_identifier_names
-List<GetPage> get K_PAGES => [
-      // ** Home Page ** //
-      GetPage(
-          name: '/home',
-          page: () {
-            Get.putAsync(() => SonrService().init(), permanent: true);
-            return HomeScreen();
-          },
-          transition: Transition.topLevel,
-          curve: Curves.easeIn,
-          binding: HomeBinding(),
-          middlewares: [GetMiddleware()]),
-
-      // ** Home Page ** //
-      GetPage(
-          name: '/home/received',
-          page: () => HomeScreen(),
-          transition: Transition.fadeIn,
-          curve: Curves.easeIn,
-          binding: HomeBinding(),
-          middlewares: [GetMiddleware()]),
-
-      // ** Home Page - Back from Transfer ** //
-      GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),
-
-      // ** Home Page - Back from Profile ** //
-      GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeIn, binding: HomeBinding()),
-
-      // ** Register Page ** //
-      GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
-
-      // ** Transfer Page ** //
-      GetPage(
-          name: '/transfer',
-          page: () => TransferScreen(),
-          maintainState: false,
-          transition: Transition.downToUp,
-          curve: Curves.easeIn,
-          binding: TransferBinding()),
-
-      // ** Profile Page ** //
-      GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),
-    ];

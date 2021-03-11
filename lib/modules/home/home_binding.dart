@@ -10,3 +10,11 @@ class HomeBinding implements Bindings {
     Get.lazyPut<SearchCardController>(() => SearchCardController());
   }
 }
+
+class HomeArguments {
+  final bool isFirstLoad;
+  final bool hasNewCard;
+  final bool firstNewCard;
+
+  HomeArguments({this.isFirstLoad = false, this.hasNewCard = false, this.firstNewCard = false});
+}

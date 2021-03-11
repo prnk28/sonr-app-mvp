@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'home_controller.dart';
 
 // @ Widget Constants
 const double K_ITEM_SPACING = 12;
@@ -11,30 +12,31 @@ const double K_DEFAULT_HEIGHT = 70;
 const double K_DEFAULT_WIDTH = 30;
 const Duration K_ANIMATION_DURATION = const Duration(milliseconds: 200);
 
-class ShareButton extends GetView<HomeController> {
-  final expandedView = _ExpandedView();
-  final defaultView = _DefaultView();
-
+class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: AnimatedContainer(
-            curve: Curves.easeInBack,
-            padding: EdgeInsetsDirectional.only(start: 30),
-            width: controller.isShareExpanded.value ? Get.width / 2 + K_EXPANDED_WIDTH : Get.width / 2 + K_DEFAULT_WIDTH,
-            height: controller.isShareExpanded.value ? K_EXPANDED_HEIGHT : K_DEFAULT_HEIGHT,
-            duration: K_ANIMATION_DURATION,
-            child: Center(
-              child: NeumorphicButton(
-                child: controller.isShareExpanded.value ? expandedView : defaultView,
-                onPressed: controller.toggleShare,
-                style: SonrStyle.shareButton,
-              ),
-            )),
-      );
-    });
+    return GetX<ShareButtonController>(
+        init: ShareButtonController(),
+        builder: (controller) {
+          final expandedView = _ExpandedView(controller);
+          final defaultView = _DefaultView();
+          return Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+                curve: Curves.easeInBack,
+                padding: EdgeInsetsDirectional.only(start: 30),
+                width: controller.isExpanded.value ? Get.width / 2 + K_EXPANDED_WIDTH : Get.width / 2 + K_DEFAULT_WIDTH,
+                height: controller.isExpanded.value ? K_EXPANDED_HEIGHT : K_DEFAULT_HEIGHT,
+                duration: K_ANIMATION_DURATION,
+                child: Center(
+                  child: NeumorphicButton(
+                    child: controller.isExpanded.value ? expandedView : defaultView,
+                    onPressed: controller.toggle,
+                    style: SonrStyle.shareButton,
+                  ),
+                )),
+          );
+        });
   }
 }
 
@@ -59,6 +61,9 @@ class _DefaultView extends StatelessWidget {
 
 // ** Expanded Share Button View ** //
 class _ExpandedView extends StatelessWidget {
+  final ShareButtonController controller;
+
+  const _ExpandedView(this.controller, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return PlayAnimation<double>(
@@ -79,15 +84,16 @@ class _ExpandedView extends StatelessWidget {
                       depth: 8,
                       intensity: 0.4,
                     ),
-                    child: _ShareButtonRow())),
+                    child: _ShareButtonRow(controller))),
           );
         });
   }
 }
 
 // ** Share Button Row ** //
-class _ShareButtonRow extends GetView<HomeController> {
-  const _ShareButtonRow();
+class _ShareButtonRow extends StatelessWidget {
+  final ShareButtonController controller;
+  const _ShareButtonRow(this.controller);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -101,7 +107,7 @@ class _ShareButtonRow extends GetView<HomeController> {
               child: _ShareButtonItem(
                 onPressed: () {
                   // Toggle Share Expand
-                  controller.closeShare();
+                  controller.close();
 
                   // Check Permissions
                   if (Get.find<DeviceService>().cameraPermitted) {
@@ -133,7 +139,7 @@ class _ShareButtonRow extends GetView<HomeController> {
             child: Container(
               child: _ShareButtonItem(
                 onPressed: () {
-                  controller.closeShare();
+                  controller.close();
                   // Check Permissions
                   if (Get.find<DeviceService>().galleryPermitted) {
                     MediaService.refreshGallery();
@@ -169,7 +175,7 @@ class _ShareButtonRow extends GetView<HomeController> {
                   SonrService.queueContact();
 
                   // Close Share Button
-                  controller.closeShare();
+                  controller.close();
 
                   // Go to Transfer
                   Get.toNamed("/transfer");
@@ -215,5 +221,53 @@ class _ShareButtonItem extends StatelessWidget {
       Padding(padding: EdgeInsets.only(top: 4)),
       SonrText(_typeText, weight: FontWeight.w500, size: 14, key: key, color: Colors.white),
     ]);
+  }
+}
+
+class ShareButtonController extends GetxController {
+  // Properties
+  final isExpanded = false.obs;
+  final counter = 0.obs;
+
+  // References
+  Timer _timer;
+
+  // ^ Close Share Button ^ //
+  void close() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+      HapticFeedback.mediumImpact();
+      isExpanded(false);
+      counter(0);
+    }
+  }
+
+  // ^ Expand Share Button ^ //
+  void expand() {
+    HapticFeedback.heavyImpact();
+    isExpanded(true);
+
+    // Create Timeout
+    _timer = Timer.periodic(500.milliseconds, (_) {
+      // Add to Counter
+      counter(counter.value += 500);
+
+      // Check if Timeout Reached
+      if (counter.value == 4000) {
+        if (isExpanded.value) {
+          close();
+        }
+      }
+    });
+  }
+
+  // ^ Toggles Expanded Share Button ^ //
+  void toggle() {
+    if (!isExpanded.value) {
+      expand();
+    } else {
+      close();
+    }
   }
 }
