@@ -75,11 +75,11 @@ class _CompassView extends GetView<TransferController> {
           // Interior Compass
           child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
             // Center Circle
-            _CompassBulb(
-                controller.string.value, controller.heading.value, DeviceService.isDarkMode.value ? SonrColor.darkModeBulb : SonrColor.lightModeBulb),
+            Obx(() => _CompassBulb(controller.string.value, controller.heading.value,
+                DeviceService.isDarkMode.value ? SonrColor.darkModeBulb : SonrColor.lightModeBulb)),
 
             // Spokes
-            _Spokes(controller.angle.value),
+            Obx(() => _Spokes(controller.angle.value)),
           ]),
         ),
       ),
