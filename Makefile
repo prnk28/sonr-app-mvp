@@ -58,7 +58,7 @@ deploy: deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS) --release
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane ios internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
@@ -75,10 +75,12 @@ deploy.android:
 ##
 ## [debug]       :   Run Mobile App in Debug Mode
 debug:
+	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
 ## [profile]     :   Run Mobile App for Profile Mode
 profile:
+	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl
 
 ## [release]     :   Run Mobile App for Release Mode
