@@ -224,10 +224,10 @@ class DeviceService extends GetxService {
 
   // ^ Trigger iOS Local Network with Alert ^ //
   Future triggerNetwork() async {
-    if (!networkTriggered) {
+    if (!networkTriggered && Platform.isIOS) {
       await SonrOverlay.alert(
           title: 'Requires Permission',
-          description: 'Sonr uses your microphone in order to communicate with other devices.',
+          description: 'Sonr requires local network permissions in order to maximize transfer speed.',
           buttonText: "Continue",
           barrierDismissible: false);
 

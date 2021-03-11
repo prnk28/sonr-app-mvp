@@ -138,6 +138,15 @@ List<GetPage> get K_PAGES => [
           binding: HomeBinding(),
           middlewares: [GetMiddleware()]),
 
+      // ** Home Page ** //
+      GetPage(
+          name: '/home/received',
+          page: () => HomeScreen(),
+          transition: Transition.fadeIn,
+          curve: Curves.easeIn,
+          binding: HomeBinding(),
+          middlewares: [GetMiddleware()]),
+
       // ** Home Page - Back from Transfer ** //
       GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),
 

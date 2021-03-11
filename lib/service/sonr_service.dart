@@ -37,7 +37,7 @@ class SonrService extends GetxService with TransferQueue {
   Future<SonrService> init() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
-    await Get.find<DeviceService>().triggerNetwork();
+    // await Get.find<DeviceService>().triggerNetwork();
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);

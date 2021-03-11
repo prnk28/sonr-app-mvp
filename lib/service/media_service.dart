@@ -254,6 +254,9 @@ class MediaService extends GetxService {
 
   // ^ Saves Received Media to Gallery ^ //
   static Future<bool> saveTransfer(TransferCard card) async {
+    // Await Permissions
+
+
     // Get Data from Media
     final path = card.metadata.path;
     if (card.hasMetadata()) {
