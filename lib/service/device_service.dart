@@ -144,7 +144,7 @@ class DeviceService extends GetxService {
   // ^ Request Gallery optional overlay ^ //
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     // Present Overlay
-    if (await SonrOverlay.question(title: 'Requires Permission', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
+    if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
       if (Platform.isAndroid) {
         if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
           _galleryPermittedToBox(true);
@@ -169,7 +169,7 @@ class DeviceService extends GetxService {
   Future<bool> requestLocation() async {
     // Present Overlay
     if (await SonrOverlay.question(
-        title: 'Requires Permission',
+        title: 'Location',
         description: 'Sonr requires location in order to find devices in your area.',
         acceptTitle: "Allow",
         declineTitle: "Decline")) {
@@ -188,7 +188,7 @@ class DeviceService extends GetxService {
   Future<bool> requestMicrophone() async {
     // Present Overlay
     if (await SonrOverlay.question(
-        title: 'Requires Permission',
+        title: 'Microphone',
         description: 'Sonr uses your microphone in order to communicate with other devices.',
         acceptTitle: "Allow",
         declineTitle: "Decline")) {

@@ -119,6 +119,7 @@ class TransferCardGrid extends GetView<HomeController> {
 
               // Build Cards
               else {
+                controller.promptAutoSave();
                 return PageView.builder(
                   itemCount: controller.getCardList().length,
                   controller: pageController,
