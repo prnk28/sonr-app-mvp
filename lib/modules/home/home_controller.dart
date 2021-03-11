@@ -28,7 +28,6 @@ class HomeController extends GetxController {
   bool _hasPromptedAutoSave = false;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
-  Duration _timeout = 2400.milliseconds;
 
   // ^ Controller Constructer ^
   onInit() {

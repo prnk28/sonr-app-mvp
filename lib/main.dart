@@ -1,12 +1,8 @@
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
-import 'modules/profile/profile_binding.dart';
-import 'modules/register/register_binding.dart';
-import 'modules/transfer/transfer_binding.dart';
 import 'package:wiredash/wiredash.dart';
 
 const bool K_TESTER_MODE = true;
