@@ -1,7 +1,7 @@
 # Plugin Vars
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
-BUILDIOS=$(FLUTTER) build ipa
+BUILDIOS=$(FLUTTER) build ios
 BUILDANDROID=$(FLUTTER) build appbundle
 CLEAN=$(FLUTTER) clean
 ANDROID_DIR=/Users/prad/Sonr/app/android
@@ -58,17 +58,17 @@ deploy: deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-	cd $(PROJECT_DIR) && $(BUILDIOS) --release
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane beta
+	cd $(IOS_DIR) && fastlane ios internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
 
 ## └─ android         - APB for PlayStore
 deploy.android:
-	cd $(PROJECT_DIR) && $(BUILDANDROID) --release
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
 	@echo "Finished Building Sonr Android ➡ " && date
-	cd $(ANDROID_DIR) && fastlane alpha
+	cd $(ANDROID_DIR) && fastlane android internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo "Finished Uploading Sonr Android to AppStore Connect ➡ " && date
 

@@ -17,8 +17,10 @@ default_platform(:ios)
 
 platform :ios do
   desc "Push a new beta build to TestFlight"
-  lane :beta do
-    add_git_tag
-    upload_to_testflight(app_identifier:"io.sonr.ios", skip_submission: true)
+  lane :internal do
+    get_certificates
+    get_provisioning_profile
+    build_app(workspace: "Runner.xcworkspace", scheme: "Runner")
+    upload_to_testflight
   end
 end
