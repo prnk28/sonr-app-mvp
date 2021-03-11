@@ -8,7 +8,7 @@ import 'modules/register/register_binding.dart';
 import 'modules/transfer/transfer_binding.dart';
 import 'package:wiredash/wiredash.dart';
 
-const bool K_TESTER_MODE = true;
+const bool K_TESTER_MODE = false;
 
 // ^ Main Method ^ //
 void main() async {
