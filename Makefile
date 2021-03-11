@@ -70,7 +70,7 @@ deploy.android:
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
-	@echo "Finished Uploading Sonr Android to AppStore Connect ➡ " && date
+	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
 
 ##
 ## [debug]       :   Run Mobile App in Debug Mode

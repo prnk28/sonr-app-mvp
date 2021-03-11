@@ -16,16 +16,11 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Android
-### android test
+### android internal
 ```
-fastlane android test
+fastlane android internal
 ```
-Runs all the tests
-### android alpha
-```
-fastlane android alpha
-```
-Upload Binary to closed alpha
+Submit a new build to Internal Track on Play
 
 ----
 
