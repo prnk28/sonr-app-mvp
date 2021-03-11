@@ -64,7 +64,7 @@ class MediaService extends GetxService {
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
-    if (Get.find<DeviceService>().galleryPermitted) {
+    if (Get.find<DeviceService>().galleryPermitted.val) {
       // Get Collections
       _state(GalleryState.Loading);
       List<MediaCollection> collections = await MediaGallery.listMediaCollections(
@@ -256,12 +256,11 @@ class MediaService extends GetxService {
   static Future<bool> saveTransfer(TransferCard card) async {
     // Await Permissions
 
-
     // Get Data from Media
     final path = card.metadata.path;
     if (card.hasMetadata()) {
       // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted) {
+      if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted.val) {
         var result = await GallerySaver.saveImage(path, albumName: "Sonr");
 
         // Visualize Result
@@ -274,7 +273,7 @@ class MediaService extends GetxService {
       }
 
       // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted) {
+      else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted.val) {
         var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
 
         // Visualize Result

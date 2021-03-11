@@ -440,10 +440,11 @@ class _AlertOverlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
+    return NeumorphicBackground(
+      backendColor: Colors.transparent,
+      margin: EdgeInsets.all(30),
+      borderRadius: BorderRadius.circular(20),
       child: Neumorphic(
-          margin: EdgeInsets.only(left: 6, right: 6),
           style: SonrStyle.overlay,
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Container(
@@ -600,10 +601,11 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
+    return NeumorphicBackground(
+      backendColor: Colors.transparent,
+      margin: EdgeInsets.all(30),
+      borderRadius: BorderRadius.circular(20),
       child: Neumorphic(
-          margin: EdgeInsets.only(left: 6, right: 6),
           style: SonrStyle.overlay,
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Container(

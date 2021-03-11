@@ -20,7 +20,6 @@ void main() async {
 
 // ^ Services (Files, Contacts) ^ //
 initServices() async {
-  await GetStorage.init();
   await Get.putAsync(() => UserService().init()); // First Required Service
   await Get.putAsync(() => DeviceService().init()); // Second Required Service
   await Get.putAsync(() => MediaService().init());
@@ -63,13 +62,13 @@ class _AppState extends State<App> {
         case LaunchPage.PermissionLocation:
           Get.find<DeviceService>().requestLocation().then((value) {
             if (value) {
-              Get.offNamed("/home");
+              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
             }
           });
           break;
         case LaunchPage.PermissionNetwork:
           Get.find<DeviceService>().triggerNetwork().then((value) {
-            Get.offNamed("/home");
+            Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
           });
           break;
       }

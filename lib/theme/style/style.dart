@@ -88,9 +88,6 @@ class SonrStyle {
         color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
       );
 
-  static get mediaButtonDefault => NeumorphicStyle(intensity: 0.85, color: SonrColor.White);
-  static get mediaButtonPressed => NeumorphicStyle(depth: -12, intensity: 0.85, shadowDarkColorEmboss: Colors.grey[700]);
-
   static get normal => NeumorphicStyle(
         depth: DeviceService.isDarkMode.value ? 4 : 8,
         color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,

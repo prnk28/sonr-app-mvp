@@ -110,7 +110,7 @@ class _ShareButtonRow extends StatelessWidget {
                   controller.close();
 
                   // Check Permissions
-                  if (Get.find<DeviceService>().cameraPermitted) {
+                  if (Get.find<DeviceService>().cameraPermitted.val) {
                     Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
                       SonrService.queueMedia(file);
                       Get.toNamed("/transfer");
@@ -141,7 +141,7 @@ class _ShareButtonRow extends StatelessWidget {
                 onPressed: () {
                   controller.close();
                   // Check Permissions
-                  if (Get.find<DeviceService>().galleryPermitted) {
+                  if (Get.find<DeviceService>().galleryPermitted.val) {
                     MediaService.refreshGallery();
                     Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                       SonrService.queueMedia(file);

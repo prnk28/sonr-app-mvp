@@ -160,7 +160,7 @@ class HomeController extends GetxController {
   promptAutoSave() async {
     if (!_hasPromptedAutoSave) {
       Future.delayed(2400.milliseconds, () {
-        if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted && !SonrOverlay.isOpen) {
+        if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted.val && !SonrOverlay.isOpen) {
           Get.find<DeviceService>().requestGallery(
               description: "Next time Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
         }
