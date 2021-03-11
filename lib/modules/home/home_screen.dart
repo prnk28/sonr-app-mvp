@@ -12,11 +12,7 @@ class HomeScreen extends GetView<HomeController> {
     return SonrScaffold.appBarLeadingAction(
       resizeToAvoidBottomPadding: false,
       title: "Home",
-      leading: SonrButton.circle(
-        icon: SonrIcon.more,
-        onPressed: () => Get.bottomSheet(_SettingsSheet()),
-        shape: NeumorphicShape.flat,
-      ),
+      leading: _buildLeadingByMode(),
       action: SonrButton.circle(
           icon: SonrIcon.search,
           shape: NeumorphicShape.flat,
@@ -77,7 +73,14 @@ class HomeScreen extends GetView<HomeController> {
         onPressed: () => Get.bottomSheet(_SettingsSheet()),
         shape: NeumorphicShape.flat,
       );
-    } else {}
+    } else {
+      return SonrButton.circle(
+        icon: SonrIcon.profile,
+        onPressed: () => Get.toNamed("/profile"),
+        onLongPressed: () => DeviceService.toggleDarkMode(),
+        shape: NeumorphicShape.flat,
+      );
+    }
   }
 
   // ^ Helper Method for Category Filter ^ //
