@@ -1,5 +1,6 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'package:wiredash/wiredash.dart';
+import '../../main.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
 import 'share_button.dart';
@@ -9,63 +10,74 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
-        resizeToAvoidBottomPadding: false,
-        title: "Home",
-        leading: SonrButton.circle(
-          icon: SonrIcon.more,
-          onPressed: () => Get.bottomSheet(_SettingsSheet()),
+      resizeToAvoidBottomPadding: false,
+      title: "Home",
+      leading: SonrButton.circle(
+        icon: SonrIcon.more,
+        onPressed: () => Get.bottomSheet(_SettingsSheet()),
+        shape: NeumorphicShape.flat,
+      ),
+      action: SonrButton.circle(
+          icon: SonrIcon.search,
           shape: NeumorphicShape.flat,
-        ),
-        action: SonrButton.circle(
-            icon: SonrIcon.search,
-            shape: NeumorphicShape.flat,
-            onPressed: () {
-              if (controller.status.value != HomeState.None) {
-                SonrOverlay.show(
-                  SearchView(),
-                  barrierDismissible: true,
-                );
-              } else {
-                SonrSnack.error("No Cards Found");
-              }
-            }),
-        floatingActionButton: ShareButton(),
-        body: NeumorphicBackground(
-          backendColor: Colors.transparent,
-          child: Container(
-            width: Get.width,
-            height: Get.height,
-            child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              GestureDetector(
-                onTap: () => controller.closeShare(),
-                child: Container(
-                  padding: EdgeInsets.only(top: 10),
-                  margin: EdgeInsets.only(left: 30, right: 30),
-                  child: Obx(() => NeumorphicToggle(
-                        style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
-                        selectedIndex: controller.toggleIndex.value,
-                        onChanged: (val) => controller.setToggleCategory(val),
-                        thumb: SonrAnimatedSwitcher.fade(
-                          child: GestureDetector(
-                              key: ValueKey<int>(controller.toggleIndex.value),
-                              onDoubleTap: () => controller.jumpToStart(),
-                              onLongPress: () => controller.jumpToEnd(),
-                              child: Center(child: Obx(() => buildView()))),
-                        ),
-                        children: [
-                          ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
-                          ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
-                          //ToggleElement(),
-                        ],
-                      )),
-                ),
+          onPressed: () {
+            if (controller.status.value != HomeState.None) {
+              SonrOverlay.show(
+                SearchView(),
+                barrierDismissible: true,
+              );
+            } else {
+              SonrSnack.error("No Cards Found");
+            }
+          }),
+      floatingActionButton: ShareButton(),
+      body: NeumorphicBackground(
+        backendColor: Colors.transparent,
+        child: Container(
+          width: Get.width,
+          height: Get.height,
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            GestureDetector(
+              onTap: () => controller.closeShare(),
+              child: Container(
+                padding: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(left: 30, right: 30),
+                child: Obx(() => NeumorphicToggle(
+                      style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                      selectedIndex: controller.toggleIndex.value,
+                      onChanged: (val) => controller.setToggleCategory(val),
+                      thumb: SonrAnimatedSwitcher.fade(
+                        child: GestureDetector(
+                            key: ValueKey<int>(controller.toggleIndex.value),
+                            onDoubleTap: () => controller.jumpToStart(),
+                            onLongPress: () => controller.jumpToEnd(),
+                            child: Center(child: Obx(() => buildView()))),
+                      ),
+                      children: [
+                        ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
+                        ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
+                        ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
+                        //ToggleElement(),
+                      ],
+                    )),
               ),
-              TransferCardGrid(),
-              Spacer()
-            ]),
-          ),
-        ));
+            ),
+            TransferCardGrid(),
+            Spacer()
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLeadingByMode() {
+    if (K_TESTER_MODE) {
+      return SonrButton.circle(
+        icon: SonrIcon.more,
+        onPressed: () => Get.bottomSheet(_SettingsSheet()),
+        shape: NeumorphicShape.flat,
+      );
+    } else {}
   }
 
   // ^ Helper Method for Category Filter ^ //
