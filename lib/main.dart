@@ -8,7 +8,7 @@ import 'modules/home/home_binding.dart';
 const bool K_TESTER_MODE = true;
 
 // ^ Main Method ^ //
-void main() async {
+Future<void> main() async {
   await SentryFlutter.init(
     (SentryFlutterOptions options) {
       options.useFlutterBreadcrumbTracking();
@@ -18,6 +18,7 @@ void main() async {
       options.addInAppExclude("flutter_custom_clippers");
       options.addInAppExclude("google_fonts");
       options.addInAppExclude("sonr_core");
+      options.useFlutterBreadcrumbTracking();
     },
     appRunner: () async {
       WidgetsFlutterBinding.ensureInitialized();
