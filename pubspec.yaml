@@ -22,8 +22,8 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   flutter_hooks: ^0.16.0
-  get: ^4.0.0-nullsafety.2
-  get_storage: ^2.0.1
+  get:
+  get_storage:
   intl: ^0.17.0
   sentry_flutter: ^4.0.5
   url_launcher: ^6.0.2
@@ -35,12 +35,12 @@ dependencies:
   permission_handler: ^5.1.0+2
 
   # -- Data --
-  better_player: ^0.0.55
+  better_player: ^0.0.62
   gallery_saver:
   media_gallery: ^0.1.5
   open_file: ^3.0.3
   path: ^1.7.0
-  path_provider: ^2.0.1
+  path_provider:
 
   # -- Network --
   qr_code_tools: ^0.0.6

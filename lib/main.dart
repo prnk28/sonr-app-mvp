@@ -35,6 +35,7 @@ initServices() async {
   await Get.putAsync(() => MediaService().init());
   await Get.putAsync(() => SQLService().init());
   await Get.putAsync(() => SonrService().init());
+  await Get.putAsync(() => SonrOverlay().init());
 }
 
 // ^ Initial Controller Bindings ^ //
@@ -44,7 +45,6 @@ class InitialBinding implements Bindings {
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<CameraController>(() => CameraController());
-    Get.lazyPut<SonrOverlay>(() => SonrOverlay(), fenix: true);
     Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
   }
 }

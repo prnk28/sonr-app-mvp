@@ -10,7 +10,7 @@ import '../theme.dart';
 import 'form.dart';
 
 // ** Class Controls Active Overlays ** //
-class SonrOverlay extends GetxController {
+class SonrOverlay extends GetxService {
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrFixedOverlayEntry>();
@@ -19,6 +19,11 @@ class SonrOverlay extends GetxController {
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
   static int get count => Get.find<SonrOverlay>().overlays.length;
   static SonrOverlay get _controller => Get.find<SonrOverlay>();
+
+  // ^ Initialize Service Method ^ //
+  Future<SonrOverlay> init() async {
+    return this;
+  }
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
   static void show(Widget view,
