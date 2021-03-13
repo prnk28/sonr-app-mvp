@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_sentry/flutter_sentry.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 import 'modules/card/card_controller.dart';
@@ -9,22 +9,13 @@ const bool K_TESTER_MODE = true;
 
 // ^ Main Method ^ //
 Future<void> main() async {
-  await SentryFlutter.init(
-    (SentryFlutterOptions options) {
-      options.useFlutterBreadcrumbTracking();
-      options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
-      options.enableAutoSessionTracking = false;
-      options.addInAppExclude("flutter_neumorphic");
-      options.addInAppExclude("flutter_custom_clippers");
-      options.addInAppExclude("google_fonts");
-      options.addInAppExclude("sonr_core");
-      options.useFlutterBreadcrumbTracking();
-    },
-    appRunner: () async {
+  await FlutterSentry.wrap(
+    () async {
       WidgetsFlutterBinding.ensureInitialized();
       await initServices();
       runApp(App());
     },
+    dsn: 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326',
   );
 }
 
