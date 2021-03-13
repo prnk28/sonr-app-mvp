@@ -36,7 +36,6 @@ build: build.ios build.android
 build.ios:
 	@cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
-	cd $(IOS_ARCHIVE_DIR) && open .
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo "Finished Building iOS ➡ " && date
 
@@ -64,7 +63,7 @@ deploy: deploy.ios deploy.android
 deploy.ios:
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane ios internal
+	cd $(IOS_DIR) && fastlane internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
 

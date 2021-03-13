@@ -156,7 +156,7 @@ class HomeController extends GetxController {
 
   // ^ Prompts first time user Auto Save ^ //
   promptAutoSave() async {
-    if (!_hasPromptedAutoSave) {
+    if (!_hasPromptedAutoSave && cards.length == 1) {
       Future.delayed(2400.milliseconds, () {
         if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted.val && !SonrOverlay.isOpen) {
           Get.find<DeviceService>().requestGallery(
