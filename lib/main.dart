@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 import 'modules/card/card_controller.dart';
 import 'modules/home/home_binding.dart';
-import 'package:wiredash/wiredash.dart';
 
 const bool K_TESTER_MODE = true;
 
@@ -11,7 +11,12 @@ const bool K_TESTER_MODE = true;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initServices();
-  runApp(App());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
+    },
+    appRunner: () => runApp(App()),
+  );
 }
 
 // ^ Services (Files, Contacts) ^ //
@@ -73,26 +78,6 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    if (K_TESTER_MODE) {
-      return Wiredash(
-        theme: WiredashThemeData(fontFamily: "Poppins", brightness: DeviceService.brightness.value),
-        options: WiredashOptionsData(
-          praiseButton: false,
-          screenshotStep: false,
-          customTranslations: {const Locale.fromSubtags(languageCode: 'zh'): const SonrWiredashTranslation()},
-          locale: const Locale.fromSubtags(languageCode: 'zh'),
-        ),
-        navigatorKey: Get.key,
-        projectId: 'sonr-g4dd5i0',
-        secret: 'ksir492giek9pqyt3yjz6gwl2klc47paxp1w9wpof7z6g52v',
-        child: _buildSplashScreen(),
-      );
-    } else {
-      return _buildSplashScreen();
-    }
-  }
-
-  Widget _buildSplashScreen() {
     return GetMaterialApp(
       getPages: pageRouting,
       initialBinding: InitialBinding(),

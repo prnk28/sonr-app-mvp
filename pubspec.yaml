@@ -4,12 +4,12 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.9.0+49
+version: 0.9.0+50
 publish_to: none
 
 # -- Flutter Settings --
 environment:
-  sdk: ">=2.8.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.1"
 
 # ** ================== **
 # **    DEPENDENCIES    **
@@ -22,11 +22,11 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   flutter_hooks: ^0.16.0
-  get: ^3.25.4
-  get_storage: ^1.4.0
+  get: ^4.0.0-nullsafety.2
+  get_storage: ^2.0.1
   intl: ^0.17.0
+  sentry_flutter: ^4.0.5
   url_launcher: ^6.0.2
-  wiredash: ^0.5.0
 
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
@@ -36,11 +36,11 @@ dependencies:
 
   # -- Data --
   better_player: ^0.0.55
-  gallery_saver: ^2.0.3
+  gallery_saver:
   media_gallery: ^0.1.5
   open_file: ^3.0.3
   path: ^1.7.0
-  path_provider: ^1.6.27
+  path_provider: ^2.0.1
 
   # -- Network --
   qr_code_tools: ^0.0.6
@@ -54,7 +54,7 @@ dependencies:
   flutter_gradients: ^1.0.0+3
   flutter_neumorphic: ^3.0.4+1
   flutter_staggered_grid_view: ^0.3.4
-  google_fonts: ^1.1.2
+  google_fonts:
   photo_view: ^0.10.3
   rive: ^0.6.8
   simple_animations: ^2.5.1

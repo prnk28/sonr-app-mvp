@@ -234,7 +234,7 @@ class MediaService extends GetxService {
     } else {
       if (isVideo) {
         // Save Image to Gallery
-        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
+        var result = await GallerySaver.saveVideo(path);
 
         // Visualize Result
         if (result) {
@@ -243,7 +243,7 @@ class MediaService extends GetxService {
         return result;
       } else {
         // Save Image to Gallery
-        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+        var result = await GallerySaver.saveImage(path);
         if (!result) {
           SonrSnack.error("Unable to save Captured Video to your Gallery");
         }
@@ -261,7 +261,7 @@ class MediaService extends GetxService {
     if (card.hasMetadata()) {
       // Save Image to Gallery
       if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted.val) {
-        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+        var result = await GallerySaver.saveImage(path);
 
         // Visualize Result
         if (result) {
@@ -274,7 +274,7 @@ class MediaService extends GetxService {
 
       // Save Video to Gallery
       else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted.val) {
-        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
+        var result = await GallerySaver.saveVideo(path);
 
         // Visualize Result
         if (result) {

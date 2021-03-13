@@ -221,7 +221,6 @@ class SonrOverlay extends GetxController {
 
       // Clear List
       _controller.overlays.clear();
-      _controller.currentOverlay.nil();
 
       // Refresh List
       _controller.overlays.refresh();

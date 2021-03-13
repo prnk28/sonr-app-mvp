@@ -1,5 +1,4 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:wiredash/wiredash.dart';
 import '../../main.dart';
 import 'home_controller.dart';
 import 'search_view.dart';
@@ -204,18 +203,6 @@ class TransferCardGrid extends GetView<HomeController> {
 class _SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Set WireDash User
-    Wiredash.of(context).setUserProperties(
-      userEmail: UserService.email.value,
-      userId: UserService.wireID,
-    );
-
-    // Set WireDash Build
-    Wiredash.of(context).setBuildProperties(
-      buildNumber: '42',
-      buildVersion: '0.9.0',
-    );
-
     return NeumorphicBackground(
       borderRadius: BorderRadius.circular(20),
       margin: EdgeInsets.only(left: 15, right: 15, top: 75),
@@ -295,23 +282,6 @@ class _SettingsSheet extends StatelessWidget {
                           )
                         ])),
                     Spacer(),
-
-                    // @ Bug Reporter
-                    Align(
-                        heightFactor: 0.9,
-                        alignment: Alignment.topCenter,
-                        child: SonrButton.rectangle(
-                            margin: EdgeInsetsX.horizontal(65),
-                            onPressed: () {
-                              Get.back();
-                              Wiredash.of(context).show();
-                            },
-                            text: SonrText.normal("Report"),
-                            icon: SonrIcon.normal(
-                              Icons.bug_report,
-                              color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark,
-                            ))),
-                    Padding(padding: EdgeInsetsX.top(20)),
 
                     // @ Version Number
                     Align(
