@@ -14,7 +14,7 @@ class HomeScreen extends GetView<HomeController> {
             duration: 2.seconds,
             child: GestureDetector(
                 key: ValueKey<String>(controller.titleText.value),
-                onTap: () => controller.swapTitleText("${SonrService.lobbySize.value} Nearby"),
+//                onTap: () => controller.swapTitleText("${SonrService.lobbySize()} Nearby"),
                 child: SonrText.appBar(controller.titleText.value)),
           )),
       leading: _buildLeadingByMode(),

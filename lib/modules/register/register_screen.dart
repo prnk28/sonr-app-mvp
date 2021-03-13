@@ -6,7 +6,6 @@ import 'package:sonr_core/sonr_core.dart';
 class RegisterScreen extends GetView<RegisterController> {
   final hintName = SonrText.hintName();
   final lastNameFocus = FocusNode();
-  final emailFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -52,26 +51,8 @@ class RegisterScreen extends GetView<RegisterController> {
                     status: controller.lastNameStatus,
                     autoCorrect: false,
                     onEditingComplete: () {
-                      FocusScope.of(context).requestFocus(emailFocus);
                       controller.lastName(controller.lastName.value.capitalizeFirst);
                       controller.lastName.refresh();
-                    },
-                    onChanged: (String value) {
-                      controller.lastName(value);
-                    }),
-
-                // ***************** //
-                // ** <Email Address> ** //
-                // ***************** //
-                SonrTextField(
-                    label: "Email Address",
-                    hint: "${hintName.item1.toLowerCase()}_${hintName.item2.toLowerCase()}@email.com",
-                    status: controller.emailStatus,
-                    value: controller.lastName.value,
-                    textInputAction: TextInputAction.done,
-                    focusNode: emailFocus,
-                    autoCorrect: false,
-                    onEditingComplete: () {
                       FocusScopeNode currentFocus = FocusScope.of(Get.context);
                       if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                         FocusManager.instance.primaryFocus.unfocus();
@@ -79,7 +60,7 @@ class RegisterScreen extends GetView<RegisterController> {
                       }
                     },
                     onChanged: (String value) {
-                      controller.email(value);
+                      controller.lastName(value);
                     }),
 
                 // ********************* //
@@ -110,7 +91,6 @@ class RegisterController extends GetxController {
   // Properties
   final firstName = "".obs;
   final lastName = "".obs;
-  final email = "".obs;
   final isPending = false.obs;
 
   // Error Status
@@ -126,7 +106,6 @@ class RegisterController extends GetxController {
       var contact = new Contact();
       contact.firstName = firstName.value;
       contact.lastName = lastName.value;
-      contact.email = email.value;
 
       // Remove Textfield Focus
       FocusScopeNode currentFocus = FocusScope.of(Get.context);
@@ -150,14 +129,12 @@ class RegisterController extends GetxController {
     // Check Valid
     bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
     bool lastNameValid = GetUtils.isAlphabetOnly(lastName.value);
-    bool emailValid = GetUtils.isEmail(email.value);
 
     // Update Reactive Properties
     firstNameStatus(TextInputValidStatusUtils.fromValidBool(firstNameValid));
     lastNameStatus(TextInputValidStatusUtils.fromValidBool(lastNameValid));
-    emailStatus(TextInputValidStatusUtils.fromValidBool(emailValid));
 
     // Return Result
-    return firstNameValid && lastNameValid && emailValid;
+    return firstNameValid && lastNameValid;
   }
 }

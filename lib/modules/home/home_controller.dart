@@ -40,15 +40,14 @@ class HomeController extends GetxController {
     HomeArguments args = Get.arguments;
     if (args.isFirstLoad) {
       MediaService.checkInitialShare();
-      shiftTitleText();
     }
   }
 
   @override
   void onReady() {
     // Add Stream Handlers
-    cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
-    lobbySizeStream = SonrService.lobbySize.stream.listen(_handleLobbySizeStream);
+    cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
+    lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
 
     // Set Initial Status
     if (cards.length > 0) {

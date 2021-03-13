@@ -9,13 +9,21 @@ const bool K_TESTER_MODE = true;
 
 // ^ Main Method ^ //
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await initServices();
   await SentryFlutter.init(
-    (options) {
+    (SentryFlutterOptions options) {
+      options.useFlutterBreadcrumbTracking();
       options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
+      options.enableAutoSessionTracking = false;
+      options.addInAppExclude("flutter_neumorphic");
+      options.addInAppExclude("flutter_custom_clippers");
+      options.addInAppExclude("google_fonts");
+      options.addInAppExclude("sonr_core");
     },
-    appRunner: () => runApp(App()),
+    appRunner: () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await initServices();
+      runApp(App());
+    },
   );
 }
 
@@ -25,6 +33,7 @@ initServices() async {
   await Get.putAsync(() => DeviceService().init()); // Second Required Service
   await Get.putAsync(() => MediaService().init());
   await Get.putAsync(() => SQLService().init());
+  await Get.putAsync(() => SonrService().init());
 }
 
 // ^ Initial Controller Bindings ^ //

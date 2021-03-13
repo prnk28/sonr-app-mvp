@@ -18,7 +18,7 @@ List<GetPage> get pageRouting => [
       GetPage(
           name: '/home',
           page: () {
-            Get.putAsync(() => SonrService().init(), permanent: true);
+            Get.find<SonrService>().connect();
             return HomeScreen();
           },
           transition: Transition.topLevel,

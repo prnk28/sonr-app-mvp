@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
+import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -35,9 +36,13 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
+    return this;
+  }
+
+  // ^ Connect to Service Method ^ //
+  void connect() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
-    // await Get.find<DeviceService>().triggerNetwork();
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -51,8 +56,8 @@ class SonrService extends GetxService with TransferQueue {
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
     _connected(true);
+    Get.find<HomeController>().shiftTitleText();
     _connected.value ? print("Connected") : print("Failed to Connect.");
-    return this;
   }
 
   // ^ Sets Contact for Node ^
