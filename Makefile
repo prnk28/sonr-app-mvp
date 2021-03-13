@@ -1,15 +1,21 @@
-# Plugin Vars
+SONR_ROOT_DIR=/Users/prad/Sonr # Set this to Folder of Sonr
+
+# Project Dirs
+PROJECT_DIR=$(SONR_ROOT_DIR)/app
+ANDROID_DIR=$(SONR_ROOT_DIR)/app/android
+IOS_DIR=$(SONR_ROOT_DIR)/app/ios
+
+# Mobile Actions
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
 BUILDIOS=$(FLUTTER) build ios
 BUILDANDROID=$(FLUTTER) build appbundle
 CLEAN=$(FLUTTER) clean
-ANDROID_DIR=/Users/prad/Sonr/app/android
-IOS_DIR=/Users/prad/Sonr/app/ios
-IOS_ARCHIVE_DIR=/Users/prad/Sonr/app/build/ios/archive/
-ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/app/build/app/outputs/bundle/release/
-PROJECT_DIR=/Users/prad/Sonr/app
-SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
+
+# Result Dirs/Files
+IOS_ARCHIVE_DIR=$(SONR_ROOT_DIR)/app/build/ios/archive/
+ANDROID_ARCHIVE_DIR=$(SONR_ROOT_DIR)/app/build/app/outputs/bundle/release/
+SKL_FILE=$(SONR_ROOT_DIR)/assets/animations/flutter_01.sksl.json
 
 # Lists Options
 all: Makefile
