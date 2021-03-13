@@ -21,12 +21,12 @@ Future<void> main() async {
 
 // ^ Services (Files, Contacts) ^ //
 initServices() async {
-  await Get.putAsync(() => UserService().init()); // First Required Service
-  await Get.putAsync(() => DeviceService().init()); // Second Required Service
-  await Get.putAsync(() => MediaService().init());
-  await Get.putAsync(() => SQLService().init());
-  await Get.putAsync(() => SonrService().init());
-  await Get.putAsync(() => SonrOverlay().init());
+  await Get.putAsync(() => UserService().init(), permanent: true); // First Required Service
+  await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
+  await Get.putAsync(() => MediaService().init(), permanent: true);
+  await Get.putAsync(() => SQLService().init(), permanent: true);
+  await Get.putAsync(() => SonrService().init(), permanent: true);
+  await Get.putAsync(() => SonrOverlay().init(), permanent: true);
 }
 
 // ^ Initial Controller Bindings ^ //
