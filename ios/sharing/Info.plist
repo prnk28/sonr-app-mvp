@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleShortVersionString</key>
-	<string>0.9.0</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -18,8 +16,10 @@
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.9.0</string>
 	<key>CFBundleVersion</key>
-	<string>1079</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>No Clue Ignore</string>
 	<key>NSExtension</key>

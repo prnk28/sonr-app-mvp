@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
- 	<key>SentryDSN</key>
-  	<string>https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -35,7 +33,7 @@
 		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1079</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
 	<string>Privacy - Location When In Use Usage Description</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -66,6 +64,8 @@
 	<string>Requried for the App</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Sound Detection</string>
+	<key>SentryDSN</key>
+	<string>https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
