@@ -264,7 +264,7 @@ class _RiveContainer extends State<RiveContainer> {
             final artboard = file.mainArtboard;
 
             // Determine Animation by Tile Type
-            artboard.addController(SimpleAnimation('mail'));
+            artboard.addController(SimpleAnimation('Default'));
             setState(() => _riveArtboard = artboard);
           }
         },
@@ -279,7 +279,7 @@ class _RiveContainer extends State<RiveContainer> {
             final artboard = file.mainArtboard;
 
             // Determine Animation by Tile Type
-            artboard.addController(SimpleAnimation('test'));
+            artboard.addController(SimpleAnimation('Default'));
             setState(() => _riveArtboard = artboard);
           }
         },
