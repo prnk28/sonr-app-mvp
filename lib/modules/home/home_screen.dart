@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'home_controller.dart';
@@ -130,7 +132,10 @@ class TransferCardGrid extends GetView<HomeController> {
 
           // Zero Cards
           else if (controller.status.value == HomeState.None) {
-            return Center(child: SonrText.bold("No Cards Found!", color: Colors.grey[500]));
+            return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [Image.file(File('assets/images/rush-7.png')), SonrText.bold("No Cards Found!", color: Colors.grey[500])]);
           }
 
           // Build Cards
