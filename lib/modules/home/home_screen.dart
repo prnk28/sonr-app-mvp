@@ -282,12 +282,11 @@ class _SettingsSheet extends StatelessWidget {
                           )
                         ])),
                     Spacer(),
-
                     // @ Version Number
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.light("Closed Alpha - 0.9.0 Build 48", size: 16),
+                      child: SonrText.light("Internal Alpha - 0.9.0 Build 66", size: 16),
                     ),
                     Padding(padding: EdgeInsetsX.top(20)),
                   ]),
