@@ -17,6 +17,7 @@ class SonrOverlay extends GetxService {
 
   // References
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
+  static bool get isNotOpen => Get.find<SonrOverlay>().overlays.length == 0;
   static int get count => Get.find<SonrOverlay>().overlays.length;
   static SonrOverlay get _controller => Get.find<SonrOverlay>();
 

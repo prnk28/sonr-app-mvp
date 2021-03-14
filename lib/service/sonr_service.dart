@@ -40,7 +40,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Connect to Service Method ^ //
-  void connect() async {
+  Future<void> connect() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
 
@@ -160,7 +160,7 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
-    if (!Get.isDialogOpen) {
+    if (SonrOverlay.isNotOpen) {
       HapticFeedback.heavyImpact();
       SonrOverlay.invite(data);
     }
