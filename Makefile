@@ -37,6 +37,7 @@ build.ios:
 	@cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Building iOS ➡ " && date
 
 ## └─ android         - APB for Android
@@ -45,6 +46,7 @@ build.android:
 	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
 	cd $(ANDROID_ARCHIVE_DIR) && open .
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Building Android ➡ " && date
 
 ## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
@@ -65,6 +67,7 @@ deploy.ios:
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
 
 ## └─ android         - APB for PlayStore
@@ -73,6 +76,7 @@ deploy.android:
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
 
 ##
@@ -97,4 +101,10 @@ release:
 clean:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
+	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
+	@echo 'Cleaning iOS Fastlane Cache'
 	cd $(PROJECT_DIR) && flutter pub get
+	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
+	@echo "Finished Cleaning Sonr Mobile Frontend ➡ " && date
+
