@@ -72,6 +72,7 @@ deploy.ios:
 
 ## └─ android         - APB for PlayStore
 deploy.android:
+	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal

@@ -27,6 +27,6 @@ platform :ios do
             export_options: {
               method: "app-store",
             })
-    upload_to_testflight(skip_waiting_for_build_processing: true)
+    upload_to_testflight(skip_waiting_for_build_processing: true, groups: "Internal", expire_previous_builds: true)
   end
 end
