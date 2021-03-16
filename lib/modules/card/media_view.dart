@@ -250,10 +250,8 @@ class _MediaCardInfo extends StatelessWidget {
     // Build Overlay View
     return Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Neumorphic(
-          margin: EdgeInsets.only(left: 6, right: 6),
-          style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
+        child: GlassContainer(
+          blurRadius: 26,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
             SonrText.header("$mimeType From"),

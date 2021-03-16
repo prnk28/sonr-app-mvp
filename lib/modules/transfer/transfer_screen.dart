@@ -8,7 +8,6 @@ import 'peer_widget.dart';
 import 'transfer_controller.dart';
 
 class TransferScreen extends GetView<TransferController> {
-  // @ Initialize
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold.appBarLeading(
@@ -18,32 +17,48 @@ class TransferScreen extends GetView<TransferController> {
           onPressed: () => Get.offNamed("/home/transfer"),
           shape: NeumorphicShape.flat,
         ),
-        body: SafeArea(
-            child: Stack(
-          children: <Widget>[
-            // @ Range Lines
-            Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: Stack(
-                  children: [
-                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
-                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
-                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
+        body: GestureDetector(
+          onDoubleTap: () => controller.toggleBirdsEye(),
+          child: controller.isBirdsEye.value
+              ? LobbyBirdsEye()
+              : Stack(
+                  children: <Widget>[
+                    // @ Range Lines
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: Stack(
+                          children: [
+                            Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
+                            Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
+                            Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
+                          ],
+                        )),
+
+                    // @ Lobby View
+                    PlayAnimation<double>(
+                        tween: (0.0).tweenTo(1.0),
+                        duration: 150.milliseconds,
+                        builder: (context, child, value) {
+                          return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: LobbyStack());
+                        }),
+
+                    // @ Compass View
+                    Padding(
+                      padding: EdgeInsetsX.bottom(16.0),
+                      child: CompassView(),
+                    ),
                   ],
-                )),
+                ),
+        )));
+  }
+}
 
-            // @ Lobby View
-            PlayAnimation<double>(
-                tween: (0.0).tweenTo(1.0),
-                duration: 150.milliseconds,
-                builder: (context, child, value) {
-                  return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: LobbyStack());
-                }),
-
-            // @ Compass View
-            CompassView(),
-          ],
-        ))));
+class LobbyBirdsEye extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.amber,
+    );
   }
 }
 

@@ -6,6 +6,7 @@ class TransferController extends GetxController {
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
+  final isBirdsEye = false.obs;
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -43,6 +44,13 @@ class TransferController extends GetxController {
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
+  }
+
+  // ^ Switch Transfer Views ^ //
+  void toggleBirdsEye() {
+    isBirdsEye(!isBirdsEye.value);
+    print("isBirdsEye ${isBirdsEye.value}");
+    isBirdsEye.refresh();
   }
 
   // ^ Handle Compass Update ^ //

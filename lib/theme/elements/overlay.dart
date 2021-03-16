@@ -567,7 +567,7 @@ class _InviteReplyOverlayView extends StatelessWidget {
 
     // Build View
     return GlassContainer(
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: EdgeInsets.symmetric(horizontal: 16),
         height: 500,
         // borderRadius: BorderRadius.circular(30),
         // backendColor: Colors.transparent,
@@ -590,52 +590,48 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-      backendColor: Colors.transparent,
-      margin: EdgeInsets.all(30),
-      borderRadius: BorderRadius.circular(20),
-      child: Neumorphic(
-          style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
-          child: Container(
-            margin: EdgeInsets.all(8),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.header(title),
-              Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: SonrText.normal(description, size: 18),
+    return GlassContainer(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      height: Get.height / 3,
+      child: Container(
+        margin: EdgeInsets.all(8),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SonrText.header(title),
+          Padding(
+            padding: EdgeInsets.only(left: 10.0),
+            child: SonrText.normal(description, size: 18),
+          ),
+          Padding(padding: EdgeInsets.all(4)),
+          Divider(),
+          Padding(padding: EdgeInsets.all(4)),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            // Decline Button
+            TextButton(
+                onPressed: () {
+                  onDecision(false);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                child: SonrText.semibold(declineTitle, color: SonrColor.red, size: 18)),
+            // Accept Button
+            Container(
+              width: Get.width / 2.5,
+              height: 50,
+              child: SonrButton.stadium(
+                onPressed: () {
+                  onDecision(true);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
-              Padding(padding: EdgeInsets.all(4)),
-              Divider(),
-              Padding(padding: EdgeInsets.all(4)),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                // Decline Button
-                TextButton(
-                    onPressed: () {
-                      onDecision(false);
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    child: SonrText.semibold(declineTitle, color: SonrColor.red, size: 18)),
-                // Accept Button
-                Container(
-                  width: Get.width / 2.5,
-                  height: 50,
-                  child: SonrButton.stadium(
-                    onPressed: () {
-                      onDecision(true);
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                    text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.black.withOpacity(0.85)),
-                  ),
-                ),
-              ]),
-            ]),
-          )),
+            ),
+          ]),
+        ]),
+      ),
     );
   }
 }
