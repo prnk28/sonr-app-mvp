@@ -592,7 +592,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
   Widget build(BuildContext context) {
     return GlassContainer(
       margin: EdgeInsets.symmetric(horizontal: 16),
-      height: Get.height / 3,
+      height: Get.height / 3 + 50,
       child: Container(
         margin: EdgeInsets.all(8),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
