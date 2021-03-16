@@ -72,7 +72,7 @@ class _FileInviteView extends StatelessWidget {
                       : Icon(
                           Icons.insert_emoticon,
                           size: 100,
-                          color: Colors.black.withOpacity(0.5),
+                          color: SonrColor.black.withOpacity(0.5),
                         ),
                 ),
               ),
@@ -119,7 +119,7 @@ class _FileInviteView extends StatelessWidget {
               child: SonrButton.stadium(
                 onPressed: () => controller.acceptTransfer(card),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+                text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
             ),
           ]),
@@ -287,7 +287,7 @@ class _FileCardInfo extends StatelessWidget {
               SonrButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
               ),
             ]),
           ]),

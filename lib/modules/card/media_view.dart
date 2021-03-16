@@ -58,21 +58,20 @@ class _MediaInviteView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // @ Header
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             // Build Profile Pic
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
+            Container(
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
-                      color: Colors.black.withOpacity(0.5),
+                      color: SonrColor.black.withOpacity(0.5),
                     ),
             ),
 
             // From Information
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               invite.from.profile.hasLastName()
                   ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
@@ -105,7 +104,7 @@ class _MediaInviteView extends StatelessWidget {
               child: SonrButton.stadium(
                 onPressed: () => controller.acceptTransfer(card),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+                text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
             ),
           ]),
@@ -179,7 +178,7 @@ class _MediaItemView extends StatelessWidget {
                         child: Neumorphic(
                           style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
                           child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                              color: card.metadata.mime.type == MIME_Type.image ? Colors.black : SonrColor.currentNeumorphic),
+                              color: card.metadata.mime.type == MIME_Type.image ? SonrColor.black : SonrColor.currentNeumorphic),
                           padding: EdgeInsets.all(10),
                         ),
                       ),
@@ -338,7 +337,7 @@ class _MediaCardInfo extends StatelessWidget {
               SonrButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
               ),
             ]),
           ]),

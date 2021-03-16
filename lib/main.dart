@@ -107,8 +107,7 @@ class _AppState extends State<App> {
                     return AnimatedOpacity(
                         opacity: value,
                         duration: 400.milliseconds,
-                        child:
-                            Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", gradient: FlutterGradientNames.glassWater)));
+                        child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white)));
                   }),
             ],
           )),

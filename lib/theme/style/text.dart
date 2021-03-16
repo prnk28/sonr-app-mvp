@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
@@ -8,7 +9,7 @@ import 'package:sonr_app/data/model/model_register.dart';
 import 'style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/theme.dart' hide Platform;
 
 class SonrText extends StatelessWidget {
   final String text;
@@ -33,34 +34,57 @@ class SonrText extends StatelessWidget {
       this.size})
       : super(key: key);
 
+  // ^ Black(w800) Text with Provided Data
+  factory SonrText.header(String text, {double size = 40, Color color, Key key}) {
+    return SonrText(text,
+        isGradient: color != null ? false : true,
+        isCentered: true,
+        weight: FontWeight.w700,
+        size: size,
+        key: key,
+        color: color,
+        gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear());
+  }
+
+  factory SonrText.title(String text, {Key key}) {
+    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: SonrColor.black);
+  }
+
+  factory SonrText.subtitle(String text, {Key key}) {
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 25 : 27, key: key, color: SonrColor.black);
+  }
+
+  factory SonrText.paragraph(String text, {Key key}) {
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 16 : 17, key: key, color: SonrColor.black);
+  }
+
+  factory SonrText.span(String text, {Key key}) {
+    return SonrText(text, weight: FontWeight.w300, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.black);
+  }
+
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.light(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+  factory SonrText.light(String text, {Color color = SonrColor.black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ Normal(w400) Text with Provided Data
-  factory SonrText.normal(String text, {Color color = Colors.black, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+  factory SonrText.normal(String text, {Color color = SonrColor.black, double size = 24, Key key}) {
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
-  factory SonrText.medium(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+  factory SonrText.medium(String text, {Color color = SonrColor.black, double size = 16, Key key}) {
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white70 : Colors.black87);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white70 : SonrColor.black);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
-  factory SonrText.bold(String text, {Color color = Colors.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
-  }
-
-  // ^ Black(w800) Text with Provided Data
-  factory SonrText.black(String text, {Color color = Colors.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black);
+  factory SonrText.bold(String text, {Color color = SonrColor.black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
@@ -107,11 +131,11 @@ class SonrText extends StatelessWidget {
               TextSpan(
                   text: dateText,
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w300, fontSize: size, color: DeviceService.isDarkMode.value ? Colors.black : Colors.white)),
+                      fontWeight: FontWeight.w300, fontSize: size, color: DeviceService.isDarkMode.value ? SonrColor.black : Colors.white)),
               TextSpan(
                   text: "  $timeText",
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600, fontSize: size, color: DeviceService.isDarkMode.value ? Colors.black : Colors.white)),
+                      fontWeight: FontWeight.w600, fontSize: size, color: DeviceService.isDarkMode.value ? SonrColor.black : Colors.white)),
             ])));
   }
 
@@ -124,22 +148,9 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: seconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: Colors.black)),
-              TextSpan(text: "  s", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: Colors.black)),
+              TextSpan(text: seconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.black)),
+              TextSpan(text: "  s", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.black)),
             ])));
-  }
-
-  // ^ Header Text with Provided Data
-  factory SonrText.header(String text, {FlutterGradientNames gradient = FlutterGradientNames.viciousStance, double size = 40, Key key}) {
-    return SonrText(
-      text,
-      isGradient: true,
-      isCentered: true,
-      weight: FontWeight.w700,
-      size: size,
-      key: key,
-      gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear(),
-    );
   }
 
   // ^ Gradient Text with Provided Data
@@ -165,7 +176,7 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: Colors.black)),
+              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.black)),
               TextSpan(
                   text: " from ${firstName.capitalizeFirst}",
                   style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
@@ -173,7 +184,7 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Rich Text with FirstName and Invite
-  factory SonrText.search(String query, String value, {Color color = Colors.black, double size = 16, Key key}) {
+  factory SonrText.search(String query, String value, {Color color = SonrColor.black, double size = 16, Key key}) {
     // Text Contains Query
     if (value.toLowerCase().contains(query.toLowerCase())) {
       query = query.toLowerCase();
@@ -283,7 +294,7 @@ class SonrText extends StatelessWidget {
     if (DeviceService.isDarkMode.value) {
       return Colors.white;
     } else {
-      return Colors.black;
+      return SonrColor.black;
     }
   }
 
@@ -384,7 +395,7 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,

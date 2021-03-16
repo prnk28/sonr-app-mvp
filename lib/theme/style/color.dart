@@ -18,6 +18,7 @@ class SonrColor {
   static const Color White = Color(0xffE0E0E0);
 
   // ** Color Pallette ** //
+  static const Color black = Color(0xff202020);
   static Color get primary => DeviceService.isDarkMode.value ? Color(0xff2c2b2b) : Color(0xff538fff);
   static Color get secondary => DeviceService.isDarkMode.value ? Color(0xff9757ff) : Color(0xff543191);
   static Color get tertiary => DeviceService.isDarkMode.value ? Color(0xff52ffc0) : Color(0xff2e906e);

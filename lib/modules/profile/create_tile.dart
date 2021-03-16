@@ -163,7 +163,7 @@ class _InfoText extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 34,
               fontWeight: FontWeight.bold,
-              color: DeviceService.isDarkMode.value ? Colors.white : Colors.black,
+              color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black,
             )),
       ),
     ]);

@@ -123,8 +123,8 @@ class TransferCardGrid extends GetView<HomeController> {
           // New User
           else if (controller.status.value == HomeState.First) {
             return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrText.header("Welcome to Sonr", gradient: FlutterGradientNames.magicRay, size: 36),
-              SonrText.normal("Share to begin viewing your Cards!", color: Colors.black.withOpacity(0.7), size: 18)
+              SonrText.header("Welcome to Sonr"),
+              SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.black.withOpacity(0.7), size: 18)
             ]);
           }
 

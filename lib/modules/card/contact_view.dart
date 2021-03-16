@@ -128,7 +128,7 @@ class _ContactInviteView extends StatelessWidget {
                 }
               },
               icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-              text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+              text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
             ),
           ),
         ])

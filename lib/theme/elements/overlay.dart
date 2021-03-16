@@ -630,7 +630,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                       }
                     },
                     icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                    text: SonrText.semibold(acceptTitle, size: 18, color: Colors.black.withOpacity(0.85)),
+                    text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.black.withOpacity(0.85)),
                   ),
                 ),
               ]),

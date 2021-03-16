@@ -23,7 +23,7 @@ class GlassContainer extends StatelessWidget {
     Key key,
     this.width,
     this.height,
-    this.blurRadius = 6.0,
+    this.blurRadius = 4.0,
     this.child,
     this.margin,
     this.padding,
@@ -51,18 +51,11 @@ class GlassContainer extends StatelessWidget {
                   ),
                 ),
               ),
-              IgnorePointer(
-                child: Container(
-                  foregroundDecoration: BoxDecoration(
-                      border: DeviceService.isDarkMode.value
-                          ? Border.all(color: Colors.black.withOpacity(0.4), width: 2)
-                          : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
-                      borderRadius: borderRadius),
-                  decoration: BoxDecoration(
-                    // Fill Opacity
-                    color: DeviceService.isDarkMode.value ? Colors.black.withOpacity(0.20) : Colors.white.withOpacity(0.20),
-                    borderRadius: borderRadius,
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  // Fill Opacity
+                  color: DeviceService.isDarkMode.value ? SonrColor.black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
+                  borderRadius: borderRadius,
                 ),
               ),
               Container(
@@ -72,7 +65,7 @@ class GlassContainer extends StatelessWidget {
                     // Object Opacity
                     gradient: LinearGradient(
                       colors: DeviceService.isDarkMode.value
-                          ? [Colors.black.withOpacity(0.8), Colors.black.withOpacity(0.15)]
+                          ? [SonrColor.black.withOpacity(0.8), SonrColor.black.withOpacity(0.15)]
                           : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -81,6 +74,15 @@ class GlassContainer extends StatelessWidget {
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
                   child: Container(margin: EdgeInsets.all(8), color: const Color(0x0), child: child),
+                ),
+              ),
+              IgnorePointer(
+                child: Container(
+                  foregroundDecoration: BoxDecoration(
+                      border: DeviceService.isDarkMode.value
+                          ? Border.all(color: SonrColor.black.withOpacity(0.4), width: 2)
+                          : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
+                      borderRadius: borderRadius),
                 ),
               ),
             ],
