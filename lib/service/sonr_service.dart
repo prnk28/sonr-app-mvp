@@ -36,11 +36,6 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
-    return this;
-  }
-
-  // ^ Connect to Service Method ^ //
-  Future<void> connect() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
 
@@ -55,7 +50,12 @@ class SonrService extends GetxService with TransferQueue {
     _node.onReceived = _handleReceived;
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
-    _connected(true);
+    return this;
+  }
+
+  // ^ Connect to Service Method ^ //
+  Future<void> connect() async {
+    _node.connect();
     Get.find<HomeController>().shiftTitleText();
     _connected.value ? print("Connected") : print("Failed to Connect.");
   }
@@ -143,7 +143,9 @@ class SonrService extends GetxService with TransferQueue {
   // ******* Callbacks ********
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
-  void _handleConnected() {
+  void _handleConnected(bool data) {
+    print("Connection $data");
+    _connected(data);
     _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
   }
 
