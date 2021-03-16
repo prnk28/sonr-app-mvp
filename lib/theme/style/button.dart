@@ -381,7 +381,7 @@ class SonrButton extends StatelessWidget {
         onPressed: () {
           HapticFeedback.lightImpact();
           onPressed();
-          child.animate(AnimType.Shake);
+          child.shake();
         },
         margin: margin,
         style: NeumorphicStyle(

@@ -141,21 +141,9 @@ class SonrAnimatedWidget extends GetWidget<AnimatedController> {
     return child;
   }
 
-  void animate(AnimType anim) {
-    switch (anim) {
-      case AnimType.Shake:
-        controller.shake();
-        break;
-      case AnimType.FadeIn:
-        controller.fadeIn();
-        break;
-      case AnimType.FadeOut:
-        controller.fadeOut();
-        break;
-      default:
-        break;
-    }
-  }
+  void shake() => controller.shake();
+  void fadeIn() => controller.fadeIn();
+  void fadeOut() => controller.fadeOut();
 
   void reset() {
     controller.type(AnimType.None);

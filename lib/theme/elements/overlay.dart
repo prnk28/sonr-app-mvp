@@ -501,7 +501,7 @@ class _DropdownOverlayView extends StatelessWidget {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 15.0),
+        padding: const EdgeInsets.only(top: 16.0),
         child: Container(
           height: (items.length * size.height) / 1.5 + height,
           width: size.width + width,
@@ -516,7 +516,7 @@ class _DropdownOverlayView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: NeumorphicButton(
                     style: SonrStyle.flat,
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(8),
                     onPressed: () {
                       onChanged(index);
                       SonrPositionedOverlay.back();
@@ -598,8 +598,8 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           SonrText.header(title),
           Padding(
-            padding: EdgeInsets.only(left: 10.0),
-            child: SonrText.normal(description, size: 18),
+            padding: EdgeInsets.only(left: 8.0),
+            child: SonrText.subtitle(description),
           ),
           Padding(padding: EdgeInsets.all(4)),
           Divider(),
