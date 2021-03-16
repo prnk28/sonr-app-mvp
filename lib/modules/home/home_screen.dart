@@ -73,7 +73,7 @@ class HomeScreen extends GetView<HomeController> {
     if (K_TESTER_MODE) {
       return SonrButton.circle(
         icon: SonrIcon.more,
-        onPressed: () => Get.bottomSheet(_SettingsSheet()),
+        onPressed: () => Get.bottomSheet(_SettingsSheet(), backgroundColor: Colors.transparent),
         shape: NeumorphicShape.flat,
       );
     } else {
@@ -210,22 +210,15 @@ class TransferCardGrid extends GetView<HomeController> {
 class _SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-      borderRadius: BorderRadius.circular(20),
-      margin: EdgeInsets.only(left: 15, right: 15, top: 75),
-      backendColor: Colors.transparent,
+    return GlassContainer(
+      // borderRadius: BorderRadius.circular(20),
+      // margin: EdgeInsets.only(left: 15, right: 15, top: 75),
+      // backendColor: Colors.transparent,
+      height: Get.height / 3,
       child: Stack(children: [
         Container(
             width: Get.width,
-            child: Obx(() => Neumorphic(
-                style: NeumorphicStyle(
-                  intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
-                  depth: DeviceService.isDarkMode.value ? 6 : 8,
-                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                  color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-                ),
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16),
+            child: Obx(() => Container(
                   child: Column(children: [
                     // @ Title of Pane
                     Align(
@@ -243,7 +236,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
                               inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: DeviceService.isDarkMode.value,
@@ -260,7 +253,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
                               inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: DeviceService.hasPointToShare.value,
@@ -297,7 +290,7 @@ class _SettingsSheet extends StatelessWidget {
                     ),
                     Padding(padding: EdgeInsetsX.top(20)),
                   ]),
-                ))))
+                )))
       ]),
     );
   }

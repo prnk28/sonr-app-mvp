@@ -59,7 +59,7 @@ class _ContactInviteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(6),
+      margin: EdgeInsets.all(8),
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -112,7 +112,7 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold("Decline", color: SonrColor.Red, size: 18),
+                child: SonrText.semibold("Decline", color: SonrColor.red, size: 18),
               )),
           // Accept Button
           Container(

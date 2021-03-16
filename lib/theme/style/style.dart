@@ -1,5 +1,6 @@
 // Custom Theme Aspects
 export '../elements/header.dart';
+export 'background.dart';
 export 'button.dart';
 export 'color.dart';
 export 'icon.dart';
@@ -9,6 +10,7 @@ export 'text.dart';
 
 // Global UI Widgets
 export '../elements/animation.dart';
+export '../elements/glass.dart';
 export '../elements/painter.dart';
 export '../elements/sheet.dart';
 export '../elements/overlay.dart';

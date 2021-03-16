@@ -62,20 +62,13 @@ class _MediaInviteView extends StatelessWidget {
             // Build Profile Pic
             Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
-              child: Neumorphic(
-                padding: EdgeInsets.all(4),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  depth: -10,
-                ),
-                child: invite.from.profile.hasPicture()
-                    ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                    : Icon(
-                        Icons.insert_emoticon,
-                        size: 60,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-              ),
+              child: invite.from.profile.hasPicture()
+                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+                  : Icon(
+                      Icons.insert_emoticon,
+                      size: 60,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
             ),
 
             // From Information
@@ -93,13 +86,7 @@ class _MediaInviteView extends StatelessWidget {
           Container(
             width: card.preview.isNotEmpty ? Get.width - 50 : Get.width - 150,
             height: card.preview.isNotEmpty ? Get.height / 3 : Get.height / 5,
-            child: Neumorphic(
-                padding: EdgeInsets.all(8),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                  depth: -10,
-                ),
-                child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.properties.mime, size: 60)),
+            child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.properties.mime, size: 60),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -345,7 +332,7 @@ class _MediaCardInfo extends StatelessWidget {
                     });
                   }
                 },
-                text: SonrText.medium("Delete", color: SonrColor.Red),
+                text: SonrText.medium("Delete", color: SonrColor.red),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               SonrButton.rectangle(

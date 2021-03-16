@@ -332,14 +332,6 @@ class _SonrFixedOverlayEntry {
       return Positioned.fill(
         child: GestureDetector(
           onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
-          child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: blur,
-                sigmaY: blur,
-              ),
-              child: Container(
-                color: backgroundColor,
-              )),
         ),
       );
     });
@@ -445,41 +437,35 @@ class _AlertOverlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-      backendColor: Colors.transparent,
+    return GlassContainer(
+      // backendColor: Colors.transparent,
       margin: EdgeInsets.all(30),
-      borderRadius: BorderRadius.circular(20),
-      child: Neumorphic(
-          style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
-          child: Container(
-            margin: EdgeInsets.all(8),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.header(title),
-              Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: SonrText.normal(description, size: 18),
-              ),
-              Padding(padding: EdgeInsets.all(4)),
-              Divider(),
-              Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                // Accept Button
-                Container(
-                  width: Get.width / 3,
-                  child: SonrButton.stadium(
-                    onPressed: () {
-                      onPressed();
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    icon: SonrIcon.accept,
-                    text: SonrText.semibold(buttonText, size: 18),
-                  ),
-                ),
-              ]),
-            ]),
-          )),
+      // borderRadius: BorderRadius.circular(20),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrText.header(title),
+        Padding(
+          padding: EdgeInsets.only(left: 10.0),
+          child: SonrText.normal(description, size: 18),
+        ),
+        Padding(padding: EdgeInsets.all(4)),
+        Divider(),
+        Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          // Accept Button
+          Container(
+            width: Get.width / 3,
+            child: SonrButton.stadium(
+              onPressed: () {
+                onPressed();
+                if (closeOnResponse) {
+                  SonrOverlay.back();
+                }
+              },
+              icon: SonrIcon.accept,
+              text: SonrText.semibold(buttonText, size: 18),
+            ),
+          ),
+        ]),
+      ]),
     );
   }
 }
@@ -580,14 +566,12 @@ class _InviteReplyOverlayView extends StatelessWidget {
     }
 
     // Build View
-    return NeumorphicBackground(
+    return GlassContainer(
         margin: EdgeInsets.symmetric(horizontal: 20),
-        borderRadius: BorderRadius.circular(30),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-          style: NeumorphicStyle(color: SonrColor.White),
-          child: view,
-        ));
+        height: 500,
+        // borderRadius: BorderRadius.circular(30),
+        // backendColor: Colors.transparent,
+        child: view);
   }
 }
 
@@ -633,7 +617,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                         SonrOverlay.back();
                       }
                     },
-                    child: SonrText.semibold(declineTitle, color: SonrColor.Red, size: 18)),
+                    child: SonrText.semibold(declineTitle, color: SonrColor.red, size: 18)),
                 // Accept Button
                 Container(
                   width: Get.width / 2.5,
