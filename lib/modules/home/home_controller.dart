@@ -181,11 +181,11 @@ class HomeController extends GetxController {
   }
 
   // ^ Provides Information at home page ^ //
-  void shiftTitleText({Duration timeout = const Duration(milliseconds: 3500)}) {
+  void readyTitleText(int lobbySize, {Duration timeout = const Duration(milliseconds: 3500)}) {
     titleText("Hello, ${UserService.firstName.value}");
     _timeoutActive = true;
     Future.delayed(timeout, () {
-      titleText("${SonrService.lobbySize.value} Nearby");
+      titleText("$lobbySize Nearby");
     });
     Future.delayed(timeout * 2, () {
       titleText("Home");

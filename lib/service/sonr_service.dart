@@ -10,15 +10,19 @@ import 'sql_service.dart';
 import 'user_service.dart';
 export 'package:sonr_core/sonr_core.dart';
 
+enum SonrServiceStatus { Connected, Ready, Busy, Default, Error }
+
 class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
-  final _connected = false.obs;
+  final _status = SonrServiceStatus.Default.obs;
   final _peers = Map<String, Peer>().obs;
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
+
+  static bool get isReady => Get.find<SonrService>()._status.value == SonrServiceStatus.Ready;
+  static Rx<SonrServiceStatus> get status => Get.find<SonrService>()._status;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
-  static RxBool get connected => Get.find<SonrService>()._connected;
   static SonrService get to => Get.find<SonrService>();
   static RxDouble get progress => Get.find<SonrService>()._progress;
   // @ Set References
@@ -27,7 +31,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(500.milliseconds, (timer) {
-      if (_connected.value) {
+      if (isReady) {
         // Update Direction
         DeviceService.direction.value ?? _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
       }
@@ -42,6 +46,7 @@ class SonrService extends GetxService with TransferQueue {
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
     _node.onConnected = _handleConnected;
+    _node.onReady = _handleReady;
     _node.onRefreshed = _handleRefresh;
     _node.onDirected = _handleDirect;
     _node.onInvited = _handleInvited;
@@ -56,45 +61,52 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Connect to Service Method ^ //
   Future<void> connect() async {
     _node.connect();
-    Get.find<HomeController>().shiftTitleText();
-    _connected.value ? print("Connected") : print("Failed to Connect.");
+    isReady ? print("Connected") : print("Failed to Connect.");
   }
 
   // ^ Sets Contact for Node ^
   static void setContact(Contact contact) async {
     // - Check Connected -
-    if (to._connected.conn) {
+    if (isReady) {
       await to._node.setContact(contact);
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
     }
   }
 
   // ^ Set Payload for Contact ^ //
   static queueContact() async {
     // - Check Connected -
-    if (to._connected.conn) {
+    if (isReady) {
       to.addToQueue(TransferQueueItem.contact());
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
     }
   }
 
   // ^ Set Payload for Media ^ //
   static queueMedia(MediaFile media) async {
     // - Check Connected -
-    if (to._connected.conn) {
+    if (isReady) {
       to.addToQueue(TransferQueueItem.media(media));
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
     }
   }
 
   // ^ Set Payload for URL Link ^ //
   static queueUrl(String url) async {
     // - Check Connected -
-    if (to._connected.conn) {
+    if (isReady) {
       to.addToQueue(TransferQueueItem.url(url));
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
     }
   }
 
   // ^ Invite-Peer Event ^
   static invite(PeerController c) async {
-    if (to._connected.conn) {
+    if (isReady) {
       // Set Peer Controller
       to.currentInvited(c);
 
@@ -119,20 +131,24 @@ class SonrService extends GetxService with TransferQueue {
       else {
         SonrSnack.error("No media, contact, or link provided");
       }
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
     }
   }
 
   // ^ Respond-Peer Event ^
   static respond(bool decision) async {
-    if (to._connected.conn) {
+    if (isReady) {
       // Send Response
       await to._node.respond(decision);
+    } else {
+      SonrSnack.error("Not Connected to the Sonr Network");
     }
   }
 
   // ^ Async Function notifies transfer complete ^ //
   static Future<TransferCard> completed() async {
-    if (!to._connected.value) {
+    if (!isReady) {
       SonrSnack.error("Not Connected to the Sonr Network");
       to.received.completeError("Error Transferring File");
     }
@@ -144,9 +160,29 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
   void _handleConnected(bool data) {
-    print("Connection $data");
-    _connected(data);
+    // Update Status
+    _status(data ? SonrServiceStatus.Connected : SonrServiceStatus.Error);
+
+    // Check for Homescreen Controller
+    if (Get.isRegistered<HomeController>()) {
+      if (data) {
+        Get.find<HomeController>().swapTitleText("Connected");
+      } else {
+        Get.find<HomeController>().swapTitleText("Error Connecting");
+      }
+    }
+  }
+
+  // ^ Handle Bootstrap Result ^ //
+  void _handleReady(bool data) {
+    // Update Status
+    _status(data ? SonrServiceStatus.Ready : SonrServiceStatus.Connected);
     _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
+
+    // Check for Homescreen Controller
+    if (Get.isRegistered<HomeController>() && data) {
+      Get.find<HomeController>().readyTitleText(lobbySize.value);
+    }
   }
 
   // ^ Handle Lobby Update ^ //
@@ -213,16 +249,5 @@ class SonrService extends GetxService with TransferQueue {
   void _handleError(ErrorMessage data) async {
     print(data.method + "() - " + data.message);
     SonrSnack.error("Internal Error Occurred");
-  }
-}
-
-extension SonrSnackbarAction on RxBool {
-  bool get conn {
-    if (this.value) {
-      return true;
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-      return false;
-    }
   }
 }
