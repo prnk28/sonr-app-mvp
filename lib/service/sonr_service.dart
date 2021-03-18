@@ -31,7 +31,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(500.milliseconds, (timer) {
-      if (isReady) {
+      if (Get.find<SonrService>()._status.value == SonrServiceStatus.Ready) {
         // Update Direction
         DeviceService.direction.value ?? _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
       }
