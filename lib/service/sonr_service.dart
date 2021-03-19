@@ -10,17 +10,12 @@ import 'sql_service.dart';
 import 'user_service.dart';
 export 'package:sonr_core/sonr_core.dart';
 
-enum SonrServiceStatus { Connected, Ready, Busy, Default, Error }
-
 class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
-  final _status = SonrServiceStatus.Default.obs;
   final _peers = Map<String, Peer>().obs;
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
 
-  static bool get isReady => Get.find<SonrService>()._status.value == SonrServiceStatus.Ready;
-  static Rx<SonrServiceStatus> get status => Get.find<SonrService>()._status;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static SonrService get to => Get.find<SonrService>();
@@ -31,10 +26,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(500.milliseconds, (timer) {
-      if (Get.find<SonrService>()._status.value == SonrServiceStatus.Ready) {
-        // Update Direction
-        DeviceService.direction.value ?? _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
-      }
+      DeviceService.direction.value ?? _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
     });
   }
 
@@ -61,97 +53,68 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Connect to Service Method ^ //
   Future<void> connect() async {
     _node.connect();
-    isReady ? print("Connected") : print("Failed to Connect.");
   }
 
   // ^ Sets Contact for Node ^
   static void setContact(Contact contact) async {
     // - Check Connected -
-    if (isReady) {
-      await to._node.setContact(contact);
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-    }
+    await to._node.setContact(contact);
+    //SonrSnack.error("Not Connected to the Sonr Network");
   }
 
   // ^ Set Payload for Contact ^ //
   static queueContact() async {
     // - Check Connected -
-    if (isReady) {
-      to.addToQueue(TransferQueueItem.contact());
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-    }
+    to.addToQueue(TransferQueueItem.contact());
   }
 
   // ^ Set Payload for Media ^ //
   static queueMedia(MediaFile media) async {
     // - Check Connected -
-    if (isReady) {
-      to.addToQueue(TransferQueueItem.media(media));
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-    }
+    to.addToQueue(TransferQueueItem.media(media));
   }
 
   // ^ Set Payload for URL Link ^ //
   static queueUrl(String url) async {
     // - Check Connected -
-    if (isReady) {
-      to.addToQueue(TransferQueueItem.url(url));
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-    }
+    to.addToQueue(TransferQueueItem.url(url));
   }
 
   // ^ Invite-Peer Event ^
   static invite(PeerController c) async {
-    if (isReady) {
-      // Set Peer Controller
-      to.currentInvited(c);
+    // Set Peer Controller
+    to.currentInvited(c);
 
-      // File Payload
-      if (to.payload == Payload.MEDIA) {
-        assert(to.currentTransfer.media != null);
-        await to._node.inviteFile(c.peer, to.currentTransfer.media);
-      }
+    // File Payload
+    if (to.payload == Payload.MEDIA) {
+      assert(to.currentTransfer.media != null);
+      await to._node.inviteFile(c.peer, to.currentTransfer.media);
+    }
 
-      // Contact Payload
-      else if (to.payload == Payload.CONTACT) {
-        await to._node.inviteContact(c.peer);
-      }
+    // Contact Payload
+    else if (to.payload == Payload.CONTACT) {
+      await to._node.inviteContact(c.peer);
+    }
 
-      // Link Payload
-      else if (to.payload == Payload.URL) {
-        assert(to.currentTransfer.url != null);
-        await to._node.inviteLink(c.peer, to.currentTransfer.url);
-      }
+    // Link Payload
+    else if (to.payload == Payload.URL) {
+      assert(to.currentTransfer.url != null);
+      await to._node.inviteLink(c.peer, to.currentTransfer.url);
+    }
 
-      // No Payload
-      else {
-        SonrSnack.error("No media, contact, or link provided");
-      }
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
+    // No Payload
+    else {
+      SonrSnack.error("No media, contact, or link provided");
     }
   }
 
   // ^ Respond-Peer Event ^
   static respond(bool decision) async {
-    if (isReady) {
-      // Send Response
-      await to._node.respond(decision);
-    } else {
-      SonrSnack.error("Not Connected to the Sonr Network");
-    }
+    await to._node.respond(decision);
   }
 
   // ^ Async Function notifies transfer complete ^ //
   static Future<TransferCard> completed() async {
-    if (!isReady) {
-      SonrSnack.error("Not Connected to the Sonr Network");
-      to.received.completeError("Error Transferring File");
-    }
     return to.received.future;
   }
 
@@ -160,9 +123,6 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
   void _handleConnected(bool data) {
-    // Update Status
-    _status(data ? SonrServiceStatus.Connected : SonrServiceStatus.Error);
-
     // Check for Homescreen Controller
     if (Get.isRegistered<HomeController>()) {
       if (data) {
@@ -176,7 +136,6 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Handle Bootstrap Result ^ //
   void _handleReady(bool data) {
     // Update Status
-    _status(data ? SonrServiceStatus.Ready : SonrServiceStatus.Connected);
     _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
 
     // Check for Homescreen Controller

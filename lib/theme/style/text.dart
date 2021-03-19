@@ -51,7 +51,7 @@ class SonrText extends StatelessWidget {
   }
 
   factory SonrText.subtitle(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 25 : 27, key: key, color: SonrColor.black);
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.black);
   }
 
   factory SonrText.paragraph(String text, {Key key}) {
