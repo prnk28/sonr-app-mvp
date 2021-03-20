@@ -10,7 +10,6 @@ const double K_EXPANDED_HEIGHT = 130;
 const double K_EXPANDED_WIDTH = 165;
 const double K_DEFAULT_HEIGHT = 70;
 const double K_DEFAULT_WIDTH = 30;
-const Duration K_ANIMATION_DURATION = const Duration(milliseconds: 200);
 
 class ShareButton extends StatelessWidget {
   @override
@@ -24,15 +23,13 @@ class ShareButton extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
                 curve: Curves.easeInBack,
+                duration: const Duration(milliseconds: 200),
                 padding: EdgeInsetsDirectional.only(start: 30),
                 width: controller.isExpanded.value ? Get.width / 2 + K_EXPANDED_WIDTH : Get.width / 2 + K_DEFAULT_WIDTH,
                 height: controller.isExpanded.value ? K_EXPANDED_HEIGHT : K_DEFAULT_HEIGHT,
-                duration: K_ANIMATION_DURATION,
                 child: Center(
                   child: GestureDetector(
-                    onLongPress: () async {
-                      
-                    },
+                    onLongPress: () async {},
                     child: NeumorphicButton(
                       child: controller.isExpanded.value ? expandedView : defaultView,
                       onPressed: controller.toggle,
@@ -94,8 +91,6 @@ class _ExpandedView extends StatelessWidget {
         });
   }
 }
-
-
 
 // ** Share Button Row ** //
 class _ShareButtonRow extends StatelessWidget {
@@ -278,4 +273,3 @@ class ShareButtonController extends GetxController {
     }
   }
 }
-

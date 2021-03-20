@@ -34,67 +34,64 @@ class GlassContainer extends StatelessWidget {
     final double blurSigma = blurRadius * 0.57735 + 0.5;
     final borderRadius = BorderRadius.circular(20);
 
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        margin: margin,
-        padding: padding,
-        width: width,
-        height: height,
-        child: Obx(() => Stack(
-              clipBehavior: Clip.none,
-              children: [
-                ClipPath(
-                  clipper: _InvRRectClipper(20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: borderRadius,
-                      boxShadow: DeviceService.isDarkMode.value ? darkBoxShadow : lightBoxShadow,
-                    ),
-                  ),
-                ),
-                Container(
+    return Container(
+      margin: margin,
+      padding: padding,
+      width: width,
+      height: height,
+      child: Obx(() => Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ClipPath(
+                clipper: _InvRRectClipper(20),
+                child: Container(
                   decoration: BoxDecoration(
-                    // Fill Opacity
-                    color: DeviceService.isDarkMode.value ? SonrColor.black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
                     borderRadius: borderRadius,
+                    boxShadow: DeviceService.isDarkMode.value ? darkBoxShadow : lightBoxShadow,
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      backgroundBlendMode: BlendMode.overlay,
-                      borderRadius: borderRadius,
-                      // Object Opacity
-                      gradient: LinearGradient(
-                        colors: DeviceService.isDarkMode.value
-                            ? [SonrColor.black.withOpacity(0.8), SonrColor.black.withOpacity(0.15)]
-                            : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )),
-                  clipBehavior: Clip.antiAlias,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-                    child: Container(
-                      margin: EdgeInsets.all(8),
-                      padding: EdgeInsets.only(bottom: 8),
-                      color: const Color(0x0),
-                      child: child,
-                    ),
-                  ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  // Fill Opacity
+                  color: DeviceService.isDarkMode.value ? SonrColor.black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
+                  borderRadius: borderRadius,
                 ),
-                IgnorePointer(
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    backgroundBlendMode: BlendMode.overlay,
+                    borderRadius: borderRadius,
+                    // Object Opacity
+                    gradient: LinearGradient(
+                      colors: DeviceService.isDarkMode.value
+                          ? [SonrColor.black.withOpacity(0.8), SonrColor.black.withOpacity(0.15)]
+                          : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )),
+                clipBehavior: Clip.antiAlias,
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
                   child: Container(
-                    foregroundDecoration: BoxDecoration(
-                        border: DeviceService.isDarkMode.value
-                            ? Border.all(color: SonrColor.black.withOpacity(0.4), width: 2)
-                            : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
-                        borderRadius: borderRadius),
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.only(bottom: 8),
+                    color: const Color(0x0),
+                    child: child,
                   ),
                 ),
-              ],
-            )),
-      ),
+              ),
+              IgnorePointer(
+                child: Container(
+                  foregroundDecoration: BoxDecoration(
+                      border: DeviceService.isDarkMode.value
+                          ? Border.all(color: SonrColor.black.withOpacity(0.4), width: 2)
+                          : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
+                      borderRadius: borderRadius),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
