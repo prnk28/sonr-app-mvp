@@ -4,7 +4,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'compass_view.dart';
-import 'group_view.dart';
 import 'peer_widget.dart';
 import 'transfer_controller.dart';
 
@@ -19,11 +18,11 @@ class TransferScreen extends GetView<TransferController> {
             shape: NeumorphicShape.flat,
           ),
           action: SonrButton.circle(
-              icon: SonrIcon.add,
+              icon: SonrIcon.remote,
               onPressed: () async {
                 String name = await SonrService.createGroup();
-                print("New Group Name $name");
-                SonrOverlay.show(CreateGroupView(name));
+                controller.toggleRemote();
+                SonrSnack.remote(message: name, icon: Icon(SonrIconData.remote));
               }),
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),

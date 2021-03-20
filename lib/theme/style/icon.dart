@@ -144,7 +144,8 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get more =>
       SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrColor.red, size: 36);
-  static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.primary, size: 36);
+  static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.Blue, size: 36);
+  static SonrIcon get remote => SonrIcon.normal(SonrIconData.remote, color: SonrColor.Blue, size: 28);
 
   // ^ Build View of Icon ^ //
   @override
@@ -262,6 +263,7 @@ class SonrIconData {
   static const IconData twitter = IconData(0xf309, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData medium_alt = IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData media = IconData(0xf87c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData remote = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
 
 class IconGradientData {

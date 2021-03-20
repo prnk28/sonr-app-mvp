@@ -1,6 +1,6 @@
 import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
-import 'group_view.dart';
+import 'search_view.dart';
 import 'home_controller.dart';
 // import 'search_view.dart';
 import 'share_button.dart';
@@ -14,10 +14,17 @@ class HomeScreen extends GetView<HomeController> {
       title: "Home",
       leading: _buildLeadingByMode(),
       action: SonrButton.circle(
-          icon: SonrIcon.groups,
+          icon: SonrIcon.search,
           shape: NeumorphicShape.flat,
           onPressed: () {
-            SonrOverlay.show(JoinGroupView());
+            if (controller.status.value != HomeState.None) {
+              SonrOverlay.show(
+                SearchView(),
+                barrierDismissible: true,
+              );
+            } else {
+              SonrSnack.error("No Cards Found");
+            }
           }),
       floatingActionButton: ShareButton(),
       body: NeumorphicBackground(

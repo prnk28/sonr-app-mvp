@@ -7,6 +7,7 @@ class TransferController extends GetxController {
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
   final isBirdsEye = false.obs;
+  final counter = 0.obs;
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -17,9 +18,13 @@ class TransferController extends GetxController {
   final string = "".obs;
   final heading = "".obs;
 
+  // @ Remote Properties
+  final isRemoteCountdownActive = false.obs;
+
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
+  Timer _timer;
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -38,6 +43,38 @@ class TransferController extends GetxController {
   void onDispose() {
     compassStream.cancel();
     lobbySizeStream.cancel();
+  }
+
+  // ^ Toggle Remote Value ^ //
+  void toggleRemote() {
+    isRemoteCountdownActive(true);
+    // Create Timeout
+    _timer = Timer.periodic(500.milliseconds, (_) {
+      // Add to Counter
+      counter(counter.value += 500);
+      var remaining = (45000 - counter.value) / 1000;
+      title("${remaining}s Left");
+      title.refresh();
+
+      // Check if Timeout Reached
+      if (counter.value == 45000) {
+        if (isRemoteCountdownActive.value) {
+          closeRemote();
+        }
+      }
+    });
+  }
+
+  // ^ Close Remote Window ^ //
+  void closeRemote() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+      HapticFeedback.mediumImpact();
+      counter(0);
+      isRemoteCountdownActive(false);
+      _handleLobbySizeUpdate(SonrService.lobbySize.value);
+    }
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //
@@ -75,12 +112,14 @@ class TransferController extends GetxController {
 
   // ^ Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(int size) {
-    if (size == 0) {
-      title("Nobody Here");
-    } else if (size == 1) {
-      title("1 Person");
-    } else {
-      title("$size People");
+    if (!isRemoteCountdownActive.value) {
+      if (size == 0) {
+        title("Nobody Here");
+      } else if (size == 1) {
+        title("1 Person");
+      } else {
+        title("$size People");
+      }
     }
   }
 }

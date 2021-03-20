@@ -47,8 +47,8 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.title(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: SonrColor.black);
+  factory SonrText.title(String text, {Key key, Color color = SonrColor.black}) {
+    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: color);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
