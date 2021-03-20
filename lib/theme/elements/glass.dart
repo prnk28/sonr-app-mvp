@@ -75,7 +75,12 @@ class GlassContainer extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-                    child: Container(margin: EdgeInsets.all(8), color: const Color(0x0), child: child),
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      padding: EdgeInsets.only(bottom: 8),
+                      color: const Color(0x0),
+                      child: child,
+                    ),
                   ),
                 ),
                 IgnorePointer(

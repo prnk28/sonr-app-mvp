@@ -9,26 +9,25 @@ class JoinGroupView extends StatelessWidget {
         width: Get.width - 24,
         height: Get.height / 2,
         child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SonrHeaderBar.leading(
-            title: SonrText.title("Groups"),
-            leading: IconButton(onPressed: () {}, icon: SonrIcon.close, color: Colors.transparent),
-          ),
+          SonrHeaderBar.twoButton(
+              title: SonrText.title("Groups"),
+              leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: SonrIcon.close,
+                  color: Colors.transparent),
+              action: IconButton(
+                  onPressed: () {
+                    print("New Group");
+                  },
+                  icon: SonrIcon.add)),
           // ListView.builder(
           //     itemCount: controller.groups.length,
           //     itemBuilder: (context, index) {
           //       var group = controller.groups.values.toList()[index];
           //       return ListTile(onTap: () {}, title: SonrText.paragraph(group.name), subtitle: SonrText.paragraph(group.size.toString()));
           //     })
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: SonrButton.stadium(
-                  margin: EdgeInsetsX.horizontal(64),
-                  color: Colors.black,
-                  icon: SonrIcon.add,
-                  text: SonrText.normal("Join"),
-                  onPressed: () async {
-                    print("New Group");
-                  }))
         ]));
   }
 }
