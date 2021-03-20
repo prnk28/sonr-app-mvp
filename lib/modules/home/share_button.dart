@@ -4,21 +4,17 @@ import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-// @ Widget Constants
-const double K_ITEM_SPACING = 12;
-const double K_EXPANDED_HEIGHT = 130;
-const double K_EXPANDED_WIDTH = 165;
-const double K_DEFAULT_HEIGHT = 70;
-const double K_DEFAULT_WIDTH = 30;
-
 class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<ShareButtonController>(
         init: ShareButtonController(),
         builder: (controller) {
+          // Get Views
           final expandedView = _ExpandedView(controller);
           final defaultView = _DefaultView();
+
+          // Build Container
           return Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
@@ -226,10 +222,50 @@ class _ShareButtonItem extends StatelessWidget {
   }
 }
 
+// @ Widget Constants
+const double K_ITEM_SPACING = 12;
+const double K_EXPANDED_HEIGHT = 130;
+const double K_EXPANDED_WIDTH = 165;
+const double K_DEFAULT_HEIGHT = 70;
+const double K_DEFAULT_WIDTH = 30;
+enum ShareButtonState { Default, Expanded, Remote, Pending }
+
+extension ShareButtonStateUtil on ShareButtonState {
+  double get width {
+    switch (this) {
+      case ShareButtonState.Expanded:
+        return 165;
+      case ShareButtonState.Remote:
+        return 165;
+        break;
+      case ShareButtonState.Pending:
+        return 60;
+      default:
+        return 30;
+    }
+  }
+
+  double get height {
+    switch (this) {
+      case ShareButtonState.Expanded:
+        return 130;
+      case ShareButtonState.Remote:
+        return 165;
+        break;
+      case ShareButtonState.Pending:
+        return 60;
+      default:
+        return 70;
+    }
+  }
+}
+
 class ShareButtonController extends GetxController {
   // Properties
   final isExpanded = false.obs;
+  final isRemote = false.obs;
   final counter = 0.obs;
+  final state = ShareButtonState.Default.obs;
 
   // References
   Timer _timer;
@@ -241,6 +277,7 @@ class ShareButtonController extends GetxController {
       _timer = null;
       HapticFeedback.mediumImpact();
       isExpanded(false);
+      state(ShareButtonState.Default);
       counter(0);
     }
   }
@@ -248,7 +285,6 @@ class ShareButtonController extends GetxController {
   // ^ Expand Share Button ^ //
   void expand() {
     HapticFeedback.heavyImpact();
-    isExpanded(true);
 
     // Create Timeout
     _timer = Timer.periodic(500.milliseconds, (_) {
@@ -267,7 +303,19 @@ class ShareButtonController extends GetxController {
   // ^ Toggles Expanded Share Button ^ //
   void toggle() {
     if (!isExpanded.value) {
+      isExpanded(true);
+      state(ShareButtonState.Expanded);
       expand();
+    } else {
+      close();
+    }
+  }
+
+  // ^ Toggles Remote Share View ^ //
+  void toggleRemote() {
+    if (!isRemote.value) {
+      isRemote(true);
+      state(ShareButtonState.Remote);
     } else {
       close();
     }

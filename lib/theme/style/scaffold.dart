@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:sonr_app/theme/theme.dart';
 import 'style.dart';
 
+// ^ Standardized Uniform Scaffold ^ //
 class SonrScaffold extends StatelessWidget {
   final Widget body;
   final Widget appBar;
@@ -66,17 +67,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         appBar: NeumorphicAppBar(
           color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-          title: GetX<_TitleController>(
-            global: false,
-            init: _TitleController(),
-            builder: (controller) {
-              controller.setDefault(title);
-              return SonrAnimatedSwitcher.fade(
-                duration: 2.seconds,
-                child: GestureDetector(key: ValueKey<String>(controller.text.value), child: SonrText.appBar(controller.text.value)),
-              );
-            },
-          ),
+          title: _SonrAppbarTitle(defaultText: title),
           leading: leading,
           actions: [action],
         ),
@@ -120,33 +111,43 @@ class SonrScaffold extends StatelessWidget {
   }
 }
 
-class _TitleController extends GetxController {
-  // Properties
-  String defaultText = "";
-  final text = "".obs;
+// ^ Dynamic App bar title for Lobby Size ^ //
+class _SonrAppbarTitle extends StatefulWidget {
+  final String defaultText;
+  const _SonrAppbarTitle({Key key, this.defaultText}) : super(key: key);
+  @override
+  _SonrAppbarTitleState createState() => _SonrAppbarTitleState();
+}
 
+class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
+  String text;
   // References
   StreamSubscription<int> lobbySizeStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
-  // ^ Constructer ^ //
-  _TitleController() {
+  @override
+  void initState() {
     lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
-    text(defaultText);
+    text = widget.defaultText;
+    super.initState();
   }
 
-  // ^ On Dispose ^ //
-  void onDispose() {
+  @override
+  void dispose() {
     lobbySizeStream.cancel();
+    super.dispose();
   }
 
-  setDefault(String val) {
-    defaultText = val;
-    text(val);
+  @override
+  Widget build(BuildContext context) {
+    return SonrAnimatedSwitcher.fade(
+      duration: 2.seconds,
+      child: GestureDetector(key: ValueKey<String>(text), child: SonrText.appBar(text)),
+    );
   }
 
-  // ^ Handle Cards Update ^ //
+  // @ Handle Cards Update ^ //
   _handleLobbySizeStream(int onData) {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
@@ -157,15 +158,22 @@ class _TitleController extends GetxController {
     }
   }
 
-  // ^ Provides Information at home page ^ //
+  // @ Swaps Title when Lobby Size Changes ^ //
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
     if (!_timeoutActive) {
-      text(val);
-      HapticFeedback.mediumImpact();
-      _timeoutActive = true;
+      // Swap Text
+      setState(() {
+        text = val;
+        HapticFeedback.mediumImpact();
+        _timeoutActive = true;
+      });
+
+      // Revert Text
       Future.delayed(timeout, () {
-        text(defaultText);
-        _timeoutActive = false;
+        setState(() {
+          text = widget.defaultText;
+          _timeoutActive = false;
+        });
       });
     }
   }

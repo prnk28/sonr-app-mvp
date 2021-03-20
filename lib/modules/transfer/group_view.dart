@@ -7,22 +7,18 @@ class CreateGroupView extends StatelessWidget {
   const CreateGroupView(this.name, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GetX<CreateGroupViewController>(
-        init: CreateGroupViewController(name),
-        builder: (controller) {
-          return Container(
-              width: Get.width - 24,
-              height: Get.height - 64,
-              child: Column(children: [
-                SonrText.title(name),
-                ListView.builder(
-                    itemCount: controller.members.length,
-                    itemBuilder: (context, index) {
-                      var peer = controller.members.values.toList()[index];
-                      return ListTile(onTap: () {}, title: peer.fullName, subtitle: Text(peer.platform.toString()));
-                    })
-              ]));
-        });
+    return Container(
+        width: Get.width - 24,
+        height: Get.height - 64,
+        child: Column(children: [
+          SonrText.title(name),
+          // ListView.builder(
+          //     itemCount: controller.members.length,
+          //     itemBuilder: (context, index) {
+          //       var peer = controller.members.values.toList()[index];
+          //       return ListTile(onTap: () {}, title: peer.fullName, subtitle: Text(peer.platform.toString()));
+          //     })
+        ]));
   }
 }
 
