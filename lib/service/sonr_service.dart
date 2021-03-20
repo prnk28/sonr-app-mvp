@@ -133,16 +133,7 @@ class SonrService extends GetxService with TransferQueue {
   // ******* Callbacks ********
   // **************************
   // ^ Handle Connected to Bootstrap Nodes ^ //
-  void _handleConnected(bool data) {
-    // Check for Homescreen Controller
-    if (Get.isRegistered<HomeController>()) {
-      if (data) {
-        Get.find<HomeController>().swapTitleText("Connected");
-      } else {
-        Get.find<HomeController>().swapTitleText("Error Connecting");
-      }
-    }
-  }
+  void _handleConnected(bool data) {}
 
   // ^ Handle Bootstrap Result ^ //
   void _handleReady(bool data) {

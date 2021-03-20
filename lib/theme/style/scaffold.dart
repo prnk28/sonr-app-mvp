@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sonr_app/theme/theme.dart';
 import 'style.dart';
 
@@ -53,7 +55,7 @@ class SonrScaffold extends StatelessWidget {
   }
 
   factory SonrScaffold.appBarLeadingAction(
-      {@required Widget title,
+      {@required String title,
       @required SonrButton leading,
       @required SonrButton action,
       Widget body,
@@ -64,7 +66,17 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         appBar: NeumorphicAppBar(
           color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-          title: title,
+          title: GetX<_TitleController>(
+            global: false,
+            init: _TitleController(),
+            builder: (controller) {
+              controller.setDefault(title);
+              return SonrAnimatedSwitcher.fade(
+                duration: 2.seconds,
+                child: GestureDetector(key: ValueKey<String>(controller.text.value), child: SonrText.appBar(controller.text.value)),
+              );
+            },
+          ),
           leading: leading,
           actions: [action],
         ),
@@ -105,5 +117,56 @@ class SonrScaffold extends StatelessWidget {
               floatingActionButton: floatingActionButton,
               resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
             ))));
+  }
+}
+
+class _TitleController extends GetxController {
+  // Properties
+  String defaultText = "";
+  final text = "".obs;
+
+  // References
+  StreamSubscription<int> lobbySizeStream;
+  int _lobbySizeRef = 0;
+  bool _timeoutActive = false;
+
+  // ^ Constructer ^ //
+  _TitleController() {
+    lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
+    text(defaultText);
+  }
+
+  // ^ On Dispose ^ //
+  void onDispose() {
+    lobbySizeStream.cancel();
+  }
+
+  setDefault(String val) {
+    defaultText = val;
+    text(val);
+  }
+
+  // ^ Handle Cards Update ^ //
+  _handleLobbySizeStream(int onData) {
+    if (onData > _lobbySizeRef) {
+      var diff = onData - _lobbySizeRef;
+      swapTitleText("$diff Joined");
+    } else if (onData < _lobbySizeRef) {
+      var diff = _lobbySizeRef - onData;
+      swapTitleText("$diff Left");
+    }
+  }
+
+  // ^ Provides Information at home page ^ //
+  void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
+    if (!_timeoutActive) {
+      text(val);
+      HapticFeedback.mediumImpact();
+      _timeoutActive = true;
+      Future.delayed(timeout, () {
+        text(defaultText);
+        _timeoutActive = false;
+      });
+    }
   }
 }

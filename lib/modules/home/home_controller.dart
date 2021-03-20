@@ -22,12 +22,9 @@ class HomeController extends GetxController {
   // References
   PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
-  StreamSubscription<int> lobbySizeStream;
 
   // Conditional
   bool _hasPromptedAutoSave = false;
-  int _lobbySizeRef = 0;
-  bool _timeoutActive = false;
 
   // ^ Controller Constructer ^
   onInit() {
@@ -47,7 +44,6 @@ class HomeController extends GetxController {
   void onReady() {
     // Add Stream Handlers
     cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
-    lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
 
     // Set Initial Status
     if (cards.length > 0) {
@@ -65,7 +61,6 @@ class HomeController extends GetxController {
   // ^ On Dispose ^ //
   void onDispose() {
     cardStream.cancel();
-    lobbySizeStream.cancel();
 
     toggleIndex(1);
     pageIndex(0);
@@ -94,17 +89,6 @@ class HomeController extends GetxController {
     // No Cards Available
     else {
       status(HomeState.None);
-    }
-  }
-
-  // ^ Handle Cards Update ^ //
-  _handleLobbySizeStream(int onData) {
-    if (onData > _lobbySizeRef) {
-      var diff = onData - _lobbySizeRef;
-      swapTitleText("$diff Joined");
-    } else if (onData < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData;
-      swapTitleText("$diff Left");
     }
   }
 
@@ -183,26 +167,11 @@ class HomeController extends GetxController {
   // ^ Provides Information at home page ^ //
   void readyTitleText(int lobbySize, {Duration timeout = const Duration(milliseconds: 3500)}) {
     titleText("Hello, ${UserService.firstName.value}");
-    _timeoutActive = true;
     Future.delayed(timeout, () {
       titleText("$lobbySize Nearby");
     });
     Future.delayed(timeout * 2, () {
       titleText("Home");
-      _timeoutActive = false;
     });
-  }
-
-  // ^ Provides Information at home page ^ //
-  void swapTitleText(String text, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    if (!_timeoutActive) {
-      titleText(text);
-      HapticFeedback.mediumImpact();
-      _timeoutActive = true;
-      Future.delayed(timeout, () {
-        titleText("Home");
-        _timeoutActive = false;
-      });
-    }
   }
 }

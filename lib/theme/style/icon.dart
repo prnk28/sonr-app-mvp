@@ -143,6 +143,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get more =>
       SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrColor.red, size: 36);
+  static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.primary, size: 36);
 
   // ^ Build View of Icon ^ //
   @override

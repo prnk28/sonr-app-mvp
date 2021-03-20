@@ -10,13 +10,7 @@ class HomeScreen extends GetView<HomeController> {
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
       resizeToAvoidBottomPadding: false,
-      title: Obx(() => SonrAnimatedSwitcher.fade(
-            duration: 2.seconds,
-            child: GestureDetector(
-                key: ValueKey<String>(controller.titleText.value),
-//                onTap: () => controller.swapTitleText("${SonrService.lobbySize()} Nearby"),
-                child: SonrText.appBar(controller.titleText.value)),
-          )),
+      title: "Home",
       leading: _buildLeadingByMode(),
       action: SonrButton.circle(
           icon: SonrIcon.search,
@@ -286,7 +280,7 @@ class _SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.light("Internal Alpha - 0.9.0 Build 66", size: 16),
+                      child: SonrText.light("Internal Alpha - 0.9.1", size: 16),
                     ),
                     Padding(padding: EdgeInsetsX.top(20)),
                   ]),
