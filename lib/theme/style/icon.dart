@@ -139,6 +139,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get profile =>
       SonrIcon.neumorphicGradient(SonrIconData.profile, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
+  static SonrIcon get groups => SonrIcon.neumorphicGradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
   static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get more =>
       SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);

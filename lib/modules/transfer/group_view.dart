@@ -1,14 +1,14 @@
 // ** Dialog Group View ** //
 import 'package:sonr_app/theme/theme.dart';
 
-class GroupView extends StatelessWidget {
+class CreateGroupView extends StatelessWidget {
   final String name;
 
-  const GroupView(this.name, {Key key}) : super(key: key);
+  const CreateGroupView(this.name, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GetX<GroupViewController>(
-        init: GroupViewController(name),
+    return GetX<CreateGroupViewController>(
+        init: CreateGroupViewController(name),
         builder: (controller) {
           return Container(
               width: Get.width - 24,
@@ -26,11 +26,11 @@ class GroupView extends StatelessWidget {
   }
 }
 
-class GroupViewController extends GetxController {
+class CreateGroupViewController extends GetxController {
   final String _groupName;
   final members = RxMap<String, Peer>();
 
-  GroupViewController(this._groupName) {
+  CreateGroupViewController(this._groupName) {
     SonrService.groups.listen((vals) {
       if (vals.containsKey(_groupName)) {
         var group = vals[_groupName];

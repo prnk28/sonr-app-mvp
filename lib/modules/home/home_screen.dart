@@ -1,7 +1,8 @@
 import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
+import 'group_view.dart';
 import 'home_controller.dart';
-import 'search_view.dart';
+// import 'search_view.dart';
 import 'share_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -13,17 +14,10 @@ class HomeScreen extends GetView<HomeController> {
       title: "Home",
       leading: _buildLeadingByMode(),
       action: SonrButton.circle(
-          icon: SonrIcon.search,
+          icon: SonrIcon.groups,
           shape: NeumorphicShape.flat,
           onPressed: () {
-            if (controller.status.value != HomeState.None) {
-              SonrOverlay.show(
-                SearchView(),
-                barrierDismissible: true,
-              );
-            } else {
-              SonrSnack.error("No Cards Found");
-            }
+            SonrOverlay.show(JoinGroupView());
           }),
       floatingActionButton: ShareButton(),
       body: NeumorphicBackground(
@@ -50,7 +44,6 @@ class HomeScreen extends GetView<HomeController> {
                       ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
                       ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
                       ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
-                      //ToggleElement(),
                     ],
                   )),
             ),

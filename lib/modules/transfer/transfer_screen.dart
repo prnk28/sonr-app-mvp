@@ -23,7 +23,7 @@ class TransferScreen extends GetView<TransferController> {
               onPressed: () async {
                 String name = await SonrService.createGroup();
                 print("New Group Name $name");
-                SonrOverlay.show(GroupView(name));
+                SonrOverlay.show(CreateGroupView(name));
               }),
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),

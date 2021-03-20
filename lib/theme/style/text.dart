@@ -46,18 +46,22 @@ class SonrText extends StatelessWidget {
         gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear());
   }
 
+  // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.title(String text, {Key key}) {
     return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: SonrColor.black);
   }
 
+  // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.subtitle(String text, {Key key}) {
     return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.black);
   }
 
+  // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.paragraph(String text, {Key key}) {
     return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 16 : 17, key: key, color: SonrColor.black);
   }
 
+  // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.span(String text, {Key key}) {
     return SonrText(text, weight: FontWeight.w300, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.black);
   }
