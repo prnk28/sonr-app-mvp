@@ -17,7 +17,7 @@ class HomeScreen extends GetView<HomeController> {
           icon: SonrIcon.groups,
           shape: NeumorphicShape.flat,
           onPressed: () {
-            SonrOverlay.show(JoinGroupView());
+            Get.bottomSheet(JoinGroupView());
           }),
       floatingActionButton: ShareButton(),
       body: NeumorphicBackground(
