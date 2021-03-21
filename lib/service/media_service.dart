@@ -118,7 +118,7 @@ class MediaService extends GetxService {
   }
 
   // ^ Checks for Initial Media/Text to Share ^ //
-  static checkInitialShare() {
+  static checkInitialShare() async {
     // Initialize
     var controller = Get.find<MediaService>();
 
@@ -134,8 +134,9 @@ class MediaService extends GetxService {
 
     // @ Check for Text
     if (controller._incomingText.value != "" && GetUtils.isURL(controller._incomingText.value) && !Get.isBottomSheetOpen) {
+      var data = await SonrCore.getURL(controller._incomingText.value);
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(controller._incomingText.value), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 
       // Reset Incoming
       controller._incomingText("");
@@ -302,7 +303,11 @@ class MediaService extends GetxService {
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
-      Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      // Get Data
+      var data = await SonrCore.getURL(text);
+
+      // Open Sheet
+      Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 }

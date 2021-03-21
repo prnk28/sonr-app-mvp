@@ -83,6 +83,7 @@ class SonrScaffold extends StatelessWidget {
       Widget body,
       Widget floatingActionButton,
       FloatingActionButtonLocation floatingActionButtonLocation,
+      bool disableDynamicLobbyTitle = false,
       bool resizeToAvoidBottomPadding = true}) {
     return SonrScaffold(
         body: body,
@@ -90,7 +91,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar: NeumorphicAppBar(
           color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-          title: _SonrAppbarTitle(defaultText: title),
+          title: disableDynamicLobbyTitle ? SonrText.appBar(title) : _SonrAppbarTitle(defaultText: title),
           leading: leading,
           actions: [action],
         ),
@@ -145,7 +146,9 @@ class _SonrAppbarTitle extends StatefulWidget {
 }
 
 class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
+  // Properties
   String text;
+
   // References
   StreamSubscription<int> lobbySizeStream;
   int _lobbySizeRef = 0;
@@ -153,6 +156,10 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
 
   @override
   void initState() {
+    // Add Initial Data
+    _handleLobbySizeStream(SonrService.lobbySize.value);
+
+    // Set Defaults
     lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
     text = widget.defaultText;
     super.initState();

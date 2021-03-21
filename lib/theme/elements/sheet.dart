@@ -27,13 +27,13 @@ class ShareSheet extends StatelessWidget {
   }
 
   // @ Bottom Sheet for URL
-  factory ShareSheet.url(String value) {
+  factory ShareSheet.url(URLLink value) {
     // Get Sizing
     final Size window = Size(Get.width - 20, Get.height / 5 + 40);
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
-    return ShareSheet(child: _ShareItemURL(urlText: value, size: content), size: window, payloadType: Payload.URL);
+    return ShareSheet(child: _ShareItemURL(url: value, size: content), size: window, payloadType: Payload.URL);
   }
   @override
   Widget build(BuildContext context) {
@@ -113,12 +113,12 @@ class _ShareItemMedia extends StatelessWidget {
 
 // ^ Share Item URL View ^ //
 class _ShareItemURL extends StatelessWidget {
-  final String urlText;
+  final URLLink url;
   final Size size;
-  const _ShareItemURL({Key key, this.urlText, this.size}) : super(key: key);
+  const _ShareItemURL({Key key, this.url, this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    SonrService.queueUrl(urlText);
+    SonrService.queueUrl(url.link);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +139,7 @@ class _ShareItemURL extends StatelessWidget {
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: SonrText.url(urlText),
+                child: SonrText.url(url.link),
               )),
         ),
       ],

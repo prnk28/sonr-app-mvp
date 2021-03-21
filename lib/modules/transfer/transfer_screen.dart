@@ -11,19 +11,10 @@ class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold.appBarLeadingAction(
+          disableDynamicLobbyTitle: true,
           title: controller.title.value,
-          leading: SonrButton.circle(
-            icon: SonrIcon.close,
-            onPressed: () => Get.offNamed("/home/transfer"),
-            shape: NeumorphicShape.flat,
-          ),
-          action: SonrButton.circle(
-              icon: SonrIcon.remote,
-              onPressed: () async {
-                String name = await SonrService.createGroup();
-                controller.toggleRemote();
-                SonrSnack.remote(message: name, icon: Icon(SonrIconData.remote));
-              }),
+          leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
+          action: SonrButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat),
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),
             child: Stack(

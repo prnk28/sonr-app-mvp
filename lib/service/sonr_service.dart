@@ -41,8 +41,8 @@ class SonrService extends GetxService with TransferQueue {
     _node.onConnected = _handleConnected;
     _node.onReady = _handleReady;
     _node.onRefreshed = _handleRefresh;
-    _node.onDirected = _handleDirect;
     _node.onInvited = _handleInvited;
+    _node.onRemoteStart = _handleRemoteStart;
     _node.onReplied = _handleResponded;
     _node.onProgressed = _handleProgress;
     _node.onReceived = _handleReceived;
@@ -56,14 +56,9 @@ class SonrService extends GetxService with TransferQueue {
     _node.connect();
   }
 
-  // ^ Create a New Group ^
-  static Future<String> createGroup() async {
-    return await to._node.createGroup();
-  }
-
   // ^ Join a New Group ^
-  static joinGroup(String name) async {
-    return await to._node.joinGroup(name);
+  static joinRemote(String name) async {
+    return await to._node.joinRemote(name);
   }
 
   // ^ Sets Contact for Node ^
@@ -91,6 +86,11 @@ class SonrService extends GetxService with TransferQueue {
     to.addToQueue(TransferQueueItem.url(url));
   }
 
+  // ^ Direct Message a Peer ^
+  static message(Peer peer, String content) {
+    to._node.message(peer, content);
+  }
+
   // ^ Invite-Peer Event ^
   static invite(PeerController c) async {
     // Set Peer Controller
@@ -111,6 +111,31 @@ class SonrService extends GetxService with TransferQueue {
     else if (to.payload == Payload.URL) {
       assert(to.currentTransfer.url != null);
       await to._node.inviteLink(c.peer, to.currentTransfer.url);
+    }
+
+    // No Payload
+    else {
+      SonrSnack.error("No media, contact, or link provided");
+    }
+  }
+
+  // ^ Invite-Peer Event ^
+  static remote() async {
+    // File Payload
+    if (to.payload == Payload.MEDIA) {
+      assert(to.currentTransfer.media != null);
+      await to._node.inviteFileRemote(to.currentTransfer.media);
+    }
+
+    // Contact Payload
+    else if (to.payload == Payload.CONTACT) {
+      await to._node.inviteContactRemote();
+    }
+
+    // Link Payload
+    else if (to.payload == Payload.URL) {
+      assert(to.currentTransfer.url != null);
+      await to._node.inviteLinkRemote(to.currentTransfer.url);
     }
 
     // No Payload
@@ -154,8 +179,9 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Node Has Been Directed from Other Device ^ //
-  void _handleDirect(TransferCard data) async {
+  void _handleRemoteStart(RemoteResponse data) async {
     HapticFeedback.heavyImpact();
+    SonrSnack.remote(message: data.display, icon: Icon(SonrIconData.remote));
   }
 
   // ^ Node Has Been Invited ^ //

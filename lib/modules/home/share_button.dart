@@ -154,7 +154,7 @@ class _RemoteView extends StatelessWidget {
                               value: '',
                               textInputAction: TextInputAction.done,
                               onChanged: (val) => controller.thirdWord(val),
-                              onEditingComplete: () => controller.joinGroup(),
+                              onEditingComplete: () => controller.joinRemote(),
                             )),
                       ]),
                     ]))),
@@ -412,17 +412,18 @@ class ShareButtonController extends GetxController {
   void toggleRemote() {
     if (state.value == ShareButtonState.Default) {
       state(ShareButtonState.Remote);
-      expand(8000, state.value);
+      expand(20000, state.value);
     } else {
       state(ShareButtonState.Default);
     }
   }
 
-  joinGroup() {
+  // ^ Join Remote Point ^ //
+  joinRemote() {
     // Clean words into new string
     var group = "${firstWord.value}-${secondWord.value}-${thirdWord.value}";
     print(group);
-    //SonrService.joinGroup(group);
+    SonrService.joinRemote(group);
     state(ShareButtonState.Pending);
   }
 }
