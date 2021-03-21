@@ -297,7 +297,7 @@ class _ShareButtonItem extends StatelessWidget {
   }
 }
 
-enum ShareButtonState { Default, Expanded, Remote, Pending }
+enum ShareButtonState { Default, Expanded, Remote }
 
 extension ShareButtonStateUtil on ShareButtonState {
   Alignment get alignment {
@@ -307,8 +307,6 @@ extension ShareButtonStateUtil on ShareButtonState {
       case ShareButtonState.Remote:
         return Alignment.center;
         break;
-      case ShareButtonState.Pending:
-        return Alignment.bottomCenter;
       default:
         return Alignment.bottomCenter;
     }
@@ -321,8 +319,6 @@ extension ShareButtonStateUtil on ShareButtonState {
       case ShareButtonState.Remote:
         return Get.width / 2 + 200;
         break;
-      case ShareButtonState.Pending:
-        return Get.width / 3;
       default:
         return Get.width / 2 + 30;
     }
@@ -335,8 +331,6 @@ extension ShareButtonStateUtil on ShareButtonState {
       case ShareButtonState.Remote:
         return 165;
         break;
-      case ShareButtonState.Pending:
-        return Get.width / 3;
       default:
         return 70;
     }
@@ -348,8 +342,6 @@ extension ShareButtonStateUtil on ShareButtonState {
         return _ExpandedView(controller);
       case ShareButtonState.Remote:
         return _RemoteView(controller);
-      case ShareButtonState.Pending:
-        return _PendingView();
       default:
         return _DefaultView();
     }
@@ -412,7 +404,7 @@ class ShareButtonController extends GetxController {
   void toggleRemote() {
     if (state.value == ShareButtonState.Default) {
       state(ShareButtonState.Remote);
-      expand(20000, state.value);
+      expand(25000, state.value);
     } else {
       state(ShareButtonState.Default);
     }
@@ -422,8 +414,7 @@ class ShareButtonController extends GetxController {
   joinRemote() {
     // Clean words into new string
     var group = "${firstWord.value}-${secondWord.value}-${thirdWord.value}";
-    print(group);
     SonrService.joinRemote(group);
-    state(ShareButtonState.Pending);
+    state(ShareButtonState.Default);
   }
 }

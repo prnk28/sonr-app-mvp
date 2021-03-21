@@ -14,6 +14,7 @@ class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
   final _groups = Map<String, Group>().obs;
   final _peers = Map<String, Peer>().obs;
+  final _remoteMembers = RxList<Peer>();
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
   static RxMap<String, Group> get groups => Get.find<SonrService>()._groups;
@@ -21,6 +22,8 @@ class SonrService extends GetxService with TransferQueue {
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static SonrService get to => Get.find<SonrService>();
   static RxDouble get progress => Get.find<SonrService>()._progress;
+  static RxList<Peer> get remoteMembers => Get.find<SonrService>()._remoteMembers;
+
   // @ Set References
   Node _node;
 
@@ -194,18 +197,23 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
-    // Check if Sent Back Contact
-    if (data.type == AuthReply_Type.Contact) {
-      HapticFeedback.vibrate();
-      SonrOverlay.reply(data);
-    }
-    // For Cancel
-    else if (data.type == AuthReply_Type.Cancel) {
-      HapticFeedback.vibrate();
-      currentDecided(false);
+    // Handle Remote Peer
+    if (data.isRemote) {
+      _remoteMembers.add(data.from);
     } else {
-      // For File
-      currentDecided(data.decision);
+      // Check if Sent Back Contact
+      if (data.type == AuthReply_Type.Contact) {
+        HapticFeedback.vibrate();
+        SonrOverlay.reply(data);
+      }
+      // For Cancel
+      else if (data.type == AuthReply_Type.Cancel) {
+        HapticFeedback.vibrate();
+        currentDecided(false);
+      } else {
+        // For File
+        currentDecided(data.decision);
+      }
     }
   }
 

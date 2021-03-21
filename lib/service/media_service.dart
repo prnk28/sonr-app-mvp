@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'sonr_service.dart';
 import 'user_service.dart';
 
@@ -18,6 +19,7 @@ class MediaService extends GetxService {
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
   final _totalMedia = <Media>[].obs;
+  final _assets = RxList<AssetEntity>();
 
   // Properties
   static RxList<MediaCollection> get gallery => Get.find<MediaService>()._gallery;
@@ -70,6 +72,14 @@ class MediaService extends GetxService {
       List<MediaCollection> collections = await MediaGallery.listMediaCollections(
         mediaTypes: [MediaType.image, MediaType.video],
       );
+
+      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
+      list.forEach((element) {
+        // Set Has Gallery
+        if (element.assetCount > 0) {
+          _hasGallery(true);
+        }
+      });
 
       // Set Gallery
       _gallery(collections);

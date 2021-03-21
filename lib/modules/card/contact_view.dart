@@ -34,10 +34,10 @@ class ContactCard extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _ContactInviteView(card, controller, false);
+        return _ContactInviteView(card, invite, controller, false);
         break;
       case CardType.Reply:
-        return _ContactInviteView(card, controller, true);
+        return _ContactInviteView(card, invite, controller, true);
         break;
       case CardType.GridItem:
         return _ContactItemView(card, controller);
@@ -53,13 +53,13 @@ class ContactCard extends GetWidget<TransferCardController> {
 class _ContactInviteView extends StatelessWidget {
   final TransferCardController controller;
   final TransferCard card;
+  final AuthInvite invite;
   final bool isReply;
-  _ContactInviteView(this.card, this.controller, this.isReply);
+  _ContactInviteView(this.card, this.invite, this.controller, this.isReply);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8),
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -112,7 +112,7 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold("Decline", color: SonrColor.red, size: 18),
+                child: SonrText.semibold(invite.isRemote ? "Cancel" : "Decline", color: SonrColor.red, size: 18),
               )),
           // Accept Button
           Container(
@@ -128,7 +128,7 @@ class _ContactInviteView extends StatelessWidget {
                 }
               },
               icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-              text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
+              text: SonrText.semibold(invite.isRemote ? "Continue" : "Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
             ),
           ),
         ])
