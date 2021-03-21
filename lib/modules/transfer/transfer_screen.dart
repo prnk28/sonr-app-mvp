@@ -14,7 +14,9 @@ class TransferScreen extends GetView<TransferController> {
           disableDynamicLobbyTitle: true,
           title: controller.title.value,
           leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
-          action: SonrButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat),
+          action: Get.find<SonrService>().payload != Payload.CONTACT
+              ? SonrButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat)
+              : Container(),
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),
             child: controller.isRemoteActive.value

@@ -85,14 +85,6 @@ class _ExpandedView extends StatelessWidget {
   }
 }
 
-// ** Pending Remote File View ** //
-class _PendingView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(width: 120, height: 120, child: CircularProgressIndicator());
-  }
-}
-
 // ** Enter Remote File Code View ** //
 class _RemoteView extends StatelessWidget {
   final ShareButtonController controller;

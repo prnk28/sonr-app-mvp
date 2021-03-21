@@ -55,7 +55,9 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Connect to Service Method ^ //
   Future<void> connect({Contact contact}) async {
-    await _node.setContact(contact);
+    if (contact != null) {
+      await _node.setContact(contact);
+    }
     _node.connect();
   }
 

@@ -3,7 +3,6 @@ import 'package:flutter_sentry/flutter_sentry.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 import 'modules/card/card_controller.dart';
-import 'modules/home/home_binding.dart';
 
 const bool K_TESTER_MODE = true;
 
