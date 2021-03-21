@@ -78,8 +78,8 @@ class SonrScaffold extends StatelessWidget {
 
   factory SonrScaffold.appBarLeadingAction(
       {@required String title,
-      @required SonrButton leading,
-      @required SonrButton action,
+      @required Widget leading,
+      @required Widget action,
       Widget body,
       Widget floatingActionButton,
       FloatingActionButtonLocation floatingActionButtonLocation,
