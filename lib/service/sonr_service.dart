@@ -41,7 +41,6 @@ class SonrService extends GetxService with TransferQueue {
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
-    _node.onConnected = _handleConnected;
     _node.onReady = _handleReady;
     _node.onRefreshed = _handleRefresh;
     _node.onInvited = _handleInvited;
@@ -55,7 +54,8 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Connect to Service Method ^ //
-  Future<void> connect() async {
+  Future<void> connect({Contact contact}) async {
+    await _node.setContact(contact);
     _node.connect();
   }
 
@@ -160,8 +160,6 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ******* Callbacks ********
   // **************************
-  // ^ Handle Connected to Bootstrap Nodes ^ //
-  void _handleConnected(bool data) {}
 
   // ^ Handle Bootstrap Result ^ //
   void _handleReady(bool data) {

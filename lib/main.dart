@@ -51,36 +51,14 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
 
-    // Listen to Device Start Status
-    Future.delayed(2.seconds, () {
-      var page = DeviceService.getLaunchPage();
-      switch (page) {
-        case LaunchPage.Home:
-          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-          break;
-        case LaunchPage.Register:
-          Get.offNamed("/register");
-          break;
-        case LaunchPage.PermissionLocation:
-          Get.find<DeviceService>().requestLocation().then((value) {
-            if (value) {
-              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-            }
-          });
-          break;
-        case LaunchPage.PermissionNetwork:
-          Get.find<DeviceService>().triggerNetwork().then((value) {
-            Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-          });
-          break;
-      }
-    });
+    // Shift Page
+    DeviceService.shiftPage(delay: 2.seconds);
   }
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      getPages: pageRouting,
+      getPages: SonrRoutes.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],

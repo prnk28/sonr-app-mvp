@@ -4,7 +4,7 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.9.1+144
+version: 0.9.1+145
 publish_to: none
 
 # -- Flutter Settings --
@@ -22,12 +22,10 @@ dependencies:
   # ** - User Defined - **
   # -- Management --
   flutter_hooks: ^0.16.0
+  flutter_sentry: any
   get: ^3.25.4
   get_storage: ^1.4.0
   intl: ^0.17.0
-  url_launcher: ^6.0.2
-  flutter_sentry: any
-  # To use classes provided by sentry package (e.g. User).
   sentry: any
 
   # -- Device --
@@ -35,6 +33,7 @@ dependencies:
   flutter_compass: ^0.6.0
   geolocator: ^6.2.1
   permission_handler: ^5.1.0+2
+  url_launcher: ^6.0.2
 
   # -- Data --
   better_player: ^0.0.55
@@ -44,10 +43,8 @@ dependencies:
   photo_manager: ^1.0.2
   path: ^1.7.0
   path_provider: ^1.6.27
-  shared_preferences: ^0.5.12+4
 
   # -- Network --
-  qr_code_tools: ^0.0.6
   receive_sharing_intent: ^1.4.3
   sqflite: ^2.0.0+1
   sonr_core:

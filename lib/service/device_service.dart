@@ -8,12 +8,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/home/home_binding.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position, Platform;
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
-enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 
 class DeviceService extends GetxService {
   // Status/Sensor Properties
@@ -61,17 +61,28 @@ class DeviceService extends GetxService {
     return this;
   }
 
-  // ^ Method Determins LaunchPage ^
-  static LaunchPage getLaunchPage() {
-    if (!UserService.exists.value) {
-      return LaunchPage.Register;
-    } else {
-      if (Get.find<DeviceService>().locationPermitted.val) {
-        return LaunchPage.Home;
+  // ^ Method Determins LaunchPage and Changes Screen ^
+  static void shiftPage({@required Duration delay}) async {
+    Future.delayed(delay, () {
+      // Check for User
+      if (!UserService.exists.value) {
+        Get.offNamed("/register");
       } else {
-        return LaunchPage.PermissionLocation;
+        // All Valid
+        if (Get.find<DeviceService>().locationPermitted.val) {
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        }
+
+        // No Location
+        else {
+          Get.find<DeviceService>().requestLocation().then((value) {
+            if (value) {
+              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+            }
+          });
+        }
       }
-    }
+    });
   }
 
   // ^ Launch a URL Event ^ //
