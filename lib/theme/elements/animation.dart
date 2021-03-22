@@ -7,7 +7,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum ArtboardType { Camera, Icon, Gallery, Contact, Feed, Splash }
+enum ArtboardType { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class RipplesAnimation extends StatefulWidget {
   const RipplesAnimation({
@@ -141,21 +141,9 @@ class SonrAnimatedWidget extends GetWidget<AnimatedController> {
     return child;
   }
 
-  void animate(AnimType anim) {
-    switch (anim) {
-      case AnimType.Shake:
-        controller.shake();
-        break;
-      case AnimType.FadeIn:
-        controller.fadeIn();
-        break;
-      case AnimType.FadeOut:
-        controller.fadeOut();
-        break;
-      default:
-        break;
-    }
-  }
+  void shake() => controller.shake();
+  void fadeIn() => controller.fadeIn();
+  void fadeOut() => controller.fadeOut();
 
   void reset() {
     controller.type(AnimType.None);
@@ -229,6 +217,8 @@ class _RiveContainer extends State<RiveContainer> {
   // References
   final String _splashPath = 'assets/animations/splash_screen.riv';
   final String _tilePath = 'assets/animations/tile_preview.riv';
+  final String _notFoundPath = 'assets/animations/not_found.riv';
+  final String _documentsPath = 'assets/animations/documents.riv';
 
   // Properties
   Artboard _riveArtboard;
@@ -239,6 +229,36 @@ class _RiveContainer extends State<RiveContainer> {
     // Load the RiveFile from the binary data.
     if (widget.type == ArtboardType.Splash) {
       rootBundle.load(_splashPath).then(
+        (data) async {
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
+
+            // Determine Animation by Tile Type
+            artboard.addController(SimpleAnimation('Default'));
+            setState(() => _riveArtboard = artboard);
+          }
+        },
+      );
+    } else if (widget.type == ArtboardType.NotFound) {
+      rootBundle.load(_notFoundPath).then(
+        (data) async {
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
+
+            // Determine Animation by Tile Type
+            artboard.addController(SimpleAnimation('Default'));
+            setState(() => _riveArtboard = artboard);
+          }
+        },
+      );
+    } else if (widget.type == ArtboardType.Documents) {
+      rootBundle.load(_documentsPath).then(
         (data) async {
           // Await Loading
           final file = RiveFile();

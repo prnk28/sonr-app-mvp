@@ -12,15 +12,20 @@ class SonrColor {
   static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color OverlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
 
-  // ** Color Pallette ** //
-  static const Color Dark = Color(0xff1B1B1B);
-  static const Color Red = Color(0xffF04C63);
+  static const Color Dark = Color(0xff2c2b2b);
   static const Color Grey = Color(0xffC6C4C4);
   static const Color Blue = Color(0xff51C5DD);
   static const Color White = Color(0xffE0E0E0);
-  static const Color Navy = Color(0xff0A4F70);
-  static const Color LightModeShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
-  static const Color LightModeShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
+
+  // ** Color Pallette ** //
+  static const Color black = Color(0xff202020);
+  static Color get primary => DeviceService.isDarkMode.value ? Color(0xff2c2b2b) : Color(0xff538fff);
+  static Color get secondary => DeviceService.isDarkMode.value ? Color(0xff9757ff) : Color(0xff543191);
+  static Color get tertiary => DeviceService.isDarkMode.value ? Color(0xff52ffc0) : Color(0xff2e906e);
+  static Color get red => DeviceService.isDarkMode.value ? Color(0xffcc1b0b) : Color(0xffff4d62);
+
+  // static const Color ShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
+  // static const Color ShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
 
   // ** Gradients ** //
   static Gradient get lightModeBulb => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
@@ -57,7 +62,7 @@ class SonrColor {
   // ^ Finds Current Theme Icon Color ^ //
   static Color icons() {
     final theme = NeumorphicTheme.of(Get.context);
-    if (Get.isDarkMode) {
+    if (DeviceService.isDarkMode.value) {
       return theme.current.accentColor;
     } else {
       return theme.current.accentColor;

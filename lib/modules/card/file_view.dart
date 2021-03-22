@@ -72,7 +72,7 @@ class _FileInviteView extends StatelessWidget {
                       : Icon(
                           Icons.insert_emoticon,
                           size: 100,
-                          color: Colors.black.withOpacity(0.5),
+                          color: SonrColor.black.withOpacity(0.5),
                         ),
                 ),
               ),
@@ -100,10 +100,7 @@ class _FileInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: invite.payload.icon(
-                  IconType.Gradient,
-                  size: (Get.height / 3),
-                )),
+                child: RiveContainer(type: ArtboardType.Documents, width: Get.width - 150, height: Get.height / 3)),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -113,7 +110,7 @@ class _FileInviteView extends StatelessWidget {
                 onPressed: () => controller.declineInvite(),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: SonrText.semibold("Decline", color: Colors.red[600], size: 18),
+                  child: SonrText.semibold(invite.isRemote ? "Cancel" : "Decline", color: Colors.red[600], size: 18),
                 )),
             // Accept Button
             Container(
@@ -122,11 +119,10 @@ class _FileInviteView extends StatelessWidget {
               child: SonrButton.stadium(
                 onPressed: () => controller.acceptTransfer(card),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+                text: SonrText.semibold(invite.isRemote ? "Continue" : "Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
             ),
           ]),
-          Padding(padding: EdgeInsets.only(top: 14)),
         ],
       ),
     );
@@ -141,57 +137,62 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        OpenFile.open(card.metadata.path);
-      },
-      child: Neumorphic(
-        style: SonrStyle.normal,
-        margin: EdgeInsets.all(4),
-        child: Hero(
-          tag: card.id,
-          child: Container(
-            height: 75,
-            child: Stack(
-              children: <Widget>[
-                // Time Stamp
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Neumorphic(
-                      style: SonrStyle.timeStampDark,
-                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
-                      padding: EdgeInsets.all(10),
-                    ),
+    return SonrScaffold(
+        resizeToAvoidBottomPadding: false,
+        body: Container(
+          height: Get.height,
+          child: GestureDetector(
+            onTap: () {
+              OpenFile.open(card.metadata.path);
+            },
+            child: Neumorphic(
+              style: SonrStyle.normal,
+              margin: EdgeInsets.all(4),
+              child: Hero(
+                tag: card.id,
+                child: Container(
+                  height: 75,
+                  child: Stack(
+                    children: <Widget>[
+                      // Time Stamp
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Neumorphic(
+                            style: SonrStyle.timeStampDark,
+                            child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
+                            padding: EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+
+                      // File Icon
+                      Align(
+                          alignment: Alignment.center,
+                          child: Neumorphic(
+                              padding: EdgeInsets.all(20),
+                              style: SonrStyle.indented,
+                              child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
+
+                      // Info Button
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SonrButton.circle(
+                              icon: SonrIcon.info,
+                              onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
+                              shadowLightColor: Colors.black38,
+                            )),
+                      ),
+                    ],
                   ),
                 ),
-
-                // File Icon
-                Align(
-                    alignment: Alignment.center,
-                    child: Neumorphic(
-                        padding: EdgeInsets.all(20),
-                        style: SonrStyle.indented,
-                        child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
-
-                // Info Button
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SonrButton.circle(
-                        icon: SonrIcon.info,
-                        onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
-                        shadowLightColor: Colors.black38,
-                      )),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -285,7 +286,7 @@ class _FileCardInfo extends StatelessWidget {
               SonrButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
               ),
             ]),
           ]),

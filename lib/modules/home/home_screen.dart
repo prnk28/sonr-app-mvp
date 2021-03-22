@@ -1,8 +1,8 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:wiredash/wiredash.dart';
 import '../../main.dart';
-import 'home_controller.dart';
 import 'search_view.dart';
+import 'home_controller.dart';
+// import 'search_view.dart';
 import 'share_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -33,30 +33,26 @@ class HomeScreen extends GetView<HomeController> {
           width: Get.width,
           height: Get.height,
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            GestureDetector(
-              onTap: () => controller.closeShare(),
-              child: Container(
-                padding: EdgeInsets.only(top: 10),
-                margin: EdgeInsets.only(left: 30, right: 30),
-                child: Obx(() => NeumorphicToggle(
-                      style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
-                      selectedIndex: controller.toggleIndex.value,
-                      onChanged: (val) => controller.setToggleCategory(val),
-                      thumb: SonrAnimatedSwitcher.fade(
-                        child: GestureDetector(
-                            key: ValueKey<int>(controller.toggleIndex.value),
-                            onDoubleTap: () => controller.jumpToStart(),
-                            onLongPress: () => controller.jumpToEnd(),
-                            child: Center(child: Obx(() => _buildToggleView()))),
-                      ),
-                      children: [
-                        ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
-                        ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
-                        ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
-                        //ToggleElement(),
-                      ],
-                    )),
-              ),
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(left: 30, right: 30),
+              child: Obx(() => NeumorphicToggle(
+                    style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                    selectedIndex: controller.toggleIndex.value,
+                    onChanged: (val) => controller.setToggleCategory(val),
+                    thumb: SonrAnimatedSwitcher.fade(
+                      child: GestureDetector(
+                          key: ValueKey<int>(controller.toggleIndex.value),
+                          onDoubleTap: () => controller.jumpToStart(),
+                          onLongPress: () => controller.jumpToEnd(),
+                          child: Center(child: Obx(() => _buildToggleView()))),
+                    ),
+                    children: [
+                      ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
+                      ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
+                      ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
+                    ],
+                  )),
             ),
             TransferCardGrid(),
             Spacer()
@@ -71,7 +67,7 @@ class HomeScreen extends GetView<HomeController> {
     if (K_TESTER_MODE) {
       return SonrButton.circle(
         icon: SonrIcon.more,
-        onPressed: () => Get.bottomSheet(_SettingsSheet()),
+        onPressed: () => Get.bottomSheet(_SettingsSheet(), backgroundColor: Colors.transparent),
         shape: NeumorphicShape.flat,
       );
     } else {
@@ -109,72 +105,77 @@ class TransferCardGrid extends GetView<HomeController> {
     controller.pageController = pageController;
 
     // Build View
-    return GestureDetector(
-        onTap: () => controller.closeShare(),
-        child: Container(
-            padding: EdgeInsets.only(top: 15),
-            height: 500,
-            child: Obx(() {
-              // Loading Cards
-              if (controller.status.value == HomeState.Loading) {
-                return Center(child: CircularProgressIndicator());
-              }
+    return Container(
+        padding: EdgeInsets.only(top: 15),
+        height: 500,
+        child: Obx(() {
+          // Loading Cards
+          if (controller.status.value == HomeState.Loading) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-              // New User
-              else if (controller.status.value == HomeState.First) {
-                return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  SonrText.header("Welcome to Sonr", gradient: FlutterGradientNames.magicRay, size: 36),
-                  SonrText.normal("Share to begin viewing your Cards!", color: Colors.black.withOpacity(0.7), size: 18)
-                ]);
-              }
+          // New User
+          else if (controller.status.value == HomeState.First) {
+            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SonrText.header("Welcome to Sonr"),
+              SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.black.withOpacity(0.7), size: 18)
+            ]);
+          }
 
-              // Zero Cards
-              else if (controller.status.value == HomeState.None) {
-                return Center(child: SonrText.bold("No Cards Found!", color: Colors.grey[500]));
-              }
+          // Zero Cards
+          else if (controller.status.value == HomeState.None) {
+            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SonrText.header(
+                "No Cards Found!",
+                size: 32,
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              RiveContainer(type: ArtboardType.NotFound, width: Get.width, height: Get.height / 3.5),
+            ]);
+          }
 
-              // Build Cards
-              else {
-                controller.promptAutoSave();
-                return PageView.builder(
-                  itemCount: controller.getCardList().length,
-                  controller: pageController,
-                  onPageChanged: (int index) => controller.pageIndex(index),
-                  itemBuilder: (_, idx) {
-                    return Obx(() {
-                      if (idx == controller.pageIndex.value) {
-                        return PlayAnimation<double>(
-                          tween: (0.85).tweenTo(0.95),
-                          duration: 200.milliseconds,
-                          builder: (context, child, value) {
-                            return Transform.scale(
-                              scale: value,
-                              child: buildCard(idx),
-                            );
-                          },
-                        );
-                      } else if (idx == controller.pageIndex.value) {
-                        return PlayAnimation<double>(
-                          tween: (0.95).tweenTo(0.85),
-                          duration: 200.milliseconds,
-                          builder: (context, child, value) {
-                            return Transform.scale(
-                              scale: value,
-                              child: buildCard(idx),
-                            );
-                          },
-                        );
-                      } else {
+          // Build Cards
+          else {
+            controller.promptAutoSave();
+            return PageView.builder(
+              itemCount: controller.getCardList().length,
+              controller: pageController,
+              onPageChanged: (int index) => controller.pageIndex(index),
+              itemBuilder: (_, idx) {
+                return Obx(() {
+                  if (idx == controller.pageIndex.value) {
+                    return PlayAnimation<double>(
+                      tween: (0.85).tweenTo(0.95),
+                      duration: 200.milliseconds,
+                      builder: (context, child, value) {
                         return Transform.scale(
-                          scale: 0.85,
+                          scale: value,
                           child: buildCard(idx),
                         );
-                      }
-                    });
-                  },
-                );
-              }
-            })));
+                      },
+                    );
+                  } else if (idx == controller.pageIndex.value) {
+                    return PlayAnimation<double>(
+                      tween: (0.95).tweenTo(0.85),
+                      duration: 200.milliseconds,
+                      builder: (context, child, value) {
+                        return Transform.scale(
+                          scale: value,
+                          child: buildCard(idx),
+                        );
+                      },
+                    );
+                  } else {
+                    return Transform.scale(
+                      scale: 0.85,
+                      child: buildCard(idx),
+                    );
+                  }
+                });
+              },
+            );
+          }
+        }));
   }
 
   Widget buildCard(int index) {
@@ -203,34 +204,15 @@ class TransferCardGrid extends GetView<HomeController> {
 class _SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Set WireDash User
-    Wiredash.of(context).setUserProperties(
-      userEmail: UserService.email.value,
-      userId: UserService.wireID,
-    );
-
-    // Set WireDash Build
-    Wiredash.of(context).setBuildProperties(
-      buildNumber: '42',
-      buildVersion: '0.9.0',
-    );
-
-    return NeumorphicBackground(
-      borderRadius: BorderRadius.circular(20),
-      margin: EdgeInsets.only(left: 15, right: 15, top: 75),
-      backendColor: Colors.transparent,
+    return GlassContainer(
+      // borderRadius: BorderRadius.circular(20),
+      // margin: EdgeInsets.only(left: 15, right: 15, top: 75),
+      // backendColor: Colors.transparent,
+      height: Get.height / 3,
       child: Stack(children: [
         Container(
             width: Get.width,
-            child: Obx(() => Neumorphic(
-                style: NeumorphicStyle(
-                  intensity: DeviceService.isDarkMode.value ? 0.45 : 0.85,
-                  depth: DeviceService.isDarkMode.value ? 6 : 8,
-                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                  color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-                ),
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16),
+            child: Obx(() => Container(
                   child: Column(children: [
                     // @ Title of Pane
                     Align(
@@ -248,7 +230,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
                               inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: DeviceService.isDarkMode.value,
@@ -265,7 +247,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.Red : SonrColor.Blue,
+                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
                               inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: DeviceService.hasPointToShare.value,
@@ -294,33 +276,15 @@ class _SettingsSheet extends StatelessWidget {
                           )
                         ])),
                     Spacer(),
-
-                    // @ Bug Reporter
-                    Align(
-                        heightFactor: 0.9,
-                        alignment: Alignment.topCenter,
-                        child: SonrButton.rectangle(
-                            margin: EdgeInsetsX.horizontal(65),
-                            onPressed: () {
-                              Get.back();
-                              Wiredash.of(context).show();
-                            },
-                            text: SonrText.normal("Report"),
-                            icon: SonrIcon.normal(
-                              Icons.bug_report,
-                              color: DeviceService.isDarkMode.value ? SonrColor.White : SonrColor.Dark,
-                            ))),
-                    Padding(padding: EdgeInsetsX.top(20)),
-
                     // @ Version Number
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.light("Closed Alpha - 0.9.0 Build 44", size: 16),
+                      child: SonrText.light("Internal Alpha - 0.9.1", size: 16),
                     ),
                     Padding(padding: EdgeInsetsX.top(20)),
                   ]),
-                ))))
+                )))
       ]),
     );
   }

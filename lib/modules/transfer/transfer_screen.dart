@@ -8,42 +8,49 @@ import 'peer_widget.dart';
 import 'transfer_controller.dart';
 
 class TransferScreen extends GetView<TransferController> {
-  // @ Initialize
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SonrScaffold.appBarLeading(
-        title: controller.title.value,
-        leading: SonrButton.circle(
-          icon: SonrIcon.close,
-          onPressed: () => Get.offNamed("/home/transfer"),
-          shape: NeumorphicShape.flat,
-        ),
-        body: SafeArea(
-            child: Stack(
-          children: <Widget>[
-            // @ Range Lines
-            Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: Stack(
-                  children: [
-                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
-                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
-                    Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
-                  ],
-                )),
+    return Obx(() => SonrScaffold.appBarLeadingAction(
+          disableDynamicLobbyTitle: true,
+          title: controller.title.value,
+          leading: SonrButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
+          action: Get.find<SonrService>().payload != Payload.CONTACT
+              ? SonrButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat)
+              : Container(),
+          body: GestureDetector(
+            onDoubleTap: () => controller.toggleBirdsEye(),
+            child: controller.isRemoteActive.value
+                ? RemoteView()
+                : Stack(
+                    children: <Widget>[
+                      // @ Range Lines
+                      Padding(
+                          padding: EdgeInsets.only(bottom: 5),
+                          child: Stack(
+                            children: [
+                              Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
+                              Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
+                              Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
+                            ],
+                          )),
 
-            // @ Lobby View
-            PlayAnimation<double>(
-                tween: (0.0).tweenTo(1.0),
-                duration: 150.milliseconds,
-                builder: (context, child, value) {
-                  return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: LobbyStack());
-                }),
+                      // @ Lobby View
+                      PlayAnimation<double>(
+                          tween: (0.0).tweenTo(1.0),
+                          duration: 150.milliseconds,
+                          builder: (context, child, value) {
+                            return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: LobbyStack());
+                          }),
 
-            // @ Compass View
-            CompassView(),
-          ],
-        ))));
+                      // @ Compass View
+                      Padding(
+                        padding: EdgeInsetsX.bottom(16.0),
+                        child: CompassView(),
+                      ),
+                    ],
+                  ),
+          ),
+        ));
   }
 }
 
@@ -103,5 +110,37 @@ class _LobbyStackState extends State<LobbyStack> {
         stackChildren = children;
       });
     }
+  }
+}
+
+class RemoteView extends StatefulWidget {
+  @override
+  _RemoteViewState createState() => _RemoteViewState();
+}
+
+class _RemoteViewState extends State<LobbyStack> {
+  // * Initial State * //
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // * On Dispose * //
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      SonrText.title("Handling Remote..."),
+      Obx(() => ListView.builder(
+          itemCount: SonrService.remoteMembers.length,
+          itemBuilder: (context, index) {
+            var peer = SonrService.remoteMembers[index];
+            return ListTile(title: peer.fullName, subtitle: peer.platformExpanded);
+          }))
+    ]);
   }
 }

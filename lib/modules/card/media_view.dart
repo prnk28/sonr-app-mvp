@@ -58,28 +58,20 @@ class _MediaInviteView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // @ Header
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             // Build Profile Pic
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
-              child: Neumorphic(
-                padding: EdgeInsets.all(4),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  depth: -10,
-                ),
-                child: invite.from.profile.hasPicture()
-                    ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                    : Icon(
-                        Icons.insert_emoticon,
-                        size: 60,
-                        color: Colors.black.withOpacity(0.5),
-                      ),
-              ),
+            Container(
+              child: invite.from.profile.hasPicture()
+                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+                  : Icon(
+                      Icons.insert_emoticon,
+                      size: 60,
+                      color: SonrColor.black.withOpacity(0.5),
+                    ),
             ),
 
             // From Information
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               invite.from.profile.hasLastName()
                   ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
@@ -93,13 +85,7 @@ class _MediaInviteView extends StatelessWidget {
           Container(
             width: card.preview.isNotEmpty ? Get.width - 50 : Get.width - 150,
             height: card.preview.isNotEmpty ? Get.height / 3 : Get.height / 5,
-            child: Neumorphic(
-                padding: EdgeInsets.all(8),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                  depth: -10,
-                ),
-                child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.properties.mime, size: 60)),
+            child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.properties.mime, size: 60),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -109,7 +95,7 @@ class _MediaInviteView extends StatelessWidget {
                 onPressed: () => controller.declineInvite(),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: SonrText.semibold("Decline", color: Colors.red[600], size: 18),
+                  child: SonrText.semibold(invite.isRemote ? "Cancel" : "Decline", color: Colors.red[600], size: 18),
                 )),
             // Accept Button
             Container(
@@ -118,11 +104,10 @@ class _MediaInviteView extends StatelessWidget {
               child: SonrButton.stadium(
                 onPressed: () => controller.acceptTransfer(card),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: Colors.black.withOpacity(0.85)),
+                text: SonrText.semibold(invite.isRemote ? "Continue" : "Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
             ),
           ]),
-          Padding(padding: EdgeInsets.only(top: 14)),
         ],
       ),
     );
@@ -137,75 +122,82 @@ class _MediaItemView extends StatelessWidget {
   _MediaItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Push to Page
-        Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
-      },
-      child: Neumorphic(
-        style: SonrStyle.normal,
-        margin: EdgeInsets.all(4),
-        child: Hero(
-          tag: card.id,
-          child: Container(
-            height: 75,
-            decoration: card.metadata.mime.type == MIME_Type.image
-                ? BoxDecoration(
-                    image: DecorationImage(
-                    colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
-                    fit: BoxFit.cover,
-                    image: MemoryImage(card.metadata.thumbnail),
-                  ))
-                : null,
-            child: Stack(
-              children: <Widget>[
-                // Display Mime Type if Not Image
-                card.metadata.mime.type != MIME_Type.image
-                    ? Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: Get.width - 200,
-                            height: Get.height / 5,
-                            child: Neumorphic(
-                                padding: EdgeInsets.all(8),
-                                style: NeumorphicStyle(
-                                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                                  depth: -10,
-                                ),
-                                child: SonrIcon.withMime(card.metadata.mime, size: 60)),
-                          ),
+    return SonrScaffold(
+      resizeToAvoidBottomPadding: false,
+      body: Container(
+        height: Get.height,
+        child: GestureDetector(
+          onTap: () {
+            // Push to Page
+            Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
+          },
+          child: Neumorphic(
+            style: SonrStyle.normal,
+            margin: EdgeInsets.all(4),
+            child: Hero(
+              tag: card.id,
+              child: Container(
+                height: 75,
+                decoration: card.metadata.mime.type == MIME_Type.image
+                    ? BoxDecoration(
+                        image: DecorationImage(
+                        colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
+                        fit: BoxFit.cover,
+                        image: MemoryImage(card.metadata.thumbnail),
+                      ))
+                    : null,
+                child: Stack(
+                  children: <Widget>[
+                    // Display Mime Type if Not Image
+                    card.metadata.mime.type != MIME_Type.image
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: Get.width - 200,
+                                height: Get.height / 5,
+                                child: Neumorphic(
+                                    padding: EdgeInsets.all(8),
+                                    style: NeumorphicStyle(
+                                      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                                      depth: -10,
+                                    ),
+                                    child: SonrIcon.withMime(card.metadata.mime, size: 60)),
+                              ),
+                            ),
+                          )
+                        : Container(),
+
+                    // Time Stamp
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Neumorphic(
+                          style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+                          child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
+                              color: card.metadata.mime.type == MIME_Type.image ? SonrColor.black : SonrColor.currentNeumorphic),
+                          padding: EdgeInsets.all(10),
                         ),
-                      )
-                    : Container(),
-
-                // Time Stamp
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Neumorphic(
-                      style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                      child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                          color: card.metadata.mime.type == MIME_Type.image ? Colors.black : SonrColor.currentNeumorphic),
-                      padding: EdgeInsets.all(10),
+                      ),
                     ),
-                  ),
-                ),
 
-                // Info Button
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SonrButton.circle(
-                        icon: SonrIcon.info,
-                        onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
-                        shadowLightColor: Colors.black38,
-                      )),
+                    // Info Button
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SonrButton.circle(
+                            color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            icon: SonrIcon.info,
+                            onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
+                            shadowLightColor: Colors.black38,
+                          )),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -257,10 +249,8 @@ class _MediaCardInfo extends StatelessWidget {
     // Build Overlay View
     return Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Neumorphic(
-          margin: EdgeInsets.only(left: 6, right: 6),
-          style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
+        child: GlassContainer(
+          blurRadius: 26,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
             SonrText.header("$mimeType From"),
@@ -338,13 +328,13 @@ class _MediaCardInfo extends StatelessWidget {
                     });
                   }
                 },
-                text: SonrText.medium("Delete", color: SonrColor.Red),
+                text: SonrText.medium("Delete", color: SonrColor.red),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               SonrButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : Colors.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
               ),
             ]),
           ]),

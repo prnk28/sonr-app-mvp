@@ -40,7 +40,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
             radius: 20,
             shape: NeumorphicShape.convex,
             onPressed: () => Get.back(),
-            icon: SonrIcon.normal(Icons.close, color: SonrColor.Red, size: 38)),
+            icon: SonrIcon.normal(Icons.close, color: SonrColor.red, size: 38)),
         floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
         middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 100, index: index, margin: EdgeInsets.only(left: 12, right: 12)),
         body: ValueListenableBuilder(
@@ -117,6 +117,9 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
   Uint8List thumbnail;
   bool loaded = false;
 
+  final mediaButtonDefault = NeumorphicStyle(intensity: 0.85, color: SonrColor.White);
+  final mediaButtonPressed = NeumorphicStyle(depth: -12, intensity: 1, surfaceIntensity: 0.75, shadowDarkColorEmboss: SonrColor.black);
+
   @override
   void initState() {
     widget.item.getThumbnail().then((data) {
@@ -136,7 +139,7 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
       child: NeumorphicButton(
           padding: EdgeInsets.zero,
           onPressed: () => widget.onTap(widget.item),
-          style: widget.isSelected ? SonrStyle.mediaButtonPressed : SonrStyle.mediaButtonDefault,
+          style: widget.isSelected ? mediaButtonPressed : mediaButtonDefault,
           child: Stack(fit: StackFit.expand, children: [
             loaded && thumbnail != null
                 ? Hero(
@@ -149,10 +152,10 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
                 child: widget.item.type == MediaType.video
                     ? SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.glassWater, size: 36)
                     : Container(),
-                alignment: Alignment.center),
+                alignment: Alignment.topRight),
             widget.isSelected
                 ? Container(
-                    alignment: Alignment.bottomLeft,
+                    alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 4, bottom: 4),
                     child: SonrIcon.gradient(SonrIcon.success.data, FlutterGradientNames.hiddenJaguar, size: 40))
                 : Container()

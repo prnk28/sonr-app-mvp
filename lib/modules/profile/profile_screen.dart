@@ -132,7 +132,7 @@ class _AvatarField extends GetView<ProfileController> {
           child: Icon(
             Icons.insert_emoticon,
             size: 120,
-            color: Colors.black.withOpacity(0.2),
+            color: SonrColor.black.withOpacity(0.2),
           ),
         ),
       ),

@@ -8,12 +8,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/home/home_binding.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position, Platform;
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
-enum LaunchPage { Home, Register, PermissionNetwork, PermissionLocation }
 
 class DeviceService extends GetxService {
   // Status/Sensor Properties
@@ -28,47 +28,22 @@ class DeviceService extends GetxService {
   static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
   static RxBool get hasPointToShare => Get.find<DeviceService>()._hasPointToShare;
 
-  // Camera Permissions
-  bool get cameraPermitted => _box.read("cameraPermitted") ?? false;
-  _cameraPermittedToBox(bool val) {
-    _box.write("cameraPermitted", val);
-  }
-
-  // Gallery Permissions
-  bool get galleryPermitted => _box.read("galleryPermitted") ?? false;
-  _galleryPermittedToBox(bool val) {
-    _box.write("galleryPermitted", val);
-  }
-
-// Location Permissions
-  bool get locationPermitted => _box.read("locationPermitted") ?? false;
-  _locationPermittedToBox(bool val) {
-    _box.write("locationPermitted", val);
-  }
-
-  // Microphone Permissions
-  bool get microphonePermitted => _box.read("microphonePermitted") ?? false;
-  _microphonePermittedToBox(bool val) {
-    _box.write("microphonePermitted", val);
-  }
-
-  // Network Triggered
-  bool get networkTriggered => _box.read("networkTriggered") ?? false;
-  _networkTriggeredToBox(bool val) {
-    _box.write("networkTriggered", val);
-  }
-
-  // Network Triggered
-  bool get notificationPermitted => _box.read("notificationPermitted") ?? false;
-  _notificationPermittedToBox(bool val) {
-    _box.write("notificationPermitted", val);
-  }
-
   // References
   final _box = GetStorage();
 
+  // Permissions Values
+  final cameraPermitted = false.val('cameraPermitted');
+  final galleryPermitted = false.val('galleryPermitted');
+  final locationPermitted = false.val('locationPermitted');
+  final microphonePermitted = false.val('microphonePermitted');
+  final networkTriggered = false.val('networkTriggered');
+  final notificationPermitted = false.val('notificationPermitted');
+
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
+    // Initialize Storage
+    await GetStorage.init();
+
     // Bind Direction Stream
     _direction.bindStream(FlutterCompass.events);
 
@@ -86,17 +61,28 @@ class DeviceService extends GetxService {
     return this;
   }
 
-  // ^ Method Determins LaunchPage ^
-  static LaunchPage getLaunchPage() {
-    if (!UserService.exists.value) {
-      return LaunchPage.Register;
-    } else {
-      if (Get.find<DeviceService>().locationPermitted) {
-        return LaunchPage.Home;
+  // ^ Method Determins LaunchPage and Changes Screen ^
+  static void shiftPage({@required Duration delay}) async {
+    Future.delayed(delay, () {
+      // Check for User
+      if (!UserService.exists.value) {
+        Get.offNamed("/register");
       } else {
-        return LaunchPage.PermissionLocation;
+        // All Valid
+        if (Get.find<DeviceService>().locationPermitted.val) {
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        }
+
+        // No Location
+        else {
+          Get.find<DeviceService>().requestLocation().then((value) {
+            if (value) {
+              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+            }
+          });
+        }
       }
-    }
+    });
   }
 
   // ^ Launch a URL Event ^ //
@@ -131,7 +117,7 @@ class DeviceService extends GetxService {
         acceptTitle: "Allow",
         declineTitle: "Decline")) {
       if (await Permission.camera.request().isGranted) {
-        _cameraPermittedToBox(true);
+        cameraPermitted.val = true;
         return true;
       } else {
         return false;
@@ -147,14 +133,14 @@ class DeviceService extends GetxService {
     if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
       if (Platform.isAndroid) {
         if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
-          _galleryPermittedToBox(true);
+          galleryPermitted.val = true;
           return true;
         } else {
           return false;
         }
       } else {
         if (await Permission.photos.request().isGranted) {
-          _galleryPermittedToBox(true);
+          galleryPermitted.val = true;
           return true;
         } else {
           return false;
@@ -174,7 +160,7 @@ class DeviceService extends GetxService {
         acceptTitle: "Allow",
         declineTitle: "Decline")) {
       if (await Permission.locationWhenInUse.request().isGranted) {
-        _locationPermittedToBox(true);
+        locationPermitted.val = true;
         return true;
       } else {
         return false;
@@ -193,7 +179,7 @@ class DeviceService extends GetxService {
         acceptTitle: "Allow",
         declineTitle: "Decline")) {
       if (await Permission.microphone.request().isGranted) {
-        _microphonePermittedToBox(true);
+        microphonePermitted.val = true;
         return true;
       } else {
         return false;
@@ -212,7 +198,7 @@ class DeviceService extends GetxService {
         acceptTitle: "Allow",
         declineTitle: "Decline")) {
       if (await Permission.notification.request().isGranted) {
-        _notificationPermittedToBox(true);
+        notificationPermitted.val = true;
         return true;
       } else {
         return false;
@@ -224,7 +210,7 @@ class DeviceService extends GetxService {
 
   // ^ Trigger iOS Local Network with Alert ^ //
   Future triggerNetwork() async {
-    if (!networkTriggered && Platform.isIOS) {
+    if (!networkTriggered.val && Platform.isIOS) {
       await SonrOverlay.alert(
           title: 'Requires Permission',
           description: 'Sonr requires local network permissions in order to maximize transfer speed.',
@@ -232,14 +218,17 @@ class DeviceService extends GetxService {
           barrierDismissible: false);
 
       await SonrCore.requestLocalNetwork();
-      _networkTriggeredToBox(true);
+      networkTriggered.val = true;
     }
     return true;
   }
 
   // ^ BoxStorage Theme Mode Helper ^ //
   bool _loadThemeFromBox() => _box.read("isDarkMode") ?? false;
-  _saveThemeToBox(bool isDarkMode) => _box.write("isDarkMode", isDarkMode);
+  _saveThemeToBox(bool isDarkMode) {
+    _box.write("isDarkMode", isDarkMode);
+    _box.save();
+  }
 
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {

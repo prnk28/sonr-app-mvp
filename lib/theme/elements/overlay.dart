@@ -10,15 +10,21 @@ import '../theme.dart';
 import 'form.dart';
 
 // ** Class Controls Active Overlays ** //
-class SonrOverlay extends GetxController {
+class SonrOverlay extends GetxService {
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrFixedOverlayEntry>();
 
   // References
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;
+  static bool get isNotOpen => Get.find<SonrOverlay>().overlays.length == 0;
   static int get count => Get.find<SonrOverlay>().overlays.length;
   static SonrOverlay get _controller => Get.find<SonrOverlay>();
+
+  // ^ Initialize Service Method ^ //
+  Future<SonrOverlay> init() async {
+    return this;
+  }
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
   static void show(Widget view,
@@ -221,7 +227,6 @@ class SonrOverlay extends GetxController {
 
       // Clear List
       _controller.overlays.clear();
-      _controller.currentOverlay.nil();
 
       // Refresh List
       _controller.overlays.refresh();
@@ -232,7 +237,7 @@ class SonrOverlay extends GetxController {
 }
 
 // ** Class Controls Active Overlays ** //
-class SonrPositionedOverlay extends GetxController {
+class SonrPositionedOverlay extends GetxService {
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrPositionedOverlayEntry>();
@@ -241,6 +246,10 @@ class SonrPositionedOverlay extends GetxController {
   static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;
   static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
   static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
+
+  Future<SonrPositionedOverlay> init() async {
+    return this;
+  }
 
   // ^ Opens View at Position with Size ^ //
   static void open(
@@ -327,14 +336,6 @@ class _SonrFixedOverlayEntry {
       return Positioned.fill(
         child: GestureDetector(
           onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
-          child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: blur,
-                sigmaY: blur,
-              ),
-              child: Container(
-                color: backgroundColor,
-              )),
         ),
       );
     });
@@ -440,40 +441,35 @@ class _AlertOverlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Neumorphic(
-          margin: EdgeInsets.only(left: 6, right: 6),
-          style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
-          child: Container(
-            margin: EdgeInsets.all(8),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.header(title),
-              Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: SonrText.normal(description, size: 18),
-              ),
-              Padding(padding: EdgeInsets.all(4)),
-              Divider(),
-              Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                // Accept Button
-                Container(
-                  width: Get.width / 3,
-                  child: SonrButton.stadium(
-                    onPressed: () {
-                      onPressed();
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    icon: SonrIcon.accept,
-                    text: SonrText.semibold(buttonText, size: 18),
-                  ),
-                ),
-              ]),
-            ]),
-          )),
+    return GlassContainer(
+      // backendColor: Colors.transparent,
+      margin: EdgeInsets.all(30),
+      // borderRadius: BorderRadius.circular(20),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrText.header(title),
+        Padding(
+          padding: EdgeInsets.only(left: 10.0),
+          child: SonrText.normal(description, size: 18),
+        ),
+        Padding(padding: EdgeInsets.all(4)),
+        Divider(),
+        Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          // Accept Button
+          Container(
+            width: Get.width / 3,
+            child: SonrButton.stadium(
+              onPressed: () {
+                onPressed();
+                if (closeOnResponse) {
+                  SonrOverlay.back();
+                }
+              },
+              icon: SonrIcon.accept,
+              text: SonrText.semibold(buttonText, size: 18),
+            ),
+          ),
+        ]),
+      ]),
     );
   }
 }
@@ -504,12 +500,12 @@ class _DropdownOverlayView extends StatelessWidget {
           child: Container(
             width: 17,
             height: 17,
-            color:DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+            color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
           ),
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 15.0),
+        padding: const EdgeInsets.only(top: 16.0),
         child: Container(
           height: (items.length * size.height) / 1.5 + height,
           width: size.width + width,
@@ -524,7 +520,7 @@ class _DropdownOverlayView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: NeumorphicButton(
                     style: SonrStyle.flat,
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(8),
                     onPressed: () {
                       onChanged(index);
                       SonrPositionedOverlay.back();
@@ -574,14 +570,12 @@ class _InviteReplyOverlayView extends StatelessWidget {
     }
 
     // Build View
-    return NeumorphicBackground(
-        margin: EdgeInsets.symmetric(horizontal: 20),
-        borderRadius: BorderRadius.circular(30),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-          style: NeumorphicStyle(color: SonrColor.White),
-          child: view,
-        ));
+    return GlassContainer(
+        margin: EdgeInsets.symmetric(horizontal: 16),
+        height: 500,
+        // borderRadius: BorderRadius.circular(30),
+        // backendColor: Colors.transparent,
+        child: view);
   }
 }
 
@@ -600,51 +594,48 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Neumorphic(
-          margin: EdgeInsets.only(left: 6, right: 6),
-          style: SonrStyle.overlay,
-          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
-          child: Container(
-            margin: EdgeInsets.all(8),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.header(title),
-              Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: SonrText.normal(description, size: 18),
+    return GlassContainer(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      height: Get.height / 3 + 50,
+      child: Container(
+        margin: EdgeInsets.all(8),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SonrText.header(title),
+          Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: SonrText.subtitle(description),
+          ),
+          Padding(padding: EdgeInsets.all(4)),
+          Divider(),
+          Padding(padding: EdgeInsets.all(4)),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            // Decline Button
+            TextButton(
+                onPressed: () {
+                  onDecision(false);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                child: SonrText.semibold(declineTitle, color: SonrColor.red, size: 18)),
+            // Accept Button
+            Container(
+              width: Get.width / 2.5,
+              height: 50,
+              child: SonrButton.stadium(
+                onPressed: () {
+                  onDecision(true);
+                  if (closeOnResponse) {
+                    SonrOverlay.back();
+                  }
+                },
+                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
-              Padding(padding: EdgeInsets.all(4)),
-              Divider(),
-              Padding(padding: EdgeInsets.all(4)),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                // Decline Button
-                TextButton(
-                    onPressed: () {
-                      onDecision(false);
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    child: SonrText.semibold(declineTitle, color: SonrColor.Red, size: 18)),
-                // Accept Button
-                Container(
-                  width: Get.width / 2.5,
-                  height: 50,
-                  child: SonrButton.stadium(
-                    onPressed: () {
-                      onDecision(true);
-                      if (closeOnResponse) {
-                        SonrOverlay.back();
-                      }
-                    },
-                    icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                    text: SonrText.semibold(acceptTitle, size: 18, color: Colors.black.withOpacity(0.85)),
-                  ),
-                ),
-              ]),
-            ]),
-          )),
+            ),
+          ]),
+        ]),
+      ),
     );
   }
 }

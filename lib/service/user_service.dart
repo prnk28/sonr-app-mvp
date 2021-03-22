@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class UserService extends GetxService {
@@ -38,27 +38,27 @@ class UserService extends GetxService {
     var controller = Get.find<UserService>();
     // Return Existing User
     if (controller._exists.value) {
-      var profileJson = controller._prefs.getString("user");
+      var profileJson = controller._box.read("user");
       return User.fromJson(profileJson);
     }
     return new User();
   }
 
   // ** References **
-  SharedPreferences _prefs;
+  final _box = GetStorage('User');
 
   // ^ Open SharedPreferences on Init ^ //
   Future<UserService> init() async {
     // @ Init Shared Preferences
-    _prefs = await SharedPreferences.getInstance();
+    await GetStorage.init('User');
 
     // @ Check User Status
-    _exists(_prefs.containsKey("user"));
+    _exists(_box.hasData("user"));
 
     // @ Check if User Exists
     if (_exists.value) {
       // Get Json Value
-      var profileJson = _prefs.getString("user");
+      var profileJson = _box.read("user");
       var user = User.fromJson(profileJson);
 
       // Set Contact Values
@@ -184,18 +184,18 @@ class UserService extends GetxService {
     User user;
     if (_exists.value) {
       // Update Existing User with new Contact
-      var profileJson = _prefs.getString("user");
+      var profileJson = _box.read("user");
       user = User.fromJson(profileJson);
       user.contact = contact;
 
       // @ Save to SharedPreferences, Update SonrNode
-      _prefs.setString("user", user.writeToJson());
+      _box.write("user", user.writeToJson());
       SonrService.setContact(contact);
     }
     // Create New User with Contact
     else {
       user = new User(contact: contact);
-      _prefs.setString("user", user.writeToJson());
+      _box.write("user", user.writeToJson());
       _exists(true);
     }
     return user;

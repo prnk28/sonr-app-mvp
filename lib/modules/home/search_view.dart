@@ -12,11 +12,11 @@ class SearchView extends GetView<SearchCardController> {
               borderRadius: BorderRadius.circular(30),
               backendColor: Colors.transparent,
               child: Neumorphic(
-                style: NeumorphicStyle(color: SonrColor.White),
+                style: SonrStyle.normal,
                 child: Container(
                   child: Column(children: [
                     Neumorphic(
-                        style: NeumorphicStyle(color: SonrColor.White),
+                        style: SonrStyle.normal,
                         child: Container(
                           width: Get.width - 60,
                           margin: EdgeInsets.only(left: 10, right: 10),

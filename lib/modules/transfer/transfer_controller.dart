@@ -6,6 +6,9 @@ class TransferController extends GetxController {
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
+  final isBirdsEye = false.obs;
+  final isRemoteActive = false.obs;
+  final counter = 0.obs;
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -19,6 +22,7 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
+  Timer _timer;
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -27,7 +31,7 @@ class TransferController extends GetxController {
     _handleLobbySizeUpdate(SonrService.lobbySize.value);
 
     // Add Stream Handlers
-    compassStream = DeviceService.direction.stream.listen(_handleCompassUpdate);
+    compassStream = DeviceService.direction.listen(_handleCompassUpdate);
     lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeUpdate);
 
     super.onInit();
@@ -39,10 +43,45 @@ class TransferController extends GetxController {
     lobbySizeStream.cancel();
   }
 
+  // ^ Toggle Remote Value ^ //
+  void startRemote() {
+    SonrService.remote();
+    isRemoteActive(true);
+    // Create Timeout
+    _timer = Timer.periodic(500.milliseconds, (_) {
+      // Add to Counter
+      counter(counter.value += 500);
+      var remaining = (45000 - counter.value) / 1000;
+      title("${remaining}s Left");
+      title.refresh();
+
+      // Check if Timeout Reached
+      if (counter.value == 45000) {
+        if (isRemoteActive.value) {
+          _timer.cancel();
+          _timer = null;
+          HapticFeedback.mediumImpact();
+          counter(0);
+          isRemoteActive(false);
+          _handleLobbySizeUpdate(SonrService.lobbySize.value);
+        }
+      }
+    });
+  }
+
   // ^ User is Facing or No longer Facing a Peer ^ //
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
+  }
+
+  // ^ Switch Transfer Views ^ //
+  void toggleBirdsEye() {
+    if (!isRemoteActive.value) {
+      isBirdsEye(!isBirdsEye.value);
+      print("isBirdsEye ${isBirdsEye.value}");
+      isBirdsEye.refresh();
+    }
   }
 
   // ^ Handle Compass Update ^ //
@@ -67,12 +106,14 @@ class TransferController extends GetxController {
 
   // ^ Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(int size) {
-    if (size == 0) {
-      title("Nobody Here");
-    } else if (size == 1) {
-      title("1 Person");
-    } else {
-      title("$size People");
+    if (!isRemoteActive.value) {
+      if (size == 0) {
+        title("Nobody Here");
+      } else if (size == 1) {
+        title("1 Person");
+      } else {
+        title("$size People");
+      }
     }
   }
 }

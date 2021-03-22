@@ -1,15 +1,21 @@
-# Plugin Vars
+SONR_ROOT_DIR=/Users/prad/Sonr # Set this to Folder of Sonr
+
+# Project Dirs
+PROJECT_DIR=/Users/prad/Sonr/mobile
+ANDROID_DIR=/Users/prad/Sonr/mobile/android
+IOS_DIR=/Users/prad/Sonr/mobile/ios
+
+# Mobile Actions
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
 BUILDIOS=$(FLUTTER) build ios
 BUILDANDROID=$(FLUTTER) build appbundle
 CLEAN=$(FLUTTER) clean
-ANDROID_DIR=/Users/prad/Sonr/app/android
-IOS_DIR=/Users/prad/Sonr/app/ios
-IOS_ARCHIVE_DIR=/Users/prad/Sonr/app/build/ios/archive/
-ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/app/build/app/outputs/bundle/release/
-PROJECT_DIR=/Users/prad/Sonr/app
-SKL_FILE=/Users/prad/Sonr/app/assets/animations/flutter_01.sksl.json
+
+# Result Dirs/Files
+IOS_ARCHIVE_DIR=/Users/prad/Sonr/mobile/build/ios/archive/
+ANDROID_ARCHIVE_DIR=/Users/prad/Sonr/mobile/build/app/outputs/bundle/release/
+SKL_FILE=/Users/prad/Sonr/mobile/assets/animations/flutter_01.sksl.json
 
 # Lists Options
 all: Makefile
@@ -29,20 +35,19 @@ build: build.ios build.android
 ## └─ ios             - IPA for iOS
 build.ios:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDIOS) --release
-	cd $(IOS_ARCHIVE_DIR) && open .
+	cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Building iOS ➡ " && date
-# cd $(PROJECT_DIR) && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 
 ## └─ android         - APB for Android
 build.android:
 	@cd $(PROJECT_DIR) && $(CLEAN)
-	cd $(PROJECT_DIR) && $(BUILDANDROID) --release
+	cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
 	cd $(ANDROID_ARCHIVE_DIR) && open .
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Building Android ➡ " && date
-# cd $(PROJECT_DIR) && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE) --release
 
 ## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
 deploy: deploy.ios deploy.android
@@ -58,28 +63,33 @@ deploy: deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
 	@echo "Finished Building Sonr iOS ➡ " && date
-	cd $(IOS_DIR) && fastlane ios internal
+	cd $(IOS_DIR) && fastlane internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr iOS to AppStore Connect ➡ " && date
 
 ## └─ android         - APB for PlayStore
 deploy.android:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
+	cd $(PROJECT_DIR) && cider bump build
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
 
 ##
 ## [debug]       :   Run Mobile App in Debug Mode
 debug:
+	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
 ## [profile]     :   Run Mobile App for Profile Mode
 profile:
-	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl
+	cd $(PROJECT_DIR) && cider bump build
+	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl --write-sksl-on-exit $(SKL_FILE)
 
 ## [release]     :   Run Mobile App for Release Mode
 release:
@@ -92,4 +102,10 @@ release:
 clean:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
+	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
+	@echo 'Cleaning iOS Fastlane Cache'
 	cd $(PROJECT_DIR) && flutter pub get
+	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
+	@echo "Finished Cleaning Sonr Mobile Frontend ➡ " && date
+

@@ -391,6 +391,12 @@
       "search": [
         "icons8-user-(4)"
       ]
+    },
+    {
+      "uid": "e6t4yvmv401e9gpo2anslq4uqy2iz692",
+      "css": "remote",
+      "code": 59421,
+      "src": "modernpics"
     }
   ]
 }

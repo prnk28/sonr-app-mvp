@@ -24,7 +24,7 @@ class PeerController extends GetxController {
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
   final position = Rx<Position>();
-  final userPos = Rx<CompassEvent>();
+  final userPos = Rx<CompassEvent>(DeviceService.direction.value);
 
   // References
   Timer _timer;

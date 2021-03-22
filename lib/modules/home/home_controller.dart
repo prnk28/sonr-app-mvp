@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:sonr_app/theme/theme.dart';
 
+import 'home_binding.dart';
+
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
@@ -12,17 +14,37 @@ class HomeController extends GetxController {
   final status = Rx<HomeState>();
   final category = Rx<ToggleFilter>(ToggleFilter.All);
 
-  // Widget Elements
-  final isShareExpanded = false.obs;
+  // Elements
+  final titleText = "Home".obs;
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
 
   // References
   PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
+
+  // Conditional
   bool _hasPromptedAutoSave = false;
 
-  HomeController() {
+  // ^ Controller Constructer ^
+  onInit() {
+    // Set View Properties
+    toggleIndex(1);
+    pageIndex(0);
+    super.onInit();
+
+    // Initialize
+    HomeArguments args = Get.arguments;
+    if (args.isFirstLoad) {
+      MediaService.checkInitialShare();
+    }
+  }
+
+  @override
+  void onReady() {
+    // Add Stream Handlers
+    cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
+
     // Set Initial Status
     if (cards.length > 0) {
       status(HomeState.Ready);
@@ -33,39 +55,15 @@ class HomeController extends GetxController {
         status(HomeState.None);
       }
     }
-  }
-
-  // ^ Controller Constructer ^
-  onInit() {
-    // Initialize
-    MediaService.checkInitialShare();
-
-    // Add Stream Handlers
-    cardStream = Get.find<SQLService>().cards.stream.listen(_handleCardStream);
-
-    // Set View Properties
-    toggleIndex(1);
-    pageIndex(0);
-    super.onInit();
+    super.onReady();
   }
 
   // ^ On Dispose ^ //
   void onDispose() {
     cardStream.cancel();
+
     toggleIndex(1);
     pageIndex(0);
-  }
-
-  // ^ Prompts first time user Auto Save ^ //
-  promptAutoSave() async {
-    if (!_hasPromptedAutoSave) {
-      Future.delayed(2400.milliseconds, () {
-        if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted && !SonrOverlay.isOpen) {
-          Get.find<DeviceService>().requestGallery(
-              description: "Next time Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
-        }
-      });
-    }
   }
 
   // ^ Handle Cards Update ^ //
@@ -109,20 +107,6 @@ class HomeController extends GetxController {
     }
   }
 
-  // ^ Method for Setting Category Filter ^ //
-  setToggleCategory(int index) {
-    toggleIndex(index);
-    category(ToggleFilter.values[index]);
-
-    // Haptic Feedback
-    HapticFeedback.mediumImpact();
-
-    // Change Category
-    if (status.value == HomeState.Ready) {
-      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
-    }
-  }
-
   // ^ Finds Index of Card and Scrolls to It ^ //
   void jumpToCard(TransferCard card) async {
     // Get Index
@@ -154,21 +138,40 @@ class HomeController extends GetxController {
     }
   }
 
-  // ^ Close Share Button ^ //
-  void closeShare() {
-    HapticFeedback.heavyImpact();
-    isShareExpanded(false);
+  // ^ Prompts first time user Auto Save ^ //
+  promptAutoSave() async {
+    if (!_hasPromptedAutoSave && cards.length == 1) {
+      Future.delayed(2400.milliseconds, () {
+        if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted.val && !SonrOverlay.isOpen) {
+          Get.find<DeviceService>().requestGallery(
+              description: "Next time Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
+        }
+      });
+    }
   }
 
-  // ^ Expand Share Button ^ //
-  void expandShare() {
-    HapticFeedback.heavyImpact();
-    isShareExpanded(true);
+  // ^ Method for Setting Category Filter ^ //
+  setToggleCategory(int index) {
+    toggleIndex(index);
+    category(ToggleFilter.values[index]);
+
+    // Haptic Feedback
+    HapticFeedback.mediumImpact();
+
+    // Change Category
+    if (status.value == HomeState.Ready) {
+      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+    }
   }
 
-  // ^ Toggles Expanded Share Button ^ //
-  void toggleShare() {
-    HapticFeedback.heavyImpact();
-    isShareExpanded(!isShareExpanded.value);
+  // ^ Provides Information at home page ^ //
+  void readyTitleText(int lobbySize, {Duration timeout = const Duration(milliseconds: 3500)}) {
+    titleText("Hello, ${UserService.firstName.value}");
+    Future.delayed(timeout, () {
+      titleText("$lobbySize Nearby");
+    });
+    Future.delayed(timeout * 2, () {
+      titleText("Home");
+    });
   }
 }

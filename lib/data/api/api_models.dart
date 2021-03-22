@@ -33,7 +33,7 @@ extension ContactUtils on Contact {
         : Icon(
             Icons.insert_emoticon,
             size: 120,
-            color: Colors.black.withOpacity(0.5),
+            color: SonrColor.black.withOpacity(0.5),
           );
   }
 
@@ -96,7 +96,7 @@ extension PeerUtils on Peer {
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
               TextSpan(text: this.platform.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
-              TextSpan(text: " - ${this.model}", style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: Colors.black)),
+              TextSpan(text: " - ${this.model}", style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.black)),
             ])));
   }
 
@@ -118,7 +118,7 @@ extension PeerUtils on Peer {
           : Icon(
               Icons.insert_emoticon,
               size: 100,
-              color: Colors.black.withOpacity(0.5),
+              color: SonrColor.black.withOpacity(0.5),
             ),
     );
   }

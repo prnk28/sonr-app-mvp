@@ -64,7 +64,7 @@ class MediaService extends GetxService {
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
-    if (Get.find<DeviceService>().galleryPermitted) {
+    if (Get.find<DeviceService>().galleryPermitted.val) {
       // Get Collections
       _state(GalleryState.Loading);
       List<MediaCollection> collections = await MediaGallery.listMediaCollections(
@@ -118,7 +118,7 @@ class MediaService extends GetxService {
   }
 
   // ^ Checks for Initial Media/Text to Share ^ //
-  static checkInitialShare() {
+  static checkInitialShare() async {
     // Initialize
     var controller = Get.find<MediaService>();
 
@@ -134,8 +134,9 @@ class MediaService extends GetxService {
 
     // @ Check for Text
     if (controller._incomingText.value != "" && GetUtils.isURL(controller._incomingText.value) && !Get.isBottomSheetOpen) {
+      var data = await SonrCore.getURL(controller._incomingText.value);
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(controller._incomingText.value), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 
       // Reset Incoming
       controller._incomingText("");
@@ -234,7 +235,7 @@ class MediaService extends GetxService {
     } else {
       if (isVideo) {
         // Save Image to Gallery
-        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
+        var result = await GallerySaver.saveVideo(path);
 
         // Visualize Result
         if (result) {
@@ -243,7 +244,7 @@ class MediaService extends GetxService {
         return result;
       } else {
         // Save Image to Gallery
-        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+        var result = await GallerySaver.saveImage(path);
         if (!result) {
           SonrSnack.error("Unable to save Captured Video to your Gallery");
         }
@@ -256,13 +257,12 @@ class MediaService extends GetxService {
   static Future<bool> saveTransfer(TransferCard card) async {
     // Await Permissions
 
-
     // Get Data from Media
     final path = card.metadata.path;
     if (card.hasMetadata()) {
       // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted) {
-        var result = await GallerySaver.saveImage(path, albumName: "Sonr");
+      if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted.val) {
+        var result = await GallerySaver.saveImage(path);
 
         // Visualize Result
         if (result) {
@@ -274,8 +274,8 @@ class MediaService extends GetxService {
       }
 
       // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted) {
-        var result = await GallerySaver.saveVideo(path, albumName: "Sonr");
+      else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted.val) {
+        var result = await GallerySaver.saveVideo(path);
 
         // Visualize Result
         if (result) {
@@ -303,7 +303,11 @@ class MediaService extends GetxService {
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
-      Get.bottomSheet(ShareSheet.url(text), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      // Get Data
+      var data = await SonrCore.getURL(text);
+
+      // Open Sheet
+      Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 }

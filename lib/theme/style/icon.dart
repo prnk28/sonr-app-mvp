@@ -72,7 +72,7 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ Payload Data from TransferCard
-  factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = Colors.black, Key key}) {
+  factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = SonrColor.black, Key key}) {
     IconGradientData iconData;
     switch (card.properties.mime.type) {
       case MIME_Type.audio:
@@ -104,7 +104,7 @@ class SonrIcon extends StatelessWidget {
 
   // ^ Payload Data from Mime
   factory SonrIcon.withMime(MIME mime,
-      {double size = 30, Color color = Colors.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
+      {double size = 30, Color color = SonrColor.black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
     return SonrIcon(
       mime.type.gradientData.data,
       IconType.Gradient,
@@ -116,10 +116,10 @@ class SonrIcon extends StatelessWidget {
   }
 
   // ^ UI Icons ^ //
-  static SonrIcon get success => SonrIcon(SonrIconData.success, IconType.Normal, Colors.black, null);
-  static SonrIcon get missing => SonrIcon(SonrIconData.missing, IconType.Normal, Colors.black, null);
-  static SonrIcon get error => SonrIcon(SonrIconData.error, IconType.Normal, Colors.black, null);
-  static SonrIcon get cancel => SonrIcon(SonrIconData.cancel, IconType.Normal, Colors.black, null);
+  static SonrIcon get success => SonrIcon(SonrIconData.success, IconType.Normal, SonrColor.black, null);
+  static SonrIcon get missing => SonrIcon(SonrIconData.missing, IconType.Normal, SonrColor.black, null);
+  static SonrIcon get error => SonrIcon(SonrIconData.error, IconType.Normal, SonrColor.black, null);
+  static SonrIcon get cancel => SonrIcon(SonrIconData.cancel, IconType.Normal, SonrColor.black, null);
   static SonrIcon get clear => SonrIcon.gradient(SonrIconData.cancel, FlutterGradientNames.happyMemories, size: 20);
   static SonrIcon get info => SonrIcon.gradient(SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
   static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
@@ -139,10 +139,13 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get profile =>
       SonrIcon.neumorphicGradient(SonrIconData.profile, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
+  static SonrIcon get groups => SonrIcon.neumorphicGradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
   static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get more =>
       SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
-  static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrColor.Red, size: 36);
+  static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrColor.red, size: 36);
+  static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.Blue, size: 36);
+  static SonrIcon get remote => SonrIcon.normal(SonrIconData.remote, color: SonrColor.Blue, size: 28);
 
   // ^ Build View of Icon ^ //
   @override
@@ -260,6 +263,7 @@ class SonrIconData {
   static const IconData twitter = IconData(0xf309, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData medium_alt = IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData media = IconData(0xf87c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData remote = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
 
 class IconGradientData {
