@@ -1,5 +1,6 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/home/home_binding.dart';
+import 'package:sonr_app/service/permission.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -115,7 +116,7 @@ class RegisterController extends GetxController {
 
       // Process data.
       await UserService.saveChanges(providedContact: contact, isNewUser: true);
-      var result = await Get.find<DeviceService>().requestLocation();
+      var result = await Get.find<PermissionService>().requestLocation();
       if (result) {
         await Get.find<DeviceService>().currentLocation();
         isPending(false);

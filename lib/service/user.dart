@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 class UserService extends GetxService {
   // ** User Reactive Properties **
-  final _exists = false.obs;
+  final _isExisting = false.obs;
   final _isNewUser = false.obs;
 
   // ** Contact Reactive Properties **
@@ -18,9 +18,22 @@ class UserService extends GetxService {
   final _picture = Rx<Uint8List>();
   final _socials = <Contact_SocialTile>[].obs;
 
+  // Preferences
+  final _brightness = Rx<Brightness>();
+  final _direction = Rx<CompassEvent>();
+  final _isDarkMode = true.obs;
+  final _hasPointToShare = false.obs;
+
   // **  Getter Methods for Contact Properties **
-  static RxBool get exists => Get.find<UserService>()._exists;
+  static RxBool get isExisting => Get.find<UserService>()._isExisting;
   static RxBool get isNewUser => Get.find<UserService>()._isNewUser;
+
+  // Getters for Preferences
+  static Rx<Brightness> get brightness => Get.find<UserService>()._brightness;
+  static Rx<CompassEvent> get direction => Get.find<UserService>()._direction;
+  static RxBool get isDarkMode => Get.find<UserService>()._isDarkMode;
+  static RxBool get hasPointToShare => Get.find<UserService>()._hasPointToShare;
+
   static RxString get firstName => Get.find<UserService>()._firstName;
   static RxString get lastName => Get.find<UserService>()._lastName;
   static RxString get phone => Get.find<UserService>()._phone;
@@ -37,28 +50,30 @@ class UserService extends GetxService {
   static User get current {
     var controller = Get.find<UserService>();
     // Return Existing User
-    if (controller._exists.value) {
-      var profileJson = controller._box.read("user");
+    if (controller._isExisting.value) {
+      var profileJson = controller._userBox.read("user");
       return User.fromJson(profileJson);
     }
     return new User();
   }
 
   // ** References **
-  final _box = GetStorage('User');
+  final _userBox = GetStorage('User');
+  final _prefsBox = GetStorage('Preferences');
 
   // ^ Open SharedPreferences on Init ^ //
   Future<UserService> init() async {
     // @ Init Shared Preferences
     await GetStorage.init('User');
+    await GetStorage.init('Preferences');
 
     // @ Check User Status
-    _exists(_box.hasData("user"));
+    _isExisting(_userBox.hasData("user"));
 
     // @ Check if User Exists
-    if (_exists.value) {
+    if (_isExisting.value) {
       // Get Json Value
-      var profileJson = _box.read("user");
+      var profileJson = _userBox.read("user");
       var user = User.fromJson(profileJson);
 
       // Set Contact Values
@@ -72,6 +87,18 @@ class UserService extends GetxService {
     } else {
       _isNewUser(true);
     }
+
+    // Set Preferences
+    _isDarkMode(_prefsBox.read("isDarkMode") ?? false);
+    _hasPointToShare(_prefsBox.read("hasPointToShare") ?? false);
+    _brightness(_isDarkMode.value ? Brightness.dark : Brightness.light);
+
+    // Update Android and iOS Status Bar
+    _isDarkMode.value
+        ? SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
     return this;
   }
 
@@ -182,22 +209,69 @@ class UserService extends GetxService {
   Future<User> _saveContactForUser(Contact contact) async {
     // @ Initialize
     User user;
-    if (_exists.value) {
+    if (_isExisting.value) {
       // Update Existing User with new Contact
-      var profileJson = _box.read("user");
+      var profileJson = _userBox.read("user");
       user = User.fromJson(profileJson);
       user.contact = contact;
 
       // @ Save to SharedPreferences, Update SonrNode
-      _box.write("user", user.writeToJson());
+      _userBox.write("user", user.writeToJson());
       SonrService.setContact(contact);
     }
     // Create New User with Contact
     else {
       user = new User(contact: contact);
-      _box.write("user", user.writeToJson());
-      _exists(true);
+      _userBox.write("user", user.writeToJson());
+      _isExisting(true);
     }
     return user;
+  }
+
+  // ************************* //
+  // ** Preference Requests ** //
+  // ************************* //
+
+  // ^ BoxStorage Theme Mode Helper ^ //
+  bool _loadThemeFromBox() => _prefsBox.read("isDarkMode") ?? false;
+  _saveThemeToBox(bool isDarkMode) {
+    _prefsBox.write("isDarkMode", isDarkMode);
+    _prefsBox.save();
+  }
+
+  // ^ Trigger iOS Local Network with Alert ^ //
+  static toggleDarkMode() async {
+    // Update Value
+    Get.find<UserService>()._isDarkMode(!Get.find<UserService>()._isDarkMode.value);
+    Get.find<UserService>()._isDarkMode.refresh();
+
+    // Update Android and iOS Status Bar
+    Get.find<UserService>()._isDarkMode.value
+        ? SystemChrome.setSystemUIOverlayStyle(
+            SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
+        : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
+
+    // Update Theme
+    Get.changeThemeMode(Get.find<UserService>()._loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
+
+    // Save Preference
+    Get.find<UserService>()._saveThemeToBox(!Get.find<UserService>()._loadThemeFromBox());
+    return true;
+  }
+
+  // ^ BoxStorage Point to Share Mode Helper ^ //
+  bool _loadPointToShareFromBox() => _prefsBox.read("hasPointToShare") ?? false;
+  _savePointToShareToBox(bool hasPointToShare) => _prefsBox.write("hasPointToShare", hasPointToShare);
+
+  // ^ Trigger iOS Local Network with Alert ^ //
+  static togglePointToShare() async {
+    // Update Value
+    Get.find<UserService>()._hasPointToShare(!Get.find<UserService>()._hasPointToShare.value);
+    Get.find<UserService>()._hasPointToShare.refresh();
+
+    // Save Preference
+    Get.find<UserService>()._savePointToShareToBox(!Get.find<UserService>()._loadPointToShareFromBox());
+    return true;
   }
 }

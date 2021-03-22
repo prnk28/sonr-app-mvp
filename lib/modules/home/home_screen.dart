@@ -37,7 +37,7 @@ class HomeScreen extends GetView<HomeController> {
               padding: EdgeInsets.only(top: 10),
               margin: EdgeInsets.only(left: 30, right: 30),
               child: Obx(() => NeumorphicToggle(
-                    style: NeumorphicToggleStyle(depth: 20, backgroundColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                    style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
                     selectedIndex: controller.toggleIndex.value,
                     onChanged: (val) => controller.setToggleCategory(val),
                     thumb: SonrAnimatedSwitcher.fade(
@@ -74,7 +74,7 @@ class HomeScreen extends GetView<HomeController> {
       return SonrButton.circle(
         icon: SonrIcon.profile,
         onPressed: () => Get.toNamed("/profile"),
-        onLongPressed: () => DeviceService.toggleDarkMode(),
+        onLongPressed: () => UserService.toggleDarkMode(),
         shape: NeumorphicShape.flat,
       );
     }
@@ -87,7 +87,7 @@ class HomeScreen extends GetView<HomeController> {
       return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
     } else if (controller.toggleIndex.value == 1) {
       return SonrIcon.neumorphicGradient(
-          SonrIconData.all_categories, DeviceService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+          SonrIconData.all_categories, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
           size: 22.5);
     } else if (controller.toggleIndex.value == 2) {
       return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
@@ -230,11 +230,11 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
-                              inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
+                              inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
-                            value: DeviceService.isDarkMode.value,
-                            onChanged: (val) => DeviceService.toggleDarkMode(),
+                            value: UserService.isDarkMode.value,
+                            onChanged: (val) => UserService.toggleDarkMode(),
                           )
                         ])),
                     Padding(padding: EdgeInsetsX.top(20)),
@@ -247,10 +247,10 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: DeviceService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
-                              inactiveTrackColor: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
+                              inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
-                            value: DeviceService.hasPointToShare.value,
+                            value: UserService.hasPointToShare.value,
                             onChanged: (val) async {
                               if (val) {
                                 // Overlay Prompt
@@ -264,13 +264,13 @@ class _SettingsSheet extends StatelessWidget {
                                     .then((value) {
                                   // Check Result
                                   if (value) {
-                                    DeviceService.togglePointToShare();
+                                    UserService.togglePointToShare();
                                   } else {
                                     Get.back();
                                   }
                                 });
                               } else {
-                                DeviceService.togglePointToShare();
+                                UserService.togglePointToShare();
                               }
                             },
                           )

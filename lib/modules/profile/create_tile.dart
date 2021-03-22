@@ -156,14 +156,14 @@ class _InfoText extends StatelessWidget {
       Padding(padding: EdgeInsets.all(14)),
       Text(index.toString(),
           style: GoogleFonts.poppins(
-              fontSize: 108, fontWeight: FontWeight.w900, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
+              fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38)),
       Padding(padding: EdgeInsets.all(8)),
       Expanded(
         child: Text(text,
             style: GoogleFonts.poppins(
               fontSize: 34,
               fontWeight: FontWeight.bold,
-              color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black,
+              color: UserService.isDarkMode.value ? Colors.white : SonrColor.black,
             )),
       ),
     ]);

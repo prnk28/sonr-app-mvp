@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:flutter_sentry/flutter_sentry.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
-import 'modules/card/card_controller.dart';
 
 const bool K_TESTER_MODE = false;
 

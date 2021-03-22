@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/user.dart';
 import '../style/style.dart';
 
 final darkBoxShadow = [
@@ -49,14 +49,14 @@ class GlassContainer extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: borderRadius,
-                      boxShadow: DeviceService.isDarkMode.value ? darkBoxShadow : lightBoxShadow,
+                      boxShadow: UserService.isDarkMode.value ? darkBoxShadow : lightBoxShadow,
                     ),
                   ),
                 ),
                 Container(
                   decoration: BoxDecoration(
                     // Fill Opacity
-                    color: DeviceService.isDarkMode.value ? SonrColor.black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
+                    color: UserService.isDarkMode.value ? SonrColor.black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
                     borderRadius: borderRadius,
                   ),
                 ),
@@ -66,7 +66,7 @@ class GlassContainer extends StatelessWidget {
                       borderRadius: borderRadius,
                       // Object Opacity
                       gradient: LinearGradient(
-                        colors: DeviceService.isDarkMode.value
+                        colors: UserService.isDarkMode.value
                             ? [SonrColor.black.withOpacity(0.8), SonrColor.black.withOpacity(0.15)]
                             : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
                         begin: Alignment.topLeft,
@@ -81,7 +81,7 @@ class GlassContainer extends StatelessWidget {
                 IgnorePointer(
                   child: Container(
                     foregroundDecoration: BoxDecoration(
-                        border: DeviceService.isDarkMode.value
+                        border: UserService.isDarkMode.value
                             ? Border.all(color: SonrColor.black.withOpacity(0.4), width: 2)
                             : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
                         borderRadius: borderRadius),

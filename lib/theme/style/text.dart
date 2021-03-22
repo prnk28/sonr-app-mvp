@@ -43,7 +43,7 @@ class SonrText extends StatelessWidget {
         size: size,
         key: key,
         color: color,
-        gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear());
+        gradient: UserService.isDarkMode.value ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear());
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
@@ -68,27 +68,27 @@ class SonrText extends StatelessWidget {
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = SonrColor.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
+    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ Normal(w400) Text with Provided Data
   factory SonrText.normal(String text, {Color color = SonrColor.black, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
   factory SonrText.medium(String text, {Color color = SonrColor.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white70 : SonrColor.black);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white70 : SonrColor.black);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
   factory SonrText.bold(String text, {Color color = SonrColor.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black);
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
@@ -135,11 +135,11 @@ class SonrText extends StatelessWidget {
               TextSpan(
                   text: dateText,
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w300, fontSize: size, color: DeviceService.isDarkMode.value ? SonrColor.black : Colors.white)),
+                      fontWeight: FontWeight.w300, fontSize: size, color: UserService.isDarkMode.value ? SonrColor.black : Colors.white)),
               TextSpan(
                   text: "  $timeText",
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600, fontSize: size, color: DeviceService.isDarkMode.value ? SonrColor.black : Colors.white)),
+                      fontWeight: FontWeight.w600, fontSize: size, color: UserService.isDarkMode.value ? SonrColor.black : Colors.white)),
             ])));
   }
 
@@ -169,7 +169,7 @@ class SonrText extends StatelessWidget {
         weight: FontWeight.w600,
         size: size,
         key: key,
-        gradient: DeviceService.isDarkMode.value ? FlutterGradientNames.premiumWhite.linear() : FlutterGradientNames.premiumDark.linear());
+        gradient: UserService.isDarkMode.value ? FlutterGradientNames.premiumWhite.linear() : FlutterGradientNames.premiumDark.linear());
   }
 
   // ^ Rich Text with FirstName and Invite
@@ -295,7 +295,7 @@ class SonrText extends StatelessWidget {
 
   // ^ Find Text color based on Theme - Light/Dark ^
   static Color findTextColor() {
-    if (DeviceService.isDarkMode.value) {
+    if (UserService.isDarkMode.value) {
       return Colors.white;
     } else {
       return SonrColor.black;
@@ -399,7 +399,7 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
@@ -414,7 +414,7 @@ class SonrTextField extends StatelessWidget {
                     : InputDecoration.collapsed(
                         hintText: hint,
                         hintStyle: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38)),
+                            fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -438,7 +438,7 @@ class SonrTextField extends StatelessWidget {
           decoration: InputDecoration.collapsed(
               border: UnderlineInputBorder(borderSide: BorderSide(color: SonrColor.red, width: 4)),
               hintText: hint,
-              hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: DeviceService.isDarkMode.value ? Colors.white38 : Colors.black38))),
+              hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38))),
     );
   }
 

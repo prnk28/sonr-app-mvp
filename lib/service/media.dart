@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'sonr_service.dart';
-import 'user_service.dart';
+import 'sonr.dart';
+import 'user.dart';
 
 enum GalleryState { Initial, Loading, Ready }
 
@@ -64,7 +64,7 @@ class MediaService extends GetxService {
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
-    if (Get.find<DeviceService>().galleryPermitted.val) {
+    if (Get.find<PermissionService>().galleryPermitted.val) {
       // Get Collections
       _state(GalleryState.Loading);
       List<MediaCollection> collections = await MediaGallery.listMediaCollections(
@@ -261,7 +261,7 @@ class MediaService extends GetxService {
     final path = card.metadata.path;
     if (card.hasMetadata()) {
       // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image && Get.find<DeviceService>().galleryPermitted.val) {
+      if (card.metadata.mime.type == MIME_Type.image && Get.find<PermissionService>().galleryPermitted.val) {
         var result = await GallerySaver.saveImage(path);
 
         // Visualize Result
@@ -274,7 +274,7 @@ class MediaService extends GetxService {
       }
 
       // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video && Get.find<DeviceService>().galleryPermitted.val) {
+      else if (card.metadata.mime.type == MIME_Type.video && Get.find<PermissionService>().galleryPermitted.val) {
         var result = await GallerySaver.saveVideo(path);
 
         // Visualize Result
@@ -295,14 +295,14 @@ class MediaService extends GetxService {
 
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedFiles(List<SharedMediaFile> data) async {
-    if (!Get.isBottomSheetOpen && UserService.exists.value) {
+    if (!Get.isBottomSheetOpen && UserService.isExisting.value) {
       Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedText(String text) async {
-    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.exists.value) {
+    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.isExisting.value) {
       // Get Data
       var data = await SonrCore.getURL(text);
 
