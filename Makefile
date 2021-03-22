@@ -102,10 +102,13 @@ release:
 
 ## [clean]       :   Cleans Project Cache and Build Folder
 clean:
+	@echo 'Cleaning Builds'
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
-	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
 	@echo 'Cleaning iOS Fastlane Cache'
+	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
+	@cd $(PROJECT_DIR)/ios/fastlane && find . -name "report.xml" -type f -delete
+	@cd $(PROJECT_DIR)/android/fastlane && find . -name "report.xml" -type f -delete
 	cd $(PROJECT_DIR) && flutter pub get
 	@cd /System/Library/Sounds && afplay Glass.aiff
 	@echo '--------------------------------------------------'
