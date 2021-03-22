@@ -237,7 +237,7 @@ class SonrOverlay extends GetxService {
 }
 
 // ** Class Controls Active Overlays ** //
-class SonrPositionedOverlay extends GetxController {
+class SonrPositionedOverlay extends GetxService {
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrPositionedOverlayEntry>();
@@ -246,6 +246,10 @@ class SonrPositionedOverlay extends GetxController {
   static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;
   static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
   static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
+
+  Future<SonrPositionedOverlay> init() async {
+    return this;
+  }
 
   // ^ Opens View at Position with Size ^ //
   static void open(

@@ -175,7 +175,13 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
   Widget build(BuildContext context) {
     return SonrAnimatedSwitcher.fade(
       duration: 2.seconds,
-      child: GestureDetector(key: ValueKey<String>(text), child: SonrText.appBar(text)),
+      child: GestureDetector(
+        key: ValueKey<String>(text),
+        child: SonrText.appBar(text),
+        onTap: () {
+          swapTitleText("${SonrService.lobbySize.value} Around", timeout: 2500.milliseconds);
+        },
+      ),
     );
   }
 

@@ -11,32 +11,11 @@ Future<void> main() async {
   await FlutterSentry.wrap(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await initServices();
+      await SonrRoutes.initServices();
       runApp(App());
     },
     dsn: 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326',
   );
-}
-
-// ^ Services (Files, Contacts) ^ //
-initServices() async {
-  await Get.putAsync(() => UserService().init(), permanent: true); // First Required Service
-  await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
-  await Get.putAsync(() => MediaService().init(), permanent: true);
-  await Get.putAsync(() => SQLService().init(), permanent: true);
-  await Get.putAsync(() => SonrService().init(), permanent: true);
-  await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-}
-
-// ^ Initial Controller Bindings ^ //
-class InitialBinding implements Bindings {
-  @override
-  void dependencies() {
-    Get.create<TransferCardController>(() => TransferCardController());
-    Get.create<AnimatedController>(() => AnimatedController());
-    Get.lazyPut<CameraController>(() => CameraController());
-    Get.lazyPut<SonrPositionedOverlay>(() => SonrPositionedOverlay(), fenix: true);
-  }
 }
 
 // ^ Root App Widget ^ //
@@ -84,7 +63,7 @@ class _AppState extends State<App> {
                     return AnimatedOpacity(
                         opacity: value,
                         duration: 400.milliseconds,
-                        child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white)));
+                        child: Padding(padding: EdgeInsets.only(top: 800), child: SonrText.header("Sonr", color: Colors.white)));
                   }),
             ],
           )),

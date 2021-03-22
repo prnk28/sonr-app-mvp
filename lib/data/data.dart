@@ -56,4 +56,25 @@ class SonrRoutes {
         // ** Profile Page ** //
         GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),
       ];
+
+  // ^ Services (Files, Contacts) ^ //
+  static initServices() async {
+    await Get.putAsync(() => UserService().init(), permanent: true); // First Required Service
+    await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => MediaService().init(), permanent: true);
+    await Get.putAsync(() => SQLService().init(), permanent: true);
+    await Get.putAsync(() => SonrService().init(), permanent: true);
+    await Get.putAsync(() => SonrOverlay().init(), permanent: true);
+    await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
+  }
+}
+
+// ^ Initial Controller Bindings ^ //
+class InitialBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.create<TransferCardController>(() => TransferCardController());
+    Get.create<AnimatedController>(() => AnimatedController());
+    Get.lazyPut<CameraController>(() => CameraController());
+  }
 }
