@@ -4,7 +4,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 import 'modules/card/card_controller.dart';
 
-const bool K_TESTER_MODE = true;
+const bool K_TESTER_MODE = false;
 
 // ^ Main Method ^ //
 Future<void> main() async {
