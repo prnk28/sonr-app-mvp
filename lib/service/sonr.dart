@@ -12,11 +12,13 @@ export 'package:sonr_core/sonr_core.dart';
 
 class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
+  final _isReady = false.obs;
   final _groups = Map<String, Group>().obs;
   final _peers = Map<String, Peer>().obs;
   final _remoteMembers = RxList<Peer>();
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
+  static RxBool get isReady => Get.find<SonrService>()._isReady;
   static RxMap<String, Group> get groups => Get.find<SonrService>()._groups;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
@@ -197,6 +199,7 @@ class SonrService extends GetxService with TransferQueue {
   void _handleReady(bool data) {
     // Update Status
     _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
+    _isReady(true);
 
     // Check for Homescreen Controller
     if (Get.isRegistered<HomeController>() && data) {

@@ -156,6 +156,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
 
   // References
   StreamSubscription<int> lobbySizeStream;
+  StreamSubscription<bool> readyStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
@@ -166,6 +167,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
 
     // Set Defaults
     lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
+    readyStream = SonrService.isReady.listen(_handleReady);
     text = widget.defaultText;
     super.initState();
   }
@@ -173,6 +175,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
   @override
   void dispose() {
     lobbySizeStream.cancel();
+    readyStream.cancel();
     super.dispose();
   }
 
@@ -199,6 +202,30 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
       var diff = _lobbySizeRef - onData;
       swapTitleText("$diff Left");
     }
+  }
+
+  // @ Handle Ready ^ //
+  _handleReady(bool val) {
+    // Entry Text
+    setState(() {
+      text = "Hello, ${UserService.firstName.value}";
+      _timeoutActive = true;
+    });
+
+    // Nearby Peers Text
+    Future.delayed(const Duration(milliseconds: 3500), () {
+      setState(() {
+        text = ("${SonrService.lobbySize.value} Nearby");
+      });
+    });
+
+    // Revert Text
+    Future.delayed(const Duration(milliseconds: 3500) * 2, () {
+      setState(() {
+        text = widget.defaultText;
+        _timeoutActive = false;
+      });
+    });
   }
 
   // @ Swaps Title when Lobby Size Changes ^ //
