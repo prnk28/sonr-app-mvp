@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/service/device_service.dart';
+import 'package:sonr_app/service/user.dart';
 import 'style.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
@@ -397,10 +397,10 @@ class SonrButton extends StatelessWidget {
       return NeumorphicButton(
         margin: margin,
         style: NeumorphicStyle(
-          depth: DeviceService.isDarkMode.value ? 4 : 8,
-          color: DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+          depth: UserService.isDarkMode.value ? 4 : 8,
+          color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
           boxShape: boxShape,
-          intensity: DeviceService.isDarkMode.value ? 0.6 : 0.85,
+          intensity: UserService.isDarkMode.value ? 0.6 : 0.85,
         ),
         padding: const EdgeInsets.all(12.0),
         onPressed: () {

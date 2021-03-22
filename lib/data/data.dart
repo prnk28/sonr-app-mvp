@@ -59,8 +59,9 @@ class SonrRoutes {
 
   // ^ Services (Files, Contacts) ^ //
   static initServices() async {
-    await Get.putAsync(() => UserService().init(), permanent: true); // First Required Service
-    await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => DeviceService().init(), permanent: true); // First Required Service
+    await Get.putAsync(() => UserService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => PermissionService().init(), permanent: true); // Third Required Service
     await Get.putAsync(() => MediaService().init(), permanent: true);
     await Get.putAsync(() => SQLService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);

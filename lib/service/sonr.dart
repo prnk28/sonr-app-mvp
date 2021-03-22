@@ -5,9 +5,9 @@ import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'media_service.dart';
-import 'sql_service.dart';
-import 'user_service.dart';
+import 'media.dart';
+import 'sql.dart';
+import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
 class SonrService extends GetxService with TransferQueue {

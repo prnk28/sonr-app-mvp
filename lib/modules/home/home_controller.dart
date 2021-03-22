@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:sonr_app/service/permission.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 import 'home_binding.dart';
@@ -142,8 +143,8 @@ class HomeController extends GetxController {
   promptAutoSave() async {
     if (!_hasPromptedAutoSave && cards.length == 1) {
       Future.delayed(2400.milliseconds, () {
-        if (UserService.isNewUser.value && !Get.find<DeviceService>().galleryPermitted.val && !SonrOverlay.isOpen) {
-          Get.find<DeviceService>().requestGallery(
+        if (UserService.isNewUser.value && !Get.find<PermissionService>().galleryPermitted.val && !SonrOverlay.isOpen) {
+          Get.find<PermissionService>().requestGallery(
               description: "Next time Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
         }
       });

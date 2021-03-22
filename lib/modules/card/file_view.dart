@@ -286,7 +286,7 @@ class _FileCardInfo extends StatelessWidget {
               SonrButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: DeviceService.isDarkMode.value ? Colors.white : SonrColor.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
               ),
             ]),
           ]),

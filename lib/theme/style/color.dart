@@ -19,10 +19,10 @@ class SonrColor {
 
   // ** Color Pallette ** //
   static const Color black = Color(0xff202020);
-  static Color get primary => DeviceService.isDarkMode.value ? Color(0xff2c2b2b) : Color(0xff538fff);
-  static Color get secondary => DeviceService.isDarkMode.value ? Color(0xff9757ff) : Color(0xff543191);
-  static Color get tertiary => DeviceService.isDarkMode.value ? Color(0xff52ffc0) : Color(0xff2e906e);
-  static Color get red => DeviceService.isDarkMode.value ? Color(0xffcc1b0b) : Color(0xffff4d62);
+  static Color get primary => UserService.isDarkMode.value ? Color(0xff2c2b2b) : Color(0xff538fff);
+  static Color get secondary => UserService.isDarkMode.value ? Color(0xff9757ff) : Color(0xff543191);
+  static Color get tertiary => UserService.isDarkMode.value ? Color(0xff52ffc0) : Color(0xff2e906e);
+  static Color get red => UserService.isDarkMode.value ? Color(0xffcc1b0b) : Color(0xffff4d62);
 
   // static const Color ShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
   // static const Color ShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
@@ -34,7 +34,7 @@ class SonrColor {
 
   // ^ ThemeMode Handling ^ //
   static Color get currentNeumorphic {
-    return DeviceService.isDarkMode.value ? SonrColor.Dark : SonrColor.White;
+    return UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White;
   }
 
   // ^ Generates Random Gradient for Progress View ^ //
@@ -62,7 +62,7 @@ class SonrColor {
   // ^ Finds Current Theme Icon Color ^ //
   static Color icons() {
     final theme = NeumorphicTheme.of(Get.context);
-    if (DeviceService.isDarkMode.value) {
+    if (UserService.isDarkMode.value) {
       return theme.current.accentColor;
     } else {
       return theme.current.accentColor;
