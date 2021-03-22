@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/device.dart';
 import 'package:sonr_app/service/user.dart';
 import '../style/style.dart';
 

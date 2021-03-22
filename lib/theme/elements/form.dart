@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:media_gallery/media_gallery.dart';
-import 'package:sonr_app/service/device.dart';
 import '../style/style.dart';
 import 'package:sonr_core/sonr_core.dart';
 

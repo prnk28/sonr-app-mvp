@@ -7,7 +7,9 @@ IOS_DIR=/Users/prad/Sonr/mobile/ios
 
 # Mobile Actions
 FLUTTER=flutter
-RUN=$(FLUTTER) run -d all
+RUN_MOBILE=$(FLUTTER) run -d 00008020-000975662686002E && $(FLUTTER) run -d 0A031FDD4004M5 --suppress-analytics
+RUN_DESKTOP=$(FLUTTER) run -d macos
+
 BUILDIOS=$(FLUTTER) build ios
 BUILDANDROID=$(FLUTTER) build appbundle
 CLEAN=$(FLUTTER) clean
@@ -49,6 +51,25 @@ build.android:
 	@echo '--------------------------------------------------'
 	@echo "Finished Building Android ➡ " && date
 
+##
+## debug         :   Run App in Debug Mode to ALL Devices
+debug: debug.mobile debug.desktop
+
+
+## └─ mobile          - Run in Debug mode on Mobile Devices
+debug.mobile:
+	cd $(PROJECT_DIR) && cider bump build
+	@echo '--------------------------------'
+	@echo 'Press d after Launch to Continue'
+	@echo '--------------------------------'
+	cd $(PROJECT_DIR) && $(RUN_MOBILE)
+
+## └─ desktop         - Run in Debug mode on Desktop Devices
+debug.desktop:
+	cd $(PROJECT_DIR) && cider bump build
+	cd $(PROJECT_DIR) && $(RUN_DESKTOP)
+
+##
 ## deploy        :   Builds AppBundle/iOS Archive and Uploads to PlayStore/AppStore
 deploy: deploy.ios deploy.android
 	cd $(PROJECT_DIR) && rm -rf build
@@ -83,25 +104,59 @@ deploy.android:
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
 
 ##
-## [debug]       :   Run Mobile App in Debug Mode
-debug:
-	cd $(PROJECT_DIR) && cider bump build
-	cd $(PROJECT_DIR) && $(RUN)
+## profile       :   Run App for Profile Mode on ALL Devices
+profile: profile.mobile
 
-## [profile]     :   Run Mobile App for Profile Mode
-profile:
+## └─ mobile          - Run in Profile mode on Mobile Devices
+profile.mobile:
 	cd $(PROJECT_DIR) && cider bump build
-	cd $(PROJECT_DIR) && $(RUN) --profile --cache-sksl --write-sksl-on-exit $(SKL_FILE)
+	@echo '--------------------------------'
+	@echo 'Press d after Launch to Continue'
+	@echo '--------------------------------'
+	cd $(PROJECT_DIR) && $(RUN_MOBILE) --profile --cache-sksl
 
-## [release]     :   Run Mobile App for Release Mode
-release:
+## └─ desktop         - Run in Profile mode on Desktop Devices
+profile.desktop:
+	cd $(PROJECT_DIR) && cider bump build
+	cd $(PROJECT_DIR) && $(RUN_DESKTOP) --profile --cache-sksl
+
+##
+## release       :   Run App for Release Mode on All Devices
+release: relase.mobile release.desktop
+
+## └─ mobile          - Run in Profile mode on Mobile Devices
+release.mobile:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
 	cd $(PROJECT_DIR) && flutter pub get
-	cd $(PROJECT_DIR) && $(RUN) --release
+	cd $(PROJECT_DIR) && cider bump build
+	@echo '--------------------------------'
+	@echo 'Press d after Launch to Continue'
+	@echo '--------------------------------'
+	cd $(PROJECT_DIR) && $(RUN_MOBILE) --release
 
+## └─ desktop         - Run in Profile mode on Desktop Devices
+release.desktop:
+	cd $(PROJECT_DIR) && rm -rf build
+	cd $(PROJECT_DIR) && $(CLEAN)
+	cd $(PROJECT_DIR) && flutter pub get
+	cd $(PROJECT_DIR) && cider bump build
+	cd $(PROJECT_DIR) && $(RUN_DESKTOP) --release
+
+##
 ## [clean]       :   Cleans Project Cache and Build Folder
 clean:
+	cd $(PROJECT_DIR) && rm -rf build
+	cd $(PROJECT_DIR) && $(CLEAN)
+	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete
+	@echo 'Cleaning iOS Fastlane Cache'
+	cd $(PROJECT_DIR) && flutter pub get
+	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
+	@echo "Finished Cleaning Sonr Mobile Frontend ➡ " && date
+
+## [kill]        :   Kill Current DartVM Instances
+kill:
 	cd $(PROJECT_DIR) && rm -rf build
 	cd $(PROJECT_DIR) && $(CLEAN)
 	@cd $(PROJECT_DIR)/ios && find . -name "*.zip" -type f -delete && find . -name "*.ipa" -type f -delete

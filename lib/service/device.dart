@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'dart:io' as io;
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_binding.dart';
@@ -67,18 +64,22 @@ class DeviceService extends GetxService {
       if (!UserService.isExisting.value) {
         Get.offNamed("/register");
       } else {
-        // All Valid
-        if (Get.find<PermissionService>().locationPermitted.val) {
-          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-        }
+        if (isMobile) {
+          // All Valid
+          if (Get.find<PermissionService>().locationPermitted.val) {
+            Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+          }
 
-        // No Location
-        else {
-          Get.find<PermissionService>().requestLocation().then((value) {
-            if (value) {
-              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-            }
-          });
+          // No Location
+          else {
+            Get.find<PermissionService>().requestLocation().then((value) {
+              if (value) {
+                Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+              }
+            });
+          }
+        } else {
+          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
         }
       }
     });

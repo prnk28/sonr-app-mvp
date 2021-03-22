@@ -23,15 +23,19 @@ class PermissionService extends GetxService {
 
   // ^ Request Camera optional overlay ^ //
   Future<bool> requestCamera() async {
-    // Present Overlay
-    if (await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline")) {
-      if (await Permission.camera.request().isGranted) {
-        cameraPermitted.val = true;
-        return true;
+    if (DeviceService.isMobile) {
+      // Present Overlay
+      if (await SonrOverlay.question(
+          title: 'Requires Permission',
+          description: 'Sonr Needs to Access your Camera in Order to send Pictures through the app.',
+          acceptTitle: "Allow",
+          declineTitle: "Decline")) {
+        if (await Permission.camera.request().isGranted) {
+          cameraPermitted.val = true;
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -42,22 +46,26 @@ class PermissionService extends GetxService {
 
   // ^ Request Gallery optional overlay ^ //
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
-    // Present Overlay
-    if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
-      if (io.Platform.isAndroid) {
-        if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
-          galleryPermitted.val = true;
-          return true;
+    if (DeviceService.isMobile) {
+      // Present Overlay
+      if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
+        if (io.Platform.isAndroid) {
+          if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
+            galleryPermitted.val = true;
+            return true;
+          } else {
+            return false;
+          }
         } else {
-          return false;
+          if (await Permission.photos.request().isGranted) {
+            galleryPermitted.val = true;
+            return true;
+          } else {
+            return false;
+          }
         }
       } else {
-        if (await Permission.photos.request().isGranted) {
-          galleryPermitted.val = true;
-          return true;
-        } else {
-          return false;
-        }
+        return false;
       }
     } else {
       return false;
@@ -66,15 +74,19 @@ class PermissionService extends GetxService {
 
   // ^ Request Location optional overlay ^ //
   Future<bool> requestLocation() async {
-    // Present Overlay
-    if (await SonrOverlay.question(
-        title: 'Location',
-        description: 'Sonr requires location in order to find devices in your area.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline")) {
-      if (await Permission.locationWhenInUse.request().isGranted) {
-        locationPermitted.val = true;
-        return true;
+    if (DeviceService.isMobile) {
+      // Present Overlay
+      if (await SonrOverlay.question(
+          title: 'Location',
+          description: 'Sonr requires location in order to find devices in your area.',
+          acceptTitle: "Allow",
+          declineTitle: "Decline")) {
+        if (await Permission.locationWhenInUse.request().isGranted) {
+          locationPermitted.val = true;
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -85,15 +97,19 @@ class PermissionService extends GetxService {
 
   // ^ Request Microphone optional overlay ^ //
   Future<bool> requestMicrophone() async {
-    // Present Overlay
-    if (await SonrOverlay.question(
-        title: 'Microphone',
-        description: 'Sonr uses your microphone in order to communicate with other devices.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline")) {
-      if (await Permission.microphone.request().isGranted) {
-        microphonePermitted.val = true;
-        return true;
+    if (DeviceService.isMobile) {
+      // Present Overlay
+      if (await SonrOverlay.question(
+          title: 'Microphone',
+          description: 'Sonr uses your microphone in order to communicate with other devices.',
+          acceptTitle: "Allow",
+          declineTitle: "Decline")) {
+        if (await Permission.microphone.request().isGranted) {
+          microphonePermitted.val = true;
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -105,14 +121,18 @@ class PermissionService extends GetxService {
   // ^ Request Notifications optional overlay ^ //
   Future<bool> requestNotifications() async {
     // Present Overlay
-    if (await SonrOverlay.question(
-        title: 'Requires Permission',
-        description: 'Sonr would like to send you Notifications for Transfer Invites.',
-        acceptTitle: "Allow",
-        declineTitle: "Decline")) {
-      if (await Permission.notification.request().isGranted) {
-        notificationPermitted.val = true;
-        return true;
+    if (DeviceService.isMobile) {
+      if (await SonrOverlay.question(
+          title: 'Requires Permission',
+          description: 'Sonr would like to send you Notifications for Transfer Invites.',
+          acceptTitle: "Allow",
+          declineTitle: "Decline")) {
+        if (await Permission.notification.request().isGranted) {
+          notificationPermitted.val = true;
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -123,7 +143,7 @@ class PermissionService extends GetxService {
 
   // ^ Trigger iOS Local Network with Alert ^ //
   Future triggerNetwork() async {
-    if (!networkTriggered.val && io.Platform.isIOS) {
+    if (!networkTriggered.val && DeviceService.isIOS) {
       await SonrOverlay.alert(
           title: 'Requires Permission',
           description: 'Sonr requires local network permissions in order to maximize transfer speed.',
