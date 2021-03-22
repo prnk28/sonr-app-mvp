@@ -48,11 +48,15 @@ class TransferController extends GetxController {
     SonrService.remote();
     isRemoteActive(true);
     // Create Timeout
-    _timer = Timer.periodic(500.milliseconds, (_) {
+    _timer = Timer.periodic(1.seconds, (_) {
       // Add to Counter
-      counter(counter.value += 500);
-      var remaining = (45000 - counter.value) / 1000;
-      title("${remaining}s Left");
+      counter(counter.value += 1);
+      var remaining = (300 - counter.value);
+      var raw = (remaining / 60);
+      var minutes = raw.floor();
+      var seconds = raw - minutes;
+
+      title("$minutes:$seconds Left");
       title.refresh();
 
       // Check if Timeout Reached
