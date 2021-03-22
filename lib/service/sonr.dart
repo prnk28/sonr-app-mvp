@@ -127,6 +127,34 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
+  static inviteFromList(Peer p) async {
+    // Set Peer Controller
+    to.currentInvitedFromList(p);
+
+    // File Payload
+    if (to.payload == Payload.MEDIA) {
+      assert(to.currentTransfer.media != null);
+      await to._node.inviteFile(p, to.currentTransfer.media);
+    }
+
+    // Contact Payload
+    else if (to.payload == Payload.CONTACT) {
+      await to._node.inviteContact(p);
+    }
+
+    // Link Payload
+    else if (to.payload == Payload.URL) {
+      assert(to.currentTransfer.url != null);
+      await to._node.inviteLink(p, to.currentTransfer.url);
+    }
+
+    // No Payload
+    else {
+      SonrSnack.error("No media, contact, or link provided");
+    }
+  }
+
+  // ^ Invite-Peer Event ^
   static remote() async {
     // File Payload
     if (to.payload == Payload.MEDIA) {

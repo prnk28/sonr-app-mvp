@@ -20,7 +20,7 @@ platform :ios do
   lane :internal do
     increment_build_number
     increment_version_number(
-      version_number: "0.9.1"
+      version_number: "0.9.0"
     )
     build_app(scheme: "Runner",
             workspace: "Runner.xcworkspace",

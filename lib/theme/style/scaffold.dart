@@ -6,6 +6,7 @@ import 'style.dart';
 // ^ Standardized Uniform Scaffold ^ //
 class SonrScaffold extends StatelessWidget {
   final Widget body;
+  final Widget bottomSheet;
   final Widget appBar;
   final Widget floatingActionButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
@@ -40,8 +41,8 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), leading: leading),
+        appBar:
+            NeumorphicAppBar(color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), leading: leading),
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -82,6 +83,7 @@ class SonrScaffold extends StatelessWidget {
       @required Widget action,
       Widget body,
       Widget floatingActionButton,
+      Widget bottomSheet,
       FloatingActionButtonLocation floatingActionButtonLocation,
       bool disableDynamicLobbyTitle = false,
       bool resizeToAvoidBottomPadding = true}) {
@@ -95,6 +97,7 @@ class SonrScaffold extends StatelessWidget {
           leading: leading,
           actions: [action],
         ),
+        bottomSheet: bottomSheet,
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -107,6 +110,7 @@ class SonrScaffold extends StatelessWidget {
     this.resizeToAvoidBottomPadding,
     this.bodyAction,
     this.backgroundColor,
+    this.bottomSheet,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -133,6 +137,7 @@ class SonrScaffold extends StatelessWidget {
               appBar: appBar,
               floatingActionButton: floatingActionButton,
               resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
+              bottomSheet: bottomSheet,
             ))));
   }
 }

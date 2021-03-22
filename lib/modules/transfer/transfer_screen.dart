@@ -17,6 +17,7 @@ class TransferScreen extends GetView<TransferController> {
           action: Get.find<SonrService>().payload != Payload.CONTACT
               ? SonrButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat)
               : Container(),
+          // bottomSheet: LobbySheet(),
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),
             child: controller.isRemoteActive.value
@@ -25,12 +26,12 @@ class TransferScreen extends GetView<TransferController> {
                     children: <Widget>[
                       // @ Range Lines
                       Padding(
-                          padding: EdgeInsets.only(bottom: 5),
+                          padding: EdgeInsets.only(top: 16),
                           child: Stack(
                             children: [
                               Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
                               Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
-                              Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
+                              //Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Immediate)),
                             ],
                           )),
 
@@ -44,13 +45,95 @@ class TransferScreen extends GetView<TransferController> {
 
                       // @ Compass View
                       Padding(
-                        padding: EdgeInsetsX.bottom(16.0),
+                        padding: EdgeInsetsX.bottom(64.0),
                         child: CompassView(),
                       ),
                     ],
                   ),
           ),
         ));
+  }
+}
+
+class LobbySheet extends StatefulWidget {
+  @override
+  _LobbySheetState createState() => _LobbySheetState();
+}
+
+class _LobbySheetState extends State<LobbySheet> {
+  // References
+  int lobbySize = 0;
+  List<Peer> peerList = <Peer>[];
+  StreamSubscription<Map<String, Peer>> peerStream;
+
+  // * Initial State * //
+  @override
+  void initState() {
+    // Add Initial Data
+    _handlePeerUpdate(SonrService.peers);
+
+    // Set Stream
+    peerStream = SonrService.peers.listen(_handlePeerUpdate);
+    super.initState();
+  }
+
+  // * On Dispose * //
+  @override
+  void dispose() {
+    peerStream.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      maxChildSize: 0.7,
+      minChildSize: 0.1,
+      initialChildSize: 0.1,
+      expand: false,
+      builder: (BuildContext context, scrollController) {
+        return ListView.builder(
+          controller: scrollController,
+          itemCount: peerList.length + 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [SonrIcon.profile, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("Other Peers")]);
+            } else {
+              return ListTile(
+                title: peerList[index - 1].fullName,
+                subtitle: peerList[index - 1].platformExpanded,
+                onTap: SonrService.inviteFromList(peerList[index - 1]),
+              );
+            }
+          },
+        );
+      },
+    );
+  }
+
+  // ^ Updates Stack Children ^ //
+  _handlePeerUpdate(Map<String, Peer> lobby) {
+    // Initialize
+    var children = <Peer>[];
+
+    // Clear List
+    peerList.clear();
+
+    // Iterate through peers and IDs
+    lobby.forEach((id, peer) {
+      // Add to Stack Items
+      if (peer.platform != Platform.Android || peer.platform != Platform.iOS) {
+        children.add(peer);
+      }
+    });
+
+    // Update View
+    setState(() {
+      lobbySize = lobby.length;
+      peerList = children;
+    });
   }
 }
 
@@ -93,23 +176,22 @@ class _LobbyStackState extends State<LobbyStack> {
     // Initialize
     var children = <PeerBubble>[];
 
-    // Check if Lobby has Changed
-    if (lobby.length != lobbySize) {
-      // Clear List
-      stackChildren.clear();
+    // Clear List
+    stackChildren.clear();
 
-      // Iterate through peers and IDs
-      lobby.forEach((id, peer) {
-        // Add to Stack Items
+    // Iterate through peers and IDs
+    lobby.forEach((id, peer) {
+      // Add to Stack Items
+      if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
         children.add(PeerBubble(peer, stackChildren.length - 1));
-      });
+      }
+    });
 
-      // Update View
-      setState(() {
-        lobbySize = lobby.length;
-        stackChildren = children;
-      });
-    }
+    // Update View
+    setState(() {
+      lobbySize = lobby.length;
+      stackChildren = children;
+    });
   }
 }
 

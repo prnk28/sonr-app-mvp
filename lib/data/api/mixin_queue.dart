@@ -54,6 +54,13 @@ class TransferQueue {
   }
 
   // ^ Current Transfer has Updated Progress ^ //
+  currentInvitedFromList(Peer peer) {
+    if (isQueueNotEmpty) {
+      currentTransfer.peer = peer;
+    }
+  }
+
+  // ^ Current Transfer has Updated Progress ^ //
   currentProgressed(double progress) {
     if (isQueueNotEmpty) {
       currentTransfer.progress(progress);
@@ -108,6 +115,12 @@ class TransferQueueItem {
   PeerController get peerController => hasPeerController ? _peerController : null;
   set peerController(PeerController controller) => _peerController = controller;
 
+  // Controller
+  Peer _peer;
+  bool get hasPeer => _peer != null;
+  Peer get peer => hasPeer ? _peer : null;
+  set peer(Peer peer) => _peer = peer;
+
   // Get Data
   dynamic get data {
     switch (payload) {
@@ -157,23 +170,29 @@ class TransferQueueItem {
     // Completer for Played
     var played = new Completer<bool>();
 
-    // Validate Controller
-    if (hasPeerController) {
-      // Play Feedback
+    if (hasPeer) {
       HapticFeedback.mediumImpact();
-
-      // Check Decision
-      if (decision) {
-        peerController.playAccepted();
-        played.complete(true);
-      } else {
-        _peerController.playDenied();
-        played.complete(true);
-      }
+      played.complete(true);
     } else {
-      print("Peer Controller is not set");
-      played.complete(false);
+      // Validate Controller
+      if (hasPeerController) {
+        // Play Feedback
+        HapticFeedback.mediumImpact();
+
+        // Check Decision
+        if (decision) {
+          peerController.playAccepted();
+          played.complete(true);
+        } else {
+          _peerController.playDenied();
+          played.complete(true);
+        }
+      } else {
+        print("Peer Controller is not set");
+        played.complete(false);
+      }
     }
+
     return played.future;
   }
 
@@ -182,7 +201,9 @@ class TransferQueueItem {
     // Completer for Played
     var played = new Completer<bool>();
     HapticFeedback.heavyImpact();
-    _peerController.playCompleted();
+    if (hasPeerController) {
+      _peerController.playCompleted();
+    }
     return played.future;
   }
 }
