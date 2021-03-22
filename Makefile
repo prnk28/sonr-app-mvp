@@ -63,7 +63,8 @@ deploy: deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS) --bundle-sksl-path $(SKL_FILE) --release
+# --bundle-sksl-path $(SKL_FILE) --release
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
@@ -73,7 +74,8 @@ deploy.ios:
 ## └─ android         - APB for PlayStore
 deploy.android:
 	cd $(PROJECT_DIR) && cider bump build
-	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID) --bundle-sksl-path $(SKL_FILE)
+# --bundle-sksl-path $(SKL_FILE)
+	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal
 	@cd /System/Library/Sounds && afplay Glass.aiff
