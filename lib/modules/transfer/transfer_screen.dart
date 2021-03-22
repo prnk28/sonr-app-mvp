@@ -195,34 +195,11 @@ class _LobbyStackState extends State<LobbyStack> {
   }
 }
 
-class RemoteView extends StatefulWidget {
-  @override
-  _RemoteViewState createState() => _RemoteViewState();
-}
-
-class _RemoteViewState extends State<LobbyStack> {
-  // * Initial State * //
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  // * On Dispose * //
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+class RemoteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       SonrText.title("Handling Remote..."),
-      Obx(() => ListView.builder(
-          itemCount: SonrService.remoteMembers.length,
-          itemBuilder: (context, index) {
-            var peer = SonrService.remoteMembers[index];
-            return ListTile(title: peer.fullName, subtitle: peer.platformExpanded);
-          }))
     ]);
   }
 }

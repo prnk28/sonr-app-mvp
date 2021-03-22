@@ -51,16 +51,24 @@ class TransferController extends GetxController {
     _timer = Timer.periodic(1.seconds, (_) {
       // Add to Counter
       counter(counter.value += 1);
+
+      // Compute Title
       var remaining = (300 - counter.value);
       var raw = (remaining / 60);
       var minutes = raw.floor();
-      var seconds = raw - minutes;
+      var secondsInt = ((raw - minutes) * 60).round();
+      String seconds = secondsInt.toString();
+
+      // Adjust Seconds
+      if (secondsInt < 10) {
+        seconds = "0$secondsInt";
+      }
 
       title("$minutes:$seconds Left");
       title.refresh();
 
       // Check if Timeout Reached
-      if (counter.value == 45000) {
+      if (counter.value == 300) {
         if (isRemoteActive.value) {
           _timer.cancel();
           _timer = null;
