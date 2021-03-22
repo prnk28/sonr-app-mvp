@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' as io;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_binding.dart';
-import 'package:sonr_app/theme/theme.dart' hide Position, Platform;
+import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
 
 // @ Enum defines Type of Permission
@@ -21,12 +21,27 @@ class DeviceService extends GetxService {
   final _direction = Rx<CompassEvent>();
   final _isDarkMode = true.obs;
   final _hasPointToShare = false.obs;
+  final _platform = Rx<Platform>();
 
   // Getters for Global References
   static Rx<Brightness> get brightness => Get.find<DeviceService>()._brightness;
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static RxBool get isDarkMode => Get.find<DeviceService>()._isDarkMode;
   static RxBool get hasPointToShare => Get.find<DeviceService>()._hasPointToShare;
+
+  // Platform Properties
+  static bool get isDesktop =>
+      Get.find<DeviceService>()._platform.value == Platform.Linux ||
+      Get.find<DeviceService>()._platform.value == Platform.MacOS ||
+      Get.find<DeviceService>()._platform.value == Platform.Windows;
+  static bool get isMobile =>
+      Get.find<DeviceService>()._platform.value == Platform.iOS || Get.find<DeviceService>()._platform.value == Platform.Android;
+  static bool get isAndroid => Get.find<DeviceService>()._platform.value == Platform.Android;
+  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.iOS;
+  static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
+  static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
+  static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+  static Rx<Platform> get platform => Get.find<DeviceService>()._platform;
 
   // References
   final _box = GetStorage();
@@ -44,8 +59,23 @@ class DeviceService extends GetxService {
     // Initialize Storage
     await GetStorage.init();
 
+    // Set Platform
+    if (io.Platform.isAndroid) {
+      _platform(Platform.Android);
+    } else if (io.Platform.isIOS) {
+      _platform(Platform.iOS);
+    } else if (io.Platform.isLinux) {
+      _platform(Platform.Linux);
+    } else if (io.Platform.isMacOS) {
+      _platform(Platform.MacOS);
+    } else if (io.Platform.isWindows) {
+      _platform(Platform.Windows);
+    }
+
     // Bind Direction Stream
-    _direction.bindStream(FlutterCompass.events);
+    if (_platform.value == Platform.iOS || _platform.value == Platform.Android) {
+      _direction.bindStream(FlutterCompass.events);
+    }
 
     // Set Preferences
     _isDarkMode(_box.read("isDarkMode") ?? false);
@@ -131,7 +161,7 @@ class DeviceService extends GetxService {
   Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     // Present Overlay
     if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
-      if (Platform.isAndroid) {
+      if (io.Platform.isAndroid) {
         if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
           galleryPermitted.val = true;
           return true;
@@ -210,7 +240,7 @@ class DeviceService extends GetxService {
 
   // ^ Trigger iOS Local Network with Alert ^ //
   Future triggerNetwork() async {
-    if (!networkTriggered.val && Platform.isIOS) {
+    if (!networkTriggered.val && io.Platform.isIOS) {
       await SonrOverlay.alert(
           title: 'Requires Permission',
           description: 'Sonr requires local network permissions in order to maximize transfer speed.',
