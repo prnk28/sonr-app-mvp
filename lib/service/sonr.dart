@@ -13,13 +13,11 @@ export 'package:sonr_core/sonr_core.dart';
 class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
   final _isReady = false.obs;
-  final _groups = Map<String, Group>().obs;
   final _peers = Map<String, Peer>().obs;
   final _remoteMembers = RxList<Peer>();
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
   static RxBool get isReady => Get.find<SonrService>()._isReady;
-  static RxMap<String, Group> get groups => Get.find<SonrService>()._groups;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static SonrService get to => Get.find<SonrService>();
@@ -209,7 +207,6 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Handle Lobby Update ^ //
   void _handleRefresh(Lobby data) {
-    _groups(data.groups);
     _peers(data.peers);
     _lobbySize(data.peers.length);
   }
