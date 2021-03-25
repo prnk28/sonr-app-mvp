@@ -81,11 +81,10 @@ class SonrService extends GetxService with TransferQueue {
     to.addToQueue(TransferQueueItem.contact());
   }
 
-  // ^ Set Payload for Media ^ //
+  // ^ Set Payload for URL Link ^ //
   static queueMedia(MediaFile media) async {
     // - Check Connected -
     to.addToQueue(TransferQueueItem.media(media));
-    to._node.queueFile(to.currentTransfer.media);
   }
 
   // ^ Set Payload for URL Link ^ //
@@ -107,7 +106,7 @@ class SonrService extends GetxService with TransferQueue {
     // File Payload
     if (to.payload == Payload.MEDIA) {
       assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(c.peer);
+      await to._node.inviteFile(c.peer, to.currentTransfer.media);
     }
 
     // Contact Payload
@@ -135,7 +134,7 @@ class SonrService extends GetxService with TransferQueue {
     // File Payload
     if (to.payload == Payload.MEDIA) {
       assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(p);
+      await to._node.inviteFile(p, to.currentTransfer.media);
     }
 
     // Contact Payload
