@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:flutter_sentry/flutter_sentry.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
 
@@ -7,14 +6,9 @@ const bool K_TESTER_MODE = true;
 
 // ^ Main Method ^ //
 Future<void> main() async {
-  await FlutterSentry.wrap(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await SonrRoutes.initServices();
-      runApp(App());
-    },
-    dsn: 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326',
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await SonrRoutes.initServices();
+  runApp(App());
 }
 
 // ^ Root App Widget ^ //

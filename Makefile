@@ -19,8 +19,7 @@ SKL_FILE=/Users/prad/Sonr/mobile/assets/animations/flutter_01.sksl.json
 
 # Lists Options
 all: Makefile
-	@echo '--- Sonr App Module Actions ---'
-	@echo ''
+	@figlet -f slant Sonr Mobile
 	@sed -n 's/^##//p' $<
 
 ## build         :   Builds IPA and APB for Flutter Frontend Module
