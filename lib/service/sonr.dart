@@ -17,12 +17,14 @@ class SonrService extends GetxService with TransferQueue {
   final _remoteMembers = RxList<Peer>();
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
+  final _status = Rx<Status>();
   static RxBool get isReady => Get.find<SonrService>()._isReady;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static SonrService get to => Get.find<SonrService>();
   static RxDouble get progress => Get.find<SonrService>()._progress;
   static RxList<Peer> get remoteMembers => Get.find<SonrService>()._remoteMembers;
+  static Rx<Status> get status => Get.find<SonrService>()._status;
 
   // @ Set References
   Node _node;
@@ -43,7 +45,7 @@ class SonrService extends GetxService with TransferQueue {
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
-    _node.onReady = _handleReady;
+    _node.onStatus = _handleStatus;
     _node.onRefreshed = _handleRefresh;
     _node.onInvited = _handleInvited;
     _node.onRemoteStart = _handleRemoteStart;
@@ -194,13 +196,15 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
 
   // ^ Handle Bootstrap Result ^ //
-  void _handleReady(bool data) {
-    // Update Status
-    _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
-    _isReady(true);
-
+  void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
-    if (Get.isRegistered<HomeController>() && data) {
+    if (Get.isRegistered<HomeController>() && data.value == Status.AVAILABLE) {
+      // Update Status
+      _isReady(true);
+      _status(data.value);
+
+      // Handle Available
+      _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
       Get.find<HomeController>().readyTitleText(lobbySize.value);
     }
   }
