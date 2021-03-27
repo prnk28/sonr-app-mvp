@@ -92,6 +92,11 @@ debug:
 	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
+## └─ clean           - Clean before running in Debug Mode
+debug.clean: clean
+	cd $(PROJECT_DIR) && cider bump build
+	cd $(PROJECT_DIR) && $(RUN)
+
 ## [profile]     :   Run Mobile App for Profile Mode
 profile:
 	cd $(PROJECT_DIR) && cider bump build
