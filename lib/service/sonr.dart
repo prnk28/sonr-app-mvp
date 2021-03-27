@@ -197,6 +197,8 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
+    print(data.value.toString());
+                                                                                                      
     // Check for Homescreen Controller
     if (Get.isRegistered<HomeController>() && data.value == Status.AVAILABLE) {
       // Update Status
