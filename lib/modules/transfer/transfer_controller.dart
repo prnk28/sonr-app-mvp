@@ -45,7 +45,6 @@ class TransferController extends GetxController {
 
   // ^ Toggle Remote Value ^ //
   void startRemote() {
-    SonrService.remote();
     isRemoteActive(true);
     // Create Timeout
     _timer = Timer.periodic(1.seconds, (_) {

@@ -14,7 +14,6 @@ class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
   final _isReady = false.obs;
   final _peers = Map<String, Peer>().obs;
-  final _remoteMembers = RxList<Peer>();
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
   final _status = Rx<Status>();
@@ -23,7 +22,6 @@ class SonrService extends GetxService with TransferQueue {
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static SonrService get to => Get.find<SonrService>();
   static RxDouble get progress => Get.find<SonrService>()._progress;
-  static RxList<Peer> get remoteMembers => Get.find<SonrService>()._remoteMembers;
   static Rx<Status> get status => Get.find<SonrService>()._status;
 
   // @ Set References
@@ -48,7 +46,6 @@ class SonrService extends GetxService with TransferQueue {
     _node.onStatus = _handleStatus;
     _node.onRefreshed = _handleRefresh;
     _node.onInvited = _handleInvited;
-    _node.onRemoteStart = _handleRemoteStart;
     _node.onReplied = _handleResponded;
     _node.onProgressed = _handleProgress;
     _node.onReceived = _handleReceived;
@@ -156,31 +153,6 @@ class SonrService extends GetxService with TransferQueue {
     }
   }
 
-  // ^ Invite-Peer Event ^
-  static remote() async {
-    // File Payload
-    if (to.payload == Payload.MEDIA) {
-      assert(to.currentTransfer.media != null);
-      // await to._node.inviteFileRemote();
-    }
-
-    // Contact Payload
-    else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContactRemote();
-    }
-
-    // Link Payload
-    else if (to.payload == Payload.URL) {
-      assert(to.currentTransfer.url != null);
-      await to._node.inviteLinkRemote(to.currentTransfer.url);
-    }
-
-    // No Payload
-    else {
-      SonrSnack.error("No media, contact, or link provided");
-    }
-  }
-
   // ^ Respond-Peer Event ^
   static respond(bool decision) async {
     await to._node.respond(decision);
@@ -198,7 +170,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     print(data.value.toString());
-                                                                                                      
+
     // Check for Homescreen Controller
     if (Get.isRegistered<HomeController>() && data.value == Status.AVAILABLE) {
       // Update Status
@@ -217,12 +189,6 @@ class SonrService extends GetxService with TransferQueue {
     _lobbySize(data.peers.length);
   }
 
-  // ^ Node Has Been Directed from Other Device ^ //
-  void _handleRemoteStart(RemoteResponse data) async {
-    HapticFeedback.heavyImpact();
-    SonrSnack.remote(message: data.display, icon: Icon(SonrIconData.remote));
-  }
-
   // ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
     if (SonrOverlay.isNotOpen) {
@@ -233,23 +199,18 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
-    // Handle Remote Peer
-    if (data.isRemote) {
-      _remoteMembers.add(data.from);
+    // Check if Sent Back Contact
+    if (data.type == AuthReply_Type.Contact) {
+      HapticFeedback.vibrate();
+      SonrOverlay.reply(data);
+    }
+    // For Cancel
+    else if (data.type == AuthReply_Type.Cancel) {
+      HapticFeedback.vibrate();
+      currentDecided(false);
     } else {
-      // Check if Sent Back Contact
-      if (data.type == AuthReply_Type.Contact) {
-        HapticFeedback.vibrate();
-        SonrOverlay.reply(data);
-      }
-      // For Cancel
-      else if (data.type == AuthReply_Type.Cancel) {
-        HapticFeedback.vibrate();
-        currentDecided(false);
-      } else {
-        // For File
-        currentDecided(data.decision);
-      }
+      // For File
+      currentDecided(data.decision);
     }
   }
 
