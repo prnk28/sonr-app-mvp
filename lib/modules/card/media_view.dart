@@ -95,7 +95,7 @@ class _MediaInviteView extends StatelessWidget {
                 onPressed: () => controller.declineInvite(),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: SonrText.semibold(invite.isRemote ? "Cancel" : "Decline", color: Colors.red[600], size: 18),
+                  child: SonrText.semibold( "Decline", color: Colors.red[600], size: 18),
                 )),
             // Accept Button
             Container(
@@ -104,7 +104,7 @@ class _MediaInviteView extends StatelessWidget {
               child: SonrButton.stadium(
                 onPressed: () => controller.acceptTransfer(card),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold(invite.isRemote ? "Continue" : "Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
+                text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
               ),
             ),
           ]),

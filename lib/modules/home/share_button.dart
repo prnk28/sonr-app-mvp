@@ -407,7 +407,7 @@ class ShareButtonController extends GetxController {
   joinRemote() {
     // Clean words into new string
     var group = "${firstWord.value}-${secondWord.value}-${thirdWord.value}";
-    SonrService.joinRemote(group);
+    //SonrService.joinRemote(group);
     state(ShareButtonState.Default);
   }
 }
