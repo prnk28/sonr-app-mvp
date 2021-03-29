@@ -10,6 +10,7 @@ class PeerController extends GetxController {
   // Properties
   final Peer peer;
   final int index;
+  final bool isAnimated;
 
   // Reactive Elements
   final RxMap<String, Peer> peers = SonrService.peers;
@@ -39,7 +40,8 @@ class PeerController extends GetxController {
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   StreamSubscription<Map<String, Peer>> peerStream;
-  PeerController(this.peer, this.index) {
+  PeerController(this.peer, this.index, {this.isAnimated = true}) {
+    // Set Initial
     isVisible(true);
     position(peer.position);
     offset(_calculateOffset());
@@ -52,32 +54,36 @@ class PeerController extends GetxController {
 
   @override
   void onInit() async {
-    // Load your Rive data
-    final data = await rootBundle.load('assets/animations/peer_bubble.riv');
+    // Check for animated
+    if (isAnimated) {
+      // Load your Rive data
+      final data = await rootBundle.load('assets/animations/peer_bubble.riv');
 
-    // Create a RiveFile from the binary data
-    final file = RiveFile();
-    if (file.import(data)) {
-      final artboard = file.mainArtboard;
+      // Create a RiveFile from the binary data
+      final file = RiveFile();
+      if (file.import(data)) {
+        final artboard = file.mainArtboard;
 
-      // Add Animation Controllers
-      artboard.addController(SimpleAnimation('Idle'));
-      artboard.addController(_pending = SimpleAnimation('Pending'));
-      artboard.addController(_denied = SimpleAnimation('Denied'));
-      artboard.addController(_accepted = SimpleAnimation('Accepted'));
-      artboard.addController(_sending = SimpleAnimation('Sending'));
-      artboard.addController(_complete = SimpleAnimation('Complete'));
+        // Add Animation Controllers
+        artboard.addController(SimpleAnimation('Idle'));
+        artboard.addController(_pending = SimpleAnimation('Pending'));
+        artboard.addController(_denied = SimpleAnimation('Denied'));
+        artboard.addController(_accepted = SimpleAnimation('Accepted'));
+        artboard.addController(_sending = SimpleAnimation('Sending'));
+        artboard.addController(_complete = SimpleAnimation('Complete'));
 
-      // Set Default States
-      _pending.isActive = _isInvited;
-      _denied.isActive = _hasDenied;
-      _accepted.isActive = _hasAccepted;
-      _sending.isActive = _inProgress;
-      _complete.isActive = _hasCompleted;
+        // Set Default States
+        _pending.isActive = _isInvited;
+        _denied.isActive = _hasDenied;
+        _accepted.isActive = _hasAccepted;
+        _sending.isActive = _inProgress;
+        _complete.isActive = _hasCompleted;
 
-      // Observable Artboard
-      this.artboard(artboard);
+        // Observable Artboard
+        this.artboard(artboard);
+      }
     }
+
     // Set Initial Values
     _handlePeerUpdate(SonrService.peers);
 

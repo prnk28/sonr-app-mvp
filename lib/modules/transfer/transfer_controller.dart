@@ -2,13 +2,23 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 
+class TransferBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<TransferController>(TransferController(), permanent: true);
+  }
+}
+
 class TransferController extends GetxController {
   // @ Properties
   final title = "Nobody Here".obs;
   final isFacingPeer = false.obs;
   final isBirdsEye = false.obs;
+
+  // @ Remote Properties
   final isRemoteActive = false.obs;
   final counter = 0.obs;
+  final remote = Rx<RemoteInfo>();
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -44,28 +54,19 @@ class TransferController extends GetxController {
   }
 
   // ^ Toggle Remote Value ^ //
-  void startRemote() {
-    SonrService.createRemote();
+  void startRemote() async {
+    // Start Remote
+    remote(await SonrService.createRemote());
     isRemoteActive(true);
+
+    // Set Title
+    title(remote.value.display);
+    title.refresh();
+
     // Create Timeout
     _timer = Timer.periodic(1.seconds, (_) {
       // Add to Counter
       counter(counter.value += 1);
-
-      // Compute Title
-      var remaining = (300 - counter.value);
-      var raw = (remaining / 60);
-      var minutes = raw.floor();
-      var secondsInt = ((raw - minutes) * 60).round();
-      String seconds = secondsInt.toString();
-
-      // Adjust Seconds
-      if (secondsInt < 10) {
-        seconds = "0$secondsInt";
-      }
-
-      title("$minutes:$seconds Left");
-      title.refresh();
 
       // Check if Timeout Reached
       if (counter.value == 300) {
