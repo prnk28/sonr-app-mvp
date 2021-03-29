@@ -25,35 +25,32 @@ class PeerBubble extends StatelessWidget {
               child: Container(
                 width: K_BUBBLE_SIZE,
                 height: K_BUBBLE_SIZE,
-                child: Obx(() {
-                  return GestureDetector(
-                    onTap: () => controller.invite(),
-                    onLongPress: () => controller.expandDetails(),
-                    child: Stack(alignment: Alignment.center, children: [
-                      controller.artboard.value == null
-                          ? Container()
-                          : Rive(
-                              artboard: controller.artboard.value,
-                              alignment: Alignment.center,
-                              fit: BoxFit.cover,
-                            ),
-                      PlayAnimation<double>(
-                          tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
-                          duration: Duration(milliseconds: 250),
-                          delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-                          builder: (context, child, value) => AnimatedOpacity(
-                                opacity: value,
-                                duration: Duration(milliseconds: 250),
-                                child:
-                                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                  Padding(padding: EdgeInsets.all(8)),
-                                  controller.peer.initials,
-                                  Padding(padding: EdgeInsets.all(8)),
-                                ]),
-                              )),
-                    ]),
-                  );
-                }),
+                child: GestureDetector(
+                  onTap: () => controller.invite(),
+                  onLongPress: () => controller.expandDetails(),
+                  child: Stack(alignment: Alignment.center, children: [
+                    controller.artboard.value == null
+                        ? Container()
+                        : Rive(
+                            artboard: controller.artboard.value,
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
+                          ),
+                    PlayAnimation<double>(
+                        tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
+                        duration: Duration(milliseconds: 250),
+                        delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
+                        builder: (context, child, value) => AnimatedOpacity(
+                              opacity: value,
+                              duration: Duration(milliseconds: 250),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                Padding(padding: EdgeInsets.all(8)),
+                                controller.peer.initials,
+                                Padding(padding: EdgeInsets.all(8)),
+                              ]),
+                            )),
+                  ]),
+                ),
               ));
         });
   }
@@ -141,5 +138,26 @@ class PeerSheetView extends StatelessWidget {
             ),
           ]),
         ));
+  }
+}
+
+// ^ PeerListItem for Remote View ^ //
+class PeerListItem extends StatelessWidget {
+  final Peer peer;
+  final int index;
+
+  PeerListItem(this.peer, this.index);
+
+  @override
+  Widget build(BuildContext context) {
+    return GetX<PeerController>(
+        assignId: true,
+        init: PeerController(peer, index, isAnimated: false),
+        builder: (controller) {
+          return Container(
+              child: Row(
+            children: [],
+          ));
+        });
   }
 }

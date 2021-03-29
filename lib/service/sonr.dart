@@ -63,9 +63,9 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Join a New Group ^
-  static createRemote() async {
+  static Future<RemoteInfo> createRemote() async {
     var data = await to._node.createRemote();
-    print(data.toString());
+    return data;
   }
 
   // ^ Join a New Group ^

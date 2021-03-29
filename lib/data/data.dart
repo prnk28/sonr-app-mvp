@@ -9,7 +9,8 @@ import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_binding.dart';
 import 'package:sonr_app/modules/profile/profile_binding.dart';
 import 'package:sonr_app/modules/register/register_binding.dart';
-import 'package:sonr_app/modules/transfer/transfer_binding.dart';
+import 'package:sonr_app/modules/transfer/transfer_controller.dart';
+import 'package:sonr_app/modules/transfer/transfer_screen.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ^ Constant Routing Information ^ //
@@ -79,3 +80,4 @@ class InitialBinding implements Bindings {
     Get.lazyPut<CameraController>(() => CameraController());
   }
 }
+
