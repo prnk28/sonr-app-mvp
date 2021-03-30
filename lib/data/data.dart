@@ -11,6 +11,7 @@ import 'package:sonr_app/modules/profile/profile_binding.dart';
 import 'package:sonr_app/modules/register/register_binding.dart';
 import 'package:sonr_app/modules/transfer/transfer_controller.dart';
 import 'package:sonr_app/modules/transfer/transfer_screen.dart';
+import 'package:sonr_app/service/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ^ Constant Routing Information ^ //
@@ -65,6 +66,7 @@ class SonrRoutes {
     await Get.putAsync(() => PermissionService().init(), permanent: true); // Third Required Service
     await Get.putAsync(() => MediaService().init(), permanent: true);
     await Get.putAsync(() => SQLService().init(), permanent: true);
+    await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
@@ -80,4 +82,3 @@ class InitialBinding implements Bindings {
     Get.lazyPut<CameraController>(() => CameraController());
   }
 }
-

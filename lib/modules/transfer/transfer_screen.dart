@@ -35,12 +35,7 @@ class TransferScreen extends GetView<TransferController> {
                           )),
 
                       // @ Lobby View
-                      PlayAnimation<double>(
-                          tween: (0.0).tweenTo(1.0),
-                          duration: 150.milliseconds,
-                          builder: (context, child, value) {
-                            return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: LobbyStack());
-                          }),
+                      LobbyStack(),
 
                       // @ Compass View
                       Padding(
@@ -63,33 +58,38 @@ class _LobbyStackState extends State<LobbyStack> {
   // References
   int lobbySize = 0;
   List<PeerBubble> stackChildren = <PeerBubble>[];
-  StreamSubscription<Map<String, Peer>> peerStream;
+  StreamSubscription<Lobby> localLobbyStream;
 
   // * Initial State * //
   @override
   void initState() {
     // Add Initial Data
-    _handlePeerUpdate(SonrService.peers);
+    _handleLobbyUpdate(LobbyService.local.value);
 
     // Set Stream
-    peerStream = SonrService.peers.listen(_handlePeerUpdate);
+    localLobbyStream = LobbyService.local.listen(_handleLobbyUpdate);
     super.initState();
   }
 
   // * On Dispose * //
   @override
   void dispose() {
-    peerStream.cancel();
+    localLobbyStream.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: stackChildren);
+    return PlayAnimation<double>(
+        tween: (0.0).tweenTo(1.0),
+        duration: 150.milliseconds,
+        builder: (context, child, value) {
+          return AnimatedOpacity(opacity: value, duration: 150.milliseconds, child: Stack(children: stackChildren));
+        });
   }
 
   // ^ Updates Stack Children ^ //
-  _handlePeerUpdate(Map<String, Peer> lobby) {
+  _handleLobbyUpdate(Lobby data) {
     // Initialize
     var children = <PeerBubble>[];
 
@@ -97,7 +97,7 @@ class _LobbyStackState extends State<LobbyStack> {
     stackChildren.clear();
 
     // Iterate through peers and IDs
-    lobby.forEach((id, peer) {
+    data.peers.forEach((id, peer) {
       // Add to Stack Items
       if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
         children.add(PeerBubble(peer, stackChildren.length - 1));
@@ -106,7 +106,7 @@ class _LobbyStackState extends State<LobbyStack> {
 
     // Update View
     setState(() {
-      lobbySize = lobby.length;
+      lobbySize = data.size;
       stackChildren = children;
     });
   }

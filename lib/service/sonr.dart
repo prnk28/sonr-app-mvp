@@ -5,6 +5,7 @@ import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'lobby.dart';
 import 'media.dart';
 import 'sql.dart';
 import 'user.dart';
@@ -17,6 +18,8 @@ class SonrService extends GetxService with TransferQueue {
   final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
   final _status = Rx<Status>();
+
+  // @ Static Accessors
   static RxBool get isReady => Get.find<SonrService>()._isReady;
   static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
   static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
@@ -44,7 +47,7 @@ class SonrService extends GetxService with TransferQueue {
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
     _node.onStatus = _handleStatus;
-    _node.onRefreshed = _handleRefresh;
+    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
     _node.onInvited = _handleInvited;
     _node.onReplied = _handleResponded;
     _node.onProgressed = _handleProgress;
