@@ -22,7 +22,7 @@ class PeerBubble extends StatelessWidget {
               top: controller.offset.value.dy - (ZonePathProvider.size / 2),
               left: controller.offset.value.dx - (ZonePathProvider.size / 2),
               duration: 150.milliseconds,
-              child: SonrButton.circle(
+              child: ShapeButton.circle(
                   onPressed: controller.invite,
                   onLongPressed: controller.expandDetails,
                   child: Stack(alignment: Alignment.center, children: [
@@ -94,7 +94,7 @@ class PeerSheetView extends StatelessWidget {
                   controller.peer.platformExpanded,
                   Container(
                       margin: EdgeInsets.symmetric(horizontal: 90, vertical: 10),
-                      child: SonrButton.rectangle(
+                      child: ShapeButton.rectangle(
                           padding: EdgeInsets.symmetric(vertical: 8),
                           shape: NeumorphicShape.convex,
                           depth: 4,
@@ -169,8 +169,15 @@ class _PeerListItemState extends State<PeerListItem> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SonrColorButton.neutral(onPressed: () {}, text: "Message"),
-                SonrColorButton.primary(onPressed: () {}, text: "Invite"),
+                ColorButton.neutral(onPressed: () {}, text: "Message"),
+                Padding(padding: EdgeInsets.all(8)),
+                ColorButton.primary(
+                  onPressed: () {
+                    SonrService.inviteFromList(widget.peer);
+                  },
+                  text: "Invite",
+                  icon: SonrIcon.invite,
+                ),
               ],
             ),
             Padding(padding: EdgeInsets.all(8)),

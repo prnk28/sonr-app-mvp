@@ -4,6 +4,7 @@ import 'search_view.dart';
 import 'home_controller.dart';
 // import 'search_view.dart';
 import 'share_button.dart';
+import 'package:stacked_card_carousel/stacked_card_carousel.dart';
 
 class HomeScreen extends GetView<HomeController> {
   @override
@@ -13,7 +14,7 @@ class HomeScreen extends GetView<HomeController> {
       resizeToAvoidBottomPadding: false,
       title: "Home",
       leading: _buildLeadingByMode(),
-      action: SonrButton.circle(
+      action: ShapeButton.circle(
           icon: SonrIcon.search,
           shape: NeumorphicShape.flat,
           onPressed: () {
@@ -43,21 +44,20 @@ class HomeScreen extends GetView<HomeController> {
                     thumb: Neumorphic(style: SonrStyle.toggle),
                     children: [
                       ToggleElement(
-                          background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16)),
+                          background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 18)),
                           foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
                       ToggleElement(
-                          background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16)),
+                          background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
                           foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories,
                               UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                               size: 22.5)),
                       ToggleElement(
-                          background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16)),
+                          background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 18)),
                           foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
                     ],
                   )),
             ),
-            TransferCardGrid(),
-            Spacer()
+            Expanded(child: TransferCardGrid()),
           ]),
         ),
       ),
@@ -67,13 +67,13 @@ class HomeScreen extends GetView<HomeController> {
 // ^ Helper Method for Test Mode Leading Button ^ //
   Widget _buildLeadingByMode() {
     if (K_TESTER_MODE) {
-      return SonrButton.circle(
+      return ShapeButton.circle(
         icon: SonrIcon.more,
         onPressed: () => Get.bottomSheet(_SettingsSheet(), backgroundColor: Colors.transparent),
         shape: NeumorphicShape.flat,
       );
     } else {
-      return SonrButton.circle(
+      return ShapeButton.circle(
         icon: SonrIcon.profile,
         onPressed: () => Get.toNamed("/profile"),
         onLongPressed: () => UserService.toggleDarkMode(),
@@ -91,78 +91,47 @@ class TransferCardGrid extends GetView<HomeController> {
     controller.pageController = pageController;
 
     // Build View
-    return Container(
-        padding: EdgeInsets.only(top: 15),
-        height: 500,
-        child: Obx(() {
-          // Loading Cards
-          if (controller.status.value == HomeState.Loading) {
-            return Center(child: CircularProgressIndicator());
-          }
+    return Container(child: Obx(() {
+      // Loading Cards
+      if (controller.status.value == HomeState.Loading) {
+        return Center(child: CircularProgressIndicator());
+      }
 
-          // New User
-          else if (controller.status.value == HomeState.First) {
-            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrText.header("Welcome to Sonr"),
-              SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18)
-            ]);
-          }
+      // New User
+      else if (controller.status.value == HomeState.First) {
+        return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          SonrText.header("Welcome to Sonr"),
+          SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18)
+        ]);
+      }
 
-          // Zero Cards
-          else if (controller.status.value == HomeState.None) {
-            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrText.header(
-                "No Cards Found!",
-                size: 32,
-              ),
-              Padding(padding: EdgeInsets.all(10)),
-              RiveContainer(type: RiveBoard.NotFound, width: Get.width, height: Get.height / 3.5),
-              // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
-            ]);
-          }
+      // Zero Cards
+      else if (controller.status.value == HomeState.None) {
+        return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          SonrText.header(
+            "No Cards Found!",
+            size: 32,
+          ),
+          Padding(padding: EdgeInsets.all(10)),
+          RiveContainer(type: RiveBoard.NotFound, width: Get.width, height: Get.height / 3.5),
+          // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
+        ]);
+      }
 
-          // Build Cards
-          else {
-            controller.promptAutoSave();
-            return PageView.builder(
-              itemCount: controller.getCardList().length,
-              controller: pageController,
-              onPageChanged: (int index) => controller.pageIndex(index),
-              itemBuilder: (_, idx) {
-                return Obx(() {
-                  if (idx == controller.pageIndex.value) {
-                    return PlayAnimation<double>(
-                      tween: (0.85).tweenTo(0.95),
-                      duration: 200.milliseconds,
-                      builder: (context, child, value) {
-                        return Transform.scale(
-                          scale: value,
-                          child: buildCard(idx),
-                        );
-                      },
-                    );
-                  } else if (idx == controller.pageIndex.value) {
-                    return PlayAnimation<double>(
-                      tween: (0.95).tweenTo(0.85),
-                      duration: 200.milliseconds,
-                      builder: (context, child, value) {
-                        return Transform.scale(
-                          scale: value,
-                          child: buildCard(idx),
-                        );
-                      },
-                    );
-                  } else {
-                    return Transform.scale(
-                      scale: 0.85,
-                      child: buildCard(idx),
-                    );
-                  }
-                });
-              },
-            );
-          }
-        }));
+      // Build Cards
+      else {
+        controller.promptAutoSave();
+        return StackedCardCarousel(
+          initialOffset: 16,
+          spaceBetweenItems: 500,
+          onPageChanged: (int index) => controller.pageIndex(index),
+          pageController: pageController,
+          items: List<Widget>.generate(controller.getCardList().length, (idx) {
+            return buildCard(idx);
+          }),
+        );
+      }
+    }));
   }
 
   Widget buildCard(int index) {

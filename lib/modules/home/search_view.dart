@@ -31,7 +31,7 @@ class SearchView extends GetView<SearchCardController> {
                                     padding: const EdgeInsets.only(top: 8.0, right: 32),
                                     child: SonrText.header("Find Card", size: 32),
                                   ),
-                                  leading: SonrButton.circle(
+                                  leading: ShapeButton.circle(
                                     onPressed: () {
                                       SonrOverlay.back();
                                     },

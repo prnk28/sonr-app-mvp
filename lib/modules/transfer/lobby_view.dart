@@ -91,8 +91,10 @@ class LobbySheet extends StatefulWidget {
 class _LobbySheetState extends State<LobbySheet> {
   // References
   int lobbySize = 0;
-  int toggleIndex = 0;
-  List<Peer> peerList = <Peer>[];
+  int toggleIndex = 1;
+  List<Peer> allPeers = <Peer>[];
+  List<Peer> desktopPeers = <Peer>[];
+  List<Peer> mobilePeers = <Peer>[];
   StreamSubscription<Lobby> peerStream;
 
   // * Initial State * //
@@ -115,6 +117,17 @@ class _LobbySheetState extends State<LobbySheet> {
 
   @override
   Widget build(BuildContext context) {
+    // Set Current List
+    var peerList;
+    if (toggleIndex == 1) {
+      peerList = allPeers;
+    } else if (toggleIndex == 0) {
+      peerList = mobilePeers;
+    } else if (toggleIndex == 2) {
+      peerList = desktopPeers;
+    }
+
+    // Build View
     return NeumorphicBackground(
         backendColor: Colors.transparent,
         borderRadius: BorderRadius.circular(20),
@@ -147,6 +160,7 @@ class _LobbySheetState extends State<LobbySheet> {
         padding: EdgeInsets.only(top: 8, bottom: 16),
         margin: EdgeInsetsX.horizontal(24),
         child: NeumorphicToggle(
+          duration: 100.milliseconds,
           style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
           thumb: Neumorphic(style: SonrStyle.toggle),
           selectedIndex: toggleIndex,
@@ -157,16 +171,16 @@ class _LobbySheetState extends State<LobbySheet> {
           },
           children: [
             ToggleElement(
-                background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16)),
-                foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
+                background: Center(child: SonrText.medium("Mobile", color: SonrColor.Grey, size: 18)),
+                foreground: SonrIcon.neumorphicGradient(Icons.smartphone, FlutterGradientNames.newRetrowave, size: 24)),
             ToggleElement(
-                background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16)),
-                foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories,
-                    UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
+                foreground: SonrIcon.neumorphicGradient(
+                    Icons.group, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                     size: 22.5)),
             ToggleElement(
-                background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16)),
-                foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
+                background: Center(child: SonrText.medium("Desktop", color: SonrColor.Grey, size: 18)),
+                foreground: SonrIcon.neumorphicGradient(Icons.computer, FlutterGradientNames.orangeJuice, size: 24)),
           ],
         ),
       ),
@@ -176,23 +190,32 @@ class _LobbySheetState extends State<LobbySheet> {
   // ^ Updates Stack Children ^ //
   _handlePeerUpdate(Lobby lobby) {
     // Initialize
-    var children = <Peer>[];
+    var total = <Peer>[];
+    var mobile = <Peer>[];
+    var desktop = <Peer>[];
 
-    // Clear List
-    peerList.clear();
+    // Clear Lists
+    allPeers.clear();
+    mobilePeers.clear();
+    desktopPeers.clear();
 
     // Iterate through peers and IDs
     lobby.peers.forEach((id, peer) {
-      // Add to Stack Items
-      if (peer.platform != Platform.Android || peer.platform != Platform.iOS) {
-        children.add(peer);
+      total.add(peer);
+      // Add to Peer Lists
+      if (peer.isOnMobile) {
+        mobile.add(peer);
+      } else if (peer.isOnDesktop) {
+        desktop.add(peer);
       }
     });
 
     // Update View
     setState(() {
       lobbySize = lobby.size;
-      peerList = children;
+      allPeers = total;
+      mobilePeers = mobile;
+      desktopPeers = desktop;
     });
   }
 }

@@ -35,12 +35,12 @@ class EditDialog extends GetView<EditDialogController> {
                       // @ Top Banner
                       SonrHeaderBar.twoButton(
                           title: SonrText.header(headerText, size: 34),
-                          leading: SonrButton.circle(
+                          leading: ShapeButton.circle(
                               icon: SonrIcon.close,
                               onPressed: () {
                                 SonrOverlay.back();
                               }),
-                          action: SonrButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)),
+                          action: ShapeButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)),
 
                       // @ Window Content
                       type.view,

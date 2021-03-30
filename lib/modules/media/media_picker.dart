@@ -36,12 +36,12 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
       borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       backendColor: Colors.transparent,
       child: SonrScaffold.appBarCustom(
-        leading: SonrButton.rectangle(
+        leading: ShapeButton.rectangle(
             radius: 20,
             shape: NeumorphicShape.convex,
             onPressed: () => Get.back(),
             icon: SonrIcon.normal(Icons.close, color: SonrPalete.Red, size: 38)),
-        floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
+        floatingActionButton: ShapeButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
         middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 100, index: index, margin: EdgeInsets.only(left: 12, right: 12)),
         body: ValueListenableBuilder(
             builder: (BuildContext context, List<Media> list, Widget child) {

@@ -118,7 +118,7 @@ class _ContactInviteView extends StatelessWidget {
           Container(
             width: Get.width / 3,
             height: 50,
-            child: SonrButton.stadium(
+            child: ShapeButton.stadium(
               onPressed: () {
                 SonrOverlay.back();
                 if (!isReply) {
@@ -193,7 +193,7 @@ class _ContactItemView extends StatelessWidget {
                       SizedBox(
                         width: 78,
                         height: 78,
-                        child: SonrButton.circle(
+                        child: ShapeButton.circle(
                             depth: 4,
                             onPressed: () {},
                             text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
@@ -204,7 +204,7 @@ class _ContactItemView extends StatelessWidget {
                       SizedBox(
                         width: 78,
                         height: 78,
-                        child: SonrButton.circle(
+                        child: ShapeButton.circle(
                             depth: 4,
                             onPressed: () {},
                             text: SonrText.medium("Text", size: 12, color: Colors.black45),
@@ -215,7 +215,7 @@ class _ContactItemView extends StatelessWidget {
                       SizedBox(
                           width: 78,
                           height: 78,
-                          child: SonrButton.circle(
+                          child: ShapeButton.circle(
                               depth: 4,
                               onPressed: () {},
                               text: SonrText.medium("Video", size: 12, color: Colors.black45),

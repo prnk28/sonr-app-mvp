@@ -52,7 +52,7 @@ class MediaPreviewView extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                     // Left Button - Cancel and Retake
-                    SonrButton.flat(
+                    ShapeButton.flat(
                       onPressed: () {
                         HapticFeedback.heavyImpact();
                         onDecision(false);
@@ -64,7 +64,7 @@ class MediaPreviewView extends StatelessWidget {
                     Container(
                       width: Get.width / 3 + 20,
                       height: 50,
-                      child: SonrButton.stadium(
+                      child: ShapeButton.stadium(
                           onPressed: () {
                             HapticFeedback.heavyImpact();
                             onDecision(true);

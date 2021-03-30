@@ -23,7 +23,7 @@ class CreateTileStepper extends GetView<ProfileController> {
                 Container(
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(top: 8, left: 8),
-                    child: SonrButton.rectangle(
+                    child: ShapeButton.rectangle(
                         radius: 20,
                         shape: NeumorphicShape.convex,
                         onPressed: () => Get.back(),

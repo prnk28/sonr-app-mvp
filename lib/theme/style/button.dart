@@ -6,7 +6,7 @@ import 'style.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
 
-class SonrButton extends StatelessWidget {
+class ShapeButton extends StatelessWidget {
   final bool hasIcon;
   final _ButtonType type;
   final SonrText text;
@@ -26,7 +26,7 @@ class SonrButton extends StatelessWidget {
   final Widget child;
 
   // * Constructer * //
-  const SonrButton(
+  const ShapeButton(
     this.hasIcon,
     this.text,
     this.color,
@@ -48,7 +48,7 @@ class SonrButton extends StatelessWidget {
   });
 
   // * Rectangle Button * //
-  factory SonrButton.rectangle(
+  factory ShapeButton.rectangle(
       {@required Function onPressed,
       Function onLongPressed,
       SonrText text,
@@ -67,7 +67,7 @@ class SonrButton extends StatelessWidget {
       EdgeInsets padding = EdgeInsets.zero}) {
     // Child Provided
     if (child != null) {
-      return SonrButton(
+      return ShapeButton(
         true,
         text,
         color,
@@ -85,7 +85,7 @@ class SonrButton extends StatelessWidget {
       // Icon AND Text
       if (icon != null && text != null) {
         var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-        return SonrButton(
+        return ShapeButton(
           true,
           text,
           color,
@@ -105,7 +105,7 @@ class SonrButton extends StatelessWidget {
       // Icon ONLY
       else if (icon != null && text == null) {
         var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-        return SonrButton(
+        return ShapeButton(
           true,
           text,
           color,
@@ -125,7 +125,7 @@ class SonrButton extends StatelessWidget {
       // TEXT ONLY
       else {
         var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-        return SonrButton(
+        return ShapeButton(
           false,
           text,
           color,
@@ -144,7 +144,7 @@ class SonrButton extends StatelessWidget {
   }
 
   // * Flat Button * //
-  factory SonrButton.flat({
+  factory ShapeButton.flat({
     @required Function onPressed,
     Function onLongPressed,
     SonrText text,
@@ -156,7 +156,7 @@ class SonrButton extends StatelessWidget {
   }) {
     // Child Provided
     if (child != null) {
-      return SonrButton(
+      return ShapeButton(
         true,
         text,
         color,
@@ -173,7 +173,7 @@ class SonrButton extends StatelessWidget {
       // Icon AND Text
       if (icon != null && text != null) {
         var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-        return SonrButton(
+        return ShapeButton(
           true,
           text,
           color,
@@ -192,7 +192,7 @@ class SonrButton extends StatelessWidget {
       // Icon ONLY
       else if (icon != null && text == null) {
         var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-        return SonrButton(
+        return ShapeButton(
           true,
           text,
           color,
@@ -211,7 +211,7 @@ class SonrButton extends StatelessWidget {
       // TEXT ONLY
       else {
         var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-        return SonrButton(
+        return ShapeButton(
           false,
           text,
           color,
@@ -229,7 +229,7 @@ class SonrButton extends StatelessWidget {
   }
 
   // * Circle Style Button * //
-  factory SonrButton.circle({
+  factory ShapeButton.circle({
     @required Function onPressed,
     Function onLongPressed,
     SonrIcon icon,
@@ -248,7 +248,7 @@ class SonrButton extends StatelessWidget {
   }) {
     // Child Provided
     if (child != null) {
-      return SonrButton(
+      return ShapeButton(
         true,
         text,
         color,
@@ -266,7 +266,7 @@ class SonrButton extends StatelessWidget {
       // Icon AND Text
       if (icon != null && text != null) {
         var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-        return SonrButton(
+        return ShapeButton(
           true,
           text,
           color,
@@ -286,7 +286,7 @@ class SonrButton extends StatelessWidget {
       // Icon ONLY
       else if (icon != null && text == null) {
         var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-        return SonrButton(
+        return ShapeButton(
           true,
           null,
           color,
@@ -306,7 +306,7 @@ class SonrButton extends StatelessWidget {
       // TEXT ONLY
       else {
         var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-        return SonrButton(
+        return ShapeButton(
           false,
           text,
           color,
@@ -325,7 +325,7 @@ class SonrButton extends StatelessWidget {
   }
 
   // * Stadium Style Button * //
-  factory SonrButton.stadium({
+  factory ShapeButton.stadium({
     @required Function onPressed,
     Function onLongPressed,
     SonrIcon icon,
@@ -344,7 +344,7 @@ class SonrButton extends StatelessWidget {
   }) {
     // Child Provided
     if (child != null) {
-      return SonrButton(
+      return ShapeButton(
         true,
         text,
         color,
@@ -362,7 +362,7 @@ class SonrButton extends StatelessWidget {
       // Icon AND Text
       if (icon != null && text != null) {
         var type = isDisabled ? _ButtonType.DisabledIconText : _ButtonType.IconText;
-        return SonrButton(
+        return ShapeButton(
           true,
           text,
           color,
@@ -382,7 +382,7 @@ class SonrButton extends StatelessWidget {
       // Icon ONLY
       else if (icon != null && text == null) {
         var type = isDisabled ? _ButtonType.DisabledIcon : _ButtonType.Icon;
-        return SonrButton(
+        return ShapeButton(
           true,
           null,
           color,
@@ -402,7 +402,7 @@ class SonrButton extends StatelessWidget {
       // TEXT ONLY
       else {
         var type = isDisabled ? _ButtonType.DisabledText : _ButtonType.Text;
-        return SonrButton(
+        return ShapeButton(
           false,
           text,
           color,
@@ -552,10 +552,10 @@ class SonrButton extends StatelessWidget {
 
 enum ColorButtonType { Primary, Secondary, Neutral, Critical }
 
-class SonrColorButton extends StatefulWidget {
-  static const double PRESSED_SCALE = 0.95;
-  static const double UNPRESSED_SCALE = 1.0;
+class ColorButton extends StatefulWidget {
   static const double K_BORDER_RADIUS = 8;
+  static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
+  static const K_BUTTON_DURATION = Duration(milliseconds: 100);
 
   final EdgeInsets margin;
   final EdgeInsets padding;
@@ -565,8 +565,9 @@ class SonrColorButton extends StatefulWidget {
   final Function onLongPressed;
   final String tooltip;
   final bool isEnabled;
+  final double pressedScale;
 
-  const SonrColorButton({
+  const ColorButton({
     Key key,
     @required this.onPressed,
     @required this.child,
@@ -576,10 +577,11 @@ class SonrColorButton extends StatefulWidget {
     this.onLongPressed,
     this.tooltip,
     this.isEnabled = true,
+    @required this.pressedScale,
   }) : super(key: key);
 
   // @ Primary Button //
-  factory SonrColorButton.primary({
+  factory ColorButton.primary({
     @required Function onPressed,
     Gradient gradient,
     Function onLongPressed,
@@ -587,7 +589,7 @@ class SonrColorButton extends StatefulWidget {
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    Icon icon,
+    SonrIcon icon,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -598,18 +600,19 @@ class SonrColorButton extends StatefulWidget {
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalete.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
-    return SonrColorButton(
+    return ColorButton(
         decoration: decoration,
         onPressed: onPressed,
         child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,
         margin: margin,
-        onLongPressed: onLongPressed);
+        onLongPressed: onLongPressed,
+        pressedScale: 0.95);
   }
 
   // @ Secondary Button //
-  factory SonrColorButton.secondary({
+  factory ColorButton.secondary({
     @required Function onPressed,
     Color color,
     Function onLongPressed,
@@ -617,7 +620,7 @@ class SonrColorButton extends StatefulWidget {
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    Icon icon,
+    SonrIcon icon,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -628,25 +631,26 @@ class SonrColorButton extends StatefulWidget {
     );
 
     // Build Child
-    return SonrColorButton(
+    return ColorButton(
         decoration: decoration,
         onPressed: onPressed,
         child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,
         margin: margin,
-        onLongPressed: onLongPressed);
+        onLongPressed: onLongPressed,
+        pressedScale: 0.98);
   }
 
   // @ Neutral Button //
-  factory SonrColorButton.neutral({
+  factory ColorButton.neutral({
     @required Function onPressed,
     Function onLongPressed,
     Widget child,
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    Icon icon,
+    SonrIcon icon,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -657,18 +661,19 @@ class SonrColorButton extends StatefulWidget {
     );
 
     // Build Child
-    return SonrColorButton(
+    return ColorButton(
         decoration: decoration,
         onPressed: onPressed,
         child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,
         margin: margin,
-        onLongPressed: onLongPressed);
+        onLongPressed: onLongPressed,
+        pressedScale: 0.98);
   }
 
   // @ Helper Method to Build Icon View //
-  static Widget _buildChild(WidgetPosition iconPosition, Widget icon, String text, Widget child) {
+  static Widget _buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
     if (child != null) {
       return child;
     } else if (icon != null && text == null) {
@@ -678,13 +683,29 @@ class SonrColorButton extends StatefulWidget {
     } else if (text != null && icon != null) {
       switch (iconPosition) {
         case WidgetPosition.Left:
-          return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [icon, _buildText(text)]);
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildIcon(icon), Padding(padding: EdgeInsets.all(4)), _buildText(text)]));
         case WidgetPosition.Right:
-          return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [_buildText(text), icon]);
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildText(text), Padding(padding: EdgeInsets.all(4)), _buildIcon(icon)]));
         case WidgetPosition.Top:
-          return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [icon, _buildText(text)]);
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildIcon(icon), Padding(padding: EdgeInsets.all(4)), _buildText(text)]));
         case WidgetPosition.Bottom:
-          return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [_buildText(text), icon]);
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildText(text), Padding(padding: EdgeInsets.all(4)), _buildIcon(icon)]));
         case WidgetPosition.Center:
           return icon;
         default:
@@ -693,6 +714,18 @@ class SonrColorButton extends StatefulWidget {
     } else {
       return Container();
     }
+  }
+
+  static Widget _buildIcon(SonrIcon icon) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: 2.0,
+          child: Icon(icon.data, color: SonrColor.Black.withOpacity(0.5), size: 20),
+        ),
+        Icon(icon.data, color: Colors.white, size: 20),
+      ],
+    );
   }
 
   static Widget _buildText(String text) {
@@ -707,10 +740,10 @@ class SonrColorButton extends StatefulWidget {
   }
 
   @override
-  _SonrColorButtonState createState() => _SonrColorButtonState();
+  _ColorButtonState createState() => _ColorButtonState();
 }
 
-class _SonrColorButtonState extends State<SonrColorButton> {
+class _ColorButtonState extends State<ColorButton> {
   bool hasFinishedAnimationDown = false;
   bool hasFinishedLongAnimationDown = false;
   bool hasTapUp = false;
@@ -718,9 +751,6 @@ class _SonrColorButtonState extends State<SonrColorButton> {
   bool pressed = false;
   bool longPressed = false;
   bool hasDisposed = false;
-
-  static const K_BUTTON_DURATION = Duration(milliseconds: 100);
-  static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
 
   @override
   void dispose() {
@@ -772,13 +802,14 @@ class _SonrColorButtonState extends State<SonrColorButton> {
         _resetIfTapUp();
       },
       child: ControlAnimated(
-        scale: this.pressed ? SonrColorButton.PRESSED_SCALE : SonrColorButton.UNPRESSED_SCALE,
+        //isShaking: this.longPressed,
+        scale: this.pressed ? widget.pressedScale : 1.0,
         child: AnimatedContainer(
           decoration: widget.decoration,
           margin: widget.margin ?? const EdgeInsets.all(0),
-          duration: K_BUTTON_DURATION,
+          duration: ColorButton.K_BUTTON_DURATION,
           curve: Curves.ease,
-          padding: K_BUTTON_PADDING,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: widget.child,
         ),
       ),
@@ -791,7 +822,7 @@ class _SonrColorButtonState extends State<SonrColorButton> {
       pressed = true;
     });
 
-    await Future.delayed(K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ColorButton.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedAnimationDown = true;
 
     //haptic vibration
@@ -817,7 +848,7 @@ class _SonrColorButtonState extends State<SonrColorButton> {
       longPressed = true;
     });
 
-    await Future.delayed(K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ColorButton.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedLongAnimationDown = true;
 
     //haptic vibration

@@ -22,13 +22,13 @@ class ProfileScreen extends GetView<ProfileController> {
               slivers: [
                 // @ Builds Profile Header
                 SonrHeaderBar.sliver(
-                    leading: SonrButton.circle(
+                    leading: ShapeButton.circle(
                         icon: SonrIcon.close,
                         shape: NeumorphicShape.convex,
                         onPressed: () => Get.back(),
                         intensity: 0.85,
                         shadowLightColor: Colors.lightBlueAccent[100]),
-                    action: SonrButton.circle(
+                    action: ShapeButton.circle(
                       shape: NeumorphicShape.convex,
                       icon: SonrIcon.more,
                       onPressed: () => {},

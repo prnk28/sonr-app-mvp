@@ -78,6 +78,14 @@ extension EditTypeUtils on EditType {
 
 // ^ Peer Model Extensions ^ //
 extension PeerUtils on Peer {
+  bool get isOnMobile {
+    return this.platform == Platform.Android || this.platform == Platform.iOS;
+  }
+
+  bool get isOnDesktop {
+    return this.platform == Platform.MacOS || this.platform == Platform.Windows || this.platform == Platform.Linux;
+  }
+
   SonrText get initials {
     var first = this.profile.firstName[0].toUpperCase();
     var last = this.profile.lastName[0].toUpperCase();

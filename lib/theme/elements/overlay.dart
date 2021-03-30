@@ -457,7 +457,7 @@ class _AlertOverlayView extends StatelessWidget {
           // Accept Button
           Container(
             width: Get.width / 3,
-            child: SonrButton.stadium(
+            child: ShapeButton.stadium(
               onPressed: () {
                 onPressed();
                 if (closeOnResponse) {
@@ -622,7 +622,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
             Container(
               width: Get.width / 2.5,
               height: 50,
-              child: SonrButton.stadium(
+              child: ShapeButton.stadium(
                 onPressed: () {
                   onDecision(true);
                   if (closeOnResponse) {

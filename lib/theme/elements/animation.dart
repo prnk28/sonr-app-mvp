@@ -211,8 +211,8 @@ class ControlAnimated extends StatefulWidget {
     this.scale = 1.0,
     this.isVisible,
     this.isShaking,
-    this.shakePadding,
-    this.shakeRange,
+    this.shakePadding = 16,
+    this.shakeRange = 16,
   }) : super(key: key);
 
   @override
@@ -281,7 +281,7 @@ class _ControlAnimatedState extends State<ControlAnimated> with TickerProviderSt
   Widget build(BuildContext context) {
     if (currAnim == AnimType.Shake) {
       final Animation<double> offsetAnimation =
-          Tween(begin: 0.0, end: widget.shakeRange).chain(CurveTween(curve: Curves.elasticIn)).animate(_shakeController)
+          Tween(begin: 0.0, end: widget.shakeRange).chain(CurveTween(curve: Curves.fastLinearToSlowEaseIn)).animate(_shakeController)
             ..addStatusListener((status) {
               if (status == AnimationStatus.completed) {
                 _shakeController.reverse();
