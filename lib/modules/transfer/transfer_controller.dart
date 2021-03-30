@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
-    Get.create<PeerController>(() => PeerController());
   }
 }
 
@@ -45,7 +43,6 @@ class TransferController extends GetxController {
     // Add Stream Handlers
     compassStream = DeviceService.direction.listen(_handleCompassUpdate);
     lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeUpdate);
-
     super.onInit();
   }
 
