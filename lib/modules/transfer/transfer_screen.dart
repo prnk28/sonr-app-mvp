@@ -101,7 +101,7 @@ class _LobbyStackState extends State<LobbyStack> {
       // Add to Stack Items
       if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
         children.add(PeerBubble(peer, stackChildren.length - 1));
-      }
+      //}
     });
 
     // Update View
