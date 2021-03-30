@@ -40,7 +40,7 @@ class PeerController extends GetxController {
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   StreamSubscription<Map<String, Peer>> peerStream;
-  PeerController(this.peer, this.index, {this.isAnimated = true}) {
+  PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
     position(peer.position);
