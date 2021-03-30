@@ -125,9 +125,9 @@ class _MediaItemView extends StatelessWidget {
     return Card(
       shadowColor: Colors.transparent,
       color: Colors.transparent,
-      elevation: 8,
+      elevation: 2,
       child: Container(
-        height: 500,
+        height: 420,
         width: Get.width - 64,
         child: GestureDetector(
           onTap: () {

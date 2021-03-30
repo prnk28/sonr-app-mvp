@@ -79,11 +79,13 @@ class HomeController extends GetxController {
         if (status.value == HomeState.New) {
           pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
         }
+        cards.refresh();
       }
       // Set Cards
       else {
         cards(onData);
         status(HomeState.Ready);
+        cards.refresh();
       }
     }
     // No Cards Available

@@ -133,10 +133,13 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Container(
-          height: Get.height,
+    return Card(
+        shadowColor: Colors.transparent,
+        color: Colors.transparent,
+        elevation: 2,
+        child: Container(
+          height: 420,
+          width: Get.width - 64,
           child: GestureDetector(
             onTap: () {
               OpenFile.open(card.metadata.path);

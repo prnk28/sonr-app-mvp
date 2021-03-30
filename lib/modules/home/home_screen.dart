@@ -8,6 +8,10 @@ import 'carousel_view.dart';
 class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
+    // Create Page Controller
+    final pageController = PageController(viewportFraction: 0.8, keepPage: false, initialPage: controller.cards.length - 1);
+    controller.pageController = pageController;
+
     // Build Scaffold
     return SonrScaffold.appBarLeadingAction(
       resizeToAvoidBottomPadding: false,
@@ -56,7 +60,47 @@ class HomeScreen extends GetView<HomeController> {
                     ],
                   )),
             ),
-            Expanded(child: TransferCardGrid()),
+            Expanded(child: Container(child: Obx(() {
+              // Loading Cards
+              if (controller.status.value == HomeState.Loading) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              // New User
+              else if (controller.status.value == HomeState.First) {
+                return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  SonrText.header("Welcome to Sonr"),
+                  SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18)
+                ]);
+              }
+
+              // Zero Cards
+              else if (controller.status.value == HomeState.None) {
+                return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  SonrText.header(
+                    "No Cards Found!",
+                    size: 32,
+                  ),
+                  Padding(padding: EdgeInsets.all(10)),
+                  RiveContainer(type: RiveBoard.NotFound, width: Get.width, height: Get.height / 3.5),
+                  // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
+                ]);
+              }
+
+              // Build Cards
+              else {
+                controller.promptAutoSave();
+                return StackedCardCarousel(
+                  initialOffset: 2,
+                  spaceBetweenItems: 460,
+                  onPageChanged: (int index) => controller.pageIndex(index),
+                  pageController: pageController,
+                  items: List<Widget>.generate(controller.getCardList().length, (idx) {
+                    return _buildCard(idx);
+                  }),
+                );
+              }
+            }))),
           ]),
         ),
       ),
@@ -80,60 +124,9 @@ class HomeScreen extends GetView<HomeController> {
       );
     }
   }
-}
 
-class TransferCardGrid extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    // Create Page Controller
-    final pageController = PageController(viewportFraction: 0.8, keepPage: false);
-    controller.pageController = pageController;
-
-    // Build View
-    return Container(child: Obx(() {
-      // Loading Cards
-      if (controller.status.value == HomeState.Loading) {
-        return Center(child: CircularProgressIndicator());
-      }
-
-      // New User
-      else if (controller.status.value == HomeState.First) {
-        return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.header("Welcome to Sonr"),
-          SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18)
-        ]);
-      }
-
-      // Zero Cards
-      else if (controller.status.value == HomeState.None) {
-        return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.header(
-            "No Cards Found!",
-            size: 32,
-          ),
-          Padding(padding: EdgeInsets.all(10)),
-          RiveContainer(type: RiveBoard.NotFound, width: Get.width, height: Get.height / 3.5),
-          // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
-        ]);
-      }
-
-      // Build Cards
-      else {
-        controller.promptAutoSave();
-        return StackedCardCarousel(
-          initialOffset: 16,
-          spaceBetweenItems: 500,
-          onPageChanged: (int index) => controller.pageIndex(index),
-          pageController: pageController,
-          items: List<Widget>.generate(controller.getCardList().length, (idx) {
-            return buildCard(idx);
-          }),
-        );
-      }
-    }));
-  }
-
-  Widget buildCard(int index) {
+// ^ Helper Method for Test Mode Leading Button ^ //
+  Widget _buildCard(int index) {
     // Get Card List
     List<TransferCard> list = controller.getCardList();
     bool isNew = false;

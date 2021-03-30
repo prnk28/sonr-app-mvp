@@ -112,7 +112,7 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold( "Decline", color: SonrPalete.Red, size: 18),
+                child: SonrText.semibold("Decline", color: SonrPalete.Red, size: 18),
               )),
           // Accept Button
           Container(
@@ -145,10 +145,13 @@ class _ContactItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Contact contact = card.contact;
-    return SonrScaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Container(
-          height: Get.height,
+    return Card(
+        shadowColor: Colors.transparent,
+        color: Colors.transparent,
+        elevation: 2,
+        child: Container(
+          height: 420,
+          width: Get.width - 64,
           child: GestureDetector(
             onTap: () {
               // Push to Page
