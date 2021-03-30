@@ -2,11 +2,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import '../style/style.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
+enum LottieBoard { Complete, Empty, Pending, Progress }
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class RipplesAnimation extends StatefulWidget {
@@ -468,13 +470,63 @@ class SonrAnimatedWaveIcon extends HookWidget {
 
 // ^ Lottie Animation Container Widget ^ //
 class LottieContainer extends StatefulWidget {
+  final double width;
+  final double height;
+  final BoxFit fit;
+  final LottieBoard board;
+  final Function onComplete;
+  const LottieContainer({Key key, @required this.board, this.onComplete, this.width = 200, this.height = 200, this.fit = BoxFit.fill})
+      : super(key: key);
   @override
   _LottieContainerState createState() => _LottieContainerState();
 }
 
-class _LottieContainerState extends State<LottieContainer> {
+class _LottieContainerState extends State<LottieContainer> with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        widget.onComplete != null ? widget.onComplete() : print(widget.board.toString() + " Completed");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return Lottie.asset(
+      _getPathFromBoard(),
+      controller: _controller,
+      width: widget.width,
+      height: widget.height,
+      fit: widget.fit,
+      onLoaded: (composition) {
+        _controller
+          ..duration = composition.duration
+          ..forward();
+      },
+    );
+  }
+
+  _getPathFromBoard() {
+    switch (widget.board) {
+      case LottieBoard.Complete:
+        return "assets/animations/lottie/complete.json";
+      case LottieBoard.Empty:
+        return "assets/animations/lottie/empty-lobby.json";
+      case LottieBoard.Pending:
+        return "assets/animations/lottie/pending.json";
+      case LottieBoard.Progress:
+        return "assets/animations/lottie/progress.json";
+    }
   }
 }
