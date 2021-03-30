@@ -78,22 +78,34 @@ class SonrScaffold extends StatelessWidget {
   }
 
   factory SonrScaffold.appBarLeadingAction(
-      {@required String title,
-      @required Widget leading,
+      {@required Widget leading,
       @required Widget action,
+      String title,
+      Widget titleWidget,
       Widget body,
       Widget floatingActionButton,
       Widget bottomSheet,
       FloatingActionButtonLocation floatingActionButtonLocation,
       bool disableDynamicLobbyTitle = false,
       bool resizeToAvoidBottomPadding = true}) {
+    // Set Title
+    Widget titleItem;
+    if (disableDynamicLobbyTitle && titleWidget == null) {
+      titleItem = SonrText.appBar(title);
+    } else if (titleWidget != null && disableDynamicLobbyTitle) {
+      titleItem = titleWidget;
+    } else {
+      titleItem = _SonrAppbarTitle(defaultText: title);
+    }
+
+    // Build Scaffold
     return SonrScaffold(
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar: NeumorphicAppBar(
           color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-          title: disableDynamicLobbyTitle ? SonrText.appBar(title) : _SonrAppbarTitle(defaultText: title),
+          title: titleItem,
           leading: leading,
           actions: [action],
         ),

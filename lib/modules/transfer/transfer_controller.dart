@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'transfer_screen.dart';
 
 class TransferController extends GetxController {
   // @ Properties
   final title = "Nobody Here".obs;
-  final isFacingPeer = false.obs;
   final isBirdsEye = false.obs;
+  final isFacingPeer = false.obs;
+  final isLobbySheetOpen = false.obs;
 
   // @ Remote Properties
   final isRemoteActive = false.obs;
@@ -87,6 +89,16 @@ class TransferController extends GetxController {
       isBirdsEye(!isBirdsEye.value);
       print("isBirdsEye ${isBirdsEye.value}");
       isBirdsEye.refresh();
+    }
+  }
+
+  // ^ Switch Transfer Views ^ //
+  void toggleLobbySheet() {
+    isLobbySheetOpen(!isLobbySheetOpen.value);
+    if (isLobbySheetOpen.value) {
+      Get.bottomSheet(LobbySheet());
+    } else if (Get.isBottomSheetOpen && !isLobbySheetOpen.value) {
+      Get.back();
     }
   }
 

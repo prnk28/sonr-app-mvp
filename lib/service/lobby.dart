@@ -28,7 +28,7 @@ class LobbyService extends GetxService {
     if (data.isLocal) {
       // Update Local
       _local(data);
-      _localSize(data.size);
+      _localSize(data.count);
       _local.refresh();
     }
 
