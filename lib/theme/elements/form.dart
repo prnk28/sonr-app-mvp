@@ -288,7 +288,7 @@ class SonrRadioRowOption {
   SonrRadioRowOption({@required this.child, @required this.title});
 
   // * Animated Icon from Type * //
-  factory SonrRadioRowOption.animated(ArtboardType type, String title) {
+  factory SonrRadioRowOption.animated(RiveBoard type, String title) {
     return SonrRadioRowOption(
         child: RiveContainer(
           height: 60,

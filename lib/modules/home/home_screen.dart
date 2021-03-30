@@ -130,7 +130,7 @@ class TransferCardGrid extends GetView<HomeController> {
                 size: 32,
               ),
               Padding(padding: EdgeInsets.all(10)),
-              RiveContainer(type: ArtboardType.NotFound, width: Get.width, height: Get.height / 3.5),
+              RiveContainer(type: RiveBoard.NotFound, width: Get.width, height: Get.height / 3.5),
             ]);
           }
 

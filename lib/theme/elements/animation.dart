@@ -7,7 +7,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
 enum AnimState { Instant, Controlled }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum ArtboardType { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
+enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class RipplesAnimation extends StatefulWidget {
   const RipplesAnimation({
@@ -201,11 +201,11 @@ class AnimatedController extends GetxController {
   }
 }
 
-// ^ Root App Widget ^ //
+// ^ Rive Animation Container Widget ^ //
 class RiveContainer extends StatefulWidget {
   final double width;
   final double height;
-  final ArtboardType type;
+  final RiveBoard type;
   final Widget placeholder;
 
   const RiveContainer({Key key, @required this.type, this.width = 55, this.height = 55, this.placeholder}) : super(key: key);
@@ -215,10 +215,10 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _splashPath = 'assets/animations/splash_screen.riv';
-  final String _tilePath = 'assets/animations/tile_preview.riv';
-  final String _notFoundPath = 'assets/animations/not_found.riv';
-  final String _documentsPath = 'assets/animations/documents.riv';
+  final String _splashPath = 'assets/animations/rive/splash_screen.riv';
+  final String _tilePath = 'assets/animations/rive/tile_preview.riv';
+  final String _notFoundPath = 'assets/animations/rive/not_found.riv';
+  final String _documentsPath = 'assets/animations/rive/documents.riv';
 
   // Properties
   Artboard _riveArtboard;
@@ -227,7 +227,7 @@ class _RiveContainer extends State<RiveContainer> {
   @override
   void initState() {
     // Load the RiveFile from the binary data.
-    if (widget.type == ArtboardType.Splash) {
+    if (widget.type == RiveBoard.Splash) {
       rootBundle.load(_splashPath).then(
         (data) async {
           // Await Loading
@@ -242,7 +242,7 @@ class _RiveContainer extends State<RiveContainer> {
           }
         },
       );
-    } else if (widget.type == ArtboardType.NotFound) {
+    } else if (widget.type == RiveBoard.NotFound) {
       rootBundle.load(_notFoundPath).then(
         (data) async {
           // Await Loading
@@ -257,7 +257,7 @@ class _RiveContainer extends State<RiveContainer> {
           }
         },
       );
-    } else if (widget.type == ArtboardType.Documents) {
+    } else if (widget.type == RiveBoard.Documents) {
       rootBundle.load(_documentsPath).then(
         (data) async {
           // Await Loading
@@ -282,16 +282,16 @@ class _RiveContainer extends State<RiveContainer> {
             final artboard = file.mainArtboard;
 
             // Retreive Camera
-            if (widget.type == ArtboardType.Camera) {
+            if (widget.type == RiveBoard.Camera) {
               artboard.addController(SimpleAnimation('Camera'));
             }
 
             // Retreive Showcase Loop
-            else if (widget.type == ArtboardType.Gallery) {
+            else if (widget.type == RiveBoard.Gallery) {
               artboard.addController(SimpleAnimation('Showcase'));
             }
             // Retreive Showcase Loop
-            else if (widget.type == ArtboardType.Feed) {
+            else if (widget.type == RiveBoard.Feed) {
               artboard.addController(SimpleAnimation('Feed'));
             }
             // Retreive Icon Loop
@@ -463,5 +463,18 @@ class SonrAnimatedWaveIcon extends HookWidget {
         )
       ],
     );
+  }
+}
+
+// ^ Lottie Animation Container Widget ^ //
+class LottieContainer extends StatefulWidget {
+  @override
+  _LottieContainerState createState() => _LottieContainerState();
+}
+
+class _LottieContainerState extends State<LottieContainer> {
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
   }
 }

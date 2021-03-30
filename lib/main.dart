@@ -41,7 +41,7 @@ class _AppState extends State<App> {
             children: [
               // @ Rive Animation
               RiveContainer(
-                type: ArtboardType.Splash,
+                type: RiveBoard.Splash,
                 width: Get.width,
                 height: Get.height,
                 placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),

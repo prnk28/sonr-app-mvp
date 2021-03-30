@@ -131,9 +131,9 @@ class SetTypeView extends GetView<ProfileController> {
         // @ Toggle Buttons for Widget Size
         SonrRadio(
             options: [
-              SonrRadioRowOption.animated(ArtboardType.Icon, "Link"),
-              SonrRadioRowOption.animated(ArtboardType.Gallery, "Post"),
-              SonrRadioRowOption.animated(ArtboardType.Feed, "Feed"),
+              SonrRadioRowOption.animated(RiveBoard.Icon, "Link"),
+              SonrRadioRowOption.animated(RiveBoard.Gallery, "Post"),
+              SonrRadioRowOption.animated(RiveBoard.Feed, "Feed"),
             ],
             onUpdated: (int index, String title) {
               var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == title);

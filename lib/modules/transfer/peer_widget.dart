@@ -143,22 +143,46 @@ class PeerSheetView extends StatelessWidget {
 }
 
 // ^ PeerListItem for Remote View ^ //
-class PeerListItem extends StatelessWidget {
+class PeerListItem extends StatefulWidget {
   final Peer peer;
   final int index;
 
   PeerListItem(this.peer, this.index);
+  @override
+  _PeerListItemState createState() => _PeerListItemState();
+}
 
+class _PeerListItemState extends State<PeerListItem> {
   @override
   Widget build(BuildContext context) {
-    return GetX<PeerController>(
-        assignId: true,
-        init: PeerController(peer: peer, index: index, isAnimated: false),
-        builder: (controller) {
-          return Container(
-              child: Row(
-            children: [],
-          ));
-        });
+    return Neumorphic(
+        margin: EdgeInsetsX.horizontal(8),
+        child: ExpansionTile(
+          title: SonrText.gradient(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, FlutterGradientNames.frozenHeat, size: 32),
+          subtitle: SonrText("",
+              isRich: true,
+              richText: RichText(
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.fade,
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: widget.peer.platform.toString(),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
+                    TextSpan(
+                        text: " - ${widget.peer.model}",
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.black)),
+                  ]))),
+          children: [
+            Text(
+              "Child 1",
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              "Child 2",
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        style: SonrStyle.normal);
   }
 }

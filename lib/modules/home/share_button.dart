@@ -196,7 +196,7 @@ class _ShareButtonRow extends StatelessWidget {
                     });
                   }
                 },
-                type: ArtboardType.Camera,
+                type: RiveBoard.Camera,
               ),
             ),
           ),
@@ -229,7 +229,7 @@ class _ShareButtonRow extends StatelessWidget {
                     });
                   }
                 },
-                type: ArtboardType.Gallery,
+                type: RiveBoard.Gallery,
               ),
             ),
           ),
@@ -246,7 +246,7 @@ class _ShareButtonRow extends StatelessWidget {
                   // Go to Transfer
                   Get.toNamed("/transfer");
                 },
-                type: ArtboardType.Contact,
+                type: RiveBoard.Contact,
               ),
             ),
           )
@@ -257,7 +257,7 @@ class _ShareButtonRow extends StatelessWidget {
 // ** Share Button Item View ** //
 class _ShareButtonItem extends StatelessWidget {
   // Properties
-  final ArtboardType type;
+  final RiveBoard type;
   final Function onPressed;
 
   // Method to Return Type

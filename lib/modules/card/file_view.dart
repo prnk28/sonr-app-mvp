@@ -100,7 +100,7 @@ class _FileInviteView extends StatelessWidget {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: RiveContainer(type: ArtboardType.Documents, width: Get.width - 150, height: Get.height / 3)),
+                child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3)),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
