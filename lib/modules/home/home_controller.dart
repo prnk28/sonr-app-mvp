@@ -1,9 +1,8 @@
 import 'dart:async';
 
+import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/permission.dart';
 import 'package:sonr_app/theme/theme.dart';
-
-import 'home_binding.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
@@ -163,16 +162,5 @@ class HomeController extends GetxController {
     if (status.value == HomeState.Ready) {
       pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
     }
-  }
-
-  // ^ Provides Information at home page ^ //
-  void readyTitleText(int lobbySize, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    titleText("Hello, ${UserService.firstName.value}");
-    Future.delayed(timeout, () {
-      titleText("$lobbySize Nearby");
-    });
-    Future.delayed(timeout * 2, () {
-      titleText("Home");
-    });
   }
 }

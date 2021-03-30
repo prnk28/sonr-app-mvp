@@ -202,6 +202,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
       var diff = _lobbySizeRef - onData;
       swapTitleText("$diff Left");
     }
+    _lobbySizeRef = onData;
   }
 
   // @ Handle Ready ^ //

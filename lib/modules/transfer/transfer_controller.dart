@@ -2,12 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 
-class TransferBinding implements Bindings {
-  @override
-  void dependencies() {
-    Get.put<TransferController>(TransferController(), permanent: true);
-  }
-}
 
 class TransferController extends GetxController {
   // @ Properties

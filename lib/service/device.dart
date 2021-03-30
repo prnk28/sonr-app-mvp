@@ -5,7 +5,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/home/home_binding.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/permission.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';

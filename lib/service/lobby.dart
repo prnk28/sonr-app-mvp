@@ -30,8 +30,6 @@ class LobbyService extends GetxService {
       _local(data);
       _localSize(data.size);
       _local.refresh();
-
-      Get.find<HomeController>().readyTitleText(_localSize.value);
     }
 
     // @ Update Other Topics
