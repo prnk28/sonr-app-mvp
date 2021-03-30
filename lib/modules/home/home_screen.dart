@@ -2,9 +2,8 @@ import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'search_view.dart';
 import 'home_controller.dart';
-// import 'search_view.dart';
 import 'share_button.dart';
-import 'package:stacked_card_carousel/stacked_card_carousel.dart';
+import 'carousel_view.dart';
 
 class HomeScreen extends GetView<HomeController> {
   @override

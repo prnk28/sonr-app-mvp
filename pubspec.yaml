@@ -60,7 +60,6 @@ dependencies:
   photo_view: ^0.10.3
   rive: ^0.6.8
   simple_animations: ^2.5.1
-  stacked_card_carousel: ^0.0.2+1
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
