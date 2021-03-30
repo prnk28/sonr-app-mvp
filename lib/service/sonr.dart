@@ -21,8 +21,6 @@ class SonrService extends GetxService with TransferQueue {
 
   // @ Static Accessors
   static RxBool get isReady => Get.find<SonrService>()._isReady;
-  static RxMap<String, Peer> get peers => Get.find<SonrService>()._peers;
-  static RxInt get lobbySize => Get.find<SonrService>()._lobbySize;
   static SonrService get to => Get.find<SonrService>();
   static RxDouble get progress => Get.find<SonrService>()._progress;
   static Rx<Status> get status => Get.find<SonrService>()._status;
@@ -193,14 +191,8 @@ class SonrService extends GetxService with TransferQueue {
 
       // Handle Available
       _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
-      Get.find<HomeController>().readyTitleText(lobbySize.value);
-    }
-  }
 
-  // ^ Handle Lobby Update ^ //
-  void _handleRefresh(Lobby data) {
-    _peers(data.peers);
-    _lobbySize(data.peers.length);
+    }
   }
 
   // ^ Node Has Been Invited ^ //

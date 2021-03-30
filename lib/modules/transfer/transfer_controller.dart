@@ -38,11 +38,11 @@ class TransferController extends GetxController {
   void onInit() {
     // Set Initial Value
     _handleCompassUpdate(DeviceService.direction.value);
-    _handleLobbySizeUpdate(SonrService.lobbySize.value);
+    _handleLobbySizeUpdate(LobbyService.localSize.value);
 
     // Add Stream Handlers
     compassStream = DeviceService.direction.listen(_handleCompassUpdate);
-    lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeUpdate);
+    lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
     super.onInit();
   }
 
@@ -75,7 +75,7 @@ class TransferController extends GetxController {
           HapticFeedback.mediumImpact();
           counter(0);
           isRemoteActive(false);
-          _handleLobbySizeUpdate(SonrService.lobbySize.value);
+          _handleLobbySizeUpdate(LobbyService.localSize.value);
         }
       }
     });

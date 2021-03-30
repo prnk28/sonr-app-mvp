@@ -116,7 +116,7 @@ class RemoteLobbyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: SonrService.lobbySize.value,
+        itemCount: LobbyService.localSize.value,
         itemBuilder: (context, idx) {
           return Column(children: [
             SonrText.title("Handling Remote..."),

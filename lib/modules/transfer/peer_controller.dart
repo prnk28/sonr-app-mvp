@@ -13,7 +13,7 @@ class PeerController extends GetxController {
   final bool isAnimated;
 
   // Reactive Elements
-  final RxMap<String, Peer> peers = SonrService.peers;
+  final Rx<Lobby> lobby = LobbyService.local;
   final artboard = Rx<Artboard>();
   final counter = 0.0.obs;
   final diffDesg = Rx<Position_Designation>();
@@ -39,7 +39,7 @@ class PeerController extends GetxController {
 
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
-  StreamSubscription<Map<String, Peer>> peerStream;
+  StreamSubscription<Lobby> peerStream;
   PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
@@ -85,10 +85,10 @@ class PeerController extends GetxController {
     }
 
     // Set Initial Values
-    _handlePeerUpdate(SonrService.peers);
+    _handlePeerUpdate(LobbyService.local.value);
 
     // Add Stream Handlers
-    peerStream = SonrService.peers.listen(_handlePeerUpdate);
+    peerStream = LobbyService.local.listen(_handlePeerUpdate);
     super.onInit();
   }
 
@@ -199,10 +199,10 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Peer Position ^ //
-  _handlePeerUpdate(Map<String, Peer> lobby) {
+  _handlePeerUpdate(Lobby lobby) {
     if (!hasCompleted.value) {
       // Initialize
-      lobby.forEach((id, value) {
+      lobby.peers.forEach((id, value) {
         // Update Direction
         if (id == peer.id.peer && !_isInvited) {
           position(value.position);

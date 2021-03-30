@@ -163,10 +163,10 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
   @override
   void initState() {
     // Add Initial Data
-    _handleLobbySizeStream(SonrService.lobbySize.value);
+    _handleLobbySizeStream(LobbyService.localSize.value);
 
     // Set Defaults
-    lobbySizeStream = SonrService.lobbySize.listen(_handleLobbySizeStream);
+    lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
     readyStream = SonrService.isReady.listen(_handleReady);
     text = widget.defaultText;
     super.initState();
@@ -187,7 +187,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
         key: ValueKey<String>(text),
         child: SonrText.appBar(text),
         onTap: () {
-          swapTitleText("${SonrService.lobbySize.value} Around", timeout: 2500.milliseconds);
+          swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
         },
       ),
     );
@@ -215,7 +215,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
     // Nearby Peers Text
     Future.delayed(const Duration(milliseconds: 3500), () {
       setState(() {
-        text = ("${SonrService.lobbySize.value} Nearby");
+        text = ("${LobbyService.localSize.value} Nearby");
       });
     });
 
