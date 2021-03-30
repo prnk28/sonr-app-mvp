@@ -112,7 +112,7 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold( "Decline", color: SonrColor.red, size: 18),
+                child: SonrText.semibold( "Decline", color: SonrPalete.Red, size: 18),
               )),
           // Accept Button
           Container(
@@ -128,7 +128,7 @@ class _ContactInviteView extends StatelessWidget {
                 }
               },
               icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-              text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
+              text: SonrText.semibold("Accept", size: 18, color: SonrColor.Black.withOpacity(0.85)),
             ),
           ),
         ])

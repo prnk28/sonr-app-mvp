@@ -34,23 +34,25 @@ class HomeScreen extends GetView<HomeController> {
           height: Get.height,
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
-              margin: EdgeInsets.only(left: 30, right: 30),
+              padding: EdgeInsets.only(top: 8),
+              margin: EdgeInsetsX.horizontal(24),
               child: Obx(() => NeumorphicToggle(
                     style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
                     selectedIndex: controller.toggleIndex.value,
                     onChanged: (val) => controller.setToggleCategory(val),
-                    thumb: SonrAnimatedSwitcher.fade(
-                      child: GestureDetector(
-                          key: ValueKey<int>(controller.toggleIndex.value),
-                          onDoubleTap: () => controller.jumpToStart(),
-                          onLongPress: () => controller.jumpToEnd(),
-                          child: Center(child: Obx(() => _buildToggleView()))),
-                    ),
+                    thumb: Neumorphic(style: SonrStyle.toggle),
                     children: [
-                      ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
-                      ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
-                      ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
+                      ToggleElement(
+                          background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16)),
+                          foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
+                      ToggleElement(
+                          background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16)),
+                          foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories,
+                              UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                              size: 22.5)),
+                      ToggleElement(
+                          background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16)),
+                          foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
                     ],
                   )),
             ),
@@ -79,22 +81,6 @@ class HomeScreen extends GetView<HomeController> {
       );
     }
   }
-
-  // ^ Helper Method for Category Filter ^ //
-  Widget _buildToggleView() {
-    // Change Category
-    if (controller.toggleIndex.value == 0) {
-      return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
-    } else if (controller.toggleIndex.value == 1) {
-      return SonrIcon.neumorphicGradient(
-          SonrIconData.all_categories, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
-          size: 22.5);
-    } else if (controller.toggleIndex.value == 2) {
-      return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
-    } else {
-      return SonrIcon.neumorphicGradient(SonrIconData.url, FlutterGradientNames.sugarLollipop, size: 24);
-    }
-  }
 }
 
 class TransferCardGrid extends GetView<HomeController> {
@@ -118,7 +104,7 @@ class TransferCardGrid extends GetView<HomeController> {
           else if (controller.status.value == HomeState.First) {
             return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
               SonrText.header("Welcome to Sonr"),
-              SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.black.withOpacity(0.7), size: 18)
+              SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18)
             ]);
           }
 
@@ -231,7 +217,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.isDarkMode.value,
@@ -248,7 +234,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.hasPointToShare.value,

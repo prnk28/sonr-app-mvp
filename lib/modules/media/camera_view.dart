@@ -222,8 +222,8 @@ class _CaptureButton extends GetView<CameraController> {
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value
-                                ? NeumorphicBorder(color: SonrColor.red, width: 4)
-                                : NeumorphicBorder(color: SonrColor.black, width: 0))),
+                                ? NeumorphicBorder(color: SonrPalete.Red, width: 4)
+                                : NeumorphicBorder(color: SonrColor.Black, width: 0))),
                   ),
                 ),
                 // Interior Compass

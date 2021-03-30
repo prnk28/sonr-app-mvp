@@ -136,7 +136,7 @@ class SonrScaffold extends StatelessWidget {
           intensity: 0.45,
         ),
         theme: NeumorphicThemeData(
-          defaultTextColor: SonrColor.black,
+          defaultTextColor: SonrColor.Black,
           baseColor: SonrColor.White,
           lightSource: LightSource.topLeft,
           depth: 8,

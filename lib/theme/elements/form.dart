@@ -219,8 +219,8 @@ class SonrDropdown extends StatelessWidget {
         SonrText.medium(initial.text, color: Colors.black87, size: 18),
         Spacer(flex: selectedFlex),
         Get.find<SonrPositionedOverlay>().overlays.length > 0
-            ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black)
-            : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
+            ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black)
+            : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
         Spacer(),
       ]);
     }
@@ -236,8 +236,8 @@ class SonrDropdown extends StatelessWidget {
           SonrText.medium(item.text, color: Colors.black87, size: 18),
           Spacer(flex: selectedFlex),
           Get.find<SonrPositionedOverlay>().overlays.length > 0
-              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black)
-              : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
+              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black)
+              : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
           Spacer(),
         ]);
       } else {
@@ -246,8 +246,8 @@ class SonrDropdown extends StatelessWidget {
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon : Container(),
           Get.find<SonrPositionedOverlay>().overlays.length > 0
-              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black)
-              : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
+              ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black)
+              : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
         ]);
       }
     }
@@ -276,7 +276,7 @@ class SonrDropdownItem extends StatelessWidget {
         )
       ]);
     } else {
-      return Row(children: [Padding(padding: EdgeInsets.all(4)), SonrText.medium(text, color: SonrColor.black)]);
+      return Row(children: [Padding(padding: EdgeInsets.all(4)), SonrText.medium(text, color: SonrColor.Black)]);
     }
   }
 }
@@ -367,7 +367,7 @@ class SonrRadioItem extends StatelessWidget {
         onChanged: (i) => onChanged(),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(title, size: 14, color: SonrColor.black),
+      SonrText.medium(title, size: 14, color: SonrColor.Black),
     ]);
   }
 }

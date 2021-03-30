@@ -97,7 +97,7 @@ class _URLInviteView extends StatelessWidget {
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
-                      color: SonrColor.black.withOpacity(0.5),
+                      color: SonrColor.Black.withOpacity(0.5),
                     ),
             ),
           ),
@@ -139,7 +139,7 @@ class _URLInviteView extends StatelessWidget {
             child: SonrButton.stadium(
               onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
               icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
-              text: SonrText.semibold("Open", size: 18, color: SonrColor.black.withOpacity(0.85)),
+              text: SonrText.semibold("Open", size: 18, color: SonrColor.Black.withOpacity(0.85)),
             ),
           ),
         ]),

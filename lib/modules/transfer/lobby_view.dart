@@ -91,6 +91,7 @@ class LobbySheet extends StatefulWidget {
 class _LobbySheetState extends State<LobbySheet> {
   // References
   int lobbySize = 0;
+  int toggleIndex = 0;
   List<Peer> peerList = <Peer>[];
   StreamSubscription<Lobby> peerStream;
 
@@ -114,31 +115,62 @@ class _LobbySheetState extends State<LobbySheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      maxChildSize: 1.0,
-      minChildSize: 0.4,
-      initialChildSize: 0.4,
-      builder: (BuildContext context, scrollController) {
-        return NeumorphicBackground(
-            backendColor: Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            child: Neumorphic(
-                style: SonrStyle.normal,
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: peerList.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [SonrIcon.profile, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("All Peers")]);
-                    } else {
-                      return PeerListItem(peerList[index - 1], index - 1);
-                    }
-                  },
-                )));
-      },
-    );
+    return NeumorphicBackground(
+        backendColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
+        child: Neumorphic(
+            style: SonrStyle.normal,
+            child: ListView.builder(
+              itemCount: peerList.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return _buildTitle();
+                } else {
+                  // Build List Item
+                  return PeerListItem(peerList[index - 1], index - 1);
+                }
+              },
+            )));
+  }
+
+  // ^ Builds Title View ^ //
+  Widget _buildTitle() {
+    return Column(children: [
+      // Build Title
+      Padding(padding: EdgeInsetsX.top(8)),
+      Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [SonrIcon.profile, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("All Peers")]),
+
+      // Build Toggle View
+      Container(
+        padding: EdgeInsets.only(top: 8, bottom: 16),
+        margin: EdgeInsetsX.horizontal(24),
+        child: NeumorphicToggle(
+          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+          thumb: Neumorphic(style: SonrStyle.toggle),
+          selectedIndex: toggleIndex,
+          onChanged: (val) {
+            setState(() {
+              toggleIndex = val;
+            });
+          },
+          children: [
+            ToggleElement(
+                background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16)),
+                foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
+            ToggleElement(
+                background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16)),
+                foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories,
+                    UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                    size: 22.5)),
+            ToggleElement(
+                background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16)),
+                foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
+          ],
+        ),
+      ),
+    ]);
   }
 
   // ^ Updates Stack Children ^ //

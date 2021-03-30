@@ -69,7 +69,7 @@ class MediaPreviewView extends StatelessWidget {
                             HapticFeedback.heavyImpact();
                             onDecision(true);
                           },
-                          text: SonrText.semibold("Continue", size: 18, color: SonrColor.black.withOpacity(0.85)),
+                          text: SonrText.semibold("Continue", size: 18, color: SonrColor.Black.withOpacity(0.85)),
                           icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28)),
                     ),
                   ]),
