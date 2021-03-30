@@ -135,6 +135,8 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.aboveTheSky, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
   static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
+  static SonrIcon get location =>
+      SonrIcon.neumorphicGradient(Icons.location_city, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
 
   // ^ AppBar Icons ^ //
   static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36, style: SonrStyle.appBarIcon);

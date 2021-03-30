@@ -90,6 +90,7 @@ class LobbySheet extends StatefulWidget {
 
 class _LobbySheetState extends State<LobbySheet> {
   // References
+  String title;
   int lobbySize = 0;
   int toggleIndex = 1;
   List<Peer> allPeers = <Peer>[];
@@ -105,7 +106,15 @@ class _LobbySheetState extends State<LobbySheet> {
 
     // Set Stream
     peerStream = LobbyService.local.listen(_handlePeerUpdate);
+    setTitle();
     super.initState();
+  }
+
+  void setTitle() async {
+    var data = await Get.find<DeviceService>().currentPlacemark();
+    setState(() {
+      title = "${data.city}, ${data.countryCode}";
+    });
   }
 
   // * On Dispose * //
@@ -153,7 +162,7 @@ class _LobbySheetState extends State<LobbySheet> {
       Padding(padding: EdgeInsetsX.top(8)),
       Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [SonrIcon.profile, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("All Peers")]),
+          children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.header(title)]),
 
       // Build Toggle View
       Container(

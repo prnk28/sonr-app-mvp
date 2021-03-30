@@ -9,6 +9,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/permission.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geocode/geocode.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
@@ -17,6 +18,7 @@ class DeviceService extends GetxService {
   // Status/Sensor Properties
   final _direction = Rx<CompassEvent>();
   final _platform = Rx<Platform>();
+  final _geoCode = GeoCode();
 
   // Getters for Global References
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
@@ -99,6 +101,17 @@ class DeviceService extends GetxService {
   Future<Position> currentLocation() async {
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
       return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    } else {
+      print("No Location Permissions");
+      return null;
+    }
+  }
+
+  // ^ Refresh User Location Position ^ //
+  Future<Address> currentPlacemark() async {
+    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+      final loc = await currentLocation();
+      return await _geoCode.reverseGeocoding(latitude: loc.latitude, longitude: loc.longitude);
     } else {
       print("No Location Permissions");
       return null;
