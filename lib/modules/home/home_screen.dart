@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                 size: 32,
               ),
               Padding(padding: EdgeInsets.all(10)),
-              LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 3.5),
+              LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 3.5, repeat: true),
               // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
             ]);
           }

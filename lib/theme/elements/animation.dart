@@ -666,7 +666,19 @@ class LottieContainer extends StatefulWidget {
   final BoxFit fit;
   final LottieBoard type;
   final Function onComplete;
-  const LottieContainer({Key key, @required this.type, this.onComplete, this.width = 200, this.height = 200, this.fit = BoxFit.fill})
+  final bool repeat;
+  final bool animate;
+  final bool reverse;
+  const LottieContainer(
+      {Key key,
+      @required this.type,
+      this.onComplete,
+      this.width = 200,
+      this.height = 200,
+      this.fit = BoxFit.fill,
+      this.repeat = false,
+      this.animate = true,
+      this.reverse = true})
       : super(key: key);
   @override
   _LottieContainerState createState() => _LottieContainerState();
@@ -698,12 +710,18 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
       _getPathFromBoard(),
       controller: _controller,
       width: widget.width,
+      repeat: widget.repeat,
+      reverse: widget.reverse,
+      animate: widget.animate,
       height: widget.height,
       fit: BoxFit.contain,
       onLoaded: (composition) {
-        _controller
-          ..duration = composition.seconds.seconds
-          ..forward(from: 0);
+        _controller..duration = composition.seconds.seconds;
+        if (widget.repeat) {
+          _controller.repeat();
+        } else {
+          _controller.forward(from: 0);
+        }
       },
     );
   }
