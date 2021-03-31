@@ -69,7 +69,7 @@ class RegisterScreen extends GetView<RegisterController> {
                 Center(
                   child: Padding(
                     padding: EdgeInsets.only(top: 16.0),
-                    child: SonrButton.rectangle(
+                    child: ShapeButton.rectangle(
                       margin: EdgeInsetsX.horizontal(120),
                       icon: SonrIcon.accept,
                       text: SonrText.semibold("Submit"),

@@ -36,12 +36,12 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
       borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       backendColor: Colors.transparent,
       child: SonrScaffold.appBarCustom(
-        leading: SonrButton.rectangle(
+        leading: ShapeButton.rectangle(
             radius: 20,
             shape: NeumorphicShape.convex,
             onPressed: () => Get.back(),
-            icon: SonrIcon.normal(Icons.close, color: SonrColor.red, size: 38)),
-        floatingActionButton: SonrButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
+            icon: SonrIcon.normal(Icons.close, color: SonrPalete.Red, size: 38)),
+        floatingActionButton: ShapeButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
         middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 100, index: index, margin: EdgeInsets.only(left: 12, right: 12)),
         body: ValueListenableBuilder(
             builder: (BuildContext context, List<Media> list, Widget child) {
@@ -118,7 +118,7 @@ class _SonrMediaButtonState extends State<_SonrMediaButton> {
   bool loaded = false;
 
   final mediaButtonDefault = NeumorphicStyle(intensity: 0.85, color: SonrColor.White);
-  final mediaButtonPressed = NeumorphicStyle(depth: -12, intensity: 1, surfaceIntensity: 0.75, shadowDarkColorEmboss: SonrColor.black);
+  final mediaButtonPressed = NeumorphicStyle(depth: -12, intensity: 1, surfaceIntensity: 0.75, shadowDarkColorEmboss: SonrColor.Black);
 
   @override
   void initState() {

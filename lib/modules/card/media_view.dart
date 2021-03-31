@@ -66,7 +66,7 @@ class _MediaInviteView extends StatelessWidget {
                   : Icon(
                       Icons.insert_emoticon,
                       size: 60,
-                      color: SonrColor.black.withOpacity(0.5),
+                      color: SonrColor.Black.withOpacity(0.5),
                     ),
             ),
 
@@ -95,16 +95,16 @@ class _MediaInviteView extends StatelessWidget {
                 onPressed: () => controller.declineInvite(),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: SonrText.semibold( "Decline", color: Colors.red[600], size: 18),
+                  child: SonrText.semibold("Decline", color: Colors.red[600], size: 18),
                 )),
             // Accept Button
             Container(
               width: Get.width / 3,
               height: 50,
-              child: SonrButton.stadium(
+              child: ShapeButton.stadium(
                 onPressed: () => controller.acceptTransfer(card),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
+                text: SonrText.semibold("Accept", size: 18, color: SonrColor.Black.withOpacity(0.85)),
               ),
             ),
           ]),
@@ -122,10 +122,13 @@ class _MediaItemView extends StatelessWidget {
   _MediaItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Container(
-        height: Get.height,
+    return Card(
+      shadowColor: Colors.transparent,
+      color: Colors.transparent,
+      elevation: 2,
+      child: Container(
+        height: 420,
+        width: Get.width - 64,
         child: GestureDetector(
           onTap: () {
             // Push to Page
@@ -177,7 +180,7 @@ class _MediaItemView extends StatelessWidget {
                         child: Neumorphic(
                           style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
                           child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                              color: card.metadata.mime.type == MIME_Type.image ? SonrColor.black : SonrColor.currentNeumorphic),
+                              color: card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
                           padding: EdgeInsets.all(10),
                         ),
                       ),
@@ -188,7 +191,7 @@ class _MediaItemView extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: SonrButton.circle(
+                          child: ShapeButton.circle(
                             color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             icon: SonrIcon.info,
                             onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
@@ -302,7 +305,7 @@ class _MediaCardInfo extends StatelessWidget {
 
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              SonrButton.flat(
+              ShapeButton.flat(
                 onPressed: () async {
                   if (card.hasExported) {
                     Get.find<SQLService>().deleteCard(card.id);
@@ -328,13 +331,13 @@ class _MediaCardInfo extends StatelessWidget {
                     });
                   }
                 },
-                text: SonrText.medium("Delete", color: SonrColor.red),
+                text: SonrText.medium("Delete", color: SonrPalete.Red),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
-              SonrButton.rectangle(
+              ShapeButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
               ),
             ]),
           ]),

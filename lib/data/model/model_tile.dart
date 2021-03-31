@@ -91,7 +91,7 @@ class TileStep {
   Widget get bottomButtons {
     //  Step Three: Cancel and Confirm
     if (current == 2) {
-      return SonrButton.stadium(
+      return ShapeButton.stadium(
         text: SonrText.semibold("Save"),
         onPressed: save,
         icon: SonrIcon.success,
@@ -101,13 +101,13 @@ class TileStep {
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (current == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        SonrButton.stadium(text: SonrText.semibold("Back"), onPressed: previous, icon: SonrIcon.back),
-        SonrButton.stadium(text: SonrText.semibold("Next"), onPressed: next, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+        ShapeButton.stadium(text: SonrText.semibold("Back"), onPressed: previous, icon: SonrIcon.back),
+        ShapeButton.stadium(text: SonrText.semibold("Next"), onPressed: next, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
-      return SonrButton.stadium(
+      return ShapeButton.stadium(
           text: SonrText.semibold("Next", size: 22),
           onPressed: next,
           icon: SonrIcon.forward,

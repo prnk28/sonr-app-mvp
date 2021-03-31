@@ -2,76 +2,131 @@ import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'search_view.dart';
 import 'home_controller.dart';
-// import 'search_view.dart';
 import 'share_button.dart';
+import 'carousel_view.dart';
 
-class HomeScreen extends GetView<HomeController> {
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Build Scaffold
-    return SonrScaffold.appBarLeadingAction(
-      resizeToAvoidBottomPadding: false,
-      title: "Home",
-      leading: _buildLeadingByMode(),
-      action: SonrButton.circle(
-          icon: SonrIcon.search,
-          shape: NeumorphicShape.flat,
-          onPressed: () {
-            if (controller.status.value != HomeState.None) {
-              SonrOverlay.show(
-                SearchView(),
-                barrierDismissible: true,
-              );
-            } else {
-              SonrSnack.error("No Cards Found");
-            }
-          }),
-      floatingActionButton: ShareButton(),
-      body: NeumorphicBackground(
-        backendColor: Colors.transparent,
-        child: Container(
-          width: Get.width,
-          height: Get.height,
-          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              margin: EdgeInsets.only(left: 30, right: 30),
-              child: Obx(() => NeumorphicToggle(
-                    style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
-                    selectedIndex: controller.toggleIndex.value,
-                    onChanged: (val) => controller.setToggleCategory(val),
-                    thumb: SonrAnimatedSwitcher.fade(
-                      child: GestureDetector(
-                          key: ValueKey<int>(controller.toggleIndex.value),
-                          onDoubleTap: () => controller.jumpToStart(),
-                          onLongPress: () => controller.jumpToEnd(),
-                          child: Center(child: Obx(() => _buildToggleView()))),
-                    ),
-                    children: [
-                      ToggleElement(background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 16))),
-                      ToggleElement(background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 16))),
-                      ToggleElement(background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 16))),
-                    ],
-                  )),
+    // Create Page Controller
+    final pageController = PageController(viewportFraction: 0.8, keepPage: false);
+    return GetX<HomeController>(
+      init: HomeController(pageController),
+      builder: (controller) {
+        // Build Grid View
+        var gridView;
+        // Loading Cards
+        if (controller.status.value == HomeState.Loading) {
+          gridView = Center(child: CircularProgressIndicator());
+        }
+
+        // New User
+        else if (controller.status.value == HomeState.First) {
+          gridView = Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+            SonrText.header("Welcome to Sonr"),
+            SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18)
+          ]);
+        }
+
+        // Zero Cards
+        else if (controller.status.value == HomeState.None) {
+          gridView = Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
+            SonrText.header(
+              "No Cards Found!",
+              size: 32,
             ),
-            TransferCardGrid(),
-            Spacer()
+            LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 3.5),
+            Padding(padding: EdgeInsets.all(10)),
+          ]);
+        }
+
+        // Build Cards
+        else {
+          controller.promptAutoSave();
+          if (controller.getCardList().length > 0) {
+            gridView = StackedCardCarousel(
+              initialOffset: 2,
+              spaceBetweenItems: 435,
+              onPageChanged: (int index) => controller.pageIndex(index),
+              pageController: pageController,
+              items: List<Widget>.generate(controller.getCardList().length, (idx) {
+                return _buildCard(idx, controller);
+              }),
+            );
+          } else {
+            gridView = Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SonrText.header(
+                "No Cards Found!",
+                size: 32,
+              ),
+              Padding(padding: EdgeInsets.all(10)),
+              LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 3.5, repeat: true),
+              // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
+            ]);
+          }
+        }
+
+        // Build Scaffold
+        return SonrScaffold.appBarLeadingAction(
+          resizeToAvoidBottomPadding: false,
+          title: "Home",
+          leading: _buildLeadingByMode(),
+          action: ShapeButton.circle(
+              icon: SonrIcon.search,
+              shape: NeumorphicShape.flat,
+              onPressed: () {
+                if (controller.status.value != HomeState.None) {
+                  SonrOverlay.show(
+                    SearchView(),
+                    barrierDismissible: true,
+                  );
+                } else {
+                  SonrSnack.error("No Cards Found");
+                }
+              }),
+          floatingActionButton: ShareButton(),
+          body: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Container(
+              padding: EdgeInsets.only(top: 8),
+              margin: EdgeInsetsX.horizontal(24),
+              child: NeumorphicToggle(
+                style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                selectedIndex: controller.toggleIndex.value,
+                onChanged: (val) => controller.setToggleCategory(val),
+                thumb: Neumorphic(style: SonrStyle.toggle),
+                children: [
+                  ToggleElement(
+                      background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 18)),
+                      foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
+                  ToggleElement(
+                      background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
+                      foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories,
+                          UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                          size: 22.5)),
+                  ToggleElement(
+                      background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 18)),
+                      foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
+                ],
+              ),
+            ),
+            Padding(padding: EdgeInsets.all(8)),
+            Expanded(child: Container(child: gridView)),
           ]),
-        ),
-      ),
+        );
+      },
     );
   }
 
 // ^ Helper Method for Test Mode Leading Button ^ //
   Widget _buildLeadingByMode() {
     if (K_TESTER_MODE) {
-      return SonrButton.circle(
+      return ShapeButton.circle(
         icon: SonrIcon.more,
         onPressed: () => Get.bottomSheet(_SettingsSheet(), backgroundColor: Colors.transparent),
         shape: NeumorphicShape.flat,
       );
     } else {
-      return SonrButton.circle(
+      return ShapeButton.circle(
         icon: SonrIcon.profile,
         onPressed: () => Get.toNamed("/profile"),
         onLongPressed: () => UserService.toggleDarkMode(),
@@ -80,105 +135,8 @@ class HomeScreen extends GetView<HomeController> {
     }
   }
 
-  // ^ Helper Method for Category Filter ^ //
-  Widget _buildToggleView() {
-    // Change Category
-    if (controller.toggleIndex.value == 0) {
-      return SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24);
-    } else if (controller.toggleIndex.value == 1) {
-      return SonrIcon.neumorphicGradient(
-          SonrIconData.all_categories, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
-          size: 22.5);
-    } else if (controller.toggleIndex.value == 2) {
-      return SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24);
-    } else {
-      return SonrIcon.neumorphicGradient(SonrIconData.url, FlutterGradientNames.sugarLollipop, size: 24);
-    }
-  }
-}
-
-class TransferCardGrid extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    // Create Page Controller
-    final pageController = PageController(viewportFraction: 0.8, keepPage: false);
-    controller.pageController = pageController;
-
-    // Build View
-    return Container(
-        padding: EdgeInsets.only(top: 15),
-        height: 500,
-        child: Obx(() {
-          // Loading Cards
-          if (controller.status.value == HomeState.Loading) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          // New User
-          else if (controller.status.value == HomeState.First) {
-            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrText.header("Welcome to Sonr"),
-              SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.black.withOpacity(0.7), size: 18)
-            ]);
-          }
-
-          // Zero Cards
-          else if (controller.status.value == HomeState.None) {
-            return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrText.header(
-                "No Cards Found!",
-                size: 32,
-              ),
-              Padding(padding: EdgeInsets.all(10)),
-              RiveContainer(type: RiveBoard.NotFound, width: Get.width, height: Get.height / 3.5),
-            ]);
-          }
-
-          // Build Cards
-          else {
-            controller.promptAutoSave();
-            return PageView.builder(
-              itemCount: controller.getCardList().length,
-              controller: pageController,
-              onPageChanged: (int index) => controller.pageIndex(index),
-              itemBuilder: (_, idx) {
-                return Obx(() {
-                  if (idx == controller.pageIndex.value) {
-                    return PlayAnimation<double>(
-                      tween: (0.85).tweenTo(0.95),
-                      duration: 200.milliseconds,
-                      builder: (context, child, value) {
-                        return Transform.scale(
-                          scale: value,
-                          child: buildCard(idx),
-                        );
-                      },
-                    );
-                  } else if (idx == controller.pageIndex.value) {
-                    return PlayAnimation<double>(
-                      tween: (0.95).tweenTo(0.85),
-                      duration: 200.milliseconds,
-                      builder: (context, child, value) {
-                        return Transform.scale(
-                          scale: value,
-                          child: buildCard(idx),
-                        );
-                      },
-                    );
-                  } else {
-                    return Transform.scale(
-                      scale: 0.85,
-                      child: buildCard(idx),
-                    );
-                  }
-                });
-              },
-            );
-          }
-        }));
-  }
-
-  Widget buildCard(int index) {
+// ^ Helper Method for Test Mode Leading Button ^ //
+  Widget _buildCard(int index, HomeController controller) {
     // Get Card List
     List<TransferCard> list = controller.getCardList();
     bool isNew = false;
@@ -230,7 +188,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.isDarkMode.value,
@@ -247,7 +205,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrColor.red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.hasPointToShare.value,

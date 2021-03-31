@@ -1,10 +1,9 @@
-import 'package:rive/rive.dart';
 import 'peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 const double K_BUBBLE_SIZE = 80;
 
-// ^ PeerBubble Utilizes Peer Controller ^ //
+// ^ PeerBubble Utilizes Controller and Lottie Files ^ //
 class PeerBubble extends StatelessWidget {
   final Peer peer;
   final int index;
@@ -23,37 +22,28 @@ class PeerBubble extends StatelessWidget {
               top: controller.offset.value.dy - (ZonePathProvider.size / 2),
               left: controller.offset.value.dx - (ZonePathProvider.size / 2),
               duration: 150.milliseconds,
-              child: Container(
-                width: K_BUBBLE_SIZE,
-                height: K_BUBBLE_SIZE,
-                child: GestureDetector(
-                  onTap: () => controller.invite(),
-                  onLongPress: () => controller.expandDetails(),
+              child: ShapeButton.circle(
+                  onPressed: controller.invite,
+                  onLongPressed: controller.expandDetails,
                   child: Stack(alignment: Alignment.center, children: [
-                    controller.artboard.value == null
-                        ? Container()
-                        : Rive(
-                            artboard: controller.artboard.value,
-                            alignment: Alignment.center,
-                            fit: BoxFit.cover,
-                          ),
-                    PlayAnimation<double>(
-                        tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
-                        duration: Duration(milliseconds: 250),
-                        delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-                        builder: (context, child, value) => AnimatedOpacity(
-                              opacity: value,
-                              duration: Duration(milliseconds: 250),
-                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                Padding(padding: EdgeInsets.all(8)),
-                                controller.peer.initials,
-                                Padding(padding: EdgeInsets.all(8)),
-                              ]),
-                            )),
-                  ]),
-                ),
-              ));
+                    _buildPeerInfo(controller),
+                  ])));
         });
+  }
+
+  // @ Builds Peer Info for Peer
+  Widget _buildPeerInfo(PeerController controller) {
+    return PlayAnimation<double>(
+        tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
+        duration: Duration(milliseconds: 250),
+        delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
+        builder: (context, child, value) => AnimatedOpacity(
+              opacity: value,
+              duration: Duration(milliseconds: 250),
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                controller.peer.initials,
+              ]),
+            ));
   }
 }
 
@@ -71,7 +61,9 @@ class PeerSheetView extends StatelessWidget {
           onTap: () => Get.back(),
           child: Stack(children: [
             // Window
-            Container(
+            NeumorphicBackground(
+              borderRadius: BorderRadius.circular(20),
+              backendColor: Colors.transparent,
               margin: EdgeInsets.only(top: 60),
               child: Neumorphic(
                 style: SonrStyle.overlay,
@@ -92,11 +84,8 @@ class PeerSheetView extends StatelessWidget {
                                 color: Colors.white,
                                 size: 20,
                               ),
-                              Obx(() => SonrText.light(
-                                    " " + controller.position.value.facing.direction,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ))
+                              Obx(() => SonrText(" " + controller.position.value.facing.direction,
+                                  weight: FontWeight.w300, size: 20, key: key, color: Colors.white))
                             ]),
                           ))),
 
@@ -105,7 +94,7 @@ class PeerSheetView extends StatelessWidget {
                   controller.peer.platformExpanded,
                   Container(
                       margin: EdgeInsets.symmetric(horizontal: 90, vertical: 10),
-                      child: SonrButton.rectangle(
+                      child: ShapeButton.rectangle(
                           padding: EdgeInsets.symmetric(vertical: 8),
                           shape: NeumorphicShape.convex,
                           depth: 4,
@@ -133,7 +122,7 @@ class PeerSheetView extends StatelessWidget {
                 ),
                 child: Neumorphic(
                   style: NeumorphicStyle(intensity: 0.5, depth: -8, boxShape: NeumorphicBoxShape.circle(), color: SonrColor.White),
-                  child: controller.peer.profilePicture,
+                  child: controller.peer.profilePicture(),
                 ),
               ),
             ),
@@ -158,7 +147,10 @@ class _PeerListItemState extends State<PeerListItem> {
     return Neumorphic(
         margin: EdgeInsetsX.horizontal(8),
         child: ExpansionTile(
-          title: SonrText.gradient(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, FlutterGradientNames.frozenHeat, size: 32),
+          backgroundColor: Colors.transparent,
+          collapsedBackgroundColor: Colors.transparent,
+          leading: widget.peer.profilePicture(size: 50),
+          title: SonrText.title(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
           subtitle: SonrText("",
               isRich: true,
               richText: RichText(
@@ -167,20 +159,28 @@ class _PeerListItemState extends State<PeerListItem> {
                   text: TextSpan(children: [
                     TextSpan(
                         text: widget.peer.platform.toString(),
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalete.Primary)),
                     TextSpan(
                         text: " - ${widget.peer.model}",
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.black)),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalete.Secondary)),
                   ]))),
           children: [
-            Text(
-              "Child 1",
-              style: TextStyle(fontSize: 18),
+            Padding(padding: EdgeInsets.all(8)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ColorButton.neutral(onPressed: () {}, text: "Block"),
+                Padding(padding: EdgeInsets.all(8)),
+                ColorButton.primary(
+                  onPressed: () {
+                    SonrService.inviteFromList(widget.peer);
+                  },
+                  text: "Invite",
+                  icon: SonrIcon.invite,
+                ),
+              ],
             ),
-            Text(
-              "Child 2",
-              style: TextStyle(fontSize: 18),
-            ),
+            Padding(padding: EdgeInsets.all(8)),
           ],
         ),
         style: SonrStyle.normal);

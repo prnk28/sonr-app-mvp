@@ -112,13 +112,13 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold( "Decline", color: SonrColor.red, size: 18),
+                child: SonrText.semibold("Decline", color: SonrPalete.Red, size: 18),
               )),
           // Accept Button
           Container(
             width: Get.width / 3,
             height: 50,
-            child: SonrButton.stadium(
+            child: ShapeButton.stadium(
               onPressed: () {
                 SonrOverlay.back();
                 if (!isReply) {
@@ -128,7 +128,7 @@ class _ContactInviteView extends StatelessWidget {
                 }
               },
               icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-              text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
+              text: SonrText.semibold("Accept", size: 18, color: SonrColor.Black.withOpacity(0.85)),
             ),
           ),
         ])
@@ -145,10 +145,13 @@ class _ContactItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Contact contact = card.contact;
-    return SonrScaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Container(
-          height: Get.height,
+    return Card(
+        shadowColor: Colors.transparent,
+        color: Colors.transparent,
+        elevation: 2,
+        child: Container(
+          height: 420,
+          width: Get.width - 64,
           child: GestureDetector(
             onTap: () {
               // Push to Page
@@ -193,7 +196,7 @@ class _ContactItemView extends StatelessWidget {
                       SizedBox(
                         width: 78,
                         height: 78,
-                        child: SonrButton.circle(
+                        child: ShapeButton.circle(
                             depth: 4,
                             onPressed: () {},
                             text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
@@ -204,7 +207,7 @@ class _ContactItemView extends StatelessWidget {
                       SizedBox(
                         width: 78,
                         height: 78,
-                        child: SonrButton.circle(
+                        child: ShapeButton.circle(
                             depth: 4,
                             onPressed: () {},
                             text: SonrText.medium("Text", size: 12, color: Colors.black45),
@@ -215,7 +218,7 @@ class _ContactItemView extends StatelessWidget {
                       SizedBox(
                           width: 78,
                           height: 78,
-                          child: SonrButton.circle(
+                          child: ShapeButton.circle(
                               depth: 4,
                               onPressed: () {},
                               text: SonrText.medium("Video", size: 12, color: Colors.black45),

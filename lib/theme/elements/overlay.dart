@@ -457,7 +457,7 @@ class _AlertOverlayView extends StatelessWidget {
           // Accept Button
           Container(
             width: Get.width / 3,
-            child: SonrButton.stadium(
+            child: ShapeButton.stadium(
               onPressed: () {
                 onPressed();
                 if (closeOnResponse) {
@@ -617,12 +617,12 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                     SonrOverlay.back();
                   }
                 },
-                child: SonrText.semibold(declineTitle, color: SonrColor.red, size: 18)),
+                child: SonrText.semibold(declineTitle, color: SonrPalete.Red, size: 18)),
             // Accept Button
             Container(
               width: Get.width / 2.5,
               height: 50,
-              child: SonrButton.stadium(
+              child: ShapeButton.stadium(
                 onPressed: () {
                   onDecision(true);
                   if (closeOnResponse) {
@@ -630,7 +630,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                   }
                 },
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.black.withOpacity(0.85)),
+                text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.Black.withOpacity(0.85)),
               ),
             ),
           ]),

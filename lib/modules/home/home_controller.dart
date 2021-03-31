@@ -20,11 +20,13 @@ class HomeController extends GetxController {
   final toggleIndex = 1.obs;
 
   // References
-  PageController pageController;
+  final PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
 
   // Conditional
   bool _hasPromptedAutoSave = false;
+
+  HomeController(this.pageController);
 
   // ^ Controller Constructer ^
   onInit() {
@@ -79,11 +81,13 @@ class HomeController extends GetxController {
         if (status.value == HomeState.New) {
           pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
         }
+        cards.refresh();
       }
       // Set Cards
       else {
         cards(onData);
         status(HomeState.Ready);
+        cards.refresh();
       }
     }
     // No Cards Available

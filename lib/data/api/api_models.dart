@@ -33,7 +33,7 @@ extension ContactUtils on Contact {
         : Icon(
             Icons.insert_emoticon,
             size: 120,
-            color: SonrColor.black.withOpacity(0.5),
+            color: SonrColor.Black.withOpacity(0.5),
           );
   }
 
@@ -78,10 +78,18 @@ extension EditTypeUtils on EditType {
 
 // ^ Peer Model Extensions ^ //
 extension PeerUtils on Peer {
+  bool get isOnMobile {
+    return this.platform == Platform.Android || this.platform == Platform.iOS;
+  }
+
+  bool get isOnDesktop {
+    return this.platform == Platform.MacOS || this.platform == Platform.Windows || this.platform == Platform.Linux;
+  }
+
   SonrText get initials {
     var first = this.profile.firstName[0].toUpperCase();
     var last = this.profile.lastName[0].toUpperCase();
-    return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 34, gradient: FlutterGradientNames.glassWater.linear());
+    return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 34, gradient: this.platform.gradient.linear());
   }
 
   SonrIcon get platformIcon {
@@ -96,7 +104,7 @@ extension PeerUtils on Peer {
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
               TextSpan(text: this.platform.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
-              TextSpan(text: " - ${this.model}", style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.black)),
+              TextSpan(text: " - ${this.model}", style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.Black)),
             ])));
   }
 
@@ -106,7 +114,7 @@ extension PeerUtils on Peer {
         : SonrText.gradient(this.profile.firstName, FlutterGradientNames.frozenHeat, size: 32);
   }
 
-  Widget get profilePicture {
+  Widget profilePicture({double size = 100}) {
     return Neumorphic(
       padding: EdgeInsets.all(4),
       style: NeumorphicStyle(
@@ -117,10 +125,27 @@ extension PeerUtils on Peer {
           ? Image.memory(Uint8List.fromList(this.profile.picture))
           : Icon(
               Icons.insert_emoticon,
-              size: 100,
-              color: SonrColor.black.withOpacity(0.5),
+              size: size,
+              color: SonrColor.Black.withOpacity(0.5),
             ),
     );
+  }
+}
+
+extension PlatformUtils on Platform {
+  FlutterGradientNames get gradient {
+    switch (this) {
+      case Platform.Android:
+        return FlutterGradientNames.hiddenJaguar;
+      case Platform.iOS:
+        return FlutterGradientNames.morpheusDen;
+      case Platform.MacOS:
+        return FlutterGradientNames.octoberSilence;
+      case Platform.Windows:
+        return FlutterGradientNames.deepBlue;
+      default:
+        return FlutterGradientNames.viciousStance;
+    }
   }
 }
 

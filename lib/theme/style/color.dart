@@ -11,44 +11,16 @@ class SonrColor {
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
   static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color OverlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
-
+  static const Color Black = Color(0xff202020);
   static const Color Dark = Color(0xff2c2b2b);
   static const Color Grey = Color(0xffC6C4C4);
   static const Color Blue = Color(0xff51C5DD);
   static const Color White = Color(0xffE0E0E0);
-
-  // ** Color Pallette ** //
-  static const Color black = Color(0xff202020);
-  static Color get primary => UserService.isDarkMode.value ? Color(0xff2c2b2b) : Color(0xff538fff);
-  static Color get secondary => UserService.isDarkMode.value ? Color(0xff9757ff) : Color(0xff543191);
-  static Color get tertiary => UserService.isDarkMode.value ? Color(0xff52ffc0) : Color(0xff2e906e);
-  static Color get red => UserService.isDarkMode.value ? Color(0xffcc1b0b) : Color(0xffff4d62);
-
-  // static const Color ShadowLight = Color.fromRGBO(190, 190, 190, 0.6);
-  // static const Color ShadowDark = Color.fromRGBO(55, 55, 55, 0.8);
-
-  // ** Gradients ** //
-  static Gradient get lightModeBulb => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
-  static Gradient get darkModeBulb => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
-  static Gradient get mainGradient => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
+  static const Color Neutral = Color(0xff62666a);
 
   // ^ ThemeMode Handling ^ //
   static Color get currentNeumorphic {
     return UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White;
-  }
-
-  // ^ Generates Random Gradient for Progress View ^ //
-  static Gradient progressGradient() {
-    var name = [
-      FlutterGradientNames.amyCrisp,
-      FlutterGradientNames.sugarLollipop,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.supremeSky,
-      FlutterGradientNames.juicyCake,
-      FlutterGradientNames.northMiracle,
-      FlutterGradientNames.seaLord
-    ].random();
-    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
   }
 
   // ^ Returns Color from Hexidecimal ^ //
@@ -105,5 +77,53 @@ extension GradientValue on FlutterGradientNames {
       startAngle: startAngle,
       endAngle: endAngle,
     );
+  }
+}
+
+class SonrGradient {
+  // ** Gradients ** //
+  static Gradient get bulbDark => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
+  static Gradient get bulbLight => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
+  static Gradient get logo => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
+
+  // ^ Generates Random Gradient for Progress View ^ //
+  static Gradient progress() {
+    var name = [
+      FlutterGradientNames.amyCrisp,
+      FlutterGradientNames.sugarLollipop,
+      FlutterGradientNames.summerGames,
+      FlutterGradientNames.supremeSky,
+      FlutterGradientNames.juicyCake,
+      FlutterGradientNames.northMiracle,
+      FlutterGradientNames.seaLord
+    ].random();
+    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
+  }
+}
+
+class SonrPalete {
+  static const Color Neutral = Color(0xff62666a);
+  static const Color Primary = Color(0xff538fff);
+  static const Color Secondary = Color(0xff9757ff);
+  static const Color Tertiary = Color(0xff52ffc0);
+  static const Color Red = Color(0xffcc1b0b);
+
+  static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
+  static const AlignmentGeometry _K_END = Alignment.topCenter;
+
+  static Gradient primary() {
+    return LinearGradient(colors: [Color(0xff2c75ff2c75ff), Color(0xff2caaff)], begin: _K_BEGIN, end: _K_END);
+  }
+
+  static Gradient secondary() {
+    return LinearGradient(colors: [Color(0xff7f30ff), Color(0xff9757ff)], begin: _K_BEGIN, end: _K_END);
+  }
+
+  static Gradient tertiary() {
+    return LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
+  }
+
+  static Gradient critical() {
+    return LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
   }
 }

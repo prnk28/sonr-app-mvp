@@ -47,48 +47,48 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.title(String text, {Key key, Color color = SonrColor.black}) {
-    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: color);
+  factory SonrText.title(String text, {Key key, Color color = SonrColor.Black, bool isCentered = false}) {
+    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: color, isCentered: isCentered);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.subtitle(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.black);
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.Black);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.paragraph(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 16 : 17, key: key, color: SonrColor.black);
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 16 : 17, key: key, color: SonrColor.Black);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.span(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.black);
+    return SonrText(text, weight: FontWeight.w300, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.Black);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.light(String text, {Color color = SonrColor.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
+  factory SonrText.light(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black);
   }
 
   // ^ Normal(w400) Text with Provided Data
-  factory SonrText.normal(String text, {Color color = SonrColor.black, double size = 24, Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
+  factory SonrText.normal(String text, {Color color = SonrColor.Black, double size = 24, Key key}) {
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black);
   }
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
-  factory SonrText.medium(String text, {Color color = SonrColor.black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
+  factory SonrText.medium(String text, {Color color = SonrColor.Black, double size = 16, Key key}) {
+    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white70 : SonrColor.black);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white70 : SonrColor.Black);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
-  factory SonrText.bold(String text, {Color color = SonrColor.black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black);
+  factory SonrText.bold(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
@@ -135,11 +135,11 @@ class SonrText extends StatelessWidget {
               TextSpan(
                   text: dateText,
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w300, fontSize: size, color: UserService.isDarkMode.value ? SonrColor.black : Colors.white)),
+                      fontWeight: FontWeight.w300, fontSize: size, color: UserService.isDarkMode.value ? SonrColor.Black : Colors.white)),
               TextSpan(
                   text: "  $timeText",
                   style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600, fontSize: size, color: UserService.isDarkMode.value ? SonrColor.black : Colors.white)),
+                      fontWeight: FontWeight.w600, fontSize: size, color: UserService.isDarkMode.value ? SonrColor.Black : Colors.white)),
             ])));
   }
 
@@ -152,8 +152,8 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: seconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.black)),
-              TextSpan(text: "  s", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.black)),
+              TextSpan(text: seconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.Black)),
+              TextSpan(text: "  s", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.Black)),
             ])));
   }
 
@@ -180,7 +180,7 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.black)),
+              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.Black)),
               TextSpan(
                   text: " from ${firstName.capitalizeFirst}",
                   style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
@@ -188,7 +188,7 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Rich Text with FirstName and Invite
-  factory SonrText.search(String query, String value, {Color color = SonrColor.black, double size = 16, Key key}) {
+  factory SonrText.search(String query, String value, {Color color = SonrColor.Black, double size = 16, Key key}) {
     // Text Contains Query
     if (value.toLowerCase().contains(query.toLowerCase())) {
       query = query.toLowerCase();
@@ -290,7 +290,9 @@ class SonrText extends StatelessWidget {
     }
 
     // @ Normal Type Text
-    return Text(text, style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
+    return Text(text,
+        textAlign: isCentered ? TextAlign.center : TextAlign.start,
+        style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^
@@ -298,7 +300,7 @@ class SonrText extends StatelessWidget {
     if (UserService.isDarkMode.value) {
       return Colors.white;
     } else {
-      return SonrColor.black;
+      return SonrColor.Black;
     }
   }
 
@@ -386,7 +388,7 @@ class SonrTextField extends StatelessWidget {
                       isError
                           ? Text(
                               " *Error",
-                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrColor.red),
+                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalete.Red),
                             )
                           : Container(),
                     ]))
@@ -399,7 +401,7 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
+                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
@@ -413,8 +415,8 @@ class SonrTextField extends StatelessWidget {
                     ? decoration
                     : InputDecoration.collapsed(
                         hintText: hint,
-                        hintStyle: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38)),
+                        hintStyle:
+                            GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -436,7 +438,7 @@ class SonrTextField extends StatelessWidget {
       child: buildDefault(context,
           isError: true,
           decoration: InputDecoration.collapsed(
-              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrColor.red, width: 4)),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalete.Red, width: 4)),
               hintText: hint,
               hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38))),
     );

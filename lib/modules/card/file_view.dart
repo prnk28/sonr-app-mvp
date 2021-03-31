@@ -72,7 +72,7 @@ class _FileInviteView extends StatelessWidget {
                       : Icon(
                           Icons.insert_emoticon,
                           size: 100,
-                          color: SonrColor.black.withOpacity(0.5),
+                          color: SonrColor.Black.withOpacity(0.5),
                         ),
                 ),
               ),
@@ -116,11 +116,7 @@ class _FileInviteView extends StatelessWidget {
             Container(
               width: Get.width / 3,
               height: 50,
-              child: SonrButton.stadium(
-                onPressed: () => controller.acceptTransfer(card),
-                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: SonrColor.black.withOpacity(0.85)),
-              ),
+              child: ColorButton.primary(onPressed: () => controller.acceptTransfer(card), icon: SonrIcon.normal(Icons.check), text: "Accept"),
             ),
           ]),
         ],
@@ -137,10 +133,13 @@ class _FileItemView extends StatelessWidget {
   _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Container(
-          height: Get.height,
+    return Card(
+        shadowColor: Colors.transparent,
+        color: Colors.transparent,
+        elevation: 2,
+        child: Container(
+          height: 420,
+          width: Get.width - 64,
           child: GestureDetector(
             onTap: () {
               OpenFile.open(card.metadata.path);
@@ -180,7 +179,7 @@ class _FileItemView extends StatelessWidget {
                         alignment: Alignment.topRight,
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: SonrButton.circle(
+                            child: ShapeButton.circle(
                               icon: SonrIcon.info,
                               onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
                               shadowLightColor: Colors.black38,
@@ -259,7 +258,7 @@ class _FileCardInfo extends StatelessWidget {
 
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              SonrButton.rectangle(
+              ShapeButton.rectangle(
                 isDisabled: true,
                 onPressed: () {
                   // Prompt Question
@@ -283,10 +282,10 @@ class _FileCardInfo extends StatelessWidget {
                 text: SonrText.medium("Delete"),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
-              SonrButton.rectangle(
+              ShapeButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
               ),
             ]),
           ]),

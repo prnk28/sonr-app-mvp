@@ -52,7 +52,7 @@ class MediaPreviewView extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                     // Left Button - Cancel and Retake
-                    SonrButton.flat(
+                    ShapeButton.flat(
                       onPressed: () {
                         HapticFeedback.heavyImpact();
                         onDecision(false);
@@ -64,12 +64,12 @@ class MediaPreviewView extends StatelessWidget {
                     Container(
                       width: Get.width / 3 + 20,
                       height: 50,
-                      child: SonrButton.stadium(
+                      child: ShapeButton.stadium(
                           onPressed: () {
                             HapticFeedback.heavyImpact();
                             onDecision(true);
                           },
-                          text: SonrText.semibold("Continue", size: 18, color: SonrColor.black.withOpacity(0.85)),
+                          text: SonrText.semibold("Continue", size: 18, color: SonrColor.Black.withOpacity(0.85)),
                           icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28)),
                     ),
                   ]),

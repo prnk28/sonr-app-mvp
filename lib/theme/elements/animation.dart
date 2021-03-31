@@ -2,12 +2,69 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import '../style/style.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
-enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn }
-enum AnimState { Instant, Controlled }
+enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn, Scale, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
+enum LottieBoard { Complete, Empty, Pending, Progress, Computer, David, Phone }
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
+
+class AnimatedScale extends StatefulWidget {
+  final Widget child;
+  final double scale;
+  final Duration duration;
+  final Alignment alignment;
+
+  const AnimatedScale({
+    this.child,
+    this.scale = 1,
+    this.duration = const Duration(milliseconds: 150),
+    this.alignment = Alignment.center,
+  });
+
+  @override
+  _AnimatedScaleState createState() => _AnimatedScaleState();
+}
+
+class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> _animation;
+  double oldScale = 1;
+
+  @override
+  void initState() {
+    _controller = AnimationController(duration: widget.duration, vsync: this);
+    _animation = Tween<double>(begin: widget.scale, end: widget.scale).animate(_controller);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(AnimatedScale oldWidget) {
+    if (oldWidget.scale != widget.scale) {
+      _controller.reset();
+      oldScale = oldWidget.scale;
+      _animation = Tween<double>(begin: oldScale, end: widget.scale).animate(_controller);
+      _controller.forward();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _animation,
+      alignment: widget.alignment,
+      child: widget.child,
+    );
+  }
+}
 
 class RipplesAnimation extends StatefulWidget {
   const RipplesAnimation({
@@ -62,54 +119,34 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
   }
 }
 
-class SonrAnimatedWidget extends GetWidget<AnimatedController> {
+class Animated extends GetWidget<AnimatedController> {
   final Widget child;
-  final AnimState state;
   final AnimType animation;
   final Duration delay;
   final Duration duration;
-  const SonrAnimatedWidget({
+  final double scaleStart;
+  final double scaleEnd;
+
+  const Animated({
     @required this.child,
-    @required this.state,
+    this.scaleStart,
+    this.scaleEnd,
     this.animation = AnimType.FadeIn,
     this.duration = const Duration(seconds: 1),
     this.delay = const Duration(milliseconds: 0),
   });
 
-  factory SonrAnimatedWidget.instant({@required AnimType animation, @required Widget child, Duration delay}) {
-    return SonrAnimatedWidget(child: child, state: AnimState.Instant, animation: animation, delay: delay);
-  }
-
-  factory SonrAnimatedWidget.controlled({@required Widget child, Duration delay}) {
-    return SonrAnimatedWidget(child: child, state: AnimState.Controlled, delay: delay);
-  }
-
   @override
   Widget build(BuildContext context) {
-    // @ Check Animation State for Switcher
-    if (state == AnimState.Instant) {
-      return _buildGeneralAnimation(animation);
-    } else if (state == AnimState.Controlled) {
-      return Obx(() {
-        return _buildGeneralAnimation(controller.type.value);
-      });
-    } else {
-      return child;
-    }
-  }
-
-  Widget _buildGeneralAnimation(AnimType animation) {
     if (animation == AnimType.Shake) {
       return TweenAnimationBuilder<double>(
-        key: key,
-        tween: Tween(begin: 0.0, end: 1.0),
-        duration: 1.seconds,
-        builder: (context, animation, child) => Transform.translate(
-          offset: controller.shakeOffset(animation),
-          child: child,
-        ),
-        child: child,
-      );
+          key: key,
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: 1.seconds,
+          builder: (context, animation, child) => Transform.translate(
+                offset: controller.shakeOffset(animation),
+                child: child,
+              ));
     } else if (animation == AnimType.FadeIn) {
       return PlayAnimation<double>(
           tween: (0.0).tweenTo(1.0),
@@ -135,12 +172,21 @@ class SonrAnimatedWidget extends GetWidget<AnimatedController> {
           offset: animation,
           child: child,
         ),
-        child: child,
       );
+    } else if (animation == AnimType.Scale) {
+      return PlayAnimation<double>(
+          tween: (1.0).tweenTo(0.0),
+          duration: 150.milliseconds,
+          delay: delay,
+          builder: (context, child, value) => Transform.scale(
+                scale: value,
+                child: child,
+              ));
     }
     return child;
   }
 
+  void scale() => controller.shake();
   void shake() => controller.shake();
   void fadeIn() => controller.fadeIn();
   void fadeOut() => controller.fadeOut();
@@ -148,6 +194,142 @@ class SonrAnimatedWidget extends GetWidget<AnimatedController> {
   void reset() {
     controller.type(AnimType.None);
     controller.type.refresh();
+  }
+}
+
+class ControlAnimated extends StatefulWidget {
+  final Widget child;
+  final double scale;
+  final bool isVisible;
+  final bool isShaking;
+  final double shakePadding;
+  final double shakeRange;
+
+  const ControlAnimated({
+    Key key,
+    @required this.child,
+    this.scale = 1.0,
+    this.isVisible,
+    this.isShaking,
+    this.shakePadding = 16,
+    this.shakeRange = 16,
+  }) : super(key: key);
+
+  @override
+  _ControlAnimatedState createState() => _ControlAnimatedState();
+}
+
+class _ControlAnimatedState extends State<ControlAnimated> with TickerProviderStateMixin {
+  // Modifiers
+  AnimType currAnim = AnimType.None;
+  double oldScale = 1;
+
+  // Scale Controllers
+  AnimationController _scaleController;
+  Animation<double> _scaleAnimation;
+  Duration _scaleDuration = Duration(milliseconds: 150);
+
+  // Fade Controllers
+  Animatable<double> _fadeTween;
+  Duration _fadeDuration;
+
+  // Shake Controllers
+  AnimationController _shakeController;
+  Duration _shakeDuration = 1.seconds;
+
+  @override
+  void initState() {
+    _scaleController = AnimationController(duration: _scaleDuration, vsync: this);
+    _scaleAnimation = Tween<double>(begin: widget.scale, end: widget.scale).animate(_scaleController);
+    _fadeTween = (1.0).tweenTo(1.0);
+    _fadeDuration = 500.milliseconds;
+    _shakeController = AnimationController(duration: _shakeDuration, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(ControlAnimated oldWidget) {
+    // Check for Fade
+    if (oldWidget.isVisible != widget.isVisible) {
+      if (widget.isVisible) {
+        _fadeTween = (0.0).tweenTo(1.0);
+        _fadeDuration = 500.milliseconds;
+      } else {
+        _fadeTween = (1.0).tweenTo(0.0);
+        _fadeDuration = 150.milliseconds;
+      }
+      currAnim = AnimType.Fade;
+    }
+    // Check for Shake
+    else if (oldWidget.isShaking != widget.isShaking) {
+      currAnim = AnimType.Shake;
+      _shakeController.forward(from: 0.0);
+    }
+
+    // Scale Widget
+    else if (oldWidget.scale != widget.scale) {
+      currAnim = AnimType.Scale;
+      _scaleController.reset();
+      oldScale = oldWidget.scale;
+      _scaleAnimation = Tween<double>(begin: oldScale, end: widget.scale).animate(_scaleController);
+      _scaleController.forward();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (currAnim == AnimType.Shake) {
+      final Animation<double> offsetAnimation =
+          Tween(begin: 0.0, end: widget.shakeRange).chain(CurveTween(curve: Curves.fastLinearToSlowEaseIn)).animate(_shakeController)
+            ..addStatusListener((status) {
+              if (status == AnimationStatus.completed) {
+                _shakeController.reverse();
+              }
+            });
+
+      return AnimatedBuilder(
+        animation: offsetAnimation,
+        builder: (context, child) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: widget.shakeRange),
+            padding: EdgeInsets.only(left: offsetAnimation.value + widget.shakePadding, right: widget.shakePadding - offsetAnimation.value),
+            child: widget.child,
+          );
+        },
+      );
+    } else if (currAnim == AnimType.Fade) {
+      // Reset after Complete
+      Future.delayed(_fadeDuration, () {
+        currAnim = AnimType.None;
+      });
+
+      // Animate
+      return PlayAnimation<double>(
+          tween: _fadeTween,
+          duration: _fadeDuration,
+          builder: (context, child, value) {
+            return AnimatedOpacity(opacity: value, duration: _fadeDuration, child: child);
+          });
+    } else if (currAnim == AnimType.Scale) {
+      // Reset after Complete
+      Future.delayed(_scaleDuration, () {
+        currAnim = AnimType.None;
+      });
+
+      // Animate
+      return ScaleTransition(
+        scale: _scaleAnimation,
+        alignment: Alignment.center,
+        child: widget.child,
+      );
+    }
+    return widget.child;
+  }
+
+  Offset shakeOffset(double animation) {
+    var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
+    return Offset(18 * shake, 0);
   }
 }
 
@@ -164,6 +346,17 @@ class AnimatedController extends GetxController {
   void shake() {
     // Start Animation
     type(AnimType.Shake);
+    type.refresh();
+
+    // Reset
+    Future.delayed(shakeDuration, () {
+      type(AnimType.None);
+    });
+  }
+
+  void scale() {
+    // Start Animation
+    type(AnimType.Scale);
     type.refresh();
 
     // Reset
@@ -431,7 +624,7 @@ class SonrAnimatedWaveIcon extends HookWidget {
                   iconKey: iconKey,
                   waveAnimation: controller,
                   percent: controller.value,
-                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrColor.progressGradient(),
+                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrGradient.progress(),
                   boxHeight: size,
                 ),
               );
@@ -468,13 +661,87 @@ class SonrAnimatedWaveIcon extends HookWidget {
 
 // ^ Lottie Animation Container Widget ^ //
 class LottieContainer extends StatefulWidget {
+  final double width;
+  final double height;
+  final BoxFit fit;
+  final LottieBoard type;
+  final Function onComplete;
+  final bool repeat;
+  final bool animate;
+  final bool reverse;
+  const LottieContainer(
+      {Key key,
+      @required this.type,
+      this.onComplete,
+      this.width = 200,
+      this.height = 200,
+      this.fit = BoxFit.fill,
+      this.repeat = false,
+      this.animate = true,
+      this.reverse = true})
+      : super(key: key);
   @override
   _LottieContainerState createState() => _LottieContainerState();
 }
 
-class _LottieContainerState extends State<LottieContainer> {
+class _LottieContainerState extends State<LottieContainer> with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        widget.onComplete != null ? widget.onComplete() : print(widget.type.toString() + " Completed");
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return Lottie.asset(
+      _getPathFromBoard(),
+      controller: _controller,
+      width: widget.width,
+      repeat: widget.repeat,
+      reverse: widget.reverse,
+      animate: widget.animate,
+      height: widget.height,
+      fit: BoxFit.contain,
+      onLoaded: (composition) {
+        _controller..duration = composition.seconds.seconds;
+        if (widget.repeat) {
+          _controller.repeat();
+        } else {
+          _controller.forward(from: 0);
+        }
+      },
+    );
+  }
+
+  _getPathFromBoard() {
+    switch (widget.type) {
+      case LottieBoard.Complete:
+        return "assets/animations/lottie/complete.json";
+      case LottieBoard.Empty:
+        return "assets/animations/lottie/empty-lobby.json";
+      case LottieBoard.Pending:
+        return "assets/animations/lottie/pending.json";
+      case LottieBoard.Progress:
+        return "assets/animations/lottie/progress.json";
+      case LottieBoard.Computer:
+        return "assets/animations/lottie/computer.json";
+      case LottieBoard.David:
+        return "assets/animations/lottie/david.json";
+      case LottieBoard.Phone:
+        return "assets/animations/lottie/phone.json";
+    }
   }
 }

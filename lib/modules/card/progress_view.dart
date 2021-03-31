@@ -7,7 +7,7 @@ import 'card_controller.dart';
 class ProgressView extends HookWidget {
   //  Properties
   final TransferCard card;
-  final Gradient gradient = SonrColor.progressGradient();
+  final Gradient gradient = SonrGradient.progress();
   final TransferCardController cardController;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;

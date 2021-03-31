@@ -29,7 +29,12 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../theme.dart';
 import 'color.dart';
 
+enum WidgetPosition { Left, Right, Top, Bottom, Center }
+
 class SonrStyle {
+  static get appBarIcon =>
+      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
+
   static get compassStamp =>
       NeumorphicStyle(intensity: 0.4, depth: UserService.isDarkMode.value ? 4 : 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
@@ -69,6 +74,11 @@ class SonrStyle {
         color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
       );
 
+  static get indented => NeumorphicStyle(
+      color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      depth: -8,
+      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+
   static get gradientIcon => NeumorphicStyle(
       color: SonrColor.White,
       shadowLightColor: Colors.transparent,
@@ -76,13 +86,6 @@ class SonrStyle {
       depth: UserService.isDarkMode.value ? 4 : 8,
       surfaceIntensity: 0.6);
 
-  static get appBarIcon =>
-      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
-
-  static get indented => NeumorphicStyle(
-      color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-      depth: -8,
-      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
   static get overlay => NeumorphicStyle(
         intensity: UserService.isDarkMode.value ? 0.45 : 0.85,
         depth: UserService.isDarkMode.value ? 4 : 8,
@@ -123,6 +126,14 @@ class SonrStyle {
       depth: UserService.isDarkMode.value ? 4 : 8,
       boxShape: NeumorphicBoxShape.stadium(),
       color: UserService.isDarkMode.value ? SonrColor.White : SonrColor.Dark);
+
+  static get toggle => NeumorphicStyle(
+        intensity: UserService.isDarkMode.value ? 0.25 : 0.5,
+        depth: UserService.isDarkMode.value ? 4 : 6,
+        shape: NeumorphicShape.flat,
+        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
+        color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+      );
 
   static zonePath({@required Position_Proximity proximity}) => NeumorphicStyle(
         border: NeumorphicBorder(

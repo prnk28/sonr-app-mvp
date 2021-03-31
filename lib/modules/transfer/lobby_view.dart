@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:geocode/geocode.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
 
@@ -90,8 +91,12 @@ class LobbySheet extends StatefulWidget {
 
 class _LobbySheetState extends State<LobbySheet> {
   // References
+  Address placemark;
   int lobbySize = 0;
-  List<Peer> peerList = <Peer>[];
+  int toggleIndex = 1;
+  List<Peer> allPeers = <Peer>[];
+  List<Peer> desktopPeers = <Peer>[];
+  List<Peer> mobilePeers = <Peer>[];
   StreamSubscription<Lobby> peerStream;
 
   // * Initial State * //
@@ -102,6 +107,7 @@ class _LobbySheetState extends State<LobbySheet> {
 
     // Set Stream
     peerStream = LobbyService.local.listen(_handlePeerUpdate);
+    placemark = DeviceService.placemark.value;
     super.initState();
   }
 
@@ -114,53 +120,120 @@ class _LobbySheetState extends State<LobbySheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      maxChildSize: 1.0,
-      minChildSize: 0.4,
-      initialChildSize: 0.4,
-      builder: (BuildContext context, scrollController) {
-        return NeumorphicBackground(
-            backendColor: Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            child: Neumorphic(
-                style: SonrStyle.normal,
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: peerList.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [SonrIcon.profile, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("All Peers")]);
-                    } else {
-                      return PeerListItem(peerList[index - 1], index - 1);
-                    }
-                  },
-                )));
-      },
-    );
+    // Set Current List
+    var peerList;
+    if (toggleIndex == 1) {
+      peerList = allPeers;
+    } else if (toggleIndex == 0) {
+      peerList = mobilePeers;
+    } else if (toggleIndex == 2) {
+      peerList = desktopPeers;
+    }
+
+    // Build View
+    return NeumorphicBackground(
+        backendColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
+        child: Neumorphic(
+            style: SonrStyle.normal,
+            child: ListView.builder(
+              itemCount: peerList.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index == 0) {
+                  return _buildTitle();
+                } else {
+                  // Build List Item
+                  return PeerListItem(peerList[index - 1], index - 1);
+                }
+              },
+            )));
+  }
+
+  // ^ Builds Title View ^ //
+  Widget _buildTitle() {
+    return Column(children: [
+      // Build Title
+      Padding(padding: EdgeInsetsX.top(8)),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrIcon.location,
+        Padding(padding: EdgeInsetsX.right(16)),
+        SonrText("",
+            isRich: true,
+            richText: RichText(
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.fade,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: "${placemark.city.capitalizeFirst}, ",
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 32, color: Colors.grey[800])),
+                  TextSpan(
+                      text: placemark.countryCode, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 32, color: SonrColor.Black)),
+                ])))
+      ]),
+
+      // Build Toggle View
+      Container(
+        padding: EdgeInsets.only(top: 8),
+        margin: EdgeInsetsX.horizontal(24),
+        child: NeumorphicToggle(
+          duration: 100.milliseconds,
+          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+          thumb: Neumorphic(style: SonrStyle.toggle),
+          selectedIndex: toggleIndex,
+          onChanged: (val) {
+            setState(() {
+              toggleIndex = val;
+            });
+          },
+          children: [
+            ToggleElement(
+                background: Center(child: SonrText.medium("Mobile", color: SonrColor.Grey, size: 18)),
+                foreground: SonrIcon.neumorphicGradient(Icons.smartphone, FlutterGradientNames.newRetrowave, size: 24)),
+            ToggleElement(
+                background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
+                foreground: SonrIcon.neumorphicGradient(
+                    Icons.group, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                    size: 22.5)),
+            ToggleElement(
+                background: Center(child: SonrText.medium("Desktop", color: SonrColor.Grey, size: 18)),
+                foreground: SonrIcon.neumorphicGradient(Icons.computer, FlutterGradientNames.orangeJuice, size: 24)),
+          ],
+        ),
+      ),
+
+      Padding(padding: EdgeInsets.only(top: 24))
+    ]);
   }
 
   // ^ Updates Stack Children ^ //
   _handlePeerUpdate(Lobby lobby) {
     // Initialize
-    var children = <Peer>[];
+    var total = <Peer>[];
+    var mobile = <Peer>[];
+    var desktop = <Peer>[];
 
-    // Clear List
-    peerList.clear();
+    // Clear Lists
+    allPeers.clear();
+    mobilePeers.clear();
+    desktopPeers.clear();
 
     // Iterate through peers and IDs
     lobby.peers.forEach((id, peer) {
-      // Add to Stack Items
-      if (peer.platform != Platform.Android || peer.platform != Platform.iOS) {
-        children.add(peer);
+      total.add(peer);
+      // Add to Peer Lists
+      if (peer.isOnMobile) {
+        mobile.add(peer);
+      } else if (peer.isOnDesktop) {
+        desktop.add(peer);
       }
     });
 
     // Update View
     setState(() {
       lobbySize = lobby.size;
-      peerList = children;
+      allPeers = total;
+      mobilePeers = mobile;
+      desktopPeers = desktop;
     });
   }
 }
