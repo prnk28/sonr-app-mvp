@@ -52,8 +52,8 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.subtitle(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.Black);
+  factory SonrText.subtitle(String text, {Key key, bool isCentered = false}) {
+    return SonrText(text, weight: FontWeight.w500, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.Black, isCentered: isCentered);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text

@@ -143,7 +143,12 @@ class _LobbySheetState extends State<LobbySheet> {
                   return _buildTitle();
                 } else {
                   // Build List Item
-                  return PeerListItem(peerList[index - 1], index - 1);
+                  return Column(children: [
+                    PeerListItem(peerList[index - 1], index - 1),
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                    )
+                  ]);
                 }
               },
             )));

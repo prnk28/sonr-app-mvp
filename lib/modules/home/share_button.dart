@@ -277,9 +277,10 @@ class _ShareButtonItem extends StatelessWidget {
               color: SonrColor.fromHex("EFEEEE"),
               boxShape: NeumorphicBoxShape.circle()),
           child: LottieContainer(
+            repeat: true,
             type: type,
-            width: 100,
-            height: 100,
+            width: 200,
+            height: 200,
           ),
           onPressed: onPressed,
         ),

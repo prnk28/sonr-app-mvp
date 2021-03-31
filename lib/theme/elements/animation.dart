@@ -691,11 +691,6 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        widget.onComplete != null ? widget.onComplete() : print(widget.type.toString() + " Completed");
-      }
-    });
   }
 
   @override
@@ -717,7 +712,11 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
       fit: BoxFit.contain,
       onLoaded: (composition) {
         _controller..duration = composition.seconds.seconds;
-        _controller.forward(from: 0);
+        if (widget.repeat) {
+          _controller.repeat();
+        } else {
+          _controller.forward();
+        }
       },
     );
   }
