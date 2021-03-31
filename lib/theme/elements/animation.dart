@@ -717,11 +717,7 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
       fit: BoxFit.contain,
       onLoaded: (composition) {
         _controller..duration = composition.seconds.seconds;
-        if (widget.repeat) {
-          _controller.repeat();
-        } else {
-          _controller.forward(from: 0);
-        }
+        _controller.forward(from: 0);
       },
     );
   }
