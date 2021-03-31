@@ -7,7 +7,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn, Scale, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum LottieBoard { Complete, Empty, Pending, Progress, Computer, David, Phone }
+enum LottieBoard { Complete, Empty, Pending, Progress, Computer, David, Phone, Gallery, Progress_Alt, Camera, Contact }
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class AnimatedScale extends StatefulWidget {
@@ -726,18 +726,37 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
     switch (widget.type) {
       case LottieBoard.Complete:
         return "assets/animations/lottie/complete.json";
+        break;
       case LottieBoard.Empty:
         return "assets/animations/lottie/empty-lobby.json";
+        break;
       case LottieBoard.Pending:
         return "assets/animations/lottie/pending.json";
+        break;
       case LottieBoard.Progress:
         return "assets/animations/lottie/progress.json";
+        break;
       case LottieBoard.Computer:
         return "assets/animations/lottie/computer.json";
+        break;
       case LottieBoard.David:
         return "assets/animations/lottie/david.json";
+        break;
       case LottieBoard.Phone:
         return "assets/animations/lottie/phone.json";
+        break;
+      case LottieBoard.Gallery:
+        return "assets/animations/lottie/gallery.json";
+        break;
+      case LottieBoard.Progress_Alt:
+        return "assets/animations/lottie/progress-alt.json";
+        break;
+      case LottieBoard.Camera:
+        return "assets/animations/lottie/camera.json";
+        break;
+      case LottieBoard.Contact:
+        return "assets/animations/lottie/contact.json";
+        break;
     }
   }
 }
