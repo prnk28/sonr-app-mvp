@@ -7,7 +7,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, FadeIn, FadeOut, SlideIn, Scale, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum LottieBoard { Complete, Empty, Pending, Progress }
+enum LottieBoard { Complete, Empty, Pending, Progress, Computer, David, Phone }
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class AnimatedScale extends StatefulWidget {
@@ -664,9 +664,9 @@ class LottieContainer extends StatefulWidget {
   final double width;
   final double height;
   final BoxFit fit;
-  final LottieBoard board;
+  final LottieBoard type;
   final Function onComplete;
-  const LottieContainer({Key key, @required this.board, this.onComplete, this.width = 200, this.height = 200, this.fit = BoxFit.fill})
+  const LottieContainer({Key key, @required this.type, this.onComplete, this.width = 200, this.height = 200, this.fit = BoxFit.fill})
       : super(key: key);
   @override
   _LottieContainerState createState() => _LottieContainerState();
@@ -681,7 +681,7 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
     _controller = AnimationController(vsync: this);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        widget.onComplete != null ? widget.onComplete() : print(widget.board.toString() + " Completed");
+        widget.onComplete != null ? widget.onComplete() : print(widget.type.toString() + " Completed");
       }
     });
   }
@@ -699,17 +699,17 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
       controller: _controller,
       width: widget.width,
       height: widget.height,
-      fit: widget.fit,
+      fit: BoxFit.contain,
       onLoaded: (composition) {
         _controller
-          ..duration = composition.duration
-          ..forward();
+          ..duration = composition.seconds.seconds
+          ..forward(from: 0);
       },
     );
   }
 
   _getPathFromBoard() {
-    switch (widget.board) {
+    switch (widget.type) {
       case LottieBoard.Complete:
         return "assets/animations/lottie/complete.json";
       case LottieBoard.Empty:
@@ -718,6 +718,12 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
         return "assets/animations/lottie/pending.json";
       case LottieBoard.Progress:
         return "assets/animations/lottie/progress.json";
+      case LottieBoard.Computer:
+        return "assets/animations/lottie/computer.json";
+      case LottieBoard.David:
+        return "assets/animations/lottie/david.json";
+      case LottieBoard.Phone:
+        return "assets/animations/lottie/phone.json";
     }
   }
 }

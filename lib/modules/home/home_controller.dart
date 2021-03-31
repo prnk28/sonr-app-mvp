@@ -20,11 +20,13 @@ class HomeController extends GetxController {
   final toggleIndex = 1.obs;
 
   // References
-  PageController pageController;
+  final PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
 
   // Conditional
   bool _hasPromptedAutoSave = false;
+
+  HomeController(this.pageController);
 
   // ^ Controller Constructer ^
   onInit() {

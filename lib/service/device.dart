@@ -19,10 +19,12 @@ class DeviceService extends GetxService {
   final _direction = Rx<CompassEvent>();
   final _platform = Rx<Platform>();
   final _geoCode = GeoCode();
+  final _placemark = Address().obs;
 
   // Getters for Global References
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static Rx<Platform> get platform => Get.find<DeviceService>()._platform;
+  static Rx<Address> get placemark => Get.find<DeviceService>()._placemark;
 
   // Platform Properties
   static bool get isDesktop =>
@@ -100,7 +102,9 @@ class DeviceService extends GetxService {
   // ^ Refresh User Location Position ^ //
   Future<Position> currentLocation() async {
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      var loc = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      setPlacemark(loc);
+      return loc;
     } else {
       print("No Location Permissions");
       return null;
@@ -108,13 +112,8 @@ class DeviceService extends GetxService {
   }
 
   // ^ Refresh User Location Position ^ //
-  Future<Address> currentPlacemark() async {
-    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      final loc = await currentLocation();
-      return await _geoCode.reverseGeocoding(latitude: loc.latitude, longitude: loc.longitude);
-    } else {
-      print("No Location Permissions");
-      return null;
-    }
+  setPlacemark(Position loc) async {
+    var data = await _geoCode.reverseGeocoding(latitude: loc.latitude, longitude: loc.longitude);
+    _placemark(data);
   }
 }

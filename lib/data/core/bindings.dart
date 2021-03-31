@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/modules/home/search_view.dart';
 import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
@@ -7,7 +6,6 @@ import 'package:sonr_app/modules/profile/tile_item.dart';
 import 'package:sonr_app/modules/register/register_screen.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/transfer_controller.dart';
-
 
 // ^ Initial Controller Bindings ^ //
 class InitialBinding implements Bindings {
@@ -23,7 +21,6 @@ class InitialBinding implements Bindings {
 class HomeBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<HomeController>(HomeController(), permanent: true);
     Get.lazyPut<SearchCardController>(() => SearchCardController());
   }
 }

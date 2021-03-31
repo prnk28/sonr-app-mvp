@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:geocode/geocode.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
 
@@ -90,7 +91,7 @@ class LobbySheet extends StatefulWidget {
 
 class _LobbySheetState extends State<LobbySheet> {
   // References
-  String title;
+  Address placemark;
   int lobbySize = 0;
   int toggleIndex = 1;
   List<Peer> allPeers = <Peer>[];
@@ -106,15 +107,8 @@ class _LobbySheetState extends State<LobbySheet> {
 
     // Set Stream
     peerStream = LobbyService.local.listen(_handlePeerUpdate);
-    setTitle();
+    placemark = DeviceService.placemark.value;
     super.initState();
-  }
-
-  void setTitle() async {
-    var data = await Get.find<DeviceService>().currentPlacemark();
-    setState(() {
-      title = "${data.city}, ${data.countryCode}";
-    });
   }
 
   // * On Dispose * //
@@ -160,13 +154,26 @@ class _LobbySheetState extends State<LobbySheet> {
     return Column(children: [
       // Build Title
       Padding(padding: EdgeInsetsX.top(8)),
-      Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.header(title)]),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        SonrIcon.location,
+        Padding(padding: EdgeInsetsX.right(16)),
+        SonrText("",
+            isRich: true,
+            richText: RichText(
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.fade,
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: "${placemark.city.capitalizeFirst}, ",
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.w400, fontSize: 32, color: Colors.grey[800])),
+                  TextSpan(
+                      text: placemark.countryCode, style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 32, color: SonrColor.Black)),
+                ])))
+      ]),
 
       // Build Toggle View
       Container(
-        padding: EdgeInsets.only(top: 8, bottom: 16),
+        padding: EdgeInsets.only(top: 8),
         margin: EdgeInsetsX.horizontal(24),
         child: NeumorphicToggle(
           duration: 100.milliseconds,
@@ -193,6 +200,8 @@ class _LobbySheetState extends State<LobbySheet> {
           ],
         ),
       ),
+
+      Padding(padding: EdgeInsets.only(top: 24))
     ]);
   }
 

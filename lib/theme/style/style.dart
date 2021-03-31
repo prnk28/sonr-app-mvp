@@ -128,7 +128,7 @@ class SonrStyle {
       color: UserService.isDarkMode.value ? SonrColor.White : SonrColor.Dark);
 
   static get toggle => NeumorphicStyle(
-        intensity: UserService.isDarkMode.value ? 0.45 : 0.65,
+        intensity: UserService.isDarkMode.value ? 0.25 : 0.5,
         depth: UserService.isDarkMode.value ? 4 : 6,
         shape: NeumorphicShape.flat,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),

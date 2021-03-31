@@ -47,8 +47,8 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.title(String text, {Key key, Color color = SonrColor.Black}) {
-    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: color);
+  factory SonrText.title(String text, {Key key, Color color = SonrColor.Black, bool isCentered = false}) {
+    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: color, isCentered: isCentered);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
@@ -290,7 +290,9 @@ class SonrText extends StatelessWidget {
     }
 
     // @ Normal Type Text
-    return Text(text, style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
+    return Text(text,
+        textAlign: isCentered ? TextAlign.center : TextAlign.start,
+        style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^

@@ -150,7 +150,7 @@ class _PeerListItemState extends State<PeerListItem> {
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,
           leading: widget.peer.profilePicture(size: 50),
-          title: SonrText.gradient(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, FlutterGradientNames.frozenHeat, size: 32),
+          title: SonrText.title(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
           subtitle: SonrText("",
               isRich: true,
               richText: RichText(
@@ -159,17 +159,17 @@ class _PeerListItemState extends State<PeerListItem> {
                   text: TextSpan(children: [
                     TextSpan(
                         text: widget.peer.platform.toString(),
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalete.Primary)),
                     TextSpan(
                         text: " - ${widget.peer.model}",
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.Black)),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalete.Secondary)),
                   ]))),
           children: [
             Padding(padding: EdgeInsets.all(8)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ColorButton.neutral(onPressed: () {}, text: "Message"),
+                ColorButton.neutral(onPressed: () {}, text: "Block"),
                 Padding(padding: EdgeInsets.all(8)),
                 ColorButton.primary(
                   onPressed: () {

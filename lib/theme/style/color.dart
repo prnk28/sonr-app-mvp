@@ -112,7 +112,7 @@ class SonrPalete {
   static const AlignmentGeometry _K_END = Alignment.topCenter;
 
   static Gradient primary() {
-    return LinearGradient(colors: [Color(0xff2c75ff), Color(0xff2caaff)], begin: _K_BEGIN, end: _K_END);
+    return LinearGradient(colors: [Color(0xff2c75ff2c75ff), Color(0xff2caaff)], begin: _K_BEGIN, end: _K_END);
   }
 
   static Gradient secondary() {
