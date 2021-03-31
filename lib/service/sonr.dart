@@ -15,11 +15,12 @@ class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
   final _isReady = false.obs;
   final _progress = 0.0.obs;
+  final _properties = Peer_Properties().obs;
   final _status = Rx<Status>();
 
   // @ Static Accessors
-  static RxBool get isReady => Get.find<SonrService>()._isReady;
   static SonrService get to => Get.find<SonrService>();
+  static RxBool get isReady => Get.find<SonrService>()._isReady;
   static RxDouble get progress => Get.find<SonrService>()._progress;
   static Rx<Status> get status => Get.find<SonrService>()._status;
 
@@ -28,9 +29,10 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Updates Node^ //
   SonrService() {
-    Timer.periodic(500.milliseconds, (timer) {
+    Timer.periodic(200.milliseconds, (timer) {
       if (DeviceService.isMobile) {
-        DeviceService.direction.value ?? _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
+        DeviceService.direction.value ??
+            _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
       }
     });
   }
@@ -39,6 +41,7 @@ class SonrService extends GetxService with TransferQueue {
   Future<SonrService> init() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
+    _properties(Peer_Properties(hasPointToShare: UserService.hasPointToShare.value));
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -55,10 +58,10 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Connect to Service Method ^ //
   Future<void> connect({Contact contact}) async {
-    if (contact != null) {
-      await _node.setContact(contact);
-    }
     _node.connect();
+    if (contact != null) {
+      _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+    }
   }
 
   // ^ Join a New Group ^
@@ -77,11 +80,17 @@ class SonrService extends GetxService with TransferQueue {
     await to._node.joinRemote(RemoteInfo(isJoin: true, topic: topic, display: display, words: words));
   }
 
+  // ^ Sets Properties for Node ^
+  static void setFlatMode(bool isFlatMode) async {
+    if (to._properties.value.isFlatMode != isFlatMode) {
+      to._properties(Peer_Properties(hasPointToShare: UserService.hasPointToShare.value, isFlatMode: isFlatMode));
+      await to._node.update(properties: to._properties.value);
+    }
+  }
+
   // ^ Sets Contact for Node ^
-  static void setContact(Contact contact) async {
-    // - Check Connected -
-    await to._node.setContact(contact);
-    //SonrSnack.error("Not Connected to the Sonr Network");
+  static void setProfile(Contact contact) async {
+    await to._node.update(contact: contact);
   }
 
   // ^ Set Payload for Contact ^ //
@@ -188,8 +197,7 @@ class SonrService extends GetxService with TransferQueue {
       _status(data.value);
 
       // Handle Available
-      _node.update(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading);
-
+      _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
     }
   }
 

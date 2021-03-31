@@ -9,24 +9,34 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/permission.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:geocode/geocode.dart';
+import 'package:motion_sensors/motion_sensors.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
+const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 
 class DeviceService extends GetxService {
-  // Status/Sensor Properties
+  // Device/Location Properties
   final _direction = Rx<CompassEvent>();
+  final _location = Rx<Position>();
   final _platform = Rx<Platform>();
-  final _geoCode = GeoCode();
-  final _placemark = Address().obs;
 
-  // Getters for Global References
+  // Sensor Properties
+  final _accelerometer = Rx<AccelerometerEvent>();
+  final _gyroscope = Rx<GyroscopeEvent>();
+  final _magnetometer = Rx<MagnetometerEvent>();
+  final _orientation = Rx<OrientationEvent>();
+
+  // Getters for Device/Location References
+  static DeviceService get to => Get.find<DeviceService>();
   static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
   static Rx<Platform> get platform => Get.find<DeviceService>()._platform;
-  static Rx<Address> get placemark => Get.find<DeviceService>()._placemark;
+  static Rx<AccelerometerEvent> get accelerometer => to._accelerometer;
+  static Rx<GyroscopeEvent> get gyroscope => to._gyroscope;
+  static Rx<MagnetometerEvent> get magnetometer => to._magnetometer;
+  static Rx<OrientationEvent> get orientation => to._orientation;
 
-  // Platform Properties
+  // Platform Checkers
   static bool get isDesktop =>
       Get.find<DeviceService>()._platform.value == Platform.Linux ||
       Get.find<DeviceService>()._platform.value == Platform.MacOS ||
@@ -41,7 +51,7 @@ class DeviceService extends GetxService {
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
-    // Set Platform
+    // @ Set Platform
     if (io.Platform.isAndroid) {
       _platform(Platform.Android);
     } else if (io.Platform.isIOS) {
@@ -54,9 +64,21 @@ class DeviceService extends GetxService {
       _platform(Platform.Windows);
     }
 
-    // Bind Direction Stream
+    // @ Bind Sensors for Mobile
     if (_platform.value == Platform.iOS || _platform.value == Platform.Android) {
+      // Bind Direction and Set Intervals
       _direction.bindStream(FlutterCompass.events);
+      motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
+      motionSensors.magnetometerUpdateInterval = K_SENSOR_INTERVAL;
+      motionSensors.orientationUpdateInterval = K_SENSOR_INTERVAL;
+      motionSensors.gyroscopeUpdateInterval = K_SENSOR_INTERVAL;
+      motionSensors.userAccelerometerUpdateInterval = K_SENSOR_INTERVAL;
+
+      // Bind Sensor Streams
+      _accelerometer.bindStream(motionSensors.accelerometer);
+      _magnetometer.bindStream(motionSensors.magnetometer);
+      _orientation.bindStream(motionSensors.orientation);
+      _gyroscope.bindStream(motionSensors.gyroscope);
     }
     return this;
   }
@@ -102,18 +124,11 @@ class DeviceService extends GetxService {
   // ^ Refresh User Location Position ^ //
   Future<Position> currentLocation() async {
     if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      var loc = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      setPlacemark(loc);
-      return loc;
+      _location(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
+      return _location.value;
     } else {
       print("No Location Permissions");
       return null;
     }
-  }
-
-  // ^ Refresh User Location Position ^ //
-  setPlacemark(Position loc) async {
-    var data = await _geoCode.reverseGeocoding(latitude: loc.latitude, longitude: loc.longitude);
-    _placemark(data);
   }
 }

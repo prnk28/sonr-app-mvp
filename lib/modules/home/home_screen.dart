@@ -1,3 +1,4 @@
+
 import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'search_view.dart';
@@ -13,6 +14,12 @@ class HomeScreen extends StatelessWidget {
     return GetX<HomeController>(
       init: HomeController(pageController),
       builder: (controller) {
+        LobbyService.isFlatMode.listen((isFlat) {
+          if (isFlat) {
+            print(LobbyService.localFlatPeers.toString());
+          }
+        });
+
         // Build Grid View
         var gridView;
         // Loading Cards
@@ -104,7 +111,6 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(padding: EdgeInsets.all(8)),
             Expanded(child: Container(child: gridView)),
           ]),
         );
