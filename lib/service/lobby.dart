@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
-import 'package:sonr_app/modules/profile/profile_card.dart';
+import 'package:sonr_app/modules/transfer/flat_overlay.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -35,8 +35,10 @@ class LobbyService extends GetxService {
   }
 
   // # On Service Close //
-  void onDispose() {
+  @override
+  void onClose() {
     _accelStream.cancel();
+    super.onClose();
   }
 
   // ^ Method to Cancel Flat Mode ^ //
@@ -95,13 +97,13 @@ class LobbyService extends GetxService {
 
   // # Begin Facing Invite Check
   void _startTimer() {
-    _timer = Timer.periodic(400.milliseconds, (_) {
+    _timer = Timer.periodic(500.milliseconds, (_) {
       // Add MS to Counter
-      counter(counter.value += 400);
+      counter(counter.value += 500);
 
       // Check if Facing
-      if (counter.value == 2400) {
-        if (_lastIsFacingFlat.value && localFlatPeers.length > 0) {
+      if (counter.value == 2000) {
+        if (_lastIsFacingFlat.value) {
           // Update Refs
           _isFlatMode(true);
           SonrService.setFlatMode(true);

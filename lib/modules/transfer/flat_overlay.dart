@@ -1,68 +1,62 @@
+import 'dart:async';
+
 import 'package:sonr_app/theme/theme.dart';
 import 'package:animated_widgets/animated_widgets.dart';
+
+const K_TRANSLATE_DELAY = const Duration(milliseconds: 50);
+const K_TRANSLATE_DURATION = const Duration(milliseconds: 300);
 
 class FlatModeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Handle Flat Mode Updates
-    LobbyService.isFlatMode.listen((val) {
-      if (!val) {
-        Get.back();
-      }
-    });
-
-    // Build View
-    return Container(
-        width: Get.width,
-        height: Get.height,
-        color: Colors.black87,
-        child: Stack(alignment: Alignment.bottomCenter, children: [
-          ProfileCard(),
-        ]));
+    return GetX<FlatModeController>(
+      init: FlatModeController(),
+      builder: (controller) {
+        return Container(
+            width: Get.width,
+            height: Get.height,
+            color: Colors.black87,
+            child: Stack(alignment: Alignment.bottomCenter, children: [
+              TranslationAnimatedWidget(
+                enabled: controller.isAnimatingOut.value,
+                delay: K_TRANSLATE_DELAY,
+                duration: K_TRANSLATE_DURATION,
+                curve: Curves.easeIn,
+                values: [
+                  Offset(0, -1 * controller.lastYPos.value), // disabled value value
+                  Offset(0, (-1 * Get.height)) //enabled value
+                ],
+                child: Draggable(
+                  child: _ProfileCardView(scale: 0.9),
+                  feedback: _ProfileCardView(scale: 0.9),
+                  childWhenDragging: Container(),
+                  axis: Axis.vertical,
+                  onDragUpdate: (details) {
+                    if (details.globalPosition.dy >= Get.height * 0.5) {
+                      HapticFeedback.heavyImpact();
+                    } else {
+                      controller.animateOut(details.globalPosition.dy);
+                    }
+                  },
+                ),
+              )
+            ]));
+      },
+    );
   }
 }
 
-class ProfileCard extends StatefulWidget {
+class ProfileOverlayCard extends StatefulWidget {
   @override
-  _ProfileCardState createState() => _ProfileCardState();
+  _ProfileOverlayCardState createState() => _ProfileOverlayCardState();
 }
 
-class _ProfileCardState extends State<ProfileCard> {
+class _ProfileOverlayCardState extends State<ProfileOverlayCard> with SingleTickerProviderStateMixin {
   bool animateOut = false;
   double _y = 20;
 
   @override
-  Widget build(BuildContext context) {
-    return TranslationAnimatedWidget(
-      duration: 250.milliseconds,
-      values: [
-        Offset(0, _y), // disabled value value
-        Offset(0, Get.height / 2), //intermediate value
-        Offset(0, Get.height) //enabled value
-      ],
-      animationFinished: (val) {
-        Get.find<LobbyService>().sendFlatMode();
-        Get.back();
-      },
-      child: Draggable(
-        child: _ProfileCardView(scale: 0.9),
-        feedback: _ProfileCardView(scale: 0.9),
-        childWhenDragging: Container(),
-        axis: Axis.vertical,
-        onDragUpdate: (details) {
-          if (details.globalPosition.dy >= Get.height * 0.5) {
-            HapticFeedback.heavyImpact();
-          } else {
-            setState(() {
-              animateOut = true;
-              _y = details.globalPosition.dy;
-            });
-            print("Animate out");
-          }
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) {}
 }
 
 // ^ Profile Card View ^ //
@@ -152,5 +146,44 @@ class _ProfileCardView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class FlatModeController extends GetxController {
+  // Properties
+  final isDragging = false.obs;
+  final isPending = false.obs;
+  final isAnimatingOut = false.obs;
+  final lastYPos = 0.0.obs;
+
+  // References
+  StreamSubscription<bool> _isFlatStream;
+  bool get _isStandby => !isDragging.value && !isPending.value && !isAnimatingOut.value;
+
+  @override
+  void onInit() {
+    // Handle Flat Mode Updates
+    _isFlatStream = LobbyService.isFlatMode.listen(_handleFlatMode);
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    _isFlatStream.cancel();
+    super.onClose();
+  }
+
+  animateOut(double lastY) {
+    lastYPos(lastY);
+    isAnimatingOut(true);
+    Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
+      isPending(true);
+    });
+  }
+
+  _handleFlatMode(bool status) {
+    if (!status && _isStandby) {
+      Get.back();
+    }
   }
 }

@@ -92,8 +92,10 @@ class PeerController extends GetxController {
     super.onInit();
   }
 
-  void onDispose() {
+  @override
+  void onClose() {
     peerStream.cancel();
+    super.onClose();
   }
 
   // ^ Handle User Invitation ^

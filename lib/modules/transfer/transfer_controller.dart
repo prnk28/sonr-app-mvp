@@ -40,9 +40,11 @@ class TransferController extends GetxController {
   }
 
   // ^ On Dispose ^ //
-  void onDispose() {
+  @override
+  void onClose() {
     compassStream.cancel();
     lobbySizeStream.cancel();
+    super.onClose();
   }
 
   // ^ Toggle Remote Value ^ //
