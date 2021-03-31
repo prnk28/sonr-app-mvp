@@ -27,20 +27,22 @@ class SonrOverlay extends GetxService {
   }
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
-  static void show(Widget view,
+  static int show(Widget view,
       {Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300),
       bool barrierDismissible: true,
       bool disableAnimation: false,
+      Color backgroundColor,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top}) {
     // Create Overlay
-    var overlay =
-        _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view, disableAnimation: disableAnimation);
+    var overlay = _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view,
+        disableAnimation: disableAnimation, backgroundColor: backgroundColor);
 
     // Add Overlay to List
     _controller.currentOverlay(overlay);
     _controller.overlays.add(overlay);
+    return _controller.overlays.indexOf(overlay);
   }
 
   // ^ Method Finds Overlay Controller and Prompts Question ^ //
@@ -196,18 +198,10 @@ class SonrOverlay extends GetxService {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Alert ^ //
-  static void pop({int backUntil = 1}) {
-    if (isOpen) {
-      // Validate PopCount is less than List Length
-      if (backUntil > count) {
-        backUntil = count;
-      }
-
-      // Reverse Iterate Count and Remove
-      for (var i = 0; i <= count; i++) {
-        _controller.overlays[i].dismiss();
-        _controller.overlays.removeLast();
-      }
+  static void closeAt(int index) {
+    if (isOpen && index >= 0) {
+      _controller.overlays[index].dismiss();
+      _controller.overlays.removeAt(index);
 
       // Refresh List
       _controller.currentOverlay(_controller.overlays[count - 1]);
@@ -324,18 +318,18 @@ class _SonrFixedOverlayEntry {
 
   // ** Constructer ** //
   _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
-      {this.blur = 5.0,
-      this.backgroundColor = SonrColor.OverlayBackground,
-      this.mainAxisAlignment = MainAxisAlignment.center,
-      this.disableAnimation = false}) {
+      {this.blur = 5.0, this.backgroundColor, this.mainAxisAlignment = MainAxisAlignment.center, this.disableAnimation = false}) {
     dismiss = () {
       overlayBackground.remove();
       overlay.remove();
     };
     overlayBackground = OverlayEntry(builder: (context) {
       return Positioned.fill(
-        child: GestureDetector(
-          onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
+        child: Container(
+          color: backgroundColor ?? Colors.transparent,
+          child: GestureDetector(
+            onTap: () => barrierDismissible ? SonrOverlay.back() : () {},
+          ),
         ),
       );
     });

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
+import 'package:sonr_app/modules/profile/profile_card.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -12,6 +13,7 @@ class LobbyService extends GetxService {
   final _localFlatPeers = RxMap<String, Peer>();
   final _localSize = 0.obs;
   final counter = 0.0.obs;
+  final flatOverlayIndex = (-1).obs;
 
   // @ Static Accessors
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
@@ -38,10 +40,10 @@ class LobbyService extends GetxService {
   }
 
   // ^ Method to Cancel Flat Mode ^ //
-  void cancelFlatMode() {
+  void sendFlatMode() {
     _flatModeCancelled(true);
     _resetTimer();
-    Future.delayed(8.seconds, () {
+    Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
   }
@@ -51,7 +53,7 @@ class LobbyService extends GetxService {
     // @ Update Local Topics
     if (data.isLocal) {
       // Update Local
-      _setFlatPeers(data);
+      _handleFlatPeers(data);
       _local(data);
       _localSize(data.count);
       _local.refresh();
@@ -65,9 +67,9 @@ class LobbyService extends GetxService {
   }
 
   // # Handle Lobby Flat Peers ^ //
-  void _setFlatPeers(Lobby data) {
+  void _handleFlatPeers(Lobby data) {
     var flatPeers = <String, Peer>{};
-    local.value.peers.forEach((id, peer) {
+    data.peers.forEach((id, peer) {
       if (peer.properties.isFlatMode) {
         flatPeers[id] = peer;
       }
@@ -93,15 +95,19 @@ class LobbyService extends GetxService {
 
   // # Begin Facing Invite Check
   void _startTimer() {
-    _timer = Timer.periodic(500.milliseconds, (_) {
+    _timer = Timer.periodic(400.milliseconds, (_) {
       // Add MS to Counter
-      counter(counter.value += 500);
+      counter(counter.value += 400);
 
       // Check if Facing
-      if (counter.value == 2000) {
-        if (_lastIsFacingFlat.value) {
+      if (counter.value == 2400) {
+        if (_lastIsFacingFlat.value && localFlatPeers.length > 0) {
+          // Update Refs
           _isFlatMode(true);
           SonrService.setFlatMode(true);
+
+          // Present View
+          Get.dialog(FlatModeView(), barrierColor: Colors.transparent, barrierDismissible: false, useSafeArea: false);
         } else {
           _resetTimer();
         }
