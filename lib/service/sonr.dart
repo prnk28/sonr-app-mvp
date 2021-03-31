@@ -14,8 +14,6 @@ export 'package:sonr_core/sonr_core.dart';
 class SonrService extends GetxService with TransferQueue {
   // @ Set Properties
   final _isReady = false.obs;
-  final _peers = Map<String, Peer>().obs;
-  final _lobbySize = 0.obs;
   final _progress = 0.0.obs;
   final _status = Rx<Status>();
 

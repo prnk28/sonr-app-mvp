@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
