@@ -46,7 +46,7 @@ class LobbyService extends GetxService {
   bool sendFlatMode(Peer peer) {
     if (isFacingPeer(peer)) {
       // Send Invite
-      SonrService.queueContact();
+      SonrService.queueContact(isFlat: true);
       SonrService.inviteWithPeer(peer);
 
       // Reset Timers

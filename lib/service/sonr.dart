@@ -212,6 +212,8 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
     // Check if Sent Back Contact
+    print(data.toString());
+
     if (data.type == AuthReply_Type.Contact) {
       HapticFeedback.vibrate();
       SonrOverlay.reply(data);

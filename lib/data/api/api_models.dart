@@ -45,18 +45,12 @@ extension ContactUtils on Contact {
 // ^ Position Designation Extensions ^ //
 extension DesignationUtils on Position_Designation {
   bool isFacing(Position_Proximity prox) {
-    if (prox == Position_Proximity.Distant) {
-      return this == Position_Designation.NNE ||
-          this == Position_Designation.NEbN ||
-          this == Position_Designation.NbE ||
-          this == Position_Designation.NE ||
-          this == Position_Designation.N;
-    } else {
-      return this == Position_Designation.NNE ||
-          this == Position_Designation.N ||
-          this == Position_Designation.NEbN ||
-          this == Position_Designation.NbE;
-    }
+    return this == Position_Designation.NNE ||
+        this == Position_Designation.NEbN ||
+        this == Position_Designation.NbE ||
+        this == Position_Designation.NE ||
+        this == Position_Designation.NNE ||
+        this == Position_Designation.N;
   }
 }
 
