@@ -15,6 +15,7 @@ export '../elements/painter.dart';
 export '../elements/sheet.dart';
 export '../elements/overlay.dart';
 export '../elements/form.dart';
+export '../elements/flat.dart';
 
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';

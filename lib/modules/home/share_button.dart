@@ -196,7 +196,7 @@ class _ShareButtonRow extends StatelessWidget {
                     });
                   }
                 },
-                type: LottieBoard.Camera,
+                type: RiveBoard.Camera,
               ),
             ),
           ),
@@ -229,7 +229,7 @@ class _ShareButtonRow extends StatelessWidget {
                     });
                   }
                 },
-                type: LottieBoard.Gallery,
+                type: RiveBoard.Gallery,
               ),
             ),
           ),
@@ -246,7 +246,7 @@ class _ShareButtonRow extends StatelessWidget {
                   // Go to Transfer
                   Get.toNamed("/transfer");
                 },
-                type: LottieBoard.Contact,
+                type: RiveBoard.Contact,
               ),
             ),
           )
@@ -257,7 +257,7 @@ class _ShareButtonRow extends StatelessWidget {
 // ** Share Button Item View ** //
 class _ShareButtonItem extends StatelessWidget {
   // Properties
-  final LottieBoard type;
+  final RiveBoard type;
   final Function onPressed;
 
   // Method to Return Type
@@ -276,8 +276,7 @@ class _ShareButtonItem extends StatelessWidget {
               depth: 12,
               color: SonrColor.fromHex("EFEEEE"),
               boxShape: NeumorphicBoxShape.circle()),
-          child: LottieContainer(
-            repeat: true,
+          child: RiveContainer(
             type: type,
             width: 200,
             height: 200,

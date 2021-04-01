@@ -101,10 +101,11 @@ class _MediaInviteView extends StatelessWidget {
             Container(
               width: Get.width / 3,
               height: 50,
-              child: ShapeButton.stadium(
+              child: ColorButton.primary(
                 onPressed: () => controller.acceptTransfer(card),
+                gradient: SonrPalette.tertiary(),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold("Accept", size: 18, color: SonrColor.Black.withOpacity(0.85)),
+                text: "Accept",
               ),
             ),
           ]),
@@ -331,7 +332,7 @@ class _MediaCardInfo extends StatelessWidget {
                     });
                   }
                 },
-                text: SonrText.medium("Delete", color: SonrPalete.Red),
+                text: SonrText.medium("Delete", color: SonrPalette.Red),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               ShapeButton.rectangle(

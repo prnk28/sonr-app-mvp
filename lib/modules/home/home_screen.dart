@@ -182,7 +182,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalette.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.isDarkMode.value,
@@ -199,7 +199,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalette.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.hasPointToShare.value,

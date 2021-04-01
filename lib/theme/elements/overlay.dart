@@ -9,7 +9,8 @@ import 'package:sonr_core/sonr_core.dart';
 import '../theme.dart';
 import 'form.dart';
 
-// ** Class Controls Active Overlays ** //
+
+// ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
@@ -28,7 +29,7 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
   static int show(Widget view,
-      {Duration backgroundDuration = const Duration(milliseconds: 200),
+      { // ^,
       Duration entryDuration = const Duration(milliseconds: 300),
       bool barrierDismissible: true,
       bool disableAnimation: false,
@@ -36,7 +37,7 @@ class SonrOverlay extends GetxService {
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top}) {
     // Create Overlay
-    var overlay = _SonrFixedOverlayEntry(entryLocation, backgroundDuration, entryDuration, barrierDismissible, view,
+    var overlay = _SonrFixedOverlayEntry(entryLocation, entryDuration, barrierDismissible, view,
         disableAnimation: disableAnimation, backgroundColor: backgroundColor);
 
     // Add Overlay to List
@@ -50,8 +51,7 @@ class SonrOverlay extends GetxService {
     // Feedback
     HapticFeedback.heavyImpact();
     // Create Overlay
-    var editOverlay =
-        _SonrFixedOverlayEntry(SonrOffset.Top, Duration(milliseconds: 200), Duration(milliseconds: 300), true, child, disableAnimation: true);
+    var editOverlay = _SonrFixedOverlayEntry(SonrOffset.Top, Duration(milliseconds: 300), true, child, disableAnimation: true);
 
     // Add Overlay to List
     _controller.currentOverlay(editOverlay);
@@ -68,7 +68,6 @@ class SonrOverlay extends GetxService {
       bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top,
-      Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Future Completer
     var completer = new Completer<bool>();
@@ -76,7 +75,6 @@ class SonrOverlay extends GetxService {
     // Create Overlay
     var questionOverlay = _SonrFixedOverlayEntry(
         entryLocation,
-        backgroundDuration,
         entryDuration,
         barrierDismissible,
         _QuestionOverlayView(
@@ -106,7 +104,6 @@ class SonrOverlay extends GetxService {
       bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top,
-      Duration backgroundDuration = const Duration(milliseconds: 200),
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Future Completer
     var completer = new Completer();
@@ -114,7 +111,6 @@ class SonrOverlay extends GetxService {
     // Create Overlay
     var alertOverlay = _SonrFixedOverlayEntry(
         entryLocation,
-        backgroundDuration,
         entryDuration,
         barrierDismissible,
         _AlertOverlayView(
@@ -138,13 +134,11 @@ class SonrOverlay extends GetxService {
   static void invite(AuthInvite invite,
       {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     if (!isOpen) {
       // Create Overlay
       var cardOverlay = _SonrFixedOverlayEntry(
         SonrOffset.fromDegrees(invite.from.position.facingAntipodal),
-        backgroundDuration,
         entryDuration,
         barrierDismissible,
         _InviteReplyOverlayView(count, false, invite: invite),
@@ -156,19 +150,51 @@ class SonrOverlay extends GetxService {
     }
   }
 
-  // ^ Method Finds Overlay Controller and Prompts Invite ^ //
+  // ^ Method Finds Overlay Controller to Show Reply ^ //
   static void reply(AuthReply reply,
       {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration backgroundDuration = const Duration(milliseconds: 250),
       Duration entryDuration = const Duration(milliseconds: 350)}) {
     if (!isOpen) {
       // Create Overlay
       var cardOverlay = _SonrFixedOverlayEntry(
           SonrOffset.fromDegrees(reply.from.position.facingAntipodal),
-          backgroundDuration,
           entryDuration,
           barrierDismissible,
+          _InviteReplyOverlayView(
+            count,
+            true,
+            reply: reply,
+          ));
+
+      // Add Overlay to List
+      _controller.currentOverlay(cardOverlay);
+      _controller.overlays.add(cardOverlay);
+    }
+  }
+
+  // ^ Method Finds Overlay Controller to Show Flat Contact Reply ^ //
+  static void flatInvite(
+      {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center, Duration entryDuration = const Duration(milliseconds: 350)}) {
+    if (!isOpen) {
+      // Create Overlay
+      var cardOverlay = _SonrFixedOverlayEntry(SonrOffset.Top, entryDuration, true, FlatModeView());
+
+      // Add Overlay to List
+      _controller.currentOverlay(cardOverlay);
+      _controller.overlays.add(cardOverlay);
+    }
+  }
+
+  // ^ Method Finds Overlay Controller to Show Flat Contact Reply ^ //
+  static void flatReply(AuthReply reply,
+      {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center, Duration entryDuration = const Duration(milliseconds: 350)}) {
+    if (!isOpen) {
+      // Create Overlay
+      var cardOverlay = _SonrFixedOverlayEntry(
+          SonrOffset.Top,
+          entryDuration,
+          true,
           _InviteReplyOverlayView(
             count,
             true,
@@ -230,7 +256,7 @@ class SonrOverlay extends GetxService {
   }
 }
 
-// ** Class Controls Active Overlays ** //
+// ^ Class Controls Active Overlays ** //
 class SonrPositionedOverlay extends GetxService {
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
@@ -299,11 +325,10 @@ class SonrPositionedOverlay extends GetxService {
   }
 }
 
-// ** Class Presents Overlay Widget Entry on Context ** //
+// ^ Class Presents Overlay Widget Entry on Context ** //
 class _SonrFixedOverlayEntry {
   // Properties
   final Offset entryLocation;
-  final Duration backgroundDuration;
   final Duration entryDuration;
   final Widget overlayWidget;
   final double blur;
@@ -316,8 +341,8 @@ class _SonrFixedOverlayEntry {
   Function dismiss;
   OverlayEntry overlay, overlayBackground;
 
-  // ** Constructer ** //
-  _SonrFixedOverlayEntry(this.entryLocation, this.backgroundDuration, this.entryDuration, this.barrierDismissible, this.overlayWidget,
+  // ^ Constructer ** //
+  _SonrFixedOverlayEntry(this.entryLocation, this.entryDuration, this.barrierDismissible, this.overlayWidget,
       {this.blur = 5.0, this.backgroundColor, this.mainAxisAlignment = MainAxisAlignment.center, this.disableAnimation = false}) {
     dismiss = () {
       overlayBackground.remove();
@@ -351,7 +376,7 @@ class _SonrFixedOverlayEntry {
   }
 }
 
-// ** Class Presents Positioned Overlay Widget Entry on Context ** //
+// ^ Class Presents Positioned Overlay Widget Entry on Context ** //
 class _SonrPositionedOverlayEntry {
   // Properties
   final Widget widget;
@@ -363,7 +388,7 @@ class _SonrPositionedOverlayEntry {
   Function dismiss;
   OverlayEntry overlay, overlayBackground;
 
-  // ** Constructer ** //
+  // ^ Constructer ** //
   _SonrPositionedOverlayEntry(this.size, this.position, this.widget, this.barrierDismissible) {
     dismiss = () {
       overlayBackground.remove();
@@ -389,7 +414,7 @@ class _SonrPositionedOverlayEntry {
   }
 }
 
-// ** Class Builds Base Animated Overlay View ** //
+// ^ Class Builds Base Animated Overlay View ** //
 class _BaseOverlayView extends StatefulWidget {
   final Widget child;
   final Duration duration;
@@ -421,7 +446,7 @@ class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin 
   }
 }
 
-// ** Class Builds Alert View Widget for Overlay ** //
+// ^ Class Builds Alert View Widget for Overlay ** //
 class _AlertOverlayView extends StatelessWidget {
   final int index; // Index of Overlay
   final String title;
@@ -468,7 +493,7 @@ class _AlertOverlayView extends StatelessWidget {
   }
 }
 
-// ** Class Builds Dropdown View Widget for Positioned Overlay ** //
+// ^ Class Builds Dropdown View Widget for Positioned Overlay ** //
 class _DropdownOverlayView extends StatelessWidget {
   final int index; // Index of Overlay
   final List<SonrDropdownItem> items;
@@ -531,7 +556,7 @@ class _DropdownOverlayView extends StatelessWidget {
   }
 }
 
-// ** Class Builds Alert View Widget for Overlay ** //
+// ^ Class Builds Alert View Widget for Overlay ** //
 class _InviteReplyOverlayView extends StatelessWidget {
   final int index; // Index of Overlay
   final AuthInvite invite;
@@ -550,7 +575,11 @@ class _InviteReplyOverlayView extends StatelessWidget {
       if (invite.payload == Payload.MEDIA) {
         view = MediaCard.invite(invite);
       } else if (invite.payload == Payload.CONTACT) {
-        view = ContactCard.invite(invite);
+        if (invite.isFlat) {
+          return ContactCard.flat(invite.card.contact);
+        } else {
+          view = ContactCard.invite(invite);
+        }
       } else if (invite.payload == Payload.URL) {
         view = URLCard.invite(invite);
       } else {
@@ -560,7 +589,11 @@ class _InviteReplyOverlayView extends StatelessWidget {
 
     // Reply Provided
     else {
-      view = ContactCard.reply(reply);
+      if (reply.type == AuthReply_Type.FlatContact) {
+        return ContactCard.flat(reply.card.contact);
+      } else {
+        view = ContactCard.reply(reply);
+      }
     }
 
     // Build View
@@ -573,7 +606,7 @@ class _InviteReplyOverlayView extends StatelessWidget {
   }
 }
 
-// ** Class Builds Question View Widget for Overlay ** //
+// ^ Class Builds Question View Widget for Overlay ** //
 class _QuestionOverlayView extends GetView<SonrOverlay> {
   final int index; // Index of Overlay
   final String title;
@@ -611,7 +644,7 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
                     SonrOverlay.back();
                   }
                 },
-                child: SonrText.semibold(declineTitle, color: SonrPalete.Red, size: 18)),
+                child: SonrText.semibold(declineTitle, color: SonrPalette.Red, size: 18)),
             // Accept Button
             Container(
               width: Get.width / 2.5,
@@ -633,3 +666,4 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
     );
   }
 }
+

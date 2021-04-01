@@ -100,7 +100,7 @@ class SonrGradient {
   }
 }
 
-class SonrPalete {
+class SonrPalette {
   static const Color Neutral = Color(0xff62666a);
   static const Color Primary = Color(0xff538fff);
   static const Color Secondary = Color(0xff9757ff);

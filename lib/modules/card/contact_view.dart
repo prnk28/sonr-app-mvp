@@ -11,10 +11,17 @@ class ContactCard extends GetWidget<TransferCardController> {
   final AuthReply reply;
   final TransferCard card;
   final bool isNewItem;
+  final Contact contact;
+  final double scale;
 
   // ** Factory -> Invite Dialog View ** //
   factory ContactCard.invite(AuthInvite invite) {
     return ContactCard(CardType.Invite, invite: invite, card: invite.card);
+  }
+
+  // ** Factory -> Invite Dialog View ** //
+  factory ContactCard.flat(Contact contact, {double scale = 1.0}) {
+    return ContactCard(CardType.InviteFlat, contact: contact, scale: scale);
   }
 
   // ** Factory -> Invite Dialog View ** //
@@ -28,13 +35,16 @@ class ContactCard extends GetWidget<TransferCardController> {
   }
 
   // ** Constructer ** //
-  const ContactCard(this.type, {Key key, this.invite, this.reply, this.card, this.isNewItem}) : super(key: key);
+  const ContactCard(this.type, {Key key, this.contact, this.invite, this.reply, this.card, this.isNewItem, this.scale}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
         return _ContactInviteView(card, invite, controller, false);
+        break;
+      case CardType.InviteFlat:
+        return _ContactFlatView(contact, scale);
         break;
       case CardType.Reply:
         return _ContactInviteView(card, invite, controller, true);
@@ -46,6 +56,95 @@ class ContactCard extends GetWidget<TransferCardController> {
         return Container();
         break;
     }
+  }
+}
+
+// ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
+class _ContactFlatView extends StatelessWidget {
+  final double scale;
+  final Contact contact;
+  _ContactFlatView(this.contact, this.scale);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 420 * scale,
+      width: (Get.width - 64) * scale,
+      child: NeumorphicBackground(
+        backendColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(20),
+        child: Neumorphic(
+          style: SonrStyle.normal,
+          margin: EdgeInsets.all(4),
+          child: Container(
+            height: 75,
+            child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Padding(padding: EdgeInsets.all(4)),
+              // Build Profile Pic
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Neumorphic(
+                    padding: EdgeInsets.all(10),
+                    style: NeumorphicStyle(
+                      boxShape: NeumorphicBoxShape.circle(),
+                      depth: -10,
+                    ),
+                    child: contact.profilePicture),
+              ),
+
+              // Build Name
+              contact.fullName,
+              Divider(),
+              Padding(padding: EdgeInsets.all(4)),
+
+              // Quick Actions
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SizedBox(
+                  width: 78,
+                  height: 78,
+                  child: ShapeButton.circle(
+                      depth: 4,
+                      onPressed: () {},
+                      text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
+                      icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
+                      iconPosition: WidgetPosition.Top),
+                ),
+                Padding(padding: EdgeInsets.all(6)),
+                SizedBox(
+                  width: 78,
+                  height: 78,
+                  child: ShapeButton.circle(
+                      depth: 4,
+                      onPressed: () {},
+                      text: SonrText.medium("Text", size: 12, color: Colors.black45),
+                      icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
+                      iconPosition: WidgetPosition.Top),
+                ),
+                Padding(padding: EdgeInsets.all(6)),
+                SizedBox(
+                    width: 78,
+                    height: 78,
+                    child: ShapeButton.circle(
+                        depth: 4,
+                        onPressed: () {},
+                        text: SonrText.medium("Video", size: 12, color: Colors.black45),
+                        icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
+                        iconPosition: WidgetPosition.Top)),
+              ]),
+
+              Divider(),
+              Padding(padding: EdgeInsets.all(4)),
+
+              // Brief Contact Card Info
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List<Widget>.generate(contact.socials.length, (index) {
+                    return contact.socials[index].provider.icon(IconType.Gradient, size: 35);
+                  }))
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -112,24 +211,24 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () => SonrOverlay.back(),
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold("Decline", color: SonrPalete.Red, size: 18),
+                child: SonrText.semibold("Decline", color: SonrPalette.Red, size: 18),
               )),
           // Accept Button
           Container(
             width: Get.width / 3,
             height: 50,
-            child: ShapeButton.stadium(
-              onPressed: () {
-                SonrOverlay.back();
-                if (!isReply) {
-                  controller.promptSendBack(card);
-                } else {
-                  controller.acceptContact(card, sendBackContact: false);
-                }
-              },
-              icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-              text: SonrText.semibold("Accept", size: 18, color: SonrColor.Black.withOpacity(0.85)),
-            ),
+            child: ColorButton.primary(
+                onPressed: () {
+                  SonrOverlay.back();
+                  if (!isReply) {
+                    controller.promptSendBack(card);
+                  } else {
+                    controller.acceptContact(card, sendBackContact: false);
+                  }
+                },
+                gradient: SonrPalette.tertiary(),
+                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                text: "Accept"),
           ),
         ])
       ]),

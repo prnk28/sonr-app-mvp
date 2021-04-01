@@ -136,11 +136,10 @@ class _URLInviteView extends StatelessWidget {
           Container(
             width: Get.width / 3,
             height: 50,
-            child: ShapeButton.stadium(
-              onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
-              icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
-              text: SonrText.semibold("Open", size: 18, color: SonrColor.Black.withOpacity(0.85)),
-            ),
+            child: ColorButton.primary(
+                onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
+                icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
+                text: "Open"),
           ),
         ]),
         Padding(padding: EdgeInsets.only(top: 14))

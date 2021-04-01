@@ -157,7 +157,7 @@ class SonrService extends GetxService with TransferQueue {
 
     // Contact Payload
     else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(p);
+      await to._node.inviteContact(p, isFlat: to.currentTransfer.isFlat);
     }
 
     // Link Payload
@@ -213,6 +213,11 @@ class SonrService extends GetxService with TransferQueue {
   void _handleResponded(AuthReply data) async {
     // Check if Sent Back Contact
     print(data.toString());
+
+    if (data.type == AuthReply_Type.FlatContact) {
+      HapticFeedback.heavyImpact();
+      SonrOverlay.flatReply(data);
+    }
 
     if (data.type == AuthReply_Type.Contact) {
       HapticFeedback.vibrate();
