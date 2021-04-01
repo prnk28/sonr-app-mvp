@@ -206,18 +206,16 @@ class SonrService extends GetxService with TransferQueue {
     if (SonrOverlay.isNotOpen) {
       HapticFeedback.heavyImpact();
       // Check for Flat
-      if(data.isFlat && data.payload == Payload.CONTACT){
-
+      if (data.isFlat && data.payload == Payload.CONTACT) {
+        FlatMode.receiving(data.card);
+      } else {
+        SonrOverlay.invite(data);
       }
-      SonrOverlay.invite(data);
     }
   }
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
-    // Check if Sent Back Contact
-    print(data.toString());
-
     if (data.type == AuthReply_Type.FlatContact) {
       HapticFeedback.heavyImpact();
       FlatMode.incoming(data.card);

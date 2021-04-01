@@ -33,17 +33,13 @@ class PeerBubble extends StatelessWidget {
 
   // @ Builds Peer Info for Peer
   Widget _buildPeerInfo(PeerController controller) {
-    return PlayAnimation<double>(
-        tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
+    return OpacityAnimatedWidget(
+        values: controller.isVisible.value ? [0, 1] : [1, 0],
         duration: Duration(milliseconds: 250),
         delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-        builder: (context, child, value) => AnimatedOpacity(
-              opacity: value,
-              duration: Duration(milliseconds: 250),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                controller.peer.initials,
-              ]),
-            ));
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          controller.peer.initials,
+        ]));
   }
 }
 

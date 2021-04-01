@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:animated_widgets/animated_widgets.dart';
 import '../theme.dart';
 
 enum FlatModeState { Standby, Dragging, Outgoing, Empty, Pending, Incoming, Exchanging, Done }
@@ -83,7 +81,7 @@ class _FlatModeView extends StatelessWidget {
 
 class _FlatModeController extends GetxController {
   // Properties
-  final animation = RxList<Offset>();
+  final animation = RxList<Offset>([Offset(0, 0)]);
   final received = Rx<Contact>();
   final status = Rx<FlatModeState>(FlatModeState.Standby);
 

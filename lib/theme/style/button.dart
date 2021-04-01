@@ -801,8 +801,7 @@ class _ColorButtonState extends State<ColorButton> {
         hasTapUp = true;
         _resetIfTapUp();
       },
-      child: ControlAnimated(
-        //isShaking: this.longPressed,
+      child: AnimatedScale(
         scale: this.pressed ? widget.pressedScale : 1.0,
         child: AnimatedContainer(
           decoration: widget.decoration,

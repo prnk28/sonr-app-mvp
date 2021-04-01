@@ -48,16 +48,10 @@ class _AppState extends State<App> {
               ),
 
               // @ Fade Animation of Text
-              PlayAnimation<double>(
-                  tween: (0.0).tweenTo(1.0),
+              OpacityAnimatedWidget(
                   duration: 400.milliseconds,
                   delay: 1.seconds,
-                  builder: (context, child, value) {
-                    return AnimatedOpacity(
-                        opacity: value,
-                        duration: 400.milliseconds,
-                        child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white)));
-                  }),
+                  child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white))),
             ],
           )),
     );
