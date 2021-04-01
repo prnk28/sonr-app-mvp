@@ -20,8 +20,8 @@ class ContactCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Invite Dialog View ** //
-  factory ContactCard.flat(Contact contact, {double scale = 1.0}) {
-    return ContactCard(CardType.InviteFlat, contact: contact, scale: scale);
+  factory ContactCard.flat(Contact contact, {double scale = 1.0, Key key}) {
+    return ContactCard(CardType.InviteFlat, contact: contact, scale: scale, key: key);
   }
 
   // ** Factory -> Invite Dialog View ** //
@@ -63,7 +63,7 @@ class ContactCard extends GetWidget<TransferCardController> {
 class _ContactFlatView extends StatelessWidget {
   final double scale;
   final Contact contact;
-  _ContactFlatView(this.contact, this.scale);
+  _ContactFlatView(this.contact, this.scale, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(

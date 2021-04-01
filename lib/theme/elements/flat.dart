@@ -1,19 +1,34 @@
-// ^ Class Builds Flat Overlay View ** //
 import 'dart:async';
 
 import 'package:animated_widgets/animated_widgets.dart';
 import '../theme.dart';
 
-enum FlatModeState { Standby, Dragging, Animate, Pending, Empty, Done }
+enum FlatModeState { Standby, Dragging, Outgoing, Empty, Pending, Incoming, Exchanging, Done }
+
+class FlatMode {
+  static outgoing() {
+    Get.dialog(_FlatModeView(), barrierColor: Colors.transparent, barrierDismissible: false, useSafeArea: false);
+  }
+
+  static incoming(TransferCard data) {
+    Get.find<_FlatModeController>().animateIn(data.contact);
+  }
+
+  static receiving(TransferCard data) {
+    Get.find<_FlatModeController>().animateIn(data.contact);
+  }
+}
+
 const K_TRANSLATE_DELAY = const Duration(milliseconds: 50);
 const K_TRANSLATE_DURATION = const Duration(milliseconds: 300);
 
-class FlatModeView extends StatelessWidget {
+// ^ Class Builds Flat Overlay View ** //
+class _FlatModeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<_FlatModeController>(
-      global: false,
       init: _FlatModeController(),
+      autoRemove: false,
       builder: (controller) {
         return Container(
             width: Get.width,
@@ -21,48 +36,66 @@ class FlatModeView extends StatelessWidget {
             color: Colors.black87,
             child: Stack(alignment: Alignment.bottomCenter, children: [
               TranslationAnimatedWidget(
-                enabled: controller.isAnimatingOut,
+                enabled: controller.isAnimating,
                 delay: K_TRANSLATE_DELAY,
                 duration: K_TRANSLATE_DURATION,
                 curve: Curves.easeIn,
-                values: [
-                  Offset(0, -1 * controller.lastYPos.value), // disabled value value
-                  Offset(0, (-1 * Get.height)) //enabled value
-                ],
-                child: Draggable(
-                  child: ContactCard.flat(UserService.current.contact, scale: 0.9),
-                  feedback: ContactCard.flat(UserService.current.contact, scale: 0.9),
-                  childWhenDragging: Container(),
-                  axis: Axis.vertical,
-                  onDragUpdate: (details) {
-                    if (details.globalPosition.dy >= Get.height * 0.6) {
-                      HapticFeedback.heavyImpact();
-                      controller.setDragging(true);
-                    } else {
-                      controller.animateOut(details.globalPosition.dy);
-                    }
-                  },
-                  onDragCompleted: () {
-                    controller.setDragging(false);
-                  },
-                ),
+                values: controller.animation,
+                child: controller.isIncoming
+                    ? ContactCard.flat(controller.received.value, scale: 0.9)
+                    : SonrAnimatedSwitcher.slideDown(
+                        child: controller.hasReceived
+                            ? ContactCard.flat(controller.received.value, key: ValueKey<bool>(controller.hasReceived))
+                            : Draggable(
+                                child: ContactCard.flat(UserService.current.contact, scale: 0.9),
+                                feedback: ContactCard.flat(UserService.current.contact, scale: 0.9),
+                                childWhenDragging: Container(),
+                                axis: Axis.vertical,
+                                onDragUpdate: (details) {
+                                  if (details.globalPosition.dy >= Get.height * 0.6) {
+                                    HapticFeedback.heavyImpact();
+                                    controller.setDragging(true);
+                                  } else {
+                                    controller.animateOut(details.globalPosition.dy);
+                                  }
+                                },
+                                onDragCompleted: () {
+                                  controller.setDragging(false);
+                                },
+                              ),
+                      ),
               )
             ]));
       },
     );
   }
+
+  _buildView(_FlatModeController controller) {
+    if (controller.status.value == FlatModeState.Incoming ||
+        controller.status.value == FlatModeState.Outgoing ||
+        controller.status.value == FlatModeState.Exchanging) {
+    } else if (controller.status.value == FlatModeState.Exchanging) {
+      return SonrAnimatedSwitcher.slideDown(
+          child: controller.hasReceived ? ContactCard.flat(controller.received.value) : ContactCard.flat(controller.received.value));
+    }
+  }
 }
 
 class _FlatModeController extends GetxController {
   // Properties
-  final lastYPos = 0.0.obs;
+  final animation = RxList<Offset>();
+  final received = Rx<Contact>();
   final status = Rx<FlatModeState>(FlatModeState.Standby);
 
   // Status Checkers
+  bool get hasReceived => received.value != null;
+  bool get isExchanging => status.value == FlatModeState.Exchanging;
   bool get isStandby => status.value == FlatModeState.Standby;
   bool get isDragging => status.value == FlatModeState.Dragging;
-  bool get isAnimatingOut => status.value == FlatModeState.Animate;
+  bool get isAnimating => status.value == FlatModeState.Outgoing || status.value == FlatModeState.Incoming;
   bool get isPending => status.value == FlatModeState.Pending;
+  bool get isIncoming => status.value == FlatModeState.Incoming;
+  bool get isComplete => status.value == FlatModeState.Done;
 
   // References
   StreamSubscription<bool> _isFlatStream;
@@ -81,10 +114,37 @@ class _FlatModeController extends GetxController {
     super.onClose();
   }
 
-  // ^ Method to Animate out View ^ //
+  // ^ Method to Animate in Responded Card ^ //
+  animateIn(Contact card) {
+    received(card);
+    animation([
+      Offset(0, 1 * Get.height), // disabled value value
+      Offset(0, (1 * Get.height / 2))
+    ]);
+    animation.refresh();
+    status(FlatModeState.Incoming);
+    Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
+      status(FlatModeState.Done);
+    });
+  }
+
+  // ^ Method to Animate in Responded Card ^ //
+  animateInOut(Contact card) {
+    received(card);
+    status(FlatModeState.Exchanging);
+    Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
+      status(FlatModeState.Done);
+    });
+  }
+
+  // ^ Method to Animate out Sent Card ^ //
   animateOut(double lastY) {
-    lastYPos(lastY);
-    status(FlatModeState.Animate);
+    animation([
+      Offset(0, -1 * lastY), // disabled value value
+      Offset(0, (-1 * Get.height))
+    ]);
+    animation.refresh();
+    status(FlatModeState.Outgoing);
     Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
       if (LobbyService.localFlatPeers.length == 0) {
         Get.back();
@@ -93,6 +153,8 @@ class _FlatModeController extends GetxController {
         var result = Get.find<LobbyService>().sendFlatMode(LobbyService.localFlatPeers.values.first);
         if (!result) {
           status(FlatModeState.Standby);
+        } else {
+          status(FlatModeState.Pending);
         }
       } else {
         status(FlatModeState.Standby);

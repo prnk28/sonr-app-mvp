@@ -9,7 +9,6 @@ import 'package:sonr_core/sonr_core.dart';
 import '../theme.dart';
 import 'form.dart';
 
-
 // ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
   // Fixed Properties
@@ -161,40 +160,6 @@ class SonrOverlay extends GetxService {
           SonrOffset.fromDegrees(reply.from.position.facingAntipodal),
           entryDuration,
           barrierDismissible,
-          _InviteReplyOverlayView(
-            count,
-            true,
-            reply: reply,
-          ));
-
-      // Add Overlay to List
-      _controller.currentOverlay(cardOverlay);
-      _controller.overlays.add(cardOverlay);
-    }
-  }
-
-  // ^ Method Finds Overlay Controller to Show Flat Contact Reply ^ //
-  static void flatInvite(
-      {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center, Duration entryDuration = const Duration(milliseconds: 350)}) {
-    if (!isOpen) {
-      // Create Overlay
-      var cardOverlay = _SonrFixedOverlayEntry(SonrOffset.Top, entryDuration, true, FlatModeView());
-
-      // Add Overlay to List
-      _controller.currentOverlay(cardOverlay);
-      _controller.overlays.add(cardOverlay);
-    }
-  }
-
-  // ^ Method Finds Overlay Controller to Show Flat Contact Reply ^ //
-  static void flatReply(AuthReply reply,
-      {MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center, Duration entryDuration = const Duration(milliseconds: 350)}) {
-    if (!isOpen) {
-      // Create Overlay
-      var cardOverlay = _SonrFixedOverlayEntry(
-          SonrOffset.Top,
-          entryDuration,
-          true,
           _InviteReplyOverlayView(
             count,
             true,
@@ -575,11 +540,7 @@ class _InviteReplyOverlayView extends StatelessWidget {
       if (invite.payload == Payload.MEDIA) {
         view = MediaCard.invite(invite);
       } else if (invite.payload == Payload.CONTACT) {
-        if (invite.isFlat) {
-          return ContactCard.flat(invite.card.contact);
-        } else {
-          view = ContactCard.invite(invite);
-        }
+        view = ContactCard.invite(invite);
       } else if (invite.payload == Payload.URL) {
         view = URLCard.invite(invite);
       } else {
@@ -589,11 +550,7 @@ class _InviteReplyOverlayView extends StatelessWidget {
 
     // Reply Provided
     else {
-      if (reply.type == AuthReply_Type.FlatContact) {
-        return ContactCard.flat(reply.card.contact);
-      } else {
-        view = ContactCard.reply(reply);
-      }
+      view = ContactCard.reply(reply);
     }
 
     // Build View
@@ -666,4 +623,3 @@ class _QuestionOverlayView extends GetView<SonrOverlay> {
     );
   }
 }
-

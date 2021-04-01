@@ -133,8 +133,7 @@ class LobbyService extends GetxService {
 
           // Present View
           if (_localFlatPeers.length > 0 && !_flatModeCancelled.value) {
-            SonrOverlay.flatInvite();
-            Get.dialog(FlatModeView(), barrierColor: Colors.transparent, barrierDismissible: false, useSafeArea: false);
+            FlatMode.outgoing();
           } else {
             _resetTimer();
           }
