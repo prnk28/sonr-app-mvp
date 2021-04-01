@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:sonr_app/modules/transfer/flat_overlay.dart';
@@ -42,12 +43,36 @@ class LobbyService extends GetxService {
   }
 
   // ^ Method to Cancel Flat Mode ^ //
-  void sendFlatMode() {
-    _flatModeCancelled(true);
-    _resetTimer();
-    Future.delayed(15.seconds, () {
-      _flatModeCancelled(false);
-    });
+  bool sendFlatMode(Peer peer) {
+    if (isFacingPeer(peer)) {
+      // Send Invite
+      SonrService.queueContact();
+      SonrService.inviteWithPeer(peer);
+
+      // Reset Timers
+      _flatModeCancelled(true);
+      _resetTimer();
+      Future.delayed(15.seconds, () {
+        _flatModeCancelled(false);
+      });
+
+      SonrSnack.success("Sent Contact to ${LobbyService.localFlatPeers.values.first.profile.firstName}");
+      Get.back();
+      return true;
+    }
+    SonrSnack.error("Not facing any peers.");
+    return false;
+  }
+
+  // ^ Method to Check if Peers are Facing each other ^ //
+  bool isFacingPeer(Peer peer) {
+    // Set Designation with Heading Vals
+    var adjustedDesignation = (((DeviceService.direction.value.heading - peer.position.headingAntipodal).abs() / 11.25) + 0.25).toInt();
+    print("Adjusted: " + adjustedDesignation.toString());
+
+    var diffDesg = Position_Designation.values[(adjustedDesignation % 32)];
+    print("Difference: " + diffDesg.toString());
+    return diffDesg.isFacing(peer.position.proximity);
   }
 
   // # Handle Lobby Update //
@@ -83,11 +108,11 @@ class LobbyService extends GetxService {
   // # Handle Incoming Acceleromter Stream
   void _handleAccelStream(AccelerometerEvent data) {
     if (!_flatModeCancelled.value) {
-      var newIsFacingFlat = data.y < 2.6;
+      var newIsFacingFlat = data.y < 2.75;
       if (newIsFacingFlat != _lastIsFacingFlat.value) {
         if (newIsFacingFlat) {
           _startTimer();
-          _lastIsFacingFlat(data.y < 2.6);
+          _lastIsFacingFlat(data.y < 2.75);
         } else {
           _resetTimer();
         }
@@ -109,7 +134,11 @@ class LobbyService extends GetxService {
           SonrService.setFlatMode(true);
 
           // Present View
-          Get.dialog(FlatModeView(), barrierColor: Colors.transparent, barrierDismissible: false, useSafeArea: false);
+          if (_localFlatPeers.length > 0) {
+            Get.dialog(FlatModeView(), barrierColor: Colors.transparent, barrierDismissible: false, useSafeArea: false);
+          } else {
+            _resetTimer();
+          }
         } else {
           _resetTimer();
         }

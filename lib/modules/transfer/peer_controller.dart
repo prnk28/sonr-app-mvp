@@ -102,7 +102,7 @@ class PeerController extends GetxController {
   invite() {
     if (!_isInvited) {
       // Perform Invite
-      SonrService.invite(this);
+      SonrService.inviteWithController(this);
       Get.find<TransferController>().setFacingPeer(false);
 
       // Check for File

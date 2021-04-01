@@ -173,7 +173,7 @@ class _PeerListItemState extends State<PeerListItem> {
                 Padding(padding: EdgeInsets.all(8)),
                 ColorButton.primary(
                   onPressed: () {
-                    SonrService.inviteFromList(widget.peer);
+                    SonrService.inviteWithPeer(widget.peer);
                   },
                   text: "Invite",
                   icon: SonrIcon.invite,

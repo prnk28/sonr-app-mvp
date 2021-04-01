@@ -102,6 +102,7 @@ class TransferQueue {
 
 class TransferQueueItem {
   // Properties
+  final bool isFlat;
   final bool isMultiple;
   final progress = 0.0.obs;
   final Payload payload;
@@ -140,8 +141,8 @@ class TransferQueueItem {
     }
   }
 
-  factory TransferQueueItem.contact() {
-    return TransferQueueItem(Payload.CONTACT);
+  factory TransferQueueItem.contact({bool isFlat = false}) {
+    return TransferQueueItem(Payload.CONTACT, isFlat: isFlat);
   }
 
   factory TransferQueueItem.media(MediaFile media) {
@@ -163,7 +164,7 @@ class TransferQueueItem {
   }
 
   // * Constructer * //
-  TransferQueueItem(this.payload, {this.url, this.media, this.files, this.isMultiple = false});
+  TransferQueueItem(this.payload, {this.url, this.media, this.files, this.isMultiple = false, this.isFlat = false});
 
   // ^ Peer Decided on Invite ^ //
   Future<bool> setDecision(bool decision) async {

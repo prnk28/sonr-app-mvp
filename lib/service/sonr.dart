@@ -94,9 +94,9 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Set Payload for Contact ^ //
-  static queueContact() async {
+  static queueContact({bool isFlat = false}) async {
     // - Check Connected -
-    to.addToQueue(TransferQueueItem.contact());
+    to.addToQueue(TransferQueueItem.contact(isFlat: isFlat));
   }
 
   // ^ Set Payload for URL Link ^ //
@@ -117,7 +117,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
-  static invite(PeerController c) async {
+  static inviteWithController(PeerController c) async {
     // Set Peer Controller
     to.currentInvited(c);
 
@@ -129,7 +129,7 @@ class SonrService extends GetxService with TransferQueue {
 
     // Contact Payload
     else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(c.peer);
+      await to._node.inviteContact(c.peer, isFlat: to.currentTransfer.isFlat);
     }
 
     // Link Payload
@@ -145,7 +145,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
-  static inviteFromList(Peer p) async {
+  static inviteWithPeer(Peer p) async {
     // Set Peer Controller
     to.currentInvitedFromList(p);
 
