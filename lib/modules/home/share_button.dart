@@ -16,8 +16,8 @@ class ShareButton extends StatelessWidget {
           return Align(
             alignment: controller.state.value.alignment,
             child: AnimatedContainer(
-                curve: Curves.easeInBack,
-                duration: const Duration(milliseconds: 200),
+                curve: Curves.bounceOut,
+                duration: Duration(milliseconds: 600),
                 padding: EdgeInsetsDirectional.only(start: 30),
                 width: controller.state.value.width,
                 height: controller.state.value.height,
@@ -63,6 +63,7 @@ class _ExpandedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpacityAnimatedWidget(
+      enabled: true,
       duration: 150.milliseconds,
       delay: 150.milliseconds,
       child: NeumorphicTheme(
@@ -89,6 +90,7 @@ class _RemoteView extends StatelessWidget {
     final FocusNode second = FocusNode();
     final FocusNode third = FocusNode();
     return OpacityAnimatedWidget(
+      enabled: true,
       duration: 150.milliseconds,
       delay: 150.milliseconds,
       child: NeumorphicTheme(

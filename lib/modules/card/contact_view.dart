@@ -97,39 +97,41 @@ class _ContactFlatView extends StatelessWidget {
               Padding(padding: EdgeInsets.all(4)),
 
               // Quick Actions
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: ShapeButton.circle(
-                      depth: 4,
-                      onPressed: () {},
-                      text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
-                      icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
-                      iconPosition: WidgetPosition.Top),
-                ),
-                Padding(padding: EdgeInsets.all(6)),
-                SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: ShapeButton.circle(
-                      depth: 4,
-                      onPressed: () {},
-                      text: SonrText.medium("Text", size: 12, color: Colors.black45),
-                      icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
-                      iconPosition: WidgetPosition.Top),
-                ),
-                Padding(padding: EdgeInsets.all(6)),
-                SizedBox(
+              Container(
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  SizedBox(
                     width: 78,
                     height: 78,
                     child: ShapeButton.circle(
                         depth: 4,
                         onPressed: () {},
-                        text: SonrText.medium("Video", size: 12, color: Colors.black45),
-                        icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
-                        iconPosition: WidgetPosition.Top)),
-              ]),
+                        text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
+                        icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
+                        iconPosition: WidgetPosition.Top),
+                  ),
+                  Padding(padding: EdgeInsets.all(6)),
+                  SizedBox(
+                    width: 78,
+                    height: 78,
+                    child: ShapeButton.circle(
+                        depth: 4,
+                        onPressed: () {},
+                        text: SonrText.medium("Text", size: 12, color: Colors.black45),
+                        icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
+                        iconPosition: WidgetPosition.Top),
+                  ),
+                  Padding(padding: EdgeInsets.all(6)),
+                  SizedBox(
+                      width: 78,
+                      height: 78,
+                      child: ShapeButton.circle(
+                          depth: 4,
+                          onPressed: () {},
+                          text: SonrText.medium("Video", size: 12, color: Colors.black45),
+                          icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
+                          iconPosition: WidgetPosition.Top)),
+                ]),
+              ),
 
               Divider(),
               Padding(padding: EdgeInsets.all(4)),

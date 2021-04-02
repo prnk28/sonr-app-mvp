@@ -49,6 +49,7 @@ class _AppState extends State<App> {
 
               // @ Fade Animation of Text
               OpacityAnimatedWidget(
+                  enabled: true,
                   duration: 400.milliseconds,
                   delay: 1.seconds,
                   child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white))),

@@ -1,26 +1,30 @@
 import 'dart:async';
 import '../theme.dart';
 
-enum FlatModeState { Standby, Dragging, Outgoing, Empty, Pending, Incoming, Exchanging, Done }
+enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
+enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown }
 
+// ** Flat Mode Handler ** //
 class FlatMode {
   static outgoing() {
-    Get.dialog(_FlatModeView(), barrierColor: Colors.transparent, barrierDismissible: false, useSafeArea: false);
+    if (!Get.isDialogOpen) {
+      Get.dialog(_FlatModeView(), barrierColor: Colors.transparent,  useSafeArea: false);
+    }
   }
 
-  static incoming(TransferCard data) {
-    Get.find<_FlatModeController>().animateIn(data.contact);
+  static response(TransferCard data) {
+    Get.find<_FlatModeController>().animateIn(data.contact, delayModifier: 2);
   }
 
-  static receiving(TransferCard data) {
-    Get.find<_FlatModeController>().animateIn(data.contact);
+  static invite(TransferCard data) {
+    Get.find<_FlatModeController>().animateIn(data.contact, isReceiving: true);
   }
 }
 
-const K_TRANSLATE_DELAY = const Duration(milliseconds: 50);
-const K_TRANSLATE_DURATION = const Duration(milliseconds: 300);
+const K_TRANSLATE_DELAY = const Duration(milliseconds: 150);
+const K_TRANSLATE_DURATION = const Duration(milliseconds: 600);
 
-// ^ Class Builds Flat Overlay View ** //
+// ** Flat Mode View ** //
 class _FlatModeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -32,68 +36,57 @@ class _FlatModeView extends StatelessWidget {
             width: Get.width,
             height: Get.height,
             color: Colors.black87,
-            child: Stack(alignment: Alignment.bottomCenter, children: [
-              TranslationAnimatedWidget(
-                enabled: controller.isAnimating,
-                delay: K_TRANSLATE_DELAY,
+            padding: EdgeInsets.all(24),
+            child: AnimatedSwitcher(
                 duration: K_TRANSLATE_DURATION,
-                curve: Curves.easeIn,
-                values: controller.animation,
-                child: controller.isIncoming
-                    ? ContactCard.flat(controller.received.value, scale: 0.9)
-                    : SonrAnimatedSwitcher.slideDown(
-                        child: controller.hasReceived
-                            ? ContactCard.flat(controller.received.value, key: ValueKey<bool>(controller.hasReceived))
-                            : Draggable(
-                                child: ContactCard.flat(UserService.current.contact, scale: 0.9),
-                                feedback: ContactCard.flat(UserService.current.contact, scale: 0.9),
-                                childWhenDragging: Container(),
-                                axis: Axis.vertical,
-                                onDragUpdate: (details) {
-                                  if (details.globalPosition.dy >= Get.height * 0.6) {
-                                    HapticFeedback.heavyImpact();
-                                    controller.setDragging(true);
-                                  } else {
-                                    controller.animateOut(details.globalPosition.dy);
-                                  }
-                                },
-                                onDragCompleted: () {
-                                  controller.setDragging(false);
-                                },
-                              ),
-                      ),
-              )
-            ]));
+                switchOutCurve: controller.animation.value.switchOutCurve,
+                switchInCurve: controller.animation.value.switchInCurve,
+                transitionBuilder: controller.animation.value.transition(),
+                layoutBuilder: controller.animation.value.layout(),
+                child: _buildChild(controller)));
       },
     );
   }
 
-  _buildView(_FlatModeController controller) {
-    if (controller.status.value == FlatModeState.Incoming ||
-        controller.status.value == FlatModeState.Outgoing ||
-        controller.status.value == FlatModeState.Exchanging) {
-    } else if (controller.status.value == FlatModeState.Exchanging) {
-      return SonrAnimatedSwitcher.slideDown(
-          child: controller.hasReceived ? ContactCard.flat(controller.received.value) : ContactCard.flat(controller.received.value));
+  // # Build Stack Child View for Flat View //
+  Widget _buildChild(_FlatModeController controller) {
+    if (controller.isIncoming) {
+      return ContactCard.flat(controller.received.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+    } else if (controller.isPending) {
+      return Container(key: ValueKey<FlatModeState>(controller.status.value));
+    } else if (controller.isReceiving) {
+      return ContactCard.flat(UserService.current.contact, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+    } else {
+      return Draggable(
+        key: ValueKey<FlatModeState>(controller.status.value),
+        child: ContactCard.flat(UserService.current.contact, scale: 0.9),
+        feedback: ContactCard.flat(UserService.current.contact, scale: 0.9),
+        childWhenDragging: Container(),
+        axis: Axis.vertical,
+        onDragUpdate: (details) {
+          controller.setDrag(details.globalPosition.dy);
+        },
+      );
     }
   }
 }
 
+// ** Reactive Flat Mode Controller ** //
 class _FlatModeController extends GetxController {
   // Properties
-  final animation = RxList<Offset>([Offset(0, 0)]);
   final received = Rx<Contact>();
   final status = Rx<FlatModeState>(FlatModeState.Standby);
+  final animation = Rx<_FlatModeAnimation>(_FlatModeAnimation(FlatModeTransition.Standby));
+  final transition = Rx<FlatModeTransition>(FlatModeTransition.Standby);
 
   // Status Checkers
   bool get hasReceived => received.value != null;
-  bool get isExchanging => status.value == FlatModeState.Exchanging;
   bool get isStandby => status.value == FlatModeState.Standby;
   bool get isDragging => status.value == FlatModeState.Dragging;
-  bool get isAnimating => status.value == FlatModeState.Outgoing || status.value == FlatModeState.Incoming;
   bool get isPending => status.value == FlatModeState.Pending;
+  bool get isReceiving => status.value == FlatModeState.Receiving;
   bool get isIncoming => status.value == FlatModeState.Incoming;
-  bool get isComplete => status.value == FlatModeState.Done;
+  bool get isDone => status.value == FlatModeState.Done;
 
   // References
   StreamSubscription<bool> _isFlatStream;
@@ -113,66 +106,51 @@ class _FlatModeController extends GetxController {
   }
 
   // ^ Method to Animate in Responded Card ^ //
-  animateIn(Contact card) {
+  animateIn(Contact card, {double delayModifier = 1.0, bool isReceiving = false}) {
     received(card);
-    animation([
-      Offset(0, 1 * Get.height), // disabled value value
-      Offset(0, (1 * Get.height / 2))
-    ]);
-    animation.refresh();
-    status(FlatModeState.Incoming);
-    Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
-      status(FlatModeState.Done);
-    });
-  }
-
-  // ^ Method to Animate in Responded Card ^ //
-  animateInOut(Contact card) {
-    received(card);
-    status(FlatModeState.Exchanging);
-    Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
-      status(FlatModeState.Done);
-    });
-  }
-
-  // ^ Method to Animate out Sent Card ^ //
-  animateOut(double lastY) {
-    animation([
-      Offset(0, -1 * lastY), // disabled value value
-      Offset(0, (-1 * Get.height))
-    ]);
-    animation.refresh();
-    status(FlatModeState.Outgoing);
-    Future.delayed(K_TRANSLATE_DURATION + K_TRANSLATE_DELAY, () {
-      if (LobbyService.localFlatPeers.length == 0) {
-        Get.back();
-        SonrSnack.error("No Peers in Flat Mode");
-      } else if (LobbyService.localFlatPeers.length == 1) {
-        var result = Get.find<LobbyService>().sendFlatMode(LobbyService.localFlatPeers.values.first);
-        if (!result) {
-          status(FlatModeState.Standby);
-        } else {
-          status(FlatModeState.Pending);
-        }
-      } else {
-        status(FlatModeState.Standby);
-        SonrSnack.error("Too Many Peers in Flat Mode");
-      }
-    });
-  }
-
-  // ^ Method to Animate out View ^ //
-  setDragging(bool dragging) {
-    // Set to Dragging if Standby
-    if (dragging && status.value == FlatModeState.Standby) {
-      status(FlatModeState.Dragging);
+    if (isReceiving) {
+      transition(FlatModeTransition.SlideDown);
+      animation(_FlatModeAnimation(transition.value));
+      status(FlatModeState.Receiving);
     }
+    Future.delayed(K_TRANSLATE_DURATION * delayModifier, () {
+      if (isReceiving) {
+              status(FlatModeState.Pending);
+      }
+      transition(FlatModeTransition.SlideIn);
+      animation(_FlatModeAnimation(transition.value));
+      status(FlatModeState.Incoming);
+    });
+  }
 
-    // Reset State if Not Animating
-    if (!dragging) {
-      Future.delayed(30.milliseconds, () {
-        status(FlatModeState.Standby);
-      });
+  // ^ Method to Animate out Sent Card  and Update Drage Position ^ //
+  setDrag(double y) {
+    // @ Check for Valid State
+    if (status.value == FlatModeState.Dragging || status.value == FlatModeState.Standby) {
+      // # Before Drag Threshold
+      if (y >= Get.height * 0.8) {
+        HapticFeedback.heavyImpact();
+        status(FlatModeState.Dragging);
+      }
+      // # Reached Drag Threshold
+      else {
+        status(FlatModeState.Outgoing);
+        transition(FlatModeTransition.SlideOut);
+        animation(_FlatModeAnimation(transition.value));
+        // No Peers
+        if (LobbyService.localFlatPeers.length == 0) {
+          Get.back();
+          SonrSnack.error("No Peers in Flat Mode");
+        } else if (LobbyService.localFlatPeers.length == 1) {
+          if (Get.find<LobbyService>().sendFlatMode(LobbyService.localFlatPeers.values.first)) {
+            Future.delayed(K_TRANSLATE_DURATION, () {
+              status(FlatModeState.Pending);
+            });
+          }
+        } else {
+          SonrSnack.error("Too Many Peers in Flat Mode");
+        }
+      }
     }
   }
 
@@ -181,5 +159,79 @@ class _FlatModeController extends GetxController {
     if (!status && isStandby) {
       Get.back();
     }
+  }
+}
+
+// ^ Method Builds Slide Transition ^ //
+class _FlatModeAnimation {
+  final FlatModeTransition type;
+  _FlatModeAnimation(this.type);
+
+  Curve get switchOutCurve {
+    return Curves.easeOut;
+  }
+
+  Curve get switchInCurve {
+    return Curves.easeIn;
+  }
+
+  // # Helper to Find End Offset
+  TweenSequence<Offset> _buildTweenSequence() {
+    switch (this.type) {
+      // @ Slide In
+      case FlatModeTransition.SlideIn:
+        return TweenSequence([
+          TweenSequenceItem(tween: Offset(0, -1).tweenTo(Offset(0.0, 0.0)), weight: 1),
+          TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
+        ]);
+        break;
+
+      // @ Slide Out
+      case FlatModeTransition.SlideOut:
+        return TweenSequence([
+          TweenSequenceItem(tween: Offset(0, 0.5).tweenTo(Offset(0.0, -1)), weight: 1),
+          TweenSequenceItem(tween: ConstantTween(Offset(0.0, -1)), weight: 1),
+        ]);
+
+      // @ Slide Down
+      case FlatModeTransition.SlideDown:
+        return TweenSequence([
+          TweenSequenceItem(tween: Offset(0, 0.0).tweenTo(Offset(0.0, 1)), weight: 1),
+          TweenSequenceItem(tween: ConstantTween(Offset(0.0, 1)), weight: 1),
+        ]);
+
+      default:
+        return TweenSequence([TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1)]);
+        break;
+    }
+  }
+
+  // # Switcher Transition Method
+  Widget Function(Widget, Animation<double>) transition() {
+    return (Widget child, Animation<double> animation) {
+      final offsetAnimation = _buildTweenSequence().animate(animation);
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    };
+  }
+
+  // # Switcher Layout Method
+  Widget Function(Widget currentChild, List<Widget> previousChildren) layout() {
+    return (Widget currentChild, List<Widget> previousChildren) {
+      if (type == FlatModeTransition.SlideIn || type == FlatModeTransition.SlideDown) {
+        List<Widget> children = previousChildren;
+        if (currentChild != null) children = children.toList()..add(currentChild);
+        return Stack(
+          children: children,
+          alignment: Alignment.center,
+        );
+      } else if (type == FlatModeTransition.Standby) {
+        return Align(alignment: Alignment.bottomCenter, child: Container(child: currentChild, padding: EdgeInsetsX.bottom(48)));
+      } else {
+        return Center(child: currentChild);
+      }
+    };
   }
 }
