@@ -21,7 +21,7 @@ class PeerController extends GetxController {
   final isVisible = true.obs;
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
-  final position = Rx<VectorPosition>();
+  final peerVector = Rx<VectorPosition>();
   final userVector = Rx<VectorPosition>();
 
   // References
@@ -36,16 +36,18 @@ class PeerController extends GetxController {
 
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
-  StreamSubscription<Lobby> peerStream;
+  StreamSubscription<Peer> peerStream;
   StreamSubscription<VectorPosition> userStream;
   PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
-    position(VectorPosition(peer.position));
+    peerVector(VectorPosition(peer.position));
+    userVector(LobbyService.userPosition.value);
+
     if (peer.isOnDesktop) {
       offset(Offset.zero);
     } else {
-      offset(position.value.offsetFromVector(userVector.value));
+      offset(peerVector.value.offsetAgainstVector(userVector.value));
     }
   }
 
@@ -81,12 +83,8 @@ class PeerController extends GetxController {
       }
     }
 
-    // Set Initial Values
-    _handleUserUpdate(LobbyService.userPosition.value);
-    _handlePeerUpdate(LobbyService.local.value);
-
     // Add Stream Handlers
-    peerStream = LobbyService.local.listen(_handlePeerUpdate);
+    peerStream = LobbyService.listenToPeer(peer, _handlePeerUpdate);
     userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     super.onInit();
   }
@@ -99,7 +97,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle User Invitation ^
-  invite() {
+  void invite() {
     if (!_isInvited) {
       // Perform Invite
       SonrService.inviteWithController(this);
@@ -118,13 +116,13 @@ class PeerController extends GetxController {
   }
 
   // ^ Toggle Expanded View
-  expandDetails() {
+  void expandDetails() {
     Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.DialogBackground);
     HapticFeedback.heavyImpact();
   }
 
   // ^ Handle Accepted ^
-  playAccepted() async {
+  void playAccepted() async {
     // Update Visibility
     isVisible(false);
 
@@ -140,7 +138,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Denied ^
-  playDenied() async {
+  void playDenied() async {
     // Start Animation
     _pending.instance.animation.loop = Loop.oneShot;
     _denied.isActive = _hasDenied = !_hasDenied;
@@ -153,7 +151,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Completed ^
-  playCompleted() async {
+  void playCompleted() async {
     // Update Visibility
     isVisible(true);
     hasCompleted(true);
@@ -170,23 +168,20 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Peer Position ^ //
-  _handlePeerUpdate(Lobby lobby) {
+  void _handlePeerUpdate(Peer peer) {
     if (!hasCompleted.value) {
-      // Initialize
-      lobby.peers.forEach((id, value) {
-        // Update Direction
-        if (id == peer.id.peer && !_isInvited) {
-          position(VectorPosition(value.position));
+      // Update Direction
+      if (peer.id.peer == peer.id.peer && !_isInvited) {
+        peerVector(VectorPosition(peer.position));
 
-          // Handle Changes
-          _handleFacingUpdate();
-        }
-      });
+        // Handle Changes
+        _handleFacingUpdate();
+      }
     }
   }
 
   // ^ Handle Peer Position ^ //
-  _handleUserUpdate(VectorPosition pos) {
+  void _handleUserUpdate(VectorPosition pos) {
     if (!hasCompleted.value) {
       // Initialize
       userVector(pos);
@@ -195,18 +190,18 @@ class PeerController extends GetxController {
       if (peer.isOnDesktop) {
         offset(Offset.zero);
       } else {
-        offset(position.value.offsetFromVector(userVector.value));
+        offset(peerVector.value.offsetAgainstVector(userVector.value));
       }
 
       // Check if Facing
-      var newIsFacing = position.value.isPointing(userVector.value);
+      var newIsFacing = userVector.value.isPointingAt(peerVector.value);
       if (isFacing.value != newIsFacing) {
         // Check if Device Permits PointToShare
         if (UserService.pointShareEnabled) {
           // Check New Result
           if (newIsFacing) {
             _startTimer();
-            isFacing(position.value.isPointing(userVector.value));
+            isFacing(userVector.value.isPointingAt(peerVector.value));
           } else {
             _stopTimer();
           }
@@ -216,23 +211,23 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Facing Check ^ //
-  _handleFacingUpdate() {
+  void _handleFacingUpdate() {
     // Find Offset
     if (peer.isOnDesktop) {
       offset(Offset.zero);
     } else {
-      offset(position.value.offsetFromVector(userVector.value));
+      offset(peerVector.value.offsetAgainstVector(userVector.value));
     }
 
     // Check if Facing
-    var newIsFacing = position.value.isPointing(userVector.value);
+    var newIsFacing = userVector.value.isPointingAt(peerVector.value);
     if (isFacing.value != newIsFacing) {
       // Check if Device Permits PointToShare
       if (UserService.pointShareEnabled) {
         // Check New Result
         if (newIsFacing) {
           _startTimer();
-          isFacing(position.value.isPointing(userVector.value));
+          isFacing(userVector.value.isPointingAt(peerVector.value));
         } else {
           _stopTimer();
         }
@@ -241,7 +236,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Temporary: Workaround to handle Bubble States ^ //
-  _reset() async {
+  void _reset() async {
     // Call Finish
     _hasDenied = false;
     _hasCompleted = false;

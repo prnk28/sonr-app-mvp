@@ -3,8 +3,23 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:sonr_core/sonr_core.dart';
 
+// * Constants * //
 const double K_RADIUS = 2.0;
 const double K_DISTANCE = 10.0;
+const double N_RANGE_MIN = 0;
+const double N_RANGE_MAX = 10;
+const double N_TARGET_MIN = 4;
+const double N_TARGET_MAX = 6;
+
+// * Range Enum * //
+enum VectorPositionRange {
+  Direct, // 0.8 -> 1.0
+  CloseLeft, // 1.0 -> 1.2
+  CloseRight, // 0.6 -> 0.8
+  FarLeft, // 1.2 -> 2.0
+  FarRight, // 0 -> 0.6
+  Off // Not Intersecting
+}
 
 class VectorPosition {
   // # Reference
@@ -94,11 +109,16 @@ class VectorPosition {
   }
 
 // ^ Method Checks if Vector Ray intersects with peer sphere
-  bool isPointing(VectorPosition user) {
-    if (user.intersectsFacing(this)) {
+  bool isPointingAt(VectorPosition peer) {
+    if (this.intersectsFacing(peer)) {
       return true;
     }
-    if (user.intersectsAntiFacing(this)) {
+    return false;
+  }
+
+  // ^ Method Checks if Vector Ray intersects with peer sphere
+  bool isFlatPointingAt(VectorPosition peer) {
+    if (peer.intersectsHeading(this) && this.intersectsHeading(peer)) {
       return true;
     }
     return false;
@@ -109,11 +129,8 @@ class VectorPosition {
     // Check if Heading touches facing
     var headingToFacing = rayHeading.intersectsWithSphere(receiver.sphereFacing);
     if (headingToFacing != null) {
-      print("Heading to Facing: " + headingToFacing.toString());
+      print("Heading to Facing: " + headingToFacing.toString() + " Gyroscope Y: " + receiver.yRoto.toString());
       return true;
-    } else {
-      print("Heading to Facing NOT: " + rayHeading.toString());
-      print("Heading to Facing NOT: " + sphereFacing.toString());
     }
     return false;
   }
@@ -125,9 +142,6 @@ class VectorPosition {
     if (headingToAntiFacing != null) {
       print("Heading to Anti Facing: " + headingToAntiFacing.toString());
       return true;
-    } else {
-      print("Heading to Anti Facing NOT: " + rayHeading.toString());
-      print("Heading to Anti Facing NOT: " + sphereFacing.toString());
     }
     return false;
   }
@@ -155,30 +169,41 @@ class VectorPosition {
   }
 
   // ^ Method Returns offset from Another Vector
-  Offset offsetFromVector(VectorPosition vector) {
-    var diffRad = ((vector.heading - this.antiFacing).abs() * pi) / 180.0;
-    var adjDesig = (((vector.heading - this.facing).abs() / 11.25) + 0.25).toInt();
-    var diffDesg = Position_Designation.values[(adjDesig % 32)];
-
-    // Convert Rad to Point on Path
-    var path = ZonePathProvider(data.proximity);
-    var metrics = path.getPath(Get.size).computeMetrics().elementAt(0);
-    var point = diffRad * metrics.length;
-
-    // Get Tanget for Point
-    var tangent = metrics.getTangentForOffset(point);
-    var calcPos = tangent.position;
+  Offset offsetAgainstVector(VectorPosition vector) {
+    // Get Difference Values
+    var diff = vector.rayHeading.intersectsWithSphere(this.sphereFacing);
+    var range = withinPointerRange(diff);
 
     // Top of View
-    if (diffDesg == Position_Designation.NNE || diffDesg == Position_Designation.NEbN || diffDesg == Position_Designation.NbE) {
+    if (range == VectorPositionRange.Direct || range == VectorPositionRange.CloseRight || range == VectorPositionRange.CloseLeft) {
       return Offset(180, data.proximity.topOffset);
-    } else if (diffDesg == Position_Designation.NE) {
+    } else if (range == VectorPositionRange.FarRight) {
       return Offset(270, data.proximity.topOffset + 20);
-    } else if (diffDesg == Position_Designation.N) {
+    } else if (range == VectorPositionRange.FarLeft) {
       return Offset(90, data.proximity.topOffset + 20);
     } else {
-      return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZonePathProvider.proximityMaxHeight(data.proximity), calcPos.dy).toDouble());
+      if (diff > 2.0) {
+        return Offset(340, data.proximity.topOffset + 20);
+      } else {
+        return Offset(0, data.proximity.topOffset + 20);
+      }
     }
+  }
+
+  // ^ Method Checks if Value is Within Pointer Range
+  VectorPositionRange withinPointerRange(double diff) {
+    if (diff <= 0.6) {
+      return VectorPositionRange.FarRight;
+    } else if (diff > 0.6 && diff <= 0.8) {
+      return VectorPositionRange.CloseRight;
+    } else if (diff > 0.8 && diff <= 1.0) {
+      return VectorPositionRange.Direct;
+    } else if (diff > 1.0 && diff <= 1.2) {
+      return VectorPositionRange.CloseLeft;
+    } else if (diff > 1.2 && diff <= 2.0) {
+      return VectorPositionRange.FarLeft;
+    }
+    return VectorPositionRange.Off;
   }
 
   // # Returns String of Data

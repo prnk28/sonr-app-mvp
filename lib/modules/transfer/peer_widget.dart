@@ -80,7 +80,7 @@ class PeerSheetView extends StatelessWidget {
                                 color: Colors.white,
                                 size: 20,
                               ),
-                              Obx(() => SonrText(" " + controller.position.value.facing.direction,
+                              Obx(() => SonrText(" " + controller.peerVector.value.facing.direction,
                                   weight: FontWeight.w300, size: 20, key: key, color: Colors.white))
                             ]),
                           ))),

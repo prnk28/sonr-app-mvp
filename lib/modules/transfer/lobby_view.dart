@@ -36,7 +36,11 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
 
   @override
   Widget build(BuildContext context) {
-    return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
+    if (stackChildren.length > 0) {
+      return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
+    } else {
+      return Container();
+    }
   }
 
   // * Updates Stack Children * //

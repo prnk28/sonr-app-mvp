@@ -61,6 +61,16 @@ class LobbyService extends GetxService {
     });
   }
 
+  // ^ Method to Listen to Specified Lobby ^ //
+  static StreamSubscription<Lobby> listenToLobby(String name, Function(Lobby) onData) {
+    return _LobbyStream(name).stream.listen(onData);
+  }
+
+  // ^ Method to Listen to Specified Peer ^ //
+  static StreamSubscription<Peer> listenToPeer(Peer peer, Function(Peer) onData, {Lobby lobby}) {
+    return _PeerStream(peer, lobby != null ? lobby : local.value).stream.listen(onData);
+  }
+
   // ^ Method to Cancel Flat Mode ^ //
   bool sendFlatMode(Peer peer) {
     // Send Invite
@@ -166,4 +176,39 @@ class LobbyService extends GetxService {
       counter(0);
     }
   }
+}
+
+class _LobbyStream {
+  final String name;
+
+  _LobbyStream(this.name) {
+    LobbyService.lobbies.listen((Map<String, Lobby> map) {
+      if (map[name] != null) {
+        _controller.sink.add(map[name]);
+      }
+    });
+  }
+
+  // ignore: close_sinks
+  final _controller = StreamController<Lobby>();
+  Stream<Lobby> get stream => _controller.stream;
+}
+
+class _PeerStream {
+  final Peer peer;
+  final Lobby lobby;
+
+  _PeerStream(this.peer, this.lobby) {
+    LobbyService.lobbies.listen((Map<String, Lobby> map) {
+      if (map[lobby.name] != null) {
+        if (map[lobby.name].peers[peer.id.peer] != null) {
+          _controller.sink.add(map[lobby.name].peers[peer.id.peer]);
+        }
+      }
+    });
+  }
+
+  // ignore: close_sinks
+  final _controller = StreamController<Peer>();
+  Stream<Peer> get stream => _controller.stream;
 }
