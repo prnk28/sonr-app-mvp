@@ -8,7 +8,7 @@ enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown }
 class FlatMode {
   static outgoing() {
     if (!Get.isDialogOpen) {
-      Get.dialog(_FlatModeView(), barrierColor: Colors.transparent,  useSafeArea: false);
+      Get.dialog(_FlatModeView(), barrierColor: Colors.transparent, useSafeArea: false);
     }
   }
 
@@ -115,7 +115,7 @@ class _FlatModeController extends GetxController {
     }
     Future.delayed(K_TRANSLATE_DURATION * delayModifier, () {
       if (isReceiving) {
-              status(FlatModeState.Pending);
+        status(FlatModeState.Pending);
       }
       transition(FlatModeTransition.SlideIn);
       animation(_FlatModeAnimation(transition.value));
@@ -220,7 +220,7 @@ class _FlatModeAnimation {
   // # Switcher Layout Method
   Widget Function(Widget currentChild, List<Widget> previousChildren) layout() {
     return (Widget currentChild, List<Widget> previousChildren) {
-      if (type == FlatModeTransition.SlideIn || type == FlatModeTransition.SlideDown) {
+      if (type == FlatModeTransition.SlideIn) {
         List<Widget> children = previousChildren;
         if (currentChild != null) children = children.toList()..add(currentChild);
         return Stack(
@@ -229,6 +229,8 @@ class _FlatModeAnimation {
         );
       } else if (type == FlatModeTransition.Standby) {
         return Align(alignment: Alignment.bottomCenter, child: Container(child: currentChild, padding: EdgeInsetsX.bottom(48)));
+      } else if (type == FlatModeTransition.SlideDown) {
+        return currentChild;
       } else {
         return Center(child: currentChild);
       }
