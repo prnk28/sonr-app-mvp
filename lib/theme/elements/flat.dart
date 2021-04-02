@@ -2,7 +2,7 @@ import 'dart:async';
 import '../theme.dart';
 
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
-enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown }
+enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }
 
 // ** Flat Mode Handler ** //
 class FlatMode {
@@ -17,7 +17,7 @@ class FlatMode {
   }
 
   static invite(TransferCard data) {
-    Get.find<_FlatModeController>().animateIn(data.contact, isReceiving: true);
+    Get.find<_FlatModeController>().animateSwap(data.contact);
   }
 }
 
@@ -32,18 +32,21 @@ class _FlatModeView extends StatelessWidget {
       init: _FlatModeController(),
       autoRemove: false,
       builder: (controller) {
-        return Container(
-            width: Get.width,
-            height: Get.height,
-            color: Colors.black87,
-            padding: EdgeInsets.all(24),
-            child: AnimatedSwitcher(
-                duration: K_TRANSLATE_DURATION,
-                switchOutCurve: controller.animation.value.switchOutCurve,
-                switchInCurve: controller.animation.value.switchInCurve,
-                transitionBuilder: controller.animation.value.transition(),
-                layoutBuilder: controller.animation.value.layout(),
-                child: _buildChild(controller)));
+        return GestureDetector(
+          onTap: () => Get.find<LobbyService>().cancelFlatMode(),
+          child: Container(
+              width: Get.width,
+              height: Get.height,
+              color: Colors.black87,
+              padding: EdgeInsets.all(24),
+              child: AnimatedSwitcher(
+                  duration: K_TRANSLATE_DURATION,
+                  switchOutCurve: controller.animation.value.switchOutCurve,
+                  switchInCurve: controller.animation.value.switchInCurve,
+                  transitionBuilder: controller.animation.value.transition(),
+                  layoutBuilder: controller.animation.value.layout(),
+                  child: _buildChild(controller))),
+        );
       },
     );
   }
@@ -106,18 +109,31 @@ class _FlatModeController extends GetxController {
   }
 
   // ^ Method to Animate in Responded Card ^ //
-  animateIn(Contact card, {double delayModifier = 1.0, bool isReceiving = false}) {
+  animateIn(Contact card, {double delayModifier = 1.0}) {
     received(card);
-    if (isReceiving) {
-      transition(FlatModeTransition.SlideDown);
-      animation(_FlatModeAnimation(transition.value));
-      status(FlatModeState.Receiving);
-    }
     Future.delayed(K_TRANSLATE_DURATION * delayModifier, () {
-      if (isReceiving) {
-        status(FlatModeState.Pending);
-      }
       transition(FlatModeTransition.SlideIn);
+      animation(_FlatModeAnimation(transition.value));
+      status(FlatModeState.Incoming);
+    });
+  }
+
+  // ^ Method to Animate in Invited Card ^ //
+  animateSwap(Contact card) {
+    // Set Received Card
+    received(card);
+
+    // Translate User Card Down
+    transition(FlatModeTransition.SlideDown);
+    animation(_FlatModeAnimation(transition.value));
+    status(FlatModeState.Receiving);
+
+    Future.delayed(K_TRANSLATE_DURATION, () {
+      // Hide Existing Card
+      status(FlatModeState.Pending);
+
+      // Slide In Received
+      transition(FlatModeTransition.SlideInSingle);
       animation(_FlatModeAnimation(transition.value));
       status(FlatModeState.Incoming);
     });
@@ -186,6 +202,14 @@ class _FlatModeAnimation {
         ]);
         break;
 
+      // @ Slide In Single
+      case FlatModeTransition.SlideInSingle:
+        return TweenSequence([
+          TweenSequenceItem(tween: Offset(0, -1).tweenTo(Offset(0.0, 0.0)), weight: 1),
+          TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 1),
+        ]);
+        break;
+
       // @ Slide Out
       case FlatModeTransition.SlideOut:
         return TweenSequence([
@@ -231,6 +255,8 @@ class _FlatModeAnimation {
         return Align(alignment: Alignment.bottomCenter, child: Container(child: currentChild, padding: EdgeInsetsX.bottom(48)));
       } else if (type == FlatModeTransition.SlideDown) {
         return currentChild;
+      } else if (type == FlatModeTransition.SlideInSingle) {
+        return Center(child: currentChild);
       } else {
         return Center(child: currentChild);
       }

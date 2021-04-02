@@ -41,25 +41,14 @@ class LobbyService extends GetxService {
   }
 
   // ^ Method to Cancel Flat Mode ^ //
-  bool sendFlatMode(Peer peer) {
-    //if (isFacingPeer(peer)) {
-    // Send Invite
-    SonrService.queueContact(isFlat: true);
-    SonrService.inviteWithPeer(peer);
-
+  void cancelFlatMode() {
     // Reset Timers
     _flatModeCancelled(true);
     _resetTimer();
-    Future.delayed(15.seconds, () {
+    Get.back();
+    Future.delayed(25.seconds, () {
       _flatModeCancelled(false);
     });
-
-    SonrSnack.success("Sent Contact to ${LobbyService.localFlatPeers.values.first.profile.firstName}");
-    Get.back();
-    return true;
-    // }
-    // SonrSnack.error("Not facing any peers.");
-    //return false;
   }
 
   // ^ Method to Check if Peers are Facing each other ^ //
@@ -89,6 +78,28 @@ class LobbyService extends GetxService {
       _lobbies[data.name] = data;
       _lobbies.refresh();
     }
+  }
+
+  // ^ Method to Cancel Flat Mode ^ //
+  bool sendFlatMode(Peer peer) {
+    //if (isFacingPeer(peer)) {
+    // Send Invite
+    SonrService.queueContact(isFlat: true);
+    SonrService.inviteWithPeer(peer);
+
+    // Reset Timers
+    _flatModeCancelled(true);
+    _resetTimer();
+    Future.delayed(15.seconds, () {
+      _flatModeCancelled(false);
+    });
+
+    SonrSnack.success("Sent Contact to ${LobbyService.localFlatPeers.values.first.profile.firstName}");
+    Get.back();
+    return true;
+    // }
+    // SonrSnack.error("Not facing any peers.");
+    //return false;
   }
 
   // # Handle Lobby Flat Peers ^ //
