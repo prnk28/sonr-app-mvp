@@ -17,6 +17,7 @@ class LobbyService extends GetxService {
   final _local = Rx<Lobby>();
   final _localFlatPeers = RxMap<String, Peer>();
   final _localSize = 0.obs;
+  final _position = Rx<VectorPosition>();
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
@@ -26,15 +27,18 @@ class LobbyService extends GetxService {
   static Rx<Lobby> get local => Get.find<LobbyService>()._local;
   static RxMap<String, Peer> get localFlatPeers => Get.find<LobbyService>()._localFlatPeers;
   static RxInt get localSize => Get.find<LobbyService>()._localSize;
+  static Rx<VectorPosition> get userPosition => to._position;
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
   StreamSubscription<AccelerometerEvent> _accelStream;
+  StreamSubscription<CompassEvent> _compassStream;
   Timer _timer;
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
     _accelStream = DeviceService.accelerometer.listen(_handleAccelStream);
+    _compassStream = DeviceService.compass.listen(_handleCompassStream);
     return this;
   }
 
@@ -42,6 +46,7 @@ class LobbyService extends GetxService {
   @override
   void onClose() {
     _accelStream.cancel();
+    _compassStream.cancel();
     super.onClose();
   }
 
@@ -117,6 +122,11 @@ class LobbyService extends GetxService {
         }
       }
     }
+  }
+
+  void _handleCompassStream(CompassEvent data) {
+    // Set Vector Position
+    _position(VectorPosition.fromQuadruple(DeviceService.direction));
   }
 
   // # Begin Facing Invite Check

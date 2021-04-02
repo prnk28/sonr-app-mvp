@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -22,8 +21,8 @@ class PeerController extends GetxController {
   final isVisible = true.obs;
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
-  final userPos = Rx<CompassEvent>(DeviceService.compass.value);
   final position = Rx<VectorPosition>();
+  final userVector = Rx<VectorPosition>();
 
   // References
   Timer _timer;
@@ -38,14 +37,15 @@ class PeerController extends GetxController {
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   StreamSubscription<Lobby> peerStream;
+  StreamSubscription<VectorPosition> userStream;
   PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
     position(VectorPosition(peer.position));
-    if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
+    if (peer.isOnDesktop) {
       offset(Offset.zero);
     } else {
-      offset(position.value.offsetFromVector(SonrService.position));
+      offset(position.value.offsetFromVector(userVector.value));
     }
   }
 
@@ -82,16 +82,19 @@ class PeerController extends GetxController {
     }
 
     // Set Initial Values
+    _handleUserUpdate(LobbyService.userPosition.value);
     _handlePeerUpdate(LobbyService.local.value);
 
     // Add Stream Handlers
     peerStream = LobbyService.local.listen(_handlePeerUpdate);
+    userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     super.onInit();
   }
 
   @override
   void onClose() {
     peerStream.cancel();
+    userStream.cancel();
     super.onClose();
   }
 
@@ -182,24 +185,54 @@ class PeerController extends GetxController {
     }
   }
 
+  // ^ Handle Peer Position ^ //
+  _handleUserUpdate(VectorPosition pos) {
+    if (!hasCompleted.value) {
+      // Initialize
+      userVector(pos);
+
+      // Find Offset
+      if (peer.isOnDesktop) {
+        offset(Offset.zero);
+      } else {
+        offset(position.value.offsetFromVector(userVector.value));
+      }
+
+      // Check if Facing
+      var newIsFacing = position.value.isPointing(userVector.value);
+      if (isFacing.value != newIsFacing) {
+        // Check if Device Permits PointToShare
+        if (UserService.pointShareEnabled) {
+          // Check New Result
+          if (newIsFacing) {
+            _startTimer();
+            isFacing(position.value.isPointing(userVector.value));
+          } else {
+            _stopTimer();
+          }
+        }
+      }
+    }
+  }
+
   // ^ Handle Facing Check ^ //
   _handleFacingUpdate() {
     // Find Offset
-    if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
+    if (peer.isOnDesktop) {
       offset(Offset.zero);
     } else {
-      offset(position.value.offsetFromVector(SonrService.position));
+      offset(position.value.offsetFromVector(userVector.value));
     }
 
     // Check if Facing
-    var newIsFacing = position.value.isPointing(SonrService.position);
+    var newIsFacing = position.value.isPointing(userVector.value);
     if (isFacing.value != newIsFacing) {
       // Check if Device Permits PointToShare
       if (UserService.pointShareEnabled) {
         // Check New Result
         if (newIsFacing) {
           _startTimer();
-          isFacing(position.value.isPointing(SonrService.position));
+          isFacing(position.value.isPointing(userVector.value));
         } else {
           _stopTimer();
         }

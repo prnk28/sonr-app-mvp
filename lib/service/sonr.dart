@@ -21,17 +21,26 @@ class SonrService extends GetxService with TransferQueue {
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>();
-  final _position = Rx<VectorPosition>();
 
   // @ Static Accessors
   static RxBool get isReady => to._isReady;
   static RxDouble get progress => to._progress;
-  static Status get status => to._status.value;
-  static VectorPosition get position => to._position.value;
+  static Rx<Status> get status => to._status;
 
   // @ Set References
   Node _node;
-  StreamSubscription<CompassEvent> compassStream;
+
+  // ^ Updates Node^ //
+  SonrService() {
+    Timer.periodic(250.milliseconds, (timer) {
+      if (DeviceService.isMobile && SonrRoutes.areRequiredRegistered && isRegistered) {
+        // Publish Position
+        if (to._isReady.value) {
+          DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
+        }
+      }
+    });
+  }
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
@@ -49,14 +58,7 @@ class SonrService extends GetxService with TransferQueue {
     _node.onReceived = _handleReceived;
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
-    compassStream = DeviceService.compass.listen(_handleCompass);
     return this;
-  }
-
-  @override
-  void onClose() {
-    compassStream.cancel();
-    super.onClose();
   }
 
   // ^ Connect to Service Method ^ //
@@ -188,13 +190,7 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ******* Callbacks ********
   // **************************
-  void _handleCompass(CompassEvent data) {
-    // Publish Position
-    DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
-
-    // Set Vector Position
-    _position(VectorPosition.fromQuadruple(DeviceService.direction));
-  }
+  void _handleCompass(CompassEvent data) {}
 
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {

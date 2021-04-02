@@ -4,7 +4,7 @@ import 'package:vector_math/vector_math_64.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 const double K_RADIUS = 2.0;
-const double K_DISTANCE = 5.0;
+const double K_DISTANCE = 10.0;
 
 class VectorPosition {
   // # Reference
@@ -111,6 +111,9 @@ class VectorPosition {
     if (headingToFacing != null) {
       print("Heading to Facing: " + headingToFacing.toString());
       return true;
+    } else {
+      print("Heading to Facing NOT: " + rayHeading.toString());
+      print("Heading to Facing NOT: " + sphereFacing.toString());
     }
     return false;
   }
@@ -122,6 +125,9 @@ class VectorPosition {
     if (headingToAntiFacing != null) {
       print("Heading to Anti Facing: " + headingToAntiFacing.toString());
       return true;
+    } else {
+      print("Heading to Anti Facing NOT: " + rayHeading.toString());
+      print("Heading to Anti Facing NOT: " + sphereFacing.toString());
     }
     return false;
   }
