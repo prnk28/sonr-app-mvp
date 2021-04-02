@@ -31,8 +31,7 @@ class SonrService extends GetxService with TransferQueue {
   SonrService() {
     Timer.periodic(200.milliseconds, (timer) {
       if (DeviceService.isMobile) {
-        DeviceService.direction.value ??
-            _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+        DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
       }
     });
   }
@@ -60,7 +59,7 @@ class SonrService extends GetxService with TransferQueue {
   Future<void> connect({Contact contact}) async {
     _node.connect();
     if (contact != null) {
-      _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+      _node.update(direction: DeviceService.direction);
     }
   }
 
@@ -197,7 +196,7 @@ class SonrService extends GetxService with TransferQueue {
       _status(data.value);
 
       // Handle Available
-      _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+      _node.update(direction: DeviceService.direction);
     }
   }
 

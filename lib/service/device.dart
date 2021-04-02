@@ -17,7 +17,7 @@ const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 
 class DeviceService extends GetxService {
   // Device/Location Properties
-  final _direction = Rx<CompassEvent>();
+  final _compass = Rx<CompassEvent>();
   final _location = Rx<Position>();
   final _platform = Rx<Platform>();
 
@@ -29,12 +29,29 @@ class DeviceService extends GetxService {
 
   // Getters for Device/Location References
   static DeviceService get to => Get.find<DeviceService>();
-  static Rx<CompassEvent> get direction => Get.find<DeviceService>()._direction;
+  static Rx<CompassEvent> get compass => Get.find<DeviceService>()._compass;
   static Rx<Platform> get platform => Get.find<DeviceService>()._platform;
   static Rx<AccelerometerEvent> get accelerometer => to._accelerometer;
   static Rx<GyroscopeEvent> get gyroscope => to._gyroscope;
   static Rx<MagnetometerEvent> get magnetometer => to._magnetometer;
   static Rx<OrientationEvent> get orientation => to._orientation;
+
+  // Returns Current Position
+  static Quadruple<double, double, Position_Accelerometer, Position_Gyroscope> get direction {
+    return Quadruple(
+        compass.value.headingForCameraMode,
+        compass.value.heading,
+        Position_Accelerometer(
+          x: accelerometer.value.x,
+          y: accelerometer.value.y,
+          z: accelerometer.value.z,
+        ),
+        Position_Gyroscope(
+          x: gyroscope.value.x,
+          y: gyroscope.value.y,
+          z: gyroscope.value.z,
+        ));
+  }
 
   // Platform Checkers
   static bool get isDesktop =>
@@ -67,7 +84,7 @@ class DeviceService extends GetxService {
     // @ Bind Sensors for Mobile
     if (_platform.value == Platform.iOS || _platform.value == Platform.Android) {
       // Bind Direction and Set Intervals
-      _direction.bindStream(FlutterCompass.events);
+      _compass.bindStream(FlutterCompass.events);
       motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
       motionSensors.magnetometerUpdateInterval = K_SENSOR_INTERVAL;
       motionSensors.orientationUpdateInterval = K_SENSOR_INTERVAL;

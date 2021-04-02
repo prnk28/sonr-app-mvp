@@ -54,7 +54,7 @@ class LobbyService extends GetxService {
   // ^ Method to Check if Peers are Facing each other ^ //
   bool isFacingPeer(Peer peer) {
     // Set Designation with Heading Vals
-    var adjustedDesignation = (((DeviceService.direction.value.heading - peer.position.heading).abs() / 11.25) + 0.25).toInt();
+    var adjustedDesignation = (((DeviceService.compass.value.heading - peer.position.heading).abs() / 11.25) + 0.25).toInt();
     print("Adjusted: " + adjustedDesignation.toString());
 
     var diffDesg = Position_Designation.values[(adjustedDesignation % 32)];
