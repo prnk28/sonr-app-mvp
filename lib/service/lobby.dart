@@ -5,7 +5,13 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class LobbyService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<LobbyService>();
+  static LobbyService get to => Get.find<LobbyService>();
+
   // @ Set Properties
+  final _flatModeCancelled = false.obs;
+  final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
   final _lobbies = RxMap<String, Lobby>();
   final _local = Rx<Lobby>();
@@ -14,7 +20,7 @@ class LobbyService extends GetxService {
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
-  // @ Static Accessors
+  // @ Routing to Reactive
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
   static RxMap<String, Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
   static Rx<Lobby> get local => Get.find<LobbyService>()._local;
@@ -22,9 +28,8 @@ class LobbyService extends GetxService {
   static RxInt get localSize => Get.find<LobbyService>()._localSize;
 
   // @ References
+  bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
   StreamSubscription<AccelerometerEvent> _accelStream;
-  final _flatModeCancelled = false.obs;
-  final _lastIsFacingFlat = false.obs;
   Timer _timer;
 
   // # Initialize Service Method ^ //
@@ -51,15 +56,22 @@ class LobbyService extends GetxService {
     });
   }
 
-  // ^ Method to Check if Peers are Facing each other ^ //
-  bool isFacingPeer(Peer peer) {
-    // Set Designation with Heading Vals
-    var adjustedDesignation = (((DeviceService.compass.value.heading - peer.position.heading).abs() / 11.25) + 0.25).toInt();
-    print("Adjusted: " + adjustedDesignation.toString());
+  // ^ Method to Cancel Flat Mode ^ //
+  bool sendFlatMode(Peer peer) {
+    // Send Invite
+    SonrService.queueContact(isFlat: true);
+    SonrService.inviteWithPeer(peer);
 
-    var diffDesg = Position_Designation.values[(adjustedDesignation % 32)];
-    print("Difference: " + diffDesg.toString());
-    return diffDesg.isFacing(peer.position.proximity);
+    // Reset Timers
+    _flatModeCancelled(true);
+    _resetTimer();
+    Future.delayed(15.seconds, () {
+      _flatModeCancelled(false);
+    });
+
+    SonrSnack.success("Sent Contact to ${LobbyService.localFlatPeers.values.first.profile.firstName}");
+    Get.back();
+    return true;
   }
 
   // # Handle Lobby Update //
@@ -80,28 +92,6 @@ class LobbyService extends GetxService {
     }
   }
 
-  // ^ Method to Cancel Flat Mode ^ //
-  bool sendFlatMode(Peer peer) {
-    //if (isFacingPeer(peer)) {
-    // Send Invite
-    SonrService.queueContact(isFlat: true);
-    SonrService.inviteWithPeer(peer);
-
-    // Reset Timers
-    _flatModeCancelled(true);
-    _resetTimer();
-    Future.delayed(15.seconds, () {
-      _flatModeCancelled(false);
-    });
-
-    SonrSnack.success("Sent Contact to ${LobbyService.localFlatPeers.values.first.profile.firstName}");
-    Get.back();
-    return true;
-    // }
-    // SonrSnack.error("Not facing any peers.");
-    //return false;
-  }
-
   // # Handle Lobby Flat Peers ^ //
   void _handleFlatPeers(Lobby data) {
     var flatPeers = <String, Peer>{};
@@ -116,7 +106,7 @@ class LobbyService extends GetxService {
 
   // # Handle Incoming Acceleromter Stream
   void _handleAccelStream(AccelerometerEvent data) {
-    if (!_flatModeCancelled.value) {
+    if (_flatModeEnabled) {
       var newIsFacingFlat = data.y < 2.75;
       if (newIsFacingFlat != _lastIsFacingFlat.value) {
         if (newIsFacingFlat) {

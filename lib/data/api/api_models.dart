@@ -42,39 +42,8 @@ extension ContactUtils on Contact {
   }
 }
 
-// ^ Position Designation Extensions ^ //
-extension DesignationUtils on Position_Designation {
-  bool isFacing(Position_Proximity prox) {
-    return this == Position_Designation.NNE ||
-        this == Position_Designation.NEbN ||
-        this == Position_Designation.NbE ||
-        this == Position_Designation.NE ||
-        this == Position_Designation.NNE ||
-        this == Position_Designation.N;
-  }
-}
-
-// ^ Edit Sheet View for Profile ^ //
-enum EditType { ColorCombo, NameField }
-
-extension EditTypeUtils on EditType {
-  Widget get view {
-    switch (this) {
-      case EditType.ColorCombo:
-        return EditColorsView();
-        break;
-      case EditType.NameField:
-        return EditNameView();
-        break;
-      default:
-        return Container();
-        break;
-    }
-  }
-}
-
-// ^ Peer Model Extensions ^ //
-extension PeerUtils on Peer {
+// ^ Peer Value Checker Extensions ^ //
+extension CheckerUtils on Peer {
   bool get isOnMobile {
     return this.platform == Platform.Android || this.platform == Platform.iOS;
   }
@@ -82,7 +51,10 @@ extension PeerUtils on Peer {
   bool get isOnDesktop {
     return this.platform == Platform.MacOS || this.platform == Platform.Windows || this.platform == Platform.Linux;
   }
+}
 
+// ^ Peer Widget Builder Extensions ^ //
+extension WidgetUtils on Peer {
   SonrText get initials {
     var first = this.profile.firstName[0].toUpperCase();
     var last = this.profile.lastName[0].toUpperCase();
@@ -126,6 +98,37 @@ extension PeerUtils on Peer {
               color: SonrColor.Black.withOpacity(0.5),
             ),
     );
+  }
+}
+
+// ^ Position Designation Extensions ^ //
+extension DesignationUtils on Position_Designation {
+  bool isFacing(Position_Proximity prox) {
+    return this == Position_Designation.NNE ||
+        this == Position_Designation.NEbN ||
+        this == Position_Designation.NbE ||
+        this == Position_Designation.NE ||
+        this == Position_Designation.NNE ||
+        this == Position_Designation.N;
+  }
+}
+
+// ^ Edit Sheet View for Profile ^ //
+enum EditType { ColorCombo, NameField }
+
+extension EditTypeUtils on EditType {
+  Widget get view {
+    switch (this) {
+      case EditType.ColorCombo:
+        return EditColorsView();
+        break;
+      case EditType.NameField:
+        return EditNameView();
+        break;
+      default:
+        return Container();
+        break;
+    }
   }
 }
 

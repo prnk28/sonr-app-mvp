@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -12,29 +12,26 @@ import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
 class SonrService extends GetxService with TransferQueue {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SonrService>();
+  static SonrService get to => Get.find<SonrService>();
+
   // @ Set Properties
   final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
   final _status = Rx<Status>();
+  final _position = Rx<VectorPosition>();
 
   // @ Static Accessors
-  static SonrService get to => Get.find<SonrService>();
-  static RxBool get isReady => Get.find<SonrService>()._isReady;
-  static RxDouble get progress => Get.find<SonrService>()._progress;
-  static Rx<Status> get status => Get.find<SonrService>()._status;
+  static RxBool get isReady => to._isReady;
+  static RxDouble get progress => to._progress;
+  static Status get status => to._status.value;
+  static VectorPosition get position => to._position.value;
 
   // @ Set References
   Node _node;
-
-  // ^ Updates Node^ //
-  SonrService() {
-    Timer.periodic(200.milliseconds, (timer) {
-      if (DeviceService.isMobile) {
-        DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
-      }
-    });
-  }
+  StreamSubscription<CompassEvent> compassStream;
 
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
@@ -52,7 +49,14 @@ class SonrService extends GetxService with TransferQueue {
     _node.onReceived = _handleReceived;
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
+    compassStream = DeviceService.compass.listen(_handleCompass);
     return this;
+  }
+
+  @override
+  void onClose() {
+    compassStream.cancel();
+    super.onClose();
   }
 
   // ^ Connect to Service Method ^ //
@@ -184,13 +188,18 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ******* Callbacks ********
   // **************************
+  void _handleCompass(CompassEvent data) {
+    // Publish Position
+    DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
+
+    // Set Vector Position
+    _position(VectorPosition.fromQuadruple(DeviceService.direction));
+  }
 
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
-    print(data.value.toString());
-
     // Check for Homescreen Controller
-    if (Get.isRegistered<HomeController>() && data.value == Status.AVAILABLE) {
+    if (Get.isRegistered<DeviceService>() && data.value == Status.AVAILABLE) {
       // Update Status
       _isReady(true);
       _status(data.value);

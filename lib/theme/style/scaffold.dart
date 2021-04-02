@@ -123,7 +123,7 @@ class SonrScaffold extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => NeumorphicTheme(
+    return NeumorphicTheme(
         themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
           defaultTextColor: Colors.white,
@@ -139,15 +139,15 @@ class SonrScaffold extends StatelessWidget {
           depth: 8,
           intensity: 0.85,
         ),
-        child: Obx(() => Scaffold(
-              backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-              floatingActionButtonLocation: floatingActionButtonLocation,
-              body: body,
-              appBar: appBar,
-              floatingActionButton: floatingActionButton,
-              resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
-              bottomSheet: bottomSheet,
-            ))));
+        child: Scaffold(
+          backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+          floatingActionButtonLocation: floatingActionButtonLocation,
+          body: body,
+          appBar: appBar,
+          floatingActionButton: floatingActionButton,
+          resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
+          bottomSheet: bottomSheet,
+        ));
   }
 }
 

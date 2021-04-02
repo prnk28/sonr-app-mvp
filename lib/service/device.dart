@@ -16,10 +16,15 @@ enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 
 class DeviceService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<DeviceService>();
+  static DeviceService get to => Get.find<DeviceService>();
+
   // Device/Location Properties
   final _compass = Rx<CompassEvent>();
   final _location = Rx<Position>();
   final _platform = Rx<Platform>();
+
 
   // Sensor Properties
   final _accelerometer = Rx<AccelerometerEvent>();
@@ -28,9 +33,9 @@ class DeviceService extends GetxService {
   final _orientation = Rx<OrientationEvent>();
 
   // Getters for Device/Location References
-  static DeviceService get to => Get.find<DeviceService>();
-  static Rx<CompassEvent> get compass => Get.find<DeviceService>()._compass;
-  static Rx<Platform> get platform => Get.find<DeviceService>()._platform;
+
+  static Rx<CompassEvent> get compass => to._compass;
+  static Rx<Platform> get platform => to._platform;
   static Rx<AccelerometerEvent> get accelerometer => to._accelerometer;
   static Rx<GyroscopeEvent> get gyroscope => to._gyroscope;
   static Rx<MagnetometerEvent> get magnetometer => to._magnetometer;

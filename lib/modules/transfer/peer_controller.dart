@@ -16,16 +16,14 @@ class PeerController extends GetxController {
   final Rx<Lobby> lobby = LobbyService.local;
   final artboard = Rx<Artboard>();
   final counter = 0.0.obs;
-  final diffDesg = Rx<Position_Designation>();
-  final diffRad = 0.0.obs;
 
   final hasCompleted = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
-  final position = Rx<Position>();
   final userPos = Rx<CompassEvent>(DeviceService.compass.value);
+  final position = Rx<VectorPosition>();
 
   // References
   Timer _timer;
@@ -43,13 +41,12 @@ class PeerController extends GetxController {
   PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
-    position(peer.position);
-    offset(_calculateOffset());
-
-    // Update Peer Periodically
-    Timer.periodic(250.milliseconds, (timer) {
-      _handleCompassUpdate(DeviceService.compass.value);
-    });
+    position(VectorPosition(peer.position));
+    if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
+      offset(Offset.zero);
+    } else {
+      offset(position.value.offsetFromVector(SonrService.position));
+    }
   }
 
   @override
@@ -169,37 +166,6 @@ class PeerController extends GetxController {
     });
   }
 
-  // ^ Calculate Peer Offset from Line ^ //
-  Offset _calculateOffset() {
-    if (_isInvited) {
-      return offset.value;
-    } else {
-      if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
-        return Offset.zero;
-      } else {
-        return SonrOffset.fromPosition(position.value, diffDesg.value, diffRad.value);
-      }
-    }
-  }
-
-  // ^ Handle Compass Update ^ //
-  _handleCompassUpdate(CompassEvent newDir) {
-    if (newDir != null && !hasCompleted.value && !isClosed) {
-      // Update Direction
-      userPos(newDir);
-
-      // Set Diff Radians from Heading Vals
-      diffRad(((userPos.value.heading - position.value.facingAntipodal).abs() * pi) / 180.0);
-
-      // Set Designation with Facing Vals
-      var adjustedDesignation = (((userPos.value.headingForCameraMode - position.value.facing).abs() / 11.25) + 0.25).toInt();
-      diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
-
-      // Handle Changes
-      _handleFacingUpdate();
-    }
-  }
-
   // ^ Handle Peer Position ^ //
   _handlePeerUpdate(Lobby lobby) {
     if (!hasCompleted.value) {
@@ -207,14 +173,7 @@ class PeerController extends GetxController {
       lobby.peers.forEach((id, value) {
         // Update Direction
         if (id == peer.id.peer && !_isInvited) {
-          position(value.position);
-
-          // Set Diff Radians from Heading Vals
-          diffRad(((userPos.value.heading - position.value.headingAntipodal).abs() * pi) / 180.0);
-
-          // Set Designation with Facing Vals
-          var adjustedDesignation = (((userPos.value.headingForCameraMode - position.value.facing).abs() / 11.25) + 0.25).toInt();
-          diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
+          position(VectorPosition(value.position));
 
           // Handle Changes
           _handleFacingUpdate();
@@ -226,17 +185,21 @@ class PeerController extends GetxController {
   // ^ Handle Facing Check ^ //
   _handleFacingUpdate() {
     // Find Offset
-    offset(_calculateOffset());
+    if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
+      offset(Offset.zero);
+    } else {
+      offset(position.value.offsetFromVector(SonrService.position));
+    }
 
     // Check if Facing
-    var newIsFacing = diffDesg.value.isFacing(position.value.proximity);
+    var newIsFacing = position.value.isPointing(SonrService.position);
     if (isFacing.value != newIsFacing) {
       // Check if Device Permits PointToShare
       if (UserService.pointShareEnabled) {
         // Check New Result
         if (newIsFacing) {
           _startTimer();
-          isFacing(diffDesg.value.isFacing(position.value.proximity));
+          isFacing(position.value.isPointing(SonrService.position));
         } else {
           _stopTimer();
         }

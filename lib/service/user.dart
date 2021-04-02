@@ -5,8 +5,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class UserService extends GetxService {
-  // Accessor
-  static UserService get to => to;
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<UserService>();
+  static UserService get to => Get.find<UserService>();
 
   // ** User Reactive Properties **
   final _isExisting = false.obs;

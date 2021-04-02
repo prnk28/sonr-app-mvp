@@ -2,6 +2,7 @@ export '../data/api/mixin_queue.dart';
 export '../data/model/model_tile.dart';
 export '../data/model/model_file.dart';
 export '../data/api/api_models.dart';
+export '../data/api/api_vector.dart';
 export '../data/api/api_primitive.dart';
 export '../data/api/api_widgets.dart';
 export '../service/device.dart';

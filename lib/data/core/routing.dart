@@ -64,4 +64,15 @@ class SonrRoutes {
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
   }
+
+  // ^ Method Validates Required Services Registered ^ //
+  static bool get areRequiredRegistered {
+    return DeviceService.isRegistered &&
+        UserService.isRegistered &&
+        PermissionService.isRegistered &&
+        MediaService.isRegistered &&
+        SQLService.isRegistered &&
+        LobbyService.isRegistered &&
+        UserService.isRegistered;
+  }
 }

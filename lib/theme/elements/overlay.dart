@@ -10,6 +10,10 @@ import 'form.dart';
 
 // ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SonrOverlay>();
+  static SonrOverlay get to => Get.find<SonrOverlay>();
+
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrFixedOverlayEntry>();
@@ -222,6 +226,10 @@ class SonrOverlay extends GetxService {
 
 // ^ Class Controls Active Overlays ** //
 class SonrPositionedOverlay extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SonrPositionedOverlay>();
+  static SonrPositionedOverlay get to => Get.find<SonrPositionedOverlay>();
+
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrPositionedOverlayEntry>();

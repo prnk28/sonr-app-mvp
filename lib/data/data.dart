@@ -1,4 +1,5 @@
 export 'api/api_models.dart';
+export 'api/api_vector.dart';
 export 'api/api_primitive.dart';
 export 'api/api_widgets.dart';
 export 'core/arguments.dart';

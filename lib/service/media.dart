@@ -11,6 +11,10 @@ import 'user.dart';
 enum GalleryState { Initial, Loading, Ready }
 
 class MediaService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<MediaService>();
+  static MediaService get to => Get.find<MediaService>();
+
   // Reactive Instances
   final _gallery = <MediaCollection>[].obs;
   final _hasGallery = false.obs;

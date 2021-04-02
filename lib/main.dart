@@ -33,7 +33,7 @@ class _AppState extends State<App> {
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
-      themeMode: ThemeMode.light,
+      themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: Scaffold(
           backgroundColor: Colors.black,
           body: Stack(
