@@ -104,26 +104,19 @@ class _FileInviteView extends StatelessWidget {
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            // Decline Button
-            TextButton(
-                onPressed: () => controller.declineInvite(),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: SonrText.semibold("Decline", color: Colors.red[600], size: 18),
-                )),
-            // Accept Button
-            Container(
-              width: Get.width / 3,
-              height: 50,
-              child: ColorButton.primary(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ColorButton.neutral(onPressed: () => controller.declineInvite(), text: "Decline"),
+              Padding(padding: EdgeInsets.all(8)),
+              ColorButton.primary(
                 onPressed: () => controller.acceptTransfer(card),
-                icon: SonrIcon.normal(Icons.check),
                 text: "Accept",
                 gradient: SonrPalette.tertiary(),
+                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
               ),
-            ),
-          ]),
+            ],
+          ),
         ],
       ),
     );
