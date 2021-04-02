@@ -34,6 +34,7 @@ class PeerBubble extends StatelessWidget {
   // @ Builds Peer Info for Peer
   Widget _buildPeerInfo(PeerController controller) {
     return OpacityAnimatedWidget(
+        enabled: controller.isVisible.value,
         values: controller.isVisible.value ? [0, 1] : [1, 0],
         duration: Duration(milliseconds: 250),
         delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),

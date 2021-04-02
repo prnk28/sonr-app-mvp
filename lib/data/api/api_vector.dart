@@ -4,12 +4,8 @@ import 'package:vector_math/vector_math_64.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // * Constants * //
-const double K_RADIUS = 2.0;
-const double K_DISTANCE = 10.0;
-const double N_RANGE_MIN = 0;
-const double N_RANGE_MAX = 10;
-const double N_TARGET_MIN = 4;
-const double N_TARGET_MAX = 6;
+const double K_RADIUS = 1.0;
+const double K_DISTANCE = 6.0;
 
 // * Range Enum * //
 enum VectorPositionRange {
@@ -57,10 +53,15 @@ class VectorPosition {
   Matrix4 get rotoAntiHeading => Matrix4.rotationY(radAntiHeading);
   Ray get rayAntiHeading => Ray.originDirection(Vector3.zero(), rotoAntiHeading.transform3(Vector3(0, 0, K_DISTANCE)));
 
-  // Rotation
-  double xRoto;
-  double yRoto;
-  double zRoto;
+  // @ Gyroscope Rotation
+  double xGyro; // X Axis Gyro in Rad/s
+  Matrix4 get rotoXGyro => Matrix4.rotationX(xGyro);
+
+  double yGoro; // Y Axis Gyro in Rad/s
+  Matrix4 get rotoYGyro => Matrix4.rotationY(yGoro);
+
+  double zGyro; // Z Axis Gyro in Rad/s
+  Matrix4 get rotoZGyro => Matrix4.rotationZ(zGyro);
 
   // # Factory Constructer from Direction Quadruple
   factory VectorPosition.fromQuadruple(Quadruple<double, double, Position_Accelerometer, Position_Gyroscope> data) {
@@ -103,14 +104,24 @@ class VectorPosition {
     this.antiHeading = data.headingAntipodal;
 
     // Set Rotation
-    this.xRoto = data.gyroscope.x;
-    this.yRoto = data.gyroscope.y;
-    this.zRoto = data.gyroscope.z;
+    this.xGyro = data.gyroscope.x;
+    this.yGoro = data.gyroscope.y;
+    this.zGyro = data.gyroscope.z;
   }
 
 // ^ Method Checks if Vector Ray intersects with peer sphere
   bool isPointingAt(VectorPosition peer) {
-    if (this.intersectsFacing(peer)) {
+    // Get Initial
+    Vector3 direction = rotoFacing.transform3(Vector3(0, 0, K_DISTANCE));
+
+    // Rotate for Peer
+    peer.rotoXGyro.transform3(direction);
+    peer.rotoYGyro.transform3(direction);
+    peer.rotoZGyro.transform3(direction);
+
+    // Check Collision
+    var ray = Ray.originDirection(Vector3.zero(), direction);
+    if (this.intersectsFacing(peer, ray: ray)) {
       return true;
     }
     return false;
@@ -125,14 +136,24 @@ class VectorPosition {
   }
 
   // ^ Method Checks if Heading Intersects with Facing Sphere
-  bool intersectsFacing(VectorPosition receiver) {
-    // Check if Heading touches facing
-    var headingToFacing = rayHeading.intersectsWithSphere(receiver.sphereFacing);
-    if (headingToFacing != null) {
-      print("Heading to Facing: " + headingToFacing.toString() + " Gyroscope Y: " + receiver.yRoto.toString());
-      return true;
+  bool intersectsFacing(VectorPosition receiver, {Ray ray}) {
+    if (ray != null) {
+      // Check if Heading touches facing
+      var headingToFacing = ray.intersectsWithSphere(receiver.sphereFacing);
+      if (headingToFacing != null) {
+        print("Heading to Facing: " + headingToFacing.toString() + " Gyroscope Y: " + receiver.yGoro.toString());
+        return true;
+      }
+      return false;
+    } else {
+      // Check if Heading touches facing
+      var headingToFacing = rayHeading.intersectsWithSphere(receiver.sphereFacing);
+      if (headingToFacing != null) {
+        print("Heading to Facing: " + headingToFacing.toString() + " Gyroscope Y: " + receiver.yGoro.toString());
+        return true;
+      }
+      return false;
     }
-    return false;
   }
 
   // ^ Method Checks if Heading Intersects with Facing Antipodal Sphere
@@ -182,28 +203,29 @@ class VectorPosition {
     } else if (range == VectorPositionRange.FarLeft) {
       return Offset(90, data.proximity.topOffset + 20);
     } else {
-      if (diff > 2.0) {
-        return Offset(340, data.proximity.topOffset + 20);
-      } else {
-        return Offset(0, data.proximity.topOffset + 20);
-      }
+      return Offset(340, data.proximity.topOffset + 20);
     }
   }
 
   // ^ Method Checks if Value is Within Pointer Range
   VectorPositionRange withinPointerRange(double diff) {
-    if (diff <= 0.6) {
-      return VectorPositionRange.FarRight;
-    } else if (diff > 0.6 && diff <= 0.8) {
-      return VectorPositionRange.CloseRight;
-    } else if (diff > 0.8 && diff <= 1.0) {
-      return VectorPositionRange.Direct;
-    } else if (diff > 1.0 && diff <= 1.2) {
-      return VectorPositionRange.CloseLeft;
-    } else if (diff > 1.2 && diff <= 2.0) {
-      return VectorPositionRange.FarLeft;
+    if (diff != null) {
+      if (diff <= 0.6) {
+        return VectorPositionRange.FarRight;
+      } else if (diff > 0.6 && diff <= 0.8) {
+        return VectorPositionRange.CloseRight;
+      } else if (diff > 0.8 && diff <= 1.0) {
+        return VectorPositionRange.Direct;
+      } else if (diff > 1.0 && diff <= 1.2) {
+        return VectorPositionRange.CloseLeft;
+      } else if (diff > 1.2 && diff <= 2.0) {
+        return VectorPositionRange.FarLeft;
+      } else {
+        return VectorPositionRange.Off;
+      }
+    } else {
+      return VectorPositionRange.Off;
     }
-    return VectorPositionRange.Off;
   }
 
   // # Returns String of Data
@@ -247,9 +269,9 @@ class VectorPosition {
         },
       },
       "Rotation": {
-        "X": xRoto,
-        "Y": yRoto,
-        "Z": zRoto,
+        "X": xGyro,
+        "Y": yGoro,
+        "Z": zGyro,
       }
     }.toString();
   }

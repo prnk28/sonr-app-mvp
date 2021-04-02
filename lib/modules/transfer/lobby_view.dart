@@ -13,12 +13,13 @@ class LocalLobbyStack extends StatefulWidget {
 class _LocalLobbyStackState extends State<LocalLobbyStack> {
   // References
   int lobbySize = 0;
-  List<PeerBubble> stackChildren = <PeerBubble>[];
+  List<PeerBubble> stackChildren;
   StreamSubscription<Lobby> localLobbyStream;
 
   // * Initial State * //
   @override
   void initState() {
+    stackChildren = <PeerBubble>[];
     // Add Initial Data
     _handleLobbyUpdate(LobbyService.local.value);
 
@@ -36,7 +37,7 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
 
   @override
   Widget build(BuildContext context) {
-    if (stackChildren.length > 0) {
+    if (stackChildren != null) {
       return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
     } else {
       return Container();
