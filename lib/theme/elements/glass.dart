@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/user.dart';
-import '../style/style.dart';
+import '../theme.dart';
 
 final darkBoxShadow = [
   BoxShadow(color: Color(0xff464545).withOpacity(0.2), blurRadius: 20, offset: Offset(8, 8)),

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:sonr_app/theme/theme.dart';
-import 'style.dart';
 
 // ^ Standardized Uniform Scaffold ^ //
 class SonrScaffold extends StatelessWidget {

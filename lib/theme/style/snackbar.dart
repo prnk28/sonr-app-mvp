@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
-import 'style.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class SonrSnack {

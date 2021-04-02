@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../style/style.dart';
 import '../../data/data.dart';
 import 'package:sonr_core/sonr_core.dart';
 

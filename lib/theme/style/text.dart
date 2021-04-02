@@ -6,7 +6,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/data/model/model_register.dart';
-import 'style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
