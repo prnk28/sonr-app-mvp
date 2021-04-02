@@ -161,74 +161,79 @@ class _ContactInviteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
-        Row(children: [
-          // @ Photo
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4.0, left: 8),
-              child: Neumorphic(
-                padding: EdgeInsets.all(4),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  depth: -10,
-                ),
-                child: card.contact.profilePicture,
-              ),
-            ),
-          ),
-          VerticalDivider(),
-          Padding(padding: EdgeInsets.all(4)),
-          // @ Content
-          Container(
-            margin: EdgeInsets.only(right: 8),
-            child: Column(children: [
-              // Name
-              card.contact.headerName,
+        child: NeumorphicBackground(
+            backendColor: Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            child: Neumorphic(
+              style: SonrStyle.normal,
+              child: Column(children: [
+                Row(children: [
+                  // @ Photo
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 4.0, left: 8),
+                      child: Neumorphic(
+                        padding: EdgeInsets.all(4),
+                        style: NeumorphicStyle(
+                          boxShape: NeumorphicBoxShape.circle(),
+                          depth: -10,
+                        ),
+                        child: card.contact.profilePicture,
+                      ),
+                    ),
+                  ),
+                  VerticalDivider(),
+                  Padding(padding: EdgeInsets.all(4)),
+                  // @ Content
+                  Container(
+                    margin: EdgeInsets.only(right: 8),
+                    child: Column(children: [
+                      // Name
+                      card.contact.headerName,
 
-              // Phone/ Website
-              Row(children: [
-                card.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
-                // Hide PhoneNumber
-                Padding(padding: EdgeInsets.all(10)),
-                card.contact.phoneNumber,
-                card.contact.webSite,
+                      // Phone/ Website
+                      Row(children: [
+                        card.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
+                        // Hide PhoneNumber
+                        Padding(padding: EdgeInsets.all(10)),
+                        card.contact.phoneNumber,
+                        card.contact.webSite,
+                      ]),
+                    ]),
+                  ),
+                ]),
+                // Social Media
+                Container(
+                  margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
+                  child: Row(
+                      children: List.generate(card.contact.socials.length, (index) {
+                    return card.contact.socials[index].provider.icon(IconType.Gradient, size: 32);
+                  })),
+                ),
+                Divider(),
+                Padding(padding: EdgeInsets.all(4)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Decline"),
+                    Padding(padding: EdgeInsets.all(8)),
+                    ColorButton.primary(
+                      onPressed: () {
+                        SonrOverlay.back();
+                        if (!isReply) {
+                          controller.promptSendBack(card);
+                        } else {
+                          controller.acceptContact(card, sendBackContact: false);
+                        }
+                      },
+                      text: "Accept",
+                      gradient: SonrPalette.tertiary(),
+                      icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                    ),
+                  ],
+                ),
               ]),
-            ]),
-          ),
-        ]),
-        // Social Media
-        Container(
-          margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
-          child: Row(
-              children: List.generate(card.contact.socials.length, (index) {
-            return card.contact.socials[index].provider.icon(IconType.Gradient, size: 32);
-          })),
-        ),
-        Divider(),
-        Padding(padding: EdgeInsets.all(4)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Decline"),
-            Padding(padding: EdgeInsets.all(8)),
-            ColorButton.primary(
-              onPressed: () {
-                SonrOverlay.back();
-                if (!isReply) {
-                  controller.promptSendBack(card);
-                } else {
-                  controller.acceptContact(card, sendBackContact: false);
-                }
-              },
-              text: "Accept",
-              gradient: SonrPalette.tertiary(),
-              icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-            ),
-          ],
-        ),
-      ]),
-    );
+            )));
   }
 }
 

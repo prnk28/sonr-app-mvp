@@ -105,7 +105,7 @@ class SonrPalette {
   static const Color Primary = Color(0xff538fff);
   static const Color Secondary = Color(0xff9757ff);
   static const Color Tertiary = Color(0xff52ffc0);
-  static const Color Red = Color(0xffcc1b0b);
+  static const Color Red = Color(0xffff176b);
 
   static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
   static const AlignmentGeometry _K_END = Alignment.topCenter;
