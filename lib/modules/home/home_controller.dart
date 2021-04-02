@@ -61,11 +61,13 @@ class HomeController extends GetxController {
   }
 
   // ^ On Dispose ^ //
-  void onDispose() {
+  @override
+  void onClose() {
     cardStream.cancel();
 
     toggleIndex(1);
     pageIndex(0);
+    super.onClose();
   }
 
   // ^ Handle Cards Update ^ //

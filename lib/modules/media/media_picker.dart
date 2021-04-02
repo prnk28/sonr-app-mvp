@@ -40,7 +40,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
             radius: 20,
             shape: NeumorphicShape.convex,
             onPressed: () => Get.back(),
-            icon: SonrIcon.normal(Icons.close, color: SonrPalete.Red, size: 38)),
+            icon: SonrIcon.normal(Icons.close, color: SonrPalette.Red, size: 38)),
         floatingActionButton: ShapeButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
         middle: SonrDropdown.albums(MediaService.gallery, width: Get.width - 100, index: index, margin: EdgeInsets.only(left: 12, right: 12)),
         body: ValueListenableBuilder(

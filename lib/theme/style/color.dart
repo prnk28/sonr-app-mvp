@@ -10,7 +10,6 @@ class SonrColor {
   // ** General Theme Color Properties ** //
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
   static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
-  static const Color OverlayBackground = Color.fromRGBO(0, 0, 0, 0.45);
   static const Color Black = Color(0xff202020);
   static const Color Dark = Color(0xff2c2b2b);
   static const Color Grey = Color(0xffC6C4C4);
@@ -101,7 +100,7 @@ class SonrGradient {
   }
 }
 
-class SonrPalete {
+class SonrPalette {
   static const Color Neutral = Color(0xff62666a);
   static const Color Primary = Color(0xff538fff);
   static const Color Secondary = Color(0xff9757ff);

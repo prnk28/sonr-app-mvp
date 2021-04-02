@@ -10,7 +10,7 @@ export 'media_view.dart';
 export 'url_view.dart';
 export 'progress_view.dart';
 
-enum CardType { None, Invite, Reply, GridItem, Info }
+enum CardType { None, Invite, InviteFlat, Reply, GridItem, Info }
 
 class TransferCardController extends GetxController {
   // Properties

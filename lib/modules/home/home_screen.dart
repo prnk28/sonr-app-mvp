@@ -30,13 +30,11 @@ class HomeScreen extends StatelessWidget {
 
         // Zero Cards
         else if (controller.status.value == HomeState.None) {
-          gridView = Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-            SonrText.header(
-              "No Cards Found!",
-              size: 32,
-            ),
-            LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 3.5),
-            Padding(padding: EdgeInsets.all(10)),
+          gridView = Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+            SonrText.header("No Cards Found!", size: 32),
+            Padding(padding: EdgeInsets.all(8)),
+            LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
+            Padding(padding: EdgeInsets.all(16)),
           ]);
         }
 
@@ -55,13 +53,10 @@ class HomeScreen extends StatelessWidget {
             );
           } else {
             gridView = Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SonrText.header(
-                "No Cards Found!",
-                size: 32,
-              ),
-              Padding(padding: EdgeInsets.all(10)),
-              LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 3.5, repeat: true),
-              // LottieContainer(board: LottieBoard.Empty, width: Get.width, height: ,)
+              SonrText.header("No Cards Found!", size: 32),
+              Padding(padding: EdgeInsets.all(8)),
+              LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
+              Padding(padding: EdgeInsets.all(16)),
             ]);
           }
         }
@@ -109,7 +104,6 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(padding: EdgeInsets.all(8)),
             Expanded(child: Container(child: gridView)),
           ]),
         );
@@ -188,7 +182,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalette.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.isDarkMode.value,
@@ -205,7 +199,7 @@ class _SettingsSheet extends StatelessWidget {
                           // Dark Mode Switch
                           NeumorphicSwitch(
                             style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrPalete.Red : SonrColor.Blue,
+                              activeTrackColor: UserService.isDarkMode.value ? SonrPalette.Red : SonrColor.Blue,
                               inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
                             ),
                             value: UserService.hasPointToShare.value,

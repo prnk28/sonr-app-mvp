@@ -10,6 +10,8 @@ FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
 BUILDIOS=$(FLUTTER) build ios
 BUILDANDROID=$(FLUTTER) build appbundle
+BUILDIOS_SKL=$(FLUTTER) build ios --bundle-sksl-path $(SKL_FILE) --release
+BUILDANDROID_SKL=$(FLUTTER) build appbundle --bundle-sksl-path $(SKL_FILE)
 CLEAN=$(FLUTTER) clean
 
 # Result Dirs/Files
@@ -67,7 +69,6 @@ deploy: deploy.ios deploy.android
 
 ## └─ ios             - IPA for AppStore Connect
 deploy.ios:
-# --bundle-sksl-path $(SKL_FILE) --release
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDIOS)
 	@echo "Finished Building Sonr iOS ➡ " && date
 	cd $(IOS_DIR) && fastlane internal
@@ -78,7 +79,6 @@ deploy.ios:
 ## └─ android         - APB for PlayStore
 deploy.android:
 	cd $(PROJECT_DIR) && cider bump build
-# --bundle-sksl-path $(SKL_FILE)
 	cd $(PROJECT_DIR) && flutter clean && $(BUILDANDROID)
 	@echo "Finished Building Sonr Android ➡ " && date
 	cd $(ANDROID_DIR) && fastlane android internal

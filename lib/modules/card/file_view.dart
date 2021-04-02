@@ -116,7 +116,12 @@ class _FileInviteView extends StatelessWidget {
             Container(
               width: Get.width / 3,
               height: 50,
-              child: ColorButton.primary(onPressed: () => controller.acceptTransfer(card), icon: SonrIcon.normal(Icons.check), text: "Accept"),
+              child: ColorButton.primary(
+                onPressed: () => controller.acceptTransfer(card),
+                icon: SonrIcon.normal(Icons.check),
+                text: "Accept",
+                gradient: SonrPalette.tertiary(),
+              ),
             ),
           ]),
         ],

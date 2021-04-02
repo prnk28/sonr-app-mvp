@@ -16,8 +16,8 @@ class ShareButton extends StatelessWidget {
           return Align(
             alignment: controller.state.value.alignment,
             child: AnimatedContainer(
-                curve: Curves.easeInBack,
-                duration: const Duration(milliseconds: 200),
+                curve: Curves.bounceOut,
+                duration: Duration(milliseconds: 600),
                 padding: EdgeInsetsDirectional.only(start: 30),
                 width: controller.state.value.width,
                 height: controller.state.value.height,
@@ -62,27 +62,19 @@ class _ExpandedView extends StatelessWidget {
   const _ExpandedView(this.controller, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return PlayAnimation<double>(
-        tween: (0.0).tweenTo(1.0),
-        duration: 150.milliseconds,
-        delay: 150.milliseconds,
-        builder: (context, child, value) {
-          return Container(
-            width: Get.width / 2 + 165,
-            height: 130,
-            child: AnimatedOpacity(
-                opacity: value,
-                duration: 150.milliseconds,
-                child: NeumorphicTheme(
-                    theme: NeumorphicThemeData(
-                      baseColor: Color.fromRGBO(239, 238, 238, 1.0),
-                      lightSource: LightSource.top,
-                      depth: 8,
-                      intensity: 0.4,
-                    ),
-                    child: _ShareButtonRow(controller))),
-          );
-        });
+    return OpacityAnimatedWidget(
+      enabled: true,
+      duration: 150.milliseconds,
+      delay: 150.milliseconds,
+      child: NeumorphicTheme(
+          theme: NeumorphicThemeData(
+            baseColor: Color.fromRGBO(239, 238, 238, 1.0),
+            lightSource: LightSource.top,
+            depth: 8,
+            intensity: 0.4,
+          ),
+          child: _ShareButtonRow(controller)),
+    );
   }
 }
 
@@ -97,62 +89,63 @@ class _RemoteView extends StatelessWidget {
     final FocusNode first = FocusNode();
     final FocusNode second = FocusNode();
     final FocusNode third = FocusNode();
-
-    // Build View
-    return PlayAnimation<double>(
-        tween: (0.0).tweenTo(1.0),
-        duration: 150.milliseconds,
-        delay: 150.milliseconds,
-        builder: (context, child, value) {
-          return Container(
+    return OpacityAnimatedWidget(
+      enabled: true,
+      duration: 150.milliseconds,
+      delay: 150.milliseconds,
+      child: NeumorphicTheme(
+          theme: NeumorphicThemeData(
+            baseColor: Color.fromRGBO(239, 238, 238, 1.0),
+            lightSource: LightSource.top,
+            depth: 8,
+            intensity: 0.4,
+          ),
+          child: Container(
             height: 130,
             width: Get.width / 2 + 200,
-            child: AnimatedOpacity(
-                opacity: value,
-                duration: 150.milliseconds,
-                child: NeumorphicTheme(
-                    theme: NeumorphicThemeData(
-                      baseColor: Color.fromRGBO(239, 238, 238, 1.0),
-                      lightSource: LightSource.top,
-                      depth: 8,
-                      intensity: 0.4,
-                    ),
-                    child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                      SonrText.title("Enter Code", color: SonrColor.White),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                        Container(
-                            width: 100,
-                            child: SonrTextField(
-                              autoFocus: true,
-                              focusNode: first,
-                              hint: "One",
-                              value: '',
-                              onChanged: (val) => controller.firstWord(val),
-                              textInputAction: TextInputAction.next,
-                            )),
-                        Container(
-                            width: 100,
-                            child: SonrTextField(
-                              focusNode: second,
-                              hint: "Two",
-                              value: '',
-                              onChanged: (val) => controller.secondWord(val),
-                              textInputAction: TextInputAction.next,
-                            )),
-                        Container(
-                            width: 100,
-                            child: SonrTextField(
-                              focusNode: third,
-                              hint: "Three",
-                              value: '',
-                              textInputAction: TextInputAction.done,
-                              onChanged: (val) => controller.thirdWord(val),
-                              onEditingComplete: () => controller.joinRemote(),
-                            )),
-                      ]),
-                    ]))),
-          );
-        });
+            child: NeumorphicTheme(
+                theme: NeumorphicThemeData(
+                  baseColor: Color.fromRGBO(239, 238, 238, 1.0),
+                  lightSource: LightSource.top,
+                  depth: 8,
+                  intensity: 0.4,
+                ),
+                child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  SonrText.title("Enter Code", color: SonrColor.White),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                    Container(
+                        width: 100,
+                        child: SonrTextField(
+                          autoFocus: true,
+                          focusNode: first,
+                          hint: "One",
+                          value: '',
+                          onChanged: (val) => controller.firstWord(val),
+                          textInputAction: TextInputAction.next,
+                        )),
+                    Container(
+                        width: 100,
+                        child: SonrTextField(
+                          focusNode: second,
+                          hint: "Two",
+                          value: '',
+                          onChanged: (val) => controller.secondWord(val),
+                          textInputAction: TextInputAction.next,
+                        )),
+                    Container(
+                        width: 100,
+                        child: SonrTextField(
+                          focusNode: third,
+                          hint: "Three",
+                          value: '',
+                          textInputAction: TextInputAction.done,
+                          onChanged: (val) => controller.thirdWord(val),
+                          onEditingComplete: () => controller.joinRemote(),
+                        )),
+                  ]),
+                ])),
+          )),
+    );
   }
 }
 
@@ -278,8 +271,8 @@ class _ShareButtonItem extends StatelessWidget {
               boxShape: NeumorphicBoxShape.circle()),
           child: RiveContainer(
             type: type,
-            width: Get.width,
-            height: Get.height,
+            width: 200,
+            height: 200,
           ),
           onPressed: onPressed,
         ),

@@ -8,6 +8,7 @@ class UserService extends GetxService {
   // ** User Reactive Properties **
   final _isExisting = false.obs;
   final _isNewUser = false.obs;
+  final _contact = Rx<Contact>();
 
   // ** Contact Reactive Properties **
   final _firstName = "".obs;
@@ -27,6 +28,7 @@ class UserService extends GetxService {
   // **  Getter Methods for Contact Properties **
   static RxBool get isExisting => Get.find<UserService>()._isExisting;
   static RxBool get isNewUser => Get.find<UserService>()._isNewUser;
+  static Rx<Contact> get contact => Get.find<UserService>()._contact;
 
   // Getters for Preferences
   static Rx<Brightness> get brightness => Get.find<UserService>()._brightness;
@@ -77,6 +79,7 @@ class UserService extends GetxService {
       var user = User.fromJson(profileJson);
 
       // Set Contact Values
+      _contact(user.contact);
       _firstName(user.contact.firstName);
       _lastName(user.contact.lastName);
       _phone(user.contact.phone);
@@ -208,6 +211,7 @@ class UserService extends GetxService {
   // ^ Saves Contact User to Disk ^ //
   Future<User> _saveContactForUser(Contact contact) async {
     // @ Initialize
+    _contact(contact);
     User user;
     if (_isExisting.value) {
       // Update Existing User with new Contact
@@ -217,7 +221,7 @@ class UserService extends GetxService {
 
       // @ Save to SharedPreferences, Update SonrNode
       _userBox.write("user", user.writeToJson());
-      SonrService.setContact(contact);
+      SonrService.setProfile(contact);
     }
     // Create New User with Contact
     else {

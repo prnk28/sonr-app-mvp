@@ -33,17 +33,13 @@ class PeerBubble extends StatelessWidget {
 
   // @ Builds Peer Info for Peer
   Widget _buildPeerInfo(PeerController controller) {
-    return PlayAnimation<double>(
-        tween: controller.isVisible.value ? (0.0).tweenTo(1.0) : (1.0).tweenTo(0.0),
+    return OpacityAnimatedWidget(
+        values: controller.isVisible.value ? [0, 1] : [1, 0],
         duration: Duration(milliseconds: 250),
         delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-        builder: (context, child, value) => AnimatedOpacity(
-              opacity: value,
-              duration: Duration(milliseconds: 250),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                controller.peer.initials,
-              ]),
-            ));
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          controller.peer.initials,
+        ]));
   }
 }
 
@@ -150,7 +146,7 @@ class _PeerListItemState extends State<PeerListItem> {
           backgroundColor: Colors.transparent,
           collapsedBackgroundColor: Colors.transparent,
           leading: widget.peer.profilePicture(size: 50),
-          title: SonrText.title(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
+          title: SonrText.subtitle(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
           subtitle: SonrText("",
               isRich: true,
               richText: RichText(
@@ -159,10 +155,10 @@ class _PeerListItemState extends State<PeerListItem> {
                   text: TextSpan(children: [
                     TextSpan(
                         text: widget.peer.platform.toString(),
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalete.Primary)),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
                     TextSpan(
                         text: " - ${widget.peer.model}",
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalete.Secondary)),
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
                   ]))),
           children: [
             Padding(padding: EdgeInsets.all(8)),
@@ -173,7 +169,7 @@ class _PeerListItemState extends State<PeerListItem> {
                 Padding(padding: EdgeInsets.all(8)),
                 ColorButton.primary(
                   onPressed: () {
-                    SonrService.inviteFromList(widget.peer);
+                    SonrService.inviteWithPeer(widget.peer);
                   },
                   text: "Invite",
                   icon: SonrIcon.invite,

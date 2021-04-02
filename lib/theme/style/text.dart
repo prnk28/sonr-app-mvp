@@ -52,8 +52,8 @@ class SonrText extends StatelessWidget {
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.subtitle(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.Black);
+  factory SonrText.subtitle(String text, {Key key, bool isCentered = false}) {
+    return SonrText(text, weight: FontWeight.w500, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.Black, isCentered: isCentered);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
@@ -388,7 +388,7 @@ class SonrTextField extends StatelessWidget {
                       isError
                           ? Text(
                               " *Error",
-                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalete.Red),
+                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalette.Red),
                             )
                           : Container(),
                     ]))
@@ -438,7 +438,7 @@ class SonrTextField extends StatelessWidget {
       child: buildDefault(context,
           isError: true,
           decoration: InputDecoration.collapsed(
-              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalete.Red, width: 4)),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Red, width: 4)),
               hintText: hint,
               hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode.value ? Colors.white38 : Colors.black38))),
     );
