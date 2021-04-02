@@ -1,4 +1,3 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'edit_dialog.dart';
 import 'tile_item.dart';
@@ -43,23 +42,11 @@ class ProfileScreen extends GetView<ProfileController> {
                 GetBuilder<ProfileController>(
                     id: 'social-grid',
                     builder: (_) {
-                      return SliverStaggeredGrid(
+                      return SliverGrid(
                           delegate: SliverChildBuilderDelegate((context, index) {
                             return SocialTileItem(UserService.socials[index], index);
                           }),
-                          gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 12.0,
-                              crossAxisSpacing: 6.0,
-                              staggeredTileCount: UserService.tileCount,
-                              staggeredTileBuilder: (index) {
-                                var focused = Get.find<ProfileController>().focused.value;
-                                if (focused.isActive) {
-                                  return focused.index == index ? StaggeredTile.count(4, 4) : StaggeredTile.count(2, 2);
-                                } else {
-                                  return StaggeredTile.count(2, 2);
-                                }
-                              }));
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12.0, crossAxisSpacing: 6.0));
                     })
               ],
             )));

@@ -410,7 +410,7 @@ class SonrAnimatedWaveIcon extends HookWidget {
     // Hook Controller
     final controller = useAnimationController(duration: Duration(seconds: 1));
     final iconKey = GlobalKey();
-    controller.play();
+    controller.forward();
 
     // Reactive to Progress
     return Stack(

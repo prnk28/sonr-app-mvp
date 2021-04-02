@@ -390,13 +390,13 @@ class _BaseOverlayView extends StatefulWidget {
   _BaseOverlayViewState createState() => _BaseOverlayViewState();
 }
 
-class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin {
+class _BaseOverlayViewState extends State<_BaseOverlayView> with TickerProviderStateMixin {
   Animation<Offset> position;
 
   void initState() {
+    AnimationController controller = AnimationController(vsync: this, duration: widget.duration);
     position = widget.entryLocation.tweenTo(Offset.zero).animatedBy(controller);
-    controller.duration = widget.duration;
-    controller.play();
+    controller.forward();
     super.initState();
   }
 

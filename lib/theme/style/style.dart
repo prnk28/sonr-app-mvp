@@ -20,9 +20,6 @@ export '../elements/flat.dart';
 // UI Packages
 export 'package:google_fonts/google_fonts.dart';
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';
-export 'package:simple_animations/simple_animations.dart';
-export 'package:supercharged/supercharged.dart';
-export 'package:simple_animations/simple_animations.dart';
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter_custom_clippers/flutter_custom_clippers.dart' hide ArrowClipper;
 export 'package:flutter/services.dart';

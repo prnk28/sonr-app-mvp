@@ -19,7 +19,7 @@ class ProgressView extends HookWidget {
   Widget build(BuildContext context) {
     // Inject Hook Controller
     final hookController = useAnimationController(duration: duration);
-    hookController.loop();
+    hookController.forward();
 
     // Reactive to Progress
     return Container(
