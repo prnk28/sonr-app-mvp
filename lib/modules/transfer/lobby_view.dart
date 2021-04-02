@@ -161,7 +161,7 @@ class _LobbySheetState extends State<LobbySheet> {
         margin: EdgeInsetsX.horizontal(24),
         child: NeumorphicToggle(
           duration: 100.milliseconds,
-          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
           thumb: Neumorphic(style: SonrStyle.toggle),
           selectedIndex: toggleIndex,
           onChanged: (val) {
@@ -176,7 +176,7 @@ class _LobbySheetState extends State<LobbySheet> {
             ToggleElement(
                 background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
                 foreground: SonrIcon.neumorphicGradient(
-                    Icons.group, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                    Icons.group, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                     size: 22.5)),
             ToggleElement(
                 background: Center(child: SonrText.medium("Desktop", color: SonrColor.Grey, size: 18)),

@@ -40,7 +40,7 @@ class SonrService extends GetxService with TransferQueue {
   Future<SonrService> init() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
-    _properties(Peer_Properties(hasPointToShare: UserService.hasPointToShare.value));
+    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -82,7 +82,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Sets Properties for Node ^
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
-      to._properties(Peer_Properties(hasPointToShare: UserService.hasPointToShare.value, isFlatMode: isFlatMode));
+      to._properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
       await to._node.update(properties: to._properties.value);
     }
   }

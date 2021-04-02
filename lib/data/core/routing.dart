@@ -25,20 +25,19 @@ class SonrRoutes {
             },
             transition: Transition.topLevel,
             curve: Curves.easeIn,
-            binding: HomeBinding(),
             middlewares: [GetMiddleware()]),
 
         // ** Home Page ** //
-        GetPage(name: '/home/received', page: () => HomeScreen(), transition: Transition.fadeIn, curve: Curves.easeIn, binding: HomeBinding()),
+        GetPage(name: '/home/received', page: () => HomeScreen(), transition: Transition.fadeIn, curve: Curves.easeOut),
 
         // ** Home Page - Back from Transfer ** //
-        GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: HomeBinding()),
+        GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.bounceIn),
 
         // ** Home Page - Back from Profile ** //
-        GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeIn, binding: HomeBinding()),
+        GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeOut),
 
         // ** Register Page ** //
-        GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
+        GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
         GetPage(
@@ -46,7 +45,7 @@ class SonrRoutes {
             page: () => TransferScreen(),
             maintainState: false,
             transition: Transition.downToUp,
-            curve: Curves.easeIn,
+            curve: Curves.bounceOut,
             binding: TransferBinding()),
 
         // ** Profile Page ** //

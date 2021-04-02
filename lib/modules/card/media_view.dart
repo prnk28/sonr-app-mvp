@@ -192,7 +192,7 @@ class _MediaItemView extends StatelessWidget {
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ShapeButton.circle(
-                            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                             icon: SonrIcon.info,
                             onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
                             shadowLightColor: Colors.black38,
@@ -337,7 +337,7 @@ class _MediaCardInfo extends StatelessWidget {
               ShapeButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
             ]),
           ]),

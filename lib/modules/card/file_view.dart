@@ -289,7 +289,7 @@ class _FileCardInfo extends StatelessWidget {
               ShapeButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
             ]),
           ]),

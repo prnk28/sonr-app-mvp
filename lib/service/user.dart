@@ -5,6 +5,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class UserService extends GetxService {
+  // Accessor
+  static UserService get to => to;
+
   // ** User Reactive Properties **
   final _isExisting = false.obs;
   final _isNewUser = false.obs;
@@ -21,36 +24,36 @@ class UserService extends GetxService {
 
   // Preferences
   final _brightness = Rx<Brightness>();
-  final _direction = Rx<CompassEvent>();
-  final _isDarkMode = true.obs;
-  final _hasPointToShare = false.obs;
+  final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
+  final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
+  final _hasPointToShare = false.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
 
   // **  Getter Methods for Contact Properties **
-  static RxBool get isExisting => Get.find<UserService>()._isExisting;
-  static RxBool get isNewUser => Get.find<UserService>()._isNewUser;
-  static Rx<Contact> get contact => Get.find<UserService>()._contact;
+  static RxBool get isExisting => to._isExisting;
+  static RxBool get isNewUser => to._isNewUser;
+  static Rx<Contact> get contact => to._contact;
 
   // Getters for Preferences
-  static Rx<Brightness> get brightness => Get.find<UserService>()._brightness;
-  static Rx<CompassEvent> get direction => Get.find<UserService>()._direction;
-  static RxBool get isDarkMode => Get.find<UserService>()._isDarkMode;
-  static RxBool get hasPointToShare => Get.find<UserService>()._hasPointToShare;
+  static Rx<Brightness> get brightness => to._brightness;
+  static bool get isDarkMode => to._isDarkMode.val;
+  static bool get flatModeEnabled => to._hasFlatMode.val;
+  static bool get pointShareEnabled => to._hasPointToShare.val;
 
-  static RxString get firstName => Get.find<UserService>()._firstName;
-  static RxString get lastName => Get.find<UserService>()._lastName;
-  static RxString get phone => Get.find<UserService>()._phone;
-  static RxString get email => Get.find<UserService>()._email;
-  static RxString get website => Get.find<UserService>()._website;
+  static RxString get firstName => to._firstName;
+  static RxString get lastName => to._lastName;
+  static RxString get phone => to._phone;
+  static RxString get email => to._email;
+  static RxString get website => to._website;
 
-  static Rx<Uint8List> get picture => Get.find<UserService>()._picture;
-  static RxList<Contact_SocialTile> get socials => Get.find<UserService>()._socials;
-  static int get tileCount => Get.find<UserService>()._socials.length;
+  static Rx<Uint8List> get picture => to._picture;
+  static RxList<Contact_SocialTile> get socials => to._socials;
+  static int get tileCount => to._socials.length;
   static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
-  static String get wireID => "${Get.find<UserService>()._firstName.value}-${Get.find<UserService>()._lastName.value}";
+  static String get wireID => "${to._firstName.value}-${to._lastName.value}";
 
   // ** Return Current User Object **
   static User get current {
-    var controller = Get.find<UserService>();
+    var controller = to;
     // Return Existing User
     if (controller._isExisting.value) {
       var profileJson = controller._userBox.read("user");
@@ -92,12 +95,10 @@ class UserService extends GetxService {
     }
 
     // Set Preferences
-    _isDarkMode(_prefsBox.read("isDarkMode") ?? false);
-    _hasPointToShare(_prefsBox.read("hasPointToShare") ?? false);
-    _brightness(_isDarkMode.value ? Brightness.dark : Brightness.light);
+    _brightness(_isDarkMode.val ? Brightness.dark : Brightness.light);
 
     // Update Android and iOS Status Bar
-    _isDarkMode.value
+    _isDarkMode.val
         ? SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
         : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -107,14 +108,14 @@ class UserService extends GetxService {
 
   // ^ Add Social to List ^ //
   static addSocial(Contact_SocialTile value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._socials.add(value);
     saveChanges();
   }
 
   // ^ Delete Social from List ^ //
   static bool deleteSocial(Contact_SocialTile value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     if (controller._socials.contains(value)) {
       controller._socials.remove(value);
       saveChanges();
@@ -125,7 +126,7 @@ class UserService extends GetxService {
 
   // ^ Update Social in List ^ //
   static bool swapSocials(Contact_SocialTile first, Contact_SocialTile second) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     int idxOne = controller._socials.indexOf(first);
     int idxTwo = controller._socials.indexOf(second);
     controller._socials.swap(idxOne, idxTwo);
@@ -135,7 +136,7 @@ class UserService extends GetxService {
 
   // ^ Update Social in List ^ //
   static bool updateSocial(Contact_SocialTile value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     if (controller._socials.contains(value)) {
       var idx = controller._socials.indexOf(value);
       controller._socials[idx] = value;
@@ -147,42 +148,42 @@ class UserService extends GetxService {
 
   // ^ Modify Contact FirstName Value ^ //
   static setFirstName(String value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._firstName(value);
     saveChanges();
   }
 
   // ^ Modify Contact LastName Value ^ //
   static setLastName(String value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._lastName(value);
     saveChanges();
   }
 
   // ^ Modify Contact Phone Value ^ //
   static setPhone(String value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._phone(value);
     saveChanges();
   }
 
   // ^ Modify Contact Email Value ^ //
   static setEmail(String value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._email(value);
     saveChanges();
   }
 
   // ^ Modify Contact Website Value ^ //
   static setWebsite(String value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._website(value);
     saveChanges();
   }
 
   // ^ Modify Contact Picture Value ^ //
   static setPicture(Uint8List value) {
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._picture(value);
     saveChanges();
   }
@@ -190,7 +191,7 @@ class UserService extends GetxService {
   // ^ Method to Save Changes ^ //
   static Future<User> saveChanges({Contact providedContact, bool isNewUser = false}) async {
     // @ Initialize
-    var controller = Get.find<UserService>();
+    var controller = to;
     controller._isNewUser(isNewUser);
 
     // @ Check if Contact was Provided
@@ -236,46 +237,30 @@ class UserService extends GetxService {
   // ** Preference Requests ** //
   // ************************* //
 
-  // ^ BoxStorage Theme Mode Helper ^ //
-  bool _loadThemeFromBox() => _prefsBox.read("isDarkMode") ?? false;
-  _saveThemeToBox(bool isDarkMode) {
-    _prefsBox.write("isDarkMode", isDarkMode);
-    _prefsBox.save();
-  }
-
   // ^ Trigger iOS Local Network with Alert ^ //
   static toggleDarkMode() async {
     // Update Value
-    Get.find<UserService>()._isDarkMode(!Get.find<UserService>()._isDarkMode.value);
-    Get.find<UserService>()._isDarkMode.refresh();
+    to._isDarkMode.val = !to._isDarkMode.val;
 
     // Update Android and iOS Status Bar
-    Get.find<UserService>()._isDarkMode.value
+    to._isDarkMode.val
         ? SystemChrome.setSystemUIOverlayStyle(
             SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
         : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
             statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
 
     // Update Theme
-    Get.changeThemeMode(Get.find<UserService>()._loadThemeFromBox() ? ThemeMode.light : ThemeMode.dark);
-
-    // Save Preference
-    Get.find<UserService>()._saveThemeToBox(!Get.find<UserService>()._loadThemeFromBox());
+    Get.changeThemeMode(to._isDarkMode.val ? ThemeMode.dark : ThemeMode.light);
     return true;
   }
 
-  // ^ BoxStorage Point to Share Mode Helper ^ //
-  bool _loadPointToShareFromBox() => _prefsBox.read("hasPointToShare") ?? false;
-  _savePointToShareToBox(bool hasPointToShare) => _prefsBox.write("hasPointToShare", hasPointToShare);
+  // ^ Trigger iOS Local Network with Alert ^ //
+  static toggleFlatMode() async {
+    to._hasFlatMode.val = !to._hasFlatMode.val;
+  }
 
   // ^ Trigger iOS Local Network with Alert ^ //
   static togglePointToShare() async {
-    // Update Value
-    Get.find<UserService>()._hasPointToShare(!Get.find<UserService>()._hasPointToShare.value);
-    Get.find<UserService>()._hasPointToShare.refresh();
-
-    // Save Preference
-    Get.find<UserService>()._savePointToShareToBox(!Get.find<UserService>()._loadPointToShareFromBox());
-    return true;
+    to._hasPointToShare.val = !to._hasPointToShare.val;
   }
 }

@@ -232,7 +232,7 @@ class PeerController extends GetxController {
     var newIsFacing = diffDesg.value.isFacing(position.value.proximity);
     if (isFacing.value != newIsFacing) {
       // Check if Device Permits PointToShare
-      if (UserService.hasPointToShare.value) {
+      if (UserService.pointShareEnabled) {
         // Check New Result
         if (newIsFacing) {
           _startTimer();

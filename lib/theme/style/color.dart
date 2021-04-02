@@ -19,7 +19,7 @@ class SonrColor {
 
   // ^ ThemeMode Handling ^ //
   static Color get currentNeumorphic {
-    return UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White;
+    return UserService.isDarkMode ? SonrColor.Dark : SonrColor.White;
   }
 
   // ^ Returns Color from Hexidecimal ^ //
@@ -33,7 +33,7 @@ class SonrColor {
   // ^ Finds Current Theme Icon Color ^ //
   static Color icons() {
     final theme = NeumorphicTheme.of(Get.context);
-    if (UserService.isDarkMode.value) {
+    if (UserService.isDarkMode) {
       return theme.current.accentColor;
     } else {
       return theme.current.accentColor;

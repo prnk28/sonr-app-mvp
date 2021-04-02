@@ -483,7 +483,7 @@ class _DropdownOverlayView extends StatelessWidget {
           child: Container(
             width: 17,
             height: 17,
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           ),
         ),
       ),

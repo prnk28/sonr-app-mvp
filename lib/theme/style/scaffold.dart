@@ -24,8 +24,7 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), actions: [action]),
+        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), actions: [action]),
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -40,8 +39,7 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar:
-            NeumorphicAppBar(color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), leading: leading),
+        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), leading: leading),
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -57,8 +55,8 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: middle, leading: leading, actions: [action]),
+        appBar:
+            NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: middle, leading: leading, actions: [action]),
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -72,7 +70,7 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title)),
+        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title)),
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -103,7 +101,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar: NeumorphicAppBar(
-          color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+          color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           title: titleItem,
           leading: leading,
           actions: [action],
@@ -126,7 +124,7 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => NeumorphicTheme(
-        themeMode: UserService.isDarkMode.value ? ThemeMode.dark : ThemeMode.light, //or dark / system
+        themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
           defaultTextColor: Colors.white,
           baseColor: SonrColor.Dark,
@@ -142,7 +140,7 @@ class SonrScaffold extends StatelessWidget {
           intensity: 0.85,
         ),
         child: Obx(() => Scaffold(
-              backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+              backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
               floatingActionButtonLocation: floatingActionButtonLocation,
               body: body,
               appBar: appBar,

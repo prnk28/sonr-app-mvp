@@ -75,8 +75,8 @@ class _CompassView extends GetView<TransferController> {
           // Interior Compass
           child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
             // Center Circle
-            Obx(() => _CompassBulb(controller.string.value, controller.heading.value,
-                UserService.isDarkMode.value ? SonrGradient.bulbDark : SonrGradient.bulbLight)),
+            Obx(() => _CompassBulb(
+                controller.string.value, controller.heading.value, UserService.isDarkMode ? SonrGradient.bulbDark : SonrGradient.bulbLight)),
 
             // Spokes
             Obx(() => _Spokes(controller.angle.value)),
@@ -238,7 +238,7 @@ class _Spoke extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
-                            color: UserService.isDarkMode.value ? Colors.white54 : Colors.black54,
+                            color: UserService.isDarkMode ? Colors.white54 : Colors.black54,
                           )))),
             ],
           ));

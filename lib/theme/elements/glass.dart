@@ -48,14 +48,14 @@ class GlassContainer extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: borderRadius,
-                    boxShadow: UserService.isDarkMode.value ? darkBoxShadow : lightBoxShadow,
+                    boxShadow: UserService.isDarkMode ? darkBoxShadow : lightBoxShadow,
                   ),
                 ),
               ),
               Container(
                 decoration: BoxDecoration(
                   // Fill Opacity
-                  color: UserService.isDarkMode.value ? SonrColor.Black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
+                  color: UserService.isDarkMode ? SonrColor.Black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
                   borderRadius: borderRadius,
                 ),
               ),
@@ -65,7 +65,7 @@ class GlassContainer extends StatelessWidget {
                     borderRadius: borderRadius,
                     // Object Opacity
                     gradient: LinearGradient(
-                      colors: UserService.isDarkMode.value
+                      colors: UserService.isDarkMode
                           ? [SonrColor.Black.withOpacity(0.8), SonrColor.Black.withOpacity(0.15)]
                           : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
                       begin: Alignment.topLeft,
@@ -80,7 +80,7 @@ class GlassContainer extends StatelessWidget {
               IgnorePointer(
                 child: Container(
                   foregroundDecoration: BoxDecoration(
-                      border: UserService.isDarkMode.value
+                      border: UserService.isDarkMode
                           ? Border.all(color: SonrColor.Black.withOpacity(0.4), width: 2)
                           : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
                       borderRadius: borderRadius),

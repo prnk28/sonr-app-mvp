@@ -426,10 +426,10 @@ class ShapeButton extends StatelessWidget {
       return NeumorphicButton(
         margin: margin,
         style: NeumorphicStyle(
-          depth: UserService.isDarkMode.value ? 4 : 8,
-          color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+          depth: UserService.isDarkMode ? 4 : 8,
+          color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           boxShape: boxShape,
-          intensity: UserService.isDarkMode.value ? 0.6 : 0.85,
+          intensity: UserService.isDarkMode ? 0.6 : 0.85,
         ),
         padding: const EdgeInsets.all(12.0),
         onPressed: () {
@@ -501,10 +501,10 @@ class ShapeButton extends StatelessWidget {
         return NeumorphicButton(
           margin: margin,
           style: NeumorphicStyle(
-            depth: UserService.isDarkMode.value ? 4 : 8,
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+            depth: UserService.isDarkMode ? 4 : 8,
+            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
             boxShape: boxShape,
-            intensity: UserService.isDarkMode.value ? 0.6 : 0.85,
+            intensity: UserService.isDarkMode ? 0.6 : 0.85,
           ),
           padding: const EdgeInsets.all(12.0),
           onPressed: () {
