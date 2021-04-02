@@ -127,6 +127,20 @@ class VectorPosition {
     return false;
   }
 
+  // ^ Method Returns Pointing At Value
+  double getPointingAtValue(VectorPosition peer) {
+    // Get Initial
+    Vector3 direction = rotoFacing.transform3(Vector3(0, 0, K_DISTANCE));
+
+    // Rotate for Peer
+    peer.rotoXGyro.transform3(direction);
+    peer.rotoYGyro.transform3(direction);
+    peer.rotoZGyro.transform3(direction);
+
+    var ray = Ray.originDirection(Vector3.zero(), direction);
+    return ray.intersectsWithSphere(peer.sphereFacing);
+  }
+
   // ^ Method Checks if Vector Ray intersects with peer sphere
   bool isFlatPointingAt(VectorPosition peer) {
     if (peer.intersectsHeading(this) && this.intersectsHeading(peer)) {
@@ -192,7 +206,7 @@ class VectorPosition {
   // ^ Method Returns offset from Another Vector
   Offset offsetAgainstVector(VectorPosition vector) {
     // Get Difference Values
-    var diff = vector.rayHeading.intersectsWithSphere(this.sphereFacing);
+    var diff = vector.getPointingAtValue(this);
     var range = withinPointerRange(diff);
 
     // Top of View
