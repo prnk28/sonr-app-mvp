@@ -33,12 +33,17 @@ class TransferScreen extends GetView<TransferController> {
                           )),
 
                       // @ Lobby View
-                      LocalLobbyStack(),
+                      LobbyService.localSize.value > 0 ? LocalLobbyStack() : Container(),
 
                       // @ Compass View
                       Padding(
                         padding: EdgeInsetsX.bottom(64.0),
-                        child: CompassView(),
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.toggleShifting();
+                          },
+                          child: CompassView(),
+                        ),
                       ),
                     ],
                   ),

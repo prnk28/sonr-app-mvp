@@ -121,7 +121,10 @@ class VectorPosition {
 
     // Check Collision
     var ray = Ray.originDirection(Vector3.zero(), direction);
-    if (this.intersectsFacing(peer, ray: ray)) {
+    // Check if Heading touches facing
+    var headingToFacing = ray.intersectsWithSphere(peer.sphereFacing);
+
+    if (headingToFacing != null) {
       return true;
     }
     return false;

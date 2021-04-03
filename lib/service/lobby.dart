@@ -63,12 +63,12 @@ class LobbyService extends GetxService {
 
   // ^ Method to Listen to Specified Lobby ^ //
   static StreamSubscription<Lobby> listenToLobby(String name, Function(Lobby) onData) {
-    return _LobbyStream(name).stream.listen(onData);
+    return LobbyStream(name).stream.listen(onData);
   }
 
   // ^ Method to Listen to Specified Peer ^ //
-  static StreamSubscription<Peer> listenToPeer(Peer peer, Function(Peer) onData, {Lobby lobby}) {
-    return _PeerStream(peer, lobby != null ? lobby : local.value).stream.listen(onData);
+  static PeerStream listenToPeer(Peer peer, {Lobby lobby}) {
+    return PeerStream(peer, lobby != null ? lobby : local.value);
   }
 
   // ^ Method to Cancel Flat Mode ^ //
@@ -178,10 +178,10 @@ class LobbyService extends GetxService {
   }
 }
 
-class _LobbyStream {
+class LobbyStream {
   final String name;
 
-  _LobbyStream(this.name) {
+  LobbyStream(this.name) {
     LobbyService.lobbies.listen((Map<String, Lobby> map) {
       if (map[name] != null) {
         _controller.sink.add(map[name]);
@@ -192,13 +192,21 @@ class _LobbyStream {
   // ignore: close_sinks
   final _controller = StreamController<Lobby>();
   Stream<Lobby> get stream => _controller.stream;
+
+  listen(Function(Lobby) onData) {
+    _controller.stream.listen(onData);
+  }
+
+  close() {
+    _controller.close();
+  }
 }
 
-class _PeerStream {
+class PeerStream {
   final Peer peer;
   final Lobby lobby;
 
-  _PeerStream(this.peer, this.lobby) {
+  PeerStream(this.peer, this.lobby) {
     LobbyService.lobbies.listen((Map<String, Lobby> map) {
       if (map[lobby.name] != null) {
         if (map[lobby.name].peers[peer.id.peer] != null) {
@@ -208,7 +216,15 @@ class _PeerStream {
     });
   }
 
+  listen(Function(Peer) onData) {
+    _controller.stream.listen(onData);
+  }
+
   // ignore: close_sinks
   final _controller = StreamController<Peer>();
   Stream<Peer> get stream => _controller.stream;
+
+  close() {
+    _controller.close();
+  }
 }

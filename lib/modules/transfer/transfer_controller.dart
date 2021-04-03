@@ -17,8 +17,9 @@ class TransferController extends GetxController {
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
   final direction = 0.0.obs;
+  final isShiftingEnabled = true.obs;
 
-  // @ String Properties
+  // @ View Properties
   final string = "".obs;
   final heading = "".obs;
 
@@ -88,6 +89,14 @@ class TransferController extends GetxController {
       isBirdsEye(!isBirdsEye.value);
       print("isBirdsEye ${isBirdsEye.value}");
       isBirdsEye.refresh();
+    }
+  }
+
+  void toggleShifting(){
+    isShiftingEnabled(!isShiftingEnabled.value);
+
+    if(isShiftingEnabled.value){
+
     }
   }
 

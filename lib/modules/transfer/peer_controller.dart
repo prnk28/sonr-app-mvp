@@ -36,7 +36,7 @@ class PeerController extends GetxController {
 
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
-  StreamSubscription<Peer> peerStream;
+  PeerStream peerStream;
   StreamSubscription<VectorPosition> userStream;
   PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
@@ -84,14 +84,14 @@ class PeerController extends GetxController {
     }
 
     // Add Stream Handlers
-    peerStream = LobbyService.listenToPeer(peer, _handlePeerUpdate);
+    peerStream = LobbyService.listenToPeer(peer).listen(_handlePeerUpdate);
     userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     super.onInit();
   }
 
   @override
   void onClose() {
-    peerStream.cancel();
+    peerStream.close();
     userStream.cancel();
     super.onClose();
   }
@@ -169,41 +169,49 @@ class PeerController extends GetxController {
 
   // ^ Handle Peer Position ^ //
   void _handlePeerUpdate(Peer peer) {
-    if (!hasCompleted.value) {
-      // Update Direction
-      if (peer.id.peer == peer.id.peer && !_isInvited) {
-        peerVector(VectorPosition(peer.position));
+    if (!isClosed) {
+      if (!hasCompleted.value) {
+        // Update Direction
+        if (peer.id.peer == peer.id.peer && !_isInvited) {
+          peerVector(VectorPosition(peer.position));
 
-        // Handle Changes
-        _handleFacingUpdate();
+          // Handle Changes
+          if (Get.find<TransferController>().isShiftingEnabled.value) {
+            _handleFacingUpdate();
+          }
+        }
       }
     }
   }
 
   // ^ Handle Peer Position ^ //
   void _handleUserUpdate(VectorPosition pos) {
-    if (!hasCompleted.value) {
-      // Initialize
-      userVector(pos);
+    if (!isClosed) {
+      if (!hasCompleted.value) {
+        // Initialize
+        userVector(pos);
 
-      // Find Offset
-      if (peer.isOnDesktop) {
-        offset(Offset.zero);
-      } else {
-        offset(peerVector.value.offsetAgainstVector(userVector.value));
-      }
-
-      // Check if Facing
-      var newIsFacing = userVector.value.isPointingAt(peerVector.value);
-      if (isFacing.value != newIsFacing) {
-        // Check if Device Permits PointToShare
-        if (UserService.pointShareEnabled) {
-          // Check New Result
-          if (newIsFacing) {
-            _startTimer();
-            isFacing(userVector.value.isPointingAt(peerVector.value));
+        // Find Offset
+        if (Get.find<TransferController>().isShiftingEnabled.value) {
+          if (peer.isOnDesktop) {
+            offset(Offset.zero);
           } else {
-            _stopTimer();
+            offset(peerVector.value.offsetAgainstVector(userVector.value));
+          }
+        }
+
+        // Check if Facing
+        var newIsFacing = userVector.value.isPointingAt(peerVector.value);
+        if (isFacing.value != newIsFacing) {
+          // Check if Device Permits PointToShare
+          if (UserService.pointShareEnabled) {
+            // Check New Result
+            if (newIsFacing) {
+              _startTimer();
+              isFacing(userVector.value.isPointingAt(peerVector.value));
+            } else {
+              _stopTimer();
+            }
           }
         }
       }
