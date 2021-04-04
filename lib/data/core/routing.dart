@@ -9,7 +9,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'bindings.dart';
 
 // ^ Constant Routing Information ^ //
-class SonrRoutes {
+class SonrRouting {
   static get pages => [
         // ** Home Page ** //
         GetPage(
@@ -37,7 +37,7 @@ class SonrRoutes {
         GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeOut),
 
         // ** Register Page ** //
-        GetPage(name: '/register', page: () => RegisterScreen(), transition: Transition.fade, curve: Curves.easeIn),
+        GetPage(name: '/register', page: () => StartedScreen(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
         GetPage(
@@ -66,7 +66,7 @@ class SonrRoutes {
   }
 
   // ^ Method Validates Required Services Registered ^ //
-  static bool get areRequiredRegistered {
+  static bool get areServicesRegistered {
     return DeviceService.isRegistered &&
         UserService.isRegistered &&
         PermissionService.isRegistered &&

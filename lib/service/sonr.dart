@@ -33,7 +33,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (DeviceService.isMobile && SonrRoutes.areRequiredRegistered && isRegistered) {
+      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
           DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
