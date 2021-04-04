@@ -26,8 +26,8 @@ class SonrSnack {
   }
 
   // ^ Custom Alert ^ //
-  factory SonrSnack.remote({@required String message, @required Icon icon, Color color = Colors.purple}) {
-    return SonrSnack("Remote Code", message, icon, color, 45000, true);
+  factory SonrSnack.remote({@required String message, int duration = 45000, Color color = Colors.purple}) {
+    return SonrSnack("Remote Code", message, SonrIcon.remote, color, duration, true);
   }
 
   // ^ Custom Alert ^ //

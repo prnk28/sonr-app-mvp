@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -14,7 +15,7 @@ class LobbyService extends GetxService {
   final _flatModeCancelled = false.obs;
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
-  final _lobbies = RxMap<String, Lobby>();
+  final _lobbies = RxList<LobbyModel>();
   final _local = Rx<LobbyModel>();
   final _localFlatPeers = RxMap<String, Peer>();
   final _localSize = 0.obs;
@@ -24,7 +25,7 @@ class LobbyService extends GetxService {
 
   // @ Routing to Reactive
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
-  static RxMap<String, Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
+  static RxList<LobbyModel> get lobbies => Get.find<LobbyService>()._lobbies;
   static Rx<LobbyModel> get local => Get.find<LobbyService>()._local;
   static RxInt get localSize => Get.find<LobbyService>()._localSize;
   static Rx<VectorPosition> get userPosition => to._position;
@@ -83,8 +84,8 @@ class LobbyService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-
-    SonrSnack.success("Sent Contact to ${LobbyService.local.value.flatPeers.values.first.profile.firstName}");
+    var flatPeer = LobbyService.local.value.firstFlat();
+    SonrSnack.success("Sent Contact to ${flatPeer.profile.firstName}");
     Get.back();
     return true;
   }
@@ -102,7 +103,7 @@ class LobbyService extends GetxService {
 
     // @ Update Other Topics
     else {
-      _lobbies[data.name] = data;
+      _lobbies.add(LobbyModel(data));
       _lobbies.refresh();
     }
   }
@@ -175,56 +176,5 @@ class LobbyService extends GetxService {
       _lastIsFacingFlat(false);
       counter(0);
     }
-  }
-}
-
-class LobbyStream {
-  final RemoteInfo remote;
-
-  LobbyStream(this.remote) {
-    LobbyService.lobbies.listen((Map<String, Lobby> map) {
-      if (map[remote.topic] != null) {
-        _controller.sink.add(LobbyModel(map[remote.topic]));
-      }
-    });
-  }
-
-  // ignore: close_sinks
-  final _controller = StreamController<LobbyModel>();
-  Stream<LobbyModel> get stream => _controller.stream;
-
-  listen(Function(LobbyModel) onData) {
-    _controller.stream.listen(onData);
-  }
-
-  close() {
-    _controller.close();
-  }
-}
-
-class PeerStream {
-  final Peer peer;
-  final Lobby lobby;
-
-  PeerStream(this.peer, this.lobby) {
-    LobbyService.lobbies.listen((Map<String, Lobby> map) {
-      if (map[lobby.name] != null) {
-        if (map[lobby.name].peers[peer.id.peer] != null) {
-          _controller.sink.add(map[lobby.name].peers[peer.id.peer]);
-        }
-      }
-    });
-  }
-
-  listen(Function(Peer) onData) {
-    _controller.stream.listen(onData);
-  }
-
-  // ignore: close_sinks
-  final _controller = StreamController<Peer>();
-  Stream<Peer> get stream => _controller.stream;
-
-  close() {
-    _controller.close();
   }
 }

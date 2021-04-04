@@ -52,7 +52,7 @@ class LocalLobbyView extends GetView<TransferController> {
 
             // @ Compass View
             Padding(
-              padding: EdgeInsetsX.bottom(64.0),
+              padding: EdgeInsetsX.bottom(32.0),
               child: GestureDetector(
                 onTap: () {
                   controller.toggleShifting();
@@ -102,9 +102,9 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
   Widget build(BuildContext context) {
     return SonrScaffold.appBarLeadingAction(
         disableDynamicLobbyTitle: true,
-        titleWidget: SonrText.appBar("Remote"),
+        titleWidget: _buildTitleWidget(),
         leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
-        action: Container(),
+        action: ShapeButton.circle(icon: SonrIcon.leave, onPressed: () => Get.find<TransferController>().stopRemote(), shape: NeumorphicShape.flat),
         body: ListView.builder(
           itemCount: lobbyModel != null ? lobbyModel.length + 1 : 1,
           itemBuilder: (BuildContext context, int index) {
@@ -115,7 +115,6 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
                     toggleIndex = index;
                   });
                 },
-                title: '',
               );
             } else {
               // Build List Item
@@ -123,6 +122,18 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
             }
           },
         ));
+  }
+
+  Widget _buildTitleWidget() {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      SonrText.appBar("Remote"),
+      IconButton(
+        icon: Icon(Icons.info_outline),
+        onPressed: () {
+          SonrSnack.remote(message: widget.info.display, duration: 12000);
+        },
+      )
+    ]);
   }
 
   // ^ Updates Stack Children ^ //

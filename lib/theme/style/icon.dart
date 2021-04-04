@@ -126,6 +126,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
 
   static SonrIcon get invite => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.aquaGuidance, size: 28);
+  static SonrIcon get leave => SonrIcon.gradient(Icons.exit_to_app_rounded, FlutterGradientNames.happyMemories, size: 28);
   static SonrIcon get message => SonrIcon.gradient(Icons.message, FlutterGradientNames.aquaGuidance, size: 28);
   static SonrIcon get settings => SonrIcon.gradient(SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get multiSettings => SonrIcon.gradient(SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);

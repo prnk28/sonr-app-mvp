@@ -8,8 +8,10 @@ class TimerService {
   final Duration deadline;
   final Duration interval;
   final completer = new Completer<bool>();
+  bool get isRunning => _isRunning;
 
   // References
+  bool _isRunning = false;
   Timer _timer;
   double _counter;
   int _intervalValue;
@@ -20,24 +22,21 @@ class TimerService {
     _intervalValue = this.interval.inMilliseconds;
   }
 
-  Future<bool> start({BoolFunction isValid}) {
+  Future<bool> start({@required  BoolFunction isValid, @required  Function onComplete}) {
+    _isRunning = true;
     _timer = Timer.periodic(interval, (_) {
       // Add MS to Counter
       _counter = _counter += _intervalValue;
 
       // Check if Facing
       if (_counter == _deadlineValue) {
-        if (isValid != null) {
           if (isValid()) {
+            onComplete();
             completer.complete(true);
           } else {
             completer.complete(false);
             _resetTimer();
           }
-        } else {
-          completer.complete(true);
-          _resetTimer();
-        }
       }
     });
     return completer.future;
@@ -46,6 +45,7 @@ class TimerService {
   // # Stop Timer for Facing Check
   void _resetTimer() {
     if (_timer != null) {
+      _isRunning = false;
       _timer.cancel();
       _timer = null;
       _counter = 0;

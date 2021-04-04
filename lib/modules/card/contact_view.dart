@@ -217,9 +217,9 @@ class _ContactInviteView extends StatelessWidget {
               onPressed: () {
                 SonrOverlay.back();
                 if (!isReply) {
-                  controller.promptSendBack(card);
+                  controller.promptSendBack(invite, card);
                 } else {
-                  controller.acceptContact(card, sendBackContact: false);
+                  controller.acceptContact(invite, card, sendBackContact: false);
                 }
               },
               text: "Accept",

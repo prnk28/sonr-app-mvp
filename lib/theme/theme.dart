@@ -5,6 +5,7 @@ export '../data/api/api_models.dart';
 export '../data/api/api_vector.dart';
 export '../data/api/api_primitive.dart';
 export '../data/api/api_widgets.dart';
+export '../data/model/model_lobby.dart';
 export '../service/device.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';

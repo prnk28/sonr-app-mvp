@@ -26,7 +26,6 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
-  Timer _timer;
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -48,15 +47,19 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
-  // ^ Toggle Remote Value ^ //
+  // ^ Start Remote Session ^ //
   void startRemote() async {
     // Start Remote
     remote(await SonrService.createRemote());
     isRemoteActive(true);
+  }
 
-    // Set Title
-    title(remote.value.display);
-    title.refresh();
+  // ^ Stop Remote Session ^ //
+  void stopRemote() async {
+    // Start Remote
+    SonrService.leaveRemote(remote.value);
+    remote(RemoteInfo());
+    isRemoteActive(false);
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //
@@ -74,7 +77,7 @@ class TransferController extends GetxController {
     }
   }
 
-  void toggleShifting(){
+  void toggleShifting() {
     isShiftingEnabled(!isShiftingEnabled.value);
   }
 

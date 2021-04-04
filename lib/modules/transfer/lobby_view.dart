@@ -140,7 +140,7 @@ class _LobbySheetState extends State<LobbySheet> {
 class LobbyTitleView extends StatefulWidget {
   final Function(int) onChanged;
   final String title;
-  const LobbyTitleView({Key key, @required this.onChanged, @required this.title}) : super(key: key);
+  const LobbyTitleView({Key key, @required this.onChanged, this.title = ''}) : super(key: key);
 
   @override
   _LobbyTitleViewState createState() => _LobbyTitleViewState();

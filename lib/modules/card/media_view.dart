@@ -96,7 +96,7 @@ class _MediaInviteView extends StatelessWidget {
               ColorButton.neutral(onPressed: () => controller.declineInvite(), text: "Decline"),
               Padding(padding: EdgeInsets.all(8)),
               ColorButton.primary(
-                onPressed: () => controller.acceptTransfer(card),
+                onPressed: () => controller.acceptTransfer(invite, card),
                 text: "Accept",
                 gradient: SonrPalette.tertiary(),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),

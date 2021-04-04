@@ -17,7 +17,7 @@ class TransferCardController extends GetxController {
   final animationCompleted = false.obs;
 
   // ^ Accept Contact Invite Request ^ //
-  acceptContact(TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
+  acceptContact(AuthInvite invite, TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
     // Save Card
     Get.find<SQLService>().storeCard(card);
 
@@ -36,7 +36,7 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  acceptTransfer(TransferCard card) {
+  acceptTransfer(AuthInvite invite, TransferCard card) {
     SonrService.respond(true);
     SonrOverlay.back();
 
@@ -69,9 +69,9 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  promptSendBack(TransferCard card) async {
+  promptSendBack(AuthInvite invite, TransferCard card) async {
     var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-    acceptContact(card, sendBackContact: result, closeOverlay: true);
+    acceptContact(invite, card, sendBackContact: result, closeOverlay: true);
   }
 
   // ^ Method to Present Card Overlay Info

@@ -20,11 +20,13 @@ class SonrService extends GetxService with TransferQueue {
   final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
+  final _remotes = RxList<RemoteInfo>();
   final _status = Rx<Status>();
 
   // @ Static Accessors
   static RxBool get isReady => to._isReady;
   static RxDouble get progress => to._progress;
+  static RxList<RemoteInfo> get remotes => to._remotes;
   static Rx<Status> get status => to._status;
 
   // @ Set References
@@ -82,7 +84,16 @@ class SonrService extends GetxService with TransferQueue {
     var topic = "${words[0]}-${words[1]}-${words[2]}";
 
     // Perform Routine
-    await to._node.joinRemote(RemoteInfo(isJoin: true, topic: topic, display: display, words: words));
+    var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
+    await to._node.joinRemote(remote);
+    to._remotes.add(remote);
+    to._remotes.refresh();
+  }
+
+  // ^ Leave a Remote Group ^
+  static leaveRemote(RemoteInfo info) async {
+    // Perform Routine
+    await to._node.leaveRemote(info);
   }
 
   // ^ Sets Properties for Node ^
@@ -150,25 +161,25 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
-  static inviteWithPeer(Peer p) async {
+  static inviteWithPeer(Peer p, {RemoteInfo info}) async {
     // Set Peer Controller
     to.currentInvitedFromList(p);
 
     // File Payload
     if (to.payload == Payload.MEDIA) {
       assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(p, to.currentTransfer.media);
+      await to._node.inviteFile(p, to.currentTransfer.media, info: info);
     }
 
     // Contact Payload
     else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(p, isFlat: to.currentTransfer.isFlat);
+      await to._node.inviteContact(p, isFlat: to.currentTransfer.isFlat, info: info);
     }
 
     // Link Payload
     else if (to.payload == Payload.URL) {
       assert(to.currentTransfer.url != null);
-      await to._node.inviteLink(p, to.currentTransfer.url);
+      await to._node.inviteLink(p, to.currentTransfer.url, info: info);
     }
 
     // No Payload
@@ -178,8 +189,8 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Respond-Peer Event ^
-  static respond(bool decision) async {
-    await to._node.respond(decision);
+  static respond(bool decision, {RemoteInfo info}) async {
+    await to._node.respond(decision, info: info);
   }
 
   // ^ Async Function notifies transfer complete ^ //
