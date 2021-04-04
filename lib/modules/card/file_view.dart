@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
-import 'package:sonr_app/modules/card/progress_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'card_controller.dart';
 
-class FileCard extends StatelessWidget {
+class FileCard extends GetWidget<TransferCardController> {
   // References
   final CardType type;
   final AuthInvite invite;
@@ -29,10 +29,10 @@ class FileCard extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _FileInviteView(card, invite);
+        return _FileInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return _FileItemView(card);
+        return _FileItemView(card, controller);
       default:
         return Container();
         break;
@@ -44,166 +44,158 @@ class FileCard extends StatelessWidget {
 class _FileInviteView extends StatelessWidget {
   final TransferCard card;
   final AuthInvite invite;
-  _FileInviteView(this.card, this.invite);
+  final TransferCardController controller;
+  _FileInviteView(this.card, this.controller, this.invite);
 
   @override
   Widget build(BuildContext context) {
-    return GetX<FileCardController>(
-      init: FileCardController(card, invite: invite),
-      builder: (controller) {
-        return Container(
-            child: NeumorphicBackground(
-                backendColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(20),
-                child: Neumorphic(
-                  style: SonrStyle.normal,
-                  margin: EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    key: UniqueKey(),
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(children: [
-                        // Build Profile Pic
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 4.0, left: 8),
-                            child: Neumorphic(
-                              padding: EdgeInsets.all(4),
-                              style: NeumorphicStyle(
-                                boxShape: NeumorphicBoxShape.circle(),
-                                depth: -10,
-                              ),
-                              child: invite.from.profile.hasPicture()
-                                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                                  : Icon(
-                                      Icons.insert_emoticon,
-                                      size: 100,
-                                      color: SonrColor.Black.withOpacity(0.5),
-                                    ),
-                            ),
-                          ),
-                        ),
-                        // Create Spacing
-                        Padding(padding: EdgeInsets.all(6)),
-                        // From Information
-                        Column(children: [
-                          invite.from.profile.hasLastName()
-                              ? SonrText.gradient(
-                                  invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
-                                  size: 38)
-                              : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
-                          Row(children: [
-                            SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                            SonrText.normal("   ${card.properties.size.sizeText()}", size: 18)
-                          ]),
-                        ]),
-                      ]),
-                      Divider(),
-                      Container(
-                        width: Get.width - 50,
-                        height: Get.height / 3,
+    return Container(
+        child: NeumorphicBackground(
+            backendColor: Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            child: Neumorphic(
+              style: SonrStyle.normal,
+              margin: EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                key: UniqueKey(),
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(children: [
+                    // Build Profile Pic
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4.0, left: 8),
                         child: Neumorphic(
-                            padding: EdgeInsets.all(8),
-                            style: NeumorphicStyle(
-                              boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                              depth: -10,
-                            ),
-                            child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3)),
-                      ),
-                      Divider(),
-                      Padding(padding: EdgeInsets.all(4)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ColorButton.neutral(onPressed: () => controller.decline(), text: "Decline"),
-                          Padding(padding: EdgeInsets.all(8)),
-                          ColorButton.primary(
-                            onPressed: () => controller.accept(),
-                            text: "Accept",
-                            gradient: SonrPalette.tertiary(),
-                            icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                          padding: EdgeInsets.all(4),
+                          style: NeumorphicStyle(
+                            boxShape: NeumorphicBoxShape.circle(),
+                            depth: -10,
                           ),
-                        ],
+                          child: invite.from.profile.hasPicture()
+                              ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+                              : Icon(
+                                  Icons.insert_emoticon,
+                                  size: 100,
+                                  color: SonrColor.Black.withOpacity(0.5),
+                                ),
+                        ),
+                      ),
+                    ),
+                    // Create Spacing
+                    Padding(padding: EdgeInsets.all(6)),
+                    // From Information
+                    Column(children: [
+                      invite.from.profile.hasLastName()
+                          ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
+                              size: 38)
+                          : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
+                      Row(children: [
+                        SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+                        SonrText.normal("   ${card.properties.size.sizeText()}", size: 18)
+                      ]),
+                    ]),
+                  ]),
+                  Divider(),
+                  Container(
+                    width: Get.width - 50,
+                    height: Get.height / 3,
+                    child: Neumorphic(
+                        padding: EdgeInsets.all(8),
+                        style: NeumorphicStyle(
+                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                          depth: -10,
+                        ),
+                        child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3)),
+                  ),
+                  Divider(),
+                  Padding(padding: EdgeInsets.all(4)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ColorButton.neutral(onPressed: () => controller.declineInvite(), text: "Decline"),
+                      Padding(padding: EdgeInsets.all(8)),
+                      ColorButton.primary(
+                        onPressed: () => controller.acceptTransfer(invite, card),
+                        text: "Accept",
+                        gradient: SonrPalette.tertiary(),
+                        icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
                       ),
                     ],
                   ),
-                )));
-      },
-    );
+                ],
+              ),
+            )));
   }
 }
 
 // ^ TransferCard Media Item Details ^ //
 class _FileItemView extends StatelessWidget {
   final TransferCard card;
+  final TransferCardController controller;
 
-  _FileItemView(this.card);
+  _FileItemView(this.card, this.controller);
   @override
   Widget build(BuildContext context) {
-    return GetX<FileCardController>(
-        init: FileCardController(card),
-        builder: (controller) {
-          return Card(
-              shadowColor: Colors.transparent,
-              color: Colors.transparent,
-              elevation: 2,
-              child: Container(
-                height: 420,
-                width: Get.width - 64,
-                child: GestureDetector(
-                  onTap: () {
-                    OpenFile.open(card.metadata.path);
-                  },
-                  child: Neumorphic(
-                    style: SonrStyle.normal,
-                    margin: EdgeInsets.all(4),
-                    child: Hero(
-                      tag: card.id,
-                      child: Container(
-                        height: 75,
-                        child: Stack(
-                          children: <Widget>[
-                            // Time Stamp
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Neumorphic(
-                                  style: SonrStyle.timeStampDark,
-                                  child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
-                                  padding: EdgeInsets.all(10),
-                                ),
-                              ),
-                            ),
-
-                            // File Icon
-                            Align(
-                                alignment: Alignment.center,
-                                child: Neumorphic(
-                                    padding: EdgeInsets.all(20),
-                                    style: SonrStyle.indented,
-                                    child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
-
-                            // Info Button
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ShapeButton.circle(
-                                    icon: SonrIcon.info,
-                                    onPressed: () => controller.showInfo(),
-                                    shadowLightColor: Colors.black38,
-                                  )),
-                            ),
-                          ],
+    return Card(
+        shadowColor: Colors.transparent,
+        color: Colors.transparent,
+        elevation: 2,
+        child: Container(
+          height: 420,
+          width: Get.width - 64,
+          child: GestureDetector(
+            onTap: () {
+              OpenFile.open(card.metadata.path);
+            },
+            child: Neumorphic(
+              style: SonrStyle.normal,
+              margin: EdgeInsets.all(4),
+              child: Hero(
+                tag: card.id,
+                child: Container(
+                  height: 75,
+                  child: Stack(
+                    children: <Widget>[
+                      // Time Stamp
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Neumorphic(
+                            style: SonrStyle.timeStampDark,
+                            child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
+                            padding: EdgeInsets.all(10),
+                          ),
                         ),
                       ),
-                    ),
+
+                      // File Icon
+                      Align(
+                          alignment: Alignment.center,
+                          child: Neumorphic(
+                              padding: EdgeInsets.all(20),
+                              style: SonrStyle.indented,
+                              child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
+
+                      // Info Button
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ShapeButton.circle(
+                              icon: SonrIcon.info,
+                              onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
+                              shadowLightColor: Colors.black38,
+                            )),
+                      ),
+                    ],
                   ),
                 ),
-              ));
-        });
+              ),
+            ),
+          ),
+        ));
   }
 }
 
@@ -302,51 +294,5 @@ class _FileCardInfo extends StatelessWidget {
             ]),
           ]),
         ));
-  }
-}
-
-class FileCardController extends GetxController {
-  final AuthInvite invite;
-  final TransferCard card;
-  final animationCompleted = false.obs;
-
-  FileCardController(this.card, {this.invite});
-
-  // ^ Accept Contact Invite Request ^ //
-  accept({bool sendBackContact = false, bool closeOverlay = false}) {
-    SonrService.respond(true);
-    SonrOverlay.back();
-
-    SonrOverlay.show(
-      ProgressView(card, card.properties.size > 5000000),
-      barrierDismissible: false,
-      disableAnimation: true,
-    );
-
-    if (card.properties.size > 5000000) {
-      // Handle Card Received
-      SonrService.completed().then((value) {
-        SonrOverlay.back();
-        Get.offNamed('/home/received');
-      });
-    } else {
-      // Handle Animation Completed
-      Future.delayed(1600.milliseconds, () {
-        SonrOverlay.back();
-        Get.offNamed('/home/received');
-      });
-    }
-  }
-
-  // ^ Decline Invite Request ^ //
-  decline() {
-    // Check if accepted
-    SonrService.respond(false);
-    SonrOverlay.back();
-  }
-
-  // ^ Method to Present Card Overlay Info
-  showInfo() {
-    SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
   }
 }

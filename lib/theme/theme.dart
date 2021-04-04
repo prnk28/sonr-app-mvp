@@ -14,6 +14,7 @@ export '../service/sonr.dart';
 export '../service/sql.dart';
 export '../service/user.dart';
 export 'package:flutter/services.dart';
+export 'package:sonr_app/modules/card/card_controller.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';

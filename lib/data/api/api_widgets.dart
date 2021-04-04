@@ -1,7 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
 
-enum CardType { None, Invite, InviteFlat, Reply, GridItem, Info }
-
 // ^ Edge Insets Helper Extensions ^ //
 extension EdgeInsetsX on EdgeInsets {
   // Top Only Insets
