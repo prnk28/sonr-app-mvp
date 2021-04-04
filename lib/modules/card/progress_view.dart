@@ -2,18 +2,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'card_controller.dart';
 
 class ProgressView extends HookWidget {
   //  Properties
   final TransferCard card;
   final Gradient gradient = SonrGradient.progress();
-  final TransferCardController cardController;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
 
   // Constructer
-  ProgressView(this.cardController, this.card, this.utilizeProgress) : super(key: UniqueKey());
+  ProgressView(this.card, this.utilizeProgress) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {

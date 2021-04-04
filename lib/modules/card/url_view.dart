@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'card_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class URLCard extends GetWidget<TransferCardController> {
+class URLCard extends StatelessWidget {
   // References
   final CardType type;
   final AuthInvite invite;
@@ -27,7 +27,7 @@ class URLCard extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _URLInviteView(card, controller, invite);
+        return _URLInviteView(card, invite);
         break;
       case CardType.GridItem:
         return _URLItemView(card);
@@ -71,76 +71,79 @@ class _URLItemView extends StatelessWidget {
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
 class _URLInviteView extends StatelessWidget {
-  final TransferCardController controller;
   final TransferCard card;
   final AuthInvite invite;
-  _URLInviteView(this.card, this.controller, this.invite);
+  _URLInviteView(this.card, this.invite);
 
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-      style: SonrStyle.normal,
-      margin: EdgeInsets.all(8),
-      child: Column(mainAxisSize: MainAxisSize.max, children: [
-        // @ Header
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          // Build Profile Pic
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
-            child: Neumorphic(
-              padding: EdgeInsets.all(4),
-              style: NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.circle(),
-                depth: -10,
-              ),
-              child: invite.from.profile.hasPicture()
-                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                  : Icon(
-                      Icons.insert_emoticon,
-                      size: 60,
-                      color: SonrColor.Black.withOpacity(0.5),
+    return GetX<URLCardController>(
+        init: URLCardController(card, invite: invite),
+        builder: (controller) {
+          return Neumorphic(
+            style: SonrStyle.normal,
+            margin: EdgeInsets.all(8),
+            child: Column(mainAxisSize: MainAxisSize.max, children: [
+              // @ Header
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                // Build Profile Pic
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
+                  child: Neumorphic(
+                    padding: EdgeInsets.all(4),
+                    style: NeumorphicStyle(
+                      boxShape: NeumorphicBoxShape.circle(),
+                      depth: -10,
                     ),
-            ),
-          ),
+                    child: invite.from.profile.hasPicture()
+                        ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
+                        : Icon(
+                            Icons.insert_emoticon,
+                            size: 60,
+                            color: SonrColor.Black.withOpacity(0.5),
+                          ),
+                  ),
+                ),
 
-          // From Information
-          Column(mainAxisSize: MainAxisSize.min, children: [
-            invite.from.profile.hasLastName()
-                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
-                    size: 32)
-                : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
-            Center(child: SonrText.gradient("Website Link", FlutterGradientNames.magicRay, size: 22)),
-          ]),
-        ]),
-        Divider(),
+                // From Information
+                Column(mainAxisSize: MainAxisSize.min, children: [
+                  invite.from.profile.hasLastName()
+                      ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
+                          size: 32)
+                      : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
+                  Center(child: SonrText.gradient("Website Link", FlutterGradientNames.magicRay, size: 22)),
+                ]),
+              ]),
+              Divider(),
 
-        // @ URL Information
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(child: Container(child: _buildURLView(card.url))),
-          ],
-        ),
+              // @ URL Information
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(child: Container(child: _buildURLView(card.url))),
+                ],
+              ),
 
-        // @ Actions
-        Divider(),
-        Padding(padding: EdgeInsets.all(4)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
-            Padding(padding: EdgeInsets.all(8)),
-            ColorButton.primary(
-              onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
-              text: "Open",
-              icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
-            ),
-          ],
-        ),
-        Padding(padding: EdgeInsets.only(top: 14))
-      ]),
-    );
+              // @ Actions
+              Divider(),
+              Padding(padding: EdgeInsets.all(4)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
+                  Padding(padding: EdgeInsets.all(8)),
+                  ColorButton.primary(
+                    onPressed: () => controller.launchURL(card.url.link),
+                    text: "Open",
+                    icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
+                  ),
+                ],
+              ),
+              Padding(padding: EdgeInsets.only(top: 14))
+            ]),
+          );
+        });
   }
 
   // ^ Method to Build View from Data ^ //
@@ -255,5 +258,22 @@ class _URLInviteView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class URLCardController extends GetxController {
+  final TransferCard card;
+  final AuthInvite invite;
+
+  URLCardController(this.card, {this.invite});
+
+  // ^ Launch a URL Event ^ //
+  Future launchURL(String url) async {
+    if (await canLaunch(url)) {
+      SonrOverlay.back();
+      await launch(url);
+    } else {
+      SonrSnack.error("Could not launch the URL.");
+    }
   }
 }

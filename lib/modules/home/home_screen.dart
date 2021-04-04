@@ -1,3 +1,7 @@
+import 'package:sonr_app/modules/card/contact_view.dart';
+import 'package:sonr_app/modules/card/file_view.dart';
+import 'package:sonr_app/modules/card/media_view.dart';
+import 'package:sonr_app/modules/card/url_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'search_view.dart';

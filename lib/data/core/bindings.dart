@@ -9,7 +9,6 @@ import 'package:sonr_app/modules/transfer/transfer_controller.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<CameraController>(() => CameraController());
   }
@@ -22,7 +21,6 @@ class TransferBinding implements Bindings {
     Get.put<TransferController>(TransferController(), permanent: true);
   }
 }
-
 
 // ^ Profile Controller Bindings ^ //
 class ProfileBinding implements Bindings {

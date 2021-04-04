@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:sonr_app/modules/card/contact_view.dart';
+
 import '../theme.dart';
 
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
