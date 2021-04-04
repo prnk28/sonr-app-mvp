@@ -102,7 +102,7 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
   Widget build(BuildContext context) {
     return SonrScaffold.appBarLeadingAction(
         disableDynamicLobbyTitle: true,
-        titleWidget: SonrText.appBar(widget.info.display),
+        titleWidget: SonrText.appBar("Remote"),
         leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
         action: Container(),
         body: ListView.builder(

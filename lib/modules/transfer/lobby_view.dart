@@ -14,17 +14,14 @@ class LocalLobbyStack extends StatefulWidget {
 class _LocalLobbyStackState extends State<LocalLobbyStack> {
   // References
   int lobbySize = 0;
-  List<PeerBubble> stackChildren = [];
+  List<PeerBubble> stackChildren = <PeerBubble>[];
   StreamSubscription<LobbyModel> localLobbyStream;
 
   // * Initial State * //
   @override
   void initState() {
-    stackChildren = <PeerBubble>[];
     // Add Initial Data
     _handleLobbyUpdate(LobbyService.local.value);
-
-    // Set Stream
     localLobbyStream = LobbyService.local.listen(_handleLobbyUpdate);
     super.initState();
   }
@@ -156,10 +153,12 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
   Widget build(BuildContext context) {
     return Column(children: [
       // Build Title
-      Padding(padding: EdgeInsetsX.top(8)),
-      Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title(widget.title)]),
+      widget.title != '' ? Padding(padding: EdgeInsetsX.top(8)) : Container(),
+      widget.title != ''
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title(widget.title)])
+          : Container(),
 
       // Build Toggle View
       Container(
@@ -191,7 +190,6 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
           ],
         ),
       ),
-
       Padding(padding: EdgeInsets.only(top: 24))
     ]);
   }
