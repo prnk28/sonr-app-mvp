@@ -57,29 +57,27 @@ class PeerController extends GetxController {
       // Load your Rive data
       final data = await rootBundle.load('assets/animations/rive/peer_bubble.riv');
 
-      // Create a RiveFile from the binary data
-      final file = RiveFile();
-      if (file.import(data)) {
-        final artboard = file.mainArtboard;
+      // Await Loading
+      final file = RiveFile.import(data);
+      final artboard = file.mainArtboard;
 
-        // Add Animation Controllers
-        artboard.addController(SimpleAnimation('Idle'));
-        artboard.addController(_pending = SimpleAnimation('Pending'));
-        artboard.addController(_denied = SimpleAnimation('Denied'));
-        artboard.addController(_accepted = SimpleAnimation('Accepted'));
-        artboard.addController(_sending = SimpleAnimation('Sending'));
-        artboard.addController(_complete = SimpleAnimation('Complete'));
+      // Add Animation Controllers
+      artboard.addController(SimpleAnimation('Idle'));
+      artboard.addController(_pending = SimpleAnimation('Pending'));
+      artboard.addController(_denied = SimpleAnimation('Denied'));
+      artboard.addController(_accepted = SimpleAnimation('Accepted'));
+      artboard.addController(_sending = SimpleAnimation('Sending'));
+      artboard.addController(_complete = SimpleAnimation('Complete'));
 
-        // Set Default States
-        _pending.isActive = _isInvited;
-        _denied.isActive = _hasDenied;
-        _accepted.isActive = _hasAccepted;
-        _sending.isActive = _inProgress;
-        _complete.isActive = _hasCompleted;
+      // Set Default States
+      _pending.isActive = _isInvited;
+      _denied.isActive = _hasDenied;
+      _accepted.isActive = _hasAccepted;
+      _sending.isActive = _inProgress;
+      _complete.isActive = _hasCompleted;
 
-        // Observable Artboard
-        this.artboard(artboard);
-      }
+      // Observable Artboard
+      this.artboard(artboard);
     }
 
     // Add Stream Handlers

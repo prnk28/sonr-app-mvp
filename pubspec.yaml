@@ -62,7 +62,7 @@ dependencies:
   google_fonts: ^1.1.2
   lottie: ^1.0.1
   photo_view: ^0.10.3
-  rive: ^0.6.8
+  rive: ^0.7.0
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
