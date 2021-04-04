@@ -20,13 +20,11 @@ class SonrService extends GetxService with TransferQueue {
   final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
-  final _remotes = RxList<RemoteInfo>();
   final _status = Rx<Status>();
 
   // @ Static Accessors
   static RxBool get isReady => to._isReady;
   static RxDouble get progress => to._progress;
-  static RxList<RemoteInfo> get remotes => to._remotes;
   static Rx<Status> get status => to._status;
 
   // @ Set References
@@ -78,7 +76,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Join a New Group ^
-  static joinRemote(List<String> words) async {
+  static Future<RemoteInfo> joinRemote(List<String> words) async {
     // Extract Data
     var display = "${words[0]} ${words[1]} ${words[2]}";
     var topic = "${words[0]}-${words[1]}-${words[2]}";
@@ -86,8 +84,7 @@ class SonrService extends GetxService with TransferQueue {
     // Perform Routine
     var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
     await to._node.joinRemote(remote);
-    to._remotes.add(remote);
-    to._remotes.refresh();
+    return remote;
   }
 
   // ^ Leave a Remote Group ^
