@@ -65,7 +65,6 @@ class UserService extends GetxService {
 
   // ** References **
   final _userBox = GetStorage('User');
-  final _prefsBox = GetStorage('Preferences');
 
   // ^ Open SharedPreferences on Init ^ //
   Future<UserService> init() async {

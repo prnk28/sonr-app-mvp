@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/service/permission.dart';
+import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 

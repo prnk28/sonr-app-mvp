@@ -19,7 +19,7 @@ class TransferScreen extends GetView<TransferController> {
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),
             child: controller.isRemoteActive.value
-                ? RemoteLobbyView()
+                ? RemoteLobbyView(info: controller.remote.value)
                 : Stack(
                     children: <Widget>[
                       // @ Range Lines

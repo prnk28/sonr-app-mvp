@@ -68,20 +68,6 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
   }
 }
 
-// ^ Switched Lobby View ^ //
-class RemoteLobbyView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: LobbyService.localSize.value,
-        itemBuilder: (context, idx) {
-          return Column(children: [
-            SonrText.title("Handling Remote..."),
-          ]);
-        });
-  }
-}
-
 // ^ Sheet Lobby View ^ //
 class LobbySheet extends StatefulWidget {
   @override
@@ -137,7 +123,13 @@ class _LobbySheetState extends State<LobbySheet> {
               itemCount: peerList.length + 1,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
-                  return _buildTitle();
+                  return LobbyTitleView(
+                    onChanged: (index) {
+                      setState(() {
+                        toggleIndex = index;
+                      });
+                    },
+                  );
                 } else {
                   // Build List Item
                   return Column(children: [
@@ -151,8 +143,54 @@ class _LobbySheetState extends State<LobbySheet> {
             )));
   }
 
-  // ^ Builds Title View ^ //
-  Widget _buildTitle() {
+  // ^ Updates Stack Children ^ //
+  _handlePeerUpdate(Lobby lobby) {
+    // Initialize
+    var total = <Peer>[];
+    var mobile = <Peer>[];
+    var desktop = <Peer>[];
+
+    // Clear Lists
+    allPeers.clear();
+    mobilePeers.clear();
+    desktopPeers.clear();
+
+    // Iterate through peers and IDs
+    lobby.peers.forEach((id, peer) {
+      total.add(peer);
+      // Add to Peer Lists
+      if (peer.isOnMobile) {
+        mobile.add(peer);
+      } else if (peer.isOnDesktop) {
+        desktop.add(peer);
+      }
+    });
+
+    // Update View
+    setState(() {
+      lobbySize = lobby.size;
+      allPeers = total;
+      mobilePeers = mobile;
+      desktopPeers = desktop;
+    });
+  }
+}
+
+// ^ Lobby Title View ^ //
+class LobbyTitleView extends StatefulWidget {
+  final Function(int) onChanged;
+
+  const LobbyTitleView({Key key, @required this.onChanged}) : super(key: key);
+
+  @override
+  _LobbyTitleViewState createState() => _LobbyTitleViewState();
+}
+
+class _LobbyTitleViewState extends State<LobbyTitleView> {
+  int toggleIndex = 1;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(children: [
       // Build Title
       Padding(padding: EdgeInsetsX.top(8)),
@@ -173,6 +211,7 @@ class _LobbySheetState extends State<LobbySheet> {
             setState(() {
               toggleIndex = val;
             });
+            widget.onChanged(val);
           },
           children: [
             ToggleElement(
@@ -192,6 +231,76 @@ class _LobbySheetState extends State<LobbySheet> {
 
       Padding(padding: EdgeInsets.only(top: 24))
     ]);
+  }
+}
+
+// ^ Switched Lobby View ^ //
+class RemoteLobbyView extends StatefulWidget {
+  final RemoteInfo info;
+
+  const RemoteLobbyView({Key key, @required this.info}) : super(key: key);
+  @override
+  _RemoteLobbyViewState createState() => _RemoteLobbyViewState();
+}
+
+class _RemoteLobbyViewState extends State<RemoteLobbyView> {
+  // References
+  int lobbySize = 0;
+  int toggleIndex = 1;
+  List<Peer> allPeers = <Peer>[];
+  List<Peer> desktopPeers = <Peer>[];
+  List<Peer> mobilePeers = <Peer>[];
+  LobbyStream peerStream;
+
+  // * Initial State * //
+  @override
+  void initState() {
+    // Add Initial Data
+    _handlePeerUpdate(LobbyService.local.value);
+
+    // Set Stream
+    peerStream = LobbyService.listenToLobby(widget.info);
+    peerStream.listen(_handlePeerUpdate);
+    super.initState();
+  }
+
+  // * On Dispose * //
+  @override
+  void dispose() {
+    peerStream.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Set Current List
+    var peerList;
+    if (toggleIndex == 1) {
+      peerList = allPeers;
+    } else if (toggleIndex == 0) {
+      peerList = mobilePeers;
+    } else if (toggleIndex == 2) {
+      peerList = desktopPeers;
+    }
+
+    // Build View
+    return ListView.builder(
+      itemCount: peerList.length + 1,
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          return LobbyTitleView(
+            onChanged: (index) {
+              setState(() {
+                toggleIndex = index;
+              });
+            },
+          );
+        } else {
+          // Build List Item
+          return PeerListItem(peerList[index - 1], index - 1);
+        }
+      },
+    );
   }
 
   // ^ Updates Stack Children ^ //

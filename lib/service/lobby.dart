@@ -62,8 +62,8 @@ class LobbyService extends GetxService {
   }
 
   // ^ Method to Listen to Specified Lobby ^ //
-  static StreamSubscription<Lobby> listenToLobby(String name, Function(Lobby) onData) {
-    return LobbyStream(name).stream.listen(onData);
+  static LobbyStream listenToLobby(RemoteInfo remote) {
+    return LobbyStream(remote);
   }
 
   // ^ Method to Listen to Specified Peer ^ //
@@ -179,12 +179,12 @@ class LobbyService extends GetxService {
 }
 
 class LobbyStream {
-  final String name;
+  final RemoteInfo remote;
 
-  LobbyStream(this.name) {
+  LobbyStream(this.remote) {
     LobbyService.lobbies.listen((Map<String, Lobby> map) {
-      if (map[name] != null) {
-        _controller.sink.add(map[name]);
+      if (map[remote.topic] != null) {
+        _controller.sink.add(map[remote.topic]);
       }
     });
   }

@@ -8,7 +8,7 @@ export '../data/api/api_widgets.dart';
 export '../service/device.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';
-export '../service/permission.dart';
+export '../service/permissions.dart';
 export '../service/sonr.dart';
 export '../service/sql.dart';
 export '../service/user.dart';

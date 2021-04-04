@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/service/permission.dart';
+import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:motion_sensors/motion_sensors.dart';

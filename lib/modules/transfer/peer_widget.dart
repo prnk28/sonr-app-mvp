@@ -140,45 +140,50 @@ class PeerListItem extends StatefulWidget {
 class _PeerListItemState extends State<PeerListItem> {
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-        margin: EdgeInsetsX.horizontal(8),
-        child: ExpansionTile(
-          backgroundColor: Colors.transparent,
-          collapsedBackgroundColor: Colors.transparent,
-          leading: widget.peer.profilePicture(size: 50),
-          title: SonrText.subtitle(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
-          subtitle: SonrText("",
-              isRich: true,
-              richText: RichText(
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.fade,
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: widget.peer.platform.toString(),
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
-                    TextSpan(
-                        text: " - ${widget.peer.model}",
-                        style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
-                  ]))),
-          children: [
-            Padding(padding: EdgeInsets.all(8)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      children: [
+        Neumorphic(
+            margin: EdgeInsetsX.horizontal(8),
+            child: ExpansionTile(
+              backgroundColor: Colors.transparent,
+              collapsedBackgroundColor: Colors.transparent,
+              leading: widget.peer.profilePicture(size: 50),
+              title: SonrText.subtitle(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
+              subtitle: SonrText("",
+                  isRich: true,
+                  richText: RichText(
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.fade,
+                      text: TextSpan(children: [
+                        TextSpan(
+                            text: widget.peer.platform.toString(),
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
+                        TextSpan(
+                            text: " - ${widget.peer.model}",
+                            style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
+                      ]))),
               children: [
-                ColorButton.neutral(onPressed: () {}, text: "Block"),
                 Padding(padding: EdgeInsets.all(8)),
-                ColorButton.primary(
-                  onPressed: () {
-                    SonrService.inviteWithPeer(widget.peer);
-                  },
-                  text: "Invite",
-                  icon: SonrIcon.invite,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ColorButton.neutral(onPressed: () {}, text: "Block"),
+                    Padding(padding: EdgeInsets.all(8)),
+                    ColorButton.primary(
+                      onPressed: () {
+                        SonrService.inviteWithPeer(widget.peer);
+                      },
+                      text: "Invite",
+                      icon: SonrIcon.invite,
+                    ),
+                  ],
                 ),
+                Padding(padding: EdgeInsets.all(8)),
               ],
             ),
-            Padding(padding: EdgeInsets.all(8)),
-          ],
-        ),
-        style: SonrStyle.normal);
+            style: SonrStyle.normal),
+        Padding(padding: EdgeInsets.all(8))
+      ],
+    );
   }
 }
