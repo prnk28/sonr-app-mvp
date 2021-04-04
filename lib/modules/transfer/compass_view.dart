@@ -347,7 +347,7 @@ class _CompassBulb extends StatelessWidget {
                     size: 44,
                     key: ValueKey<String>(direction),
                   ),
-                  SonrAnimatedSwitcher.slideDown(
+                  AnimatedSlideSwitcher.slideDown(
                       child: SonrText.gradient(
                     heading,
                     FlutterGradientNames.glassWater,

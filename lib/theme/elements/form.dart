@@ -197,7 +197,7 @@ class SonrDropdown extends StatelessWidget {
         child: NeumorphicButton(
             margin: EdgeInsets.symmetric(horizontal: 3),
             style: style,
-            child: SonrAnimatedSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
+            child: AnimatedSlideSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
             onPressed: () {
               SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {
                 index(newIdx);

@@ -144,6 +144,7 @@ class SonrOverlay extends GetxService {
         entryDuration,
         barrierDismissible,
         _InviteReplyOverlayView(count, false, invite: invite),
+        backgroundColor: Colors.black54,
       );
 
       // Add Overlay to List
@@ -561,12 +562,8 @@ class _InviteReplyOverlayView extends StatelessWidget {
     }
 
     // Build View
-    return GlassContainer(
-        margin: EdgeInsets.symmetric(horizontal: 16),
-        height: 500,
-        // borderRadius: BorderRadius.circular(30),
-        // backendColor: Colors.transparent,
-        child: view);
+    return NeumorphicBackground(
+        margin: EdgeInsets.symmetric(horizontal: 16), borderRadius: BorderRadius.circular(30), backendColor: Colors.transparent, child: view);
   }
 }
 

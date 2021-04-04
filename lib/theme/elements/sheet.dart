@@ -138,10 +138,123 @@ class _ShareItemURL extends StatelessWidget {
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: SonrText.url(url.link),
+                child: _buildURLView(url),
               )),
         ),
       ],
+    );
+  }
+
+  Widget _buildURLView(URLLink data) {
+    // Check open graph images
+    if (data.images.length > 0) {
+      return Column(children: [
+        // @ Social Image
+        Image.network(data.images.first.url),
+
+        // @ URL Info
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30),
+          padding: EdgeInsets.symmetric(vertical: 4),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SonrText.header(data.title, size: 22),
+              SonrText.normal(data.description, size: 16),
+            ],
+          ),
+        ),
+
+        // @ Link Preview
+        GestureDetector(
+          onLongPress: () {
+            Clipboard.setData(new ClipboardData(text: data.link));
+            SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+          },
+          child: Neumorphic(
+              style: SonrStyle.indented,
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 6),
+              child: Row(children: [
+                // URL Icon
+                Padding(
+                  padding: const EdgeInsets.only(left: 14.0, right: 8),
+                  child: SonrIcon.url,
+                ),
+
+                // Link Preview
+                Container(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SonrText.url(data.url),
+                  ),
+                )
+              ])),
+        )
+      ]);
+    }
+
+    // Check twitter data
+    if (data.hasTwitter()) {
+      return Column(children: [
+        // @ Social Image
+        Image.network(data.twitter.image),
+
+        // @ URL Info
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30),
+          padding: EdgeInsets.symmetric(vertical: 4),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SonrText.header(data.title, size: 22),
+              SonrText.normal(data.description, size: 16),
+            ],
+          ),
+        ),
+
+        // @ Link Preview
+        GestureDetector(
+          onLongPress: () {
+            Clipboard.setData(new ClipboardData(text: data.link));
+            SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+          },
+          child: Neumorphic(
+              style: SonrStyle.indented,
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 6),
+              child: Row(children: [
+                // URL Icon
+                Padding(
+                  padding: const EdgeInsets.only(left: 14.0, right: 8),
+                  child: SonrIcon.url,
+                ),
+
+                // Link Preview
+                Container(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SonrText.url(data.url),
+                  ),
+                )
+              ])),
+        )
+      ]);
+    }
+
+    return GestureDetector(
+      onLongPress: () {
+        Clipboard.setData(new ClipboardData(text: data.link));
+        SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
+      },
+      child: Neumorphic(
+        style: SonrStyle.indented,
+        margin: EdgeInsets.all(10),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SonrText.url(data.url),
+        ),
+      ),
     );
   }
 }

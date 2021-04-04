@@ -48,7 +48,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 height: Get.height / 2 + 80,
-                child: SonrAnimatedSwitcher.fade(
+                child: AnimatedSlideSwitcher.fade(
                   duration: 2800.milliseconds,
                   child: GridView.builder(
                       key: ValueKey<List<Media>>(list),

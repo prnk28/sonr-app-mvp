@@ -5,7 +5,7 @@ import '../theme.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
-enum AnimType { None, Shake,  SlideIn, Fade }
+enum AnimType { None, Shake, SlideIn, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
 enum LottieBoard { Complete, Empty, Pending, Progress, Computer, David, Phone, Gallery, Progress_Alt, Camera, Contact }
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
@@ -62,6 +62,77 @@ class _AnimatedScaleState extends State<AnimatedScale> with TickerProviderStateM
       scale: _animation,
       alignment: widget.alignment,
       child: widget.child,
+    );
+  }
+}
+
+// ^ Sonr Animated Wave Icon for Screen Transitions ^ //
+class AnimatedWaveIcon extends HookWidget {
+  // Properties
+  final IconData iconData;
+  final double size;
+  final Duration duration;
+  final Function onCompleted;
+  final FlutterGradientNames gradient;
+
+  // Constructer
+  AnimatedWaveIcon(this.iconData, {this.gradient, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
+      : super(key: GlobalKey());
+
+  @override
+  Widget build(BuildContext context) {
+    // Hook Controller
+    final controller = useAnimationController(duration: Duration(seconds: 1));
+    final iconKey = GlobalKey();
+    controller.forward();
+
+    // Reactive to Progress
+    return Stack(
+      alignment: Alignment.center,
+      key: UniqueKey(),
+      children: <Widget>[
+        SizedBox(
+          height: size,
+          width: size,
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (BuildContext context, Widget child) {
+              return CustomPaint(
+                painter: IconWavePainter(
+                  iconKey: iconKey,
+                  waveAnimation: controller,
+                  percent: controller.value,
+                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrGradient.progress(),
+                  boxHeight: size,
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: size,
+          width: size,
+          child: ShaderMask(
+            blendMode: BlendMode.srcOut,
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [SonrColor.White],
+              stops: [0.0],
+            ).createShader(bounds),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Center(
+                child: Icon(
+                  iconData,
+                  size: size * 0.8,
+                  key: iconKey,
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -147,7 +218,7 @@ class Animated extends GetWidget<AnimatedController> {
                 offset: controller.shakeOffset(animation),
                 child: child,
               ));
-    }  else if (animation == AnimType.SlideIn) {
+    } else if (animation == AnimType.SlideIn) {
       return TweenAnimationBuilder<Offset>(
         key: key,
         tween: Tween(begin: Offset.zero, end: Offset(0.0, 1.0)),
@@ -195,6 +266,181 @@ class AnimatedController extends GetxController {
   Offset shakeOffset(double animation) {
     var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
     return Offset(18 * shake, 0);
+  }
+}
+
+class AnimatedSlideSwitcher extends StatelessWidget {
+  final AnimSwitch _animation;
+  final Widget child;
+  final Duration duration;
+
+  // * Constructer * //
+  const AnimatedSlideSwitcher(this._animation, this.child, this.duration);
+
+  // * Factory Fade * //
+  factory AnimatedSlideSwitcher.fade({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlideSwitcher(AnimSwitch.Fade, child, duration);
+  }
+
+  // * Factory Slide Up * //
+  factory AnimatedSlideSwitcher.slideUp({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlideSwitcher(AnimSwitch.SlideUp, child, duration);
+  }
+
+  // * Factory Slide Down * //
+  factory AnimatedSlideSwitcher.slideDown({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlideSwitcher(AnimSwitch.SlideDown, child, duration);
+  }
+
+  // * Factory Slide Left * //
+  factory AnimatedSlideSwitcher.slideLeft({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlideSwitcher(AnimSwitch.SlideLeft, child, duration);
+  }
+
+  // * Factory Slide Right * //
+  factory AnimatedSlideSwitcher.slideRight({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
+    return AnimatedSlideSwitcher(AnimSwitch.SlideRight, child, duration);
+  }
+
+  // ^ Build View Method ^ //
+  @override
+  Widget build(BuildContext context) {
+    // Initialize Transition Map
+    Map<AnimSwitch, Widget Function(Widget, Animation<double>)> transitionMap = {
+      AnimSwitch.Fade: AnimatedSwitcher.defaultTransitionBuilder,
+      AnimSwitch.SlideDown: _slideTransition(0, -1),
+      AnimSwitch.SlideUp: _slideTransition(0, 1),
+      AnimSwitch.SlideLeft: _slideTransition(-1, 0),
+      AnimSwitch.SlideRight: _slideTransition(1, 0),
+    };
+
+    // Return Switcher
+    return AnimatedSwitcher(
+        duration: duration,
+        switchOutCurve: Curves.easeInOutSine,
+        switchInCurve: Curves.fastLinearToSlowEaseIn,
+        transitionBuilder: transitionMap[_animation],
+        layoutBuilder: (Widget currentChild, List<Widget> previousChildren) {
+          return currentChild;
+        },
+        child: child);
+  }
+
+  // ^ Method Builds Slide Transition ^ //
+  Widget Function(Widget, Animation<double>) _slideTransition(double x, double y) {
+    return (Widget child, Animation<double> animation) {
+      final offsetAnimation = TweenSequence([
+        TweenSequenceItem(tween: Tween<Offset>(begin: Offset(x, y), end: Offset(0.0, 0.0)), weight: 1),
+        TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
+      ]).animate(animation);
+      return ClipRect(
+        child: SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        ),
+      );
+    };
+  }
+}
+
+// ^ Lottie Animation Container Widget ^ //
+class LottieContainer extends StatefulWidget {
+  final double width;
+  final double height;
+  final BoxFit fit;
+  final LottieBoard type;
+  final Function onComplete;
+  final bool repeat;
+  final bool animate;
+  final bool reverse;
+  const LottieContainer(
+      {Key key,
+      @required this.type,
+      this.onComplete,
+      this.width = 200,
+      this.height = 200,
+      this.fit = BoxFit.fill,
+      this.repeat = false,
+      this.animate = true,
+      this.reverse = true})
+      : super(key: key);
+  @override
+  _LottieContainerState createState() => _LottieContainerState();
+}
+
+class _LottieContainerState extends State<LottieContainer> with TickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Lottie.asset(
+      _getPathFromBoard(),
+      controller: _controller,
+      width: widget.width,
+      repeat: widget.repeat,
+      reverse: widget.reverse,
+      animate: widget.animate,
+      height: widget.height,
+      fit: BoxFit.contain,
+      onLoaded: (composition) {
+        _controller..duration = composition.seconds.seconds;
+        if (widget.repeat) {
+          _controller.repeat();
+        } else {
+          _controller.forward();
+        }
+      },
+    );
+  }
+
+  _getPathFromBoard() {
+    switch (widget.type) {
+      case LottieBoard.Complete:
+        return "assets/animations/lottie/complete.json";
+        break;
+      case LottieBoard.Empty:
+        return "assets/animations/lottie/empty-lobby.json";
+        break;
+      case LottieBoard.Pending:
+        return "assets/animations/lottie/pending.json";
+        break;
+      case LottieBoard.Progress:
+        return "assets/animations/lottie/progress.json";
+        break;
+      case LottieBoard.Computer:
+        return "assets/animations/lottie/computer.json";
+        break;
+      case LottieBoard.David:
+        return "assets/animations/lottie/david.json";
+        break;
+      case LottieBoard.Phone:
+        return "assets/animations/lottie/phone.json";
+        break;
+      case LottieBoard.Gallery:
+        return "assets/animations/lottie/gallery.json";
+        break;
+      case LottieBoard.Progress_Alt:
+        return "assets/animations/lottie/progress-alt.json";
+        break;
+      case LottieBoard.Camera:
+        return "assets/animations/lottie/camera.json";
+        break;
+      case LottieBoard.Contact:
+        return "assets/animations/lottie/contact.json";
+        break;
+    }
   }
 }
 
@@ -315,251 +561,5 @@ class _RiveContainer extends State<RiveContainer> {
                   artboard: _riveArtboard,
                 )),
     );
-  }
-}
-
-class SonrAnimatedSwitcher extends StatelessWidget {
-  final AnimSwitch _animation;
-  final Widget child;
-  final Duration duration;
-
-  // * Constructer * //
-  const SonrAnimatedSwitcher(this._animation, this.child, this.duration);
-
-  // * Factory Fade * //
-  factory SonrAnimatedSwitcher.fade({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return SonrAnimatedSwitcher(AnimSwitch.Fade, child, duration);
-  }
-
-  // * Factory Slide Up * //
-  factory SonrAnimatedSwitcher.slideUp({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return SonrAnimatedSwitcher(AnimSwitch.SlideUp, child, duration);
-  }
-
-  // * Factory Slide Down * //
-  factory SonrAnimatedSwitcher.slideDown({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return SonrAnimatedSwitcher(AnimSwitch.SlideDown, child, duration);
-  }
-
-  // * Factory Slide Left * //
-  factory SonrAnimatedSwitcher.slideLeft({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return SonrAnimatedSwitcher(AnimSwitch.SlideLeft, child, duration);
-  }
-
-  // * Factory Slide Right * //
-  factory SonrAnimatedSwitcher.slideRight({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return SonrAnimatedSwitcher(AnimSwitch.SlideRight, child, duration);
-  }
-
-  // ^ Build View Method ^ //
-  @override
-  Widget build(BuildContext context) {
-    // Initialize Transition Map
-    Map<AnimSwitch, Widget Function(Widget, Animation<double>)> transitionMap = {
-      AnimSwitch.Fade: AnimatedSwitcher.defaultTransitionBuilder,
-      AnimSwitch.SlideDown: _slideTransition(0, -1),
-      AnimSwitch.SlideUp: _slideTransition(0, 1),
-      AnimSwitch.SlideLeft: _slideTransition(-1, 0),
-      AnimSwitch.SlideRight: _slideTransition(1, 0),
-    };
-
-    // Return Switcher
-    return AnimatedSwitcher(
-        duration: duration,
-        switchOutCurve: Curves.easeInOutSine,
-        switchInCurve: Curves.fastLinearToSlowEaseIn,
-        transitionBuilder: transitionMap[_animation],
-        layoutBuilder: (Widget currentChild, List<Widget> previousChildren) {
-          return currentChild;
-        },
-        child: child);
-  }
-
-  // ^ Method Builds Slide Transition ^ //
-  Widget Function(Widget, Animation<double>) _slideTransition(double x, double y) {
-    return (Widget child, Animation<double> animation) {
-      final offsetAnimation = TweenSequence([
-        TweenSequenceItem(tween: Tween<Offset>(begin: Offset(x, y), end: Offset(0.0, 0.0)), weight: 1),
-        TweenSequenceItem(tween: ConstantTween(Offset(0.0, 0.0)), weight: 2),
-      ]).animate(animation);
-      return ClipRect(
-        child: SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        ),
-      );
-    };
-  }
-}
-
-// ^ Sonr Animated Wave Icon for Screen Transitions ^ //
-class SonrAnimatedWaveIcon extends HookWidget {
-  // Properties
-  final IconData iconData;
-  final double size;
-  final Duration duration;
-  final Function onCompleted;
-  final FlutterGradientNames gradient;
-
-  // Constructer
-  SonrAnimatedWaveIcon(this.iconData, {this.gradient, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
-      : super(key: GlobalKey());
-
-  @override
-  Widget build(BuildContext context) {
-    // Hook Controller
-    final controller = useAnimationController(duration: Duration(seconds: 1));
-    final iconKey = GlobalKey();
-    controller.forward();
-
-    // Reactive to Progress
-    return Stack(
-      alignment: Alignment.center,
-      key: UniqueKey(),
-      children: <Widget>[
-        SizedBox(
-          height: size,
-          width: size,
-          child: AnimatedBuilder(
-            animation: controller,
-            builder: (BuildContext context, Widget child) {
-              return CustomPaint(
-                painter: IconWavePainter(
-                  iconKey: iconKey,
-                  waveAnimation: controller,
-                  percent: controller.value,
-                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrGradient.progress(),
-                  boxHeight: size,
-                ),
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: size,
-          width: size,
-          child: ShaderMask(
-            blendMode: BlendMode.srcOut,
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [SonrColor.White],
-              stops: [0.0],
-            ).createShader(bounds),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-              ),
-              child: Center(
-                child: Icon(
-                  iconData,
-                  size: size * 0.8,
-                  key: iconKey,
-                ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-// ^ Lottie Animation Container Widget ^ //
-class LottieContainer extends StatefulWidget {
-  final double width;
-  final double height;
-  final BoxFit fit;
-  final LottieBoard type;
-  final Function onComplete;
-  final bool repeat;
-  final bool animate;
-  final bool reverse;
-  const LottieContainer(
-      {Key key,
-      @required this.type,
-      this.onComplete,
-      this.width = 200,
-      this.height = 200,
-      this.fit = BoxFit.fill,
-      this.repeat = false,
-      this.animate = true,
-      this.reverse = true})
-      : super(key: key);
-  @override
-  _LottieContainerState createState() => _LottieContainerState();
-}
-
-class _LottieContainerState extends State<LottieContainer> with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Lottie.asset(
-      _getPathFromBoard(),
-      controller: _controller,
-      width: widget.width,
-      repeat: widget.repeat,
-      reverse: widget.reverse,
-      animate: widget.animate,
-      height: widget.height,
-      fit: BoxFit.contain,
-      onLoaded: (composition) {
-        _controller..duration = composition.seconds.seconds;
-        if (widget.repeat) {
-          _controller.repeat();
-        } else {
-          _controller.forward();
-        }
-      },
-    );
-  }
-
-  _getPathFromBoard() {
-    switch (widget.type) {
-      case LottieBoard.Complete:
-        return "assets/animations/lottie/complete.json";
-        break;
-      case LottieBoard.Empty:
-        return "assets/animations/lottie/empty-lobby.json";
-        break;
-      case LottieBoard.Pending:
-        return "assets/animations/lottie/pending.json";
-        break;
-      case LottieBoard.Progress:
-        return "assets/animations/lottie/progress.json";
-        break;
-      case LottieBoard.Computer:
-        return "assets/animations/lottie/computer.json";
-        break;
-      case LottieBoard.David:
-        return "assets/animations/lottie/david.json";
-        break;
-      case LottieBoard.Phone:
-        return "assets/animations/lottie/phone.json";
-        break;
-      case LottieBoard.Gallery:
-        return "assets/animations/lottie/gallery.json";
-        break;
-      case LottieBoard.Progress_Alt:
-        return "assets/animations/lottie/progress-alt.json";
-        break;
-      case LottieBoard.Camera:
-        return "assets/animations/lottie/camera.json";
-        break;
-      case LottieBoard.Contact:
-        return "assets/animations/lottie/contact.json";
-        break;
-    }
   }
 }

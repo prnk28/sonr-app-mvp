@@ -190,7 +190,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
 
   @override
   Widget build(BuildContext context) {
-    return SonrAnimatedSwitcher.fade(
+    return AnimatedSlideSwitcher.fade(
       duration: 2.seconds,
       child: GestureDetector(
         key: ValueKey<String>(text),

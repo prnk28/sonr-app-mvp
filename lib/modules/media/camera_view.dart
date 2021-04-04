@@ -126,7 +126,7 @@ class _CameraToolsView extends GetView<CameraController> {
             Obx(() {
               var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
               return GestureDetector(
-                  child: SonrAnimatedSwitcher.slideUp(
+                  child: AnimatedSlideSwitcher.slideUp(
                       child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                   onTap: () async {
                     HapticFeedback.heavyImpact();
