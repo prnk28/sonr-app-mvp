@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_screen.dart';
 import 'package:sonr_app/modules/profile/profile_screen.dart';
-import 'package:sonr_app/modules/register/register_screen.dart';
+import 'package:sonr_app/modules/register/form_page.dart';
 import 'package:sonr_app/modules/transfer/transfer_screen.dart';
 import 'package:sonr_app/service/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -37,7 +37,7 @@ class SonrRouting {
         GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeOut),
 
         // ** Register Page ** //
-        GetPage(name: '/register', page: () => StartedScreen(), transition: Transition.fade, curve: Curves.easeIn),
+        GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
         GetPage(

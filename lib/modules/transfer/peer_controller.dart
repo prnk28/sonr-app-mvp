@@ -12,7 +12,6 @@ class PeerController extends GetxController {
   final bool isAnimated;
 
   // Reactive Elements
-  final Rx<Lobby> lobby = LobbyService.local;
   final artboard = Rx<Artboard>();
   final counter = 0.0.obs;
 

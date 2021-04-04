@@ -190,8 +190,6 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ******* Callbacks ********
   // **************************
-  void _handleCompass(CompassEvent data) {}
-
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller

@@ -57,24 +57,6 @@ class TransferController extends GetxController {
     // Set Title
     title(remote.value.display);
     title.refresh();
-
-    // Create Timeout
-    _timer = Timer.periodic(1.seconds, (_) {
-      // Add to Counter
-      counter(counter.value += 1);
-
-      // Check if Timeout Reached
-      if (counter.value == 300) {
-        if (isRemoteActive.value) {
-          _timer.cancel();
-          _timer = null;
-          HapticFeedback.mediumImpact();
-          counter(0);
-          isRemoteActive(false);
-          _handleLobbySizeUpdate(LobbyService.localSize.value);
-        }
-      }
-    });
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //
@@ -94,10 +76,6 @@ class TransferController extends GetxController {
 
   void toggleShifting(){
     isShiftingEnabled(!isShiftingEnabled.value);
-
-    if(isShiftingEnabled.value){
-
-    }
   }
 
   // ^ Handle Compass Update ^ //

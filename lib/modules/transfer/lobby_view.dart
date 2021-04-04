@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
 
@@ -13,8 +14,8 @@ class LocalLobbyStack extends StatefulWidget {
 class _LocalLobbyStackState extends State<LocalLobbyStack> {
   // References
   int lobbySize = 0;
-  List<PeerBubble> stackChildren;
-  StreamSubscription<Lobby> localLobbyStream;
+  List<PeerBubble> stackChildren = [];
+  StreamSubscription<LobbyModel> localLobbyStream;
 
   // * Initial State * //
   @override
@@ -37,7 +38,7 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
 
   @override
   Widget build(BuildContext context) {
-    if (stackChildren != null) {
+    if (lobbySize > 0) {
       return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
     } else {
       return Container();
@@ -45,7 +46,7 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
   }
 
   // * Updates Stack Children * //
-  _handleLobbyUpdate(Lobby data) {
+  _handleLobbyUpdate(LobbyModel data) {
     // Initialize
     var children = <PeerBubble>[];
 
@@ -53,11 +54,9 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
     stackChildren.clear();
 
     // Iterate through peers and IDs
-    data.peers.forEach((id, peer) {
+    data.mobilePeers.forEach((peer) {
       // Add to Stack Items
-      if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
-        children.add(PeerBubble(peer, stackChildren.length - 1));
-      }
+      children.add(PeerBubble(peer, stackChildren.length - 1));
     });
 
     // Update View
@@ -76,12 +75,9 @@ class LobbySheet extends StatefulWidget {
 
 class _LobbySheetState extends State<LobbySheet> {
   // References
-  int lobbySize = 0;
+  LobbyModel lobby;
   int toggleIndex = 1;
-  List<Peer> allPeers = <Peer>[];
-  List<Peer> desktopPeers = <Peer>[];
-  List<Peer> mobilePeers = <Peer>[];
-  StreamSubscription<Lobby> peerStream;
+  StreamSubscription<LobbyModel> peerStream;
 
   // * Initial State * //
   @override
@@ -103,16 +99,6 @@ class _LobbySheetState extends State<LobbySheet> {
 
   @override
   Widget build(BuildContext context) {
-    // Set Current List
-    var peerList;
-    if (toggleIndex == 1) {
-      peerList = allPeers;
-    } else if (toggleIndex == 0) {
-      peerList = mobilePeers;
-    } else if (toggleIndex == 2) {
-      peerList = desktopPeers;
-    }
-
     // Build View
     return NeumorphicBackground(
         backendColor: Colors.transparent,
@@ -120,10 +106,11 @@ class _LobbySheetState extends State<LobbySheet> {
         child: Neumorphic(
             style: SonrStyle.normal,
             child: ListView.builder(
-              itemCount: peerList.length + 1,
+              itemCount: lobby != null ? lobby.length + 1 : 1,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
                   return LobbyTitleView(
+                    title: "Local Lobby",
                     onChanged: (index) {
                       setState(() {
                         toggleIndex = index;
@@ -133,7 +120,7 @@ class _LobbySheetState extends State<LobbySheet> {
                 } else {
                   // Build List Item
                   return Column(children: [
-                    PeerListItem(peerList[index - 1], index - 1),
+                    PeerListItem(lobby.atIndex(index - 1), index - 1),
                     Padding(
                       padding: EdgeInsets.all(8),
                     )
@@ -144,34 +131,10 @@ class _LobbySheetState extends State<LobbySheet> {
   }
 
   // ^ Updates Stack Children ^ //
-  _handlePeerUpdate(Lobby lobby) {
-    // Initialize
-    var total = <Peer>[];
-    var mobile = <Peer>[];
-    var desktop = <Peer>[];
-
-    // Clear Lists
-    allPeers.clear();
-    mobilePeers.clear();
-    desktopPeers.clear();
-
-    // Iterate through peers and IDs
-    lobby.peers.forEach((id, peer) {
-      total.add(peer);
-      // Add to Peer Lists
-      if (peer.isOnMobile) {
-        mobile.add(peer);
-      } else if (peer.isOnDesktop) {
-        desktop.add(peer);
-      }
-    });
-
+  _handlePeerUpdate(LobbyModel data) {
     // Update View
     setState(() {
-      lobbySize = lobby.size;
-      allPeers = total;
-      mobilePeers = mobile;
-      desktopPeers = desktop;
+      lobby = data;
     });
   }
 }
@@ -179,8 +142,8 @@ class _LobbySheetState extends State<LobbySheet> {
 // ^ Lobby Title View ^ //
 class LobbyTitleView extends StatefulWidget {
   final Function(int) onChanged;
-
-  const LobbyTitleView({Key key, @required this.onChanged}) : super(key: key);
+  final String title;
+  const LobbyTitleView({Key key, @required this.onChanged, @required this.title}) : super(key: key);
 
   @override
   _LobbyTitleViewState createState() => _LobbyTitleViewState();
@@ -196,7 +159,7 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
       Padding(padding: EdgeInsetsX.top(8)),
       Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("Local Lobby")]),
+          children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title(widget.title)]),
 
       // Build Toggle View
       Container(
@@ -231,107 +194,5 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
 
       Padding(padding: EdgeInsets.only(top: 24))
     ]);
-  }
-}
-
-// ^ Switched Lobby View ^ //
-class RemoteLobbyView extends StatefulWidget {
-  final RemoteInfo info;
-
-  const RemoteLobbyView({Key key, @required this.info}) : super(key: key);
-  @override
-  _RemoteLobbyViewState createState() => _RemoteLobbyViewState();
-}
-
-class _RemoteLobbyViewState extends State<RemoteLobbyView> {
-  // References
-  int lobbySize = 0;
-  int toggleIndex = 1;
-  List<Peer> allPeers = <Peer>[];
-  List<Peer> desktopPeers = <Peer>[];
-  List<Peer> mobilePeers = <Peer>[];
-  LobbyStream peerStream;
-
-  // * Initial State * //
-  @override
-  void initState() {
-    // Add Initial Data
-    _handlePeerUpdate(LobbyService.local.value);
-
-    // Set Stream
-    peerStream = LobbyService.listenToLobby(widget.info);
-    peerStream.listen(_handlePeerUpdate);
-    super.initState();
-  }
-
-  // * On Dispose * //
-  @override
-  void dispose() {
-    peerStream.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Set Current List
-    var peerList;
-    if (toggleIndex == 1) {
-      peerList = allPeers;
-    } else if (toggleIndex == 0) {
-      peerList = mobilePeers;
-    } else if (toggleIndex == 2) {
-      peerList = desktopPeers;
-    }
-
-    // Build View
-    return ListView.builder(
-      itemCount: peerList.length + 1,
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          return LobbyTitleView(
-            onChanged: (index) {
-              setState(() {
-                toggleIndex = index;
-              });
-            },
-          );
-        } else {
-          // Build List Item
-          return PeerListItem(peerList[index - 1], index - 1);
-        }
-      },
-    );
-  }
-
-  // ^ Updates Stack Children ^ //
-  _handlePeerUpdate(Lobby lobby) {
-    // Initialize
-    var total = <Peer>[];
-    var mobile = <Peer>[];
-    var desktop = <Peer>[];
-
-    // Clear Lists
-    allPeers.clear();
-    mobilePeers.clear();
-    desktopPeers.clear();
-
-    // Iterate through peers and IDs
-    lobby.peers.forEach((id, peer) {
-      total.add(peer);
-      // Add to Peer Lists
-      if (peer.isOnMobile) {
-        mobile.add(peer);
-      } else if (peer.isOnDesktop) {
-        desktop.add(peer);
-      }
-    });
-
-    // Update View
-    setState(() {
-      lobbySize = lobby.size;
-      allPeers = total;
-      mobilePeers = mobile;
-      desktopPeers = desktop;
-    });
   }
 }

@@ -15,7 +15,7 @@ class GetStartedPage extends StatelessWidget {
             child: Container(
                 padding: EdgeInsetsX.bottom(24),
                 child: ColorButton.primary(
-                  onPressed: onPressed,
+                  onPressed: () => onPressed,
                   text: "Get Started",
                   icon: SonrIcon.sonr,
                 )))

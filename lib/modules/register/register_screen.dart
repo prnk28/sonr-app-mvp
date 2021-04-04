@@ -2,35 +2,27 @@ import 'package:sonr_app/theme/theme.dart';
 import 'form_page.dart';
 import 'started_page.dart';
 
-class StartedScreen extends StatelessWidget {
+class StartedScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return GetX<_StartedController>(
-      init: _StartedController(),
-      builder: (controller) {
-        return PageView.builder(
-          controller: controller.pageController,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return GetStartedPage(controller.shiftToForm());
-            } else if (index == 1) {
-              return FormPage();
-            }
-            return FormPage();
-          },
-        );
-      },
-    );
-  }
+  _StartedScreenState createState() => _StartedScreenState();
 }
 
-class _StartedController extends GetxController {
-  final index = 0.obs;
+class _StartedScreenState extends State<StartedScreen> {
   final pageController = PageController();
-
-  shiftToForm() {
-    pageController.jumpToPage(1);
-    index(1);
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: pageController,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: 2,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return GetStartedPage(() {
+            pageController.jumpToPage(1);
+          });
+        }
+        return FormPage();
+      },
+    );
   }
 }
