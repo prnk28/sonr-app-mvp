@@ -6,7 +6,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'lobby.dart';
-import 'media.dart';
 import 'sql.dart';
 import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
@@ -121,7 +120,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Set Payload for URL Link ^ //
   static queueMedia(MediaItem media) async {
     // - Check Connected -
-    to.addToQueue(TransferQueueItem.media(await media.getInfo()));
+    to.addToQueue(TransferQueueItem.media(await media.getMetadata()));
   }
 
   // ^ Set Payload for URL Link ^ //

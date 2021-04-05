@@ -68,11 +68,11 @@ class TransferQueue {
   }
 
   // ^ Complete Current/Last Transfer ^ //
-  InviteRequest_FileInfo lastMedia({bool status = true}) {
+  Metadata lastMedia({bool status = true}) {
     if (transferQueue.length > 0) {
       var item = transferQueue.firstWhere((element) => element.payload == Payload.MEDIA, orElse: () => null);
       if (item != null) {
-        return item.data is InviteRequest_FileInfo ? item.data : null;
+        return item.data is Metadata ? item.data : null;
       }
     }
     return null;
@@ -107,8 +107,8 @@ class TransferQueueItem {
   final progress = 0.0.obs;
   final Payload payload;
   final String url;
-  final InviteRequest_FileInfo media;
-  final List<InviteRequest_FileInfo> files;
+  final Metadata media;
+  final List<Metadata> files;
 
   // Controller
   PeerController _peerController;
@@ -145,21 +145,23 @@ class TransferQueueItem {
     return TransferQueueItem(Payload.CONTACT, isFlat: isFlat);
   }
 
-  factory TransferQueueItem.media(InviteRequest_FileInfo info) {
+  factory TransferQueueItem.media(Metadata info) {
     return TransferQueueItem(Payload.MEDIA, media: info);
   }
 
   factory TransferQueueItem.capture(MediaFile media) {
-    var file = InviteRequest_FileInfo(
+    var file = Metadata(
       path: media.path,
-      duration: media.duration,
       thumbnail: media.thumbnail,
-      isVideo: media.isVideo,
+      properties: Metadata_Properties(
+        duration: media.duration,
+        isVideo: media.isVideo,
+      ),
     );
     return TransferQueueItem(Payload.MEDIA, media: file);
   }
 
-  factory TransferQueueItem.files(List<InviteRequest_FileInfo> files) {
+  factory TransferQueueItem.files(List<Metadata> files) {
     return TransferQueueItem(Payload.MEDIA, files: files, isMultiple: true);
   }
 

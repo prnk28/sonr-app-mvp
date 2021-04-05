@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/data/model/model_media.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import '../theme.dart';

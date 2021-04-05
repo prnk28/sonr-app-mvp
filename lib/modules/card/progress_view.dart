@@ -99,7 +99,7 @@ class ProgressView extends HookWidget {
                 if (SonrService.progress.value >= 0.5) {
                   return OpacityAnimatedWidget(
                       duration: Duration(milliseconds: 200),
-                      child: Icon(card.properties.mime.type.gradientData.data, size: 165, color: Colors.white));
+                      child: Icon(card.metadata.mime.type.gradientData.data, size: 165, color: Colors.white));
                 } else {
                   return Container();
                 }
@@ -107,6 +107,6 @@ class ProgressView extends HookWidget {
             : OpacityAnimatedWidget(
                 delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
                 duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-                child: Icon(card.properties.mime.type.gradientData.data, size: 165, color: Colors.white)));
+                child: Icon(card.metadata.mime.type.gradientData.data, size: 165, color: Colors.white)));
   }
 }

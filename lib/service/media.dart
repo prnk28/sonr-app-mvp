@@ -63,12 +63,13 @@ class MediaService extends GetxService {
   void onClose() {
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
+    PhotoManager.clearFileCache();
     super.onClose();
   }
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
-    if (Get.find<PermissionService>().galleryPermitted.val) {
+    if (UserService.permissions.value.hasGallery) {
       // Get Collections
       _state(GalleryState.Loading);
 
@@ -126,9 +127,21 @@ class MediaService extends GetxService {
     }
   }
 
+  // ^ Load IO File from Metadata ^ //
+  static Future<File> loadFileFromMetadata(Metadata metadata) async {
+    var asset = await AssetEntity.fromId(metadata.id);
+    return await asset.file;
+  }
+
+  // ^ Load MediaItem from Metadata ^ //
+  static Future<MediaItem> loadItemFromMetadata(Metadata metadata) async {
+    var asset = await AssetEntity.fromId(metadata.id);
+    return MediaItem(asset, -1);
+  }
+
   // ^ Method Refreshes Gallery ^ //
   static Future refreshGallery() async {
-    if (Get.find<PermissionService>().galleryPermitted.val) {
+    if (UserService.permissions.value.hasGallery) {
       // Get Collections
       to._state(GalleryState.Loading);
 
@@ -194,37 +207,37 @@ class MediaService extends GetxService {
   static Future<AssetEntity> saveTransfer(Metadata meta) async {
     // Get Data from Media
     final path = meta.path;
-      // Save Image to Gallery
-      if (meta.mime.type == MIME_Type.image && Get.find<PermissionService>().galleryPermitted.val) {
-        var asset = await PhotoManager.editor.saveImageWithPath(path);
-        var result = await asset.exists;
+    // Save Image to Gallery
+    if (meta.mime.type == MIME_Type.image && UserService.permissions.value.hasGallery) {
+      var asset = await PhotoManager.editor.saveImageWithPath(path);
+      var result = await asset.exists;
 
-        // Visualize Result
-        if (result) {
-          SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
-        } else {
-          SonrSnack.error("Unable to save Photo to your Gallery");
-        }
-        return asset;
-      }
-
-      // Save Video to Gallery
-      else if (meta.mime.type == MIME_Type.video && Get.find<PermissionService>().galleryPermitted.val) {
-        // Set Video File
-        File videoFile = File(path);
-        var asset = await PhotoManager.editor.saveVideo(videoFile);
-        var result = await asset.exists;
-
-        // Visualize Result
-        if (result) {
-          SonrSnack.success("Saved Transferred Video to your Device's Gallery");
-        } else {
-          SonrSnack.error("Unable to save Video to your Gallery");
-        }
-        return asset;
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
       } else {
-        return null;
+        SonrSnack.error("Unable to save Photo to your Gallery");
       }
+      return asset;
+    }
+
+    // Save Video to Gallery
+    else if (meta.mime.type == MIME_Type.video && UserService.permissions.value.hasGallery) {
+      // Set Video File
+      File videoFile = File(path);
+      var asset = await PhotoManager.editor.saveVideo(videoFile);
+      var result = await asset.exists;
+
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Transferred Video to your Device's Gallery");
+      } else {
+        SonrSnack.error("Unable to save Video to your Gallery");
+      }
+      return asset;
+    } else {
+      return null;
+    }
   }
 
   // ^ Saves Received Media to Gallery ^ //

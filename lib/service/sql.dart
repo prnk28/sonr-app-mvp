@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:get/get.dart' hide Node;
 import 'package:intl/intl.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -15,7 +14,7 @@ const K_QUERY_CATEGORY_COUNT = 5;
 enum QueryCategory { Payload, Platform, FirstName, LastName, Username, Month, Day, Year }
 final cardColumnForType = {
   QueryCategory.Payload: cardColumnPayload,
-  QueryCategory.Platform: cardColumnPlatform,
+  QueryCategory.Platform: cardColumnOwner,
   QueryCategory.FirstName: cardColumnFirstName,
   QueryCategory.LastName: cardColumnLastName,
   QueryCategory.Username: cardColumnUserName,
@@ -27,7 +26,7 @@ final cardColumnForType = {
 // ** Card Model for Transferred Data ** //
 final String cardColumnId = '_id'; // integer primary key autoincrement
 final String cardColumnPayload = "payload"; // text
-final String cardColumnPlatform = "platform"; // text
+final String cardColumnOwner = "owner"; // text
 final String cardColumnReceived = 'received'; // integer -> DateTime
 final String cardColumnMonth = 'month'; // integer -> DateTime
 final String cardColumnDay = 'day'; // integer -> DateTime
@@ -40,7 +39,7 @@ final String cardColumnMetadata = 'metadata'; // text -> JSON
 final cardColumns = [
   cardColumnId,
   cardColumnPayload,
-  cardColumnPlatform,
+  cardColumnOwner,
   cardColumnReceived,
   cardColumnMonth,
   cardColumnYear,
@@ -73,17 +72,17 @@ class SQLService extends GetxService {
     _dbPath = join(databasesPath, DATABASE_PATH);
 
     // Open Databases for Cards
-    _db = await openDatabase(_dbPath, version: 2, onCreate: (Database db, int version) async {
+    _db = await openDatabase(_dbPath, version: 1, onCreate: (Database db, int version) async {
       // Create Cards Table
       await db.execute('''
 create table $CARD_TABLE (
   $cardColumnId integer primary key autoincrement,
   $cardColumnPayload text not null,
-  $cardColumnPlatform text not null,
   $cardColumnReceived integer not null,
   $cardColumnMonth text not null,
   $cardColumnYear integer not null,
   $cardColumnDay integer not null,
+  $cardColumnOwner text not null,
   $cardColumnUserName text not null,
   $cardColumnFirstName text not null,
   $cardColumnLastName text not null,
@@ -91,7 +90,7 @@ create table $CARD_TABLE (
   $cardColumnMetadata text)
 ''');
     });
-    refresh();
+    refreshCards();
     return this;
   }
 
@@ -103,13 +102,13 @@ create table $CARD_TABLE (
 
     if (card.hasMetadata()) {
       AssetEntity asset = await MediaService.saveTransfer(card.metadata);
-      card.metadata.assetID = asset.id;
+      card.metadata.id = asset.id;
 
       // Insert Card
       card.id = await _db.insert(CARD_TABLE, {
         // General
         cardColumnPayload: card.payload.toString().toLowerCase(),
-        cardColumnPlatform: card.platform.toString().toLowerCase(),
+
         cardColumnReceived: card.received,
         cardColumnMonth: formatter.format(date),
         cardColumnYear: date.year,
@@ -121,6 +120,7 @@ create table $CARD_TABLE (
         cardColumnLastName: card.lastName.toLowerCase(),
 
         // Transfer Properties
+        cardColumnOwner: card.owner.writeToJson(),
         cardColumnContact: card.contact.writeToJson(),
         cardColumnMetadata: card.metadata.writeToJson(),
       });
@@ -129,7 +129,7 @@ create table $CARD_TABLE (
       card.id = await _db.insert(CARD_TABLE, {
         // General
         cardColumnPayload: card.payload.toString().toLowerCase(),
-        cardColumnPlatform: card.platform.toString().toLowerCase(),
+
         cardColumnReceived: card.received,
         cardColumnMonth: formatter.format(date),
         cardColumnYear: date.year,
@@ -141,24 +141,25 @@ create table $CARD_TABLE (
         cardColumnLastName: card.lastName.toLowerCase(),
 
         // Transfer Properties
+        cardColumnOwner: card.owner.writeToJson(),
         cardColumnContact: card.contact.writeToJson(),
         cardColumnMetadata: card.metadata.writeToJson(),
       });
     }
 
     // Refresh Cards and Return
-    refresh();
+    refreshCards();
     return card;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
   void deleteCard(int id) async {
     await _db.delete(CARD_TABLE, where: '$cardColumnId = ?', whereArgs: [id]);
-    refresh();
+    refreshCards();
   }
 
   // ^ Get All Cards ^ //
-  void refresh() async {
+  void refreshCards() async {
     // Init List
     List<TransferCard> result = <TransferCard>[];
 
@@ -193,9 +194,9 @@ create table $CARD_TABLE (
     });
 
     // Update Reactive Lists
-    cards(allCards);
-    contacts(contactList);
-    media(mediaList);
+    cards.assignAll(allCards);
+    contacts.assignAll(contactList);
+    media.assignAll(mediaList);
 
     // Refresh Lists
     cards.refresh();
@@ -253,17 +254,16 @@ create table $CARD_TABLE (
   TransferCard cardFromMap(Map<dynamic, dynamic> e) {
     // Clean Data
     String payload = e[cardColumnPayload].toString().toUpperCase();
-    String platform = e[cardColumnPlatform].toString().capitalizeFirst;
 
     // Create TransferCard Object
     return TransferCard(
         id: e[cardColumnId],
         payload: Payload.values.firstWhere((p) => p.toString() == payload, orElse: () => Payload.UNDEFINED),
-        platform: Platform.values.firstWhere((p) => p.toString() == platform, orElse: () => Platform.Unknown),
         received: e[cardColumnReceived],
         username: e[cardColumnUserName],
         firstName: e[cardColumnFirstName].toString().capitalizeFirst,
         lastName: e[cardColumnLastName].toString().capitalizeFirst,
+        owner: Profile.fromJson(e[cardColumnOwner]),
         contact: Contact.fromJson(e[cardColumnContact]),
         metadata: Metadata.fromJson(e[cardColumnMetadata]));
   }

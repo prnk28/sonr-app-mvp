@@ -92,7 +92,7 @@ class _FileInviteView extends StatelessWidget {
                           : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
                       Row(children: [
                         SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                        SonrText.normal("   ${card.properties.size.sizeText()}", size: 18)
+                        SonrText.normal("   ${card.metadata.size.sizeText()}", size: 18)
                       ]),
                     ]),
                   ]),
@@ -224,7 +224,7 @@ class _FileCardInfo extends StatelessWidget {
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              card.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
+              card.owner.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
               SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
             ]),
 

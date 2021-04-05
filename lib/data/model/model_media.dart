@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:open_file/open_file.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/service/device.dart';
 import 'package:sonr_app/service/sonr.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 const K_ALBUM_PAGE_SIZE = 40;
 
@@ -39,7 +41,7 @@ class MediaAlbum {
 // ^ Class for Media Item in Gallery ^ //
 class MediaItem {
   // Inherited References
-  final AssetEntity data;
+  final AssetEntity entity;
   final int index;
 
   // Properties
@@ -50,9 +52,7 @@ class MediaItem {
   Duration duration;
 
   // Calculated
-  Uint8List thumbnail;
   OpenResult openResult;
-  File file;
 
   // # Getter for is Audio
   bool get isAudio {
@@ -79,61 +79,71 @@ class MediaItem {
   }
 
   // * Constructer * //
-  MediaItem(this.data, this.index) {
+  MediaItem(this.entity, this.index) {
     // Set Properties
-    this.id = data.id;
-    this.duration = data.videoDuration;
-    this.type = data.type;
-    this.width = data.width;
-    this.height = data.height;
+    this.id = entity.id;
+    this.duration = entity.videoDuration;
+    this.type = entity.type;
+    this.width = entity.width;
+    this.height = entity.height;
   }
 
-  static fromID(String id) async {
-    var asset = await AssetEntity.fromId(id);
-    return MediaItem(asset, -1);
+  // @ Fetch Uint8List
+  Future<String> getPath() async {
+    String path;
+    useFile(onAsset: (file) {
+      path = path;
+    });
+    return path;
   }
 
   // @ Fetch Uint8List
   Future<Uint8List> getThumbnail() async {
     // Set Thumbnail
-    var td = await data.thumbDataWithSize(320, 320);
-    this.thumbnail = td;
-    return td;
-  }
-
-  // @ Fetch File
-  Future<File> getFile() async {
-    this.file = await this.data.file;
-    return this.file;
+    return await entity.thumbDataWithSize(320, 320);
   }
 
   // @ Return File Info for Invite Request
-  Future<InviteRequest_FileInfo> getInfo() async {
-    if (this.file == null) {
-      this.file = await data.file;
-      return InviteRequest_FileInfo(
-        path: this.file.path,
-        duration: this.duration.inSeconds,
-        thumbnail: this.thumbnail,
+  Future<Metadata> getMetadata() async {
+    var thumb = await getThumbnail();
+    var file = await entity.loadFile();
+    var path = file.path;
+    return Metadata(
+      path: path,
+      thumbnail: thumb,
+      properties: Metadata_Properties(
+        hasThumbnail: thumb.length > 0,
+        width: width,
+        height: height,
+        isImage: this.isImage,
         isVideo: this.isVideo,
-      );
-    } else {
-      return InviteRequest_FileInfo(
-        path: this.file.path,
         duration: this.duration.inSeconds,
-        thumbnail: this.thumbnail,
-        isVideo: this.isVideo,
-      );
-    }
+      ),
+    );
+  }
+
+  // @ Fetch Image
+  Future<ImageProvider<Object>> getImageProvider() async {
+    return NetworkImage(await entity.getMediaUrl());
   }
 
   // @ Fetch File
-  void openFile() async {
-    if (this.file == null) {
-      this.file = await data.file;
-      this.openResult = await OpenFile.open(file.path);
-    } else {
-      this.openResult = await OpenFile.open(file.path);
+  openFile() async {
+    useFile(onAsset: (file) async {
+      var result = await OpenFile.open(file.path);
+      return result;
+    });
+  }
+
+  Future<void> useFile({@required Function(File file) onAsset}) async {
+    File file;
+    try {
+      file = await entity.file;
+      onAsset(file);
+    } finally {
+      if (DeviceService.isIOS) {
+        await file.delete();
+      }
     }
   }
 }

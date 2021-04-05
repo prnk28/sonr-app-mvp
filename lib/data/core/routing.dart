@@ -55,7 +55,6 @@ class SonrRouting {
   static initServices() async {
     await Get.putAsync(() => DeviceService().init(), permanent: true); // First Required Service
     await Get.putAsync(() => UserService().init(), permanent: true); // Second Required Service
-    await Get.putAsync(() => PermissionService().init(), permanent: true); // Third Required Service
     await Get.putAsync(() => MediaService().init(), permanent: true);
     await Get.putAsync(() => SQLService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
@@ -68,7 +67,6 @@ class SonrRouting {
   static bool get areServicesRegistered {
     return DeviceService.isRegistered &&
         UserService.isRegistered &&
-        PermissionService.isRegistered &&
         MediaService.isRegistered &&
         SQLService.isRegistered &&
         LobbyService.isRegistered &&

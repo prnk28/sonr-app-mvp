@@ -74,7 +74,7 @@ class SonrIcon extends StatelessWidget {
   // ^ Payload Data from TransferCard
   factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = SonrColor.Black, Key key}) {
     IconGradientData iconData;
-    switch (card.properties.mime.type) {
+    switch (card.metadata.mime.type) {
       case MIME_Type.audio:
         iconData = IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
         break;

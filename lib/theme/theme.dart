@@ -8,7 +8,6 @@ export '../data/model/model_lobby.dart';
 export '../service/device.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';
-export '../service/permissions.dart';
 export '../service/sonr.dart';
 export '../service/sql.dart';
 export '../service/user.dart';

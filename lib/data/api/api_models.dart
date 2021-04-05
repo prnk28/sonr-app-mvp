@@ -198,16 +198,8 @@ extension PayloadUtils on Payload {
 
 // ^ TransferCard Model Extensions ^ //
 extension TransferCardUtils on TransferCard {
-  String get hasExportedString {
-    if (this.hasExported) {
-      return "YES";
-    } else {
-      return "NO";
-    }
-  }
-
   String get inviteSizeString {
-    return this.properties.size.sizeText();
+    return this.metadata.size.sizeText();
   }
 
   String get metaSizeString {
@@ -244,7 +236,7 @@ extension TransferCardUtils on TransferCard {
   }
 
   SonrIcon get ownerPlatformIcon {
-    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
+    return this.owner.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
   }
 
   String get payloadString {
