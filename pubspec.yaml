@@ -41,7 +41,7 @@ dependencies:
   gallery_saver: ^2.0.3
   media_gallery: ^0.1.5
   open_file: ^3.0.3
-  #photo_manager: ^1.0.2
+  photo_manager: ^1.0.2
   path: ^1.7.0
   path_provider: ^1.6.27
   vector_math: ^2.1.0
