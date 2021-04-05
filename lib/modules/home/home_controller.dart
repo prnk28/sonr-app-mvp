@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:sonr_app/data/core/arguments.dart';
-import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -148,8 +147,8 @@ class HomeController extends GetxController {
   promptAutoSave() async {
     if (!_hasPromptedAutoSave && cards.length == 1) {
       Future.delayed(2400.milliseconds, () {
-        if (UserService.isNewUser.value && !Get.find<PermissionService>().galleryPermitted.val && !SonrOverlay.isOpen) {
-          Get.find<PermissionService>().requestGallery(
+        if (UserService.isNewUser.value && !UserService.permissions.value.hasGallery && !SonrOverlay.isOpen) {
+          Get.find<UserService>().requestGallery(
               description: "Next time Sonr can automatically save media files to your gallery but needs permission, would you like to enable?");
         }
       });

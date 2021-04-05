@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -86,7 +87,7 @@ class _ShareItemMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get Shared File
     SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
-    SonrService.queueMedia(MediaFile.externalShare(sharedIntent));
+    SonrService.queueCapture(MediaFile.externalShare(sharedIntent));
 
     return Neumorphic(
         style: NeumorphicStyle(

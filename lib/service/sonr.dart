@@ -6,7 +6,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'lobby.dart';
-import 'media.dart';
 import 'sql.dart';
 import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
@@ -113,9 +112,15 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Set Payload for URL Link ^ //
-  static queueMedia(MediaFile media) async {
+  static queueCapture(MediaFile media) async {
     // - Check Connected -
-    to.addToQueue(TransferQueueItem.media(media));
+    to.addToQueue(TransferQueueItem.capture(media));
+  }
+
+  // ^ Set Payload for URL Link ^ //
+  static queueMedia(MediaItem media) async {
+    // - Check Connected -
+    to.addToQueue(TransferQueueItem.media(await media.getMetadata()));
   }
 
   // ^ Set Payload for URL Link ^ //
@@ -260,13 +265,7 @@ class SonrService extends GetxService with TransferQueue {
     HapticFeedback.heavyImpact();
 
     // Save Card to Gallery
-    MediaService.saveTransfer(data).then((value) {
-      data.hasExported = value;
-      if (!received.isCompleted) {
-        received.complete(data);
-      }
-      Get.find<SQLService>().storeCard(data);
-    });
+    Get.find<SQLService>().storeCard(data);
   }
 
   // ^ An Error Has Occurred ^ //

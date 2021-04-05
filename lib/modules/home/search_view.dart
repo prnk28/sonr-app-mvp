@@ -188,7 +188,7 @@ class _SonrSearchCardListItem extends GetView<SearchCardController> {
                 SonrText.medium(" "),
                 SonrText.search(controller.searchText.value, card.lastName.toString())
               ]),
-              SonrText.search(controller.searchText.value, card.platform.toString())
+              SonrText.search(controller.searchText.value, card.owner.platform.toString())
             ],
           ),
         ]),

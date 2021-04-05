@@ -1,5 +1,4 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -120,7 +119,7 @@ class _FormPageController extends GetxController {
 
       // Process data.
       await UserService.saveChanges(providedContact: contact, isNewUser: true);
-      var result = await Get.find<PermissionService>().requestLocation();
+      var result = await Get.find<UserService>().requestLocation();
       if (result) {
         await Get.find<DeviceService>().currentLocation();
         isPending(false);

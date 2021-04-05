@@ -52,10 +52,10 @@ class PeerController extends GetxController {
     // Add Stream Handlers
     peerStream = LobbyService.listenToPeer(peer).listen(_handlePeerUpdate);
     userStream = LobbyService.userPosition.listen(_handleUserUpdate);
+    loadAnimations();
   }
 
-  @override
-  void onInit() async {
+  void loadAnimations() async {
     // Check for animated
     if (isAnimated) {
       // Load your Rive data
@@ -90,8 +90,12 @@ class PeerController extends GetxController {
 
   @override
   void onClose() {
-    peerStream.close();
-    userStream.cancel();
+    if (peerStream != null) {
+      peerStream.close();
+    }
+    if (userStream != null) {
+      userStream.cancel();
+    }
     super.onClose();
   }
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/media/media_picker.dart';
-import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class ShareButton extends StatelessWidget {
@@ -167,17 +167,17 @@ class _ShareButtonRow extends StatelessWidget {
                   controller.close();
 
                   // Check Permissions
-                  if (Get.find<PermissionService>().cameraPermitted.val) {
+                  if (UserService.permissions.value.hasCamera) {
                     Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-                      SonrService.queueMedia(file);
+                      SonrService.queueCapture(file);
                       Get.toNamed("/transfer");
                     }), transition: Transition.downToUp);
                   } else {
-                    Get.find<PermissionService>().requestCamera().then((value) {
+                    Get.find<UserService>().requestCamera().then((value) {
                       // Go to Camera View
                       if (value) {
                         Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-                          SonrService.queueMedia(file);
+                          SonrService.queueCapture(file);
                           Get.toNamed("/transfer");
                         }), transition: Transition.downToUp);
                       } else {
@@ -198,14 +198,14 @@ class _ShareButtonRow extends StatelessWidget {
                 onPressed: () {
                   controller.close();
                   // Check Permissions
-                  if (Get.find<PermissionService>().galleryPermitted.val) {
+                  if (UserService.permissions.value.hasGallery) {
                     MediaService.refreshGallery();
                     Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                       SonrService.queueMedia(file);
                       Get.toNamed("/transfer");
                     }), isDismissible: false);
                   } else {
-                    Get.find<PermissionService>().requestGallery().then((value) {
+                    Get.find<UserService>().requestGallery().then((value) {
                       // Present Sheet
                       if (value) {
                         MediaService.refreshGallery();

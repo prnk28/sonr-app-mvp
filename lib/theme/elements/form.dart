@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:media_gallery/media_gallery.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import '../theme.dart';
@@ -108,78 +107,6 @@ class SonrDropdown extends StatelessWidget {
       selectedIconPosition: WidgetPosition.Left,
       style: SonrStyle.dropDownFlat,
     );
-  }
-
-  // * Builds Albums Dropdown * //
-  factory SonrDropdown.albums(List<MediaCollection> data,
-      {@required RxInt index, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
-    var items = List<SonrDropdownItem>.generate(data.length, (index) {
-      if (data[index].name != null) {
-        // Initialize
-        var collection = data[index];
-        var hasIcon = false;
-        var icon;
-
-        // Set Icon for Generated Albums
-        switch (collection.name.toLowerCase()) {
-          case "all":
-            hasIcon = true;
-            icon = SonrIcon.gradient(
-                Icons.all_inbox_rounded, UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
-                size: 20);
-            break;
-          case "sonr":
-            hasIcon = true;
-            icon = SonrIcon.sonr;
-            break;
-          case "download":
-            hasIcon = true;
-            icon = SonrIcon.gradient(Icons.download_rounded, FlutterGradientNames.orangeJuice, size: 20);
-            break;
-          case "screenshots":
-            hasIcon = true;
-            icon = SonrIcon.screenshots;
-            break;
-          case "movies":
-            hasIcon = true;
-            icon = SonrIcon.gradient(Icons.movie_creation_outlined, FlutterGradientNames.lilyMeadow, size: 20);
-            break;
-          case "panoramas":
-            hasIcon = true;
-            icon = SonrIcon.panorama;
-            break;
-          case "favorites":
-            hasIcon = true;
-            icon = SonrIcon.gradient(Icons.star_half_rounded, FlutterGradientNames.fruitBlend, size: 20);
-            break;
-          case "recents":
-            hasIcon = true;
-            icon = SonrIcon.gradient(Icons.timelapse, FlutterGradientNames.crystalline, size: 20);
-            break;
-          default:
-            hasIcon = false;
-        }
-        // Return Item
-        return SonrDropdownItem(hasIcon, collection.name, icon: icon);
-      } else {
-        return null;
-      }
-    });
-    return SonrDropdown(
-        items,
-        SonrDropdownItem(true, "All",
-            icon: SonrIcon.gradient(
-                Icons.all_inbox_rounded, UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
-                size: 20)),
-        index,
-        margin,
-        width ?? Get.width - 250,
-        height,
-        style: SonrStyle.dropDownCurved,
-        overlayWidth: 70,
-        overlayHeight: 100,
-        selectedFlex: 2,
-        selectedIconPosition: WidgetPosition.Left);
   }
 
   SonrDropdown(this.items, this.initial, this.index, this.margin, this.width, this.height,

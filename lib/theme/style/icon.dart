@@ -74,7 +74,7 @@ class SonrIcon extends StatelessWidget {
   // ^ Payload Data from TransferCard
   factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = SonrColor.Black, Key key}) {
     IconGradientData iconData;
-    switch (card.properties.mime.type) {
+    switch (card.metadata.mime.type) {
       case MIME_Type.audio:
         iconData = IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
         break;
@@ -133,6 +133,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get send => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
   static SonrIcon get sonr => SonrIcon.gradient(SonrIconData.sonr, FlutterGradientNames.fabledSunset, size: 20);
   static SonrIcon get screenshots => SonrIcon.gradient(SonrIconData.screenshot, FlutterGradientNames.happyAcid, size: 20);
+  static SonrIcon get photos => SonrIcon.gradient(SonrIconData.photo, FlutterGradientNames.shadyWater, size: 22);
   static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.aboveTheSky, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
   static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);

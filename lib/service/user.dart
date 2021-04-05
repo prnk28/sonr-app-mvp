@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sonr_app/data/model/model_permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class UserService extends GetxService {
@@ -28,10 +29,12 @@ class UserService extends GetxService {
   final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
   final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
   final _hasPointToShare = false.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
+  final _userPermissions = UserPermissions().obs;
 
   // **  Getter Methods for Contact Properties **
   static RxBool get isExisting => to._isExisting;
   static RxBool get isNewUser => to._isNewUser;
+  static Rx<UserPermissions> get permissions => to._userPermissions;
   static Rx<Contact> get contact => to._contact;
 
   // Getters for Preferences
@@ -262,5 +265,71 @@ class UserService extends GetxService {
   // ^ Trigger iOS Local Network with Alert ^ //
   static togglePointToShare() async {
     to._hasPointToShare.val = !to._hasPointToShare.val;
+  }
+
+  // ************************** //
+  // ** Permissions Requests ** //
+  // ************************** //
+
+  // ^ Request Camera optional overlay ^ //
+  Future<bool> requestCamera() async {
+    var result = await _userPermissions.value.request(UserPermissionType.Camera);
+    _userPermissions.refresh();
+    return result;
+  }
+
+  // ^ Request Gallery optional overlay ^ //
+  Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
+    if (_userPermissions.value.hasGallery != true) {
+      var result = await _userPermissions.value.request(UserPermissionType.Gallery);
+      _userPermissions.refresh();
+      return result;
+    } else {
+      return true;
+    }
+  }
+
+  // ^ Request Location optional overlay ^ //
+  Future<bool> requestLocation() async {
+    if (_userPermissions.value.hasLocation != true) {
+      var result = await _userPermissions.value.request(UserPermissionType.Location);
+      _userPermissions.refresh();
+      return result;
+    } else {
+      return true;
+    }
+  }
+
+  // ^ Request Microphone optional overlay ^ //
+  Future<bool> requestMicrophone() async {
+    if (_userPermissions.value.hasMicrophone != true) {
+      var result = await _userPermissions.value.request(UserPermissionType.Microphone);
+      _userPermissions.refresh();
+      return result;
+    } else {
+      return true;
+    }
+  }
+
+  // ^ Request Notifications optional overlay ^ //
+  Future<bool> requestNotifications() async {
+    if (_userPermissions.value.hasNotifications != true) {
+      var result = await _userPermissions.value.request(UserPermissionType.Notifications);
+      _userPermissions.refresh();
+      return result;
+    } else {
+      return true;
+    }
+  }
+
+  // ^ Trigger iOS Local Network with Alert ^ //
+  Future triggerNetwork() async {
+    if (_userPermissions.value.hasLocalNetwork != true) {
+      var result = await _userPermissions.value.request(UserPermissionType.LocalNetwork);
+      _userPermissions.refresh();
+      return result;
+    } else {
+      return true;
+    }
   }
 }

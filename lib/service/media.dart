@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:media_gallery/media_gallery.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'sonr.dart';
 import 'user.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 enum GalleryState { Initial, Loading, Ready }
 
@@ -16,18 +16,18 @@ class MediaService extends GetxService {
   static MediaService get to => Get.find<MediaService>();
 
   // Reactive Instances
-  final _gallery = <MediaCollection>[].obs;
+  final _albums = <MediaAlbum>[].obs;
   final _hasGallery = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
-  final _totalMedia = <Media>[].obs;
+  final _allMedia = Rx<MediaAlbum>();
 
   // Properties
-  static RxList<MediaCollection> get gallery => Get.find<MediaService>()._gallery;
+  static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allMedia;
+  static RxList<MediaAlbum> get albums => Get.find<MediaService>()._albums;
   static RxBool get hasGallery => Get.find<MediaService>()._hasGallery;
   static Rx<GalleryState> get state => Get.find<MediaService>()._state;
-  static RxList<Media> get totalMedia => Get.find<MediaService>()._totalMedia;
 
   // References
   StreamSubscription _externalMediaStream;
@@ -63,61 +63,40 @@ class MediaService extends GetxService {
   void onClose() {
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
+    PhotoManager.clearFileCache();
     super.onClose();
   }
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
-    if (Get.find<PermissionService>().galleryPermitted.val) {
+    if (UserService.permissions.value.hasGallery) {
       // Get Collections
       _state(GalleryState.Loading);
-      List<MediaCollection> collections = await MediaGallery.listMediaCollections(
-        mediaTypes: [MediaType.image, MediaType.video],
-      );
 
-      // Set Gallery
-      _gallery(collections);
+      // Remove Non existing albums for android
+      if (DeviceService.isAndroid) {
+        await PhotoManager.editor.android.removeAllNoExistsAsset();
+      }
 
-      // @ List Collections
-      var totalCollection;
-      collections.forEach((element) {
-        // Set Has Gallery
-        if (element.count > 0) {
-          _hasGallery(true);
-        }
-
-        // Check for Master Collection
-        if (element.isAllCollection) {
-          totalCollection = element;
+      // Get Albums
+      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
+      var albums = <MediaAlbum>[];
+      list.forEach((element) {
+        // Validate Album
+        if (element.name != "" && element.assetCount > 1) {
+          var album = MediaAlbum(element);
+          albums.add(album);
+          if (element.isAll) {
+            _allMedia(album);
+          }
         }
       });
 
-      // @ Get Initial Media
-      if (totalCollection.count > 0) {
-        // Get Images
-        final MediaPage imagePage = await totalCollection.getMedias(
-          mediaType: MediaType.image,
-          take: 500,
-        );
-
-        // Get Videos
-        final MediaPage videoPage = await totalCollection.getMedias(
-          mediaType: MediaType.video,
-          take: 500,
-        );
-
-        // Combine Media
-        final List<Media> combined = [
-          ...imagePage.items,
-          ...videoPage.items,
-        ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
-
-        // Set All Media
-        _totalMedia.assignAll(combined);
-      }
+      // Set Gallery
+      _albums.assignAll(albums);
+      _albums.refresh();
       _state(GalleryState.Ready);
     }
-
     return this;
   }
 
@@ -148,84 +127,48 @@ class MediaService extends GetxService {
     }
   }
 
-  // ^ Method Returns Media from Current Collection ^ //
-  static Future<List<Media>> getMediaFromCollection(MediaCollection updatedCollection) async {
-    // Initialize
-    var controller = Get.find<MediaService>();
-    controller._state(GalleryState.Loading);
+  // ^ Load IO File from Metadata ^ //
+  static Future<File> loadFileFromMetadata(Metadata metadata) async {
+    var asset = await AssetEntity.fromId(metadata.id);
+    return await asset.file;
+  }
 
-    // Set All Media
-    controller._state(GalleryState.Ready);
-
-    // Get Images
-    final MediaPage imagePage = await updatedCollection.getMedias(
-      mediaType: MediaType.image,
-      take: 500,
-    );
-
-    // Get Videos
-    final MediaPage videoPage = await updatedCollection.getMedias(
-      mediaType: MediaType.video,
-      take: 500,
-    );
-
-    // Combine Media
-    return [
-      ...imagePage.items,
-      ...videoPage.items,
-    ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
+  // ^ Load MediaItem from Metadata ^ //
+  static Future<MediaItem> loadItemFromMetadata(Metadata metadata) async {
+    var asset = await AssetEntity.fromId(metadata.id);
+    return MediaItem(asset, -1);
   }
 
   // ^ Method Refreshes Gallery ^ //
   static Future refreshGallery() async {
-    final controller = Get.find<MediaService>();
-    // Get Collections
-    controller._state(GalleryState.Loading);
-    List<MediaCollection> collections = await MediaGallery.listMediaCollections(
-      mediaTypes: [MediaType.image, MediaType.video],
-    );
+    if (UserService.permissions.value.hasGallery) {
+      // Get Collections
+      to._state(GalleryState.Loading);
 
-    // Set Gallery
-    controller._gallery(collections);
-
-    // @ List Collections
-    var totalCollection;
-    collections.forEach((element) {
-      // Set Has Gallery
-      if (element.count > 0) {
-        controller._hasGallery(true);
+      // Remove Non existing albums for android
+      if (DeviceService.isAndroid) {
+        await PhotoManager.editor.android.removeAllNoExistsAsset();
       }
 
-      // Check for Master Collection
-      if (element.isAllCollection) {
-        totalCollection = element;
-      }
-    });
+      // Get Albums
+      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
+      var albums = <MediaAlbum>[];
+      list.forEach((element) {
+        // Validate Album
+        if (element.name != "" && element.assetCount > 1) {
+          var album = MediaAlbum(element);
+          albums.add(album);
+          if (element.isAll) {
+            to._allMedia(album);
+          }
+        }
+      });
 
-    // @ Get Initial Media
-    if (totalCollection.count > 0) {
-      // Get Images
-      final MediaPage imagePage = await totalCollection.getMedias(
-        mediaType: MediaType.image,
-        take: 500,
-      );
-
-      // Get Videos
-      final MediaPage videoPage = await totalCollection.getMedias(
-        mediaType: MediaType.video,
-        take: 500,
-      );
-
-      // Combine Media
-      final List<Media> combined = [
-        ...imagePage.items,
-        ...videoPage.items,
-      ]..sort((x, y) => y.creationDate.compareTo(x.creationDate));
-
-      // Set All Media
-      controller._totalMedia.assignAll(combined);
+      // Set Gallery
+      to._albums.assignAll(albums);
+      to._albums.refresh();
+      to._state(GalleryState.Ready);
     }
-    controller._state(GalleryState.Ready);
   }
 
   // ^ Saves Photo to Gallery ^ //
@@ -238,8 +181,10 @@ class MediaService extends GetxService {
       return false;
     } else {
       if (isVideo) {
-        // Save Image to Gallery
-        var result = await GallerySaver.saveVideo(path);
+        // Set Video File
+        File videoFile = File(path);
+        var asset = await PhotoManager.editor.saveVideo(videoFile);
+        var result = await asset.exists;
 
         // Visualize Result
         if (result) {
@@ -248,7 +193,8 @@ class MediaService extends GetxService {
         return result;
       } else {
         // Save Image to Gallery
-        var result = await GallerySaver.saveImage(path);
+        var asset = await PhotoManager.editor.saveImageWithPath(path);
+        var result = await asset.exists;
         if (!result) {
           SonrSnack.error("Unable to save Captured Video to your Gallery");
         }
@@ -258,42 +204,39 @@ class MediaService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  static Future<bool> saveTransfer(TransferCard card) async {
-    // Await Permissions
-
+  static Future<AssetEntity> saveTransfer(Metadata meta) async {
     // Get Data from Media
-    final path = card.metadata.path;
-    if (card.hasMetadata()) {
-      // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image && Get.find<PermissionService>().galleryPermitted.val) {
-        var result = await GallerySaver.saveImage(path);
+    final path = meta.path;
+    // Save Image to Gallery
+    if (meta.mime.type == MIME_Type.image && UserService.permissions.value.hasGallery) {
+      var asset = await PhotoManager.editor.saveImageWithPath(path);
+      var result = await asset.exists;
 
-        // Visualize Result
-        if (result) {
-          SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
-        } else {
-          SonrSnack.error("Unable to save Photo to your Gallery");
-        }
-        return result;
-      }
-
-      // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video && Get.find<PermissionService>().galleryPermitted.val) {
-        var result = await GallerySaver.saveVideo(path);
-
-        // Visualize Result
-        if (result) {
-          SonrSnack.success("Saved Transferred Video to your Device's Gallery");
-        } else {
-          SonrSnack.error("Unable to save Video to your Gallery");
-        }
-        return result;
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
       } else {
-        return false;
+        SonrSnack.error("Unable to save Photo to your Gallery");
       }
+      return asset;
+    }
+
+    // Save Video to Gallery
+    else if (meta.mime.type == MIME_Type.video && UserService.permissions.value.hasGallery) {
+      // Set Video File
+      File videoFile = File(path);
+      var asset = await PhotoManager.editor.saveVideo(videoFile);
+      var result = await asset.exists;
+
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Transferred Video to your Device's Gallery");
+      } else {
+        SonrSnack.error("Unable to save Video to your Gallery");
+      }
+      return asset;
     } else {
-      SonrSnack.success("Unable to save Media to Gallery");
-      return false;
+      return null;
     }
   }
 

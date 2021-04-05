@@ -1,9 +1,11 @@
-import 'dart:typed_data';
 import 'package:get/get.dart' hide Node;
 import 'package:intl/intl.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'media.dart';
 
 // ** Constant Values
 const DATABASE_PATH = 'transferCards.db';
@@ -12,7 +14,7 @@ const K_QUERY_CATEGORY_COUNT = 5;
 enum QueryCategory { Payload, Platform, FirstName, LastName, Username, Month, Day, Year }
 final cardColumnForType = {
   QueryCategory.Payload: cardColumnPayload,
-  QueryCategory.Platform: cardColumnPlatform,
+  QueryCategory.Platform: cardColumnOwner,
   QueryCategory.FirstName: cardColumnFirstName,
   QueryCategory.LastName: cardColumnLastName,
   QueryCategory.Username: cardColumnUserName,
@@ -24,8 +26,7 @@ final cardColumnForType = {
 // ** Card Model for Transferred Data ** //
 final String cardColumnId = '_id'; // integer primary key autoincrement
 final String cardColumnPayload = "payload"; // text
-final String cardColumnPlatform = "platform"; // text
-final String cardColumnPreview = "preview"; // blob
+final String cardColumnOwner = "owner"; // text
 final String cardColumnReceived = 'received'; // integer -> DateTime
 final String cardColumnMonth = 'month'; // integer -> DateTime
 final String cardColumnDay = 'day'; // integer -> DateTime
@@ -38,8 +39,7 @@ final String cardColumnMetadata = 'metadata'; // text -> JSON
 final cardColumns = [
   cardColumnId,
   cardColumnPayload,
-  cardColumnPlatform,
-  cardColumnPreview,
+  cardColumnOwner,
   cardColumnReceived,
   cardColumnMonth,
   cardColumnYear,
@@ -78,12 +78,11 @@ class SQLService extends GetxService {
 create table $CARD_TABLE (
   $cardColumnId integer primary key autoincrement,
   $cardColumnPayload text not null,
-  $cardColumnPlatform text not null,
-  $cardColumnPreview blob,
   $cardColumnReceived integer not null,
   $cardColumnMonth text not null,
   $cardColumnYear integer not null,
   $cardColumnDay integer not null,
+  $cardColumnOwner text not null,
   $cardColumnUserName text not null,
   $cardColumnFirstName text not null,
   $cardColumnLastName text not null,
@@ -91,7 +90,7 @@ create table $CARD_TABLE (
   $cardColumnMetadata text)
 ''');
     });
-    refresh();
+    refreshCards();
     return this;
   }
 
@@ -101,40 +100,66 @@ create table $CARD_TABLE (
     var date = DateTime.fromMillisecondsSinceEpoch(card.received * 1000);
     var formatter = new DateFormat('MMMM');
 
-    // Insert Card
-    card.id = await _db.insert(CARD_TABLE, {
-      // General
-      cardColumnPayload: card.payload.toString().toLowerCase(),
-      cardColumnPlatform: card.platform.toString().toLowerCase(),
-      cardColumnPreview: Uint8List.fromList(card.preview),
-      cardColumnReceived: card.received,
-      cardColumnMonth: formatter.format(date),
-      cardColumnYear: date.year,
-      cardColumnDay: date.day,
+    if (card.hasMetadata()) {
+      AssetEntity asset = await MediaService.saveTransfer(card.metadata);
+      card.metadata.id = asset.id;
 
-      // Owner Properties
-      cardColumnUserName: card.username.toLowerCase(),
-      cardColumnFirstName: card.firstName.toLowerCase(),
-      cardColumnLastName: card.lastName.toLowerCase(),
+      // Insert Card
+      card.id = await _db.insert(CARD_TABLE, {
+        // General
+        cardColumnPayload: card.payload.toString().toLowerCase(),
 
-      // Transfer Properties
-      cardColumnContact: card.contact.writeToJson(),
-      cardColumnMetadata: card.metadata.writeToJson(),
-    });
+        cardColumnReceived: card.received,
+        cardColumnMonth: formatter.format(date),
+        cardColumnYear: date.year,
+        cardColumnDay: date.day,
+
+        // Owner Properties
+        cardColumnUserName: card.username.toLowerCase(),
+        cardColumnFirstName: card.firstName.toLowerCase(),
+        cardColumnLastName: card.lastName.toLowerCase(),
+
+        // Transfer Properties
+        cardColumnOwner: card.owner.writeToJson(),
+        cardColumnContact: card.contact.writeToJson(),
+        cardColumnMetadata: card.metadata.writeToJson(),
+      });
+    } else {
+      // Insert Card
+      card.id = await _db.insert(CARD_TABLE, {
+        // General
+        cardColumnPayload: card.payload.toString().toLowerCase(),
+
+        cardColumnReceived: card.received,
+        cardColumnMonth: formatter.format(date),
+        cardColumnYear: date.year,
+        cardColumnDay: date.day,
+
+        // Owner Properties
+        cardColumnUserName: card.username.toLowerCase(),
+        cardColumnFirstName: card.firstName.toLowerCase(),
+        cardColumnLastName: card.lastName.toLowerCase(),
+
+        // Transfer Properties
+        cardColumnOwner: card.owner.writeToJson(),
+        cardColumnContact: card.contact.writeToJson(),
+        cardColumnMetadata: card.metadata.writeToJson(),
+      });
+    }
 
     // Refresh Cards and Return
-    refresh();
+    refreshCards();
     return card;
   }
 
   // ^ Delete a Metadata from SQL DB ^ //
   void deleteCard(int id) async {
     await _db.delete(CARD_TABLE, where: '$cardColumnId = ?', whereArgs: [id]);
-    refresh();
+    refreshCards();
   }
 
   // ^ Get All Cards ^ //
-  void refresh() async {
+  void refreshCards() async {
     // Init List
     List<TransferCard> result = <TransferCard>[];
 
@@ -169,9 +194,9 @@ create table $CARD_TABLE (
     });
 
     // Update Reactive Lists
-    cards(allCards);
-    contacts(contactList);
-    media(mediaList);
+    cards.assignAll(allCards);
+    contacts.assignAll(contactList);
+    media.assignAll(mediaList);
 
     // Refresh Lists
     cards.refresh();
@@ -229,19 +254,16 @@ create table $CARD_TABLE (
   TransferCard cardFromMap(Map<dynamic, dynamic> e) {
     // Clean Data
     String payload = e[cardColumnPayload].toString().toUpperCase();
-    String platform = e[cardColumnPlatform].toString().capitalizeFirst;
-    Uint8List preview = e[cardColumnPreview];
 
     // Create TransferCard Object
     return TransferCard(
         id: e[cardColumnId],
         payload: Payload.values.firstWhere((p) => p.toString() == payload, orElse: () => Payload.UNDEFINED),
-        platform: Platform.values.firstWhere((p) => p.toString() == platform, orElse: () => Platform.Unknown),
-        preview: preview.toList(),
         received: e[cardColumnReceived],
         username: e[cardColumnUserName],
         firstName: e[cardColumnFirstName].toString().capitalizeFirst,
         lastName: e[cardColumnLastName].toString().capitalizeFirst,
+        owner: Profile.fromJson(e[cardColumnOwner]),
         contact: Contact.fromJson(e[cardColumnContact]),
         metadata: Metadata.fromJson(e[cardColumnMetadata]));
   }

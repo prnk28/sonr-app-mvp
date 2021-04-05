@@ -1,32 +1,94 @@
-import 'dart:async';
-import 'dart:io' as io;
-import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart' hide Position;
+import 'package:sonr_app/theme/theme.dart';
 
-class PermissionService extends GetxService {
-  // Accessors
-  static bool get isRegistered => Get.isRegistered<PermissionService>();
-  static PermissionService get to => Get.find<PermissionService>();
+enum UserPermissionType {
+  Camera,
+  Location,
+  LocalNetwork,
+  Gallery, // Photos + Storage (Android), Photos(iOS)
+  Microphone,
+  Notifications,
+}
 
-  // Permissions Values
-  final cameraPermitted = false.val('cameraPermitted', getBox: () => GetStorage('Permissions'));
-  final galleryPermitted = false.val('galleryPermitted', getBox: () => GetStorage('Permissions'));
-  final locationPermitted = false.val('locationPermitted', getBox: () => GetStorage('Permissions'));
-  final microphonePermitted = false.val('microphonePermitted', getBox: () => GetStorage('Permissions'));
-  final networkTriggered = false.val('networkTriggered', getBox: () => GetStorage('Permissions'));
-  final notificationPermitted = false.val('notificationPermitted', getBox: () => GetStorage('Permissions'));
+class UserPermissions {
+  // Camera
+  bool get hasCamera => _hasCamera;
+  bool _hasCamera = false;
 
-  // ^ Open GetStorage on Init ^ //
-  Future<PermissionService> init() async {
-    // Initialize Storage
-    await GetStorage.init('Permissions');
-    return this;
+  // Location
+  bool get hasLocation => _hasLocation;
+  bool _hasLocation = false;
+
+  bool get hasGallery {
+    if (DeviceService.isIOS) {
+      return _hasPhotos;
+    } else {
+      return _hasStorage;
+    }
+  }
+
+  // Local Network
+  bool get hasLocalNetwork => _hasLocalNetwork;
+  bool _hasLocalNetwork = false;
+
+  // Microphone
+  bool get hasMicrophone => _hasMicrophone;
+  bool _hasMicrophone = false;
+
+  // Notifications
+  bool get hasNotifications => _hasNotifications;
+  bool _hasNotifications = false;
+
+  // Photos
+  bool get hasPhotos => _hasPhotos;
+  bool _hasPhotos = false;
+
+  // Storage
+  bool get hasStorage => _hasStorage;
+  bool _hasStorage = false;
+
+  UserPermissions() {
+    update();
+  }
+
+  // ^ Update Method ^ //
+  void update() async {
+    _hasCamera = await Permission.camera.isGranted;
+    _hasLocation = await Permission.locationWhenInUse.isGranted;
+    _hasMicrophone = await Permission.microphone.isGranted;
+    _hasNotifications = await Permission.notification.isGranted;
+    _hasPhotos = await Permission.photos.isGranted;
+    _hasStorage = await Permission.storage.isGranted;
+  }
+
+  // ^ Request Method ^ //
+  Future<bool> request(UserPermissionType type) {
+    switch (type) {
+      case UserPermissionType.Camera:
+        return _requestCamera();
+        break;
+      case UserPermissionType.Location:
+        return _requestLocation();
+        break;
+      case UserPermissionType.LocalNetwork:
+        return _triggerNetwork();
+        break;
+      case UserPermissionType.Gallery:
+        return _requestGallery();
+        break;
+      case UserPermissionType.Microphone:
+        return _requestMicrophone();
+        break;
+      case UserPermissionType.Notifications:
+        return _requestNotifications();
+        break;
+      default:
+        return Future.value(false);
+    }
   }
 
   // ^ Request Camera optional overlay ^ //
-  Future<bool> requestCamera() async {
+  Future<bool> _requestCamera() async {
     if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
@@ -35,7 +97,7 @@ class PermissionService extends GetxService {
           acceptTitle: "Allow",
           declineTitle: "Decline")) {
         if (await Permission.camera.request().isGranted) {
-          cameraPermitted.val = true;
+          this.update();
           return true;
         } else {
           return false;
@@ -49,35 +111,39 @@ class PermissionService extends GetxService {
   }
 
   // ^ Request Gallery optional overlay ^ //
-  Future<bool> requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
+  Future<bool> _requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
     if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
-        if (io.Platform.isAndroid) {
-          if (await Permission.storage.request().isGranted && await Permission.photos.request().isGranted) {
-            galleryPermitted.val = true;
+        if (DeviceService.isAndroid) {
+          if (await Permission.storage.request().isGranted) {
+            this.update();
             return true;
           } else {
+            this.update();
             return false;
           }
         } else {
           if (await Permission.photos.request().isGranted) {
-            galleryPermitted.val = true;
+            this.update();
             return true;
           } else {
+            this.update();
             return false;
           }
         }
       } else {
+        this.update();
         return false;
       }
     } else {
+      this.update();
       return false;
     }
   }
 
   // ^ Request Location optional overlay ^ //
-  Future<bool> requestLocation() async {
+  Future<bool> _requestLocation() async {
     if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
@@ -86,21 +152,24 @@ class PermissionService extends GetxService {
           acceptTitle: "Allow",
           declineTitle: "Decline")) {
         if (await Permission.locationWhenInUse.request().isGranted) {
-          locationPermitted.val = true;
+          this.update();
           return true;
         } else {
+          this.update();
           return false;
         }
       } else {
+        this.update();
         return false;
       }
     } else {
+      this.update();
       return false;
     }
   }
 
   // ^ Request Microphone optional overlay ^ //
-  Future<bool> requestMicrophone() async {
+  Future<bool> _requestMicrophone() async {
     if (DeviceService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
@@ -109,21 +178,24 @@ class PermissionService extends GetxService {
           acceptTitle: "Allow",
           declineTitle: "Decline")) {
         if (await Permission.microphone.request().isGranted) {
-          microphonePermitted.val = true;
+          this.update();
           return true;
         } else {
+          this.update();
           return false;
         }
       } else {
+        this.update();
         return false;
       }
     } else {
+      this.update();
       return false;
     }
   }
 
   // ^ Request Notifications optional overlay ^ //
-  Future<bool> requestNotifications() async {
+  Future<bool> _requestNotifications() async {
     // Present Overlay
     if (DeviceService.isMobile) {
       if (await SonrOverlay.question(
@@ -132,7 +204,7 @@ class PermissionService extends GetxService {
           acceptTitle: "Allow",
           declineTitle: "Decline")) {
         if (await Permission.notification.request().isGranted) {
-          notificationPermitted.val = true;
+          this.update();
           return true;
         } else {
           return false;
@@ -146,8 +218,8 @@ class PermissionService extends GetxService {
   }
 
   // ^ Trigger iOS Local Network with Alert ^ //
-  Future triggerNetwork() async {
-    if (!networkTriggered.val && DeviceService.isIOS) {
+  Future _triggerNetwork() async {
+    if (!hasLocalNetwork && DeviceService.isIOS) {
       await SonrOverlay.alert(
           title: 'Requires Permission',
           description: 'Sonr requires local network permissions in order to maximize transfer speed.',
@@ -155,7 +227,7 @@ class PermissionService extends GetxService {
           barrierDismissible: false);
 
       await SonrCore.requestLocalNetwork();
-      networkTriggered.val = true;
+      this.update();
     }
     return true;
   }

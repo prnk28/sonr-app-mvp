@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
@@ -77,7 +79,7 @@ class _MediaInviteView extends StatelessWidget {
                   ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
               Row(children: [
-                SonrText.gradient(card.properties.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+                SonrText.gradient(card.metadata.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
                 SonrText.normal("   ${card.inviteSizeString}", size: 18)
               ]),
             ]),
@@ -86,7 +88,7 @@ class _MediaInviteView extends StatelessWidget {
           Container(
             width: card.preview.isNotEmpty ? Get.width - 50 : Get.width - 150,
             height: card.preview.isNotEmpty ? Get.height / 3 : Get.height / 5,
-            child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.properties.mime, size: 60),
+            child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.metadata.mime, size: 60),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -110,11 +112,33 @@ class _MediaInviteView extends StatelessWidget {
 }
 
 // ^ TransferCard Media Item Details ^ //
-class _MediaItemView extends StatelessWidget {
+class _MediaItemView extends StatefulWidget {
   final TransferCard card;
   final TransferCardController controller;
 
   _MediaItemView(this.card, this.controller);
+
+  @override
+  _MediaItemViewState createState() => _MediaItemViewState();
+}
+
+class _MediaItemViewState extends State<_MediaItemView> {
+  File mediaFile;
+  bool hasLoaded = false;
+
+  @override
+  void initState() {
+    loadMediaFile();
+    super.initState();
+  }
+
+  loadMediaFile() async {
+    mediaFile = await MediaService.loadFileFromMetadata(widget.card.metadata);
+    setState(() {
+      hasLoaded = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -127,27 +151,20 @@ class _MediaItemView extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             // Push to Page
-            Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
+            Get.to(_MediaCardExpanded(widget.card, mediaFile), transition: Transition.fadeIn);
           },
           child: Neumorphic(
             style: SonrStyle.normal,
             margin: EdgeInsets.all(4),
             child: Hero(
-              tag: card.id,
+              tag: widget.card.id,
               child: Container(
                 height: 75,
-                decoration: card.metadata.mime.type == MIME_Type.image
-                    ? BoxDecoration(
-                        image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
-                        fit: BoxFit.cover,
-                        image: MemoryImage(card.metadata.thumbnail),
-                      ))
-                    : null,
+                decoration: hasLoaded ? _buildImageDecoration() : BoxDecoration(),
                 child: Stack(
                   children: <Widget>[
                     // Display Mime Type if Not Image
-                    card.metadata.mime.type != MIME_Type.image
+                    widget.card.metadata.mime.type != MIME_Type.image
                         ? Align(
                             alignment: Alignment.center,
                             child: Padding(
@@ -161,7 +178,7 @@ class _MediaItemView extends StatelessWidget {
                                       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                                       depth: -10,
                                     ),
-                                    child: SonrIcon.withMime(card.metadata.mime, size: 60)),
+                                    child: SonrIcon.withMime(widget.card.metadata.mime, size: 60)),
                               ),
                             ),
                           )
@@ -173,9 +190,9 @@ class _MediaItemView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Neumorphic(
-                          style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                          child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                              color: card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
+                          style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+                          child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(widget.card.received * 1000),
+                              color: widget.card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
                           padding: EdgeInsets.all(10),
                         ),
                       ),
@@ -189,7 +206,7 @@ class _MediaItemView extends StatelessWidget {
                           child: ShapeButton.circle(
                             color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                             icon: SonrIcon.info,
-                            onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
+                            onPressed: () => widget.controller.showCardInfo(_MediaCardInfo(widget.card)),
                             shadowLightColor: Colors.black38,
                           )),
                     ),
@@ -202,12 +219,24 @@ class _MediaItemView extends StatelessWidget {
       ),
     );
   }
+
+  Decoration _buildImageDecoration() {
+    return widget.card.metadata.mime.type == MIME_Type.image
+        ? BoxDecoration(
+            image: DecorationImage(
+            colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
+            fit: BoxFit.cover,
+            image: FileImage(mediaFile),
+          ))
+        : null;
+  }
 }
 
 // ^ Widget for Expanded Media View
 class _MediaCardExpanded extends StatelessWidget {
   final TransferCard card;
-  const _MediaCardExpanded(this.card);
+  final File mediaFile;
+  const _MediaCardExpanded(this.card, this.mediaFile);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -222,7 +251,7 @@ class _MediaCardExpanded extends StatelessWidget {
             tag: card.id,
             child: Material(
               color: Colors.transparent,
-              child: PhotoView(imageProvider: MemoryImage(card.metadata.thumbnail)),
+              child: PhotoView(imageProvider: FileImage(mediaFile)),
             ),
           ),
         ),
@@ -242,7 +271,6 @@ class _MediaCardInfo extends StatelessWidget {
     var metadata = card.metadata;
     var mimeType = card.metaMimeString;
     var size = card.metaSizeString;
-    var hasExported = card.hasExportedString;
 
     // Build Overlay View
     return Padding(
@@ -290,9 +318,9 @@ class _MediaCardInfo extends StatelessWidget {
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Saved to Gallery ", size: 16),
+              SonrText.bold("ID ", size: 16),
               Spacer(),
-              SonrText.medium("$hasExported", size: 16),
+              SonrText.medium("${metadata.id}", size: 16),
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
@@ -302,29 +330,9 @@ class _MediaCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               ShapeButton.flat(
                 onPressed: () async {
-                  if (card.hasExported) {
-                    Get.find<SQLService>().deleteCard(card.id);
-                    SonrSnack.success("Deleted $mimeType from Sonr, it's still available in your gallery.");
-                    SonrOverlay.back();
-                  } else {
-                    // Prompt Question
-                    SonrOverlay.question(
-                            entryLocation: SonrOffset.Bottom,
-                            title: "Delete",
-                            description: "Are you sure you want to delete this Card, it has not saved to your gallery yet.",
-                            acceptTitle: "Continue",
-                            declineTitle: "Cancel")
-                        .then((result) {
-                      // Handle Response
-                      if (result) {
-                        Get.find<SQLService>().deleteCard(card.id);
-                        SonrSnack.success("Deleted $mimeType from Sonr.");
-                        SonrOverlay.closeAll();
-                      } else {
-                        SonrOverlay.closeAll();
-                      }
-                    });
-                  }
+                  Get.find<SQLService>().deleteCard(card.id);
+                  SonrSnack.success("Deleted $mimeType from Sonr, it's still available in your gallery.");
+                  SonrOverlay.back();
                 },
                 text: SonrText.medium("Delete", color: SonrPalette.Red),
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),

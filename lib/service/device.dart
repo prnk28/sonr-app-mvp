@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:motion_sensors/motion_sensors.dart';
@@ -114,13 +113,13 @@ class DeviceService extends GetxService {
       } else {
         if (isMobile) {
           // All Valid
-          if (Get.find<PermissionService>().locationPermitted.val) {
+          if (UserService.permissions.value.hasLocation) {
             Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
           }
 
           // No Location
           else {
-            Get.find<PermissionService>().requestLocation().then((value) {
+            Get.find<UserService>().requestLocation().then((value) {
               if (value) {
                 Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
               }

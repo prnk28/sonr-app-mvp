@@ -189,7 +189,7 @@ class _ContactInviteView extends StatelessWidget {
 
               // Phone/ Website
               Row(children: [
-                card.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
+                card.owner.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
                 card.contact.phoneNumber,

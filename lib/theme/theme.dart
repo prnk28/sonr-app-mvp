@@ -1,6 +1,5 @@
 export '../data/api/mixin_queue.dart';
 export '../data/model/model_tile.dart';
-export '../data/model/model_file.dart';
 export '../data/api/api_models.dart';
 export '../data/api/api_vector.dart';
 export '../data/api/api_primitive.dart';
@@ -9,7 +8,6 @@ export '../data/model/model_lobby.dart';
 export '../service/device.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';
-export '../service/permissions.dart';
 export '../service/sonr.dart';
 export '../service/sql.dart';
 export '../service/user.dart';

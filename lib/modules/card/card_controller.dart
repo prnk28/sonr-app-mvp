@@ -52,12 +52,12 @@ class TransferCardController extends GetxController {
     // Switch View
     SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(card, card.properties.size > 5000000),
+      ProgressView(card, card.metadata.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
 
-    if (card.properties.size > 5000000) {
+    if (card.metadata.size > 5000000) {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();
