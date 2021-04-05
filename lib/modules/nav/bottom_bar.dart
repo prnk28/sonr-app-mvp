@@ -1,41 +1,40 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'nav_button.dart';
 import 'nav_controller.dart';
 import 'share_button.dart';
 
-class SonrBottomNavBar extends GetView<SonrNavController> {
+class SonrBottomNavBar extends GetView<NavController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Stack(children: [
-          Neumorphic(
-            style: NeumorphicStyle(
-              boxShape: NeumorphicBoxShape.path(BottomBarPath()),
-              depth: UserService.isDarkMode ? 4 : 8,
-              color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-              intensity: UserService.isDarkMode ? 0.45 : 0.85,
-            ),
-            child: Container(
-              width: Get.width,
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  BottomBarButton(BottomBarButtonType.Home),
-                  BottomBarButton(BottomBarButtonType.Profile),
-                  Container(
-                    width: Get.width * 0.20,
-                  ),
-                  BottomBarButton(BottomBarButtonType.Alerts),
-                  BottomBarButton(BottomBarButtonType.Settings),
-                ],
+    return Stack(children: [
+      Neumorphic(
+        style: NeumorphicStyle(
+          boxShape: NeumorphicBoxShape.path(BottomBarPath()),
+          depth: UserService.isDarkMode ? 4 : 8,
+          color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+          intensity: UserService.isDarkMode ? 0.45 : 0.85,
+        ),
+        child: Container(
+          width: Get.width,
+          height: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              NavButton.bottom(BottomNavButton.Home),
+              NavButton.bottom(BottomNavButton.Profile),
+              Container(
+                width: Get.width * 0.20,
               ),
-            ),
+              NavButton.bottom(BottomNavButton.Alerts),
+              NavButton.bottom(BottomNavButton.Remote),
+            ],
           ),
-          Center(
-            heightFactor: 0.6,
-            child: BottomShareButton(),
-          )
-        ]));
+        ),
+      ),
+      Center(
+        heightFactor: 0.6,
+        child: BottomShareButton(),
+      )
+    ]);
   }
 }
 

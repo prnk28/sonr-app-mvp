@@ -24,7 +24,9 @@ export 'package:animated_widgets/animated_widgets.dart';
 // Custom Theme Aspects
 export 'elements/header.dart';
 export 'style/background.dart';
-export 'style/button.dart';
+export 'buttons/shape.dart';
+export 'buttons/color.dart';
+export 'buttons/navigation.dart';
 export 'style/color.dart';
 export 'style/icon.dart';
 export 'style/scaffold.dart';

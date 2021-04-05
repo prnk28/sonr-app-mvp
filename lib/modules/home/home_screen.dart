@@ -3,7 +3,6 @@ import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'search_view.dart';
 import 'home_controller.dart';
-import 'share_button.dart';
 import 'carousel_view.dart';
 import 'settings_sheet.dart';
 

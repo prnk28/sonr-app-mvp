@@ -146,12 +146,11 @@ class SonrScaffold extends StatelessWidget {
         child: Scaffold(
           backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           floatingActionButtonLocation: floatingActionButtonLocation,
-          body: body,
+          body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: bottomNavigationBar))]),
           appBar: appBar,
           floatingActionButton: floatingActionButton,
           resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
           bottomSheet: bottomSheet,
-          bottomNavigationBar: bottomNavigationBar,
         ));
   }
 }

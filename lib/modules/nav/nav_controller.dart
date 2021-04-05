@@ -1,15 +1,20 @@
 import 'dart:async';
 import 'package:sonr_app/theme/theme.dart';
-import 'share_button.dart';
 
-class SonrNavController extends GetxController {
+enum BottomShareButtonState { Default, Expanded }
+enum NavPage { Home, Profile, Alerts, Remote, Transfer }
+
+class NavController extends GetxController {
   // Properties
   final bottomIndex = 0.obs;
   final shareState = BottomShareButtonState.Default.obs;
   final shareCounter = 0.obs;
+  final page = NavPage.Home.obs;
 
   // References
   Timer _timer;
+
+  bool get isExpanded => shareState.value == BottomShareButtonState.Expanded;
 
   bool isBottomIndex(int val) {
     return val == bottomIndex.value;
@@ -18,6 +23,15 @@ class SonrNavController extends GetxController {
   // ^ Update Bottom Bar Index ^ //
   setBottomIndex(int newIndex) {
     bottomIndex(newIndex);
+    if (newIndex == 1) {
+      page(NavPage.Profile);
+    } else if (newIndex == 2) {
+      page(NavPage.Alerts);
+    } else if (newIndex == 3) {
+      page(NavPage.Remote);
+    } else {
+      page(NavPage.Home);
+    }
   }
 
   // ^ Expand Share Button ^ //
@@ -53,7 +67,7 @@ class SonrNavController extends GetxController {
   void toggleShare() {
     if (shareState.value == BottomShareButtonState.Default) {
       shareState(BottomShareButtonState.Expanded);
-      expandShare(4000, shareState.value);
+      expandShare(6000, shareState.value);
     } else {
       shrinkShare();
     }

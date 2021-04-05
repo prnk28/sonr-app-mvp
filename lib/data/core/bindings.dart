@@ -9,7 +9,7 @@ import 'package:sonr_app/theme/theme.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<SonrNavController>(SonrNavController(), permanent: true);
+    Get.put<NavController>(NavController(), permanent: true);
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<CameraController>(() => CameraController());
