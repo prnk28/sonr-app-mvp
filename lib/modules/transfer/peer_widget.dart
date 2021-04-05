@@ -47,8 +47,8 @@ class PeerBubble extends StatelessWidget {
 class PeerListItem extends StatefulWidget {
   final Peer peer;
   final int index;
-
-  PeerListItem(this.peer, this.index);
+  final RemoteInfo remote;
+  PeerListItem(this.peer, this.index, {this.remote});
   @override
   _PeerListItemState createState() => _PeerListItemState();
 }
@@ -87,7 +87,11 @@ class _PeerListItemState extends State<PeerListItem> {
                     Padding(padding: EdgeInsets.all(8)),
                     ColorButton.primary(
                       onPressed: () {
-                        SonrService.inviteWithPeer(widget.peer);
+                        if (widget.remote != null) {
+                          SonrService.inviteWithPeer(widget.peer, info: widget.remote);
+                        } else {
+                          SonrService.inviteWithPeer(widget.peer);
+                        }
                       },
                       text: "Invite",
                       icon: SonrIcon.invite,

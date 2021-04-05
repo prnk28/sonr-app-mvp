@@ -23,7 +23,12 @@ class TransferCardController extends GetxController {
 
     // Check if Send Back
     if (sendBackContact) {
-      SonrService.respond(true);
+      // Check for Remote
+      if (invite.hasRemote()) {
+        SonrService.respond(true, info: invite.remote);
+      } else {
+        SonrService.respond(true);
+      }
     }
 
     // Return to HomeScreen
@@ -37,11 +42,17 @@ class TransferCardController extends GetxController {
 
   // ^ Accept Transfer Invite Request ^ //
   acceptTransfer(AuthInvite invite, TransferCard card) {
-    SonrService.respond(true);
-    SonrOverlay.back();
+    // Check for Remote
+    if (invite.hasRemote()) {
+      SonrService.respond(true, info: invite.remote);
+    } else {
+      SonrService.respond(true);
+    }
 
+    // Switch View
+    SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(this, card, card.properties.size > 5000000),
+      ProgressView(card, card.properties.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
@@ -62,8 +73,13 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Decline Invite Request ^ //
-  declineInvite() {
+  declineInvite(AuthInvite invite) {
     // Check if accepted
+    if (invite.hasRemote()) {
+      SonrService.respond(true, info: invite.remote);
+    } else {
+      SonrService.respond(true);
+    }
     SonrService.respond(false);
     SonrOverlay.back();
   }

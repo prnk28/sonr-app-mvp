@@ -93,7 +93,7 @@ class _MediaInviteView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ColorButton.neutral(onPressed: () => controller.declineInvite(), text: "Decline"),
+              ColorButton.neutral(onPressed: () => controller.declineInvite(invite), text: "Decline"),
               Padding(padding: EdgeInsets.all(8)),
               ColorButton.primary(
                 onPressed: () => controller.acceptTransfer(invite, card),

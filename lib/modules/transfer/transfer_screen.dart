@@ -118,7 +118,11 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
               );
             } else {
               // Build List Item
-              return PeerListItem(lobbyModel.atIndex(index - 1), index - 1);
+              return PeerListItem(
+                lobbyModel.atIndex(index - 1),
+                index - 1,
+                remote: widget.info,
+              );
             }
           },
         ));
