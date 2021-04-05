@@ -6,14 +6,13 @@ const double K_BUBBLE_SIZE = 80;
 // ^ PeerBubble Utilizes Controller and Lottie Files ^ //
 class PeerBubble extends StatelessWidget {
   final Peer peer;
-  final int index;
-  PeerBubble(this.peer, this.index);
+  PeerBubble(this.peer);
 
   @override
   Widget build(BuildContext context) {
     return GetX<PeerController>(
         autoRemove: false,
-        init: PeerController(peer: peer, index: index),
+        init: PeerController(peer: peer),
         builder: (controller) {
           return AnimatedPositioned(
               width: K_BUBBLE_SIZE,
@@ -25,21 +24,16 @@ class PeerBubble extends StatelessWidget {
                   onPressed: controller.invite,
                   onLongPressed: controller.expandDetails,
                   child: Stack(alignment: Alignment.center, children: [
-                    _buildPeerInfo(controller),
+                    OpacityAnimatedWidget(
+                        enabled: controller.isVisible.value,
+                        values: controller.isVisible.value ? [0, 1] : [1, 0],
+                        duration: Duration(milliseconds: 250),
+                        delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                          controller.peer.initials,
+                        ]))
                   ])));
         });
-  }
-
-  // @ Builds Peer Info for Peer
-  Widget _buildPeerInfo(PeerController controller) {
-    return OpacityAnimatedWidget(
-        enabled: controller.isVisible.value,
-        values: controller.isVisible.value ? [0, 1] : [1, 0],
-        duration: Duration(milliseconds: 250),
-        delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          controller.peer.initials,
-        ]));
   }
 }
 
@@ -109,9 +103,9 @@ class _PeerListItemState extends State<PeerListItem> {
 }
 
 // ^ PeerSheetView Displays Extended Peer Details ^ //
-class PeerSheetView extends StatelessWidget {
+class PeerDetailsView extends StatelessWidget {
   final PeerController controller;
-  const PeerSheetView(this.controller, {Key key}) : super(key: key);
+  const PeerDetailsView(this.controller, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

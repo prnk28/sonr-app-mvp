@@ -8,7 +8,6 @@ import 'transfer_controller.dart';
 class PeerController extends GetxController {
   // Properties
   final Peer peer;
-  final int index;
   final bool isAnimated;
 
   // Reactive Elements
@@ -37,7 +36,7 @@ class PeerController extends GetxController {
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   PeerStream peerStream;
   StreamSubscription<VectorPosition> userStream;
-  PeerController({this.peer, this.index, this.isAnimated = true}) {
+  PeerController({this.peer, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
     peerVector(VectorPosition(peer.position));
@@ -48,6 +47,10 @@ class PeerController extends GetxController {
     } else {
       offset(peerVector.value.offsetAgainstVector(userVector.value));
     }
+
+    // Add Stream Handlers
+    peerStream = LobbyService.listenToPeer(peer).listen(_handlePeerUpdate);
+    userStream = LobbyService.userPosition.listen(_handleUserUpdate);
   }
 
   @override
@@ -81,10 +84,6 @@ class PeerController extends GetxController {
         this.artboard(artboard);
       }
     }
-
-    // Add Stream Handlers
-    peerStream = LobbyService.listenToPeer(peer).listen(_handlePeerUpdate);
-    userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     super.onInit();
   }
 
@@ -116,7 +115,7 @@ class PeerController extends GetxController {
 
   // ^ Toggle Expanded View
   void expandDetails() {
-    Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.DialogBackground);
+    Get.bottomSheet(PeerDetailsView(this), barrierColor: SonrColor.DialogBackground);
     HapticFeedback.heavyImpact();
   }
 

@@ -19,7 +19,7 @@ class InitialBinding implements Bindings {
 class TransferBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<TransferController>(TransferController(), permanent: true);
+    Get.put<TransferController>(TransferController());
   }
 }
 

@@ -53,12 +53,12 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
     // Iterate through peers and IDs
     data.mobilePeers.forEach((peer) {
       // Add to Stack Items
-      children.add(PeerBubble(peer, stackChildren.length - 1));
+      children.add(PeerBubble(peer));
     });
 
     // Update View
     setState(() {
-      lobbySize = data.size;
+      lobbySize = data.mobilePeers.length;
       stackChildren = children;
     });
   }
@@ -157,7 +157,7 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
       widget.title != ''
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title(widget.title)])
+              children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.subtitle(widget.title)])
           : Container(),
 
       // Build Toggle View

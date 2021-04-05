@@ -115,6 +115,7 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
                     toggleIndex = index;
                   });
                 },
+                title: widget.info.display,
               );
             } else {
               // Build List Item
