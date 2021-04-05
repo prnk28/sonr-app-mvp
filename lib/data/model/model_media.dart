@@ -6,19 +6,25 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/service/sonr.dart';
 
+const K_ALBUM_PAGE_SIZE = 40;
+
 // ^ Class for Media Album ^ //
 class MediaAlbum {
+  final AssetPathEntity data;
   // Properties
   bool isAll;
   var assets = <MediaItem>[];
   String name = "";
   int count = 0;
+  int currentPage = 0;
+  int totalPages = 0;
 
   // * Constructer * //
-  MediaAlbum(AssetPathEntity data) {
+  MediaAlbum(this.data) {
     this.isAll = data.isAll;
     this.name = data.name;
     this.count = data.assetCount;
+    this.totalPages = (data.assetCount / K_ALBUM_PAGE_SIZE).ceil();
 
     // Items on Range
     data.getAssetListRange(start: 0, end: 500).then((items) {
@@ -42,6 +48,11 @@ class MediaItem {
   int height;
   AssetType type;
   Duration duration;
+
+  // Calculated
+  Uint8List thumbnail;
+  OpenResult openResult;
+  File file;
 
   // # Getter for is Audio
   bool get isAudio {
@@ -67,11 +78,6 @@ class MediaItem {
     return false;
   }
 
-  // Calculated
-  Uint8List thumbnail;
-  OpenResult openResult;
-  File file;
-
   // * Constructer * //
   MediaItem(this.data, this.index) {
     // Set Properties
@@ -80,6 +86,11 @@ class MediaItem {
     this.type = data.type;
     this.width = data.width;
     this.height = data.height;
+  }
+
+  static fromID(String id) async {
+    var asset = await AssetEntity.fromId(id);
+    return MediaItem(asset, -1);
   }
 
   // @ Fetch Uint8List

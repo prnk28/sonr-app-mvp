@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
@@ -110,11 +112,33 @@ class _MediaInviteView extends StatelessWidget {
 }
 
 // ^ TransferCard Media Item Details ^ //
-class _MediaItemView extends StatelessWidget {
+class _MediaItemView extends StatefulWidget {
   final TransferCard card;
   final TransferCardController controller;
 
   _MediaItemView(this.card, this.controller);
+
+  @override
+  __MediaItemViewState createState() => __MediaItemViewState();
+}
+
+class __MediaItemViewState extends State<_MediaItemView> {
+  File mediaFile;
+  bool hasLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  loadMediaFile() async {
+    MediaItem item = MediaItem.fromID(widget.card.metadata.assetID);
+    mediaFile = await item.getFile();
+    setState(() {
+      hasLoaded = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -127,27 +151,20 @@ class _MediaItemView extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             // Push to Page
-            Get.to(_MediaCardExpanded(card), transition: Transition.fadeIn);
+            Get.to(_MediaCardExpanded(widget.card), transition: Transition.fadeIn);
           },
           child: Neumorphic(
             style: SonrStyle.normal,
             margin: EdgeInsets.all(4),
             child: Hero(
-              tag: card.id,
+              tag: widget.card.id,
               child: Container(
                 height: 75,
-                decoration: card.metadata.mime.type == MIME_Type.image
-                    ? BoxDecoration(
-                        image: DecorationImage(
-                        colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
-                        fit: BoxFit.cover,
-                        image: MemoryImage(card.metadata.thumbnail),
-                      ))
-                    : null,
+                decoration: hasLoaded ? _buildImageDecoration() : Container(),
                 child: Stack(
                   children: <Widget>[
                     // Display Mime Type if Not Image
-                    card.metadata.mime.type != MIME_Type.image
+                    widget.card.metadata.mime.type != MIME_Type.image
                         ? Align(
                             alignment: Alignment.center,
                             child: Padding(
@@ -161,7 +178,7 @@ class _MediaItemView extends StatelessWidget {
                                       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                                       depth: -10,
                                     ),
-                                    child: SonrIcon.withMime(card.metadata.mime, size: 60)),
+                                    child: SonrIcon.withMime(widget.card.metadata.mime, size: 60)),
                               ),
                             ),
                           )
@@ -173,9 +190,9 @@ class _MediaItemView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Neumorphic(
-                          style: card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                          child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000),
-                              color: card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
+                          style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+                          child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(widget.card.received * 1000),
+                              color: widget.card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
                           padding: EdgeInsets.all(10),
                         ),
                       ),
@@ -189,7 +206,7 @@ class _MediaItemView extends StatelessWidget {
                           child: ShapeButton.circle(
                             color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                             icon: SonrIcon.info,
-                            onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
+                            onPressed: () => widget.controller.showCardInfo(_MediaCardInfo(widget.card)),
                             shadowLightColor: Colors.black38,
                           )),
                     ),
@@ -201,6 +218,17 @@ class _MediaItemView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Decoration _buildImageDecoration() {
+    return widget.card.metadata.mime.type == MIME_Type.image
+        ? BoxDecoration(
+            image: DecorationImage(
+            colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
+            fit: BoxFit.cover,
+            image: FileImage(mediaFile),
+          ))
+        : null;
   }
 }
 

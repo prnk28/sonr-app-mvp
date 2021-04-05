@@ -10,7 +10,7 @@ class AlbumsDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SonrDropdown(
-        _buildItems(MediaService.albums),
+        _buildAlbumItems(MediaService.albums),
         SonrDropdownItem(true, "All",
             icon: SonrIcon.gradient(
                 Icons.all_inbox_rounded, UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
@@ -27,7 +27,7 @@ class AlbumsDropdown extends StatelessWidget {
   }
 
   // # Build Media Album Items
-  List<SonrDropdownItem> _buildItems(List<MediaAlbum> data) {
+  List<SonrDropdownItem> _buildAlbumItems(List<MediaAlbum> data) {
     return List<SonrDropdownItem>.generate(data.length, (index) {
       if (data[index].name != null) {
         // Initialize

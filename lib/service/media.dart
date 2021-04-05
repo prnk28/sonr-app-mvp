@@ -72,18 +72,23 @@ class MediaService extends GetxService {
       // Get Collections
       _state(GalleryState.Loading);
 
-      // Get Albums
+      // Remove Non existing albums for android
       if (DeviceService.isAndroid) {
         await PhotoManager.editor.android.removeAllNoExistsAsset();
       }
 
+      // Get Albums
       List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
       var albums = <MediaAlbum>[];
       list.forEach((element) {
-        if (element.isAll) {
-          _allMedia(MediaAlbum(element));
+        // Validate Album
+        if (element.name != "" && element.assetCount > 1) {
+          var album = MediaAlbum(element);
+          albums.add(album);
+          if (element.isAll) {
+            _allMedia(album);
+          }
         }
-        albums.add(MediaAlbum(element));
       });
 
       // Set Gallery
@@ -127,6 +132,7 @@ class MediaService extends GetxService {
       // Get Collections
       to._state(GalleryState.Loading);
 
+      // Remove Non existing albums for android
       if (DeviceService.isAndroid) {
         await PhotoManager.editor.android.removeAllNoExistsAsset();
       }
@@ -135,16 +141,19 @@ class MediaService extends GetxService {
       List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
       var albums = <MediaAlbum>[];
       list.forEach((element) {
-        if (element.isAll) {
-          to._allMedia(MediaAlbum(element));
-        }
-        if (element.name != "") {
-          albums.add(MediaAlbum(element));
+        // Validate Album
+        if (element.name != "" && element.assetCount > 1) {
+          var album = MediaAlbum(element);
+          albums.add(album);
+          if (element.isAll) {
+            to._allMedia(album);
+          }
         }
       });
 
       // Set Gallery
       to._albums.assignAll(albums);
+      to._albums.refresh();
       to._state(GalleryState.Ready);
     }
   }
@@ -182,12 +191,11 @@ class MediaService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  static Future<bool> saveTransfer(TransferCard card) async {
+  static Future<AssetEntity> saveTransfer(Metadata meta) async {
     // Get Data from Media
-    final path = card.metadata.path;
-    if (card.hasMetadata()) {
+    final path = meta.path;
       // Save Image to Gallery
-      if (card.metadata.mime.type == MIME_Type.image && Get.find<PermissionService>().galleryPermitted.val) {
+      if (meta.mime.type == MIME_Type.image && Get.find<PermissionService>().galleryPermitted.val) {
         var asset = await PhotoManager.editor.saveImageWithPath(path);
         var result = await asset.exists;
 
@@ -197,11 +205,11 @@ class MediaService extends GetxService {
         } else {
           SonrSnack.error("Unable to save Photo to your Gallery");
         }
-        return result;
+        return asset;
       }
 
       // Save Video to Gallery
-      else if (card.metadata.mime.type == MIME_Type.video && Get.find<PermissionService>().galleryPermitted.val) {
+      else if (meta.mime.type == MIME_Type.video && Get.find<PermissionService>().galleryPermitted.val) {
         // Set Video File
         File videoFile = File(path);
         var asset = await PhotoManager.editor.saveVideo(videoFile);
@@ -213,14 +221,10 @@ class MediaService extends GetxService {
         } else {
           SonrSnack.error("Unable to save Video to your Gallery");
         }
-        return result;
+        return asset;
       } else {
-        return false;
+        return null;
       }
-    } else {
-      SonrSnack.success("Unable to save Media to Gallery");
-      return false;
-    }
   }
 
   // ^ Saves Received Media to Gallery ^ //

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/card/progress_view.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -83,6 +86,7 @@ class TransferCardController extends GetxController {
     SonrService.respond(false);
     SonrOverlay.back();
   }
+
 
   // ^ Accept Transfer Invite Request ^ //
   promptSendBack(AuthInvite invite, TransferCard card) async {
