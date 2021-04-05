@@ -45,8 +45,7 @@ class SonrRouting {
             page: () => TransferScreen(),
             maintainState: false,
             transition: Transition.downToUp,
-            curve: Curves.bounceOut,
-            binding: TransferBinding()),
+            curve: Curves.bounceOut),
 
         // ** Profile Page ** //
         GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),

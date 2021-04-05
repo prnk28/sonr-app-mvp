@@ -1,18 +1,21 @@
 import 'peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'transfer_controller.dart';
+
 const double K_BUBBLE_SIZE = 80;
 
 // ^ PeerBubble Utilizes Controller and Lottie Files ^ //
 class PeerBubble extends StatelessWidget {
   final Peer peer;
-  PeerBubble(this.peer);
+  final TransferController transfer;
+  PeerBubble(this.peer, this.transfer);
 
   @override
   Widget build(BuildContext context) {
     return GetX<PeerController>(
         autoRemove: false,
-        init: PeerController(peer: peer),
+        init: PeerController(transfer, peer: peer),
         builder: (controller) {
           return AnimatedPositioned(
               width: K_BUBBLE_SIZE,

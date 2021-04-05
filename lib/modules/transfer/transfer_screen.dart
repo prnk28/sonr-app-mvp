@@ -9,21 +9,27 @@ import 'lobby_view.dart';
 import 'transfer_controller.dart';
 
 // ^ Transfer Screen Entry Point ^ //
-class TransferScreen extends GetView<TransferController> {
+class TransferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.isRemoteActive.value) {
-        return RemoteLobbyView(info: controller.remote.value);
-      } else {
-        return LocalLobbyView();
-      }
-    });
+    return GetX<TransferController>(
+      init: TransferController(),
+      builder: (controller) {
+        if (controller.isRemoteActive.value) {
+          return RemoteLobbyView(controller, info: controller.remote.value);
+        } else {
+          return LocalLobbyView(controller);
+        }
+      },
+    );
   }
 }
 
 // ^ Local Lobby View ^ //
-class LocalLobbyView extends GetView<TransferController> {
+class LocalLobbyView extends StatelessWidget {
+  final TransferController controller;
+
+  const LocalLobbyView(this.controller, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SonrScaffold.appBarLeadingAction(
@@ -48,7 +54,7 @@ class LocalLobbyView extends GetView<TransferController> {
                 )),
 
             // @ Lobby View
-            LobbyService.localSize.value > 0 ? LocalLobbyStack() : Container(),
+            LobbyService.localSize.value > 0 ? LocalLobbyStack(controller) : Container(),
 
             // @ Compass View
             Padding(
@@ -70,8 +76,8 @@ class LocalLobbyView extends GetView<TransferController> {
 // ^ Remote Lobby View ^ //
 class RemoteLobbyView extends StatefulWidget {
   final RemoteInfo info;
-
-  const RemoteLobbyView({Key key, @required this.info}) : super(key: key);
+  final TransferController controller;
+  const RemoteLobbyView(this.controller, {Key key, @required this.info}) : super(key: key);
   @override
   _RemoteLobbyViewState createState() => _RemoteLobbyViewState();
 }
@@ -104,7 +110,7 @@ class _RemoteLobbyViewState extends State<RemoteLobbyView> {
         disableDynamicLobbyTitle: true,
         titleWidget: _buildTitleWidget(),
         leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
-        action: ShapeButton.circle(icon: SonrIcon.leave, onPressed: () => Get.find<TransferController>().stopRemote(), shape: NeumorphicShape.flat),
+        action: ShapeButton.circle(icon: SonrIcon.leave, onPressed: () => widget.controller.stopRemote(), shape: NeumorphicShape.flat),
         body: ListView.builder(
           itemCount: lobbyModel != null ? lobbyModel.length + 1 : 1,
           itemBuilder: (BuildContext context, int index) {

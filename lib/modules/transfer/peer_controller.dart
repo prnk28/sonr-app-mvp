@@ -9,6 +9,7 @@ class PeerController extends GetxController {
   // Properties
   final Peer peer;
   final bool isAnimated;
+  final TransferController transfer;
 
   // Reactive Elements
   final artboard = Rx<Artboard>();
@@ -36,7 +37,7 @@ class PeerController extends GetxController {
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   PeerStream peerStream;
   StreamSubscription<VectorPosition> userStream;
-  PeerController({this.peer, this.isAnimated = true}) {
+  PeerController(this.transfer, {this.peer, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
     peerVector(VectorPosition(peer.position));
@@ -99,7 +100,7 @@ class PeerController extends GetxController {
     if (!_isInvited) {
       // Perform Invite
       SonrService.inviteWithController(this);
-      Get.find<TransferController>().setFacingPeer(false);
+      transfer.setFacingPeer(false);
 
       // Check for File
       if (Get.find<SonrService>().payload == Payload.MEDIA) {
@@ -174,7 +175,7 @@ class PeerController extends GetxController {
           peerVector(VectorPosition(peer.position));
 
           // Handle Changes
-          if (Get.find<TransferController>().isShiftingEnabled.value) {
+          if (transfer.isShiftingEnabled.value) {
             _handleFacingUpdate();
           }
         }
@@ -190,7 +191,7 @@ class PeerController extends GetxController {
         userVector(pos);
 
         // Find Offset
-        if (Get.find<TransferController>().isShiftingEnabled.value) {
+        if (transfer.isShiftingEnabled.value) {
           if (peer.isOnDesktop) {
             offset(Offset.zero);
           } else {
@@ -266,7 +267,7 @@ class PeerController extends GetxController {
 
   // ^ Begin Facing Invite Check ^ //
   void _startTimer() {
-    Get.find<TransferController>().setFacingPeer(true);
+    transfer.setFacingPeer(true);
     _timer = Timer.periodic(500.milliseconds, (_) {
       // Add MS to Counter
       counter(counter.value += 500);
@@ -286,7 +287,7 @@ class PeerController extends GetxController {
   // ^ Stop Timer for Facing Check ^ //
   void _stopTimer() {
     if (_timer != null) {
-      Get.find<TransferController>().setFacingPeer(false);
+      transfer.setFacingPeer(false);
       _timer.cancel();
       _timer = null;
       isFacing(false);

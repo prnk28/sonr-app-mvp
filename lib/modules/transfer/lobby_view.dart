@@ -4,9 +4,16 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
+import 'transfer_controller.dart';
 
 // ^ Local Lobby Stack View ^ //
 class LocalLobbyStack extends StatefulWidget {
+  final TransferController transfer;
+
+  const LocalLobbyStack(
+    this.transfer, {
+    Key key,
+  }) : super(key: key);
   @override
   _LocalLobbyStackState createState() => _LocalLobbyStackState();
 }
@@ -53,7 +60,7 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
     // Iterate through peers and IDs
     data.mobilePeers.forEach((peer) {
       // Add to Stack Items
-      children.add(PeerBubble(peer));
+      children.add(PeerBubble(peer, widget.transfer));
     });
 
     // Update View
