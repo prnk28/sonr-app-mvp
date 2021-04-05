@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
-import 'style.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class SonrSnack {
@@ -27,8 +26,8 @@ class SonrSnack {
   }
 
   // ^ Custom Alert ^ //
-  factory SonrSnack.remote({@required String message, @required Icon icon, Color color = Colors.purple}) {
-    return SonrSnack("Remote Code", message, icon, color, 45000, true);
+  factory SonrSnack.remote({@required String message, int duration = 45000, Color color = Colors.purple}) {
+    return SonrSnack("Remote Code", message, SonrIcon.remote, color, duration, true);
   }
 
   // ^ Custom Alert ^ //

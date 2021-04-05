@@ -47,7 +47,7 @@ class SocialView extends StatelessWidget {
       // @ Build Loading View
       else {
         var icon = item.provider.icon(IconType.Gradient);
-        return SonrAnimatedWaveIcon(icon.data, gradient: icon.gradient);
+        return AnimatedWaveIcon(icon.data, gradient: icon.gradient);
       }
     });
   }

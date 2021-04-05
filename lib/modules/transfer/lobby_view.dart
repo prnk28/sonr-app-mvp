@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer_widget.dart';
 
@@ -14,15 +15,13 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
   // References
   int lobbySize = 0;
   List<PeerBubble> stackChildren = <PeerBubble>[];
-  StreamSubscription<Lobby> localLobbyStream;
+  StreamSubscription<LobbyModel> localLobbyStream;
 
   // * Initial State * //
   @override
   void initState() {
     // Add Initial Data
     _handleLobbyUpdate(LobbyService.local.value);
-
-    // Set Stream
     localLobbyStream = LobbyService.local.listen(_handleLobbyUpdate);
     super.initState();
   }
@@ -36,11 +35,15 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
 
   @override
   Widget build(BuildContext context) {
-    return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren));
+    if (lobbySize > 0) {
+      return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
+    } else {
+      return Container();
+    }
   }
 
   // * Updates Stack Children * //
-  _handleLobbyUpdate(Lobby data) {
+  _handleLobbyUpdate(LobbyModel data) {
     // Initialize
     var children = <PeerBubble>[];
 
@@ -48,11 +51,9 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
     stackChildren.clear();
 
     // Iterate through peers and IDs
-    data.peers.forEach((id, peer) {
+    data.mobilePeers.forEach((peer) {
       // Add to Stack Items
-      if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
-        children.add(PeerBubble(peer, stackChildren.length - 1));
-      }
+      children.add(PeerBubble(peer, stackChildren.length - 1));
     });
 
     // Update View
@@ -60,20 +61,6 @@ class _LocalLobbyStackState extends State<LocalLobbyStack> {
       lobbySize = data.size;
       stackChildren = children;
     });
-  }
-}
-
-// ^ Switched Lobby View ^ //
-class RemoteLobbyView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: LobbyService.localSize.value,
-        itemBuilder: (context, idx) {
-          return Column(children: [
-            SonrText.title("Handling Remote..."),
-          ]);
-        });
   }
 }
 
@@ -85,12 +72,9 @@ class LobbySheet extends StatefulWidget {
 
 class _LobbySheetState extends State<LobbySheet> {
   // References
-  int lobbySize = 0;
+  LobbyModel lobby;
   int toggleIndex = 1;
-  List<Peer> allPeers = <Peer>[];
-  List<Peer> desktopPeers = <Peer>[];
-  List<Peer> mobilePeers = <Peer>[];
-  StreamSubscription<Lobby> peerStream;
+  StreamSubscription<LobbyModel> peerStream;
 
   // * Initial State * //
   @override
@@ -112,16 +96,6 @@ class _LobbySheetState extends State<LobbySheet> {
 
   @override
   Widget build(BuildContext context) {
-    // Set Current List
-    var peerList;
-    if (toggleIndex == 1) {
-      peerList = allPeers;
-    } else if (toggleIndex == 0) {
-      peerList = mobilePeers;
-    } else if (toggleIndex == 2) {
-      peerList = desktopPeers;
-    }
-
     // Build View
     return NeumorphicBackground(
         backendColor: Colors.transparent,
@@ -129,14 +103,21 @@ class _LobbySheetState extends State<LobbySheet> {
         child: Neumorphic(
             style: SonrStyle.normal,
             child: ListView.builder(
-              itemCount: peerList.length + 1,
+              itemCount: lobby != null ? lobby.length + 1 : 1,
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
-                  return _buildTitle();
+                  return LobbyTitleView(
+                    title: "Local Lobby",
+                    onChanged: (index) {
+                      setState(() {
+                        toggleIndex = index;
+                      });
+                    },
+                  );
                 } else {
                   // Build List Item
                   return Column(children: [
-                    PeerListItem(peerList[index - 1], index - 1),
+                    PeerListItem(lobby.atIndex(index - 1), index - 1),
                     Padding(
                       padding: EdgeInsets.all(8),
                     )
@@ -146,14 +127,38 @@ class _LobbySheetState extends State<LobbySheet> {
             )));
   }
 
-  // ^ Builds Title View ^ //
-  Widget _buildTitle() {
+  // ^ Updates Stack Children ^ //
+  _handlePeerUpdate(LobbyModel data) {
+    // Update View
+    setState(() {
+      lobby = data;
+    });
+  }
+}
+
+// ^ Lobby Title View ^ //
+class LobbyTitleView extends StatefulWidget {
+  final Function(int) onChanged;
+  final String title;
+  const LobbyTitleView({Key key, @required this.onChanged, this.title = ''}) : super(key: key);
+
+  @override
+  _LobbyTitleViewState createState() => _LobbyTitleViewState();
+}
+
+class _LobbyTitleViewState extends State<LobbyTitleView> {
+  int toggleIndex = 1;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(children: [
       // Build Title
-      Padding(padding: EdgeInsetsX.top(8)),
-      Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title("Local Lobby")]),
+      widget.title != '' ? Padding(padding: EdgeInsetsX.top(8)) : Container(),
+      widget.title != ''
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.title(widget.title)])
+          : Container(),
 
       // Build Toggle View
       Container(
@@ -161,13 +166,14 @@ class _LobbySheetState extends State<LobbySheet> {
         margin: EdgeInsetsX.horizontal(24),
         child: NeumorphicToggle(
           duration: 100.milliseconds,
-          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
           thumb: Neumorphic(style: SonrStyle.toggle),
           selectedIndex: toggleIndex,
           onChanged: (val) {
             setState(() {
               toggleIndex = val;
             });
+            widget.onChanged(val);
           },
           children: [
             ToggleElement(
@@ -176,7 +182,7 @@ class _LobbySheetState extends State<LobbySheet> {
             ToggleElement(
                 background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
                 foreground: SonrIcon.neumorphicGradient(
-                    Icons.group, UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                    Icons.group, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                     size: 22.5)),
             ToggleElement(
                 background: Center(child: SonrText.medium("Desktop", color: SonrColor.Grey, size: 18)),
@@ -184,40 +190,7 @@ class _LobbySheetState extends State<LobbySheet> {
           ],
         ),
       ),
-
       Padding(padding: EdgeInsets.only(top: 24))
     ]);
-  }
-
-  // ^ Updates Stack Children ^ //
-  _handlePeerUpdate(Lobby lobby) {
-    // Initialize
-    var total = <Peer>[];
-    var mobile = <Peer>[];
-    var desktop = <Peer>[];
-
-    // Clear Lists
-    allPeers.clear();
-    mobilePeers.clear();
-    desktopPeers.clear();
-
-    // Iterate through peers and IDs
-    lobby.peers.forEach((id, peer) {
-      total.add(peer);
-      // Add to Peer Lists
-      if (peer.isOnMobile) {
-        mobile.add(peer);
-      } else if (peer.isOnDesktop) {
-        desktop.add(peer);
-      }
-    });
-
-    // Update View
-    setState(() {
-      lobbySize = lobby.size;
-      allPeers = total;
-      mobilePeers = mobile;
-      desktopPeers = desktop;
-    });
   }
 }

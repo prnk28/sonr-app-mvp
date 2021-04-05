@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/card/card_controller.dart';
-import '../style/style.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
 import '../theme.dart';
@@ -11,6 +10,10 @@ import 'form.dart';
 
 // ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SonrOverlay>();
+  static SonrOverlay get to => Get.find<SonrOverlay>();
+
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrFixedOverlayEntry>();
@@ -141,6 +144,7 @@ class SonrOverlay extends GetxService {
         entryDuration,
         barrierDismissible,
         _InviteReplyOverlayView(count, false, invite: invite),
+        backgroundColor: Colors.black54,
       );
 
       // Add Overlay to List
@@ -223,6 +227,10 @@ class SonrOverlay extends GetxService {
 
 // ^ Class Controls Active Overlays ** //
 class SonrPositionedOverlay extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SonrPositionedOverlay>();
+  static SonrPositionedOverlay get to => Get.find<SonrPositionedOverlay>();
+
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
   final currentOverlay = Rx<_SonrPositionedOverlayEntry>();
@@ -390,13 +398,13 @@ class _BaseOverlayView extends StatefulWidget {
   _BaseOverlayViewState createState() => _BaseOverlayViewState();
 }
 
-class _BaseOverlayViewState extends State<_BaseOverlayView> with AnimationMixin {
+class _BaseOverlayViewState extends State<_BaseOverlayView> with TickerProviderStateMixin {
   Animation<Offset> position;
 
   void initState() {
+    AnimationController controller = AnimationController(vsync: this, duration: widget.duration);
     position = widget.entryLocation.tweenTo(Offset.zero).animatedBy(controller);
-    controller.duration = widget.duration;
-    controller.play();
+    controller.forward();
     super.initState();
   }
 
@@ -484,7 +492,7 @@ class _DropdownOverlayView extends StatelessWidget {
           child: Container(
             width: 17,
             height: 17,
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           ),
         ),
       ),
@@ -554,12 +562,8 @@ class _InviteReplyOverlayView extends StatelessWidget {
     }
 
     // Build View
-    return GlassContainer(
-        margin: EdgeInsets.symmetric(horizontal: 16),
-        height: 500,
-        // borderRadius: BorderRadius.circular(30),
-        // backendColor: Colors.transparent,
-        child: view);
+    return NeumorphicBackground(
+        margin: EdgeInsets.symmetric(horizontal: 16), borderRadius: BorderRadius.circular(30), backendColor: Colors.transparent, child: view);
   }
 }
 

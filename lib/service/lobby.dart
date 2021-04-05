@@ -1,35 +1,45 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
+import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class LobbyService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<LobbyService>();
+  static LobbyService get to => Get.find<LobbyService>();
+
   // @ Set Properties
+  final _flatModeCancelled = false.obs;
+  final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
-  final _lobbies = RxMap<String, Lobby>();
-  final _local = Rx<Lobby>();
+  final _lobbies = RxList<LobbyModel>();
+  final _local = Rx<LobbyModel>();
   final _localFlatPeers = RxMap<String, Peer>();
   final _localSize = 0.obs;
+  final _position = Rx<VectorPosition>();
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
-  // @ Static Accessors
+  // @ Routing to Reactive
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
-  static RxMap<String, Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
-  static Rx<Lobby> get local => Get.find<LobbyService>()._local;
-  static RxMap<String, Peer> get localFlatPeers => Get.find<LobbyService>()._localFlatPeers;
+  static RxList<LobbyModel> get lobbies => Get.find<LobbyService>()._lobbies;
+  static Rx<LobbyModel> get local => Get.find<LobbyService>()._local;
   static RxInt get localSize => Get.find<LobbyService>()._localSize;
+  static Rx<VectorPosition> get userPosition => to._position;
 
   // @ References
+  bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
   StreamSubscription<AccelerometerEvent> _accelStream;
-  final _flatModeCancelled = false.obs;
-  final _lastIsFacingFlat = false.obs;
+  StreamSubscription<CompassEvent> _compassStream;
   Timer _timer;
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
     _accelStream = DeviceService.accelerometer.listen(_handleAccelStream);
+    _compassStream = DeviceService.compass.listen(_handleCompassStream);
     return this;
   }
 
@@ -37,6 +47,7 @@ class LobbyService extends GetxService {
   @override
   void onClose() {
     _accelStream.cancel();
+    _compassStream.cancel();
     super.onClose();
   }
 
@@ -51,38 +62,18 @@ class LobbyService extends GetxService {
     });
   }
 
-  // ^ Method to Check if Peers are Facing each other ^ //
-  bool isFacingPeer(Peer peer) {
-    // Set Designation with Heading Vals
-    var adjustedDesignation = (((DeviceService.direction.value.heading - peer.position.heading).abs() / 11.25) + 0.25).toInt();
-    print("Adjusted: " + adjustedDesignation.toString());
-
-    var diffDesg = Position_Designation.values[(adjustedDesignation % 32)];
-    print("Difference: " + diffDesg.toString());
-    return diffDesg.isFacing(peer.position.proximity);
+  // ^ Method to Listen to Specified Lobby ^ //
+  static LobbyStream listenToLobby(RemoteInfo remote) {
+    return LobbyStream(remote);
   }
 
-  // # Handle Lobby Update //
-  void handleRefresh(Lobby data) {
-    // @ Update Local Topics
-    if (data.isLocal) {
-      // Update Local
-      _handleFlatPeers(data);
-      _local(data);
-      _localSize(data.count);
-      _local.refresh();
-    }
-
-    // @ Update Other Topics
-    else {
-      _lobbies[data.name] = data;
-      _lobbies.refresh();
-    }
+  // ^ Method to Listen to Specified Peer ^ //
+  static PeerStream listenToPeer(Peer peer, {Lobby lobby}) {
+    return PeerStream(peer, lobby != null ? lobby : local.value);
   }
 
   // ^ Method to Cancel Flat Mode ^ //
   bool sendFlatMode(Peer peer) {
-    //if (isFacingPeer(peer)) {
     // Send Invite
     SonrService.queueContact(isFlat: true);
     SonrService.inviteWithPeer(peer);
@@ -93,13 +84,28 @@ class LobbyService extends GetxService {
     Future.delayed(15.seconds, () {
       _flatModeCancelled(false);
     });
-
-    SonrSnack.success("Sent Contact to ${LobbyService.localFlatPeers.values.first.profile.firstName}");
+    var flatPeer = LobbyService.local.value.firstFlat();
+    SonrSnack.success("Sent Contact to ${flatPeer.profile.firstName}");
     Get.back();
     return true;
-    // }
-    // SonrSnack.error("Not facing any peers.");
-    //return false;
+  }
+
+  // # Handle Lobby Update //
+  void handleRefresh(Lobby data) {
+    // @ Update Local Topics
+    if (data.isLocal) {
+      // Update Local
+      _handleFlatPeers(data);
+      _local(LobbyModel(data));
+      _localSize(data.count);
+      _local.refresh();
+    }
+
+    // @ Update Other Topics
+    else {
+      _lobbies.add(LobbyModel(data));
+      _lobbies.refresh();
+    }
   }
 
   // # Handle Lobby Flat Peers ^ //
@@ -116,7 +122,7 @@ class LobbyService extends GetxService {
 
   // # Handle Incoming Acceleromter Stream
   void _handleAccelStream(AccelerometerEvent data) {
-    if (!_flatModeCancelled.value) {
+    if (_flatModeEnabled) {
       var newIsFacingFlat = data.y < 2.75;
       if (newIsFacingFlat != _lastIsFacingFlat.value) {
         if (newIsFacingFlat) {
@@ -127,6 +133,11 @@ class LobbyService extends GetxService {
         }
       }
     }
+  }
+
+  void _handleCompassStream(CompassEvent data) {
+    // Set Vector Position
+    _position(VectorPosition.fromQuadruple(DeviceService.direction));
   }
 
   // # Begin Facing Invite Check

@@ -160,7 +160,8 @@ class _ContactInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Neumorphic(
+      style: SonrStyle.normal,
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -207,32 +208,26 @@ class _ContactInviteView extends StatelessWidget {
         ),
         Divider(),
         Padding(padding: EdgeInsets.all(4)),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          // Decline Button
-          TextButton(
-              onPressed: () => SonrOverlay.back(),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.semibold("Decline", color: SonrPalette.Red, size: 18),
-              )),
-          // Accept Button
-          Container(
-            width: Get.width / 3,
-            height: 50,
-            child: ColorButton.primary(
-                onPressed: () {
-                  SonrOverlay.back();
-                  if (!isReply) {
-                    controller.promptSendBack(card);
-                  } else {
-                    controller.acceptContact(card, sendBackContact: false);
-                  }
-                },
-                gradient: SonrPalette.tertiary(),
-                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: "Accept"),
-          ),
-        ])
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Decline"),
+            Padding(padding: EdgeInsets.all(8)),
+            ColorButton.primary(
+              onPressed: () {
+                SonrOverlay.back();
+                if (!isReply) {
+                  controller.promptSendBack(invite, card);
+                } else {
+                  controller.acceptContact(invite, card, sendBackContact: false);
+                }
+              },
+              text: "Accept",
+              gradient: SonrPalette.tertiary(),
+              icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+            ),
+          ],
+        ),
       ]),
     );
   }

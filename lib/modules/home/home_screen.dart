@@ -4,6 +4,7 @@ import 'search_view.dart';
 import 'home_controller.dart';
 import 'share_button.dart';
 import 'carousel_view.dart';
+import 'settings_sheet.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -85,7 +86,7 @@ class HomeScreen extends StatelessWidget {
               padding: EdgeInsets.only(top: 8),
               margin: EdgeInsetsX.horizontal(24),
               child: NeumorphicToggle(
-                style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White),
+                style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
                 selectedIndex: controller.toggleIndex.value,
                 onChanged: (val) => controller.setToggleCategory(val),
                 thumb: Neumorphic(style: SonrStyle.toggle),
@@ -96,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                   ToggleElement(
                       background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
                       foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories,
-                          UserService.isDarkMode.value ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                          UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                           size: 22.5)),
                   ToggleElement(
                       background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 18)),
@@ -116,7 +117,7 @@ class HomeScreen extends StatelessWidget {
     if (K_TESTER_MODE) {
       return ShapeButton.circle(
         icon: SonrIcon.more,
-        onPressed: () => Get.bottomSheet(_SettingsSheet(), backgroundColor: Colors.transparent),
+        onPressed: () => Get.bottomSheet(SettingsSheet(), backgroundColor: Colors.transparent),
         shape: NeumorphicShape.flat,
       );
     } else {
@@ -150,94 +151,5 @@ class HomeScreen extends StatelessWidget {
     } else {
       return FileCard.item(list[index], isNewItem: isNew);
     }
-  }
-}
-
-class _SettingsSheet extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GlassContainer(
-      // borderRadius: BorderRadius.circular(20),
-      // margin: EdgeInsets.only(left: 15, right: 15, top: 75),
-      // backendColor: Colors.transparent,
-      height: Get.height / 3,
-      child: Stack(children: [
-        Container(
-            width: Get.width,
-            child: Obx(() => Container(
-                  child: Column(children: [
-                    // @ Title of Pane
-                    Align(
-                      heightFactor: 0.9,
-                      alignment: Alignment.topCenter,
-                      child: SonrText.header("Settings", size: 45),
-                    ),
-                    Padding(padding: EdgeInsetsX.top(28)),
-
-                    // @ Dark Mode
-                    Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          // Dark Mode Title
-                          SonrText.medium("Dark Mode"),
-
-                          // Dark Mode Switch
-                          NeumorphicSwitch(
-                            style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrPalette.Red : SonrColor.Blue,
-                              inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-                            ),
-                            value: UserService.isDarkMode.value,
-                            onChanged: (val) => UserService.toggleDarkMode(),
-                          )
-                        ])),
-                    Padding(padding: EdgeInsetsX.top(20)),
-
-                    // @ Dark Mode
-                    Obx(() => Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          // Dark Mode Title
-                          SonrText.medium("Point To Share"),
-
-                          // Dark Mode Switch
-                          NeumorphicSwitch(
-                            style: NeumorphicSwitchStyle(
-                              activeTrackColor: UserService.isDarkMode.value ? SonrPalette.Red : SonrColor.Blue,
-                              inactiveTrackColor: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
-                            ),
-                            value: UserService.hasPointToShare.value,
-                            onChanged: (val) async {
-                              if (val) {
-                                // Overlay Prompt
-                                SonrOverlay.question(
-                                        barrierDismissible: false,
-                                        title: "Wait!",
-                                        description:
-                                            "Point To Share is still experimental, performance may not be stable. \n Do you still want to continue?",
-                                        acceptTitle: "Continue",
-                                        declineTitle: "Cancel")
-                                    .then((value) {
-                                  // Check Result
-                                  if (value) {
-                                    UserService.togglePointToShare();
-                                  } else {
-                                    Get.back();
-                                  }
-                                });
-                              } else {
-                                UserService.togglePointToShare();
-                              }
-                            },
-                          )
-                        ])),
-                    Spacer(),
-                    // @ Version Number
-                    Align(
-                      heightFactor: 0.9,
-                      alignment: Alignment.topCenter,
-                      child: SonrText.light("Internal Alpha - 0.9.1", size: 16),
-                    ),
-                    Padding(padding: EdgeInsetsX.top(20)),
-                  ]),
-                )))
-      ]),
-    );
   }
 }

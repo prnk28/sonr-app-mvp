@@ -2,7 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/service/user.dart';
 import '../theme.dart';
-import 'style.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
 
@@ -427,10 +426,10 @@ class ShapeButton extends StatelessWidget {
       return NeumorphicButton(
         margin: margin,
         style: NeumorphicStyle(
-          depth: UserService.isDarkMode.value ? 4 : 8,
-          color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+          depth: UserService.isDarkMode ? 4 : 8,
+          color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           boxShape: boxShape,
-          intensity: UserService.isDarkMode.value ? 0.6 : 0.85,
+          intensity: UserService.isDarkMode ? 0.6 : 0.85,
         ),
         padding: const EdgeInsets.all(12.0),
         onPressed: () {
@@ -502,10 +501,10 @@ class ShapeButton extends StatelessWidget {
         return NeumorphicButton(
           margin: margin,
           style: NeumorphicStyle(
-            depth: UserService.isDarkMode.value ? 4 : 8,
-            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+            depth: UserService.isDarkMode ? 4 : 8,
+            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
             boxShape: boxShape,
-            intensity: UserService.isDarkMode.value ? 0.6 : 0.85,
+            intensity: UserService.isDarkMode ? 0.6 : 0.85,
           ),
           padding: const EdgeInsets.all(12.0),
           onPressed: () {
@@ -565,6 +564,7 @@ class ColorButton extends StatefulWidget {
   final Function onLongPressed;
   final String tooltip;
   final bool isEnabled;
+  final double width;
   final double pressedScale;
 
   const ColorButton({
@@ -572,12 +572,13 @@ class ColorButton extends StatefulWidget {
     @required this.onPressed,
     @required this.child,
     @required this.decoration,
+    @required this.pressedScale,
     this.margin,
     this.padding,
     this.onLongPressed,
     this.tooltip,
     this.isEnabled = true,
-    @required this.pressedScale,
+    this.width,
   }) : super(key: key);
 
   // @ Primary Button //
@@ -591,6 +592,7 @@ class ColorButton extends StatefulWidget {
     EdgeInsets margin,
     SonrIcon icon,
     String text,
+    double width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Build Decoration
@@ -605,6 +607,7 @@ class ColorButton extends StatefulWidget {
         onPressed: onPressed,
         child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
+        width: width,
         padding: padding,
         margin: margin,
         onLongPressed: onLongPressed,
@@ -620,6 +623,7 @@ class ColorButton extends StatefulWidget {
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
+    double width,
     SonrIcon icon,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
@@ -634,6 +638,7 @@ class ColorButton extends StatefulWidget {
     return ColorButton(
         decoration: decoration,
         onPressed: onPressed,
+        width: width,
         child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,
@@ -651,6 +656,7 @@ class ColorButton extends StatefulWidget {
     EdgeInsets padding,
     EdgeInsets margin,
     SonrIcon icon,
+    double width,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -664,6 +670,7 @@ class ColorButton extends StatefulWidget {
     return ColorButton(
         decoration: decoration,
         onPressed: onPressed,
+        width: width,
         child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,

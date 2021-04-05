@@ -2,10 +2,13 @@ import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 
-class SearchView extends GetView<SearchCardController> {
+class SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedContainer(
+    return GetX<SearchCardController>(
+      init: SearchCardController(),
+      builder: (controller) {
+        return AnimatedContainer(
           margin: controller.viewMargin.value,
           duration: 250.milliseconds,
           child: NeumorphicBackground(
@@ -46,24 +49,27 @@ class SearchView extends GetView<SearchCardController> {
                                 child: Obx(() => SonrSearchField.forCards(
                                       value: controller.searchText.value,
                                       onChanged: controller.textFieldChanged,
-                                      suggestion: controller.hasResults.value ? _SonrSearchCardSuggestion() : Container(),
+                                      suggestion: controller.hasResults.value ? _SonrSearchCardSuggestion(controller) : Container(),
                                     )),
                               ),
                               Spacer()
                             ]),
                           ),
                         )),
-                    _SonrSearchCardListView(),
+                    _SonrSearchCardListView(controller),
                   ]),
                 ),
               )),
-        ));
+        );
+      },
+    );
   }
 }
 
 // ** Class For TransferCard Searched Suggestion Widget ** //
-class _SonrSearchCardSuggestion extends GetView<SearchCardController> {
-  _SonrSearchCardSuggestion({Key key}) : super(key: key);
+class _SonrSearchCardSuggestion extends StatelessWidget {
+  final SearchCardController controller;
+  _SonrSearchCardSuggestion(this.controller, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     //var expandedMargin = ;
@@ -112,8 +118,9 @@ class _SonrSearchCardSuggestion extends GetView<SearchCardController> {
 }
 
 // ** Class For TransferCard Results ListView Widget ** //
-class _SonrSearchCardListView extends GetView<SearchCardController> {
-  _SonrSearchCardListView({Key key}) : super(key: key);
+class _SonrSearchCardListView extends StatelessWidget {
+  final SearchCardController controller;
+  _SonrSearchCardListView(this.controller, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {

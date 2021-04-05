@@ -50,7 +50,8 @@ class _MediaInviteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return Container(
+    return Neumorphic(
+      style: SonrStyle.normal,
       margin: EdgeInsets.all(8),
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -89,26 +90,19 @@ class _MediaInviteView extends StatelessWidget {
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            // Decline Button
-            TextButton(
-                onPressed: () => controller.declineInvite(),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: SonrText.semibold("Decline", color: Colors.red[600], size: 18),
-                )),
-            // Accept Button
-            Container(
-              width: Get.width / 3,
-              height: 50,
-              child: ColorButton.primary(
-                onPressed: () => controller.acceptTransfer(card),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ColorButton.neutral(onPressed: () => controller.declineInvite(invite), text: "Decline"),
+              Padding(padding: EdgeInsets.all(8)),
+              ColorButton.primary(
+                onPressed: () => controller.acceptTransfer(invite, card),
+                text: "Accept",
                 gradient: SonrPalette.tertiary(),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: "Accept",
               ),
-            ),
-          ]),
+            ],
+          ),
         ],
       ),
     );
@@ -193,7 +187,7 @@ class _MediaItemView extends StatelessWidget {
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ShapeButton.circle(
-                            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                             icon: SonrIcon.info,
                             onPressed: () => controller.showCardInfo(_MediaCardInfo(card)),
                             shadowLightColor: Colors.black38,
@@ -338,7 +332,7 @@ class _MediaCardInfo extends StatelessWidget {
               ShapeButton.rectangle(
                 onPressed: () {},
                 text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode.value ? Colors.white : SonrColor.Black),
+                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
             ]),
           ]),

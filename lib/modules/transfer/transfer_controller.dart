@@ -17,24 +17,24 @@ class TransferController extends GetxController {
   final angle = 0.0.obs;
   final degrees = 0.0.obs;
   final direction = 0.0.obs;
+  final isShiftingEnabled = true.obs;
 
-  // @ String Properties
+  // @ View Properties
   final string = "".obs;
   final heading = "".obs;
 
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
-  Timer _timer;
 
   // ^ Controller Constructer ^
   void onInit() {
     // Set Initial Value
-    _handleCompassUpdate(DeviceService.direction.value);
+    _handleCompassUpdate(DeviceService.compass.value);
     _handleLobbySizeUpdate(LobbyService.localSize.value);
 
     // Add Stream Handlers
-    compassStream = DeviceService.direction.listen(_handleCompassUpdate);
+    compassStream = DeviceService.compass.listen(_handleCompassUpdate);
     lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
     super.onInit();
   }
@@ -47,33 +47,19 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
-  // ^ Toggle Remote Value ^ //
+  // ^ Start Remote Session ^ //
   void startRemote() async {
     // Start Remote
     remote(await SonrService.createRemote());
     isRemoteActive(true);
+  }
 
-    // Set Title
-    title(remote.value.display);
-    title.refresh();
-
-    // Create Timeout
-    _timer = Timer.periodic(1.seconds, (_) {
-      // Add to Counter
-      counter(counter.value += 1);
-
-      // Check if Timeout Reached
-      if (counter.value == 300) {
-        if (isRemoteActive.value) {
-          _timer.cancel();
-          _timer = null;
-          HapticFeedback.mediumImpact();
-          counter(0);
-          isRemoteActive(false);
-          _handleLobbySizeUpdate(LobbyService.localSize.value);
-        }
-      }
-    });
+  // ^ Stop Remote Session ^ //
+  void stopRemote() async {
+    // Start Remote
+    SonrService.leaveRemote(remote.value);
+    remote(RemoteInfo());
+    isRemoteActive(false);
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //
@@ -89,6 +75,10 @@ class TransferController extends GetxController {
       print("isBirdsEye ${isBirdsEye.value}");
       isBirdsEye.refresh();
     }
+  }
+
+  void toggleShifting() {
+    isShiftingEnabled(!isShiftingEnabled.value);
   }
 
   // ^ Handle Compass Update ^ //

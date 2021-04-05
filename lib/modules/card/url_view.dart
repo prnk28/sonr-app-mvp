@@ -78,8 +78,9 @@ class _URLInviteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 6),
+    return Neumorphic(
+      style: SonrStyle.normal,
+      margin: EdgeInsets.all(8),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -105,7 +106,8 @@ class _URLInviteView extends StatelessWidget {
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
             invite.from.profile.hasLastName()
-                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
+                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
+                    size: 32)
                 : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
             Center(child: SonrText.gradient("Website Link", FlutterGradientNames.magicRay, size: 22)),
           ]),
@@ -124,24 +126,18 @@ class _URLInviteView extends StatelessWidget {
         // @ Actions
         Divider(),
         Padding(padding: EdgeInsets.all(4)),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          // Decline Button
-          TextButton(
-              onPressed: () => SonrOverlay.back(),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: SonrText.medium("Dismiss", color: Colors.grey[600], size: 18),
-              )),
-          // Accept Button
-          Container(
-            width: Get.width / 3,
-            height: 50,
-            child: ColorButton.primary(
-                onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
-                icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
-                text: "Open"),
-          ),
-        ]),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
+            Padding(padding: EdgeInsets.all(8)),
+            ColorButton.primary(
+              onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
+              text: "Open",
+              icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
+            ),
+          ],
+        ),
         Padding(padding: EdgeInsets.only(top: 14))
       ]),
     );

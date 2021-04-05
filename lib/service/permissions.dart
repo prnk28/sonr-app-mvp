@@ -6,6 +6,10 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 
 class PermissionService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<PermissionService>();
+  static PermissionService get to => Get.find<PermissionService>();
+
   // Permissions Values
   final cameraPermitted = false.val('cameraPermitted', getBox: () => GetStorage('Permissions'));
   final galleryPermitted = false.val('galleryPermitted', getBox: () => GetStorage('Permissions'));

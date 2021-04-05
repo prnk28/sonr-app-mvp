@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:ui';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -13,19 +12,16 @@ class PeerController extends GetxController {
   final bool isAnimated;
 
   // Reactive Elements
-  final Rx<Lobby> lobby = LobbyService.local;
   final artboard = Rx<Artboard>();
   final counter = 0.0.obs;
-  final diffDesg = Rx<Position_Designation>();
-  final diffRad = 0.0.obs;
 
   final hasCompleted = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
-  final position = Rx<Position>();
-  final userPos = Rx<CompassEvent>(DeviceService.direction.value);
+  final peerVector = Rx<VectorPosition>();
+  final userVector = Rx<VectorPosition>();
 
   // References
   Timer _timer;
@@ -39,17 +35,19 @@ class PeerController extends GetxController {
 
   // References
   SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
-  StreamSubscription<Lobby> peerStream;
+  PeerStream peerStream;
+  StreamSubscription<VectorPosition> userStream;
   PeerController({this.peer, this.index, this.isAnimated = true}) {
     // Set Initial
     isVisible(true);
-    position(peer.position);
-    offset(_calculateOffset());
+    peerVector(VectorPosition(peer.position));
+    userVector(LobbyService.userPosition.value);
 
-    // Update Peer Periodically
-    Timer.periodic(250.milliseconds, (timer) {
-      _handleCompassUpdate(DeviceService.direction.value);
-    });
+    if (peer.isOnDesktop) {
+      offset(Offset.zero);
+    } else {
+      offset(peerVector.value.offsetAgainstVector(userVector.value));
+    }
   }
 
   @override
@@ -84,22 +82,21 @@ class PeerController extends GetxController {
       }
     }
 
-    // Set Initial Values
-    _handlePeerUpdate(LobbyService.local.value);
-
     // Add Stream Handlers
-    peerStream = LobbyService.local.listen(_handlePeerUpdate);
+    peerStream = LobbyService.listenToPeer(peer).listen(_handlePeerUpdate);
+    userStream = LobbyService.userPosition.listen(_handleUserUpdate);
     super.onInit();
   }
 
   @override
   void onClose() {
-    peerStream.cancel();
+    peerStream.close();
+    userStream.cancel();
     super.onClose();
   }
 
   // ^ Handle User Invitation ^
-  invite() {
+  void invite() {
     if (!_isInvited) {
       // Perform Invite
       SonrService.inviteWithController(this);
@@ -118,13 +115,13 @@ class PeerController extends GetxController {
   }
 
   // ^ Toggle Expanded View
-  expandDetails() {
+  void expandDetails() {
     Get.bottomSheet(PeerSheetView(this), barrierColor: SonrColor.DialogBackground);
     HapticFeedback.heavyImpact();
   }
 
   // ^ Handle Accepted ^
-  playAccepted() async {
+  void playAccepted() async {
     // Update Visibility
     isVisible(false);
 
@@ -140,7 +137,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Denied ^
-  playDenied() async {
+  void playDenied() async {
     // Start Animation
     _pending.instance.animation.loop = Loop.oneShot;
     _denied.isActive = _hasDenied = !_hasDenied;
@@ -153,7 +150,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Handle Completed ^
-  playCompleted() async {
+  void playCompleted() async {
     // Update Visibility
     isVisible(true);
     hasCompleted(true);
@@ -169,74 +166,75 @@ class PeerController extends GetxController {
     });
   }
 
-  // ^ Calculate Peer Offset from Line ^ //
-  Offset _calculateOffset() {
-    if (_isInvited) {
-      return offset.value;
-    } else {
-      if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Web || peer.platform == Platform.Linux) {
-        return Offset.zero;
-      } else {
-        return SonrOffset.fromPosition(position.value, diffDesg.value, diffRad.value);
+  // ^ Handle Peer Position ^ //
+  void _handlePeerUpdate(Peer peer) {
+    if (!isClosed) {
+      if (!hasCompleted.value) {
+        // Update Direction
+        if (peer.id.peer == peer.id.peer && !_isInvited) {
+          peerVector(VectorPosition(peer.position));
+
+          // Handle Changes
+          if (Get.find<TransferController>().isShiftingEnabled.value) {
+            _handleFacingUpdate();
+          }
+        }
       }
     }
   }
 
-  // ^ Handle Compass Update ^ //
-  _handleCompassUpdate(CompassEvent newDir) {
-    if (newDir != null && !hasCompleted.value && !isClosed) {
-      // Update Direction
-      userPos(newDir);
-
-      // Set Diff Radians from Heading Vals
-      diffRad(((userPos.value.heading - position.value.facingAntipodal).abs() * pi) / 180.0);
-
-      // Set Designation with Facing Vals
-      var adjustedDesignation = (((userPos.value.headingForCameraMode - position.value.facing).abs() / 11.25) + 0.25).toInt();
-      diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
-
-      // Handle Changes
-      _handleFacingUpdate();
-    }
-  }
-
   // ^ Handle Peer Position ^ //
-  _handlePeerUpdate(Lobby lobby) {
-    if (!hasCompleted.value) {
-      // Initialize
-      lobby.peers.forEach((id, value) {
-        // Update Direction
-        if (id == peer.id.peer && !_isInvited) {
-          position(value.position);
+  void _handleUserUpdate(VectorPosition pos) {
+    if (!isClosed) {
+      if (!hasCompleted.value) {
+        // Initialize
+        userVector(pos);
 
-          // Set Diff Radians from Heading Vals
-          diffRad(((userPos.value.heading - position.value.headingAntipodal).abs() * pi) / 180.0);
-
-          // Set Designation with Facing Vals
-          var adjustedDesignation = (((userPos.value.headingForCameraMode - position.value.facing).abs() / 11.25) + 0.25).toInt();
-          diffDesg(Position_Designation.values[(adjustedDesignation % 32)]);
-
-          // Handle Changes
-          _handleFacingUpdate();
+        // Find Offset
+        if (Get.find<TransferController>().isShiftingEnabled.value) {
+          if (peer.isOnDesktop) {
+            offset(Offset.zero);
+          } else {
+            offset(peerVector.value.offsetAgainstVector(userVector.value));
+          }
         }
-      });
+
+        // Check if Facing
+        var newIsFacing = userVector.value.isPointingAt(peerVector.value);
+        if (isFacing.value != newIsFacing) {
+          // Check if Device Permits PointToShare
+          if (UserService.pointShareEnabled) {
+            // Check New Result
+            if (newIsFacing) {
+              _startTimer();
+              isFacing(userVector.value.isPointingAt(peerVector.value));
+            } else {
+              _stopTimer();
+            }
+          }
+        }
+      }
     }
   }
 
   // ^ Handle Facing Check ^ //
-  _handleFacingUpdate() {
+  void _handleFacingUpdate() {
     // Find Offset
-    offset(_calculateOffset());
+    if (peer.isOnDesktop) {
+      offset(Offset.zero);
+    } else {
+      offset(peerVector.value.offsetAgainstVector(userVector.value));
+    }
 
     // Check if Facing
-    var newIsFacing = diffDesg.value.isFacing(position.value.proximity);
+    var newIsFacing = userVector.value.isPointingAt(peerVector.value);
     if (isFacing.value != newIsFacing) {
       // Check if Device Permits PointToShare
-      if (UserService.hasPointToShare.value) {
+      if (UserService.pointShareEnabled) {
         // Check New Result
         if (newIsFacing) {
           _startTimer();
-          isFacing(diffDesg.value.isFacing(position.value.proximity));
+          isFacing(userVector.value.isPointingAt(peerVector.value));
         } else {
           _stopTimer();
         }
@@ -245,7 +243,7 @@ class PeerController extends GetxController {
   }
 
   // ^ Temporary: Workaround to handle Bubble States ^ //
-  _reset() async {
+  void _reset() async {
     // Call Finish
     _hasDenied = false;
     _hasCompleted = false;

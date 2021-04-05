@@ -53,6 +53,10 @@ final cardColumns = [
 
 // ** SQL Card Service ** //
 class SQLService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SQLService>();
+  static SQLService get to => Get.find<SQLService>();
+
   // Database Reference
   Database _db;
   String _dbPath;

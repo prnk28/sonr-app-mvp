@@ -1,7 +1,6 @@
 import 'dart:ui';
-import 'package:get/get.dart';
 import 'package:sonr_app/service/user.dart';
-import '../style/style.dart';
+import '../theme.dart';
 
 final darkBoxShadow = [
   BoxShadow(color: Color(0xff464545).withOpacity(0.2), blurRadius: 20, offset: Offset(8, 8)),
@@ -24,10 +23,10 @@ class GlassContainer extends StatelessWidget {
     Key key,
     this.width,
     this.height,
-    this.blurRadius = 4.0,
     this.child,
     this.margin,
     this.padding,
+    this.blurRadius = 4.0,
     this.isMaterial = true,
   }) : super(key: key);
 
@@ -40,54 +39,54 @@ class GlassContainer extends StatelessWidget {
       padding: padding,
       width: width,
       height: height,
-      child: Obx(() => Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ClipPath(
-                clipper: _InvRRectClipper(20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: borderRadius,
-                    boxShadow: UserService.isDarkMode.value ? darkBoxShadow : lightBoxShadow,
-                  ),
-                ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ClipPath(
+            clipper: _InvRRectClipper(20),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                boxShadow: UserService.isDarkMode ? darkBoxShadow : lightBoxShadow,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  // Fill Opacity
-                  color: UserService.isDarkMode.value ? SonrColor.Black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
-                  borderRadius: borderRadius,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    backgroundBlendMode: BlendMode.overlay,
-                    borderRadius: borderRadius,
-                    // Object Opacity
-                    gradient: LinearGradient(
-                      colors: UserService.isDarkMode.value
-                          ? [SonrColor.Black.withOpacity(0.8), SonrColor.Black.withOpacity(0.15)]
-                          : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )),
-                clipBehavior: Clip.antiAlias,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-                  child: Container(margin: EdgeInsets.all(8), padding: EdgeInsets.only(bottom: 8), color: const Color(0x0), child: child),
-                ),
-              ),
-              IgnorePointer(
-                child: Container(
-                  foregroundDecoration: BoxDecoration(
-                      border: UserService.isDarkMode.value
-                          ? Border.all(color: SonrColor.Black.withOpacity(0.4), width: 2)
-                          : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
-                      borderRadius: borderRadius),
-                ),
-              ),
-            ],
-          )),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              // Fill Opacity
+              color: UserService.isDarkMode ? SonrColor.Black.withOpacity(0.50) : Colors.white.withOpacity(0.50),
+              borderRadius: borderRadius,
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                backgroundBlendMode: BlendMode.overlay,
+                borderRadius: borderRadius,
+                // Object Opacity
+                gradient: LinearGradient(
+                  colors: UserService.isDarkMode
+                      ? [SonrColor.Black.withOpacity(0.8), SonrColor.Black.withOpacity(0.15)]
+                      : [Colors.white.withOpacity(0.8), Colors.white.withOpacity(0.15)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )),
+            clipBehavior: Clip.antiAlias,
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+              child: Container(margin: EdgeInsets.all(8), padding: EdgeInsets.only(bottom: 8), color: const Color(0x0), child: child),
+            ),
+          ),
+          IgnorePointer(
+            child: Container(
+              foregroundDecoration: BoxDecoration(
+                  border: UserService.isDarkMode
+                      ? Border.all(color: SonrColor.Black.withOpacity(0.4), width: 2)
+                      : Border.all(color: Colors.white.withOpacity(0.4), width: 2),
+                  borderRadius: borderRadius),
+            ),
+          ),
+        ],
+      ),
     );
 
     return isMaterial

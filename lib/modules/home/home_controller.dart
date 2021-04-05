@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:sonr_app/data/core/arguments.dart';
-import 'package:sonr_app/service/permission.dart';
+import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }

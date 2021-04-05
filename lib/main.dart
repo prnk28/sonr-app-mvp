@@ -7,7 +7,7 @@ const bool K_TESTER_MODE = true;
 // ^ Main Method ^ //
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrRoutes.initServices();
+  await SonrRouting.initServices();
   runApp(App());
 }
 
@@ -29,11 +29,11 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      getPages: SonrRoutes.pages,
+      getPages: SonrRouting.pages,
       initialBinding: InitialBinding(),
       navigatorKey: Get.key,
       navigatorObservers: [GetObserver()],
-      themeMode: ThemeMode.light,
+      themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: Scaffold(
           backgroundColor: Colors.black,
           body: Stack(

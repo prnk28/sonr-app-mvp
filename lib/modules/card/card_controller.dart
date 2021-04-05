@@ -17,13 +17,18 @@ class TransferCardController extends GetxController {
   final animationCompleted = false.obs;
 
   // ^ Accept Contact Invite Request ^ //
-  acceptContact(TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
+  acceptContact(AuthInvite invite, TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
     // Save Card
     Get.find<SQLService>().storeCard(card);
 
     // Check if Send Back
     if (sendBackContact) {
-      SonrService.respond(true);
+      // Check for Remote
+      if (invite.hasRemote()) {
+        SonrService.respond(true, info: invite.remote);
+      } else {
+        SonrService.respond(true);
+      }
     }
 
     // Return to HomeScreen
@@ -36,12 +41,18 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  acceptTransfer(TransferCard card) {
-    SonrService.respond(true);
-    SonrOverlay.back();
+  acceptTransfer(AuthInvite invite, TransferCard card) {
+    // Check for Remote
+    if (invite.hasRemote()) {
+      SonrService.respond(true, info: invite.remote);
+    } else {
+      SonrService.respond(true);
+    }
 
+    // Switch View
+    SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(this, card, card.properties.size > 5000000),
+      ProgressView(card, card.properties.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
@@ -62,16 +73,21 @@ class TransferCardController extends GetxController {
   }
 
   // ^ Decline Invite Request ^ //
-  declineInvite() {
+  declineInvite(AuthInvite invite) {
     // Check if accepted
+    if (invite.hasRemote()) {
+      SonrService.respond(true, info: invite.remote);
+    } else {
+      SonrService.respond(true);
+    }
     SonrService.respond(false);
     SonrOverlay.back();
   }
 
   // ^ Accept Transfer Invite Request ^ //
-  promptSendBack(TransferCard card) async {
+  promptSendBack(AuthInvite invite, TransferCard card) async {
     var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-    acceptContact(card, sendBackContact: result, closeOverlay: true);
+    acceptContact(invite, card, sendBackContact: result, closeOverlay: true);
   }
 
   // ^ Method to Present Card Overlay Info

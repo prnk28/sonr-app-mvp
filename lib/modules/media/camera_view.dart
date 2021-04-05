@@ -126,7 +126,7 @@ class _CameraToolsView extends GetView<CameraController> {
             Obx(() {
               var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
               return GestureDetector(
-                  child: SonrAnimatedSwitcher.slideUp(
+                  child: AnimatedSlideSwitcher.slideUp(
                       child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                   onTap: () async {
                     HapticFeedback.heavyImpact();
@@ -177,20 +177,20 @@ class _CaptureButton extends GetView<CameraController> {
           child: Neumorphic(
             margin: EdgeInsets.all(14),
             style: NeumorphicStyle(
-              color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+              color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
               boxShape: NeumorphicBoxShape.circle(),
             ),
             child: Neumorphic(
               style: NeumorphicStyle(
                 depth: 14,
-                color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                 boxShape: NeumorphicBoxShape.circle(),
               ),
               margin: EdgeInsets.all(10),
               child: Neumorphic(
                 style: NeumorphicStyle(
                   depth: -8,
-                  color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                  color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                   boxShape: NeumorphicBoxShape.circle(),
                 ),
                 margin: EdgeInsets.all(14),
@@ -213,12 +213,12 @@ class _CaptureButton extends GetView<CameraController> {
                         child: Center(
                             child: SonrIcon.neumorphicGradient(
                           SonrIconData.camera,
-                          UserService.isDarkMode.value ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                          UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                           size: 40,
                         )),
                         style: NeumorphicStyle(
                             depth: 14,
-                            color: UserService.isDarkMode.value ? SonrColor.Dark : SonrColor.White,
+                            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value

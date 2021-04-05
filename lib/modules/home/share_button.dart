@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/media/media_picker.dart';
-import 'package:sonr_app/service/permission.dart';
+import 'package:sonr_app/service/permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class ShareButton extends StatelessWidget {

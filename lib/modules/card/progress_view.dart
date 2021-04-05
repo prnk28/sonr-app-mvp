@@ -8,18 +8,17 @@ class ProgressView extends HookWidget {
   //  Properties
   final TransferCard card;
   final Gradient gradient = SonrGradient.progress();
-  final TransferCardController cardController;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
 
   // Constructer
-  ProgressView(this.cardController, this.card, this.utilizeProgress) : super(key: UniqueKey());
+  ProgressView(this.card, this.utilizeProgress) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
     // Inject Hook Controller
     final hookController = useAnimationController(duration: duration);
-    hookController.loop();
+    hookController.forward();
 
     // Reactive to Progress
     return Container(

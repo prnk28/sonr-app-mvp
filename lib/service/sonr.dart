@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -12,6 +12,10 @@ import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
 class SonrService extends GetxService with TransferQueue {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<SonrService>();
+  static SonrService get to => Get.find<SonrService>();
+
   // @ Set Properties
   final _isReady = false.obs;
   final _progress = 0.0.obs;
@@ -19,20 +23,21 @@ class SonrService extends GetxService with TransferQueue {
   final _status = Rx<Status>();
 
   // @ Static Accessors
-  static SonrService get to => Get.find<SonrService>();
-  static RxBool get isReady => Get.find<SonrService>()._isReady;
-  static RxDouble get progress => Get.find<SonrService>()._progress;
-  static Rx<Status> get status => Get.find<SonrService>()._status;
+  static RxBool get isReady => to._isReady;
+  static RxDouble get progress => to._progress;
+  static Rx<Status> get status => to._status;
 
   // @ Set References
   Node _node;
 
   // ^ Updates Node^ //
   SonrService() {
-    Timer.periodic(200.milliseconds, (timer) {
-      if (DeviceService.isMobile) {
-        DeviceService.direction.value ??
-            _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+    Timer.periodic(250.milliseconds, (timer) {
+      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
+        // Publish Position
+        if (to._isReady.value) {
+          DeviceService.compass.value ?? _node.update(direction: DeviceService.direction);
+        }
       }
     });
   }
@@ -41,7 +46,7 @@ class SonrService extends GetxService with TransferQueue {
   Future<SonrService> init() async {
     // Initialize
     var pos = await Get.find<DeviceService>().currentLocation();
-    _properties(Peer_Properties(hasPointToShare: UserService.hasPointToShare.value));
+    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -60,7 +65,7 @@ class SonrService extends GetxService with TransferQueue {
   Future<void> connect({Contact contact}) async {
     _node.connect();
     if (contact != null) {
-      _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+      _node.update(direction: DeviceService.direction);
     }
   }
 
@@ -71,19 +76,27 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Join a New Group ^
-  static joinRemote(List<String> words) async {
+  static Future<RemoteInfo> joinRemote(List<String> words) async {
     // Extract Data
     var display = "${words[0]} ${words[1]} ${words[2]}";
     var topic = "${words[0]}-${words[1]}-${words[2]}";
 
     // Perform Routine
-    await to._node.joinRemote(RemoteInfo(isJoin: true, topic: topic, display: display, words: words));
+    var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
+    await to._node.joinRemote(remote);
+    return remote;
+  }
+
+  // ^ Leave a Remote Group ^
+  static leaveRemote(RemoteInfo info) async {
+    // Perform Routine
+    await to._node.leaveRemote(info);
   }
 
   // ^ Sets Properties for Node ^
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
-      to._properties(Peer_Properties(hasPointToShare: UserService.hasPointToShare.value, isFlatMode: isFlatMode));
+      to._properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
       await to._node.update(properties: to._properties.value);
     }
   }
@@ -145,25 +158,25 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
-  static inviteWithPeer(Peer p) async {
+  static inviteWithPeer(Peer p, {RemoteInfo info}) async {
     // Set Peer Controller
     to.currentInvitedFromList(p);
 
     // File Payload
     if (to.payload == Payload.MEDIA) {
       assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(p, to.currentTransfer.media);
+      await to._node.inviteFile(p, to.currentTransfer.media, info: info);
     }
 
     // Contact Payload
     else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(p, isFlat: to.currentTransfer.isFlat);
+      await to._node.inviteContact(p, isFlat: to.currentTransfer.isFlat, info: info);
     }
 
     // Link Payload
     else if (to.payload == Payload.URL) {
       assert(to.currentTransfer.url != null);
-      await to._node.inviteLink(p, to.currentTransfer.url);
+      await to._node.inviteLink(p, to.currentTransfer.url, info: info);
     }
 
     // No Payload
@@ -173,8 +186,8 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Respond-Peer Event ^
-  static respond(bool decision) async {
-    await to._node.respond(decision);
+  static respond(bool decision, {RemoteInfo info}) async {
+    await to._node.respond(decision, info: info);
   }
 
   // ^ Async Function notifies transfer complete ^ //
@@ -185,19 +198,16 @@ class SonrService extends GetxService with TransferQueue {
   // **************************
   // ******* Callbacks ********
   // **************************
-
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
-    print(data.value.toString());
-
     // Check for Homescreen Controller
-    if (Get.isRegistered<HomeController>() && data.value == Status.AVAILABLE) {
+    if (Get.isRegistered<DeviceService>() && data.value == Status.AVAILABLE) {
       // Update Status
       _isReady(true);
       _status(data.value);
 
       // Handle Available
-      _node.update(direction: Tuple(DeviceService.direction.value.headingForCameraMode, DeviceService.direction.value.heading));
+      _node.update(direction: DeviceService.direction);
     }
   }
 
