@@ -113,9 +113,15 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Set Payload for URL Link ^ //
-  static queueMedia(MediaFile media) async {
+  static queueCapture(MediaFile media) async {
     // - Check Connected -
-    to.addToQueue(TransferQueueItem.media(media));
+    to.addToQueue(TransferQueueItem.capture(media));
+  }
+
+  // ^ Set Payload for URL Link ^ //
+  static queueMedia(MediaItem media) async {
+    // - Check Connected -
+    to.addToQueue(TransferQueueItem.media(await media.getInfo()));
   }
 
   // ^ Set Payload for URL Link ^ //

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:get/get.dart' hide Node;
-import '../model/model_file.dart';
 
 class TransferQueue {
   // Properties
@@ -145,7 +145,11 @@ class TransferQueueItem {
     return TransferQueueItem(Payload.CONTACT, isFlat: isFlat);
   }
 
-  factory TransferQueueItem.media(MediaFile media) {
+  factory TransferQueueItem.media(InviteRequest_FileInfo info) {
+    return TransferQueueItem(Payload.MEDIA, media: info);
+  }
+
+  factory TransferQueueItem.capture(MediaFile media) {
     var file = InviteRequest_FileInfo(
       path: media.path,
       duration: media.duration,
