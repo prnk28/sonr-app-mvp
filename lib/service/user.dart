@@ -53,7 +53,6 @@ class UserService extends GetxService {
   static RxList<Contact_SocialTile> get socials => to._socials;
   static int get tileCount => to._socials.length;
   static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
-  static String get wireID => "${to._firstName.value}-${to._lastName.value}";
 
   // ** Return Current User Object **
   static User get current {
