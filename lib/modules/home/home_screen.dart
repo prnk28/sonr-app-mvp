@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/nav/bottom_bar.dart';
 import 'package:sonr_app/theme/theme.dart';
 import '../../main.dart';
 import 'search_view.dart';
@@ -65,6 +66,7 @@ class HomeScreen extends StatelessWidget {
         // Build Scaffold
         return SonrScaffold.appBarLeadingAction(
           resizeToAvoidBottomPadding: false,
+          bottomNavigationBar: SonrBottomNavBar(),
           title: "Home",
           leading: _buildLeadingByMode(),
           action: ShapeButton.circle(
@@ -80,7 +82,6 @@ class HomeScreen extends StatelessWidget {
                   SonrSnack.error("No Cards Found");
                 }
               }),
-          floatingActionButton: ShareButton(),
           body: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Container(
               padding: EdgeInsets.only(top: 8),
@@ -117,7 +118,7 @@ class HomeScreen extends StatelessWidget {
     if (K_TESTER_MODE) {
       return ShapeButton.circle(
         icon: SonrIcon.more,
-        onPressed: () => Get.bottomSheet(SettingsSheet(), backgroundColor: Colors.transparent),
+        onPressed: () => Get.dialog(SettingsSheet(), barrierColor: Colors.transparent),
         shape: NeumorphicShape.flat,
       );
     } else {

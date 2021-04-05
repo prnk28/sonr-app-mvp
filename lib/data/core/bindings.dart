@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/nav/nav_controller.dart';
 import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/modules/profile/tile_item.dart';
@@ -8,6 +9,7 @@ import 'package:sonr_app/theme/theme.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
+    Get.put<SonrNavController>(SonrNavController(), permanent: true);
     Get.create<TransferCardController>(() => TransferCardController());
     Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<CameraController>(() => CameraController());
