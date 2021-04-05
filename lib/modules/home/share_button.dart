@@ -9,10 +9,8 @@ class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<ShareButtonController>(
-        autoRemove: false,
         init: ShareButtonController(),
         builder: (controller) {
-          // Build Container
           return Align(
             alignment: controller.state.value.alignment,
             child: AnimatedContainer(

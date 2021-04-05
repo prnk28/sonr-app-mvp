@@ -7,7 +7,7 @@ class SettingsSheet extends StatelessWidget {
       init: _SettingsSheetController(),
       builder: (controller) {
         return GlassContainer(
-          height: Get.height / 3 + 40,
+          height: Get.height / 2,
           child: Stack(children: [
             Container(
                 width: Get.width,
