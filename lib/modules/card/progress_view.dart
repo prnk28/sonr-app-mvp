@@ -2,7 +2,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'card_controller.dart';
 
 class ProgressView extends HookWidget {
   //  Properties
