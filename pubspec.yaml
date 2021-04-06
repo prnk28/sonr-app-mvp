@@ -54,7 +54,6 @@ dependencies:
   flutter_custom_clippers: ^1.1.2
   flutter_gradients: ^1.0.0+3
   flutter_neumorphic: ^3.0.4+1
-  google_fonts: ^1.1.2
   lottie: ^1.0.1
   photo_view: ^0.10.3
   rive: ^0.6.8
@@ -77,6 +76,39 @@ flutter:
   - family:  SonrIcons
     fonts:
       - asset: assets/fonts/sonr_icons.ttf
+
+  - family: Poppins
+    fonts:
+      - asset: assets/fonts/Poppins-300.ttf
+        weight: 300
+      - asset: assets/fonts/Poppins-300-Italic.ttf
+        weight: 300
+        style: italic
+      - asset: assets/fonts/Poppins-400.ttf
+        weight: 400
+      - asset: assets/fonts/Poppins-400-Italic.ttf
+        weight: 400
+        style: italic
+      - asset: assets/fonts/Poppins-500.ttf
+        weight: 500
+      - asset: assets/fonts/Poppins-500-Italic.ttf
+        weight: 500
+        style: italic
+      - asset: assets/fonts/Poppins-600.ttf
+        weight: 600
+      - asset: assets/fonts/Poppins-600-Italic.ttf
+        weight: 600
+        style: italic
+      - asset: assets/fonts/Poppins-700.ttf
+        weight: 700
+      - asset: assets/fonts/Poppins-700-Italic.ttf
+        weight: 700
+        style: italic
+      - asset: assets/fonts/Poppins-800.ttf
+        weight: 800
+      - asset: assets/fonts/Poppins-800-Italic.ttf
+        weight: 800
+        style: italic
 
   # -- Media --
   assets:
