@@ -61,6 +61,25 @@ class PayloadConverter extends TypeConverter<Payload, int> {
   }
 }
 
+class ProfileConverter extends TypeConverter<Profile, String> {
+  const ProfileConverter();
+  @override
+  Profile mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return Profile.fromJson(json.decode(fromDb));
+  }
+
+  @override
+  String mapToSql(Profile value) {
+    if (value == null) {
+      return null;
+    }
+    return value.writeToJson();
+  }
+}
+
 class URLConverter extends TypeConverter<URLLink, String> {
   const URLConverter();
   @override
