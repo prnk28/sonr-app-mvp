@@ -192,85 +192,6 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
   }
 }
 
-class Animated extends GetWidget<AnimatedController> {
-  final Widget child;
-  final AnimType animation;
-  final Duration delay;
-  final Duration duration;
-  final double scaleStart;
-  final double scaleEnd;
-
-  const Animated({
-    @required this.child,
-    this.scaleStart,
-    this.scaleEnd,
-    this.animation = AnimType.SlideIn,
-    this.duration = const Duration(seconds: 1),
-    this.delay = const Duration(milliseconds: 0),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (animation == AnimType.Shake) {
-      return TweenAnimationBuilder<double>(
-          key: key,
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: 1.seconds,
-          builder: (context, animation, child) => Transform.translate(
-                offset: controller.shakeOffset(animation),
-                child: child,
-              ));
-    } else if (animation == AnimType.SlideIn) {
-      return TweenAnimationBuilder<Offset>(
-        key: key,
-        tween: Tween(begin: Offset.zero, end: Offset(0.0, 1.0)),
-        duration: 1.seconds,
-        builder: (context, animation, child) => Transform.translate(
-          offset: animation,
-          child: child,
-        ),
-      );
-    }
-    return child;
-  }
-
-  void scale() => controller.shake();
-  void shake() => controller.shake();
-
-  void reset() {
-    controller.type(AnimType.None);
-    controller.type.refresh();
-  }
-}
-
-class AnimatedController extends GetxController {
-  // Properties
-  final type = AnimType.None.obs;
-
-  // ^ Duration Returners ^ //
-  Duration get shakeDuration => 1000.milliseconds;
-  Duration get fadeInDuration => 250.milliseconds;
-  Duration get fadeOutDuration => 150.milliseconds;
-
-  // ^ Method to Begin Shake ^ //
-  void shake() {
-    // Start Animation
-    type(AnimType.Shake);
-    type.refresh();
-
-    // Reset
-    Future.delayed(shakeDuration, () {
-      type(AnimType.None);
-    });
-  }
-
-  // ^ Get Animated Offset for Shake Method ^ //
-  Offset shakeOffset(double animation) {
-    var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
-    return Offset(18 * shake, 0);
-  }
-}
-
 class AnimatedSlideSwitcher extends StatelessWidget {
   final AnimSwitch _animation;
   final Widget child;
@@ -410,7 +331,7 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
   _getPathFromBoard() {
     switch (widget.type) {
       case LottieBoard.David:
-        return "assets/illustrations/david.json";
+        return "assets/images/david.json";
         break;
     }
   }

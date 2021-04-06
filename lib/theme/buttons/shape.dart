@@ -3,7 +3,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/service/user.dart';
 import '../theme.dart';
 
-
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
 
 class ShapeButton extends StatelessWidget {
@@ -481,12 +480,10 @@ class ShapeButton extends StatelessWidget {
 
       // Create View
       if (isDisabled) {
-        var child = Animated(child: hasIcon ? _buildIconView(iconChild, textChild) : textChild);
+        var child = Container(child: hasIcon ? _buildIconView(iconChild, textChild) : textChild);
         return NeumorphicButton(
           onPressed: () {
             HapticFeedback.lightImpact();
-            onPressed();
-            child.shake();
           },
           margin: margin,
           style: NeumorphicStyle(

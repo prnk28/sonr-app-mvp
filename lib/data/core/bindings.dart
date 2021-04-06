@@ -12,7 +12,6 @@ class InitialBinding implements Bindings {
   void dependencies() {
     Get.put<NavController>(NavController(), permanent: true);
     Get.create<TransferCardController>(() => TransferCardController());
-    Get.create<AnimatedController>(() => AnimatedController());
     Get.lazyPut<CameraController>(() => CameraController());
   }
 }
