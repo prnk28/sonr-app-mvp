@@ -33,12 +33,33 @@ class CardService extends GetxService {
 
   // ^ Add New Card to Database ^ //
   static addCard(TransferCard card) async {
+    // Save Media to Device
+    if (card.payload.isMedia) {
+      var asset = await MediaService.saveTransfer(card.metadata);
+      card.metadata.id = asset.id;
+    }
+
+    // Store in Database
     await to._database.addCard(card);
   }
 
   // ^ Returns total Card Count ^ //
-  static Future<int> cardCount() async {
+  static Future<int> cardCount({bool withoutContacts = false, bool withoutMedia = false, bool withoutURLs = false}) async {
+    // Get Total Entries
     var cards = await to._database.allCardEntries;
+
+    // Filter from Options
+    if (withoutContacts) {
+      cards.removeWhere((element) => element.payload == Payload.CONTACT);
+    }
+    if (withoutMedia) {
+      cards.removeWhere((element) => element.payload == Payload.MEDIA);
+    }
+    if (withoutURLs) {
+      cards.removeWhere((element) => element.payload == Payload.URL);
+    }
+
+    // Return Remaining
     return cards.length;
   }
 

@@ -205,6 +205,14 @@ extension PayloadUtils on Payload {
     }
     return this.toString().capitalizeFirst;
   }
+
+  bool get isFile {
+    return this != Payload.UNDEFINED && this != Payload.CONTACT && this != Payload.URL;
+  }
+
+  bool get isMedia {
+    return this == Payload.MEDIA;
+  }
 }
 
 // ^ TransferCard Model Extensions ^ //
