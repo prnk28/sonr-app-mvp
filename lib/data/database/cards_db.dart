@@ -43,7 +43,15 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   // returns the generated id
-  Future<void> addCard(TransferCard card) async {}
+  Future<int> addCard(TransferCard card) async {
+    return into(transferCardItems).insert(TransferCardItemsCompanion(
+        owner: Value(card.owner),
+        payload: Value(card.payload),
+        contact: card.hasContact() ? Value(card.contact) : Value.absent(),
+        metadata: card.hasContact() ? Value(card.metadata) : Value.absent(),
+        url: card.hasContact() ? Value(card.url) : Value.absent(),
+        received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
+  }
 }
 
 LazyDatabase _openConnection() {
