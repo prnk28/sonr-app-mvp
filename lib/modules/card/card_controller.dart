@@ -76,11 +76,10 @@ class TransferCardController extends GetxController {
   declineInvite(AuthInvite invite) {
     // Check if accepted
     if (invite.hasRemote()) {
-      SonrService.respond(true, info: invite.remote);
+      SonrService.respond(false, info: invite.remote);
     } else {
-      SonrService.respond(true);
+      SonrService.respond(false);
     }
-    SonrService.respond(false);
     SonrOverlay.back();
   }
 

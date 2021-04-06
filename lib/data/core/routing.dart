@@ -3,6 +3,7 @@ import 'package:sonr_app/modules/home/home_screen.dart';
 import 'package:sonr_app/modules/profile/profile_screen.dart';
 import 'package:sonr_app/modules/register/form_page.dart';
 import 'package:sonr_app/modules/transfer/transfer_screen.dart';
+import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/service/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -70,7 +71,7 @@ class SonrRouting {
     await Get.putAsync(() => DeviceService().init(), permanent: true); // First Required Service
     await Get.putAsync(() => UserService().init(), permanent: true); // Second Required Service
     await Get.putAsync(() => MediaService().init(), permanent: true);
-    await Get.putAsync(() => SQLService().init(), permanent: true);
+    await Get.putAsync(() => CardsService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
@@ -82,7 +83,7 @@ class SonrRouting {
     return DeviceService.isRegistered &&
         UserService.isRegistered &&
         MediaService.isRegistered &&
-        SQLService.isRegistered &&
+        CardsService.isRegistered &&
         LobbyService.isRegistered &&
         UserService.isRegistered;
   }
