@@ -35,11 +35,20 @@ class CardsDatabase extends _$CardsDatabase {
 
   // loads all todo entries
   Future<List<TransferCardItem>> get allCardEntries => select(transferCardItems).get();
+  Stream<List<TransferCardItem>> watchAll() {
+    return (select(transferCardItems).watch());
+  }
 
-  // watches all todo entries in a given category. The stream will automatically
-  // emit new items whenever the underlying data changes.
-  Stream<List<TransferCardItem>> watchEntriesInPayload(Payload c) {
-    return (select(transferCardItems)..where((t) => t.payload.equals(c.value))).watch();
+  Stream<List<TransferCardItem>> watchContacts() {
+    return (select(transferCardItems)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
+  }
+
+  Stream<List<TransferCardItem>> watchMedia() {
+    return (select(transferCardItems)..where((t) => t.payload.equals(Payload.MEDIA.value))).watch();
+  }
+
+  Stream<List<TransferCardItem>> watchUrls() {
+    return (select(transferCardItems)..where((t) => t.payload.equals(Payload.URL.value))).watch();
   }
 
   // returns the generated id
@@ -60,7 +69,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    final file = File(p.join(dbFolder.path, 'db_cards.sqlite'));
     return VmDatabase(file);
   });
 }
