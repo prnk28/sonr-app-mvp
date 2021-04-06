@@ -9,7 +9,7 @@ class ShareButton extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(
         curve: Curves.bounceOut,
-        padding: controller.isShareExpanded ? EdgeInsetsX.bottom(20) : EdgeInsets.zero,
+        padding: controller.isShareExpanded ? EdgeInsetsX.bottom(16) : EdgeInsets.zero,
         duration: Duration(milliseconds: 600),
         width: _width,
         height: _height,
@@ -56,14 +56,13 @@ class _ExpandedView extends GetView<HomeController> {
         children: [
           GestureDetector(
             onTap: () {
-              // Close Share Button
-              controller.shrinkShare();
               // Check Permissions
               if (UserService.permissions.value.hasCamera) {
                 Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
                   SonrService.queueCapture(file);
                   Get.toNamed("/transfer");
                 }), transition: Transition.downToUp);
+                controller.shrinkShare(delay: 150.milliseconds);
               } else {
                 Get.find<UserService>().requestCamera().then((value) {
                   // Go to Camera View
@@ -72,6 +71,7 @@ class _ExpandedView extends GetView<HomeController> {
                       SonrService.queueCapture(file);
                       Get.toNamed("/transfer");
                     }), transition: Transition.downToUp);
+                    controller.shrinkShare(delay: 150.milliseconds);
                   } else {
                     // Present Error
                     SonrSnack.error("Sonr cannot open Camera without Permissions");
@@ -95,14 +95,13 @@ class _ExpandedView extends GetView<HomeController> {
           ),
           GestureDetector(
             onTap: () {
-              // Close Share Button
-              controller.shrinkShare();
               // Check Permissions
               if (UserService.permissions.value.hasGallery) {
                 MediaService.refreshGallery();
                 Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                   SonrService.queueMedia(file);
                   Get.toNamed("/transfer");
+                  controller.shrinkShare(delay: 150.milliseconds);
                 }), isDismissible: false);
               } else {
                 Get.find<UserService>().requestGallery().then((value) {
@@ -112,6 +111,7 @@ class _ExpandedView extends GetView<HomeController> {
                     Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
                       SonrService.queueMedia(file);
                       Get.toNamed("/transfer");
+                      controller.shrinkShare();
                     }), isDismissible: false);
                   } else {
                     // Present Error
@@ -134,12 +134,11 @@ class _ExpandedView extends GetView<HomeController> {
           ),
           GestureDetector(
             onTap: () {
-              // Close Share Button
-              controller.shrinkShare();
               SonrService.queueContact();
 
               // Go to Transfer
               Get.toNamed("/transfer");
+              controller.shrinkShare(delay: 150.milliseconds);
             },
             child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(

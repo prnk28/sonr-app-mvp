@@ -37,7 +37,8 @@ class NavButton extends StatelessWidget {
         child: ObxValue<RxInt>(
             (idx) => AnimatedScale(
                   duration: 250.milliseconds,
-                  child: Icon(bottomType.iconData, color: idx.value == bottomType.index ? SonrPalette.Primary : Colors.grey.shade400),
+                  child: Icon(bottomType.iconData,
+                      size: bottomType.iconSize, color: idx.value == bottomType.index ? SonrPalette.Primary : Colors.grey.shade400),
                   scale: idx.value == bottomType.index ? 1.2 : 1.0,
                 ),
             currentIndex));
@@ -63,6 +64,25 @@ extension BottomNavButtonUtils on BottomNavButton {
         break;
       default:
         return Icons.deck;
+    }
+  }
+
+  double get iconSize {
+    switch (this) {
+      case BottomNavButton.Grid:
+        return 24;
+        break;
+      case BottomNavButton.Profile:
+        return 24;
+        break;
+      case BottomNavButton.Alerts:
+        return 24;
+        break;
+      case BottomNavButton.Remote:
+        return 20;
+        break;
+      default:
+        return 24;
     }
   }
 

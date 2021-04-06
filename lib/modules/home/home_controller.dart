@@ -209,14 +209,16 @@ class HomeController extends GetxController {
   }
 
   // ^ Close Share Button ^ //
-  void shrinkShare() {
-    if (_timer != null) {
-      _timer.cancel();
-      _timer = null;
-      HapticFeedback.mediumImpact();
-      shareState(ShareButtonState.Default);
-      shareCounter(0);
-    }
+  void shrinkShare({Duration delay = const Duration(milliseconds: 0)}) {
+    Future.delayed(delay, () {
+      if (_timer != null) {
+        _timer.cancel();
+        _timer = null;
+        HapticFeedback.mediumImpact();
+        shareState(ShareButtonState.Default);
+        shareCounter(0);
+      }
+    });
   }
 
   // ^ Toggles Expanded Share Button ^ //

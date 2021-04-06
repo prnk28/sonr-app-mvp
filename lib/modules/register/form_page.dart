@@ -12,83 +12,86 @@ class FormPage extends StatelessWidget {
       init: _FormPageController(),
       builder: (controller) {
         return SonrScaffold(
-            body: Column(children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(24),
-            child: Image.asset("assets/images/icon_dark.png", width: Get.width / 3, height: Get.height / 3),
-          ),
-          Form(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // ****************** //
-                // ** <First Name> ** //
-                // ****************** //
-                SonrTextField(
-                    label: "First Name",
-                    hint: hintName.item1,
-                    value: controller.firstName.value,
-                    status: controller.firstNameStatus,
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.words,
-                    autoFocus: true,
-                    autoCorrect: false,
-                    onEditingComplete: () {
-                      FocusScope.of(context).requestFocus(lastNameFocus);
-                      controller.firstName(controller.firstName.value.capitalizeFirst);
-                      controller.firstName.refresh();
-                    },
-                    onChanged: (String value) {
-                      controller.firstName(value);
-                    }),
+            body: Container(
+          width: Get.width,
+          height: Get.height,
+          margin: EdgeInsets.only(bottom: 8, top: 72),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Image.asset("assets/images/icon_dark.png", width: 128, height: 128, colorBlendMode: BlendMode.difference),
+            Expanded(
+              child: Form(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    // ****************** //
+                    // ** <First Name> ** //
+                    // ****************** //
+                    SonrTextField(
+                        label: "First Name",
+                        hint: hintName.item1,
+                        value: controller.firstName.value,
+                        status: controller.firstNameStatus,
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.words,
+                        autoFocus: true,
+                        autoCorrect: false,
+                        onEditingComplete: () {
+                          FocusScope.of(context).requestFocus(lastNameFocus);
+                          controller.firstName(controller.firstName.value.capitalizeFirst);
+                          controller.firstName.refresh();
+                        },
+                        onChanged: (String value) {
+                          controller.firstName(value);
+                        }),
 
-                // ***************** //
-                // ** <Last Name> ** //
-                // ***************** //
-                SonrTextField(
-                    label: "Last Name",
-                    hint: hintName.item2,
-                    textInputAction: TextInputAction.next,
-                    value: controller.lastName.value,
-                    textCapitalization: TextCapitalization.words,
-                    focusNode: lastNameFocus,
-                    status: controller.lastNameStatus,
-                    autoCorrect: false,
-                    onEditingComplete: () {
-                      controller.lastName(controller.lastName.value.capitalizeFirst);
-                      controller.lastName.refresh();
-                      FocusScopeNode currentFocus = FocusScope.of(Get.context);
-                      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                        FocusManager.instance.primaryFocus.unfocus();
-                        controller.submit();
-                      }
-                    },
-                    onChanged: (String value) {
-                      controller.lastName(value);
-                    }),
+                    // ***************** //
+                    // ** <Last Name> ** //
+                    // ***************** //
+                    SonrTextField(
+                        label: "Last Name",
+                        hint: hintName.item2,
+                        textInputAction: TextInputAction.next,
+                        value: controller.lastName.value,
+                        textCapitalization: TextCapitalization.words,
+                        focusNode: lastNameFocus,
+                        status: controller.lastNameStatus,
+                        autoCorrect: false,
+                        onEditingComplete: () {
+                          controller.lastName(controller.lastName.value.capitalizeFirst);
+                          controller.lastName.refresh();
+                          FocusScopeNode currentFocus = FocusScope.of(Get.context);
+                          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                            FocusManager.instance.primaryFocus.unfocus();
+                            controller.submit();
+                          }
+                        },
+                        onChanged: (String value) {
+                          controller.lastName(value);
+                        }),
 
-                // ********************* //
-                // ** <Submit Button> ** //
-                // ********************* //
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: ShapeButton.rectangle(
-                      margin: EdgeInsetsX.horizontal(120),
-                      icon: SonrIcon.accept,
-                      text: SonrText.semibold("Submit"),
-                      onPressed: () {
-                        controller.submit();
-                      },
-                      //margin: EdgeInsets.only(top: 12),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ]));
+                    // ********************* //
+                    // ** <Submit Button> ** //
+                    // ********************* //
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: ColorButton.primary(
+                          margin: EdgeInsetsX.horizontal(88),
+                          icon: SonrIcon.accept,
+                          text: "Get Started",
+                          onPressed: () {
+                            controller.submit();
+                          },
+                          //margin: EdgeInsets.only(top: 12),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ]),
+        ));
       },
     );
   }
