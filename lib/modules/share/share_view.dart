@@ -42,3 +42,12 @@ class _QueueView extends GetView<ShareController> {
     );
   }
 }
+
+class _MediaView extends GetView<ShareController> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+}

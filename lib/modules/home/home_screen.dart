@@ -1,6 +1,5 @@
 import 'package:sonr_app/modules/card/card_grid.dart';
 import 'package:sonr_app/theme/navigation/app_bar.dart';
-import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bottom_bar.dart';
 import 'home_controller.dart';
