@@ -9,19 +9,19 @@ class ShareButton extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(
         curve: Curves.bounceOut,
-        padding: controller.isShareExpanded ? EdgeInsetsX.bottom(16) : EdgeInsets.zero,
+        padding: controller.isQueueExpanded ? EdgeInsetsX.bottom(16) : EdgeInsets.zero,
         duration: Duration(milliseconds: 600),
         width: _width,
         height: _height,
         child: NeumorphicButton(
-          child: controller.isShareExpanded ? _ExpandedView() : _DefaultView(),
+          child: controller.isQueueExpanded ? _QueueView() : _DefaultView(),
           onPressed: controller.toggleShare,
           style: SonrStyle.shareButton,
         )));
   }
 
   double get _width {
-    if (controller.isShareExpanded) {
+    if (controller.isQueueExpanded) {
       return Get.width / 2 + 165;
     } else {
       return 60;
@@ -29,7 +29,7 @@ class ShareButton extends GetView<HomeController> {
   }
 
   double get _height {
-    if (controller.isShareExpanded) {
+    if (controller.isQueueExpanded) {
       return 120;
     } else {
       return 60;
@@ -46,7 +46,7 @@ class _DefaultView extends GetView<HomeController> {
 }
 
 // ** Expanded Share Button View ** //
-class _ExpandedView extends GetView<HomeController> {
+class _QueueView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Row(

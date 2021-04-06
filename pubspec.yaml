@@ -4,7 +4,7 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.9.1+72
+version: 0.9.1+75
 publish_to: none
 
 # -- Flutter Settings --
@@ -37,6 +37,7 @@ dependencies:
 
   # -- Data --
   better_player: ^0.0.55
+
   open_file: ^3.0.3
   photo_manager: ^1.0.6
   path: ^1.7.0
@@ -44,6 +45,8 @@ dependencies:
   vector_math: ^2.1.0
 
   # -- Network --
+  moor: ^4.2.1
+  sqlite3_flutter_libs: ^0.4.1
   receive_sharing_intent: ^1.4.3
   sqflite: ^2.0.0+1
   sonr_core:
@@ -60,7 +63,8 @@ dependencies:
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
-  build_runner: ^1.10.2
+  build_runner:
+  moor_generator:
 
 flutter_test:
   sdk: flutter

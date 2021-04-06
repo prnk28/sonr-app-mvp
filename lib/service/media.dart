@@ -242,14 +242,14 @@ class MediaService extends GetxService {
 
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedFiles(List<SharedMediaFile> data) async {
-    if (!Get.isBottomSheetOpen && UserService.isExisting.value) {
+    if (!Get.isBottomSheetOpen && UserService.hasUser.value) {
       Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedText(String text) async {
-    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.isExisting.value) {
+    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.hasUser.value) {
       // Get Data
       var data = await SonrCore.getURL(text);
 

@@ -32,7 +32,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
         ),
       ),
       Obx(() => Center(
-            heightFactor: controller.shareState.value == ShareButtonState.Expanded ? 0.2 : 0.6,
+            heightFactor: controller.shareState.value == ShareButtonState.Queue ? 0.2 : 0.6,
             child: ShareButton(),
           ))
     ]);

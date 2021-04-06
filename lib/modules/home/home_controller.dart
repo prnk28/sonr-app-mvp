@@ -4,7 +4,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-enum ShareButtonState { Default, Expanded }
+enum ShareButtonState { Default, Queue }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
@@ -21,7 +21,7 @@ class HomeController extends GetxController {
   final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
   final page = BottomNavButton.Grid.obs;
-  bool get isShareExpanded => shareState.value == ShareButtonState.Expanded;
+  bool get isQueueExpanded => shareState.value == ShareButtonState.Queue;
 
   // References
   var _lastPage = BottomNavButton.Grid;
@@ -224,7 +224,7 @@ class HomeController extends GetxController {
   // ^ Toggles Expanded Share Button ^ //
   void toggleShare() {
     if (shareState.value == ShareButtonState.Default) {
-      shareState(ShareButtonState.Expanded);
+      shareState(ShareButtonState.Queue);
       expandShare(6000, shareState.value);
     } else {
       shrinkShare();

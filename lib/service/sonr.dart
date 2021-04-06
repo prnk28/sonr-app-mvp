@@ -44,9 +44,11 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
     // Initialize
-    if (UserService.isExisting.value) {
-      var pos = await Get.find<DeviceService>().currentLocation();
-      _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+
+    // Check for Connect Requirements
+    if (UserService.hasRequiredToConnect) {
+      var pos = await DeviceService.currentLocation();
 
       // Create Node
       _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -72,8 +74,8 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact, String username) async {
-    var pos = await Get.find<DeviceService>().currentLocation();
-    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+    // Get Data
+    var pos = await DeviceService.currentLocation();
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -85,6 +87,8 @@ class SonrService extends GetxService with TransferQueue {
     _node.onReceived = _handleReceived;
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
+
+    // Connect Node
     _node.connect();
     _node.update(direction: DeviceService.direction);
   }

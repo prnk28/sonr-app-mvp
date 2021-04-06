@@ -11,7 +11,7 @@ class UserService extends GetxService {
   static UserService get to => Get.find<UserService>();
 
   // ** User Reactive Properties **
-  final _isExisting = false.obs;
+  final _hasUser = false.obs;
   final _isNewUser = false.obs;
   final _contact = Rx<Contact>();
 
@@ -32,7 +32,7 @@ class UserService extends GetxService {
   final _userPermissions = UserPermissions().obs;
 
   // **  Getter Methods for Contact Properties **
-  static RxBool get isExisting => to._isExisting;
+  static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
   static Rx<UserPermissions> get permissions => to._userPermissions;
   static Rx<Contact> get contact => to._contact;
@@ -42,28 +42,32 @@ class UserService extends GetxService {
   static bool get isDarkMode => to._isDarkMode.val;
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
-
+  static bool get hasRequiredToConnect => to._userPermissions.value.hasLocation && to._userPermissions.value.hasLocalNetwork && to._hasUser.value;
+  
+  // Contact Values
   static RxString get firstName => to._firstName;
   static RxString get lastName => to._lastName;
   static RxString get phone => to._phone;
   static RxString get email => to._email;
   static RxString get website => to._website;
-
   static Rx<Uint8List> get picture => to._picture;
   static RxList<Contact_SocialTile> get socials => to._socials;
   static int get tileCount => to._socials.length;
+
+  // Username
   static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
 
   // ** Return Current User Object **
   static User get current {
-    var controller = to;
     // Return Existing User
-    if (controller._isExisting.value) {
-      var profileJson = controller._userBox.read("user");
+    if (to._hasUser.value) {
+      var profileJson = to._userBox.read("user");
       return User.fromJson(profileJson);
     }
     return new User();
   }
+
+  // ** Checks if Required Data for Connection Exists ** //
 
   // ** References **
   final _userBox = GetStorage('User');
@@ -75,10 +79,10 @@ class UserService extends GetxService {
     await GetStorage.init('Preferences');
 
     // @ Check User Status
-    _isExisting(_userBox.hasData("user"));
+    _hasUser(_userBox.hasData("user"));
 
     // @ Check if User Exists
-    if (_isExisting.value) {
+    if (_hasUser.value) {
       // Get Json Value
       var profileJson = _userBox.read("user");
       var user = User.fromJson(profileJson);
@@ -216,7 +220,7 @@ class UserService extends GetxService {
     // @ Initialize
     _contact(contact);
     User user;
-    if (_isExisting.value) {
+    if (_hasUser.value) {
       // Update Existing User with new Contact
       var profileJson = _userBox.read("user");
       user = User.fromJson(profileJson);
@@ -230,7 +234,7 @@ class UserService extends GetxService {
     else {
       user = new User(contact: contact);
       _userBox.write("user", user.writeToJson());
-      _isExisting(true);
+      _hasUser(true);
     }
     return user;
   }
@@ -282,6 +286,10 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasGallery != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Gallery);
       _userPermissions.refresh();
+
+      if (result) {
+        MediaService.refreshGallery();
+      }
       return result;
     } else {
       return true;
