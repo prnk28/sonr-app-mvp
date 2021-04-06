@@ -331,19 +331,12 @@ class _MediaCardInfo extends StatelessWidget {
 
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              ShapeButton.flat(
-                onPressed: () async {
-                  CardService.deleteCard(card);
-                  SonrSnack.success("Deleted $mimeType from Sonr, it's still available in your gallery.");
-                  SonrOverlay.back();
-                },
-                text: SonrText.medium("Delete", color: SonrPalette.Red),
-                icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
-              ),
-              ShapeButton.rectangle(
-                onPressed: () {},
-                text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+              ConfirmButton.delete(
+                onConfirmed: () {},
+                defaultIcon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+                defaultText: "Delete",
+                confirmIcon: SonrIcon.success,
+                confirmText: "Confirm?",
               ),
             ]),
           ]),
