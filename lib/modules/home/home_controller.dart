@@ -5,16 +5,12 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-enum ShareButtonState { Default, Queue }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
   // Properties
-
   final status = Rx<HomeState>();
   final category = Rx<ToggleFilter>(ToggleFilter.All);
-  final shareCounter = 0.obs;
-  final shareState = ShareButtonState.Default.obs;
 
   // Elements
   final titleText = "Home".obs;
@@ -22,13 +18,10 @@ class HomeController extends GetxController {
   final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
   final page = BottomNavButton.Grid.obs;
-  bool get isQueueExpanded => shareState.value == ShareButtonState.Queue;
 
   // References
   var _lastPage = BottomNavButton.Grid;
   StreamSubscription<List<TransferCard>> _cardStream;
-  bool _hasPromptedAutoSave = false;
-  Timer _timer;
 
   // ^ Controller Constructer ^
   @override
@@ -101,24 +94,6 @@ class HomeController extends GetxController {
     }
   }
 
-  // ^ Expand Share Button ^ //
-  expandShare(double timeout, ShareButtonState previousState) {
-    HapticFeedback.heavyImpact();
-
-    // Create Timeout
-    _timer = Timer.periodic(500.milliseconds, (_) {
-      // Add to Counter
-      shareCounter(shareCounter.value += 500);
-
-      // Check if Timeout Reached
-      if (shareCounter.value == timeout) {
-        if (shareState.value == previousState) {
-          shrinkShare();
-        }
-      }
-    });
-  }
-
   // ^ Method for Setting Category Filter ^ //
   setToggleCategory(int index) {
     toggleIndex(index);
@@ -139,29 +114,6 @@ class HomeController extends GetxController {
       page(BottomNavButton.Remote);
     } else {
       page(BottomNavButton.Grid);
-    }
-  }
-
-  // ^ Close Share Button ^ //
-  void shrinkShare({Duration delay = const Duration(milliseconds: 0)}) {
-    Future.delayed(delay, () {
-      if (_timer != null) {
-        _timer.cancel();
-        _timer = null;
-        HapticFeedback.mediumImpact();
-        shareState(ShareButtonState.Default);
-        shareCounter(0);
-      }
-    });
-  }
-
-  // ^ Toggles Expanded Share Button ^ //
-  void toggleShare() {
-    if (shareState.value == ShareButtonState.Default) {
-      shareState(ShareButtonState.Queue);
-      expandShare(6000, shareState.value);
-    } else {
-      shrinkShare();
     }
   }
 }

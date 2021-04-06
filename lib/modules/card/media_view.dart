@@ -143,6 +143,7 @@ class _MediaItemViewState extends State<_MediaItemView> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.card.toString());
     return Card(
       shadowColor: Colors.transparent,
       color: Colors.transparent,
@@ -159,7 +160,7 @@ class _MediaItemViewState extends State<_MediaItemView> {
             style: SonrStyle.normal,
             margin: EdgeInsets.all(4),
             child: Hero(
-              tag: widget.card.id,
+              tag: widget.card.received,
               child: Container(
                 height: 75,
                 decoration: hasLoaded ? _buildImageDecoration() : BoxDecoration(),
@@ -250,7 +251,7 @@ class _MediaCardExpanded extends StatelessWidget {
             Get.back(closeOverlays: true);
           },
           child: Hero(
-            tag: card.id,
+            tag: card.received,
             child: Material(
               color: Colors.transparent,
               child: PhotoView(imageProvider: FileImage(mediaFile)),

@@ -29,7 +29,7 @@ class MediaAlbum {
     this.totalPages = (data.assetCount / K_ALBUM_PAGE_SIZE).ceil();
 
     // Items on Range
-    data.getAssetListRange(start: 0, end: 500).then((items) {
+    data.getAssetListRange(start: 0, end: 100).then((items) {
       // Iterate through Items
       items.forEach((element) {
         assets.add(MediaItem(element, items.indexOf(element)));

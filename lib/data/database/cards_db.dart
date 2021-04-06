@@ -57,8 +57,8 @@ class CardsDatabase extends _$CardsDatabase {
         owner: Value(card.owner),
         payload: Value(card.payload),
         contact: card.hasContact() ? Value(card.contact) : Value.absent(),
-        metadata: card.hasContact() ? Value(card.metadata) : Value.absent(),
-        url: card.hasContact() ? Value(card.url) : Value.absent(),
+        metadata: card.hasMetadata() ? Value(card.metadata) : Value.absent(),
+        url: card.hasUrl() ? Value(card.url) : Value.absent(),
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
   }
 

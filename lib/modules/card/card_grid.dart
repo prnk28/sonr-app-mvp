@@ -1,7 +1,8 @@
+import 'package:sonr_app/theme/elements/carousel.dart';
+import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'home_controller.dart';
-import 'carousel_view.dart';
+
 
 // ^ Card Grid View ^ //
 class CardGridView extends GetView<HomeController> {

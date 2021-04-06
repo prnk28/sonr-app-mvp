@@ -1,4 +1,5 @@
-import 'package:sonr_app/modules/home/share_button.dart';
+import 'package:sonr_app/modules/share/share_view.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 import 'home_controller.dart';
@@ -32,7 +33,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
         ),
       ),
       Obx(() => Center(
-            heightFactor: controller.shareState.value == ShareButtonState.Queue ? 0.2 : 0.6,
+            heightFactor: Get.find<ShareController>().heightFactor.value,
             child: ShareButton(),
           ))
     ]);
