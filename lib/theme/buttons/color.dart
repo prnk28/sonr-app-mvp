@@ -193,7 +193,8 @@ class ColorButton extends StatefulWidget {
     return Text(text,
         overflow: TextOverflow.fade,
         textAlign: TextAlign.center,
-        style: GoogleFonts.poppins(
+        style: TextStyle(
+              fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 18,
             color: Colors.white,

@@ -155,11 +155,13 @@ class _InfoText extends StatelessWidget {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
       Padding(padding: EdgeInsets.all(14)),
       Text(index.toString(),
-          style: GoogleFonts.poppins(fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+          style: TextStyle(
+              fontFamily: 'Poppins',fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
       Padding(padding: EdgeInsets.all(8)),
       Expanded(
         child: Text(text,
-            style: GoogleFonts.poppins(
+            style: TextStyle(
+              fontFamily: 'Poppins',
               fontSize: 34,
               fontWeight: FontWeight.bold,
               color: UserService.isDarkMode ? Colors.white : SonrColor.Black,

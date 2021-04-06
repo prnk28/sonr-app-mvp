@@ -235,7 +235,8 @@ class _Spoke extends StatelessWidget {
                   child: Padding(
                       padding: textPadding,
                       child: Text(textValue,
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
+              fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: UserService.isDarkMode ? Colors.white54 : Colors.black54,
