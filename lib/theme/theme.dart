@@ -9,7 +9,7 @@ export '../service/device.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';
 export '../service/sonr.dart';
-export '../service/sql.dart';
+export '../service/cards.dart';
 export '../service/user.dart';
 export 'package:flutter/services.dart';
 export 'package:sonr_app/modules/card/card_controller.dart';

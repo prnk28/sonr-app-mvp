@@ -71,7 +71,7 @@ class SonrRouting {
     await Get.putAsync(() => DeviceService().init(), permanent: true); // First Required Service
     await Get.putAsync(() => UserService().init(), permanent: true); // Second Required Service
     await Get.putAsync(() => MediaService().init(), permanent: true);
-    await Get.putAsync(() => CardsService().init(), permanent: true);
+    await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
@@ -83,7 +83,7 @@ class SonrRouting {
     return DeviceService.isRegistered &&
         UserService.isRegistered &&
         MediaService.isRegistered &&
-        CardsService.isRegistered &&
+        CardService.isRegistered &&
         LobbyService.isRegistered &&
         UserService.isRegistered;
   }

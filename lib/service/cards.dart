@@ -1,27 +1,50 @@
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/theme/theme.dart';
+export 'package:sonr_app/data/database/cards_db.dart';
 
-class CardsService extends GetxService {
-  // Accessors
-  static bool get isRegistered => Get.isRegistered<CardsService>();
-  static CardsService get to => Get.find<CardsService>();
+class CardService extends GetxService {
+  // Service Accessors
+  static bool get isRegistered => Get.isRegistered<CardService>();
+  static CardService get to => Get.find<CardService>();
 
   // Properties
-  final allCards = RxList<TransferCardItem>();
-  final contactCards = RxList<TransferCardItem>();
-  final mediaCards = RxList<TransferCardItem>();
-  final urlCards = RxList<TransferCardItem>();
+  final _allCards = RxList<TransferCardItem>();
+  final _contactCards = RxList<TransferCardItem>();
+  final _mediaCards = RxList<TransferCardItem>();
+  final _urlCards = RxList<TransferCardItem>();
+
+  // Property Accessors
+  static RxList<TransferCardItem> get allCards => to._allCards;
+  static RxList<TransferCardItem> get contactCards => to._contactCards;
+  static RxList<TransferCardItem> get mediaCards => to._mediaCards;
+  static RxList<TransferCardItem> get urlCards => to._urlCards;
 
   // References
   final _database = CardsDatabase();
 
   // * Constructer * //
-  Future<CardsService> init() async {
-    allCards.bindStream(_database.watchAll());
-    contactCards.bindStream(_database.watchContacts());
-    mediaCards.bindStream(_database.watchMedia());
-    urlCards.bindStream(_database.watchUrls());
+  Future<CardService> init() async {
+    _allCards.bindStream(_database.watchAll());
+    _contactCards.bindStream(_database.watchContacts());
+    _mediaCards.bindStream(_database.watchMedia());
+    _urlCards.bindStream(_database.watchUrls());
     return this;
+  }
+
+  // ^ Add New Card to Database ^ //
+  static addCard(TransferCard card) async {
+    await to._database.addCard(card);
+  }
+
+  // ^ Returns total Card Count ^ //
+  static Future<int> cardCount() async {
+    var cards = await to._database.allCardEntries;
+    return cards.length;
+  }
+
+  // ^ Add New Card to Database ^ //
+  static deleteCard(TransferCardItem card) async {
+    await to._database.deleteCard(card);
   }
 
   // ^ Handles User Invite Response

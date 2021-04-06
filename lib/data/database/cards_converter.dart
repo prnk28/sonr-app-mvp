@@ -1,6 +1,4 @@
 // stores preferences as strings
-import 'dart:convert';
-
 import 'package:moor/moor.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -11,7 +9,7 @@ class ContactConverter extends TypeConverter<Contact, String> {
     if (fromDb == null) {
       return null;
     }
-    return Contact.fromJson(json.decode(fromDb));
+    return Contact.fromJson(fromDb);
   }
 
   @override
@@ -30,7 +28,7 @@ class MetadataConverter extends TypeConverter<Metadata, String> {
     if (fromDb == null) {
       return null;
     }
-    return Metadata.fromJson(json.decode(fromDb));
+    return Metadata.fromJson(fromDb);
   }
 
   @override
@@ -68,7 +66,7 @@ class ProfileConverter extends TypeConverter<Profile, String> {
     if (fromDb == null) {
       return null;
     }
-    return Profile.fromJson(json.decode(fromDb));
+    return Profile.fromJson(fromDb);
   }
 
   @override
@@ -87,7 +85,7 @@ class URLConverter extends TypeConverter<URLLink, String> {
     if (fromDb == null) {
       return null;
     }
-    return URLLink.fromJson(json.decode(fromDb));
+    return URLLink.fromJson(fromDb);
   }
 
   @override

@@ -49,110 +49,112 @@ class _DefaultView extends GetView<HomeController> {
 class _QueueView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          GestureDetector(
-            onTap: () {
-              // Check Permissions
-              if (UserService.permissions.value.hasCamera) {
-                Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-                  SonrService.queueCapture(file);
-                  Get.toNamed("/transfer");
-                }), transition: Transition.downToUp);
-                controller.shrinkShare(delay: 150.milliseconds);
-              } else {
-                Get.find<UserService>().requestCamera().then((value) {
-                  // Go to Camera View
-                  if (value) {
-                    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-                      SonrService.queueCapture(file);
-                      Get.toNamed("/transfer");
-                    }), transition: Transition.downToUp);
+    return Container(
+      child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GestureDetector(
+              onTap: () {
+                // Check Permissions
+                if (UserService.permissions.value.hasCamera) {
+                  Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+                    SonrService.queueCapture(file);
+                    Get.toNamed("/transfer");
+                  }), transition: Transition.downToUp);
+                  controller.shrinkShare(delay: 150.milliseconds);
+                } else {
+                  Get.find<UserService>().requestCamera().then((value) {
+                    // Go to Camera View
+                    if (value) {
+                      Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+                        SonrService.queueCapture(file);
+                        Get.toNamed("/transfer");
+                      }), transition: Transition.downToUp);
+                      controller.shrinkShare(delay: 150.milliseconds);
+                    } else {
+                      // Present Error
+                      SonrSnack.error("Sonr cannot open Camera without Permissions");
+                    }
+                  });
+                }
+              },
+              child: Container(
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Expanded(
+                    child: RiveContainer(
+                      type: RiveBoard.Camera,
+                      width: 80,
+                      height: 80,
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 4)),
+                  SonrText(_typeText(RiveBoard.Camera), weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+                ]),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Check Permissions
+                if (UserService.permissions.value.hasGallery) {
+                  MediaService.refreshGallery();
+                  Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
+                    SonrService.queueMedia(file);
+                    Get.toNamed("/transfer");
                     controller.shrinkShare(delay: 150.milliseconds);
-                  } else {
-                    // Present Error
-                    SonrSnack.error("Sonr cannot open Camera without Permissions");
-                  }
-                });
-              }
-            },
-            child: Container(
+                  }), isDismissible: false);
+                } else {
+                  Get.find<UserService>().requestGallery().then((value) {
+                    // Present Sheet
+                    if (value) {
+                      MediaService.refreshGallery();
+                      Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
+                        SonrService.queueMedia(file);
+                        Get.toNamed("/transfer");
+                        controller.shrinkShare();
+                      }), isDismissible: false);
+                    } else {
+                      // Present Error
+                      SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
+                    }
+                  });
+                }
+              },
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Expanded(
                   child: RiveContainer(
-                    type: RiveBoard.Camera,
+                    type: RiveBoard.Gallery,
                     width: 80,
                     height: 80,
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 4)),
-                SonrText(_typeText(RiveBoard.Camera), weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+                SonrText(_typeText(RiveBoard.Gallery), weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
               ]),
             ),
-          ),
-          GestureDetector(
-            onTap: () {
-              // Check Permissions
-              if (UserService.permissions.value.hasGallery) {
-                MediaService.refreshGallery();
-                Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
-                  SonrService.queueMedia(file);
-                  Get.toNamed("/transfer");
-                  controller.shrinkShare(delay: 150.milliseconds);
-                }), isDismissible: false);
-              } else {
-                Get.find<UserService>().requestGallery().then((value) {
-                  // Present Sheet
-                  if (value) {
-                    MediaService.refreshGallery();
-                    Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
-                      SonrService.queueMedia(file);
-                      Get.toNamed("/transfer");
-                      controller.shrinkShare();
-                    }), isDismissible: false);
-                  } else {
-                    // Present Error
-                    SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
-                  }
-                });
-              }
-            },
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Expanded(
-                child: RiveContainer(
-                  type: RiveBoard.Gallery,
-                  width: 80,
-                  height: 80,
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(top: 4)),
-              SonrText(_typeText(RiveBoard.Gallery), weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
-            ]),
-          ),
-          GestureDetector(
-            onTap: () {
-              SonrService.queueContact();
+            GestureDetector(
+              onTap: () {
+                SonrService.queueContact();
 
-              // Go to Transfer
-              Get.toNamed("/transfer");
-              controller.shrinkShare(delay: 150.milliseconds);
-            },
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Expanded(
-                child: RiveContainer(
-                  type: RiveBoard.Contact,
-                  width: 80,
-                  height: 80,
+                // Go to Transfer
+                Get.toNamed("/transfer");
+                controller.shrinkShare(delay: 150.milliseconds);
+              },
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Expanded(
+                  child: RiveContainer(
+                    type: RiveBoard.Contact,
+                    width: 80,
+                    height: 80,
+                  ),
                 ),
-              ),
-              Padding(padding: EdgeInsets.only(top: 4)),
-              SonrText(_typeText(RiveBoard.Contact), weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
-            ]),
-          )
-        ]);
+                Padding(padding: EdgeInsets.only(top: 4)),
+                SonrText(_typeText(RiveBoard.Contact), weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+              ]),
+            )
+          ]),
+    );
   }
 
   String _typeText(RiveBoard type) {

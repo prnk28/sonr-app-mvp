@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:get/get.dart';
+import 'package:sonr_app/data/database/cards_db.dart';
+import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
@@ -10,7 +12,7 @@ class ContactCard extends GetWidget<TransferCardController> {
   final AuthInvite invite;
   final AuthReply reply;
   final TransferCard card;
-  final bool isNewItem;
+  final TransferCardItem cardItem;
   final Contact contact;
   final double scale;
 
@@ -30,12 +32,12 @@ class ContactCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory ContactCard.item(TransferCard card, {bool isNewItem = false}) {
-    return ContactCard(CardType.GridItem, card: card, isNewItem: isNewItem);
+  factory ContactCard.item(TransferCardItem card) {
+    return ContactCard(CardType.GridItem, cardItem: card);
   }
 
   // ** Constructer ** //
-  const ContactCard(this.type, {Key key, this.contact, this.invite, this.reply, this.card, this.isNewItem, this.scale}) : super(key: key);
+  const ContactCard(this.type, {Key key, this.contact, this.invite, this.reply, this.card, this.cardItem, this.scale}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +52,7 @@ class ContactCard extends GetWidget<TransferCardController> {
         return _ContactInviteView(card, invite, controller, true);
         break;
       case CardType.GridItem:
-        return _ContactItemView(card, controller);
+        return _ContactItemView(cardItem, controller);
         break;
       default:
         return Container();
@@ -219,7 +221,7 @@ class _ContactInviteView extends StatelessWidget {
                 if (!isReply) {
                   controller.promptSendBack(invite, card);
                 } else {
-                  controller.acceptContact(invite, card, sendBackContact: false);
+                  CardService.handleInviteResponse(true, invite, card, sendBackContact: false);
                 }
               },
               text: "Accept",
@@ -235,7 +237,7 @@ class _ContactInviteView extends StatelessWidget {
 
 // ^ TransferCard Contact Item Details ^ //
 class _ContactItemView extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   final TransferCardController controller;
   _ContactItemView(this.card, this.controller);
   @override
@@ -342,7 +344,7 @@ class _ContactItemView extends StatelessWidget {
 
 // ^ Widget for Expanded Contact Card View
 class _ContactCardExpanded extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   const _ContactCardExpanded(this.card);
   @override
   Widget build(BuildContext context) {

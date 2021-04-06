@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/database/cards_db.dart';
+import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
@@ -12,7 +14,7 @@ class MediaCard extends GetWidget<TransferCardController> {
   final CardType type;
   final AuthInvite invite;
   final TransferCard card;
-  final bool isNewItem;
+  final TransferCardItem cardItem;
 
   // ** Factory -> Invite Dialog View ** //
   factory MediaCard.invite(AuthInvite invite) {
@@ -20,12 +22,12 @@ class MediaCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory MediaCard.item(TransferCard card, {bool isNewItem = false}) {
-    return MediaCard(CardType.GridItem, card: card, isNewItem: isNewItem);
+  factory MediaCard.item(TransferCardItem card) {
+    return MediaCard(CardType.GridItem, cardItem: card);
   }
 
   // ** Constructer ** //
-  const MediaCard(this.type, {Key key, this.invite, this.card, this.isNewItem}) : super(key: key);
+  const MediaCard(this.type, {Key key, this.invite, this.card, this.cardItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class MediaCard extends GetWidget<TransferCardController> {
         return _MediaInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return _MediaItemView(card, controller);
+        return _MediaItemView(cardItem, controller);
       default:
         return Container();
         break;
@@ -95,10 +97,10 @@ class _MediaInviteView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ColorButton.neutral(onPressed: () => controller.declineInvite(invite), text: "Decline"),
+              ColorButton.neutral(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
               Padding(padding: EdgeInsets.all(8)),
               ColorButton.primary(
-                onPressed: () => controller.acceptTransfer(invite, card),
+                onPressed: () => CardService.handleInviteResponse(true, invite, card),
                 text: "Accept",
                 gradient: SonrPalette.tertiary(),
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
@@ -113,7 +115,7 @@ class _MediaInviteView extends StatelessWidget {
 
 // ^ TransferCard Media Item Details ^ //
 class _MediaItemView extends StatefulWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   final TransferCardController controller;
 
   _MediaItemView(this.card, this.controller);
@@ -191,7 +193,7 @@ class _MediaItemViewState extends State<_MediaItemView> {
                         padding: const EdgeInsets.all(8.0),
                         child: Neumorphic(
                           style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                          child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(widget.card.received * 1000),
+                          child: SonrText.date(widget.card.received,
                               color: widget.card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
                           padding: EdgeInsets.all(10),
                         ),
@@ -234,7 +236,7 @@ class _MediaItemViewState extends State<_MediaItemView> {
 
 // ^ Widget for Expanded Media View
 class _MediaCardExpanded extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   final File mediaFile;
   const _MediaCardExpanded(this.card, this.mediaFile);
   @override
@@ -262,15 +264,15 @@ class _MediaCardExpanded extends StatelessWidget {
 
 // ^ Overlay View for Media Info
 class _MediaCardInfo extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   _MediaCardInfo(this.card);
 
   @override
   Widget build(BuildContext context) {
     // Extract Data
     var metadata = card.metadata;
-    var mimeType = card.metaMimeString;
-    var size = card.metaSizeString;
+    var mimeType = card.metadata.mime.asString;
+    var size = card.metadata.sizeString;
 
     // Build Overlay View
     return Padding(
@@ -285,7 +287,7 @@ class _MediaCardInfo extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [card.ownerPlatformIcon, card.ownerNameText]),
+                children: [card.owner.platformIcon, card.owner.nameText]),
 
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
@@ -330,7 +332,7 @@ class _MediaCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               ShapeButton.flat(
                 onPressed: () async {
-                  Get.find<SQLService>().deleteCard(card.id);
+                  CardService.deleteCard(card);
                   SonrSnack.success("Deleted $mimeType from Sonr, it's still available in your gallery.");
                   SonrOverlay.back();
                 },

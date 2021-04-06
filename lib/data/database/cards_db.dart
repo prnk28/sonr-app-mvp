@@ -61,6 +61,10 @@ class CardsDatabase extends _$CardsDatabase {
         url: card.hasContact() ? Value(card.url) : Value.absent(),
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
   }
+
+  Future deleteCard(TransferCardItem item) {
+    return (delete(transferCardItems)..where((t) => t.id.equals(item.id))).go();
+  }
 }
 
 LazyDatabase _openConnection() {

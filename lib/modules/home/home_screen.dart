@@ -1,4 +1,5 @@
 import 'package:sonr_app/modules/nav/app_bar.dart';
+import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bottom_bar.dart';
 import 'home_controller.dart';
@@ -38,12 +39,6 @@ class CardGridView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      controller.status.listen((status) {
-        // Check Status
-        if (status == HomeState.New || status == HomeState.Ready) {
-          pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
-        }
-      });
       return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Container(
           padding: EdgeInsets.only(top: 8),
@@ -100,48 +95,54 @@ class CardGridView extends GetView<HomeController> {
 
     // Build Cards
     else {
-      controller.promptAutoSave();
-      if (controller.getCardList().length > 0) {
-        return StackedCardCarousel(
-          initialOffset: 2,
-          spaceBetweenItems: 435,
-          onPageChanged: (int index) => controller.pageIndex(index),
-          pageController: pageController,
-          items: List<Widget>.generate(controller.getCardList().length, (idx) {
-            return _buildCard(idx);
-          }),
-        );
-      } else {
-        return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.header("No Cards Found!", size: 32),
-          Padding(padding: EdgeInsets.all(8)),
-          LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
-          Padding(padding: EdgeInsets.all(16)),
-        ]);
-      }
+      return Obx(() {
+        // @ 1. Set List
+        var cardList = <TransferCardItem>[];
+        // Media
+        if (controller.toggleIndex.value == 0) {
+          cardList = CardService.mediaCards;
+        }
+        // Contacts
+        else if (controller.toggleIndex.value == 2) {
+          cardList = CardService.contactCards;
+        }
+        // All
+        else {
+          cardList = CardService.allCards;
+        }
+
+        // @ 2. Build View
+        if (cardList.length > 0) {
+          return StackedCardCarousel(
+            initialOffset: 2,
+            spaceBetweenItems: 435,
+            onPageChanged: (int index) => controller.pageIndex(index),
+            pageController: pageController,
+            items: List<Widget>.generate(cardList.length, (idx) {
+              return _buildCard(cardList[idx]);
+            }),
+          );
+        } else {
+          return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+            SonrText.header("No Cards Found!", size: 32),
+            Padding(padding: EdgeInsets.all(8)),
+            LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
+            Padding(padding: EdgeInsets.all(16)),
+          ]);
+        }
+      });
     }
   }
 
   // @ Helper Method for Test Mode Leading Button ^ //
-  Widget _buildCard(int index) {
-    // Get Card List
-    List<TransferCard> list = controller.getCardList();
-    bool isNew = false;
-
-    // Check if New Card
-    if (controller.status.value == HomeState.New) {
-      isNew = index == 0;
-    }
-
+  Widget _buildCard(TransferCardItem item) {
     // Determin CardView
-    if (list[index].payload == Payload.MEDIA) {
-      return MediaCard.item(list[index], isNewItem: isNew);
-    } else if (list[index].payload == Payload.CONTACT) {
-      return ContactCard.item(list[index], isNewItem: isNew);
-    } else if (list[index].payload == Payload.URL) {
-      return URLCard.item(list[index], isNewItem: isNew);
+    if (item.payload == Payload.MEDIA) {
+      return MediaCard.item(item);
+    } else if (item.payload == Payload.CONTACT) {
+      return ContactCard.item(item);
     } else {
-      return FileCard.item(list[index], isNewItem: isNew);
+      return FileCard.item(item);
     }
   }
 }
