@@ -13,10 +13,20 @@ class ShareButton extends GetView<ShareController> {
         width: controller.size.value.width,
         height: controller.size.value.height,
         child: NeumorphicButton(
-          child: controller.status.value.isQueued ? _QueueView() : _DefaultView(),
+          child: _buildChild(),
           onPressed: controller.toggle,
           style: SonrStyle.shareButton,
         )));
+  }
+
+  Widget _buildChild() {
+    if (controller.status.value.isQueued) {
+      return _QueueView();
+    }
+    if (controller.status.value.isMedia) {
+      return _MediaView();
+    }
+    return _DefaultView();
   }
 }
 
@@ -33,7 +43,9 @@ class _QueueView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsetsX.horizontal(8),
+      width: controller.size.value.width,
+      height: controller.size.value.height,
+      margin: EdgeInsets.all(8),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         const ShareCameraButtonItem(),
         const ShareGalleryButtonItem(),
@@ -46,8 +58,6 @@ class _QueueView extends GetView<ShareController> {
 class _MediaView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Container();
   }
-
 }

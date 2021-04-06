@@ -4,10 +4,12 @@ import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ** Share State Extension ** //
-enum ShareButtonState { Default, Queue }
+enum ShareButtonState { Default, Queue, Media, Lobby }
 
 extension ShareStateUtils on ShareButtonState {
   bool get isQueued => this == ShareButtonState.Queue;
+  bool get isMedia => this == ShareButtonState.Media;
+  bool get isLobby => this == ShareButtonState.Lobby;
   bool get isDefault => this == ShareButtonState.Default;
 }
 

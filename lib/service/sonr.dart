@@ -76,6 +76,7 @@ class SonrService extends GetxService with TransferQueue {
       _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node.onEvent = Get.find<LobbyService>().handleEvent;
       _node.onInvited = _handleInvited;
       _node.onReplied = _handleResponded;
       _node.onProgressed = _handleProgress;

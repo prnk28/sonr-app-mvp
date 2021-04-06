@@ -108,6 +108,14 @@ class LobbyService extends GetxService {
     }
   }
 
+  // # Handle Lobby Event //
+  void handleEvent(LobbyEvent data) {
+    // @ Update Local Topics
+    if (data.event == LobbyEvent_Event.MESSAGE) {
+      
+    }
+  }
+
   // # Handle Lobby Flat Peers ^ //
   void _handleFlatPeers(Lobby data) {
     var flatPeers = <String, Peer>{};
