@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/nav/nav_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 
 // ^ Bottom Bar Button Types ^ //
 enum BottomNavButton {
-  Home,
+  Grid,
   Profile,
   Alerts,
   Remote,
@@ -20,42 +18,29 @@ enum TopNavButton {
 }
 
 // ^ Bottom Bar Button Widget ^ //
-class NavButton extends GetView<NavController> {
+class NavButton extends StatelessWidget {
   final bool isBottom;
   final TopNavButton topType;
   final BottomNavButton bottomType;
-  NavButton(this.isBottom, {this.bottomType, this.topType});
-
-  factory NavButton.top(TopNavButton type) {
-    return NavButton(false, topType: type);
-  }
-
-  factory NavButton.bottom(BottomNavButton type) {
-    return NavButton(true, bottomType: type);
+  final Function(int) onPressed;
+  final RxInt currentIndex;
+  NavButton(this.isBottom, this.onPressed, this.currentIndex, {this.bottomType, this.topType});
+  factory NavButton.bottom(BottomNavButton type, Function(int) onPressed, RxInt currentIndex) {
+    return NavButton(true, onPressed, currentIndex, bottomType: type);
   }
   @override
   Widget build(BuildContext context) {
-    if (isBottom) {
-      return GestureDetector(
-          onTap: () {
-            controller.setBottomIndex(bottomType.index);
-          },
-          child: Obx(() => AnimatedScale(
-                duration: 250.milliseconds,
-                child: Icon(bottomType.iconData, color: controller.isBottomIndex(bottomType.index) ? SonrPalette.Primary : Colors.grey.shade400),
-                scale: controller.isBottomIndex(bottomType.index) ? 1.2 : 1.0,
-              )));
-    } else {
-      return GestureDetector(
-          onTap: () {
-
-          },
-          child: Obx(() => AnimatedScale(
-                duration: 250.milliseconds,
-                child: Icon(bottomType.iconData, color: controller.isBottomIndex(bottomType.index) ? SonrPalette.Primary : Colors.grey.shade400),
-                scale: controller.isBottomIndex(bottomType.index) ? 1.2 : 1.0,
-              )));
-    }
+    return GestureDetector(
+        onTap: () {
+          onPressed(bottomType.index);
+        },
+        child: ObxValue<RxInt>(
+            (idx) => AnimatedScale(
+                  duration: 250.milliseconds,
+                  child: Icon(bottomType.iconData, color: idx.value == bottomType.index ? SonrPalette.Primary : Colors.grey.shade400),
+                  scale: idx.value == bottomType.index ? 1.2 : 1.0,
+                ),
+            currentIndex));
   }
 }
 
@@ -64,7 +49,7 @@ extension BottomNavButtonUtils on BottomNavButton {
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {
-      case BottomNavButton.Home:
+      case BottomNavButton.Grid:
         return Icons.home;
         break;
       case BottomNavButton.Profile:
@@ -84,7 +69,7 @@ extension BottomNavButtonUtils on BottomNavButton {
   // # Returns Index for Type
   int get index {
     switch (this) {
-      case BottomNavButton.Home:
+      case BottomNavButton.Grid:
         return 0;
         break;
       case BottomNavButton.Profile:

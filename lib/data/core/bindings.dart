@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/modules/home/share_button.dart';
 import 'package:sonr_app/modules/nav/nav_controller.dart';
 import 'package:sonr_app/modules/profile/edit_dialog.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
@@ -17,11 +19,20 @@ class InitialBinding implements Bindings {
 }
 
 // ^ Profile Controller Bindings ^ //
+class HomeBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<HomeController>(HomeController(), permanent: true);
+    Get.lazyPut<ShareController>(() => ShareController());
+  }
+}
+
+// ^ Profile Controller Bindings ^ //
 class ProfileBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<ProfileController>(ProfileController());
-    Get.put<EditDialogController>(EditDialogController());
+    Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut<EditDialogController>(() => EditDialogController());
     Get.create<TileController>(() => TileController());
   }
 }

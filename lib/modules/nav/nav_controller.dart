@@ -16,24 +16,6 @@ class NavController extends GetxController {
 
   bool get isExpanded => shareState.value == BottomShareButtonState.Expanded;
 
-  bool isBottomIndex(int val) {
-    return val == bottomIndex.value;
-  }
-
-  // ^ Update Bottom Bar Index ^ //
-  setBottomIndex(int newIndex) {
-    bottomIndex(newIndex);
-    if (newIndex == 1) {
-      page(NavPage.Profile);
-    } else if (newIndex == 2) {
-      page(NavPage.Alerts);
-    } else if (newIndex == 3) {
-      page(NavPage.Remote);
-    } else {
-      page(NavPage.Home);
-    }
-  }
-
   // ^ Expand Share Button ^ //
   expandShare(double timeout, BottomShareButtonState previousState) {
     HapticFeedback.heavyImpact();

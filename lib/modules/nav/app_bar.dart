@@ -9,7 +9,7 @@ class SonrAppBar extends GetView<NavController> with PreferredSizeWidget {
   final Widget action;
   final String title;
   final bool disableDynamicLobbyTitle;
-  SonrAppBar({this.middle, this.leading, this.action, this.disableDynamicLobbyTitle, this.title});
+  SonrAppBar({this.middle, this.leading, this.action, this.disableDynamicLobbyTitle = false, this.title});
   @override
   Widget build(BuildContext context) {
     // Set Title
@@ -25,13 +25,14 @@ class SonrAppBar extends GetView<NavController> with PreferredSizeWidget {
     // Return App Bar
     return Container(
       width: Get.width,
-      height: 80,
-      child: NavigationToolbar(middle: titleItem, leading: leading, trailing: action, centerMiddle: true),
+      padding: EdgeInsets.only(top: kToolbarHeight, bottom: 16),
+      height: kToolbarHeight + 56,
+      child: NeumorphicBackground(child: NavigationToolbar(middle: titleItem, leading: leading, trailing: action, centerMiddle: true)),
     );
   }
 
   @override
-  Size get preferredSize => Size(Get.width, 80);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 56);
 }
 
 // ^ Dynamic App bar title for Lobby Size ^ //

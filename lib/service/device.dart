@@ -24,7 +24,6 @@ class DeviceService extends GetxService {
   final _location = Rx<Position>();
   final _platform = Rx<Platform>();
 
-
   // Sensor Properties
   final _accelerometer = Rx<AccelerometerEvent>();
   final _gyroscope = Rx<GyroscopeEvent>();

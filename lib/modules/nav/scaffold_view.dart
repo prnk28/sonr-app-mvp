@@ -1,18 +1,12 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'app_bar.dart';
-import 'bottom_bar.dart';
-import 'bottom_sheet.dart';
-import 'nav_controller.dart';
 
 // ^ Standardized Uniform Scaffold ^ //
 class SonrScaffold extends StatelessWidget {
-  final Widget body;
   final bool disableDynamicLobbyTitle;
-  SonrScaffold({
-    Key key,
-    this.body,
-    this.disableDynamicLobbyTitle,
-  }) : super(key: key);
+  final Widget body;
+  final Widget bottomBar;
+  SonrScaffold({Key key, this.disableDynamicLobbyTitle, this.body, this.bottomBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,40 +28,10 @@ class SonrScaffold extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-        body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: SonrBottomNavBar()))]),
+        body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: bottomBar))]),
         appBar: SonrAppBar(),
         resizeToAvoidBottomInset: true,
-        bottomSheet: SonrBottomSheet(),
       ),
     );
-  }
-}
-
-class _SonrScaffoldBody extends GetView<NavController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-
-    });
-  }
-
-  _switchPage(){
-    switch(controller.page.value){
-      case NavPage.Home:
-        // TODO: Handle this case.
-        break;
-      case NavPage.Profile:
-        // TODO: Handle this case.
-        break;
-      case NavPage.Alerts:
-        // TODO: Handle this case.
-        break;
-      case NavPage.Remote:
-        // TODO: Handle this case.
-        break;
-      case NavPage.Transfer:
-        // TODO: Handle this case.
-        break;
-    }
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -17,15 +16,17 @@ class HomeController extends GetxController {
   final titleText = "Home".obs;
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
+  final bottomIndex = 0.obs;
+  final lastPage = BottomNavButton.Grid.obs;
+  final page = BottomNavButton.Grid.obs;
 
   // References
-  final PageController pageController;
   StreamSubscription<List<TransferCard>> cardStream;
 
   // Conditional
   bool _hasPromptedAutoSave = false;
 
-  HomeController(this.pageController);
+  HomeController();
 
   // ^ Controller Constructer ^
   onInit() {
@@ -77,11 +78,6 @@ class HomeController extends GetxController {
       if (onData.length > cards.length) {
         cards(onData);
         cards.length == 1 ? status(HomeState.Ready) : status(HomeState.New);
-
-        // Check Status
-        if (status.value == HomeState.New) {
-          pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
-        }
         cards.refresh();
       }
       // Set Cards
@@ -94,6 +90,38 @@ class HomeController extends GetxController {
     // No Cards Available
     else {
       status(HomeState.None);
+    }
+  }
+
+  AnimSwitch getSwitcherAnimation() {
+    switch (page.value) {
+      case BottomNavButton.Grid:
+        if (lastPage.value == BottomNavButton.Profile) {
+          lastPage(page.value);
+          return AnimSwitch.SlideUp;
+        } else if (lastPage.value == BottomNavButton.Remote) {
+          lastPage(page.value);
+          return AnimSwitch.SlideDown;
+        } else {
+          lastPage(page.value);
+          return AnimSwitch.SlideLeft;
+        }
+        break;
+      case BottomNavButton.Profile:
+        lastPage(page.value);
+        return AnimSwitch.SlideDown;
+        break;
+      case BottomNavButton.Alerts:
+        lastPage(page.value);
+        return AnimSwitch.SlideRight;
+        break;
+      case BottomNavButton.Remote:
+        lastPage(page.value);
+        return AnimSwitch.SlideUp;
+        break;
+      default:
+        lastPage(page.value);
+        return AnimSwitch.SlideLeft;
     }
   }
 
@@ -121,25 +149,8 @@ class HomeController extends GetxController {
     if (index != -1) {
       // Pop View
       Get.back();
-
-      // Jump to Page
-      pageController.animateToPage(index, duration: 650.milliseconds, curve: Curves.bounceOut);
     } else {
       SonrSnack.error("Error finding the suggested card.");
-    }
-  }
-
-  // ^ Finds Index of Card and Scrolls to It ^ //
-  void jumpToStart() async {
-    if (status.value != HomeState.None) {
-      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
-    }
-  }
-
-  // ^ Finds Index of Card and Scrolls to It ^ //
-  void jumpToEnd() async {
-    if (status.value != HomeState.None) {
-      pageController.animateToPage(cards.length - 1, duration: 650.milliseconds, curve: Curves.bounceOut);
     }
   }
 
@@ -162,10 +173,19 @@ class HomeController extends GetxController {
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();
+  }
 
-    // Change Category
-    if (status.value == HomeState.Ready) {
-      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+  // ^ Update Bottom Bar Index ^ //
+  setBottomIndex(int newIndex) {
+    bottomIndex(newIndex);
+    if (newIndex == 1) {
+      page(BottomNavButton.Profile);
+    } else if (newIndex == 2) {
+      page(BottomNavButton.Alerts);
+    } else if (newIndex == 3) {
+      page(BottomNavButton.Remote);
+    } else {
+      page(BottomNavButton.Grid);
     }
   }
 }
