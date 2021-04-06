@@ -8,6 +8,7 @@ class SonrScaffold extends StatelessWidget {
   final Widget bottomSheet;
   final Widget appBar;
   final Widget floatingActionButton;
+  final Widget bottomNavigationBar;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool resizeToAvoidBottomPadding;
   final Function bodyAction;
@@ -81,6 +82,7 @@ class SonrScaffold extends StatelessWidget {
       Widget titleWidget,
       Widget body,
       Widget floatingActionButton,
+      Widget bottomNavigationBar,
       Widget bottomSheet,
       FloatingActionButtonLocation floatingActionButtonLocation,
       bool disableDynamicLobbyTitle = false,
@@ -107,6 +109,7 @@ class SonrScaffold extends StatelessWidget {
           actions: [action],
         ),
         bottomSheet: bottomSheet,
+        bottomNavigationBar: bottomNavigationBar,
         resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
   }
 
@@ -119,6 +122,7 @@ class SonrScaffold extends StatelessWidget {
     this.resizeToAvoidBottomPadding,
     this.bodyAction,
     this.backgroundColor,
+    this.bottomNavigationBar,
     this.bottomSheet,
   }) : super(key: key);
   @override
@@ -142,7 +146,7 @@ class SonrScaffold extends StatelessWidget {
         child: Scaffold(
           backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           floatingActionButtonLocation: floatingActionButtonLocation,
-          body: body,
+          body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: bottomNavigationBar))]),
           appBar: appBar,
           floatingActionButton: floatingActionButton,
           resizeToAvoidBottomInset: resizeToAvoidBottomPadding,

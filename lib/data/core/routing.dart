@@ -17,35 +17,49 @@ class SonrRouting {
             page: () {
               // Update Contact for New User
               if (UserService.isNewUser.value) {
-                Get.find<SonrService>().connect(contact: UserService.current.contact);
+                Get.find<SonrService>().connectNewUser(UserService.current.contact, UserService.username);
               } else {
                 Get.find<SonrService>().connect();
               }
               return HomeScreen();
             },
+            binding: HomeBinding(),
             transition: Transition.topLevel,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
         // ** Home Page ** //
-        GetPage(name: '/home/received', page: () => HomeScreen(), transition: Transition.fadeIn, curve: Curves.easeOut),
+        GetPage(
+          name: '/home/received',
+          page: () => HomeScreen(),
+          transition: Transition.fadeIn,
+          curve: Curves.easeOut,
+          binding: HomeBinding(),
+        ),
 
         // ** Home Page - Back from Transfer ** //
-        GetPage(name: '/home/transfer', page: () => HomeScreen(), transition: Transition.upToDown, curve: Curves.bounceIn),
+        GetPage(
+          name: '/home/transfer',
+          page: () => HomeScreen(),
+          transition: Transition.upToDown,
+          curve: Curves.bounceIn,
+          binding: HomeBinding(),
+        ),
 
         // ** Home Page - Back from Profile ** //
-        GetPage(name: '/home/profile', page: () => HomeScreen(), transition: Transition.downToUp, curve: Curves.easeOut),
+        GetPage(
+          name: '/home/profile',
+          page: () => HomeScreen(),
+          transition: Transition.downToUp,
+          curve: Curves.easeOut,
+          binding: HomeBinding(),
+        ),
 
         // ** Register Page ** //
         GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
-        GetPage(
-            name: '/transfer',
-            page: () => TransferScreen(),
-            maintainState: false,
-            transition: Transition.downToUp,
-            curve: Curves.bounceOut),
+        GetPage(name: '/transfer', page: () => TransferScreen(), maintainState: false, transition: Transition.downToUp, curve: Curves.bounceOut),
 
         // ** Profile Page ** //
         GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),

@@ -6,7 +6,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/data/model/model_register.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 
@@ -133,12 +132,18 @@ class SonrText extends StatelessWidget {
             text: TextSpan(children: [
               TextSpan(
                   text: dateText,
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w300, fontSize: size, color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w300,
+                      fontSize: size,
+                      color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
               TextSpan(
                   text: "  $timeText",
-                  style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600, fontSize: size, color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: size,
+                      color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
             ])));
   }
 
@@ -151,8 +156,10 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: seconds.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.Black)),
-              TextSpan(text: "  s", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.Black)),
+              TextSpan(
+                  text: seconds.toString(),
+                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.Black)),
+              TextSpan(text: "  s", style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.Black)),
             ])));
   }
 
@@ -179,10 +186,13 @@ class SonrText extends StatelessWidget {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: type.capitalizeFirst, style: GoogleFonts.poppins(fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.Black)),
+              TextSpan(
+                  text: type.capitalizeFirst,
+                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.Black)),
               TextSpan(
                   text: " from ${firstName.capitalizeFirst}",
-                  style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
+                  style: TextStyle(
+                      fontFamily: 'Poppins', fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
             ])));
   }
 
@@ -200,10 +210,11 @@ class SonrText extends StatelessWidget {
               text: TextSpan(children: [
                 TextSpan(
                     text: value.substring(value.indexOf(query), query.length).toUpperCase(),
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: size, color: Colors.blue[500])),
+                    style: TextStyle(
+                        fontFamily: 'Poppins', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: size, color: Colors.blue[500])),
                 TextSpan(
                     text: value.substring(value.indexOf(query) + query.length),
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.normal, fontSize: size, color: color)),
+                    style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.normal, fontSize: size, color: color)),
               ])));
     } else {
       return SonrText(value, weight: FontWeight.w500, size: size, key: key, color: color);
@@ -240,7 +251,8 @@ class SonrText extends StatelessWidget {
     var spans = [
       TextSpan(
           text: host,
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+              fontFamily: 'Poppins',
               decoration: TextDecoration.underline,
               decorationStyle: TextDecorationStyle.dotted,
               fontWeight: FontWeight.w300,
@@ -249,7 +261,8 @@ class SonrText extends StatelessWidget {
               color: Colors.blueGrey[300])),
       TextSpan(
           text: directories > 0 ? path : "",
-          style: GoogleFonts.poppins(
+          style: TextStyle(
+              fontFamily: 'Poppins',
               decoration: TextDecoration.underline,
               decorationStyle: TextDecorationStyle.dotted,
               fontWeight: FontWeight.w500,
@@ -278,7 +291,7 @@ class SonrText extends StatelessWidget {
               text,
               overflow: TextOverflow.ellipsis,
               textAlign: isCentered ? TextAlign.center : TextAlign.start,
-              style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 32.0, color: Colors.white),
+              style: TextStyle(fontFamily: 'Poppins', fontWeight: weight, fontSize: size ?? 32.0, color: Colors.white),
             )),
       );
     }
@@ -291,7 +304,7 @@ class SonrText extends StatelessWidget {
     // @ Normal Type Text
     return Text(text,
         textAlign: isCentered ? TextAlign.center : TextAlign.start,
-        style: GoogleFonts.poppins(fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
+        style: TextStyle(fontFamily: 'Poppins', fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^
@@ -400,7 +413,7 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
@@ -414,7 +427,8 @@ class SonrTextField extends StatelessWidget {
                     ? decoration
                     : InputDecoration.collapsed(
                         hintText: hint,
-                        hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                        hintStyle: TextStyle(
+                            fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -438,7 +452,8 @@ class SonrTextField extends StatelessWidget {
           decoration: InputDecoration.collapsed(
               border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Red, width: 4)),
               hintText: hint,
-              hintStyle: GoogleFonts.poppins(fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
+              hintStyle:
+                  TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
     );
   }
 

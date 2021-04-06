@@ -7,7 +7,9 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, SlideIn, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum LottieBoard { Complete, Empty, Pending, Progress, Computer, David, Phone, Gallery, Progress_Alt, Camera, Contact }
+enum LottieBoard {
+  David,
+}
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class AnimatedScale extends StatefulWidget {
@@ -190,85 +192,6 @@ class _RipplesAnimationState extends State<RipplesAnimation> with TickerProvider
   }
 }
 
-class Animated extends GetWidget<AnimatedController> {
-  final Widget child;
-  final AnimType animation;
-  final Duration delay;
-  final Duration duration;
-  final double scaleStart;
-  final double scaleEnd;
-
-  const Animated({
-    @required this.child,
-    this.scaleStart,
-    this.scaleEnd,
-    this.animation = AnimType.SlideIn,
-    this.duration = const Duration(seconds: 1),
-    this.delay = const Duration(milliseconds: 0),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (animation == AnimType.Shake) {
-      return TweenAnimationBuilder<double>(
-          key: key,
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: 1.seconds,
-          builder: (context, animation, child) => Transform.translate(
-                offset: controller.shakeOffset(animation),
-                child: child,
-              ));
-    } else if (animation == AnimType.SlideIn) {
-      return TweenAnimationBuilder<Offset>(
-        key: key,
-        tween: Tween(begin: Offset.zero, end: Offset(0.0, 1.0)),
-        duration: 1.seconds,
-        builder: (context, animation, child) => Transform.translate(
-          offset: animation,
-          child: child,
-        ),
-      );
-    }
-    return child;
-  }
-
-  void scale() => controller.shake();
-  void shake() => controller.shake();
-
-  void reset() {
-    controller.type(AnimType.None);
-    controller.type.refresh();
-  }
-}
-
-class AnimatedController extends GetxController {
-  // Properties
-  final type = AnimType.None.obs;
-
-  // ^ Duration Returners ^ //
-  Duration get shakeDuration => 1000.milliseconds;
-  Duration get fadeInDuration => 250.milliseconds;
-  Duration get fadeOutDuration => 150.milliseconds;
-
-  // ^ Method to Begin Shake ^ //
-  void shake() {
-    // Start Animation
-    type(AnimType.Shake);
-    type.refresh();
-
-    // Reset
-    Future.delayed(shakeDuration, () {
-      type(AnimType.None);
-    });
-  }
-
-  // ^ Get Animated Offset for Shake Method ^ //
-  Offset shakeOffset(double animation) {
-    var shake = 2 * (0.5 - (0.5 - Curves.bounceOut.transform(animation)).abs());
-    return Offset(18 * shake, 0);
-  }
-}
-
 class AnimatedSlideSwitcher extends StatelessWidget {
   final AnimSwitch _animation;
   final Widget child;
@@ -407,38 +330,8 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
 
   _getPathFromBoard() {
     switch (widget.type) {
-      case LottieBoard.Complete:
-        return "assets/animations/lottie/complete.json";
-        break;
-      case LottieBoard.Empty:
-        return "assets/animations/lottie/empty-lobby.json";
-        break;
-      case LottieBoard.Pending:
-        return "assets/animations/lottie/pending.json";
-        break;
-      case LottieBoard.Progress:
-        return "assets/animations/lottie/progress.json";
-        break;
-      case LottieBoard.Computer:
-        return "assets/animations/lottie/computer.json";
-        break;
       case LottieBoard.David:
-        return "assets/animations/lottie/david.json";
-        break;
-      case LottieBoard.Phone:
-        return "assets/animations/lottie/phone.json";
-        break;
-      case LottieBoard.Gallery:
-        return "assets/animations/lottie/gallery.json";
-        break;
-      case LottieBoard.Progress_Alt:
-        return "assets/animations/lottie/progress-alt.json";
-        break;
-      case LottieBoard.Camera:
-        return "assets/animations/lottie/camera.json";
-        break;
-      case LottieBoard.Contact:
-        return "assets/animations/lottie/contact.json";
+        return "assets/images/david.json";
         break;
     }
   }
@@ -458,10 +351,10 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _splashPath = 'assets/animations/rive/splash_screen.riv';
-  final String _tilePath = 'assets/animations/rive/tile_preview.riv';
-  final String _notFoundPath = 'assets/animations/rive/not_found.riv';
-  final String _documentsPath = 'assets/animations/rive/documents.riv';
+  final String _splashPath = 'assets/animations/splash_screen.riv';
+  final String _tilePath = 'assets/animations/tile_preview.riv';
+  final String _notFoundPath = 'assets/animations/not_found.riv';
+  final String _documentsPath = 'assets/animations/documents.riv';
 
   // Properties
   Artboard _riveArtboard;

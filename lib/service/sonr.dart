@@ -44,6 +44,34 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
     // Initialize
+    if (UserService.isExisting.value) {
+      var pos = await Get.find<DeviceService>().currentLocation();
+      _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+
+      // Create Node
+      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+      _node.onStatus = _handleStatus;
+      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node.onInvited = _handleInvited;
+      _node.onReplied = _handleResponded;
+      _node.onProgressed = _handleProgress;
+      _node.onReceived = _handleReceived;
+      _node.onTransmitted = _handleTransmitted;
+      _node.onError = _handleError;
+      return this;
+    } else {
+      return this;
+    }
+  }
+
+  // ^ Connect to Service Method ^ //
+  Future<void> connect() async {
+    _node.connect();
+    _node.update(direction: DeviceService.direction);
+  }
+
+  // ^ Connect to Service Method ^ //
+  Future<void> connectNewUser(Contact contact, String username) async {
     var pos = await Get.find<DeviceService>().currentLocation();
     _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
 
@@ -57,15 +85,8 @@ class SonrService extends GetxService with TransferQueue {
     _node.onReceived = _handleReceived;
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
-    return this;
-  }
-
-  // ^ Connect to Service Method ^ //
-  Future<void> connect({Contact contact}) async {
     _node.connect();
-    if (contact != null) {
-      _node.update(direction: DeviceService.direction);
-    }
+    _node.update(direction: DeviceService.direction);
   }
 
   // ^ Join a New Group ^

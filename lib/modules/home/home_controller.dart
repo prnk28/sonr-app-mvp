@@ -1,10 +1,10 @@
 import 'dart:async';
-
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
+enum ShareButtonState { Default, Expanded }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
@@ -12,20 +12,22 @@ class HomeController extends GetxController {
   final cards = RxList<TransferCard>(Get.find<SQLService>().cards);
   final status = Rx<HomeState>();
   final category = Rx<ToggleFilter>(ToggleFilter.All);
+  final shareCounter = 0.obs;
+  final shareState = ShareButtonState.Default.obs;
 
   // Elements
   final titleText = "Home".obs;
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
+  final bottomIndex = 0.obs;
+  final page = BottomNavButton.Grid.obs;
+  bool get isShareExpanded => shareState.value == ShareButtonState.Expanded;
 
   // References
-  final PageController pageController;
-  StreamSubscription<List<TransferCard>> cardStream;
-
-  // Conditional
+  var _lastPage = BottomNavButton.Grid;
+  StreamSubscription<List<TransferCard>> _cardStream;
   bool _hasPromptedAutoSave = false;
-
-  HomeController(this.pageController);
+  Timer _timer;
 
   // ^ Controller Constructer ^
   onInit() {
@@ -44,7 +46,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     // Add Stream Handlers
-    cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
+    _cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
 
     // Set Initial Status
     if (cards.length > 0) {
@@ -62,7 +64,7 @@ class HomeController extends GetxController {
   // ^ On Dispose ^ //
   @override
   void onClose() {
-    cardStream.cancel();
+    _cardStream.cancel();
 
     toggleIndex(1);
     pageIndex(0);
@@ -77,11 +79,6 @@ class HomeController extends GetxController {
       if (onData.length > cards.length) {
         cards(onData);
         cards.length == 1 ? status(HomeState.Ready) : status(HomeState.New);
-
-        // Check Status
-        if (status.value == HomeState.New) {
-          pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
-        }
         cards.refresh();
       }
       // Set Cards
@@ -95,6 +92,56 @@ class HomeController extends GetxController {
     else {
       status(HomeState.None);
     }
+  }
+
+  AnimSwitch getSwitcherAnimation() {
+    switch (page.value) {
+      case BottomNavButton.Grid:
+        if (_lastPage == BottomNavButton.Profile) {
+          _lastPage = page.value;
+          return AnimSwitch.SlideUp;
+        } else if (_lastPage == BottomNavButton.Remote) {
+          _lastPage = page.value;
+          return AnimSwitch.SlideDown;
+        } else {
+          _lastPage = page.value;
+          return AnimSwitch.SlideLeft;
+        }
+        break;
+      case BottomNavButton.Profile:
+        _lastPage = page.value;
+        return AnimSwitch.SlideDown;
+        break;
+      case BottomNavButton.Alerts:
+        _lastPage = page.value;
+        return AnimSwitch.SlideRight;
+        break;
+      case BottomNavButton.Remote:
+        _lastPage = page.value;
+        return AnimSwitch.SlideUp;
+        break;
+      default:
+        _lastPage = page.value;
+        return AnimSwitch.SlideLeft;
+    }
+  }
+
+  // ^ Expand Share Button ^ //
+  expandShare(double timeout, ShareButtonState previousState) {
+    HapticFeedback.heavyImpact();
+
+    // Create Timeout
+    _timer = Timer.periodic(500.milliseconds, (_) {
+      // Add to Counter
+      shareCounter(shareCounter.value += 500);
+
+      // Check if Timeout Reached
+      if (shareCounter.value == timeout) {
+        if (shareState.value == previousState) {
+          shrinkShare();
+        }
+      }
+    });
   }
 
   // ^ Method for Returning Current Card List ^ //
@@ -121,25 +168,8 @@ class HomeController extends GetxController {
     if (index != -1) {
       // Pop View
       Get.back();
-
-      // Jump to Page
-      pageController.animateToPage(index, duration: 650.milliseconds, curve: Curves.bounceOut);
     } else {
       SonrSnack.error("Error finding the suggested card.");
-    }
-  }
-
-  // ^ Finds Index of Card and Scrolls to It ^ //
-  void jumpToStart() async {
-    if (status.value != HomeState.None) {
-      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
-    }
-  }
-
-  // ^ Finds Index of Card and Scrolls to It ^ //
-  void jumpToEnd() async {
-    if (status.value != HomeState.None) {
-      pageController.animateToPage(cards.length - 1, duration: 650.milliseconds, curve: Curves.bounceOut);
     }
   }
 
@@ -162,10 +192,42 @@ class HomeController extends GetxController {
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();
+  }
 
-    // Change Category
-    if (status.value == HomeState.Ready) {
-      pageController.animateToPage(0, duration: 650.milliseconds, curve: Curves.bounceOut);
+  // ^ Update Bottom Bar Index ^ //
+  setBottomIndex(int newIndex) {
+    bottomIndex(newIndex);
+    if (newIndex == 1) {
+      page(BottomNavButton.Profile);
+    } else if (newIndex == 2) {
+      page(BottomNavButton.Alerts);
+    } else if (newIndex == 3) {
+      page(BottomNavButton.Remote);
+    } else {
+      page(BottomNavButton.Grid);
+    }
+  }
+
+  // ^ Close Share Button ^ //
+  void shrinkShare({Duration delay = const Duration(milliseconds: 0)}) {
+    Future.delayed(delay, () {
+      if (_timer != null) {
+        _timer.cancel();
+        _timer = null;
+        HapticFeedback.mediumImpact();
+        shareState(ShareButtonState.Default);
+        shareCounter(0);
+      }
+    });
+  }
+
+  // ^ Toggles Expanded Share Button ^ //
+  void toggleShare() {
+    if (shareState.value == ShareButtonState.Default) {
+      shareState(ShareButtonState.Expanded);
+      expandShare(6000, shareState.value);
+    } else {
+      shrinkShare();
     }
   }
 }

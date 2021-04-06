@@ -72,8 +72,12 @@ extension WidgetUtils on Peer {
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
             text: TextSpan(children: [
-              TextSpan(text: this.platform.toString(), style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
-              TextSpan(text: " - ${this.model}", style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.Black)),
+              TextSpan(
+                  text: this.platform.toString(),
+                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
+              TextSpan(
+                  text: " - ${this.model}",
+                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.Black)),
             ])));
   }
 

@@ -70,10 +70,12 @@ class _PeerListItemState extends State<PeerListItem> {
                       text: TextSpan(children: [
                         TextSpan(
                             text: widget.peer.platform.toString(),
-                            style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
+                            style: TextStyle(
+              fontFamily: 'Poppins',fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
                         TextSpan(
                             text: " - ${widget.peer.model}",
-                            style: GoogleFonts.poppins(fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
+                            style: TextStyle(
+              fontFamily: 'Poppins',fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
                       ]))),
               children: [
                 Padding(padding: EdgeInsets.all(8)),

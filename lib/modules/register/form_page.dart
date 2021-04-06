@@ -11,13 +11,17 @@ class FormPage extends StatelessWidget {
     return GetX<_FormPageController>(
       init: _FormPageController(),
       builder: (controller) {
-        return SonrScaffold.appBarTitle(
-            title: "Register",
-            body: Column(children: <Widget>[
-              Form(
+        return SonrScaffold(
+            body: Container(
+          width: Get.width,
+          height: Get.height,
+          margin: EdgeInsets.only(bottom: 8, top: 72),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Image.asset("assets/images/icon_dark.png", width: 128, height: 128, colorBlendMode: BlendMode.difference),
+            Expanded(
+              child: Form(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // ****************** //
                     // ** <First Name> ** //
@@ -71,10 +75,10 @@ class FormPage extends StatelessWidget {
                     Center(
                       child: Padding(
                         padding: EdgeInsets.only(top: 16.0),
-                        child: ShapeButton.rectangle(
-                          margin: EdgeInsetsX.horizontal(120),
+                        child: ColorButton.primary(
+                          margin: EdgeInsetsX.horizontal(88),
                           icon: SonrIcon.accept,
-                          text: SonrText.semibold("Submit"),
+                          text: "Get Started",
                           onPressed: () {
                             controller.submit();
                           },
@@ -84,8 +88,10 @@ class FormPage extends StatelessWidget {
                     )
                   ],
                 ),
-              )
-            ]));
+              ),
+            )
+          ]),
+        ));
       },
     );
   }
