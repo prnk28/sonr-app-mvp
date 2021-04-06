@@ -112,7 +112,7 @@ class LobbyService extends GetxService {
   void handleEvent(LobbyEvent data) {
     // @ Update Local Topics
     if (data.event == LobbyEvent_Event.MESSAGE) {
-      
+      print(data.message);
     }
   }
 
