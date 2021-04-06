@@ -1,28 +1,27 @@
-import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'home_controller.dart';
 
-class ShareButton extends GetView<ShareController> {
+class ShareButton extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(
         curve: Curves.bounceOut,
-        padding: controller.isExpanded ? EdgeInsetsX.bottom(20) : EdgeInsets.zero,
+        padding: controller.isShareExpanded ? EdgeInsetsX.bottom(20) : EdgeInsets.zero,
         duration: Duration(milliseconds: 600),
         width: _width,
         height: _height,
         child: NeumorphicButton(
-          child: controller.isExpanded ? _ExpandedView() : _DefaultView(),
-          onPressed: controller.toggle,
+          child: controller.isShareExpanded ? _ExpandedView() : _DefaultView(),
+          onPressed: controller.toggleShare,
           style: SonrStyle.shareButton,
         )));
   }
 
   double get _width {
-    if (controller.isExpanded) {
+    if (controller.isShareExpanded) {
       return Get.width / 2 + 165;
     } else {
       return 60;
@@ -30,7 +29,7 @@ class ShareButton extends GetView<ShareController> {
   }
 
   double get _height {
-    if (controller.isExpanded) {
+    if (controller.isShareExpanded) {
       return 120;
     } else {
       return 60;
@@ -39,7 +38,7 @@ class ShareButton extends GetView<ShareController> {
 }
 
 // ** Close Share Button View ** //
-class _DefaultView extends GetView<ShareController> {
+class _DefaultView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(child: SonrIcon.send, padding: EdgeInsetsX.vertical(8));
@@ -47,7 +46,7 @@ class _DefaultView extends GetView<ShareController> {
 }
 
 // ** Expanded Share Button View ** //
-class _ExpandedView extends GetView<ShareController> {
+class _ExpandedView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -58,7 +57,7 @@ class _ExpandedView extends GetView<ShareController> {
           GestureDetector(
             onTap: () {
               // Close Share Button
-              controller.shrink();
+              controller.shrinkShare();
               // Check Permissions
               if (UserService.permissions.value.hasCamera) {
                 Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
@@ -97,7 +96,7 @@ class _ExpandedView extends GetView<ShareController> {
           GestureDetector(
             onTap: () {
               // Close Share Button
-              controller.shrink();
+              controller.shrinkShare();
               // Check Permissions
               if (UserService.permissions.value.hasGallery) {
                 MediaService.refreshGallery();
@@ -136,7 +135,7 @@ class _ExpandedView extends GetView<ShareController> {
           GestureDetector(
             onTap: () {
               // Close Share Button
-              controller.shrink();
+              controller.shrinkShare();
               SonrService.queueContact();
 
               // Go to Transfer
@@ -160,55 +159,5 @@ class _ExpandedView extends GetView<ShareController> {
   String _typeText(RiveBoard type) {
     // Method to Return Type
     return type.toString().split('.').last;
-  }
-}
-
-enum ShareButtonState { Default, Expanded }
-
-class ShareController extends GetxController {
-  final shareCounter = 0.obs;
-  final shareState = ShareButtonState.Default.obs;
-
-  // References
-  Timer _timer;
-  bool get isExpanded => shareState.value == ShareButtonState.Expanded;
-
-  // ^ Expand Share Button ^ //
-  expand(double timeout, ShareButtonState previousState) {
-    HapticFeedback.heavyImpact();
-
-    // Create Timeout
-    _timer = Timer.periodic(500.milliseconds, (_) {
-      // Add to Counter
-      shareCounter(shareCounter.value += 500);
-
-      // Check if Timeout Reached
-      if (shareCounter.value == timeout) {
-        if (shareState.value == previousState) {
-          shrink();
-        }
-      }
-    });
-  }
-
-  // ^ Close Share Button ^ //
-  void shrink() {
-    if (_timer != null) {
-      _timer.cancel();
-      _timer = null;
-      HapticFeedback.mediumImpact();
-      shareState(ShareButtonState.Default);
-      shareCounter(0);
-    }
-  }
-
-  // ^ Toggles Expanded Share Button ^ //
-  void toggle() {
-    if (shareState.value == ShareButtonState.Default) {
-      shareState(ShareButtonState.Expanded);
-      expand(6000, shareState.value);
-    } else {
-      shrink();
-    }
   }
 }

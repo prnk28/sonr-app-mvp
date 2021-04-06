@@ -4,6 +4,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
+enum ShareButtonState { Default, Expanded }
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
@@ -11,22 +12,22 @@ class HomeController extends GetxController {
   final cards = RxList<TransferCard>(Get.find<SQLService>().cards);
   final status = Rx<HomeState>();
   final category = Rx<ToggleFilter>(ToggleFilter.All);
+  final shareCounter = 0.obs;
+  final shareState = ShareButtonState.Default.obs;
 
   // Elements
   final titleText = "Home".obs;
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
-  final lastPage = BottomNavButton.Grid.obs;
   final page = BottomNavButton.Grid.obs;
+  bool get isShareExpanded => shareState.value == ShareButtonState.Expanded;
 
   // References
-  StreamSubscription<List<TransferCard>> cardStream;
-
-  // Conditional
+  var _lastPage = BottomNavButton.Grid;
+  StreamSubscription<List<TransferCard>> _cardStream;
   bool _hasPromptedAutoSave = false;
-
-  HomeController();
+  Timer _timer;
 
   // ^ Controller Constructer ^
   onInit() {
@@ -45,7 +46,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     // Add Stream Handlers
-    cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
+    _cardStream = Get.find<SQLService>().cards.listen(_handleCardStream);
 
     // Set Initial Status
     if (cards.length > 0) {
@@ -63,7 +64,7 @@ class HomeController extends GetxController {
   // ^ On Dispose ^ //
   @override
   void onClose() {
-    cardStream.cancel();
+    _cardStream.cancel();
 
     toggleIndex(1);
     pageIndex(0);
@@ -96,33 +97,51 @@ class HomeController extends GetxController {
   AnimSwitch getSwitcherAnimation() {
     switch (page.value) {
       case BottomNavButton.Grid:
-        if (lastPage.value == BottomNavButton.Profile) {
-          lastPage(page.value);
+        if (_lastPage == BottomNavButton.Profile) {
+          _lastPage = page.value;
           return AnimSwitch.SlideUp;
-        } else if (lastPage.value == BottomNavButton.Remote) {
-          lastPage(page.value);
+        } else if (_lastPage == BottomNavButton.Remote) {
+          _lastPage = page.value;
           return AnimSwitch.SlideDown;
         } else {
-          lastPage(page.value);
+          _lastPage = page.value;
           return AnimSwitch.SlideLeft;
         }
         break;
       case BottomNavButton.Profile:
-        lastPage(page.value);
+        _lastPage = page.value;
         return AnimSwitch.SlideDown;
         break;
       case BottomNavButton.Alerts:
-        lastPage(page.value);
+        _lastPage = page.value;
         return AnimSwitch.SlideRight;
         break;
       case BottomNavButton.Remote:
-        lastPage(page.value);
+        _lastPage = page.value;
         return AnimSwitch.SlideUp;
         break;
       default:
-        lastPage(page.value);
+        _lastPage = page.value;
         return AnimSwitch.SlideLeft;
     }
+  }
+
+  // ^ Expand Share Button ^ //
+  expandShare(double timeout, ShareButtonState previousState) {
+    HapticFeedback.heavyImpact();
+
+    // Create Timeout
+    _timer = Timer.periodic(500.milliseconds, (_) {
+      // Add to Counter
+      shareCounter(shareCounter.value += 500);
+
+      // Check if Timeout Reached
+      if (shareCounter.value == timeout) {
+        if (shareState.value == previousState) {
+          shrinkShare();
+        }
+      }
+    });
   }
 
   // ^ Method for Returning Current Card List ^ //
@@ -186,6 +205,27 @@ class HomeController extends GetxController {
       page(BottomNavButton.Remote);
     } else {
       page(BottomNavButton.Grid);
+    }
+  }
+
+  // ^ Close Share Button ^ //
+  void shrinkShare() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+      HapticFeedback.mediumImpact();
+      shareState(ShareButtonState.Default);
+      shareCounter(0);
+    }
+  }
+
+  // ^ Toggles Expanded Share Button ^ //
+  void toggleShare() {
+    if (shareState.value == ShareButtonState.Default) {
+      shareState(ShareButtonState.Expanded);
+      expandShare(6000, shareState.value);
+    } else {
+      shrinkShare();
     }
   }
 }

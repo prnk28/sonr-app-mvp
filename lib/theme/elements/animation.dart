@@ -430,10 +430,10 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _splashPath = 'assets/animations/rive/splash_screen.riv';
-  final String _tilePath = 'assets/animations/rive/tile_preview.riv';
-  final String _notFoundPath = 'assets/animations/rive/not_found.riv';
-  final String _documentsPath = 'assets/animations/rive/documents.riv';
+  final String _splashPath = 'assets/animations/splash_screen.riv';
+  final String _tilePath = 'assets/animations/tile_preview.riv';
+  final String _notFoundPath = 'assets/animations/not_found.riv';
+  final String _documentsPath = 'assets/animations/documents.riv';
 
   // Properties
   Artboard _riveArtboard;

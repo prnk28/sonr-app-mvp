@@ -33,7 +33,7 @@ class HomeScreen extends GetView<HomeController> {
 // ^ Card Grid View ^ //
 class CardGridView extends GetView<HomeController> {
   CardGridView({Key key}) : super(key: key);
-  final pageController = PageController(viewportFraction: 0.8, keepPage: false);
+  final pageController = PageController(viewportFraction: 0.8);
 
   @override
   Widget build(BuildContext context) {
