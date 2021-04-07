@@ -62,35 +62,14 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+  // ^ Return Animation by Page Index
   AnimSwitch getSwitcherAnimation() {
-    switch (page.value) {
-      case BottomNavButton.Grid:
-        if (_lastPage == BottomNavButton.Profile) {
-          _lastPage = page.value;
-          return AnimSwitch.SlideUp;
-        } else if (_lastPage == BottomNavButton.Remote) {
-          _lastPage = page.value;
-          return AnimSwitch.SlideDown;
-        } else {
-          _lastPage = page.value;
-          return AnimSwitch.SlideLeft;
-        }
-        break;
-      case BottomNavButton.Profile:
-        _lastPage = page.value;
-        return AnimSwitch.SlideDown;
-        break;
-      case BottomNavButton.Alerts:
-        _lastPage = page.value;
-        return AnimSwitch.SlideRight;
-        break;
-      case BottomNavButton.Remote:
-        _lastPage = page.value;
-        return AnimSwitch.SlideUp;
-        break;
-      default:
-        _lastPage = page.value;
-        return AnimSwitch.SlideLeft;
+    if (_lastPage.index > page.value.index) {
+      _lastPage = page.value;
+      return AnimSwitch.SlideLeft;
+    } else {
+      _lastPage = page.value;
+      return AnimSwitch.SlideRight;
     }
   }
 

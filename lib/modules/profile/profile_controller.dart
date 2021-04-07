@@ -156,7 +156,6 @@ class ProfileController extends GetxController {
 
   // ^ Expand a Tile  ^ //
   toggleExpand(int index, bool isExpanded) {
-    print("Index $index Expanded $isExpanded");
     focused(FocusedTile(index, isExpanded));
     update(['social-grid']);
   }

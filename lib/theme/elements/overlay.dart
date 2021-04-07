@@ -187,8 +187,6 @@ class SonrOverlay extends GetxService {
       // Refresh List
       _controller.overlays.removeLast();
       _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
     }
   }
 
@@ -201,8 +199,6 @@ class SonrOverlay extends GetxService {
       // Refresh List
       _controller.currentOverlay(_controller.overlays[count - 1]);
       _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
     }
   }
 
@@ -219,8 +215,6 @@ class SonrOverlay extends GetxService {
 
       // Refresh List
       _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
     }
   }
 }
@@ -292,8 +286,6 @@ class SonrPositionedOverlay extends GetxService {
       // Refresh List
       _controller.overlays.removeLast();
       _controller.overlays.refresh();
-    } else {
-      print("Overlay is not open");
     }
   }
 }

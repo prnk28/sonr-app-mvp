@@ -143,7 +143,6 @@ class _MediaItemViewState extends State<_MediaItemView> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.card.toString());
     return Card(
       shadowColor: Colors.transparent,
       color: Colors.transparent,

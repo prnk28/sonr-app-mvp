@@ -68,7 +68,7 @@ class CameraView extends GetView<CameraController> {
             }
           },
           onHorizontalDragUpdate: (details) {
-            print("Drag Horizontal: ${details.delta}");
+
           },
           child: CameraAwesome(
             sensor: controller.sensor,

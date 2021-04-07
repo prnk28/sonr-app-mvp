@@ -11,7 +11,11 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
         bottomNavigationBar: HomeBottomNavBar(),
-        body: Obx(() => AnimatedSlideSwitcher(controller.getSwitcherAnimation(), _buildView(controller.page.value), const Duration(seconds: 3))));
+        body: Obx(() => AnimatedSlideSwitcher(
+              controller.getSwitcherAnimation(),
+              _buildView(controller.page.value),
+              const Duration(milliseconds: 2500),
+            )));
   }
 
   // @ Build Page View by Navigation Item
