@@ -43,32 +43,32 @@ class _RemoteInitialView extends GetView<RemoteController> {
   _RemoteInitialView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SonrStyle.viewSize.width,
-      height: SonrStyle.viewSize.height,
-      child: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              children: <Widget>[
-                Column(children: [
-                  SonrText.header("Join Remote"),
+    return Obx(() => Container(
+          width: SonrStyle.viewSize.width,
+          height: SonrStyle.viewSize.height,
+          child: CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Column(
+                  children: <Widget>[
+                    Column(children: [
+                      SonrText.header("Join Remote"),
 
-                  // Check for Keyboard Open
-                  Obx(() => controller.isJoinFieldTapped.value
-                      ? SonrText.normal("Enter lobby code here.", color: SonrColor.Black.withOpacity(0.7), size: 18)
-                      : LottieContainer(
-                          type: LottieBoard.JoinRemote,
-                          repeat: true,
-                          height: 150,
-                        )),
-                  GestureDetector(
-                    onTap: () => controller.handleJoinTap(),
-                    child: Neumorphic(
-                      padding: EdgeInsets.only(bottom: 8),
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Obx(() => OpacityAnimatedWidget(
+                      // Check for Keyboard Open
+                      controller.isJoinFieldTapped.value
+                          ? SonrText.normal("Enter lobby code here.", color: SonrColor.Black.withOpacity(0.7), size: 18)
+                          : LottieContainer(
+                              type: LottieBoard.JoinRemote,
+                              repeat: true,
+                              height: 150,
+                            ),
+                      GestureDetector(
+                        onTap: () => controller.handleJoinTap(),
+                        child: Neumorphic(
+                          padding: EdgeInsets.only(bottom: 8),
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          child: OpacityAnimatedWidget(
                             duration: 400.milliseconds,
                             enabled: controller.isJoinFieldTapped.value,
                             child: Row(
@@ -88,22 +88,22 @@ class _RemoteInitialView extends GetView<RemoteController> {
                                 ),
                               ],
                             ),
-                          )),
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.all(8)),
-                  ColorButton.secondary(
-                    text: "Join",
-                    onPressed: () => controller.join(),
-                  ),
-                  Padding(padding: EdgeInsets.all(8)),
-                ])
-              ],
-            ),
+                          ),
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.all(8)),
+                      ColorButton.secondary(
+                        text: "Join",
+                        onPressed: () => controller.join(),
+                      ),
+                      Padding(padding: EdgeInsets.all(8)),
+                    ])
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
 

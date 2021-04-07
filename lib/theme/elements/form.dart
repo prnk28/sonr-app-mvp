@@ -3,14 +3,6 @@ import 'package:sonr_core/sonr_core.dart';
 
 import '../theme.dart';
 
-class SonrForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-
 // ^ Builds Neumorphic Checkbox with Label ^ //
 class SonrCheckbox extends StatelessWidget {
   final String label;
