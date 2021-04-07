@@ -132,7 +132,7 @@ class ShareController extends GetxController {
   _updateSize() {
     if (status.value == ShareButtonState.Queue) {
       heightFactor(0.2);
-      size(Size(Get.width / 2 + 165, 120));
+      size(Size(Get.width / 2 + 165, 110));
     } else {
       heightFactor(0.6);
       size(Size(60, 60));

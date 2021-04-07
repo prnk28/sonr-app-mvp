@@ -42,16 +42,16 @@ class _DefaultView extends GetView<ShareController> {
 class _QueueView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: controller.size.value.width,
-      height: controller.size.value.height,
-      margin: EdgeInsets.all(8),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        const ShareCameraButtonItem(),
-        const ShareGalleryButtonItem(),
-        const ShareContactButtonItem(),
-      ]),
-    );
+    return OpacityAnimatedWidget(
+        enabled: true,
+        duration: 150.milliseconds,
+        delay: 350.milliseconds,
+        curve: Curves.easeIn,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          const ShareCameraButtonItem(),
+          const ShareGalleryButtonItem(),
+          const ShareContactButtonItem(),
+        ]));
   }
 }
 

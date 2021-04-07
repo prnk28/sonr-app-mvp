@@ -9,17 +9,15 @@ class ShareCameraButtonItem extends GetView<ShareController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: controller.onCameraShare,
-      child: Container(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Expanded(
-            child: const RiveContainer(
-              type: RiveBoard.Camera,
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          SonrText('Camera', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
-        ]),
-      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        RiveContainer(
+          width: 55,
+          height: 55,
+          type: RiveBoard.Camera,
+        ),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        SonrText('Camera', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+      ]),
     );
   }
 }
@@ -31,17 +29,15 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: controller.onGalleryShare,
-      child: Container(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Expanded(
-            child: const RiveContainer(
-              type: RiveBoard.Gallery,
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          SonrText('Gallery', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
-        ]),
-      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        RiveContainer(
+          width: 55,
+          height: 55,
+          type: RiveBoard.Gallery,
+        ),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        SonrText('Gallery', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+      ]),
     );
   }
 }
@@ -59,17 +55,15 @@ class ShareContactButtonItem extends GetView<ShareController> {
         Get.toNamed("/transfer");
         controller.shrink(delay: 150.milliseconds);
       },
-      child: Container(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Expanded(
-            child: const RiveContainer(
-              type: RiveBoard.Contact,
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(top: 4)),
-          SonrText('Contact', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
-        ]),
-      ),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        RiveContainer(
+          width: 55,
+          height: 55,
+          type: RiveBoard.Contact,
+        ),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        SonrText('Contact', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+      ]),
     );
   }
 }
