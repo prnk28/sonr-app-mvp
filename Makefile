@@ -122,7 +122,8 @@ plugin.clean:
 
 
 ## push          :   Push Mobile and Plugin SubModule to Remote Repo
-push: push.mobile push.plugin
+push: push.plugin push.mobile
+	cd $(PROJECT_DIR) && git submodule update --remote
 	@cd /System/Library/Sounds && afplay Hero.aiff
 
 ## └─ mobile          - Push Mobile App Repo to Git Remote
