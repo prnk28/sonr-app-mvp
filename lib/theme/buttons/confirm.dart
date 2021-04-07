@@ -2,8 +2,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../theme.dart';
 
-enum ConfirmButtonType { Primary, Secondary, Neutral, Critical }
-
 class ConfirmButton extends StatefulWidget {
   static const double K_BORDER_RADIUS = 8;
   static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
@@ -11,129 +9,71 @@ class ConfirmButton extends StatefulWidget {
 
   final EdgeInsets margin;
   final EdgeInsets padding;
-  final Widget child;
-  final Decoration decoration;
-  final Function onPressed;
-  final Function onLongPressed;
+  final Widget defaultChild;
+  final Widget confirmChild;
+  final Decoration defaultDecoration;
+  final Decoration confirmDecoration;
+  final Function onConfirmed;
   final String tooltip;
-  final bool isEnabled;
   final double width;
   final double pressedScale;
 
   const ConfirmButton({
     Key key,
-    @required this.onPressed,
-    @required this.child,
-    @required this.decoration,
+    @required this.onConfirmed,
+    @required this.defaultChild,
+    @required this.confirmChild,
+    @required this.defaultDecoration,
+    @required this.confirmDecoration,
     @required this.pressedScale,
     this.margin,
     this.padding,
-    this.onLongPressed,
     this.tooltip,
-    this.isEnabled = true,
     this.width,
   }) : super(key: key);
 
-  // @ Primary Button //
-  factory ConfirmButton.primary({
-    @required Function onPressed,
-    Gradient gradient,
-    Function onLongPressed,
-    Widget child,
+  // @ Delete Button //
+  factory ConfirmButton.delete({
+    @required Function onConfirmed,
+    Widget defaultChild,
+    SonrIcon defaultIcon,
+    String defaultText,
+    Widget confirmChild,
+    SonrIcon confirmIcon,
+    String confirmText,
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    SonrIcon icon,
-    String text,
     double width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
     // Build Decoration
-    BoxDecoration decoration = BoxDecoration(
-        gradient: gradient != null ? gradient : SonrPalette.primary(),
+    BoxDecoration defaultDecoration = BoxDecoration(
+        gradient: SonrPalette.neutral(),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+
+    BoxDecoration confirmDecoration = BoxDecoration(
+        gradient: SonrPalette.primary(),
         borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ConfirmButton(
-        decoration: decoration,
-        onPressed: onPressed,
-        child: _buildChild(iconPosition, icon, text, child),
+        defaultDecoration: defaultDecoration,
+        confirmDecoration: confirmDecoration,
+        onConfirmed: onConfirmed,
+        defaultChild: buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
+        confirmChild: buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
         tooltip: tooltip,
         width: width,
         padding: padding,
         margin: margin,
-        onLongPressed: onLongPressed,
         pressedScale: 0.95);
   }
 
-  // @ Secondary Button //
-  factory ConfirmButton.secondary({
-    @required Function onPressed,
-    Color color,
-    Function onLongPressed,
-    Widget child,
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    double width,
-    SonrIcon icon,
-    String text,
-    WidgetPosition iconPosition = WidgetPosition.Left,
-  }) {
-    // Decoration
-    BoxDecoration decoration = BoxDecoration(
-      color: color != null ? color : SonrPalette.Secondary,
-      borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
-    );
-
-    // Build Child
-    return ConfirmButton(
-        decoration: decoration,
-        onPressed: onPressed,
-        width: width,
-        child: _buildChild(iconPosition, icon, text, child),
-        tooltip: tooltip,
-        padding: padding,
-        margin: margin,
-        onLongPressed: onLongPressed,
-        pressedScale: 0.98);
-  }
-
-  // @ Neutral Button //
-  factory ConfirmButton.neutral({
-    @required Function onPressed,
-    Function onLongPressed,
-    Widget child,
-    String tooltip,
-    EdgeInsets padding,
-    EdgeInsets margin,
-    SonrIcon icon,
-    double width,
-    String text,
-    WidgetPosition iconPosition = WidgetPosition.Left,
-  }) {
-    // Decoration
-    BoxDecoration decoration = BoxDecoration(
-      color: SonrColor.Neutral,
-      borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
-    );
-
-    // Build Child
-    return ConfirmButton(
-        decoration: decoration,
-        onPressed: onPressed,
-        width: width,
-        child: _buildChild(iconPosition, icon, text, child),
-        tooltip: tooltip,
-        padding: padding,
-        margin: margin,
-        onLongPressed: onLongPressed,
-        pressedScale: 0.98);
-  }
-
   // @ Helper Method to Build Icon View //
-  static Widget _buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
+  static Widget buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
     if (child != null) {
       return child;
     } else if (icon != null && text == null) {
@@ -193,7 +133,7 @@ class ConfirmButton extends StatefulWidget {
         overflow: TextOverflow.fade,
         textAlign: TextAlign.center,
         style: TextStyle(
-              fontFamily: 'Poppins',
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 18,
             color: Colors.white,
@@ -204,13 +144,21 @@ class ConfirmButton extends StatefulWidget {
   _ConfirmButtonState createState() => _ConfirmButtonState();
 }
 
+enum ConfirmStatus { Default, Pressed, Pending, Confirmed, Done }
+
+extension ConfirmStatusUtil on ConfirmStatus {
+  bool get isDefault => this == ConfirmStatus.Default;
+  bool get isPressed => this == ConfirmStatus.Pressed;
+  bool get isPending => this == ConfirmStatus.Pending;
+  bool get isConfirmed => this == ConfirmStatus.Confirmed;
+  bool get isDone => this == ConfirmStatus.Done;
+}
+
 class _ConfirmButtonState extends State<ConfirmButton> {
   bool hasFinishedAnimationDown = false;
   bool hasFinishedLongAnimationDown = false;
   bool hasTapUp = false;
-  bool hasLongTapUp = false;
-  bool pressed = false;
-  bool longPressed = false;
+  ConfirmStatus status = ConfirmStatus.Default;
   bool hasDisposed = false;
 
   @override
@@ -236,50 +184,61 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     return GestureDetector(
       onTapDown: (detail) {
         hasTapUp = false;
-        if (!pressed && !longPressed) {
+        if (status.isDefault || status.isPressed) {
           _handlePress();
+        } else {
+          _handleConfirm();
         }
       },
       onTapUp: (details) {
-        widget.onPressed();
         hasTapUp = true;
-        _resetIfTapUp();
-      },
-      onLongPressStart: (details) {
-        hasLongTapUp = false;
-        if (!longPressed) {
-          _handleLongPress();
-        }
-      },
-      onLongPressUp: () {
-        if (widget.onLongPressed != null) {
-          widget.onLongPressed();
-        }
-        hasLongTapUp = true;
-        _resetIfLongTapUp();
+        _resetIfTapUp(status);
       },
       onTapCancel: () {
         hasTapUp = true;
-        _resetIfTapUp();
+        _resetIfTapUp(status);
       },
       child: AnimatedScale(
-        scale: this.pressed ? widget.pressedScale : 1.0,
+        scale: status.isPressed ? widget.pressedScale : 1.0,
         child: AnimatedContainer(
-          decoration: widget.decoration,
+          decoration: _buildDecoration(),
           margin: widget.margin ?? const EdgeInsets.all(0),
           duration: ConfirmButton.K_BUTTON_DURATION,
           curve: Curves.ease,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: widget.child,
+          child: AnimatedSlideSwitcher.slideUp(child: _buildChild()),
         ),
       ),
     );
   }
 
+  Widget _buildChild() {
+    if (status.isDefault || status.isPressed) {
+      return Container(child: widget.defaultChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Default));
+    } else if (status.isPending || status.isConfirmed) {
+      return Container(child: widget.confirmChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Confirmed));
+    } else {
+      return ConfirmButton.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Deleted.", null);
+    }
+  }
+
+  BoxDecoration _buildDecoration() {
+    if (status.isDefault || status.isPressed) {
+      return widget.defaultDecoration;
+    } else if (status.isPending || status.isConfirmed) {
+      return widget.confirmDecoration;
+    } else {
+      return BoxDecoration(
+          gradient: SonrPalette.critical(),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+    }
+  }
+
   Future<void> _handlePress() async {
     hasFinishedAnimationDown = false;
     setState(() {
-      pressed = true;
+      status = ConfirmStatus.Pressed;
     });
 
     await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
@@ -287,42 +246,32 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
     //haptic vibration
     HapticFeedback.mediumImpact();
-    _resetIfTapUp();
+    _resetIfTapUp(ConfirmStatus.Pending);
   }
 
-  //used to stay pressed if no tap up
-  void _resetIfTapUp() {
-    if (hasFinishedAnimationDown == true && hasTapUp == true && !hasDisposed) {
-      setState(() {
-        pressed = false;
-
-        hasFinishedAnimationDown = false;
-        hasTapUp = false;
-      });
-    }
-  }
-
-  Future<void> _handleLongPress() async {
-    hasFinishedLongAnimationDown = false;
+  Future<void> _handleConfirm() async {
+    hasFinishedAnimationDown = false;
     setState(() {
-      longPressed = true;
+      status = ConfirmStatus.Confirmed;
     });
 
     await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
-    hasFinishedLongAnimationDown = true;
+    hasFinishedAnimationDown = true;
 
     //haptic vibration
     HapticFeedback.heavyImpact();
-    _resetIfLongTapUp();
+    widget.onConfirmed();
+    _resetIfTapUp(ConfirmStatus.Done);
   }
 
-  void _resetIfLongTapUp() {
-    if (hasFinishedLongAnimationDown == true && hasLongTapUp == true && !hasDisposed) {
+  //used to stay pressed if no tap up
+  void _resetIfTapUp(ConfirmStatus newStatus) {
+    if (hasFinishedAnimationDown == true && hasTapUp == true && !hasDisposed) {
       setState(() {
-        longPressed = false;
+        status = newStatus;
 
-        hasFinishedLongAnimationDown = false;
-        hasLongTapUp = false;
+        hasFinishedAnimationDown = false;
+        hasTapUp = false;
       });
     }
   }

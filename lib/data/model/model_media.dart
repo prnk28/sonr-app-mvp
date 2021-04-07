@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:open_file/open_file.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:sonr_app/service/device.dart';
 import 'package:sonr_app/service/sonr.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -29,7 +28,7 @@ class MediaAlbum {
     this.totalPages = (data.assetCount / K_ALBUM_PAGE_SIZE).ceil();
 
     // Items on Range
-    data.getAssetListRange(start: 0, end: 500).then((items) {
+    data.getAssetListRange(start: 0, end: 100).then((items) {
       // Iterate through Items
       items.forEach((element) {
         assets.add(MediaItem(element, items.indexOf(element)));
@@ -50,6 +49,7 @@ class MediaItem {
   int height;
   AssetType type;
   Duration duration;
+  Uint8List thumbnail;
 
   // Calculated
   OpenResult openResult;
@@ -89,30 +89,22 @@ class MediaItem {
   }
 
   // @ Fetch Uint8List
-  Future<String> getPath() async {
-    String path;
-    useFile(onAsset: (file) {
-      path = path;
-    });
-    return path;
-  }
-
-  // @ Fetch Uint8List
   Future<Uint8List> getThumbnail() async {
     // Set Thumbnail
-    return await entity.thumbDataWithSize(320, 320);
+    thumbnail = await entity.thumbDataWithSize(320, 320);
+    return thumbnail;
   }
 
   // @ Return File Info for Invite Request
   Future<Metadata> getMetadata() async {
-    var thumb = await getThumbnail();
-    var file = await entity.loadFile();
+    thumbnail = thumbnail != null ? thumbnail : await getThumbnail();
+    var file = await entity.file;
     var path = file.path;
     return Metadata(
       path: path,
-      thumbnail: thumb,
+      thumbnail: thumbnail,
       properties: Metadata_Properties(
-        hasThumbnail: thumb.length > 0,
+        hasThumbnail: thumbnail.length > 0,
         width: width,
         height: height,
         isImage: this.isImage,
@@ -129,22 +121,9 @@ class MediaItem {
 
   // @ Fetch File
   openFile() async {
-    useFile(onAsset: (file) async {
-      var result = await OpenFile.open(file.path);
-      return result;
-    });
-  }
-
-  Future<void> useFile({@required Function(File file) onAsset}) async {
-    File file;
-    try {
-      file = await entity.file;
-      onAsset(file);
-    } finally {
-      if (DeviceService.isIOS) {
-        await file.delete();
-      }
-    }
+    File file = await entity.file;
+    var result = await OpenFile.open(file.path);
+    return result;
   }
 }
 

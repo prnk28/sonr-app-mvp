@@ -5,8 +5,8 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'cards.dart';
 import 'lobby.dart';
-import 'sql.dart';
 import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
@@ -44,9 +44,11 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Initialize Service Method ^ //
   Future<SonrService> init() async {
     // Initialize
-    if (UserService.isExisting.value) {
-      var pos = await Get.find<DeviceService>().currentLocation();
-      _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+
+    // Check for Connect Requirements
+    if (UserService.hasRequiredToConnect) {
+      var pos = await DeviceService.currentLocation();
 
       // Create Node
       _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -66,14 +68,35 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Connect to Service Method ^ //
   Future<void> connect() async {
-    _node.connect();
-    _node.update(direction: DeviceService.direction);
+    if (_node == null) {
+      // Get Data
+      var pos = await DeviceService.currentLocation();
+
+      // Create Node
+      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+      _node.onStatus = _handleStatus;
+      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node.onEvent = Get.find<LobbyService>().handleEvent;
+      _node.onInvited = _handleInvited;
+      _node.onReplied = _handleResponded;
+      _node.onProgressed = _handleProgress;
+      _node.onReceived = _handleReceived;
+      _node.onTransmitted = _handleTransmitted;
+      _node.onError = _handleError;
+
+      // Connect Node
+      _node.connect();
+      _node.update(direction: DeviceService.direction);
+    } else {
+      _node.connect();
+      _node.update(direction: DeviceService.direction);
+    }
   }
 
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact, String username) async {
-    var pos = await Get.find<DeviceService>().currentLocation();
-    _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
+    // Get Data
+    var pos = await DeviceService.currentLocation();
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
@@ -85,6 +108,8 @@ class SonrService extends GetxService with TransferQueue {
     _node.onReceived = _handleReceived;
     _node.onTransmitted = _handleTransmitted;
     _node.onError = _handleError;
+
+    // Connect Node
     _node.connect();
     _node.update(direction: DeviceService.direction);
   }
@@ -286,7 +311,7 @@ class SonrService extends GetxService with TransferQueue {
     HapticFeedback.heavyImpact();
 
     // Save Card to Gallery
-    Get.find<SQLService>().storeCard(data);
+    CardService.addCard(data);
   }
 
   // ^ An Error Has Occurred ^ //

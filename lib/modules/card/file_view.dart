@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
+import 'package:sonr_app/data/database/cards_db.dart';
+import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'card_controller.dart';
@@ -10,6 +12,7 @@ class FileCard extends GetWidget<TransferCardController> {
   final CardType type;
   final AuthInvite invite;
   final TransferCard card;
+  final TransferCardItem cardItem;
   final bool isNewItem;
 
   // ** Factory -> Invite Dialog View ** //
@@ -18,12 +21,12 @@ class FileCard extends GetWidget<TransferCardController> {
   }
 
   // ** Factory -> Grid Item View ** //
-  factory FileCard.item(TransferCard card, {bool isNewItem = false}) {
-    return FileCard(CardType.GridItem, card: card, isNewItem: isNewItem);
+  factory FileCard.item(TransferCardItem card, {bool isNewItem = false}) {
+    return FileCard(CardType.GridItem, cardItem: card, isNewItem: isNewItem);
   }
 
   // ** Constructer ** //
-  const FileCard(this.type, {Key key, this.invite, this.card, this.isNewItem}) : super(key: key);
+  const FileCard(this.type, {Key key, this.invite, this.card, this.isNewItem, this.cardItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class FileCard extends GetWidget<TransferCardController> {
         return _FileInviteView(card, controller, invite);
         break;
       case CardType.GridItem:
-        return _FileItemView(card, controller);
+        return _FileItemView(cardItem, controller);
       default:
         return Container();
         break;
@@ -113,10 +116,10 @@ class _FileInviteView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ColorButton.neutral(onPressed: () => controller.declineInvite(invite), text: "Decline"),
+                      ColorButton.neutral(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
                       Padding(padding: EdgeInsets.all(8)),
                       ColorButton.primary(
-                        onPressed: () => controller.acceptTransfer(invite, card),
+                        onPressed: () => CardService.handleInviteResponse(true, invite, card),
                         text: "Accept",
                         gradient: SonrPalette.tertiary(),
                         icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
@@ -131,7 +134,7 @@ class _FileInviteView extends StatelessWidget {
 
 // ^ TransferCard Media Item Details ^ //
 class _FileItemView extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   final TransferCardController controller;
 
   _FileItemView(this.card, this.controller);
@@ -164,7 +167,7 @@ class _FileItemView extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Neumorphic(
                             style: SonrStyle.timeStampDark,
-                            child: SonrText.date(DateTime.fromMillisecondsSinceEpoch(card.received * 1000), color: Colors.white),
+                            child: SonrText.date(card.received, color: Colors.white),
                             padding: EdgeInsets.all(10),
                           ),
                         ),
@@ -201,15 +204,15 @@ class _FileItemView extends StatelessWidget {
 
 // ^ Overlay View for File Info
 class _FileCardInfo extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   _FileCardInfo(this.card);
 
   @override
   Widget build(BuildContext context) {
     // Extract Data
     var metadata = card.metadata;
-    var payload = card.payloadString;
-    var size = card.metaSizeString;
+    var payload = card.payload.asString;
+    var size = card.metadata.sizeString;
 
     // Build Overlay View
     return Padding(
@@ -225,7 +228,7 @@ class _FileCardInfo extends StatelessWidget {
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
               card.owner.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
-              SonrText.bold(" ${card.firstName} ${card.lastName}", size: 16, color: Colors.grey[600])
+              SonrText.bold(" ${card.owner.firstName} ${card.owner.lastName}", size: 16, color: Colors.grey[600])
             ]),
 
             Divider(),
@@ -275,7 +278,7 @@ class _FileCardInfo extends StatelessWidget {
                       .then((result) {
                     // Handle Response
                     if (result) {
-                      Get.find<SQLService>().deleteCard(card.id);
+                      CardService.deleteCard(card);
                       SonrSnack.success("Deleted File from Sonr.");
                       SonrOverlay.closeAll();
                     } else {

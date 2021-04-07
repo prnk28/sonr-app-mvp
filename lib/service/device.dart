@@ -3,7 +3,6 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
@@ -107,7 +106,7 @@ class DeviceService extends GetxService {
   static void shiftPage({@required Duration delay}) async {
     Future.delayed(delay, () {
       // Check for User
-      if (!UserService.isExisting.value) {
+      if (!UserService.hasUser.value) {
         Get.offNamed("/register");
       } else {
         if (isMobile) {
@@ -142,10 +141,10 @@ class DeviceService extends GetxService {
   }
 
   // ^ Refresh User Location Position ^ //
-  Future<Position> currentLocation() async {
-    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      _location(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
-      return _location.value;
+  static Future<Position> currentLocation() async {
+    if (UserService.permissions.value.hasLocation) {
+      to._location(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high));
+      return to._location.value;
     } else {
       print("No Location Permissions");
       return null;

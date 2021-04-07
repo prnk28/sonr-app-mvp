@@ -198,6 +198,21 @@ extension PayloadUtils on Payload {
       FlutterGradientNames.seashore
     ].random();
   }
+
+  String get asString {
+    if (this == Payload.PDF) {
+      return this.toString();
+    }
+    return this.toString().capitalizeFirst;
+  }
+
+  bool get isFile {
+    return this != Payload.UNDEFINED && this != Payload.CONTACT && this != Payload.URL;
+  }
+
+  bool get isMedia {
+    return this == Payload.MEDIA;
+  }
 }
 
 // ^ TransferCard Model Extensions ^ //
@@ -248,5 +263,48 @@ extension TransferCardUtils on TransferCard {
       return this.payload.toString();
     }
     return this.payload.toString().capitalizeFirst;
+  }
+}
+
+extension MetadataUtils on Metadata {
+  String get sizeString {
+    // @ Less than 1KB
+    if (this.size < pow(10, 3)) {
+      return "$this B";
+    }
+    // @ Less than 1MB
+    else if (this.size >= pow(10, 3) && this.size < pow(10, 6)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 3);
+      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
+    }
+    // @ Less than 1GB
+    else if (this.size >= pow(10, 6) && this.size < pow(10, 9)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 6);
+      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
+    }
+    // @ Greater than GB
+    else {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 9);
+      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
+    }
+  }
+}
+
+extension MIMEUtils on MIME {
+  String get asString {
+    return this.type.toString().capitalizeFirst;
+  }
+}
+
+extension ProfileUtils on Profile {
+  SonrText get nameText {
+    return SonrText.bold(" ${this.firstName} ${this.lastName}", size: 16, color: Colors.grey[600]);
+  }
+
+  SonrIcon get platformIcon {
+    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
   }
 }

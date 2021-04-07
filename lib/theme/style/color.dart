@@ -122,7 +122,11 @@ class SonrPalette {
     return LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
   }
 
-  static Gradient critical() {
+  static Gradient neutral() {
     return LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
+  }
+
+  static Gradient critical() {
+    return LinearGradient(colors: [Color(0xffff176b), Color(0xffff176b).withOpacity(0.7)], begin: _K_BEGIN, end: _K_END);
   }
 }

@@ -127,7 +127,6 @@ class _FormPageController extends GetxController {
       await UserService.saveChanges(providedContact: contact, isNewUser: true);
       var result = await Get.find<UserService>().requestLocation();
       if (result) {
-        await Get.find<DeviceService>().currentLocation();
         isPending(false);
         Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
       }
