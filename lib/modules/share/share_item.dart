@@ -9,7 +9,7 @@ class ShareCameraButtonItem extends GetView<ShareController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: controller.onCameraShare,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         RiveContainer(
           width: 55,
           height: 55,
@@ -29,7 +29,7 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: controller.onGalleryShare,
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         RiveContainer(
           width: 55,
           height: 55,
@@ -55,7 +55,7 @@ class ShareContactButtonItem extends GetView<ShareController> {
         Get.toNamed("/transfer");
         controller.shrink(delay: 150.milliseconds);
       },
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         RiveContainer(
           width: 55,
           height: 55,

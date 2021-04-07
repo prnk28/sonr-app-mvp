@@ -5,7 +5,6 @@ import 'package:sonr_core/sonr_core.dart';
 
 // @ PeerStatus Enum
 enum ProfileState { Viewing, Editing }
-
 class ProfileController extends GetxController {
   // Properties
   final state = ProfileState.Viewing.obs;

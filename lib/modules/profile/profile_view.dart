@@ -4,19 +4,26 @@ import 'tile_item.dart';
 import 'profile_controller.dart';
 import 'create_tile.dart';
 
-class ProfileScreen extends GetView<ProfileController> {
+class ProfileView extends GetView<ProfileController> {
+  ProfileView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // Build View
-    return SonrScaffold(
-        floatingActionButton: NeumorphicFloatingActionButton(
-            child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
-            style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
-            onPressed: () {
-              Get.dialog(CreateTileStepper());
-            }),
-        body: NeumorphicBackground(
-            backendColor: Colors.transparent,
+    return Stack(children: [
+      Positioned(
+          bottom: 8,
+          right: 8,
+          child: NeumorphicFloatingActionButton(
+              child: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
+              style: NeumorphicStyle(intensity: 0.85, depth: 10, shape: NeumorphicShape.convex),
+              onPressed: () {
+                Get.dialog(CreateTileStepper());
+              })),
+      Container(
+        width: Get.width,
+        height: Get.height,
+        margin: SonrStyle.viewMargin,
+        child: Neumorphic(
+            style: SonrStyle.normal,
             child: CustomScrollView(
               slivers: [
                 // @ Builds Profile Header
@@ -49,7 +56,9 @@ class ProfileScreen extends GetView<ProfileController> {
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 12.0, crossAxisSpacing: 6.0));
                     })
               ],
-            )));
+            )),
+      )
+    ]);
   }
 }
 

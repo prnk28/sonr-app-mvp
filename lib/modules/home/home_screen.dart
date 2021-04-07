@@ -1,5 +1,7 @@
 import 'package:sonr_app/modules/card/card_grid.dart';
 import 'package:sonr_app/modules/home/top_header.dart';
+import 'package:sonr_app/modules/profile/profile_view.dart';
+import 'package:sonr_app/modules/remote/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bottom_bar.dart';
 import 'home_controller.dart';
@@ -24,32 +26,6 @@ class HomeScreen extends GetView<HomeController> {
     } else {
       return CardGridView(key: ValueKey<BottomNavButton>(BottomNavButton.Grid), header: HomeTopHeaderBar());
     }
-  }
-}
-
-// ^ Profile View ^ //
-class ProfileView extends GetView<HomeController> {
-  ProfileView({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Profile View"),
-      SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18),
-      Padding(padding: EdgeInsets.all(16)),
-    ]);
-  }
-}
-
-// ^ Remote View ^ //
-class RemoteView extends GetView<HomeController> {
-  RemoteView({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote View"),
-      SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18),
-      Padding(padding: EdgeInsets.all(16)),
-    ]);
   }
 }
 
