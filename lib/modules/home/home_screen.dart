@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/card/card_grid.dart';
-import 'package:sonr_app/theme/navigation/app_bar.dart';
+import 'package:sonr_app/modules/home/top_header.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bottom_bar.dart';
 import 'home_controller.dart';
@@ -8,9 +8,6 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
-        appBar: SonrAppBar(
-          title: "Home",
-        ),
         bottomNavigationBar: HomeBottomNavBar(),
         body: Obx(() => AnimatedSlideSwitcher(controller.getSwitcherAnimation(), _buildView(controller.page.value), const Duration(seconds: 3))));
   }
@@ -25,7 +22,7 @@ class HomeScreen extends GetView<HomeController> {
     } else if (page == BottomNavButton.Remote) {
       return RemoteView(key: ValueKey<BottomNavButton>(BottomNavButton.Remote));
     } else {
-      return CardGridView(key: ValueKey<BottomNavButton>(BottomNavButton.Grid));
+      return CardGridView(key: ValueKey<BottomNavButton>(BottomNavButton.Grid), header: HomeTopHeaderBar());
     }
   }
 }

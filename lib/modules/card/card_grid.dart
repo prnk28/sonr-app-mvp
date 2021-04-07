@@ -3,10 +3,10 @@ import 'package:sonr_app/modules/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-
 // ^ Card Grid View ^ //
 class CardGridView extends GetView<HomeController> {
-  CardGridView({Key key}) : super(key: key);
+  final Widget header;
+  CardGridView({this.header, Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,32 +26,39 @@ class CardGridView extends GetView<HomeController> {
       }
 
       return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Container(
-          padding: EdgeInsets.only(top: 8),
-          margin: EdgeInsetsX.horizontal(24),
-          child: NeumorphicToggle(
-            style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
-            selectedIndex: controller.toggleIndex.value,
-            onChanged: (val) => controller.setToggleCategory(val),
-            thumb: Neumorphic(style: SonrStyle.toggle),
-            children: [
-              ToggleElement(
-                  background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 18)),
-                  foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
-              ToggleElement(
-                  background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
-                  foreground: SonrIcon.neumorphicGradient(
-                      SonrIconData.all_categories, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
-                      size: 22.5)),
-              ToggleElement(
-                  background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 18)),
-                  foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
-            ],
-          ),
-        ),
+        header != null ? header : _CardGridToggle(),
         Expanded(child: Container(child: _CardGridWidget(cardList))),
       ]);
     });
+  }
+}
+
+class _CardGridToggle extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 8),
+      margin: EdgeInsetsX.horizontal(24),
+      child: NeumorphicToggle(
+        style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
+        selectedIndex: controller.toggleIndex.value,
+        onChanged: (val) => controller.setToggleCategory(val),
+        thumb: Neumorphic(style: SonrStyle.toggle),
+        children: [
+          ToggleElement(
+              background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 18)),
+              foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
+          ToggleElement(
+              background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
+              foreground: SonrIcon.neumorphicGradient(
+                  SonrIconData.all_categories, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
+                  size: 22.5)),
+          ToggleElement(
+              background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 18)),
+              foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
+        ],
+      ),
+    );
   }
 }
 
