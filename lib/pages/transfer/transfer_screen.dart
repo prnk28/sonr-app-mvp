@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
-import 'package:sonr_app/modules/transfer/peer_widget.dart';
+import 'package:sonr_app/pages/transfer/peer_widget.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'compass_view.dart';
 import 'lobby_view.dart';

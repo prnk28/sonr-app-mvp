@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/elements/carousel.dart';
-import 'package:sonr_app/modules/home/home_controller.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 
