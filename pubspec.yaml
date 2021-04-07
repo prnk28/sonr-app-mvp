@@ -37,7 +37,6 @@ dependencies:
 
   # -- Data --
   better_player: ^0.0.55
-
   open_file: ^3.0.3
   photo_manager: ^1.0.6
   path: ^1.7.0
@@ -48,9 +47,12 @@ dependencies:
   moor: ^4.2.1
   sqlite3_flutter_libs: ^0.4.1
   receive_sharing_intent: ^1.4.3
-  sqflite: ^2.0.0+1
+
+  # -- Plugins --
   sonr_core:
-    path: ../plugin/
+    path: plugins/sonr
+  here_sdk:
+    path: plugins/here_sdk
 
   # -- UI/UX --
   animated_widgets: ^1.0.6
