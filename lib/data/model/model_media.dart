@@ -163,4 +163,8 @@ class MediaFile {
   factory MediaFile.capture(String path, bool isVideo, int duration) {
     return MediaFile(File(path), Uint8List(0), isVideo, duration);
   }
+
+  Future<Uint8List> toUint8List() async{
+    return await _file.readAsBytes();
+  }
 }

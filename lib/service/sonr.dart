@@ -10,6 +10,24 @@ import 'lobby.dart';
 import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
+extension StatusUtils on Status {
+  bool get isNotConnected {
+    return this == Status.NONE;
+  }
+
+  bool get isConnecting {
+    return this == Status.NONE || this == Status.CONNECTED;
+  }
+
+  bool get isConnected {
+    return this != Status.NONE;
+  }
+
+  bool get isReady {
+    return this == Status.BOOTSTRAPPED;
+  }
+}
+
 class SonrService extends GetxService with TransferQueue {
   // Accessors
   static bool get isRegistered => Get.isRegistered<SonrService>();
@@ -22,7 +40,6 @@ class SonrService extends GetxService with TransferQueue {
   final _status = Rx<Status>();
 
   // @ Static Accessors
-  static RxBool get isReady => to._isReady;
   static RxDouble get progress => to._progress;
   static Rx<Status> get status => to._status;
 

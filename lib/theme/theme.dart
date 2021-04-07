@@ -49,6 +49,7 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter_custom_clippers/flutter_custom_clippers.dart' hide ArrowClipper;
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:get/get.dart';
 import 'package:sonr_app/service/user.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -58,6 +59,8 @@ import 'style/color.dart';
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
 
 class SonrStyle {
+  static get viewMargin => EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+
   static get appBarIcon =>
       NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
 

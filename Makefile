@@ -5,6 +5,10 @@ PROJECT_DIR=/Users/prad/Sonr/mobile
 ANDROID_DIR=/Users/prad/Sonr/mobile/android
 IOS_DIR=/Users/prad/Sonr/mobile/ios
 
+# Plugin Dirs
+PLUGIN_DIR=/Users/prad/Sonr/mobile/plugins/sonr
+PLUGIN_EXAMPLE_DIR=/Users/prad/Sonr/mobile/plugins/sonr/example
+
 # Mobile Actions
 FLUTTER=flutter
 RUN=$(FLUTTER) run -d all
@@ -86,8 +90,7 @@ deploy.android:
 	@echo '--------------------------------------------------'
 	@echo "Finished Uploading Sonr Android to PlayStore ➡ " && date
 
-##
-## [debug]       :   Run Mobile App in Debug Mode
+## debug         :   Run Mobile App in Debug Mode
 debug:
 	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
@@ -97,6 +100,51 @@ debug.clean: clean
 	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
+
+## plugin        :   Lists Options for Binded Proxy Plugin
+plugin: Makefile
+	@echo 'Plugin Options'
+	@sed -n 's/^##//p' $<
+
+## └─ run             - Runs the Plugin Example App in Debug Mode
+plugin.run:
+	cd $(PLUGIN_EXAMPLE_DIR) && $(CLEAN)
+	cd $(PLUGIN_EXAMPLE_DIR) && $(RUN)
+
+## └─ xcode           - Opens iOS Project in Xcode
+plugin.xcode:
+	cd /Users/prad/Sonr/plugin/example/ios && xed .
+
+## └─ clean           - Cleans Plugin Project Directory
+plugin.clean:
+	cd $(PLUGIN_DIR) && $(CLEAN)
+	cd $(PLUGIN_EXAMPLE_DIR) && $(CLEAN)
+
+
+## push          :   Push Mobile and Plugin SubModule to Remote Repo
+push: push.plugin push.mobile
+	cd $(PROJECT_DIR) && git submodule update --remote
+	@cd /System/Library/Sounds && afplay Hero.aiff
+
+## └─ mobile          - Push Mobile App Repo to Git Remote
+push.mobile:
+	cd $(PROJECT_DIR) && flutter clean
+	cd $(PROJECT_DIR) && git add . && git commit -m 'Updated Plugin Project' && git push
+	cd $(PROJECT_DIR) && flutter pub get
+	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
+	@echo "Finished Pushing Mobile ➡ " && date
+
+## └─ plugin          - Push Plugin Repo to Git Remote
+push.plugin:
+	cd $(PLUGIN_DIR) && flutter clean
+	cd $(PLUGIN_DIR) && git add . && git commit -m 'Updated Plugin Project' && git push
+	cd $(PLUGIN_DIR) && flutter pub get
+	@cd /System/Library/Sounds && afplay Glass.aiff
+	@echo '--------------------------------------------------'
+	@echo "Finished Pushing Plugin ➡ " && date
+
+##
 ## [profile]     :   Run Mobile App for Profile Mode
 profile:
 	cd $(PROJECT_DIR) && cider bump build

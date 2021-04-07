@@ -43,14 +43,13 @@ class UserService extends GetxService {
   static bool get flatModeEnabled => to._hasFlatMode.val;
   static bool get pointShareEnabled => to._hasPointToShare.val;
   static bool get hasRequiredToConnect => to._userPermissions.value.hasLocation && to._userPermissions.value.hasLocalNetwork && to._hasUser.value;
-  
+
   // Contact Values
   static RxString get firstName => to._firstName;
   static RxString get lastName => to._lastName;
   static RxString get phone => to._phone;
   static RxString get email => to._email;
   static RxString get website => to._website;
-  static Rx<Uint8List> get picture => to._picture;
   static RxList<Contact_SocialTile> get socials => to._socials;
   static int get tileCount => to._socials.length;
 

@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/home/home_screen.dart';
-import 'package:sonr_app/modules/profile/profile_screen.dart';
 import 'package:sonr_app/modules/register/form_page.dart';
 import 'package:sonr_app/modules/transfer/transfer_screen.dart';
 import 'package:sonr_app/service/cards.dart';
@@ -29,15 +28,6 @@ class SonrRouting {
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
-        // ** Home Page ** //
-        GetPage(
-          name: '/home/received',
-          page: () => HomeScreen(),
-          transition: Transition.fadeIn,
-          curve: Curves.easeOut,
-          binding: HomeBinding(),
-        ),
-
         // ** Home Page - Back from Transfer ** //
         GetPage(
           name: '/home/transfer',
@@ -47,23 +37,11 @@ class SonrRouting {
           binding: HomeBinding(),
         ),
 
-        // ** Home Page - Back from Profile ** //
-        GetPage(
-          name: '/home/profile',
-          page: () => HomeScreen(),
-          transition: Transition.downToUp,
-          curve: Curves.easeOut,
-          binding: HomeBinding(),
-        ),
-
         // ** Register Page ** //
         GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
         GetPage(name: '/transfer', page: () => TransferScreen(), maintainState: false, transition: Transition.downToUp, curve: Curves.bounceOut),
-
-        // ** Profile Page ** //
-        GetPage(name: '/profile', page: () => ProfileScreen(), transition: Transition.upToDown, curve: Curves.easeIn, binding: ProfileBinding()),
       ];
 
   // ^ Services (Files, Contacts) ^ //

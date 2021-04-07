@@ -308,3 +308,4 @@ extension ProfileUtils on Profile {
     return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
   }
 }
+

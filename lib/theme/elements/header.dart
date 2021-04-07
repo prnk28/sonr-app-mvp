@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../theme.dart';
 
-enum _SonrDialogHeaderType { Title, Leading, Action, TwoButton, CloseAccept, Sliver }
+enum _SonrDialogHeaderType { Title, Leading, Action, TwoButton, CloseAccept }
 
 class SonrHeaderBar extends StatelessWidget {
   // Properties
@@ -79,30 +79,6 @@ class SonrHeaderBar extends StatelessWidget {
         action: ShapeButton.circle(onPressed: onAccept, icon: SonrIcon.accept));
   }
 
-  factory SonrHeaderBar.sliver(
-      {@required Widget leading,
-      @required Widget action,
-      @required Widget flexibleSpace,
-      pinned: true,
-      floating: true,
-      snap: true,
-      primary: true,
-      automaticallyImplyLeading: false,
-      expandedHeight: 285.0}) {
-    return SonrHeaderBar(
-        title: null,
-        type: _SonrDialogHeaderType.Sliver,
-        leading: leading,
-        action: action,
-        flexibleSpace: flexibleSpace,
-        pinned: pinned,
-        floating: floating,
-        snap: snap,
-        primary: primary,
-        automaticallyImplyLeading: automaticallyImplyLeading,
-        expandedHeight: expandedHeight);
-  }
-
   @override
   Widget build(BuildContext context) {
     // Initialize
@@ -124,23 +100,6 @@ class SonrHeaderBar extends StatelessWidget {
         break;
       case _SonrDialogHeaderType.CloseAccept:
         items = [leading, Expanded(child: Center(child: title)), action];
-        break;
-      case _SonrDialogHeaderType.Sliver:
-        return SliverAppBar(
-          pinned: pinned,
-          floating: floating,
-          snap: snap,
-          primary: primary,
-          automaticallyImplyLeading: automaticallyImplyLeading,
-          flexibleSpace: flexibleSpace,
-          toolbarHeight: kToolbarHeight + 32 * 2,
-          expandedHeight: expandedHeight,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[leading, Spacer(), action],
-          ),
-        );
         break;
     }
 
