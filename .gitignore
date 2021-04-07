@@ -35,7 +35,6 @@ Gemfile
 .pub-cache/
 .pub/
 build/
-plugins/
 
 # Android related
 **/android/**/gradle-wrapper.jar
