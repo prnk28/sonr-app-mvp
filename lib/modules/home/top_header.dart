@@ -1,94 +1,44 @@
 import 'dart:async';
-
-import 'package:sonr_app/theme/navigation/app_bar.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 
+// ^ Home Screen Header ^ //
 class HomeTopHeaderBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Neumorphic(
         style: NeumorphicStyle(
-            boxShape: NeumorphicBoxShape.path(TopBarPath()),
-            depth: UserService.isDarkMode ? 4 : 8,
-            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-            intensity: UserService.isDarkMode ? 0.45 : 0.85,
-            surfaceIntensity: 0.6),
+          boxShape: NeumorphicBoxShape.path(TopBarPath()),
+          depth: UserService.isDarkMode ? 4 : 8,
+          intensity: UserService.isDarkMode ? 0.45 : 0.85,
+          surfaceIntensity: 0.6,
+        ),
         child: Container(
             height: Get.height / 3.5,
             width: Get.width,
             decoration: BoxDecoration(gradient: SonrPalette.primary()),
             child: Stack(children: [
-              Align(alignment: Alignment.topCenter, child: _HomeAppbarTitle(defaultText: "Home")),
+              Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
             ])));
   }
 }
 
+// ^ Header Clipper for Neumorphic Path ^ //
 class TopBarPath extends NeumorphicPathProvider {
-  /// reverse the wave direction in vertical axis
-  bool reverse;
-
-  /// flip the wave direction horizontal axis
-  bool flip;
-
-  TopBarPath({this.reverse = false, this.flip = false});
-
   @override
   Path getPath(Size size) {
-    if (!reverse && !flip) {
-      Offset firstEndPoint = Offset(size.width * .5, size.height - 20);
-      Offset firstControlPoint = Offset(size.width * .25, size.height - 30);
-      Offset secondEndPoint = Offset(size.width, size.height - 50);
-      Offset secondControlPoint = Offset(size.width * .75, size.height - 10);
+    Offset firstEndPoint = Offset(size.width * .5, size.height - 20);
+    Offset firstControlPoint = Offset(size.width * .25, size.height - 30);
+    Offset secondEndPoint = Offset(size.width, size.height - 50);
+    Offset secondControlPoint = Offset(size.width * .75, size.height - 10);
 
-      final path = Path()
-        ..lineTo(0.0, size.height)
-        ..quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy)
-        ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
-        ..lineTo(size.width, 0.0)
-        ..close();
-      return path;
-    } else if (!reverse && flip) {
-      Offset firstEndPoint = Offset(size.width * .5, size.height - 20);
-      Offset firstControlPoint = Offset(size.width * .25, size.height - 10);
-      Offset secondEndPoint = Offset(size.width, size.height);
-      Offset secondControlPoint = Offset(size.width * .75, size.height - 30);
-
-      final path = Path()
-        ..lineTo(0.0, size.height - 30)
-        ..quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy)
-        ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
-        ..lineTo(size.width, 0.0)
-        ..close();
-      return path;
-    } else if (reverse && flip) {
-      Offset firstEndPoint = Offset(size.width * .5, 20);
-      Offset firstControlPoint = Offset(size.width * .25, 10);
-      Offset secondEndPoint = Offset(size.width, 0);
-      Offset secondControlPoint = Offset(size.width * .75, 30);
-
-      final path = Path()
-        ..lineTo(0, 30)
-        ..quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy)
-        ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
-        ..lineTo(size.width, size.height)
-        ..lineTo(0.0, size.height)
-        ..close();
-      return path;
-    } else {
-      Offset firstEndPoint = Offset(size.width * .5, 20);
-      Offset firstControlPoint = Offset(size.width * .25, 30);
-      Offset secondEndPoint = Offset(size.width, 50);
-      Offset secondControlPoint = Offset(size.width * .75, 10);
-
-      final path = Path()
-        ..quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy)
-        ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
-        ..lineTo(size.width, size.height)
-        ..lineTo(0.0, size.height)
-        ..close();
-      return path;
-    }
+    final path = Path()
+      ..lineTo(0.0, size.height)
+      ..quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy)
+      ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
+      ..lineTo(size.width, 0.0)
+      ..close();
+    return path;
   }
 
   @override
@@ -96,14 +46,14 @@ class TopBarPath extends NeumorphicPathProvider {
 }
 
 // ^ Dynamic App bar title for Lobby Size ^ //
-class _HomeAppbarTitle extends StatefulWidget {
+class _HomeHeaderTitle extends StatefulWidget {
   final String defaultText;
-  const _HomeAppbarTitle({Key key, this.defaultText}) : super(key: key);
+  const _HomeHeaderTitle({Key key, this.defaultText}) : super(key: key);
   @override
-  _HomeAppbarTitleState createState() => _HomeAppbarTitleState();
+  _HomeHeaderTitleState createState() => _HomeHeaderTitleState();
 }
 
-class _HomeAppbarTitleState extends State<_HomeAppbarTitle> {
+class _HomeHeaderTitleState extends State<_HomeHeaderTitle> {
   // Properties
   String text;
 
