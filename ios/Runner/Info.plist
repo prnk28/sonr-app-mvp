@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>HERECredentials</key>
+	<dict>
+    	<key>AccessKeyId</key>
+    		<string>WLCvm13SPXK4xSDMYbqWog</string>
+    	<key>AccessKeySecret</key>
+    		<string>qssKHphhuG2khFg_fTfyF0StoJJQzKMWIVRbBLkI7qko9BFTbi8U3ZxuPfndq3o9Ge6e9awG7_pQFcsJDDkikA</string>
+	</dict>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleDevelopmentRegion</key>
