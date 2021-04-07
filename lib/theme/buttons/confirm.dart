@@ -49,7 +49,7 @@ class ConfirmButton extends StatefulWidget {
   }) {
     // Build Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrPalette.critical(),
+        gradient: SonrPalette.neutral(),
         borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
@@ -63,8 +63,8 @@ class ConfirmButton extends StatefulWidget {
         defaultDecoration: defaultDecoration,
         confirmDecoration: confirmDecoration,
         onConfirmed: onConfirmed,
-        defaultChild: _buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
-        confirmChild: _buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
+        defaultChild: buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
+        confirmChild: buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
         tooltip: tooltip,
         width: width,
         padding: padding,
@@ -73,7 +73,7 @@ class ConfirmButton extends StatefulWidget {
   }
 
   // @ Helper Method to Build Icon View //
-  static Widget _buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
+  static Widget buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
     if (child != null) {
       return child;
     } else if (icon != null && text == null) {
@@ -144,13 +144,14 @@ class ConfirmButton extends StatefulWidget {
   _ConfirmButtonState createState() => _ConfirmButtonState();
 }
 
-enum ConfirmStatus { Default, Pressed, Pending, Confirmed }
+enum ConfirmStatus { Default, Pressed, Pending, Confirmed, Done }
 
 extension ConfirmStatusUtil on ConfirmStatus {
   bool get isDefault => this == ConfirmStatus.Default;
   bool get isPressed => this == ConfirmStatus.Pressed;
   bool get isPending => this == ConfirmStatus.Pending;
   bool get isConfirmed => this == ConfirmStatus.Confirmed;
+  bool get isDone => this == ConfirmStatus.Done;
 }
 
 class _ConfirmButtonState extends State<ConfirmButton> {
@@ -183,9 +184,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     return GestureDetector(
       onTapDown: (detail) {
         hasTapUp = false;
-        if (status.isDefault) {
+        if (status.isDefault || status.isPressed) {
           _handlePress();
-        } else if (status.isPending) {
+        } else {
           _handleConfirm();
         }
       },
@@ -214,16 +215,23 @@ class _ConfirmButtonState extends State<ConfirmButton> {
   Widget _buildChild() {
     if (status.isDefault || status.isPressed) {
       return Container(child: widget.defaultChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Default));
-    } else {
+    } else if (status.isPending || status.isConfirmed) {
       return Container(child: widget.confirmChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Confirmed));
+    } else {
+      return ConfirmButton.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Deleted.", null);
     }
   }
 
   BoxDecoration _buildDecoration() {
     if (status.isDefault || status.isPressed) {
       return widget.defaultDecoration;
-    } else {
+    } else if (status.isPending || status.isConfirmed) {
       return widget.confirmDecoration;
+    } else {
+      return BoxDecoration(
+          gradient: SonrPalette.critical(),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
     }
   }
 
@@ -253,6 +261,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     //haptic vibration
     HapticFeedback.heavyImpact();
     widget.onConfirmed();
+    _resetIfTapUp(ConfirmStatus.Done);
   }
 
   //used to stay pressed if no tap up
