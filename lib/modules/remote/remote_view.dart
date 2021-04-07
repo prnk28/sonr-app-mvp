@@ -52,52 +52,76 @@ class _RemoteInitialView extends GetView<RemoteController> {
                 hasScrollBody: false,
                 child: Column(
                   children: <Widget>[
-                    Column(children: [
-                      SonrText.header("Join Remote"),
+                    Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SonrText.header("Join Remote"),
 
-                      // Check for Keyboard Open
-                      controller.isJoinFieldTapped.value
-                          ? SonrText.normal("Enter lobby code here.", color: SonrColor.Black.withOpacity(0.7), size: 18)
-                          : LottieContainer(
-                              type: LottieBoard.JoinRemote,
-                              repeat: true,
-                              height: 150,
-                            ),
-                      GestureDetector(
-                        onTap: () => controller.handleJoinTap(),
-                        child: Neumorphic(
-                          padding: EdgeInsets.only(bottom: 8),
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          child: OpacityAnimatedWidget(
-                            duration: 400.milliseconds,
-                            enabled: controller.isJoinFieldTapped.value,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  child: TextField(onChanged: (value) => controller.firstWord(value), textInputAction: TextInputAction.next),
-                                  width: SonrStyle.viewSize.width / 4.2,
+                          // Check for Keyboard Open
+                          controller.isJoinFieldTapped.value
+                              ? SonrText.normal("Enter lobby code here.", color: SonrColor.Black.withOpacity(0.7), size: 18)
+                              : LottieContainer(
+                                  type: LottieBoard.JoinRemote,
+                                  repeat: true,
+                                  height: 150,
                                 ),
-                                Container(
-                                  child: TextField(onChanged: (value) => controller.secondWord(value), textInputAction: TextInputAction.next),
-                                  width: SonrStyle.viewSize.width / 4.2,
+                          GestureDetector(
+                            onTap: controller.handleJoinTap,
+                            child: Neumorphic(
+                              padding: EdgeInsets.only(bottom: 8),
+                              margin: EdgeInsets.symmetric(horizontal: 16),
+                              child: OpacityAnimatedWidget(
+                                duration: 400.milliseconds,
+                                enabled: controller.isJoinFieldTapped.value,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: TextField(
+                                        onChanged: (value) => controller.firstWord(value),
+                                        textInputAction: TextInputAction.next,
+                                        autofocus: controller.isJoinFieldTapped.value,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                            color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                                      ),
+                                      width: SonrStyle.viewSize.width / 4.2,
+                                    ),
+                                    Container(
+                                      child: TextField(
+                                          onChanged: (value) => controller.secondWord(value),
+                                          textInputAction: TextInputAction.next,
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+                                      width: SonrStyle.viewSize.width / 4.2,
+                                    ),
+                                    Container(
+                                      child: TextField(
+                                          onChanged: (value) => controller.thirdWord(value),
+                                          textInputAction: TextInputAction.done,
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+                                      width: SonrStyle.viewSize.width / 4.2,
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  child: TextField(onChanged: (value) => controller.thirdWord(value), textInputAction: TextInputAction.done),
-                                  width: SonrStyle.viewSize.width / 4.2,
-                                ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.all(8)),
-                      ColorButton.secondary(
-                        text: "Join",
-                        onPressed: () => controller.join(),
-                      ),
-                      Padding(padding: EdgeInsets.all(8)),
-                    ])
+                          Padding(padding: EdgeInsets.all(8)),
+                          ColorButton.secondary(
+                            text: "Join",
+                            onPressed: () => controller.join(),
+                          ),
+                          Padding(padding: EdgeInsets.all(8)),
+                        ])
                   ],
                 ),
               ),

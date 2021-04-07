@@ -32,11 +32,12 @@ class RemoteController extends GetxController {
 
   // ^ Handle Initial Join Tap
   handleJoinTap() {
-    isJoinFieldTapped(!isJoinFieldTapped.value);
+    isJoinFieldTapped(true);
   }
 
   // ^ Method to Join New Remote Lobby ^ //
   join() async {
+    isJoinFieldTapped(false);
     currentRemote(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
     _lobbyStream = LobbyService.listenToLobby(currentRemote.value);
     _lobbyStream.listen(_handleLobby);
