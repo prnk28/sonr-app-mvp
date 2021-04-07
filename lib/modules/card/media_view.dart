@@ -332,7 +332,10 @@ class _MediaCardInfo extends StatelessWidget {
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
               ConfirmButton.delete(
-                onConfirmed: () {},
+                onConfirmed: () {
+                  SonrOverlay.back();
+                  CardService.deleteCard(card);
+                },
                 defaultIcon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
                 defaultText: "Delete",
                 confirmIcon: SonrIcon.success,

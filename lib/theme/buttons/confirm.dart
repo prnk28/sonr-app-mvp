@@ -260,8 +260,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
     //haptic vibration
     HapticFeedback.heavyImpact();
-    widget.onConfirmed();
     _resetIfTapUp(ConfirmStatus.Done);
+    await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
+    widget.onConfirmed();
   }
 
   //used to stay pressed if no tap up
