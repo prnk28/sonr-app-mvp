@@ -11,6 +11,7 @@ class RemoteController extends GetxController {
   final currentInvite = Rx<AuthInvite>();
   final receivedCard = Rx<TransferCard>();
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
+  final isJoinFieldTapped = false.obs;
 
   // References
   LobbyStream _lobbyStream;
@@ -27,6 +28,11 @@ class RemoteController extends GetxController {
       _lobbyStream.close();
     }
     super.onClose();
+  }
+
+  // ^ Handle Initial Join Tap
+  handleJoinTap() {
+    isJoinFieldTapped(!isJoinFieldTapped.value);
   }
 
   // ^ Method to Join New Remote Lobby ^ //

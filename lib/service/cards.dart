@@ -36,7 +36,9 @@ class CardService extends GetxService {
     // Save Media to Device
     if (card.payload.isMedia) {
       var asset = await MediaService.saveTransfer(card.metadata);
-      card.metadata.id = asset.id;
+      if (asset != null) {
+        card.metadata.id = asset.id;
+      }
     }
 
     // Store in Database
@@ -98,13 +100,11 @@ class CardService extends GetxService {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();
-        Get.offNamed('/home/received');
       });
     } else {
       // Handle Animation Completed
       Future.delayed(1600.milliseconds, () {
         SonrOverlay.back();
-        Get.offNamed('/home/received');
       });
     }
   }

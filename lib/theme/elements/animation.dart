@@ -6,9 +6,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, SlideIn, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum LottieBoard {
-  David,
-}
+enum LottieBoard { David, JoinRemote }
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class AnimatedScale extends StatefulWidget {
@@ -330,7 +328,10 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
   _getPathFromBoard() {
     switch (widget.type) {
       case LottieBoard.David:
-        return "assets/images/david.json";
+        return "assets/lottie/david.json";
+        break;
+      case LottieBoard.JoinRemote:
+        return "assets/lottie/join-remote.json";
         break;
     }
   }
@@ -350,10 +351,10 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _splashPath = 'assets/animations/splash_screen.riv';
-  final String _tilePath = 'assets/animations/tile_preview.riv';
-  final String _notFoundPath = 'assets/animations/not_found.riv';
-  final String _documentsPath = 'assets/animations/documents.riv';
+  final String _splashPath = 'assets/rive/splash_screen.riv';
+  final String _tilePath = 'assets/rive/tile_preview.riv';
+  final String _notFoundPath = 'assets/rive/not_found.riv';
+  final String _documentsPath = 'assets/rive/documents.riv';
 
   // Properties
   Artboard _riveArtboard;
@@ -373,7 +374,9 @@ class _RiveContainer extends State<RiveContainer> {
 
             // Determine Animation by Tile Type
             artboard.addController(SimpleAnimation('Default'));
-            setState(() => _riveArtboard = artboard);
+            if (mounted) {
+              setState(() => _riveArtboard = artboard);
+            }
           }
         },
       );
@@ -388,7 +391,9 @@ class _RiveContainer extends State<RiveContainer> {
 
             // Determine Animation by Tile Type
             artboard.addController(SimpleAnimation('Default'));
-            setState(() => _riveArtboard = artboard);
+            if (mounted) {
+              setState(() => _riveArtboard = artboard);
+            }
           }
         },
       );
@@ -403,7 +408,9 @@ class _RiveContainer extends State<RiveContainer> {
 
             // Determine Animation by Tile Type
             artboard.addController(SimpleAnimation('Default'));
-            setState(() => _riveArtboard = artboard);
+            if (mounted) {
+              setState(() => _riveArtboard = artboard);
+            }
           }
         },
       );
@@ -433,7 +440,9 @@ class _RiveContainer extends State<RiveContainer> {
             else {
               artboard.addController(SimpleAnimation('Icon'));
             }
-            setState(() => _riveArtboard = artboard);
+            if (mounted) {
+              setState(() => _riveArtboard = artboard);
+            }
           }
         },
       );
