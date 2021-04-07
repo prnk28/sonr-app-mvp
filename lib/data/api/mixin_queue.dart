@@ -195,7 +195,6 @@ class TransferQueueItem {
           played.complete(true);
         }
       } else {
-        ("Peer Controller is not set");
         played.complete(false);
       }
     }
