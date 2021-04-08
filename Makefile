@@ -119,6 +119,8 @@ plugin.xcode:
 plugin.clean:
 	cd $(PLUGIN_DIR) && $(CLEAN)
 	cd $(PLUGIN_EXAMPLE_DIR) && $(CLEAN)
+	cd $(PLUGIN_DIR) && flutter pub get
+	cd $(PLUGIN_EXAMPLE_DIR) && flutter pub get
 
 
 ## push          :   Push Mobile and Plugin SubModule to Remote Repo
