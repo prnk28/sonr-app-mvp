@@ -2,7 +2,6 @@ export 'auth_view.dart';
 export 'card_view.dart';
 export 'flat_view.dart';
 
-import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 

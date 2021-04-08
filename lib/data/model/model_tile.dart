@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/profile/add_view.dart';
+import 'package:sonr_app/modules/profile/add_social.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/sonr_social.dart';

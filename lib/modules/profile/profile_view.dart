@@ -148,7 +148,19 @@ class _AvatarField extends GetView<ProfileController> {
             boxShape: NeumorphicBoxShape.circle(),
             depth: -10,
           ),
-          child: Obx(() => UserService.contact.value.profilePicture),
+          child: Obx(() => UserService.contact.value.hasPicture()
+              ? Container(
+                  width: 120,
+                  height: 120,
+                  child: CircleAvatar(
+                    backgroundImage: MemoryImage(UserService.contact.value.picture),
+                  ),
+                )
+              : Icon(
+                  Icons.insert_emoticon,
+                  size: 120,
+                  color: SonrColor.Black.withOpacity(0.5),
+                )),
         ),
       ),
     );

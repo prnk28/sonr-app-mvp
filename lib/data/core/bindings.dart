@@ -3,7 +3,7 @@ import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
-import 'package:sonr_app/modules/profile/tile_item.dart';
+import 'package:sonr_app/modules/profile/tile/tile_item.dart';
 import 'package:sonr_app/modules/remote/remote_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';

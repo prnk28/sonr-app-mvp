@@ -1,6 +1,7 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
 
+// ^ Edit Profile Details View ^ //
 class EditDetailsView extends GetView<ProfileController> {
   final String headerText;
   EditDetailsView({this.headerText = "Edit Details", Key key}) : super(key: key);
@@ -67,6 +68,7 @@ class EditDetailsView extends GetView<ProfileController> {
   }
 }
 
+// ^ Edit Profile Picture View ^ //
 class EditPictureView extends GetView<ProfileController> {
   final String headerText;
   EditPictureView({this.headerText = "Add Picture", Key key}) : super(key: key);
@@ -89,6 +91,36 @@ class EditPictureView extends GetView<ProfileController> {
                   PlainButton(icon: SonrIcon.accept, onPressed: controller.saveEditedDetails)
                 ]),
           ),
+        ),
+
+        // @ Window Content
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Neumorphic(
+                padding: EdgeInsets.all(10),
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.circle(),
+                  depth: -10,
+                ),
+                child: Obx(() => UserService.contact.value.hasPicture()
+                    ? Container(
+                        width: 120,
+                        height: 120,
+                        child: CircleAvatar(
+                          backgroundImage: MemoryImage(UserService.contact.value.picture),
+                        ),
+                      )
+                    : Icon(
+                        Icons.insert_emoticon,
+                        size: 120,
+                        color: SonrColor.Black.withOpacity(0.5),
+                      )),
+              ),
+            ),
+          ]),
         ),
       ]),
     );

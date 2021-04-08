@@ -69,6 +69,7 @@ class CameraView extends GetView<CameraController> {
           },
           onHorizontalDragUpdate: (details) {},
           child: CameraAwesome(
+            testMode: false,
             sensor: controller.sensor,
             zoom: controller.zoomNotifier,
             photoSize: controller.photoSize,
