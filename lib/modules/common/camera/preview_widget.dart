@@ -48,7 +48,7 @@ class MediaPreviewView extends StatelessWidget {
                         ),
                       ),
                 Container(
-                  padding: EdgeInsetsX.vertical(10),
+                  padding: EdgeWith.vertical(10),
                   margin: EdgeInsets.only(left: 10, right: 10),
                   alignment: Alignment.bottomCenter,
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [

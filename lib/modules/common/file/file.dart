@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
+const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
+
 // ^ Metadata Model Extensions ^ //
 extension MetadataFileUtils on Metadata {
   String get sizeString {
@@ -36,5 +38,15 @@ extension MetadataFileUtils on Metadata {
 extension MIMEFileUtils on MIME {
   String get asString {
     return this.type.toString().capitalizeFirst;
+  }
+}
+
+extension ProfileFileUtils on Profile {
+  SonrText get nameText {
+    return SonrText.bold(" ${this.firstName} ${this.lastName}", size: 16, color: Colors.grey[600]);
+  }
+
+  SonrIcon get platformIcon {
+    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
   }
 }

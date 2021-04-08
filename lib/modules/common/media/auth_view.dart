@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/data.dart';
+import 'media.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -42,7 +42,7 @@ class MediaAuthView extends StatelessWidget {
                   : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
               Row(children: [
                 SonrText.gradient(card.metadata.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                SonrText.normal("   ${card.inviteSizeString}", size: 18)
+                SonrText.normal("   ${card.metadata.sizeString}", size: 18)
               ]),
             ]),
           ]),

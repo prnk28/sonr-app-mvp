@@ -76,7 +76,7 @@ class FormPage extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: ColorButton.primary(
-                          margin: EdgeInsetsX.horizontal(88),
+                          margin: EdgeWith.horizontal(88),
                           icon: SonrIcon.accept,
                           text: "Get Started",
                           onPressed: () {

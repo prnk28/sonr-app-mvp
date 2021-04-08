@@ -140,11 +140,11 @@ extension SonrOffset on Offset {
 
     // Top of View
     if (diffDesg == Position_Designation.NNE || diffDesg == Position_Designation.NEbN || diffDesg == Position_Designation.NbE) {
-      return Offset(180, position.proximity.topOffset);
+      return Offset(180, position.topOffset);
     } else if (diffDesg == Position_Designation.NE) {
-      return Offset(270, position.proximity.topOffset + 20);
+      return Offset(270, position.topOffset + 20);
     } else if (diffDesg == Position_Designation.N) {
-      return Offset(90, position.proximity.topOffset + 20);
+      return Offset(90, position.topOffset + 20);
     } else {
       return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZonePathProvider.proximityMaxHeight(position.proximity), calcPos.dy).toDouble());
     }

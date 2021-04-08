@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:sonr_app/modules/common/contact/contact.dart';
-import 'package:sonr_app/data/data.dart';
 import '../../theme/theme.dart';
 
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
@@ -254,7 +253,7 @@ class _FlatModeAnimation {
           alignment: Alignment.center,
         );
       } else if (type == FlatModeTransition.Standby) {
-        return Align(alignment: Alignment.bottomCenter, child: Container(child: currentChild, padding: EdgeInsetsX.bottom(48)));
+        return Align(alignment: Alignment.bottomCenter, child: Container(child: currentChild, padding: EdgeWith.bottom(48)));
       } else if (type == FlatModeTransition.SlideDown) {
         return currentChild;
       } else if (type == FlatModeTransition.SlideInSingle) {

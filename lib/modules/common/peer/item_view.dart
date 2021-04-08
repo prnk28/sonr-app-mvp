@@ -1,5 +1,4 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
 import 'peer.dart';
 
 // ^ PeerListItem for Remote View ^ //
@@ -18,7 +17,7 @@ class _PeerListItemState extends State<PeerListItem> {
     return Column(
       children: [
         Neumorphic(
-            margin: EdgeInsetsX.horizontal(8),
+            margin: EdgeWith.horizontal(8),
             child: ExpansionTile(
               backgroundColor: Colors.transparent,
               collapsedBackgroundColor: Colors.transparent,

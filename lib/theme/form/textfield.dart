@@ -3,9 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/model/model_register.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
+
+enum TextInputValidStatus { None, Valid, Invalid }
+
+extension TextInputValidStatusUtils on TextInputValidStatus {
+  static TextInputValidStatus fromValidBool(bool val) {
+    if (val) {
+      return TextInputValidStatus.Valid;
+    } else {
+      return TextInputValidStatus.Invalid;
+    }
+  }
+
+  static TextInputValidStatus fromInvalidBool(bool val) {
+    if (val) {
+      return TextInputValidStatus.Invalid;
+    } else {
+      return TextInputValidStatus.Valid;
+    }
+  }
+}
 
 // ^ Builds Neumorphic Text Field ^ //
 class SonrTextField extends StatelessWidget {

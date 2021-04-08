@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
 
 // ^ Lobby Title View ^ //
 class LobbyTitleView extends StatefulWidget {
@@ -20,17 +19,17 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
   Widget build(BuildContext context) {
     return Column(children: [
       // Build Title
-      widget.title != '' ? Padding(padding: EdgeInsetsX.top(8)) : Container(),
+      widget.title != '' ? Padding(padding: EdgeWith.top(8)) : Container(),
       widget.title != ''
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SonrIcon.location, Padding(padding: EdgeInsetsX.right(16)), SonrText.subtitle(widget.title)])
+              children: [SonrIcon.location, Padding(padding: EdgeWith.right(16)), SonrText.subtitle(widget.title)])
           : Container(),
 
       // Build Toggle View
       Container(
         padding: EdgeInsets.only(top: 8),
-        margin: EdgeInsetsX.horizontal(24),
+        margin: EdgeWith.horizontal(24),
         child: NeumorphicToggle(
           duration: 100.milliseconds,
           style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),

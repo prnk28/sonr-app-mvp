@@ -42,7 +42,7 @@ class LocalLobbyView extends StatelessWidget {
 
             // @ Compass View
             Padding(
-              padding: EdgeInsetsX.bottom(32.0),
+              padding: EdgeWith.bottom(32.0),
               child: GestureDetector(
                 onTap: () {
                   controller.toggleShifting();

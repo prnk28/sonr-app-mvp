@@ -42,7 +42,7 @@ class _CardGridToggle extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 8),
-      margin: EdgeInsetsX.horizontal(24),
+      margin: EdgeWith.horizontal(24),
       child: NeumorphicToggle(
         style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
         selectedIndex: controller.toggleIndex.value,

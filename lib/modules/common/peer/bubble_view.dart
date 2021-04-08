@@ -1,7 +1,6 @@
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
 import 'peer.dart';
 
 const double K_BUBBLE_SIZE = 80;
@@ -78,7 +77,7 @@ class PeerDetailsView extends StatelessWidget {
                                 color: Colors.white,
                                 size: 20,
                               ),
-                              Obx(() => SonrText(" " + controller.peerVector.value.facing.direction,
+                              Obx(() => SonrText(" " + controller.peerVector.value.data.directionString,
                                   weight: FontWeight.w300, size: 20, key: key, color: Colors.white))
                             ]),
                           ))),

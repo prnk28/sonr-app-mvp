@@ -174,3 +174,34 @@ class _FileCardInfo extends StatelessWidget {
         ));
   }
 }
+
+// ^ Payload Model Extensions ^ //
+extension PayloadUtils on Payload {
+  FlutterGradientNames get gradientName {
+    return [
+      FlutterGradientNames.itmeoBranding,
+      FlutterGradientNames.norseBeauty,
+      FlutterGradientNames.summerGames,
+      FlutterGradientNames.healthyWater,
+      FlutterGradientNames.frozenHeat,
+      FlutterGradientNames.mindCrawl,
+      FlutterGradientNames.seashore
+    ].random();
+  }
+
+  String get asString {
+    if (this == Payload.PDF) {
+      return this.toString();
+    }
+    return this.toString().capitalizeFirst;
+  }
+
+  bool get isFile {
+    return this != Payload.UNDEFINED && this != Payload.CONTACT && this != Payload.URL;
+  }
+
+  bool get isMedia {
+    return this == Payload.MEDIA;
+  }
+}
+

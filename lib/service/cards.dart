@@ -36,7 +36,7 @@ class CardService extends GetxService {
   // ^ Add New Card to Database ^ //
   static addCard(TransferCard card) async {
     // Save Media to Device
-    if (card.payload.isMedia) {
+    if (card.payload == Payload.MEDIA) {
       var asset = await MediaService.saveTransfer(card.metadata);
       if (asset != null) {
         card.metadata.id = asset.id;

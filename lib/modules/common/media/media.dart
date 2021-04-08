@@ -40,3 +40,13 @@ extension MIMEMimeUtils on MIME {
     return this.type.toString().capitalizeFirst;
   }
 }
+
+extension ProfileMediaUtils on Profile {
+  SonrText get nameText {
+    return SonrText.bold(" ${this.firstName} ${this.lastName}", size: 16, color: Colors.grey[600]);
+  }
+
+  SonrIcon get platformIcon {
+    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
+  }
+}

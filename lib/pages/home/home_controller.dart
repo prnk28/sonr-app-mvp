@@ -5,7 +5,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
+
 
 class HomeController extends GetxController {
   // Properties

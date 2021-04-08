@@ -1,5 +1,4 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
 import 'settings_controller.dart';
 
 class SettingsSheet extends StatelessWidget {
@@ -21,7 +20,7 @@ class SettingsSheet extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: SonrText.header("Settings", size: 45),
                     ),
-                    Padding(padding: EdgeInsetsX.top(24)),
+                    Padding(padding: EdgeWith.top(24)),
 
                     // @ Dark Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -38,7 +37,7 @@ class SettingsSheet extends StatelessWidget {
                         onChanged: (val) => controller.setDarkMode(val),
                       )
                     ]),
-                    Padding(padding: EdgeInsetsX.top(16)),
+                    Padding(padding: EdgeWith.top(16)),
 
                     // @ Flat Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -55,7 +54,7 @@ class SettingsSheet extends StatelessWidget {
                         onChanged: (val) => controller.setFlatMode(val),
                       )
                     ]),
-                    Padding(padding: EdgeInsetsX.top(16)),
+                    Padding(padding: EdgeWith.top(16)),
 
                     // @ PointShare Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -81,7 +80,7 @@ class SettingsSheet extends StatelessWidget {
                       alignment: Alignment.topCenter,
                       child: SonrText.light("Alpha - 0.9.2", size: 16),
                     ),
-                    Padding(padding: EdgeInsetsX.top(16)),
+                    Padding(padding: EdgeWith.top(16)),
                   ]),
                 ))
           ]),

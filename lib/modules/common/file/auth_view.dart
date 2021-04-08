@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/data/data.dart';
+import 'file.dart';
 
 // ^ File Invite Builds from Invite Protobuf ^ //
 class FileAuthView extends StatelessWidget {
@@ -56,7 +56,7 @@ class FileAuthView extends StatelessWidget {
                           : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
                       Row(children: [
                         SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                        SonrText.normal("   ${card.metadata.size.sizeText()}", size: 18)
+                        SonrText.normal("   ${card.metadata.sizeString}", size: 18)
                       ]),
                     ]),
                   ]),

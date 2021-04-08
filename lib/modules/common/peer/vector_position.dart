@@ -215,13 +215,13 @@ class VectorPosition {
 
     // Top of View
     if (range == VectorPositionRange.Direct || range == VectorPositionRange.CloseRight || range == VectorPositionRange.CloseLeft) {
-      return Offset(180, data.proximity.topOffset);
+      return Offset(180, data.topOffset);
     } else if (range == VectorPositionRange.FarRight) {
-      return Offset(270, data.proximity.topOffset + 20);
+      return Offset(270, data.topOffset + 20);
     } else if (range == VectorPositionRange.FarLeft) {
-      return Offset(90, data.proximity.topOffset + 20);
+      return Offset(90, data.topOffset + 20);
     } else {
-      return Offset(340, data.proximity.topOffset + 20);
+      return Offset(340, data.topOffset + 20);
     }
   }
 

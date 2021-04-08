@@ -6,7 +6,6 @@ export 'vector_position.dart';
 import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/data/data.dart';
 
 // ^ Platform Model Extensions ^ //
 extension PlatformUtils on Platform {
@@ -27,14 +26,14 @@ extension PlatformUtils on Platform {
 }
 
 // ^ Proximity Model Extensions ^ //
-extension ProximityUtils on Position_Proximity {
+extension PositionUtils on Position {
   double get maxHeight {
     // Bottom Zone
-    if (this == Position_Proximity.Immediate) {
+    if (this.proximity == Position_Proximity.Immediate) {
       return 235;
     }
     // Middle Zone
-    else if (this == Position_Proximity.Near) {
+    else if (this.proximity == Position_Proximity.Near) {
       return 150;
     }
     // Top Zone
@@ -45,17 +44,38 @@ extension ProximityUtils on Position_Proximity {
 
   double get topOffset {
     // Bottom Zone
-    if (this == Position_Proximity.Immediate) {
+    if (this.proximity == Position_Proximity.Immediate) {
       return 185;
     }
     // Middle Zone
-    else if (this == Position_Proximity.Near) {
+    else if (this.proximity == Position_Proximity.Near) {
       return 100;
     }
     // Top Zone
     else {
       return 25;
     }
+  }
+
+  String get directionString {
+    // Calculated
+    var adjustedDegrees = this.heading.round();
+    final unit = "°";
+
+    // @ Convert To String
+    if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
+      return "0" + "0" + adjustedDegrees.toString() + unit;
+    } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
+      return "0" + adjustedDegrees.toString() + unit;
+    } else {
+      return adjustedDegrees.toString() + unit;
+    }
+  }
+
+  String get cardinalValueString {
+    var adjustedDesignation = ((this.heading.round() / 11.25) + 0.25).toInt();
+    var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];
+    return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }
 
@@ -119,17 +139,5 @@ extension WidgetUtils on Peer {
               color: SonrColor.Black.withOpacity(0.5),
             ),
     );
-  }
-}
-
-// ^ Position Designation Extensions ^ //
-extension DesignationUtils on Position_Designation {
-  bool isFacing(Position_Proximity prox) {
-    return this == Position_Designation.NNE ||
-        this == Position_Designation.NEbN ||
-        this == Position_Designation.NbE ||
-        this == Position_Designation.NE ||
-        this == Position_Designation.NNE ||
-        this == Position_Designation.N;
   }
 }

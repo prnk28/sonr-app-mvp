@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/common/media/queue_view.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/modules/share/option_widget.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -35,7 +34,7 @@ class ShareButton extends GetView<ShareController> {
 class _DefaultView extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: SonrIcon.send, padding: EdgeInsetsX.vertical(8));
+    return Container(child: SonrIcon.send, padding: EdgeWith.vertical(8));
   }
 }
 
