@@ -11,8 +11,7 @@ import 'package:sonr_app/theme/theme.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put<CameraController>(CameraController());
-    Get.create<TransferCardController>(() => TransferCardController());
+    Get.lazyPut<CameraController>(() => CameraController());
   }
 }
 

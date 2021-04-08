@@ -5,9 +5,8 @@ import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'card_controller.dart';
 
-class FileCard extends GetWidget<TransferCardController> {
+class FileCard extends StatelessWidget {
   // References
   final CardType type;
   final AuthInvite invite;
@@ -32,10 +31,10 @@ class FileCard extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _FileInviteView(card, controller, invite);
+        return _FileInviteView(card, invite);
         break;
       case CardType.GridItem:
-        return _FileItemView(cardItem, controller);
+        return _FileItemView(cardItem);
       default:
         return Container();
         break;
@@ -47,8 +46,7 @@ class FileCard extends GetWidget<TransferCardController> {
 class _FileInviteView extends StatelessWidget {
   final TransferCard card;
   final AuthInvite invite;
-  final TransferCardController controller;
-  _FileInviteView(this.card, this.controller, this.invite);
+  _FileInviteView(this.card, this.invite);
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +133,8 @@ class _FileInviteView extends StatelessWidget {
 // ^ TransferCard Media Item Details ^ //
 class _FileItemView extends StatelessWidget {
   final TransferCardItem card;
-  final TransferCardController controller;
 
-  _FileItemView(this.card, this.controller);
+  _FileItemView(this.card);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -188,7 +185,9 @@ class _FileItemView extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: ShapeButton.circle(
                               icon: SonrIcon.info,
-                              onPressed: () => controller.showCardInfo(_FileCardInfo(card)),
+                              onPressed: () {
+                                SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
+                              },
                               shadowLightColor: Colors.black38,
                             )),
                       ),

@@ -1,3 +1,6 @@
+import 'package:sonr_app/common/card/contact_view.dart';
+import 'package:sonr_app/common/card/file_view.dart';
+import 'package:sonr_app/common/media/card_view.dart';
 import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';

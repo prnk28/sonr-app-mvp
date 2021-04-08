@@ -1,5 +1,6 @@
 export '../data/api/mixin_queue.dart';
 export '../data/model/model_tile.dart';
+export '../data/model/model_card.dart';
 export '../data/api/api_models.dart';
 export '../data/api/api_vector.dart';
 export '../data/api/api_primitive.dart';
@@ -12,7 +13,6 @@ export '../service/sonr.dart';
 export '../service/cards.dart';
 export '../service/user.dart';
 export 'package:flutter/services.dart';
-export 'package:sonr_app/common/card/card_controller.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
@@ -40,9 +40,9 @@ export 'elements/animation.dart';
 export 'elements/glass.dart';
 export 'elements/painter.dart';
 export 'elements/sheet.dart';
-export 'elements/overlay.dart';
+export '../modules/overlay/overlay.dart';
 export 'elements/form.dart';
-export 'elements/flat.dart';
+export '../modules/overlay/flat_overlay.dart';
 
 // UI Packages
 export 'package:flutter_neumorphic/flutter_neumorphic.dart';

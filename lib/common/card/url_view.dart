@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'card_controller.dart';
 
-class URLCard extends GetWidget<TransferCardController> {
+class URLCard extends StatelessWidget {
   // References
   final CardType type;
   final AuthInvite invite;
@@ -27,7 +26,7 @@ class URLCard extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _URLInviteView(card, controller, invite);
+        return _URLInviteView(card, invite);
         break;
       case CardType.GridItem:
         return _URLItemView(card);
@@ -71,10 +70,9 @@ class _URLItemView extends StatelessWidget {
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
 class _URLInviteView extends StatelessWidget {
-  final TransferCardController controller;
   final TransferCard card;
   final AuthInvite invite;
-  _URLInviteView(this.card, this.controller, this.invite);
+  _URLInviteView(this.card, this.invite);
 
   @override
   Widget build(BuildContext context) {
@@ -106,8 +104,7 @@ class _URLInviteView extends StatelessWidget {
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
             invite.from.profile.hasLastName()
-                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
-                    size: 32)
+                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
                 : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
             Center(child: SonrText.gradient("Website Link", FlutterGradientNames.magicRay, size: 22)),
           ]),

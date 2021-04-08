@@ -1,10 +1,12 @@
 import 'package:sonr_app/theme/theme.dart';
 
+import 'settings_controller.dart';
+
 class SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetX<_SettingsSheetController>(
-      init: _SettingsSheetController(),
+    return GetX<SettingsController>(
+      init: SettingsController(),
       builder: (controller) {
         return GlassContainer(
           height: Get.height / 2,
@@ -86,44 +88,5 @@ class SettingsSheet extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-class _SettingsSheetController extends GetxController {
-  final isDarkModeEnabled = UserService.isDarkMode.obs;
-  final isFlatModeEnabled = UserService.flatModeEnabled.obs;
-  final isPointToShareEnabled = UserService.pointShareEnabled.obs;
-
-  setDarkMode(bool val) {
-    isDarkModeEnabled(val);
-    UserService.toggleDarkMode();
-  }
-
-  setFlatMode(bool val) {
-    isFlatModeEnabled(val);
-    UserService.toggleFlatMode();
-  }
-
-  setPointShare(bool val) {
-    if (val) {
-      // Overlay Prompt
-      SonrOverlay.question(
-              barrierDismissible: false,
-              title: "Wait!",
-              description: "Point To Share is still experimental, performance may not be stable. \n Do you still want to continue?",
-              acceptTitle: "Continue",
-              declineTitle: "Cancel")
-          .then((value) {
-        // Check Result
-        if (value) {
-          isPointToShareEnabled(true);
-          UserService.togglePointToShare();
-        } else {
-          Get.back();
-        }
-      });
-    } else {
-      UserService.togglePointToShare();
-    }
   }
 }

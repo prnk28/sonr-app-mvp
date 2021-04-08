@@ -4,9 +4,8 @@ import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'card_controller.dart';
 
-class ContactCard extends GetWidget<TransferCardController> {
+class ContactCard extends StatelessWidget {
   // References
   final CardType type;
   final AuthInvite invite;
@@ -43,16 +42,16 @@ class ContactCard extends GetWidget<TransferCardController> {
   Widget build(BuildContext context) {
     switch (type) {
       case CardType.Invite:
-        return _ContactInviteView(card, invite, controller, false);
+        return _ContactInviteView(card, invite, false);
         break;
       case CardType.InviteFlat:
         return _ContactFlatView(contact, scale);
         break;
       case CardType.Reply:
-        return _ContactInviteView(card, invite, controller, true);
+        return _ContactInviteView(card, invite, true);
         break;
       case CardType.GridItem:
-        return _ContactItemView(cardItem, controller);
+        return _ContactItemView(cardItem);
         break;
       default:
         return Container();
@@ -154,11 +153,10 @@ class _ContactFlatView extends StatelessWidget {
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
 class _ContactInviteView extends StatelessWidget {
-  final TransferCardController controller;
   final TransferCard card;
   final AuthInvite invite;
   final bool isReply;
-  _ContactInviteView(this.card, this.invite, this.controller, this.isReply);
+  _ContactInviteView(this.card, this.invite, this.isReply);
 
   @override
   Widget build(BuildContext context) {
@@ -216,10 +214,11 @@ class _ContactInviteView extends StatelessWidget {
             ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Decline"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
-              onPressed: () {
+              onPressed: () async {
                 SonrOverlay.back();
                 if (!isReply) {
-                  controller.promptSendBack(invite, card);
+                  var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
+                  CardService.handleInviteResponse(true, invite, card, sendBackContact: result);
                 } else {
                   CardService.handleInviteResponse(true, invite, card, sendBackContact: false);
                 }
@@ -238,8 +237,7 @@ class _ContactInviteView extends StatelessWidget {
 // ^ TransferCard Contact Item Details ^ //
 class _ContactItemView extends StatelessWidget {
   final TransferCardItem card;
-  final TransferCardController controller;
-  _ContactItemView(this.card, this.controller);
+  _ContactItemView(this.card);
   @override
   Widget build(BuildContext context) {
     Contact contact = card.contact;
