@@ -71,7 +71,7 @@ class EditDetailsView extends GetView<ProfileController> {
 // ^ Edit Profile Picture View ^ //
 class EditPictureView extends GetView<ProfileController> {
   final String headerText;
-  EditPictureView({this.headerText = "Add Picture", Key key}) : super(key: key);
+  EditPictureView({this.headerText = "Edit Picture", Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,29 +97,33 @@ class EditPictureView extends GetView<ProfileController> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Neumorphic(
-                padding: EdgeInsets.all(10),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  depth: -10,
-                ),
-                child: Obx(() => UserService.contact.value.hasPicture()
-                    ? Container(
-                        width: 120,
-                        height: 120,
-                        child: CircleAvatar(
-                          backgroundImage: MemoryImage(UserService.contact.value.picture),
-                        ),
-                      )
-                    : Icon(
-                        Icons.insert_emoticon,
-                        size: 120,
-                        color: SonrColor.Black.withOpacity(0.5),
-                      )),
-              ),
-            ),
+            GetX<ProfilePictureController>(
+                init: ProfilePictureController(),
+                builder: (pictureController) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Neumorphic(
+                      padding: EdgeInsets.all(10),
+                      style: NeumorphicStyle(
+                        boxShape: NeumorphicBoxShape.circle(),
+                        depth: -10,
+                      ),
+                      child: Obx(() => UserService.contact.value.hasPicture()
+                          ? Container(
+                              width: 120,
+                              height: 120,
+                              child: CircleAvatar(
+                                backgroundImage: MemoryImage(UserService.contact.value.picture),
+                              ),
+                            )
+                          : Icon(
+                              Icons.insert_emoticon,
+                              size: 120,
+                              color: SonrColor.Black.withOpacity(0.5),
+                            )),
+                    ),
+                  );
+                }),
           ]),
         ),
       ]),

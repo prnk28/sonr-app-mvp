@@ -49,11 +49,6 @@ class ProfileController extends GetxController {
     status(ProfileViewStatus.Viewing);
   }
 
-  // ^ Completed Editing Picture ^ //
-  void saveEditedPicture(MediaFile file) async {
-    UserService.setPicture(await file.toUint8List());
-  }
-
   // ^ Completed Editing Details ^ //
   void saveEditedDetails() {
     // Update Values in Profile Controller
