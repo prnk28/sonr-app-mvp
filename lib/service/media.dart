@@ -21,7 +21,7 @@ class MediaService extends GetxService {
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
-  final _allMedia = Rx<MediaAlbum>();
+  final _allMedia = Rx<MediaAlbum>(MediaAlbum.blank());
 
   // Properties
   static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allMedia;

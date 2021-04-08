@@ -13,27 +13,34 @@ const K_ALBUM_PAGE_SIZE = 40;
 class MediaAlbum {
   final AssetPathEntity data;
   // Properties
-  bool isAll;
+  bool isAll = false;
+  bool get isEmpty => assets.length == 0;
   var assets = <MediaItem>[];
   String name = "";
   int count = 0;
   int currentPage = 0;
   int totalPages = 0;
 
+  factory MediaAlbum.blank() {
+    return MediaAlbum(null);
+  }
+
   // * Constructer * //
   MediaAlbum(this.data) {
-    this.isAll = data.isAll;
-    this.name = data.name;
-    this.count = data.assetCount;
-    this.totalPages = (data.assetCount / K_ALBUM_PAGE_SIZE).ceil();
+    if (this.data != null) {
+      this.isAll = data.isAll;
+      this.name = data.name;
+      this.count = data.assetCount;
+      this.totalPages = (data.assetCount / K_ALBUM_PAGE_SIZE).ceil();
 
-    // Items on Range
-    data.getAssetListRange(start: 0, end: 100).then((items) {
-      // Iterate through Items
-      items.forEach((element) {
-        assets.add(MediaItem(element, items.indexOf(element)));
+      // Items on Range
+      data.getAssetListRange(start: 0, end: 100).then((items) {
+        // Iterate through Items
+        items.forEach((element) {
+          assets.add(MediaItem(element, items.indexOf(element)));
+        });
       });
-    });
+    }
   }
 }
 
@@ -164,7 +171,7 @@ class MediaFile {
     return MediaFile(File(path), Uint8List(0), isVideo, duration);
   }
 
-  Future<Uint8List> toUint8List() async{
+  Future<Uint8List> toUint8List() async {
     return await _file.readAsBytes();
   }
 }

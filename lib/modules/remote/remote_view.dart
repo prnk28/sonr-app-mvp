@@ -48,6 +48,7 @@ class _RemoteInitialView extends GetView<RemoteController> {
           width: SonrStyle.viewSize.width,
           height: SonrStyle.viewSize.height,
           child: CustomScrollView(
+            physics: NeverScrollableScrollPhysics(),
             slivers: [
               SliverFillRemaining(
                 hasScrollBody: false,
@@ -58,23 +59,23 @@ class _RemoteInitialView extends GetView<RemoteController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Title
                           SonrText.header("Join Remote"),
 
-                          // Check for Keyboard Open
+                          // Check for Button Tap
                           controller.isJoinFieldTapped.value
-                              ? SonrText.normal("Enter lobby code here.", color: SonrColor.Black.withOpacity(0.7), size: 18)
+                              ? SonrText.normal("Enter lobby code below.", color: SonrColor.Black.withOpacity(0.7), size: 18)
                               : LottieContainer(
                                   type: LottieBoard.JoinRemote,
                                   repeat: true,
                                   height: 150,
                                 ),
-                          GestureDetector(
-                            onTap: controller.handleJoinTap,
-                            child: Neumorphic(
-                                padding: EdgeInsets.only(bottom: 8),
-                                margin: EdgeInsets.symmetric(horizontal: 16),
-                                child: controller.isJoinFieldTapped.value ? _buildTextFieldView() : SonrText.subtitle("Enter Code")),
-                          ),
+                          Padding(padding: EdgeInsets.all(8)),
+
+                          // Swap Between Button and Text Field View
+                          controller.isJoinFieldTapped.value
+                              ? _RemoteTextCodeField()
+                              : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Enter Code"),
                           Padding(padding: EdgeInsets.all(8)),
                         ])
                   ],
@@ -84,39 +85,60 @@ class _RemoteInitialView extends GetView<RemoteController> {
           ),
         ));
   }
+}
 
-  Widget _buildTextFieldView() {
-    return OpacityAnimatedWidget(
-      duration: 400.milliseconds,
-      enabled: controller.isJoinFieldTapped.value,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: TextField(
-              onChanged: (value) => controller.firstWord(value),
-              textInputAction: TextInputAction.next,
-              autofocus: controller.isJoinFieldTapped.value,
-              style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
-            ),
-            width: SonrStyle.viewSize.width / 4.2,
-          ),
-          Container(
-            child: TextField(
-                onChanged: (value) => controller.secondWord(value),
+class _RemoteTextCodeField extends GetView<RemoteController> {
+  @override
+  Widget build(BuildContext context) {
+    return Neumorphic(
+      padding: EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      child: OpacityAnimatedWidget(
+        duration: 400.milliseconds,
+        enabled: controller.isJoinFieldTapped.value,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 4),
+              child: TextField(
+                showCursor: false,
+                autocorrect: false,
+                onChanged: (value) => controller.firstWord(value),
                 textInputAction: TextInputAction.next,
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
-            width: SonrStyle.viewSize.width / 4.2,
-          ),
-          Container(
-            child: TextField(
-                onSubmitted: (val) => controller.join(),
-                onChanged: (value) => controller.thirdWord(value),
-                textInputAction: TextInputAction.done,
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
-            width: SonrStyle.viewSize.width / 4.2,
-          ),
-        ],
+                textAlign: TextAlign.center,
+                autofocus: controller.isJoinFieldTapped.value,
+                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+              ),
+              width: SonrStyle.viewSize.width / 4.2,
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 2, right: 2),
+              child: TextField(
+                  showCursor: false,
+                  autocorrect: false,
+                  onChanged: (value) => controller.secondWord(value),
+                  textAlign: TextAlign.center,
+                  textInputAction: TextInputAction.next,
+                  style:
+                      TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+              width: SonrStyle.viewSize.width / 4.2,
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 4),
+              child: TextField(
+                  showCursor: false,
+                  autocorrect: false,
+                  onSubmitted: (val) => controller.join(),
+                  onChanged: (value) => controller.thirdWord(value),
+                  textAlign: TextAlign.center,
+                  textInputAction: TextInputAction.done,
+                  style:
+                      TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+              width: SonrStyle.viewSize.width / 4.2,
+            ),
+          ],
+        ),
       ),
     );
   }
