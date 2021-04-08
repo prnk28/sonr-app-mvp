@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:sonr_app/common/card/contact_view.dart';
+import 'package:sonr_app/common/contact/contact.dart';
 
 import '../../theme/theme.dart';
 
@@ -56,16 +56,16 @@ class _FlatModeView extends StatelessWidget {
   // # Build Stack Child View for Flat View //
   Widget _buildChild(_FlatModeController controller) {
     if (controller.isIncoming) {
-      return ContactCard.flat(controller.received.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+      return ContactFlatCard(controller.received.value, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
     } else if (controller.isPending) {
       return Container(key: ValueKey<FlatModeState>(controller.status.value));
     } else if (controller.isReceiving) {
-      return ContactCard.flat(UserService.current.contact, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
+      return ContactFlatCard(UserService.current.contact, key: ValueKey<FlatModeState>(controller.status.value), scale: 0.9);
     } else {
       return Draggable(
         key: ValueKey<FlatModeState>(controller.status.value),
-        child: ContactCard.flat(UserService.current.contact, scale: 0.9),
-        feedback: ContactCard.flat(UserService.current.contact, scale: 0.9),
+        child: ContactFlatCard(UserService.current.contact, scale: 0.9),
+        feedback: ContactFlatCard(UserService.current.contact, scale: 0.9),
         childWhenDragging: Container(),
         axis: Axis.vertical,
         onDragUpdate: (details) {

@@ -9,7 +9,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/common/media/sheet_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
-import 'capture_preview.dart';
+import 'preview_widget.dart';
 
 enum CameraViewType { Default, Preview }
 

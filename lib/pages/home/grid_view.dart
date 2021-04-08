@@ -1,5 +1,5 @@
-import 'package:sonr_app/common/card/contact_view.dart';
 import 'package:sonr_app/common/card/file_view.dart';
+import 'package:sonr_app/common/contact/contact.dart';
 import 'package:sonr_app/common/media/card_view.dart';
 import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
@@ -102,7 +102,7 @@ class _CardGridWidget extends GetView<HomeController> {
     if (item.payload == Payload.MEDIA) {
       return MediaCard.item(item);
     } else if (item.payload == Payload.CONTACT) {
-      return ContactCard.item(item);
+      return ContactCardView(item);
     } else {
       return FileCard.item(item);
     }

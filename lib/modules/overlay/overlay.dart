@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/common/card/contact_view.dart';
+import 'package:sonr_app/common/contact/contact.dart';
 import 'package:sonr_app/common/card/file_view.dart';
 import 'package:sonr_app/common/card/url_view.dart';
 import 'package:sonr_app/common/media/card_view.dart';
@@ -174,7 +174,7 @@ class InviteReplyOverlayView extends StatelessWidget {
       if (invite.payload == Payload.MEDIA) {
         view = MediaCard.invite(invite);
       } else if (invite.payload == Payload.CONTACT) {
-        view = ContactCard.invite(invite);
+        view = ContactAuthView(false, invite: invite);
       } else if (invite.payload == Payload.URL) {
         view = URLCard.invite(invite);
       } else {
@@ -184,7 +184,7 @@ class InviteReplyOverlayView extends StatelessWidget {
 
     // Reply Provided
     else {
-      view = ContactCard.reply(reply);
+      view = ContactAuthView(true, reply: reply);
     }
 
     // Build View
