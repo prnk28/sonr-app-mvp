@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/modules/profile/edit_dialog.dart';
+import 'package:sonr_app/modules/profile/editing_view.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/modules/profile/tile_item.dart';
 import 'package:sonr_app/modules/remote/remote_controller.dart';
@@ -23,7 +23,6 @@ class HomeBinding implements Bindings {
     Get.put<ShareController>(ShareController(), permanent: true);
     Get.lazyPut<RemoteController>(() => RemoteController());
     Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<EditDialogController>(() => EditDialogController());
     Get.create<TileController>(() => TileController());
   }
 }

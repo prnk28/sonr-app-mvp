@@ -27,7 +27,7 @@ class RemoteView extends GetView<RemoteController> {
   Widget _buildView(RemoteViewStatus status) {
     // Return View
     if (status == RemoteViewStatus.NotJoined) {
-      return _RemoteInitialView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.NotJoined));
+      return _JoinRemoteView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.NotJoined));
     } else if (status == RemoteViewStatus.Joined) {
       return RemoteLobbyCardView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
     } else if (status == RemoteViewStatus.Invited) {
@@ -41,8 +41,8 @@ class RemoteView extends GetView<RemoteController> {
 }
 
 // ^ Join a Remote View ^ //
-class _RemoteInitialView extends GetView<RemoteController> {
-  _RemoteInitialView({Key key}) : super(key: key);
+class _JoinRemoteView extends GetView<RemoteController> {
+  _JoinRemoteView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(

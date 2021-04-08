@@ -48,18 +48,6 @@ class SonrOverlay extends GetxService {
   }
 
   // ^ Method Finds Overlay Controller and Prompts Question ^ //
-  static void edit(EditType type, Widget child) {
-    // Feedback
-    HapticFeedback.heavyImpact();
-    // Create Overlay
-    var editOverlay = _SonrFixedOverlayEntry(SonrOffset.Top, Duration(milliseconds: 300), true, child, disableAnimation: true);
-
-    // Add Overlay to List
-    _controller.currentOverlay(editOverlay);
-    _controller.overlays.add(editOverlay);
-  }
-
-  // ^ Method Finds Overlay Controller and Prompts Question ^ //
   static Future<bool> question(
       {@required String title,
       @required String description,

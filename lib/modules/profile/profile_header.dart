@@ -2,7 +2,7 @@ import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
 
-class ProfileHeaderBar extends StatelessWidget {
+class ProfileHeaderBar extends GetView<ProfileController> {
   // Sliver Attributes
   final bool automaticallyImplyLeading;
   final double expandedHeight;
@@ -17,7 +17,7 @@ class ProfileHeaderBar extends StatelessWidget {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      flexibleSpace: ProfileHeaderView(),
+      flexibleSpace: _ProfileHeaderView(),
       expandedHeight: Get.height / 5,
       title: Container(
           alignment: Alignment.topCenter,
@@ -25,7 +25,7 @@ class ProfileHeaderBar extends StatelessWidget {
             IconButton(
               padding: EdgeInsets.only(top: 0, bottom: 16, right: 8, left: 8),
               icon: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
-              onPressed: () => Get.dialog(CreateTileStepper()),
+              onPressed: controller.addTile,
             ),
             IconButton(
               padding: EdgeInsets.only(top: 0, bottom: 16, right: 8, left: 8),
@@ -37,17 +37,13 @@ class ProfileHeaderBar extends StatelessWidget {
   }
 }
 
-class ProfileHeaderView extends GetView<ProfileController> {
+class _ProfileHeaderView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return FlexibleSpaceBar(
       //titlePadding: EdgeInsets.only(bottom: 24),
       centerTitle: true,
       background: GestureDetector(
-        onLongPress: () async {
-          print("Launch Color picker to change header");
-          HapticFeedback.heavyImpact();
-        },
         child: Container(
           height: Get.height / 5, // Same Header Color
           child: Column(
@@ -56,10 +52,7 @@ class ProfileHeaderView extends GetView<ProfileController> {
               // @ Avatar
               _AvatarField(),
               GestureDetector(
-                  onLongPress: () async => SonrOverlay.edit(
-                        EditType.NameField,
-                        EditDialog.nameField(),
-                      ),
+                  onLongPress: controller.setEditingMode,
                   child: Obx(() =>
                       SonrText.medium(UserService.firstName.value + " " + UserService.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24))),
             ],

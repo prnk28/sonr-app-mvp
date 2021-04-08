@@ -1,23 +1,9 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
 
-class EditDialog extends GetView<EditDialogController> {
+class EditProfileView extends GetView<ProfileController> {
   final String headerText;
-  final EditType type;
-
-  EditDialog(this.type, {this.headerText = "Edit"});
-
-  factory EditDialog.colorComboPicker() {
-    return EditDialog(
-      EditType.ColorCombo,
-    );
-  }
-
-  factory EditDialog.nameField() {
-    return EditDialog(
-      EditType.NameField,
-    );
-  }
+  EditProfileView({this.headerText = "Edit", Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +34,19 @@ class EditDialog extends GetView<EditDialogController> {
                                     SonrOverlay.back();
                                   }),
                               Expanded(child: Center(child: SonrText.header(headerText, size: 34))),
-                              ShapeButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)
+                              ShapeButton.circle(icon: SonrIcon.accept, onPressed: controller.completeEditing)
                             ]),
                       ),
 
                       // @ Window Content
-                      type.view,
+                      EditNameView(),
                     ])))),
       ),
     );
   }
 }
 
-class EditNameView extends GetView<EditDialogController> {
+class EditNameView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     // Extract Data
@@ -81,78 +67,38 @@ class EditNameView extends GetView<EditDialogController> {
                 autoFocus: true,
                 textInputAction: TextInputAction.next,
                 controller: TextEditingController(text: UserService.firstName.value),
-                value: controller.editFirstName.value,
+                value: controller.editedFirstName.value,
                 onEditingComplete: () {
                   FocusScope.of(context).requestFocus(lastNameFocus);
                 },
-                onChanged: (val) => controller.editFirstName(val)),
+                onChanged: (val) => controller.editedFirstName(val)),
             SonrTextField(
                 hint: hintName.item2,
                 label: "Last Name",
                 focusNode: lastNameFocus,
                 textInputAction: TextInputAction.next,
                 controller: TextEditingController(text: UserService.lastName.value),
-                value: controller.editLastName.value,
+                value: controller.editedLastName.value,
                 onEditingComplete: () {
                   FocusScope.of(context).requestFocus(phoneFocus);
                 },
-                onChanged: (val) => controller.editLastName(val)),
+                onChanged: (val) => controller.editedLastName(val)),
             SonrTextField(
                 hint: "+1-555-555-5555",
                 label: "Phone",
                 focusNode: phoneFocus,
                 textInputAction: TextInputAction.done,
                 controller: TextEditingController(text: UserService.phone.value),
-                value: controller.editLastName.value,
+                value: controller.editedLastName.value,
                 onEditingComplete: () {
                   FocusScopeNode currentFocus = FocusScope.of(Get.context);
                   if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                     FocusManager.instance.primaryFocus.unfocus();
                   }
                 },
-                onChanged: (val) => controller.editPhone(val)),
+                onChanged: (val) => controller.editedPhone(val)),
             Padding(padding: EdgeInsets.all(8))
           ]),
         ));
-  }
-}
-
-class EditColorsView extends GetView<EditDialogController> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class EditDialogController extends GetxController {
-  // Properties
-  final editFirstName = "".obs;
-  final editLastName = "".obs;
-  final editPhone = "".obs;
-
-  // ^ Initialize the Controller ^ //
-  void onInit() async {
-    // Get Initial Values
-    var firstInitial = UserService.firstName.value;
-    var lastInitial = UserService.lastName.value;
-    var phoneInitial = UserService.phone.value;
-
-    // Set Values
-    editFirstName(firstInitial);
-    editLastName(lastInitial);
-    editPhone(phoneInitial);
-    super.onInit();
-  }
-
-  // ^ Completed Editing ^ //
-  void complete() {
-    // Update Values in Profile Controller
-    UserService.setFirstName(editFirstName.value);
-    UserService.setLastName(editLastName.value);
-    UserService.setPhone(editPhone.value);
-    UserService.saveChanges();
-
-    // Close View
-    SonrOverlay.back();
   }
 }

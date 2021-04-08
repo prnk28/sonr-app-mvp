@@ -1,7 +1,6 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-
 class FormPage extends StatelessWidget {
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();

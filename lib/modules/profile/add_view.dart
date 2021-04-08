@@ -3,7 +3,8 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
 
 // ** Builds Add Social Form Dialog ** //
-class CreateTileStepper extends GetView<ProfileController> {
+class AddTileView extends GetView<ProfileController> {
+  AddTileView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -11,50 +12,42 @@ class CreateTileStepper extends GetView<ProfileController> {
       return AnimatedContainer(
         duration: 250.milliseconds,
         margin: EdgeInsets.symmetric(vertical: controller.step.value.verticalMargin, horizontal: 6),
-        child: NeumorphicBackground(
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 100),
-          borderRadius: BorderRadius.circular(30),
-          backendColor: Colors.transparent,
-          child: Neumorphic(
-            style: SonrStyle.normal,
-            child: Material(
-              color: Colors.transparent,
-              child: Column(children: [
-                Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(top: 8, left: 8),
-                    child: ShapeButton.rectangle(
-                        radius: 20,
-                        shape: NeumorphicShape.convex,
-                        onPressed: () => Get.back(),
-                        icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38, style: SonrStyle.appBarIcon))),
-                Container(
-                  height: controller.step.value.height,
-                  child: PageView.builder(
-                    controller: controller.pageController,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (_, idx) {
-                      if (idx == 0) {
-                        return DropdownAddView();
-                      } else if (idx == 1) {
-                        return SingleChildScrollView(child: SetInfoView());
-                      } else {
-                        return SetTypeView();
-                      }
-                    },
-                  ),
-                ),
-
-                // Bottom Buttons
-                Spacer(),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: controller.step.value.bottomButtons,
-                ),
-                Spacer(),
-              ]),
+        child: Material(
+          color: Colors.transparent,
+          child: Column(children: [
+            Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.only(top: 8, left: 8),
+                child: ShapeButton.rectangle(
+                    radius: 20,
+                    shape: NeumorphicShape.convex,
+                    onPressed: controller.exitAddTile,
+                    icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38, style: SonrStyle.appBarIcon))),
+            Container(
+              height: controller.step.value.height,
+              child: PageView.builder(
+                controller: controller.pageController,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (_, idx) {
+                  if (idx == 0) {
+                    return DropdownAddView();
+                  } else if (idx == 1) {
+                    return SingleChildScrollView(child: SetInfoView());
+                  } else {
+                    return SetTypeView();
+                  }
+                },
+              ),
             ),
-          ),
+
+            // Bottom Buttons
+            Spacer(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: controller.step.value.bottomButtons,
+            ),
+            Spacer(),
+          ]),
         ),
       );
     });
@@ -156,7 +149,7 @@ class _InfoText extends StatelessWidget {
       Padding(padding: EdgeInsets.all(14)),
       Text(index.toString(),
           style: TextStyle(
-              fontFamily: 'Poppins',fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+              fontFamily: 'Poppins', fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
       Padding(padding: EdgeInsets.all(8)),
       Expanded(
         child: Text(text,
