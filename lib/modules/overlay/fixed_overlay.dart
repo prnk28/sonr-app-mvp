@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'overlay.dart';
-
+import 'package:sonr_app/data/data.dart';
 // ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
   // Accessors

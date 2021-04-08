@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/common/media/queue_view.dart';
+import 'package:sonr_app/modules/common/media/queue_view.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/modules/share/share_item.dart';

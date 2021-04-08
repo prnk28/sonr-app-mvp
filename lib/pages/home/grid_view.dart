@@ -1,10 +1,11 @@
-import 'package:sonr_app/common/contact/contact.dart';
-import 'package:sonr_app/common/file/file.dart';
-import 'package:sonr_app/common/media/media.dart';
+import 'package:sonr_app/modules/common/contact/contact.dart';
+import 'package:sonr_app/modules/common/file/file.dart';
+import 'package:sonr_app/modules/common/media/media.dart';
 import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/data/data.dart';
 
 // ^ Card Grid View ^ //
 class CardGridView extends GetView<HomeController> {

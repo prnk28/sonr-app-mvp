@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/common/peer/peer_controller.dart';
+import 'package:sonr_app/modules/common/peer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'cards.dart';
 import 'lobby.dart';

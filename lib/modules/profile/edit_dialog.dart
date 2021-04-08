@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
-
+import 'package:sonr_app/data/data.dart';
 class EditDialog extends GetView<EditDialogController> {
   final String headerText;
   final EditType type;

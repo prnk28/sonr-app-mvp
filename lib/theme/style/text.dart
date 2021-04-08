@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:sonr_app/data/model/model_register.dart';
 import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
-
+import 'package:sonr_app/data/data.dart';
 class SonrText extends StatelessWidget {
   final String text;
   final Color color;

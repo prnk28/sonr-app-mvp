@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/data/data.dart';
 
 class TransferController extends GetxController {
   // @ Properties

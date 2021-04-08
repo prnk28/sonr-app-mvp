@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/theme/theme.dart';
-
+import 'package:sonr_app/data/data.dart';
 
 // ^ Lobby Title View ^ //
 class LobbyTitleView extends StatefulWidget {

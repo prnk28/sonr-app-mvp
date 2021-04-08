@@ -1,11 +1,3 @@
-export '../data/api/mixin_queue.dart';
-export '../data/model/model_tile.dart';
-export '../data/model/model_card.dart';
-export '../data/api/api_models.dart';
-export '../data/api/api_vector.dart';
-export '../data/api/api_primitive.dart';
-export '../data/api/api_widgets.dart';
-export '../data/model/model_lobby.dart';
 export '../service/device.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';
@@ -20,8 +12,9 @@ export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
 
 export 'package:animated_widgets/animated_widgets.dart';
-export 'package:sonr_app/common/camera/camera_view.dart';
-export 'package:sonr_app/common/media/sheet_view.dart';
+export 'package:sonr_app/modules/common/camera/camera_view.dart';
+export 'package:sonr_app/modules/common/media/sheet_view.dart';
+
 // Custom Theme Aspects
 export 'elements/header.dart';
 export 'style/background.dart';

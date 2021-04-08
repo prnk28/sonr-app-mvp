@@ -4,6 +4,7 @@ import 'package:rive/rive.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bubble_view.dart';
+import 'package:sonr_app/data/data.dart';
 
 class PeerController extends GetxController {
   // Properties

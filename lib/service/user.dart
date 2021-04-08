@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/data/model/model_permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
-
+import 'package:sonr_app/data/data.dart';
 class UserService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<UserService>();

@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
-
+import 'package:sonr_app/data/data.dart';
 import 'settings_controller.dart';
 
 class SettingsSheet extends StatelessWidget {

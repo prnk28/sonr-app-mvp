@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';

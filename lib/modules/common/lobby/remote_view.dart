@@ -1,8 +1,9 @@
-import 'package:sonr_app/common/peer/item_view.dart';
+import 'package:sonr_app/modules/common/peer/item_view.dart';
 import 'package:sonr_app/modules/remote/remote_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'title_widget.dart';
+import 'package:sonr_app/data/data.dart';
 
 // ^ Card Aspect Ratio Remote View ^ //
 class RemoteLobbyCardView extends GetView<RemoteController> {

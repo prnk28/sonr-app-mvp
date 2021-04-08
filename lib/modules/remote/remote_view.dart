@@ -1,4 +1,4 @@
-import 'package:sonr_app/common/lobby/remote_view.dart';
+import 'package:sonr_app/modules/common/lobby/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'remote_controller.dart';
 

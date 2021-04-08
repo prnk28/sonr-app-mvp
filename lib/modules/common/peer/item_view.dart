@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
-
+import 'package:sonr_app/data/data.dart';
 // ^ PeerListItem for Remote View ^ //
 class PeerListItem extends StatefulWidget {
   final Peer peer;
