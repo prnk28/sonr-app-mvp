@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-
 // ^ Contact Model Extensions ^ //
 extension ContactUtils on Contact {
   String get tempUsername {
@@ -32,7 +31,13 @@ extension ContactUtils on Contact {
 
   Widget get profilePicture {
     return this.hasPicture()
-        ? Image.memory(Uint8List.fromList(this.picture))
+        ? Container(
+            width: 120,
+            height: 120,
+            child: CircleAvatar(
+              backgroundImage: MemoryImage(this.picture),
+            ),
+          )
         : Icon(
             Icons.insert_emoticon,
             size: 120,
