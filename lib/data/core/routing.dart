@@ -41,8 +41,7 @@ class SonrRouting {
         GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
-        GetPage(
-            name: '/transfer', page: () => TransferScreen(), binding: TransferBinding(), transition: Transition.downToUp, curve: Curves.bounceOut),
+        GetPage(name: '/transfer', page: () => TransferScreen(), maintainState: false, transition: Transition.downToUp, curve: Curves.bounceOut),
       ];
 
   // ^ Services (Files, Contacts) ^ //

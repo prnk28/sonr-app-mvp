@@ -1,9 +1,15 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../theme.dart';
-import 'utility.dart';
+
+
+enum ColorButtonType { Primary, Secondary, Neutral, Critical }
 
 class ColorButton extends StatefulWidget {
+  static const double K_BORDER_RADIUS = 8;
+  static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
+  static const K_BUTTON_DURATION = Duration(milliseconds: 100);
+
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Widget child;
@@ -46,14 +52,14 @@ class ColorButton extends StatefulWidget {
     // Build Decoration
     BoxDecoration decoration = BoxDecoration(
         gradient: gradient != null ? gradient : SonrPalette.primary(),
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ColorButton(
         decoration: decoration,
         onPressed: onPressed,
-        child: ButtonUtility.buildChild(iconPosition, icon, text, child),
+        child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         width: width,
         padding: padding,
@@ -79,7 +85,7 @@ class ColorButton extends StatefulWidget {
     // Decoration
     BoxDecoration decoration = BoxDecoration(
       color: color != null ? color : SonrPalette.Secondary,
-      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
     );
 
     // Build Child
@@ -87,7 +93,7 @@ class ColorButton extends StatefulWidget {
         decoration: decoration,
         onPressed: onPressed,
         width: width,
-        child: ButtonUtility.buildChild(iconPosition, icon, text, child),
+        child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,
         margin: margin,
@@ -111,7 +117,7 @@ class ColorButton extends StatefulWidget {
     // Decoration
     BoxDecoration decoration = BoxDecoration(
       color: SonrColor.Neutral,
-      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+      borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
     );
 
     // Build Child
@@ -119,12 +125,80 @@ class ColorButton extends StatefulWidget {
         decoration: decoration,
         onPressed: onPressed,
         width: width,
-        child: ButtonUtility.buildChild(iconPosition, icon, text, child),
+        child: _buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
         padding: padding,
         margin: margin,
         onLongPressed: onLongPressed,
         pressedScale: 0.98);
+  }
+
+  // @ Helper Method to Build Icon View //
+  static Widget _buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
+    if (child != null) {
+      return child;
+    } else if (icon != null && text == null) {
+      return Container(padding: EdgeInsets.all(8), child: icon);
+    } else if (text != null && icon == null) {
+      return Container(padding: EdgeInsets.all(8), child: _buildText(text));
+    } else if (text != null && icon != null) {
+      switch (iconPosition) {
+        case WidgetPosition.Left:
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildIcon(icon), Padding(padding: EdgeInsets.all(4)), _buildText(text)]));
+        case WidgetPosition.Right:
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildText(text), Padding(padding: EdgeInsets.all(4)), _buildIcon(icon)]));
+        case WidgetPosition.Top:
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildIcon(icon), Padding(padding: EdgeInsets.all(4)), _buildText(text)]));
+        case WidgetPosition.Bottom:
+          return Container(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [_buildText(text), Padding(padding: EdgeInsets.all(4)), _buildIcon(icon)]));
+        case WidgetPosition.Center:
+          return icon;
+        default:
+          return Container();
+      }
+    } else {
+      return Container();
+    }
+  }
+
+  static Widget _buildIcon(SonrIcon icon) {
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: 2.0,
+          child: Icon(icon.data, color: SonrColor.Black.withOpacity(0.5), size: 20),
+        ),
+        Icon(icon.data, color: Colors.white, size: 20),
+      ],
+    );
+  }
+
+  static Widget _buildText(String text) {
+    return Text(text,
+        overflow: TextOverflow.fade,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+              fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
+            color: Colors.white,
+            shadows: [Shadow(blurRadius: 4, color: SonrColor.Black.withOpacity(0.5))]));
   }
 
   @override
@@ -194,7 +268,7 @@ class _ColorButtonState extends State<ColorButton> {
         child: AnimatedContainer(
           decoration: widget.decoration,
           margin: widget.margin ?? const EdgeInsets.all(0),
-          duration: ButtonUtility.K_BUTTON_DURATION,
+          duration: ColorButton.K_BUTTON_DURATION,
           curve: Curves.ease,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: widget.child,
@@ -209,7 +283,7 @@ class _ColorButtonState extends State<ColorButton> {
       pressed = true;
     });
 
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ColorButton.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedAnimationDown = true;
 
     //haptic vibration
@@ -235,7 +309,7 @@ class _ColorButtonState extends State<ColorButton> {
       longPressed = true;
     });
 
-    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ColorButton.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedLongAnimationDown = true;
 
     //haptic vibration

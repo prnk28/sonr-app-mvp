@@ -1,7 +1,6 @@
 import 'dart:async';
-
 import 'package:sonr_app/data/data.dart';
-
+import 'package:sonr_app/modules/media/media_picker.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ** Share State Extension ** //

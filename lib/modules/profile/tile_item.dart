@@ -1,6 +1,7 @@
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_core/sonr_social.dart';
-import 'profile.dart';
+import 'social_view.dart';
 
 // ** Builds Social Tile ** //
 class SocialTileItem extends GetWidget<TileController> {
@@ -76,9 +77,9 @@ class TileController extends GetxController {
   final isFetched = false.obs;
 
   // Social Media Properties
-  final medium = Rx<MediumModel>(null);
-  final twitter = Rx<TwitterModel>(null);
-  final youtube = Rx<YoutubeModel>(null);
+  final medium = Rx<MediumModel>();
+  final twitter = Rx<TwitterModel>();
+  final youtube = Rx<YoutubeModel>();
 
   // ^ Create New Tile ^ //
   initialize(Contact_SocialTile tile, int i) async {

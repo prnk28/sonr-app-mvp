@@ -34,17 +34,14 @@ class NavButton extends StatelessWidget {
         onTap: () {
           onPressed(bottomType.index);
         },
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: ObxValue<RxInt>(
-              (idx) => AnimatedScale(
-                    duration: 250.milliseconds,
-                    child: Icon(bottomType.iconData,
-                        size: bottomType.iconSize, color: idx.value == bottomType.index ? SonrPalette.Primary : Colors.grey.shade400),
-                    scale: idx.value == bottomType.index ? 1.2 : 1.0,
-                  ),
-              currentIndex),
-        ));
+        child: ObxValue<RxInt>(
+            (idx) => AnimatedScale(
+                  duration: 250.milliseconds,
+                  child: Icon(bottomType.iconData,
+                      size: bottomType.iconSize, color: idx.value == bottomType.index ? SonrPalette.Primary : Colors.grey.shade400),
+                  scale: idx.value == bottomType.index ? 1.2 : 1.0,
+                ),
+            currentIndex));
   }
 }
 

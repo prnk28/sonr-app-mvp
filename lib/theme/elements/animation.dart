@@ -6,8 +6,10 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum AnimType { None, Shake, SlideIn, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-enum LottieBoard { David, JoinRemote }
-enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, Documents }
+enum LottieBoard {
+  David,
+}
+enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
 
 class AnimatedScale extends StatefulWidget {
   final Widget child;
@@ -136,18 +138,18 @@ class AnimatedWaveIcon extends HookWidget {
   }
 }
 
-class AnimatedRipples extends StatefulWidget {
-  const AnimatedRipples({
+class RipplesAnimation extends StatefulWidget {
+  const RipplesAnimation({
     Key key,
     @required this.child,
   }) : super(key: key);
 
   final Widget child;
   @override
-  _AnimatedRipplesState createState() => _AnimatedRipplesState();
+  _RipplesAnimationState createState() => _RipplesAnimationState();
 }
 
-class _AnimatedRipplesState extends State<AnimatedRipples> with TickerProviderStateMixin {
+class _RipplesAnimationState extends State<RipplesAnimation> with TickerProviderStateMixin {
   AnimationController _controller;
   @override
   void initState() {
@@ -328,10 +330,7 @@ class _LottieContainerState extends State<LottieContainer> with TickerProviderSt
   _getPathFromBoard() {
     switch (widget.type) {
       case LottieBoard.David:
-        return "assets/lottie/david.json";
-        break;
-      case LottieBoard.JoinRemote:
-        return "assets/lottie/join-remote.json";
+        return "assets/images/david.json";
         break;
     }
   }
@@ -351,9 +350,10 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _splashPath = 'assets/rive/splash_screen.riv';
-  final String _tilePath = 'assets/rive/tile_preview.riv';
-  final String _documentsPath = 'assets/rive/documents.riv';
+  final String _splashPath = 'assets/animations/splash_screen.riv';
+  final String _tilePath = 'assets/animations/tile_preview.riv';
+  final String _notFoundPath = 'assets/animations/not_found.riv';
+  final String _documentsPath = 'assets/animations/documents.riv';
 
   // Properties
   Artboard _riveArtboard;
@@ -365,15 +365,29 @@ class _RiveContainer extends State<RiveContainer> {
     if (widget.type == RiveBoard.Splash) {
       rootBundle.load(_splashPath).then(
         (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
 
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
+            // Determine Animation by Tile Type
+            artboard.addController(SimpleAnimation('Default'));
+            setState(() => _riveArtboard = artboard);
+          }
+        },
+      );
+    } else if (widget.type == RiveBoard.NotFound) {
+      rootBundle.load(_notFoundPath).then(
+        (data) async {
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
 
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
+            // Determine Animation by Tile Type
+            artboard.addController(SimpleAnimation('Default'));
             setState(() => _riveArtboard = artboard);
           }
         },
@@ -381,14 +395,14 @@ class _RiveContainer extends State<RiveContainer> {
     } else if (widget.type == RiveBoard.Documents) {
       rootBundle.load(_documentsPath).then(
         (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
 
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
+            // Determine Animation by Tile Type
+            artboard.addController(SimpleAnimation('Default'));
             setState(() => _riveArtboard = artboard);
           }
         },
@@ -396,29 +410,29 @@ class _RiveContainer extends State<RiveContainer> {
     } else {
       rootBundle.load(_tilePath).then(
         (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
+          // Await Loading
+          final file = RiveFile();
+          if (file.import(data)) {
+            // Retreive Artboard
+            final artboard = file.mainArtboard;
 
-          // Retreive Camera
-          if (widget.type == RiveBoard.Camera) {
-            artboard.addController(SimpleAnimation('Camera'));
-          }
+            // Retreive Camera
+            if (widget.type == RiveBoard.Camera) {
+              artboard.addController(SimpleAnimation('Camera'));
+            }
 
-          // Retreive Showcase Loop
-          else if (widget.type == RiveBoard.Gallery) {
-            artboard.addController(SimpleAnimation('Showcase'));
-          }
-          // Retreive Showcase Loop
-          else if (widget.type == RiveBoard.Feed) {
-            artboard.addController(SimpleAnimation('Feed'));
-          }
-          // Retreive Icon Loop
-          else {
-            artboard.addController(SimpleAnimation('Icon'));
-          }
-          if (mounted) {
+            // Retreive Showcase Loop
+            else if (widget.type == RiveBoard.Gallery) {
+              artboard.addController(SimpleAnimation('Showcase'));
+            }
+            // Retreive Showcase Loop
+            else if (widget.type == RiveBoard.Feed) {
+              artboard.addController(SimpleAnimation('Feed'));
+            }
+            // Retreive Icon Loop
+            else {
+              artboard.addController(SimpleAnimation('Icon'));
+            }
             setState(() => _riveArtboard = artboard);
           }
         },

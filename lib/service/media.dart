@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/share/sheet_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'sonr.dart';
@@ -22,7 +21,7 @@ class MediaService extends GetxService {
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
-  final _allMedia = Rx<MediaAlbum>(MediaAlbum.blank());
+  final _allMedia = Rx<MediaAlbum>();
 
   // Properties
   static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allMedia;

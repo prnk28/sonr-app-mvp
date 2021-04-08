@@ -2,56 +2,27 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/data/data.dart';
 
 // @ PeerStatus Enum
-enum ProfileViewStatus { Viewing, Editing, AddingSocial }
-
+enum ProfileState { Viewing, Editing }
 class ProfileController extends GetxController {
   // Properties
-  final status = ProfileViewStatus.Viewing.obs;
+  final state = ProfileState.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
   final options = SonrSocial.options(UserService.socials);
   final dropdownIndex = (-1).obs;
 
-  // Edited Values
-  final editedFirstName = RxString(UserService.firstName.value);
-  final editedLastName = RxString(UserService.lastName.value);
-  final editedPhone = RxString(UserService.phone.value);
+  // References
+  final step = Rx<TileStep>();
+  final pageController = PageController();
 
   // References
-  final step = Rx<TileStep>(null);
-  final pageController = PageController();
+  bool _isEditing = false;
 
   // ** Initialize Method ** //
   onInit() async {
     step(TileStep(nextStep, previousStep, saveTile));
     super.onInit();
-  }
-
-  // ^ Start Editing ^ //
-  addTile() {
-    status(ProfileViewStatus.AddingSocial);
-  }
-
-  // ^ Start Editing ^ //
-  setEditingMode() {
-    status(ProfileViewStatus.Editing);
-  }
-
-  // ^ End Add/Edit State ^ //
-  exitToViewing() {
-    status(ProfileViewStatus.Viewing);
-  }
-
-  // ^ Completed Editing ^ //
-  void completeEditing() {
-    // Update Values in Profile Controller
-    UserService.setFirstName(editedFirstName.value);
-    UserService.setLastName(editedLastName.value);
-    UserService.setPhone(editedPhone.value);
-    UserService.saveChanges();
-    status(ProfileViewStatus.Viewing);
   }
 
   // -- Set Privacy -- //
@@ -159,7 +130,7 @@ class ProfileController extends GetxController {
 
       // Save to Profile
       UserService.addSocial(tile);
-      status(ProfileViewStatus.Viewing);
+      Get.back(closeOverlays: true);
       reset();
     } else {
       // Display Error Snackbar
@@ -173,8 +144,19 @@ class ProfileController extends GetxController {
     step.refresh();
   }
 
+  // ^ Toggle Editing Mode ^ //
+  toggleEditing() {
+    _isEditing = !_isEditing;
+    if (_isEditing) {
+      state(ProfileState.Editing);
+    } else {
+      state(ProfileState.Viewing);
+    }
+  }
+
   // ^ Expand a Tile  ^ //
   toggleExpand(int index, bool isExpanded) {
+    print("Index $index Expanded $isExpanded");
     focused(FocusedTile(index, isExpanded));
     update(['social-grid']);
   }

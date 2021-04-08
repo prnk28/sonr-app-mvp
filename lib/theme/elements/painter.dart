@@ -2,8 +2,9 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/common/peer/peer.dart';
+import '../../data/data.dart';
 import 'package:sonr_core/sonr_core.dart';
+
 import '../theme.dart';
 
 // ^ Arrow Painter for Dropdown ^ //
@@ -140,11 +141,11 @@ extension SonrOffset on Offset {
 
     // Top of View
     if (diffDesg == Position_Designation.NNE || diffDesg == Position_Designation.NEbN || diffDesg == Position_Designation.NbE) {
-      return Offset(180, position.topOffset);
+      return Offset(180, position.proximity.topOffset);
     } else if (diffDesg == Position_Designation.NE) {
-      return Offset(270, position.topOffset + 20);
+      return Offset(270, position.proximity.topOffset + 20);
     } else if (diffDesg == Position_Designation.N) {
-      return Offset(90, position.topOffset + 20);
+      return Offset(90, position.proximity.topOffset + 20);
     } else {
       return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZonePathProvider.proximityMaxHeight(position.proximity), calcPos.dy).toDouble());
     }

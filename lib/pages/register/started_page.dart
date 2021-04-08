@@ -1,3 +1,4 @@
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class GetStartedPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class GetStartedPage extends StatelessWidget {
         Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-                padding: EdgeWith.bottom(24),
+                padding: EdgeInsetsX.bottom(24),
                 child: ColorButton.primary(
                   onPressed: () => onPressed,
                   text: "Get Started",

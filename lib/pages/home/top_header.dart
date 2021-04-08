@@ -23,130 +23,147 @@ class HomeTopHeaderBar extends GetView<HomeController> {
   }
 }
 
+// ^ Header Clipper for Neumorphic Path ^ //
+class TopBarPath extends NeumorphicPathProvider {
+  @override
+  Path getPath(Size size) {
+    Offset firstEndPoint = Offset(size.width * .5, size.height - 20);
+    Offset firstControlPoint = Offset(size.width * .25, size.height - 30);
+    Offset secondEndPoint = Offset(size.width, size.height - 50);
+    Offset secondControlPoint = Offset(size.width * .75, size.height - 10);
+
+    final path = Path()
+      ..lineTo(0.0, size.height)
+      ..quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy)
+      ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
+      ..lineTo(size.width, 0.0)
+      ..close();
+    return path;
+  }
+
+  @override
+  bool get oneGradientPerPath => true;
+}
+
 // ^ Dynamic App bar title for Lobby Size ^ //
-class _HomeHeaderTitle extends StatelessWidget {
+class _HomeHeaderTitle extends StatefulWidget {
   final String defaultText;
   const _HomeHeaderTitle({Key key, this.defaultText}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return GetX<_HomeHeaderTitleController>(
-      init: _HomeHeaderTitleController(defaultText),
-      builder: (controller) {
-        return Container(
-          width: Get.width,
-          padding: EdgeInsets.only(top: kToolbarHeight, bottom: 16),
-          height: kToolbarHeight + 56,
-          child: NavigationToolbar(
-              middle: AnimatedSlideSwitcher.fade(
-                duration: 2.seconds,
-                child: GestureDetector(
-                  key: ValueKey<String>(controller.title.value),
-                  child: controller.status.value.isConnecting
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [SonrText.appBar("Connecting"), CircularProgressIndicator()],
-                        )
-                      : SonrText.appBar(controller.title.value),
-                  onTap: () {
-                    controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                  },
-                ),
-              ),
-              centerMiddle: true),
-        );
-      },
-    );
-  }
+  _HomeHeaderTitleState createState() => _HomeHeaderTitleState();
 }
 
-// ^ Controller for Header Title ^ //
-class _HomeHeaderTitleController extends GetxController {
+class _HomeHeaderTitleState extends State<_HomeHeaderTitle> {
   // Properties
-  final String defaultText;
-  final title = "".obs;
-  final status = Rx<Status>(Status.NONE);
+  String text;
 
   // References
   StreamSubscription<int> lobbySizeStream;
   StreamSubscription<Status> statusStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
-
-  _HomeHeaderTitleController(this.defaultText);
+  Status _currentStatus = Status.NONE;
 
   @override
-  void onReady() {
+  void initState() {
     // Add Initial Data
     _handleLobbySizeStream(LobbyService.localSize.value);
 
     // Set Defaults
     lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
     statusStream = SonrService.status.listen(_handleStatus);
-    title(defaultText);
-    super.onReady();
+    text = widget.defaultText;
+    super.initState();
   }
 
   @override
-  void onClose() {
+  void dispose() {
     lobbySizeStream.cancel();
     statusStream.cancel();
-    super.onClose();
+    super.dispose();
   }
 
-  // @ Handle Size Update ^ //
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Get.width,
+      padding: EdgeInsets.only(top: kToolbarHeight, bottom: 16),
+      height: kToolbarHeight + 56,
+      child: NavigationToolbar(
+          middle: AnimatedSlideSwitcher.fade(
+            duration: 2.seconds,
+            child: GestureDetector(
+              key: ValueKey<String>(text),
+              child: _currentStatus.isConnecting
+                  ? Row(
+                      children: [SonrText.appBar("Connecting"), CircularProgressIndicator()],
+                    )
+                  : SonrText.appBar(text),
+              onTap: () {
+                swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+              },
+            ),
+          ),
+          centerMiddle: true),
+    );
+  }
+
+  // @ Handle Cards Update ^ //
   _handleLobbySizeStream(int onData) {
-    // Peer Joined
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
-    }
-    // Peer Left
-    else if (onData < _lobbySizeRef) {
+    } else if (onData < _lobbySizeRef) {
       var diff = _lobbySizeRef - onData;
       swapTitleText("$diff Left");
     }
     _lobbySizeRef = onData;
   }
 
-  // @ Handle Status Update ^ //
+  // @ Handle Ready ^ //
   _handleStatus(Status val) {
-    status(val);
-    if (val.isConnected) {
+    _currentStatus = val;
+    if (val.isReady && mounted) {
       // Entry Text
-      title("Hello, ${UserService.firstName.value}");
-      _timeoutActive = true;
+      setState(() {
+        text = "Hello, ${UserService.firstName.value}";
+        _timeoutActive = true;
+      });
 
       // Nearby Peers Text
       Future.delayed(const Duration(milliseconds: 3500), () {
-        if (!isClosed) {
-          title("${LobbyService.localSize.value} Nearby");
-        }
+        setState(() {
+          text = ("${LobbyService.localSize.value} Nearby");
+        });
       });
 
       // Revert Text
       Future.delayed(const Duration(milliseconds: 3500) * 2, () {
-        if (!isClosed) {
-          title(defaultText);
+        setState(() {
+          text = widget.defaultText;
           _timeoutActive = false;
-        }
+        });
       });
     }
   }
 
   // @ Swaps Title when Lobby Size Changes ^ //
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    if (!_timeoutActive && !isClosed) {
+    if (!_timeoutActive && mounted) {
       // Swap Text
-      title(val);
-      HapticFeedback.mediumImpact();
-      _timeoutActive = true;
+      setState(() {
+        text = val;
+        HapticFeedback.mediumImpact();
+        _timeoutActive = true;
+      });
 
       // Revert Text
       Future.delayed(timeout, () {
-        if (!isClosed) {
-          title(defaultText);
-          _timeoutActive = false;
+        if (mounted) {
+          setState(() {
+            text = widget.defaultText;
+            _timeoutActive = false;
+          });
         }
       });
     }

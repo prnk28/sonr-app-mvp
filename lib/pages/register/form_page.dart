@@ -1,8 +1,9 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+
 class FormPage extends StatelessWidget {
-  final hintName = SonrTextField.hintName();
+  final hintName = SonrText.hintName();
   final lastNameFocus = FocusNode();
 
   @override
@@ -75,7 +76,7 @@ class FormPage extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(top: 16.0),
                         child: ColorButton.primary(
-                          margin: EdgeWith.horizontal(88),
+                          margin: EdgeInsetsX.horizontal(88),
                           icon: SonrIcon.accept,
                           text: "Get Started",
                           onPressed: () {

@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/data/model/model_permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/common/contact/contact.dart';
 
 class UserService extends GetxService {
   // Accessors
@@ -15,7 +13,7 @@ class UserService extends GetxService {
   // ** User Reactive Properties **
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-  final _contact = Rx<Contact>(null);
+  final _contact = Rx<Contact>();
 
   // ** Contact Reactive Properties **
   final _firstName = "".obs;
@@ -23,11 +21,11 @@ class UserService extends GetxService {
   final _phone = "".obs;
   final _email = "".obs;
   final _website = "".obs;
-  final _picture = Rx<Uint8List>(null);
+  final _picture = Rx<Uint8List>();
   final _socials = <Contact_SocialTile>[].obs;
 
   // Preferences
-  final _brightness = Rx<Brightness>(Brightness.light);
+  final _brightness = Rx<Brightness>();
   final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
   final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
   final _hasPointToShare = false.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
