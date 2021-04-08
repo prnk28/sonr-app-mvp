@@ -1,5 +1,5 @@
+import 'package:sonr_app/common/lobby/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'lobby_view.dart';
 import 'remote_controller.dart';
 
 // ^ Main Card View ^ //
@@ -29,7 +29,7 @@ class RemoteView extends GetView<RemoteController> {
     if (status == RemoteViewStatus.NotJoined) {
       return _RemoteInitialView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.NotJoined));
     } else if (status == RemoteViewStatus.Joined) {
-      return RemoteLobbyView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
+      return RemoteLobbyCardView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
     } else if (status == RemoteViewStatus.Invited) {
       return RemoteInviteView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Invited));
     } else if (status == RemoteViewStatus.InProgress) {
@@ -143,5 +143,47 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
         ),
       ),
     );
+  }
+}
+
+// ^ Received Remote Invite View ^ //
+class RemoteInviteView extends GetView<RemoteController> {
+  RemoteInviteView({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      SonrText.header("Remote Invite View"),
+      SonrText.normal("TODO: Display Invite thats received ", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      Padding(padding: EdgeInsets.all(16)),
+    ]);
+  }
+}
+
+// ^ During Remote Transfer View ^ //
+
+class RemoteProgressView extends GetView<RemoteController> {
+  RemoteProgressView({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    //return Center();
+    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      SonrText.header("Remote Progress View"),
+      SonrText.normal("TODO: Display Lottie File with Animation Controller by Progress", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      Padding(padding: EdgeInsets.all(16)),
+    ]);
+  }
+}
+
+// ^  Remote Completed View ^ //
+
+class RemoteCompletedView extends GetView<RemoteController> {
+  RemoteCompletedView({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      SonrText.header("Remote View"),
+      SonrText.normal("TODO: Display Received Transfer Card", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      Padding(padding: EdgeInsets.all(16)),
+    ]);
   }
 }
