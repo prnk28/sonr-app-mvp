@@ -5,7 +5,7 @@ import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_app/data/data.dart';
 
 // @ PeerStatus Enum
-enum ProfileViewStatus { Viewing, Editing, AddingSocial }
+enum ProfileViewStatus { Viewing, EditDetails, AddSocial, AddPicture }
 
 class ProfileController extends GetxController {
   // Properties
@@ -29,27 +29,35 @@ class ProfileController extends GetxController {
     super.onInit();
   }
 
-  // ^ Start Editing ^ //
-  addTile() {
-    status(ProfileViewStatus.AddingSocial);
+  // ^ Start Editing Picture ^ //
+  void setAddPicture() {
+    HapticFeedback.heavyImpact();
+    status(ProfileViewStatus.AddPicture);
   }
 
-  // ^ Start Editing ^ //
-  setEditingMode() {
-    status(ProfileViewStatus.Editing);
+  // ^ Start Editing for Social Tile ^ //
+  void setAddTile() {
+    HapticFeedback.heavyImpact();
+    status(ProfileViewStatus.AddSocial);
+  }
+
+  // ^ Start Editing for Details ^ //
+  void setEditingMode() {
+    HapticFeedback.heavyImpact();
+    status(ProfileViewStatus.EditDetails);
   }
 
   // ^ End Add/Edit State ^ //
-  exitToViewing() {
+  void exitToViewing() {
     status(ProfileViewStatus.Viewing);
   }
 
-  // ^ Completed Editing ^ //
-  void completeEditing() {
+  // ^ Completed Editing Details ^ //
+  void saveEditedDetails() {
     // Update Values in Profile Controller
-    UserService.setFirstName(editedFirstName.value);
-    UserService.setLastName(editedLastName.value);
-    UserService.setPhone(editedPhone.value);
+    UserService.firstName(editedFirstName.value);
+    UserService.lastName(editedLastName.value);
+    UserService.phone(editedPhone.value);
     UserService.saveChanges();
     status(ProfileViewStatus.Viewing);
   }

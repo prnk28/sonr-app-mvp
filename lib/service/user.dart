@@ -16,6 +16,7 @@ class UserService extends GetxService {
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
   final _contact = Rx<Contact>(null);
+  final _user = Rx<User>(null);
 
   // ** Contact Reactive Properties **
   final _firstName = "".obs;
@@ -36,6 +37,7 @@ class UserService extends GetxService {
   // **  Getter Methods for Contact Properties **
   static RxBool get hasUser => to._hasUser;
   static RxBool get isNewUser => to._isNewUser;
+  static Rx<User> get user => to._user;
   static Rx<UserPermissions> get permissions => to._userPermissions;
   static Rx<Contact> get contact => to._contact;
 
@@ -50,23 +52,15 @@ class UserService extends GetxService {
   static RxString get firstName => to._firstName;
   static RxString get lastName => to._lastName;
   static RxString get phone => to._phone;
+  static Rx<Uint8List> get picture => to._picture;
   static RxString get email => to._email;
   static RxString get website => to._website;
   static RxList<Contact_SocialTile> get socials => to._socials;
   static int get tileCount => to._socials.length;
 
   // Username
-  static String get username => UserService.current.hasProfile() ? UserService.current.profile.username : UserService.current.contact.tempUsername;
-
-  // ** Return Current User Object **
-  static User get current {
-    // Return Existing User
-    if (to._hasUser.value) {
-      var profileJson = to._userBox.read("user");
-      return User.fromJson(profileJson);
-    }
-    return new User();
-  }
+  static String get username =>
+      UserService.user.value.hasProfile() ? UserService.user.value.profile.username : UserService.user.value.contact.tempUsername;
 
   // ** Checks if Required Data for Connection Exists ** //
 
@@ -89,6 +83,7 @@ class UserService extends GetxService {
       var user = User.fromJson(profileJson);
 
       // Set Contact Values
+      _user(user);
       _contact(user.contact);
       _firstName(user.contact.firstName);
       _lastName(user.contact.lastName);
@@ -153,91 +148,62 @@ class UserService extends GetxService {
     return false;
   }
 
-  // ^ Modify Contact FirstName Value ^ //
-  static setFirstName(String value) {
-    var controller = to;
-    controller._firstName(value);
-    saveChanges();
-  }
-
-  // ^ Modify Contact LastName Value ^ //
-  static setLastName(String value) {
-    var controller = to;
-    controller._lastName(value);
-    saveChanges();
-  }
-
-  // ^ Modify Contact Phone Value ^ //
-  static setPhone(String value) {
-    var controller = to;
-    controller._phone(value);
-    saveChanges();
-  }
-
-  // ^ Modify Contact Email Value ^ //
-  static setEmail(String value) {
-    var controller = to;
-    controller._email(value);
-    saveChanges();
-  }
-
-  // ^ Modify Contact Website Value ^ //
-  static setWebsite(String value) {
-    var controller = to;
-    controller._website(value);
-    saveChanges();
-  }
-
-  // ^ Modify Contact Picture Value ^ //
-  static setPicture(Uint8List value) {
-    var controller = to;
-    controller._picture(value);
-    saveChanges();
+  // ^ Method to Create New User from Contact ^ //
+  static Future<User> newUser(Contact providedContact) async {
+    to._isNewUser(true);
+    // Set Contact for User
+    return await to._saveContactForUser(providedContact);
   }
 
   // ^ Method to Save Changes ^ //
-  static Future<User> saveChanges({Contact providedContact, bool isNewUser = false}) async {
-    // @ Initialize
-    var controller = to;
-    controller._isNewUser(isNewUser);
-
-    // @ Check if Contact was Provided
-    var contact = providedContact ??
-        Contact(
-            firstName: controller._firstName.value,
-            lastName: controller._lastName.value,
-            phone: controller._phone.value,
-            email: controller._email.value,
-            website: controller._website.value,
-            picture: controller._picture.value.toList() ?? [],
-            socials: controller._socials ?? []);
-
+  static Future<User> saveChanges() async {
     // Set Contact for User
-    return await controller._saveContactForUser(contact);
+    var user = await to._saveContactForUser(Contact(
+        firstName: to._firstName.value,
+        lastName: to._lastName.value,
+        phone: to._phone.value,
+        email: to._email.value,
+        website: to._website.value,
+        picture: to._picture.value.toList() ?? [],
+        socials: to._socials ?? []));
+
+    // Refresh Values
+    to._firstName.refresh();
+    to._lastName.refresh();
+    to._phone.refresh();
+    to._email.refresh();
+    to._website.refresh();
+    to._picture.refresh();
+    to._socials.refresh();
+
+    return user;
   }
 
   // ^ Saves Contact User to Disk ^ //
   Future<User> _saveContactForUser(Contact contact) async {
     // @ Initialize
     _contact(contact);
-    User user;
+    _contact.refresh();
+
+    User userValue;
     if (_hasUser.value) {
       // Update Existing User with new Contact
       var profileJson = _userBox.read("user");
-      user = User.fromJson(profileJson);
-      user.contact = contact;
+      userValue = User.fromJson(profileJson);
+      userValue.contact = contact;
 
       // @ Save to SharedPreferences, Update SonrNode
-      _userBox.write("user", user.writeToJson());
+      _userBox.write("user", userValue.writeToJson());
       SonrService.setProfile(contact);
     }
     // Create New User with Contact
     else {
-      user = new User(contact: contact);
-      _userBox.write("user", user.writeToJson());
+      userValue = new User(contact: contact);
+      _userBox.write("user", userValue.writeToJson());
       _hasUser(true);
     }
-    return user;
+    user(userValue);
+    return user.value;
   }
 
   // ************************* //

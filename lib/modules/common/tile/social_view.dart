@@ -1,6 +1,6 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
-import 'profile.dart';
+import 'tile_controller.dart';
 
 class SocialView extends StatelessWidget {
   final TileController controller;

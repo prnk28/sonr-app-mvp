@@ -1,6 +1,6 @@
+import 'package:sonr_app/modules/common/tile/tile_item.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
-import 'package:sonr_app/modules/common/contact/contact.dart';
 
 class ProfileView extends GetView<ProfileController> {
   ProfileView({Key key}) : super(key: key);
@@ -21,12 +21,23 @@ class ProfileView extends GetView<ProfileController> {
 
   // @ Build Page View by Navigation Item
   Widget _buildView(ProfileViewStatus status) {
-    // Return View
-    if (status == ProfileViewStatus.Editing) {
-      return EditProfileView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.Editing));
-    } else if (status == ProfileViewStatus.AddingSocial) {
-      return AddTileView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddingSocial));
-    } else {
+    // Edit Details View
+    if (status == ProfileViewStatus.EditDetails) {
+      return EditDetailsView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.EditDetails));
+    }
+
+    // Edit Profile Picture
+    else if (status == ProfileViewStatus.AddPicture) {
+      return EditPictureView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddPicture));
+    }
+
+    // Add Social Tile
+    else if (status == ProfileViewStatus.AddSocial) {
+      return AddTileView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.AddSocial));
+    }
+
+    // Default View
+    else {
       return _DefaultProfileView(key: ValueKey<ProfileViewStatus>(ProfileViewStatus.Viewing));
     }
   }
@@ -84,11 +95,11 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             PlainButton(
               icon: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
-              onPressed: controller.addTile,
+              onPressed: controller.setAddTile,
             ),
             PlainButton(
               icon: SonrIcon.more,
-              onPressed: () => {},
+              onPressed: controller.setEditingMode,
             ),
           ])),
     );
@@ -99,7 +110,6 @@ class _ProfileHeaderView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return FlexibleSpaceBar(
-      //titlePadding: EdgeInsets.only(bottom: 24),
       centerTitle: true,
       background: GestureDetector(
         child: Container(
@@ -109,6 +119,7 @@ class _ProfileHeaderView extends GetView<ProfileController> {
             children: [
               // @ Avatar
               _AvatarField(),
+              Padding(padding: EdgeInsets.all(8)),
               GestureDetector(
                   onLongPress: controller.setEditingMode,
                   child: Obx(() =>
@@ -126,10 +137,7 @@ class _AvatarField extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () async {
-        HapticFeedback.heavyImpact();
-        Get.to(CameraView.withPreview(onMediaSelected: (file) async {
-          UserService.setPicture(await file.toUint8List());
-        }), transition: Transition.downToUp);
+        controller.setAddPicture();
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 4.0),
@@ -139,7 +147,19 @@ class _AvatarField extends GetView<ProfileController> {
             boxShape: NeumorphicBoxShape.circle(),
             depth: -10,
           ),
-          child: Obx(() => UserService.contact.value.profilePicture),
+          child: Obx(() => UserService.picture.value != null
+              ? Container(
+                  width: 120,
+                  height: 120,
+                  child: CircleAvatar(
+                    backgroundImage: MemoryImage(UserService.picture.value),
+                  ),
+                )
+              : Icon(
+                  Icons.insert_emoticon,
+                  size: 120,
+                  color: SonrColor.Black.withOpacity(0.5),
+                )),
         ),
       ),
     );

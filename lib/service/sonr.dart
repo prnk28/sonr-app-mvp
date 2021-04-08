@@ -74,7 +74,7 @@ class SonrService extends GetxService with TransferQueue {
       var pos = await DeviceService.currentLocation();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -96,7 +96,7 @@ class SonrService extends GetxService with TransferQueue {
       var pos = await DeviceService.currentLocation();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onEvent = Get.find<LobbyService>().handleEvent;
@@ -122,7 +122,7 @@ class SonrService extends GetxService with TransferQueue {
     var pos = await DeviceService.currentLocation();
 
     // Create Node
-    _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.current.contact);
+    _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
     _node.onStatus = _handleStatus;
     _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
     _node.onInvited = _handleInvited;

@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../theme.dart';
+import 'utility.dart';
 
 class ConfirmButton extends StatefulWidget {
   static const double K_BORDER_RADIUS = 8;
@@ -11,8 +12,10 @@ class ConfirmButton extends StatefulWidget {
   final EdgeInsets padding;
   final Widget defaultChild;
   final Widget confirmChild;
+  final Widget completeChild;
   final Decoration defaultDecoration;
   final Decoration confirmDecoration;
+  final Decoration completeDecoration;
   final Function onConfirmed;
   final String tooltip;
   final double width;
@@ -23,8 +26,10 @@ class ConfirmButton extends StatefulWidget {
     @required this.onConfirmed,
     @required this.defaultChild,
     @required this.confirmChild,
+    @required this.completeChild,
     @required this.defaultDecoration,
     @required this.confirmDecoration,
+    @required this.completeDecoration,
     @required this.pressedScale,
     this.margin,
     this.padding,
@@ -32,112 +37,124 @@ class ConfirmButton extends StatefulWidget {
     this.width,
   }) : super(key: key);
 
-  // @ Delete Button //
-  factory ConfirmButton.delete({
+  // @ Save Button //
+  factory ConfirmButton.save({
     @required Function onConfirmed,
+    // Default
     Widget defaultChild,
     SonrIcon defaultIcon,
     String defaultText,
+
+    // Confirm
     Widget confirmChild,
     SonrIcon confirmIcon,
     String confirmText,
+
+    // Complete
+    Widget completeChild,
+    SonrIcon completeIcon,
+    String completeText,
+
+    // Properties
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
     double width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
-    // Build Decoration
+    // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
         gradient: SonrPalette.neutral(),
         borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
+    // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
         gradient: SonrPalette.primary(),
         borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
+    // Complete Decoration
+    BoxDecoration completeDecoration = BoxDecoration(
+        gradient: SonrPalette.tertiary(),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+
     // Build Child
     return ConfirmButton(
-        defaultDecoration: defaultDecoration,
-        confirmDecoration: confirmDecoration,
-        onConfirmed: onConfirmed,
-        defaultChild: buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
-        confirmChild: buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-        tooltip: tooltip,
-        width: width,
-        padding: padding,
-        margin: margin,
-        pressedScale: 0.95);
-  }
-
-  // @ Helper Method to Build Icon View //
-  static Widget buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {
-    if (child != null) {
-      return child;
-    } else if (icon != null && text == null) {
-      return Container(padding: EdgeInsets.all(8), child: icon);
-    } else if (text != null && icon == null) {
-      return Container(padding: EdgeInsets.all(8), child: _buildText(text));
-    } else if (text != null && icon != null) {
-      switch (iconPosition) {
-        case WidgetPosition.Left:
-          return Container(
-              padding: EdgeInsets.all(8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [_buildIcon(icon), Padding(padding: EdgeInsets.all(4)), _buildText(text)]));
-        case WidgetPosition.Right:
-          return Container(
-              padding: EdgeInsets.all(8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [_buildText(text), Padding(padding: EdgeInsets.all(4)), _buildIcon(icon)]));
-        case WidgetPosition.Top:
-          return Container(
-              padding: EdgeInsets.all(8),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [_buildIcon(icon), Padding(padding: EdgeInsets.all(4)), _buildText(text)]));
-        case WidgetPosition.Bottom:
-          return Container(
-              padding: EdgeInsets.all(8),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [_buildText(text), Padding(padding: EdgeInsets.all(4)), _buildIcon(icon)]));
-        case WidgetPosition.Center:
-          return icon;
-        default:
-          return Container();
-      }
-    } else {
-      return Container();
-    }
-  }
-
-  static Widget _buildIcon(SonrIcon icon) {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 2.0,
-          child: Icon(icon.data, color: SonrColor.Black.withOpacity(0.5), size: 20),
-        ),
-        Icon(icon.data, color: Colors.white, size: 20),
-      ],
+      defaultDecoration: defaultDecoration,
+      confirmDecoration: confirmDecoration,
+      completeDecoration: completeDecoration,
+      onConfirmed: onConfirmed,
+      defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
+      confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
+      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Saved!", null),
+      tooltip: tooltip,
+      width: width,
+      padding: padding,
+      margin: margin,
+      pressedScale: 0.95,
     );
   }
 
-  static Widget _buildText(String text) {
-    return Text(text,
-        overflow: TextOverflow.fade,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-            color: Colors.white,
-            shadows: [Shadow(blurRadius: 4, color: SonrColor.Black.withOpacity(0.5))]));
+  // @ Delete Button //
+  factory ConfirmButton.delete({
+    @required Function onConfirmed,
+    // Default
+    Widget defaultChild,
+    SonrIcon defaultIcon,
+    String defaultText,
+
+    // Confirm
+    Widget confirmChild,
+    SonrIcon confirmIcon,
+    String confirmText,
+
+    // Complete
+    Widget completeChild,
+    SonrIcon completeIcon,
+    String completeText,
+
+    // Properties
+    String tooltip,
+    EdgeInsets padding,
+    EdgeInsets margin,
+    double width,
+    WidgetPosition iconPosition = WidgetPosition.Left,
+  }) {
+    // Default Decoration
+    BoxDecoration defaultDecoration = BoxDecoration(
+        gradient: SonrPalette.neutral(),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+
+    // Confirm Decoration
+    BoxDecoration confirmDecoration = BoxDecoration(
+        gradient: SonrPalette.primary(),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+
+    // Complete Decoration
+    BoxDecoration completeDecoration = BoxDecoration(
+        gradient: SonrPalette.critical(),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+
+    // Build Child
+    return ConfirmButton(
+      defaultDecoration: defaultDecoration,
+      confirmDecoration: confirmDecoration,
+      completeDecoration: completeDecoration,
+      onConfirmed: onConfirmed,
+      defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
+      confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
+      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Deleted.", null),
+      tooltip: tooltip,
+      width: width,
+      padding: padding,
+      margin: margin,
+      pressedScale: 0.95,
+    );
   }
 
   @override
@@ -218,7 +235,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     } else if (status.isPending || status.isConfirmed) {
       return Container(child: widget.confirmChild, key: ValueKey<ConfirmStatus>(ConfirmStatus.Confirmed));
     } else {
-      return ConfirmButton.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Deleted.", null);
+      return widget.completeChild;
     }
   }
 
@@ -228,10 +245,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     } else if (status.isPending || status.isConfirmed) {
       return widget.confirmDecoration;
     } else {
-      return BoxDecoration(
-          gradient: SonrPalette.critical(),
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+      return widget.completeDecoration;
     }
   }
 
@@ -261,7 +275,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     //haptic vibration
     HapticFeedback.heavyImpact();
     _resetIfTapUp(ConfirmStatus.Done);
-    await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ConfirmButton.K_BUTTON_DURATION * 2); //wait until animation finished
     widget.onConfirmed();
   }
 

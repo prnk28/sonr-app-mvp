@@ -96,7 +96,7 @@ debug:
 	cd $(PROJECT_DIR) && $(RUN)
 
 ## └─ clean           - Clean before running in Debug Mode
-debug.clean: clean
+debug.clean: plugin.clean clean
 	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
@@ -119,6 +119,8 @@ plugin.xcode:
 plugin.clean:
 	cd $(PLUGIN_DIR) && $(CLEAN)
 	cd $(PLUGIN_EXAMPLE_DIR) && $(CLEAN)
+	cd $(PLUGIN_DIR) && flutter pub get
+	cd $(PLUGIN_EXAMPLE_DIR) && flutter pub get
 
 
 ## push          :   Push Mobile and Plugin SubModule to Remote Repo

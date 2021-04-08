@@ -143,6 +143,7 @@ class MediaFile {
   final int duration;
 
   String get path => _file.path;
+  File get file => _file;
 
   // Constructer
   MediaFile(this._file, this.thumbnail, this.isVideo, this.duration);
