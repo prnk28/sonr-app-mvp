@@ -3,6 +3,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
+import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -16,10 +17,10 @@ class LobbyService extends GetxService {
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
   final _lobbies = RxList<LobbyModel>();
-  final _local = Rx<LobbyModel>();
+  final _local = Rx<LobbyModel>(null);
   final _localFlatPeers = RxMap<String, Peer>();
   final _localSize = 0.obs;
-  final _position = Rx<VectorPosition>();
+  final _position = Rx<VectorPosition>(null);
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 

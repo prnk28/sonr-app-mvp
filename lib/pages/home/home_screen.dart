@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/card/card_grid.dart';
+import 'grid_view.dart';
 import 'package:sonr_app/pages/home/top_header.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
 import 'package:sonr_app/modules/remote/remote_view.dart';
@@ -10,8 +10,13 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
+        resizeToAvoidBottomInset: false,
         bottomNavigationBar: HomeBottomNavBar(),
-        body: Obx(() => AnimatedSlideSwitcher(controller.getSwitcherAnimation(), _buildView(controller.page.value), const Duration(seconds: 3))));
+        body: Obx(() => AnimatedSlideSwitcher(
+              controller.getSwitcherAnimation(),
+              _buildView(controller.page.value),
+              const Duration(milliseconds: 2500),
+            )));
   }
 
   // @ Build Page View by Navigation Item

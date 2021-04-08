@@ -10,7 +10,7 @@ class SonrScaffold extends StatelessWidget {
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
   final FloatingActionButtonLocation floatingActionButtonLocation;
-  final bool resizeToAvoidBottomPadding;
+  final bool resizeToAvoidBottomInset;
   final Function bodyAction;
   final Color backgroundColor;
 
@@ -26,7 +26,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), actions: [action]),
-        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
   factory SonrScaffold.appBarLeading(
@@ -41,7 +41,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), leading: leading),
-        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
   factory SonrScaffold.appBarCustom(
@@ -58,7 +58,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar:
             NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: middle, leading: leading, actions: [action]),
-        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
   factory SonrScaffold.appBarTitle(
@@ -72,7 +72,7 @@ class SonrScaffold extends StatelessWidget {
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
         appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title)),
-        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
   factory SonrScaffold.appBarLeadingAction(
@@ -110,7 +110,7 @@ class SonrScaffold extends StatelessWidget {
         ),
         bottomSheet: bottomSheet,
         bottomNavigationBar: bottomNavigationBar,
-        resizeToAvoidBottomPadding: resizeToAvoidBottomPadding);
+        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
   SonrScaffold({
@@ -119,7 +119,7 @@ class SonrScaffold extends StatelessWidget {
     this.appBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
-    this.resizeToAvoidBottomPadding,
+    this.resizeToAvoidBottomInset,
     this.bodyAction,
     this.backgroundColor,
     this.bottomNavigationBar,
@@ -149,7 +149,7 @@ class SonrScaffold extends StatelessWidget {
           body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: bottomNavigationBar))]),
           appBar: appBar,
           floatingActionButton: floatingActionButton,
-          resizeToAvoidBottomInset: resizeToAvoidBottomPadding,
+          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
           bottomSheet: bottomSheet,
         ));
   }

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/pages/transfer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'cards.dart';
 import 'lobby.dart';
@@ -37,7 +37,7 @@ class SonrService extends GetxService with TransferQueue {
   final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
-  final _status = Rx<Status>();
+  final _status = Rx<Status>(Status.NONE);
 
   // @ Static Accessors
   static RxDouble get progress => to._progress;
@@ -45,6 +45,7 @@ class SonrService extends GetxService with TransferQueue {
 
   // @ Set References
   Node _node;
+  Function(AuthInvite) _remoteCallback;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -56,6 +57,11 @@ class SonrService extends GetxService with TransferQueue {
         }
       }
     });
+  }
+
+  // @ Register Handler for Remote Invite
+  void registerRemoteInvite(Function(AuthInvite) invite) {
+    _remoteCallback = invite;
   }
 
   // ^ Initialize Service Method ^ //
@@ -150,7 +156,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Leave a Remote Group ^
-  static leaveRemote(RemoteInfo info) async {
+  static void leaveRemote(RemoteInfo info) async {
     // Perform Routine
     await to._node.leaveRemote(info);
   }
@@ -169,54 +175,54 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Set Payload for Contact ^ //
-  static queueContact({bool isFlat = false}) async {
+  static void queueContact({bool isFlat = false}) async {
     // - Check Connected -
     to.addToQueue(TransferQueueItem.contact(isFlat: isFlat));
   }
 
   // ^ Set Payload for URL Link ^ //
-  static queueCapture(MediaFile media) async {
+  static void queueCapture(MediaFile media) async {
     // - Check Connected -
     to.addToQueue(TransferQueueItem.capture(media));
   }
 
   // ^ Set Payload for URL Link ^ //
-  static queueMedia(MediaItem media) async {
+  static void queueMedia(MediaItem media) async {
     // - Check Connected -
     to.addToQueue(TransferQueueItem.media(await media.getMetadata()));
   }
 
   // ^ Set Payload for URL Link ^ //
-  static queueUrl(String url) async {
+  static void queueUrl(String url) async {
     // - Check Connected -
     to.addToQueue(TransferQueueItem.url(url));
   }
 
   // ^ Direct Message a Peer ^
-  static message(Peer peer, String content) {
+  static void message(Peer peer, String content) {
     to._node.message(peer, content);
   }
 
   // ^ Invite-Peer Event ^
-  static inviteWithController(PeerController c) async {
+  static void inviteWithController(BubbleController c) async {
     // Set Peer Controller
     to.currentInvited(c);
 
     // File Payload
     if (to.payload == Payload.MEDIA) {
       assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(c.peer, to.currentTransfer.media);
+      await to._node.inviteFile(c.peer.value, to.currentTransfer.media);
     }
 
     // Contact Payload
     else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(c.peer, isFlat: to.currentTransfer.isFlat);
+      await to._node.inviteContact(c.peer.value, isFlat: to.currentTransfer.isFlat);
     }
 
     // Link Payload
     else if (to.payload == Payload.URL) {
       assert(to.currentTransfer.url != null);
-      await to._node.inviteLink(c.peer, to.currentTransfer.url);
+      await to._node.inviteLink(c.peer.value, to.currentTransfer.url);
     }
 
     // No Payload
@@ -226,7 +232,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
-  static inviteWithPeer(Peer p, {RemoteInfo info}) async {
+  static void inviteWithPeer(Peer p, {RemoteInfo info}) async {
     // Set Peer Controller
     to.currentInvitedFromList(p);
 
@@ -254,7 +260,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Respond-Peer Event ^
-  static respond(bool decision, {RemoteInfo info}) async {
+  static void respond(bool decision, {RemoteInfo info}) async {
     await to._node.respond(decision, info: info);
   }
 
@@ -281,6 +287,11 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
+    if (data.hasRemote() && _remoteCallback != null) {
+      _remoteCallback(data);
+    }
+
+    // Present Overlay
     if (SonrOverlay.isNotOpen) {
       HapticFeedback.heavyImpact();
       // Check for Flat

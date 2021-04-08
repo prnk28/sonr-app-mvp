@@ -1,16 +1,17 @@
 import 'dart:async';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
 class HomeController extends GetxController {
   // Properties
-  final status = Rx<HomeState>();
+  final status = Rx<HomeState>(HomeState.None);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
+  final isBottomBarVisible = true.obs;
 
   // Elements
   final titleText = "Home".obs;
@@ -22,20 +23,27 @@ class HomeController extends GetxController {
   // References
   var _lastPage = BottomNavButton.Grid;
   StreamSubscription<List<TransferCard>> _cardStream;
+  final _keyboardVisible = KeyboardVisibilityController();
 
   // ^ Controller Constructer ^
   @override
-  void onReady() {
-    // Set View Properties
+  onInit() {
+    // Set efault Properties
     toggleIndex(1);
     pageIndex(0);
     setStatus();
-    super.onReady();
+
     // Initialize
+    super.onInit();
+
+    // Check Entry Arguments
     HomeArguments args = Get.arguments;
     if (args.isFirstLoad) {
       MediaService.checkInitialShare();
     }
+
+    // Handle Keyboard Visibility
+    _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
   }
 
   // ^ Update Home State ^ //
@@ -62,35 +70,14 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+  // ^ Return Animation by Page Index
   AnimSwitch getSwitcherAnimation() {
-    switch (page.value) {
-      case BottomNavButton.Grid:
-        if (_lastPage == BottomNavButton.Profile) {
-          _lastPage = page.value;
-          return AnimSwitch.SlideUp;
-        } else if (_lastPage == BottomNavButton.Remote) {
-          _lastPage = page.value;
-          return AnimSwitch.SlideDown;
-        } else {
-          _lastPage = page.value;
-          return AnimSwitch.SlideLeft;
-        }
-        break;
-      case BottomNavButton.Profile:
-        _lastPage = page.value;
-        return AnimSwitch.SlideDown;
-        break;
-      case BottomNavButton.Alerts:
-        _lastPage = page.value;
-        return AnimSwitch.SlideRight;
-        break;
-      case BottomNavButton.Remote:
-        _lastPage = page.value;
-        return AnimSwitch.SlideUp;
-        break;
-      default:
-        _lastPage = page.value;
-        return AnimSwitch.SlideLeft;
+    if (_lastPage.index > page.value.index) {
+      _lastPage = page.value;
+      return AnimSwitch.SlideLeft;
+    } else {
+      _lastPage = page.value;
+      return AnimSwitch.SlideRight;
     }
   }
 
@@ -115,5 +102,10 @@ class HomeController extends GetxController {
     } else {
       page(BottomNavButton.Grid);
     }
+  }
+
+  // @ Handle Keyboard Visibility
+  _handleKeyboardVisibility(bool keyboardVisible) {
+    isBottomBarVisible(!keyboardVisible);
   }
 }

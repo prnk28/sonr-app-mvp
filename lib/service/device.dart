@@ -19,15 +19,15 @@ class DeviceService extends GetxService {
   static DeviceService get to => Get.find<DeviceService>();
 
   // Device/Location Properties
-  final _compass = Rx<CompassEvent>();
-  final _location = Rx<Position>();
-  final _platform = Rx<Platform>();
+  final _compass = Rx<CompassEvent>(null);
+  final _location = Rx<Position>(null);
+  final _platform = Rx<Platform>(null);
 
   // Sensor Properties
-  final _accelerometer = Rx<AccelerometerEvent>();
-  final _gyroscope = Rx<GyroscopeEvent>();
-  final _magnetometer = Rx<MagnetometerEvent>();
-  final _orientation = Rx<OrientationEvent>();
+  final _accelerometer = Rx<AccelerometerEvent>(null);
+  final _gyroscope = Rx<GyroscopeEvent>(null);
+  final _magnetometer = Rx<MagnetometerEvent>(null);
+  final _orientation = Rx<OrientationEvent>(null);
 
   // Getters for Device/Location References
 
@@ -67,6 +67,8 @@ class DeviceService extends GetxService {
   static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
   static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
   static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+  static bool get isNotApple =>
+      Get.find<DeviceService>()._platform.value != Platform.iOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {

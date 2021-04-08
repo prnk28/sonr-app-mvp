@@ -11,7 +11,7 @@ class TransferController extends GetxController {
   // @ Remote Properties
   final isRemoteActive = false.obs;
   final counter = 0.obs;
-  final remote = Rx<RemoteInfo>();
+  final remote = Rx<RemoteInfo>(null);
 
   // @ Direction Properties
   final angle = 0.0.obs;
@@ -20,8 +20,8 @@ class TransferController extends GetxController {
   final isShiftingEnabled = true.obs;
 
   // @ View Properties
-  final string = "".obs;
-  final heading = "".obs;
+  final directionTitle = "".obs;
+  final cardinalTitle = "".obs;
 
   // References
   StreamSubscription<CompassEvent> compassStream;
@@ -85,8 +85,8 @@ class TransferController extends GetxController {
   _handleCompassUpdate(CompassEvent newDir) {
     // Update String Elements
     if (newDir != null && !isClosed) {
-      string(newDir.headingForCameraMode.direction);
-      heading(newDir.headingForCameraMode.heading);
+      directionTitle(_stringForDirection(newDir.headingForCameraMode));
+      cardinalTitle(_cardinalStringForDirection(newDir.headingForCameraMode));
 
       // Reference
       direction(newDir.headingForCameraMode);
@@ -112,5 +112,26 @@ class TransferController extends GetxController {
         title("$size People");
       }
     }
+  }
+
+  _stringForDirection(double dir) {
+    // Calculated
+    var adjustedDegrees = dir.round();
+    final unit = "°";
+
+    // @ Convert To String
+    if (adjustedDegrees >= 0 && adjustedDegrees <= 9) {
+      return "0" + "0" + adjustedDegrees.toString() + unit;
+    } else if (adjustedDegrees > 9 && adjustedDegrees <= 99) {
+      return "0" + adjustedDegrees.toString() + unit;
+    } else {
+      return adjustedDegrees.toString() + unit;
+    }
+  }
+
+  _cardinalStringForDirection(double dir) {
+    var adjustedDesignation = ((dir.round() / 11.25) + 0.25).toInt();
+    var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];
+    return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }
