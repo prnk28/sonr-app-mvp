@@ -1,6 +1,7 @@
 export 'bubble_view.dart';
+export 'details_view.dart';
 export 'item_view.dart';
-export 'peer_controller.dart';
+
 export 'vector_position.dart';
 import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/modules/common/peer/peer_controller.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'cards.dart';
 import 'lobby.dart';
@@ -211,18 +211,18 @@ class SonrService extends GetxService with TransferQueue {
     // File Payload
     if (to.payload == Payload.MEDIA) {
       assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(c.peer, to.currentTransfer.media);
+      await to._node.inviteFile(c.peer.value, to.currentTransfer.media);
     }
 
     // Contact Payload
     else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(c.peer, isFlat: to.currentTransfer.isFlat);
+      await to._node.inviteContact(c.peer.value, isFlat: to.currentTransfer.isFlat);
     }
 
     // Link Payload
     else if (to.payload == Payload.URL) {
       assert(to.currentTransfer.url != null);
-      await to._node.inviteLink(c.peer, to.currentTransfer.url);
+      await to._node.inviteLink(c.peer.value, to.currentTransfer.url);
     }
 
     // No Payload
