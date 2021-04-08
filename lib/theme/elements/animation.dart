@@ -136,18 +136,18 @@ class AnimatedWaveIcon extends HookWidget {
   }
 }
 
-class RipplesAnimation extends StatefulWidget {
-  const RipplesAnimation({
+class AnimatedRipples extends StatefulWidget {
+  const AnimatedRipples({
     Key key,
     @required this.child,
   }) : super(key: key);
 
   final Widget child;
   @override
-  _RipplesAnimationState createState() => _RipplesAnimationState();
+  _AnimatedRipplesState createState() => _AnimatedRipplesState();
 }
 
-class _RipplesAnimationState extends State<RipplesAnimation> with TickerProviderStateMixin {
+class _AnimatedRipplesState extends State<AnimatedRipples> with TickerProviderStateMixin {
   AnimationController _controller;
   @override
   void initState() {

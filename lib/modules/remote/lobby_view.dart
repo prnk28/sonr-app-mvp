@@ -1,7 +1,6 @@
 // ^ Within Remote View ^ //
-import 'package:sonr_app/pages/transfer/peer_widget.dart';
+import 'package:sonr_app/common/peer/item_view.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 import 'remote_controller.dart';
 
 class RemoteLobbyView extends GetView<RemoteController> {
@@ -46,6 +45,7 @@ class RemoteProgressView extends GetView<RemoteController> {
   RemoteProgressView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    //return Center();
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
       SonrText.header("Remote Progress View"),
       SonrText.normal("TODO: Display Lottie File with Animation Controller by Progress", color: SonrColor.Black.withOpacity(0.7), size: 18),

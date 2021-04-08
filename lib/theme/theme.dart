@@ -12,15 +12,16 @@ export '../service/sonr.dart';
 export '../service/cards.dart';
 export '../service/user.dart';
 export 'package:flutter/services.dart';
-export 'package:sonr_app/modules/card/card_controller.dart';
+export 'package:sonr_app/common/card/card_controller.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
-export '../modules/media/camera_view.dart';
-export 'package:animated_widgets/animated_widgets.dart';
 
+export 'package:animated_widgets/animated_widgets.dart';
+export 'package:sonr_app/common/camera/camera_view.dart';
+export 'package:sonr_app/common/media/media_picker.dart';
 // Custom Theme Aspects
 export 'elements/header.dart';
 export 'style/background.dart';

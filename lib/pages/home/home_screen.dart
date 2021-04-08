@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/card/card_grid.dart';
+import 'package:sonr_app/common/card/card_grid.dart';
 import 'package:sonr_app/pages/home/top_header.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
 import 'package:sonr_app/modules/remote/remote_view.dart';

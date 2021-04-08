@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:sonr_app/modules/card/card_controller.dart';
+import 'package:sonr_app/common/card/card_controller.dart';
 import 'package:get/get.dart';
 import 'package:sonr_core/sonr_core.dart';
 import '../theme.dart';

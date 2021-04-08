@@ -8,18 +8,19 @@ class RemoteView extends GetView<RemoteController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: Get.width,
-      height: Get.height,
-      margin: SonrStyle.viewMargin,
-      child: Neumorphic(
-        style: SonrStyle.normal,
-        child: Obx(() => AnimatedSlideSwitcher.fade(
+    return Obx(() => AnimatedContainer(
+          width: Get.width,
+          height: Get.height,
+          margin: controller.status.value.currentMargin,
+          duration: 1500.milliseconds,
+          child: Neumorphic(
+            style: SonrStyle.normal,
+            child: AnimatedSlideSwitcher.fade(
               child: _buildView(controller.status.value),
               duration: const Duration(milliseconds: 2500),
-            )),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   // @ Build Page View by Navigation Item
@@ -87,6 +88,7 @@ class _RemoteInitialView extends GetView<RemoteController> {
   }
 }
 
+// ^ Enter Code View ^ //
 class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {

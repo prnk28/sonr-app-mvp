@@ -1,6 +1,43 @@
 import 'package:sonr_app/theme/theme.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 enum RemoteViewStatus { NotJoined, Joined, Invited, InProgress, Done }
+
+extension RemoteViewStatusUtil on RemoteViewStatus {
+  EdgeInsets get currentMargin {
+    switch (this) {
+      case RemoteViewStatus.NotJoined:
+        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+      case RemoteViewStatus.Joined:
+        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+      case RemoteViewStatus.Invited:
+        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+      case RemoteViewStatus.InProgress:
+        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+      case RemoteViewStatus.Done:
+        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+      default:
+        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+    }
+  }
+
+  Size get currentSize {
+    switch (this) {
+      case RemoteViewStatus.NotJoined:
+        return Size(Get.width * 0.95, Get.height * 0.85);
+      case RemoteViewStatus.Joined:
+        return Size(Get.width * 0.95, Get.height * 0.85);
+      case RemoteViewStatus.Invited:
+        return Size(Get.width * 0.95, Get.height * 0.85);
+      case RemoteViewStatus.InProgress:
+        return Size(Get.width * 0.95, Get.height * 0.85);
+      case RemoteViewStatus.Done:
+        return Size(Get.width * 0.95, Get.height * 0.85);
+      default:
+        return Size(Get.width * 0.95, Get.height * 0.85);
+    }
+  }
+}
 
 class RemoteController extends GetxController {
   final firstWord = "".obs;
@@ -15,11 +52,13 @@ class RemoteController extends GetxController {
 
   // References
   LobbyStream _lobbyStream;
+  final _keyboardVisible = KeyboardVisibilityController();
 
   // ** Initializer ** //
   onInit() {
     Get.find<SonrService>().registerRemoteInvite(_handleRemoteInvite);
     super.onInit();
+    _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
   }
 
   // ** Disposer ** //
@@ -78,6 +117,13 @@ class RemoteController extends GetxController {
         currentInvite(null);
         return;
       }
+    }
+  }
+
+  // @ Handle Keyboard Visibility
+  _handleKeyboardVisibility(bool visible) {
+    if (!visible && status.value == RemoteViewStatus.NotJoined) {
+      isJoinFieldTapped(false);
     }
   }
 

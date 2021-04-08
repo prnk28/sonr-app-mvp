@@ -16,7 +16,7 @@ class CompassView extends GetView<TransferController> {
             AspectRatio(
               aspectRatio: 1,
               child: controller.isFacingPeer.value
-                  ? RipplesAnimation(
+                  ? AnimatedRipples(
                       child: _CompassView(),
                     )
                   : _CompassView(),

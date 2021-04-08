@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/common/lobby/sheet_view.dart';
+import 'package:sonr_app/common/lobby/stack_view.dart';
+import 'package:sonr_app/common/lobby/title_widget.dart';
+import 'package:sonr_app/common/peer/item_view.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
-import 'package:sonr_app/pages/transfer/peer_widget.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'compass_view.dart';
-import 'lobby_view.dart';
 import 'transfer_controller.dart';
 
 // ^ Transfer Screen Entry Point ^ //
