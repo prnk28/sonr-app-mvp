@@ -24,7 +24,7 @@ export 'buttons/confirm.dart';
 export 'style/color.dart';
 export 'style/icon.dart';
 export 'style/scaffold.dart';
-export 'style/snackbar.dart';
+export 'elements/snackbar.dart';
 export 'style/text.dart';
 
 // Global UI Widgets
