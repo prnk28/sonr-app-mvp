@@ -1,5 +1,5 @@
-import 'package:sonr_app/common/card/progress_view.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
+import 'package:sonr_app/modules/overlay/overlay.dart';
 import 'package:sonr_app/theme/theme.dart';
 export 'package:sonr_app/data/database/cards_db.dart';
 

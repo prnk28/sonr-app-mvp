@@ -2,9 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/common/contact/contact.dart';
-import 'package:sonr_app/common/card/url_view.dart';
+import 'package:sonr_app/common/url/url.dart';
 import 'package:sonr_app/common/file/file.dart';
-import 'package:sonr_app/common/media/card_view.dart';
+import 'package:sonr_app/common/media/media.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'fixed_overlay.dart';
@@ -12,6 +12,7 @@ import 'positioned_overlay.dart';
 export 'fixed_overlay.dart';
 export 'flat_overlay.dart';
 export 'positioned_overlay.dart';
+export 'progress_overlay.dart';
 
 // ^ Class Builds Base Animated Overlay View ** //
 class BaseOverlayView extends StatefulWidget {
@@ -172,11 +173,11 @@ class InviteReplyOverlayView extends StatelessWidget {
     // Invite Provided - Get View from Payload
     if (!isReply) {
       if (invite.payload == Payload.MEDIA) {
-        view = MediaCard.invite(invite);
+        view = MediaAuthView(invite);
       } else if (invite.payload == Payload.CONTACT) {
         view = ContactAuthView(false, invite: invite);
       } else if (invite.payload == Payload.URL) {
-        view = URLCard.invite(invite);
+        view = URLAuthView(invite);
       } else {
         view = FileAuthView(invite);
       }

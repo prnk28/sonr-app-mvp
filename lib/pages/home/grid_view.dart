@@ -1,6 +1,6 @@
 import 'package:sonr_app/common/contact/contact.dart';
 import 'package:sonr_app/common/file/file.dart';
-import 'package:sonr_app/common/media/card_view.dart';
+import 'package:sonr_app/common/media/media.dart';
 import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
@@ -100,7 +100,7 @@ class _CardGridWidget extends GetView<HomeController> {
   Widget _buildCard(TransferCardItem item) {
     // Determin CardView
     if (item.payload == Payload.MEDIA) {
-      return MediaCard.item(item);
+      return MediaCardView(item);
     } else if (item.payload == Payload.CONTACT) {
       return ContactCardView(item);
     } else {

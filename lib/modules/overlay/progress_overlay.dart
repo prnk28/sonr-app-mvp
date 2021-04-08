@@ -98,8 +98,7 @@ class ProgressView extends HookWidget {
             ? Obx(() {
                 if (SonrService.progress.value >= 0.5) {
                   return OpacityAnimatedWidget(
-                      duration: Duration(milliseconds: 200),
-                      child: Icon(card.metadata.mime.type.gradientData.data, size: 165, color: Colors.white));
+                      duration: Duration(milliseconds: 200), child: Icon(card.metadata.mime.type.gradientData.data, size: 165, color: Colors.white));
                 } else {
                   return Container();
                 }

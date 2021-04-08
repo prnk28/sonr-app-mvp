@@ -8,120 +8,18 @@ import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-class MediaCard extends StatelessWidget {
-  // References
-  final CardType type;
-  final AuthInvite invite;
-  final TransferCard card;
-  final TransferCardItem cardItem;
-
-  // ** Factory -> Invite Dialog View ** //
-  factory MediaCard.invite(AuthInvite invite) {
-    return MediaCard(CardType.Invite, invite: invite, card: invite.card);
-  }
-
-  // ** Factory -> Grid Item View ** //
-  factory MediaCard.item(TransferCardItem card) {
-    return MediaCard(CardType.GridItem, cardItem: card);
-  }
-
-  // ** Constructer ** //
-  const MediaCard(this.type, {Key key, this.invite, this.card, this.cardItem}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    switch (type) {
-      case CardType.Invite:
-        return _MediaInviteView(card, invite);
-        break;
-      case CardType.GridItem:
-        return _MediaItemView(cardItem);
-      default:
-        return Container();
-        break;
-    }
-  }
-}
-
-// ^ File Invite Builds from Invite Protobuf ^ //
-class _MediaInviteView extends StatelessWidget {
-  final TransferCard card;
-  final AuthInvite invite;
-  _MediaInviteView(this.card, this.invite);
-
-  @override
-  Widget build(BuildContext context) {
-    // Build View
-    return Neumorphic(
-      style: SonrStyle.normal,
-      margin: EdgeInsets.all(8),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        key: UniqueKey(),
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // @ Header
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            // Build Profile Pic
-            Container(
-              child: invite.from.profile.hasPicture()
-                  ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                  : Icon(
-                      Icons.insert_emoticon,
-                      size: 60,
-                      color: SonrColor.Black.withOpacity(0.5),
-                    ),
-            ),
-
-            // From Information
-            Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              invite.from.profile.hasLastName()
-                  ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
-                  : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
-              Row(children: [
-                SonrText.gradient(card.metadata.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                SonrText.normal("   ${card.inviteSizeString}", size: 18)
-              ]),
-            ]),
-          ]),
-          Divider(),
-          Container(
-            width: card.preview.isNotEmpty ? Get.width - 50 : Get.width - 150,
-            height: card.preview.isNotEmpty ? Get.height / 3 : Get.height / 5,
-            child: card.preview.isNotEmpty ? SonrIcon.withPreview(card) : SonrIcon.withMime(card.metadata.mime, size: 60),
-          ),
-          Divider(),
-          Padding(padding: EdgeInsets.all(4)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ColorButton.neutral(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
-              Padding(padding: EdgeInsets.all(8)),
-              ColorButton.primary(
-                onPressed: () => CardService.handleInviteResponse(true, invite, card),
-                text: "Accept",
-                gradient: SonrPalette.tertiary(),
-                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // ^ TransferCard Media Item Details ^ //
-class _MediaItemView extends StatefulWidget {
+class MediaCardView extends StatefulWidget {
   final TransferCardItem card;
 
-  _MediaItemView(this.card);
+  MediaCardView(this.card);
 
   @override
-  _MediaItemViewState createState() => _MediaItemViewState();
+  _MediaCardViewState createState() => _MediaCardViewState();
 }
 
-class _MediaItemViewState extends State<_MediaItemView> {
+class _MediaCardViewState extends State<MediaCardView> {
   File mediaFile;
   bool hasLoaded = false;
 
