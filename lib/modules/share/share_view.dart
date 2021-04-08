@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/common/media/queue_view.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/modules/share/share_item.dart';
@@ -24,7 +25,7 @@ class ShareButton extends GetView<ShareController> {
       return _QueueView();
     }
     if (controller.status.value.isMedia) {
-      return _MediaView();
+      return MediaQueueView();
     }
     return _DefaultView();
   }
@@ -52,12 +53,5 @@ class _QueueView extends GetView<ShareController> {
           const ShareGalleryButtonItem(),
           const ShareContactButtonItem(),
         ]));
-  }
-}
-
-class _MediaView extends GetView<ShareController> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }

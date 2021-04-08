@@ -21,7 +21,7 @@ export 'package:open_file/open_file.dart';
 
 export 'package:animated_widgets/animated_widgets.dart';
 export 'package:sonr_app/common/camera/camera_view.dart';
-export 'package:sonr_app/common/media/media_picker.dart';
+export 'package:sonr_app/common/media/sheet_view.dart';
 // Custom Theme Aspects
 export 'elements/header.dart';
 export 'style/background.dart';
