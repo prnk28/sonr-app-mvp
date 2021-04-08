@@ -28,7 +28,9 @@ class PeerBubble extends GetWidget<BubbleController> {
           onLongPress: controller.expandDetails,
           child: Stack(alignment: Alignment.center, children: [
             // Rive Board
-            SizedBox(width: K_BUBBLE_SIZE, height: K_BUBBLE_SIZE, child: Rive(artboard: controller.board.value)),
+            controller.isReady.value
+                ? SizedBox(width: K_BUBBLE_SIZE, height: K_BUBBLE_SIZE, child: Rive(artboard: controller.board.value))
+                : Container(),
 
             // Peer Info
             OpacityAnimatedWidget(
@@ -57,10 +59,13 @@ extension BubbleStatusUtils on BubbleStatus {
 
 // ^ Reactive Controller for Peer Bubble ^ //
 class BubbleController extends GetxController {
+  // Required Properties
+  final Future<RiveFile> riveFile;
+
   // Reactive Elements
   final board = Rx<Artboard>(null);
   final counter = 0.0.obs;
-  final isAnimated = true.obs;
+  final isReady = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
@@ -83,6 +88,13 @@ class BubbleController extends GetxController {
   StateMachineInput<bool> _hasAccepted;
   StateMachineInput<bool> _hasDenied;
   StateMachineInput<bool> _isComplete;
+
+  BubbleController(this.riveFile);
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   // ** Dispose on Close ** //
   @override
@@ -115,20 +127,14 @@ class BubbleController extends GetxController {
     _userStream = LobbyService.userPosition.listen(_handleUserUpdate);
 
     // Set If Animated
-    // Check for animated
     if (setAnimated) {
-      // Create a RiveFile from the binary data
-      final file = RiveFile.import(await rootBundle.load('assets/animations/peer_bubble.riv'));
-
       // Get Values
+      final file = await riveFile;
       final artboard = file.mainArtboard;
       var controller = StateMachineController.fromArtboard(artboard, 'State');
 
       // @ Set Controller
       if (controller != null) {
-        // Set If Animated
-        isAnimated(true);
-
         // Import State Machine
         artboard.addController(controller);
         _isIdle = controller.findInput('IsIdle');
@@ -146,12 +152,13 @@ class BubbleController extends GetxController {
 
         // Observable Artboard
         board(artboard);
+        isReady(true);
       }
 
       // Handle Error
       else {
         print("Failed to find animation controller");
-        isAnimated(false);
+        isReady(false);
       }
     }
   }
@@ -165,7 +172,7 @@ class BubbleController extends GetxController {
   // ^ Handle User Invitation ^
   void invite() {
     // Check Animated
-    if (isAnimated.value) {
+    if (isReady.value) {
       // Check not already Pending
       if (!_isPending.value) {
         // Perform Invite
@@ -184,38 +191,42 @@ class BubbleController extends GetxController {
     }
   }
 
+  // ^ Handle Updated Bubble Status ^ //
   void updateStatus(BubbleStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
-    // Update Status
+    // @ Update Status
     status(newStatus);
 
-    // Check Animated
-    if (isAnimated.value) {
-      // Set Animation
-      switch (status.value) {
-        case BubbleStatus.Default:
-          isVisible(true);
-          _isComplete.value = false;
-          _isPending.value = false;
-          _hasAccepted.value = false;
-          _hasDenied.value = false;
-          _isIdle.value = true;
-          break;
-        case BubbleStatus.Pending:
-          _isPending.value = true;
-          break;
-        case BubbleStatus.Accepted:
-          isVisible(false);
-          _hasAccepted.value = true;
-          break;
-        case BubbleStatus.Declined:
-          isVisible(false);
-          _hasDenied.value = true;
-          break;
-        case BubbleStatus.Complete:
-          isVisible(false);
-          _isComplete.value = true;
-          break;
-      }
+    // @ Check Animated
+    if (isReady.value) {
+      // Handle Delay
+      Future.delayed(delay, () {
+        // Set Animation
+        switch (status.value) {
+          case BubbleStatus.Default:
+            isVisible(true);
+            _isComplete.value = false;
+            _isPending.value = false;
+            _hasAccepted.value = false;
+            _hasDenied.value = false;
+            _isIdle.value = true;
+            break;
+          case BubbleStatus.Pending:
+            _isPending.value = true;
+            break;
+          case BubbleStatus.Accepted:
+            isVisible(false);
+            _hasAccepted.value = true;
+            break;
+          case BubbleStatus.Declined:
+            isVisible(false);
+            _hasDenied.value = true;
+            break;
+          case BubbleStatus.Complete:
+            isVisible(false);
+            _isComplete.value = true;
+            break;
+        }
+      });
     }
   }
 
@@ -322,18 +333,5 @@ class BubbleController extends GetxController {
       isFacing(false);
       counter(0);
     }
-  }
-
-  // ^ Reset Bubble State Machine ^ //
-  void _reset() async {
-    Future.delayed(1.seconds, () {
-      // Call Finish
-      _isComplete.value = false;
-      _isPending.value = false;
-      _hasAccepted.value = false;
-      _hasDenied.value = false;
-      _isIdle.value = true;
-      isVisible(true);
-    });
   }
 }

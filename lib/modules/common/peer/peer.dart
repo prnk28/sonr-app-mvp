@@ -95,7 +95,7 @@ extension WidgetUtils on Peer {
   SonrText get initials {
     var first = this.profile.firstName[0].toUpperCase();
     var last = this.profile.lastName[0].toUpperCase();
-    return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 34, gradient: this.platform.gradient.linear());
+    return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 34, gradient: FlutterGradientNames.glassWater.linear());
   }
 
   SonrIcon get platformIcon {

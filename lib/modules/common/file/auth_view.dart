@@ -14,6 +14,8 @@ class FileAuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     final card = invite.card;
     return Container(
+        height: context.heightTransformer(reducedBy: 35),
+        width: context.widthTransformer(reducedBy: 10),
         child: NeumorphicBackground(
             backendColor: Colors.transparent,
             borderRadius: BorderRadius.circular(20),

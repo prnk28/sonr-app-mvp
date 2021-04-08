@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
@@ -32,6 +33,12 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
-    Get.create<BubbleController>(() => BubbleController());
+    Get.create<BubbleController>(() => BubbleController(_getRiveDataFile()));
+  }
+
+  // Get Rive File for Peer Bubble
+  Future<RiveFile> _getRiveDataFile() async {
+    var data = await rootBundle.load('assets/rive/peer_bubble.riv');
+    return RiveFile.import(data);
   }
 }
