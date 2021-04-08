@@ -204,7 +204,7 @@ class SonrService extends GetxService with TransferQueue {
   }
 
   // ^ Invite-Peer Event ^
-  static void inviteWithController(PeerController c) async {
+  static void inviteWithController(BubbleController c) async {
     // Set Peer Controller
     to.currentInvited(c);
 

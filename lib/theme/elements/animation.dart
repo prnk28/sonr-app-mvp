@@ -7,7 +7,7 @@ import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 enum AnimType { None, Shake, SlideIn, Fade }
 enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
 enum LottieBoard { David, JoinRemote }
-enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, NotFound, Documents }
+enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, Documents }
 
 class AnimatedScale extends StatefulWidget {
   final Widget child;
@@ -353,7 +353,6 @@ class _RiveContainer extends State<RiveContainer> {
   // References
   final String _splashPath = 'assets/rive/splash_screen.riv';
   final String _tilePath = 'assets/rive/tile_preview.riv';
-  final String _notFoundPath = 'assets/rive/not_found.riv';
   final String _documentsPath = 'assets/rive/documents.riv';
 
   // Properties
@@ -365,22 +364,6 @@ class _RiveContainer extends State<RiveContainer> {
     // Load the RiveFile from the binary data.
     if (widget.type == RiveBoard.Splash) {
       rootBundle.load(_splashPath).then(
-        (data) async {
-          // Load the RiveFile from the binary data.
-          final file = RiveFile.import(data);
-
-          // Retreive Artboard
-          final artboard = file.mainArtboard;
-
-          // Determine Animation by Tile Type
-          artboard.addController(SimpleAnimation('Default'));
-          if (mounted) {
-            setState(() => _riveArtboard = artboard);
-          }
-        },
-      );
-    } else if (widget.type == RiveBoard.NotFound) {
-      rootBundle.load(_notFoundPath).then(
         (data) async {
           // Load the RiveFile from the binary data.
           final file = RiveFile.import(data);

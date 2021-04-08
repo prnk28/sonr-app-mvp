@@ -6,16 +6,11 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'peer.dart';
 
-class PeerController extends GetxController {
-  // Properties
-  final Peer peer;
-  final bool isAnimated;
-  final TransferController transfer;
-
+class BubbleController extends GetxController {
   // Reactive Elements
-  final artboard = Rx<Artboard>(null);
+  final board = Rx<Artboard>(null);
   final counter = 0.0.obs;
-
+  final isAnimated = true.obs;
   final hasCompleted = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
@@ -26,19 +21,19 @@ class PeerController extends GetxController {
 
   // References
   Timer _timer;
+  Peer peer;
 
   // Checkers
-  var _isInvited = false;
-  var _hasDenied = false;
-  var _hasAccepted = false;
-  var _inProgress = false;
-  var _hasCompleted = false;
+  StateMachineInput<bool> _isIdle;
+  StateMachineInput<bool> _isPending;
+  StateMachineInput<bool> _hasAccepted;
+  StateMachineInput<bool> _hasDenied;
+  StateMachineInput<bool> _isComplete;
 
   // References
-  SimpleAnimation _pending, _denied, _accepted, _sending, _complete;
   PeerStream peerStream;
   StreamSubscription<VectorPosition> userStream;
-  PeerController(this.transfer, {this.peer, this.isAnimated = true}) {
+  initalize(Peer peer, {bool setAnimated = true}) {
     // Set Initial
     isVisible(true);
     peerVector(VectorPosition(peer.position));
@@ -53,35 +48,57 @@ class PeerController extends GetxController {
     // Add Stream Handlers
     peerStream = LobbyService.listenToPeer(peer).listen(_handlePeerUpdate);
     userStream = LobbyService.userPosition.listen(_handleUserUpdate);
+
+    // Set If Animated
+    isAnimated(setAnimated);
+  }
+
+  @override
+  void onInit() {
     loadAnimations();
+    super.onInit();
   }
 
   void loadAnimations() async {
     // Check for animated
-    if (isAnimated) {
+    if (isAnimated.value) {
       // Create a RiveFile from the binary data
       final file = RiveFile.import(await rootBundle.load('assets/animations/peer_bubble.riv'));
+
+      // Get Values
       final artboard = file.mainArtboard;
+      var controller = StateMachineController.fromArtboard(artboard, 'State');
 
-      // Add Animation Controllers
-      artboard.addController(SimpleAnimation('Idle'));
-      artboard.addController(_pending = SimpleAnimation('Pending'));
-      artboard.addController(_denied = SimpleAnimation('Denied'));
-      artboard.addController(_accepted = SimpleAnimation('Accepted'));
-      artboard.addController(_sending = SimpleAnimation('Sending'));
-      artboard.addController(_complete = SimpleAnimation('Complete'));
+      // @ Set Controller
+      if (controller != null) {
+        // Set If Animated
+        isAnimated(true);
 
-      // Set Default States
-      _pending.isActive = _isInvited;
-      _denied.isActive = _hasDenied;
-      _accepted.isActive = _hasAccepted;
-      _sending.isActive = _inProgress;
-      _complete.isActive = _hasCompleted;
+        // Import State Machine
+        artboard.addController(controller);
+        _isIdle = controller.findInput('IsIdle');
+        _isPending = controller.findInput('IsPending');
+        _hasAccepted = controller.findInput('HasAccepted');
+        _hasDenied = controller.findInput('HasDenied');
+        _isComplete = controller.findInput('IsComplete');
 
-      // Observable Artboard
-      this.artboard(artboard);
+        // Set Defaults
+        _isComplete.value = false;
+        _isPending.value = false;
+        _hasAccepted.value = false;
+        _hasDenied.value = false;
+        _isIdle.value = true;
+
+        // Observable Artboard
+        board(artboard);
+      }
+
+      // Handle Error
+      else {
+        print("Failed to find animation controller");
+        isAnimated(false);
+      }
     }
-    super.onInit();
   }
 
   @override
@@ -97,15 +114,14 @@ class PeerController extends GetxController {
 
   // ^ Handle User Invitation ^
   void invite() {
-    if (!_isInvited) {
+    if (!_isPending.value) {
       // Perform Invite
       SonrService.inviteWithController(this);
-      transfer.setFacingPeer(false);
+      Get.find<TransferController>().setFacingPeer(false);
 
       // Check for File
       if (Get.find<SonrService>().payload == Payload.MEDIA) {
-        _pending.instance.animation.loop = Loop.pingPong;
-        _pending.isActive = _isInvited = !_isInvited;
+        _isPending.value = true;
       }
       // Contact/URL
       else {
@@ -126,25 +142,19 @@ class PeerController extends GetxController {
     isVisible(false);
 
     // Start Animation
-    _pending.instance.animation.loop = Loop.oneShot;
-    _accepted.isActive = _hasAccepted = !_hasAccepted;
-
-    // Update After Delay
-    Future.delayed(Duration(milliseconds: 900)).then((_) {
-      _accepted.instance.time = 0.0;
-      _sending.isActive = _inProgress = !_inProgress;
-    });
+    _hasAccepted.value = true;
   }
 
   // ^ Handle Denied ^
   void playDenied() async {
+    // Update Visibility
+    isVisible(false);
+
     // Start Animation
-    _pending.instance.animation.loop = Loop.oneShot;
-    _denied.isActive = _hasDenied = !_hasDenied;
+    _hasDenied.value = true;
 
     // Update After Delay
     Future.delayed(Duration(milliseconds: 1000)).then((_) {
-      hasCompleted(true);
       _reset();
     });
   }
@@ -153,17 +163,9 @@ class PeerController extends GetxController {
   void playCompleted() async {
     // Update Visibility
     isVisible(true);
-    hasCompleted(true);
 
     // Start Complete Animation
-    _sending.instance.animation.loop = Loop.oneShot;
-    _complete.isActive = _hasCompleted = !_hasCompleted;
-
-    // Update After Delay
-    Future.delayed(Duration(milliseconds: 2500)).then((_) {
-      // Call Finish
-      _reset();
-    });
+    _isComplete.value = true;
   }
 
   // ^ Handle Peer Position ^ //
@@ -171,11 +173,11 @@ class PeerController extends GetxController {
     if (!isClosed) {
       if (!hasCompleted.value) {
         // Update Direction
-        if (peer.id.peer == peer.id.peer && !_isInvited) {
+        if (peer.id.peer == peer.id.peer && !_isPending.value) {
           peerVector(VectorPosition(peer.position));
 
           // Handle Changes
-          if (transfer.isShiftingEnabled.value) {
+          if (Get.find<TransferController>().isShiftingEnabled.value) {
             _handleFacingUpdate();
           }
         }
@@ -191,7 +193,7 @@ class PeerController extends GetxController {
         userVector(pos);
 
         // Find Offset
-        if (transfer.isShiftingEnabled.value) {
+        if (Get.find<TransferController>().isShiftingEnabled.value) {
           if (peer.isOnDesktop) {
             offset(Offset.zero);
           } else {
@@ -244,37 +246,28 @@ class PeerController extends GetxController {
 
   // ^ Temporary: Workaround to handle Bubble States ^ //
   void _reset() async {
-    // Call Finish
-    _hasDenied = false;
-    _hasCompleted = false;
-    _inProgress = false;
-    _isInvited = false;
+    Future.delayed(1.seconds, () {
+      // Call Finish
+      _isComplete.value = false;
+      _isPending.value = false;
+      _hasAccepted.value = false;
+      _hasDenied.value = false;
+      _isIdle.value = true;
+    });
+
     isVisible(true);
-
-    // Remove Sending/Complete
-    artboard.value.removeController(_sending);
-    artboard.value.removeController(_complete);
-
-    // Add Animation Controllers
-    artboard.value.addController(_sending = SimpleAnimation('Sending'));
-    artboard.value.addController(_complete = SimpleAnimation('Complete'));
-
-    // Set Default States
-    _denied.isActive = _hasDenied;
-    _sending.isActive = _inProgress;
-    _complete.isActive = _hasCompleted;
   }
 
   // ^ Begin Facing Invite Check ^ //
   void _startTimer() {
-    transfer.setFacingPeer(true);
+    Get.find<TransferController>().setFacingPeer(true);
     _timer = Timer.periodic(500.milliseconds, (_) {
       // Add MS to Counter
       counter(counter.value += 500);
 
       // Check if Facing
       if (counter.value == 2500) {
-        if (isFacing.value && !hasCompleted.value && !_inProgress) {
+        if (isFacing.value && !hasCompleted.value && !_isPending.value) {
           invite();
           _stopTimer();
         } else {
@@ -287,7 +280,7 @@ class PeerController extends GetxController {
   // ^ Stop Timer for Facing Check ^ //
   void _stopTimer() {
     if (_timer != null) {
-      transfer.setFacingPeer(false);
+      Get.find<TransferController>().setFacingPeer(false);
       _timer.cancel();
       _timer = null;
       isFacing(false);

@@ -1,4 +1,5 @@
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
+import 'package:rive/rive.dart';
+
 import 'peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer.dart';
@@ -6,43 +7,45 @@ import 'peer.dart';
 const double K_BUBBLE_SIZE = 80;
 
 // ^ PeerBubble Utilizes Controller and Lottie Files ^ //
-class PeerBubble extends StatelessWidget {
+class PeerBubble extends GetWidget<BubbleController> {
   final Peer peer;
-  final TransferController transfer;
-  PeerBubble(this.peer, this.transfer);
+  PeerBubble(this.peer) {
+    controller.initalize(peer);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GetX<PeerController>(
-        autoRemove: false,
-        init: PeerController(transfer, peer: peer, isAnimated: false),
-        builder: (controller) {
-          return AnimatedPositioned(
-              width: K_BUBBLE_SIZE,
-              height: K_BUBBLE_SIZE,
-              top: controller.offset.value.dy - (ZonePathProvider.size / 2),
-              left: controller.offset.value.dx - (ZonePathProvider.size / 2),
-              duration: 150.milliseconds,
-              child: ShapeButton.circle(
-                  onPressed: controller.invite,
-                  onLongPressed: controller.expandDetails,
-                  child: Stack(alignment: Alignment.center, children: [
-                    OpacityAnimatedWidget(
-                        enabled: controller.isVisible.value,
-                        values: controller.isVisible.value ? [0, 1] : [1, 0],
-                        duration: Duration(milliseconds: 250),
-                        delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                          controller.peer.initials,
-                        ]))
-                  ])));
-        });
+    return Obx(() {
+      return AnimatedPositioned(
+          width: K_BUBBLE_SIZE,
+          height: K_BUBBLE_SIZE,
+          top: controller.offset.value.dy - (ZonePathProvider.size / 2),
+          left: controller.offset.value.dx - (ZonePathProvider.size / 2),
+          duration: 150.milliseconds,
+          child: GestureDetector(
+              onTap: controller.invite,
+              onLongPress: controller.expandDetails,
+              child: Stack(alignment: Alignment.center, children: [
+                // Rive Board
+                SizedBox(width: K_BUBBLE_SIZE, height: K_BUBBLE_SIZE, child: Rive(artboard: controller.board.value)),
+
+                // Peer Info
+                OpacityAnimatedWidget(
+                    enabled: controller.isVisible.value,
+                    values: controller.isVisible.value ? [0, 1] : [1, 0],
+                    duration: Duration(milliseconds: 250),
+                    delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                      controller.peer.initials,
+                    ]))
+              ])));
+    });
   }
 }
 
 // ^ PeerSheetView Displays Extended Peer Details ^ //
 class PeerDetailsView extends StatelessWidget {
-  final PeerController controller;
+  final BubbleController controller;
   const PeerDetailsView(this.controller, {Key key}) : super(key: key);
 
   @override

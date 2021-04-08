@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/modules/profile/tile_item.dart';
 import 'package:sonr_app/modules/remote/remote_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ^ Initial Controller Bindings ^ //
@@ -23,5 +25,13 @@ class HomeBinding implements Bindings {
     Get.lazyPut<RemoteController>(() => RemoteController());
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.create<TileController>(() => TileController());
+  }
+}
+
+class TransferBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<TransferController>(TransferController(), permanent: true);
+    Get.create<BubbleController>(() => BubbleController());
   }
 }

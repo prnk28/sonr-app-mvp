@@ -7,16 +7,15 @@ import 'package:sonr_app/theme/theme.dart';
 import 'transfer_controller.dart';
 
 // ^ Transfer Screen Entry Point ^ //
-class TransferScreen extends StatelessWidget {
+class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
-    return GetX<TransferController>(
-      init: TransferController(),
-      builder: (controller) {
+    return Obx(
+      () {
         if (controller.isRemoteActive.value) {
           return RemoteLobbyFullView(controller, info: controller.remote.value);
         } else {
-          return LocalLobbyView(controller);
+          return LocalLobbyView();
         }
       },
     );

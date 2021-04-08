@@ -47,7 +47,7 @@ class TransferQueue {
   }
 
   // ^ Current Transfer has Updated Progress ^ //
-  currentInvited(PeerController controller) {
+  currentInvited(BubbleController controller) {
     if (isQueueNotEmpty) {
       currentTransfer.peerController = controller;
     }
@@ -111,10 +111,10 @@ class TransferQueueItem {
   final List<Metadata> files;
 
   // Controller
-  PeerController _peerController;
+  BubbleController _peerController;
   bool get hasPeerController => _peerController != null;
-  PeerController get peerController => hasPeerController ? _peerController : null;
-  set peerController(PeerController controller) => _peerController = controller;
+  BubbleController get peerController => hasPeerController ? _peerController : null;
+  set peerController(BubbleController controller) => _peerController = controller;
 
   // Controller
   Peer _peer;
