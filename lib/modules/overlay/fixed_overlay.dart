@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/profile/profile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'overlay.dart';
@@ -123,11 +122,11 @@ class SonrOverlay extends GetxService {
   static void invite(AuthInvite invite,
       {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration entryDuration = const Duration(milliseconds: 350)}) {
+      Duration entryDuration = const Duration(milliseconds: 450)}) {
     if (!isOpen) {
       // Create Overlay
       var cardOverlay = _SonrFixedOverlayEntry(
-        SonrOffset.fromDegrees(invite.from.position.facingAntipodal),
+        SonrOffset.Top,
         entryDuration,
         barrierDismissible,
         InviteReplyOverlayView(count, false, invite: invite),
@@ -144,11 +143,11 @@ class SonrOverlay extends GetxService {
   static void reply(AuthReply reply,
       {bool barrierDismissible: false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
-      Duration entryDuration = const Duration(milliseconds: 350)}) {
+      Duration entryDuration = const Duration(milliseconds: 450)}) {
     if (!isOpen) {
       // Create Overlay
       var cardOverlay = _SonrFixedOverlayEntry(
-          SonrOffset.fromDegrees(reply.from.position.facingAntipodal),
+          SonrOffset.Top,
           entryDuration,
           barrierDismissible,
           InviteReplyOverlayView(

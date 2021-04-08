@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/modules/profile/editing_view.dart';
 import 'package:sonr_app/modules/profile/profile_controller.dart';
 import 'package:sonr_app/modules/profile/tile_item.dart';
 import 'package:sonr_app/modules/remote/remote_controller.dart';
