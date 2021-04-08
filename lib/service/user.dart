@@ -50,6 +50,7 @@ class UserService extends GetxService {
   static RxString get firstName => to._firstName;
   static RxString get lastName => to._lastName;
   static RxString get phone => to._phone;
+  static Rx<Uint8List> get picture => to._picture;
   static RxString get email => to._email;
   static RxString get website => to._website;
   static RxList<Contact_SocialTile> get socials => to._socials;
@@ -157,42 +158,36 @@ class UserService extends GetxService {
   static setFirstName(String value) {
     var controller = to;
     controller._firstName(value);
-    saveChanges();
   }
 
   // ^ Modify Contact LastName Value ^ //
   static setLastName(String value) {
     var controller = to;
     controller._lastName(value);
-    saveChanges();
   }
 
   // ^ Modify Contact Phone Value ^ //
   static setPhone(String value) {
     var controller = to;
     controller._phone(value);
-    saveChanges();
   }
 
   // ^ Modify Contact Email Value ^ //
   static setEmail(String value) {
     var controller = to;
     controller._email(value);
-    saveChanges();
   }
 
   // ^ Modify Contact Website Value ^ //
   static setWebsite(String value) {
     var controller = to;
     controller._website(value);
-    saveChanges();
   }
 
   // ^ Modify Contact Picture Value ^ //
   static setPicture(Uint8List value) {
     var controller = to;
     controller._picture(value);
-    saveChanges();
   }
 
   // ^ Method to Save Changes ^ //
@@ -220,6 +215,8 @@ class UserService extends GetxService {
   Future<User> _saveContactForUser(Contact contact) async {
     // @ Initialize
     _contact(contact);
+    _contact.refresh();
+
     User user;
     if (_hasUser.value) {
       // Update Existing User with new Contact

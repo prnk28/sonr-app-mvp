@@ -51,6 +51,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
     );
   }
 
+  // @ Build Circular Camera
   Widget _buildCamera() {
     return Neumorphic(
         padding: EdgeInsets.all(10),
@@ -66,6 +67,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
         ));
   }
 
+  // @ Build Permissions Request
   Widget _buildPermissions() {
     return Column(
       children: [
@@ -105,6 +107,7 @@ class ProfilePictureController extends GetxController {
     if (_photoCapturePath != "") {
       var file = MediaFile.capture(_photoCapturePath, false, 0);
       UserService.setPicture(await file.toUint8List());
+      UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
     }
   }

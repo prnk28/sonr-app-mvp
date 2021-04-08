@@ -137,7 +137,6 @@ class _AvatarField extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () async {
-        
         controller.setAddPicture();
       },
       child: Padding(
@@ -148,12 +147,12 @@ class _AvatarField extends GetView<ProfileController> {
             boxShape: NeumorphicBoxShape.circle(),
             depth: -10,
           ),
-          child: Obx(() => UserService.contact.value.hasPicture()
+          child: Obx(() => UserService.picture.value != null
               ? Container(
                   width: 120,
                   height: 120,
                   child: CircleAvatar(
-                    backgroundImage: MemoryImage(UserService.contact.value.picture),
+                    backgroundImage: MemoryImage(UserService.picture.value),
                   ),
                 )
               : Icon(
