@@ -315,5 +315,4 @@ class SonrText extends StatelessWidget {
       return SonrColor.Black;
     }
   }
-
 }

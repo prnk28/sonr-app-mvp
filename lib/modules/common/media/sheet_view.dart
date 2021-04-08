@@ -3,23 +3,18 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'dart:io';
 
-// ^ MediaPicker Sheet View ^ //
 class MediaPickerSheet extends StatefulWidget {
   final Function(MediaItem file) onMediaSelected;
   MediaPickerSheet({@required this.onMediaSelected});
+
   @override
   _MediaPickerSheetState createState() => _MediaPickerSheetState();
 }
 
 class _MediaPickerSheetState extends State<MediaPickerSheet> {
   ValueNotifier<MediaItem> _selectedItem = ValueNotifier<MediaItem>(null);
-  ValueNotifier<List<MediaItem>> _mediaList = ValueNotifier<List<MediaItem>>(MediaService.allAlbum.value.assets);
+  final _mediaList = RxList<MediaItem>(MediaService.allAlbum.value.assets);
   final RxInt index = (-1).obs;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,42 +25,40 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
       borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       backendColor: Colors.transparent,
       child: SonrScaffold.appBarCustom(
-        leading: ShapeButton.rectangle(
-            radius: 20,
-            shape: NeumorphicShape.convex,
-            onPressed: () => Get.back(),
-            icon: SonrIcon.normal(Icons.close, color: SonrPalette.Red, size: 38)),
-        floatingActionButton: ShapeButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
-        middle: AlbumsDropdown(index: index),
-        body: MediaService.allAlbum.value.isEmpty
-            ? Center(child: SonrText.subtitle("Album is Empty."))
-            : ValueListenableBuilder(
-                builder: (BuildContext context, List<MediaItem> list, Widget child) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    height: Get.height / 2 + 80,
-                    child: AnimatedSlideSwitcher.fade(
-                      duration: 2800.milliseconds,
-                      child: GridView.builder(
-                          key: ValueKey<List<MediaItem>>(list),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
-                          itemCount: list != null ? list.length : 0,
-                          itemBuilder: (context, index) {
-                            return ValueListenableBuilder(
-                                builder: (BuildContext context, MediaItem selected, Widget child) {
-                                  return _SonrMediaButton(
-                                    list[index],
-                                    checkSelected(index, selected),
-                                    (item) => select(item),
-                                  );
-                                },
-                                valueListenable: _selectedItem);
-                          }),
-                    ),
-                  );
-                },
-                valueListenable: _mediaList),
-      ),
+          leading: ShapeButton.rectangle(
+              radius: 20,
+              shape: NeumorphicShape.convex,
+              onPressed: () => Get.back(),
+              icon: SonrIcon.normal(Icons.close, color: SonrPalette.Red, size: 38)),
+          floatingActionButton: ShapeButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
+          middle: AlbumsDropdown(index: index),
+          body: ObxValue<RxList<MediaItem>>((list) {
+            if (MediaService.allAlbum.value.isEmpty) {
+              return Center(child: SonrText.subtitle("Album is Empty."));
+            } else {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                height: Get.height / 2 + 80,
+                child: AnimatedSlideSwitcher.fade(
+                  duration: 2800.milliseconds,
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
+                      itemCount: list != null ? list.length : 0,
+                      itemBuilder: (context, index) {
+                        return ValueListenableBuilder(
+                            builder: (BuildContext context, MediaItem selected, Widget child) {
+                              return _SonrMediaButton(
+                                list[index],
+                                checkSelected(index, selected),
+                                (item) => select(item),
+                              );
+                            },
+                            valueListenable: _selectedItem);
+                      }),
+                ),
+              );
+            }
+          }, _mediaList)),
     );
   }
 
@@ -78,7 +71,8 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
 
   setMediaCollection(int index) async {
     var updatedCollection = MediaService.albums[index];
-    _mediaList.value = updatedCollection.assets;
+    _mediaList(updatedCollection.assets);
+    _mediaList.refresh();
   }
 
   select(MediaItem item) async {
