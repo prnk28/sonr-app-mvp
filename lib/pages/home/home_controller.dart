@@ -9,7 +9,7 @@ enum HomeState { Loading, Ready, None, New, First }
 
 class HomeController extends GetxController {
   // Properties
-  final status = Rx<HomeState>();
+  final status = Rx<HomeState>(HomeState.None);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
   final isBottomBarVisible = true.obs;
 

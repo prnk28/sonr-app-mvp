@@ -78,7 +78,7 @@ class _FlatModeView extends StatelessWidget {
 // ** Reactive Flat Mode Controller ** //
 class _FlatModeController extends GetxController {
   // Properties
-  final received = Rx<Contact>();
+  final received = Rx<Contact>(null);
   final status = Rx<FlatModeState>(FlatModeState.Standby);
   final animation = Rx<_FlatModeAnimation>(_FlatModeAnimation(FlatModeTransition.Standby));
   final transition = Rx<FlatModeTransition>(FlatModeTransition.Standby);

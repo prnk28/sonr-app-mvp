@@ -21,7 +21,7 @@ class AddTileView extends GetView<ProfileController> {
                 child: ShapeButton.rectangle(
                     radius: 20,
                     shape: NeumorphicShape.convex,
-                    onPressed: controller.exitAddTile,
+                    onPressed: controller.exitToViewing,
                     icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38, style: SonrStyle.appBarIcon))),
             Container(
               height: controller.step.value.height,

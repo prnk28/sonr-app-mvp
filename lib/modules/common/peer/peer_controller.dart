@@ -13,7 +13,7 @@ class PeerController extends GetxController {
   final TransferController transfer;
 
   // Reactive Elements
-  final artboard = Rx<Artboard>();
+  final artboard = Rx<Artboard>(null);
   final counter = 0.0.obs;
 
   final hasCompleted = false.obs;
@@ -21,8 +21,8 @@ class PeerController extends GetxController {
   final isVisible = true.obs;
   final isWithin = false.obs;
   final offset = Offset(0, 0).obs;
-  final peerVector = Rx<VectorPosition>();
-  final userVector = Rx<VectorPosition>();
+  final peerVector = Rx<VectorPosition>(null);
+  final userVector = Rx<VectorPosition>(null);
 
   // References
   Timer _timer;
@@ -59,32 +59,27 @@ class PeerController extends GetxController {
   void loadAnimations() async {
     // Check for animated
     if (isAnimated) {
-      // Load your Rive data
-      final data = await rootBundle.load('assets/animations/peer_bubble.riv');
-
       // Create a RiveFile from the binary data
-      final file = RiveFile();
-      if (file.import(data)) {
-        final artboard = file.mainArtboard;
+      final file = RiveFile.import(await rootBundle.load('assets/animations/peer_bubble.riv'));
+      final artboard = file.mainArtboard;
 
-        // Add Animation Controllers
-        artboard.addController(SimpleAnimation('Idle'));
-        artboard.addController(_pending = SimpleAnimation('Pending'));
-        artboard.addController(_denied = SimpleAnimation('Denied'));
-        artboard.addController(_accepted = SimpleAnimation('Accepted'));
-        artboard.addController(_sending = SimpleAnimation('Sending'));
-        artboard.addController(_complete = SimpleAnimation('Complete'));
+      // Add Animation Controllers
+      artboard.addController(SimpleAnimation('Idle'));
+      artboard.addController(_pending = SimpleAnimation('Pending'));
+      artboard.addController(_denied = SimpleAnimation('Denied'));
+      artboard.addController(_accepted = SimpleAnimation('Accepted'));
+      artboard.addController(_sending = SimpleAnimation('Sending'));
+      artboard.addController(_complete = SimpleAnimation('Complete'));
 
-        // Set Default States
-        _pending.isActive = _isInvited;
-        _denied.isActive = _hasDenied;
-        _accepted.isActive = _hasAccepted;
-        _sending.isActive = _inProgress;
-        _complete.isActive = _hasCompleted;
+      // Set Default States
+      _pending.isActive = _isInvited;
+      _denied.isActive = _hasDenied;
+      _accepted.isActive = _hasAccepted;
+      _sending.isActive = _inProgress;
+      _complete.isActive = _hasCompleted;
 
-        // Observable Artboard
-        this.artboard(artboard);
-      }
+      // Observable Artboard
+      this.artboard(artboard);
     }
     super.onInit();
   }

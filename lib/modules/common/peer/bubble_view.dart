@@ -15,7 +15,7 @@ class PeerBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetX<PeerController>(
         autoRemove: false,
-        init: PeerController(transfer, peer: peer),
+        init: PeerController(transfer, peer: peer, isAnimated: false),
         builder: (controller) {
           return AnimatedPositioned(
               width: K_BUBBLE_SIZE,

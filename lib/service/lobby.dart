@@ -17,10 +17,10 @@ class LobbyService extends GetxService {
   final _lastIsFacingFlat = false.obs;
   final _isFlatMode = false.obs;
   final _lobbies = RxList<LobbyModel>();
-  final _local = Rx<LobbyModel>();
+  final _local = Rx<LobbyModel>(null);
   final _localFlatPeers = RxMap<String, Peer>();
   final _localSize = 0.obs;
-  final _position = Rx<VectorPosition>();
+  final _position = Rx<VectorPosition>(null);
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 

@@ -37,7 +37,7 @@ class SonrService extends GetxService with TransferQueue {
   final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
-  final _status = Rx<Status>();
+  final _status = Rx<Status>(Status.NONE);
 
   // @ Static Accessors
   static RxDouble get progress => to._progress;

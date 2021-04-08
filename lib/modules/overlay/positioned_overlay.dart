@@ -14,7 +14,7 @@ class SonrPositionedOverlay extends GetxService {
 
   // Positioned Properties
   final overlays = <_SonrPositionedOverlayEntry>[].obs;
-  final currentOverlay = Rx<_SonrPositionedOverlayEntry>();
+  final currentOverlay = Rx<_SonrPositionedOverlayEntry>(null);
 
   // References
   static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;

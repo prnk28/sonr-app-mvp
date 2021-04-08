@@ -10,6 +10,7 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return SonrScaffold(
+        resizeToAvoidBottomInset: false,
         bottomNavigationBar: HomeBottomNavBar(),
         body: Obx(() => AnimatedSlideSwitcher(
               controller.getSwitcherAnimation(),

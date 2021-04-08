@@ -11,20 +11,15 @@ class EditProfileView extends GetView<ProfileController> {
       margin: EdgeInsets.only(left: 10, right: 10),
       child: CustomScrollView(slivers: [
         // @ Top Banner
-        SliverAppBar(
-          backgroundColor: Colors.transparent,
-          title: Container(
+        SliverToBoxAdapter(
+          child: Container(
             height: kToolbarHeight + 24,
             child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  PlainButton(
-                      icon: SonrIcon.close,
-                      onPressed: () {
-                        SonrOverlay.back();
-                      }),
+                  PlainButton(icon: SonrIcon.close, onPressed: controller.exitToViewing),
                   Expanded(child: Center(child: SonrText.header(headerText, size: 34))),
                   PlainButton(icon: SonrIcon.accept, onPressed: controller.completeEditing)
                 ]),
@@ -41,7 +36,7 @@ class EditNameView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     // Extract Data
-    var hintName = SonrTextField.hintName();
+    final hintName = SonrTextField.hintName();
 
     // Build View
     return SliverFillRemaining(

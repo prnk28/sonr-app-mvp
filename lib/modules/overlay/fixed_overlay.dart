@@ -14,7 +14,7 @@ class SonrOverlay extends GetxService {
 
   // Fixed Properties
   final overlays = <_SonrFixedOverlayEntry>[].obs;
-  final currentOverlay = Rx<_SonrFixedOverlayEntry>();
+  final currentOverlay = Rx<_SonrFixedOverlayEntry>(null);
 
   // References
   static bool get isOpen => Get.find<SonrOverlay>().overlays.length > 0;

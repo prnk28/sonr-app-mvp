@@ -20,7 +20,7 @@ class ProfileController extends GetxController {
   final editedPhone = RxString(UserService.phone.value);
 
   // References
-  final step = Rx<TileStep>();
+  final step = Rx<TileStep>(null);
   final pageController = PageController();
 
   // ** Initialize Method ** //
@@ -35,13 +35,13 @@ class ProfileController extends GetxController {
   }
 
   // ^ Start Editing ^ //
-  exitAddTile() {
-    status(ProfileViewStatus.Viewing);
-  }
-
-  // ^ Start Editing ^ //
   setEditingMode() {
     status(ProfileViewStatus.Editing);
+  }
+
+  // ^ End Add/Edit State ^ //
+  exitToViewing() {
+    status(ProfileViewStatus.Viewing);
   }
 
   // ^ Completed Editing ^ //

@@ -44,10 +44,10 @@ class RemoteController extends GetxController {
   final firstWord = "".obs;
   final secondWord = "".obs;
   final thirdWord = "".obs;
-  final currentRemote = Rx<RemoteInfo>();
-  final currentLobby = Rx<LobbyModel>();
-  final currentInvite = Rx<AuthInvite>();
-  final receivedCard = Rx<TransferCard>();
+  final currentRemote = Rx<RemoteInfo>(null);
+  final currentLobby = Rx<LobbyModel>(null);
+  final currentInvite = Rx<AuthInvite>(null);
+  final receivedCard = Rx<TransferCard>(null);
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
   final isJoinFieldTapped = false.obs;
 

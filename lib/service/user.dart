@@ -15,7 +15,7 @@ class UserService extends GetxService {
   // ** User Reactive Properties **
   final _hasUser = false.obs;
   final _isNewUser = false.obs;
-  final _contact = Rx<Contact>();
+  final _contact = Rx<Contact>(null);
 
   // ** Contact Reactive Properties **
   final _firstName = "".obs;
@@ -23,11 +23,11 @@ class UserService extends GetxService {
   final _phone = "".obs;
   final _email = "".obs;
   final _website = "".obs;
-  final _picture = Rx<Uint8List>();
+  final _picture = Rx<Uint8List>(null);
   final _socials = <Contact_SocialTile>[].obs;
 
   // Preferences
-  final _brightness = Rx<Brightness>();
+  final _brightness = Rx<Brightness>(Brightness.light);
   final _isDarkMode = false.val('isDarkMode', getBox: () => GetStorage('Preferences'));
   final _hasFlatMode = false.val('flatModeEnabled', getBox: () => GetStorage('Preferences'));
   final _hasPointToShare = false.val('pointToShareEnabled', getBox: () => GetStorage('Preferences'));
