@@ -31,16 +31,19 @@ class ProfileController extends GetxController {
 
   // ^ Start Editing Picture ^ //
   void setAddPicture() {
+    HapticFeedback.heavyImpact();
     status(ProfileViewStatus.AddPicture);
   }
 
   // ^ Start Editing for Social Tile ^ //
   void setAddTile() {
+    HapticFeedback.heavyImpact();
     status(ProfileViewStatus.AddSocial);
   }
 
   // ^ Start Editing for Details ^ //
   void setEditingMode() {
+    HapticFeedback.heavyImpact();
     status(ProfileViewStatus.EditDetails);
   }
 

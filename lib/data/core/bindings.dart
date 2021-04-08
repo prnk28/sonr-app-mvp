@@ -13,7 +13,7 @@ import 'package:sonr_app/theme/theme.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CameraController>(() => CameraController(), fenix: true);
+    Get.lazyPut<CameraController>(() => CameraController());
   }
 }
 
@@ -25,6 +25,7 @@ class HomeBinding implements Bindings {
     Get.put<ShareController>(ShareController(), permanent: true);
     Get.lazyPut<RemoteController>(() => RemoteController());
     Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut<ProfilePictureController>(() => ProfilePictureController());
     Get.create<TileController>(() => TileController());
   }
 }

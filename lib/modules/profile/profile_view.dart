@@ -99,7 +99,7 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
             ),
             PlainButton(
               icon: SonrIcon.more,
-              onPressed: () => {},
+              onPressed: controller.setEditingMode,
             ),
           ])),
     );
@@ -137,7 +137,7 @@ class _AvatarField extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () async {
-        HapticFeedback.heavyImpact();
+        
         controller.setAddPicture();
       },
       child: Padding(
