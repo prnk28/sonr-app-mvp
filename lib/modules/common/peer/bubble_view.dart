@@ -2,6 +2,8 @@ import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
+import 'peer.dart';
+
 const double K_BUBBLE_SIZE = 80;
 
 // ^ PeerBubble Utilizes Controller and Lottie Files ^ //

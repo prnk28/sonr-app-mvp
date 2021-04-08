@@ -1,5 +1,6 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
+import 'profile.dart';
+
 class EditDialog extends GetView<EditDialogController> {
   final String headerText;
   final EditType type;
@@ -33,14 +34,23 @@ class EditDialog extends GetView<EditDialogController> {
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // @ Top Banner
-                      SonrHeaderBar.twoButton(
-                          title: SonrText.header(headerText, size: 34),
-                          leading: ShapeButton.circle(
-                              icon: SonrIcon.close,
-                              onPressed: () {
-                                SonrOverlay.back();
-                              }),
-                          action: ShapeButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)),
+                      Container(
+                        height: kToolbarHeight + 16 * 2,
+                        padding: EdgeInsets.only(top: 0, bottom: 15, left: 14, right: 14),
+                        child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ShapeButton.circle(
+                                  icon: SonrIcon.close,
+                                  onPressed: () {
+                                    SonrOverlay.back();
+                                  }),
+                              Expanded(child: Center(child: SonrText.header(headerText, size: 34))),
+                              ShapeButton.circle(icon: SonrIcon.accept, onPressed: controller.complete)
+                            ]),
+                      ),
 
                       // @ Window Content
                       type.view,
@@ -57,7 +67,7 @@ class EditNameView extends GetView<EditDialogController> {
     final lastNameFocus = FocusNode();
     final phoneFocus = FocusNode();
     final scroller = ScrollController();
-    var hintName = SonrText.hintName();
+    var hintName = SonrTextField.hintName();
 
     // Build View
     return Material(

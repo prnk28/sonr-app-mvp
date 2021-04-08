@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/profile/profile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'overlay.dart';
-import 'package:sonr_app/data/data.dart';
+
 // ^ Class Controls Active Overlays ** //
 class SonrOverlay extends GetxService {
   // Accessors

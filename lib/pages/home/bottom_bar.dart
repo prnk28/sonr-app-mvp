@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/share/share_view.dart';
+import 'package:sonr_app/modules/share/button_view.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 

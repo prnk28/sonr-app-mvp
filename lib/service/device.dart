@@ -67,6 +67,8 @@ class DeviceService extends GetxService {
   static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
   static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
   static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+  static bool get isNotApple =>
+      Get.find<DeviceService>()._platform.value != Platform.iOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
 
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {

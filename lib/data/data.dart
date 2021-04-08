@@ -1,7 +1,6 @@
 // API
-export 'api/api_models.dart';
+export 'api/extensions.dart';
 export 'api/api_primitive.dart';
-export 'api/api_vector.dart';
 export 'api/api_widgets.dart';
 export 'api/mixin_queue.dart';
 

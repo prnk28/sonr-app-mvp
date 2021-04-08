@@ -1,8 +1,6 @@
-import 'package:sonr_app/modules/profile/profile_controller.dart';
+import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
-import 'create_tile.dart';
-import 'edit_dialog.dart';
+import 'profile.dart';
 
 class ProfileHeaderBar extends StatelessWidget {
   // Sliver Attributes

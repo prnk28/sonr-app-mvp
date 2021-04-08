@@ -3,8 +3,6 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'dart:io';
 
-import 'dropdown_widget.dart';
-
 // ^ MediaPicker Sheet View ^ //
 class MediaPickerSheet extends StatefulWidget {
   final Function(MediaItem file) onMediaSelected;

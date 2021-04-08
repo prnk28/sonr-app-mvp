@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/data/data.dart';
+import 'contact.dart';
 
 // ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
 class ContactFlatCard extends StatelessWidget {
