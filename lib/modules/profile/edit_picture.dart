@@ -106,7 +106,7 @@ class ProfilePictureController extends GetxController {
   confirm() async {
     if (_photoCapturePath != "") {
       var file = MediaFile.capture(_photoCapturePath, false, 0);
-      UserService.setPicture(await file.toUint8List());
+      UserService.picture(await file.toUint8List());
       UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
     }

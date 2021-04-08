@@ -55,9 +55,9 @@ class ProfileController extends GetxController {
   // ^ Completed Editing Details ^ //
   void saveEditedDetails() {
     // Update Values in Profile Controller
-    UserService.setFirstName(editedFirstName.value);
-    UserService.setLastName(editedLastName.value);
-    UserService.setPhone(editedPhone.value);
+    UserService.firstName(editedFirstName.value);
+    UserService.lastName(editedLastName.value);
+    UserService.phone(editedPhone.value);
     UserService.saveChanges();
     status(ProfileViewStatus.Viewing);
   }

@@ -1,6 +1,7 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+
 class FormPage extends StatelessWidget {
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();
@@ -123,7 +124,7 @@ class _FormPageController extends GetxController {
       }
 
       // Process data.
-      await UserService.saveChanges(providedContact: contact, isNewUser: true);
+      await UserService.newUser(contact);
       var result = await Get.find<UserService>().requestLocation();
       if (result) {
         isPending(false);
