@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/common/contact/contact.dart';
-import 'package:sonr_app/common/card/file_view.dart';
 import 'package:sonr_app/common/card/url_view.dart';
+import 'package:sonr_app/common/file/file.dart';
 import 'package:sonr_app/common/media/card_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -178,7 +178,7 @@ class InviteReplyOverlayView extends StatelessWidget {
       } else if (invite.payload == Payload.URL) {
         view = URLCard.invite(invite);
       } else {
-        view = FileCard.invite(invite);
+        view = FileAuthView(invite);
       }
     }
 
