@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -6,11 +7,11 @@ import 'package:sonr_app/theme/theme.dart';
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
 
-
 class HomeController extends GetxController {
   // Properties
   final status = Rx<HomeState>();
   final category = Rx<ToggleFilter>(ToggleFilter.All);
+  final isBottomBarVisible = true.obs;
 
   // Elements
   final titleText = "Home".obs;
@@ -22,20 +23,27 @@ class HomeController extends GetxController {
   // References
   var _lastPage = BottomNavButton.Grid;
   StreamSubscription<List<TransferCard>> _cardStream;
+  final _keyboardVisible = KeyboardVisibilityController();
 
   // ^ Controller Constructer ^
   @override
-  void onReady() {
-    // Set View Properties
+  onInit() {
+    // Set efault Properties
     toggleIndex(1);
     pageIndex(0);
     setStatus();
-    super.onReady();
+
     // Initialize
+    super.onInit();
+
+    // Check Entry Arguments
     HomeArguments args = Get.arguments;
     if (args.isFirstLoad) {
       MediaService.checkInitialShare();
     }
+
+    // Handle Keyboard Visibility
+    _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
   }
 
   // ^ Update Home State ^ //
@@ -94,5 +102,10 @@ class HomeController extends GetxController {
     } else {
       page(BottomNavButton.Grid);
     }
+  }
+
+  // @ Handle Keyboard Visibility
+  _handleKeyboardVisibility(bool keyboardVisible) {
+    isBottomBarVisible(!keyboardVisible);
   }
 }
