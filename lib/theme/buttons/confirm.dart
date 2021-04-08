@@ -77,7 +77,7 @@ class ConfirmButton extends StatefulWidget {
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
         gradient: SonrPalette.tertiary(),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
@@ -137,7 +137,7 @@ class ConfirmButton extends StatefulWidget {
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
         gradient: SonrPalette.critical(),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
@@ -275,7 +275,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     //haptic vibration
     HapticFeedback.heavyImpact();
     _resetIfTapUp(ConfirmStatus.Done);
-    await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ConfirmButton.K_BUTTON_DURATION * 2); //wait until animation finished
     widget.onConfirmed();
   }
 

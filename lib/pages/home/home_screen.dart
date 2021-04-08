@@ -41,7 +41,7 @@ class AlertsView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
       SonrText.header("Alerts View"),
-      SonrText.normal("Share to begin viewing your Cards!", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      SonrText.normal("This Page is Under Construction.", color: SonrColor.Black.withOpacity(0.7), size: 18),
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }

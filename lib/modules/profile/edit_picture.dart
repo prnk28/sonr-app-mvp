@@ -23,11 +23,11 @@ class EditPictureView extends GetView<ProfileController> {
             child: Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PlainButton(icon: SonrIcon.close, onPressed: controller.exitToViewing),
-                  Expanded(child: Center(child: SonrText.header(headerText, size: 34))),
-                  PlainButton(icon: SonrIcon.accept, onPressed: controller.saveEditedDetails)
+                  SonrText.title(headerText),
+                  Padding(padding: EdgeInsets.all(16))
                 ]),
           ),
         ),
@@ -44,11 +44,26 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   Widget build(BuildContext context) {
     return SliverFillRemaining(
       hasScrollBody: false,
-      child: Container(
+      child: Obx(() => Container(
           width: context.widthTransformer(reducedBy: 15),
-          height: context.heightTransformer(reducedBy: 15),
-          child: Obx(() => controller.hasPermissions.value ? _buildCamera() : _buildPermissions())),
+          height: context.heightTransformer(reducedBy: 50),
+          child: _buildChildFromStatus(controller.status.value))),
     );
+  }
+
+  // # Handles Controller Status
+  Widget _buildChildFromStatus(ProfilePictureStatus status) {
+    switch (status) {
+      case ProfilePictureStatus.NeedsPermissions:
+        return _buildPermissions();
+        break;
+      case ProfilePictureStatus.Captured:
+        return _buildCaptured();
+        break;
+      default:
+        return _buildCamera();
+        break;
+    }
   }
 
   // @ Build Circular Camera
@@ -59,12 +74,43 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
           boxShape: NeumorphicBoxShape.circle(),
           depth: -10,
         ),
-        child: CameraAwesome(
-          sensor: controller.sensor,
-          photoSize: controller.photoSize,
-          captureMode: controller.captureMode,
-          fitted: true,
+        child: GestureDetector(
+          onTap: controller.capturePhoto,
+          child: CameraAwesome(
+            sensor: controller.sensor,
+            photoSize: controller.photoSize,
+            captureMode: controller.captureMode,
+            fitted: true,
+          ),
         ));
+  }
+
+  // @ Build Circular Camera
+  Widget _buildCaptured() {
+    return Column(children: [
+      // @ Picture Preview
+      Neumorphic(
+          padding: EdgeInsets.all(10),
+          style: NeumorphicStyle(
+            boxShape: NeumorphicBoxShape.circle(),
+            depth: -10,
+          ),
+          child: Container(
+            width: 120,
+            height: 120,
+            child: CircleAvatar(
+              backgroundImage: FileImage(controller.result.value.file),
+            ),
+          )),
+      Padding(padding: EdgeWith.bottom(8)),
+
+      // @ Confirm Button
+      ConfirmButton.save(
+        onConfirmed: controller.confirm,
+        defaultText: "Confirm",
+        confirmText: "Sure?",
+      )
+    ]);
   }
 
   // @ Build Permissions Request
@@ -78,6 +124,22 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   }
 }
 
+// ^ Profile Picture Controller Status ^ //
+enum ProfilePictureStatus {
+  NeedsPermissions,
+  Ready,
+  Captured,
+}
+
+extension ProfilePictureStatusUtils on ProfilePictureStatus {
+  bool get hasPermissions => this != ProfilePictureStatus.NeedsPermissions;
+  bool get hasCaptured => this == ProfilePictureStatus.Captured;
+
+  static ProfilePictureStatus statusFromPermissions(bool val) {
+    return val ? ProfilePictureStatus.Ready : ProfilePictureStatus.NeedsPermissions;
+  }
+}
+
 // ^ Profile Picture Reactive Controller ^ //
 class ProfilePictureController extends GetxController {
   // Notifiers
@@ -85,13 +147,15 @@ class ProfilePictureController extends GetxController {
   ValueNotifier<Size> photoSize = ValueNotifier(Size(256, 256));
   ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.FRONT);
 
-  final hasCaptured = false.obs;
-  final hasPermissions = UserService.permissions.value.hasCamera.obs;
+  // Properties
+  final result = Rx<MediaFile>(null);
+  final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(UserService.permissions.value.hasCamera));
 
-  // Controllers
-  PictureController pictureController = new PictureController();
+  // References
+  PictureController _pictureController = new PictureController();
   var _photoCapturePath = "";
 
+  // @ Method to Capture Picture
   capturePhoto() async {
     // Set Path
     var temp = await getApplicationDocumentsDirectory();
@@ -99,22 +163,25 @@ class ProfilePictureController extends GetxController {
     _photoCapturePath = '${photoDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
 
     // Capture Photo
-    await pictureController.takePicture(_photoCapturePath);
-    hasCaptured(true);
+    await _pictureController.takePicture(_photoCapturePath);
+    result(MediaFile.capture(_photoCapturePath, false, 0));
+    status(ProfilePictureStatus.Captured);
   }
 
+  // @ Method to Confirm New Picture
   confirm() async {
     if (_photoCapturePath != "") {
-      var file = MediaFile.capture(_photoCapturePath, false, 0);
-      UserService.picture(await file.toUint8List());
+      UserService.picture(await result.value.toUint8List());
       UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
+      status(ProfilePictureStatus.Ready);
     }
   }
 
+  // @ Method to Request Camera Permissions
   requestPermission() async {
     var granted = await Permission.camera.request().isGranted;
     UserService.permissions.value.update();
-    hasPermissions(granted);
+    status(ProfilePictureStatusUtils.statusFromPermissions(granted));
   }
 }

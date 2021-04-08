@@ -48,6 +48,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
     return Obx(() => Container(
           width: SonrStyle.viewSize.width,
           height: SonrStyle.viewSize.height,
+          padding: EdgeWith.top(SonrStyle.viewSize.height / 5),
           child: CustomScrollView(
             physics: NeverScrollableScrollPhysics(),
             slivers: [
