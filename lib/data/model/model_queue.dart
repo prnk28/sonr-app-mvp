@@ -188,10 +188,10 @@ class TransferQueueItem {
 
         // Check Decision
         if (decision) {
-          peerController.playAccepted();
+          peerController.updateStatus(BubbleStatus.Accepted);
           played.complete(true);
         } else {
-          _peerController.playDenied();
+          peerController.updateStatus(BubbleStatus.Declined);
           played.complete(true);
         }
       } else {
@@ -208,8 +208,14 @@ class TransferQueueItem {
     var played = new Completer<bool>();
     HapticFeedback.heavyImpact();
     if (hasPeerController) {
-      _peerController.playCompleted();
+      _awaitForComplete(played.future);
     }
     return played.future;
+  }
+
+  // # Helper: Function to Play Complete Animation after Completed ^ //
+  Future<void> _awaitForComplete(Future<bool> completed) async {
+    await completed;
+    peerController.updateStatus(BubbleStatus.Complete);
   }
 }

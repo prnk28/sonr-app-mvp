@@ -18,32 +18,42 @@ class PeerBubble extends GetWidget<BubbleController> {
     controller.initalize(peer);
     return Obx(() {
       return AnimatedPositioned(
-          width: K_BUBBLE_SIZE,
-          height: K_BUBBLE_SIZE,
-          top: controller.offset.value.dy - (ZonePathProvider.size / 2),
-          left: controller.offset.value.dx - (ZonePathProvider.size / 2),
-          duration: 150.milliseconds,
-          child: GestureDetector(
-              onTap: controller.invite,
-              onLongPress: controller.expandDetails,
-              child: Stack(alignment: Alignment.center, children: [
-                // Rive Board
-                SizedBox(width: K_BUBBLE_SIZE, height: K_BUBBLE_SIZE, child: Rive(artboard: controller.board.value)),
+        width: K_BUBBLE_SIZE,
+        height: K_BUBBLE_SIZE,
+        top: controller.offset.value.dy - (ZonePathProvider.size / 2),
+        left: controller.offset.value.dx - (ZonePathProvider.size / 2),
+        duration: 150.milliseconds,
+        child: GestureDetector(
+          onTap: controller.invite,
+          onLongPress: controller.expandDetails,
+          child: Stack(alignment: Alignment.center, children: [
+            // Rive Board
+            SizedBox(width: K_BUBBLE_SIZE, height: K_BUBBLE_SIZE, child: Rive(artboard: controller.board.value)),
 
-                // Peer Info
-                OpacityAnimatedWidget(
-                    enabled: controller.isVisible.value,
-                    values: controller.isVisible.value ? [0, 1] : [1, 0],
-                    duration: Duration(milliseconds: 250),
-                    delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                      controller.peer.value.initials,
-                    ]))
-              ])));
+            // Peer Info
+            OpacityAnimatedWidget(
+                enabled: controller.isVisible.value,
+                values: controller.isVisible.value ? [0, 1] : [1, 0],
+                duration: Duration(milliseconds: 250),
+                delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
+                child: Center(child: controller.peer.value.initials))
+          ]),
+        ),
+      );
     });
   }
 }
 
+// ^ Bubble Controller Status ^ //
+enum BubbleStatus { Default, Pending, Accepted, Declined, Complete }
+
+extension BubbleStatusUtils on BubbleStatus {
+  bool get isIdle => this == BubbleStatus.Default;
+  bool get isPending => this == BubbleStatus.Pending;
+  bool get isAccepted => this == BubbleStatus.Accepted;
+  bool get isDeclined => this == BubbleStatus.Declined;
+  bool get isComplete => this == BubbleStatus.Complete;
+}
 
 // ^ Reactive Controller for Peer Bubble ^ //
 class BubbleController extends GetxController {
@@ -51,14 +61,16 @@ class BubbleController extends GetxController {
   final board = Rx<Artboard>(null);
   final counter = 0.0.obs;
   final isAnimated = true.obs;
-  final hasCompleted = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
   final isWithin = false.obs;
+  final peer = Rx<Peer>(null);
+  final status = Rx<BubbleStatus>(BubbleStatus.Default);
+
+  // Vector Properties
   final offset = Offset(0, 0).obs;
   final peerVector = Rx<VectorPosition>(null);
   final userVector = Rx<VectorPosition>(null);
-  final peer = Rx<Peer>(null);
 
   // References
   PeerStream _peerStream;
@@ -166,64 +178,58 @@ class BubbleController extends GetxController {
         }
         // Contact/URL
         else {
-          playCompleted();
+          updateStatus(BubbleStatus.Complete);
         }
       }
     }
   }
 
-  // ^ Handle Accepted ^
-  void playAccepted() async {
+  void updateStatus(BubbleStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
+    // Update Status
+    status(newStatus);
+
     // Check Animated
     if (isAnimated.value) {
-      // Update Visibility
-      isVisible(false);
-
-      // Start Animation
-      _hasAccepted.value = true;
-    }
-  }
-
-  // ^ Handle Denied ^
-  void playDenied() async {
-    // Check Animated
-    if (isAnimated.value) {
-      // Update Visibility
-      isVisible(false);
-
-      // Start Animation
-      _hasDenied.value = true;
-
-      // Reset
-      _reset();
-    }
-  }
-
-  // ^ Handle Completed ^
-  void playCompleted() async {
-    // Check Animated
-    if (isAnimated.value) {
-      // Update Visibility
-      isVisible(true);
-
-      // Start Complete Animation
-      _isComplete.value = true;
+      // Set Animation
+      switch (status.value) {
+        case BubbleStatus.Default:
+          isVisible(true);
+          _isComplete.value = false;
+          _isPending.value = false;
+          _hasAccepted.value = false;
+          _hasDenied.value = false;
+          _isIdle.value = true;
+          break;
+        case BubbleStatus.Pending:
+          _isPending.value = true;
+          break;
+        case BubbleStatus.Accepted:
+          isVisible(false);
+          _hasAccepted.value = true;
+          break;
+        case BubbleStatus.Declined:
+          isVisible(false);
+          _hasDenied.value = true;
+          break;
+        case BubbleStatus.Complete:
+          isVisible(false);
+          _isComplete.value = true;
+          break;
+      }
     }
   }
 
   // ^ Handle Peer Position ^ //
   void _handlePeerUpdate(Peer data) {
-    if (!isClosed) {
-      if (!hasCompleted.value) {
-        // Update Direction
-        if (data.id.peer == peer.value.id.peer && !_isPending.value) {
-          peer(data);
-          peerVector(VectorPosition(data.position));
+    if (!isClosed && !status.value.isComplete) {
+      // Update Direction
+      if (data.id.peer == peer.value.id.peer && !_isPending.value) {
+        peer(data);
+        peerVector(VectorPosition(data.position));
 
-          // Handle Changes
-          if (Get.find<TransferController>().isShiftingEnabled.value) {
-            _handleFacingUpdate();
-          }
+        // Handle Changes
+        if (Get.find<TransferController>().isShiftingEnabled.value) {
+          _handleFacingUpdate();
         }
       }
     }
@@ -231,32 +237,30 @@ class BubbleController extends GetxController {
 
   // ^ Handle Peer Position ^ //
   void _handleUserUpdate(VectorPosition pos) {
-    if (!isClosed) {
-      if (!hasCompleted.value) {
-        // Initialize
-        userVector(pos);
+    if (!isClosed && !status.value.isComplete) {
+      // Initialize
+      userVector(pos);
 
-        // Find Offset
-        if (Get.find<TransferController>().isShiftingEnabled.value) {
-          if (peer.value.isOnDesktop) {
-            offset(Offset.zero);
-          } else {
-            offset(peerVector.value.offsetAgainstVector(userVector.value));
-          }
+      // Find Offset
+      if (Get.find<TransferController>().isShiftingEnabled.value) {
+        if (peer.value.isOnDesktop) {
+          offset(Offset.zero);
+        } else {
+          offset(peerVector.value.offsetAgainstVector(userVector.value));
         }
+      }
 
-        // Check if Facing
-        var newIsFacing = userVector.value.isPointingAt(peerVector.value);
-        if (isFacing.value != newIsFacing) {
-          // Check if Device Permits PointToShare
-          if (UserService.pointShareEnabled) {
-            // Check New Result
-            if (newIsFacing) {
-              _startTimer();
-              isFacing(userVector.value.isPointingAt(peerVector.value));
-            } else {
-              _stopTimer();
-            }
+      // Check if Facing
+      var newIsFacing = userVector.value.isPointingAt(peerVector.value);
+      if (isFacing.value != newIsFacing) {
+        // Check if Device Permits PointToShare
+        if (UserService.pointShareEnabled) {
+          // Check New Result
+          if (newIsFacing) {
+            _startTimer();
+            isFacing(userVector.value.isPointingAt(peerVector.value));
+          } else {
+            _stopTimer();
           }
         }
       }
@@ -265,7 +269,7 @@ class BubbleController extends GetxController {
 
   // ^ Handle Facing Check ^ //
   void _handleFacingUpdate() {
-    if (!isClosed) {
+    if (!isClosed && !status.value.isComplete) {
       // Find Offset
       if (peer.value.isOnDesktop) {
         offset(Offset.zero);
@@ -290,20 +294,6 @@ class BubbleController extends GetxController {
     }
   }
 
-  // ^ Temporary: Workaround to handle Bubble States ^ //
-  void _reset() async {
-    Future.delayed(1.seconds, () {
-      // Call Finish
-      _isComplete.value = false;
-      _isPending.value = false;
-      _hasAccepted.value = false;
-      _hasDenied.value = false;
-      _isIdle.value = true;
-    });
-
-    isVisible(true);
-  }
-
   // ^ Begin Facing Invite Check ^ //
   void _startTimer() {
     Get.find<TransferController>().setFacingPeer(true);
@@ -313,7 +303,7 @@ class BubbleController extends GetxController {
 
       // Check if Facing
       if (counter.value == 2500) {
-        if (isFacing.value && !hasCompleted.value && !_isPending.value) {
+        if (isFacing.value && !status.value.isComplete && !status.value.isPending) {
           invite();
           _stopTimer();
         } else {
@@ -332,5 +322,18 @@ class BubbleController extends GetxController {
       isFacing(false);
       counter(0);
     }
+  }
+
+  // ^ Reset Bubble State Machine ^ //
+  void _reset() async {
+    Future.delayed(1.seconds, () {
+      // Call Finish
+      _isComplete.value = false;
+      _isPending.value = false;
+      _hasAccepted.value = false;
+      _hasDenied.value = false;
+      _isIdle.value = true;
+      isVisible(true);
+    });
   }
 }
