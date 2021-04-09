@@ -208,14 +208,8 @@ class TransferQueueItem {
     var played = new Completer<bool>();
     HapticFeedback.heavyImpact();
     if (hasPeerController) {
-      _awaitForComplete(played.future);
+      peerController.updateStatus(BubbleStatus.Complete);
     }
     return played.future;
-  }
-
-  // # Helper: Function to Play Complete Animation after Completed ^ //
-  Future<void> _awaitForComplete(Future<bool> completed) async {
-    await completed;
-    peerController.updateStatus(BubbleStatus.Complete);
   }
 }
