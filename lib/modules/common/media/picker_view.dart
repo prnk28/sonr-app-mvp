@@ -3,38 +3,19 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/share/share.dart';
 
 // ^ Root Media Queue Container ^ //
-class MediaPickView extends GetView<MediaQueueController> {
-  MediaPickView({Key key}) : super(key: key);
+class MediaPickerView extends GetView<MediaQueueController> {
+  MediaPickerView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Neumorphic(
-          style: SonrStyle.normal,
-          child: AnimatedSlideSwitcher.fade(
-            child: _buildView(controller.status.value),
-            duration: const Duration(milliseconds: 2500),
-          ),
-        ));
-  }
-
-  // @ Build Page View by Navigation Item
-  Widget _buildView(MediaQueueViewStatus status) {
-    // Return View
-    if (status == MediaQueueViewStatus.Loading) {
-      return _MediaQueueLoading(key: ValueKey<MediaQueueViewStatus>(MediaQueueViewStatus.Loading));
-    } else if (status == MediaQueueViewStatus.Confirmed) {
-      return _MediaQueueConfirmed(key: ValueKey<MediaQueueViewStatus>(MediaQueueViewStatus.Confirmed));
-    } else {
-      return _MediaQueueGrid(key: ValueKey<MediaQueueViewStatus>(MediaQueueViewStatus.Ready));
-    }
-  }
-}
-
-// ^ Loading View ^ //
-class _MediaQueueLoading extends GetView<MediaQueueController> {
-  _MediaQueueLoading({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container();
+    return Neumorphic(
+      style: SonrStyle.normal,
+      child: OpacityAnimatedWidget(
+        enabled: true,
+        delay: 600.milliseconds,
+        duration: 600.milliseconds,
+        child: _MediaQueueGrid(key: ValueKey<MediaQueueViewStatus>(MediaQueueViewStatus.Ready)),
+      ),
+    );
   }
 }
 
@@ -70,14 +51,12 @@ class _MediaQueueGrid extends GetView<MediaQueueController> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Obx(() {
-            if (MediaService.allAlbum.value.isEmpty) {
-              return Center(child: SonrText.subtitle("Album is Empty."));
-            } else {
+            if (controller.currentAlbum.length > 0) {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                height: Get.height / 2 + 80,
-                child: AnimatedSlideSwitcher.fade(
-                  duration: 2800.milliseconds,
+                height: Get.height * 0.6,
+                child: AnimatedSlideSwitcher.slideDown(
+                  duration: 1200.milliseconds,
                   child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8),
                       itemCount: controller.currentAlbum != null ? controller.currentAlbum.length : 0,
@@ -89,20 +68,13 @@ class _MediaQueueGrid extends GetView<MediaQueueController> {
                       }),
                 ),
               );
+            } else {
+              return Center(child: SonrText.subtitle("Album is Empty."));
             }
           }),
         ),
       ]),
     );
-  }
-}
-
-// ^ Animation for Selected Item ^ //
-class _MediaQueueConfirmed extends GetView<MediaQueueController> {
-  _MediaQueueConfirmed({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
 
@@ -176,7 +148,7 @@ class _MediaQueueItem extends GetView<MediaQueueController> {
 }
 
 // ^ Media Queue Reactive Controller ^ //
-enum MediaQueueViewStatus { Loading, Ready, Confirmed }
+enum MediaQueueViewStatus { Loading, Ready }
 
 class MediaQueueController extends GetxController {
   // Album Properties

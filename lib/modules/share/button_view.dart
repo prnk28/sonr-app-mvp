@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/common/lobby/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'share.dart';
 
@@ -26,7 +25,7 @@ class ShareButtonView extends GetView<ShareController> {
   Widget _buildView(ShareStatus status) {
     // Return View
     if (status == ShareStatus.PickMedia) {
-      return MediaPickView(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
+      return MediaPickerView(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
     } else if (status == ShareStatus.Queue) {
       return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
     } else {
