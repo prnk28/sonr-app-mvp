@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/snackbar/snack.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
+
 class SonrSnack {
   // Properties
   final Color color;
@@ -41,7 +42,25 @@ class SonrSnack {
   }
 
   // ^ Error on Operation ^ //
-  factory SonrSnack.error(String message) {
+  factory SonrSnack.error(String message, {ErrorMessage error}) {
+    // @ Internal Error
+    if (error != null) {
+      switch (error.severity) {
+        // Orange - Title Failed
+        case ErrorMessage_Severity.CRITICAL:
+          return SonrSnack("Failed", error.message, Icon(Icons.sms_failed_outlined), Colors.orange, 2600, false);
+
+        // Red - Title Error
+        case ErrorMessage_Severity.FATAL:
+          return SonrSnack("Error", error.message, SonrIcon.error, Colors.red, 2600, false);
+
+        // Yellow - Title Warning
+        default:
+          return SonrSnack("Warning", error.message, SonrIcon.missing, Colors.yellow, 2600, false);
+      }
+    }
+
+    // @ App Error
     return SonrSnack("Error.", message, SonrIcon.error, Colors.red, 2600, false);
   }
 

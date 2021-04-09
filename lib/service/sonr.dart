@@ -344,7 +344,9 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ An Error Has Occurred ^ //
   void _handleError(ErrorMessage data) async {
-    print(data.method + "() - " + data.message);
-    SonrSnack.error("Internal Error Occurred");
+    print(data.toString());
+    if (data.severity != ErrorMessage_Severity.LOG) {
+      SonrSnack.error("", error: data);
+    }
   }
 }
