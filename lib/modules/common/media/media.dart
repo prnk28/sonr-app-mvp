@@ -1,6 +1,6 @@
 export 'auth_view.dart';
 export 'card_view.dart';
-export '../../share/queue_view.dart';
+export 'media_view.dart';
 export 'sheet_view.dart';
 import 'dart:math';
 

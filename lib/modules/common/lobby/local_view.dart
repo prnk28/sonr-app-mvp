@@ -6,7 +6,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
-import '../../common/peer/bubble_view.dart';
+import '../peer/bubble_view.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ^ Local Lobby View ^ //

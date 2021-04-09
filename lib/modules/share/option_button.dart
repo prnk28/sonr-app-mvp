@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'share.dart';
 
 // ^ Camera Share Button ^ //
 class ShareCameraButtonItem extends GetView<ShareController> {

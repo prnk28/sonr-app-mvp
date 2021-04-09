@@ -135,13 +135,18 @@ class SonrDropdownItem extends StatelessWidget {
 
 // ^ Builds Albums Dropdown Widget ^ //
 class AlbumsDropdown extends StatelessWidget {
+  final Widget leading;
   final Function() onConfirmed;
   final RxBool hasSelected;
   final RxInt index;
   final EdgeInsets margin;
   final double height = 60;
   AlbumsDropdown(
-      {@required this.index, this.margin = const EdgeInsets.only(left: 12, right: 12), @required this.hasSelected, @required this.onConfirmed});
+      {@required this.index,
+      @required this.hasSelected,
+      @required this.onConfirmed,
+      this.margin = const EdgeInsets.only(left: 12, right: 12),
+      this.leading});
   @override
   Widget build(BuildContext context) {
     return ObxValue<RxBool>(
@@ -149,12 +154,12 @@ class AlbumsDropdown extends StatelessWidget {
                 child: Row(children: [
               AnimatedContainer(
                   margin: margin,
-                  width: selected.value ? Get.width - 200 : Get.width - 250,
+                  width: selected.value ? Get.width - 150 : Get.width - 100,
                   height: height,
-                  duration: 1500.milliseconds,
+                  duration: 250.milliseconds,
                   child: _buildDropdown()),
               AnimatedContainer(
-                  duration: 1500.milliseconds, width: selected.value ? height : 0, height: selected.value ? height : 0, child: _buildConfirmButton()),
+                  duration: 250.milliseconds, width: selected.value ? height : 0, height: selected.value ? height : 0, child: _buildConfirmButton()),
             ])),
         hasSelected);
   }
@@ -177,11 +182,9 @@ class AlbumsDropdown extends StatelessWidget {
 
   // @ Build Confirm Button
   Widget _buildConfirmButton() {
-    return ColorButton.secondary(
+    return PlainButton(
       onPressed: onConfirmed,
-      color: SonrPalette.Tertiary,
       icon: SonrIcon.accept,
-      text: "Confirm!",
     );
   }
 

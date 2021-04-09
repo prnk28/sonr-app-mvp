@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'share.dart';
 
 // ** Share Reactive Controller ** //
 class ShareController extends GetxController {
@@ -75,8 +76,9 @@ class ShareController extends GetxController {
 
   // ^ Set current Media Item ^ //
   setMedia(MediaItem item) async {
-    currentMedia(item);
-    status(ShareStatus.Lobby);
+    SonrService.queueMedia(item);
+    Get.toNamed("/transfer");
+    status(ShareStatus.Default);
   }
 
   // ^ Close Share Button ^ //
@@ -133,64 +135,5 @@ class ShareController extends GetxController {
     size(status.value.size);
     alignment(status.value.alignment);
     translation(status.value.translation);
-  }
-}
-
-// ** Share State Extension ** //
-enum ShareStatus { Default, Queue, PickMedia, Lobby }
-
-extension ShareStatusUtils on ShareStatus {
-  bool get isQueued => this == ShareStatus.Queue;
-  bool get isPickMedia => this == ShareStatus.PickMedia;
-  bool get isLobby => this == ShareStatus.Lobby;
-  bool get isDefault => this == ShareStatus.Default;
-
-  // @ Method Builds Alignment for Status
-  Alignment get alignment {
-    switch (this) {
-      case ShareStatus.PickMedia:
-        return Alignment.center;
-        break;
-      case ShareStatus.Lobby:
-        return Alignment.center;
-        break;
-      case ShareStatus.Queue:
-        return Alignment.bottomCenter;
-        break;
-
-      default:
-        return Alignment.bottomCenter;
-    }
-  }
-
-  // @ Method Builds Size for Status
-  Size get size {
-    switch (this) {
-      case ShareStatus.Queue:
-        return Size(Get.width / 2 + 165, 110);
-        break;
-      case ShareStatus.PickMedia:
-        return Size(Get.width * 0.9, Get.height * 0.75);
-        break;
-      case ShareStatus.Lobby:
-        return Size(Get.width * 0.9, Get.height * 0.75);
-        break;
-      default:
-        return Size(60, 60);
-    }
-  }
-
-  // @ Method Builds Position for Status
-  Matrix4 get translation {
-    switch (this) {
-      case ShareStatus.Queue:
-        return Matrix4.translationValues(0, -30, 0);
-      case ShareStatus.PickMedia:
-        return Matrix4.translationValues(0, 100, 0);
-      case ShareStatus.Lobby:
-        return Matrix4.translationValues(0, -30, 0);
-      default:
-        return Matrix4.translationValues(0, -30, 0);
-    }
   }
 }

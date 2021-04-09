@@ -1,8 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/share/queue_view.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/modules/share/option_widget.dart';
+import 'package:sonr_app/modules/common/lobby/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'share.dart';
 
 class ShareButtonView extends GetView<ShareController> {
   ShareButtonView() : super(key: GlobalKey());
@@ -19,10 +18,7 @@ class ShareButtonView extends GetView<ShareController> {
               duration: Duration(milliseconds: 600),
               width: controller.size.value.width,
               height: controller.size.value.height,
-              child: AnimatedSlideSwitcher.fade(
-                child: _buildView(controller.status.value),
-                duration: const Duration(milliseconds: 600),
-              )),
+              child: _buildView(controller.status.value)),
         ));
   }
 

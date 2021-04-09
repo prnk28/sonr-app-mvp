@@ -1,6 +1,6 @@
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/modules/share/share.dart';
 
 // ^ Root Media Queue Container ^ //
 class MediaPickView extends GetView<MediaQueueController> {
@@ -47,11 +47,22 @@ class _MediaQueueGrid extends GetView<MediaQueueController> {
       margin: EdgeInsets.only(left: 10, right: 10),
       child: CustomScrollView(slivers: [
         // @ Top Banner
+
         SliverToBoxAdapter(
-          child: AlbumsDropdown(
-            index: controller.albumIndex,
-            hasSelected: controller.hasSelected,
-            onConfirmed: controller.confirm,
+          child: SizedBox(
+            height: 140,
+            child: Column(
+              children: [
+                Row(
+                  children: [PlainButton(onPressed: Get.find<ShareController>().shrink, icon: SonrIcon.close)],
+                ),
+                AlbumsDropdown(
+                  index: controller.albumIndex,
+                  hasSelected: controller.hasSelected,
+                  onConfirmed: controller.confirm,
+                ),
+              ],
+            ),
           ),
         ),
 
@@ -184,10 +195,12 @@ class MediaQueueController extends GetxController {
     // Check Albums
     if (MediaService.hasGallery.value) {
       currentAlbum(MediaService.allAlbum.value.assets);
+      currentAlbum.refresh();
       status(MediaQueueViewStatus.Ready);
     } else {
       await MediaService.refreshGallery();
       currentAlbum(MediaService.allAlbum.value.assets);
+      currentAlbum.refresh();
       status(MediaQueueViewStatus.Ready);
     }
 

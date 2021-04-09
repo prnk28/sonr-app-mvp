@@ -13,7 +13,7 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
         resizeToAvoidBottomInset: false,
-        shareButton: ShareButtonView(),
+        shareView: ShareButtonView(),
         bottomNavigationBar: HomeBottomNavBar(),
         body: Obx(() => AnimatedSlideSwitcher(
               controller.getSwitcherAnimation(),
