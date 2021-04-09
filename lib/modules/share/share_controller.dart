@@ -1,18 +1,6 @@
 import 'dart:async';
-
 import 'package:sonr_app/data/data.dart';
-
 import 'package:sonr_app/theme/theme.dart';
-
-// ** Share State Extension ** //
-enum ShareButtonState { Default, Queue, Media, Lobby }
-
-extension ShareStateUtils on ShareButtonState {
-  bool get isQueued => this == ShareButtonState.Queue;
-  bool get isMedia => this == ShareButtonState.Media;
-  bool get isLobby => this == ShareButtonState.Lobby;
-  bool get isDefault => this == ShareButtonState.Default;
-}
 
 // ** Share Reactive Controller ** //
 class ShareController extends GetxController {
@@ -21,9 +9,13 @@ class ShareController extends GetxController {
   final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
 
   // Properties
+  final alignment = Alignment.bottomCenter.obs;
   final size = Size(60, 60).obs;
-  final heightFactor = 0.6.obs;
-  final status = ShareButtonState.Default.obs;
+  final translation = Rx<Matrix4>(Matrix4.translationValues(0, -30, 0));
+  final status = ShareStatus.Default.obs;
+
+  // Shared Files
+  final currentMedia = Rx<MediaItem>(null);
 
   // References
   int _counter = 0;
@@ -35,7 +27,7 @@ class ShareController extends GetxController {
   }
 
   // ^ Expand Share Button ^ //
-  expand(double timeout, ShareButtonState previousState) {
+  expand(double timeout, ShareStatus previousState) {
     HapticFeedback.heavyImpact();
 
     // Create Timeout
@@ -70,7 +62,8 @@ class ShareController extends GetxController {
   onGalleryShare() async {
     // Check for Permissions
     if (galleryPermitted.value) {
-      _presentGalleryView();
+      status(ShareStatus.PickMedia);
+      _updateSize();
     }
 
     // Request Permissions
@@ -80,6 +73,12 @@ class ShareController extends GetxController {
     }
   }
 
+  // ^ Set current Media Item ^ //
+  setMedia(MediaItem item) async {
+    currentMedia(item);
+    status(ShareStatus.Lobby);
+  }
+
   // ^ Close Share Button ^ //
   void shrink({Duration delay = const Duration(milliseconds: 0)}) {
     Future.delayed(delay, () {
@@ -87,7 +86,7 @@ class ShareController extends GetxController {
         _timer.cancel();
         _timer = null;
         HapticFeedback.mediumImpact();
-        status(ShareButtonState.Default);
+        status(ShareStatus.Default);
         _updateSize();
         _counter = 0;
       }
@@ -96,8 +95,8 @@ class ShareController extends GetxController {
 
   // ^ Toggles Expanded Share Button ^ //
   void toggle() {
-    if (status.value == ShareButtonState.Default) {
-      status(ShareButtonState.Queue);
+    if (status.value == ShareStatus.Default) {
+      status(ShareStatus.Queue);
       _updateSize();
       expand(6000, status.value);
     } else {
@@ -131,12 +130,67 @@ class ShareController extends GetxController {
 
   // # Update Size Based on State
   _updateSize() {
-    if (status.value == ShareButtonState.Queue) {
-      heightFactor(0.2);
-      size(Size(Get.width / 2 + 165, 110));
-    } else {
-      heightFactor(0.6);
-      size(Size(60, 60));
+    size(status.value.size);
+    alignment(status.value.alignment);
+    translation(status.value.translation);
+  }
+}
+
+// ** Share State Extension ** //
+enum ShareStatus { Default, Queue, PickMedia, Lobby }
+
+extension ShareStatusUtils on ShareStatus {
+  bool get isQueued => this == ShareStatus.Queue;
+  bool get isPickMedia => this == ShareStatus.PickMedia;
+  bool get isLobby => this == ShareStatus.Lobby;
+  bool get isDefault => this == ShareStatus.Default;
+
+  // @ Method Builds Alignment for Status
+  Alignment get alignment {
+    switch (this) {
+      case ShareStatus.PickMedia:
+        return Alignment.center;
+        break;
+      case ShareStatus.Lobby:
+        return Alignment.center;
+        break;
+      case ShareStatus.Queue:
+        return Alignment.bottomCenter;
+        break;
+
+      default:
+        return Alignment.bottomCenter;
+    }
+  }
+
+  // @ Method Builds Size for Status
+  Size get size {
+    switch (this) {
+      case ShareStatus.Queue:
+        return Size(Get.width / 2 + 165, 110);
+        break;
+      case ShareStatus.PickMedia:
+        return Size(Get.width * 0.9, Get.height * 0.75);
+        break;
+      case ShareStatus.Lobby:
+        return Size(Get.width * 0.9, Get.height * 0.75);
+        break;
+      default:
+        return Size(60, 60);
+    }
+  }
+
+  // @ Method Builds Position for Status
+  Matrix4 get translation {
+    switch (this) {
+      case ShareStatus.Queue:
+        return Matrix4.translationValues(0, -30, 0);
+      case ShareStatus.PickMedia:
+        return Matrix4.translationValues(0, 100, 0);
+      case ShareStatus.Lobby:
+        return Matrix4.translationValues(0, -30, 0);
+      default:
+        return Matrix4.translationValues(0, -30, 0);
     }
   }
 }

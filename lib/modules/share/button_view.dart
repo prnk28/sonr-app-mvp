@@ -1,56 +1,77 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/common/media/queue_view.dart';
+import 'package:sonr_app/modules/share/queue_view.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/modules/share/option_widget.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-class ShareButton extends GetView<ShareController> {
+class ShareButtonView extends GetView<ShareController> {
+  ShareButtonView() : super(key: GlobalKey());
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedContainer(
-        curve: Curves.bounceOut,
-        duration: Duration(milliseconds: 600),
-        width: controller.size.value.width,
-        height: controller.size.value.height,
-        child: NeumorphicButton(
-          child: _buildChild(),
-          onPressed: controller.toggle,
-          style: SonrStyle.shareButton,
-        )));
+    return Obx(() => AnimatedAlign(
+          curve: Curves.bounceOut,
+          duration: Duration(milliseconds: 600),
+          alignment: controller.alignment.value,
+          child: AnimatedContainer(
+              alignment: controller.alignment.value,
+              transform: controller.translation.value,
+              curve: Curves.bounceOut,
+              duration: Duration(milliseconds: 600),
+              width: controller.size.value.width,
+              height: controller.size.value.height,
+              child: AnimatedSlideSwitcher.fade(
+                child: _buildView(controller.status.value),
+                duration: const Duration(milliseconds: 600),
+              )),
+        ));
   }
 
-  Widget _buildChild() {
-    if (controller.status.value.isQueued) {
-      return _QueueView();
+  // @ Build Page View by Navigation Item
+  Widget _buildView(ShareStatus status) {
+    // Return View
+    if (status == ShareStatus.PickMedia) {
+      return MediaPickView(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
+    } else if (status == ShareStatus.Queue) {
+      return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
+    } else {
+      return _DefaultView(key: ValueKey<ShareStatus>(ShareStatus.Default));
     }
-    if (controller.status.value.isMedia) {
-      return MediaQueueView();
-    }
-    return _DefaultView();
   }
 }
 
 // ** Close Share Button View ** //
 class _DefaultView extends GetView<ShareController> {
+  _DefaultView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(child: SonrIcon.send, padding: EdgeWith.vertical(8));
+    return NeumorphicButton(
+        onPressed: controller.toggle,
+        style: SonrStyle.shareButton,
+        child: Container(
+          child: SonrIcon.send,
+          padding: EdgeWith.vertical(8),
+        ));
   }
 }
 
 // ** Expanded Share Button View ** //
 class _QueueView extends GetView<ShareController> {
+  _QueueView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return OpacityAnimatedWidget(
-        enabled: true,
-        duration: 150.milliseconds,
-        delay: 350.milliseconds,
-        curve: Curves.easeIn,
-        child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          const ShareCameraButtonItem(),
-          const ShareGalleryButtonItem(),
-          const ShareContactButtonItem(),
-        ]));
+    return NeumorphicButton(
+      onPressed: controller.toggle,
+      style: SonrStyle.shareButton,
+      child: OpacityAnimatedWidget(
+          enabled: true,
+          duration: 150.milliseconds,
+          delay: 350.milliseconds,
+          curve: Curves.easeIn,
+          child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            const ShareCameraButtonItem(),
+            const ShareGalleryButtonItem(),
+            const ShareContactButtonItem(),
+          ])),
+    );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:sonr_app/modules/share/button_view.dart';
+
 import 'grid_view.dart';
 import 'package:sonr_app/pages/home/top_header.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
@@ -11,6 +13,7 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
         resizeToAvoidBottomInset: false,
+        shareButton: ShareButtonView(),
         bottomNavigationBar: HomeBottomNavBar(),
         body: Obx(() => AnimatedSlideSwitcher(
               controller.getSwitcherAnimation(),

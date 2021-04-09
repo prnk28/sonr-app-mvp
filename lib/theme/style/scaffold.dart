@@ -9,6 +9,7 @@ class SonrScaffold extends StatelessWidget {
   final Widget appBar;
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
+  final Widget shareButton;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool resizeToAvoidBottomInset;
   final Function bodyAction;
@@ -124,6 +125,7 @@ class SonrScaffold extends StatelessWidget {
     this.backgroundColor,
     this.bottomNavigationBar,
     this.bottomSheet,
+    this.shareButton,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -146,7 +148,7 @@ class SonrScaffold extends StatelessWidget {
         child: Scaffold(
           backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
           floatingActionButtonLocation: floatingActionButtonLocation,
-          body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: bottomNavigationBar))]),
+          body: Stack(children: [body, Positioned(bottom: 0, left: 0, child: Container(width: Get.width, child: bottomNavigationBar)), shareButton]),
           appBar: appBar,
           floatingActionButton: floatingActionButton,
           resizeToAvoidBottomInset: resizeToAvoidBottomInset,
