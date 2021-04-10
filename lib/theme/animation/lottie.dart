@@ -53,7 +53,6 @@ class LottieIcon extends HookWidget {
   LottieIcon({@required this.type, this.onComplete, this.size = 24});
   @override
   Widget build(BuildContext context) {
-    https://assets9.lottiefiles.com/packages/lf20_gctecpva.json
     final controller = useAnimationController();
     return Lottie.asset(
       type.path,
@@ -83,7 +82,7 @@ class LottieIcon extends HookWidget {
 }
 
 // ^ Lottie Animation Container Widget ^ //
-class LottieContainer extends StatefulWidget {
+class LottieContainer extends HookWidget {
   final double width;
   final double height;
   final BoxFit fit;
@@ -103,42 +102,25 @@ class LottieContainer extends StatefulWidget {
       this.animate = true,
       this.reverse = true})
       : super(key: key);
-  @override
-  _LottieContainerState createState() => _LottieContainerState();
-}
-
-class _LottieContainerState extends State<LottieContainer> with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final controller = useAnimationController();
     return Lottie.asset(
-      widget.type.path,
-      controller: _controller,
-      width: widget.width,
-      repeat: widget.repeat,
-      reverse: widget.reverse,
-      animate: widget.animate,
-      height: widget.height,
+      type.path,
+      controller: controller,
+      width: width,
+      repeat: repeat,
+      reverse: reverse,
+      animate: animate,
+      height: height,
       fit: BoxFit.contain,
       onLoaded: (composition) {
-        _controller..duration = composition.seconds.seconds;
-        if (widget.repeat) {
-          _controller.repeat();
+        controller..duration = composition.seconds.seconds;
+        if (repeat) {
+          controller.repeat();
         } else {
-          _controller.forward();
+          controller.forward();
         }
       },
     );

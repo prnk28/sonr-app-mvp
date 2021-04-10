@@ -1,8 +1,5 @@
-import 'animation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import '../theme.dart';
-import 'package:lottie/lottie.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
 enum RiveBoard { Camera, Icon, Gallery, Contact, Feed, Splash, Documents }

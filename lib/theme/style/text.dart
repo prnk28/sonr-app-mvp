@@ -61,12 +61,12 @@ class SonrText extends StatelessWidget {
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.span(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.Black);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
   // ^ Normal(w400) Text with Provided Data
@@ -76,17 +76,17 @@ class SonrText extends StatelessWidget {
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
   factory SonrText.medium(String text, {Color color = SonrColor.Black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode ? Colors.white70 : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode ? Colors.white70 : SonrColor.Black);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
   factory SonrText.bold(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text

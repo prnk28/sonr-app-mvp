@@ -22,12 +22,12 @@ class NavButton extends StatelessWidget {
           onPressed(bottomType.index);
         },
         child: Padding(
-          padding: const EdgeInsets.all(6.0),
+          padding: const EdgeInsets.all(8.0),
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
                     child: idx.value == bottomType.index ? _buildSelected() : _buildDefault(),
-                    scale: idx.value == bottomType.index ? 1.2 : 1.0,
+                    scale: idx.value == bottomType.index ? 1.25 : 1.0,
                   ),
               currentIndex),
         ));
@@ -105,19 +105,19 @@ extension BottomNavButtonUtils on BottomNavButton {
   double get iconSize {
     switch (this) {
       case BottomNavButton.Grid:
-        return 28;
-        break;
-      case BottomNavButton.Profile:
-        return 28;
-        break;
-      case BottomNavButton.Alerts:
-        return 28;
-        break;
-      case BottomNavButton.Remote:
         return 32;
         break;
+      case BottomNavButton.Profile:
+        return 32;
+        break;
+      case BottomNavButton.Alerts:
+        return 32;
+        break;
+      case BottomNavButton.Remote:
+        return 38;
+        break;
       default:
-        return 28;
+        return 32;
     }
   }
 

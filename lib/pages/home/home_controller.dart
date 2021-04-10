@@ -71,13 +71,13 @@ class HomeController extends GetxController {
   }
 
   // ^ Return Animation by Page Index
-  AnimSwitch getSwitcherAnimation() {
+  SwitchType getSwitcherAnimation() {
     if (_lastPage.index > page.value.index) {
       _lastPage = page.value;
-      return AnimSwitch.SlideLeft;
+      return SwitchType.SlideLeft;
     } else {
       _lastPage = page.value;
-      return AnimSwitch.SlideRight;
+      return SwitchType.SlideRight;
     }
   }
 

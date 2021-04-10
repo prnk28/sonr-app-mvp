@@ -4,7 +4,7 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.9.1+183
+version: 0.9.1+185
 publish_to: none
 
 # -- Flutter Settings --
@@ -85,39 +85,6 @@ flutter:
   - family:  SonrIcons
     fonts:
       - asset: assets/fonts/sonr_icons.ttf
-
-  - family: Poppins
-    fonts:
-      - asset: assets/fonts/Poppins-300.ttf
-        weight: 300
-      - asset: assets/fonts/Poppins-300-Italic.ttf
-        weight: 300
-        style: italic
-      - asset: assets/fonts/Poppins-400.ttf
-        weight: 400
-      - asset: assets/fonts/Poppins-400-Italic.ttf
-        weight: 400
-        style: italic
-      - asset: assets/fonts/Poppins-500.ttf
-        weight: 500
-      - asset: assets/fonts/Poppins-500-Italic.ttf
-        weight: 500
-        style: italic
-      - asset: assets/fonts/Poppins-600.ttf
-        weight: 600
-      - asset: assets/fonts/Poppins-600-Italic.ttf
-        weight: 600
-        style: italic
-      - asset: assets/fonts/Poppins-700.ttf
-        weight: 700
-      - asset: assets/fonts/Poppins-700-Italic.ttf
-        weight: 700
-        style: italic
-      - asset: assets/fonts/Poppins-800.ttf
-        weight: 800
-      - asset: assets/fonts/Poppins-800-Italic.ttf
-        weight: 800
-        style: italic
 
   # -- Media --
   assets:

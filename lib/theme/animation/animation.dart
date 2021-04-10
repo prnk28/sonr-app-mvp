@@ -1,15 +1,9 @@
 export 'lottie.dart';
 export 'rive.dart';
-
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../theme.dart';
-import 'package:lottie/lottie.dart';
-import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
-enum AnimType { None, Shake, SlideIn, Fade }
-enum AnimSwitch { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
-
+// ^ Animated Scale  ^ //
 class AnimatedScale extends StatefulWidget {
   final Widget child;
   final double scale;
@@ -137,41 +131,23 @@ class AnimatedWaveIcon extends HookWidget {
   }
 }
 
-class AnimatedRipples extends StatefulWidget {
+// ^ Sonr Ripples ^ //
+class AnimatedRipples extends HookWidget {
   const AnimatedRipples({
     Key key,
     @required this.child,
   }) : super(key: key);
 
   final Widget child;
-  @override
-  _AnimatedRipplesState createState() => _AnimatedRipplesState();
-}
-
-class _AnimatedRipplesState extends State<AnimatedRipples> with TickerProviderStateMixin {
-  AnimationController _controller;
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final controller = useAnimationController(duration: const Duration(milliseconds: 2000))..repeat();
     final size = 400.0;
     return Center(
       child: CustomPaint(
         painter: CirclePainter(
-          _controller,
+          controller,
         ),
         child: SizedBox(
           width: size * 4.125,
@@ -179,19 +155,23 @@ class _AnimatedRipplesState extends State<AnimatedRipples> with TickerProviderSt
           child: ScaleTransition(
               scale: Tween(begin: 0.98, end: 1.0).animate(
                 CurvedAnimation(
-                  parent: _controller,
+                  parent: controller,
                   curve: const CurveWave(),
                 ),
               ),
-              child: widget.child),
+              child: child),
         ),
       ),
     );
   }
 }
 
+// ^ Animated Slide Switch ^ //
+
+enum SwitchType { Fade, SlideUp, SlideDown, SlideLeft, SlideRight }
+
 class AnimatedSlideSwitcher extends StatelessWidget {
-  final AnimSwitch _animation;
+  final SwitchType _animation;
   final Widget child;
   final Duration duration;
 
@@ -200,39 +180,39 @@ class AnimatedSlideSwitcher extends StatelessWidget {
 
   // * Factory Fade * //
   factory AnimatedSlideSwitcher.fade({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(AnimSwitch.Fade, child, duration);
+    return AnimatedSlideSwitcher(SwitchType.Fade, child, duration);
   }
 
   // * Factory Slide Up * //
   factory AnimatedSlideSwitcher.slideUp({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(AnimSwitch.SlideUp, child, duration);
+    return AnimatedSlideSwitcher(SwitchType.SlideUp, child, duration);
   }
 
   // * Factory Slide Down * //
   factory AnimatedSlideSwitcher.slideDown({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(AnimSwitch.SlideDown, child, duration);
+    return AnimatedSlideSwitcher(SwitchType.SlideDown, child, duration);
   }
 
   // * Factory Slide Left * //
   factory AnimatedSlideSwitcher.slideLeft({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(AnimSwitch.SlideLeft, child, duration);
+    return AnimatedSlideSwitcher(SwitchType.SlideLeft, child, duration);
   }
 
   // * Factory Slide Right * //
   factory AnimatedSlideSwitcher.slideRight({@required child, Duration duration = const Duration(seconds: 2, milliseconds: 500)}) {
-    return AnimatedSlideSwitcher(AnimSwitch.SlideRight, child, duration);
+    return AnimatedSlideSwitcher(SwitchType.SlideRight, child, duration);
   }
 
   // ^ Build View Method ^ //
   @override
   Widget build(BuildContext context) {
     // Initialize Transition Map
-    Map<AnimSwitch, Widget Function(Widget, Animation<double>)> transitionMap = {
-      AnimSwitch.Fade: AnimatedSwitcher.defaultTransitionBuilder,
-      AnimSwitch.SlideDown: _slideTransition(0, -1),
-      AnimSwitch.SlideUp: _slideTransition(0, 1),
-      AnimSwitch.SlideLeft: _slideTransition(-1, 0),
-      AnimSwitch.SlideRight: _slideTransition(1, 0),
+    Map<SwitchType, Widget Function(Widget, Animation<double>)> transitionMap = {
+      SwitchType.Fade: AnimatedSwitcher.defaultTransitionBuilder,
+      SwitchType.SlideDown: _slideTransition(0, -1),
+      SwitchType.SlideUp: _slideTransition(0, 1),
+      SwitchType.SlideLeft: _slideTransition(-1, 0),
+      SwitchType.SlideRight: _slideTransition(1, 0),
     };
 
     // Return Switcher
