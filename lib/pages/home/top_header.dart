@@ -1,20 +1,22 @@
 import 'dart:async';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 
 // ^ Home Screen Header ^ //
 class HomeTopHeaderBar extends GetView<HomeController> {
+
   @override
   Widget build(BuildContext context) {
     return Neumorphic(
         style: NeumorphicStyle(
-          boxShape: NeumorphicBoxShape.path(TopBarPath()),
+          boxShape: NeumorphicBoxShape.path(WavePath()),
           depth: UserService.isDarkMode ? 4 : 8,
           intensity: UserService.isDarkMode ? 0.45 : 0.85,
           surfaceIntensity: 0.6,
         ),
         child: Container(
-            height: Get.height / 3.5,
+            height: Get.height / 4,
             width: Get.width,
             decoration: BoxDecoration(gradient: SonrPalette.primary()),
             child: Stack(children: [
@@ -65,7 +67,8 @@ class _HomeHeaderTitleController extends GetxController {
   // Properties
   final String defaultText;
   final title = "".obs;
-  final status = Rx<Status>(Status.NONE);
+  final status = Rx<Status>(SonrService.status.value);
+  final isVisible = true.obs;
 
   // References
   StreamSubscription<int> lobbySizeStream;
@@ -100,6 +103,7 @@ class _HomeHeaderTitleController extends GetxController {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
+      DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

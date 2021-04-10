@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' as io;
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,6 +9,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart' hide Position;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:motion_sensors/motion_sensors.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 // @ Enum defines Type of Permission
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
@@ -20,6 +22,7 @@ class DeviceService extends GetxService {
 
   // Device/Location Properties
   final _compass = Rx<CompassEvent>(null);
+  final _keyboardVisible = false.obs;
   final _location = Rx<Position>(null);
   final _platform = Rx<Platform>(null);
 
@@ -30,8 +33,8 @@ class DeviceService extends GetxService {
   final _orientation = Rx<OrientationEvent>(null);
 
   // Getters for Device/Location References
-
   static Rx<CompassEvent> get compass => to._compass;
+  static RxBool get keyboardVisible => to._keyboardVisible;
   static Rx<Platform> get platform => to._platform;
   static Rx<AccelerometerEvent> get accelerometer => to._accelerometer;
   static Rx<GyroscopeEvent> get gyroscope => to._gyroscope;
@@ -70,9 +73,13 @@ class DeviceService extends GetxService {
   static bool get isNotApple =>
       Get.find<DeviceService>()._platform.value != Platform.iOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
 
+  // References
+  final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
+  final _keyboardVisibleController = KeyboardVisibilityController();
+
   // ^ Open SharedPreferences on Init ^ //
   Future<DeviceService> init() async {
-    // @ Set Platform
+    // @ 1. Set Platform
     if (io.Platform.isAndroid) {
       _platform(Platform.Android);
     } else if (io.Platform.isIOS) {
@@ -85,7 +92,15 @@ class DeviceService extends GetxService {
       _platform(Platform.Windows);
     }
 
-    // @ Bind Sensors for Mobile
+    // @ 2. Initialize References
+    // Audio Player
+    _audioPlayer.disableLog();
+    _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
+
+    // Handle Keyboard Visibility
+    _keyboardVisibleController.onChange.listen(_handleKeyboardVisibility);
+
+    // @ 3. Bind Sensors for Mobile
     if (_platform.value == Platform.iOS || _platform.value == Platform.Android) {
       // Bind Direction and Set Intervals
       _compass.bindStream(FlutterCompass.events);
@@ -104,7 +119,18 @@ class DeviceService extends GetxService {
     return this;
   }
 
-  // ^ Method Determins LaunchPage and Changes Screen ^
+  @override
+  void onClose() {
+    _audioPlayer.clearCache();
+    super.onClose();
+  }
+
+  // ^ Method Plays a UI Sound ^
+  static void playSound({@required UISoundType type}) async {
+    await to._audioPlayer.play(type.file);
+  }
+
+  // ^ Method Determinse LaunchPage and Changes Screen ^
   static void shiftPage({@required Duration delay}) async {
     Future.delayed(delay, () {
       // Check for User
@@ -151,5 +177,25 @@ class DeviceService extends GetxService {
       print("No Location Permissions");
       return null;
     }
+  }
+
+  // # Handle Keyboard Visibility Update
+  _handleKeyboardVisibility(bool keyboardVisible) {
+    _keyboardVisible(keyboardVisible);
+  }
+}
+
+// ^ Asset Sound Types ^ //
+enum UISoundType { Confirmed, Connected, Critical, Deleted, Fatal, Joined, Linked, Received, Swipe, Transmitted, Warning }
+
+// ^ Asset Sound Type Utility ^ //
+extension UISoundTypeUtil on UISoundType {
+  String get file {
+    return '${this.value.toLowerCase()}.wav';
+  }
+
+  // @ Returns Value Name of Enum Type //
+  String get value {
+    return this.toString().substring(this.toString().indexOf('.') + 1);
   }
 }

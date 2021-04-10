@@ -48,14 +48,17 @@ class SonrSnack {
       switch (error.severity) {
         // Orange - Title Failed
         case ErrorMessage_Severity.CRITICAL:
+          DeviceService.playSound(type: UISoundType.Critical);
           return SonrSnack("Failed", error.message, Icon(Icons.sms_failed_outlined), Colors.orange, 2600, false);
 
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
+          DeviceService.playSound(type: UISoundType.Fatal);
           return SonrSnack("Error", error.message, SonrIcon.error, Colors.red, 2600, false);
 
         // Yellow - Title Warning
         default:
+          DeviceService.playSound(type: UISoundType.Warning);
           return SonrSnack("Warning", error.message, SonrIcon.missing, Colors.yellow, 2600, false);
       }
     }

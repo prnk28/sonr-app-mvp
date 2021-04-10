@@ -32,7 +32,9 @@ class HomeScreen extends GetView<HomeController> {
     } else if (page == NavButtonType.Remote) {
       return RemoteView(key: ValueKey<NavButtonType>(NavButtonType.Remote));
     } else {
-      return CardGridView(key: ValueKey<NavButtonType>(NavButtonType.Grid), header: HomeTopHeaderBar());
+      return CardGridView(
+        key: ValueKey<NavButtonType>(NavButtonType.Grid),
+      );
     }
   }
 }

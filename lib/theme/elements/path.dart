@@ -21,8 +21,74 @@ class BottomBarPath extends NeumorphicPathProvider {
   bool get oneGradientPerPath => true;
 }
 
-// ^ Top Home Header: Neumorphic Path ^ //
-class TopBarPath extends NeumorphicPathProvider {
+// ^ Message Neumorphic Path ^ //
+class MessagePath extends NeumorphicPathProvider {
+  final double borderRadius;
+  MessagePath({this.borderRadius = 8});
+
+  @override
+  Path getPath(Size size) {
+    double width = size.width;
+    double height = size.height;
+    double rheight = height - height / 3;
+    double oneThird = width / 3;
+
+    final path = Path()
+      ..lineTo(0, rheight - borderRadius)
+      ..cubicTo(0, rheight - borderRadius, 0, rheight, borderRadius, rheight)
+      ..lineTo(oneThird, rheight)
+      ..lineTo(width / 2 - borderRadius, height - borderRadius)
+      ..cubicTo(width / 2 - borderRadius, height - borderRadius, width / 2, height, width / 2 + borderRadius, height - borderRadius)
+      ..lineTo(2 * oneThird, rheight)
+      ..lineTo(width - borderRadius, rheight)
+      ..cubicTo(width - borderRadius, rheight, width, rheight, width, rheight - borderRadius)
+      ..lineTo(width, 0)
+      ..lineTo(0, 0);
+    return path;
+  }
+
+  @override
+  bool get oneGradientPerPath => true;
+}
+
+// ^ Oval Bottom Neumorphic Path ^ //
+class OvalBottomPath extends NeumorphicPathProvider {
+  @override
+  Path getPath(Size size) {
+    var path = Path();
+    path.lineTo(0, 0);
+    path.lineTo(0, size.height - 40);
+    path.quadraticBezierTo(size.width / 4, size.height, size.width / 2, size.height);
+    path.quadraticBezierTo(size.width - size.width / 4, size.height, size.width, size.height - 40);
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
+    return path;
+  }
+
+  @override
+  bool get oneGradientPerPath => true;
+}
+
+// ^ Oval Top Neumorphic Path ^ //
+class OvalTopPath extends NeumorphicPathProvider {
+  @override
+  Path getPath(Size size) {
+    var path = Path();
+    path.lineTo(0, 0);
+    path.lineTo(0, 40);
+    path.quadraticBezierTo(size.width / 4, 0, size.width / 2, 0);
+    path.quadraticBezierTo(size.width - size.width / 4, 0, size.width, 40);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    return path;
+  }
+
+  @override
+  bool get oneGradientPerPath => true;
+}
+
+// ^ Wave Default Right Path ^ //
+class WavePath extends NeumorphicPathProvider {
   @override
   Path getPath(Size size) {
     Offset firstEndPoint = Offset(size.width * .5, size.height - 20);
@@ -36,6 +102,32 @@ class TopBarPath extends NeumorphicPathProvider {
       ..quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy)
       ..lineTo(size.width, 0.0)
       ..close();
+    return path;
+  }
+
+  @override
+  bool get oneGradientPerPath => true;
+}
+
+// ^ Wave Strong Right Path ^ //
+class WaveStrongPath extends NeumorphicPathProvider {
+  @override
+  Path getPath(Size size) {
+    var firstControlPoint = Offset(size.width / 3.25, 65);
+    var firstEndPoint = Offset(size.width / 1.75, 40);
+    var secondCP = Offset(size.width / 1.25, 0);
+    var secondEP = Offset(size.width, 30);
+
+    final path = Path();
+    path.lineTo(0.0, 20);
+
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
+
+    path.quadraticBezierTo(secondCP.dx, secondCP.dy, secondEP.dx, secondEP.dy);
+
+    path.lineTo(size.width, size.height);
+    path.lineTo(0.0, size.height);
+    path.close();
     return path;
   }
 

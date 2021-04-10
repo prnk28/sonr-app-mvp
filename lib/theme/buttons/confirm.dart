@@ -1,13 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/data/data.dart';
 import '../theme.dart';
 import 'utility.dart';
+
+enum ConfirmButtonType { Save, Delete }
 
 class ConfirmButton extends StatefulWidget {
   static const double K_BORDER_RADIUS = 8;
   static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
   static const K_BUTTON_DURATION = Duration(milliseconds: 100);
-
+  final ConfirmButtonType type;
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Widget defaultChild;
@@ -31,6 +34,7 @@ class ConfirmButton extends StatefulWidget {
     @required this.confirmDecoration,
     @required this.completeDecoration,
     @required this.pressedScale,
+    @required this.type,
     this.margin,
     this.padding,
     this.tooltip,
@@ -82,6 +86,7 @@ class ConfirmButton extends StatefulWidget {
 
     // Build Child
     return ConfirmButton(
+      type: ConfirmButtonType.Save,
       defaultDecoration: defaultDecoration,
       confirmDecoration: confirmDecoration,
       completeDecoration: completeDecoration,
@@ -142,6 +147,7 @@ class ConfirmButton extends StatefulWidget {
 
     // Build Child
     return ConfirmButton(
+      type: ConfirmButtonType.Delete,
       defaultDecoration: defaultDecoration,
       confirmDecoration: confirmDecoration,
       completeDecoration: completeDecoration,
@@ -258,7 +264,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedAnimationDown = true;
 
-    //haptic vibration
+    // Haptic Feedback
     HapticFeedback.mediumImpact();
     _resetIfTapUp(ConfirmStatus.Pending);
   }
@@ -272,10 +278,18 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedAnimationDown = true;
 
-    //haptic vibration
+    // Haptic Feedback
     HapticFeedback.heavyImpact();
     _resetIfTapUp(ConfirmStatus.Done);
     await Future.delayed(ConfirmButton.K_BUTTON_DURATION * 2); //wait until animation finished
+
+    // Play Sound
+    if (widget.type == ConfirmButtonType.Save) {
+      DeviceService.playSound(type: UISoundType.Confirmed);
+    } else if (widget.type == ConfirmButtonType.Delete) {
+      DeviceService.playSound(type: UISoundType.Deleted);
+    }
+
     widget.onConfirmed();
   }
 

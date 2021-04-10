@@ -4,8 +4,8 @@ import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'grid_view.dart';
 
-enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
 
 class HomeController extends GetxController {
@@ -24,7 +24,6 @@ class HomeController extends GetxController {
   // References
   var _lastPage = NavButtonType.Grid;
   StreamSubscription<List<TransferCard>> _cardStream;
-  final _keyboardVisible = KeyboardVisibilityController();
 
   // ^ Controller Constructer ^
   @override
@@ -44,7 +43,7 @@ class HomeController extends GetxController {
     }
 
     // Handle Keyboard Visibility
-    _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
+    DeviceService.keyboardVisible.listen(_handleKeyboardVisibility);
   }
 
   // ^ Update Home State ^ //
