@@ -81,7 +81,7 @@ class ShareController extends GetxController {
   // ^ Set current Media Item ^ //
   setMedia(MediaItem item) async {
     SonrService.queueMedia(item);
-    Get.toNamed("/transfer");
+    Get.offNamed("/transfer");
     status(ShareStatus.Default);
   }
 
@@ -113,7 +113,7 @@ class ShareController extends GetxController {
     // Move to View
     Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
       SonrService.queueCapture(file);
-      Get.toNamed("/transfer");
+      Get.offNamed("/transfer");
     }), transition: Transition.downToUp);
 
     // Shrink Button after Delay

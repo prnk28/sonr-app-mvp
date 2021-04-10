@@ -3,6 +3,7 @@ export 'core/arguments.dart';
 export 'core/bindings.dart';
 export 'core/extensions.dart';
 export 'core/routing.dart';
+export 'core/sounds.dart';
 export 'core/timer.dart';
 
 // Database
