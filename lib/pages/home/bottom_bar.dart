@@ -19,19 +19,19 @@ class HomeBottomNavBar extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    NavButton(BottomNavButton.Grid, controller.setBottomIndex, controller.bottomIndex),
+                    NavButton(NavButtonType.Grid, controller.setBottomIndex, controller.bottomIndex),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child: NavButton(BottomNavButton.Profile, controller.setBottomIndex, controller.bottomIndex),
+                      child: NavButton(NavButtonType.Profile, controller.setBottomIndex, controller.bottomIndex),
                     ),
                     Container(
                       width: Get.width * 0.20,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child: NavButton(BottomNavButton.Alerts, controller.setBottomIndex, controller.bottomIndex),
+                      child: NavButton(NavButtonType.Alerts, controller.setBottomIndex, controller.bottomIndex),
                     ),
-                    NavButton(BottomNavButton.Remote, controller.setBottomIndex, controller.bottomIndex),
+                    NavButton(NavButtonType.Remote, controller.setBottomIndex, controller.bottomIndex),
                   ],
                 ),
               ),

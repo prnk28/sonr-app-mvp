@@ -24,6 +24,7 @@ class ShareController extends GetxController {
 
   @override
   onInit() {
+    status.listen(_handleStatus);
     super.onInit();
   }
 
@@ -71,7 +72,6 @@ class ShareController extends GetxController {
       galleryPermitted(await Get.find<UserService>().requestGallery());
       if (galleryPermitted.value) {
         status(ShareStatus.PickMedia);
-        _updateSize();
       } else {
         SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
       }
@@ -93,7 +93,6 @@ class ShareController extends GetxController {
         _timer = null;
         HapticFeedback.mediumImpact();
         status(ShareStatus.Default);
-        _updateSize();
         _counter = 0;
       }
     });
@@ -103,7 +102,6 @@ class ShareController extends GetxController {
   void toggle() {
     if (status.value == ShareStatus.Default) {
       status(ShareStatus.Queue);
-      _updateSize();
       expand(6000, status.value);
     } else {
       shrink();
@@ -123,9 +121,9 @@ class ShareController extends GetxController {
   }
 
   // # Update Size Based on State
-  _updateSize() {
-    size(status.value.size);
-    alignment(status.value.alignment);
-    translation(status.value.translation);
+  _handleStatus(ShareStatus status) {
+    size(status.size);
+    alignment(status.alignment);
+    translation(status.translation);
   }
 }

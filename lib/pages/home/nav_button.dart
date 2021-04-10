@@ -1,17 +1,22 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'home_controller.dart';
+
 // ^ Bottom Bar Button Types ^ //
-enum BottomNavButton {
+enum NavButtonType {
   Grid,
   Profile,
   Alerts,
   Remote,
 }
 
+// ^ Bottom Bar Button Status ^ //
+enum NavButtonStatus { Default, Animating, Completed }
+
 // ^ Bottom Bar Button Widget ^ //
-class NavButton extends StatelessWidget {
-  final BottomNavButton bottomType;
+class NavButton extends GetView<HomeController> {
+  final NavButtonType bottomType;
   final Function(int) onPressed;
   final RxInt currentIndex;
   NavButton(this.bottomType, this.onPressed, this.currentIndex);
@@ -50,20 +55,20 @@ class NavButton extends StatelessWidget {
 }
 
 // ^ Bottom Bar Button Type Utility ^ //
-extension BottomNavButtonUtils on BottomNavButton {
+extension BottomNavButtonUtils on NavButtonType {
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {
-      case BottomNavButton.Grid:
+      case NavButtonType.Grid:
         return Icons.home;
         break;
-      case BottomNavButton.Profile:
+      case NavButtonType.Profile:
         return Icons.person;
         break;
-      case BottomNavButton.Alerts:
+      case NavButtonType.Alerts:
         return Icons.notifications;
         break;
-      case BottomNavButton.Remote:
+      case NavButtonType.Remote:
         return SonrIconData.remote;
         break;
       default:
@@ -74,11 +79,11 @@ extension BottomNavButtonUtils on BottomNavButton {
   // # Returns Icon Path for Type
   String get disabled {
     switch (this) {
-      case BottomNavButton.Profile:
+      case NavButtonType.Profile:
         return "assets/bar/profile_disabled.png";
-      case BottomNavButton.Alerts:
+      case NavButtonType.Alerts:
         return "assets/bar/alerts_disabled.png";
-      case BottomNavButton.Remote:
+      case NavButtonType.Remote:
         return "assets/bar/remote_disabled.png";
       default:
         return "assets/bar/home_disabled.png";
@@ -87,13 +92,13 @@ extension BottomNavButtonUtils on BottomNavButton {
 
   LottieIconType get lottie {
     switch (this) {
-      case BottomNavButton.Profile:
+      case NavButtonType.Profile:
         return LottieIconType.Profile;
         break;
-      case BottomNavButton.Alerts:
+      case NavButtonType.Alerts:
         return LottieIconType.Alerts;
         break;
-      case BottomNavButton.Remote:
+      case NavButtonType.Remote:
         return LottieIconType.Remote;
         break;
       default:
@@ -104,16 +109,16 @@ extension BottomNavButtonUtils on BottomNavButton {
   // # Returns Icon Size
   double get iconSize {
     switch (this) {
-      case BottomNavButton.Grid:
+      case NavButtonType.Grid:
         return 32;
         break;
-      case BottomNavButton.Profile:
+      case NavButtonType.Profile:
         return 32;
         break;
-      case BottomNavButton.Alerts:
+      case NavButtonType.Alerts:
         return 32;
         break;
-      case BottomNavButton.Remote:
+      case NavButtonType.Remote:
         return 38;
         break;
       default:
@@ -124,16 +129,16 @@ extension BottomNavButtonUtils on BottomNavButton {
   // # Returns Index for Type
   int get index {
     switch (this) {
-      case BottomNavButton.Grid:
+      case NavButtonType.Grid:
         return 0;
         break;
-      case BottomNavButton.Profile:
+      case NavButtonType.Profile:
         return 1;
         break;
-      case BottomNavButton.Alerts:
+      case NavButtonType.Alerts:
         return 2;
         break;
-      case BottomNavButton.Remote:
+      case NavButtonType.Remote:
         return 3;
         break;
       default:

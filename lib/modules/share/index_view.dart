@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'share.dart';
 
-class ShareButtonView extends GetView<ShareController> {
-  ShareButtonView() : super(key: GlobalKey());
+class ShareView extends GetView<ShareController> {
+  ShareView() : super(key: GlobalKey());
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedAlign(
@@ -17,26 +17,26 @@ class ShareButtonView extends GetView<ShareController> {
               duration: Duration(milliseconds: 600),
               width: controller.size.value.width,
               height: controller.size.value.height,
-              child: _buildView(controller.status.value)),
+              child: _buildView()),
         ));
   }
 
   // @ Build Page View by Navigation Item
-  Widget _buildView(ShareStatus status) {
+  Widget _buildView() {
     // Return View
-    if (status == ShareStatus.PickMedia) {
+    if (controller.status.value == ShareStatus.PickMedia) {
       return MediaPickerView(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
-    } else if (status == ShareStatus.Queue) {
+    } else if (controller.status.value == ShareStatus.Queue) {
       return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
     } else {
-      return _DefaultView(key: ValueKey<ShareStatus>(ShareStatus.Default));
+      return _DefaultButtonView(key: ValueKey<ShareStatus>(ShareStatus.Default));
     }
   }
 }
 
 // ** Close Share Button View ** //
-class _DefaultView extends GetView<ShareController> {
-  _DefaultView({Key key}) : super(key: key);
+class _DefaultButtonView extends GetView<ShareController> {
+  _DefaultButtonView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return NeumorphicButton(

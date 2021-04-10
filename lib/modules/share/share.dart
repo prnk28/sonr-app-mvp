@@ -1,4 +1,4 @@
-export 'button_view.dart';
+export 'index_view.dart';
 export '../common/media/picker_view.dart';
 export 'option_button.dart';
 export 'share_controller.dart';
