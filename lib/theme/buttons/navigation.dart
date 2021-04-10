@@ -9,25 +9,12 @@ enum BottomNavButton {
   Remote,
 }
 
-// ^ Top Bar Button Types ^ //
-enum TopNavButton {
-  Menu,
-  Search,
-  Back,
-  Details,
-}
-
 // ^ Bottom Bar Button Widget ^ //
 class NavButton extends StatelessWidget {
-  final bool isBottom;
-  final TopNavButton topType;
   final BottomNavButton bottomType;
   final Function(int) onPressed;
   final RxInt currentIndex;
-  NavButton(this.isBottom, this.onPressed, this.currentIndex, {this.bottomType, this.topType});
-  factory NavButton.bottom(BottomNavButton type, Function(int) onPressed, RxInt currentIndex) {
-    return NavButton(true, onPressed, currentIndex, bottomType: type);
-  }
+  NavButton(this.bottomType, this.onPressed, this.currentIndex);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -39,12 +26,26 @@ class NavButton extends StatelessWidget {
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
-                    child: Icon(bottomType.iconData,
-                        size: bottomType.iconSize, color: idx.value == bottomType.index ? SonrPalette.Primary : Colors.grey.shade400),
+                    child: idx.value == bottomType.index ? _buildSelected() : _buildDefault(),
                     scale: idx.value == bottomType.index ? 1.2 : 1.0,
                   ),
               currentIndex),
         ));
+  }
+
+  Widget _buildDefault() {
+    return ImageIcon(
+      AssetImage(bottomType.disabled),
+      size: bottomType.iconSize,
+      color: Colors.grey[400],
+    );
+  }
+
+  Widget _buildSelected() {
+    return LottieIcon(
+      type: bottomType.lottie,
+      size: bottomType.iconSize,
+    );
   }
 }
 
@@ -70,22 +71,53 @@ extension BottomNavButtonUtils on BottomNavButton {
     }
   }
 
+  // # Returns Icon Path for Type
+  String get disabled {
+    switch (this) {
+      case BottomNavButton.Profile:
+        return "assets/bar/profile_disabled.png";
+      case BottomNavButton.Alerts:
+        return "assets/bar/alerts_disabled.png";
+      case BottomNavButton.Remote:
+        return "assets/bar/remote_disabled.png";
+      default:
+        return "assets/bar/home_disabled.png";
+    }
+  }
+
+  LottieIconType get lottie {
+    switch (this) {
+      case BottomNavButton.Profile:
+        return LottieIconType.Profile;
+        break;
+      case BottomNavButton.Alerts:
+        return LottieIconType.Alerts;
+        break;
+      case BottomNavButton.Remote:
+        return LottieIconType.Remote;
+        break;
+      default:
+        return LottieIconType.Home;
+    }
+  }
+
+  // # Returns Icon Size
   double get iconSize {
     switch (this) {
       case BottomNavButton.Grid:
-        return 24;
+        return 28;
         break;
       case BottomNavButton.Profile:
-        return 24;
+        return 28;
         break;
       case BottomNavButton.Alerts:
-        return 24;
+        return 28;
         break;
       case BottomNavButton.Remote:
-        return 20;
+        return 32;
         break;
       default:
-        return 24;
+        return 28;
     }
   }
 

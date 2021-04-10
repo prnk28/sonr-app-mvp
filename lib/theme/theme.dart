@@ -28,9 +28,9 @@ export 'style/scaffold.dart';
 export 'elements/snackbar.dart';
 export 'elements/path.dart';
 export 'style/text.dart';
+export 'animation/animation.dart';
 
 // Global UI Widgets
-export 'elements/animation.dart';
 export 'elements/glass.dart';
 export 'elements/painter.dart';
 export '../modules/overlay/overlay.dart';
