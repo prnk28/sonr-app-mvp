@@ -1,7 +1,6 @@
 import 'package:sonr_app/modules/share/index_view.dart';
 
 import 'grid_view.dart';
-import 'package:sonr_app/pages/home/top_header.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
 import 'package:sonr_app/modules/remote/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';

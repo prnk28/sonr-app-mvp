@@ -1,4 +1,47 @@
-import 'package:sonr_app/theme/theme.dart';
+import '../theme.dart';
+
+class ShapeContainer extends StatelessWidget {
+  // Properties
+  final NeumorphicPathProvider path;
+  final double height;
+  final double width;
+  final BoxDecoration decoration;
+  final Widget child;
+
+  // @ Factory Option: Message
+  factory ShapeContainer.message({double height, double width, Widget child, BoxDecoration decoration}) =>
+      ShapeContainer(path: MessagePath(), height: height, width: width, child: child, decoration: decoration);
+
+  // @ Factory Option: Oval Bottom
+  factory ShapeContainer.ovalDown({double height, double width, Widget child, BoxDecoration decoration}) =>
+      ShapeContainer(path: OvalBottomPath(), height: height, width: width, child: child, decoration: decoration);
+
+  // @ Factory Option: Oval Top
+  factory ShapeContainer.ovalTop({double height, double width, Widget child, BoxDecoration decoration}) =>
+      ShapeContainer(path: OvalTopPath(), height: height, width: width, child: child, decoration: decoration);
+
+  // @ Factory Option: Wave Weak Right
+  factory ShapeContainer.wave({double height, double width, Widget child, BoxDecoration decoration}) =>
+      ShapeContainer(path: WavePath(), height: height, width: width, child: child, decoration: decoration);
+
+  // @ Factory Option: Wave Strong
+  factory ShapeContainer.waveStrong({double height, double width, Widget child, BoxDecoration decoration}) =>
+      ShapeContainer(path: WaveStrongPath(), height: height, width: width, child: child, decoration: decoration);
+
+  // ** Constructer ** //
+  const ShapeContainer({@required this.path, Key key, this.decoration, this.child, this.width = 200, this.height = 200}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Neumorphic(
+        style: NeumorphicStyle(
+          boxShape: NeumorphicBoxShape.path(path),
+          depth: UserService.isDarkMode ? 4 : 8,
+          intensity: UserService.isDarkMode ? 0.45 : 0.85,
+          surfaceIntensity: 0.6,
+        ),
+        child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child));
+  }
+}
 
 // ^ Bottom Nav Bar: Neumorphic Path ^ //
 class BottomBarPath extends NeumorphicPathProvider {

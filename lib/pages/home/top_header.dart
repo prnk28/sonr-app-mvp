@@ -1,27 +1,19 @@
 import 'dart:async';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 
 // ^ Home Screen Header ^ //
 class HomeTopHeaderBar extends GetView<HomeController> {
-
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-        style: NeumorphicStyle(
-          boxShape: NeumorphicBoxShape.path(WavePath()),
-          depth: UserService.isDarkMode ? 4 : 8,
-          intensity: UserService.isDarkMode ? 0.45 : 0.85,
-          surfaceIntensity: 0.6,
-        ),
-        child: Container(
-            height: Get.height / 4,
-            width: Get.width,
-            decoration: BoxDecoration(gradient: SonrPalette.primary()),
-            child: Stack(children: [
-              Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
-            ])));
+    return ShapeContainer(
+        path: WavePath(),
+        height: Get.height / 4,
+        width: Get.width,
+        decoration: BoxDecoration(gradient: SonrPalette.primary()),
+        child: Stack(children: [
+          Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
+        ]));
   }
 }
 

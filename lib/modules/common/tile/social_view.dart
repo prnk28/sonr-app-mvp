@@ -87,7 +87,7 @@ class _MediumItem extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ClipPath(clipper: WaveClipperOne(), child: Image.network(medium.posts.first.thumbnail)),
+              ShapeContainer.wave(child: Image.network(medium.posts.first.thumbnail), width: 150, height: 120),
               SonrText.gradient(medium.posts.first.title, FlutterGradientNames.premiumDark, size: 16),
             ],
           ),
@@ -100,7 +100,7 @@ class _MediumItem extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            ClipPath(clipper: WaveClipperOne(), child: Image.network(medium.posts[index].thumbnail)),
+            ShapeContainer.wave(child: Image.network(medium.posts[index].thumbnail), width: 275, height: 140),
             SonrText.gradient(medium.posts[index].title, FlutterGradientNames.premiumDark, size: 20),
             SonrText.postDescription(medium.posts[index].title.length, medium.posts[index].description),
             SonrText.postDate(medium.posts[index].pubDate, size: 14)
