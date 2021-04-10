@@ -1,6 +1,38 @@
+import 'dart:async';
+
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/share/share.dart';
+
+class MediaPicker {
+  final bool isSheet;
+
+  // @ Media Picker as Sheet
+  static Future<MediaItem> sheet() async {
+    if (await Permission.photos.request().isGranted) {
+      Completer<MediaItem> completer;
+      // Display Bottom Sheet
+      Get.bottomSheet(MediaPickerSheet(onMediaSelected: (MediaItem file) {
+        completer.complete(file);
+      }), isDismissible: true);
+
+      // Return Future
+      return completer.future;
+    } else {
+      // Display Error
+      SonrSnack.error("Sonr isnt permitted to access your media.");
+      return null;
+    }
+  }
+
+  // @ Media Picker as Dialog
+  static Widget picker({Key key}) {
+    return MediaPickerView(key: key);
+  }
+
+  MediaPicker(this.isSheet);
+}
 
 // ^ Root Media Queue Container ^ //
 class MediaPickerView extends GetView<MediaQueueController> {
@@ -13,8 +45,30 @@ class MediaPickerView extends GetView<MediaQueueController> {
         enabled: true,
         delay: 600.milliseconds,
         duration: 600.milliseconds,
-        child: _MediaQueueGrid(key: ValueKey<MediaQueueViewStatus>(MediaQueueViewStatus.Ready)),
+        child: Obx(() => _buildChildFromStatus(controller.status.value)),
       ),
+    );
+  }
+
+  // @ Method to check View Status
+  Widget _buildChildFromStatus(MediaQueueViewStatus status) {
+    if (status == MediaQueueViewStatus.NeedsPermissions) {
+      return _MediaPermissionsView();
+    } else {
+      return _MediaQueueGrid(key: ValueKey<MediaQueueViewStatus>(MediaQueueViewStatus.Ready));
+    }
+  }
+}
+
+// ^ Permissions View ^ //
+class _MediaPermissionsView extends GetView<MediaQueueController> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SonrText.subtitle("Need Gallery Permissions"),
+        ColorButton.primary(onPressed: controller.requestPermission, text: "Proceed"),
+      ],
     );
   }
 }
@@ -148,7 +202,13 @@ class _MediaQueueItem extends GetView<MediaQueueController> {
 }
 
 // ^ Media Queue Reactive Controller ^ //
-enum MediaQueueViewStatus { Loading, Ready }
+enum MediaQueueViewStatus { NeedsPermissions, Loading, Ready }
+
+extension MediaQueueViewStatusUtils on MediaQueueViewStatus {
+  static MediaQueueViewStatus statusFromPermissions(bool val) {
+    return val ? MediaQueueViewStatus.Ready : MediaQueueViewStatus.NeedsPermissions;
+  }
+}
 
 class MediaQueueController extends GetxController {
   // Album Properties
@@ -161,7 +221,7 @@ class MediaQueueController extends GetxController {
   final selectedIndex = (-1).obs;
 
   // View Properties
-  final status = Rx<MediaQueueViewStatus>(MediaQueueViewStatus.Loading);
+  final status = Rx<MediaQueueViewStatus>(MediaQueueViewStatusUtils.statusFromPermissions(UserService.permissions.value.hasGallery));
 
   onInit() async {
     // Check Albums
@@ -179,6 +239,31 @@ class MediaQueueController extends GetxController {
     // Add Listener
     albumIndex.listen(_handleAlbumIndex);
     super.onInit();
+  }
+
+  // @ Request Media Permissions
+  requestPermission() async {
+    // Initialize
+    bool granted = false;
+
+    // Check Device
+    if (DeviceService.isAndroid) {
+      if (await Permission.storage.request().isGranted) {
+        granted = true;
+      } else {
+        granted = false;
+      }
+    } else {
+      if (await Permission.photos.request().isGranted) {
+        granted = true;
+      } else {
+        granted = false;
+      }
+    }
+
+    // Update User Settings and Status
+    UserService.permissions.value.update();
+    status(MediaQueueViewStatusUtils.statusFromPermissions(granted));
   }
 
   // @ Return Item Thumbnail ^ //

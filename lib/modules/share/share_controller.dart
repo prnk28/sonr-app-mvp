@@ -64,13 +64,17 @@ class ShareController extends GetxController {
     // Check for Permissions
     if (galleryPermitted.value) {
       status(ShareStatus.PickMedia);
-      _updateSize();
     }
 
     // Request Permissions
     else {
       galleryPermitted(await Get.find<UserService>().requestGallery());
-      galleryPermitted.value ? _presentGalleryView() : SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
+      if (galleryPermitted.value) {
+        status(ShareStatus.PickMedia);
+        _updateSize();
+      } else {
+        SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
+      }
     }
   }
 
@@ -115,18 +119,6 @@ class ShareController extends GetxController {
     }), transition: Transition.downToUp);
 
     // Shrink Button after Delay
-    shrink(delay: 150.milliseconds);
-  }
-
-  // # Present Picker View for Gallery ^ //
-  _presentGalleryView() {
-    // Present Sheet
-    Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
-      SonrService.queueMedia(file);
-      Get.toNamed("/transfer");
-    }), isDismissible: false);
-
-    // Shrink button after delay
     shrink(delay: 150.milliseconds);
   }
 
