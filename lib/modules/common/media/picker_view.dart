@@ -224,16 +224,21 @@ class MediaQueueController extends GetxController {
   final status = Rx<MediaQueueViewStatus>(MediaQueueViewStatusUtils.statusFromPermissions(UserService.permissions.value.hasGallery));
 
   onInit() async {
-    // Check Albums
-    if (MediaService.hasGallery.value) {
-      currentAlbum(MediaService.allAlbum.value.assets);
-      currentAlbum.refresh();
-      status(MediaQueueViewStatus.Ready);
+    // Check Permissions
+    if (UserService.permissions.value.hasGallery) {
+      // Check Albums
+      if (MediaService.hasGallery.value) {
+        currentAlbum(MediaService.allAlbum.value.assets);
+        currentAlbum.refresh();
+        status(MediaQueueViewStatus.Ready);
+      } else {
+        await MediaService.refreshGallery();
+        currentAlbum(MediaService.allAlbum.value.assets);
+        currentAlbum.refresh();
+        status(MediaQueueViewStatus.Ready);
+      }
     } else {
-      await MediaService.refreshGallery();
-      currentAlbum(MediaService.allAlbum.value.assets);
-      currentAlbum.refresh();
-      status(MediaQueueViewStatus.Ready);
+      status(MediaQueueViewStatus.NeedsPermissions);
     }
 
     // Add Listener
