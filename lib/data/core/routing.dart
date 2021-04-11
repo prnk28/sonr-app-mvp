@@ -30,15 +30,6 @@ class SonrRouting {
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
-        // ** Home Page - Back from Transfer ** //
-        GetPage(
-          name: '/home/transfer',
-          page: () => HomeScreen(),
-          transition: Transition.upToDown,
-          curve: Curves.bounceIn,
-          binding: HomeBinding(),
-        ),
-
         // ** Register Page ** //
         GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
 

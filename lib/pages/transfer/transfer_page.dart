@@ -62,7 +62,7 @@ class _RemoteLobbyFullViewState extends State<RemoteLobbyFullView> {
     return SonrScaffold.appBarLeadingAction(
         disableDynamicLobbyTitle: true,
         titleWidget: _buildTitleWidget(),
-        leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
+        leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.back(closeOverlays: true), shape: NeumorphicShape.flat),
         action: ShapeButton.circle(icon: SonrIcon.leave, onPressed: () => widget.controller.stopRemote(), shape: NeumorphicShape.flat),
         body: ListView.builder(
           itemCount: lobbyModel != null ? lobbyModel.length + 1 : 1,
@@ -116,7 +116,7 @@ class LocalLobbyView extends GetView<TransferController> {
     return Obx(() => SonrScaffold.appBarLeadingAction(
           disableDynamicLobbyTitle: true,
           titleWidget: GestureDetector(child: SonrText.appBar(controller.title.value), onTap: () => Get.bottomSheet(LobbySheet())),
-          leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home/transfer"), shape: NeumorphicShape.flat),
+          leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.back(closeOverlays: true), shape: NeumorphicShape.flat),
           action: Get.find<SonrService>().payload != Payload.CONTACT
               ? ShapeButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat)
               : Container(),

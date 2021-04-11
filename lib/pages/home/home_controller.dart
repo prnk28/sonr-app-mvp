@@ -21,7 +21,7 @@ class HomeController extends GetxController {
   final page = NavButtonType.Grid.obs;
 
   // References
-  var _lastPage = NavButtonType.Grid;
+  NavButtonType _lastPage = NavButtonType.Grid;
   StreamSubscription<List<TransferCard>> _cardStream;
 
   // ^ Controller Constructer ^
@@ -69,17 +69,6 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  // ^ Return Animation by Page Index
-  SwitchType getSwitcherAnimation() {
-    if (_lastPage.index > page.value.index) {
-      _lastPage = page.value;
-      return SwitchType.SlideLeft;
-    } else {
-      _lastPage = page.value;
-      return SwitchType.SlideRight;
-    }
-  }
-
   // ^ Method for Setting Category Filter ^ //
   setToggleCategory(int index) {
     toggleIndex(index);
@@ -107,10 +96,26 @@ class HomeController extends GetxController {
       } else {
         page(NavButtonType.Grid);
       }
-    } else {}
+
+      // Close Sharebutton if open
+      if (Get.find<ShareController>().status.value.isExpanded) {
+        Get.find<ShareController>().shrink();
+      }
+    }
   }
 
-  // @ Handle Keyboard Visibility
+  // @ Return Animation by Page Index
+  SwitchType get switchAnimation {
+    if (_lastPage.index > page.value.index) {
+      _lastPage = page.value;
+      return SwitchType.SlideLeft;
+    } else {
+      _lastPage = page.value;
+      return SwitchType.SlideRight;
+    }
+  }
+
+  // # Handle Keyboard Visibility
   _handleKeyboardVisibility(bool keyboardVisible) {
     isBottomBarVisible(!keyboardVisible);
   }

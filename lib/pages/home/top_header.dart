@@ -9,10 +9,21 @@ class HomeTopHeaderBar extends GetView<HomeController> {
   HomeTopHeaderBar({this.children});
   @override
   Widget build(BuildContext context) {
-    return ShapeContainer.waveStrong(
+    return ShapeContainer.ovalDown(
         height: Get.height / 4,
         width: Get.width,
-        decoration: BoxDecoration(gradient: SonrPalette.primary()),
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [
+              SonrPalette.Primary,
+              SonrPalette.Tertiary,
+              SonrPalette.Secondary,
+            ],
+            center: Alignment.topRight,
+            focal: Alignment.bottomLeft,
+            focalRadius: 1.5,
+          ),
+        ),
         child: Stack(children: _buildChildren()));
   }
 

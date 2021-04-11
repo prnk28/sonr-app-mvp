@@ -15,7 +15,7 @@ class HomeScreen extends GetView<HomeController> {
         shareView: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
         body: Obx(() => AnimatedSlideSwitcher(
-              controller.getSwitcherAnimation(),
+              controller.switchAnimation,
               _buildView(controller.page.value),
               const Duration(milliseconds: 2500),
             )));
