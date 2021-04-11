@@ -11,21 +11,10 @@ import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
 extension StatusUtils on Status {
-  bool get isNotConnected {
-    return this == Status.NONE;
-  }
-
-  bool get isConnecting {
-    return this == Status.NONE || this == Status.CONNECTED;
-  }
-
-  bool get isConnected {
-    return this != Status.NONE;
-  }
-
-  bool get isReady {
-    return this == Status.BOOTSTRAPPED;
-  }
+  bool get isNotConnected => this == Status.NONE;
+  bool get isConnecting => this == Status.NONE || this == Status.CONNECTED;
+  bool get isConnected => this != Status.NONE;
+  bool get isReady => this == Status.BOOTSTRAPPED;
 }
 
 class SonrService extends GetxService with TransferQueue {

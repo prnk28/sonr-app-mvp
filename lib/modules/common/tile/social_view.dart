@@ -28,7 +28,7 @@ class SocialView extends StatelessWidget {
           // Twitter
           case Contact_SocialTile_Provider.Twitter:
             var twitter = controller.twitter.value;
-            return Stack(children: [_TweetItem(twitter, 0, true), item.provider.badge()]);
+            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.badge()]);
             break;
 
           // Youtube
@@ -59,7 +59,7 @@ class SocialView extends StatelessWidget {
       itemCount: controller.twitter.value.count,
       scrollDirection: provider == Contact_SocialTile_Provider.Twitter ? Axis.vertical : Axis.horizontal,
       itemBuilder: (BuildContext context, int index) {
-        return _TweetItem(controller.twitter.value, index, false);
+        return _TweetItem(controller.twitter.value, index, false, controller);
       },
       separatorBuilder: (BuildContext context, int index) {
         return SizedBox(
@@ -113,10 +113,17 @@ class _MediumItem extends StatelessWidget {
 
 // ^ Twitter Item ^ //
 class _TweetItem extends StatelessWidget {
+  final TileController controller;
   final TwitterModel twitter;
   final int index;
   final bool isTile;
-  const _TweetItem(this.twitter, this.index, this.isTile, {Key key}) : super(key: key);
+  const _TweetItem(
+    this.twitter,
+    this.index,
+    this.isTile,
+    this.controller, {
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +145,7 @@ class _TweetItem extends StatelessWidget {
     return NeumorphicButton(
       padding: EdgeInsets.all(12),
       onPressed: () {
-        Get.find<DeviceService>().launchURL("https://twitter.com/${user.username}/status/${tweets[index].id}");
+        controller.launchURL("https://twitter.com/${user.username}/status/${tweets[index].id}");
       },
       child: Container(
         width: 275,

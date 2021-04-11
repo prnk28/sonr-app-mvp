@@ -1,6 +1,7 @@
 import 'package:sonr_app/modules/profile/profile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TileController extends GetxController {
   // Properties
@@ -30,6 +31,15 @@ class TileController extends GetxController {
     else if (tile.provider == Contact_SocialTile_Provider.YouTube) {
       youtube(await YoutubeController.searchVideo(tile.links.postLink));
       isFetched(true);
+    }
+  }
+
+  // ^ Launch a URL Event ^ //
+  Future launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      SonrSnack.error("Could not launch the URL.");
     }
   }
 

@@ -105,6 +105,9 @@ class UserService extends GetxService {
             SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: Brightness.light))
         : SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
             statusBarColor: Colors.transparent, statusBarBrightness: Brightness.light, statusBarIconBrightness: Brightness.dark));
+
+    // @ Listen to Contact Updates
+    _contact.listen(_handleContactUpdate);
     return this;
   }
 
@@ -150,7 +153,9 @@ class UserService extends GetxService {
 
   // ^ Method to Create New User from Contact ^ //
   static Future<User> newUser(Contact providedContact) async {
+    // Set Valuse
     to._isNewUser(true);
+
     // Set Contact for User
     return await to._saveContactForUser(providedContact);
   }
@@ -158,7 +163,7 @@ class UserService extends GetxService {
   // ^ Method to Save Changes ^ //
   static Future<User> saveChanges() async {
     // Set Contact for User
-    var user = await to._saveContactForUser(Contact(
+    return await to._saveContactForUser(Contact(
         firstName: to._firstName.value,
         lastName: to._lastName.value,
         phone: to._phone.value,
@@ -166,20 +171,9 @@ class UserService extends GetxService {
         website: to._website.value,
         picture: to._picture.value.toList() ?? [],
         socials: to._socials ?? []));
-
-    // Refresh Values
-    to._firstName.refresh();
-    to._lastName.refresh();
-    to._phone.refresh();
-    to._email.refresh();
-    to._website.refresh();
-    to._picture.refresh();
-    to._socials.refresh();
-
-    return user;
   }
 
-  // ^ Saves Contact User to Disk ^ //
+  // # Saves Contact User to Disk
   Future<User> _saveContactForUser(Contact contact) async {
     // @ Initialize
     _contact(contact);
@@ -204,6 +198,22 @@ class UserService extends GetxService {
     }
     user(userValue);
     return user.value;
+  }
+
+  // # Listen to Contact Updates
+  _handleContactUpdate(Contact contact) async {
+    // Set Values
+    to._firstName(contact.firstName);
+    to._lastName(contact.lastName);
+    to._phone(contact.phone);
+    to._email(contact.email);
+    to._website(contact.website);
+    to._picture(contact.picture);
+    to._socials(contact.socials);
+
+    // Refresh Lists
+    to._socials.refresh();
+    to._picture.refresh();
   }
 
   // ************************* //

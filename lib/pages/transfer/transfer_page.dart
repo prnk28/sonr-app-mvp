@@ -134,11 +134,7 @@ class LocalLobbyView extends GetView<TransferController> {
                     )),
 
                 // @ Lobby View
-                OpacityAnimatedWidget(
-                  duration: 150.milliseconds,
-                  child: _LocalLobbyStack(data: LobbyService.local.value),
-                  enabled: LobbyService.localSize.value > 0,
-                ),
+                _LocalLobbyStack(data: LobbyService.local.value),
 
                 // @ Compass View
                 Padding(

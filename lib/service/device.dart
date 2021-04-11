@@ -158,15 +158,7 @@ class DeviceService extends GetxService {
     });
   }
 
-  // ^ Launch a URL Event ^ //
-  Future launchURL(String url) async {
-    if (await canLaunch(url)) {
-      SonrOverlay.back();
-      await launch(url);
-    } else {
-      SonrSnack.error("Could not launch the URL.");
-    }
-  }
+
 
   // ^ Refresh User Location Position ^ //
   static Future<Position> currentLocation() async {
