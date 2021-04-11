@@ -3,6 +3,7 @@ import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'bottom_bar.dart';
 import 'grid_view.dart';
 
 enum HomeState { Loading, Ready, None, New, First }

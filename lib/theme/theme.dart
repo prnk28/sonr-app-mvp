@@ -19,7 +19,6 @@ export 'package:sonr_app/modules/common/media/sheet_view.dart';
 export 'style/background.dart';
 export 'buttons/shape.dart';
 export 'buttons/color.dart';
-export '../pages/home/nav_button.dart';
 export 'buttons/plain.dart';
 export 'buttons/confirm.dart';
 export 'style/color.dart';

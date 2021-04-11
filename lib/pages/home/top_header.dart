@@ -5,43 +5,39 @@ import 'home_controller.dart';
 // ^ Home Screen Header ^ //
 class HomeTopHeaderBar extends GetView<HomeController> {
   final List<Widget> children;
-  final RxBool animationActive = true.obs;
 
   HomeTopHeaderBar({this.children});
   @override
   Widget build(BuildContext context) {
-    return ObxValue<RxBool>((active) {
-      return CustomAnimatedWidget(
-        animationFinished: (val) => animationActive(!animationActive.value),
-        enabled: active.value,
-        duration: Duration(seconds: 12),
-        curve: Curves.bounceInOut,
-        builder: (context, percent) {
-          //for custom animation, use builders
-          final middleStop = percent.clamp(0.1, 0.6);
+    return CustomAnimatedWidget(
+      enabled: true,
+      duration: Duration(seconds: 20),
+      curve: Curves.bounceInOut,
+      builder: (context, percent) {
+        //for custom animation, use builders
+        final middleStop = percent.clamp(0.1, 0.6);
 
-          // Animated Shape Container
-          return ShapeContainer.ovalDown(
-              height: Get.height / 4,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                gradient: RadialGradient(
-                  colors: [
-                    SonrPalette.Primary.withOpacity(0.5),
-                    SonrPalette.Tertiary.withOpacity(0.5),
-                    SonrPalette.Secondary.withOpacity(0.5),
-                  ],
-                  stops: [0.0, middleStop, 1.0],
-                  center: Alignment.topRight,
-                  focal: Alignment.bottomLeft,
-                  focalRadius: 1.5,
-                ),
+        // Animated Shape Container
+        return ShapeContainer.ovalDown(
+            height: Get.height / 4,
+            width: Get.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              gradient: RadialGradient(
+                colors: [
+                  SonrPalette.Primary.withOpacity(0.5),
+                  SonrPalette.Tertiary.withOpacity(0.5),
+                  SonrPalette.Secondary.withOpacity(0.5),
+                ],
+                stops: [0.0, middleStop, 1.0],
+                center: Alignment.topRight,
+                focal: Alignment.bottomLeft,
+                focalRadius: 1.5,
               ),
-              child: Stack(children: _buildChildren()));
-        },
-      );
-    }, animationActive);
+            ),
+            child: Stack(children: _buildChildren()));
+      },
+    );
   }
 
   // @ Builds Column Children
@@ -79,13 +75,7 @@ class _HomeHeaderTitle extends StatelessWidget {
                 duration: 2.seconds,
                 child: GestureDetector(
                   key: ValueKey<String>(controller.title.value),
-                  child: controller.status.value.isConnecting
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [SonrText.appBar("Connecting"), CircularProgressIndicator()],
-                        )
-                      : SonrText.appBar(controller.title.value),
+                  child: SonrText.appBar(controller.title.value),
                   onTap: () {
                     controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
                   },
@@ -96,6 +86,7 @@ class _HomeHeaderTitle extends StatelessWidget {
       },
     );
   }
+
 }
 
 // ^ Controller for Header Title ^ //
