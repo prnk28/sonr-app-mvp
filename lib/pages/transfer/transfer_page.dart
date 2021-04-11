@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -135,7 +134,11 @@ class LocalLobbyView extends GetView<TransferController> {
                     )),
 
                 // @ Lobby View
-                LobbyService.localSize.value > 0 ? _LocalLobbyStack() : Container(),
+                OpacityAnimatedWidget(
+                  duration: 150.milliseconds,
+                  child: _LocalLobbyStack(data: LobbyService.local.value),
+                  enabled: LobbyService.localSize.value > 0,
+                ),
 
                 // @ Compass View
                 Padding(
@@ -155,61 +158,26 @@ class LocalLobbyView extends GetView<TransferController> {
 }
 
 // ^ Local Lobby Stack View ^ //
-class _LocalLobbyStack extends StatefulWidget {
-  const _LocalLobbyStack({Key key}) : super(key: key);
-  @override
-  _LocalLobbyStackState createState() => _LocalLobbyStackState();
-}
-
-class _LocalLobbyStackState extends State<_LocalLobbyStack> {
-  // References
-  int lobbySize = 0;
-  List<PeerBubble> stackChildren = <PeerBubble>[];
-  StreamSubscription<LobbyModel> localLobbyStream;
-
-  // * Initial State * //
-  @override
-  void initState() {
-    // Add Initial Data
-    _handleLobbyUpdate(LobbyService.local.value);
-    localLobbyStream = LobbyService.local.listen(_handleLobbyUpdate);
-    super.initState();
-  }
-
-  // * On Dispose * //
-  @override
-  void dispose() {
-    localLobbyStream.cancel();
-    super.dispose();
-  }
+class _LocalLobbyStack extends StatelessWidget {
+  final LobbyModel data;
+  _LocalLobbyStack({Key key, @required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (lobbySize > 0) {
-      return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
+    // Initialize Children
+    var children = <Widget>[];
+
+    // Check for Mobile
+    if (data.peers.length > 0) {
+      data.peers.forEach((peer) {
+        if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
+          children.add(PeerBubble(peer));
+        }
+      });
     } else {
-      return Container();
+      children.add(Container());
     }
-  }
 
-  // * Updates Stack Children * //
-  _handleLobbyUpdate(LobbyModel data) {
-    // Initialize
-    var children = <PeerBubble>[];
-
-    // Clear List
-    stackChildren.clear();
-
-    // Iterate through peers and IDs
-    data.mobilePeers.forEach((peer) {
-      // Add to Stack Items
-      children.add(PeerBubble(peer));
-    });
-
-    // Update View
-    setState(() {
-      lobbySize = data.mobilePeers.length;
-      stackChildren = children;
-    });
+    return Stack(children: children);
   }
 }

@@ -99,7 +99,10 @@ class LobbyService extends GetxService {
       _handleFlatPeers(data);
       _local(LobbyModel(data));
       _localSize(data.count);
+
+      // Refresh Values
       _local.refresh();
+      _localSize.refresh();
     }
 
     // @ Update Other Topics
