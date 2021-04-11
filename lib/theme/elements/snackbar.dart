@@ -62,9 +62,11 @@ class SonrSnack {
           return SonrSnack("Warning", error.message, SonrIcon.missing, Colors.yellow, 2600, false);
       }
     }
-
     // @ App Error
-    return SonrSnack("Error.", message, SonrIcon.error, Colors.red, 2600, false);
+    else {
+      DeviceService.playSound(type: UISoundType.Warning);
+      return SonrSnack("Error", message, SonrIcon.error, Colors.red, 2600, false);
+    }
   }
 
   // ^ Invalid Operation ^ //

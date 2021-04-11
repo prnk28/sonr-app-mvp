@@ -60,24 +60,6 @@ class ShareController extends GetxController {
     }
   }
 
-  // ^ Check if User Granted Gallery, or Request ^ //
-  onGalleryShare() async {
-    // Check for Permissions
-    if (galleryPermitted.value) {
-      status(ShareStatus.PickMedia);
-    }
-
-    // Request Permissions
-    else {
-      galleryPermitted(await Get.find<UserService>().requestGallery());
-      if (galleryPermitted.value) {
-        status(ShareStatus.PickMedia);
-      } else {
-        SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
-      }
-    }
-  }
-
   // ^ Set current Media Item ^ //
   setMedia(MediaItem item) async {
     SonrService.queueMedia(item);

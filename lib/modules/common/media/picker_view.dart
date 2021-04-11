@@ -261,6 +261,12 @@ class MediaQueueController extends GetxController {
       }
     }
 
+    // Display error if not granted
+    if (!granted) {
+      SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
+      Get.find<ShareController>().shrink(delay: 750.milliseconds);
+    }
+
     // Update User Settings and Status
     UserService.permissions.value.update();
     status(MediaQueueViewStatusUtils.statusFromPermissions(granted));

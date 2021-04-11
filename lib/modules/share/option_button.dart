@@ -28,7 +28,10 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: controller.onGalleryShare,
+      onTap: () {
+        controller.status(ShareStatus.PickMedia);
+        controller.status.refresh();
+      },
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         RiveContainer(
           width: 55,
