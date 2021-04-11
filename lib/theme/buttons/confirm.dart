@@ -1,6 +1,5 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/data/data.dart';
 import '../theme.dart';
 import 'utility.dart';
 

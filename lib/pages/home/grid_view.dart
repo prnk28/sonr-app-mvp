@@ -9,7 +9,6 @@ import 'package:sonr_app/data/data.dart';
 
 import 'top_header.dart';
 
-
 enum ToggleFilter { All, Media, Contact, Links }
 
 // ^ Card Grid View ^ //
@@ -35,7 +34,9 @@ class CardGridView extends GetView<HomeController> {
       }
 
       return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        HomeTopHeaderBar(),
+        HomeTopHeaderBar(
+          children: [_CardGridToggle()],
+        ),
         Expanded(child: Container(child: _CardGridWidget(cardList, pageController))),
       ]);
     });
@@ -46,7 +47,8 @@ class _CardGridToggle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 8),
+      alignment: Alignment.bottomCenter,
+      padding: EdgeInsets.only(bottom: 8),
       margin: EdgeWith.horizontal(24),
       child: NeumorphicToggle(
         style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
@@ -68,10 +70,6 @@ class _CardGridToggle extends GetView<HomeController> {
         ],
       ),
     );
-  }
-
-  _setToggleCategory(){
-
   }
 }
 

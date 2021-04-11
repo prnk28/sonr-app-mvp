@@ -4,16 +4,32 @@ import 'home_controller.dart';
 
 // ^ Home Screen Header ^ //
 class HomeTopHeaderBar extends GetView<HomeController> {
+  final List<Widget> children;
+
+  HomeTopHeaderBar({this.children});
   @override
   Widget build(BuildContext context) {
-    return ShapeContainer(
-        path: WavePath(),
+    return ShapeContainer.waveStrong(
         height: Get.height / 4,
         width: Get.width,
         decoration: BoxDecoration(gradient: SonrPalette.primary()),
-        child: Stack(children: [
-          Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
-        ]));
+        child: Stack(children: _buildChildren()));
+  }
+
+  // @ Builds Column Children
+  List<Widget> _buildChildren() {
+    // Default Children
+    var adjChildren = <Widget>[
+      Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
+    ];
+
+    // If children were passed
+    if (children != null) {
+      adjChildren.addAll(children);
+    }
+
+    // Returns Built Children
+    return adjChildren;
   }
 }
 

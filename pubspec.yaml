@@ -4,7 +4,7 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.9.1+200
+version: 0.9.1+201
 publish_to: none
 
 # -- Flutter Settings --
