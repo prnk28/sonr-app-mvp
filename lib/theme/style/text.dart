@@ -9,6 +9,143 @@ import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
+enum DesignTextStyle { Hero, HeadingOne, HeadingTwo, HeadingThree, HeadingFour, HeadingFive, HeadingSix, Paragraph, ParagraphGrey }
+
+extension DesignTextUtils on String {
+  SonrTextStyle get hero => SonrTextStyle(this, DesignTextStyle.Hero);
+  SonrTextStyle get h1 => SonrTextStyle(this, DesignTextStyle.HeadingOne);
+  SonrTextStyle get h2 => SonrTextStyle(this, DesignTextStyle.HeadingTwo);
+  SonrTextStyle get h3 => SonrTextStyle(this, DesignTextStyle.HeadingThree);
+  SonrTextStyle get h4 => SonrTextStyle(this, DesignTextStyle.HeadingFour);
+  SonrTextStyle get h5 => SonrTextStyle(this, DesignTextStyle.HeadingFive);
+  SonrTextStyle get h6 => SonrTextStyle(this, DesignTextStyle.HeadingSix);
+  SonrTextStyle get p => SonrTextStyle(this, DesignTextStyle.Paragraph);
+  SonrTextStyle get pGrey => SonrTextStyle(this, DesignTextStyle.ParagraphGrey);
+}
+
+class SonrTextStyle extends StatelessWidget {
+  final String text;
+  final DesignTextStyle type;
+
+  const SonrTextStyle(this.text, this.type);
+  @override
+  Widget build(BuildContext context) {
+    // Const Colors
+    const colorBlack = Color(0xff323232);
+    const colorGrey = Color(0xff787878);
+
+    // Initialize
+    String family = "Manrope";
+    FontWeight weight = FontWeight.w800;
+    double size = 80;
+    Color color = Colors.white;
+
+    // Get Values
+    switch (type) {
+      // @ Hero One
+      case DesignTextStyle.Hero:
+        return Center(
+          child: ShaderMask(
+              shaderCallback: (bounds) => FlutterGradients.crystalRiver(endAngle: 2.40855).createShader(
+                    Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                  ),
+              child: Text(
+                text,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: family,
+                  fontWeight: weight,
+                  fontSize: size,
+                  color: color,
+                  fontFeatures: [
+                    FontFeature.tabularFigures(),
+                  ],
+                ),
+              )),
+        );
+        break;
+
+      // @ Heading One
+      case DesignTextStyle.HeadingOne:
+        return Center(
+          child: ShaderMask(
+              shaderCallback: (bounds) => FlutterGradients.crystalRiver(endAngle: 2.40855).createShader(
+                    Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                  ),
+              child: Text(
+                text,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Manrope',
+                  fontWeight: FontWeight.w800,
+                  fontSize: 44,
+                  color: Colors.white,
+                  fontFeatures: [
+                    FontFeature.tabularFigures(),
+                  ],
+                ),
+              )),
+        );
+        break;
+      case DesignTextStyle.HeadingTwo:
+        color = colorBlack;
+        size = 38;
+        weight = FontWeight.w800;
+        family = "Manrope";
+        break;
+      case DesignTextStyle.HeadingThree:
+        color = colorBlack;
+        size = 32;
+        weight = FontWeight.w800;
+        family = "Manrope";
+        break;
+      case DesignTextStyle.HeadingFour:
+        color = colorBlack;
+        size = 28;
+        weight = FontWeight.w800;
+        family = "Manrope";
+        break;
+      case DesignTextStyle.HeadingFive:
+        color = colorBlack;
+        size = 24;
+        weight = FontWeight.w400;
+        family = "Manrope";
+        break;
+      case DesignTextStyle.HeadingSix:
+        color = colorBlack;
+        size = 20;
+        weight = FontWeight.w700;
+        family = "Manrope";
+        break;
+      case DesignTextStyle.Paragraph:
+        color = colorBlack;
+        size = 18;
+        weight = FontWeight.w400;
+        family = "OpenSans";
+        break;
+      case DesignTextStyle.ParagraphGrey:
+        color = colorGrey;
+        size = 18;
+        weight = FontWeight.w400;
+        family = "OpenSans";
+        break;
+    }
+    return Text(
+      text,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontFamily: family,
+        fontWeight: weight,
+        fontSize: size,
+        color: color,
+        fontFeatures: [
+          FontFeature.tabularFigures(),
+        ],
+      ),
+    );
+  }
+}
+
 class SonrText extends StatelessWidget {
   final String text;
   final Color color;

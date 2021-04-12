@@ -82,6 +82,10 @@ flutter:
     fonts:
       - asset: assets/fonts/Manrope-VariableFont_wght.ttf
 
+  - family:  OpenSans
+    fonts:
+      - asset: assets/fonts/OpenSans-Regular.ttf
+
   - family:  SonrIcons
     fonts:
       - asset: assets/fonts/sonr_icons.ttf

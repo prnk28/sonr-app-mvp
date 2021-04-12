@@ -49,6 +49,7 @@ class TransferController extends GetxController {
 
   // ^ Start Remote Session ^ //
   void startRemote() async {
+    
     // Start Remote
     remote(await SonrService.createRemote());
     isRemoteActive(true);

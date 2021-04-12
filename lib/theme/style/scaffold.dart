@@ -208,7 +208,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
         key: ValueKey<String>(text),
         child: _currentStatus.isConnecting
             ? Row(
-                children: [SonrText.appBar("Connecting"), CircularProgressIndicator()],
+                children: ["Connected".h3, CircularProgressIndicator()],
               )
             : SonrText.appBar(text),
         onTap: () {
