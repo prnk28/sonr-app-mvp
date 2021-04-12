@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
 class URLAuthView extends StatelessWidget {
@@ -63,7 +63,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
-              onPressed: () => Get.find<DeviceService>().launchURL(card.url.link),
+              onPressed: () => launchURL(card.url.link),
               text: "Open",
               icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
             ),
@@ -187,5 +187,14 @@ class URLAuthView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // ^ Launch a URL Event ^ //
+  Future launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      SonrSnack.error("Could not launch the URL.");
+    }
   }
 }

@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:sonr_app/data/core/arguments.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'bottom_bar.dart';
+import 'grid_view.dart';
 
-enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
 
 class HomeController extends GetxController {
@@ -18,12 +19,11 @@ class HomeController extends GetxController {
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
-  final page = BottomNavButton.Grid.obs;
+  final page = NavButtonType.Grid.obs;
 
   // References
-  var _lastPage = BottomNavButton.Grid;
+  NavButtonType _lastPage = NavButtonType.Grid;
   StreamSubscription<List<TransferCard>> _cardStream;
-  final _keyboardVisible = KeyboardVisibilityController();
 
   // ^ Controller Constructer ^
   @override
@@ -43,7 +43,7 @@ class HomeController extends GetxController {
     }
 
     // Handle Keyboard Visibility
-    _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
+    DeviceService.keyboardVisible.listen(_handleKeyboardVisibility);
   }
 
   // ^ Update Home State ^ //
@@ -70,17 +70,6 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  // ^ Return Animation by Page Index
-  AnimSwitch getSwitcherAnimation() {
-    if (_lastPage.index > page.value.index) {
-      _lastPage = page.value;
-      return AnimSwitch.SlideLeft;
-    } else {
-      _lastPage = page.value;
-      return AnimSwitch.SlideRight;
-    }
-  }
-
   // ^ Method for Setting Category Filter ^ //
   setToggleCategory(int index) {
     toggleIndex(index);
@@ -92,19 +81,42 @@ class HomeController extends GetxController {
 
   // ^ Update Bottom Bar Index ^ //
   setBottomIndex(int newIndex) {
-    bottomIndex(newIndex);
-    if (newIndex == 1) {
-      page(BottomNavButton.Profile);
-    } else if (newIndex == 2) {
-      page(BottomNavButton.Alerts);
-    } else if (newIndex == 3) {
-      page(BottomNavButton.Remote);
-    } else {
-      page(BottomNavButton.Grid);
+    // Check if Bottom Index is different
+    if (newIndex != bottomIndex.value) {
+      // Shrink Share Button
+      Get.find<ShareController>().shrink(delay: 100.milliseconds);
+
+      // Change Index
+      bottomIndex(newIndex);
+      if (newIndex == 1) {
+        page(NavButtonType.Profile);
+      } else if (newIndex == 2) {
+        page(NavButtonType.Alerts);
+      } else if (newIndex == 3) {
+        page(NavButtonType.Remote);
+      } else {
+        page(NavButtonType.Grid);
+      }
+
+      // Close Sharebutton if open
+      if (Get.find<ShareController>().status.value.isExpanded) {
+        Get.find<ShareController>().shrink();
+      }
     }
   }
 
-  // @ Handle Keyboard Visibility
+  // @ Return Animation by Page Index
+  SwitchType get switchAnimation {
+    if (_lastPage.index > page.value.index) {
+      _lastPage = page.value;
+      return SwitchType.SlideLeft;
+    } else {
+      _lastPage = page.value;
+      return SwitchType.SlideRight;
+    }
+  }
+
+  // # Handle Keyboard Visibility
   _handleKeyboardVisibility(bool keyboardVisible) {
     isBottomBarVisible(!keyboardVisible);
   }

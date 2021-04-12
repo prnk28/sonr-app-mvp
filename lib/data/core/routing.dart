@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/pages/home/home_screen.dart';
+import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/form_page.dart';
-import 'package:sonr_app/pages/transfer/transfer_screen.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/service/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 import 'bindings.dart';
 
 // ^ Constant Routing Information ^ //
@@ -15,11 +14,14 @@ class SonrRouting {
         GetPage(
             name: '/home',
             page: () {
-              // Update Contact for New User
-              if (UserService.isNewUser.value) {
-                Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
-              } else {
-                Get.find<SonrService>().connect();
+              // Check if User is Not Connected
+              if (SonrService.status.value.isNotConnected) {
+                // Update Contact for New User
+                if (UserService.isNewUser.value) {
+                  Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+                } else {
+                  Get.find<SonrService>().connect();
+                }
               }
               return HomeScreen();
             },
@@ -28,21 +30,17 @@ class SonrRouting {
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
-        // ** Home Page - Back from Transfer ** //
-        GetPage(
-          name: '/home/transfer',
-          page: () => HomeScreen(),
-          transition: Transition.upToDown,
-          curve: Curves.bounceIn,
-          binding: HomeBinding(),
-        ),
-
         // ** Register Page ** //
         GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
 
         // ** Transfer Page ** //
         GetPage(
-            name: '/transfer', page: () => TransferScreen(), binding: TransferBinding(), transition: Transition.downToUp, curve: Curves.bounceOut),
+            name: '/transfer',
+            page: () => TransferScreen(),
+            binding: TransferBinding(),
+            transition: Transition.downToUp,
+            curve: Curves.bounceOut,
+            fullscreenDialog: true),
       ];
 
   // ^ Services (Files, Contacts) ^ //

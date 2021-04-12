@@ -3,7 +3,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 typedef BoolFunction = bool Function();
 
-class TimerService {
+class FunctionTimer {
   // Properties
   final Duration deadline;
   final Duration interval;
@@ -17,12 +17,12 @@ class TimerService {
   int _intervalValue;
   int _deadlineValue;
 
-  TimerService({@required this.deadline, @required this.interval}) {
+  FunctionTimer({@required this.deadline, @required this.interval}) {
     _deadlineValue = this.deadline.inMilliseconds;
     _intervalValue = this.interval.inMilliseconds;
   }
 
-  Future<bool> start({@required  BoolFunction isValid, @required  Function onComplete}) {
+  Future<bool> start({@required BoolFunction isValid, @required Function onComplete}) {
     _isRunning = true;
     _timer = Timer.periodic(interval, (_) {
       // Add MS to Counter
@@ -30,13 +30,13 @@ class TimerService {
 
       // Check if Facing
       if (_counter == _deadlineValue) {
-          if (isValid()) {
-            onComplete();
-            completer.complete(true);
-          } else {
-            completer.complete(false);
-            _resetTimer();
-          }
+        if (isValid()) {
+          onComplete();
+          completer.complete(true);
+        } else {
+          completer.complete(false);
+          _resetTimer();
+        }
       }
     });
     return completer.future;
@@ -50,5 +50,9 @@ class TimerService {
       _timer = null;
       _counter = 0;
     }
+  }
+
+  void stop() {
+    _resetTimer();
   }
 }

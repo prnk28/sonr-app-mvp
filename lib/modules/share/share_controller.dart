@@ -1,18 +1,7 @@
 import 'dart:async';
-
 import 'package:sonr_app/data/data.dart';
-
 import 'package:sonr_app/theme/theme.dart';
-
-// ** Share State Extension ** //
-enum ShareButtonState { Default, Queue, Media, Lobby }
-
-extension ShareStateUtils on ShareButtonState {
-  bool get isQueued => this == ShareButtonState.Queue;
-  bool get isMedia => this == ShareButtonState.Media;
-  bool get isLobby => this == ShareButtonState.Lobby;
-  bool get isDefault => this == ShareButtonState.Default;
-}
+import 'share.dart';
 
 // ** Share Reactive Controller ** //
 class ShareController extends GetxController {
@@ -21,9 +10,13 @@ class ShareController extends GetxController {
   final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
 
   // Properties
+  final alignment = Alignment.bottomCenter.obs;
   final size = Size(60, 60).obs;
-  final heightFactor = 0.6.obs;
-  final status = ShareButtonState.Default.obs;
+  final translation = Rx<Matrix4>(Matrix4.translationValues(0, -30, 0));
+  final status = ShareStatus.Default.obs;
+
+  // Shared Files
+  final currentMedia = Rx<MediaItem>(null);
 
   // References
   int _counter = 0;
@@ -31,11 +24,12 @@ class ShareController extends GetxController {
 
   @override
   onInit() {
+    status.listen(_handleStatus);
     super.onInit();
   }
 
   // ^ Expand Share Button ^ //
-  expand(double timeout, ShareButtonState previousState) {
+  expand(double timeout, ShareStatus previousState) {
     HapticFeedback.heavyImpact();
 
     // Create Timeout
@@ -66,18 +60,11 @@ class ShareController extends GetxController {
     }
   }
 
-  // ^ Check if User Granted Gallery, or Request ^ //
-  onGalleryShare() async {
-    // Check for Permissions
-    if (galleryPermitted.value) {
-      _presentGalleryView();
-    }
-
-    // Request Permissions
-    else {
-      galleryPermitted(await Get.find<UserService>().requestGallery());
-      galleryPermitted.value ? _presentGalleryView() : SonrSnack.error("Sonr cannot open Media Picker without Gallery Permissions");
-    }
+  // ^ Set current Media Item ^ //
+  setMedia(MediaItem item) async {
+    SonrService.queueMedia(item);
+    Get.toNamed("/transfer");
+    status(ShareStatus.Default);
   }
 
   // ^ Close Share Button ^ //
@@ -87,8 +74,7 @@ class ShareController extends GetxController {
         _timer.cancel();
         _timer = null;
         HapticFeedback.mediumImpact();
-        status(ShareButtonState.Default);
-        _updateSize();
+        status(ShareStatus.Default);
         _counter = 0;
       }
     });
@@ -96,9 +82,8 @@ class ShareController extends GetxController {
 
   // ^ Toggles Expanded Share Button ^ //
   void toggle() {
-    if (status.value == ShareButtonState.Default) {
-      status(ShareButtonState.Queue);
-      _updateSize();
+    if (status.value == ShareStatus.Default) {
+      status(ShareStatus.Queue);
       expand(6000, status.value);
     } else {
       shrink();
@@ -117,26 +102,10 @@ class ShareController extends GetxController {
     shrink(delay: 150.milliseconds);
   }
 
-  // # Present Picker View for Gallery ^ //
-  _presentGalleryView() {
-    // Present Sheet
-    Get.bottomSheet(MediaPickerSheet(onMediaSelected: (file) {
-      SonrService.queueMedia(file);
-      Get.toNamed("/transfer");
-    }), isDismissible: false);
-
-    // Shrink button after delay
-    shrink(delay: 150.milliseconds);
-  }
-
   // # Update Size Based on State
-  _updateSize() {
-    if (status.value == ShareButtonState.Queue) {
-      heightFactor(0.2);
-      size(Size(Get.width / 2 + 165, 110));
-    } else {
-      heightFactor(0.6);
-      size(Size(60, 60));
-    }
+  _handleStatus(ShareStatus status) {
+    size(status.size);
+    alignment(status.alignment);
+    translation(status.translation);
   }
 }

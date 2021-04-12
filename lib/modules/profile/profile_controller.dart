@@ -25,7 +25,6 @@ class ProfileController extends GetxController {
 
   // ** Initialize Method ** //
   onInit() async {
-    step(TileStep(nextStep, previousStep, saveTile));
     super.onInit();
   }
 
@@ -38,6 +37,7 @@ class ProfileController extends GetxController {
   // ^ Start Editing for Social Tile ^ //
   void setAddTile() {
     HapticFeedback.heavyImpact();
+    step(TileStep(nextStep, previousStep, saveTile));
     status(ProfileViewStatus.AddSocial);
   }
 

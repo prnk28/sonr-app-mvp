@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
+import 'package:sonr_app/modules/common/media/media.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/modules/common/tile/tile_controller.dart';
 import 'package:sonr_app/modules/profile/profile.dart';
@@ -26,6 +27,7 @@ class HomeBinding implements Bindings {
     Get.lazyPut<RemoteController>(() => RemoteController());
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.lazyPut<ProfilePictureController>(() => ProfilePictureController());
+    Get.lazyPut<MediaQueueController>(() => MediaQueueController());
     Get.create<TileController>(() => TileController());
   }
 }

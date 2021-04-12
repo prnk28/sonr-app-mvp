@@ -6,10 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 // ^ Lobby Data Api Model ^ //
 class LobbyModel {
   final Lobby lobby;
-
-  List<Peer> allPeers = <Peer>[];
-  List<Peer> desktopPeers = <Peer>[];
-  List<Peer> mobilePeers = <Peer>[];
+  List<Peer> peers = <Peer>[];
   Map<String, Peer> flatPeers = <String, Peer>{};
 
   bool get isEmpty => lobby.count == 0;
@@ -21,14 +18,7 @@ class LobbyModel {
   LobbyModel(this.lobby) {
     // Iterate through peers and IDs
     lobby.peers.forEach((id, peer) {
-      allPeers.add(peer);
-
-      // Add to Peer Lists
-      if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
-        mobilePeers.add(peer);
-      } else if (peer.platform == Platform.MacOS || peer.platform == Platform.Windows || peer.platform == Platform.Linux) {
-        desktopPeers.add(peer);
-      }
+      peers.add(peer);
     });
 
     // Check if Local Lobby
@@ -43,7 +33,7 @@ class LobbyModel {
 
   // # Return Peer at Index
   Peer atIndex(int i) {
-    return allPeers[i];
+    return peers[i];
   }
 
   // # Return Peer at Index
@@ -69,19 +59,9 @@ class LobbyModel {
     return info.topic == this.name;
   }
 
-  // # Return Peer at Index for Desktop List
-  Peer atDesktopIndex(int i) {
-    return desktopPeers[i];
-  }
-
   // # Return Peer at Index for Mobile List
   Peer atFlatID(String i) {
     return flatPeers[i];
-  }
-
-  // # Return Peer at Index for Mobile List
-  Peer atMobileIndex(int i) {
-    return mobilePeers[i];
   }
 
   // # Return Peer at Index for Mobile List

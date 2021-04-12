@@ -61,12 +61,12 @@ class SonrText extends StatelessWidget {
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.span(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.Black);
   }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w300, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
   // ^ Normal(w400) Text with Provided Data
@@ -76,17 +76,17 @@ class SonrText extends StatelessWidget {
 
   // ^ Medium(w500) Text with Provided Data -- Default Text
   factory SonrText.medium(String text, {Color color = SonrColor.Black, double size = 16, Key key}) {
-    return SonrText(text, weight: FontWeight.w500, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
   // ^ SemiBold(w600) Text with Provided Data -- Button Text
   factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w600, size: size, key: key, color: UserService.isDarkMode ? Colors.white70 : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode ? Colors.white70 : SonrColor.Black);
   }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
   factory SonrText.bold(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
+    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
@@ -133,15 +133,21 @@ class SonrText extends StatelessWidget {
               TextSpan(
                   text: dateText,
                   style: TextStyle(
-                      fontFamily: 'Poppins',
+                      fontFamily: 'Manrope',
                       fontWeight: FontWeight.w300,
                       fontSize: size,
+                      fontFeatures: [
+                        FontFeature.tabularFigures(),
+                      ],
                       color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
               TextSpan(
                   text: "  $timeText",
                   style: TextStyle(
-                      fontFamily: 'Poppins',
+                      fontFamily: 'Manrope',
                       fontWeight: FontWeight.w600,
+                      fontFeatures: [
+                        FontFeature.tabularFigures(),
+                      ],
                       fontSize: size,
                       color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
             ])));
@@ -158,8 +164,8 @@ class SonrText extends StatelessWidget {
             text: TextSpan(children: [
               TextSpan(
                   text: seconds.toString(),
-                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.Black)),
-              TextSpan(text: "  s", style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.Black)),
+                  style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.Black)),
+              TextSpan(text: "  s", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.Black)),
             ])));
   }
 
@@ -188,11 +194,11 @@ class SonrText extends StatelessWidget {
             text: TextSpan(children: [
               TextSpan(
                   text: type.capitalizeFirst,
-                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.Black)),
+                  style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.Black)),
               TextSpan(
                   text: " from ${firstName.capitalizeFirst}",
                   style: TextStyle(
-                      fontFamily: 'Poppins', fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
+                      fontFamily: 'Manrope', fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
             ])));
   }
 
@@ -211,10 +217,10 @@ class SonrText extends StatelessWidget {
                 TextSpan(
                     text: value.substring(value.indexOf(query), query.length).toUpperCase(),
                     style: TextStyle(
-                        fontFamily: 'Poppins', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: size, color: Colors.blue[500])),
+                        fontFamily: 'Manrope', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: size, color: Colors.blue[500])),
                 TextSpan(
                     text: value.substring(value.indexOf(query) + query.length),
-                    style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.normal, fontSize: size, color: color)),
+                    style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.normal, fontSize: size, color: color)),
               ])));
     } else {
       return SonrText(value, weight: FontWeight.w500, size: size, key: key, color: color);
@@ -252,7 +258,7 @@ class SonrText extends StatelessWidget {
       TextSpan(
           text: host,
           style: TextStyle(
-              fontFamily: 'Poppins',
+              fontFamily: 'Manrope',
               decoration: TextDecoration.underline,
               decorationStyle: TextDecorationStyle.dotted,
               fontWeight: FontWeight.w300,
@@ -262,7 +268,7 @@ class SonrText extends StatelessWidget {
       TextSpan(
           text: directories > 0 ? path : "",
           style: TextStyle(
-              fontFamily: 'Poppins',
+              fontFamily: 'Manrope',
               decoration: TextDecoration.underline,
               decorationStyle: TextDecorationStyle.dotted,
               fontWeight: FontWeight.w500,
@@ -291,7 +297,15 @@ class SonrText extends StatelessWidget {
               text,
               overflow: TextOverflow.ellipsis,
               textAlign: isCentered ? TextAlign.center : TextAlign.start,
-              style: TextStyle(fontFamily: 'Poppins', fontWeight: weight, fontSize: size ?? 32.0, color: Colors.white),
+              style: TextStyle(
+                fontFamily: 'Manrope',
+                fontWeight: weight,
+                fontSize: size ?? 32.0,
+                color: Colors.white,
+                fontFeatures: [
+                  FontFeature.tabularFigures(),
+                ],
+              ),
             )),
       );
     }
@@ -304,7 +318,7 @@ class SonrText extends StatelessWidget {
     // @ Normal Type Text
     return Text(text,
         textAlign: isCentered ? TextAlign.center : TextAlign.start,
-        style: TextStyle(fontFamily: 'Poppins', fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
+        style: TextStyle(fontFamily: 'Manrope', fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
   }
 
   // ^ Find Text color based on Theme - Light/Dark ^

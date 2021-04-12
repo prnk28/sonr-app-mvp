@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'overlay.dart';
 
-
 // ^ Class Controls Active Overlays ** //
 class SonrPositionedOverlay extends GetxService {
   // Accessors
@@ -43,7 +42,7 @@ class SonrPositionedOverlay extends GetxService {
   }
 
   static void dropdown(List<SonrDropdownItem> items, GlobalKey key, Function(int idx) onChanged,
-      {Duration entryDuration = const Duration(milliseconds: 200),
+      {Duration entryDuration = const Duration(milliseconds: 600),
       Offset entryLocation = SonrOffset.Top,
       double height,
       double width,
@@ -76,7 +75,6 @@ class SonrPositionedOverlay extends GetxService {
     }
   }
 }
-
 
 // ^ Class Presents Positioned Overlay Widget Entry on Context ** //
 class _SonrPositionedOverlayEntry {
@@ -115,4 +113,3 @@ class _SonrPositionedOverlayEntry {
     Navigator.of(Get.context).overlay.insertAll([overlayBackground, overlay]);
   }
 }
-

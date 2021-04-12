@@ -80,7 +80,7 @@ class BubbleController extends GetxController {
   // References
   PeerStream _peerStream;
   StreamSubscription<VectorPosition> _userStream;
-  Timer _timer;
+  FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
   // State Machine
   StateMachineInput<bool> _isIdle;
@@ -268,10 +268,11 @@ class BubbleController extends GetxController {
         if (UserService.pointShareEnabled) {
           // Check New Result
           if (newIsFacing) {
-            _startTimer();
+            Get.find<TransferController>().setFacingPeer(true);
+            _timer.start(isValid: _checkFacingValid, onComplete: invite);
             isFacing(userVector.value.isPointingAt(peerVector.value));
           } else {
-            _stopTimer();
+            _timer.stop();
           }
         }
       }
@@ -295,43 +296,18 @@ class BubbleController extends GetxController {
         if (UserService.pointShareEnabled) {
           // Check New Result
           if (newIsFacing) {
-            _startTimer();
+            Get.find<TransferController>().setFacingPeer(true);
+            _timer.start(isValid: _checkFacingValid, onComplete: invite);
             isFacing(userVector.value.isPointingAt(peerVector.value));
           } else {
-            _stopTimer();
+            _timer.stop();
           }
         }
       }
     }
   }
 
-  // ^ Begin Facing Invite Check ^ //
-  void _startTimer() {
-    Get.find<TransferController>().setFacingPeer(true);
-    _timer = Timer.periodic(500.milliseconds, (_) {
-      // Add MS to Counter
-      counter(counter.value += 500);
-
-      // Check if Facing
-      if (counter.value == 2500) {
-        if (isFacing.value && !status.value.isComplete && !status.value.isPending) {
-          invite();
-          _stopTimer();
-        } else {
-          _stopTimer();
-        }
-      }
-    });
-  }
-
-  // ^ Stop Timer for Facing Check ^ //
-  void _stopTimer() {
-    if (_timer != null) {
-      Get.find<TransferController>().setFacingPeer(false);
-      _timer.cancel();
-      _timer = null;
-      isFacing(false);
-      counter(0);
-    }
+  bool _checkFacingValid() {
+    return isFacing.value && !status.value.isComplete && !status.value.isPending;
   }
 }

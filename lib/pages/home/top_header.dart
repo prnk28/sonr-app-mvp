@@ -4,22 +4,56 @@ import 'home_controller.dart';
 
 // ^ Home Screen Header ^ //
 class HomeTopHeaderBar extends GetView<HomeController> {
+  final List<Widget> children;
+
+  HomeTopHeaderBar({this.children});
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-        style: NeumorphicStyle(
-          boxShape: NeumorphicBoxShape.path(TopBarPath()),
-          depth: UserService.isDarkMode ? 4 : 8,
-          intensity: UserService.isDarkMode ? 0.45 : 0.85,
-          surfaceIntensity: 0.6,
-        ),
-        child: Container(
-            height: Get.height / 3.5,
+    return CustomAnimatedWidget(
+      enabled: true,
+      duration: Duration(seconds: 20),
+      curve: Curves.bounceInOut,
+      builder: (context, percent) {
+        //for custom animation, use builders
+        final middleStop = percent.clamp(0.1, 0.6);
+
+        // Animated Shape Container
+        return ShapeContainer.ovalDown(
+            height: Get.height / 4,
             width: Get.width,
-            decoration: BoxDecoration(gradient: SonrPalette.primary()),
-            child: Stack(children: [
-              Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
-            ])));
+            decoration: BoxDecoration(
+              color: Colors.white,
+              gradient: RadialGradient(
+                colors: [
+                  SonrPalette.Primary.withOpacity(0.5),
+                  SonrPalette.Tertiary.withOpacity(0.5),
+                  SonrPalette.Secondary.withOpacity(0.5),
+                ],
+                stops: [0.0, middleStop, 1.0],
+                center: Alignment.topRight,
+                focal: Alignment.bottomLeft,
+                focalRadius: 1.5,
+              ),
+            ),
+            child: Stack(children: _buildChildren()));
+      },
+    );
+  }
+
+  // @ Builds Column Children
+  List<Widget> _buildChildren() {
+    // Default Children
+    var adjChildren = <Widget>[
+      Align(alignment: Alignment.topCenter, child: _HomeHeaderTitle(defaultText: "Home")),
+    ];
+
+    // If children were passed
+    if (children != null) {
+      adjChildren.addAll(children);
+    }
+
+    // Returns Built Children
+    return adjChildren;
   }
 }
 
@@ -41,13 +75,7 @@ class _HomeHeaderTitle extends StatelessWidget {
                 duration: 2.seconds,
                 child: GestureDetector(
                   key: ValueKey<String>(controller.title.value),
-                  child: controller.status.value.isConnecting
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [SonrText.appBar("Connecting"), CircularProgressIndicator()],
-                        )
-                      : SonrText.appBar(controller.title.value),
+                  child: SonrText.appBar(controller.title.value),
                   onTap: () {
                     controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
                   },
@@ -58,6 +86,7 @@ class _HomeHeaderTitle extends StatelessWidget {
       },
     );
   }
+
 }
 
 // ^ Controller for Header Title ^ //
@@ -65,7 +94,8 @@ class _HomeHeaderTitleController extends GetxController {
   // Properties
   final String defaultText;
   final title = "".obs;
-  final status = Rx<Status>(Status.NONE);
+  final status = Rx<Status>(SonrService.status.value);
+  final isVisible = true.obs;
 
   // References
   StreamSubscription<int> lobbySizeStream;
@@ -100,6 +130,7 @@ class _HomeHeaderTitleController extends GetxController {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
+      DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

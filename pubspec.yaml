@@ -4,7 +4,7 @@
 # -- Basic --
 name: sonr_app
 description: The dead simple way to connect with people and transfer files.
-version: 0.9.1+158
+version: 0.9.1+235
 publish_to: none
 
 # -- Flutter Settings --
@@ -37,6 +37,7 @@ dependencies:
   url_launcher: ^6.0.2
 
   # -- Data --
+  audioplayers: ^0.18.3
   better_player: ^0.0.55
   open_file:
   photo_manager: ^1.0.6
@@ -55,7 +56,6 @@ dependencies:
 
   # -- UI/UX --
   animated_widgets: ^1.0.6
-  flutter_custom_clippers: ^1.1.2
   flutter_gradients: ^1.0.0+3
   flutter_neumorphic: ^3.0.4+1
   lottie: ^1.0.1
@@ -78,48 +78,22 @@ flutter:
   uses-material-design: true
 
   fonts:
+  - family:  Manrope
+    fonts:
+      - asset: assets/fonts/Manrope-VariableFont_wght.ttf
+
   - family:  SonrIcons
     fonts:
       - asset: assets/fonts/sonr_icons.ttf
 
-  - family: Poppins
-    fonts:
-      - asset: assets/fonts/Poppins-300.ttf
-        weight: 300
-      - asset: assets/fonts/Poppins-300-Italic.ttf
-        weight: 300
-        style: italic
-      - asset: assets/fonts/Poppins-400.ttf
-        weight: 400
-      - asset: assets/fonts/Poppins-400-Italic.ttf
-        weight: 400
-        style: italic
-      - asset: assets/fonts/Poppins-500.ttf
-        weight: 500
-      - asset: assets/fonts/Poppins-500-Italic.ttf
-        weight: 500
-        style: italic
-      - asset: assets/fonts/Poppins-600.ttf
-        weight: 600
-      - asset: assets/fonts/Poppins-600-Italic.ttf
-        weight: 600
-        style: italic
-      - asset: assets/fonts/Poppins-700.ttf
-        weight: 700
-      - asset: assets/fonts/Poppins-700-Italic.ttf
-        weight: 700
-        style: italic
-      - asset: assets/fonts/Poppins-800.ttf
-        weight: 800
-      - asset: assets/fonts/Poppins-800-Italic.ttf
-        weight: 800
-        style: italic
-
   # -- Media --
   assets:
-    - assets/rive/
-    - assets/lottie/
+    - assets/bar/
     - assets/fonts/
     - assets/images/
+    - assets/lottie/
+    - assets/rive/
+    - assets/sounds/
+
 
 

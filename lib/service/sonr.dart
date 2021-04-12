@@ -11,21 +11,10 @@ import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
 extension StatusUtils on Status {
-  bool get isNotConnected {
-    return this == Status.NONE;
-  }
-
-  bool get isConnecting {
-    return this == Status.NONE || this == Status.CONNECTED;
-  }
-
-  bool get isConnected {
-    return this != Status.NONE;
-  }
-
-  bool get isReady {
-    return this == Status.BOOTSTRAPPED;
-  }
+  bool get isNotConnected => this == Status.NONE;
+  bool get isConnecting => this == Status.NONE || this == Status.CONNECTED;
+  bool get isConnected => this != Status.NONE;
+  bool get isReady => this == Status.BOOTSTRAPPED;
 }
 
 class SonrService extends GetxService with TransferQueue {
@@ -275,10 +264,11 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
-    if (Get.isRegistered<DeviceService>() && data.value == Status.AVAILABLE) {
+    if (Get.isRegistered<DeviceService>() && data.value == Status.BOOTSTRAPPED) {
       // Update Status
       _isReady(true);
       _status(data.value);
+      DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
       _node.update(direction: DeviceService.direction);
@@ -332,6 +322,7 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(Peer data) async {
     currentCompleted();
+    DeviceService.playSound(type: UISoundType.Transmitted);
   }
 
   // ^ Mark as Received File ^ //
@@ -340,6 +331,7 @@ class SonrService extends GetxService with TransferQueue {
 
     // Save Card to Gallery
     CardService.addCard(data);
+    DeviceService.playSound(type: UISoundType.Received);
   }
 
   // ^ An Error Has Occurred ^ //

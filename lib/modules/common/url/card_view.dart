@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ^ Widget for Expanded Media View
 class URLCardView extends StatelessWidget {
@@ -9,7 +9,7 @@ class URLCardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.find<DeviceService>().launchURL(card.url.link),
+      onTap: () => launchURL(card.url.link),
       child: Neumorphic(
         style: SonrStyle.normal,
         margin: EdgeInsets.all(4),
@@ -30,5 +30,14 @@ class URLCardView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // ^ Launch a URL Event ^ //
+  Future launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      SonrSnack.error("Could not launch the URL.");
+    }
   }
 }

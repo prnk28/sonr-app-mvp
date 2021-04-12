@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:better_player/better_player.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/data/data.dart';
@@ -60,25 +61,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                 child: Stack(
                   children: <Widget>[
                     // Display Mime Type if Not Image
-                    widget.card.metadata.mime.type != MIME_Type.image
-                        ? Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: Get.width - 200,
-                                height: Get.height / 5,
-                                child: Neumorphic(
-                                    padding: EdgeInsets.all(8),
-                                    style: NeumorphicStyle(
-                                      boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                                      depth: -10,
-                                    ),
-                                    child: SonrIcon.withMime(widget.card.metadata.mime, size: 60)),
-                              ),
-                            ),
-                          )
-                        : Container(),
+                    _buildChildView(),
 
                     // Time Stamp
                     Align(
@@ -118,6 +101,7 @@ class _MediaCardViewState extends State<MediaCardView> {
     );
   }
 
+  // @ Build Card for Image Type
   Decoration _buildImageDecoration() {
     return widget.card.metadata.mime.type == MIME_Type.image
         ? BoxDecoration(
@@ -127,6 +111,40 @@ class _MediaCardViewState extends State<MediaCardView> {
             image: FileImage(mediaFile),
           ))
         : null;
+  }
+
+  // @ Build Card for Video Type
+  Widget _buildChildView() {
+    if (widget.card.metadata.mime.type == MIME_Type.video) {
+      return BetterPlayer.file(mediaFile.path,
+          betterPlayerConfiguration: BetterPlayerConfiguration(
+            controlsConfiguration: BetterPlayerControlsConfiguration(),
+            allowedScreenSleep: false,
+            autoPlay: true,
+            looping: true,
+            aspectRatio: 9 / 16,
+          ));
+    } else if (widget.card.metadata.mime.type != MIME_Type.image) {
+      return Align(
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: Get.width - 200,
+            height: Get.height / 5,
+            child: Neumorphic(
+                padding: EdgeInsets.all(8),
+                style: NeumorphicStyle(
+                  boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+                  depth: -10,
+                ),
+                child: SonrIcon.withMime(widget.card.metadata.mime, size: 60)),
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }
 

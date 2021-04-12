@@ -15,12 +15,14 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
   ValueNotifier<MediaItem> _selectedItem = ValueNotifier<MediaItem>(null);
   final _mediaList = RxList<MediaItem>(MediaService.allAlbum.value.assets);
   final RxInt index = (-1).obs;
+  final RxBool hasSelected = false.obs;
 
   @override
   Widget build(BuildContext context) {
     index.listen((val) {
       setMediaCollection(val);
     });
+
     return NeumorphicBackground(
       borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       backendColor: Colors.transparent,
@@ -31,7 +33,11 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
               onPressed: () => Get.back(),
               icon: SonrIcon.normal(Icons.close, color: SonrPalette.Red, size: 38)),
           floatingActionButton: ShapeButton.circle(onPressed: () => confirm(), icon: SonrIcon.accept),
-          middle: AlbumsDropdown(index: index),
+          middle: AlbumsDropdown(
+            index: index,
+            hasSelected: hasSelected,
+            onConfirmed: confirm,
+          ),
           body: ObxValue<RxList<MediaItem>>((list) {
             if (MediaService.allAlbum.value.isEmpty) {
               return Center(child: SonrText.subtitle("Album is Empty."));
@@ -65,8 +71,9 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
   checkSelected(int index, MediaItem selected) {
     if (selected != null) {
       return selected.index == index;
+    } else {
+      return false;
     }
-    return false;
   }
 
   setMediaCollection(int index) async {
@@ -77,6 +84,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
 
   select(MediaItem item) async {
     _selectedItem.value = item;
+    hasSelected(true);
   }
 
   confirm() async {

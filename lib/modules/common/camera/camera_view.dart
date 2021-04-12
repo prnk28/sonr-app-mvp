@@ -4,9 +4,8 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/common/media/sheet_view.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'preview_widget.dart';
@@ -147,16 +146,9 @@ class _CameraToolsView extends GetView<CameraController> {
                 onTap: () async {
                   HapticFeedback.heavyImpact();
                   // Check for Permssions
-                  if (await Permission.photos.request().isGranted) {
-                    // Display Bottom Sheet
-                    Get.bottomSheet(MediaPickerSheet(onMediaSelected: (MediaItem file) {
-                      SonrService.queueMedia(file);
-                      Get.offNamed("/transfer");
-                    }), isDismissible: true);
-                  } else {
-                    // Display Error
-                    SonrSnack.error("Sonr isnt permitted to access your media.");
-                  }
+                  var file = await MediaPicker.sheet();
+                  SonrService.queueMedia(file);
+                  Get.offNamed("/transfer");
                 }),
           ]),
         ),

@@ -7,13 +7,17 @@ import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
 
+import 'top_header.dart';
+
+enum ToggleFilter { All, Media, Contact, Links }
+
 // ^ Card Grid View ^ //
 class CardGridView extends GetView<HomeController> {
-  final Widget header;
-  CardGridView({this.header, Key key}) : super(key: key);
+  CardGridView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final pageController = PageController(viewportFraction: 0.8);
     return Obx(() {
       List<TransferCardItem> cardList;
       // Media
@@ -30,8 +34,10 @@ class CardGridView extends GetView<HomeController> {
       }
 
       return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        header != null ? header : _CardGridToggle(),
-        Expanded(child: Container(child: _CardGridWidget(cardList))),
+        HomeTopHeaderBar(
+          children: [_CardGridToggle()],
+        ),
+        Expanded(child: Container(child: _CardGridWidget(cardList, pageController))),
       ]);
     });
   }
@@ -41,7 +47,8 @@ class _CardGridToggle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 8),
+      alignment: Alignment.bottomCenter,
+      padding: EdgeInsets.only(bottom: 8),
       margin: EdgeWith.horizontal(24),
       child: NeumorphicToggle(
         style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
@@ -68,13 +75,11 @@ class _CardGridToggle extends GetView<HomeController> {
 
 class _CardGridWidget extends GetView<HomeController> {
   final List<TransferCardItem> cardList;
-
-  _CardGridWidget(this.cardList);
+  final PageController pageController;
+  _CardGridWidget(this.cardList, this.pageController);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final pageController = PageController(viewportFraction: 0.8);
-
       // @ 2. Build View
       if (cardList.length > 0) {
         return StackedCardCarousel(

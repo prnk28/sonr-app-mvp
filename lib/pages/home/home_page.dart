@@ -1,5 +1,6 @@
+import 'package:sonr_app/modules/share/index_view.dart';
+
 import 'grid_view.dart';
-import 'package:sonr_app/pages/home/top_header.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
 import 'package:sonr_app/modules/remote/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -11,25 +12,28 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
         resizeToAvoidBottomInset: false,
+        shareView: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
         body: Obx(() => AnimatedSlideSwitcher(
-              controller.getSwitcherAnimation(),
+              controller.switchAnimation,
               _buildView(controller.page.value),
               const Duration(milliseconds: 2500),
             )));
   }
 
   // @ Build Page View by Navigation Item
-  Widget _buildView(BottomNavButton page) {
+  Widget _buildView(NavButtonType page) {
     // Return View
-    if (page == BottomNavButton.Profile) {
-      return ProfileView(key: ValueKey<BottomNavButton>(BottomNavButton.Profile));
-    } else if (page == BottomNavButton.Alerts) {
-      return AlertsView(key: ValueKey<BottomNavButton>(BottomNavButton.Alerts));
-    } else if (page == BottomNavButton.Remote) {
-      return RemoteView(key: ValueKey<BottomNavButton>(BottomNavButton.Remote));
+    if (page == NavButtonType.Profile) {
+      return ProfileView(key: ValueKey<NavButtonType>(NavButtonType.Profile));
+    } else if (page == NavButtonType.Alerts) {
+      return AlertsView(key: ValueKey<NavButtonType>(NavButtonType.Alerts));
+    } else if (page == NavButtonType.Remote) {
+      return RemoteView(key: ValueKey<NavButtonType>(NavButtonType.Remote));
     } else {
-      return CardGridView(key: ValueKey<BottomNavButton>(BottomNavButton.Grid), header: HomeTopHeaderBar());
+      return CardGridView(
+        key: ValueKey<NavButtonType>(NavButtonType.Grid),
+      );
     }
   }
 }

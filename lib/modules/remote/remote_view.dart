@@ -1,4 +1,4 @@
-import 'package:sonr_app/modules/common/lobby/remote_view.dart';
+import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'remote_controller.dart';
 
@@ -86,6 +86,30 @@ class _JoinRemoteView extends GetView<RemoteController> {
             ],
           ),
         ));
+  }
+}
+
+// ^ Card Aspect Ratio Remote View ^ //
+class RemoteLobbyCardView extends GetView<RemoteController> {
+  RemoteLobbyCardView({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          SonrText.header("${controller.currentRemote.value.display}"),
+          Expanded(
+              child: ListView.builder(
+            itemCount: controller.currentLobby.value != null ? controller.currentLobby.value.length + 1 : 1,
+            itemBuilder: (BuildContext context, int index) {
+              // Build List Item
+              return PeerListItem(
+                controller.currentLobby.value.atIndex(index - 1),
+                index - 1,
+                remote: controller.currentRemote.value,
+              );
+            },
+          )),
+          Padding(padding: EdgeInsets.all(8)),
+        ]));
   }
 }
 

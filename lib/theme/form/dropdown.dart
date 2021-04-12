@@ -3,13 +3,9 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_core/sonr_core.dart';
 import '../theme.dart';
 
-
 // ^ Builds Overlay Based Positional Dropdown Menu ^ //
 class SonrDropdown extends StatelessWidget {
   // Properties
-  final EdgeInsets margin;
-  final double width;
-  final double height;
   final int selectedFlex;
   final NeumorphicStyle style;
 
@@ -34,9 +30,6 @@ class SonrDropdown extends StatelessWidget {
       items,
       SonrDropdownItem(false, "Choose..."),
       index,
-      margin,
-      width ?? Get.width - 250,
-      height,
       overlayWidth: 20,
       overlayHeight: -80,
       selectedFlex: 6,
@@ -45,7 +38,7 @@ class SonrDropdown extends StatelessWidget {
     );
   }
 
-  SonrDropdown(this.items, this.initial, this.index, this.margin, this.width, this.height,
+  SonrDropdown(this.items, this.initial, this.index,
       {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right, this.selectedFlex, this.style});
   @override
   Widget build(BuildContext context) {
@@ -54,9 +47,6 @@ class SonrDropdown extends StatelessWidget {
     return Obx(() {
       return Container(
         key: _dropKey,
-        width: width,
-        margin: margin,
-        height: height,
         child: NeumorphicButton(
             margin: EdgeInsets.symmetric(horizontal: 3),
             style: style,
@@ -143,16 +133,39 @@ class SonrDropdownItem extends StatelessWidget {
   }
 }
 
-
 // ^ Builds Albums Dropdown Widget ^ //
 class AlbumsDropdown extends StatelessWidget {
+  final Widget leading;
+  final Function() onConfirmed;
+  final RxBool hasSelected;
   final RxInt index;
   final EdgeInsets margin;
-  final double width = Get.width - 100;
-  final double height;
-  AlbumsDropdown({@required this.index, this.margin = const EdgeInsets.only(left: 12, right: 12), this.height = 60});
+  final double height = 60;
+  AlbumsDropdown(
+      {@required this.index,
+      @required this.hasSelected,
+      @required this.onConfirmed,
+      this.margin = const EdgeInsets.only(left: 12, right: 12),
+      this.leading});
   @override
   Widget build(BuildContext context) {
+    return ObxValue<RxBool>(
+        (selected) => Container(
+                child: Row(children: [
+              AnimatedContainer(
+                  margin: margin,
+                  width: selected.value ? Get.width - 150 : Get.width - 100,
+                  height: height,
+                  duration: 250.milliseconds,
+                  child: _buildDropdown()),
+              AnimatedContainer(
+                  duration: 250.milliseconds, width: selected.value ? height : 0, height: selected.value ? height : 0, child: _buildConfirmButton()),
+            ])),
+        hasSelected);
+  }
+
+  // @ Build Sonr Dropdown
+  Widget _buildDropdown() {
     return SonrDropdown(
         _buildAlbumItems(MediaService.albums),
         SonrDropdownItem(true, "All",
@@ -160,14 +173,19 @@ class AlbumsDropdown extends StatelessWidget {
                 Icons.all_inbox_rounded, UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                 size: 20)),
         index,
-        margin,
-        width ?? Get.width - 250,
-        height,
         style: SonrStyle.dropDownCurved,
         overlayWidth: 70,
         overlayHeight: 100,
         selectedFlex: 2,
         selectedIconPosition: WidgetPosition.Left);
+  }
+
+  // @ Build Confirm Button
+  Widget _buildConfirmButton() {
+    return PlainButton(
+      onPressed: onConfirmed,
+      icon: SonrIcon.accept,
+    );
   }
 
   // # Build Media Album Items
