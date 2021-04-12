@@ -78,7 +78,7 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.light("Alpha - 0.9.2", size: 16),
+                      child: "Alpha - 0.9.2".l,
                     ),
                     Padding(padding: EdgeWith.top(16)),
                   ]),

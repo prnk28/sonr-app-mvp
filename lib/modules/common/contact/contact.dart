@@ -11,18 +11,18 @@ extension ContactUtils on Contact {
     return "@TempUsername";
   }
 
-  SonrText get phoneNumber {
-    return this.hasPhone() ? SonrText.light(this.phone, size: 16) : SonrText.light("1-555-555-5555", size: 16);
+  Widget get phoneNumber {
+    return this.hasPhone() ? this.phone.l : "1-555-555-5555".l;
   }
 
   Row get headerName {
     return Row(children: [
       SonrText.bold(this.firstName + " "),
-      SonrText.light(this.lastName),
+      this.lastName.l,
     ]);
   }
 
-  SonrText get fullName {
+  Widget get fullName {
     return this.hasLastName()
         ? SonrText.gradient(this.firstName + " " + this.lastName, FlutterGradientNames.solidStone, size: 32)
         : SonrText.gradient(this.firstName, FlutterGradientNames.solidStone, size: 32);
