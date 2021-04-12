@@ -236,7 +236,7 @@ class _Spoke extends StatelessWidget {
                       padding: textPadding,
                       child: Text(textValue,
                           style: TextStyle(
-                            fontFamily: 'Poppins',
+                            fontFamily: 'Manrope',
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: UserService.isDarkMode ? Colors.white54 : Colors.black54,

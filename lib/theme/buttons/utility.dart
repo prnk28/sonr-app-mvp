@@ -62,14 +62,6 @@ class ButtonUtility {
   }
 
   static Widget buildText(String text) {
-    return Text(text,
-        overflow: TextOverflow.fade,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-            color: Colors.white,
-            shadows: [Shadow(blurRadius: 4, color: SonrColor.Black.withOpacity(0.5))]));
+    return text.h6_White;
   }
 }

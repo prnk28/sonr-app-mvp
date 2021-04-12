@@ -122,7 +122,7 @@ class SonrTextField extends StatelessWidget {
               ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
@@ -137,7 +137,7 @@ class SonrTextField extends StatelessWidget {
                     : InputDecoration.collapsed(
                         hintText: hint,
                         hintStyle: TextStyle(
-                            fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                            fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -162,7 +162,7 @@ class SonrTextField extends StatelessWidget {
               border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Red, width: 4)),
               hintText: hint,
               hintStyle:
-                  TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
+                  TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
     );
   }
 

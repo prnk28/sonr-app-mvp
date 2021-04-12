@@ -135,7 +135,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                 textInputAction: TextInputAction.next,
                 textAlign: TextAlign.center,
                 autofocus: controller.isJoinFieldTapped.value,
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
               width: SonrStyle.viewSize.width / 4.2,
             ),
@@ -148,7 +148,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textAlign: TextAlign.center,
                   textInputAction: TextInputAction.next,
                   style:
-                      TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+                      TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
               width: SonrStyle.viewSize.width / 4.2,
             ),
             Container(
@@ -161,7 +161,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textAlign: TextAlign.center,
                   textInputAction: TextInputAction.done,
                   style:
-                      TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+                      TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
               width: SonrStyle.viewSize.width / 4.2,
             ),
           ],
