@@ -58,7 +58,7 @@ class MediaPreviewView extends StatelessWidget {
                         HapticFeedback.heavyImpact();
                         onDecision(false);
                       },
-                      text: SonrText.semibold("Redo", color: Colors.orange[600], size: 18),
+                      text: "Redo".headSix(color: Colors.orange[700]),
                     ),
 
                     // Right Button - Continue
@@ -70,7 +70,7 @@ class MediaPreviewView extends StatelessWidget {
                             HapticFeedback.heavyImpact();
                             onDecision(true);
                           },
-                          text: SonrText.semibold("Continue", size: 18, color: SonrColor.Black.withOpacity(0.85)),
+                          text: "Continue".h6_Grey,
                           icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28)),
                     ),
                   ]),

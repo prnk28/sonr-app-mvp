@@ -203,10 +203,10 @@ class SonrText extends StatelessWidget {
     return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
   }
 
-  // ^ SemiBold(w600) Text with Provided Data -- Button Text
-  factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
-    return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode ? Colors.white70 : SonrColor.Black);
-  }
+  // // ^ SemiBold(w600) Text with Provided Data -- Button Text
+  // factory SonrText.semibold(String text, {Color color = Colors.black87, double size = 18, Key key}) {
+  //   return SonrText(text, weight: FontWeight.w700, size: size, key: key, color: UserService.isDarkMode ? Colors.white70 : SonrColor.Black);
+  // }
 
   // ^ Bold(w700) Text with Provided Data -- Header Text
   factory SonrText.bold(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {

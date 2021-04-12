@@ -84,7 +84,7 @@ class AlertOverlayView extends StatelessWidget {
                 }
               },
               icon: SonrIcon.accept,
-              text: SonrText.semibold(buttonText, size: 18),
+              text: buttonText.h6,
             ),
           ),
         ]),
@@ -232,7 +232,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                     SonrOverlay.back();
                   }
                 },
-                child: SonrText.semibold(declineTitle, color: SonrPalette.Red, size: 18)),
+                child: declineTitle.h6_Red),
             // Accept Button
             Container(
               width: Get.width / 2.5,
@@ -245,7 +245,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                   }
                 },
                 icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.Black.withOpacity(0.85)),
+                text: acceptTitle.h6,
               ),
             ),
           ]),

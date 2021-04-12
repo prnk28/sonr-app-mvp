@@ -92,7 +92,7 @@ class TileStep {
     //  Step Three: Cancel and Confirm
     if (current == 2) {
       return ShapeButton.stadium(
-        text: SonrText.semibold("Save"),
+        text: "Save".h6,
         onPressed: save,
         icon: SonrIcon.success,
         margin: EdgeInsets.only(left: 60, right: 80),
@@ -101,18 +101,14 @@ class TileStep {
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (current == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        ShapeButton.stadium(text: SonrText.semibold("Back"), onPressed: previous, icon: SonrIcon.back),
-        ShapeButton.stadium(text: SonrText.semibold("Next"), onPressed: next, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+        ShapeButton.stadium(text: "Back".h6, onPressed: previous, icon: SonrIcon.back),
+        ShapeButton.stadium(text: "Next".h6, onPressed: next, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
       return ShapeButton.stadium(
-          text: SonrText.semibold("Next", size: 22),
-          onPressed: next,
-          icon: SonrIcon.forward,
-          margin: EdgeInsets.only(left: 60, right: 80),
-          iconPosition: WidgetPosition.Right);
+          text: "Next".h6, onPressed: next, icon: SonrIcon.forward, margin: EdgeInsets.only(left: 60, right: 80), iconPosition: WidgetPosition.Right);
     }
   }
 

@@ -146,7 +146,7 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.flat({
     @required Function onPressed,
     Function onLongPressed,
-    SonrText text,
+    Widget text,
     Widget child,
     SonrIcon icon,
     Color color = SonrColor.White,
@@ -328,7 +328,7 @@ class ShapeButton extends StatelessWidget {
     @required Function onPressed,
     Function onLongPressed,
     SonrIcon icon,
-    SonrText text,
+    Widget text,
     Widget child,
     Color shadowLightColor,
     Color shadowDarkColor,

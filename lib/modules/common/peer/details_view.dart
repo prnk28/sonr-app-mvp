@@ -57,7 +57,7 @@ class PeerDetailsView extends StatelessWidget {
                             Get.back();
                           },
                           icon: SonrIcon.invite,
-                          text: SonrText.semibold("Invite", size: 24))),
+                          text: "Invite".h5)),
                   Spacer()
                 ]),
               ),
