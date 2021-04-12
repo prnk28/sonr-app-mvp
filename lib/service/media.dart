@@ -18,14 +18,14 @@ class MediaService extends GetxService {
 
   // Reactive Instances
   final _albums = <MediaAlbum>[].obs;
+  final _allAlbum = Rx<MediaAlbum>(MediaAlbum.blank());
   final _hasGallery = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
-  final _allMedia = Rx<MediaAlbum>(MediaAlbum.blank());
 
   // Properties
-  static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allMedia;
+  static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allAlbum;
   static RxList<MediaAlbum> get albums => Get.find<MediaService>()._albums;
   static RxBool get hasGallery => Get.find<MediaService>()._hasGallery;
   static Rx<GalleryState> get state => Get.find<MediaService>()._state;
@@ -70,6 +70,10 @@ class MediaService extends GetxService {
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
+    // Disable Log
+    PhotoManager.setLog(false);
+
+    // Check Permissions
     if (UserService.permissions.value.hasGallery) {
       // Get Collections
       _state(GalleryState.Loading);
@@ -88,7 +92,7 @@ class MediaService extends GetxService {
           var album = MediaAlbum(element);
           albums.add(album);
           if (element.isAll) {
-            _allMedia(album);
+            _allAlbum(album);
           }
         }
       });
@@ -160,7 +164,7 @@ class MediaService extends GetxService {
           var album = MediaAlbum(element);
           albums.add(album);
           if (element.isAll) {
-            to._allMedia(album);
+            to._allAlbum(album);
           }
         }
       });
