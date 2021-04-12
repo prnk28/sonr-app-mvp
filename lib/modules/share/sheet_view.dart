@@ -53,7 +53,7 @@ class ShareSheet extends StatelessWidget {
                     // Bottom Left Close/Cancel Button
                     ShapeButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
 
-                    SonrText.header("Share", size: 40),
+                    "Share".h2,
 
                     // @ Top Right Confirm Button
                     ShapeButton.circle(onPressed: () => Get.offNamed("/transfer"), icon: SonrIcon.accept),
@@ -148,7 +148,7 @@ class _ShareItemURL extends StatelessWidget {
 
   Widget _buildURLView(URLLink data) {
     // Check open graph images
-    if (data.images.length > 0) {
+    if (data.images.isNotEmpty) {
       return Column(children: [
         // @ Social Image
         Image.network(data.images.first.url),
@@ -160,7 +160,7 @@ class _ShareItemURL extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SonrText.header(data.title, size: 22),
+              data.title.h3,
               SonrText.normal(data.description, size: 16),
             ],
           ),
@@ -169,7 +169,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(new ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Neumorphic(
@@ -208,7 +208,7 @@ class _ShareItemURL extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SonrText.header(data.title, size: 22),
+              data.title.h3,
               SonrText.normal(data.description, size: 16),
             ],
           ),
@@ -217,7 +217,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(new ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Neumorphic(

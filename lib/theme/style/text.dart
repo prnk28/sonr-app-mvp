@@ -10,54 +10,54 @@ import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
 enum DesignTextColor { Black, Grey, White, Red, Blue, Green }
-enum DesignTextStyle { Hero, HeadingOne, HeadingTwo, HeadingThree, HeadingFour, HeadingFive, HeadingSix, Paragraph }
+enum DesignTextStyle { Hero, HeadOne, HeadTwo, HeadThree, HeadFour, HeadFive, HeadSix, Paragraph }
 
 extension DesignTextUtils on String {
-  // Hero
+  // Hero: Gradient
   SonrTextStyle get hero => SonrTextStyle(this, DesignTextStyle.Hero);
 
-  // Heading 1
-  SonrTextStyle get h1 => SonrTextStyle(this, DesignTextStyle.HeadingOne);
+  // Heading 1: Gradient
+  SonrTextStyle get h1 => SonrTextStyle(this, DesignTextStyle.HeadOne);
 
   // Heading 2
-  SonrTextStyle get h2 => SonrTextStyle(this, DesignTextStyle.HeadingTwo);
-  SonrTextStyle get h2_Blue => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrPalette.Primary);
-  SonrTextStyle get h2_Green => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrPalette.Tertiary);
-  SonrTextStyle get h2_Grey => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrColor.Grey);
-  SonrTextStyle get h2_Red => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrPalette.Red);
-  SonrTextStyle get h2_White => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrColor.White);
+  SonrTextStyle get h2 => SonrTextStyle(this, DesignTextStyle.HeadTwo);
+  SonrTextStyle get h2_Blue => SonrTextStyle(this, DesignTextStyle.HeadTwo, color: SonrPalette.Primary);
+  SonrTextStyle get h2_Green => SonrTextStyle(this, DesignTextStyle.HeadTwo, color: SonrPalette.Tertiary);
+  SonrTextStyle get h2_Grey => SonrTextStyle(this, DesignTextStyle.HeadTwo, color: SonrColor.Grey);
+  SonrTextStyle get h2_Red => SonrTextStyle(this, DesignTextStyle.HeadTwo, color: SonrPalette.Red);
+  SonrTextStyle get h2_White => SonrTextStyle(this, DesignTextStyle.HeadTwo, color: SonrColor.White);
 
   // Heading 3
-  SonrTextStyle get h3 => SonrTextStyle(this, DesignTextStyle.HeadingThree);
-  SonrTextStyle get h3_Blue => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrPalette.Primary);
-  SonrTextStyle get h3_Green => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrPalette.Tertiary);
-  SonrTextStyle get h3_Grey => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrColor.Grey);
-  SonrTextStyle get h3_Red => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrPalette.Red);
-  SonrTextStyle get h3_White => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrColor.White);
+  SonrTextStyle get h3 => SonrTextStyle(this, DesignTextStyle.HeadThree);
+  SonrTextStyle get h3_Blue => SonrTextStyle(this, DesignTextStyle.HeadThree, color: SonrPalette.Primary);
+  SonrTextStyle get h3_Green => SonrTextStyle(this, DesignTextStyle.HeadThree, color: SonrPalette.Tertiary);
+  SonrTextStyle get h3_Grey => SonrTextStyle(this, DesignTextStyle.HeadThree, color: SonrColor.Grey);
+  SonrTextStyle get h3_Red => SonrTextStyle(this, DesignTextStyle.HeadThree, color: SonrPalette.Red);
+  SonrTextStyle get h3_White => SonrTextStyle(this, DesignTextStyle.HeadThree, color: SonrColor.White);
 
   // Heading 4
-  SonrTextStyle get h4 => SonrTextStyle(this, DesignTextStyle.HeadingFour);
-  SonrTextStyle get h4_Blue => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrPalette.Primary);
-  SonrTextStyle get h4_Green => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrPalette.Tertiary);
-  SonrTextStyle get h4_Grey => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrColor.Grey);
-  SonrTextStyle get h4_Red => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrPalette.Red);
-  SonrTextStyle get h4_White => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrColor.White);
+  SonrTextStyle get h4 => SonrTextStyle(this, DesignTextStyle.HeadFour);
+  SonrTextStyle get h4_Blue => SonrTextStyle(this, DesignTextStyle.HeadFour, color: SonrPalette.Primary);
+  SonrTextStyle get h4_Green => SonrTextStyle(this, DesignTextStyle.HeadFour, color: SonrPalette.Tertiary);
+  SonrTextStyle get h4_Grey => SonrTextStyle(this, DesignTextStyle.HeadFour, color: SonrColor.Grey);
+  SonrTextStyle get h4_Red => SonrTextStyle(this, DesignTextStyle.HeadFour, color: SonrPalette.Red);
+  SonrTextStyle get h4_White => SonrTextStyle(this, DesignTextStyle.HeadFour, color: SonrColor.White);
 
   // Heading 5
-  SonrTextStyle get h5 => SonrTextStyle(this, DesignTextStyle.HeadingFive);
-  SonrTextStyle get h5_Blue => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrPalette.Primary);
-  SonrTextStyle get h5_Green => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrPalette.Tertiary);
-  SonrTextStyle get h5_Grey => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrColor.Grey);
-  SonrTextStyle get h5_Red => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrPalette.Red);
-  SonrTextStyle get h5_White => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrColor.White);
+  SonrTextStyle get h5 => SonrTextStyle(this, DesignTextStyle.HeadFive);
+  SonrTextStyle get h5_Blue => SonrTextStyle(this, DesignTextStyle.HeadFive, color: SonrPalette.Primary);
+  SonrTextStyle get h5_Green => SonrTextStyle(this, DesignTextStyle.HeadFive, color: SonrPalette.Tertiary);
+  SonrTextStyle get h5_Grey => SonrTextStyle(this, DesignTextStyle.HeadFive, color: SonrColor.Grey);
+  SonrTextStyle get h5_Red => SonrTextStyle(this, DesignTextStyle.HeadFive, color: SonrPalette.Red);
+  SonrTextStyle get h5_White => SonrTextStyle(this, DesignTextStyle.HeadFive, color: SonrColor.White);
 
   // Heading 6
-  SonrTextStyle get h6 => SonrTextStyle(this, DesignTextStyle.HeadingSix);
-  SonrTextStyle get h6_Blue => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrPalette.Primary);
-  SonrTextStyle get h6_Green => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrPalette.Tertiary);
-  SonrTextStyle get h6_Grey => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrColor.Grey);
-  SonrTextStyle get h6_Red => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrPalette.Red);
-  SonrTextStyle get h6_White => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrColor.White);
+  SonrTextStyle get h6 => SonrTextStyle(this, DesignTextStyle.HeadSix);
+  SonrTextStyle get h6_Blue => SonrTextStyle(this, DesignTextStyle.HeadSix, color: SonrPalette.Primary);
+  SonrTextStyle get h6_Green => SonrTextStyle(this, DesignTextStyle.HeadSix, color: SonrPalette.Tertiary);
+  SonrTextStyle get h6_Grey => SonrTextStyle(this, DesignTextStyle.HeadSix, color: SonrColor.Grey);
+  SonrTextStyle get h6_Red => SonrTextStyle(this, DesignTextStyle.HeadSix, color: SonrPalette.Red);
+  SonrTextStyle get h6_White => SonrTextStyle(this, DesignTextStyle.HeadSix, color: SonrColor.White);
 
   // Paragraph
   SonrTextStyle get p => SonrTextStyle(this, DesignTextStyle.Paragraph);
@@ -95,7 +95,7 @@ class SonrTextStyle extends StatelessWidget {
                 text,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily:  "Manrope",
+                  fontFamily: "Manrope",
                   fontWeight: FontWeight.w800,
                   fontSize: 80,
                   color: Colors.white,
@@ -108,7 +108,7 @@ class SonrTextStyle extends StatelessWidget {
         break;
 
       // @ Heading One
-      case DesignTextStyle.HeadingOne:
+      case DesignTextStyle.HeadOne:
         return Center(
           child: ShaderMask(
               shaderCallback: (bounds) => FlutterGradients.crystalRiver(endAngle: 2.40855).createShader(
@@ -129,27 +129,27 @@ class SonrTextStyle extends StatelessWidget {
               )),
         );
         break;
-      case DesignTextStyle.HeadingTwo:
+      case DesignTextStyle.HeadTwo:
         size = 38;
         weight = FontWeight.w800;
         family = "Manrope";
         break;
-      case DesignTextStyle.HeadingThree:
+      case DesignTextStyle.HeadThree:
         size = 32;
         weight = FontWeight.w800;
         family = "Manrope";
         break;
-      case DesignTextStyle.HeadingFour:
+      case DesignTextStyle.HeadFour:
         size = 28;
         weight = FontWeight.w800;
         family = "Manrope";
         break;
-      case DesignTextStyle.HeadingFive:
+      case DesignTextStyle.HeadFive:
         size = 24;
         weight = FontWeight.w400;
         family = "Manrope";
         break;
-      case DesignTextStyle.HeadingSix:
+      case DesignTextStyle.HeadSix:
         size = 20;
         weight = FontWeight.w700;
         family = "Manrope";
@@ -198,38 +198,6 @@ class SonrText extends StatelessWidget {
       this.weight,
       this.size})
       : super(key: key);
-
-  // ^ Black(w800) Text with Provided Data
-  factory SonrText.header(String text, {double size = 40, Color color, Key key}) {
-    return SonrText(text,
-        isGradient: color != null ? false : true,
-        isCentered: true,
-        weight: FontWeight.w700,
-        size: size,
-        key: key,
-        color: color,
-        gradient: UserService.isDarkMode ? FlutterGradientNames.saintPetersburg.linear() : FlutterGradientNames.viciousStance.linear());
-  }
-
-  // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.title(String text, {Key key, Color color = SonrColor.Black, bool isCentered = false}) {
-    return SonrText(text, weight: FontWeight.w600, size: Platform.isAndroid ? 35 : 37, key: key, color: color, isCentered: isCentered);
-  }
-
-  // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.subtitle(String text, {Key key, bool isCentered = false}) {
-    return SonrText(text, weight: FontWeight.w500, size: Platform.isAndroid ? 20 : 21, key: key, color: SonrColor.Black, isCentered: isCentered);
-  }
-
-  // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.paragraph(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 16 : 17, key: key, color: SonrColor.Black);
-  }
-
-  // ^ Light(w300) Text with Provided Data -- Description Text
-  factory SonrText.span(String text, {Key key}) {
-    return SonrText(text, weight: FontWeight.w400, size: Platform.isAndroid ? 13 : 14, key: key, color: SonrColor.Black);
-  }
 
   // ^ Light(w300) Text with Provided Data -- Description Text
   factory SonrText.light(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {

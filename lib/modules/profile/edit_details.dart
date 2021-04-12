@@ -24,7 +24,7 @@ class EditDetailsView extends GetView<ProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   PlainButton(icon: SonrIcon.close, onPressed: controller.exitToViewing),
-                  Expanded(child: Center(child: SonrText.title(headerText))),
+                  Expanded(child: Center(child: headerText.h2)),
                   PlainButton(icon: SonrIcon.accept, onPressed: controller.saveEditedDetails)
                 ]),
           ),

@@ -26,7 +26,7 @@ class EditPictureView extends GetView<ProfileController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PlainButton(icon: SonrIcon.close, onPressed: controller.exitToViewing),
-                  SonrText.title(headerText),
+                  headerText.h2,
                   Padding(padding: EdgeInsets.all(16))
                 ]),
           ),
@@ -117,7 +117,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   Widget _buildPermissions() {
     return Column(
       children: [
-        SonrText.subtitle("Need Camera Permissions"),
+        "Need Camera Permissions".h3,
         ColorButton.primary(onPressed: controller.requestPermission, text: "Proceed"),
       ],
     );

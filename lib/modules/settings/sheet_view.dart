@@ -18,7 +18,7 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.header("Settings", size: 45),
+                      child: "Settings".h2,
                     ),
                     Padding(padding: EdgeWith.top(24)),
 

@@ -98,7 +98,7 @@ class _FileCardInfo extends StatelessWidget {
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            SonrText.header("$payload From"),
+            "$payload From".h2,
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [

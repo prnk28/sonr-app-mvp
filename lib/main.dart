@@ -52,7 +52,7 @@ class _AppState extends State<App> {
                   enabled: true,
                   duration: 400.milliseconds,
                   delay: 1.seconds,
-                  child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white))),
+                  child: Padding(padding: EdgeInsets.only(top: 200), child: "Sonr".hero)),
             ],
           )),
     );

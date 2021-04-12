@@ -23,7 +23,7 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
       widget.title != ''
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SonrIcon.location, Padding(padding: EdgeWith.right(16)), SonrText.subtitle(widget.title)])
+              children: [SonrIcon.location, Padding(padding: EdgeWith.right(16)), widget.title.h3])
           : Container(),
 
       // Build Toggle View

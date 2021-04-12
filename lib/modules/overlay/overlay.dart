@@ -65,7 +65,7 @@ class AlertOverlayView extends StatelessWidget {
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrText.header(title),
+        title.h2,
         Padding(
           padding: EdgeInsets.only(left: 10.0),
           child: SonrText.normal(description, size: 18),
@@ -215,10 +215,10 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
       child: Container(
         margin: EdgeInsets.all(8),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SonrText.header(title),
+          title.h2,
           Padding(
             padding: EdgeInsets.only(left: 8.0),
-            child: SonrText.subtitle(description),
+            child: description.h3_Grey,
           ),
           Padding(padding: EdgeInsets.all(4)),
           Divider(),

@@ -40,7 +40,7 @@ class _MediaPickerSheetState extends State<MediaPickerSheet> {
           ),
           body: ObxValue<RxList<MediaItem>>((list) {
             if (MediaService.allAlbum.value.isEmpty) {
-              return Center(child: SonrText.subtitle("Album is Empty."));
+              return Center(child: "Album is Empty.".h3);
             } else {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),

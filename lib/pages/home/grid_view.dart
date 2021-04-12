@@ -93,7 +93,7 @@ class _CardGridWidget extends GetView<HomeController> {
         );
       } else {
         return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.header("No Cards Found!", size: 32),
+          "No Cards Found!".h1,
           Padding(padding: EdgeInsets.all(8)),
           LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
           Padding(padding: EdgeInsets.all(16)),

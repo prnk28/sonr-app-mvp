@@ -66,7 +66,7 @@ class _MediaPermissionsView extends GetView<MediaQueueController> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SonrText.subtitle("Need Gallery Permissions"),
+        "Need Gallery Permissions".h3,
         ColorButton.primary(onPressed: controller.requestPermission, text: "Proceed"),
       ],
     );
@@ -123,7 +123,7 @@ class _MediaQueueGrid extends GetView<MediaQueueController> {
                 ),
               );
             } else {
-              return Center(child: SonrText.subtitle("Album is Empty."));
+              return Center(child: "Album is Empty".h4);
             }
           }),
         ),

@@ -195,7 +195,7 @@ class _MediaCardInfo extends StatelessWidget {
           blurRadius: 26,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            SonrText.header("$mimeType From"),
+            "$mimeType From".h3,
 
             // Owner
             Row(

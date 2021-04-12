@@ -62,7 +62,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Title
-                          SonrText.header("Join Remote"),
+                          "Join Remote".h2,
 
                           // Check for Button Tap
                           controller.isJoinFieldTapped.value
@@ -95,7 +95,7 @@ class RemoteLobbyCardView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.header("${controller.currentRemote.value.display}"),
+          "${controller.currentRemote.value.display}".h2,
           Expanded(
               child: ListView.builder(
             itemCount: controller.currentLobby.value != null ? controller.currentLobby.value.length + 1 : 1,
@@ -177,7 +177,7 @@ class RemoteInviteView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote Invite View"),
+      "Remote Invite View".h2,
       SonrText.normal("TODO: Display Invite thats received ", color: SonrColor.Black.withOpacity(0.7), size: 18),
       Padding(padding: EdgeInsets.all(16)),
     ]);
@@ -192,7 +192,7 @@ class RemoteProgressView extends GetView<RemoteController> {
   Widget build(BuildContext context) {
     //return Center();
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote Progress View"),
+      "Remote Progress View".h2,
       SonrText.normal("TODO: Display Lottie File with Animation Controller by Progress", color: SonrColor.Black.withOpacity(0.7), size: 18),
       Padding(padding: EdgeInsets.all(16)),
     ]);
@@ -206,7 +206,7 @@ class RemoteCompletedView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote View"),
+      "Remote View".h2,
       SonrText.normal("TODO: Display Received Transfer Card", color: SonrColor.Black.withOpacity(0.7), size: 18),
       Padding(padding: EdgeInsets.all(16)),
     ]);

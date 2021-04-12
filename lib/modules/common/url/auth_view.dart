@@ -78,7 +78,7 @@ class URLAuthView extends StatelessWidget {
   Widget _buildURLView(TransferCard card) {
     final data = card.url;
     // Check open graph images
-    if (data.images.length > 0) {
+    if (data.images.isNotEmpty) {
       return Column(children: [
         // @ Social Image
         Image.network(data.images.first.url),
@@ -90,7 +90,7 @@ class URLAuthView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SonrText.header(data.title, size: 22),
+              data.title.h3,
               SonrText.normal(data.description, size: 16),
             ],
           ),
@@ -138,7 +138,7 @@ class URLAuthView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SonrText.header(data.title, size: 22),
+              data.title.h3,
               SonrText.normal(data.description, size: 16),
             ],
           ),
@@ -147,7 +147,7 @@ class URLAuthView extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(new ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Neumorphic(

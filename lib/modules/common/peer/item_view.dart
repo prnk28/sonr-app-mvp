@@ -22,7 +22,7 @@ class _PeerListItemState extends State<PeerListItem> {
               backgroundColor: Colors.transparent,
               collapsedBackgroundColor: Colors.transparent,
               leading: widget.peer.profilePicture(size: 50),
-              title: SonrText.subtitle(widget.peer.profile.firstName + " " + widget.peer.profile.lastName, isCentered: true),
+              title: "${widget.peer.profile.firstName} ${widget.peer.profile.lastName}".h3,
               subtitle: SonrText("",
                   isRich: true,
                   richText: RichText(
