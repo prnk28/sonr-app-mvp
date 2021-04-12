@@ -8,7 +8,7 @@ enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIco
 class ShapeButton extends StatelessWidget {
   final bool hasIcon;
   final _ButtonType type;
-  final SonrText text;
+  final Widget text;
   final Color color;
   final Color shadowLightColor;
   final Color shadowDarkColor;
@@ -463,12 +463,12 @@ class ShapeButton extends StatelessWidget {
           isDisabled = true;
           break;
         case _ButtonType.DisabledText:
-          textChild = text.text.h6_Grey;
+          textChild = text;
           isDisabled = true;
           break;
         case _ButtonType.DisabledIconText:
           iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
-          textChild = text.text.h6_Grey;
+          textChild = text;
           isDisabled = true;
           break;
         default:

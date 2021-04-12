@@ -236,7 +236,7 @@ class _Spoke extends StatelessWidget {
                       padding: textPadding,
                       child: Text(textValue,
                           style: TextStyle(
-              fontFamily: 'Poppins',
+                            fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: UserService.isDarkMode ? Colors.white54 : Colors.black54,
@@ -341,21 +341,9 @@ class _CompassBulb extends StatelessWidget {
                 duration: Duration(seconds: 1),
                 decoration: BoxDecoration(gradient: gradient),
                 child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  SonrText.gradient(
-                    direction,
-                    FlutterGradientNames.glassWater,
-                    weight: FontWeight.w900,
-                    size: 44,
-                    key: ValueKey<String>(direction),
-                  ),
+                  direction.gradient(gradient: FlutterGradientNames.glassWater, size: 44, key: ValueKey<String>(direction)),
                   AnimatedSlideSwitcher.slideDown(
-                      child: SonrText.gradient(
-                    heading,
-                    FlutterGradientNames.glassWater,
-                    weight: FontWeight.w300,
-                    size: 24,
-                    key: ValueKey<String>(heading),
-                  ))
+                      child: heading.gradient(gradient: FlutterGradientNames.glassWater, size: 24, key: ValueKey<String>(heading)))
                 ]))));
   }
 }

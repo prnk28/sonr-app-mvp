@@ -2,8 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
@@ -26,8 +24,8 @@ extension DesignTextUtils on String {
   DesignText get h2_Grey => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Grey);
   DesignText get h2_Red => DesignText(this, DesignTextStyle.HeadTwo, color: SonrPalette.Red);
   DesignText get h2_White => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.White);
-  DesignText headTwo({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.HeadTwo, color: color, align: align); // Custom Options
+  DesignText headTwo({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadTwo, color: color, align: align, key: key); // Custom Options
 
   // Heading 3
   DesignText get h3 => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Black);
@@ -36,8 +34,8 @@ extension DesignTextUtils on String {
   DesignText get h3_Grey => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Grey);
   DesignText get h3_Red => DesignText(this, DesignTextStyle.HeadThree, color: SonrPalette.Red);
   DesignText get h3_White => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.White);
-  DesignText headThree({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.HeadThree, color: color, align: align); // Custom Options
+  DesignText headThree({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadThree, color: color, align: align, key: key); // Custom Options
 
   // Heading 4
   DesignText get h4 => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Black);
@@ -46,8 +44,8 @@ extension DesignTextUtils on String {
   DesignText get h4_Grey => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Grey);
   DesignText get h4_Red => DesignText(this, DesignTextStyle.HeadFour, color: SonrPalette.Red);
   DesignText get h4_White => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.White);
-  DesignText headFour({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.HeadFour, color: color, align: align); // Custom Options
+  DesignText headFour({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadFour, color: color, align: align, key: key); // Custom Options
 
   // Heading 5
   DesignText get h5 => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Black);
@@ -56,8 +54,8 @@ extension DesignTextUtils on String {
   DesignText get h5_Grey => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Grey);
   DesignText get h5_Red => DesignText(this, DesignTextStyle.HeadFive, color: SonrPalette.Red);
   DesignText get h5_White => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.White);
-  DesignText headFive({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.HeadFive, color: color, align: align); // Custom Options
+  DesignText headFive({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadFive, color: color, align: align, key: key); // Custom Options
 
   // Heading 6
   DesignText get h6 => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Black);
@@ -66,8 +64,8 @@ extension DesignTextUtils on String {
   DesignText get h6_Grey => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Grey);
   DesignText get h6_Red => DesignText(this, DesignTextStyle.HeadSix, color: SonrPalette.Red);
   DesignText get h6_White => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.White);
-  DesignText headSix({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.HeadSix, color: color, align: align); // Custom Options
+  DesignText headSix({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadSix, color: color, align: align, key: key); // Custom Options
 
   // Paragraph
   DesignText get p => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Black);
@@ -76,8 +74,8 @@ extension DesignTextUtils on String {
   DesignText get p_Grey => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Grey);
   DesignText get p_Red => DesignText(this, DesignTextStyle.Paragraph, color: SonrPalette.Red);
   DesignText get p_White => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.White);
-  DesignText paragraph({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.Paragraph, color: color, align: align); // Custom Options
+  DesignText paragraph({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.Paragraph, color: color, align: align, key: key); // Custom Options
 
   // Light
   DesignText get l => DesignText(this, DesignTextStyle.Light, color: SonrColor.Black);
@@ -86,8 +84,12 @@ extension DesignTextUtils on String {
   DesignText get l_Grey => DesignText(this, DesignTextStyle.Light, color: SonrColor.Grey);
   DesignText get l_Red => DesignText(this, DesignTextStyle.Light, color: SonrPalette.Red);
   DesignText get l_White => DesignText(this, DesignTextStyle.Light, color: SonrColor.White);
-  DesignText light({Color color = SonrColor.Black, TextAlign align = TextAlign.left}) =>
-      DesignText(this, DesignTextStyle.Light, color: color, align: align); // Custom Options
+  DesignText light({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.Light, color: color, align: align, key: key); // Custom Options
+
+  // Miscelaneous
+  GradientText gradient({double size = 32, @required FlutterGradientNames gradient, Key key}) => GradientText(this, gradient, size, key: key);
+  URLText get url => URLText(this);
 }
 
 // ^ Parameters by Type ^ //
@@ -138,7 +140,7 @@ class DesignText extends StatelessWidget {
   final Color color;
   final TextAlign align;
 
-  const DesignText(this.text, this.type, {this.color = SonrColor.Black, this.align = TextAlign.left});
+  const DesignText(this.text, this.type, {this.color = SonrColor.Black, this.align = TextAlign.left, Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // # Gradient Text
@@ -175,174 +177,44 @@ class DesignText extends StatelessWidget {
   }
 }
 
-class SonrText extends StatelessWidget {
+// ^ Gradient Text Type ^ //
+class GradientText extends StatelessWidget {
   final String text;
-  final Color color;
-  final Gradient gradient;
-  final FontWeight weight;
-  final RichText richText;
+  final FlutterGradientNames gradient;
   final double size;
-  final bool isGradient;
-  final bool isRich;
-  final bool isCentered;
 
-  const SonrText(this.text,
-      {Key key,
-      this.isGradient = false,
-      this.isRich = false,
-      this.isCentered = false,
-      this.color,
-      this.gradient,
-      this.richText,
-      this.weight,
-      this.size})
-      : super(key: key);
-
-  // ^ Bold(w700) Text with Provided Data -- Header Text
-  factory SonrText.bold(String text, {Color color = SonrColor.Black, double size = 32, Key key}) {
-    return SonrText(text, weight: FontWeight.w800, size: size, key: key, color: UserService.isDarkMode ? Colors.white : SonrColor.Black);
-  }
-
-  // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
-  factory SonrText.postDate(String pubDate, {FlutterGradientNames gradient = FlutterGradientNames.premiumDark, double size = 16, Key key}) {
-    var date = DateTime.parse(pubDate);
-    var output = DateFormat.yMMMMd('en_US');
-    return SonrText.gradient(output.format(date).toString(), gradient, size: size, key: key, weight: FontWeight.w500);
-  }
-
-  // ^ Normal(w400) Text with Provided Data
-  factory SonrText.postDescription(int titleLength, String postDesc, {Color color, double size = 14, Key key}) {
-    // Calculate Description length
-    int maxDesc = 118;
-    if (titleLength > 50) {
-      int factor = titleLength - 50;
-      maxDesc = maxDesc - factor;
-    }
-
-    // Clean from HTML Tags
-    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-    String cleaned = postDesc.replaceAll(exp, '');
-
-    // Limit Characters
-    var text = cleaned.substring(0, maxDesc) + "...";
-    return SonrText(text, weight: FontWeight.w400, size: size, key: key, color: color ?? Colors.grey[800]);
-  }
-
-  // ^ Date Text with Provided Data
-  factory SonrText.date(DateTime date, {double size = 14, Key key, Color color = Colors.white}) {
-    // Formatters
-    final dateFormat = DateFormat.yMd();
-    final timeFormat = DateFormat.jm();
-
-    // Get String
-    String dateText = dateFormat.format(date);
-    String timeText = timeFormat.format(date);
-
-    return SonrText("",
-        isRich: true,
-        richText: RichText(
+  const GradientText(this.text, this.gradient, this.size, {Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ShaderMask(
+          shaderCallback: (bounds) => FlutterGradients.findByName(gradient).createShader(
+                Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+              ),
+          child: Text(
+            text,
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
-            text: TextSpan(children: [
-              TextSpan(
-                  text: dateText,
-                  style: TextStyle(
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w300,
-                      fontSize: size,
-                      fontFeatures: [
-                        FontFeature.tabularFigures(),
-                      ],
-                      color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
-              TextSpan(
-                  text: "  $timeText",
-                  style: TextStyle(
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w600,
-                      fontFeatures: [
-                        FontFeature.tabularFigures(),
-                      ],
-                      fontSize: size,
-                      color: UserService.isDarkMode ? SonrColor.Black : Colors.white)),
-            ])));
+            style: TextStyle(
+              fontFamily: "Manrope",
+              fontWeight: FontWeight.w800,
+              fontSize: size,
+              color: Colors.white,
+              fontFeatures: [
+                FontFeature.tabularFigures(),
+              ],
+            ),
+          )),
+    );
   }
+}
 
-  // ^ Date Text with Provided Data
-  factory SonrText.duration(int milliseconds, {double size = 14, Key key}) {
-    int seconds = milliseconds ~/ 1000;
-    return SonrText("",
-        isRich: true,
-        richText: RichText(
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
-            text: TextSpan(children: [
-              TextSpan(
-                  text: seconds.toString(),
-                  style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: size, color: SonrColor.Black)),
-              TextSpan(text: "  s", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: size, color: SonrColor.Black)),
-            ])));
-  }
-
-  // ^ Gradient Text with Provided Data
-  factory SonrText.gradient(String text, FlutterGradientNames gradient, {FontWeight weight = FontWeight.bold, double size = 40, Key key}) {
-    return SonrText(text, isGradient: true, weight: weight, size: size, key: key, gradient: FlutterGradients.findByName(gradient));
-  }
-
-  // ^ AppBar Text with Provided Data
-  factory SonrText.appBar(String text, {double size = 30, FlutterGradientNames gradient = FlutterGradientNames.premiumDark, Key key}) {
-    return SonrText(text,
-        isGradient: true,
-        weight: FontWeight.w600,
-        size: size,
-        key: key,
-        gradient: UserService.isDarkMode ? FlutterGradientNames.premiumWhite.linear() : FlutterGradientNames.premiumDark.linear());
-  }
-
-  // ^ Rich Text with FirstName and Invite
-  factory SonrText.invite(String type, String firstName) {
-    return SonrText("",
-        isRich: true,
-        richText: RichText(
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
-            text: TextSpan(children: [
-              TextSpan(
-                  text: type.capitalizeFirst,
-                  style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w800, fontSize: 26, color: SonrColor.Black)),
-              TextSpan(
-                  text: " from ${firstName.capitalizeFirst}",
-                  style: TextStyle(
-                      fontFamily: 'Manrope', fontWeight: FontWeight.normal, fontStyle: FontStyle.italic, fontSize: 22, color: Colors.blue[900])),
-            ])));
-  }
-
-  // ^ Rich Text with FirstName and Invite
-  factory SonrText.search(String query, String value, {Color color = SonrColor.Black, double size = 16, Key key}) {
-    // Text Contains Query
-    if (value.toLowerCase().contains(query.toLowerCase())) {
-      query = query.toLowerCase();
-      value = value.toLowerCase();
-      return SonrText("",
-          isRich: true,
-          richText: RichText(
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.fade,
-              text: TextSpan(children: [
-                TextSpan(
-                    text: value.substring(value.indexOf(query), query.length).toUpperCase(),
-                    style: TextStyle(
-                        fontFamily: 'Manrope', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: size, color: Colors.blue[500])),
-                TextSpan(
-                    text: value.substring(value.indexOf(query) + query.length),
-                    style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.normal, fontSize: size, color: color)),
-              ])));
-    } else {
-      return SonrText(value, weight: FontWeight.w500, size: size, key: key, color: color);
-    }
-  }
-
-  // ^ Rich Text with Provided Data as URL
-  factory SonrText.url(String url) {
+// ^ URL Text Type ^ //
+class URLText extends StatelessWidget {
+  final String url;
+  const URLText(this.url, {Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
     // Parse URL
     Uri uri = Uri.parse(url);
     int segmentCount = uri.pathSegments.length;
@@ -390,57 +262,9 @@ class SonrText extends StatelessWidget {
               color: Colors.blue[600]))
     ];
 
-    return SonrText("",
-        isRich: true,
-        richText: RichText(
-          overflow: TextOverflow.fade,
-          text: TextSpan(children: spans),
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // @ Gradient Type Text
-    if (isGradient) {
-      return Center(
-        child: ShaderMask(
-            shaderCallback: (bounds) => gradient.createShader(
-                  Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                ),
-            child: Text(
-              text,
-              overflow: TextOverflow.ellipsis,
-              textAlign: isCentered ? TextAlign.center : TextAlign.start,
-              style: TextStyle(
-                fontFamily: 'Manrope',
-                fontWeight: weight,
-                fontSize: size ?? 32.0,
-                color: Colors.white,
-                fontFeatures: [
-                  FontFeature.tabularFigures(),
-                ],
-              ),
-            )),
-      );
-    }
-
-    // @ Rich Type Text
-    if (isRich) {
-      return richText;
-    }
-
-    // @ Normal Type Text
-    return Text(text,
-        textAlign: isCentered ? TextAlign.center : TextAlign.start,
-        style: TextStyle(fontFamily: 'Manrope', fontWeight: weight, fontSize: size ?? 16, color: color ?? findTextColor()));
-  }
-
-  // ^ Find Text color based on Theme - Light/Dark ^
-  static Color findTextColor() {
-    if (UserService.isDarkMode) {
-      return Colors.white;
-    } else {
-      return SonrColor.Black;
-    }
+    return RichText(
+      overflow: TextOverflow.fade,
+      text: TextSpan(children: spans),
+    );
   }
 }

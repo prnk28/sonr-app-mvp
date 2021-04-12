@@ -17,15 +17,15 @@ extension ContactUtils on Contact {
 
   Row get headerName {
     return Row(children: [
-      SonrText.bold(this.firstName + " "),
+      "${this.firstName} ".h6,
       this.lastName.l,
     ]);
   }
 
   Widget get fullName {
     return this.hasLastName()
-        ? SonrText.gradient(this.firstName + " " + this.lastName, FlutterGradientNames.solidStone, size: 32)
-        : SonrText.gradient(this.firstName, FlutterGradientNames.solidStone, size: 32);
+        ? "${this.firstName} ${this.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
+        : "${this.firstName}".gradient(gradient: FlutterGradientNames.solidStone);
   }
 
   Widget get profilePicture {

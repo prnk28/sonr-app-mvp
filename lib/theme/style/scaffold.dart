@@ -26,7 +26,7 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), actions: [action]),
+        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: title.h3, actions: [action]),
         resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
@@ -41,7 +41,7 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title), leading: leading),
+        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: title.h3, leading: leading),
         resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
@@ -72,7 +72,7 @@ class SonrScaffold extends StatelessWidget {
         body: body,
         floatingActionButton: floatingActionButton,
         floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: SonrText.appBar(title)),
+        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: title.h3),
         resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
   }
 
@@ -91,7 +91,7 @@ class SonrScaffold extends StatelessWidget {
     // Set Title
     Widget titleItem;
     if (disableDynamicLobbyTitle && titleWidget == null) {
-      titleItem = SonrText.appBar(title);
+      titleItem = title.h3;
     } else if (titleWidget != null && disableDynamicLobbyTitle) {
       titleItem = titleWidget;
     } else {
@@ -210,7 +210,7 @@ class _SonrAppbarTitleState extends State<_SonrAppbarTitle> {
             ? Row(
                 children: ["Connected".h3, CircularProgressIndicator()],
               )
-            : SonrText.appBar(text),
+            : text.h3,
         onTap: () {
           swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
         },

@@ -38,8 +38,7 @@ class PeerDetailsView extends StatelessWidget {
                                 color: Colors.white,
                                 size: 20,
                               ),
-                              Obx(() => SonrText(" " + controller.peerVector.value.data.directionString,
-                                  weight: FontWeight.w300, size: 20, key: key, color: Colors.white))
+                              Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White)
                             ]),
                           ))),
 

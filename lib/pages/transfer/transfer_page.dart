@@ -89,7 +89,7 @@ class _RemoteLobbyFullViewState extends State<RemoteLobbyFullView> {
 
   Widget _buildTitleWidget() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      SonrText.appBar("Remote"),
+      "Remote".h3,
       IconButton(
         icon: Icon(Icons.info_outline),
         onPressed: () {
@@ -114,7 +114,7 @@ class LocalLobbyView extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold.appBarLeadingAction(
           disableDynamicLobbyTitle: true,
-          titleWidget: GestureDetector(child: SonrText.appBar(controller.title.value), onTap: () => Get.bottomSheet(LobbySheet())),
+          titleWidget: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet())),
           leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.back(closeOverlays: true), shape: NeumorphicShape.flat),
           action: Get.find<SonrService>().payload != Payload.CONTACT
               ? ShapeButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat)

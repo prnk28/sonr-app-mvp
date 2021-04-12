@@ -2,6 +2,7 @@ export 'auth_view.dart';
 export 'card_view.dart';
 
 import 'dart:math';
+import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -40,11 +41,24 @@ extension MIMEFileUtils on MIME {
 }
 
 extension ProfileFileUtils on Profile {
-  SonrText get nameText {
-    return SonrText.bold(" ${this.firstName} ${this.lastName}", size: 16, color: Colors.grey[600]);
+  Widget get nameText {
+    return " ${this.firstName} ${this.lastName}".h6;
   }
 
   SonrIcon get platformIcon {
     return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
+  }
+}
+
+extension TextUtils on TransferCardItem {
+  Widget get dateText {
+    // Formatters
+    final dateFormat = DateFormat.yMd();
+    final timeFormat = DateFormat.jm();
+
+    // Get String
+    String dateText = dateFormat.format(this.received);
+    String timeText = timeFormat.format(this.received);
+    return Row(children: [dateText.h6_White, timeText.p_White]);
   }
 }

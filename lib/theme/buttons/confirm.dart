@@ -6,9 +6,6 @@ import 'utility.dart';
 enum ConfirmButtonType { Save, Delete }
 
 class ConfirmButton extends StatefulWidget {
-  static const double K_BORDER_RADIUS = 8;
-  static const K_BUTTON_PADDING = EdgeInsets.symmetric(horizontal: 24, vertical: 8);
-  static const K_BUTTON_DURATION = Duration(milliseconds: 100);
   final ConfirmButtonType type;
   final EdgeInsets margin;
   final EdgeInsets padding;
@@ -68,19 +65,19 @@ class ConfirmButton extends StatefulWidget {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
         gradient: SonrPalette.neutral(),
-        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
         gradient: SonrPalette.primary(),
-        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
         gradient: SonrPalette.tertiary(),
-        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
@@ -129,19 +126,19 @@ class ConfirmButton extends StatefulWidget {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
         gradient: SonrPalette.neutral(),
-        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
         gradient: SonrPalette.primary(),
-        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
         gradient: SonrPalette.critical(),
-        borderRadius: BorderRadius.circular(K_BORDER_RADIUS),
+        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
@@ -225,7 +222,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
         child: AnimatedContainer(
           decoration: _buildDecoration(),
           margin: widget.margin ?? const EdgeInsets.all(0),
-          duration: ConfirmButton.K_BUTTON_DURATION,
+          duration: ButtonUtility.K_BUTTON_DURATION,
           curve: Curves.ease,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
           child: AnimatedSlideSwitcher.slideUp(child: _buildChild()),
@@ -260,7 +257,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
       status = ConfirmStatus.Pressed;
     });
 
-    await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedAnimationDown = true;
 
     // Haptic Feedback
@@ -274,13 +271,13 @@ class _ConfirmButtonState extends State<ConfirmButton> {
       status = ConfirmStatus.Confirmed;
     });
 
-    await Future.delayed(ConfirmButton.K_BUTTON_DURATION); //wait until animation finished
+    await Future.delayed(ButtonUtility.K_BUTTON_DURATION); //wait until animation finished
     hasFinishedAnimationDown = true;
 
     // Haptic Feedback
     await HapticFeedback.heavyImpact();
     _resetIfTapUp(ConfirmStatus.Done);
-    await Future.delayed(ConfirmButton.K_BUTTON_DURATION * 2); //wait until animation finished
+    await Future.delayed(ButtonUtility.K_BUTTON_DURATION * 2); //wait until animation finished
 
     // Play Sound
     if (widget.type == ConfirmButtonType.Save) {

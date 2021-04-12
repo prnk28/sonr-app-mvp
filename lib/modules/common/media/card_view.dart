@@ -70,8 +70,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                         padding: const EdgeInsets.all(8.0),
                         child: Neumorphic(
                           style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                          child: SonrText.date(widget.card.received,
-                              color: widget.card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
+                          child: widget.card.dateText,
                           padding: EdgeInsets.all(10),
                         ),
                       ),
@@ -208,7 +207,7 @@ class _MediaCardInfo extends StatelessWidget {
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Name ", size: 16),
+              "Name ".h6,
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
@@ -220,21 +219,21 @@ class _MediaCardInfo extends StatelessWidget {
 
             // File Size
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Size ", size: 16),
+              "Size ".h6,
               Spacer(),
-             "$size".p,
+              "$size".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Kind ", size: 16),
+              "Kind ".h6,
               Spacer(),
               "${metadata.mime.value}".p,
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("ID ", size: 16),
+              "ID ".h6,
               Spacer(),
               "${metadata.id}".p,
             ]),

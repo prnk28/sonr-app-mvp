@@ -96,7 +96,7 @@ class CameraView extends GetView<CameraController> {
               padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
               child: Neumorphic(
                 style: SonrStyle.timeStamp,
-                child: SonrText.duration(controller.videoDuration.value),
+                child: _buildDurationText(controller.videoDuration.value),
                 padding: EdgeInsets.all(10),
               ),
             );
@@ -106,6 +106,18 @@ class CameraView extends GetView<CameraController> {
         })
       ],
     );
+  }
+
+  Widget _buildDurationText(int milliseconds) {
+    int seconds = milliseconds ~/ 1000;
+    return RichText(
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.fade,
+        text: TextSpan(children: [
+          TextSpan(
+              text: seconds.toString(), style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 16, color: SonrColor.Black)),
+          TextSpan(text: "  s", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 16, color: SonrColor.Black)),
+        ]));
   }
 }
 

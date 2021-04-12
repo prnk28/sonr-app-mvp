@@ -187,7 +187,7 @@ class _ShareItemURL extends StatelessWidget {
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SonrText.url(data.url),
+                    child: data.url.url,
                   ),
                 )
               ])),
@@ -235,7 +235,7 @@ class _ShareItemURL extends StatelessWidget {
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SonrText.url(data.url),
+                    child: data.url.url,
                   ),
                 )
               ])),
@@ -253,7 +253,7 @@ class _ShareItemURL extends StatelessWidget {
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: SonrText.url(data.url),
+          child: data.url.url,
         ),
       ),
     );

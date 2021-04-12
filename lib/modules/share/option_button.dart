@@ -40,7 +40,7 @@ class ShareCameraButtonItem extends GetView<ShareController> {
                           ))),
             galleryArtboard),
         Padding(padding: EdgeInsets.only(top: 4)),
-        SonrText('Camera', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+        'Camera'.p_White,
       ]),
     );
   }
@@ -87,7 +87,7 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
                           ))),
             galleryArtboard),
         Padding(padding: EdgeInsets.only(top: 4)),
-        SonrText('Gallery', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+        'Gallery'.p_White,
       ]),
     );
   }
@@ -133,7 +133,7 @@ class ShareContactButtonItem extends GetView<ShareController> {
                           ))),
             galleryArtboard),
         Padding(padding: EdgeInsets.only(top: 4)),
-        SonrText('Contact', weight: FontWeight.w500, size: 14, key: key, color: SonrColor.White),
+        'Contact'.p_White,
       ]),
     );
   }

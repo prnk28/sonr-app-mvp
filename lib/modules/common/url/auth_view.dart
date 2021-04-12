@@ -38,9 +38,9 @@ class URLAuthView extends StatelessWidget {
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
             invite.from.profile.hasLastName()
-                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
-                : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
-            Center(child: SonrText.gradient("Website Link", FlutterGradientNames.magicRay, size: 22)),
+                ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
+                : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
+            Center(child: "Website Link".gradient(gradient: FlutterGradientNames.magicRay, size: 22)),
           ]),
         ]),
         Divider(),
@@ -114,7 +114,7 @@ class URLAuthView extends StatelessWidget {
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SonrText.url(card.url.link),
+                    child: card.url.link.url,
                   ),
                 )
               ])),
@@ -162,7 +162,7 @@ class URLAuthView extends StatelessWidget {
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SonrText.url(card.url.link),
+                    child: card.url.link.url,
                   ),
                 )
               ])),
@@ -180,7 +180,7 @@ class URLAuthView extends StatelessWidget {
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: SonrText.url(card.url.link),
+          child: card.url.link.url,
         ),
       ),
     );

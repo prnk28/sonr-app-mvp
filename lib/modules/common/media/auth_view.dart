@@ -47,11 +47,10 @@ class MediaAuthView extends StatelessWidget {
               // From Information
               Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 invite.from.profile.hasLastName()
-                    ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
-                        size: 32)
-                    : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
+                    ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
+                    : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
                 Row(children: [
-                  SonrText.gradient(card.metadata.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+                  card.payload.toString().capitalizeFirst.gradient(gradient: FlutterGradientNames.plumBath, size: 22),
                   "   ${card.metadata.sizeString}".h5
                 ]),
               ]),

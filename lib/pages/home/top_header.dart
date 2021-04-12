@@ -75,7 +75,7 @@ class _HomeHeaderTitle extends StatelessWidget {
                 duration: 2.seconds,
                 child: GestureDetector(
                   key: ValueKey<String>(controller.title.value),
-                  child: SonrText.appBar(controller.title.value),
+                  child: controller.title.value.h3,
                   onTap: () {
                     controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
                   },
@@ -86,7 +86,6 @@ class _HomeHeaderTitle extends StatelessWidget {
       },
     );
   }
-
 }
 
 // ^ Controller for Header Title ^ //

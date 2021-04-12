@@ -53,11 +53,10 @@ class FileAuthView extends StatelessWidget {
                     // From Information
                     Column(children: [
                       invite.from.profile.hasLastName()
-                          ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark,
-                              size: 38)
-                          : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
+                          ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
+                          : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
                       Row(children: [
-                        SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
+                        card.payload.toString().capitalizeFirst.gradient(gradient: FlutterGradientNames.plumBath, size: 22),
                         "   ${card.metadata.sizeString}".h5
                       ]),
                     ]),

@@ -215,10 +215,10 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
       child: Container(
         margin: EdgeInsets.all(8),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          title.h2,
+          title.h4,
           Padding(
             padding: EdgeInsets.only(left: 8.0),
-            child: description.h3_Grey,
+            child: description.p_Grey,
           ),
           Padding(padding: EdgeInsets.all(4)),
           Divider(),

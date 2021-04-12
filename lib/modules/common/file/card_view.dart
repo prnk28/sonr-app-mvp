@@ -40,7 +40,7 @@ class FileCardView extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: Neumorphic(
                             style: SonrStyle.timeStampDark,
-                            child: SonrText.date(card.received, color: Colors.white),
+                            child: card.dateText,
                             padding: EdgeInsets.all(10),
                           ),
                         ),
@@ -103,7 +103,7 @@ class _FileCardInfo extends StatelessWidget {
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
               card.owner.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
-              SonrText.bold(" ${card.owner.firstName} ${card.owner.lastName}", size: 16, color: Colors.grey[600])
+              " ${card.owner.firstName} ${card.owner.lastName}".h6,
             ]),
 
             Divider(),
@@ -111,7 +111,7 @@ class _FileCardInfo extends StatelessWidget {
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Name ", size: 16),
+              "Name ".h6,
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
@@ -123,14 +123,14 @@ class _FileCardInfo extends StatelessWidget {
 
             // File Size
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Size ", size: 16),
+              "Size ".h6,
               Spacer(),
               "$size".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Kind ", size: 16),
+              "Kind ".h6,
               Spacer(),
               "${metadata.mime.value}".p,
             ]),

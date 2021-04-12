@@ -23,19 +23,17 @@ class _PeerListItemState extends State<PeerListItem> {
               collapsedBackgroundColor: Colors.transparent,
               leading: widget.peer.profilePicture(size: 50),
               title: "${widget.peer.profile.firstName} ${widget.peer.profile.lastName}".h3,
-              subtitle: SonrText("",
-                  isRich: true,
-                  richText: RichText(
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.fade,
-                      text: TextSpan(children: [
-                        TextSpan(
-                            text: widget.peer.platform.toString(),
-                            style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
-                        TextSpan(
-                            text: " - ${widget.peer.model}",
-                            style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
-                      ]))),
+              subtitle: RichText(
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.fade,
+                  text: TextSpan(children: [
+                    TextSpan(
+                        text: widget.peer.platform.toString(),
+                        style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
+                    TextSpan(
+                        text: " - ${widget.peer.model}",
+                        style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
+                  ])),
               children: [
                 Padding(padding: EdgeInsets.all(8)),
                 Row(
