@@ -16,7 +16,7 @@ class RegisterController extends GetxController {
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
   // ^ Submits Contact ^ //
-  completeForm() async {
+  setContact() async {
     if (validate()) {
       // Get Contact from Values
       var contact = Contact(firstName: firstName.value, lastName: lastName.value);
@@ -63,18 +63,7 @@ class RegisterController extends GetxController {
 
   // ^ Request Gallery Permissions ^ //
   Future<bool> requestGallery() async {
-    if (DeviceService.isAndroid) {
-      if (await Permission.storage.request().isGranted) {
-        UserService.permissions.value.update();
-        UserService.permissions.refresh();
-        status(RegisterStatus.Complete);
-        return true;
-      } else {
-        UserService.permissions.value.update();
-        UserService.permissions.refresh();
-        return false;
-      }
-    } else {
+    if (DeviceService.isIOS) {
       if (await Permission.photos.request().isGranted) {
         UserService.permissions.value.update();
         UserService.permissions.refresh();
@@ -85,6 +74,9 @@ class RegisterController extends GetxController {
         UserService.permissions.refresh();
         return false;
       }
+    } else {
+      status(RegisterStatus.Complete);
+      return true;
     }
   }
 

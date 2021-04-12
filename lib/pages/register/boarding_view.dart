@@ -6,19 +6,21 @@ class BoardingLocationView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Get.width,
+      height: Get.height,
       color: SonrPalette.Tertiary,
+      margin: EdgeInsets.all(8),
       child: Column(
         children: [
+          "Getting Started".h3,
+          Padding(padding: EdgeInsets.all(8)),
+          "Sonr needs your Location in order to find other devices around you".p_Grey,
           LottieContainer(
             type: LottieBoard.Location,
             width: Get.width,
           ),
-          "Getting Started".h3,
-          Padding(padding: EdgeInsets.all(8)),
-          "Sonr needs your Location in order to find other devices around you".h6_Grey,
           Spacer(),
           ColorButton.primary(onPressed: controller.requestLocation, text: "Proceed"),
-          Padding(padding: EdgeInsets.all(8)),
         ],
       ),
     );
@@ -30,19 +32,21 @@ class BoardingGalleryView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Get.width,
+      height: Get.height,
+      margin: EdgeInsets.all(8),
       color: SonrPalette.Secondary,
       child: Column(
         children: [
+          "Gallery".h3,
+          Padding(padding: EdgeInsets.all(8)),
+          "Sonr needs access to your Gallery for sharing Files.".p_Grey,
           LottieContainer(
             type: LottieBoard.Gallery,
             width: Get.width,
           ),
-          "Gallery".h3,
-          Padding(padding: EdgeInsets.all(8)),
-          "Sonr needs access to your Gallery for sharing Files.".h6_Grey,
           Spacer(),
           ColorButton.primary(onPressed: controller.requestLocation, text: "Proceed"),
-          Padding(padding: EdgeInsets.all(8)),
         ],
       ),
     );
@@ -54,14 +58,14 @@ class CompleteView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: SonrPalette.Secondary,
+      width: Get.width,
+      height: Get.height,
+      margin: EdgeInsets.all(8),
       child: Column(
         children: [
           "All Set!".hero,
-          Padding(padding: EdgeInsets.all(8)),
           Spacer(),
-          ColorButton.primary(onPressed: controller.completeForm, text: "Continue"),
-          Padding(padding: EdgeInsets.all(8)),
+          ColorButton.primary(onPressed: controller.setContact, text: "Continue"),
         ],
       ),
     );

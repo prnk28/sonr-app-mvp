@@ -41,6 +41,7 @@ class FormPage extends GetView<RegisterController> {
                         },
                         onChanged: (String value) {
                           controller.firstName(value);
+                          controller.firstName.refresh();
                         }),
 
                     // ***************** //
@@ -61,11 +62,12 @@ class FormPage extends GetView<RegisterController> {
                           FocusScopeNode currentFocus = FocusScope.of(Get.context);
                           if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                             FocusManager.instance.primaryFocus.unfocus();
-                            controller.completeForm();
+                            controller.setContact();
                           }
                         },
                         onChanged: (String value) {
                           controller.lastName(value);
+                          controller.lastName.refresh();
                         }),
 
                     // ********************* //
@@ -79,7 +81,7 @@ class FormPage extends GetView<RegisterController> {
                           icon: SonrIcon.accept,
                           text: "Get Started",
                           onPressed: () {
-                            controller.completeForm();
+                            controller.setContact();
                           },
                           //margin: EdgeInsets.only(top: 12),
                         ),

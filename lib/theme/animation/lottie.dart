@@ -23,7 +23,7 @@ extension LottieBoardUtils on LottieBoard {
         return "assets/lottie/gallery.json";
         break;
       case LottieBoard.Location:
-        return "assets/lottie/Location.json";
+        return "assets/lottie/location.json";
         break;
       default:
         return "";
