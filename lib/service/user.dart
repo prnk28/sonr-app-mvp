@@ -255,6 +255,7 @@ class UserService extends GetxService {
   Future<bool> requestCamera() async {
     var result = await _userPermissions.value.request(UserPermissionType.Camera);
     _userPermissions.refresh();
+    SonrOverlay.back();
     return result;
   }
 
@@ -267,6 +268,7 @@ class UserService extends GetxService {
       if (result) {
         await MediaService.refreshGallery();
       }
+      SonrOverlay.back();
       return result;
     } else {
       return true;
@@ -278,6 +280,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasLocation != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Location);
       _userPermissions.refresh();
+      SonrOverlay.back();
       return result;
     } else {
       return true;
@@ -289,6 +292,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasMicrophone != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Microphone);
       _userPermissions.refresh();
+      SonrOverlay.back();
       return result;
     } else {
       return true;
@@ -300,6 +304,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasNotifications != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Notifications);
       _userPermissions.refresh();
+      SonrOverlay.back();
       return result;
     } else {
       return true;

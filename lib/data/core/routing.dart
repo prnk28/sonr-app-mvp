@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
-import 'package:sonr_app/pages/register/form_page.dart';
+import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/service/lobby.dart';
@@ -31,7 +31,7 @@ class SonrRouting {
             middlewares: [GetMiddleware()]),
 
         // ** Register Page ** //
-        GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
+        GetPage(name: '/register', page: () => RegisterPage(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
 
         // ** Transfer Page ** //
         GetPage(

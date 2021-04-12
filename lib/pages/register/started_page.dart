@@ -8,7 +8,6 @@ class GetStartedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset('assets/illustrations/getting-started.png'),
         Align(
             alignment: Alignment.bottomCenter,
             child: Container(

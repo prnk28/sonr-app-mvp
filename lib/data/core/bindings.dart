@@ -7,6 +7,7 @@ import 'package:sonr_app/modules/profile/profile.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/remote/remote_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -32,6 +33,15 @@ class HomeBinding implements Bindings {
   }
 }
 
+// ^ Register Page Bindings ^ //
+class RegisterBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<RegisterController>(RegisterController());
+  }
+}
+
+// ^ Transfer Screen Bindings ^ //
 class TransferBinding implements Bindings {
   @override
   void dependencies() {

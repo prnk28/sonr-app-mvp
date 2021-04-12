@@ -3,7 +3,7 @@ import '../theme.dart';
 import 'package:lottie/lottie.dart';
 
 // ** Enums ** //
-enum LottieBoard { David, JoinRemote }
+enum LottieBoard { David, JoinRemote, Access, Gallery, Location }
 enum LottieIconType { Home, Profile, Alerts, Remote }
 
 // ^ Lottie Board Type extensions ^ //
@@ -15,6 +15,15 @@ extension LottieBoardUtils on LottieBoard {
         break;
       case LottieBoard.JoinRemote:
         return "assets/lottie/join-remote.json";
+        break;
+      case LottieBoard.Access:
+        return "assets/lottie/access.json";
+        break;
+      case LottieBoard.Gallery:
+        return "assets/lottie/gallery.json";
+        break;
+      case LottieBoard.Location:
+        return "assets/lottie/Location.json";
         break;
       default:
         return "";
@@ -90,7 +99,6 @@ class LottieContainer extends HookWidget {
   final Function onComplete;
   final bool repeat;
   final bool animate;
-  final bool reverse;
   const LottieContainer(
       {Key key,
       @required this.type,
@@ -98,9 +106,8 @@ class LottieContainer extends HookWidget {
       this.width = 200,
       this.height = 200,
       this.fit = BoxFit.fill,
-      this.repeat = false,
-      this.animate = true,
-      this.reverse = true})
+      this.repeat = true,
+      this.animate = true})
       : super(key: key);
 
   @override
@@ -111,7 +118,6 @@ class LottieContainer extends HookWidget {
       controller: controller,
       width: width,
       repeat: repeat,
-      reverse: reverse,
       animate: animate,
       height: height,
       fit: BoxFit.contain,
