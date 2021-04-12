@@ -47,6 +47,7 @@ class SonrRouting {
   static initServices() async {
     await Get.putAsync(() => DeviceService().init(), permanent: true); // First Required Service
     await Get.putAsync(() => UserService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => FileService().init(), permanent: true);
     await Get.putAsync(() => MediaService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);

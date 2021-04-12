@@ -46,18 +46,16 @@ class ShareController extends GetxController {
     });
   }
 
-  // ^ Check if User Granted Camera, or Request ^ //
-  onCameraShare() async {
-    // Check for Permissions
-    if (cameraPermitted.value) {
-      _presentCameraView();
-    }
+  // ^ Present Camera View ^ //
+  presentCameraView() {
+    // Move to View
+    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+      SonrService.queueCapture(file);
+      Get.toNamed("/transfer");
+    }), transition: Transition.downToUp);
 
-    // Request Permissions
-    else {
-      var result = await Get.find<UserService>().requestCamera();
-      result ? _presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
-    }
+    // Shrink Button after Delay
+    shrink(delay: 150.milliseconds);
   }
 
   // ^ Set current Media Item ^ //
@@ -91,16 +89,7 @@ class ShareController extends GetxController {
   }
 
   // # Present Camera View ^ //
-  _presentCameraView() {
-    // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-      SonrService.queueCapture(file);
-      Get.toNamed("/transfer");
-    }), transition: Transition.downToUp);
 
-    // Shrink Button after Delay
-    shrink(delay: 150.milliseconds);
-  }
 
   // # Update Size Based on State
   _handleStatus(ShareStatus status) {

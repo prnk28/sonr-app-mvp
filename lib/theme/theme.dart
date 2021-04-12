@@ -1,4 +1,5 @@
 export '../service/device.dart';
+export '../service/file.dart';
 export '../service/lobby.dart';
 export '../service/media.dart';
 export '../service/sonr.dart';

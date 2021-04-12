@@ -92,12 +92,10 @@ deploy.android:
 
 ## debug         :   Run Mobile App in Debug Mode
 debug:
-	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
 ## └─ clean           - Clean before running in Debug Mode
 debug.clean: plugin.clean clean
-	cd $(PROJECT_DIR) && cider bump build
 	cd $(PROJECT_DIR) && $(RUN)
 
 

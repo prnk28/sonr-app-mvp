@@ -9,6 +9,15 @@
     	<key>AccessKeySecret</key>
     		<string>qssKHphhuG2khFg_fTfyF0StoJJQzKMWIVRbBLkI7qko9BFTbi8U3ZxuPfndq3o9Ge6e9awG7_pQFcsJDDkikA</string>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+   		<string>fetch</string>
+   		<string>remote-notification</string>
+	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<bool>true</bool>
+	<key>UISupportsDocumentBrowser</key>
+	<bool>true</bool>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>

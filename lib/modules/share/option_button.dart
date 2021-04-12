@@ -15,7 +15,18 @@ class ShareCameraButtonItem extends GetView<ShareController> {
     _loadArtboard(galleryArtboard);
 
     return GestureDetector(
-      onTap: controller.onCameraShare,
+      onTap: () async {
+        // Check for Permissions
+        if (controller.cameraPermitted.value) {
+          controller.presentCameraView();
+        }
+
+        // Request Permissions
+        else {
+          var result = await Get.find<UserService>().requestCamera();
+          result ? controller.presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+        }
+      },
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         ObxValue<Rx<Artboard>>(
             (rive) => SizedBox(

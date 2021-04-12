@@ -5,8 +5,6 @@ import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
-
 // ^ Metadata Model Extensions ^ //
 extension MetadataFileUtils on Metadata {
   String get sizeString {
