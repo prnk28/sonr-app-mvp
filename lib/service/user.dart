@@ -208,7 +208,7 @@ class UserService extends GetxService {
     to._phone(contact.phone);
     to._email(contact.email);
     to._website(contact.website);
-    to._picture(contact.picture);
+    to._picture(Uint8List.fromList(contact.picture));
     to._socials(contact.socials);
 
     // Refresh Lists
