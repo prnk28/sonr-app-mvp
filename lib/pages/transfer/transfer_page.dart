@@ -61,8 +61,8 @@ class _RemoteLobbyFullViewState extends State<RemoteLobbyFullView> {
     return SonrScaffold.appBarLeadingAction(
         disableDynamicLobbyTitle: true,
         titleWidget: _buildTitleWidget(),
-        leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.back(closeOverlays: true), shape: NeumorphicShape.flat),
-        action: ShapeButton.circle(icon: SonrIcon.leave, onPressed: () => widget.controller.stopRemote(), shape: NeumorphicShape.flat),
+        leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.back(closeOverlays: true)),
+        action: PlainButton(icon: SonrIcon.leave, onPressed: () => widget.controller.stopRemote()),
         body: ListView.builder(
           itemCount: lobbyModel != null ? lobbyModel.length + 1 : 1,
           itemBuilder: (BuildContext context, int index) {

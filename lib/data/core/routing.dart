@@ -39,7 +39,7 @@ class SonrRouting {
             page: () => TransferScreen(),
             binding: TransferBinding(),
             transition: Transition.downToUp,
-            curve: Curves.bounceOut,
+            curve: Curves.easeIn,
             fullscreenDialog: true),
       ];
 
