@@ -36,7 +36,7 @@ class SonrCheckbox extends StatelessWidget {
       margin: margin,
       child: Row(crossAxisAlignment: crossAxisAlignment, mainAxisAlignment: mainAxisAlignment, children: [
         // @ Set Text
-        label ?? SonrText.normal(label, size: labelSize),
+        label ?? label.p,
 
         // @ Create Check Box
         ValueBuilder<bool>(
@@ -116,7 +116,7 @@ class SonrRadioItem extends StatelessWidget {
         onChanged: (i) => onChanged(),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(title, size: 14, color: SonrColor.Black),
+      title.p,
     ]);
   }
 }

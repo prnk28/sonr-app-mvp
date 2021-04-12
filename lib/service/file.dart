@@ -11,60 +11,81 @@ class FileService extends GetxService {
   static bool get isRegistered => Get.isRegistered<FileService>();
   static FileService get to => Get.find<FileService>();
 
-  // Properties
-  final _hasFile = RxBool(false);
-
   // ^ Initialize Service ^ //
   Future<FileService> init() async {
     return this;
   }
 
   // @ Select Audio File //
-  static Future<Tuple<bool, FileItem>> selectAudio() async => _processSelectedItem(await _handleSelectRequest(FileType.audio));
-
-  // @ Select Media File //
-  static Future<Tuple<bool, FileItem>> selectMedia() async => _processSelectedItem(await _handleSelectRequest(FileType.media));
-
-  // @ Select Other File //
-  static Future<Tuple<bool, FileItem>> selectFile() async => _processSelectedItem(await _handleSelectRequest(FileType.custom));
-
-  // # Generic Method for Different File Types
-  static Future<FilePickerResult> _handleSelectRequest(FileType type) async {
-    // @ Check if File Already Queued
-    if (!to._hasFile.value) {
-      // Check Type for Custom Files
-      if (type == FileType.custom) {
-        return await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: K_ALLOWED_FILE_TYPES,
-          withData: true,
-        );
-      }
-
-      // For Media/Audio Files
-      else {
-        return await FilePicker.platform.pickFiles(
-          type: type,
-          withData: true,
-        );
-      }
-    } else {
-      return null;
-    }
-  }
-
-  // # Helper Method to Check File Picker Result
-  static Tuple<bool, FileItem> _processSelectedItem(FilePickerResult result) {
+  static Future<Tuple<bool, FileItem>> selectAudio() async {
+    var result = await _handleSelectRequest(FileType.audio);
     // Check File
     if (result != null) {
-      to._hasFile(true);
-      return Tuple(!to._hasFile.value, FileItem.file(result));
+      return Tuple(true, FileItem.media(result));
     }
 
     // Cancelled Picker
     else {
-      to._hasFile(false);
-      return Tuple(!to._hasFile.value, null);
+      return Tuple(false, null);
     }
   }
+
+  // @ Select Media File //
+  static Future<Tuple<bool, FileItem>> selectMedia() async {
+    // Load Picker
+    var result = await _handleSelectRequest(FileType.media);
+
+    // Check File
+    if (result != null) {
+      return Tuple(true, FileItem.media(result));
+    }
+
+    // Cancelled Picker
+    else {
+      return Tuple(false, null);
+    }
+  }
+
+  // @ Select Other File //
+  static Future<Tuple<bool, FileItem>> selectFile() async {
+    // Load Picker
+    var result = await _handleSelectRequest(FileType.custom);
+
+    // Check File
+    if (result != null) {
+      return Tuple(true, FileItem.file(result));
+    }
+
+    // Cancelled Picker
+    else {
+      return Tuple(false, null);
+    }
+  }
+
+  // # Generic Method for Different File Types
+  static Future<FilePickerResult> _handleSelectRequest(FileType type) async {
+    // @ Check if File Already Queued
+    // Check Type for Custom Files
+    if (type == FileType.custom) {
+      return await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: K_ALLOWED_FILE_TYPES,
+        withData: true,
+      );
+    }
+
+    // For Media/Audio Files
+    else {
+      return await FilePicker.platform.pickFiles(
+        type: type,
+        withData: true,
+      );
+    }
+  }
+}
+
+// @ Helper Extension to Retreive Items
+extension FileItemTupleUtils on Tuple<bool, FileItem> {
+  bool get hasItem => this.item1;
+  FileItem get fileItem => this.item2;
 }

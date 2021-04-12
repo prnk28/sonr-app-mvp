@@ -44,8 +44,8 @@ class AlertsView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "Alerts View".h2,
-      SonrText.normal("This Page is Under Construction.", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "Alerts View".headTwo(align: TextAlign.center),
+      "This Page is Under Construction.".paragraph(align: TextAlign.center, color: SonrColor.Grey),
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }

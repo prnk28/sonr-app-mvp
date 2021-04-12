@@ -68,7 +68,7 @@ class ContactCardView extends StatelessWidget {
                         child: ShapeButton.circle(
                             depth: 4,
                             onPressed: () {},
-                            text: SonrText.medium("Mobile", size: 12, color: Colors.black45),
+                            text: "Mobile".p_Grey,
                             icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
                             iconPosition: WidgetPosition.Top),
                       ),
@@ -79,7 +79,7 @@ class ContactCardView extends StatelessWidget {
                         child: ShapeButton.circle(
                             depth: 4,
                             onPressed: () {},
-                            text: SonrText.medium("Text", size: 12, color: Colors.black45),
+                            text: "Text".p_Grey,
                             icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
                             iconPosition: WidgetPosition.Top),
                       ),
@@ -90,7 +90,7 @@ class ContactCardView extends StatelessWidget {
                           child: ShapeButton.circle(
                               depth: 4,
                               onPressed: () {},
-                              text: SonrText.medium("Video", size: 12, color: Colors.black45),
+                              text: "Video".p_Grey,
                               icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
                               iconPosition: WidgetPosition.Top)),
                     ]),

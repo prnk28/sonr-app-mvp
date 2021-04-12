@@ -25,7 +25,7 @@ class SettingsSheet extends StatelessWidget {
                     // @ Dark Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Dark Mode Title
-                      SonrText.medium("Dark Mode"),
+                      "Dark Mode".h6,
 
                       // Dark Mode Switch
                       NeumorphicSwitch(
@@ -42,7 +42,7 @@ class SettingsSheet extends StatelessWidget {
                     // @ Flat Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Dark Mode Title
-                      SonrText.medium("Flat Mode"),
+                      "Flat Mode".h6,
 
                       // Dark Mode Switch
                       NeumorphicSwitch(
@@ -59,7 +59,7 @@ class SettingsSheet extends StatelessWidget {
                     // @ PointShare Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Point Share Title
-                      SonrText.medium("Point To Share"),
+                      "Point To Share".h6,
 
                       // Point Share Mode Switch
                       NeumorphicSwitch(

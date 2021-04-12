@@ -68,7 +68,7 @@ class AlertOverlayView extends StatelessWidget {
         title.h2,
         Padding(
           padding: EdgeInsets.only(left: 10.0),
-          child: SonrText.normal(description, size: 18),
+          child: description.p,
         ),
         Padding(padding: EdgeInsets.all(4)),
         Divider(),

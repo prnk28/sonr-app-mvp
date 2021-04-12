@@ -57,15 +57,15 @@ class _CardGridToggle extends GetView<HomeController> {
         thumb: Neumorphic(style: SonrStyle.toggle),
         children: [
           ToggleElement(
-              background: Center(child: SonrText.medium("Media", color: SonrColor.Grey, size: 18)),
+              background: Center(child: "Media".h6_Grey),
               foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
           ToggleElement(
-              background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
+              background: Center(child: "All".h6_Grey),
               foreground: SonrIcon.neumorphicGradient(
                   SonrIconData.all_categories, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                   size: 22.5)),
           ToggleElement(
-              background: Center(child: SonrText.medium("Contacts", color: SonrColor.Grey, size: 18)),
+              background: Center(child: "Contacts".h6_Grey),
               foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
         ],
       ),
@@ -81,7 +81,7 @@ class _CardGridWidget extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (cardList.isEmpty) {
+      if (cardList.isNotEmpty) {
         return StackedCardCarousel(
           initialOffset: 2,
           spaceBetweenItems: 435,

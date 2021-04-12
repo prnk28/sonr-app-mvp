@@ -115,7 +115,7 @@ class _FileCardInfo extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: SonrText.medium("${metadata.name}", size: 16),
+                child: "${metadata.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -125,14 +125,14 @@ class _FileCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Size ", size: 16),
               Spacer(),
-              SonrText.medium("$size", size: 16),
+              "$size".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Kind ", size: 16),
               Spacer(),
-              SonrText.medium("${metadata.mime.value}", size: 16),
+              "${metadata.mime.value}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
@@ -161,12 +161,12 @@ class _FileCardInfo extends StatelessWidget {
                     }
                   });
                 },
-                text: SonrText.medium("Delete"),
+                text: "Delete".h6,
                 icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
               ),
               ShapeButton.rectangle(
                 onPressed: () {},
-                text: SonrText.medium("Save"),
+                text: "Save".h6,
                 icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
             ]),
@@ -204,4 +204,3 @@ extension PayloadUtils on Payload {
     return this == Payload.MEDIA;
   }
 }
-

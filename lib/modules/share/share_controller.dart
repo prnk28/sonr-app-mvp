@@ -58,6 +58,62 @@ class ShareController extends GetxController {
     shrink(delay: 150.milliseconds);
   }
 
+  // ^ Select a File
+  selectFile() async {
+    // Check Permissions
+    if (UserService.permissions.value.hasGallery) {
+      var result = await FileService.selectMedia();
+      if (result.hasItem) {
+        print(result.item2.toString());
+      }
+    } else {
+      // Request Permissions
+      var status = await Get.find<UserService>().requestGallery();
+      SonrOverlay.back();
+
+      // Check Status
+      if (status) {
+        await Future.delayed(100.milliseconds);
+
+        // Continue With Picker
+        var result = await FileService.selectFile();
+        if (result.hasItem) {
+          print(result.item2.toString());
+        }
+      } else {
+        SonrSnack.error("Cannot pick Media without Permissions");
+      }
+    }
+  }
+
+  // ^ Select Media
+  selectMedia() async {
+    // Check Permissions
+    if (UserService.permissions.value.hasGallery) {
+      var result = await FileService.selectMedia();
+      if (result.hasItem) {
+        print(result.item2.toString());
+      }
+    } else {
+      // Request Permissions
+      var status = await Get.find<UserService>().requestGallery();
+      SonrOverlay.back();
+
+      // Check Status
+      if (status) {
+        await Future.delayed(100.milliseconds);
+
+        // Continue With Picker
+        var result = await FileService.selectMedia();
+        if (result.hasItem) {
+          print(result.item2.toString());
+        }
+      } else {
+        SonrSnack.error("Cannot pick Media without Permissions");
+      }
+    }
+  }
+
   // ^ Set current Media Item ^ //
   setMedia(MediaItem item) async {
     SonrService.queueMedia(item);
@@ -89,7 +145,6 @@ class ShareController extends GetxController {
   }
 
   // # Present Camera View ^ //
-
 
   // # Update Size Based on State
   _handleStatus(ShareStatus status) {

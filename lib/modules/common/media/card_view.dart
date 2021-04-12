@@ -212,7 +212,7 @@ class _MediaCardInfo extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: SonrText.medium("${card.metadata.name}", size: 16),
+                child: "${card.metadata.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -222,21 +222,21 @@ class _MediaCardInfo extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Size ", size: 16),
               Spacer(),
-              SonrText.medium("$size", size: 16),
+             "$size".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("Kind ", size: 16),
               Spacer(),
-              SonrText.medium("${metadata.mime.value}", size: 16),
+              "${metadata.mime.value}".p,
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               SonrText.bold("ID ", size: 16),
               Spacer(),
-              SonrText.medium("${metadata.id}", size: 16),
+              "${metadata.id}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),

@@ -73,14 +73,7 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
 
     // Return View
     return GestureDetector(
-      onTap: () async {
-        // controller.status(ShareStatus.PickMedia);
-        // controller.status.refresh();
-        var result = await FileService.selectMedia();
-        if (result.item1) {
-          print(result.item2.toString());
-        }
-      },
+      onTap: controller.selectMedia,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         ObxValue<Rx<Artboard>>(
             (rive) => SizedBox(
@@ -126,13 +119,7 @@ class ShareContactButtonItem extends GetView<ShareController> {
     _loadArtboard(galleryArtboard);
 
     return GestureDetector(
-      onTap: () {
-        SonrService.queueContact();
-
-        // Go to Transfer
-        Get.toNamed("/transfer");
-        controller.shrink(delay: 150.milliseconds);
-      },
+      onTap: controller.selectFile,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         ObxValue<Rx<Artboard>>(
             (rive) => SizedBox(

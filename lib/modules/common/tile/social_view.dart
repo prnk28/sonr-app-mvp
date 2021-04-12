@@ -137,7 +137,7 @@ class _TweetItem extends StatelessWidget {
         width: 150,
         child: SingleChildScrollView(
           child: Column(
-            children: [SonrText.normal(latestTweet.text, size: 14), SonrText.postDate(latestTweet.createdAt, size: 14)],
+            children: [latestTweet.text.p, SonrText.postDate(latestTweet.createdAt, size: 14)],
           ),
         ),
       );
@@ -155,7 +155,7 @@ class _TweetItem extends StatelessWidget {
               width: 55,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [ClipOval(child: Image.network(user.profilePicUrl)), SonrText.medium(user.username, size: 10)]),
+                  children: [ClipOval(child: Image.network(user.profilePicUrl)), user.username.p]),
             ),
             Container(
               width: 265,
@@ -163,7 +163,7 @@ class _TweetItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SonrText.postDate((tweets[index].createdAt), size: 20),
-                  SonrText.normal(tweets[index].text, size: 14),
+                  tweets[index].text.p,
                 ],
               ),
             ),
@@ -190,7 +190,7 @@ class _YoutubeItem extends StatelessWidget {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [SonrText.normal(video.title, size: 14), SonrText.postDate(video.publishTime, size: 14)],
+          children: [video.title.p, SonrText.postDate(video.publishTime, size: 14)],
         ),
       ),
     );

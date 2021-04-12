@@ -66,7 +66,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
 
                           // Check for Button Tap
                           controller.isJoinFieldTapped.value
-                              ? SonrText.normal("Enter lobby code below.", color: SonrColor.Black.withOpacity(0.7), size: 18)
+                              ? "Enter lobby code below.".p_Grey
                               : LottieContainer(
                                   type: LottieBoard.JoinRemote,
                                   repeat: true,
@@ -178,7 +178,7 @@ class RemoteInviteView extends GetView<RemoteController> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
       "Remote Invite View".h2,
-      SonrText.normal("TODO: Display Invite thats received ", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "TODO: Display Invite thats received ".p_Grey,
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }
@@ -193,7 +193,7 @@ class RemoteProgressView extends GetView<RemoteController> {
     //return Center();
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
       "Remote Progress View".h2,
-      SonrText.normal("TODO: Display Lottie File with Animation Controller by Progress", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "TODO: Display Lottie File with Animation Controller by Progress".p_Grey,
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }
@@ -207,7 +207,7 @@ class RemoteCompletedView extends GetView<RemoteController> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
       "Remote View".h2,
-      SonrText.normal("TODO: Display Received Transfer Card", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "TODO: Display Received Transfer Card".p_Grey,
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }

@@ -68,7 +68,7 @@ class SonrDropdown extends StatelessWidget {
         Spacer(),
         initial.hasIcon ? initial.icon : Container(),
         Padding(padding: EdgeInsets.all(4)),
-        SonrText.medium(initial.text, color: Colors.black87, size: 18),
+        initial.text.h6,
         Spacer(flex: selectedFlex),
         Get.find<SonrPositionedOverlay>().overlays.isEmpty
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)
@@ -85,7 +85,7 @@ class SonrDropdown extends StatelessWidget {
           Spacer(),
           item.hasIcon ? item.icon : Container(),
           Padding(padding: EdgeInsets.only(right: 10)),
-          SonrText.medium(item.text, color: Colors.black87, size: 18),
+          item.text.headSix(color: SonrColor.Grey),
           Spacer(flex: selectedFlex),
           Get.find<SonrPositionedOverlay>().overlays.isEmpty
               ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)
@@ -94,7 +94,7 @@ class SonrDropdown extends StatelessWidget {
         ]);
       } else {
         return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.medium(item.text, color: Colors.black87, size: 18),
+          item.text.headSix(color: SonrColor.Grey),
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon : Container(),
           Get.find<SonrPositionedOverlay>().overlays.isEmpty
@@ -124,11 +124,11 @@ class SonrDropdownItem extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: SonrText.medium(text),
+          child: text.h6,
         )
       ]);
     } else {
-      return Row(children: [Padding(padding: EdgeInsets.all(4)), SonrText.medium(text, color: SonrColor.Black)]);
+      return Row(children: [Padding(padding: EdgeInsets.all(4)), text.h6]);
     }
   }
 }

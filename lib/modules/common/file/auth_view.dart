@@ -58,7 +58,7 @@ class FileAuthView extends StatelessWidget {
                           : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 38),
                       Row(children: [
                         SonrText.gradient(card.payload.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                        SonrText.normal("   ${card.metadata.sizeString}", size: 18)
+                        "   ${card.metadata.sizeString}".h5
                       ]),
                     ]),
                   ]),

@@ -52,7 +52,7 @@ class MediaAuthView extends StatelessWidget {
                     : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
                 Row(children: [
                   SonrText.gradient(card.metadata.mime.type.toString().capitalizeFirst, FlutterGradientNames.plumBath, size: 22),
-                  SonrText.normal("   ${card.metadata.sizeString}", size: 18)
+                  "   ${card.metadata.sizeString}".h5
                 ]),
               ]),
             ]),

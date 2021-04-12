@@ -161,7 +161,7 @@ class _ShareItemURL extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               data.title.h3,
-              SonrText.normal(data.description, size: 16),
+              data.description.p,
             ],
           ),
         ),
@@ -209,7 +209,7 @@ class _ShareItemURL extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               data.title.h3,
-              SonrText.normal(data.description, size: 16),
+              data.description.p,
             ],
           ),
         ),

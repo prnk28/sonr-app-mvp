@@ -121,9 +121,7 @@ class _ProfileHeaderView extends GetView<ProfileController> {
               _AvatarField(),
               Padding(padding: EdgeInsets.all(8)),
               GestureDetector(
-                  onLongPress: controller.setEditingMode,
-                  child: Obx(() =>
-                      SonrText.medium(UserService.firstName.value + " " + UserService.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24))),
+                  onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
             ],
           ),
         ),

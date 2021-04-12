@@ -45,6 +45,6 @@ extension ContactUtils on Contact {
   }
 
   Widget get webSite {
-    return this.hasWebsite() ? SonrText.medium(this.website) : Container();
+    return this.hasWebsite() ? this.website.p : Container();
   }
 }

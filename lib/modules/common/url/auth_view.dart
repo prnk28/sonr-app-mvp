@@ -89,10 +89,7 @@ class URLAuthView extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 4),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              data.title.h3,
-              SonrText.normal(data.description, size: 16),
-            ],
+            children: [data.title.h3, data.description.p],
           ),
         ),
 
@@ -139,7 +136,7 @@ class URLAuthView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               data.title.h3,
-              SonrText.normal(data.description, size: 16),
+              data.description.p,
             ],
           ),
         ),

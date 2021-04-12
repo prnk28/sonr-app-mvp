@@ -50,7 +50,7 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.rectangle(
       {@required Function onPressed,
       Function onLongPressed,
-      SonrText text,
+      Widget text,
       Widget child,
       SonrIcon icon,
       Color shadowLightColor,
@@ -232,7 +232,7 @@ class ShapeButton extends StatelessWidget {
     @required Function onPressed,
     Function onLongPressed,
     SonrIcon icon,
-    SonrText text,
+    Widget text,
     Widget child,
     Color shadowLightColor,
     Color shadowDarkColor,
@@ -463,12 +463,12 @@ class ShapeButton extends StatelessWidget {
           isDisabled = true;
           break;
         case _ButtonType.DisabledText:
-          textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.Grey);
+          textChild = text.text.h6_Grey;
           isDisabled = true;
           break;
         case _ButtonType.DisabledIconText:
           iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
-          textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.Grey);
+          textChild = text.text.h6_Grey;
           isDisabled = true;
           break;
         default:
