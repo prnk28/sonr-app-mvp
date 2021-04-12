@@ -4,5 +4,5 @@ analyzer:
   exclude: [build/**]
 
 linter:
-  ignore:
+  rules:
     - camel_case_types

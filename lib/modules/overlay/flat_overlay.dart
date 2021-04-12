@@ -22,8 +22,8 @@ class FlatMode {
   }
 }
 
-const K_TRANSLATE_DELAY = const Duration(milliseconds: 150);
-const K_TRANSLATE_DURATION = const Duration(milliseconds: 600);
+const K_TRANSLATE_DELAY = Duration(milliseconds: 150);
+const K_TRANSLATE_DURATION = Duration(milliseconds: 600);
 
 // ** Flat Mode View ** //
 class _FlatModeView extends StatelessWidget {
@@ -155,7 +155,7 @@ class _FlatModeController extends GetxController {
         transition(FlatModeTransition.SlideOut);
         animation(_FlatModeAnimation(transition.value));
         // No Peers
-        if (LobbyService.local.value.flatPeers.length == 0) {
+        if (LobbyService.local.value.flatPeers.isEmpty) {
           Get.back();
           SonrSnack.error("No Peers in Flat Mode");
         } else if (LobbyService.local.value.flatPeers.length == 1) {

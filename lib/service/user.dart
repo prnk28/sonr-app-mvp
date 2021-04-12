@@ -187,13 +187,13 @@ class UserService extends GetxService {
       userValue.contact = contact;
 
       // @ Save to SharedPreferences, Update SonrNode
-      _userBox.write("user", userValue.writeToJson());
+      await _userBox.write("user", userValue.writeToJson());
       SonrService.setProfile(contact);
     }
     // Create New User with Contact
     else {
-      userValue = new User(contact: contact);
-      _userBox.write("user", userValue.writeToJson());
+      userValue = User(contact: contact);
+      await _userBox.write("user", userValue.writeToJson());
       _hasUser(true);
     }
     user(userValue);
@@ -265,7 +265,7 @@ class UserService extends GetxService {
       _userPermissions.refresh();
 
       if (result) {
-        MediaService.refreshGallery();
+        await MediaService.refreshGallery();
       }
       return result;
     } else {

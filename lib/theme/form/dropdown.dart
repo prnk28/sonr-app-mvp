@@ -70,7 +70,7 @@ class SonrDropdown extends StatelessWidget {
         Padding(padding: EdgeInsets.all(4)),
         SonrText.medium(initial.text, color: Colors.black87, size: 18),
         Spacer(flex: selectedFlex),
-        Get.find<SonrPositionedOverlay>().overlays.length > 0
+        Get.find<SonrPositionedOverlay>().overlays.isEmpty
             ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)
             : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
         Spacer(),
@@ -87,7 +87,7 @@ class SonrDropdown extends StatelessWidget {
           Padding(padding: EdgeInsets.only(right: 10)),
           SonrText.medium(item.text, color: Colors.black87, size: 18),
           Spacer(flex: selectedFlex),
-          Get.find<SonrPositionedOverlay>().overlays.length > 0
+          Get.find<SonrPositionedOverlay>().overlays.isEmpty
               ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)
               : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
           Spacer(),
@@ -97,7 +97,7 @@ class SonrDropdown extends StatelessWidget {
           SonrText.medium(item.text, color: Colors.black87, size: 18),
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon : Container(),
-          Get.find<SonrPositionedOverlay>().overlays.length > 0
+          Get.find<SonrPositionedOverlay>().overlays.isEmpty
               ? SonrIcon.normal(Icons.arrow_upward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)
               : SonrIcon.normal(Icons.arrow_downward_rounded, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
         ]);

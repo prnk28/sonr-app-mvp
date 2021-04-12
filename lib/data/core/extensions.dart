@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 extension ListUtils<T> on List<T> {
   random() {
-    final rand = new Random();
+    final rand =  Random();
     return this[rand.nextInt(this.length)];
   }
 

@@ -14,7 +14,7 @@ class MediaAlbum {
   final AssetPathEntity data;
   // Properties
   bool isAll = false;
-  bool get isEmpty => assets.length == 0;
+  bool get isEmpty => assets.isEmpty;
   var assets = <MediaItem>[];
   String name = "";
   int count = 0;
@@ -111,7 +111,7 @@ class MediaItem {
       path: path,
       thumbnail: thumbnail,
       properties: Metadata_Properties(
-        hasThumbnail: thumbnail.length > 0,
+        hasThumbnail: thumbnail.isEmpty,
         width: width,
         height: height,
         isImage: this.isImage,

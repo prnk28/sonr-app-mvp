@@ -7,7 +7,7 @@ enum ConfirmButtonType { Save, Delete }
 
 class ConfirmButton extends StatefulWidget {
   static const double K_BORDER_RADIUS = 8;
-  static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
+  static const K_BUTTON_PADDING = EdgeInsets.symmetric(horizontal: 24, vertical: 8);
   static const K_BUTTON_DURATION = Duration(milliseconds: 100);
   final ConfirmButtonType type;
   final EdgeInsets margin;
@@ -264,7 +264,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     hasFinishedAnimationDown = true;
 
     // Haptic Feedback
-    HapticFeedback.mediumImpact();
+    await HapticFeedback.mediumImpact();
     _resetIfTapUp(ConfirmStatus.Pending);
   }
 
@@ -278,7 +278,7 @@ class _ConfirmButtonState extends State<ConfirmButton> {
     hasFinishedAnimationDown = true;
 
     // Haptic Feedback
-    HapticFeedback.heavyImpact();
+    await HapticFeedback.heavyImpact();
     _resetIfTapUp(ConfirmStatus.Done);
     await Future.delayed(ConfirmButton.K_BUTTON_DURATION * 2); //wait until animation finished
 

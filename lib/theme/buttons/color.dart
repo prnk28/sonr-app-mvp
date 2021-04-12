@@ -213,7 +213,7 @@ class _ColorButtonState extends State<ColorButton> {
     hasFinishedAnimationDown = true;
 
     //haptic vibration
-    HapticFeedback.mediumImpact();
+    await HapticFeedback.mediumImpact();
     _resetIfTapUp();
   }
 
@@ -239,7 +239,7 @@ class _ColorButtonState extends State<ColorButton> {
     hasFinishedLongAnimationDown = true;
 
     //haptic vibration
-    HapticFeedback.heavyImpact();
+    await HapticFeedback.heavyImpact();
     _resetIfLongTapUp();
   }
 

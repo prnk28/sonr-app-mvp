@@ -283,7 +283,7 @@ class SonrService extends GetxService with TransferQueue {
 
     // Present Overlay
     if (SonrOverlay.isNotOpen) {
-      HapticFeedback.heavyImpact();
+      await HapticFeedback.heavyImpact();
       // Check for Flat
       if (data.isFlat && data.payload == Payload.CONTACT) {
         FlatMode.invite(data.card);
@@ -296,17 +296,17 @@ class SonrService extends GetxService with TransferQueue {
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
     if (data.type == AuthReply_Type.FlatContact) {
-      HapticFeedback.heavyImpact();
+      await HapticFeedback.heavyImpact();
       FlatMode.response(data.card);
     }
 
     if (data.type == AuthReply_Type.Contact) {
-      HapticFeedback.vibrate();
+      await HapticFeedback.vibrate();
       SonrOverlay.reply(data);
     }
     // For Cancel
     else if (data.type == AuthReply_Type.Cancel) {
-      HapticFeedback.vibrate();
+      await HapticFeedback.vibrate();
       currentDecided(false);
     } else {
       // For File
@@ -321,13 +321,13 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(Peer data) async {
-    currentCompleted();
+    await currentCompleted();
     DeviceService.playSound(type: UISoundType.Transmitted);
   }
 
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
-    HapticFeedback.heavyImpact();
+    await HapticFeedback.heavyImpact();
 
     // Save Card to Gallery
     CardService.addCard(data);

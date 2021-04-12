@@ -197,7 +197,7 @@ class SonrIcon extends StatelessWidget {
 
       // @ Creates Thumbnail or Icon
       case IconType.Thumbnail:
-        if (thumbnail.length > 0) {
+        if (thumbnail.isEmpty) {
           result = ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: FittedBox(

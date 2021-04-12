@@ -61,7 +61,7 @@ class ShareController extends GetxController {
   // ^ Set current Media Item ^ //
   setMedia(MediaItem item) async {
     SonrService.queueMedia(item);
-    Get.toNamed("/transfer");
+    await Get.toNamed("/transfer");
     status(ShareStatus.Default);
   }
 

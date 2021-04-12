@@ -47,7 +47,7 @@ class ShareCameraButtonItem extends GetView<ShareController> {
 
   // @ Loads Artboard into ObxValue
   _loadArtboard(Rx<Artboard> rxArtboard) async {
-    rootBundle.load(_tilePath).then(
+    await rootBundle.load(_tilePath).then(
       (data) async {
         // Load the RiveFile from the binary data.
         final file = RiveFile.import(data);
@@ -101,7 +101,7 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
 
 // @ Loads Artboard into ObxValue
   _loadArtboard(Rx<Artboard> rxArtboard) async {
-    rootBundle.load(_tilePath).then(
+    await rootBundle.load(_tilePath).then(
       (data) async {
         // Load the RiveFile from the binary data.
         final file = RiveFile.import(data);
@@ -153,7 +153,7 @@ class ShareContactButtonItem extends GetView<ShareController> {
 
 // @ Loads Artboard into ObxValue
   _loadArtboard(Rx<Artboard> rxArtboard) async {
-    rootBundle.load(_tilePath).then(
+    await rootBundle.load(_tilePath).then(
       (data) async {
         // Load the RiveFile from the binary data.
         final file = RiveFile.import(data);

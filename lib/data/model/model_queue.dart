@@ -8,14 +8,14 @@ import 'package:get/get.dart' hide Node;
 class TransferQueue {
   // Properties
   List<TransferQueueItem> transferQueue = <TransferQueueItem>[];
-  Payload get payload => transferQueue.length > 0 ? transferQueue.last.payload : null;
-  TransferQueueItem get currentTransfer => transferQueue.length > 0 ? transferQueue.last : null;
-  bool get isQueueEmpty => transferQueue.length == 0;
-  bool get isQueueNotEmpty => transferQueue.length > 0;
+  Payload get payload => transferQueue.isEmpty ? transferQueue.last.payload : null;
+  TransferQueueItem get currentTransfer => transferQueue.isEmpty ? transferQueue.last : null;
+  bool get isQueueEmpty => transferQueue.isEmpty;
+  bool get isQueueNotEmpty => transferQueue.isEmpty;
   int get queueSize => transferQueue.length;
 
   // References
-  var _received = new Completer<TransferCard>();
+  var _received =  Completer<TransferCard>();
   Completer<TransferCard> get received => _received;
 
   // ^ Add to Queue With TransferQueueItem^ //
@@ -69,7 +69,7 @@ class TransferQueue {
 
   // ^ Complete Current/Last Transfer ^ //
   Metadata lastMedia({bool status = true}) {
-    if (transferQueue.length > 0) {
+    if (transferQueue.isEmpty) {
       var item = transferQueue.firstWhere((element) => element.payload == Payload.MEDIA, orElse: () => null);
       if (item != null) {
         return item.data is Metadata ? item.data : null;
@@ -80,7 +80,7 @@ class TransferQueue {
 
   // ^ Complete Transfer At Index ^ //
   String lastUrl(int i, {bool status = true}) {
-    if (transferQueue.length > 0) {
+    if (transferQueue.isEmpty) {
       var item = transferQueue.firstWhere((element) => element.payload == Payload.MEDIA, orElse: () => null);
       if (item != null) {
         return item.data is String ? item.data : null;
@@ -91,9 +91,9 @@ class TransferQueue {
 
   // ^ Clear All Queue^ //
   bool resetQueue() {
-    if (transferQueue.length > 0) {
+    if (transferQueue.isEmpty) {
       transferQueue.clear();
-      _received = new Completer<TransferCard>();
+      _received = Completer<TransferCard>();
       return true;
     }
     return false;
@@ -175,16 +175,16 @@ class TransferQueueItem {
   // ^ Peer Decided on Invite ^ //
   Future<bool> setDecision(bool decision) async {
     // Completer for Played
-    var played = new Completer<bool>();
+    var played =  Completer<bool>();
 
     if (hasPeer) {
-      HapticFeedback.mediumImpact();
+      await HapticFeedback.mediumImpact();
       played.complete(true);
     } else {
       // Validate Controller
       if (hasPeerController) {
         // Play Feedback
-        HapticFeedback.mediumImpact();
+        await HapticFeedback.mediumImpact();
 
         // Check Decision
         if (decision) {
@@ -205,8 +205,8 @@ class TransferQueueItem {
   // ^ Function to Set Completed Value ^ //
   Future<bool> complete() async {
     // Completer for Played
-    var played = new Completer<bool>();
-    HapticFeedback.heavyImpact();
+    var played = Completer<bool>();
+    await HapticFeedback.heavyImpact();
     if (hasPeerController) {
       peerController.updateStatus(BubbleStatus.Complete);
     }

@@ -152,7 +152,7 @@ class ProfilePictureController extends GetxController {
   final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(UserService.permissions.value.hasCamera));
 
   // References
-  PictureController _pictureController = new PictureController();
+  PictureController _pictureController = PictureController();
   var _photoCapturePath = "";
 
   // @ Method to Capture Picture
@@ -172,7 +172,7 @@ class ProfilePictureController extends GetxController {
   confirm() async {
     if (_photoCapturePath != "") {
       UserService.picture(await result.value.toUint8List());
-      UserService.saveChanges();
+      await UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);
     }

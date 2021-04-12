@@ -113,9 +113,7 @@ class _FormPageController extends GetxController {
     if (validate()) {
       isPending(true);
       // Get Contact from Values
-      var contact = new Contact();
-      contact.firstName = firstName.value;
-      contact.lastName = lastName.value;
+      var contact = Contact(firstName: firstName.value, lastName: lastName.value);
 
       // Remove Textfield Focus
       FocusScopeNode currentFocus = FocusScope.of(Get.context);
@@ -128,7 +126,7 @@ class _FormPageController extends GetxController {
       var result = await Get.find<UserService>().requestLocation();
       if (result) {
         isPending(false);
-        Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
       }
     }
   }

@@ -7,7 +7,7 @@ class FunctionTimer {
   // Properties
   final Duration deadline;
   final Duration interval;
-  final completer = new Completer<bool>();
+  final completer = Completer<bool>();
   bool get isRunning => _isRunning;
 
   // References

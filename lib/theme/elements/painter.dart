@@ -233,7 +233,7 @@ class ZonePathProvider extends NeumorphicPathProvider {
     if (proximity == Position_Proximity.Immediate) {
       // Build Rect
       var immediateRect = Rect.fromCircle(center: Offset(width, height * 1.25), radius: radius);
-      Path path = new Path();
+      Path path = Path();
       path.addArc(immediateRect, pi, pi);
       return path;
       // Return Path
@@ -244,7 +244,7 @@ class ZonePathProvider extends NeumorphicPathProvider {
       var nearRect = Rect.fromCircle(center: Offset(width, height), radius: radius);
 
       // Return Path
-      Path path = new Path();
+      Path path = Path();
       path.addArc(nearRect, pi, pi);
       return path;
     }
@@ -254,7 +254,7 @@ class ZonePathProvider extends NeumorphicPathProvider {
       var distantRect = Rect.fromCircle(center: Offset(width, height * 0.75), radius: radius);
 
       // Return Path
-      Path path = new Path();
+      Path path = Path();
       path.addArc(distantRect, pi, pi);
       return path;
     }

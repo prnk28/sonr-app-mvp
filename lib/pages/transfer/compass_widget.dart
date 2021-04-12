@@ -216,7 +216,7 @@ class _Spoke extends StatelessWidget {
             children: [
               // Create Spoke
               RotationTransition(
-                  turns: new AlwaysStoppedAnimation(degrees(direction) / 360),
+                  turns: AlwaysStoppedAnimation(degrees(direction) / 360),
                   child: Padding(
                       padding: EdgeInsets.only(left: _kMajorSpokeWidth),
                       child: Neumorphic(
@@ -231,7 +231,7 @@ class _Spoke extends StatelessWidget {
                       ))),
               // Create Text
               RotationTransition(
-                  turns: new AlwaysStoppedAnimation(degrees(direction + 90) / 360),
+                  turns: AlwaysStoppedAnimation(degrees(direction + 90) / 360),
                   child: Padding(
                       padding: textPadding,
                       child: Text(textValue,
@@ -249,7 +249,7 @@ class _Spoke extends StatelessWidget {
       return Align(
           alignment: alignment(-1, direction),
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(degrees(direction) / 360),
+            turns: AlwaysStoppedAnimation(degrees(direction) / 360),
             child: Padding(
               padding: EdgeInsets.only(left: _kMinorSpokeWidth),
               child: Neumorphic(
@@ -270,7 +270,7 @@ class _Spoke extends StatelessWidget {
       return Align(
           alignment: alignment(-1, direction),
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(degrees(direction) / 360),
+            turns: AlwaysStoppedAnimation(degrees(direction) / 360),
             child: Padding(
               padding: EdgeInsets.only(left: _kMinorSpokeWidth),
               child: Neumorphic(

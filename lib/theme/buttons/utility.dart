@@ -3,7 +3,7 @@ import '../theme.dart';
 class ButtonUtility {
   static const K_BUTTON_DURATION = Duration(milliseconds: 100);
   static const double K_BORDER_RADIUS = 8;
-  static const K_BUTTON_PADDING = const EdgeInsets.symmetric(horizontal: 24, vertical: 8);
+  static const K_BUTTON_PADDING = EdgeInsets.symmetric(horizontal: 24, vertical: 8);
 
   // @ Helper Method to Build Icon View //
   static Widget buildChild(WidgetPosition iconPosition, SonrIcon icon, String text, Widget child) {

@@ -16,7 +16,7 @@ class SonrPositionedOverlay extends GetxService {
   final currentOverlay = Rx<_SonrPositionedOverlayEntry>(null);
 
   // References
-  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;
+  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.isEmpty;
   static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
   static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
 

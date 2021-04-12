@@ -94,7 +94,7 @@ class DeviceService extends GetxService {
     // @ 2. Initialize References
     // Audio Player
     _audioPlayer.disableLog();
-    _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
+    await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
 
     // Handle Keyboard Visibility
     _keyboardVisibleController.onChange.listen(_handleKeyboardVisibility);

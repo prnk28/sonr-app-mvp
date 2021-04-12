@@ -74,7 +74,7 @@
 //   Widget build(BuildContext context) {
 //     //var expandedMargin = ;
 //     return Obx(() {
-//       if (controller.searchText.value.length > 0) {
+//       if (controller.searchText.value.isEmpty) {
 //         // Extract Data
 //         var suggestedCard = controller.suggestion.value;
 
@@ -222,12 +222,12 @@
 //     // @ Listen to Current Text
 //     // Query for All Rows
 //     searchText.listen((text) {
-//       if (text.length > 0) {
+//       if (text.isEmpty) {
 //         // Query Categories
 //         Get.find<SQLService>().search(text).then((r) => results(r));
 
 //         // Check Results
-//         if (results.length > 0) {
+//         if (results.isEmpty) {
 //           hasResults(true);
 //         } else {
 //           hasResults(false);
@@ -239,14 +239,14 @@
 //           cardList.addAll(result);
 
 //           // Find Query Types
-//           if (result.length < _lowestQueryCount && result.length > 0) {
+//           if (result.length < _lowestQueryCount && result.isEmpty) {
 //             _minQueryType = type;
 //             _lowestQueryCount = result.length;
 //           }
 //         });
 
 //         // Set Card List
-//         if (cardList.length > 0) {
+//         if (cardList.isEmpty) {
 //           hasList(true);
 //           cardList.refresh();
 //         } else {
@@ -276,7 +276,7 @@
 
 //   // ^ Method Updates View Margin ^ //
 //   _setMarginForResults() {
-//     if (results.length > 0) {
+//     if (results.isEmpty) {
 //       if (cardList.length > 2) {
 //         viewMargin(EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 275));
 //         listHeight(300);

@@ -99,7 +99,7 @@ class URLAuthView extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(new ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Neumorphic(
@@ -175,7 +175,7 @@ class URLAuthView extends StatelessWidget {
 
     return GestureDetector(
       onLongPress: () {
-        Clipboard.setData(new ClipboardData(text: data.link));
+        Clipboard.setData(ClipboardData(text: data.link));
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Neumorphic(

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
@@ -227,7 +226,7 @@ class SonrText extends StatelessWidget {
   // ^ Medium(w500) Text with Provided Publish Post Date, Formats JSON Date -- Default Text
   factory SonrText.postDate(String pubDate, {FlutterGradientNames gradient = FlutterGradientNames.premiumDark, double size = 16, Key key}) {
     var date = DateTime.parse(pubDate);
-    var output = new DateFormat.yMMMMd('en_US');
+    var output = DateFormat.yMMMMd('en_US');
     return SonrText.gradient(output.format(date).toString(), gradient, size: size, key: key, weight: FontWeight.w500);
   }
 
@@ -252,8 +251,8 @@ class SonrText extends StatelessWidget {
   // ^ Date Text with Provided Data
   factory SonrText.date(DateTime date, {double size = 14, Key key, Color color = Colors.white}) {
     // Formatters
-    final dateFormat = new DateFormat.yMd();
-    final timeFormat = new DateFormat.jm();
+    final dateFormat = DateFormat.yMd();
+    final timeFormat = DateFormat.jm();
 
     // Get String
     String dateText = dateFormat.format(date);

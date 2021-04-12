@@ -128,7 +128,7 @@ class _CameraToolsView extends GetView<CameraController> {
                   child: AnimatedSlideSwitcher.slideUp(
                       child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                   onTap: () async {
-                    HapticFeedback.heavyImpact();
+                    await HapticFeedback.heavyImpact();
                     controller.toggleCameraSensor();
                   });
             }),
@@ -144,11 +144,11 @@ class _CameraToolsView extends GetView<CameraController> {
                   size: 36,
                 ),
                 onTap: () async {
-                  HapticFeedback.heavyImpact();
+                  await HapticFeedback.heavyImpact();
                   // Check for Permssions
                   var file = await MediaPicker.sheet();
                   SonrService.queueMedia(file);
-                  Get.offNamed("/transfer");
+                  await Get.offNamed("/transfer");
                 }),
           ]),
         ),
@@ -252,11 +252,11 @@ class CameraController extends GetxController {
   ValueNotifier<double> zoomNotifier = ValueNotifier(0);
 
   // Controllers
-  PictureController pictureController = new PictureController();
-  VideoController videoController = new VideoController();
+  PictureController pictureController = PictureController();
+  VideoController videoController = VideoController();
 
   // Video Duration Handling
-  Stopwatch _stopwatch = new Stopwatch();
+  Stopwatch _stopwatch = Stopwatch();
   Timer _timer;
 
   // ** Constructer ** //
@@ -315,7 +315,7 @@ class CameraController extends GetxController {
     videoInProgress(true);
 
     _stopwatch.start();
-    _timer = new Timer.periodic(new Duration(milliseconds: 50), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
       videoDuration(_stopwatch.elapsedMilliseconds);
     });
   }

@@ -164,7 +164,7 @@ class _LocalLobbyStack extends StatelessWidget {
     var children = <Widget>[];
 
     // Check for Mobile
-    if (data.peers.length > 0) {
+    if (data.peers.isEmpty) {
       data.peers.forEach((peer) {
         if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
           children.add(PeerBubble(peer));

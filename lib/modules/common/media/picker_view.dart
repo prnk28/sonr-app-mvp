@@ -13,7 +13,7 @@ class MediaPicker {
     if (await Permission.photos.request().isGranted) {
       Completer<MediaItem> completer;
       // Display Bottom Sheet
-      Get.bottomSheet(MediaPickerSheet(onMediaSelected: (MediaItem file) {
+      await Get.bottomSheet(MediaPickerSheet(onMediaSelected: (MediaItem file) {
         completer.complete(file);
       }), isDismissible: true);
 
@@ -105,7 +105,7 @@ class _MediaQueueGrid extends GetView<MediaQueueController> {
         SliverFillRemaining(
           hasScrollBody: false,
           child: Obx(() {
-            if (controller.currentAlbum.length > 0) {
+            if (controller.currentAlbum.isEmpty) {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 height: Get.height * 0.6,
