@@ -11,12 +11,12 @@ class SonrColor {
   // ** General Theme Color Properties ** //
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
   static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
-  static const Color Black = Color(0xff202020);
+  static const Color Black = Color(0xff323232);
   static const Color Dark = Color(0xff2c2b2b);
-  static const Color Grey = Color(0xffC6C4C4);
   static const Color Blue = Color(0xff51C5DD);
   static const Color White = Color(0xffE0E0E0);
   static const Color Neutral = Color(0xff62666a);
+  static const Color Grey = Color(0xff787878);
 
   // ^ ThemeMode Handling ^ //
   static Color get currentNeumorphic {

@@ -73,9 +73,13 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
 
     // Return View
     return GestureDetector(
-      onTap: () {
-        controller.status(ShareStatus.PickMedia);
-        controller.status.refresh();
+      onTap: () async {
+        // controller.status(ShareStatus.PickMedia);
+        // controller.status.refresh();
+        var result = await FileService.selectMedia();
+        if (result.item1) {
+          print(result.item2.toString());
+        }
       },
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
         ObxValue<Rx<Artboard>>(

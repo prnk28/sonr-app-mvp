@@ -9,31 +9,73 @@ import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
-enum DesignTextStyle { Hero, HeadingOne, HeadingTwo, HeadingThree, HeadingFour, HeadingFive, HeadingSix, Paragraph, ParagraphGrey }
+enum DesignTextColor { Black, Grey, White, Red, Blue, Green }
+enum DesignTextStyle { Hero, HeadingOne, HeadingTwo, HeadingThree, HeadingFour, HeadingFive, HeadingSix, Paragraph }
 
 extension DesignTextUtils on String {
+  // Hero
   SonrTextStyle get hero => SonrTextStyle(this, DesignTextStyle.Hero);
+
+  // Heading 1
   SonrTextStyle get h1 => SonrTextStyle(this, DesignTextStyle.HeadingOne);
+
+  // Heading 2
   SonrTextStyle get h2 => SonrTextStyle(this, DesignTextStyle.HeadingTwo);
+  SonrTextStyle get h2_Blue => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrPalette.Primary);
+  SonrTextStyle get h2_Green => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrPalette.Tertiary);
+  SonrTextStyle get h2_Grey => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrColor.Grey);
+  SonrTextStyle get h2_Red => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrPalette.Red);
+  SonrTextStyle get h2_White => SonrTextStyle(this, DesignTextStyle.HeadingTwo, color: SonrColor.White);
+
+  // Heading 3
   SonrTextStyle get h3 => SonrTextStyle(this, DesignTextStyle.HeadingThree);
+  SonrTextStyle get h3_Blue => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrPalette.Primary);
+  SonrTextStyle get h3_Green => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrPalette.Tertiary);
+  SonrTextStyle get h3_Grey => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrColor.Grey);
+  SonrTextStyle get h3_Red => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrPalette.Red);
+  SonrTextStyle get h3_White => SonrTextStyle(this, DesignTextStyle.HeadingThree, color: SonrColor.White);
+
+  // Heading 4
   SonrTextStyle get h4 => SonrTextStyle(this, DesignTextStyle.HeadingFour);
+  SonrTextStyle get h4_Blue => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrPalette.Primary);
+  SonrTextStyle get h4_Green => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrPalette.Tertiary);
+  SonrTextStyle get h4_Grey => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrColor.Grey);
+  SonrTextStyle get h4_Red => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrPalette.Red);
+  SonrTextStyle get h4_White => SonrTextStyle(this, DesignTextStyle.HeadingFour, color: SonrColor.White);
+
+  // Heading 5
   SonrTextStyle get h5 => SonrTextStyle(this, DesignTextStyle.HeadingFive);
+  SonrTextStyle get h5_Blue => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrPalette.Primary);
+  SonrTextStyle get h5_Green => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrPalette.Tertiary);
+  SonrTextStyle get h5_Grey => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrColor.Grey);
+  SonrTextStyle get h5_Red => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrPalette.Red);
+  SonrTextStyle get h5_White => SonrTextStyle(this, DesignTextStyle.HeadingFive, color: SonrColor.White);
+
+  // Heading 6
   SonrTextStyle get h6 => SonrTextStyle(this, DesignTextStyle.HeadingSix);
+  SonrTextStyle get h6_Blue => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrPalette.Primary);
+  SonrTextStyle get h6_Green => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrPalette.Tertiary);
+  SonrTextStyle get h6_Grey => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrColor.Grey);
+  SonrTextStyle get h6_Red => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrPalette.Red);
+  SonrTextStyle get h6_White => SonrTextStyle(this, DesignTextStyle.HeadingSix, color: SonrColor.White);
+
+  // Paragraph
   SonrTextStyle get p => SonrTextStyle(this, DesignTextStyle.Paragraph);
-  SonrTextStyle get pGrey => SonrTextStyle(this, DesignTextStyle.ParagraphGrey);
+  SonrTextStyle get p_Blue => SonrTextStyle(this, DesignTextStyle.Paragraph, color: SonrPalette.Primary);
+  SonrTextStyle get p_Green => SonrTextStyle(this, DesignTextStyle.Paragraph, color: SonrPalette.Tertiary);
+  SonrTextStyle get p_Grey => SonrTextStyle(this, DesignTextStyle.Paragraph, color: SonrColor.Grey);
+  SonrTextStyle get p_Red => SonrTextStyle(this, DesignTextStyle.Paragraph, color: SonrPalette.Red);
+  SonrTextStyle get p_White => SonrTextStyle(this, DesignTextStyle.Paragraph, color: SonrColor.White);
 }
 
 class SonrTextStyle extends StatelessWidget {
   final String text;
   final DesignTextStyle type;
+  final Color color;
 
-  const SonrTextStyle(this.text, this.type);
+  const SonrTextStyle(this.text, this.type, {this.color = SonrColor.Black});
   @override
   Widget build(BuildContext context) {
-    // Const Colors
-    const colorBlack = Color(0xff323232);
-    const colorGrey = Color(0xff787878);
-
     // Initialize
     String family = "Manrope";
     FontWeight weight = FontWeight.w800;
@@ -53,10 +95,10 @@ class SonrTextStyle extends StatelessWidget {
                 text,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: family,
-                  fontWeight: weight,
-                  fontSize: size,
-                  color: color,
+                  fontFamily:  "Manrope",
+                  fontWeight: FontWeight.w800,
+                  fontSize: 80,
+                  color: Colors.white,
                   fontFeatures: [
                     FontFeature.tabularFigures(),
                   ],
@@ -88,43 +130,31 @@ class SonrTextStyle extends StatelessWidget {
         );
         break;
       case DesignTextStyle.HeadingTwo:
-        color = colorBlack;
         size = 38;
         weight = FontWeight.w800;
         family = "Manrope";
         break;
       case DesignTextStyle.HeadingThree:
-        color = colorBlack;
         size = 32;
         weight = FontWeight.w800;
         family = "Manrope";
         break;
       case DesignTextStyle.HeadingFour:
-        color = colorBlack;
         size = 28;
         weight = FontWeight.w800;
         family = "Manrope";
         break;
       case DesignTextStyle.HeadingFive:
-        color = colorBlack;
         size = 24;
         weight = FontWeight.w400;
         family = "Manrope";
         break;
       case DesignTextStyle.HeadingSix:
-        color = colorBlack;
         size = 20;
         weight = FontWeight.w700;
         family = "Manrope";
         break;
       case DesignTextStyle.Paragraph:
-        color = colorBlack;
-        size = 18;
-        weight = FontWeight.w400;
-        family = "OpenSans";
-        break;
-      case DesignTextStyle.ParagraphGrey:
-        color = colorGrey;
         size = 18;
         weight = FontWeight.w400;
         family = "OpenSans";

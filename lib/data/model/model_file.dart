@@ -8,10 +8,7 @@ class FileItem {
   final MIME mime;
 
   // * Constructer * //
-  FileItem(this.file, this.mime, this.payload) {
-    print("Mime: " + mime.toString());
-    print("Payload: " + payload.toString());
-  }
+  FileItem(this.file, this.mime, this.payload);
 
   // @ Factory: File
   factory FileItem.file(FilePickerResult file) {
@@ -50,7 +47,14 @@ class FileItem {
     }
   }
 
-
-
-
+  // @ Convert To String
+  @override
+  String toString() {
+    return {
+      'payload': payload.toString(),
+      'mime': mime.toString(),
+      'size': file.files[0].size.toString(),
+      'name': file.files[0].name,
+    }.toString();
+  }
 }

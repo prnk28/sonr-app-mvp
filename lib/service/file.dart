@@ -5,38 +5,14 @@ import 'package:file_picker/file_picker.dart';
 // ^ List of Allowed Types ^ //
 const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
 
-// ^ Status Enum ^ //
-enum FileStatus {
-  None,
-  Loading,
-  Ready,
-}
-
-// ^ Status Extension ^ //
-extension FileStatusUtil on FileStatus {
-  static FileStatus fromFilePickerStatus(FilePickerStatus s) {
-    if (s == FilePickerStatus.picking) {
-      return FileStatus.Loading;
-    } else {
-      return FileStatus.Ready;
-    }
-  }
-}
-
 // ^ Class for Managing Files ^ //
 class FileService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<FileService>();
   static FileService get to => Get.find<FileService>();
 
-  // Property Accessors
-  static FileItem get current => to._current.value;
-  static FileStatus get status => to._status.value;
-
   // Properties
-  final _current = Rx<FileItem>(null);
   final _hasFile = RxBool(false);
-  final _status = Rx<FileStatus>(FileStatus.None);
 
   // ^ Initialize Service ^ //
   Future<FileService> init() async {
@@ -44,81 +20,51 @@ class FileService extends GetxService {
   }
 
   // @ Select Audio File //
-  static Future<bool> selectAudio() async {
-    // Check if File Already Queued
-    if (!to._hasFile.value) {
-      // Get File
-      FilePickerResult result = await FilePicker.platform.pickFiles(
-        type: FileType.audio,
-        withData: true,
-        onFileLoading: (s) => _status(FileStatusUtil.fromFilePickerStatus(s)),
-      );
-
-      // Check File
-      if (result != null) {
-        to._current(FileItem.file(result));
-        to._hasFile(true);
-      }
-
-      // Cancelled Picker
-      else {
-        to._current(null);
-        to._hasFile(false);
-      }
-    }
-    return !to._hasFile.value;
-  }
+  static Future<Tuple<bool, FileItem>> selectAudio() async => _processSelectedItem(await _handleSelectRequest(FileType.audio));
 
   // @ Select Media File //
-  static Future<bool> selectMedia() async {
-    // Check if File Already Queued
-    if (!to._hasFile.value) {
-      // Get File
-      FilePickerResult result = await FilePicker.platform.pickFiles(
-        type: FileType.media,
-        withData: true,
-        onFileLoading: (s) => _status(FileStatusUtil.fromFilePickerStatus(s)),
-      );
-
-      // Check File
-      if (result != null) {
-        to._current(FileItem.file(result));
-        to._hasFile(true);
-      }
-
-      // Cancelled Picker
-      else {
-        to._current(null);
-        to._hasFile(false);
-      }
-    }
-    return !to._hasFile.value;
-  }
+  static Future<Tuple<bool, FileItem>> selectMedia() async => _processSelectedItem(await _handleSelectRequest(FileType.media));
 
   // @ Select Other File //
-  static Future<bool> selectFile() async {
-    // Check if File Already Queued
+  static Future<Tuple<bool, FileItem>> selectFile() async => _processSelectedItem(await _handleSelectRequest(FileType.custom));
+
+  // # Generic Method for Different File Types
+  static Future<FilePickerResult> _handleSelectRequest(FileType type) async {
+    // @ Check if File Already Queued
     if (!to._hasFile.value) {
-      // Get File
-      FilePickerResult result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: K_ALLOWED_FILE_TYPES,
-        withData: true,
-        onFileLoading: (s) => _status(FileStatusUtil.fromFilePickerStatus(s)),
-      );
-
-      // Check File
-      if (result != null) {
-        to._current(FileItem.file(result));
-        to._hasFile(true);
+      // Check Type for Custom Files
+      if (type == FileType.custom) {
+        return await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: K_ALLOWED_FILE_TYPES,
+          withData: true,
+        );
       }
 
-      // Cancelled Picker
+      // For Media/Audio Files
       else {
-        to._current(null);
-        to._hasFile(false);
+        return await FilePicker.platform.pickFiles(
+          type: type,
+          withData: true,
+        );
       }
+    } else {
+      return null;
     }
-    return !to._hasFile.value;
+  }
+
+  // # Helper Method to Check File Picker Result
+  static Tuple<bool, FileItem> _processSelectedItem(FilePickerResult result) {
+    // Check File
+    if (result != null) {
+      to._hasFile(true);
+      return Tuple(!to._hasFile.value, FileItem.file(result));
+    }
+
+    // Cancelled Picker
+    else {
+      to._hasFile(false);
+      return Tuple(!to._hasFile.value, null);
+    }
   }
 }

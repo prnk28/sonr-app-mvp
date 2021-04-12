@@ -1,0 +1,8 @@
+include: package:pedantic/analysis_options.1.8.0.yaml
+
+analyzer:
+  exclude: [build/**]
+
+linter:
+  ignore:
+    - camel_case_types
