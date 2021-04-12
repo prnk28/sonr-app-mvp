@@ -23,7 +23,7 @@ class ShareCameraButtonItem extends GetView<ShareController> {
                 width: 55,
                 child: Center(
                     child: rive.value == null
-                        ? Container()
+                        ? SonrIcon.gradient(Icons.camera_alt_outlined, FlutterGradientNames.supremeSky, size: 55)
                         : Rive(
                             artboard: rive.value,
                           ))),
@@ -73,7 +73,7 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
                 width: 55,
                 child: Center(
                     child: rive.value == null
-                        ? Container()
+                        ? SonrIcon.gradient(Icons.photo, FlutterGradientNames.smartIndigo, size: 55)
                         : Rive(
                             artboard: rive.value,
                           ))),
@@ -125,7 +125,7 @@ class ShareContactButtonItem extends GetView<ShareController> {
                 width: 55,
                 child: Center(
                     child: rive.value == null
-                        ? Container()
+                        ? SonrIcon.gradient(Icons.person, FlutterGradientNames.phoenixStart, size: 55)
                         : Rive(
                             artboard: rive.value,
                           ))),
