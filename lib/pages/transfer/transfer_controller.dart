@@ -57,9 +57,6 @@ class TransferController extends GetxController {
 
   // ^ Send Invite to Peer ^ //
   void invite({Peer peer, BubbleController bubbleController}) {
-    // Validate
-    assert(peer != null && bubbleController != null);
-
     // Set Controller
     if (bubbleController != null) {
       currentPeerController = bubbleController;
