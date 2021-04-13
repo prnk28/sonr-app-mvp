@@ -15,7 +15,7 @@ class SonrRouting {
             name: '/home',
             page: () {
               // Check if User is Not Connected
-              if (SonrService.status.value.isNotConnected) {
+              if (!SonrService.isInitialized) {
                 // Update Contact for New User
                 if (UserService.isNewUser.value) {
                   Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);

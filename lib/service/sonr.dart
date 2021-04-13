@@ -18,6 +18,7 @@ extension StatusUtils on Status {
 
 class SonrService extends GetxService {
   // Accessors
+  static bool get isInitialized => to._node != null;
   static bool get isRegistered => Get.isRegistered<SonrService>();
   static SonrService get to => Get.find<SonrService>();
 
