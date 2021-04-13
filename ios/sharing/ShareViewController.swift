@@ -231,7 +231,7 @@ class ShareViewController: SLComposeServiceViewController {
     func getFileName(from url: URL, type: SharedMediaType) -> String {
         var name = url.lastPathComponent
 
-        if name.isEmpty {
+        if name.length == 0 {
             name = UUID().uuidString + "." + getExtension(from: url, type: type)
         }
 

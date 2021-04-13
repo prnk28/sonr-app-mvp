@@ -38,7 +38,7 @@ class StackedCardCarousel extends StatefulWidget {
     bool applyTextScaleFactor = true,
     PageController pageController,
     OnPageChanged onPageChanged,
-  })  : assert(items.isNotEmpty),
+  })  : assert(items.length > 0),
         _items = items,
         _type = type,
         _initialOffset = initialOffset,

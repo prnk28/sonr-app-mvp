@@ -111,7 +111,7 @@ class MediaService extends GetxService {
     var controller = Get.find<MediaService>();
 
     // @ Check for Media
-    if (controller._incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
+    if (controller._incomingMedia.length > 0 && !Get.isBottomSheetOpen) {
       // Open Sheet
       await Get.bottomSheet(ShareSheet.media(controller._incomingMedia), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 

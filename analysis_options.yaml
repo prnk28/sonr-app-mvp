@@ -7,3 +7,4 @@ linter:
   rules:
     camel_case_types: false
     unawaited_futures: false
+    prefer_is_empty: false

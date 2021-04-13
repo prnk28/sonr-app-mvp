@@ -81,7 +81,7 @@ class _CardGridWidget extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (cardList.isNotEmpty) {
+      if (cardList.length > 0) {
         return StackedCardCarousel(
           initialOffset: 2,
           spaceBetweenItems: 435,

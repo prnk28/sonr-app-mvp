@@ -57,9 +57,9 @@ class MediaAuthView extends StatelessWidget {
             ]),
             Divider(),
             Container(
-              width: card.metadata.thumbnail.isNotEmpty ? Get.width - 50 : Get.width - 150,
-              height: card.metadata.thumbnail.isNotEmpty ? Get.height / 3 : Get.height / 5,
-              child: card.metadata.thumbnail.isNotEmpty
+              width: card.metadata.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
+              height: card.metadata.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
+              child: card.metadata.thumbnail.length > 0
                   ? Image.memory(
                       Uint8List.fromList(card.metadata.thumbnail),
                       width: Get.width - 50,

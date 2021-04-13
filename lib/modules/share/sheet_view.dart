@@ -164,7 +164,7 @@ class _ShareItemURL extends StatelessWidget {
 
   Widget _buildURLView(URLLink data) {
     // Check open graph images
-    if (data.images.isNotEmpty) {
+    if (data.images.length > 0) {
       return Column(children: [
         // @ Social Image
         Image.network(data.images.first.url),

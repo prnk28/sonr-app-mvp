@@ -165,7 +165,7 @@ class LobbyService extends GetxService {
           SonrService.setFlatMode(true);
 
           // Present View
-          if (_localFlatPeers.isEmpty && !_flatModeCancelled.value) {
+          if (_localFlatPeers.length == 0 && !_flatModeCancelled.value) {
             FlatMode.outgoing();
           } else {
             _resetTimer();

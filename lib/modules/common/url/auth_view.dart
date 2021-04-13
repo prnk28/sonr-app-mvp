@@ -78,7 +78,7 @@ class URLAuthView extends StatelessWidget {
   Widget _buildURLView(TransferCard card) {
     final data = card.url;
     // Check open graph images
-    if (data.images.isNotEmpty) {
+    if (data.images.length > 0) {
       return Column(children: [
         // @ Social Image
         Image.network(data.images.first.url),

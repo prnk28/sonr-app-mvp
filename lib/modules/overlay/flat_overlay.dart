@@ -155,7 +155,7 @@ class _FlatModeController extends GetxController {
         transition(FlatModeTransition.SlideOut);
         animation(_FlatModeAnimation(transition.value));
         // No Peers
-        if (LobbyService.local.value.flatPeers.isEmpty) {
+        if (LobbyService.local.value.flatPeers.length == 0) {
           Get.back();
           SonrSnack.error("No Peers in Flat Mode");
         } else if (LobbyService.local.value.flatPeers.length == 1) {

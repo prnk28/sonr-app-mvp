@@ -9,7 +9,7 @@ class LobbyModel {
   List<Peer> peers = <Peer>[];
   Map<String, Peer> flatPeers = <String, Peer>{};
 
-  bool get isEmpty => lobby.count == 0;
+  bool get isEmpty  => lobby.count == 0;
   bool get isLocal => lobby.isLocal;
   String get name => lobby.name;
   int get size => lobby.size;
