@@ -126,9 +126,7 @@ class SonrStyle {
       shadowLightColor: Colors.black38);
 
   static NeumorphicStyle get shareButton => NeumorphicStyle(
-        color: Colors.black87,
-        surfaceIntensity: 0.6,
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
+        color: SonrColor.Black,
         depth: UserService.isDarkMode ? 4 : 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
       );

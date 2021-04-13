@@ -81,8 +81,10 @@ class CardGridView extends GetView<HomeController> {
         cardList = CardService.allCards;
       }
 
-      return Container(
-          margin: EdgeInsets.all(16), child: Column(children: [_CardGridToggle(), Expanded(child: _CardGridWidget(cardList, pageController))]));
+      return SafeArea(
+        maintainBottomViewPadding: true,
+        child: Container(child: Column(children: [_CardGridToggle(), Expanded(child: _CardGridWidget(cardList, pageController))])),
+      );
     });
   }
 }

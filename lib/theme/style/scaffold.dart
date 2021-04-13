@@ -36,7 +36,7 @@ class SonrScaffold extends StatelessWidget {
         darkTheme: NeumorphicThemeData(
           defaultTextColor: Colors.white,
           baseColor: SonrColor.Dark,
-          lightSource: LightSource.topRight,
+          lightSource: LightSource.topLeft,
         ),
         theme: NeumorphicThemeData(
           defaultTextColor: SonrColor.Black,
@@ -91,6 +91,8 @@ class _BackgroundGradient extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController(duration: 20.seconds);
+    final Gradient first = FlutterGradients.crystalRiver(type: GradientType.radial, center: Alignment.topLeft);
+    final Gradient second = FlutterGradients.blackSea(type: GradientType.radial, center: Alignment.topLeft);
     controller.repeat(reverse: true);
 
     return AnimatedBuilder(
@@ -102,13 +104,8 @@ class _BackgroundGradient extends HookWidget {
                 width: Get.width,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  gradient: RadialGradient(
-                    colors: [SonrPalette.Primary, SonrPalette.Tertiary, SonrPalette.Secondary, SonrColor.White],
-                    stops: [0.0, controller.value.clamp(0.1, 0.4), 0.7, 1.0],
-                    center: Alignment.topRight,
-                    focal: Alignment.bottomLeft,
-                    focalRadius: 2,
-                  ),
+                  // ignore: invalid_use_of_protected_member
+                  gradient: first.lerpTo(second, controller.value),
                 ),
               ),
             ));
