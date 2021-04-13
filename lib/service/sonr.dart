@@ -58,6 +58,7 @@ class SonrService extends GetxService {
     _remoteCallback = invite;
   }
 
+  // @ Register Handler for Transfer Updates
   void registerTransferUpdates(Function(TransferStatus) reply) {
     _transferCallback = reply;
   }
@@ -109,8 +110,10 @@ class SonrService extends GetxService {
       _node.connect();
       _node.update(direction: DeviceService.direction);
     } else {
-      _node.connect();
-      _node.update(direction: DeviceService.direction);
+      if (_status.value == Status.NONE) {
+        _node.connect();
+        _node.update(direction: DeviceService.direction);
+      }
     }
   }
 
@@ -131,8 +134,10 @@ class SonrService extends GetxService {
     _node.onError = _handleError;
 
     // Connect Node
-    _node.connect();
-    _node.update(direction: DeviceService.direction);
+    if (_status.value == Status.NONE) {
+      _node.connect();
+      _node.update(direction: DeviceService.direction);
+    }
   }
 
   // ^ Join a New Group ^

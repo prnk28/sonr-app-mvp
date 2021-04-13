@@ -14,14 +14,11 @@ class SonrRouting {
         GetPage(
             name: '/home',
             page: () {
-              // Check if User is Not Connected
-              if (!SonrService.isInitialized) {
-                // Update Contact for New User
-                if (UserService.isNewUser.value) {
-                  Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
-                } else {
-                  Get.find<SonrService>().connect();
-                }
+              // Update Contact for New User
+              if (UserService.isNewUser.value) {
+                Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+              } else {
+                Get.find<SonrService>().connect();
               }
               return HomeScreen();
             },
