@@ -31,7 +31,7 @@ extension ShareStatusUtils on ShareStatus {
   Size get size {
     switch (this) {
       case ShareStatus.Queue:
-        return Size(Get.width / 2 + 165, 110);
+        return Size(Get.width / 2 + 220, 110);
         break;
       case ShareStatus.PickMedia:
         return Size(Get.width * 0.9, Get.height * 0.65);

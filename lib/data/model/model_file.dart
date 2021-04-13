@@ -2,15 +2,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:sonr_core/sonr_core.dart';
 
+import 'model_media.dart';
+
 class FileItem {
-  final FilePickerResult file;
+  final int size;
+  final String name;
+  final String path;
   final Payload payload;
   final MIME mime;
 
   // ^ Retreives Metadata Info ^
-  int get size => file.files.first.size;
-  String get name => file.files.first.name;
-  String get path => file.paths.first;
   bool get isAudio => mime.type == MIME_Type.audio;
   bool get isImage => mime.type == MIME_Type.image;
   bool get isVideo => mime.type == MIME_Type.video;
@@ -20,19 +21,31 @@ class FileItem {
   Metadata get metadata => Metadata(name: name, size: size, path: path, mime: mime, properties: properties);
 
   // * Constructer * //
-  FileItem(this.file, this.mime, this.payload);
+  FileItem(this.path, this.name, this.size, this.mime, this.payload);
+
+  // @ Factory: Capture
+  factory FileItem.capture(MediaFile capture) {
+    return FileItem(capture.path, capture.name, capture.size, _retreiveMime(capture.name), Payload.MEDIA);
+  }
 
   // @ Factory: File
-  factory FileItem.file(FilePickerResult file) {
-    var name = file.files[0].name;
-    var ext = file.files[0].extension;
-    return FileItem(file, _retreiveMime(name), _retreivePayload(ext));
+  factory FileItem.file(FilePickerResult data) {
+    var file = data.files.first;
+    var path = file.path;
+    var name = file.name;
+    var size = file.size;
+    var ext = file.extension;
+
+    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext));
   }
 
   // @ Factory: Media - (Audio, Image, Video)
-  factory FileItem.media(FilePickerResult file) {
-    var name = file.files[0].name;
-    return FileItem(file, _retreiveMime(name), Payload.MEDIA);
+  factory FileItem.media(FilePickerResult data) {
+    var file = data.files.first;
+    var path = file.path;
+    var name = file.name;
+    var size = file.size;
+    return FileItem(path, name, size, _retreiveMime(name), Payload.MEDIA);
   }
 
   // # File Mime from Name

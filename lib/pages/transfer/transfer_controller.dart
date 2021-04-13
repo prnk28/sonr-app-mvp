@@ -61,7 +61,7 @@ class TransferController extends GetxController {
     });
 
     // Send Invite
-    SonrService.invite(inviteRequest.value);
+    SonrService.invite(inviteRequest.value, c: bubbleController);
     setFacingPeer(false);
   }
 
@@ -138,11 +138,12 @@ class TransferController extends GetxController {
     }
   }
 
+  // ^ Toggles Peer Shifting ^ //
   void toggleShifting() {
     isShiftingEnabled(!isShiftingEnabled.value);
   }
 
-  // ^ Handle Compass Update ^ //
+  // # Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
     // Update String Elements
     if (newDir != null && !isClosed) {
@@ -162,7 +163,7 @@ class TransferController extends GetxController {
     }
   }
 
-  // ^ Handle Lobby Size Update ^ //
+  // # Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(int size) {
     if (!isRemoteActive.value) {
       if (size == 0) {
@@ -175,6 +176,7 @@ class TransferController extends GetxController {
     }
   }
 
+  // # Return String Value for Direction ^ //
   _stringForDirection(double dir) {
     // Calculated
     var adjustedDegrees = dir.round();
@@ -190,6 +192,7 @@ class TransferController extends GetxController {
     }
   }
 
+  // # Return Cardinal Value for Direction ^ //
   _cardinalStringForDirection(double dir) {
     var adjustedDesignation = ((dir.round() / 11.25) + 0.25).toInt();
     var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];

@@ -144,38 +144,6 @@ class MediaService extends GetxService {
     return MediaItem(asset, -1);
   }
 
-  // ^ Method Refreshes Gallery ^ //
-  static Future refreshGallery() async {
-    if (UserService.permissions.value.hasGallery) {
-      // Get Collections
-      to._state(GalleryState.Loading);
-
-      // Remove Non existing albums for android
-      if (DeviceService.isAndroid) {
-        await PhotoManager.editor.android.removeAllNoExistsAsset();
-      }
-
-      // Get Albums
-      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
-      var albums = <MediaAlbum>[];
-      list.forEach((element) {
-        // Validate Album
-        if (element.name != "" && element.assetCount > 1) {
-          var album = MediaAlbum(element);
-          albums.add(album);
-          if (element.isAll) {
-            to._allAlbum(album);
-          }
-        }
-      });
-
-      // Set Gallery
-      to._albums.assignAll(albums);
-      to._albums.refresh();
-      to._state(GalleryState.Ready);
-    }
-  }
-
   // ^ Saves Photo to Gallery ^ //
   static Future<bool> saveCapture(String path, bool isVideo) async {
     // Validate Path

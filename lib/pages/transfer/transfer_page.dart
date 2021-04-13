@@ -20,7 +20,7 @@ class Transfer {
   }
 
   static void transferWithUrl(String url) {
-    Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, url: url));
+    Get.offNamed("/transfer", arguments: TransferArguments(Payload.URL, url: url));
   }
 }
 

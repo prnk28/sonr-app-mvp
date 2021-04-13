@@ -65,6 +65,7 @@ class _QueueView extends GetView<ShareController> {
           child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             const ShareCameraButtonItem(),
             const ShareGalleryButtonItem(),
+            const ShareFileButtonItem(),
             const ShareContactButtonItem(),
           ])),
     );

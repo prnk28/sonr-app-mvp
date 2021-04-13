@@ -264,10 +264,6 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasGallery != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Gallery);
       _userPermissions.refresh();
-
-      if (result) {
-        await MediaService.refreshGallery();
-      }
       SonrOverlay.back();
       return result;
     } else {

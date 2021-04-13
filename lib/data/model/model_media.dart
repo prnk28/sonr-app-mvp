@@ -143,6 +143,8 @@ class MediaFile {
   final int duration;
 
   String get path => _file.path;
+  int get size => _file.lengthSync();
+  String get name => _file.path.split('/').last;
   File get file => _file;
 
   // Constructer
