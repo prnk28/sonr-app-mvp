@@ -45,7 +45,6 @@ class RemoteController extends GetxController {
   final secondWord = "".obs;
   final thirdWord = "".obs;
   final currentRemote = Rx<RemoteInfo>(null);
-  final currentLobby = Rx<LobbyModel>(null);
   final currentInvite = Rx<AuthInvite>(null);
   final receivedCard = Rx<TransferCard>(null);
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
@@ -79,8 +78,6 @@ class RemoteController extends GetxController {
   join() async {
     isJoinFieldTapped(false);
     currentRemote(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
-    _lobbyStream = LobbyService.listenToLobby(currentRemote.value);
-    _lobbyStream.listen(_handleLobby);
     status(RemoteViewStatus.Joined);
   }
 
@@ -128,11 +125,6 @@ class RemoteController extends GetxController {
     }
   }
 
-  // @ Handle Lobby Info
-  _handleLobby(LobbyModel lobby) {
-    currentLobby(lobby);
-    currentLobby.refresh();
-  }
 
   // @ Handle A remote Invite
   _handleRemoteInvite(AuthInvite invite) {

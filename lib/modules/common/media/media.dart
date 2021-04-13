@@ -1,6 +1,5 @@
 export 'auth_view.dart';
 export 'card_view.dart';
-export 'sheet_view.dart';
 import 'dart:math';
 
 import 'package:intl/intl.dart';

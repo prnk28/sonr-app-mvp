@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/share/index_view.dart';
 import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/modules/common/file/file.dart';
 import 'package:sonr_app/modules/common/media/media.dart';
@@ -6,10 +7,53 @@ import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/profile/profile_view.dart';
+import 'package:sonr_app/modules/remote/remote_view.dart';
+import 'home_controller.dart';
+import 'alerts_view.dart';
+import 'home_nav.dart';
 
-import 'top_header.dart';
+class HomePage extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return SonrScaffold(
+        resizeToAvoidBottomInset: false,
+        shareView: ShareView(),
+        bottomNavigationBar: HomeBottomNavBar(),
+        appBar: DesignAppBar(title: HomeAppBarTitle()),
+        body: Obx(() => AnimatedSlideSwitcher(
+              controller.switchAnimation,
+              GestureDetector(
+                  child: _buildView(controller.page.value),
+                  onHorizontalDragUpdate: (details) {
+                    // Note: Sensitivity is integer used when you don't want to mess up vertical drag
+                    int sensitivity = 8;
+                    if (details.delta.dx > sensitivity) {
+                      controller.swipeRight();
+                    } else if (details.delta.dx < -sensitivity) {
+                      controller.swipeLeft();
+                    }
+                  }),
+              const Duration(milliseconds: 2500),
+            )));
+  }
 
-enum ToggleFilter { All, Media, Contact, Links }
+  // @ Build Page View by Navigation Item
+  Widget _buildView(HomeView page) {
+    // Return View
+    if (page == HomeView.Profile) {
+      return ProfileView(key: ValueKey<HomeView>(HomeView.Profile));
+    } else if (page == HomeView.Alerts) {
+      return AlertsView(key: ValueKey<HomeView>(HomeView.Alerts));
+    } else if (page == HomeView.Remote) {
+      return RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
+    } else {
+      return CardGridView(
+        key: ValueKey<HomeView>(HomeView.Grid),
+      );
+    }
+  }
+}
 
 // ^ Card Grid View ^ //
 class CardGridView extends GetView<HomeController> {
@@ -33,12 +77,8 @@ class CardGridView extends GetView<HomeController> {
         cardList = CardService.allCards;
       }
 
-      return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        HomeTopHeaderBar(
-          children: [_CardGridToggle()],
-        ),
-        Expanded(child: Container(child: _CardGridWidget(cardList, pageController))),
-      ]);
+      return Container(
+          margin: EdgeInsets.all(16), child: Column(children: [_CardGridToggle(), Expanded(child: _CardGridWidget(cardList, pageController))]));
     });
   }
 }
@@ -47,8 +87,8 @@ class _CardGridToggle extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.bottomCenter,
-      padding: EdgeInsets.only(bottom: 8),
+      width: context.width,
+      height: 40,
       margin: EdgeWith.horizontal(24),
       child: NeumorphicToggle(
         style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),

@@ -17,17 +17,11 @@ class MediaService extends GetxService {
   static MediaService get to => Get.find<MediaService>();
 
   // Reactive Instances
-  final _albums = <MediaAlbum>[].obs;
-  final _allAlbum = Rx<MediaAlbum>(MediaAlbum.blank());
-  final _hasGallery = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
 
   // Properties
-  static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allAlbum;
-  static RxList<MediaAlbum> get albums => Get.find<MediaService>()._albums;
-  static RxBool get hasGallery => Get.find<MediaService>()._hasGallery;
   static Rx<GalleryState> get state => Get.find<MediaService>()._state;
 
   // References
@@ -82,24 +76,6 @@ class MediaService extends GetxService {
       if (DeviceService.isAndroid) {
         await PhotoManager.editor.android.removeAllNoExistsAsset();
       }
-
-      // Get Albums
-      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
-      var albums = <MediaAlbum>[];
-      list.forEach((element) {
-        // Validate Album
-        if (element.name != "" && element.assetCount > 1) {
-          var album = MediaAlbum(element);
-          albums.add(album);
-          if (element.isAll) {
-            _allAlbum(album);
-          }
-        }
-      });
-
-      // Set Gallery
-      _albums.assignAll(albums);
-      _albums.refresh();
       _state(GalleryState.Ready);
     }
     return this;

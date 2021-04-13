@@ -14,10 +14,8 @@ export 'package:open_file/open_file.dart';
 
 export 'package:animated_widgets/animated_widgets.dart';
 export 'package:sonr_app/modules/common/camera/camera_view.dart';
-export 'package:sonr_app/modules/common/media/sheet_view.dart';
 
 // Custom Theme Aspects
-export 'style/background.dart';
 export 'buttons/shape.dart';
 export 'buttons/color.dart';
 export 'buttons/plain.dart';
@@ -27,6 +25,7 @@ export 'style/icon.dart';
 export 'style/scaffold.dart';
 export 'elements/snackbar.dart';
 export 'style/text.dart';
+export 'elements/appbar.dart';
 export 'animation/animation.dart';
 
 // Global UI Widgets

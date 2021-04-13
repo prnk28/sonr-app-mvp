@@ -9,25 +9,27 @@ class LobbyModel {
   List<Peer> peers = <Peer>[];
   Map<String, Peer> flatPeers = <String, Peer>{};
 
-  bool get isEmpty  => lobby.count == 0;
+  bool get isEmpty => lobby.count == 0;
   bool get isLocal => lobby.isLocal;
   String get name => lobby.name;
   int get size => lobby.size;
   int get length => lobby.peers.length;
 
-  LobbyModel(this.lobby) {
-    // Iterate through peers and IDs
-    lobby.peers.forEach((id, peer) {
-      peers.add(peer);
-    });
-
-    // Check if Local Lobby
-    if (lobby.isLocal) {
+  LobbyModel({this.lobby}) {
+    if (this.lobby != null) {
+      // Iterate through peers and IDs
       lobby.peers.forEach((id, peer) {
-        if (peer.properties.isFlatMode) {
-          flatPeers[id] = peer;
-        }
+        peers.add(peer);
       });
+
+      // Check if Local Lobby
+      if (lobby.isLocal) {
+        lobby.peers.forEach((id, peer) {
+          if (peer.properties.isFlatMode) {
+            flatPeers[id] = peer;
+          }
+        });
+      }
     }
   }
 

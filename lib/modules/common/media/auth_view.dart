@@ -12,7 +12,6 @@ class MediaAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Build View
     final card = invite.card;
     return Container(
       height: context.heightTransformer(reducedBy: 35),

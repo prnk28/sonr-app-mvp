@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
@@ -35,7 +38,7 @@ class TransferScreen extends GetView<TransferController> {
     return Obx(
       () {
         if (controller.isRemoteActive.value) {
-          return RemoteLobbyFullView(controller, info: controller.remote.value);
+          return RemoteLobbyFullView(info: controller.remote.value);
         } else {
           return LocalLobbyView();
         }
@@ -45,85 +48,41 @@ class TransferScreen extends GetView<TransferController> {
 }
 
 // ^ Fullscreen Remote View ^ //
-class RemoteLobbyFullView extends StatefulWidget {
-  RemoteLobbyFullView(this.controller, {Key key, @required this.info}) : super(key: key);
+class RemoteLobbyFullView extends HookWidget {
+  RemoteLobbyFullView({Key key, @required this.info}) : super(key: key);
   final RemoteInfo info;
-  final TransferController controller;
-
-  @override
-  _RemoteLobbyFullViewState createState() => _RemoteLobbyFullViewState();
-}
-
-class _RemoteLobbyFullViewState extends State<RemoteLobbyFullView> {
-// References
-  int toggleIndex = 1;
-  LobbyModel lobbyModel;
-  LobbyStream peerStream;
-
-  // * Initial State * //
-  @override
-  void initState() {
-    // Set Stream
-    peerStream = LobbyService.listenToLobby(widget.info);
-    peerStream.listen(_handlePeerUpdate);
-    super.initState();
-  }
-
-  // * On Dispose * //
-  @override
-  void dispose() {
-    peerStream.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold.appBarLeadingAction(
-        disableDynamicLobbyTitle: true,
-        titleWidget: _buildTitleWidget(),
-        leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
-        action: PlainButton(icon: SonrIcon.leave, onPressed: () => widget.controller.stopRemote()),
+    final remoteStream = LobbyService.useRemoteLobby(info);
+    return SonrScaffold(
+        appBar: DesignAppBar(
+          action: PlainButton(icon: SonrIcon.leave, onPressed: () => Get.find<TransferController>().stopRemote()),
+          leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
+          title: _buildTitleWidget(),
+        ),
         body: ListView.builder(
-          itemCount: lobbyModel != null ? lobbyModel.length + 1 : 1,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return LobbyTitleView(
-                onChanged: (index) {
-                  setState(() {
-                    toggleIndex = index;
-                  });
-                },
-                title: widget.info.display,
-              );
-            } else {
-              // Build List Item
+            itemCount: remoteStream != null ? remoteStream.data.length + 1 : 1,
+            itemBuilder: (BuildContext context, int index) {
               return PeerListItem(
-                lobbyModel.atIndex(index - 1),
-                index - 1,
-                remote: widget.info,
+                remoteStream.data.atIndex(index),
+                index,
+                remote: info,
               );
-            }
-          },
-        ));
+            }));
   }
 
+  // # Update Title Widget
   Widget _buildTitleWidget() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       "Remote".h3,
       IconButton(
         icon: Icon(Icons.info_outline),
         onPressed: () {
-          SonrSnack.remote(message: widget.info.display, duration: 12000);
+          SonrSnack.remote(message: info.display, duration: 12000);
         },
       )
     ]);
-  }
-
-  _handlePeerUpdate(LobbyModel lobby) {
-    // Update View
-    setState(() {
-      lobbyModel = lobby;
-    });
   }
 }
 
@@ -132,13 +91,14 @@ class LocalLobbyView extends GetView<TransferController> {
   const LocalLobbyView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SonrScaffold.appBarLeadingAction(
-          disableDynamicLobbyTitle: true,
-          titleWidget: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet())),
-          leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
-          action: controller.currentPayload != Payload.CONTACT
-              ? PlainButton(icon: SonrIcon.remote, onPressed: () async => controller.startRemote())
-              : Container(),
+    return Obx(() => SonrScaffold(
+          appBar: DesignAppBar(
+            action: controller.currentPayload != Payload.CONTACT
+                ? PlainButton(icon: SonrIcon.remote, onPressed: () async => controller.startRemote())
+                : Container(),
+            leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
+            title: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet())),
+          ),
           body: GestureDetector(
             onDoubleTap: () => controller.toggleBirdsEye(),
             child: Stack(
@@ -154,7 +114,7 @@ class LocalLobbyView extends GetView<TransferController> {
                     )),
 
                 // @ Lobby View
-                _LocalLobbyStack(data: LobbyService.local.value),
+                Obx(() => _LocalLobbyStack()),
 
                 // @ Compass View
                 Padding(
@@ -174,26 +134,63 @@ class LocalLobbyView extends GetView<TransferController> {
 }
 
 // ^ Local Lobby Stack View ^ //
-class _LocalLobbyStack extends StatelessWidget {
-  final LobbyModel data;
-  _LocalLobbyStack({Key key, @required this.data}) : super(key: key);
+class _LocalLobbyStack extends StatefulWidget {
+  const _LocalLobbyStack({Key key}) : super(key: key);
+  @override
+  _LocalLobbyStackState createState() => _LocalLobbyStackState();
+}
+
+class _LocalLobbyStackState extends State<_LocalLobbyStack> {
+  // References
+  int lobbySize = 0;
+  List<PeerBubble> stackChildren = <PeerBubble>[];
+  StreamSubscription<LobbyModel> localLobbyStream;
+
+  // * Initial State * //
+  @override
+  void initState() {
+    // Add Initial Data
+    _handleLobbyUpdate(LobbyService.local.value);
+    localLobbyStream = LobbyService.local.listen(_handleLobbyUpdate);
+    super.initState();
+  }
+
+  // * On Dispose * //
+  @override
+  void dispose() {
+    localLobbyStream.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Initialize Children
-    var children = <Widget>[];
-
-    // Check for Mobile
-    if (data.peers.length == 0) {
-      data.peers.forEach((peer) {
-        if (peer.platform == Platform.Android || peer.platform == Platform.iOS) {
-          children.add(PeerBubble(peer));
-        }
-      });
+    if (lobbySize > 0) {
+      return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
     } else {
-      children.add(Container());
+      return Container();
     }
+  }
 
-    return Stack(children: children);
+  // * Updates Stack Children * //
+  _handleLobbyUpdate(LobbyModel data) {
+    // Initialize
+    var children = <PeerBubble>[];
+
+    // Clear List
+    stackChildren.clear();
+
+    // Iterate through peers and IDs
+    data.peers.forEach((peer) {
+      if (peer.platform == Platform.iOS || peer.platform == Platform.Android) {
+        // Add to Stack Items
+        children.add(PeerBubble(peer));
+      }
+    });
+
+    // Update View
+    setState(() {
+      lobbySize = data.peers.length;
+      stackChildren = children;
+    });
   }
 }

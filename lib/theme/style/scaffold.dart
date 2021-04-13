@@ -6,113 +6,14 @@ import 'package:sonr_app/theme/theme.dart';
 class SonrScaffold extends StatelessWidget {
   final Widget body;
   final Widget bottomSheet;
-  final Widget appBar;
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
   final Widget shareView;
+  final PreferredSizeWidget appBar;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool resizeToAvoidBottomInset;
   final Function bodyAction;
   final Color backgroundColor;
-
-  factory SonrScaffold.appBarAction(
-      {@required String title,
-      @required ShapeButton action,
-      Widget body,
-      Widget floatingActionButton,
-      FloatingActionButtonLocation floatingActionButtonLocation,
-      bool resizeToAvoidBottomPadding = true}) {
-    return SonrScaffold(
-        body: body,
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: title.h3, actions: [action]),
-        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
-  }
-
-  factory SonrScaffold.appBarLeading(
-      {@required String title,
-      @required ShapeButton leading,
-      Widget body,
-      Widget floatingActionButton,
-      FloatingActionButtonLocation floatingActionButtonLocation,
-      bool resizeToAvoidBottomPadding = true}) {
-    return SonrScaffold(
-        body: body,
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: title.h3, leading: leading),
-        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
-  }
-
-  factory SonrScaffold.appBarCustom(
-      {@required Widget middle,
-      @required Widget leading,
-      Widget action,
-      Widget body,
-      Widget floatingActionButton,
-      FloatingActionButtonLocation floatingActionButtonLocation,
-      bool resizeToAvoidBottomPadding = true}) {
-    return SonrScaffold(
-        body: body,
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar:
-            NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: middle, leading: leading, actions: [action]),
-        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
-  }
-
-  factory SonrScaffold.appBarTitle(
-      {@required String title,
-      Widget body,
-      Widget floatingActionButton,
-      FloatingActionButtonLocation floatingActionButtonLocation,
-      bool resizeToAvoidBottomPadding = true}) {
-    return SonrScaffold(
-        body: body,
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, title: title.h3),
-        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
-  }
-
-  factory SonrScaffold.appBarLeadingAction(
-      {@required Widget leading,
-      @required Widget action,
-      String title,
-      Widget titleWidget,
-      Widget body,
-      Widget floatingActionButton,
-      Widget bottomNavigationBar,
-      Widget bottomSheet,
-      FloatingActionButtonLocation floatingActionButtonLocation,
-      bool disableDynamicLobbyTitle = false,
-      bool resizeToAvoidBottomPadding = true}) {
-    // Set Title
-    Widget titleItem;
-    if (disableDynamicLobbyTitle && titleWidget == null) {
-      titleItem = title.h3;
-    } else if (titleWidget != null && disableDynamicLobbyTitle) {
-      titleItem = titleWidget;
-    } else {
-      titleItem = _SonrAppbarTitle(defaultText: title);
-    }
-
-    // Build Scaffold
-    return SonrScaffold(
-        body: body,
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
-        appBar: NeumorphicAppBar(
-          color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-          title: titleItem,
-          leading: leading,
-          actions: [action],
-        ),
-        bottomSheet: bottomSheet,
-        bottomNavigationBar: bottomNavigationBar,
-        resizeToAvoidBottomInset: resizeToAvoidBottomPadding);
-  }
 
   SonrScaffold({
     Key key,

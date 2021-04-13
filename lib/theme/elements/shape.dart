@@ -100,12 +100,18 @@ class OvalBottomPath extends NeumorphicPathProvider {
   Path getPath(Size size) {
     var path = Path();
     path.lineTo(0, 0);
-    path.lineTo(0, size.height - 40);
+    path.lineTo(0, _buildBottomPoint(size));
     path.quadraticBezierTo(size.width / 4, size.height, size.width / 2, size.height);
-    path.quadraticBezierTo(size.width - size.width / 4, size.height, size.width, size.height - 40);
+    path.quadraticBezierTo(size.width - size.width / 4, size.height, size.width, _buildBottomPoint(size));
     path.lineTo(size.width, 0);
     path.lineTo(0, 0);
     return path;
+  }
+
+  double _buildBottomPoint(Size size) {
+    var height = size.height;
+    var diff = size.height / 5;
+    return height - diff;
   }
 
   @override
