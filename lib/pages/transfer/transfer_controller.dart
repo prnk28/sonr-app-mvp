@@ -57,6 +57,7 @@ class TransferController extends GetxController {
 
   // ^ Send Invite with Peer ^ //
   void inviteWithPeer(Peer peer) {
+    print(peer.toString());
     // Update Request
     inviteRequest.update((val) {
       val.to = peer;
@@ -68,6 +69,7 @@ class TransferController extends GetxController {
 
   // ^ Send Invite with Bubble Controller ^ //
   void inviteWithBubble(BubbleController bubble) {
+    print(bubble.peer.value.toString());
     // Set Controller
     currentPeerController = bubble;
     setFacingPeer(false);
