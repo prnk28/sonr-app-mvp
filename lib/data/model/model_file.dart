@@ -35,7 +35,6 @@ class FileItem {
     var name = file.name;
     var size = file.size;
     var ext = file.extension;
-
     return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext));
   }
 

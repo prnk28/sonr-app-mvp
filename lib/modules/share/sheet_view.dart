@@ -5,16 +5,27 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
+import 'share_controller.dart';
+
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
 const double E_CONTENT_WIDTH_MODIFIER = 20;
 
 // ^ Share from External App BottomSheet View ^ //
-class ShareSheet extends StatelessWidget {
+class ShareSheet extends GetView<ShareController> {
   // Properties
   final Widget child;
   final Size size;
-  final Payload payloadType;
-  const ShareSheet({Key key, @required this.child, @required this.size, @required this.payloadType}) : super(key: key);
+  final Payload payload;
+  final MediaFile mediaFile;
+  final URLLink url;
+  const ShareSheet({
+    Key key,
+    @required this.child,
+    @required this.size,
+    @required this.payload,
+    this.mediaFile,
+    this.url,
+  }) : super(key: key);
 
   // @ Bottom Sheet for Media
   factory ShareSheet.media(List<SharedMediaFile> sharedFiles) {
@@ -22,8 +33,16 @@ class ShareSheet extends StatelessWidget {
     final Size window = Size(Get.width - 20, Get.height / 3 + 150);
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
+    // Get Shared File
+    SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+
     // Build View
-    return ShareSheet(child: _ShareItemMedia(sharedFiles: sharedFiles, size: content), size: window, payloadType: Payload.MEDIA);
+    return ShareSheet(
+      child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
+      size: window,
+      payload: Payload.MEDIA,
+      mediaFile: MediaFile.externalShare(sharedIntent),
+    );
   }
 
   // @ Bottom Sheet for URL
@@ -33,7 +52,7 @@ class ShareSheet extends StatelessWidget {
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Build View
-    return ShareSheet(child: _ShareItemURL(url: value, size: content), size: window, payloadType: Payload.URL);
+    return ShareSheet(child: _ShareItemURL(url: value, size: content), size: window, payload: Payload.URL, url: value);
   }
   @override
   Widget build(BuildContext context) {
@@ -56,7 +75,7 @@ class ShareSheet extends StatelessWidget {
                     "Share".h2,
 
                     // @ Top Right Confirm Button
-                    ShapeButton.circle(onPressed: () => Get.offNamed("/transfer"), icon: SonrIcon.accept),
+                    ShapeButton.circle(onPressed: () => controller.selectExternal(payload, url, mediaFile), icon: SonrIcon.accept),
                   ]),
 
                   // @ Window Content
@@ -87,8 +106,6 @@ class _ShareItemMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get Shared File
     SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
-    SonrService.queueCapture(MediaFile.externalShare(sharedIntent));
-
     return Neumorphic(
         style: NeumorphicStyle(
           depth: -8,
@@ -118,7 +135,6 @@ class _ShareItemURL extends StatelessWidget {
   const _ShareItemURL({Key key, this.url, this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    SonrService.queueUrl(url.link);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,

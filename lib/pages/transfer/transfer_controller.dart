@@ -5,6 +5,9 @@ import 'package:sonr_app/modules/common/peer/bubble_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {
+  // @ Accessors
+  Payload get currentPayload => inviteRequest.value.payload;
+
   // @ Properties
   final title = "Nobody Here".obs;
   final isBirdsEye = false.obs;
@@ -29,6 +32,7 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
+  BubbleController currentPeerController;
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -39,6 +43,7 @@ class TransferController extends GetxController {
     // Add Stream Handlers
     compassStream = DeviceService.compass.listen(_handleCompassUpdate);
     lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
+    Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
     super.onInit();
   }
 
@@ -55,13 +60,18 @@ class TransferController extends GetxController {
     // Validate
     assert(peer != null && bubbleController != null);
 
+    // Set Controller
+    if (bubbleController != null) {
+      currentPeerController = bubbleController;
+    }
+
     // Update Request
     inviteRequest.update((val) {
       val.to = bubbleController != null ? bubbleController.peer.value : peer;
     });
 
     // Send Invite
-    SonrService.invite(inviteRequest.value, c: bubbleController);
+    SonrService.invite(inviteRequest.value);
     setFacingPeer(false);
   }
 
@@ -107,6 +117,7 @@ class TransferController extends GetxController {
     // Update Invite Request
     inviteRequest.update((val) {
       val.remote = remote.value;
+      val.isRemote = true;
     });
   }
 
@@ -120,6 +131,7 @@ class TransferController extends GetxController {
     // Clear Remote from Invite Request
     inviteRequest.update((val) {
       val.remote.clear();
+      val.isRemote = false;
     });
   }
 
@@ -172,6 +184,21 @@ class TransferController extends GetxController {
         title("1 Person");
       } else {
         title("$size People");
+      }
+    }
+  }
+
+  // # Handle Peer Response ^ //
+  _handleTransferStatus(TransferStatus data) {
+    if (currentPeerController != null) {
+      // Check Decision
+      if (data == TransferStatus.Accepted) {
+        currentPeerController.updateStatus(BubbleStatus.Accepted);
+      } else if (data == TransferStatus.Denied) {
+        currentPeerController.updateStatus(BubbleStatus.Declined);
+      } else {
+        currentPeerController.updateStatus(BubbleStatus.Complete);
+        inviteRequest.value.clear();
       }
     }
   }

@@ -76,8 +76,7 @@ class LobbyService extends GetxService {
   // ^ Method to Cancel Flat Mode ^ //
   bool sendFlatMode(Peer peer) {
     // Send Invite
-    SonrService.queueContact(isFlat: true);
-    SonrService.inviteWithPeer(peer);
+    SonrService.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);

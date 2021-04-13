@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'cards.dart';
@@ -17,7 +16,7 @@ extension StatusUtils on Status {
   bool get isReady => this == Status.BOOTSTRAPPED;
 }
 
-class SonrService extends GetxService with TransferQueue {
+class SonrService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<SonrService>();
   static SonrService get to => Get.find<SonrService>();
@@ -34,7 +33,12 @@ class SonrService extends GetxService with TransferQueue {
 
   // @ Set References
   Node _node;
+  var _received = Completer<TransferCard>();
+  Completer<TransferCard> get received => _received;
+
+  // Registered Callbacks
   Function(AuthInvite) _remoteCallback;
+  Function(TransferStatus) _transferCallback;
 
   // ^ Updates Node^ //
   SonrService() {
@@ -51,6 +55,10 @@ class SonrService extends GetxService with TransferQueue {
   // @ Register Handler for Remote Invite
   void registerRemoteInvite(Function(AuthInvite) invite) {
     _remoteCallback = invite;
+  }
+
+  void registerTransferUpdates(Function(TransferStatus) reply) {
+    _transferCallback = reply;
   }
 
   // ^ Initialize Service Method ^ //
@@ -163,75 +171,28 @@ class SonrService extends GetxService with TransferQueue {
     await to._node.update(contact: contact);
   }
 
-  // ^ Set Payload for Contact ^ //
-  static void queueContact({bool isFlat = false}) async {
-    // - Check Connected -
-    to.addToQueue(TransferQueueItem.contact(isFlat: isFlat));
-  }
-
-  // ^ Set Payload for URL Link ^ //
-  static void queueCapture(MediaFile media) async {
-    // - Check Connected -
-    to.addToQueue(TransferQueueItem.capture(media));
-  }
-
-  // ^ Set Payload for URL Link ^ //
-  static void queueMedia(MediaItem media) async {
-    // - Check Connected -
-    to.addToQueue(TransferQueueItem.media(await media.getMetadata()));
-  }
-
-  // ^ Set Payload for URL Link ^ //
-  static void queueUrl(String url) async {
-    // - Check Connected -
-    to.addToQueue(TransferQueueItem.url(url));
-  }
-
   // ^ Direct Message a Peer ^
   static void message(Peer peer, String content) {
     to._node.message(peer, content);
   }
 
   // ^ Invite Peer with Built Request ^ //
-  static void invite(InviteRequest request, {BubbleController c}) async {
-    // Set Controller if Valid
-    c ?? to.currentInvited(c);
-
+  static void invite(InviteRequest request) async {
     // Send Invite
     await to._node.invite(request);
-  }
-
-  // ^ Invite-Peer Event ^
-  static void inviteWithPeer(Peer p, {RemoteInfo info}) async {
-    // Set Peer Controller
-    to.currentInvitedFromList(p);
-
-    // File Payload
-    if (to.payload == Payload.MEDIA) {
-      assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(p, to.currentTransfer.media, info: info);
-    }
-
-    // Contact Payload
-    else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(p, isFlat: to.currentTransfer.isFlat, info: info);
-    }
-
-    // Link Payload
-    else if (to.payload == Payload.URL) {
-      assert(to.currentTransfer.url != null);
-      await to._node.inviteLink(p, to.currentTransfer.url, info: info);
-    }
-
-    // No Payload
-    else {
-      SonrSnack.error("No media, contact, or link provided");
-    }
   }
 
   // ^ Respond-Peer Event ^
   static void respond(bool decision, {RemoteInfo info}) async {
     await to._node.respond(decision, info: info);
+  }
+
+  // ^ Invite Peer with Built Request ^ //
+  static void sendFlat(Peer peer) async {
+    // Send Invite
+    InviteRequest request = InviteRequest(
+        type: InviteRequest_TransferType.FlatContact, to: peer, isRemote: false, payload: Payload.CONTACT, contact: UserService.contact.value);
+    await to._node.invite(request);
   }
 
   // ^ Async Function notifies transfer complete ^ //
@@ -288,10 +249,11 @@ class SonrService extends GetxService with TransferQueue {
     // For Cancel
     else if (data.type == AuthReply_Type.Cancel) {
       await HapticFeedback.vibrate();
-      currentDecided(false);
     } else {
-      // For File
-      currentDecided(data.decision);
+      // Check for Callback
+      if (_transferCallback != null) {
+        _transferCallback(TransferStatusUtil.statusFromReply(data));
+      }
     }
   }
 
@@ -302,8 +264,14 @@ class SonrService extends GetxService with TransferQueue {
 
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(Peer data) async {
-    await currentCompleted();
+    // Check for Callback
+    if (_transferCallback != null) {
+      _transferCallback(TransferStatus.Completed);
+    }
     DeviceService.playSound(type: UISoundType.Transmitted);
+
+    // Remove Callback
+    _transferCallback = null;
   }
 
   // ^ Mark as Received File ^ //
@@ -320,6 +288,19 @@ class SonrService extends GetxService with TransferQueue {
     print(data.toString());
     if (data.severity != ErrorMessage_Severity.LOG) {
       SonrSnack.error("", error: data);
+    }
+  }
+}
+
+// ^ Transfer Status Enum ^ //
+enum TransferStatus { Accepted, Denied, Completed }
+
+extension TransferStatusUtil on TransferStatus {
+  static TransferStatus statusFromReply(AuthReply reply) {
+    if (reply.decision) {
+      return TransferStatus.Accepted;
+    } else {
+      return TransferStatus.Denied;
     }
   }
 }

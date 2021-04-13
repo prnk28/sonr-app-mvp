@@ -59,7 +59,7 @@ class ShareController extends GetxController {
     shrink(delay: 150.milliseconds);
   }
 
-  // ^ Select Contact to Transfer ^ //
+  // ^ Select Contact to Transfer ^
   selectContact() async {
     // Push to Transfer
     Transfer.transferWithContact();
@@ -140,14 +140,22 @@ class ShareController extends GetxController {
     }
   }
 
+  // ^ Select a URL ^ //
+  selectExternal(Payload payload, URLLink url, MediaFile mediaFile) {
+    if (payload == Payload.URL) {
+      Transfer.transferWithUrl(url.link);
+    } else {
+      Transfer.transferWithFile(FileItem.capture(mediaFile));
+    }
+  }
+
   // ^ Close Share Button ^ //
-  void shrink({Duration delay = const Duration(milliseconds: 0)}) {
+  void shrink({Duration delay = const Duration(milliseconds: 600)}) {
     Future.delayed(delay, () {
       if (_timer != null) {
         _timer.cancel();
         _timer = null;
         HapticFeedback.mediumImpact();
-        status(ShareStatus.Default);
         _counter = 0;
       }
     });
@@ -159,6 +167,7 @@ class ShareController extends GetxController {
       status(ShareStatus.Queue);
       expand(6000, status.value);
     } else {
+      status(ShareStatus.Default);
       shrink();
     }
   }

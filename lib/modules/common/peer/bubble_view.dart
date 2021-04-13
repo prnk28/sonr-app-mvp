@@ -179,7 +179,7 @@ class BubbleController extends GetxController {
         Get.find<TransferController>().invite(bubbleController: this);
 
         // Check for File
-        if (Get.find<SonrService>().payload.isTransfer) {
+        if (Get.find<TransferController>().currentPayload.isTransfer) {
           _isPending.value = true;
         }
         // Contact/URL

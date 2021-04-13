@@ -136,7 +136,7 @@ class LocalLobbyView extends GetView<TransferController> {
           disableDynamicLobbyTitle: true,
           titleWidget: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet())),
           leading: ShapeButton.circle(icon: SonrIcon.close, onPressed: () => Get.back(closeOverlays: true), shape: NeumorphicShape.flat),
-          action: Get.find<SonrService>().payload != Payload.CONTACT
+          action: controller.currentPayload != Payload.CONTACT
               ? ShapeButton.circle(icon: SonrIcon.remote, onPressed: () async => controller.startRemote(), shape: NeumorphicShape.flat)
               : Container(),
           body: GestureDetector(

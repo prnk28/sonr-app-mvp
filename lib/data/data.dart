@@ -13,5 +13,4 @@ export 'database/cards_db.dart';
 export 'model/model_lobby.dart';
 export 'model/model_media.dart';
 export 'model/model_permissions.dart';
-export 'model/model_queue.dart';
 export 'model/model_tile.dart';
