@@ -52,20 +52,21 @@ class ShareController extends GetxController {
   presentCameraView() {
     // Move to View
     Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+      // Shrink Button after Delay
+      shrink(delay: 150.milliseconds);
+
+      // Transfer with File
       Transfer.transferWithFile(FileItem.capture(file));
     }), transition: Transition.downToUp);
-
-    // Shrink Button after Delay
-    shrink(delay: 150.milliseconds);
   }
 
   // ^ Select Contact to Transfer ^
   selectContact() async {
-    // Push to Transfer
-    Transfer.transferWithContact();
-
     // Shrink Button after Delay
     shrink(delay: 150.milliseconds);
+
+    // Push to Transfer
+    Transfer.transferWithContact();
   }
 
   // ^ Select a File
@@ -74,11 +75,11 @@ class ShareController extends GetxController {
     if (UserService.permissions.value.hasGallery) {
       var result = await FileService.selectMedia();
       if (result.hasItem) {
-        // Push to Transfer Screen
-        Transfer.transferWithFile(result.fileItem);
-
         // Shrink Button after Delay
         shrink(delay: 150.milliseconds);
+
+        // Push to Transfer Screen
+        Transfer.transferWithFile(result.fileItem);
       }
     } else {
       // Request Permissions
@@ -92,11 +93,11 @@ class ShareController extends GetxController {
         // Continue With Picker
         var result = await FileService.selectFile();
         if (result.hasItem) {
-          // Push to Transfer
-          Transfer.transferWithFile(result.fileItem);
-
           // Shrink Button after Delay
           shrink(delay: 150.milliseconds);
+
+          // Push to Transfer
+          Transfer.transferWithFile(result.fileItem);
         }
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
@@ -155,6 +156,7 @@ class ShareController extends GetxController {
       if (_timer != null) {
         _timer.cancel();
         _timer = null;
+        status(ShareStatus.Default);
         HapticFeedback.mediumImpact();
         _counter = 0;
       }
@@ -167,7 +169,6 @@ class ShareController extends GetxController {
       status(ShareStatus.Queue);
       expand(6000, status.value);
     } else {
-      status(ShareStatus.Default);
       shrink();
     }
   }
