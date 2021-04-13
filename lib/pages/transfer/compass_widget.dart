@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'bulb_view.dart';
 import 'transfer_controller.dart';
 
 // ** Build CompassView ** //
@@ -14,7 +15,7 @@ class CompassView extends GetView<TransferController> {
           child: Stack(alignment: Alignment.topCenter, children: [
             // Compass Total
             AspectRatio(
-              aspectRatio: 1,
+              aspectRatio: 0.75,
               child: controller.isFacingPeer.value
                   ? AnimatedRipples(
                       child: _CompassView(),
@@ -75,7 +76,7 @@ class _CompassView extends GetView<TransferController> {
           // Interior Compass
           child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
             // Center Circle
-            Obx(() => _CompassBulb(controller.directionTitle.value, controller.cardinalTitle.value,
+            Obx(() => BulbView(controller.directionTitle.value, controller.cardinalTitle.value,
                 controller.isShiftingEnabled.value ? SonrGradient.bulbLight : SonrGradient.bulbDark)),
 
             // Spokes
@@ -312,38 +313,5 @@ class _Spoke extends StatelessWidget {
     } else {
       return (deg + 90);
     }
-  }
-}
-
-// ** Builds Compass View Bulb ** //
-class _CompassBulb extends StatelessWidget {
-  final String direction;
-  final String heading;
-  final Gradient gradient;
-  _CompassBulb(this.direction, this.heading, this.gradient);
-  @override
-  Widget build(BuildContext context) {
-    // Return View
-    return Neumorphic(
-        style: NeumorphicStyle(
-          depth: -5,
-          boxShape: NeumorphicBoxShape.circle(),
-        ),
-        margin: EdgeInsets.all(65),
-        child: Neumorphic(
-            style: NeumorphicStyle(
-              depth: 10,
-              shape: NeumorphicShape.concave,
-              boxShape: NeumorphicBoxShape.circle(),
-            ),
-            margin: EdgeInsets.all(7.5),
-            child: AnimatedContainer(
-                duration: Duration(seconds: 1),
-                decoration: BoxDecoration(gradient: gradient),
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  direction.gradient(gradient: FlutterGradientNames.glassWater, size: 44, key: ValueKey<String>(direction)),
-                  AnimatedSlideSwitcher.slideDown(
-                      child: heading.gradient(gradient: FlutterGradientNames.glassWater, size: 24, key: ValueKey<String>(heading)))
-                ]))));
   }
 }

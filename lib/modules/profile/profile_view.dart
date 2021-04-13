@@ -89,7 +89,7 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
       flexibleSpace: _ProfileHeaderView(),
-      expandedHeight: Get.height / 5,
+      expandedHeight: Get.height / 5 + 36,
       title: Container(
           alignment: Alignment.topCenter,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

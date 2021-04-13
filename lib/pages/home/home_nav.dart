@@ -20,7 +20,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    NavButton(HomeView.Grid, controller.setBottomIndex, controller.bottomIndex),
+                    NavButton(HomeView.Home, controller.setBottomIndex, controller.bottomIndex),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: NavButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
@@ -57,7 +57,8 @@ class NavButton extends GetView<HomeController> {
         onTap: () {
           onPressed(bottomType.index);
         },
-        child: Padding(
+        child: Container(
+          constraints: BoxConstraints(maxHeight: 80, maxWidth: Get.width / 6),
           padding: const EdgeInsets.all(8.0),
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
@@ -93,6 +94,7 @@ class HomeAppBarTitle extends GetView<HomeController> {
     return Obx(() => Container(
           padding: EdgeInsets.only(top: kToolbarHeight, bottom: 16),
           height: kToolbarHeight + 56,
+          width: Get.width - 60,
           child: AnimatedSlideSwitcher.fade(
             duration: 2.seconds,
             child: GestureDetector(

@@ -97,10 +97,9 @@ class LocalLobbyView extends GetView<TransferController> {
                 ? PlainButton(icon: SonrIcon.remote, onPressed: () async => controller.startRemote())
                 : Container(),
             leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
-            title: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet())),
+            title: Container(child: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet()))),
           ),
-          body: GestureDetector(
-            onDoubleTap: () => controller.toggleBirdsEye(),
+          body: Neumorphic(
             child: Stack(
               children: <Widget>[
                 // @ Range Lines
@@ -114,7 +113,7 @@ class LocalLobbyView extends GetView<TransferController> {
                     )),
 
                 // @ Lobby View
-                Obx(() => _LocalLobbyStack()),
+                _LocalLobbyStack(),
 
                 // @ Compass View
                 Padding(

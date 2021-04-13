@@ -6,19 +6,17 @@ class ShareView extends GetView<ShareController> {
   ShareView() : super(key: GlobalKey());
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedAlign(
-          curve: Curves.bounceOut,
-          duration: Duration(milliseconds: 600),
-          alignment: controller.alignment.value,
-          child: AnimatedContainer(
-              alignment: controller.alignment.value,
-              transform: controller.translation.value,
-              curve: Curves.bounceOut,
-              duration: Duration(milliseconds: 600),
-              width: controller.size.value.width,
-              height: controller.size.value.height,
-              child: _buildView()),
-        ));
+    return Padding(
+      padding: const EdgeInsets.only(top: 24.0),
+      child: Obx(
+        () => AnimatedContainer(
+            curve: Curves.bounceOut,
+            duration: Duration(milliseconds: 600),
+            width: controller.size.value.width,
+            height: controller.size.value.height,
+            child: _buildView()),
+      ),
+    );
   }
 
   // @ Build Page View by Navigation Item

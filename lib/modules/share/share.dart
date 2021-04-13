@@ -10,7 +10,6 @@ enum ShareStatus { Default, Queue, PickMedia }
 
 extension ShareStatusUtils on ShareStatus {
   bool get isExpanded => this != ShareStatus.Default;
-  bool get isOverflow => this != ShareStatus.Default || this != ShareStatus.Queue;
 
   // @ Method Builds Alignment for Status
   Alignment get alignment {
@@ -38,18 +37,6 @@ extension ShareStatusUtils on ShareStatus {
         break;
       default:
         return Size(60, 60);
-    }
-  }
-
-  // @ Method Builds Position for Status
-  Matrix4 get translation {
-    switch (this) {
-      case ShareStatus.Queue:
-        return Matrix4.translationValues(0, -30, 0);
-      case ShareStatus.PickMedia:
-        return Matrix4.translationValues(0, 40, 0);
-      default:
-        return Matrix4.translationValues(0, -30, 0);
     }
   }
 }

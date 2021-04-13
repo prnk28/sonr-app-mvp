@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-enum HomeView { Grid, Profile, Alerts, Remote }
+enum HomeView { Home, Profile, Alerts, Remote }
 
 class HomeController extends GetxController {
   // Properties
@@ -20,16 +20,17 @@ class HomeController extends GetxController {
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
-  final page = HomeView.Grid.obs;
+  final page = HomeView.Home.obs;
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // References
-  HomeView _lastPage = HomeView.Grid;
+  HomeView _lastPage = HomeView.Home;
   StreamSubscription<List<TransferCard>> _cardStream;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
+  bool _isSwiping = false;
 
   // ^ Controller Constructer ^
   @override
@@ -97,6 +98,8 @@ class HomeController extends GetxController {
 
       // Change Index
       bottomIndex(newIndex);
+
+      // Set Page
       if (newIndex == 1) {
         page(HomeView.Profile);
       } else if (newIndex == 2) {
@@ -104,8 +107,11 @@ class HomeController extends GetxController {
       } else if (newIndex == 3) {
         page(HomeView.Remote);
       } else {
-        page(HomeView.Grid);
+        page(HomeView.Home);
       }
+
+      // Update Title
+      titleText(page.value.title);
 
       // Close Sharebutton if open
       if (Get.find<ShareController>().status.value.isExpanded) {
@@ -116,16 +122,31 @@ class HomeController extends GetxController {
 
   // ^ Update Bottom Index from Swipe Left ^ //
   swipeLeft() {
-    if (page.value.isNotLast) {
-      page(page.value.pageNext);
+    if (!_isSwiping) {
+      _isSwiping = true;
+      if (page.value.isNotLast) {
+        page(page.value.pageNext);
+        titleText(page.value.title);
+        bottomIndex(HomeView.values.indexOf(page.value));
+      }
     }
   }
 
   // ^ Update Bottom Index from Swipe Right ^ //
   swipeRight() {
-    if (page.value.isNotFirst) {
-      page(page.value.pageBefore);
+    if (!_isSwiping) {
+      _isSwiping = true;
+      if (page.value.isNotFirst) {
+        page(page.value.pageBefore);
+        titleText(page.value.title);
+        bottomIndex(HomeView.values.indexOf(page.value));
+      }
     }
+  }
+
+  // ^ Swipe has Finished ^ //
+  swipeComplete() {
+    _isSwiping = false;
   }
 
   // @ Swaps Title when Lobby Size Changes ^ //
@@ -139,7 +160,7 @@ class HomeController extends GetxController {
       // Revert Text
       Future.delayed(timeout, () {
         if (!isClosed) {
-          titleText("Home");
+          titleText(page.value.title);
           _timeoutActive = false;
         }
       });
@@ -196,7 +217,7 @@ class HomeController extends GetxController {
       // Revert Text
       Future.delayed(const Duration(milliseconds: 3500) * 2, () {
         if (!isClosed) {
-          titleText("Home");
+          titleText(page.value.title);
           _timeoutActive = false;
         }
       });
@@ -209,18 +230,14 @@ extension HomeViewUtils on HomeView {
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {
-      case HomeView.Grid:
+      case HomeView.Home:
         return Icons.home;
-        break;
       case HomeView.Profile:
         return Icons.person;
-        break;
       case HomeView.Alerts:
         return Icons.notifications;
-        break;
       case HomeView.Remote:
         return SonrIconData.remote;
-        break;
       default:
         return Icons.deck;
     }
@@ -244,13 +261,10 @@ extension HomeViewUtils on HomeView {
     switch (this) {
       case HomeView.Profile:
         return LottieIconType.Profile;
-        break;
       case HomeView.Alerts:
         return LottieIconType.Alerts;
-        break;
       case HomeView.Remote:
         return LottieIconType.Remote;
-        break;
       default:
         return LottieIconType.Home;
     }
@@ -259,21 +273,21 @@ extension HomeViewUtils on HomeView {
   // # Returns Icon Size
   double get iconSize {
     switch (this) {
-      case HomeView.Grid:
+      case HomeView.Home:
         return 32;
-        break;
       case HomeView.Profile:
         return 32;
-        break;
       case HomeView.Alerts:
         return 32;
-        break;
       case HomeView.Remote:
         return 38;
-        break;
       default:
         return 32;
     }
+  }
+
+  String get title {
+    return this.toString().substring(this.toString().indexOf('.') + 1);
   }
 
   bool get isNotFirst {

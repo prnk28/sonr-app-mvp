@@ -14,7 +14,6 @@ class ShareController extends GetxController {
   // Properties
   final alignment = Alignment.bottomCenter.obs;
   final size = Size(60, 60).obs;
-  final translation = Rx<Matrix4>(Matrix4.translationValues(0, -30, 0));
   final status = ShareStatus.Default.obs;
 
   // Shared Files
@@ -179,6 +178,5 @@ class ShareController extends GetxController {
   _handleStatus(ShareStatus status) {
     size(status.size);
     alignment(status.alignment);
-    translation(status.translation);
   }
 }

@@ -2,6 +2,7 @@ import 'package:sonr_app/modules/share/index_view.dart';
 import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/modules/common/file/file.dart';
 import 'package:sonr_app/modules/common/media/media.dart';
+import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
@@ -16,26 +17,29 @@ import 'home_nav.dart';
 class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return SonrScaffold(
-        resizeToAvoidBottomInset: false,
-        shareView: ShareView(),
-        bottomNavigationBar: HomeBottomNavBar(),
-        appBar: DesignAppBar(title: HomeAppBarTitle()),
-        body: Obx(() => AnimatedSlideSwitcher(
-              controller.switchAnimation,
-              GestureDetector(
-                  child: _buildView(controller.page.value),
-                  onHorizontalDragUpdate: (details) {
-                    // Note: Sensitivity is integer used when you don't want to mess up vertical drag
-                    int sensitivity = 8;
-                    if (details.delta.dx > sensitivity) {
-                      controller.swipeRight();
-                    } else if (details.delta.dx < -sensitivity) {
-                      controller.swipeLeft();
-                    }
-                  }),
-              const Duration(milliseconds: 2500),
-            )));
+    return GestureDetector(
+      onTap: Get.find<ShareController>().shrink,
+      onHorizontalDragEnd: (_) => controller.swipeComplete(),
+      onHorizontalDragUpdate: (details) {
+        // Note: Sensitivity is integer used when you don't want to mess up vertical drag
+        int sensitivity = 8;
+        if (details.delta.dx > sensitivity) {
+          controller.swipeRight();
+        } else if (details.delta.dx < -sensitivity) {
+          controller.swipeLeft();
+        }
+      },
+      child: SonrScaffold(
+          resizeToAvoidBottomInset: false,
+          shareView: ShareView(),
+          bottomNavigationBar: HomeBottomNavBar(),
+          appBar: DesignAppBar(title: HomeAppBarTitle()),
+          body: Obx(() => AnimatedSlideSwitcher(
+                controller.switchAnimation,
+                _buildView(controller.page.value),
+                const Duration(milliseconds: 2500),
+              ))),
+    );
   }
 
   // @ Build Page View by Navigation Item
@@ -49,7 +53,7 @@ class HomePage extends GetView<HomeController> {
       return RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
     } else {
       return CardGridView(
-        key: ValueKey<HomeView>(HomeView.Grid),
+        key: ValueKey<HomeView>(HomeView.Home),
       );
     }
   }
