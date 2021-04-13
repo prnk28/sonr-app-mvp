@@ -2,7 +2,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-enum RegisterStatus { Form, Location, Gallery, Complete }
+enum RegisterStatus { Form, Location, Gallery }
 
 class RegisterController extends GetxController {
   // Properties
@@ -63,11 +63,11 @@ class RegisterController extends GetxController {
 
   // ^ Request Gallery Permissions ^ //
   Future<bool> requestGallery() async {
-    if (DeviceService.isIOS) {
-      if (await Permission.photos.request().isGranted) {
+    if (DeviceService.isAndroid) {
+      if (await Permission.storage.request().isGranted) {
         UserService.permissions.value.update();
         UserService.permissions.refresh();
-        status(RegisterStatus.Complete);
+        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
         return true;
       } else {
         UserService.permissions.value.update();
@@ -75,13 +75,16 @@ class RegisterController extends GetxController {
         return false;
       }
     } else {
-      status(RegisterStatus.Complete);
-      return true;
+      if (await Permission.photos.request().isGranted) {
+        UserService.permissions.value.update();
+        UserService.permissions.refresh();
+        await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+        return true;
+      } else {
+        UserService.permissions.value.update();
+        UserService.permissions.refresh();
+        return false;
+      }
     }
-  }
-
-  // ^ Move to Home Page ^ //
-  completeRegister() async {
-    await Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
   }
 }

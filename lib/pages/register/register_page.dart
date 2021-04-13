@@ -25,8 +25,6 @@ class RegisterPage extends GetView<RegisterController> {
       return BoardingLocationView(key: ValueKey<RegisterStatus>(RegisterStatus.Location));
     } else if (status == RegisterStatus.Gallery) {
       return BoardingGalleryView(key: ValueKey<RegisterStatus>(RegisterStatus.Gallery));
-    } else if (status == RegisterStatus.Complete) {
-      return CompleteView(key: ValueKey<RegisterStatus>(RegisterStatus.Complete));
     } else {
       return FormPage(key: ValueKey<RegisterStatus>(RegisterStatus.Form));
     }

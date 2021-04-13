@@ -162,7 +162,7 @@ class DesignText extends StatelessWidget {
   Text _buildText(TextAlign align) {
     return Text(
       text,
-      overflow: TextOverflow.ellipsis,
+      overflow: TextOverflow.visible,
       textAlign: align,
       style: TextStyle(
         fontFamily: type.family,
@@ -193,7 +193,7 @@ class GradientText extends StatelessWidget {
               ),
           child: Text(
             text,
-            overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.visible,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: "Manrope",

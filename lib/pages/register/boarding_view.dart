@@ -8,19 +8,13 @@ class BoardingLocationView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
-      color: SonrPalette.Tertiary,
-      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/location.png"), fit: BoxFit.fill)),
+      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 24),
       child: Column(
         children: [
-          "Getting Started".h3,
-          Padding(padding: EdgeInsets.all(8)),
-          "Sonr needs your Location in order to find other devices around you".p_Grey,
-          LottieContainer(
-            type: LottieBoard.Location,
-            width: Get.width,
-          ),
+          "Location".h2,
           Spacer(),
-          ColorButton.primary(onPressed: controller.requestLocation, text: "Proceed"),
+          ColorButton.primary(onPressed: controller.requestLocation, text: "Grant Location"),
         ],
       ),
     );
@@ -34,38 +28,13 @@ class BoardingGalleryView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
-      margin: EdgeInsets.all(8),
-      color: SonrPalette.Secondary,
+      padding: EdgeInsets.only(top: 64, left: 48, right: 86, bottom: 48),
+      decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/media.png"), fit: BoxFit.fill)),
       child: Column(
         children: [
-          "Gallery".h3,
-          Padding(padding: EdgeInsets.all(8)),
-          "Sonr needs access to your Gallery for sharing Files.".p_Grey,
-          LottieContainer(
-            type: LottieBoard.Gallery,
-            width: Get.width,
-          ),
+          "Sonr needs access to your Gallery for sharing Files.".h4,
           Spacer(),
-          ColorButton.primary(onPressed: controller.requestLocation, text: "Proceed"),
-        ],
-      ),
-    );
-  }
-}
-
-class CompleteView extends GetView<RegisterController> {
-  const CompleteView({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: Get.width,
-      height: Get.height,
-      margin: EdgeInsets.all(8),
-      child: Column(
-        children: [
-          "All Set!".hero,
-          Spacer(),
-          ColorButton.primary(onPressed: controller.setContact, text: "Continue"),
+          ColorButton.primary(onPressed: controller.requestGallery, text: "Grant Gallery"),
         ],
       ),
     );
