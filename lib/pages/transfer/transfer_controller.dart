@@ -55,21 +55,31 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
-  // ^ Send Invite to Peer ^ //
-  void invite({Peer peer, BubbleController bubbleController}) {
-    // Set Controller
-    if (bubbleController != null) {
-      currentPeerController = bubbleController;
-    }
-
+  // ^ Send Invite with Peer ^ //
+  void inviteWithPeer(Peer peer) {
     // Update Request
     inviteRequest.update((val) {
-      val.to = bubbleController != null ? bubbleController.peer.value : peer;
+      val.to = peer;
     });
 
     // Send Invite
     SonrService.invite(inviteRequest.value);
+  }
+
+  // ^ Send Invite with Bubble Controller ^ //
+  void inviteWithBubble(BubbleController bubble) {
+    // Set Controller
+    currentPeerController = bubble;
     setFacingPeer(false);
+    isShiftingEnabled(false);
+
+    // Update Request
+    inviteRequest.update((val) {
+      val.to = bubble.peer.value;
+    });
+
+    // Send Invite
+    SonrService.invite(inviteRequest.value);
   }
 
   // ^ Set Transfer Payload ^ //

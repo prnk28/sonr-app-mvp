@@ -212,6 +212,7 @@ class SonrService extends GetxService {
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
+    print(data.value.toString());
     if (Get.isRegistered<DeviceService>() && data.value == Status.BOOTSTRAPPED) {
       // Update Status
       _isReady(true);
@@ -225,24 +226,24 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
+    print(data.toString());
     if (data.hasRemote() && _remoteCallback != null) {
       _remoteCallback(data);
     }
 
     // Present Overlay
-    if (SonrOverlay.isNotOpen) {
-      await HapticFeedback.heavyImpact();
-      // Check for Flat
-      if (data.isFlat && data.payload == Payload.CONTACT) {
-        FlatMode.invite(data.card);
-      } else {
-        SonrOverlay.invite(data);
-      }
+    await HapticFeedback.heavyImpact();
+    // Check for Flat
+    if (data.isFlat && data.payload == Payload.CONTACT) {
+      FlatMode.invite(data.card);
+    } else {
+      SonrOverlay.invite(data);
     }
   }
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
+    print(data.toString());
     if (data.type == AuthReply_Type.FlatContact) {
       await HapticFeedback.heavyImpact();
       FlatMode.response(data.card);
@@ -270,6 +271,7 @@ class SonrService extends GetxService {
 
   // ^ Resets Peer Info Event ^
   void _handleTransmitted(Peer data) async {
+    print(data.toString());
     // Check for Callback
     if (_transferCallback != null) {
       _transferCallback(TransferStatus.Completed);
@@ -282,6 +284,7 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
+    print(data.toString());
     await HapticFeedback.heavyImpact();
 
     // Save Card to Gallery

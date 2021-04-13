@@ -176,7 +176,7 @@ class BubbleController extends GetxController {
       // Check not already Pending
       if (!_isPending.value) {
         // Perform Invite
-        Get.find<TransferController>().invite(bubbleController: this);
+        Get.find<TransferController>().inviteWithBubble(this);
 
         // Check for File
         if (Get.find<TransferController>().currentPayload.isTransfer) {

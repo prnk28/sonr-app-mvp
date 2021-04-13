@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 
 // ** Enums ** //
 enum LottieBoard { David, JoinRemote, Access, Gallery, Location }
+enum LottieShare { Camera, Files, Gallery }
 enum LottieIconType { Home, Profile, Alerts, Remote }
 
 // ^ Lottie Board Type extensions ^ //
@@ -12,19 +13,19 @@ extension LottieBoardUtils on LottieBoard {
     switch (this) {
       case LottieBoard.David:
         return "assets/lottie/david.json";
-        break;
+
       case LottieBoard.JoinRemote:
         return "assets/lottie/join-remote.json";
-        break;
+
       case LottieBoard.Access:
         return "assets/lottie/access.json";
-        break;
+
       case LottieBoard.Gallery:
         return "assets/lottie/gallery.json";
-        break;
+
       case LottieBoard.Location:
         return "assets/lottie/location.json";
-        break;
+
       default:
         return "";
     }
@@ -38,18 +39,29 @@ extension LottieIconUtils on LottieIconType {
     switch (this) {
       case LottieIconType.Home:
         return "assets/bar/home.json";
-        break;
+
       case LottieIconType.Profile:
         return "assets/bar/profile.json";
-        break;
+
       case LottieIconType.Alerts:
         return "assets/bar/alerts.json";
-        break;
       case LottieIconType.Remote:
         return "assets/bar/remote.json";
-        break;
       default:
         return "";
+    }
+  }
+}
+
+extension LottieShareUtils on LottieShare {
+  String get path {
+    switch (this) {
+      case LottieShare.Camera:
+        return "assets/share/camera.json";
+      case LottieShare.Files:
+        return "assets/share/files.json";
+      default:
+        return "assets/share/gallery.json";
     }
   }
 }
@@ -128,6 +140,30 @@ class LottieContainer extends HookWidget {
         } else {
           controller.forward();
         }
+      },
+    );
+  }
+}
+
+// ^ Lottie Animation Container Widget ^ //
+class LottieShareContainer extends HookWidget {
+  final LottieShare type;
+  const LottieShareContainer({Key key, @required this.type}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = useAnimationController();
+    return Lottie.asset(
+      type.path,
+      controller: controller,
+      width: 55,
+      repeat: true,
+      animate: true,
+      height: 55,
+      fit: BoxFit.fitWidth,
+      onLoaded: (composition) {
+        controller..duration = composition.seconds.seconds;
+        controller.repeat();
       },
     );
   }

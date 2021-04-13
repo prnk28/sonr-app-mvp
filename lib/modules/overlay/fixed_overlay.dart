@@ -29,11 +29,10 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
   static int show(Widget view,
-      { // ^,
+      {bool barrierDismissible = true,
       Duration entryDuration = const Duration(milliseconds: 300),
-      bool barrierDismissible = true,
       bool disableAnimation = false,
-      Color backgroundColor,
+      Color backgroundColor = Colors.black54,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top}) {
     // Create Overlay
