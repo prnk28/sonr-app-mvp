@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'preview_widget.dart';
@@ -158,9 +158,10 @@ class _CameraToolsView extends GetView<CameraController> {
                 onTap: () async {
                   await HapticFeedback.heavyImpact();
                   // Check for Permssions
-                  var file = await MediaPicker.sheet();
-                  SonrService.queueMedia(file);
-                  await Get.offNamed("/transfer");
+                  var result = await FileService.selectMedia();
+                  if (result.hasItem) {
+                    Transfer.transferWithFile(result.fileItem);
+                  }
                 }),
           ]),
         ),

@@ -176,11 +176,10 @@ class BubbleController extends GetxController {
       // Check not already Pending
       if (!_isPending.value) {
         // Perform Invite
-        SonrService.inviteWithController(this);
-        Get.find<TransferController>().setFacingPeer(false);
+        Get.find<TransferController>().invite(bubbleController: this);
 
         // Check for File
-        if (Get.find<SonrService>().payload == Payload.MEDIA) {
+        if (Get.find<SonrService>().payload.isTransfer) {
           _isPending.value = true;
         }
         // Contact/URL

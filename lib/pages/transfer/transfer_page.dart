@@ -2,16 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/common/lobby/lobby.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'compass_widget.dart';
 import 'transfer_controller.dart';
 
+// ^ Transfer Screen Entry with Arguments ^ //
+class Transfer {
+  static void transferWithContact() {
+    Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, contact: UserService.contact.value));
+  }
+
+  static void transferWithFile(FileItem fileItem) {
+    Get.offNamed("/transfer", arguments: TransferArguments(fileItem.payload, metadata: fileItem.metadata));
+  }
+
+  static void transferWithUrl(String url) {
+    Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, url: url));
+  }
+}
+
 // ^ Transfer Screen Entry Point ^ //
 class TransferScreen extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
+    // Set Payload from Args
+    controller.setPayload(Get.arguments);
+
+    // Build View
     return Obx(
       () {
         if (controller.isRemoteActive.value) {

@@ -192,32 +192,13 @@ class SonrService extends GetxService with TransferQueue {
     to._node.message(peer, content);
   }
 
-  // ^ Invite-Peer Event ^
-  static void inviteWithController(BubbleController c) async {
-    // Set Peer Controller
-    to.currentInvited(c);
+  // ^ Invite Peer with Built Request ^ //
+  static void invite(InviteRequest request, {BubbleController c}) async {
+    // Set Controller if Valid
+    c ?? to.currentInvited(c);
 
-    // File Payload
-    if (to.payload == Payload.MEDIA) {
-      assert(to.currentTransfer.media != null);
-      await to._node.inviteFile(c.peer.value, to.currentTransfer.media);
-    }
-
-    // Contact Payload
-    else if (to.payload == Payload.CONTACT) {
-      await to._node.inviteContact(c.peer.value, isFlat: to.currentTransfer.isFlat);
-    }
-
-    // Link Payload
-    else if (to.payload == Payload.URL) {
-      assert(to.currentTransfer.url != null);
-      await to._node.inviteLink(c.peer.value, to.currentTransfer.url);
-    }
-
-    // No Payload
-    else {
-      SonrSnack.error("No media, contact, or link provided");
-    }
+    // Send Invite
+    await to._node.invite(request);
   }
 
   // ^ Invite-Peer Event ^

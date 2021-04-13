@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/common/peer/bubble_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {
@@ -7,6 +9,7 @@ class TransferController extends GetxController {
   final title = "Nobody Here".obs;
   final isBirdsEye = false.obs;
   final isFacingPeer = false.obs;
+  final inviteRequest = InviteRequest().obs;
 
   // @ Remote Properties
   final isRemoteActive = false.obs;
@@ -47,12 +50,64 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
+  // ^ Send Invite to Peer ^ //
+  void invite({Peer peer, BubbleController bubbleController}) {
+    // Validate
+    assert(peer != null && bubbleController != null);
+
+    // Update Request
+    inviteRequest.update((val) {
+      val.to = bubbleController != null ? bubbleController.peer.value : peer;
+    });
+
+    // Send Invite
+    SonrService.invite(inviteRequest.value);
+    setFacingPeer(false);
+  }
+
+  // ^ Set Transfer Payload ^ //
+  void setPayload(dynamic args) {
+    // Validate Args
+    if (args is TransferArguments) {
+      // Contact
+      if (args.payload == Payload.CONTACT) {
+        inviteRequest.update((val) {
+          val.payload = args.payload;
+          val.contact = args.contact;
+          val.type = InviteRequest_TransferType.Contact;
+        });
+      }
+      // URL
+      else if (args.payload == Payload.URL) {
+        inviteRequest.update((val) {
+          val.payload = args.payload;
+          val.url = args.url;
+          val.type = InviteRequest_TransferType.URL;
+        });
+      }
+      // File
+      else {
+        inviteRequest.update((val) {
+          val.payload = args.payload;
+          val.files.add(args.metadata);
+          val.type = InviteRequest_TransferType.File;
+        });
+      }
+    } else {
+      print("Invalid Arguments Provided for Transfer");
+    }
+  }
+
   // ^ Start Remote Session ^ //
   void startRemote() async {
-    
     // Start Remote
     remote(await SonrService.createRemote());
     isRemoteActive(true);
+
+    // Update Invite Request
+    inviteRequest.update((val) {
+      val.remote = remote.value;
+    });
   }
 
   // ^ Stop Remote Session ^ //
@@ -61,6 +116,11 @@ class TransferController extends GetxController {
     SonrService.leaveRemote(remote.value);
     remote(RemoteInfo());
     isRemoteActive(false);
+
+    // Clear Remote from Invite Request
+    inviteRequest.update((val) {
+      val.remote.clear();
+    });
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //

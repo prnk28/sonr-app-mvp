@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'share.dart';
 
@@ -64,7 +65,7 @@ class ShareController extends GetxController {
     if (UserService.permissions.value.hasGallery) {
       var result = await FileService.selectMedia();
       if (result.hasItem) {
-        print(result.item2.toString());
+        Transfer.transferWithFile(result.fileItem);
       }
     } else {
       // Request Permissions
@@ -78,7 +79,7 @@ class ShareController extends GetxController {
         // Continue With Picker
         var result = await FileService.selectFile();
         if (result.hasItem) {
-          print(result.item2.toString());
+          Transfer.transferWithFile(result.fileItem);
         }
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
@@ -92,7 +93,7 @@ class ShareController extends GetxController {
     if (UserService.permissions.value.hasGallery) {
       var result = await FileService.selectMedia();
       if (result.hasItem) {
-        print(result.item2.toString());
+        Transfer.transferWithFile(result.fileItem);
       }
     } else {
       // Request Permissions
@@ -106,7 +107,7 @@ class ShareController extends GetxController {
         // Continue With Picker
         var result = await FileService.selectMedia();
         if (result.hasItem) {
-          print(result.item2.toString());
+          Transfer.transferWithFile(result.fileItem);
         }
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
@@ -114,12 +115,6 @@ class ShareController extends GetxController {
     }
   }
 
-  // ^ Set current Media Item ^ //
-  setMedia(MediaItem item) async {
-    SonrService.queueMedia(item);
-    await Get.toNamed("/transfer");
-    status(ShareStatus.Default);
-  }
 
   // ^ Close Share Button ^ //
   void shrink({Duration delay = const Duration(milliseconds: 0)}) {

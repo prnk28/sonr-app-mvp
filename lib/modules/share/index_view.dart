@@ -25,7 +25,7 @@ class ShareView extends GetView<ShareController> {
   Widget _buildView() {
     // Return View
     if (controller.status.value == ShareStatus.PickMedia) {
-      return MediaPickerView(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
+      return Container(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
     } else if (controller.status.value == ShareStatus.Queue) {
       return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
     } else {

@@ -140,3 +140,7 @@ extension WidgetUtils on Peer {
     );
   }
 }
+
+extension PayloadUtils on Payload {
+  bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
+}
