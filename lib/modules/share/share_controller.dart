@@ -12,7 +12,6 @@ class ShareController extends GetxController {
   final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
 
   // Properties
-  final alignment = Alignment.bottomCenter.obs;
   final size = Size(60, 60).obs;
   final status = ShareStatus.Default.obs;
 
@@ -177,6 +176,5 @@ class ShareController extends GetxController {
   // # Update Size Based on State
   _handleStatus(ShareStatus status) {
     size(status.size);
-    alignment(status.alignment);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
+import 'page_view.dart';
 
 // ^ Home Tab Bar Navigation ^ //
 class HomeBottomNavBar extends GetView<HomeController> {
@@ -88,20 +89,47 @@ class HomeAppBarTitle extends GetView<HomeController> {
   const HomeAppBarTitle({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          padding: EdgeInsets.only(top: kToolbarHeight, bottom: 16),
-          height: kToolbarHeight + 56,
-          width: Get.width - 60,
-          child: AnimatedSlideSwitcher.fade(
-            duration: 2.seconds,
-            child: GestureDetector(
-              key: ValueKey<String>(controller.titleText.value),
-              child: controller.titleText.value.h3,
-              onTap: () {
-                controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-              },
+    return Obx(() => controller.isTitleVisible.value
+        ? Container(
+            height: 56,
+            alignment: Alignment.centerLeft,
+            child: AnimatedSlideSwitcher.fade(
+              duration: 2.seconds,
+              child: GestureDetector(
+                key: ValueKey<String>(controller.titleText.value),
+                onTap: () {
+                  if (controller.isTitleVisible.value) {
+                    controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                  }
+                },
+                child: controller.titleText.value.h3_White,
+              ),
             ),
-          ),
+          )
+        : Container());
+  }
+}
+
+class HomeActionButton extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => AnimatedSlideSwitcher.fade(
+          child: _buildView(controller.page.value),
+          duration: const Duration(milliseconds: 2500),
         ));
+  }
+
+  // @ Build Page View by Navigation Item
+  Widget _buildView(HomeView page) {
+    // Return View
+    if (page == HomeView.Profile) {
+      return Container(key: ValueKey<HomeView>(HomeView.Profile));
+    } else if (page == HomeView.Alerts) {
+      return Container(key: ValueKey<HomeView>(HomeView.Alerts));
+    } else if (page == HomeView.Remote) {
+      return Container(key: ValueKey<HomeView>(HomeView.Remote));
+    } else {
+      return CardToggleFilter(key: ValueKey<HomeView>(HomeView.Home));
+    }
   }
 }

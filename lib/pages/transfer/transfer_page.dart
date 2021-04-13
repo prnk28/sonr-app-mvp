@@ -141,7 +141,6 @@ class _LocalLobbyStack extends StatefulWidget {
 
 class _LocalLobbyStackState extends State<_LocalLobbyStack> {
   // References
-  int lobbySize = 0;
   List<PeerBubble> stackChildren = <PeerBubble>[];
   StreamSubscription<LobbyModel> localLobbyStream;
 
@@ -163,7 +162,7 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
 
   @override
   Widget build(BuildContext context) {
-    if (lobbySize > 0) {
+    if (stackChildren.length > 0) {
       return OpacityAnimatedWidget(duration: 150.milliseconds, child: Stack(children: stackChildren), enabled: true);
     } else {
       return Container();
@@ -179,16 +178,17 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
     stackChildren.clear();
 
     // Iterate through peers and IDs
-    data.peers.forEach((peer) {
-      if (peer.platform == Platform.iOS || peer.platform == Platform.Android) {
-        // Add to Stack Items
-        children.add(PeerBubble(peer));
-      }
-    });
+    if (data.peers != null) {
+      data.peers.forEach((peer) {
+        if (peer.platform == Platform.iOS || peer.platform == Platform.Android) {
+          // Add to Stack Items
+          children.add(PeerBubble(peer));
+        }
+      });
+    }
 
     // Update View
     setState(() {
-      lobbySize = data.peers.length;
       stackChildren = children;
     });
   }

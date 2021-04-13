@@ -10,12 +10,12 @@ class CompassView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Align(
+      return Container(
           alignment: Alignment.bottomCenter,
           child: Stack(alignment: Alignment.topCenter, children: [
             // Compass Total
             AspectRatio(
-              aspectRatio: 0.75,
+              aspectRatio: 1,
               child: controller.isFacingPeer.value
                   ? AnimatedRipples(
                       child: _CompassView(),

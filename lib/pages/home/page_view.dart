@@ -3,9 +3,11 @@ import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/modules/common/file/file.dart';
 import 'package:sonr_app/modules/common/media/media.dart';
 import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/theme/buttons/utility.dart';
 import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
+import 'package:sonr_app/pages/home/tag_widget.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
@@ -33,7 +35,10 @@ class HomePage extends GetView<HomeController> {
           resizeToAvoidBottomInset: false,
           shareView: ShareView(),
           bottomNavigationBar: HomeBottomNavBar(),
-          appBar: DesignAppBar(title: HomeAppBarTitle()),
+          appBar: DesignAppBar(
+            title: HomeAppBarTitle(),
+            action: HomeActionButton(),
+          ),
           body: Obx(() => AnimatedSlideSwitcher(
                 controller.switchAnimation,
                 _buildView(controller.page.value),
@@ -83,39 +88,9 @@ class CardGridView extends GetView<HomeController> {
 
       return SafeArea(
         maintainBottomViewPadding: true,
-        child: Container(child: Column(children: [_CardGridToggle(), Expanded(child: _CardGridWidget(cardList, pageController))])),
+        child: cardList.length > 0 ? _CardGridWidget(cardList, pageController) : _CardGridEmpty(),
       );
     });
-  }
-}
-
-class _CardGridToggle extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: context.width,
-      height: 40,
-      margin: EdgeWith.horizontal(24),
-      child: NeumorphicToggle(
-        style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
-        selectedIndex: controller.toggleIndex.value,
-        onChanged: (val) => controller.setToggleCategory(val),
-        thumb: Neumorphic(style: SonrStyle.toggle),
-        children: [
-          ToggleElement(
-              background: Center(child: "Media".h6_Grey),
-              foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
-          ToggleElement(
-              background: Center(child: "All".h6_Grey),
-              foreground: SonrIcon.neumorphicGradient(
-                  SonrIconData.all_categories, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
-                  size: 22.5)),
-          ToggleElement(
-              background: Center(child: "Contacts".h6_Grey),
-              foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
-        ],
-      ),
-    );
   }
 }
 
@@ -138,12 +113,7 @@ class _CardGridWidget extends GetView<HomeController> {
           }),
         );
       } else {
-        return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          "No Cards Found!".h1,
-          Padding(padding: EdgeInsets.all(8)),
-          LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
-          Padding(padding: EdgeInsets.all(16)),
-        ]);
+        return _CardGridEmpty();
       }
     });
   }
@@ -158,5 +128,100 @@ class _CardGridWidget extends GetView<HomeController> {
     } else {
       return FileCardView(item);
     }
+  }
+}
+
+// @ Helper Method to Build Empty List Value
+class _CardGridEmpty extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      "No Cards Found!".h3,
+      Padding(padding: EdgeInsets.all(8)),
+      LottieContainer(type: LottieBoard.David, width: Get.width, height: Get.height / 2.5, repeat: true),
+      Padding(padding: EdgeInsets.all(16)),
+    ]);
+  }
+}
+
+class CardToggleFilter extends GetView<HomeController> {
+  CardToggleFilter({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      child: Obx(
+        () => GestureDetector(
+          onTap: controller.handleAction,
+          child: Opacity(
+            opacity: 0.85,
+            child: AnimatedContainer(
+              width: controller.isFilterOpen.value ? 360 : 56,
+              height: controller.isFilterOpen.value ? 56 : 56,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.White),
+              duration: ButtonUtility.K_BUTTON_DURATION,
+              child: controller.isFilterOpen.value
+                  ? TagView(
+                      tags: [
+                        Tuple(Icon(SonrIconData.all_categories, color: SonrColor.White, size: 20), "All"),
+                        Tuple(Icon(SonrIconData.media, color: SonrColor.White, size: 20), "Media"),
+                        Tuple(Icon(SonrIconData.friends, color: SonrColor.White, size: 20), "Contacts")
+                      ],
+                    )
+                  : Icon(
+                      Icons.filter_alt_outlined,
+                      color: SonrColor.Black,
+                      size: 34,
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToggle() {
+    return NeumorphicToggle(
+      style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
+      selectedIndex: controller.toggleIndex.value,
+      onChanged: (val) => controller.setToggleCategory(val),
+      thumb: Neumorphic(style: SonrStyle.toggle),
+      children: [
+        ToggleElement(
+            background: Center(child: SonrIcon.normal(SonrIconData.media, color: SonrColor.Grey, size: 24)),
+            foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
+        ToggleElement(
+            background: Center(child: SonrIcon.normal(SonrIconData.all_categories, color: SonrColor.Grey, size: 22.5)),
+            foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories, FlutterGradientNames.eternalConstance, size: 22.5)),
+        ToggleElement(
+            background: Center(child: SonrIcon.normal(SonrIconData.friends, color: SonrColor.Grey, size: 24)),
+            foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
+      ],
+    );
+  }
+
+  Widget buildBubbles() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 4),
+      alignment: Alignment.center,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Container(
+          padding: EdgeInsets.all(4),
+          child: "All".p_White,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.black.withOpacity(0.85)),
+        ),
+        Container(
+          padding: EdgeInsets.all(4),
+          child: "Media".p_White,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.orange.withOpacity(0.85)),
+        ),
+        Container(
+          padding: EdgeInsets.all(4),
+          child: "Contacts".p_White,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.purple.withOpacity(0.85)),
+        ),
+      ]),
+    );
   }
 }

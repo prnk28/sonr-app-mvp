@@ -9,27 +9,17 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   DesignAppBar({this.title, this.leading, this.action});
   @override
   Widget build(BuildContext context) {
-    if (leading == null) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 48.0),
-        child: NavigationToolbar(
-          leading: title,
-          trailing: action ?? Container(),
-          middleSpacing: 0,
-        ),
-      );
-    } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-        child: NavigationToolbar(
-          leading: leading,
-          trailing: action,
-          middle: title,
-        ),
-      );
-    }
+    return Padding(
+      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
+      child: NavigationToolbar(
+        leading: leading,
+        trailing: action,
+        middle: title,
+        centerMiddle: false,
+      ),
+    );
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 16);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 28);
 }

@@ -68,11 +68,11 @@ class PageBackground extends StatelessWidget {
       backendColor: Colors.transparent,
       child: Stack(
         children: [
-          // Underlay Color
-          _BackgroundUnderlay(),
-
           // Gradient
           _BackgroundGradient(),
+
+          // Overlay Color
+          _BackgroundOverlay(),
 
           // Blue
           BackdropFilter(
@@ -90,9 +90,9 @@ class PageBackground extends StatelessWidget {
 class _BackgroundGradient extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = useAnimationController(duration: 20.seconds);
-    final Gradient first = FlutterGradients.crystalRiver(type: GradientType.radial, center: Alignment.topLeft);
-    final Gradient second = FlutterGradients.blackSea(type: GradientType.radial, center: Alignment.topLeft);
+    final controller = useAnimationController(duration: 30.seconds);
+    final Gradient first = FlutterGradients.norseBeauty(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
+    final Gradient second = FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
     controller.repeat(reverse: true);
 
     return AnimatedBuilder(
@@ -103,7 +103,7 @@ class _BackgroundGradient extends HookWidget {
                 height: Get.height,
                 width: Get.width,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                   // ignore: invalid_use_of_protected_member
                   gradient: first.lerpTo(second, controller.value),
                 ),
@@ -112,19 +112,19 @@ class _BackgroundGradient extends HookWidget {
   }
 }
 
-class _BackgroundUnderlay extends StatelessWidget {
+class _BackgroundOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => UserService.brightness.value == Brightness.light
+    return UserService.isDarkMode
         ? Container(
-            width: Get.width,
             height: Get.height,
-            color: SonrColor.White,
+            width: Get.width,
+            color: SonrColor.Dark.withOpacity(0.8),
           )
         : Container(
-            width: Get.width,
             height: Get.height,
-            color: SonrColor.Dark,
-          ));
+            width: Get.width,
+            color: SonrColor.White.withOpacity(0.55),
+          );
   }
 }

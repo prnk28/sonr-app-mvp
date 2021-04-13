@@ -1,6 +1,3 @@
-
-
-// ** Builds Compass View Bulb ** //
 import 'package:sonr_app/theme/theme.dart';
 
 class BulbView extends StatelessWidget {

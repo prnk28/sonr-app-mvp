@@ -11,21 +11,6 @@ enum ShareStatus { Default, Queue, PickMedia }
 extension ShareStatusUtils on ShareStatus {
   bool get isExpanded => this != ShareStatus.Default;
 
-  // @ Method Builds Alignment for Status
-  Alignment get alignment {
-    switch (this) {
-      case ShareStatus.PickMedia:
-        return Alignment.center;
-        break;
-      case ShareStatus.Queue:
-        return Alignment.bottomCenter;
-        break;
-
-      default:
-        return Alignment.bottomCenter;
-    }
-  }
-
   // @ Method Builds Size for Status
   Size get size {
     switch (this) {

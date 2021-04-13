@@ -13,7 +13,8 @@ class HomeController extends GetxController {
   final status = Rx<HomeState>(HomeState.None);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
   final isBottomBarVisible = true.obs;
-  final isAppBarVisible = true.obs;
+  final isTitleVisible = true.obs;
+  final isFilterOpen = false.obs;
 
   // Elements
   final titleText = "Home".obs;
@@ -78,6 +79,23 @@ class HomeController extends GetxController {
     toggleIndex(1);
     pageIndex(0);
     super.onClose();
+  }
+
+  // ^ Method to Handle Action Button ^ //
+  void handleAction() {
+    if (page.value == HomeView.Home) {
+      // Set Open and Close Title
+      isFilterOpen(!isFilterOpen.value);
+      isTitleVisible(!isFilterOpen.value);
+
+      // Close after Delay
+      Future.delayed(5.seconds, () {
+        if (isFilterOpen.value) {
+          isFilterOpen(false);
+          isTitleVisible(!isFilterOpen.value);
+        }
+      });
+    }
   }
 
   // ^ Method for Setting Category Filter ^ //
@@ -151,7 +169,7 @@ class HomeController extends GetxController {
 
   // @ Swaps Title when Lobby Size Changes ^ //
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
-    if (!_timeoutActive && !isClosed) {
+    if (!_timeoutActive && !isClosed && isTitleVisible.value) {
       // Swap Text
       titleText(val);
       HapticFeedback.mediumImpact();
