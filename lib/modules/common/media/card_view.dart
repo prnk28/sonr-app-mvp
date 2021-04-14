@@ -46,61 +46,54 @@ class _MediaCardViewState extends State<MediaCardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: Colors.transparent,
-      color: Colors.transparent,
-      elevation: 2,
-      child: Container(
-        height: 420,
-        width: Get.width - 64,
-        child: GestureDetector(
-          onTap: () {
-            // Push to Page
-            Get.to(_MediaCardExpanded(widget.card, mediaFile), transition: Transition.fadeIn);
-          },
-          child: Neumorphic(
-            style: SonrStyle.normal,
-            margin: EdgeInsets.all(4),
-            child: Hero(
-              tag: widget.card.received,
-              child: Container(
-                height: 75,
-                decoration: hasLoaded ? _buildImageDecoration() : BoxDecoration(),
-                child: Stack(
-                  children: <Widget>[
-                    // Display Mime Type if Not Image
-                    _buildChildView(),
+    return Container(
+      height: 420,
+      width: Get.width - 64,
+      decoration: Neumorphism.floating(),
+      margin: EdgeInsets.all(4),
+      child: GestureDetector(
+        onTap: () {
+          // Push to Page
+          Get.to(_MediaCardExpanded(widget.card, mediaFile), transition: Transition.fadeIn);
+        },
+        child: Hero(
+          tag: widget.card.received,
+          child: Container(
+            height: 75,
+            decoration: hasLoaded ? _buildImageDecoration() : BoxDecoration(),
+            child: Stack(
+              children: <Widget>[
+                // Display Mime Type if Not Image
+                _buildChildView(),
 
-                    // Time Stamp
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Neumorphic(
-                          style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                          child: widget.card.dateText,
-                          padding: EdgeInsets.all(10),
-                        ),
-                      ),
+                // Time Stamp
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Neumorphic(
+                      style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+                      child: widget.card.dateText,
+                      padding: EdgeInsets.all(10),
                     ),
-
-                    // Info Button
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ShapeButton.circle(
-                            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-                            icon: SonrIcon.info,
-                            onPressed: () {
-                              SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
-                            },
-                            shadowLightColor: Colors.black38,
-                          )),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+
+                // Info Button
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ShapeButton.circle(
+                        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                        icon: SonrIcon.info,
+                        onPressed: () {
+                          SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
+                        },
+                        shadowLightColor: Colors.black38,
+                      )),
+                ),
+              ],
             ),
           ),
         ),

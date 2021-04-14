@@ -4,7 +4,6 @@ import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/modules/common/file/file.dart';
 import 'package:sonr_app/modules/common/media/media.dart';
 import 'package:sonr_app/modules/grid/tags_view.dart';
-import 'package:sonr_app/theme/elements/carousel.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -85,16 +84,14 @@ class _CardGridWidget extends GetView<HomeController> {
       // @ 2. Build View
       if (cardList.length > 0) {
         return Container(
-          padding: EdgeInsets.only(top: 24),
-          child: StackedCardCarousel(
-            initialOffset: 2,
-            spaceBetweenItems: 435,
-            onPageChanged: (int index) => controller.pageIndex(index),
-            pageController: pageController,
-            items: List<Widget>.generate(cardList.length, (idx) {
-              return _buildCard(cardList[idx]);
-            }),
-          ),
+          width: Get.width,
+          height: 440,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: cardList.length,
+              itemBuilder: (context, index) {
+                return _buildCard(cardList[index]);
+              }),
         );
       } else {
         return _CardGridEmpty();

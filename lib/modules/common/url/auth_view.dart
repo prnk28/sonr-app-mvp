@@ -10,8 +10,8 @@ class URLAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final card = invite.card;
-    return Neumorphic(
-      style: SonrStyle.normal,
+    return Container(
+      decoration: Neumorphism.floating(),
       margin: EdgeInsets.all(8),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header

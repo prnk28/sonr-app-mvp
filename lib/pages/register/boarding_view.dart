@@ -8,7 +8,7 @@ class BoardingLocationView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
-      decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/images/location.png"), fit: BoxFit.fill)),
+      decoration: BoxDecoration(image: DecorationImage(image: AssetImage("assets/illustrations/location_access.png"), fit: BoxFit.fill)),
       padding: EdgeInsets.symmetric(vertical: 64, horizontal: 24),
       child: Column(
         children: [

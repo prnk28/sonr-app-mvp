@@ -111,12 +111,12 @@ class SonrStyle {
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
       );
 
-  static NeumorphicStyle get normal => NeumorphicStyle(
-        depth: UserService.isDarkMode ? 4 : 8,
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-      );
+  // static NeumorphicStyle get normal => NeumorphicStyle(
+  //       depth: UserService.isDarkMode ? 4 : 8,
+  //       color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+  //       intensity: UserService.isDarkMode ? 0.45 : 0.85,
+  //       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
+  //     );
 
   static NeumorphicStyle get photo => NeumorphicStyle(
       intensity: UserService.isDarkMode ? 0.45 : 0.85,
@@ -163,6 +163,92 @@ class SonrStyle {
         intensity: 0.85,
         boxShape: NeumorphicBoxShape.path(ZonePathProvider(proximity)),
       );
+}
+
+extension Neumorphism on BoxDecoration {
+  static BoxDecoration floating({double radius = 20, BoxShape shape = BoxShape.rectangle}) {
+    return BoxDecoration(
+      shape: shape,
+      borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
+      color: Color(
+        0xffe8f3fb,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Color(
+            0xb9b0c3d2,
+          ),
+          offset: Offset(
+            19,
+            21,
+          ),
+          blurRadius: 50,
+        ),
+        BoxShadow(
+          color: Color(
+            0x80f4f8fb,
+          ),
+          offset: Offset(
+            -8,
+            0,
+          ),
+          blurRadius: 8,
+        ),
+        BoxShadow(
+          color: Color(
+            0x61f6fbff,
+          ),
+          offset: Offset(
+            -8,
+            -40,
+          ),
+          blurRadius: 22,
+        ),
+        BoxShadow(
+          color: Color(
+            0x45ffffff,
+          ),
+          offset: Offset(
+            -11,
+            -11,
+          ),
+          blurRadius: 20,
+        ),
+      ],
+    );
+  }
+
+  static BoxDecoration indented({double radius = 40, BoxShape shape = BoxShape.circle}) {
+    return BoxDecoration(
+      shape: shape,
+      borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
+      color: Color(
+        0xffe3edf7,
+      ),
+      boxShadow: [
+        BoxShadow(
+          color: Color(
+            0x61f6fbff,
+          ),
+          offset: Offset(
+            -8,
+            -40,
+          ),
+          blurRadius: 22,
+        ),
+        BoxShadow(
+          color: Color(
+            0x45ffffff,
+          ),
+          offset: Offset(
+            -11,
+            -11,
+          ),
+          blurRadius: 20,
+        ),
+      ],
+    );
+  }
 }
 
 // ^ Edge Insets Helper Extensions ^ //

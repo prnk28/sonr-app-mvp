@@ -10,8 +10,8 @@ class URLCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => launchURL(card.url.link),
-      child: Neumorphic(
-        style: SonrStyle.normal,
+      child: Container(
+        decoration: Neumorphism.floating(),
         margin: EdgeInsets.all(4),
         child: Hero(
           tag: card.id,

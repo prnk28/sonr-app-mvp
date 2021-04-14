@@ -126,45 +126,41 @@ class _CameraToolsView extends GetView<CameraController> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomCenter,
-      child: NeumorphicBackground(
-        borderRadius: BorderRadius.circular(20),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-          style: SonrStyle.normal,
-          padding: EdgeInsets.only(top: 20, bottom: 40),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            // Switch Camera
-            Obx(() {
-              var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
-              return GestureDetector(
-                  child: AnimatedSlideSwitcher.slideUp(
-                      child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
-                  onTap: () async {
-                    await HapticFeedback.heavyImpact();
-                    controller.toggleCameraSensor();
-                  });
-            }),
-
-            // Neumorphic Camera Button Stack
-            _CaptureButton(),
-
-            // Media Gallery Picker
-            GestureDetector(
-                child: SonrIcon.neumorphicGradient(
-                  Icons.perm_media,
-                  FlutterGradientNames.octoberSilence,
-                  size: 36,
-                ),
+      child: Container(
+        decoration: Neumorphism.floating(),
+        padding: EdgeInsets.only(top: 20, bottom: 40),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          // Switch Camera
+          Obx(() {
+            var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
+            return GestureDetector(
+                child: AnimatedSlideSwitcher.slideUp(
+                    child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                 onTap: () async {
                   await HapticFeedback.heavyImpact();
-                  // Check for Permssions
-                  var result = await FileService.selectMedia();
-                  if (result.hasItem) {
-                    Transfer.transferWithFile(result.fileItem);
-                  }
-                }),
-          ]),
-        ),
+                  controller.toggleCameraSensor();
+                });
+          }),
+
+          // Neumorphic Camera Button Stack
+          _CaptureButton(),
+
+          // Media Gallery Picker
+          GestureDetector(
+              child: SonrIcon.neumorphicGradient(
+                Icons.perm_media,
+                FlutterGradientNames.octoberSilence,
+                size: 36,
+              ),
+              onTap: () async {
+                await HapticFeedback.heavyImpact();
+                // Check for Permssions
+                var result = await FileService.selectMedia();
+                if (result.hasItem) {
+                  Transfer.transferWithFile(result.fileItem);
+                }
+              }),
+        ]),
       ),
     );
   }

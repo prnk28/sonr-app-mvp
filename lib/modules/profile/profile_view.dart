@@ -10,12 +10,10 @@ class ProfileView extends GetView<ProfileController> {
         width: Get.width,
         height: Get.height,
         margin: SonrStyle.viewMargin,
-        child: Neumorphic(
-          style: SonrStyle.normal,
-          child: AnimatedSlideSwitcher.fade(
-            child: _buildView(controller.status.value),
-            duration: const Duration(milliseconds: 2500),
-          ),
+        decoration: Neumorphism.floating(radius: 20),
+        child: AnimatedSlideSwitcher.fade(
+          child: _buildView(controller.status.value),
+          duration: const Duration(milliseconds: 2500),
         )));
   }
 
@@ -139,12 +137,9 @@ class _AvatarField extends GetView<ProfileController> {
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 4.0),
-        child: Neumorphic(
+        child: Container(
           padding: EdgeInsets.all(10),
-          style: NeumorphicStyle(
-            boxShape: NeumorphicBoxShape.circle(),
-            depth: -10,
-          ),
+          decoration: Neumorphism.indented(),
           child: Obx(() => UserService.picture.value != null
               ? Container(
                   width: 120,

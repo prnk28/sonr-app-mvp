@@ -64,6 +64,27 @@ class BottomBarPath extends NeumorphicPathProvider {
   bool get oneGradientPerPath => true;
 }
 
+// ^ Hexagon Shape Path ^ //
+class HexagonPath extends NeumorphicPathProvider {
+  @override
+  Path getPath(Size size) {
+    final path = Path();
+    path.lineTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width, size.height * 0.8);
+    path.lineTo(size.width * 0.8, size.height);
+    path.lineTo(size.width * 0.2, size.height);
+    path.lineTo(0, size.height * 0.8);
+    path.lineTo(0, 0);
+
+    path.close();
+    return path;
+  }
+
+  @override
+  bool get oneGradientPerPath => true;
+}
+
 // ^ Message Neumorphic Path ^ //
 class MessagePath extends NeumorphicPathProvider {
   final double borderRadius;

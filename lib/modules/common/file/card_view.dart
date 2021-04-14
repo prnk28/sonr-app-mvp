@@ -20,55 +20,53 @@ class FileCardView extends StatelessWidget {
         child: Container(
           height: 420,
           width: Get.width - 64,
+          decoration: Neumorphism.floating(),
+          margin: EdgeInsets.all(4),
           child: GestureDetector(
             onTap: () {
               OpenFile.open(card.metadata.path);
             },
-            child: Neumorphic(
-              style: SonrStyle.normal,
-              margin: EdgeInsets.all(4),
-              child: Hero(
-                tag: card.id,
-                child: Container(
-                  height: 75,
-                  child: Stack(
-                    children: <Widget>[
-                      // Time Stamp
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Neumorphic(
-                            style: SonrStyle.timeStampDark,
-                            child: card.dateText,
-                            padding: EdgeInsets.all(10),
-                          ),
+            child: Hero(
+              tag: card.id,
+              child: Container(
+                height: 75,
+                child: Stack(
+                  children: <Widget>[
+                    // Time Stamp
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Neumorphic(
+                          style: SonrStyle.timeStampDark,
+                          child: card.dateText,
+                          padding: EdgeInsets.all(10),
                         ),
                       ),
+                    ),
 
-                      // File Icon
-                      Align(
-                          alignment: Alignment.center,
-                          child: Neumorphic(
-                              padding: EdgeInsets.all(20),
-                              style: SonrStyle.indented,
-                              child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
+                    // File Icon
+                    Align(
+                        alignment: Alignment.center,
+                        child: Neumorphic(
+                            padding: EdgeInsets.all(20),
+                            style: SonrStyle.indented,
+                            child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
 
-                      // Info Button
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ShapeButton.circle(
-                              icon: SonrIcon.info,
-                              onPressed: () {
-                                SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
-                              },
-                              shadowLightColor: Colors.black38,
-                            )),
-                      ),
-                    ],
-                  ),
+                    // Info Button
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ShapeButton.circle(
+                            icon: SonrIcon.info,
+                            onPressed: () {
+                              SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
+                            },
+                            shadowLightColor: Colors.black38,
+                          )),
+                    ),
+                  ],
                 ),
               ),
             ),
