@@ -139,7 +139,7 @@ class _AvatarField extends GetView<ProfileController> {
         padding: const EdgeInsets.only(top: 4.0),
         child: Container(
           padding: EdgeInsets.all(10),
-          decoration: Neumorphism.indented(),
+          decoration: Neumorphism.indented(shape: BoxShape.circle),
           child: Obx(() => UserService.picture.value != null
               ? Container(
                   width: 120,

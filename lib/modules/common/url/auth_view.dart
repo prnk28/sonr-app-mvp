@@ -99,8 +99,8 @@ class URLAuthView extends StatelessWidget {
             Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
-          child: Neumorphic(
-              style: SonrStyle.indented,
+          child: Container(
+              decoration: Neumorphism.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -147,8 +147,8 @@ class URLAuthView extends StatelessWidget {
             Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
-          child: Neumorphic(
-              style: SonrStyle.indented,
+          child: Container(
+              decoration: Neumorphism.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -175,8 +175,8 @@ class URLAuthView extends StatelessWidget {
         Clipboard.setData(ClipboardData(text: data.link));
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
-      child: Neumorphic(
-        style: SonrStyle.indented,
+      child: Container(
+        decoration: Neumorphism.indented(),
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

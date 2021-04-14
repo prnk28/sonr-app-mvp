@@ -98,8 +98,8 @@ class SonrStyle {
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
       );
 
-  static NeumorphicStyle get indented => NeumorphicStyle(
-      color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
+  // static NeumorphicStyle get indented => NeumorphicStyle(
+  //     color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   static NeumorphicStyle get gradientIcon => NeumorphicStyle(
       color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: UserService.isDarkMode ? 4 : 8, surfaceIntensity: 0.6);
@@ -110,13 +110,6 @@ class SonrStyle {
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
       );
-
-  // static NeumorphicStyle get normal => NeumorphicStyle(
-  //       depth: UserService.isDarkMode ? 4 : 8,
-  //       color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-  //       intensity: UserService.isDarkMode ? 0.45 : 0.85,
-  //       boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-  //     );
 
   static NeumorphicStyle get photo => NeumorphicStyle(
       intensity: UserService.isDarkMode ? 0.45 : 0.85,
@@ -218,7 +211,7 @@ extension Neumorphism on BoxDecoration {
     );
   }
 
-  static BoxDecoration indented({double radius = 40, BoxShape shape = BoxShape.circle}) {
+  static BoxDecoration indented({double radius = 20, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
       shape: shape,
       borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,

@@ -116,9 +116,9 @@ class SonrDropdownItem extends StatelessWidget {
   Widget build(BuildContext context) {
     if (hasIcon) {
       return Row(children: [
-        Neumorphic(
+        Container(
           child: icon,
-          style: SonrStyle.indented,
+          decoration: Neumorphism.indented(),
           padding: EdgeInsets.all(10),
         ),
         Padding(
