@@ -7,7 +7,17 @@ import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
 // ^ Design Style Type ^ //
-enum DesignTextStyle { Hero, HeadOne, HeadTwo, HeadThree, HeadFour, HeadFive, HeadSix, Paragraph, Light }
+enum DesignTextStyle {
+  Hero,
+  HeadOne,
+  HeadTwo,
+  HeadThree,
+  HeadFour,
+  HeadFive,
+  HeadSix,
+  Paragraph,
+  Light,
+}
 
 // ^ Accessor for Strings ^ //
 extension DesignTextUtils on String {
@@ -24,8 +34,8 @@ extension DesignTextUtils on String {
   DesignText get h2_Grey => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Grey);
   DesignText get h2_Red => DesignText(this, DesignTextStyle.HeadTwo, color: SonrPalette.Red);
   DesignText get h2_White => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.White);
-  DesignText headTwo({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.HeadTwo, color: color, align: align, key: key); // Custom Options
+  DesignText headTwo({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadTwo, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 3
   DesignText get h3 => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Black);
@@ -34,8 +44,8 @@ extension DesignTextUtils on String {
   DesignText get h3_Grey => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Grey);
   DesignText get h3_Red => DesignText(this, DesignTextStyle.HeadThree, color: SonrPalette.Red);
   DesignText get h3_White => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.White);
-  DesignText headThree({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.HeadThree, color: color, align: align, key: key); // Custom Options
+  DesignText headThree({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadThree, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 4
   DesignText get h4 => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Black);
@@ -44,8 +54,8 @@ extension DesignTextUtils on String {
   DesignText get h4_Grey => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Grey);
   DesignText get h4_Red => DesignText(this, DesignTextStyle.HeadFour, color: SonrPalette.Red);
   DesignText get h4_White => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.White);
-  DesignText headFour({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.HeadFour, color: color, align: align, key: key); // Custom Options
+  DesignText headFour({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadFour, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 5
   DesignText get h5 => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Black);
@@ -54,8 +64,8 @@ extension DesignTextUtils on String {
   DesignText get h5_Grey => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Grey);
   DesignText get h5_Red => DesignText(this, DesignTextStyle.HeadFive, color: SonrPalette.Red);
   DesignText get h5_White => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.White);
-  DesignText headFive({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.HeadFive, color: color, align: align, key: key); // Custom Options
+  DesignText headFive({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadFive, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 6
   DesignText get h6 => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Black);
@@ -64,8 +74,8 @@ extension DesignTextUtils on String {
   DesignText get h6_Grey => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Grey);
   DesignText get h6_Red => DesignText(this, DesignTextStyle.HeadSix, color: SonrPalette.Red);
   DesignText get h6_White => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.White);
-  DesignText headSix({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.HeadSix, color: color, align: align, key: key); // Custom Options
+  DesignText headSix({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.HeadSix, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Paragraph
   DesignText get p => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Black);
@@ -74,8 +84,8 @@ extension DesignTextUtils on String {
   DesignText get p_Grey => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Grey);
   DesignText get p_Red => DesignText(this, DesignTextStyle.Paragraph, color: SonrPalette.Red);
   DesignText get p_White => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.White);
-  DesignText paragraph({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.Paragraph, color: color, align: align, key: key); // Custom Options
+  DesignText paragraph({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.Paragraph, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Light
   DesignText get l => DesignText(this, DesignTextStyle.Light, color: SonrColor.Black);
@@ -84,8 +94,8 @@ extension DesignTextUtils on String {
   DesignText get l_Grey => DesignText(this, DesignTextStyle.Light, color: SonrColor.Grey);
   DesignText get l_Red => DesignText(this, DesignTextStyle.Light, color: SonrPalette.Red);
   DesignText get l_White => DesignText(this, DesignTextStyle.Light, color: SonrColor.White);
-  DesignText light({Color color = SonrColor.Black, TextAlign align = TextAlign.left, Key key}) =>
-      DesignText(this, DesignTextStyle.Light, color: color, align: align, key: key); // Custom Options
+  DesignText light({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
+      DesignText(this, DesignTextStyle.Light, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Miscelaneous
   GradientText gradient({double size = 32, @required FlutterGradientNames gradient, Key key}) => GradientText(this, gradient, size, key: key);
@@ -139,8 +149,9 @@ class DesignText extends StatelessWidget {
   final DesignTextStyle type;
   final Color color;
   final TextAlign align;
+  final FontWeight weight;
 
-  const DesignText(this.text, this.type, {this.color = SonrColor.Black, this.align = TextAlign.left, Key key}) : super(key: key);
+  const DesignText(this.text, this.type, {this.color = SonrColor.Black, this.weight, this.align = TextAlign.left, Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // # Gradient Text
@@ -166,7 +177,7 @@ class DesignText extends StatelessWidget {
       textAlign: align,
       style: TextStyle(
         fontFamily: type.family,
-        fontWeight: type.weight,
+        fontWeight: weight ?? type.weight,
         fontSize: type.size,
         color: color,
         fontFeatures: [

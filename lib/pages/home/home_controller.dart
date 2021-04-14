@@ -36,9 +36,17 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // ^ Controller Constructer ^
   @override
   onInit() {
+    // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
+
+    // Listen for Updates
     tabController.addListener(() {
       bottomIndex(tabController.index);
+      // Set Page
+      page(HomeView.values[tabController.index]);
+
+      // Update Title
+      titleText(page.value.title);
     });
 
     // Set efault Properties
@@ -61,6 +69,17 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
+  // ^ On Dispose ^ //
+  @override
+  void onClose() {
+    _cardStream.cancel();
+    _lobbySizeStream.cancel();
+    _statusStream.cancel();
+    toggleIndex(1);
+    pageIndex(0);
+    super.onClose();
+  }
+
   // ^ Update Home State ^ //
   setStatus() async {
     // Set Initial Status
@@ -73,17 +92,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
         status(HomeState.None);
       }
     }
-  }
-
-  // ^ On Dispose ^ //
-  @override
-  void onClose() {
-    _cardStream.cancel();
-    _lobbySizeStream.cancel();
-    _statusStream.cancel();
-    toggleIndex(1);
-    pageIndex(0);
-    super.onClose();
   }
 
   // ^ Method to Handle Action Button ^ //
@@ -124,15 +132,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       tabController.animateTo(newIndex);
 
       // Set Page
-      if (newIndex == 1) {
-        page(HomeView.Profile);
-      } else if (newIndex == 2) {
-        page(HomeView.Alerts);
-      } else if (newIndex == 3) {
-        page(HomeView.Remote);
-      } else {
-        page(HomeView.Home);
-      }
+      page(HomeView.values[newIndex]);
 
       // Update Title
       titleText(page.value.title);
@@ -199,18 +199,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("Hello, ${UserService.firstName.value}");
+      titleText("${LobbyService.localSize.value} Nearby");
       _timeoutActive = true;
 
-      // Nearby Peers Text
-      Future.delayed(const Duration(milliseconds: 3500), () {
-        if (!isClosed) {
-          titleText("${LobbyService.localSize.value} Nearby");
-        }
-      });
-
       // Revert Text
-      Future.delayed(const Duration(milliseconds: 3500) * 2, () {
+      Future.delayed(const Duration(milliseconds: 3500), () {
         if (!isClosed) {
           titleText(page.value.title);
           _timeoutActive = false;
@@ -282,7 +275,11 @@ extension HomeViewUtils on HomeView {
   }
 
   String get title {
-    return this.toString().substring(this.toString().indexOf('.') + 1);
+    if (this == HomeView.Home) {
+      return "Welcome Back";
+    } else {
+      return this.toString().substring(this.toString().indexOf('.') + 1);
+    }
   }
 
   bool get isNotFirst {

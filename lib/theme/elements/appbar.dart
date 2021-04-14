@@ -21,5 +21,5 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size(Get.width, kToolbarHeight + 28);
+  Size get preferredSize => Size(Get.width, kToolbarHeight + 52);
 }

@@ -67,4 +67,47 @@ class _TagItem extends GetView<HomeController> {
           ),
         ));
   }
+
+  Widget _buildSelected(Tuple<Icon, String> data) {
+    return Container(
+      child: Stack(
+        children: [
+          Container(
+            child: SizedBox(
+              child: data.item2.h6_White,
+              width: 64,
+            ),
+            width: 96,
+            height: 32,
+            padding: EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
+            decoration: BoxDecoration(
+              color: Color(0xff1792ff),
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
+
+          /// stack requires empty non positioned widget to work properly. refer: https://github.com/flutter/flutter/issues/49631#issuecomment-582090992
+          Container(),
+        ],
+      ),
+      width: Get.width,
+    );
+  }
+
+  Widget _buildDefault(Tuple<Icon, String> data) {
+    return Container(
+        child: SizedBox(
+          child: data.item2.h6,
+          width: 64,
+        ),
+        width: 96,
+        height: 32,
+        padding: EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ));
+  }
 }

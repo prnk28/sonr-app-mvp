@@ -104,8 +104,8 @@ class SonrGradient {
 class SonrPalette {
   static const Color Neutral = Color(0xff62666a);
   static const Color Primary = Color(0xff1792ff);
-  static const Color Secondary = Color(0xffab17ff);
-  static const Color Tertiary = Color(0xff52ffc0);
+  static const Color Secondary = Color(0xffD0CCFF);
+  static const Color Tertiary = Color(0xffB9FFE5);
   static const Color Red = Color(0xffff176b);
 
   static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;

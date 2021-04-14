@@ -91,7 +91,8 @@ class HomeAppBarTitle extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() => controller.isTitleVisible.value
         ? Container(
-            height: 56,
+            height: 112,
+            width: Get.width - 60,
             alignment: Alignment.centerLeft,
             child: AnimatedSlideSwitcher.fade(
               duration: 2.seconds,
@@ -102,20 +103,49 @@ class HomeAppBarTitle extends GetView<HomeController> {
                     controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
                   }
                 },
-                child: controller.titleText.value.h3_White,
+                child: _buildView(),
               ),
             ),
           )
         : Container());
+  }
+
+  Widget _buildView() {
+    if (controller.page.value == HomeView.Home) {
+      return OpacityAnimatedWidget(
+        enabled: !controller.isFilterOpen.value,
+        delay: 200.milliseconds,
+        duration: 100.milliseconds,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.White, weight: FontWeight.w400, align: TextAlign.start),
+            controller.titleText.value.headThree(color: SonrColor.White, weight: FontWeight.w800, align: TextAlign.start)
+          ],
+        ),
+      );
+    } else {
+      return OpacityAnimatedWidget(
+        enabled: true,
+        delay: 200.milliseconds,
+        duration: 100.milliseconds,
+        child: controller.titleText.value.h3_White,
+      );
+    }
   }
 }
 
 class HomeActionButton extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSlideSwitcher.fade(
-          child: _buildView(controller.page.value),
-          duration: const Duration(milliseconds: 2500),
+    return Obx(() => Opacity(
+          opacity: _getOpacity(controller.page.value),
+          child: AnimatedSlideSwitcher.fade(
+            child: _buildView(controller.page.value),
+            duration: const Duration(milliseconds: 2500),
+          ),
         ));
   }
 
@@ -123,13 +153,21 @@ class HomeActionButton extends GetView<HomeController> {
   Widget _buildView(HomeView page) {
     // Return View
     if (page == HomeView.Profile) {
-      return Container(key: ValueKey<HomeView>(HomeView.Profile));
+      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Profile));
     } else if (page == HomeView.Alerts) {
-      return Container(key: ValueKey<HomeView>(HomeView.Alerts));
+      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Alerts));
     } else if (page == HomeView.Remote) {
-      return Container(key: ValueKey<HomeView>(HomeView.Remote));
+      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Remote));
     } else {
       return CardToggleFilter(key: ValueKey<HomeView>(HomeView.Home));
+    }
+  }
+
+  double _getOpacity(HomeView page) {
+    if (page == HomeView.Home && controller.isFilterOpen.value) {
+      return 1.0;
+    } else {
+      return 0.6;
     }
   }
 }

@@ -27,9 +27,7 @@ class HomePage extends GetView<HomeController> {
           title: HomeAppBarTitle(),
           action: HomeActionButton(),
         ),
-        body: TabBarView(
-          controller: controller.tabController,
-          children: [
+        body: TabBarView(controller: controller.tabController, children: [
           CardGridView(key: ValueKey<HomeView>(HomeView.Home)),
           ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
           AlertsView(key: ValueKey<HomeView>(HomeView.Alerts)),
@@ -77,14 +75,17 @@ class _CardGridWidget extends GetView<HomeController> {
     return Obx(() {
       // @ 2. Build View
       if (cardList.length > 0) {
-        return StackedCardCarousel(
-          initialOffset: 2,
-          spaceBetweenItems: 435,
-          onPageChanged: (int index) => controller.pageIndex(index),
-          pageController: pageController,
-          items: List<Widget>.generate(cardList.length, (idx) {
-            return _buildCard(cardList[idx]);
-          }),
+        return Container(
+          padding: EdgeInsets.only(top: 24),
+          child: StackedCardCarousel(
+            initialOffset: 2,
+            spaceBetweenItems: 435,
+            onPageChanged: (int index) => controller.pageIndex(index),
+            pageController: pageController,
+            items: List<Widget>.generate(cardList.length, (idx) {
+              return _buildCard(cardList[idx]);
+            }),
+          ),
         );
       } else {
         return _CardGridEmpty();
