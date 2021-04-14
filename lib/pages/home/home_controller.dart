@@ -27,7 +27,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // References
   TabController tabController;
   HomeView _lastPage = HomeView.Main;
-  StreamSubscription<List<TransferCard>> _cardStream;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
@@ -72,7 +71,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // ^ On Dispose ^ //
   @override
   void onClose() {
-    _cardStream.cancel();
     _lobbySizeStream.cancel();
     _statusStream.cancel();
     toggleIndex(1);

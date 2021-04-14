@@ -135,7 +135,7 @@ class _CameraToolsView extends GetView<CameraController> {
             var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
             return GestureDetector(
                 child: AnimatedSlideSwitcher.slideUp(
-                    child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
+                    child: SonrIcon.gradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                 onTap: () async {
                   await HapticFeedback.heavyImpact();
                   controller.toggleCameraSensor();
@@ -147,7 +147,7 @@ class _CameraToolsView extends GetView<CameraController> {
 
           // Media Gallery Picker
           GestureDetector(
-              child: SonrIcon.neumorphicGradient(
+              child: SonrIcon.gradient(
                 Icons.perm_media,
                 FlutterGradientNames.octoberSilence,
                 size: 36,
@@ -212,7 +212,7 @@ class _CaptureButton extends GetView<CameraController> {
                   child: Obx(
                     () => Neumorphic(
                         child: Center(
-                            child: SonrIcon.neumorphicGradient(
+                            child: SonrIcon.gradient(
                           SonrIconData.camera,
                           UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                           size: 40,

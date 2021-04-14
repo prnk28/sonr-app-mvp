@@ -41,16 +41,14 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
           },
           children: [
             ToggleElement(
-                background: Center(child: "Mobile".h6),
-                foreground: SonrIcon.neumorphicGradient(Icons.smartphone, FlutterGradientNames.newRetrowave, size: 24)),
+                background: Center(child: "Mobile".h6), foreground: SonrIcon.gradient(Icons.smartphone, FlutterGradientNames.newRetrowave, size: 24)),
             ToggleElement(
                 background: Center(child: "All".h6),
-                foreground: SonrIcon.neumorphicGradient(
+                foreground: SonrIcon.gradient(
                     Icons.group, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
                     size: 22.5)),
             ToggleElement(
-                background: Center(child: "Desktop".h6),
-                foreground: SonrIcon.neumorphicGradient(Icons.computer, FlutterGradientNames.orangeJuice, size: 24)),
+                background: Center(child: "Desktop".h6), foreground: SonrIcon.gradient(Icons.computer, FlutterGradientNames.orangeJuice, size: 24)),
           ],
         ),
       ),

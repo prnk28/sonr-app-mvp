@@ -22,7 +22,7 @@ class AddTileView extends GetView<ProfileController> {
                     radius: 20,
                     shape: NeumorphicShape.convex,
                     onPressed: controller.exitToViewing,
-                    icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38))),
+                    icon: SonrIcon.gradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38))),
             Container(
               height: controller.step.value.height,
               child: PageView.builder(

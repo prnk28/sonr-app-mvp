@@ -1,17 +1,11 @@
 import 'dart:ui';
-import 'package:sonr_app/modules/common/contact/contact.dart';
-import 'package:sonr_app/modules/common/file/file.dart';
-import 'package:sonr_app/modules/common/media/media.dart';
-import 'package:sonr_app/theme/elements/carousel.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
-import '../../pages/home/home_controller.dart';
+import 'grid_controller.dart';
 import 'tags_view.dart';
 
 // ^ Root Grid View ^ //
-class CardMainView extends GetView<HomeController> {
+class CardMainView extends GetView<GridController> {
   CardMainView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -20,62 +14,32 @@ class CardMainView extends GetView<HomeController> {
         child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [
           "Recents".headTwo(align: TextAlign.start),
           TagsView(
-            tags: ["All", "Media", "Contacts"],
+            tags: ["All", "Media", "Contacts", "Links"],
           ),
-          CardGridView(),
+          Obx(() => TabBarView(controller: controller.tabController, children: [
+                _CardGridAll(),
+                _CardGridMedia(),
+                _CardGridContacts(),
+                _CardGridLinks(),
+              ])),
         ]));
   }
 }
 
-// ^ Card Grid View ^ //
-class CardGridView extends GetView<HomeController> {
-  CardGridView({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final pageController = PageController(viewportFraction: 0.8);
-    return Obx(() {
-      List<TransferCardItem> cardList;
-      // Media
-      if (controller.toggleIndex.value == 0) {
-        cardList = CardService.mediaCards;
-      }
-      // Contacts
-      else if (controller.toggleIndex.value == 2) {
-        cardList = CardService.contactCards;
-      }
-      // All
-      else {
-        cardList = CardService.allCards;
-      }
-
-      return SafeArea(
-        maintainBottomViewPadding: true,
-        child: cardList.length > 0 ? _CardGridWidget(cardList, pageController) : _CardGridEmpty(),
-      );
-    });
-  }
-}
-
-class _CardGridWidget extends GetView<HomeController> {
-  final List<TransferCardItem> cardList;
-  final PageController pageController;
-  _CardGridWidget(this.cardList, this.pageController);
+// ^ Card Grid View - All Cards ^ //
+class _CardGridAll extends GetView<GridController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (cardList.length > 0) {
+      if (CardService.allCards.length > 0) {
         return Container(
           padding: EdgeInsets.only(top: 24),
-          child: StackedCardCarousel(
-            initialOffset: 2,
-            spaceBetweenItems: 435,
-            onPageChanged: (int index) => controller.pageIndex(index),
-            pageController: pageController,
-            items: List<Widget>.generate(cardList.length, (idx) {
-              return _buildCard(cardList[idx]);
-            }),
+          child: ListView.builder(
+            itemCount: CardService.allCards.length,
+            itemBuilder: (BuildContext context, int index) {
+              return controller.buildCard(CardService.allCards[index]);
+            },
           ),
         );
       } else {
@@ -83,17 +47,74 @@ class _CardGridWidget extends GetView<HomeController> {
       }
     });
   }
+}
 
-  // @ Helper Method for Test Mode Leading Button ^ //
-  Widget _buildCard(TransferCardItem item) {
-    // Determin CardView
-    if (item.payload == Payload.MEDIA) {
-      return MediaCardView(item);
-    } else if (item.payload == Payload.CONTACT) {
-      return ContactCardView(item);
-    } else {
-      return FileCardView(item);
-    }
+// ^ Card Grid View - Media Cards ^ //
+class _CardGridMedia extends GetView<GridController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      // @ 2. Build View
+      if (CardService.mediaCards.length > 0) {
+        return Container(
+          padding: EdgeInsets.only(top: 24),
+          child: ListView.builder(
+            itemCount: CardService.mediaCards.length,
+            itemBuilder: (BuildContext context, int index) {
+              return controller.buildCard(CardService.mediaCards[index]);
+            },
+          ),
+        );
+      } else {
+        return _CardGridEmpty();
+      }
+    });
+  }
+}
+
+// ^ Card Grid View - Contact Cards ^ //
+class _CardGridContacts extends GetView<GridController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      // @ 2. Build View
+      if (CardService.contactCards.length > 0) {
+        return Container(
+          padding: EdgeInsets.only(top: 24),
+          child: ListView.builder(
+            itemCount: CardService.contactCards.length,
+            itemBuilder: (BuildContext context, int index) {
+              return controller.buildCard(CardService.contactCards[index]);
+            },
+          ),
+        );
+      } else {
+        return _CardGridEmpty();
+      }
+    });
+  }
+}
+
+// ^ Card Grid View - URL Cards ^ //
+class _CardGridLinks extends GetView<GridController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      // @ 2. Build View
+      if (CardService.urlCards.length > 0) {
+        return Container(
+          padding: EdgeInsets.only(top: 24),
+          child: ListView.builder(
+            itemCount: CardService.urlCards.length,
+            itemBuilder: (BuildContext context, int index) {
+              return controller.buildCard(CardService.urlCards[index]);
+            },
+          ),
+        );
+      } else {
+        return _CardGridEmpty();
+      }
+    });
   }
 }
 

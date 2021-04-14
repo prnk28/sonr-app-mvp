@@ -115,45 +115,45 @@ class HomeAppBarTitle extends GetView<HomeController> {
             height: 112,
             width: Get.width - 60,
             alignment: Alignment.centerLeft,
-            child: AnimatedSlideSwitcher.fade(
-              duration: 2.seconds,
-              child: GestureDetector(
-                key: ValueKey<String>(controller.titleText.value),
-                onTap: () {
-                  if (controller.isTitleVisible.value) {
-                    controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                  }
-                },
-                child: _buildView(),
-              ),
-            ),
-          )
+            child: OpacityAnimatedWidget(
+              enabled: true,
+              delay: 200.milliseconds,
+              duration: 100.milliseconds,
+              child: controller.view.value == HomeView.Main
+                  ? Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        "Hi ${UserService.contact.value.firstName},"
+                            .headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start),
+                        AnimatedSlideSwitcher.fade(
+                          duration: 2.seconds,
+                          child: GestureDetector(
+                            key: ValueKey<String>(controller.titleText.value),
+                            onTap: () {
+                              if (controller.isTitleVisible.value) {
+                                controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                              }
+                            },
+                            child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
+                          ),
+                        )
+                      ],
+                    )
+                  : AnimatedSlideSwitcher.fade(
+                      duration: 2.seconds,
+                      child: GestureDetector(
+                        key: ValueKey<String>(controller.titleText.value),
+                        onTap: () {
+                          if (controller.isTitleVisible.value) {
+                            controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                          }
+                        },
+                        child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
+                      ),
+                    ),
+            ))
         : Container());
-  }
-
-  Widget _buildView() {
-    if (controller.view.value == HomeView.Main) {
-      return OpacityAnimatedWidget(
-        enabled: !controller.isFilterOpen.value,
-        delay: 200.milliseconds,
-        duration: 100.milliseconds,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start),
-            controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start)
-          ],
-        ),
-      );
-    } else {
-      return OpacityAnimatedWidget(
-        enabled: true,
-        delay: 200.milliseconds,
-        duration: 100.milliseconds,
-        child: controller.titleText.value.h3_White,
-      );
-    }
   }
 }

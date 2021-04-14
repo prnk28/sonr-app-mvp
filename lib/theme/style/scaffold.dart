@@ -87,28 +87,21 @@ class PageBackground extends StatelessWidget {
 }
 
 // ^ Animated Background Gradient ^ //
-class _BackgroundGradient extends HookWidget {
+class _BackgroundGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = useAnimationController(duration: 18.seconds);
-    final Gradient first = FlutterGradients.itmeoBranding(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
-    final Gradient second = FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
-    controller.repeat(reverse: true);
-
-    return AnimatedBuilder(
-        animation: controller,
-        builder: (_, child) => Opacity(
-              opacity: 0.5,
-              child: Container(
-                height: Get.height,
-                width: Get.width,
-                decoration: BoxDecoration(
-                  color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                  // ignore: invalid_use_of_protected_member
-                  gradient: first.lerpTo(second, controller.value),
-                ),
-              ),
-            ));
+    return Opacity(
+      opacity: 0.5,
+      child: Container(
+        height: Get.height,
+        width: Get.width,
+        decoration: BoxDecoration(
+          color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+          // ignore: invalid_use_of_protected_member
+          gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.centerRight, radius: 2),
+        ),
+      ),
+    );
   }
 }
 

@@ -15,14 +15,10 @@ class TransferCardWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Card(
-        shadowColor: Colors.transparent,
-        color: Colors.transparent,
-        elevation: 2,
-        child: AnimatedContainer(
-          duration: 500.milliseconds,
-          height: 420,
-          width: Get.width - 64,
-        ));
+    return AnimatedContainer(
+      duration: 500.milliseconds,
+      height: 420,
+      width: Get.width - 64,
+    );
   }
 }

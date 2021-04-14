@@ -1,8 +1,8 @@
-import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'grid_controller.dart';
 
 // ^ Card Tag View ^ //
-class TagsView extends GetView<HomeController> {
+class TagsView extends GetView<GridController> {
   final List<String> tags;
 
   const TagsView({Key key, this.tags}) : super(key: key);
@@ -20,7 +20,7 @@ class TagsView extends GetView<HomeController> {
               tags.length,
               (index) => GestureDetector(
                     onTap: () {
-                      controller.setToggleCategory(index);
+                      controller.setTag(index);
                     },
                     child: _TagItem(tags[index], index),
                   )),
@@ -31,7 +31,7 @@ class TagsView extends GetView<HomeController> {
 }
 
 // ^ Card Tag Item ^ //
-class _TagItem extends GetView<HomeController> {
+class _TagItem extends GetView<GridController> {
   final String data;
   final int index;
   const _TagItem(this.data, this.index, {Key key}) : super(key: key);
@@ -39,12 +39,12 @@ class _TagItem extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(
-        decoration: controller.toggleIndex.value == index
+        decoration: controller.tagIndex.value == index
             ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.Primary.withOpacity(0.9))
             : BoxDecoration(),
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         duration: 150.milliseconds,
-        child: controller.toggleIndex.value == index ? data.h6_White : data.h6));
+        child: controller.tagIndex.value == index ? data.h6_White : data.h6));
   }
 }

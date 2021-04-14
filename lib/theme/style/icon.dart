@@ -46,18 +46,18 @@ class SonrIcon extends StatelessWidget {
     );
   }
 
-  // ^ Neumorphic Gradient Icon with Provided Data
-  factory SonrIcon.neumorphicGradient(IconData data, FlutterGradientNames gradient, {double size = 30, NeumorphicStyle style, Key key}) {
-    return SonrIcon(
-      data,
-      IconType.NeumorphicGradient,
-      Colors.white,
-      gradient,
-      size: size,
-      key: key,
-      style: style ?? SonrStyle.gradientIcon,
-    );
-  }
+  // // ^ Neumorphic Gradient Icon with Provided Data
+  // factory SonrIcon.neumorphicGradient(IconData data, FlutterGradientNames gradient, {double size = 30, NeumorphicStyle style, Key key}) {
+  //   return SonrIcon(
+  //     data,
+  //     IconType.NeumorphicGradient,
+  //     Colors.white,
+  //     gradient,
+  //     size: size,
+  //     key: key,
+  //     style: style ?? SonrStyle.gradientIcon,
+  //   );
+  // }
 
   // ^ Normal Icon with Provided Data
   factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.White, Key key}) {
@@ -137,13 +137,13 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.aboveTheSky, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
   static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
-  static SonrIcon get location => SonrIcon.neumorphicGradient(Icons.location_city, FlutterGradientNames.itmeoBranding, size: 34);
+  static SonrIcon get location => SonrIcon.gradient(Icons.location_city, FlutterGradientNames.itmeoBranding, size: 34);
 
   // ^ AppBar Icons ^ //
-  static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36);
-  static SonrIcon get groups => SonrIcon.neumorphicGradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34);
-  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
-  static SonrIcon get more => SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
+  static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
+  static SonrIcon get groups => SonrIcon.gradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34);
+  static SonrIcon get search => SonrIcon.gradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
+  static SonrIcon get more => SonrIcon.gradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrPalette.Critical, size: 36);
   static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.Blue, size: 36);
   static SonrIcon get remote => SonrIcon.normal(SonrIconData.remote, color: SonrColor.Blue, size: 28);
