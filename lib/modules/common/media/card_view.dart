@@ -9,6 +9,14 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'media.dart';
 
+class MediaCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
 // ^ TransferCard Media Item Details ^ //
 class MediaCardView extends StatefulWidget {
   final TransferCardItem card;

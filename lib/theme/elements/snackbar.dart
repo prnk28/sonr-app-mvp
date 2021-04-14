@@ -78,7 +78,7 @@ class SonrSnack {
   factory SonrSnack.missing(String message, {bool isLast = false}) {
     // Get Missing Title
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
-    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcon.missing, SonrPalette.Red, 2600, false);
+    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcon.missing, SonrPalette.Critical, 2600, false);
   }
 
   // ^ Succesful Operation ^ //

@@ -34,7 +34,7 @@ class CirclePainter extends CustomPainter {
     final double size = rect.width / 2;
     final double area = size * size;
     final double radius = sqrt(area * value / 2);
-    final Paint paint = Paint()..color = SonrPalette.Red.withOpacity(opacity);
+    final Paint paint = Paint()..color = SonrPalette.Critical.withOpacity(opacity);
     // paint.style = PaintingStyle.stroke;
     // paint.strokeWidth = 20;
     canvas.drawCircle(rect.center, radius, paint);

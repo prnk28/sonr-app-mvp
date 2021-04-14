@@ -119,12 +119,12 @@ class _BackgroundOverlay extends StatelessWidget {
         ? Container(
             height: Get.height,
             width: Get.width,
-            color: SonrColor.Dark.withOpacity(0.8),
+            color: SonrColor.Dark.withOpacity(0.75),
           )
         : Container(
             height: Get.height,
             width: Get.width,
-            color: SonrColor.White.withOpacity(0.5),
+            color: SonrColor.White.withOpacity(0.75),
           );
   }
 }

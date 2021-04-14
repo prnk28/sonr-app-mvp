@@ -227,7 +227,7 @@ class _CaptureButton extends GetView<CameraController> {
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value
-                                ? NeumorphicBorder(color: SonrPalette.Red, width: 4)
+                                ? NeumorphicBorder(color: SonrPalette.Critical, width: 4)
                                 : NeumorphicBorder(color: SonrColor.Black, width: 0))),
                   ),
                 ),

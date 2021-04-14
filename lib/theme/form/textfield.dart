@@ -109,7 +109,7 @@ class SonrTextField extends StatelessWidget {
                       isError
                           ? Text(
                               " *Error",
-                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalette.Red),
+                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalette.Critical),
                             )
                           : Container(),
                     ]))
@@ -159,7 +159,7 @@ class SonrTextField extends StatelessWidget {
       child: buildDefault(context,
           isError: true,
           decoration: InputDecoration.collapsed(
-              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Red, width: 4)),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Critical, width: 4)),
               hintText: hint,
               hintStyle:
                   TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),

@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-enum HomeView { Home, Profile, Alerts, Remote }
+enum HomeView { Main, Profile, Alerts, Remote }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -21,12 +21,12 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final pageIndex = 0.obs;
   final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
-  final page = HomeView.Home.obs;
+  final view = HomeView.Main.obs;
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // References
   TabController tabController;
-  HomeView _lastPage = HomeView.Home;
+  HomeView _lastPage = HomeView.Main;
   StreamSubscription<List<TransferCard>> _cardStream;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
@@ -43,10 +43,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     tabController.addListener(() {
       bottomIndex(tabController.index);
       // Set Page
-      page(HomeView.values[tabController.index]);
+      view(HomeView.values[tabController.index]);
 
       // Update Title
-      titleText(page.value.title);
+      titleText(view.value.title);
     });
 
     // Set efault Properties
@@ -96,7 +96,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // ^ Method to Handle Action Button ^ //
   void handleAction() {
-    if (page.value == HomeView.Home) {
+    if (view.value == HomeView.Main) {
       // Set Open and Close Title
       isFilterOpen(!isFilterOpen.value);
       isTitleVisible(!isFilterOpen.value);
@@ -132,10 +132,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       tabController.animateTo(newIndex);
 
       // Set Page
-      page(HomeView.values[newIndex]);
+      view(HomeView.values[newIndex]);
 
       // Update Title
-      titleText(page.value.title);
+      titleText(view.value.title);
 
       // Close Sharebutton if open
       if (Get.find<ShareController>().status.value.isExpanded) {
@@ -155,7 +155,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Revert Text
       Future.delayed(timeout, () {
         if (!isClosed) {
-          titleText(page.value.title);
+          titleText(view.value.title);
           _timeoutActive = false;
         }
       });
@@ -164,11 +164,11 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Return Animation by Page Index
   SwitchType get switchAnimation {
-    if (_lastPage.index > page.value.index) {
-      _lastPage = page.value;
+    if (_lastPage.index > view.value.index) {
+      _lastPage = view.value;
       return SwitchType.SlideLeft;
     } else {
-      _lastPage = page.value;
+      _lastPage = view.value;
       return SwitchType.SlideRight;
     }
   }
@@ -205,7 +205,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Revert Text
       Future.delayed(const Duration(milliseconds: 3500), () {
         if (!isClosed) {
-          titleText(page.value.title);
+          titleText(view.value.title);
           _timeoutActive = false;
         }
       });
@@ -218,7 +218,7 @@ extension HomeViewUtils on HomeView {
   // # Returns IconData for Type
   IconData get iconData {
     switch (this) {
-      case HomeView.Home:
+      case HomeView.Main:
         return Icons.home;
       case HomeView.Profile:
         return Icons.person;
@@ -261,7 +261,7 @@ extension HomeViewUtils on HomeView {
   // # Returns Icon Size
   double get iconSize {
     switch (this) {
-      case HomeView.Home:
+      case HomeView.Main:
         return 32;
       case HomeView.Profile:
         return 32;
@@ -275,7 +275,7 @@ extension HomeViewUtils on HomeView {
   }
 
   String get title {
-    if (this == HomeView.Home) {
+    if (this == HomeView.Main) {
       return "Welcome Back";
     } else {
       return this.toString().substring(this.toString().indexOf('.') + 1);

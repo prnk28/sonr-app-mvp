@@ -1,6 +1,33 @@
+import 'package:sonr_app/modules/share/index_view.dart';
+import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/modules/profile/profile_view.dart';
+import 'package:sonr_app/modules/remote/remote_view.dart';
+import 'action_button.dart';
 import 'home_controller.dart';
-import 'page_view.dart';
+import 'alerts_view.dart';
+import '../../modules/main/main_view.dart';
+
+class HomePage extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return SonrScaffold(
+        resizeToAvoidBottomInset: false,
+        shareView: ShareView(),
+        bottomNavigationBar: HomeBottomNavBar(),
+        appBar: DesignAppBar(
+          title: HomeAppBarTitle(),
+          action: HomeActionButton(),
+        ),
+        body: TabBarView(controller: controller.tabController, children: [
+          CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+          AlertsView(key: ValueKey<HomeView>(HomeView.Alerts)),
+          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+        ]));
+  }
+}
 
 // ^ Home Tab Bar Navigation ^ //
 class HomeBottomNavBar extends GetView<HomeController> {
@@ -19,19 +46,19 @@ class HomeBottomNavBar extends GetView<HomeController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  NavButton(HomeView.Home, controller.setBottomIndex, controller.bottomIndex),
+                  HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: NavButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
+                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
                   ),
                   Container(
                     width: Get.width * 0.20,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: NavButton(HomeView.Alerts, controller.setBottomIndex, controller.bottomIndex),
+                    child: HomeBottomTabButton(HomeView.Alerts, controller.setBottomIndex, controller.bottomIndex),
                   ),
-                  NavButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
+                  HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
                 ],
               ),
             ),
@@ -40,15 +67,12 @@ class HomeBottomNavBar extends GetView<HomeController> {
   }
 }
 
-// ^ Bottom Bar Button Status ^ //
-enum NavButtonStatus { Default, Animating, Completed }
-
 // ^ Bottom Bar Button Widget ^ //
-class NavButton extends GetView<HomeController> {
+class HomeBottomTabButton extends GetView<HomeController> {
   final HomeView bottomType;
   final Function(int) onPressed;
   final RxInt currentIndex;
-  NavButton(this.bottomType, this.onPressed, this.currentIndex);
+  HomeBottomTabButton(this.bottomType, this.onPressed, this.currentIndex);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -111,7 +135,7 @@ class HomeAppBarTitle extends GetView<HomeController> {
   }
 
   Widget _buildView() {
-    if (controller.page.value == HomeView.Home) {
+    if (controller.view.value == HomeView.Main) {
       return OpacityAnimatedWidget(
         enabled: !controller.isFilterOpen.value,
         delay: 200.milliseconds,
@@ -121,8 +145,8 @@ class HomeAppBarTitle extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.White, weight: FontWeight.w400, align: TextAlign.start),
-            controller.titleText.value.headThree(color: SonrColor.White, weight: FontWeight.w800, align: TextAlign.start)
+            "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start),
+            controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start)
           ],
         ),
       );
@@ -133,41 +157,6 @@ class HomeAppBarTitle extends GetView<HomeController> {
         duration: 100.milliseconds,
         child: controller.titleText.value.h3_White,
       );
-    }
-  }
-}
-
-class HomeActionButton extends GetView<HomeController> {
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => Opacity(
-          opacity: _getOpacity(controller.page.value),
-          child: AnimatedSlideSwitcher.fade(
-            child: _buildView(controller.page.value),
-            duration: const Duration(milliseconds: 2500),
-          ),
-        ));
-  }
-
-  // @ Build Page View by Navigation Item
-  Widget _buildView(HomeView page) {
-    // Return View
-    if (page == HomeView.Profile) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Profile));
-    } else if (page == HomeView.Alerts) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Alerts));
-    } else if (page == HomeView.Remote) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Remote));
-    } else {
-      return CardToggleFilter(key: ValueKey<HomeView>(HomeView.Home));
-    }
-  }
-
-  double _getOpacity(HomeView page) {
-    if (page == HomeView.Home && controller.isFilterOpen.value) {
-      return 1.0;
-    } else {
-      return 0.6;
     }
   }
 }

@@ -148,7 +148,7 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
   static SonrIcon get more =>
       SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
-  static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrPalette.Red, size: 36);
+  static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrPalette.Critical, size: 36);
   static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.Blue, size: 36);
   static SonrIcon get remote => SonrIcon.normal(SonrIconData.remote, color: SonrColor.Blue, size: 28);
 
