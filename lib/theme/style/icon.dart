@@ -137,17 +137,13 @@ class SonrIcon extends StatelessWidget {
   static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.aboveTheSky, size: 20);
   static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
   static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
-  static SonrIcon get location =>
-      SonrIcon.neumorphicGradient(Icons.location_city, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
+  static SonrIcon get location => SonrIcon.neumorphicGradient(Icons.location_city, FlutterGradientNames.itmeoBranding, size: 34);
 
   // ^ AppBar Icons ^ //
-  static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36, style: SonrStyle.appBarIcon);
-  static SonrIcon get profile =>
-      SonrIcon.neumorphicGradient(SonrIconData.profile, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
-  static SonrIcon get groups => SonrIcon.neumorphicGradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34, style: SonrStyle.appBarIcon);
-  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36, style: SonrStyle.appBarIcon);
-  static SonrIcon get more =>
-      SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36, style: SonrStyle.appBarIcon);
+  static SonrIcon get accept => SonrIcon.neumorphicGradient(Icons.check, FlutterGradientNames.newLife, size: 36);
+  static SonrIcon get groups => SonrIcon.neumorphicGradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34);
+  static SonrIcon get search => SonrIcon.neumorphicGradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
+  static SonrIcon get more => SonrIcon.neumorphicGradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
   static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrPalette.Critical, size: 36);
   static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.Blue, size: 36);
   static SonrIcon get remote => SonrIcon.normal(SonrIconData.remote, color: SonrColor.Blue, size: 28);

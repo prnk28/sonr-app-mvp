@@ -12,7 +12,6 @@ class URLAuthView extends StatelessWidget {
     final card = invite.card;
     return Container(
       decoration: Neumorphism.floating(),
-      margin: EdgeInsets.all(8),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [

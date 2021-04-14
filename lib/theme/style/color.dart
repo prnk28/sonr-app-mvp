@@ -14,7 +14,7 @@ class SonrColor {
   static const Color Black = Color(0xff323232);
   static const Color Dark = Color(0xff2c2b2b);
   static const Color Blue = Color(0xff51C5DD);
-  static const Color White = Color(0xffE0E0E0);
+  static const Color White = Color(0xfff0f6fa);
   static const Color Neutral = Color(0xff62666a);
   static const Color Grey = Color(0xff787878);
 

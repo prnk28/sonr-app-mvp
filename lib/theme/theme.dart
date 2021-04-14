@@ -56,9 +56,6 @@ class SonrStyle {
   static Size get viewSize => Size(Get.width * 0.95, Get.height * 0.85);
   static EdgeInsets get viewMargin => EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
 
-  static NeumorphicStyle get appBarIcon =>
-      NeumorphicStyle(color: SonrColor.White, shadowLightColor: SonrColor.neuoIconShadow, intensity: 0.65, depth: 2, surfaceIntensity: 0.6);
-
   static NeumorphicStyle get compassStamp =>
       NeumorphicStyle(intensity: 0.4, depth: UserService.isDarkMode ? 4 : 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
@@ -97,9 +94,6 @@ class SonrStyle {
         shape: NeumorphicShape.flat,
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
       );
-
-  // static NeumorphicStyle get indented => NeumorphicStyle(
-  //     color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White, depth: -8, boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)));
 
   static NeumorphicStyle get gradientIcon => NeumorphicStyle(
       color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: UserService.isDarkMode ? 4 : 8, surfaceIntensity: 0.6);
@@ -161,54 +155,47 @@ class SonrStyle {
 extension Neumorphism on BoxDecoration {
   static BoxDecoration floating({double radius = 20, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
-      shape: shape,
-      borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-      color: Color(
-        0xffe8f3fb,
-      ),
-      boxShadow: [
-        BoxShadow(
-          color: Color(
-            0xb9b0c3d2,
+        shape: shape,
+        borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
+        color: Color(0xfff0f6fa),
+        boxShadow: [
+          BoxShadow(
+            color: Color(
+              0xb9b0c3d2,
+            ),
+            offset: Offset(
+              8,
+              8,
+            ),
+            blurRadius: 12,
           ),
-          offset: Offset(
-            19,
-            21,
+          BoxShadow(
+            color: Color(
+              0x61f6fbff,
+            ),
+            offset: Offset(
+              -8,
+              -8,
+            ),
+            blurRadius: 20,
           ),
-          blurRadius: 50,
-        ),
-        BoxShadow(
-          color: Color(
-            0x80f4f8fb,
+          BoxShadow(
+            color: Color(
+              0x45ffffff,
+            ),
+            offset: Offset(
+              -11,
+              -11,
+            ),
+            blurRadius: 10,
           ),
-          offset: Offset(
-            -8,
-            0,
+          BoxShadow(
+            color: Colors.white.withOpacity(0.15),
+            offset: Offset(-6.0, -6.0),
+            blurRadius: 16.0,
           ),
-          blurRadius: 8,
-        ),
-        BoxShadow(
-          color: Color(
-            0x61f6fbff,
-          ),
-          offset: Offset(
-            -8,
-            -40,
-          ),
-          blurRadius: 22,
-        ),
-        BoxShadow(
-          color: Color(
-            0x45ffffff,
-          ),
-          offset: Offset(
-            -11,
-            -11,
-          ),
-          blurRadius: 20,
-        ),
-      ],
-    );
+        ],
+        border: Border.all(color: Colors.white.withOpacity(0.65), width: 1));
   }
 
   static BoxDecoration indented({double radius = 20, BoxShape shape = BoxShape.rectangle}) {
@@ -225,9 +212,9 @@ extension Neumorphism on BoxDecoration {
           ),
           offset: Offset(
             -8,
-            -40,
+            -8,
           ),
-          blurRadius: 22,
+          blurRadius: 10,
         ),
         BoxShadow(
           color: Color(
@@ -237,7 +224,7 @@ extension Neumorphism on BoxDecoration {
             -11,
             -11,
           ),
-          blurRadius: 20,
+          blurRadius: 10,
         ),
       ],
     );

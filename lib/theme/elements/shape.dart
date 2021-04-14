@@ -2,7 +2,7 @@ import '../theme.dart';
 
 class ShapeContainer extends StatelessWidget {
   // Properties
-  final NeumorphicPathProvider path;
+  final CustomClipper<Path> path;
   final double height;
   final double width;
   final BoxDecoration decoration;
@@ -32,21 +32,18 @@ class ShapeContainer extends StatelessWidget {
   const ShapeContainer({@required this.path, Key key, this.decoration, this.child, this.width = 200, this.height = 200}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
-        style: NeumorphicStyle(
-          boxShape: NeumorphicBoxShape.path(path),
-          depth: UserService.isDarkMode ? 4 : 8,
-          intensity: UserService.isDarkMode ? 0.45 : 0.85,
-          surfaceIntensity: 0.6,
-        ),
-        child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child));
+    return ClipPath(
+      clipper: path,
+      child: Container(
+          decoration: Neumorphism.floating(),
+          child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
+    );
   }
 }
 
-// ^ Bottom Nav Bar: Neumorphic Path ^ //
-class BottomBarPath extends NeumorphicPathProvider {
+class BottomBarClip extends CustomClipper<Path> {
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     Path path = Path();
     path.moveTo(0, 20); // Start
     path.quadraticBezierTo(size.width * 0.20, 0, size.width * 0.35, 0);
@@ -61,13 +58,13 @@ class BottomBarPath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // ^ Hexagon Shape Path ^ //
-class HexagonPath extends NeumorphicPathProvider {
+class HexagonClip extends CustomClipper<Path> {
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     final path = Path();
     path.lineTo(0, 0);
     path.lineTo(size.width, 0);
@@ -82,16 +79,16 @@ class HexagonPath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // ^ Message Neumorphic Path ^ //
-class MessagePath extends NeumorphicPathProvider {
+class MessagePath extends CustomClipper<Path> {
   final double borderRadius;
   MessagePath({this.borderRadius = 8});
 
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     double width = size.width;
     double height = size.height;
     double rheight = height - height / 3;
@@ -112,13 +109,13 @@ class MessagePath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // ^ Oval Bottom Neumorphic Path ^ //
-class OvalBottomPath extends NeumorphicPathProvider {
+class OvalBottomPath extends CustomClipper<Path> {
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     var path = Path();
     path.lineTo(0, 0);
     path.lineTo(0, _buildBottomPoint(size));
@@ -136,13 +133,13 @@ class OvalBottomPath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // ^ Oval Top Neumorphic Path ^ //
-class OvalTopPath extends NeumorphicPathProvider {
+class OvalTopPath extends CustomClipper<Path> {
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     var path = Path();
     path.lineTo(0, 0);
     path.lineTo(0, 40);
@@ -154,13 +151,13 @@ class OvalTopPath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // ^ Wave Default Right Path ^ //
-class WavePath extends NeumorphicPathProvider {
+class WavePath extends CustomClipper<Path> {
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     Offset firstEndPoint = Offset(size.width * .5, size.height - 20);
     Offset firstControlPoint = Offset(size.width * .25, size.height - 30);
     Offset secondEndPoint = Offset(size.width, size.height - 50);
@@ -176,13 +173,13 @@ class WavePath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 // ^ Wave Strong Right Path ^ //
-class WaveStrongPath extends NeumorphicPathProvider {
+class WaveStrongPath extends CustomClipper<Path> {
   @override
-  Path getPath(Size size) {
+  getClip(Size size) {
     var firstControlPoint = Offset(size.width / 3.25, 65);
     var firstEndPoint = Offset(size.width / 1.75, 40);
     var secondCP = Offset(size.width / 1.25, 0);
@@ -202,5 +199,5 @@ class WaveStrongPath extends NeumorphicPathProvider {
   }
 
   @override
-  bool get oneGradientPerPath => true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

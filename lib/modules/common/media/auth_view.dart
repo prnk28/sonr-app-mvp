@@ -17,7 +17,6 @@ class MediaAuthView extends StatelessWidget {
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
       decoration: Neumorphism.floating(),
-      margin: EdgeInsets.all(8),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         key: UniqueKey(),

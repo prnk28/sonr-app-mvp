@@ -12,7 +12,6 @@ class URLCardView extends StatelessWidget {
       onTap: () => launchURL(card.url.link),
       child: Container(
         decoration: Neumorphism.floating(),
-        margin: EdgeInsets.all(4),
         child: Hero(
           tag: card.id,
           child: Container(

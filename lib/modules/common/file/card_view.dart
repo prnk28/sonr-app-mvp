@@ -21,7 +21,6 @@ class FileCardView extends StatelessWidget {
           height: 420,
           width: Get.width - 64,
           decoration: Neumorphism.floating(),
-          margin: EdgeInsets.all(4),
           child: GestureDetector(
             onTap: () {
               OpenFile.open(card.metadata.path);

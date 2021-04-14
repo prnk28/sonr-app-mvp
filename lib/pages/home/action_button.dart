@@ -48,7 +48,7 @@ class _MenuActionButton extends GetView<HomeController> {
         width: controller.isFilterOpen.value ? 360 : 56,
         height: controller.isFilterOpen.value ? 56 : 56,
         alignment: Alignment.center,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.AccentBlue),
+        decoration: Neumorphism.floating(shape: BoxShape.circle),
         duration: ButtonUtility.K_BUTTON_DURATION,
         child: Icon(
           Icons.filter_alt_outlined,

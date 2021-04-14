@@ -34,13 +34,10 @@ class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => controller.isBottomBarVisible.value
-        ? Neumorphic(
-            style: NeumorphicStyle(
-              boxShape: NeumorphicBoxShape.path(BottomBarPath()),
-              depth: UserService.isDarkMode ? 4 : 8,
-              color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-            ),
+        ? ClipPath(
+            clipper: BottomBarClip(),
             child: Container(
+              decoration: Neumorphism.floating(),
               width: Get.width,
               height: 80,
               child: Row(

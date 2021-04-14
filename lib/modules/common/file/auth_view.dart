@@ -16,7 +16,6 @@ class FileAuthView extends StatelessWidget {
     return Container(
         height: context.heightTransformer(reducedBy: 35),
         width: context.widthTransformer(reducedBy: 10),
-        margin: EdgeInsets.all(8),
         decoration: Neumorphism.floating(),
         child: Column(
           mainAxisSize: MainAxisSize.max,

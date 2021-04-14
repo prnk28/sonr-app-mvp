@@ -54,7 +54,6 @@ class SocialTileItem extends GetWidget<TileController> {
         HapticFeedback.mediumImpact();
       },
       child: Neumorphic(
-        margin: EdgeInsets.all(4),
         style: isEditing
             ? NeumorphicStyle(intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
             : NeumorphicStyle(intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),

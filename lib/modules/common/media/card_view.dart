@@ -50,7 +50,6 @@ class _MediaCardViewState extends State<MediaCardView> {
       height: 420,
       width: Get.width - 64,
       decoration: Neumorphism.floating(),
-      margin: EdgeInsets.all(4),
       child: GestureDetector(
         onTap: () {
           // Push to Page
