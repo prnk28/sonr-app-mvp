@@ -19,48 +19,22 @@ import 'home_nav.dart';
 class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: Get.find<ShareController>().shrink,
-      onHorizontalDragEnd: (_) => controller.swipeComplete(),
-      onHorizontalDragUpdate: (details) {
-        // Note: Sensitivity is integer used when you don't want to mess up vertical drag
-        int sensitivity = 8;
-        if (details.delta.dx > sensitivity) {
-          controller.swipeRight();
-        } else if (details.delta.dx < -sensitivity) {
-          controller.swipeLeft();
-        }
-      },
-      child: SonrScaffold(
-          resizeToAvoidBottomInset: false,
-          shareView: ShareView(),
-          bottomNavigationBar: HomeBottomNavBar(),
-          appBar: DesignAppBar(
-            title: HomeAppBarTitle(),
-            action: HomeActionButton(),
-          ),
-          body: Obx(() => AnimatedSlideSwitcher(
-                controller.switchAnimation,
-                _buildView(controller.page.value),
-                const Duration(milliseconds: 2500),
-              ))),
-    );
-  }
-
-  // @ Build Page View by Navigation Item
-  Widget _buildView(HomeView page) {
-    // Return View
-    if (page == HomeView.Profile) {
-      return ProfileView(key: ValueKey<HomeView>(HomeView.Profile));
-    } else if (page == HomeView.Alerts) {
-      return AlertsView(key: ValueKey<HomeView>(HomeView.Alerts));
-    } else if (page == HomeView.Remote) {
-      return RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
-    } else {
-      return CardGridView(
-        key: ValueKey<HomeView>(HomeView.Home),
-      );
-    }
+    return SonrScaffold(
+        resizeToAvoidBottomInset: false,
+        shareView: ShareView(),
+        bottomNavigationBar: HomeBottomNavBar(),
+        appBar: DesignAppBar(
+          title: HomeAppBarTitle(),
+          action: HomeActionButton(),
+        ),
+        body: TabBarView(
+          controller: controller.tabController,
+          children: [
+          CardGridView(key: ValueKey<HomeView>(HomeView.Home)),
+          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+          AlertsView(key: ValueKey<HomeView>(HomeView.Alerts)),
+          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+        ]));
   }
 }
 
@@ -178,26 +152,6 @@ class CardToggleFilter extends GetView<HomeController> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildToggle() {
-    return NeumorphicToggle(
-      style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
-      selectedIndex: controller.toggleIndex.value,
-      onChanged: (val) => controller.setToggleCategory(val),
-      thumb: Neumorphic(style: SonrStyle.toggle),
-      children: [
-        ToggleElement(
-            background: Center(child: SonrIcon.normal(SonrIconData.media, color: SonrColor.Grey, size: 24)),
-            foreground: SonrIcon.neumorphicGradient(SonrIconData.media, FlutterGradientNames.newRetrowave, size: 24)),
-        ToggleElement(
-            background: Center(child: SonrIcon.normal(SonrIconData.all_categories, color: SonrColor.Grey, size: 22.5)),
-            foreground: SonrIcon.neumorphicGradient(SonrIconData.all_categories, FlutterGradientNames.eternalConstance, size: 22.5)),
-        ToggleElement(
-            background: Center(child: SonrIcon.normal(SonrIconData.friends, color: SonrColor.Grey, size: 24)),
-            foreground: SonrIcon.neumorphicGradient(SonrIconData.friends, FlutterGradientNames.orangeJuice, size: 24)),
-      ],
     );
   }
 

@@ -12,6 +12,7 @@ class RemoteView extends GetView<RemoteController> {
     return Obx(() => AnimatedContainer(
           width: Get.width,
           height: Get.height,
+          padding: const EdgeInsets.only(top: 24.0),
           margin: controller.status.value.currentMargin,
           duration: 1500.milliseconds,
           child: Neumorphic(
@@ -49,7 +50,6 @@ class _JoinRemoteView extends GetView<RemoteController> {
     return Obx(() => Container(
           width: SonrStyle.viewSize.width,
           height: SonrStyle.viewSize.height,
-          padding: EdgeWith.top(SonrStyle.viewSize.height / 5),
           child: CustomScrollView(
             physics: NeverScrollableScrollPhysics(),
             slivers: [

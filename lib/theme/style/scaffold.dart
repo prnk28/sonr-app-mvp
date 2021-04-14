@@ -90,8 +90,8 @@ class PageBackground extends StatelessWidget {
 class _BackgroundGradient extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final controller = useAnimationController(duration: 30.seconds);
-    final Gradient first = FlutterGradients.norseBeauty(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
+    final controller = useAnimationController(duration: 18.seconds);
+    final Gradient first = FlutterGradients.itmeoBranding(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
     final Gradient second = FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.bottomRight, radius: 2.5);
     controller.repeat(reverse: true);
 
@@ -124,7 +124,7 @@ class _BackgroundOverlay extends StatelessWidget {
         : Container(
             height: Get.height,
             width: Get.width,
-            color: SonrColor.White.withOpacity(0.55),
+            color: SonrColor.White.withOpacity(0.5),
           );
   }
 }

@@ -8,17 +8,17 @@ extension RemoteViewStatusUtil on RemoteViewStatus {
   EdgeInsets get currentMargin {
     switch (this) {
       case RemoteViewStatus.NotJoined:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.Joined:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.Invited:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.InProgress:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.Done:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       default:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
     }
   }
 
@@ -124,7 +124,6 @@ class RemoteController extends GetxController {
       isJoinFieldTapped(false);
     }
   }
-
 
   // @ Handle A remote Invite
   _handleRemoteInvite(AuthInvite invite) {

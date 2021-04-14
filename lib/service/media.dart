@@ -58,7 +58,6 @@ class MediaService extends GetxService {
   void onClose() {
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
-    PhotoManager.clearFileCache();
     super.onClose();
   }
 
@@ -71,11 +70,6 @@ class MediaService extends GetxService {
     if (UserService.permissions.value.hasGallery) {
       // Get Collections
       _state(GalleryState.Loading);
-
-      // Remove Non existing albums for android
-      if (DeviceService.isAndroid) {
-        await PhotoManager.editor.android.removeAllNoExistsAsset();
-      }
       _state(GalleryState.Ready);
     }
     return this;

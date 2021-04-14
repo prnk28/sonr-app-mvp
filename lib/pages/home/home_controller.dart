@@ -8,7 +8,7 @@ enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
 enum HomeView { Home, Profile, Alerts, Remote }
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final status = Rx<HomeState>(HomeState.None);
   final category = Rx<ToggleFilter>(ToggleFilter.All);
@@ -25,17 +25,22 @@ class HomeController extends GetxController {
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
   // References
+  TabController tabController;
   HomeView _lastPage = HomeView.Home;
   StreamSubscription<List<TransferCard>> _cardStream;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
-  bool _isSwiping = false;
 
   // ^ Controller Constructer ^
   @override
   onInit() {
+    tabController = TabController(vsync: this, length: 4);
+    tabController.addListener(() {
+      bottomIndex(tabController.index);
+    });
+
     // Set efault Properties
     toggleIndex(1);
     pageIndex(0);
@@ -116,6 +121,7 @@ class HomeController extends GetxController {
 
       // Change Index
       bottomIndex(newIndex);
+      tabController.animateTo(newIndex);
 
       // Set Page
       if (newIndex == 1) {
@@ -136,35 +142,6 @@ class HomeController extends GetxController {
         Get.find<ShareController>().shrink();
       }
     }
-  }
-
-  // ^ Update Bottom Index from Swipe Left ^ //
-  swipeLeft() {
-    if (!_isSwiping) {
-      _isSwiping = true;
-      if (page.value.isNotLast) {
-        page(page.value.pageNext);
-        titleText(page.value.title);
-        bottomIndex(HomeView.values.indexOf(page.value));
-      }
-    }
-  }
-
-  // ^ Update Bottom Index from Swipe Right ^ //
-  swipeRight() {
-    if (!_isSwiping) {
-      _isSwiping = true;
-      if (page.value.isNotFirst) {
-        page(page.value.pageBefore);
-        titleText(page.value.title);
-        bottomIndex(HomeView.values.indexOf(page.value));
-      }
-    }
-  }
-
-  // ^ Swipe has Finished ^ //
-  swipeComplete() {
-    _isSwiping = false;
   }
 
   // @ Swaps Title when Lobby Size Changes ^ //
