@@ -114,7 +114,7 @@ class _MediaCardViewState extends State<MediaCardView> {
 
   // @ Build Card for Video Type
   Widget _buildChildView() {
-    if (widget.card.metadata.mime.type == MIME_Type.video) {
+    if (widget.card.metadata.mime.type == MIME_Type.video && mediaFile.path != null) {
       return BetterPlayer.file(mediaFile.path,
           betterPlayerConfiguration: BetterPlayerConfiguration(
             controlsConfiguration: BetterPlayerControlsConfiguration(),
