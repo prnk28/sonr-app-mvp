@@ -15,16 +15,8 @@ class RegisterController extends GetxController {
   final lastNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
 
-  // Assets
-  Image logoTop = SonrAssetLogo.Top.image(width: 128, height: 128);
-  DecorationImage locationAccess = DecorationImage(image: NetworkImage(SonrAssetIllustration.LocationAccess.link), fit: BoxFit.fill);
-  DecorationImage mediaAccess = DecorationImage(image: NetworkImage(SonrAssetIllustration.MediaAccess.link), fit: BoxFit.fill);
-
   // * Constructer * //
   onInit() {
-    precacheImage(logoTop.image, Get.context);
-    precacheImage(locationAccess.image, Get.context);
-    precacheImage(mediaAccess.image, Get.context);
     super.onInit();
   }
 

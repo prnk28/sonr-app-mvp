@@ -82,8 +82,7 @@ class HomeBottomTabButton extends GetView<HomeController> {
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
-                    child: AnimatedSlideSwitcher.fade(
-                        child: idx.value == view.index ? controller.getSelectedIconForView(view) : controller.getDefaultIconForView(view)),
+                    child: AnimatedSlideSwitcher.fade(child: AssetService.getHomeTabBarIcon(view: view, isSelected: idx.value == view.index)),
                     scale: idx.value == view.index ? 1.25 : 1.0,
                   ),
               currentIndex),

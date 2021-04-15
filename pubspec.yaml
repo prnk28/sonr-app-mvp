@@ -107,13 +107,9 @@ flutter:
 
   # -- Media --
   assets:
-    - assets/bar/
     - assets/fonts/
-    - assets/lottie/
     - assets/rive/
     - assets/sounds/
-    - assets/share/
-    - assets/illustrations/
 
 
 

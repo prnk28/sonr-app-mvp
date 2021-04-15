@@ -16,7 +16,7 @@ class FormPage extends GetView<RegisterController> {
           height: Get.height,
           margin: EdgeInsets.only(bottom: 8, top: 72),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            controller.logoTop,
+            SonrAssetLogo.Top.widget,
             Expanded(
               child: Form(
                 child: Column(

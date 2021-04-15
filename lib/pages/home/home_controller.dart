@@ -27,28 +27,9 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
-  // Assets
-  ImageIcon homeDefaultIcon = ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon profileDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.ProfileDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon activityDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.ActivityDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
-  ImageIcon remoteDefaultIcon =
-      ImageIcon(NetworkImage(SonrAssetIcon.RemoteDefault.link), size: 38, color: Colors.grey[400], key: ValueKey<bool>(false));
-  LottieIcon homeSelectIcon = LottieIcon(link: SonrAssetIcon.HomeSelected.link, size: 32, key: ValueKey<bool>(true));
-  LottieIcon profileSelectIcon = LottieIcon(link: SonrAssetIcon.ProfileSelected.link, size: 32, key: ValueKey<bool>(true));
-  LottieIcon activitySelectIcon = LottieIcon(link: SonrAssetIcon.ActivitySelected.link, size: 32, key: ValueKey<bool>(true));
-  LottieIcon remoteSelectIcon = LottieIcon(link: SonrAssetIcon.RemoteSelected.link, size: 38, key: ValueKey<bool>(true));
-
   // ^ Controller Constructer ^
   @override
   onInit() {
-    // Initalize Assets
-    precacheImage(homeDefaultIcon.image, Get.context);
-    precacheImage(profileDefaultIcon.image, Get.context);
-    precacheImage(activityDefaultIcon.image, Get.context);
-    precacheImage(remoteDefaultIcon.image, Get.context);
-
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
 
@@ -85,37 +66,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
-  // ^ Returns Cached Image Icon Asset ^ //
-  Widget getDefaultIconForView(HomeView view) {
-    switch (view) {
-      case HomeView.Main:
-        return homeDefaultIcon;
-      case HomeView.Profile:
-        return profileDefaultIcon;
-      case HomeView.Activity:
-        return activityDefaultIcon;
-      case HomeView.Remote:
-        return remoteDefaultIcon;
-      default:
-        return Container();
-    }
-  }
-
-// ^ Returns Lottie Icon Asset ^ //
-  Widget getSelectedIconForView(HomeView view) {
-    switch (view) {
-      case HomeView.Main:
-        return homeSelectIcon;
-      case HomeView.Profile:
-        return profileSelectIcon;
-      case HomeView.Activity:
-        return activitySelectIcon;
-      case HomeView.Remote:
-        return remoteSelectIcon;
-      default:
-        return Container();
-    }
-  }
 
   // ^ Method to Handle Action Button ^ //
   void handleAction() {

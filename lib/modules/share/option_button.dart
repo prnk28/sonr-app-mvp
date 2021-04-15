@@ -29,7 +29,7 @@ class ShareCameraButtonItem extends GetView<ShareController> {
             width: 55,
             child: Center(
                 child: LottieShareContainer(
-              type: LottieShare.Camera,
+              type: SonrAssetLottie.Camera,
             ))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Camera'.p_White,
@@ -52,7 +52,7 @@ class ShareGalleryButtonItem extends GetView<ShareController> {
             width: 55,
             child: Center(
                 child: LottieShareContainer(
-              type: LottieShare.Gallery,
+              type: SonrAssetLottie.Gallery,
             ))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Gallery'.p_White,
@@ -74,7 +74,7 @@ class ShareFileButtonItem extends GetView<ShareController> {
             width: 55,
             child: Center(
                 child: LottieShareContainer(
-              type: LottieShare.Files,
+              type: SonrAssetLottie.Files,
             ))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'File'.p_White,

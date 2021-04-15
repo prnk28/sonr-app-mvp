@@ -67,7 +67,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
                           controller.isJoinFieldTapped.value
                               ? "Enter lobby code below.".p_Grey
                               : LottieContainer(
-                                  type: LottieBoard.JoinRemote,
+                                  type: SonrAssetLottie.JoinRemote,
                                   repeat: true,
                                   height: 150,
                                 ),

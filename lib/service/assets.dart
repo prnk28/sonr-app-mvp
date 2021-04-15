@@ -1,15 +1,17 @@
 import 'dart:math';
 
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/theme/form/theme.dart';
 
 // # Lottie
 enum SonrAssetLottie {
   David,
   JoinRemote,
-  Gallery,
-  Location,
   MediaAccess,
   Progress,
+  Camera,
+  Files,
+  Gallery,
 }
 
 // @ Helper method to retreive asset
@@ -21,36 +23,18 @@ extension LottieNetworkUtils on SonrAssetLottie {
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f507e00e828537af1_david.json";
       case SonrAssetLottie.JoinRemote:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f783403762f50fcab_join-remote.json";
+      case SonrAssetLottie.Camera:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078941b16c335b7c05e1543_camera.json";
       case SonrAssetLottie.Gallery:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f3975e4bb08858af6_gallery.json";
-      case SonrAssetLottie.Location:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773fbc748953f8270d4b_location.json";
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078941b341e2a5bc5d21f23_gallery.json";
+      case SonrAssetLottie.Files:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078941bbc74897f4d27fce1_files.json";
       case SonrAssetLottie.MediaAccess:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773fbeb6eb5253002b22_access.json";
       case SonrAssetLottie.Progress:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f0b611698e3ad7561_progress.json";
       default:
         return "";
-    }
-  }
-
-  // Widget Instance
-  Widget get widget {
-    switch (this) {
-      case SonrAssetLottie.David:
-
-      case SonrAssetLottie.JoinRemote:
-
-      case SonrAssetLottie.Gallery:
-
-      case SonrAssetLottie.Location:
-
-      case SonrAssetLottie.MediaAccess:
-
-      case SonrAssetLottie.Progress:
-
-      default:
-        return Container();
     }
   }
 }
@@ -92,6 +76,28 @@ extension IconNetworkUtils on SonrAssetIcon {
         return "";
     }
   }
+
+  Widget get widget {
+    switch (this) {
+      case SonrAssetIcon.ProfileDefault:
+        return AssetService.to._profileDefaultIcon;
+      case SonrAssetIcon.RemoteDefault:
+        return AssetService.to._remoteDefaultIcon;
+      case SonrAssetIcon.ActivityDefault:
+        return AssetService.to._activityDefaultIcon;
+      case SonrAssetIcon.HomeDefault:
+        return AssetService.to._homeDefaultIcon;
+      case SonrAssetIcon.ProfileSelected:
+        return AssetService.to._profileSelectIcon;
+      case SonrAssetIcon.RemoteSelected:
+        return AssetService.to._remoteSelectIcon;
+      case SonrAssetIcon.ActivitySelected:
+        return AssetService.to._activitySelectIcon;
+      case SonrAssetIcon.HomeSelected:
+        return AssetService.to._homeSelectIcon;
+    }
+    return Container();
+  }
 }
 
 // # Illustrations
@@ -132,23 +138,27 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
     }
   }
 
-  // Widget Instance
-  static String randomNoFilesLink() {
-    var rand = Random().nextInt(3) + 1;
-    if (rand == 1) {
-      return SonrAssetIllustration.NoFiles1.link;
-    } else if (rand == 2) {
-      return SonrAssetIllustration.NoFiles2.link;
-    } else if (rand == 3) {
-      return SonrAssetIllustration.NoFiles3.link;
-    } else {
-      return SonrAssetIllustration.NoFiles4.link;
+  // ^ Get Illustration ^ //
+  Widget get widget {
+    switch (this) {
+      case SonrAssetIllustration.NoFiles1:
+        return AssetService.to._noFiles1;
+      case SonrAssetIllustration.NoFiles2:
+        return AssetService.to._noFiles2;
+      case SonrAssetIllustration.NoFiles3:
+        return AssetService.to._noFiles3;
+      case SonrAssetIllustration.NoFiles4:
+        return AssetService.to._noFiles4;
+      case SonrAssetIllustration.LocationAccess:
+        return AssetService.to._locationAccess;
+      case SonrAssetIllustration.MediaAccess:
+        return AssetService.to._mediaAccess;
+      case SonrAssetIllustration.CameraAccess:
+        return AssetService.to._cameraAccess;
+      case SonrAssetIllustration.ConnectionLost:
+        return AssetService.to._noConnection;
     }
-  }
-
-  // Widget Instance
-  Image image() {
-    return Image.network(this.link);
+    return Container();
   }
 }
 
@@ -176,9 +186,119 @@ extension LogoNetworkUtils on SonrAssetLogo {
     }
   }
 
-  Image image({double width, double height}) {
-    return Image.network(this.link, width: width ?? 100, height: height ?? 100);
+  // ^ Get Logo ^ //
+  Widget get widget {
+    if (this == SonrAssetLogo.Top || this == SonrAssetLogo.TopWhite || this == SonrAssetLogo.TopBlack) {
+      return AssetService.to._logoTop;
+    }
+    return AssetService.to._logoSide;
   }
 }
 
-class AssetService extends GetxService {}
+class AssetService extends GetxService {
+  // Service Accessors
+  static bool get isRegistered => Get.isRegistered<AssetService>();
+  static AssetService get to => Get.find<AssetService>();
+
+  // @ Illustrations: Access/Connection
+  Image _cameraAccess = Image(image: NetworkImage(SonrAssetIllustration.CameraAccess.link), fit: BoxFit.fitHeight);
+  Image _locationAccess = Image(image: NetworkImage(SonrAssetIllustration.LocationAccess.link), fit: BoxFit.fitHeight);
+  Image _mediaAccess = Image(image: NetworkImage(SonrAssetIllustration.MediaAccess.link), fit: BoxFit.fitHeight);
+  Image _noConnection = Image(image: NetworkImage(SonrAssetIllustration.ConnectionLost.link), fit: BoxFit.fitHeight);
+
+  // @ Illustrations: No Files
+  Image _noFiles1 = Image(
+    image: NetworkImage(SonrAssetIllustration.NoFiles1.link),
+    fit: BoxFit.fitHeight,
+    height: 160,
+    colorBlendMode: BlendMode.dst,
+    gaplessPlayback: true,
+  );
+  Image _noFiles2 = Image(
+    image: NetworkImage(SonrAssetIllustration.NoFiles2.link),
+    fit: BoxFit.fitHeight,
+    height: 160,
+    colorBlendMode: BlendMode.dst,
+    gaplessPlayback: true,
+  );
+  Image _noFiles3 = Image(
+    image: NetworkImage(SonrAssetIllustration.NoFiles3.link),
+    fit: BoxFit.fitHeight,
+    height: 160,
+    colorBlendMode: BlendMode.dst,
+    gaplessPlayback: true,
+  );
+  Image _noFiles4 = Image(
+    image: NetworkImage(SonrAssetIllustration.NoFiles4.link),
+    fit: BoxFit.fitHeight,
+    height: 160,
+    colorBlendMode: BlendMode.dst,
+    gaplessPlayback: true,
+  );
+
+  // @ Logos
+  Image _logoTop = Image.network(SonrAssetLogo.Top.link, width: 128, height: 128);
+  Image _logoSide = Image.network(SonrAssetLogo.Top.link, height: 128, fit: BoxFit.fitHeight);
+
+  // @ Icons: Tab Bar
+  ImageIcon _homeDefaultIcon = ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
+  ImageIcon _profileDefaultIcon =
+      ImageIcon(NetworkImage(SonrAssetIcon.ProfileDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
+  ImageIcon _activityDefaultIcon =
+      ImageIcon(NetworkImage(SonrAssetIcon.ActivityDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
+  ImageIcon _remoteDefaultIcon =
+      ImageIcon(NetworkImage(SonrAssetIcon.RemoteDefault.link), size: 38, color: Colors.grey[400], key: ValueKey<bool>(false));
+  LottieIcon _homeSelectIcon = LottieIcon(link: SonrAssetIcon.HomeSelected.link, size: 32, key: ValueKey<bool>(true));
+  LottieIcon _profileSelectIcon = LottieIcon(link: SonrAssetIcon.ProfileSelected.link, size: 32, key: ValueKey<bool>(true));
+  LottieIcon _activitySelectIcon = LottieIcon(link: SonrAssetIcon.ActivitySelected.link, size: 32, key: ValueKey<bool>(true));
+  LottieIcon _remoteSelectIcon = LottieIcon(link: SonrAssetIcon.RemoteSelected.link, size: 38, key: ValueKey<bool>(true));
+
+  // * Constructer * //
+  Future<AssetService> init() async {
+    // Load Icons
+    await precacheImage(_homeDefaultIcon.image, Get.context);
+    await precacheImage(_profileDefaultIcon.image, Get.context);
+    await precacheImage(_activityDefaultIcon.image, Get.context);
+    await precacheImage(_remoteDefaultIcon.image, Get.context);
+
+    // Load Logos
+    await precacheImage(_logoTop.image, Get.context);
+    await precacheImage(_logoSide.image, Get.context);
+
+    // Load Illustrations
+    await precacheImage(_cameraAccess.image, Get.context);
+    await precacheImage(_locationAccess.image, Get.context);
+    await precacheImage(_mediaAccess.image, Get.context);
+    await precacheImage(_noConnection.image, Get.context);
+    return this;
+  }
+
+  // ^ Static Get Icon for Home Tab Bar ^ //
+  static Widget getHomeTabBarIcon({@required HomeView view, @required bool isSelected}) {
+    switch (view) {
+      case HomeView.Main:
+        return isSelected ? to._homeSelectIcon : to._homeDefaultIcon;
+      case HomeView.Profile:
+        return isSelected ? to._profileSelectIcon : to._profileDefaultIcon;
+      case HomeView.Activity:
+        return isSelected ? to._activitySelectIcon : to._activityDefaultIcon;
+      case HomeView.Remote:
+        return isSelected ? to._remoteSelectIcon : to._remoteDefaultIcon;
+    }
+    return Container();
+  }
+
+  //  ^ Get Random No Files Image ^ //
+  static Widget randomNoFiles() {
+    var rand = Random().nextInt(3) + 1;
+    if (rand == 1) {
+      return to._noFiles1;
+    } else if (rand == 2) {
+      return to._noFiles2;
+    } else if (rand == 3) {
+      return to._noFiles3;
+    } else {
+      return to._noFiles4;
+    }
+  }
+}

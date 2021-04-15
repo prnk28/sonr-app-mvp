@@ -2,49 +2,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../form/theme.dart';
 import 'package:lottie/lottie.dart';
 
-// ** Enums ** //
-enum LottieBoard { David, JoinRemote, Access, Gallery, Location }
-enum LottieShare { Camera, Files, Gallery }
-
-// ^ Lottie Board Type extensions ^ //
-extension LottieBoardUtils on LottieBoard {
-  String get path {
-    switch (this) {
-      case LottieBoard.David:
-        return "assets/lottie/david.json";
-
-      case LottieBoard.JoinRemote:
-        return "assets/lottie/join-remote.json";
-
-      case LottieBoard.Access:
-        return "assets/lottie/access.json";
-
-      case LottieBoard.Gallery:
-        return "assets/lottie/gallery.json";
-
-      case LottieBoard.Location:
-        return "assets/lottie/location.json";
-
-      default:
-        return "";
-    }
-  }
-}
-
-// ^ Lottie Icon Type extensions ^ //
-extension LottieShareUtils on LottieShare {
-  String get path {
-    switch (this) {
-      case LottieShare.Camera:
-        return "assets/share/camera.json";
-      case LottieShare.Files:
-        return "assets/share/files.json";
-      default:
-        return "assets/share/gallery.json";
-    }
-  }
-}
-
 // ^ Lottie Icon Widget ^ //
 class LottieIcon extends HookWidget {
   final Function onComplete;
@@ -88,7 +45,7 @@ class LottieContainer extends HookWidget {
   final double width;
   final double height;
   final BoxFit fit;
-  final LottieBoard type;
+  final SonrAssetLottie type;
   final Function onComplete;
   final bool repeat;
   final bool animate;
@@ -106,8 +63,8 @@ class LottieContainer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController();
-    return Lottie.asset(
-      type.path,
+    return Lottie.network(
+      type.link,
       controller: controller,
       width: width,
       repeat: repeat,
@@ -128,14 +85,14 @@ class LottieContainer extends HookWidget {
 
 // ^ Lottie Animation Container Widget ^ //
 class LottieShareContainer extends HookWidget {
-  final LottieShare type;
+  final SonrAssetLottie type;
   const LottieShareContainer({Key key, @required this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController();
     return Lottie.asset(
-      type.path,
+      type.link,
       controller: controller,
       width: 55,
       repeat: true,

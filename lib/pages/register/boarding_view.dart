@@ -8,13 +8,14 @@ class BoardingLocationView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
-      decoration: BoxDecoration(image: controller.locationAccess),
-      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 24),
-      child: Column(
+      child: Stack(
         children: [
-          "Location".h2,
-          Spacer(),
-          ColorButton.primary(onPressed: controller.requestLocation, text: "Grant Location"),
+          SonrAssetIllustration.LocationAccess.widget,
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.only(bottom: 32),
+            child: ColorButton.primary(onPressed: controller.requestLocation, text: "Grant Location"),
+          )
         ],
       ),
     );
@@ -28,13 +29,14 @@ class BoardingGalleryView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
-      padding: EdgeInsets.only(top: 64, left: 48, right: 86, bottom: 48),
-      decoration: BoxDecoration(image: controller.mediaAccess),
-      child: Column(
+      child: Stack(
         children: [
-          "Sonr needs access to your Gallery for sharing Files.".h4,
-          Spacer(),
-          ColorButton.primary(onPressed: controller.requestGallery, text: "Grant Gallery"),
+          SonrAssetIllustration.MediaAccess.widget,
+          Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.only(bottom: 32),
+            child: ColorButton.primary(onPressed: controller.requestGallery, text: "Grant Gallery"),
+          )
         ],
       ),
     );
