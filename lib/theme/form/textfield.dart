@@ -114,12 +114,9 @@ class SonrTextField extends StatelessWidget {
                           : Container(),
                     ]))
                 : Container(),
-            Neumorphic(
+            Container(
+              decoration: Neumorphism.floating(),
               margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-              style: NeumorphicStyle(
-                depth: NeumorphicTheme.embossDepth(context),
-                boxShape: NeumorphicBoxShape.stadium(),
-              ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
                 style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
@@ -229,12 +226,9 @@ class SonrSearchField extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Neumorphic(
+            Container(
                 margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                style: NeumorphicStyle(
-                  depth: NeumorphicTheme.embossDepth(context),
-                  boxShape: NeumorphicBoxShape.stadium(),
-                ),
+                decoration: Neumorphism.floating(),
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                 child: Stack(children: [
                   Padding(

@@ -8,7 +8,7 @@ import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 import '../theme.dart';
 
-enum IconType { Neumorphic, Normal, Gradient, Thumbnail, NeumorphicGradient }
+enum IconType { Normal, Gradient, Thumbnail }
 
 class SonrIcon extends StatelessWidget {
   final IconData data;
@@ -32,32 +32,6 @@ class SonrIcon extends StatelessWidget {
       key: key,
     );
   }
-
-  // ^ Neumorphic Icon with Provided Data
-  factory SonrIcon.neumorphic(IconData data, {double size = 30, NeumorphicStyle style, Key key}) {
-    return SonrIcon(
-      data,
-      IconType.Neumorphic,
-      Colors.white,
-      null,
-      size: size,
-      key: key,
-      style: style ?? SonrStyle.gradientIcon,
-    );
-  }
-
-  // // ^ Neumorphic Gradient Icon with Provided Data
-  // factory SonrIcon.neumorphicGradient(IconData data, FlutterGradientNames gradient, {double size = 30, NeumorphicStyle style, Key key}) {
-  //   return SonrIcon(
-  //     data,
-  //     IconType.NeumorphicGradient,
-  //     Colors.white,
-  //     gradient,
-  //     size: size,
-  //     key: key,
-  //     style: style ?? SonrStyle.gradientIcon,
-  //   );
-  // }
 
   // ^ Normal Icon with Provided Data
   factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.White, Key key}) {
@@ -153,26 +127,11 @@ class SonrIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget result;
     switch (type) {
-      // @ Creates Neumorphic Icon
-      case IconType.Neumorphic:
-        result = NeumorphicIcon((data), size: size, style: style);
-        break;
 
       // @ Creates Normal Icon
       case IconType.Normal:
         result = Icon(data, size: size, color: color);
 
-        break;
-
-      // @ Creates Neumorphic Gradient Icon
-      case IconType.NeumorphicGradient:
-        result = ShaderMask(
-            blendMode: BlendMode.modulate,
-            shaderCallback: (bounds) {
-              var grad = FlutterGradients.findByName(gradient, tileMode: TileMode.clamp);
-              return grad.createShader(bounds);
-            },
-            child: NeumorphicIcon((data), size: size, style: style));
         break;
 
       // @ Creates Gradient Icon

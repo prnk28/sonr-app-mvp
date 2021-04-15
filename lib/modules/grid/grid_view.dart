@@ -1,8 +1,14 @@
 import 'dart:ui';
+import 'package:sonr_app/modules/common/contact/contact.dart';
+import 'package:sonr_app/modules/common/file/file.dart';
+import 'package:sonr_app/modules/common/media/card_view.dart';
+import 'package:sonr_app/modules/common/url/card_view.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'grid_controller.dart';
 import 'tags_view.dart';
+
+const K_LIST_HEIGHT = 225.0;
 
 // ^ Root Grid View ^ //
 class CardMainView extends GetView<GridController> {
@@ -11,18 +17,36 @@ class CardMainView extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-        child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: EdgeInsets.all(8)),
+          _CardSearchView(),
+          Spacer(),
           "Recents".headTwo(align: TextAlign.start),
           TagsView(
-            tags: ["All", "Media", "Contacts", "Links"],
+            tags: ["All", "Files", "Media", "Contacts", "Links"],
           ),
-          Obx(() => TabBarView(controller: controller.tabController, children: [
-                _CardGridAll(),
-                _CardGridMedia(),
-                _CardGridContacts(),
-                _CardGridLinks(),
-              ])),
+          Padding(padding: EdgeInsets.only(top: 24)),
+          Container(
+            height: K_LIST_HEIGHT,
+            child: TabBarView(controller: controller.tabController, children: [
+              _CardGridAll(),
+              _CardGridFiles(),
+              _CardGridMedia(),
+              _CardGridContacts(),
+              _CardGridLinks(),
+            ]),
+          ),
         ]));
+  }
+}
+
+class _CardSearchView extends GetView<GridController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: Container(height: 180, width: Get.width, decoration: Neumorphism.floating(), child: "Search ".h3),
+    );
   }
 }
 
@@ -33,19 +57,27 @@ class _CardGridAll extends GetView<GridController> {
     return Obx(() {
       // @ 2. Build View
       if (CardService.allCards.length > 0) {
-        return Container(
-          padding: EdgeInsets.only(top: 24),
-          child: ListView.builder(
-            itemCount: CardService.allCards.length,
-            itemBuilder: (BuildContext context, int index) {
-              return controller.buildCard(CardService.allCards[index]);
-            },
-          ),
+        return ListView.builder(
+          itemCount: CardService.allCards.length,
+          itemBuilder: (BuildContext context, int index) {
+            return buildCard(CardService.allCards[index]);
+          },
         );
       } else {
-        return _CardGridEmpty();
+        return _CardGridEmpty(label: "No Cards Found");
       }
     });
+  }
+
+  // @ Helper Method Builds Cards for List
+  Widget buildCard(TransferCardItem item) {
+    if (item.payload == Payload.MEDIA) {
+      return MediaCardView(item);
+    } else if (item.payload == Payload.CONTACT) {
+      return ContactCardView(item);
+    } else {
+      return FileCardView(item);
+    }
   }
 }
 
@@ -56,17 +88,34 @@ class _CardGridMedia extends GetView<GridController> {
     return Obx(() {
       // @ 2. Build View
       if (CardService.mediaCards.length > 0) {
-        return Container(
-          padding: EdgeInsets.only(top: 24),
-          child: ListView.builder(
-            itemCount: CardService.mediaCards.length,
-            itemBuilder: (BuildContext context, int index) {
-              return controller.buildCard(CardService.mediaCards[index]);
-            },
-          ),
+        return ListView.builder(
+          itemCount: CardService.mediaCards.length,
+          itemBuilder: (BuildContext context, int index) {
+            return MediaCardView(CardService.mediaCards[index]);
+          },
         );
       } else {
-        return _CardGridEmpty();
+        return _CardGridEmpty(label: "No Media yet");
+      }
+    });
+  }
+}
+
+// ^ Card Grid View - File Cards ^ //
+class _CardGridFiles extends GetView<GridController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      // @ 2. Build View
+      if (CardService.fileCards.length > 0) {
+        return ListView.builder(
+          itemCount: CardService.fileCards.length,
+          itemBuilder: (BuildContext context, int index) {
+            return FileCardView(CardService.fileCards[index]);
+          },
+        );
+      } else {
+        return _CardGridEmpty(label: "No Files yet");
       }
     });
   }
@@ -79,17 +128,14 @@ class _CardGridContacts extends GetView<GridController> {
     return Obx(() {
       // @ 2. Build View
       if (CardService.contactCards.length > 0) {
-        return Container(
-          padding: EdgeInsets.only(top: 24),
-          child: ListView.builder(
-            itemCount: CardService.contactCards.length,
-            itemBuilder: (BuildContext context, int index) {
-              return controller.buildCard(CardService.contactCards[index]);
-            },
-          ),
+        return ListView.builder(
+          itemCount: CardService.contactCards.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ContactCardView(CardService.contactCards[index]);
+          },
         );
       } else {
-        return _CardGridEmpty();
+        return _CardGridEmpty(label: "No Contacts yet");
       }
     });
   }
@@ -102,31 +148,38 @@ class _CardGridLinks extends GetView<GridController> {
     return Obx(() {
       // @ 2. Build View
       if (CardService.urlCards.length > 0) {
-        return Container(
-          padding: EdgeInsets.only(top: 24),
-          child: ListView.builder(
-            itemCount: CardService.urlCards.length,
-            itemBuilder: (BuildContext context, int index) {
-              return controller.buildCard(CardService.urlCards[index]);
-            },
-          ),
+        return ListView.builder(
+          itemCount: CardService.urlCards.length,
+          itemBuilder: (BuildContext context, int index) {
+            return URLCardView(CardService.urlCards[index]);
+          },
         );
       } else {
-        return _CardGridEmpty();
+        return _CardGridEmpty(label: "No URL Links yet");
       }
     });
   }
 }
 
 // @ Helper Method to Build Empty List Value
-class _CardGridEmpty extends StatelessWidget {
+class _CardGridEmpty extends GetView<GridController> {
+  final String label;
+
+  const _CardGridEmpty({Key key, @required this.label}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "No Cards Found!".h5,
-      Padding(padding: EdgeInsets.all(8)),
-      LottieContainer(type: LottieBoard.David, width: Get.width, height: 150, repeat: true),
-      Padding(padding: EdgeInsets.all(16)),
-    ]);
+    return Container(
+      width: K_LIST_HEIGHT,
+      height: 200,
+      child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Image.asset(
+          controller.randomNoFilesPath(),
+          height: 150,
+          colorBlendMode: BlendMode.dst,
+        ),
+        label.p_Grey,
+        Padding(padding: EdgeInsets.all(16)),
+      ]),
+    );
   }
 }

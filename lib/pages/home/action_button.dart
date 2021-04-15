@@ -20,8 +20,8 @@ class HomeActionButton extends GetView<HomeController> {
     // Return View
     if (page == HomeView.Profile) {
       return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Profile));
-    } else if (page == HomeView.Alerts) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Alerts));
+    } else if (page == HomeView.Activity) {
+      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Activity));
     } else if (page == HomeView.Remote) {
       return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Remote));
     } else {

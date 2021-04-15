@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ^ Widget for Expanded Media View
 class URLCardView extends StatelessWidget {
-  final TransferCard card;
+  final TransferCardItem card;
   const URLCardView(this.card);
   @override
   Widget build(BuildContext context) {

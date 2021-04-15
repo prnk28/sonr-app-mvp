@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeState { Loading, Ready, None, New, First }
-enum HomeView { Main, Profile, Alerts, Remote }
+enum HomeView { Main, Profile, Activity, Remote }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
@@ -220,7 +220,7 @@ extension HomeViewUtils on HomeView {
         return Icons.home;
       case HomeView.Profile:
         return Icons.person;
-      case HomeView.Alerts:
+      case HomeView.Activity:
         return Icons.notifications;
       case HomeView.Remote:
         return SonrIconData.remote;
@@ -234,7 +234,7 @@ extension HomeViewUtils on HomeView {
     switch (this) {
       case HomeView.Profile:
         return "assets/bar/profile_disabled.png";
-      case HomeView.Alerts:
+      case HomeView.Activity:
         return "assets/bar/alerts_disabled.png";
       case HomeView.Remote:
         return "assets/bar/remote_disabled.png";
@@ -247,7 +247,7 @@ extension HomeViewUtils on HomeView {
     switch (this) {
       case HomeView.Profile:
         return LottieIconType.Profile;
-      case HomeView.Alerts:
+      case HomeView.Activity:
         return LottieIconType.Alerts;
       case HomeView.Remote:
         return LottieIconType.Remote;
@@ -263,7 +263,7 @@ extension HomeViewUtils on HomeView {
         return 32;
       case HomeView.Profile:
         return 32;
-      case HomeView.Alerts:
+      case HomeView.Activity:
         return 32;
       case HomeView.Remote:
         return 38;

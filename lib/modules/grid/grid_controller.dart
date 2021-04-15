@@ -1,7 +1,5 @@
-import 'package:sonr_app/modules/common/contact/contact.dart';
-import 'package:sonr_app/modules/common/file/file.dart';
-import 'package:sonr_app/modules/common/media/media.dart';
-import 'package:sonr_app/service/cards.dart';
+import 'dart:math';
+
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -12,12 +10,16 @@ class GridController extends GetxController with SingleGetTickerProviderMixin {
 
   // References
   TabController tabController;
+  ScrollController scrollController;
 
   // ^ Controller Constructer ^
   @override
   onInit() {
+    // Set Scroll Controller
+    scrollController = ScrollController(keepScrollOffset: false);
+
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 4);
+    tabController = TabController(vsync: this, length: 5);
     tabController.addListener(() {
       tagIndex(tabController.index);
     });
@@ -39,14 +41,8 @@ class GridController extends GetxController with SingleGetTickerProviderMixin {
     HapticFeedback.mediumImpact();
   }
 
-  // @ Helper Method Builds Cards for List
-  Widget buildCard(TransferCardItem item) {
-    if (item.payload == Payload.MEDIA) {
-      return MediaCardView(item);
-    } else if (item.payload == Payload.CONTACT) {
-      return ContactCardView(item);
-    } else {
-      return FileCardView(item);
-    }
+  // ^ Method for Returning Random Image Path
+  String randomNoFilesPath() {
+    return "assets/illustrations/no_files-${Random().nextInt(3) + 1}.png";
   }
 }

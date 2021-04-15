@@ -50,7 +50,7 @@ class FileCardView extends StatelessWidget {
                         child: Container(
                             decoration: Neumorphism.indented(),
                             padding: EdgeInsets.all(20),
-                            child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
+                            child: Container(child: card.payload.icon(IconType.Gradient, size: (Get.height / 4))))),
 
                     // Info Button
                     Align(

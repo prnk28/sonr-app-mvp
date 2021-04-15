@@ -49,7 +49,7 @@ class ContactAuthView extends StatelessWidget {
 
               // Phone/ Website
               Row(children: [
-                card.owner.platform.icon(IconType.Neumorphic, color: Colors.grey[700], size: 20),
+                card.owner.platform.icon(IconType.Gradient, color: Colors.grey[700], size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
                 card.contact.phoneNumber,

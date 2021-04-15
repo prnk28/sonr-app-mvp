@@ -73,7 +73,7 @@ class FileItem {
     } else if (ext == ".txt" || ext == ".doc" || ext == ".docx" || ext == ".ttf") {
       return Payload.TEXT;
     } else {
-      return Payload.UNDEFINED;
+      return Payload.OTHER;
     }
   }
 

@@ -8,23 +8,20 @@ class TagsView extends GetView<GridController> {
   const TagsView({Key key, this.tags}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return OpacityAnimatedWidget(
-      enabled: true,
-      delay: 100.milliseconds,
-      duration: 100.milliseconds,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List<Widget>.generate(
-              tags.length,
-              (index) => GestureDetector(
-                    onTap: () {
-                      controller.setTag(index);
-                    },
-                    child: _TagItem(tags[index], index),
-                  )),
-        ),
+    return SingleChildScrollView(
+      controller: controller.scrollController,
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List<Widget>.generate(
+            tags.length,
+            (index) => GestureDetector(
+                  onTap: () {
+                    controller.setTag(index);
+                  },
+                  child: _TagItem(tags[index], index),
+                )),
       ),
     );
   }
@@ -45,6 +42,6 @@ class _TagItem extends GetView<GridController> {
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         duration: 150.milliseconds,
-        child: controller.tagIndex.value == index ? data.h6_White : data.h6));
+        child: controller.tagIndex.value == index ? data.h6_White : data.h6_Grey));
   }
 }

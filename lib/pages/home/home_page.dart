@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/grid/grid_view.dart';
 import 'package:sonr_app/modules/share/index_view.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
@@ -7,7 +8,6 @@ import 'package:sonr_app/modules/remote/remote_view.dart';
 import 'action_button.dart';
 import 'home_controller.dart';
 import 'alerts_view.dart';
-import '../../modules/main/main_view.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -23,7 +23,7 @@ class HomePage extends GetView<HomeController> {
         body: TabBarView(controller: controller.tabController, children: [
           CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
           ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-          AlertsView(key: ValueKey<HomeView>(HomeView.Alerts)),
+          AlertsView(key: ValueKey<HomeView>(HomeView.Activity)),
           RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
         ]));
   }
@@ -53,7 +53,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
-                    child: HomeBottomTabButton(HomeView.Alerts, controller.setBottomIndex, controller.bottomIndex),
+                    child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
                   ),
                   HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
                 ],

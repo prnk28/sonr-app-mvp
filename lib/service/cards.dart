@@ -12,12 +12,14 @@ class CardService extends GetxService {
   // Properties
   final _allCards = RxList<TransferCardItem>();
   final _contactCards = RxList<TransferCardItem>();
+  final _fileCards = RxList<TransferCardItem>();
   final _mediaCards = RxList<TransferCardItem>();
   final _urlCards = RxList<TransferCardItem>();
 
   // Property Accessors
   static RxList<TransferCardItem> get allCards => to._allCards;
   static RxList<TransferCardItem> get contactCards => to._contactCards;
+  static RxList<TransferCardItem> get fileCards => to._fileCards;
   static RxList<TransferCardItem> get mediaCards => to._mediaCards;
   static RxList<TransferCardItem> get urlCards => to._urlCards;
 
@@ -28,6 +30,7 @@ class CardService extends GetxService {
   Future<CardService> init() async {
     _allCards.bindStream(_database.watchAll());
     _contactCards.bindStream(_database.watchContacts());
+    _fileCards.bindStream(_database.watchFiles());
     _mediaCards.bindStream(_database.watchMedia());
     _urlCards.bindStream(_database.watchUrls());
     return this;
