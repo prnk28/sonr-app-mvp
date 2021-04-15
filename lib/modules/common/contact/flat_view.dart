@@ -13,7 +13,7 @@ class ContactFlatCard extends StatelessWidget {
     return Container(
       height: 420 * scale,
       width: (Get.width - 64) * scale,
-      decoration: Neumorphism.floating(),
+      decoration: Neumorph.floating(),
       child: Container(
         height: 75,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [

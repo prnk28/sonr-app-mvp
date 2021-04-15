@@ -11,7 +11,7 @@ class URLAuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     final card = invite.card;
     return Container(
-      decoration: Neumorphism.floating(),
+      decoration: Neumorph.floating(),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -99,7 +99,7 @@ class URLAuthView extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-              decoration: Neumorphism.indented(),
+              decoration: Neumorph.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -147,7 +147,7 @@ class URLAuthView extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-              decoration: Neumorphism.indented(),
+              decoration: Neumorph.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -175,7 +175,7 @@ class URLAuthView extends StatelessWidget {
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(
-        decoration: Neumorphism.indented(),
+        decoration: Neumorph.indented(),
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

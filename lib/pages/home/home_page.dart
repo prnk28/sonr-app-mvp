@@ -37,7 +37,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
         ? ClipPath(
             clipper: BottomBarClip(),
             child: Container(
-              decoration: Neumorphism.floating(),
+              decoration: Neumorph.floating(),
               width: Get.width,
               height: 80,
               child: Row(

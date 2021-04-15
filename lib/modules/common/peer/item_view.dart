@@ -18,7 +18,7 @@ class _PeerListItemState extends State<PeerListItem> {
     return Column(
       children: [
         Container(
-          decoration: Neumorphism.floating(),
+          decoration: Neumorph.floating(),
           margin: EdgeWith.horizontal(8),
           child: ExpansionTile(
             backgroundColor: Colors.transparent,

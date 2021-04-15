@@ -38,7 +38,8 @@ class CardMainView extends GetView<GridController> {
 
   // # Build Tags
   List<String> _buildTags() {
-    var list = <String>[];
+    var list = <String>["All"];
+
     // Check Files Length
     if (CardService.hasFiles) {
       list.add("Files");
@@ -98,7 +99,7 @@ class _CardSearchView extends GetView<GridController> {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(alignment: Alignment.center, height: 180, width: Get.width, decoration: Neumorphism.floating(), child: "Search ".h4),
+        background: Container(alignment: Alignment.center, height: 180, width: Get.width, decoration: Neumorph.floating(), child: "Search ".h4),
       ),
       expandedHeight: 120,
       // bottom:

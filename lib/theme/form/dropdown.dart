@@ -118,7 +118,7 @@ class SonrDropdownItem extends StatelessWidget {
       return Row(children: [
         Container(
           child: icon,
-          decoration: Neumorphism.indented(),
+          decoration: Neumorph.indented(),
           padding: EdgeInsets.all(10),
         ),
         Padding(

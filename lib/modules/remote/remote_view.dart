@@ -15,7 +15,7 @@ class RemoteView extends GetView<RemoteController> {
           padding: const EdgeInsets.only(top: 24.0),
           margin: controller.status.value.currentMargin,
           duration: 1500.milliseconds,
-          decoration: Neumorphism.floating(),
+          decoration: Neumorph.floating(),
           child: AnimatedSlideSwitcher.fade(
             child: _buildView(controller.status.value),
             duration: const Duration(milliseconds: 2500),

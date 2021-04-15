@@ -35,11 +35,28 @@ class ShapeContainer extends StatelessWidget {
     return ClipPath(
       clipper: path,
       child: Container(
-          decoration: Neumorphism.floating(),
+          decoration: Neumorph.floating(),
           child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
     );
   }
 }
+
+// enum NeumorphicType { Floating, Indented }
+
+// class Neumorphic extends StatelessWidget {
+//   final NeumorphicType type;
+//   final double height;
+//   final double width;
+//   final Widget child;
+//   final double radius;
+//   final BoxShape shape;
+
+//   const Neumorphic({Key key, this.type = NeumorphicType.Floating, this.height, this.width, this.child, this.radius = 12, this.shape = BoxShape.rectangle}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container();
+//   }
+// }
 
 class BottomBarClip extends CustomClipper<Path> {
   @override

@@ -40,7 +40,7 @@ class _LobbySheetState extends State<LobbySheet> {
   Widget build(BuildContext context) {
     // Build View
     return Container(
-        decoration: Neumorphism.floating(),
+        decoration: Neumorph.floating(),
         child: ListView.builder(
           itemCount: lobby != null ? lobby.length + 1 : 1,
           itemBuilder: (BuildContext context, int index) {

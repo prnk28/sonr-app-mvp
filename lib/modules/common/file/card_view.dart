@@ -20,7 +20,7 @@ class FileCardView extends StatelessWidget {
         child: Container(
           height: 420,
           width: Get.width - 64,
-          decoration: Neumorphism.floating(),
+          decoration: Neumorph.floating(),
           child: GestureDetector(
             onTap: () {
               OpenFile.open(card.metadata.path);
@@ -48,7 +48,7 @@ class FileCardView extends StatelessWidget {
                     Align(
                         alignment: Alignment.center,
                         child: Container(
-                            decoration: Neumorphism.indented(),
+                            decoration: Neumorph.indented(),
                             padding: EdgeInsets.all(20),
                             child: Container(child: card.payload.icon(IconType.Gradient, size: (Get.height / 4))))),
 

@@ -15,7 +15,7 @@ class ContactCardView extends StatelessWidget {
     Contact contact = card.contact;
     return Container(
       height: 420,
-      decoration: Neumorphism.floating(),
+      decoration: Neumorph.floating(),
       child: Hero(
         tag: card.id,
         child: Container(
@@ -34,7 +34,7 @@ class ContactCardView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child:
-                  Container(decoration: Neumorphism.indented(shape: BoxShape.circle), padding: EdgeInsets.all(10), child: contact.profilePicture),
+                  Container(decoration: Neumorph.indented(shape: BoxShape.circle), padding: EdgeInsets.all(10), child: contact.profilePicture),
             ),
 
             // Build Name

@@ -19,7 +19,7 @@ class GridController extends GetxController with SingleGetTickerProviderMixin {
     scrollController = ScrollController(keepScrollOffset: false);
 
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 5);
+    tabController = TabController(vsync: this, length: CardService.categoryCount);
     tabController.addListener(() {
       tagIndex(tabController.index);
     });

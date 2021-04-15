@@ -28,6 +28,14 @@ class CardService extends GetxService {
   static bool get hasFiles => to._fileCards.length > 0;
   static bool get hasMedia => to._mediaCards.length > 0;
   static bool get hasURLs => to._urlCards.length > 0;
+  static int get categoryCount {
+    int counter = 1;
+    hasContacts ? counter += 1 : counter += 0;
+    hasFiles ? counter += 1 : counter += 0;
+    hasMedia ? counter += 1 : counter += 0;
+    hasURLs ? counter += 1 : counter += 0;
+    return counter;
+  }
 
   // References
   final _database = CardsDatabase();

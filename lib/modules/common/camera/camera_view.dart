@@ -127,7 +127,7 @@ class _CameraToolsView extends GetView<CameraController> {
     return Container(
       alignment: Alignment.bottomCenter,
       child: Container(
-        decoration: Neumorphism.floating(),
+        decoration: Neumorph.floating(),
         padding: EdgeInsets.only(top: 20, bottom: 40),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           // Switch Camera

@@ -1,6 +1,6 @@
 import '../theme.dart';
 
-extension Neumorphism on BoxDecoration {
+extension Neumorph on BoxDecoration {
   static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
         shape: shape,

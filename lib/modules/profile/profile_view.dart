@@ -10,7 +10,7 @@ class ProfileView extends GetView<ProfileController> {
         width: Get.width,
         height: Get.height,
         margin: SonrStyle.viewMargin,
-        decoration: Neumorphism.floating(radius: 20),
+        decoration: Neumorph.floating(radius: 20),
         child: AnimatedSlideSwitcher.fade(
           child: _buildView(controller.status.value),
           duration: const Duration(milliseconds: 2500),
@@ -139,7 +139,7 @@ class _AvatarField extends GetView<ProfileController> {
         padding: const EdgeInsets.only(top: 4.0),
         child: Container(
           padding: EdgeInsets.all(10),
-          decoration: Neumorphism.indented(shape: BoxShape.circle),
+          decoration: Neumorph.indented(shape: BoxShape.circle),
           child: Obx(() => UserService.picture.value != null
               ? Container(
                   width: 120,
