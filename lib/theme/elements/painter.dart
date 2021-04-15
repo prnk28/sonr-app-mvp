@@ -192,6 +192,92 @@ class WavePainter extends CustomPainter {
   }
 }
 
+// ^ Hexagon Shape Path ^ //
+class ZoneClip extends CustomClipper<Path> {
+  // References
+  final Position_Proximity proximity;
+  ZoneClip(this.proximity);
+
+  // ^ Returns Path Size ^
+  static double get size {
+    final ThemeData themeData = Theme.of(Get.context);
+    final MaterialTapTargetSize effectiveMaterialTapTargetSize = themeData.checkboxTheme.materialTapTargetSize ?? themeData.materialTapTargetSize;
+    final VisualDensity effectiveVisualDensity = themeData.checkboxTheme.visualDensity ?? themeData.visualDensity;
+    Size size;
+    switch (effectiveMaterialTapTargetSize) {
+      case MaterialTapTargetSize.padded:
+        size = const Size(kMinInteractiveDimension, kMinInteractiveDimension);
+        break;
+      case MaterialTapTargetSize.shrinkWrap:
+        size = const Size(kMinInteractiveDimension - 8.0, kMinInteractiveDimension - 8.0);
+        break;
+    }
+    size += effectiveVisualDensity.baseSizeAdjustment;
+    return size.longestSide;
+  }
+
+  // ^ Returns Path Size ^
+  static double arcLength(double angle) {
+    return sqrt((Get.height / 2 * Get.height / 2) / 2) * angle;
+  }
+
+  @override
+  getClip(Size size) {
+    // Initialize Bounds
+    final double height = (Get.height / 2);
+    final double width = (Get.width / 2);
+    final double radius = sqrt((Get.height / 2 * Get.height / 2) / 2);
+
+    // Bottom Zone
+    if (proximity == Position_Proximity.Immediate) {
+      // Build Rect
+      var immediateRect = Rect.fromCircle(center: Offset(width, height * 1.25), radius: radius);
+      Path path = Path();
+      path.addArc(immediateRect, pi, pi);
+      return path;
+      // Return Path
+    }
+    // Middle Zone
+    else if (proximity == Position_Proximity.Near) {
+      // Build Rect
+      var nearRect = Rect.fromCircle(center: Offset(width, height), radius: radius);
+
+      // Return Path
+      Path path = Path();
+      path.addArc(nearRect, pi, pi);
+      return path;
+    }
+    // Top Zone
+    else {
+      // Build Rect
+      var distantRect = Rect.fromCircle(center: Offset(width, height * 0.75), radius: radius);
+
+      // Return Path
+      Path path = Path();
+      path.addArc(distantRect, pi, pi);
+      return path;
+    }
+  }
+
+  static double proximityMaxHeight(Position_Proximity proximity) {
+    // Bottom Zone
+    if (proximity == Position_Proximity.Immediate) {
+      return 235;
+    }
+    // Middle Zone
+    else if (proximity == Position_Proximity.Near) {
+      return 150;
+    }
+    // Top Zone
+    else {
+      return 75;
+    }
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
 // ^ Provides Zone Path by Position Proximity ^ //
 class ZonePathProvider extends NeumorphicPathProvider {
   // References

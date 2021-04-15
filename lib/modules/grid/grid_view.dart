@@ -17,16 +17,18 @@ class CardMainView extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(padding: EdgeInsets.all(8)),
+        child: CustomScrollView(primary: true, slivers: [
           _CardSearchView(),
-          Spacer(),
-          "Recents".headTwo(align: TextAlign.start),
-          TagsView(
-            tags: ["All", "Files", "Media", "Contacts", "Links"],
+          SliverPadding(padding: EdgeInsets.only(top: 24)),
+          SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start)),
+          SliverToBoxAdapter(
+            child: TagsView(
+              tags: ["All", "Files", "Media", "Contacts", "Links"],
+            ),
           ),
-          Padding(padding: EdgeInsets.only(top: 24)),
-          Container(
+          SliverPadding(padding: EdgeInsets.only(top: 24)),
+          SliverToBoxAdapter(
+              child: Container(
             height: K_LIST_HEIGHT,
             child: TabBarView(controller: controller.tabController, children: [
               _CardGridAll(),
@@ -35,7 +37,8 @@ class CardMainView extends GetView<GridController> {
               _CardGridContacts(),
               _CardGridLinks(),
             ]),
-          ),
+          )),
+          SliverPadding(padding: EdgeInsets.all(8)),
         ]));
   }
 }
@@ -43,11 +46,36 @@ class CardMainView extends GetView<GridController> {
 class _CardSearchView extends GetView<GridController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      child: Container(height: 180, width: Get.width, decoration: Neumorphism.floating(), child: "Search ".h3),
+    return SliverAppBar(
+      pinned: false,
+      floating: false,
+      snap: false,
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.transparent,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(alignment: Alignment.center, height: 180, width: Get.width, decoration: Neumorphism.floating(), child: "Search ".h4),
+      ),
+      expandedHeight: 120,
+      // bottom:
     );
   }
+}
+
+class _RecentsTitleView extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        "Recents".headTwo(align: TextAlign.start),
+        TagsView(
+          tags: ["All", "Files", "Media", "Contacts", "Links"],
+        ),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => Size(Get.width - 64, 76);
 }
 
 // ^ Card Grid View - All Cards ^ //
@@ -169,12 +197,11 @@ class _CardGridEmpty extends GetView<GridController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: K_LIST_HEIGHT,
-      height: 200,
+      height: K_LIST_HEIGHT,
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
         Image.asset(
           controller.randomNoFilesPath(),
-          height: 150,
+          height: 160,
           colorBlendMode: BlendMode.dst,
         ),
         label.p_Grey,

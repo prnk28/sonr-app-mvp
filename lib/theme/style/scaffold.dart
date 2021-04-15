@@ -97,7 +97,7 @@ class _BackgroundGradient extends StatelessWidget {
         decoration: BoxDecoration(
           color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
           // ignore: invalid_use_of_protected_member
-          gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.centerRight, radius: 2),
+          gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.topLeft, radius: 2.5),
         ),
       ),
     );

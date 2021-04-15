@@ -99,34 +99,40 @@ class LocalLobbyView extends GetView<TransferController> {
             leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
             title: Container(child: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet()))),
           ),
-          body: Neumorphic(
-            child: Stack(
-              children: <Widget>[
-                // @ Range Lines
-                Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Stack(
-                      children: [
-                        Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Distant)),
-                        Neumorphic(style: SonrStyle.zonePath(proximity: Position_Proximity.Near)),
-                      ],
-                    )),
+          body: Stack(
+            children: <Widget>[
+              // @ Range Lines
+              Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Stack(
+                    children: [
+                      ClipOval(
+                          child: Container(
+                        width: Get.width,
+                        height: Get.height,
+                      )),
+                      ClipOval(
+                          child: Container(
+                        width: Get.width,
+                        height: Get.height,
+                      ))
+                    ],
+                  )),
 
-                // @ Lobby View
-                _LocalLobbyStack(),
+              // @ Lobby View
+              _LocalLobbyStack(),
 
-                // @ Compass View
-                Padding(
-                  padding: EdgeWith.bottom(32.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.toggleShifting();
-                    },
-                    child: CompassView(),
-                  ),
+              // @ Compass View
+              Padding(
+                padding: EdgeWith.bottom(32.0),
+                child: GestureDetector(
+                  onTap: () {
+                    controller.toggleShifting();
+                  },
+                  child: CompassView(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ));
   }
@@ -178,7 +184,7 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
     stackChildren.clear();
 
     // Iterate through peers and IDs
-    if (data.peers != null) {
+    if (data != null) {
       data.peers.forEach((peer) {
         if (peer.platform == Platform.iOS || peer.platform == Platform.Android) {
           // Add to Stack Items

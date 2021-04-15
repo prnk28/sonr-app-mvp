@@ -8,20 +8,22 @@ class TagsView extends GetView<GridController> {
   const TagsView({Key key, this.tags}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: controller.scrollController,
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List<Widget>.generate(
-            tags.length,
-            (index) => GestureDetector(
-                  onTap: () {
-                    controller.setTag(index);
-                  },
-                  child: _TagItem(tags[index], index),
-                )),
+    return Container(
+      child: SingleChildScrollView(
+        controller: controller.scrollController,
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List<Widget>.generate(
+              tags.length,
+              (index) => GestureDetector(
+                    onTap: () {
+                      controller.setTag(index);
+                    },
+                    child: _TagItem(tags[index], index),
+                  )),
+        ),
       ),
     );
   }
