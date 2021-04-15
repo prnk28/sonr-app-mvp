@@ -23,6 +23,12 @@ class CardService extends GetxService {
   static RxList<TransferCardItem> get mediaCards => to._mediaCards;
   static RxList<TransferCardItem> get urlCards => to._urlCards;
 
+  // Utility
+  static bool get hasContacts => to._contactCards.length > 0;
+  static bool get hasFiles => to._fileCards.length > 0;
+  static bool get hasMedia => to._mediaCards.length > 0;
+  static bool get hasURLs => to._urlCards.length > 0;
+
   // References
   final _database = CardsDatabase();
 

@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:get/get.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/theme/theme.dart';

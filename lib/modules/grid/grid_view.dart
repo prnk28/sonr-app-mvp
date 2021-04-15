@@ -23,23 +23,68 @@ class CardMainView extends GetView<GridController> {
           SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start)),
           SliverToBoxAdapter(
             child: TagsView(
-              tags: ["All", "Files", "Media", "Contacts", "Links"],
+              tags: _buildTags(),
             ),
           ),
           SliverPadding(padding: EdgeInsets.only(top: 24)),
           SliverToBoxAdapter(
               child: Container(
             height: K_LIST_HEIGHT,
-            child: TabBarView(controller: controller.tabController, children: [
-              _CardGridAll(),
-              _CardGridFiles(),
-              _CardGridMedia(),
-              _CardGridContacts(),
-              _CardGridLinks(),
-            ]),
+            child: TabBarView(controller: controller.tabController, children: _buildViews()),
           )),
           SliverPadding(padding: EdgeInsets.all(8)),
         ]));
+  }
+
+  // # Build Tags
+  List<String> _buildTags() {
+    var list = <String>[];
+    // Check Files Length
+    if (CardService.hasFiles) {
+      list.add("Files");
+    }
+
+    // Check Media Length
+    if (CardService.hasMedia) {
+      list.add("Media");
+    }
+
+    // Check Contacts Length
+    if (CardService.hasContacts) {
+      list.add("Contacts");
+    }
+
+    // Check URLs Length
+    if (CardService.hasURLs) {
+      list.add("Links");
+    }
+    return list;
+  }
+
+  // # Build Views
+  List<Widget> _buildViews() {
+    var list = <Widget>[_CardGridAll()];
+
+    // Check Files Length
+    if (CardService.hasFiles) {
+      list.add(_CardGridFiles());
+    }
+
+    // Check Media Length
+    if (CardService.hasMedia) {
+      list.add(_CardGridMedia());
+    }
+
+    // Check Contacts Length
+    if (CardService.hasContacts) {
+      list.add(_CardGridContacts());
+    }
+
+    // Check URLs Length
+    if (CardService.hasURLs) {
+      list.add(_CardGridLinks());
+    }
+    return list;
   }
 }
 
