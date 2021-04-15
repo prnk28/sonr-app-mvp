@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../theme.dart';
+import 'theme.dart';
 
 // ^ Builds Neumorphic Checkbox with Label ^ //
 class SonrCheckbox extends StatelessWidget {

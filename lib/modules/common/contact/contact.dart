@@ -2,7 +2,7 @@ export 'auth_view.dart';
 export 'card_view.dart';
 export 'flat_view.dart';
 
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ^ Contact Model Extensions ^ //

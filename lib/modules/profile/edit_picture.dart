@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 import 'profile_controller.dart';
 

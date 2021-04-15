@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/service/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
-enum HomeState { Loading, Ready, None, New, First }
 enum HomeView { Main, Profile, Activity, Remote }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
-  final status = Rx<HomeState>(HomeState.None);
-  final category = Rx<ToggleFilter>(ToggleFilter.All);
   final isBottomBarVisible = true.obs;
   final isTitleVisible = true.obs;
   final isFilterOpen = false.obs;
@@ -19,7 +15,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Elements
   final titleText = "Home".obs;
   final pageIndex = 0.obs;
-  final toggleIndex = 1.obs;
   final bottomIndex = 0.obs;
   final view = HomeView.Main.obs;
   final sonrStatus = Rx<Status>(SonrService.status.value);
@@ -32,9 +27,28 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
 
+  // Assets
+  ImageIcon homeDefaultIcon = ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
+  ImageIcon profileDefaultIcon =
+      ImageIcon(NetworkImage(SonrAssetIcon.ProfileDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
+  ImageIcon activityDefaultIcon =
+      ImageIcon(NetworkImage(SonrAssetIcon.ActivityDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
+  ImageIcon remoteDefaultIcon =
+      ImageIcon(NetworkImage(SonrAssetIcon.RemoteDefault.link), size: 38, color: Colors.grey[400], key: ValueKey<bool>(false));
+  LottieIcon homeSelectIcon = LottieIcon(link: SonrAssetIcon.HomeSelected.link, size: 32, key: ValueKey<bool>(true));
+  LottieIcon profileSelectIcon = LottieIcon(link: SonrAssetIcon.ProfileSelected.link, size: 32, key: ValueKey<bool>(true));
+  LottieIcon activitySelectIcon = LottieIcon(link: SonrAssetIcon.ActivitySelected.link, size: 32, key: ValueKey<bool>(true));
+  LottieIcon remoteSelectIcon = LottieIcon(link: SonrAssetIcon.RemoteSelected.link, size: 38, key: ValueKey<bool>(true));
+
   // ^ Controller Constructer ^
   @override
   onInit() {
+    // Initalize Assets
+    precacheImage(homeDefaultIcon.image, Get.context);
+    precacheImage(profileDefaultIcon.image, Get.context);
+    precacheImage(activityDefaultIcon.image, Get.context);
+    precacheImage(remoteDefaultIcon.image, Get.context);
+
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
 
@@ -47,12 +61,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Update Title
       titleText(view.value.title);
     });
-
-    // Set efault Properties
-    toggleIndex(1);
-    pageIndex(0);
-    setStatus();
-
     // Initialize
     super.onInit();
 
@@ -73,22 +81,39 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   void onClose() {
     _lobbySizeStream.cancel();
     _statusStream.cancel();
-    toggleIndex(1);
     pageIndex(0);
     super.onClose();
   }
 
-  // ^ Update Home State ^ //
-  setStatus() async {
-    // Set Initial Status
-    if (await CardService.cardCount() > 0) {
-      status(HomeState.Ready);
-    } else {
-      if (UserService.isNewUser.value) {
-        status(HomeState.First);
-      } else {
-        status(HomeState.None);
-      }
+  // ^ Returns Cached Image Icon Asset ^ //
+  Widget getDefaultIconForView(HomeView view) {
+    switch (view) {
+      case HomeView.Main:
+        return homeDefaultIcon;
+      case HomeView.Profile:
+        return profileDefaultIcon;
+      case HomeView.Activity:
+        return activityDefaultIcon;
+      case HomeView.Remote:
+        return remoteDefaultIcon;
+      default:
+        return Container();
+    }
+  }
+
+// ^ Returns Lottie Icon Asset ^ //
+  Widget getSelectedIconForView(HomeView view) {
+    switch (view) {
+      case HomeView.Main:
+        return homeSelectIcon;
+      case HomeView.Profile:
+        return profileSelectIcon;
+      case HomeView.Activity:
+        return activitySelectIcon;
+      case HomeView.Remote:
+        return remoteSelectIcon;
+      default:
+        return Container();
     }
   }
 
@@ -107,15 +132,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
         }
       });
     }
-  }
-
-  // ^ Method for Setting Category Filter ^ //
-  setToggleCategory(int index) {
-    toggleIndex(index);
-    category(ToggleFilter.values[index]);
-
-    // Haptic Feedback
-    HapticFeedback.mediumImpact();
   }
 
   // ^ Update Bottom Bar Index ^ //
@@ -171,7 +187,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // # Handle Keyboard Visibility
+  // @ Handle Keyboard Visibility
   _handleKeyboardVisibility(bool keyboardVisible) {
     isBottomBarVisible(!keyboardVisible);
   }
@@ -226,33 +242,6 @@ extension HomeViewUtils on HomeView {
         return SonrIconData.remote;
       default:
         return Icons.deck;
-    }
-  }
-
-  // # Returns Icon Path for Type
-  String get disabled {
-    switch (this) {
-      case HomeView.Profile:
-        return "assets/bar/profile_disabled.png";
-      case HomeView.Activity:
-        return "assets/bar/alerts_disabled.png";
-      case HomeView.Remote:
-        return "assets/bar/remote_disabled.png";
-      default:
-        return "assets/bar/home_disabled.png";
-    }
-  }
-
-  LottieIconType get lottie {
-    switch (this) {
-      case HomeView.Profile:
-        return LottieIconType.Profile;
-      case HomeView.Activity:
-        return LottieIconType.Alerts;
-      case HomeView.Remote:
-        return LottieIconType.Remote;
-      default:
-        return LottieIconType.Home;
     }
   }
 

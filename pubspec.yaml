@@ -109,7 +109,6 @@ flutter:
   assets:
     - assets/bar/
     - assets/fonts/
-    - assets/images/
     - assets/lottie/
     - assets/rive/
     - assets/sounds/

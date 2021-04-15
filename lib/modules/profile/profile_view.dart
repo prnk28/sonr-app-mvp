@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/common/tile/tile_item.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'profile.dart';
 
 class ProfileView extends GetView<ProfileController> {

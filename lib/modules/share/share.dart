@@ -4,7 +4,7 @@ export 'share_controller.dart';
 export 'sheet_view.dart';
 
 // ** Share State Extension ** //
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 enum ShareStatus { Default, Queue, PickMedia }
 

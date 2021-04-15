@@ -8,7 +8,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/common/lobby/lobby.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'compass_widget.dart';
 import 'transfer_controller.dart';
 

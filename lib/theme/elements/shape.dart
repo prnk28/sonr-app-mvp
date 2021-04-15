@@ -1,4 +1,4 @@
-import '../theme.dart';
+import '../form/theme.dart';
 
 class ShapeContainer extends StatelessWidget {
   // Properties
@@ -35,28 +35,55 @@ class ShapeContainer extends StatelessWidget {
     return ClipPath(
       clipper: path,
       child: Container(
-          decoration: Neumorph.floating(),
-          child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
+          decoration: Neumorph.floating(), child: Container(height: height, width: width, decoration: decoration ?? BoxDecoration(), child: child)),
     );
   }
 }
 
-// enum NeumorphicType { Floating, Indented }
+enum NeumorphicType { Floating, Indented }
 
-// class Neumorphic extends StatelessWidget {
-//   final NeumorphicType type;
-//   final double height;
-//   final double width;
-//   final Widget child;
-//   final double radius;
-//   final BoxShape shape;
+class NeumorphCard extends StatelessWidget {
+  final NeumorphicType type;
+  final Widget child;
+  final double radius;
+  final BoxShape shape;
+  final AlignmentGeometry alignment;
+  final Size sizeFactor;
 
-//   const Neumorphic({Key key, this.type = NeumorphicType.Floating, this.height, this.width, this.child, this.radius = 12, this.shape = BoxShape.rectangle}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
+  const NeumorphCard(
+      {Key key,
+      this.type = NeumorphicType.Floating,
+      this.child,
+      this.radius = 12,
+      this.shape = BoxShape.rectangle,
+      this.alignment,
+      this.sizeFactor = const Size(0.8, 0.8)})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: _boxDecoration,
+      padding: EdgeInsets.all(8),
+      margin: EdgeInsets.all(32),
+      width: Get.width,
+      child: Container(
+        width: context.widthTransformer(reducedBy: sizeFactor.width),
+        height: context.heightTransformer(reducedBy: sizeFactor.height),
+        alignment: alignment,
+        child: child,
+      ),
+    );
+  }
+
+  BoxDecoration get _boxDecoration {
+    if (this.type == NeumorphicType.Floating) {
+      return Neumorph.floating(radius: radius, shape: shape);
+    } else {
+      return Neumorph.indented(radius: radius, shape: shape);
+    }
+  }
+}
 
 class BottomBarClip extends CustomClipper<Path> {
   @override

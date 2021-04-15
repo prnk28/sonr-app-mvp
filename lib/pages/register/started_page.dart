@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 class GetStartedPage extends StatelessWidget {
   final Function onPressed;

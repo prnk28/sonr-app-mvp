@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'register_controller.dart';
 
 class FormPage extends GetView<RegisterController> {
@@ -16,7 +16,7 @@ class FormPage extends GetView<RegisterController> {
           height: Get.height,
           margin: EdgeInsets.only(bottom: 8, top: 72),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Image.asset("assets/images/logo_top.png", width: 128, height: 128),
+            controller.logoTop,
             Expanded(
               child: Form(
                 child: Column(

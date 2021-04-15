@@ -1,6 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 enum RegisterStatus { Form, Location, Gallery }
 
@@ -14,6 +14,19 @@ class RegisterController extends GetxController {
   final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final lastNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
   final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
+
+  // Assets
+  Image logoTop = SonrAssetLogo.Top.image(width: 128, height: 128);
+  DecorationImage locationAccess = DecorationImage(image: NetworkImage(SonrAssetIllustration.LocationAccess.link), fit: BoxFit.fill);
+  DecorationImage mediaAccess = DecorationImage(image: NetworkImage(SonrAssetIllustration.MediaAccess.link), fit: BoxFit.fill);
+
+  // * Constructer * //
+  onInit() {
+    precacheImage(logoTop.image, Get.context);
+    precacheImage(locationAccess.image, Get.context);
+    precacheImage(mediaAccess.image, Get.context);
+    super.onInit();
+  }
 
   // ^ Submits Contact ^ //
   setContact() async {

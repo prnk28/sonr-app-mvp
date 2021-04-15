@@ -2,7 +2,7 @@ import 'package:sonr_app/modules/grid/grid_view.dart';
 import 'package:sonr_app/modules/share/index_view.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
 import 'package:sonr_app/modules/remote/remote_view.dart';
 import 'action_button.dart';
@@ -66,15 +66,15 @@ class HomeBottomNavBar extends GetView<HomeController> {
 
 // ^ Bottom Bar Button Widget ^ //
 class HomeBottomTabButton extends GetView<HomeController> {
-  final HomeView bottomType;
+  final HomeView view;
   final Function(int) onPressed;
   final RxInt currentIndex;
-  HomeBottomTabButton(this.bottomType, this.onPressed, this.currentIndex);
+  HomeBottomTabButton(this.view, this.onPressed, this.currentIndex);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          onPressed(bottomType.index);
+          onPressed(view.index);
         },
         child: Container(
           constraints: BoxConstraints(maxHeight: 80, maxWidth: Get.width / 6),
@@ -82,26 +82,12 @@ class HomeBottomTabButton extends GetView<HomeController> {
           child: ObxValue<RxInt>(
               (idx) => AnimatedScale(
                     duration: 250.milliseconds,
-                    child: idx.value == bottomType.index ? _buildSelected() : _buildDefault(),
-                    scale: idx.value == bottomType.index ? 1.25 : 1.0,
+                    child: AnimatedSlideSwitcher.fade(
+                        child: idx.value == view.index ? controller.getSelectedIconForView(view) : controller.getDefaultIconForView(view)),
+                    scale: idx.value == view.index ? 1.25 : 1.0,
                   ),
               currentIndex),
         ));
-  }
-
-  Widget _buildDefault() {
-    return ImageIcon(
-      AssetImage(bottomType.disabled),
-      size: bottomType.iconSize,
-      color: Colors.grey[400],
-    );
-  }
-
-  Widget _buildSelected() {
-    return LottieIcon(
-      type: bottomType.lottie,
-      size: bottomType.iconSize,
-    );
   }
 }
 

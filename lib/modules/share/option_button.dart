@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'share.dart';
 
 const String _tilePath = 'assets/rive/tile_preview.riv';

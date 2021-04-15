@@ -4,7 +4,7 @@ import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/service/lobby.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'bindings.dart';
 
 // ^ Constant Routing Information ^ //

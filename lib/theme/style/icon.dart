@@ -6,7 +6,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
-import '../theme.dart';
+import '../form/theme.dart';
 
 enum IconType { Normal, Gradient, Thumbnail }
 

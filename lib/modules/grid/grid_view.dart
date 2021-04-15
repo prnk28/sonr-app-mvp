@@ -4,7 +4,7 @@ import 'package:sonr_app/modules/common/file/file.dart';
 import 'package:sonr_app/modules/common/media/card_view.dart';
 import 'package:sonr_app/modules/common/url/card_view.dart';
 import 'package:sonr_app/service/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'grid_controller.dart';
 import 'tags_view.dart';
 
@@ -99,29 +99,12 @@ class _CardSearchView extends GetView<GridController> {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(alignment: Alignment.center, height: 180, width: Get.width, decoration: Neumorph.floating(), child: "Search ".h4),
+        background: NeumorphCard(alignment: Alignment.center, sizeFactor: Size(0.8, 0.6), child: "Search ".h4),
       ),
-      expandedHeight: 120,
+      expandedHeight: 160,
       // bottom:
     );
   }
-}
-
-class _RecentsTitleView extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        "Recents".headTwo(align: TextAlign.start),
-        TagsView(
-          tags: ["All", "Files", "Media", "Contacts", "Links"],
-        ),
-      ],
-    );
-  }
-
-  @override
-  Size get preferredSize => Size(Get.width - 64, 76);
 }
 
 // ^ Card Grid View - All Cards ^ //
@@ -245,10 +228,11 @@ class _CardGridEmpty extends GetView<GridController> {
     return Container(
       height: K_LIST_HEIGHT,
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        Image.asset(
-          controller.randomNoFilesPath(),
+        Image.network(
+          IllustrationNetworkUtils.randomNoFilesLink(),
           height: 160,
           colorBlendMode: BlendMode.dst,
+          gaplessPlayback: true,
         ),
         label.p_Grey,
         Padding(padding: EdgeInsets.all(16)),

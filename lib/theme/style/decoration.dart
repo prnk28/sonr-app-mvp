@@ -1,11 +1,11 @@
-import '../theme.dart';
+import '../form/theme.dart';
 
 extension Neumorph on BoxDecoration {
   static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
         shape: shape,
         borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-        color: Color(0xfff0f6fa),
+        color: Color(0xfff0f6fa).withOpacity(0.8),
         boxShadow: [
           BoxShadow(
             color: Color(
@@ -51,9 +51,7 @@ extension Neumorph on BoxDecoration {
     return BoxDecoration(
       shape: shape,
       borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-      color: Color(
-        0xffe3edf7,
-      ),
+      color: Color(0xfff0f6fa).withOpacity(0.8),
       boxShadow: [
         BoxShadow(
           color: Color(

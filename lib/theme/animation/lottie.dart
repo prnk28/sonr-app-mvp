@@ -1,11 +1,10 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../theme.dart';
+import '../form/theme.dart';
 import 'package:lottie/lottie.dart';
 
 // ** Enums ** //
 enum LottieBoard { David, JoinRemote, Access, Gallery, Location }
 enum LottieShare { Camera, Files, Gallery }
-enum LottieIconType { Home, Profile, Alerts, Remote }
 
 // ^ Lottie Board Type extensions ^ //
 extension LottieBoardUtils on LottieBoard {
@@ -33,26 +32,6 @@ extension LottieBoardUtils on LottieBoard {
 }
 
 // ^ Lottie Icon Type extensions ^ //
-
-extension LottieIconUtils on LottieIconType {
-  String get path {
-    switch (this) {
-      case LottieIconType.Home:
-        return "assets/bar/home.json";
-
-      case LottieIconType.Profile:
-        return "assets/bar/profile.json";
-
-      case LottieIconType.Alerts:
-        return "assets/bar/alerts.json";
-      case LottieIconType.Remote:
-        return "assets/bar/remote.json";
-      default:
-        return "";
-    }
-  }
-}
-
 extension LottieShareUtils on LottieShare {
   String get path {
     switch (this) {
@@ -69,18 +48,20 @@ extension LottieShareUtils on LottieShare {
 // ^ Lottie Icon Widget ^ //
 class LottieIcon extends HookWidget {
   final Function onComplete;
-  final LottieIconType type;
+  final String link;
   final double size;
-  LottieIcon({@required this.type, this.onComplete, this.size = 24});
+
+  LottieIcon({@required this.link, this.onComplete, this.size = 24, Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    assert(link.isURL);
     final controller = useAnimationController();
-    return Lottie.asset(
-      type.path,
+    return Lottie.network(
+      link,
       controller: controller,
-      width: size,
       repeat: false,
       animate: true,
+      width: size,
       height: size,
       fit: BoxFit.contain,
       onLoaded: (composition) {

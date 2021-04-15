@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/common/peer/bubble_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 class TransferController extends GetxController {
   // @ Accessors
