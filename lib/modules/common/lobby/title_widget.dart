@@ -44,7 +44,7 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
           children: [
             ToggleElement(
                 background: Center(child: "Mobile".h6),
-                foreground: SonrIcons.IPhone.gradientNamed(name: FlutterGradientNames.newRetrowave, size: 24)),
+                foreground: SonrIcons.IOS.gradientNamed(name: FlutterGradientNames.newRetrowave, size: 24)),
             ToggleElement(
                 background: Center(child: "All".h6),
                 foreground: SonrIcons.Group.gradientNamed(

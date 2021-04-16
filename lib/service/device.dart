@@ -63,14 +63,14 @@ class DeviceService extends GetxService {
       Get.find<DeviceService>()._platform.value == Platform.MacOS ||
       Get.find<DeviceService>()._platform.value == Platform.Windows;
   static bool get isMobile =>
-      Get.find<DeviceService>()._platform.value == Platform.iOS || Get.find<DeviceService>()._platform.value == Platform.Android;
+      Get.find<DeviceService>()._platform.value == Platform.IOS || Get.find<DeviceService>()._platform.value == Platform.Android;
   static bool get isAndroid => Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.iOS;
+  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.IOS;
   static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
   static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
   static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
   static bool get isNotApple =>
-      Get.find<DeviceService>()._platform.value != Platform.iOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
+      Get.find<DeviceService>()._platform.value != Platform.IOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
 
   // References
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
@@ -82,7 +82,7 @@ class DeviceService extends GetxService {
     if (io.Platform.isAndroid) {
       _platform(Platform.Android);
     } else if (io.Platform.isIOS) {
-      _platform(Platform.iOS);
+      _platform(Platform.IOS);
     } else if (io.Platform.isLinux) {
       _platform(Platform.Linux);
     } else if (io.Platform.isMacOS) {
@@ -100,7 +100,7 @@ class DeviceService extends GetxService {
     _keyboardVisibleController.onChange.listen(_handleKeyboardVisibility);
 
     // @ 3. Bind Sensors for Mobile
-    if (_platform.value == Platform.iOS || _platform.value == Platform.Android) {
+    if (_platform.value == Platform.IOS || _platform.value == Platform.Android) {
       // Bind Direction and Set Intervals
       _compass.bindStream(FlutterCompass.events);
       motionSensors.accelerometerUpdateInterval = K_SENSOR_INTERVAL;
@@ -156,8 +156,6 @@ class DeviceService extends GetxService {
       }
     });
   }
-
-
 
   // ^ Refresh User Location Position ^ //
   static Future<Position> currentLocation() async {

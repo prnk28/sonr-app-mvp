@@ -186,7 +186,7 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
     // Iterate through peers and IDs
     if (data != null) {
       data.peers.forEach((peer) {
-        if (peer.platform == Platform.iOS || peer.platform == Platform.Android) {
+        if (peer.platform == Platform.IOS || peer.platform == Platform.Android) {
           // Add to Stack Items
           children.add(PeerBubble(peer));
         }
