@@ -3,8 +3,10 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+/// Converts file to Thumbnail off Main Thread and Loads to Invite Request
 class Thumbnail extends StatefulWidget {
   final Size size;
   final File image;
@@ -61,6 +63,7 @@ class _ThumbnailState extends State<Thumbnail> {
         if (mounted) {
           setState(() {
             imgBytes = data;
+            Get.find<TransferController>().setThumbnail(data);
           });
         }
       }
@@ -96,9 +99,4 @@ class _ThumbnailState extends State<Thumbnail> {
             ),
     );
   }
-}
-
-
-class ThumbnailController extends GetxController {
-
 }

@@ -118,6 +118,20 @@ class TransferController extends GetxController {
     }
   }
 
+  // ^ Set Thumbnail ^ //
+  void setThumbnail(List<int> thumb) {
+    // Validate Thumbnail
+    if (thumb.length > 0) {
+      inviteRequest.update((val) {
+        // Validate File Exists
+        assert(val.files.length > 0);
+
+        // Set thumbnail
+        val.files.first.thumbnail = thumb;
+      });
+    }
+  }
+
   // ^ Start Remote Session ^ //
   void startRemote() async {
     // Start Remote
