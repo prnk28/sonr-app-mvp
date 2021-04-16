@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:sonr_app/modules/common/contact/contact.dart';
-import '../../theme/theme.dart';
+import '../../theme/form/theme.dart';
 
 enum FlatModeState { Standby, Dragging, Empty, Outgoing, Pending, Receiving, Incoming, Done }
 enum FlatModeTransition { Standby, SlideIn, SlideOut, SlideDown, SlideInSingle }
@@ -22,8 +22,8 @@ class FlatMode {
   }
 }
 
-const K_TRANSLATE_DELAY = const Duration(milliseconds: 150);
-const K_TRANSLATE_DURATION = const Duration(milliseconds: 600);
+const K_TRANSLATE_DELAY = Duration(milliseconds: 150);
+const K_TRANSLATE_DURATION = Duration(milliseconds: 600);
 
 // ** Flat Mode View ** //
 class _FlatModeView extends StatelessWidget {

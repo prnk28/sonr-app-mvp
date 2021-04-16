@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 typedef BoolFunction = bool Function();
 
@@ -7,7 +7,7 @@ class FunctionTimer {
   // Properties
   final Duration deadline;
   final Duration interval;
-  final completer = new Completer<bool>();
+  final completer = Completer<bool>();
   bool get isRunning => _isRunning;
 
   // References

@@ -6,7 +6,7 @@ import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart' hide Position;
+import 'package:sonr_app/theme/form/theme.dart' hide Position;
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
@@ -94,7 +94,7 @@ class DeviceService extends GetxService {
     // @ 2. Initialize References
     // Audio Player
     _audioPlayer.disableLog();
-    _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
+    await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
 
     // Handle Keyboard Visibility
     _keyboardVisibleController.onChange.listen(_handleKeyboardVisibility);

@@ -1,6 +1,6 @@
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/modules/overlay/overlay.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_app/data/data.dart';
 export 'package:sonr_app/data/database/cards_db.dart';
 
@@ -12,14 +12,30 @@ class CardService extends GetxService {
   // Properties
   final _allCards = RxList<TransferCardItem>();
   final _contactCards = RxList<TransferCardItem>();
+  final _fileCards = RxList<TransferCardItem>();
   final _mediaCards = RxList<TransferCardItem>();
   final _urlCards = RxList<TransferCardItem>();
 
   // Property Accessors
   static RxList<TransferCardItem> get allCards => to._allCards;
   static RxList<TransferCardItem> get contactCards => to._contactCards;
+  static RxList<TransferCardItem> get fileCards => to._fileCards;
   static RxList<TransferCardItem> get mediaCards => to._mediaCards;
   static RxList<TransferCardItem> get urlCards => to._urlCards;
+
+  // Utility
+  static bool get hasContacts => to._contactCards.length > 0;
+  static bool get hasFiles => to._fileCards.length > 0;
+  static bool get hasMedia => to._mediaCards.length > 0;
+  static bool get hasURLs => to._urlCards.length > 0;
+  static int get categoryCount {
+    int counter = 1;
+    hasContacts ? counter += 1 : counter += 0;
+    hasFiles ? counter += 1 : counter += 0;
+    hasMedia ? counter += 1 : counter += 0;
+    hasURLs ? counter += 1 : counter += 0;
+    return counter;
+  }
 
   // References
   final _database = CardsDatabase();
@@ -28,6 +44,7 @@ class CardService extends GetxService {
   Future<CardService> init() async {
     _allCards.bindStream(_database.watchAll());
     _contactCards.bindStream(_database.watchContacts());
+    _fileCards.bindStream(_database.watchFiles());
     _mediaCards.bindStream(_database.watchMedia());
     _urlCards.bindStream(_database.watchUrls());
     return this;

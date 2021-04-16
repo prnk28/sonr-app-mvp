@@ -1,12 +1,18 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/common/peer/bubble_view.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 class TransferController extends GetxController {
+  // @ Accessors
+  Payload get currentPayload => inviteRequest.value.payload;
+
   // @ Properties
   final title = "Nobody Here".obs;
   final isBirdsEye = false.obs;
   final isFacingPeer = false.obs;
+  final inviteRequest = InviteRequest().obs;
 
   // @ Remote Properties
   final isRemoteActive = false.obs;
@@ -26,6 +32,7 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
+  BubbleController currentPeerController;
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -36,6 +43,7 @@ class TransferController extends GetxController {
     // Add Stream Handlers
     compassStream = DeviceService.compass.listen(_handleCompassUpdate);
     lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
+
     super.onInit();
   }
 
@@ -47,12 +55,80 @@ class TransferController extends GetxController {
     super.onClose();
   }
 
+  // ^ Send Invite with Peer ^ //
+  void inviteWithPeer(Peer peer) {
+    // Update Request
+    inviteRequest.update((val) {
+      val.to = peer;
+    });
+
+    // Send Invite
+    SonrService.invite(inviteRequest.value);
+  }
+
+  // ^ Send Invite with Bubble Controller ^ //
+  void inviteWithBubble(BubbleController bubble) {
+    // Set Controller
+    currentPeerController = bubble;
+    setFacingPeer(false);
+    isShiftingEnabled(false);
+
+    // Register Callback
+    Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
+
+    // Update Request
+    inviteRequest.update((val) {
+      val.to = bubble.peer.value;
+    });
+
+    // Send Invite
+    SonrService.invite(inviteRequest.value);
+  }
+
+  // ^ Set Transfer Payload ^ //
+  void setPayload(dynamic args) {
+    // Validate Args
+    if (args is TransferArguments) {
+      // Contact
+      if (args.payload == Payload.CONTACT) {
+        inviteRequest.update((val) {
+          val.payload = args.payload;
+          val.contact = args.contact;
+          val.type = InviteRequest_TransferType.Contact;
+        });
+      }
+      // URL
+      else if (args.payload == Payload.URL) {
+        inviteRequest.update((val) {
+          val.payload = args.payload;
+          val.url = args.url;
+          val.type = InviteRequest_TransferType.URL;
+        });
+      }
+      // File
+      else {
+        inviteRequest.update((val) {
+          val.payload = args.payload;
+          val.files.add(args.metadata);
+          val.type = InviteRequest_TransferType.File;
+        });
+      }
+    } else {
+      print("Invalid Arguments Provided for Transfer");
+    }
+  }
+
   // ^ Start Remote Session ^ //
   void startRemote() async {
-    
     // Start Remote
     remote(await SonrService.createRemote());
     isRemoteActive(true);
+
+    // Update Invite Request
+    inviteRequest.update((val) {
+      val.remote = remote.value;
+      val.isRemote = true;
+    });
   }
 
   // ^ Stop Remote Session ^ //
@@ -61,6 +137,12 @@ class TransferController extends GetxController {
     SonrService.leaveRemote(remote.value);
     remote(RemoteInfo());
     isRemoteActive(false);
+
+    // Clear Remote from Invite Request
+    inviteRequest.update((val) {
+      val.remote.clear();
+      val.isRemote = false;
+    });
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //
@@ -78,11 +160,12 @@ class TransferController extends GetxController {
     }
   }
 
+  // ^ Toggles Peer Shifting ^ //
   void toggleShifting() {
     isShiftingEnabled(!isShiftingEnabled.value);
   }
 
-  // ^ Handle Compass Update ^ //
+  // # Handle Compass Update ^ //
   _handleCompassUpdate(CompassEvent newDir) {
     // Update String Elements
     if (newDir != null && !isClosed) {
@@ -102,7 +185,7 @@ class TransferController extends GetxController {
     }
   }
 
-  // ^ Handle Lobby Size Update ^ //
+  // # Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(int size) {
     if (!isRemoteActive.value) {
       if (size == 0) {
@@ -115,6 +198,22 @@ class TransferController extends GetxController {
     }
   }
 
+  // # Handle Peer Response ^ //
+  _handleTransferStatus(TransferStatus data) {
+    if (currentPeerController != null) {
+      // Check Decision
+      if (data == TransferStatus.Accepted) {
+        currentPeerController.updateStatus(BubbleStatus.Accepted);
+      } else if (data == TransferStatus.Denied) {
+        currentPeerController.updateStatus(BubbleStatus.Declined);
+      } else {
+        currentPeerController.updateStatus(BubbleStatus.Complete);
+        inviteRequest.value.clear();
+      }
+    }
+  }
+
+  // # Return String Value for Direction ^ //
   _stringForDirection(double dir) {
     // Calculated
     var adjustedDegrees = dir.round();
@@ -130,6 +229,7 @@ class TransferController extends GetxController {
     }
   }
 
+  // # Return Cardinal Value for Direction ^ //
   _cardinalStringForDirection(double dir) {
     var adjustedDesignation = ((dir.round() / 11.25) + 0.25).toInt();
     var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];

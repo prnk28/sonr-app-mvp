@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -10,9 +10,8 @@ class URLAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final card = invite.card;
-    return Neumorphic(
-      style: SonrStyle.normal,
-      margin: EdgeInsets.all(8),
+    return Container(
+      decoration: Neumorph.floating(),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -38,9 +37,9 @@ class URLAuthView extends StatelessWidget {
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
             invite.from.profile.hasLastName()
-                ? SonrText.gradient(invite.from.profile.firstName + " " + invite.from.profile.lastName, FlutterGradientNames.premiumDark, size: 32)
-                : SonrText.gradient(invite.from.profile.firstName, FlutterGradientNames.premiumDark, size: 32),
-            Center(child: SonrText.gradient("Website Link", FlutterGradientNames.magicRay, size: 22)),
+                ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
+                : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
+            Center(child: "Website Link".gradient(gradient: FlutterGradientNames.magicRay, size: 22)),
           ]),
         ]),
         Divider(),
@@ -65,7 +64,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.primary(
               onPressed: () => launchURL(card.url.link),
               text: "Open",
-              icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
+              icon: SonrIcons.Discover,
             ),
           ],
         ),
@@ -89,35 +88,32 @@ class URLAuthView extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 4),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SonrText.header(data.title, size: 22),
-              SonrText.normal(data.description, size: 16),
-            ],
+            children: [data.title.h3, data.description.p],
           ),
         ),
 
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(new ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
-          child: Neumorphic(
-              style: SonrStyle.indented,
+          child: Container(
+              decoration: Neumorph.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
                 // URL Icon
                 Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcon.url,
+                  child: SonrIcons.Link.gradient(),
                 ),
 
                 // Link Preview
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SonrText.url(card.url.link),
+                    child: card.url.link.url,
                   ),
                 )
               ])),
@@ -138,8 +134,8 @@ class URLAuthView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SonrText.header(data.title, size: 22),
-              SonrText.normal(data.description, size: 16),
+              data.title.h3,
+              data.description.p,
             ],
           ),
         ),
@@ -147,25 +143,22 @@ class URLAuthView extends StatelessWidget {
         // @ Link Preview
         GestureDetector(
           onLongPress: () {
-            Clipboard.setData(new ClipboardData(text: data.link));
+            Clipboard.setData(ClipboardData(text: data.link));
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
-          child: Neumorphic(
-              style: SonrStyle.indented,
+          child: Container(
+              decoration: Neumorph.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
                 // URL Icon
-                Padding(
-                  padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcon.url,
-                ),
+                Padding(padding: const EdgeInsets.only(left: 14.0, right: 8), child: SonrIcons.Link.gradient()),
 
                 // Link Preview
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: SonrText.url(card.url.link),
+                    child: card.url.link.url,
                   ),
                 )
               ])),
@@ -175,15 +168,15 @@ class URLAuthView extends StatelessWidget {
 
     return GestureDetector(
       onLongPress: () {
-        Clipboard.setData(new ClipboardData(text: data.link));
+        Clipboard.setData(ClipboardData(text: data.link));
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
-      child: Neumorphic(
-        style: SonrStyle.indented,
+      child: Container(
+        decoration: Neumorph.indented(),
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: SonrText.url(card.url.link),
+          child: card.url.link.url,
         ),
       ),
     );

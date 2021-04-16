@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:sonr_app/data/data.dart';
 
@@ -8,17 +8,17 @@ extension RemoteViewStatusUtil on RemoteViewStatus {
   EdgeInsets get currentMargin {
     switch (this) {
       case RemoteViewStatus.NotJoined:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.Joined:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.Invited:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.InProgress:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       case RemoteViewStatus.Done:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
       default:
-        return EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
     }
   }
 
@@ -45,7 +45,6 @@ class RemoteController extends GetxController {
   final secondWord = "".obs;
   final thirdWord = "".obs;
   final currentRemote = Rx<RemoteInfo>(null);
-  final currentLobby = Rx<LobbyModel>(null);
   final currentInvite = Rx<AuthInvite>(null);
   final receivedCard = Rx<TransferCard>(null);
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
@@ -79,8 +78,6 @@ class RemoteController extends GetxController {
   join() async {
     isJoinFieldTapped(false);
     currentRemote(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
-    _lobbyStream = LobbyService.listenToLobby(currentRemote.value);
-    _lobbyStream.listen(_handleLobby);
     status(RemoteViewStatus.Joined);
   }
 
@@ -126,12 +123,6 @@ class RemoteController extends GetxController {
     if (!visible && status.value == RemoteViewStatus.NotJoined) {
       isJoinFieldTapped(false);
     }
-  }
-
-  // @ Handle Lobby Info
-  _handleLobby(LobbyModel lobby) {
-    currentLobby(lobby);
-    currentLobby.refresh();
   }
 
   // @ Handle A remote Invite

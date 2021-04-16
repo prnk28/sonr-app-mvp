@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'peer.dart';
 
 // ^ PeerSheetView Displays Extended Peer Details ^ //
@@ -32,15 +32,8 @@ class PeerDetailsView extends StatelessWidget {
                           child: Neumorphic(
                             padding: EdgeInsets.all(4),
                             style: SonrStyle.compassStamp,
-                            child: Row(children: [
-                              SonrIcon.normal(
-                                SonrIconData.compass,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                              Obx(() => SonrText(" " + controller.peerVector.value.data.directionString,
-                                  weight: FontWeight.w300, size: 20, key: key, color: Colors.white))
-                            ]),
+                            child:
+                                Row(children: [SonrIcons.Discover.white, Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White)]),
                           ))),
 
                   // Peer Information
@@ -56,8 +49,8 @@ class PeerDetailsView extends StatelessWidget {
                             controller.invite();
                             Get.back();
                           },
-                          icon: SonrIcon.invite,
-                          text: SonrText.semibold("Invite", size: 24))),
+                          icon: SonrIcons.Share.gradient(),
+                          text: "Invite".h5)),
                   Spacer()
                 ]),
               ),

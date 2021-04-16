@@ -2,7 +2,7 @@ import 'package:rive/rive.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'peer.dart';
 
@@ -176,11 +176,10 @@ class BubbleController extends GetxController {
       // Check not already Pending
       if (!_isPending.value) {
         // Perform Invite
-        SonrService.inviteWithController(this);
-        Get.find<TransferController>().setFacingPeer(false);
+        Get.find<TransferController>().inviteWithBubble(this);
 
         // Check for File
-        if (Get.find<SonrService>().payload == Payload.MEDIA) {
+        if (Get.find<TransferController>().currentPayload.isTransfer) {
           _isPending.value = true;
         }
         // Contact/URL

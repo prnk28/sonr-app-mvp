@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import '../theme.dart';
+import '../form/theme.dart';
 import 'utility.dart';
 
 class ColorButton extends StatefulWidget {
@@ -38,7 +38,7 @@ class ColorButton extends StatefulWidget {
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    SonrIcon icon,
+    IconData icon,
     String text,
     double width,
     WidgetPosition iconPosition = WidgetPosition.Left,
@@ -72,7 +72,7 @@ class ColorButton extends StatefulWidget {
     EdgeInsets padding,
     EdgeInsets margin,
     double width,
-    SonrIcon icon,
+    IconData icon,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
@@ -103,7 +103,7 @@ class ColorButton extends StatefulWidget {
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    SonrIcon icon,
+    IconData icon,
     double width,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
@@ -213,7 +213,7 @@ class _ColorButtonState extends State<ColorButton> {
     hasFinishedAnimationDown = true;
 
     //haptic vibration
-    HapticFeedback.mediumImpact();
+    await HapticFeedback.mediumImpact();
     _resetIfTapUp();
   }
 
@@ -239,7 +239,7 @@ class _ColorButtonState extends State<ColorButton> {
     hasFinishedLongAnimationDown = true;
 
     //haptic vibration
-    HapticFeedback.heavyImpact();
+    await HapticFeedback.heavyImpact();
     _resetIfLongTapUp();
   }
 

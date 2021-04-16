@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'overlay.dart';
 
@@ -29,11 +29,10 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller and Opens View ^ //
   static int show(Widget view,
-      { // ^,
+      {bool barrierDismissible = true,
       Duration entryDuration = const Duration(milliseconds: 300),
-      bool barrierDismissible: true,
-      bool disableAnimation: false,
-      Color backgroundColor,
+      bool disableAnimation = false,
+      Color backgroundColor = Colors.black54,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top}) {
     // Create Overlay
@@ -52,13 +51,13 @@ class SonrOverlay extends GetxService {
       @required String description,
       String acceptTitle = "Yes!",
       String declineTitle = "No",
-      bool barrierDismissible: true,
+      bool barrierDismissible = true,
       bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top,
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Future Completer
-    var completer = new Completer<bool>();
+    var completer = Completer<bool>();
 
     // Create Overlay
     var questionOverlay = _SonrFixedOverlayEntry(
@@ -88,13 +87,13 @@ class SonrOverlay extends GetxService {
       {@required String title,
       @required String description,
       String buttonText = "Okay",
-      bool barrierDismissible: true,
+      bool barrierDismissible = true,
       bool closeOnResponse = true,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Offset entryLocation = SonrOffset.Top,
       Duration entryDuration = const Duration(milliseconds: 300)}) {
     // Create Future Completer
-    var completer = new Completer();
+    var completer = Completer();
 
     // Create Overlay
     var alertOverlay = _SonrFixedOverlayEntry(
@@ -120,7 +119,7 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller and Prompts Invite ^ //
   static void invite(AuthInvite invite,
-      {bool barrierDismissible: false,
+      {bool barrierDismissible = false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration entryDuration = const Duration(milliseconds: 450)}) {
     if (!isOpen) {
@@ -141,7 +140,7 @@ class SonrOverlay extends GetxService {
 
   // ^ Method Finds Overlay Controller to Show Reply ^ //
   static void reply(AuthReply reply,
-      {bool barrierDismissible: false,
+      {bool barrierDismissible = false,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center,
       Duration entryDuration = const Duration(milliseconds: 450)}) {
     if (!isOpen) {

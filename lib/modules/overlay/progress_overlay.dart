@@ -1,6 +1,6 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class ProgressView extends HookWidget {
@@ -97,8 +97,7 @@ class ProgressView extends HookWidget {
         child: utilizeProgress
             ? Obx(() {
                 if (SonrService.progress.value >= 0.5) {
-                  return OpacityAnimatedWidget(
-                      duration: Duration(milliseconds: 200), child: Icon(card.metadata.mime.type.gradientData.data, size: 165, color: Colors.white));
+                  return OpacityAnimatedWidget(duration: Duration(milliseconds: 200), child: card.metadata.mime.type.gradient(size: 165));
                 } else {
                   return Container();
                 }
@@ -106,6 +105,6 @@ class ProgressView extends HookWidget {
             : OpacityAnimatedWidget(
                 delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
                 duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-                child: Icon(card.metadata.mime.type.gradientData.data, size: 165, color: Colors.white)));
+                child: card.metadata.mime.type.gradient(size: 165)));
   }
 }

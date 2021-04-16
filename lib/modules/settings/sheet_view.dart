@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'settings_controller.dart';
 
 class SettingsSheet extends StatelessWidget {
@@ -18,19 +18,19 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.header("Settings", size: 45),
+                      child: "Settings".h2,
                     ),
                     Padding(padding: EdgeWith.top(24)),
 
                     // @ Dark Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Dark Mode Title
-                      SonrText.medium("Dark Mode"),
+                      "Dark Mode".h6,
 
                       // Dark Mode Switch
                       NeumorphicSwitch(
                         style: NeumorphicSwitchStyle(
-                          activeTrackColor: UserService.isDarkMode ? SonrPalette.Red : SonrColor.Blue,
+                          activeTrackColor: UserService.isDarkMode ? SonrPalette.Critical : SonrColor.Blue,
                           inactiveTrackColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                         ),
                         value: controller.isDarkModeEnabled.value,
@@ -42,12 +42,12 @@ class SettingsSheet extends StatelessWidget {
                     // @ Flat Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Dark Mode Title
-                      SonrText.medium("Flat Mode"),
+                      "Flat Mode".h6,
 
                       // Dark Mode Switch
                       NeumorphicSwitch(
                         style: NeumorphicSwitchStyle(
-                          activeTrackColor: UserService.isDarkMode ? SonrPalette.Red : SonrColor.Blue,
+                          activeTrackColor: UserService.isDarkMode ? SonrPalette.Critical : SonrColor.Blue,
                           inactiveTrackColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                         ),
                         value: controller.isFlatModeEnabled.value,
@@ -59,12 +59,12 @@ class SettingsSheet extends StatelessWidget {
                     // @ PointShare Mode
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                       // Point Share Title
-                      SonrText.medium("Point To Share"),
+                      "Point To Share".h6,
 
                       // Point Share Mode Switch
                       NeumorphicSwitch(
                           style: NeumorphicSwitchStyle(
-                            activeTrackColor: UserService.isDarkMode ? SonrPalette.Red : SonrColor.Blue,
+                            activeTrackColor: UserService.isDarkMode ? SonrPalette.Critical : SonrColor.Blue,
                             inactiveTrackColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
                           ),
                           value: controller.isDarkModeEnabled.value,
@@ -78,7 +78,7 @@ class SettingsSheet extends StatelessWidget {
                     Align(
                       heightFactor: 0.9,
                       alignment: Alignment.topCenter,
-                      child: SonrText.light("Alpha - 0.9.2", size: 16),
+                      child: "Alpha - 0.9.2".l,
                     ),
                     Padding(padding: EdgeWith.top(16)),
                   ]),

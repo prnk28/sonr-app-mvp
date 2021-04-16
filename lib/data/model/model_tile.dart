@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/profile/add_social.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'package:sonr_core/sonr_social.dart';
 
@@ -92,25 +92,25 @@ class TileStep {
     //  Step Three: Cancel and Confirm
     if (current == 2) {
       return ShapeButton.stadium(
-        text: SonrText.semibold("Save"),
+        text: "Save".h6,
         onPressed: save,
-        icon: SonrIcon.success,
+        icon: SonrIcons.Success.gradientNamed(name: FlutterGradientNames.newLife),
         margin: EdgeInsets.only(left: 60, right: 80),
       );
     }
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (current == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        ShapeButton.stadium(text: SonrText.semibold("Back"), onPressed: previous, icon: SonrIcon.back),
-        ShapeButton.stadium(text: SonrText.semibold("Next"), onPressed: next, icon: SonrIcon.forward, iconPosition: WidgetPosition.Right),
+        ShapeButton.stadium(text: "Back".h6, onPressed: previous, icon: SonrIcons.Backward.black),
+        ShapeButton.stadium(text: "Next".h6, onPressed: next, icon: SonrIcons.Forward.black, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
       return ShapeButton.stadium(
-          text: SonrText.semibold("Next", size: 22),
+          text: "Next".h6,
           onPressed: next,
-          icon: SonrIcon.forward,
+          icon: SonrIcons.Forward.black,
           margin: EdgeInsets.only(left: 60, right: 80),
           iconPosition: WidgetPosition.Right);
     }

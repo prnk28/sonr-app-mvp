@@ -5,7 +5,7 @@ import 'package:open_file/open_file.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/service/sonr.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 const K_ALBUM_PAGE_SIZE = 40;
 
@@ -111,7 +111,7 @@ class MediaItem {
       path: path,
       thumbnail: thumbnail,
       properties: Metadata_Properties(
-        hasThumbnail: thumbnail.length > 0,
+        hasThumbnail: thumbnail.length == 0,
         width: width,
         height: height,
         isImage: this.isImage,
@@ -143,6 +143,8 @@ class MediaFile {
   final int duration;
 
   String get path => _file.path;
+  int get size => _file.lengthSync();
+  String get name => _file.path.split('/').last;
   File get file => _file;
 
   // Constructer

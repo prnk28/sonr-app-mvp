@@ -5,9 +5,17 @@ import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'media.dart';
+
+class MediaCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
 
 // ^ TransferCard Media Item Details ^ //
 class MediaCardView extends StatefulWidget {
@@ -38,62 +46,53 @@ class _MediaCardViewState extends State<MediaCardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: Colors.transparent,
-      color: Colors.transparent,
-      elevation: 2,
-      child: Container(
-        height: 420,
-        width: Get.width - 64,
-        child: GestureDetector(
-          onTap: () {
-            // Push to Page
-            Get.to(_MediaCardExpanded(widget.card, mediaFile), transition: Transition.fadeIn);
-          },
-          child: Neumorphic(
-            style: SonrStyle.normal,
-            margin: EdgeInsets.all(4),
-            child: Hero(
-              tag: widget.card.received,
-              child: Container(
-                height: 75,
-                decoration: hasLoaded ? _buildImageDecoration() : BoxDecoration(),
-                child: Stack(
-                  children: <Widget>[
-                    // Display Mime Type if Not Image
-                    _buildChildView(),
+    return Container(
+      height: 420,
+      width: Get.width - 64,
+      decoration: Neumorph.floating(),
+      child: GestureDetector(
+        onTap: () {
+          // Push to Page
+          Get.to(_MediaCardExpanded(widget.card, mediaFile), transition: Transition.fadeIn);
+        },
+        child: Hero(
+          tag: widget.card.received,
+          child: Container(
+            height: 75,
+            decoration: hasLoaded ? _buildImageDecoration() : BoxDecoration(),
+            child: Stack(
+              children: <Widget>[
+                // Display Mime Type if Not Image
+                _buildChildView(),
 
-                    // Time Stamp
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Neumorphic(
-                          style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                          child: SonrText.date(widget.card.received,
-                              color: widget.card.metadata.mime.type == MIME_Type.image ? SonrColor.Black : SonrColor.currentNeumorphic),
-                          padding: EdgeInsets.all(10),
-                        ),
-                      ),
+                // Time Stamp
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Neumorphic(
+                      style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
+                      child: widget.card.dateText,
+                      padding: EdgeInsets.all(10),
                     ),
-
-                    // Info Button
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ShapeButton.circle(
-                            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-                            icon: SonrIcon.info,
-                            onPressed: () {
-                              SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
-                            },
-                            shadowLightColor: Colors.black38,
-                          )),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+
+                // Info Button
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ShapeButton.circle(
+                        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                        icon: SonrIcons.About.gradient(),
+                        onPressed: () {
+                          SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
+                        },
+                        shadowLightColor: Colors.black38,
+                      )),
+                ),
+              ],
             ),
           ),
         ),
@@ -115,7 +114,7 @@ class _MediaCardViewState extends State<MediaCardView> {
 
   // @ Build Card for Video Type
   Widget _buildChildView() {
-    if (widget.card.metadata.mime.type == MIME_Type.video) {
+    if (widget.card.metadata.mime.type == MIME_Type.video && mediaFile.path != null) {
       return BetterPlayer.file(mediaFile.path,
           betterPlayerConfiguration: BetterPlayerConfiguration(
             controlsConfiguration: BetterPlayerControlsConfiguration(),
@@ -138,7 +137,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: SonrIcon.withMime(widget.card.metadata.mime, size: 60)),
+                child: widget.card.metadata.mime.type.gradient(size: 60)),
           ),
         ),
       );
@@ -195,24 +194,24 @@ class _MediaCardInfo extends StatelessWidget {
           blurRadius: 26,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            SonrText.header("$mimeType From"),
+            "$mimeType From".h3,
 
             // Owner
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [card.owner.platformIcon, card.owner.nameText]),
+                children: [card.owner.platform.gradient(), card.owner.nameText]),
 
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Name ", size: 16),
+              "Name ".h6,
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: SonrText.medium("${card.metadata.name}", size: 16),
+                child: "${card.metadata.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -220,23 +219,23 @@ class _MediaCardInfo extends StatelessWidget {
 
             // File Size
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Size ", size: 16),
+              "Size ".h6,
               Spacer(),
-              SonrText.medium("$size", size: 16),
+              "$size".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Kind ", size: 16),
+              "Kind ".h6,
               Spacer(),
-              SonrText.medium("${metadata.mime.value}", size: 16),
+              "${metadata.mime.value}".p,
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("ID ", size: 16),
+              "ID ".h6,
               Spacer(),
-              SonrText.medium("${metadata.id}", size: 16),
+              "${metadata.id}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
@@ -249,9 +248,9 @@ class _MediaCardInfo extends StatelessWidget {
                   SonrOverlay.back();
                   CardService.deleteCard(card);
                 },
-                defaultIcon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+                defaultIcon: SonrIcons.Trash,
                 defaultText: "Delete",
-                confirmIcon: SonrIcon.success,
+                confirmIcon: SonrIcons.Check,
                 confirmText: "Confirm?",
               ),
             ]),

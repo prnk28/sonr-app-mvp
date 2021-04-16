@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:better_player/better_player.dart';
 
 class MediaPreviewView extends StatelessWidget {
@@ -58,7 +58,7 @@ class MediaPreviewView extends StatelessWidget {
                         HapticFeedback.heavyImpact();
                         onDecision(false);
                       },
-                      text: SonrText.semibold("Redo", color: Colors.orange[600], size: 18),
+                      text: "Redo".headSix(color: Colors.orange[700]),
                     ),
 
                     // Right Button - Continue
@@ -70,8 +70,8 @@ class MediaPreviewView extends StatelessWidget {
                             HapticFeedback.heavyImpact();
                             onDecision(true);
                           },
-                          text: SonrText.semibold("Continue", size: 18, color: SonrColor.Black.withOpacity(0.85)),
-                          icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28)),
+                          text: "Continue".h6_Grey,
+                          icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28)),
                     ),
                   ]),
                 )

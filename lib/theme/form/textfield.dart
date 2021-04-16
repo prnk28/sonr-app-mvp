@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart' hide Platform;
+import 'package:sonr_app/theme/form/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
 enum TextInputValidStatus { None, Valid, Invalid }
@@ -109,20 +109,17 @@ class SonrTextField extends StatelessWidget {
                       isError
                           ? Text(
                               " *Error",
-                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalette.Red),
+                              style: TextStyle(fontWeight: FontWeight.w500, color: SonrPalette.Critical),
                             )
                           : Container(),
                     ]))
                 : Container(),
-            Neumorphic(
+            Container(
+              decoration: Neumorph.floating(),
               margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-              style: NeumorphicStyle(
-                depth: NeumorphicTheme.embossDepth(context),
-                boxShape: NeumorphicBoxShape.stadium(),
-              ),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
                 controller: controller,
                 autofocus: autoFocus,
                 textInputAction: textInputAction,
@@ -137,7 +134,7 @@ class SonrTextField extends StatelessWidget {
                     : InputDecoration.collapsed(
                         hintText: hint,
                         hintStyle: TextStyle(
-                            fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+                            fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
               ),
             )
           ],
@@ -159,10 +156,10 @@ class SonrTextField extends StatelessWidget {
       child: buildDefault(context,
           isError: true,
           decoration: InputDecoration.collapsed(
-              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Red, width: 4)),
+              border: UnderlineInputBorder(borderSide: BorderSide(color: SonrPalette.Critical, width: 4)),
               hintText: hint,
               hintStyle:
-                  TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
+                  TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white38 : Colors.black38))),
     );
   }
 
@@ -229,18 +226,15 @@ class SonrSearchField extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Neumorphic(
+            Container(
                 margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                style: NeumorphicStyle(
-                  depth: NeumorphicTheme.embossDepth(context),
-                  boxShape: NeumorphicBoxShape.stadium(),
-                ),
+                decoration: Neumorph.floating(),
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                 child: Stack(children: [
                   Padding(
                       padding: EdgeInsets.only(top: 8),
                       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        SonrIcon.gradient(Icons.search, FlutterGradientNames.amourAmour, size: 30),
+                        SonrIcons.Search.gradientNamed(name: FlutterGradientNames.amourAmour, size: 30),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 4.0),

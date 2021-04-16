@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../theme.dart';
+import 'theme.dart';
 
 // ^ Builds Neumorphic Checkbox with Label ^ //
 class SonrCheckbox extends StatelessWidget {
@@ -36,7 +36,7 @@ class SonrCheckbox extends StatelessWidget {
       margin: margin,
       child: Row(crossAxisAlignment: crossAxisAlignment, mainAxisAlignment: mainAxisAlignment, children: [
         // @ Set Text
-        label ?? SonrText.normal(label, size: labelSize),
+        label ?? label.p,
 
         // @ Create Check Box
         ValueBuilder<bool>(
@@ -116,7 +116,7 @@ class SonrRadioItem extends StatelessWidget {
         onChanged: (i) => onChanged(),
       ),
       Padding(padding: EdgeInsets.only(top: 4)),
-      SonrText.medium(title, size: 14, color: SonrColor.Black),
+      title.p,
     ]);
   }
 }
@@ -139,7 +139,7 @@ class SonrRadioRowOption {
   }
 
   // * Static Icon Child * //
-  factory SonrRadioRowOption.icon(SonrIcon icon, String title) {
+  factory SonrRadioRowOption.icon(Icon icon, String title) {
     return SonrRadioRowOption(child: icon, title: title);
   }
 

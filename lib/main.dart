@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'data/data.dart';
 
 const bool K_TESTER_MODE = true;
@@ -23,7 +23,7 @@ class _AppState extends State<App> {
     super.initState();
 
     // Shift Page
-    DeviceService.shiftPage(delay: 2.seconds);
+    DeviceService.shiftPage(delay: 3.seconds);
   }
 
   @override
@@ -48,11 +48,10 @@ class _AppState extends State<App> {
               ),
 
               // @ Fade Animation of Text
-              OpacityAnimatedWidget(
-                  enabled: true,
-                  duration: 400.milliseconds,
-                  delay: 1.seconds,
-                  child: Padding(padding: EdgeInsets.only(top: 200), child: SonrText.header("Sonr", color: Colors.white))),
+              Positioned(
+                bottom: 100,
+                child: OpacityAnimatedWidget(enabled: true, duration: 350.milliseconds, delay: 2222.milliseconds, child: "Sonr".hero),
+              ),
             ],
           )),
     );

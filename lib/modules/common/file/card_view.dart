@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'file.dart';
 
@@ -20,55 +20,52 @@ class FileCardView extends StatelessWidget {
         child: Container(
           height: 420,
           width: Get.width - 64,
+          decoration: Neumorph.floating(),
           child: GestureDetector(
             onTap: () {
               OpenFile.open(card.metadata.path);
             },
-            child: Neumorphic(
-              style: SonrStyle.normal,
-              margin: EdgeInsets.all(4),
-              child: Hero(
-                tag: card.id,
-                child: Container(
-                  height: 75,
-                  child: Stack(
-                    children: <Widget>[
-                      // Time Stamp
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Neumorphic(
-                            style: SonrStyle.timeStampDark,
-                            child: SonrText.date(card.received, color: Colors.white),
-                            padding: EdgeInsets.all(10),
-                          ),
+            child: Hero(
+              tag: card.id,
+              child: Container(
+                height: 75,
+                child: Stack(
+                  children: <Widget>[
+                    // Time Stamp
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Neumorphic(
+                          style: SonrStyle.timeStampDark,
+                          child: card.dateText,
+                          padding: EdgeInsets.all(10),
                         ),
                       ),
+                    ),
 
-                      // File Icon
-                      Align(
-                          alignment: Alignment.center,
-                          child: Neumorphic(
-                              padding: EdgeInsets.all(20),
-                              style: SonrStyle.indented,
-                              child: Container(child: card.payload.icon(IconType.NeumorphicGradient, size: (Get.height / 4))))),
+                    // File Icon
+                    Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                            decoration: Neumorph.indented(),
+                            padding: EdgeInsets.all(20),
+                            child: Container(child: card.payload.gradient(size: (Get.height / 4))))),
 
-                      // Info Button
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ShapeButton.circle(
-                              icon: SonrIcon.info,
-                              onPressed: () {
-                                SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
-                              },
-                              shadowLightColor: Colors.black38,
-                            )),
-                      ),
-                    ],
-                  ),
+                    // Info Button
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ShapeButton.circle(
+                            icon: SonrIcons.About.gradient(),
+                            onPressed: () {
+                              SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
+                            },
+                            shadowLightColor: Colors.black38,
+                          )),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -98,12 +95,12 @@ class _FileCardInfo extends StatelessWidget {
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            SonrText.header("$payload From"),
+            "$payload From".h2,
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              card.owner.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
-              SonrText.bold(" ${card.owner.firstName} ${card.owner.lastName}", size: 16, color: Colors.grey[600])
+              card.owner.platform.gradient(),
+              " ${card.owner.firstName} ${card.owner.lastName}".h6,
             ]),
 
             Divider(),
@@ -111,11 +108,11 @@ class _FileCardInfo extends StatelessWidget {
 
             // File Name
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Name ", size: 16),
+              "Name ".h6,
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: SonrText.medium("${metadata.name}", size: 16),
+                child: "${metadata.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -123,16 +120,16 @@ class _FileCardInfo extends StatelessWidget {
 
             // File Size
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Size ", size: 16),
+              "Size ".h6,
               Spacer(),
-              SonrText.medium("$size", size: 16),
+              "$size".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SonrText.bold("Kind ", size: 16),
+              "Kind ".h6,
               Spacer(),
-              SonrText.medium("${metadata.mime.value}", size: 16),
+              "${metadata.mime.value}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
@@ -161,13 +158,13 @@ class _FileCardInfo extends StatelessWidget {
                     }
                   });
                 },
-                text: SonrText.medium("Delete"),
-                icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+                text: "Delete".h6,
+                icon: SonrIcons.Trash.grey,
               ),
               ShapeButton.rectangle(
                 onPressed: () {},
-                text: SonrText.medium("Save"),
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                text: "Save".h6,
+                icon: SonrIcons.Download_File.white,
               ),
             ]),
           ]),
@@ -204,4 +201,3 @@ extension PayloadUtils on Payload {
     return this == Payload.MEDIA;
   }
 }
-

@@ -5,7 +5,7 @@ import 'package:sonr_app/modules/common/contact/contact.dart';
 import 'package:sonr_app/modules/common/url/url.dart';
 import 'package:sonr_app/modules/common/file/file.dart';
 import 'package:sonr_app/modules/common/media/media.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'fixed_overlay.dart';
 import 'positioned_overlay.dart';
@@ -65,10 +65,10 @@ class AlertOverlayView extends StatelessWidget {
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        SonrText.header(title),
+        title.h2,
         Padding(
           padding: EdgeInsets.only(left: 10.0),
-          child: SonrText.normal(description, size: 18),
+          child: description.p,
         ),
         Padding(padding: EdgeInsets.all(4)),
         Divider(),
@@ -83,8 +83,8 @@ class AlertOverlayView extends StatelessWidget {
                   SonrOverlay.back();
                 }
               },
-              icon: SonrIcon.accept,
-              text: SonrText.semibold(buttonText, size: 18),
+              icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife),
+              text: buttonText.h6,
             ),
           ),
         ]),
@@ -213,12 +213,11 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
       margin: EdgeInsets.symmetric(horizontal: 16),
       height: Get.height / 3 + 50,
       child: Container(
-        margin: EdgeInsets.all(8),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SonrText.header(title),
+          title.h4,
           Padding(
             padding: EdgeInsets.only(left: 8.0),
-            child: SonrText.subtitle(description),
+            child: description.p_Grey,
           ),
           Padding(padding: EdgeInsets.all(4)),
           Divider(),
@@ -232,7 +231,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                     SonrOverlay.back();
                   }
                 },
-                child: SonrText.semibold(declineTitle, color: SonrPalette.Red, size: 18)),
+                child: declineTitle.h6_Red),
             // Accept Button
             Container(
               width: Get.width / 2.5,
@@ -244,8 +243,8 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                     SonrOverlay.back();
                   }
                 },
-                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
-                text: SonrText.semibold(acceptTitle, size: 18, color: SonrColor.Black.withOpacity(0.85)),
+                icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28),
+                text: acceptTitle.h6,
               ),
             ),
           ]),

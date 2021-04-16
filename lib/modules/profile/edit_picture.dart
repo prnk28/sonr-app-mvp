@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 import 'profile_controller.dart';
 
@@ -25,8 +25,8 @@ class EditPictureView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  PlainButton(icon: SonrIcon.close, onPressed: controller.exitToViewing),
-                  SonrText.title(headerText),
+                  PlainButton(icon: SonrIcons.Close, onPressed: controller.exitToViewing),
+                  headerText.h2,
                   Padding(padding: EdgeInsets.all(16))
                 ]),
           ),
@@ -117,7 +117,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   Widget _buildPermissions() {
     return Column(
       children: [
-        SonrText.subtitle("Need Camera Permissions"),
+        "Need Camera Permissions".h3,
         ColorButton.primary(onPressed: controller.requestPermission, text: "Proceed"),
       ],
     );
@@ -152,7 +152,7 @@ class ProfilePictureController extends GetxController {
   final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(UserService.permissions.value.hasCamera));
 
   // References
-  PictureController _pictureController = new PictureController();
+  PictureController _pictureController = PictureController();
   var _photoCapturePath = "";
 
   // @ Method to Capture Picture
@@ -172,7 +172,7 @@ class ProfilePictureController extends GetxController {
   confirm() async {
     if (_photoCapturePath != "") {
       UserService.picture(await result.value.toUint8List());
-      UserService.saveChanges();
+      await UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);
     }

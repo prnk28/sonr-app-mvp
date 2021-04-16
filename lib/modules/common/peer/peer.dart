@@ -4,7 +4,7 @@ export 'item_view.dart';
 
 export 'vector_position.dart';
 import 'dart:typed_data';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ^ Platform Model Extensions ^ //
@@ -92,40 +92,31 @@ extension CheckerUtils on Peer {
 
 // ^ Peer Widget Builder Extensions ^ //
 extension WidgetUtils on Peer {
-  SonrText get initials {
+  Widget get initials {
     if (this.profile.hasFirstName() && this.profile.hasLastName()) {
-      var first = this.profile.firstName[0].toUpperCase();
-      var last = this.profile.lastName[0].toUpperCase();
-      return SonrText(first + last, isGradient: true, weight: FontWeight.bold, size: 34, gradient: FlutterGradientNames.glassWater.linear());
+      return " ${this.profile.firstName} ${this.profile.lastName}".h6;
     } else {
-      return SonrText("SNR", isGradient: true, weight: FontWeight.bold, size: 28, gradient: FlutterGradientNames.glassWater.linear());
+      return "SNR".h6;
     }
   }
 
-  SonrIcon get platformIcon {
-    return this.platform.icon(IconType.Gradient, size: 24);
-  }
-
   Widget get platformExpanded {
-    return SonrText("",
-        isRich: true,
-        richText: RichText(
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
-            text: TextSpan(children: [
-              TextSpan(
-                  text: this.platform.toString(),
-                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
-              TextSpan(
-                  text: " - ${this.model}",
-                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.Black)),
-            ])));
+    return RichText(
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.fade,
+        text: TextSpan(children: [
+          TextSpan(
+              text: this.platform.toString(),
+              style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 20, color: Colors.black87)),
+          TextSpan(
+              text: " - ${this.model}", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.Black)),
+        ]));
   }
 
   Widget get fullName {
     return this.profile.hasLastName()
-        ? SonrText.gradient(this.profile.firstName + " " + this.profile.lastName, FlutterGradientNames.frozenHeat, size: 32)
-        : SonrText.gradient(this.profile.firstName, FlutterGradientNames.frozenHeat, size: 32);
+        ? "${this.profile.firstName} ${this.profile.lastName}".gradient(gradient: FlutterGradientNames.frozenHeat)
+        : "${this.profile.firstName}".gradient(gradient: FlutterGradientNames.frozenHeat);
   }
 
   Widget profilePicture({double size = 100}) {
@@ -144,4 +135,8 @@ extension WidgetUtils on Peer {
             ),
     );
   }
+}
+
+extension PayloadUtils on Payload {
+  bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
 }

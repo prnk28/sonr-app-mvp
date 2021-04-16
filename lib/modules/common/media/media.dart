@@ -1,10 +1,9 @@
 export 'auth_view.dart';
 export 'card_view.dart';
-export 'picker_view.dart';
-export 'sheet_view.dart';
 import 'dart:math';
 
-import 'package:sonr_app/theme/theme.dart';
+import 'package:intl/intl.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 // ^ Metadata Model Extensions ^ //
@@ -42,11 +41,20 @@ extension MIMEMimeUtils on MIME {
 }
 
 extension ProfileMediaUtils on Profile {
-  SonrText get nameText {
-    return SonrText.bold(" ${this.firstName} ${this.lastName}", size: 16, color: Colors.grey[600]);
+  Widget get nameText {
+    return " ${this.firstName} ${this.lastName}".h6;
   }
+}
 
-  SonrIcon get platformIcon {
-    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
+extension TextUtils on TransferCardItem {
+  Widget get dateText {
+    // Formatters
+    final dateFormat = DateFormat.yMd();
+    final timeFormat = DateFormat.jm();
+
+    // Get String
+    String dateText = dateFormat.format(this.received);
+    String timeText = timeFormat.format(this.received);
+    return Row(children: [dateText.h6_White, timeText.p_White]);
   }
 }

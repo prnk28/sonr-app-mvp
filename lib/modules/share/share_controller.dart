@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/data/model/model_file.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'share.dart';
 
 // ** Share Reactive Controller ** //
@@ -10,9 +12,7 @@ class ShareController extends GetxController {
   final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
 
   // Properties
-  final alignment = Alignment.bottomCenter.obs;
   final size = Size(60, 60).obs;
-  final translation = Rx<Matrix4>(Matrix4.translationValues(0, -30, 0));
   final status = ShareStatus.Default.obs;
 
   // Shared Files
@@ -46,35 +46,116 @@ class ShareController extends GetxController {
     });
   }
 
-  // ^ Check if User Granted Camera, or Request ^ //
-  onCameraShare() async {
-    // Check for Permissions
-    if (cameraPermitted.value) {
-      _presentCameraView();
-    }
+  // ^ Present Camera View ^ //
+  presentCameraView() {
+    // Move to View
+    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+      // Shrink Button after Delay
+      shrink(delay: 150.milliseconds);
 
-    // Request Permissions
-    else {
-      var result = await Get.find<UserService>().requestCamera();
-      result ? _presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+      // Transfer with File
+      Transfer.transferWithFile(FileItem.capture(file));
+    }), transition: Transition.downToUp);
+  }
+
+  // ^ Select Contact to Transfer ^
+  selectContact() async {
+    // Shrink Button after Delay
+    shrink(delay: 150.milliseconds);
+
+    // Push to Transfer
+    Transfer.transferWithContact();
+  }
+
+  // ^ Select a File
+  selectFile() async {
+    // Check Permissions
+    if (UserService.permissions.value.hasGallery) {
+      var result = await FileService.selectMedia();
+      if (result.hasItem) {
+        // Shrink Button after Delay
+        shrink(delay: 150.milliseconds);
+
+        // Push to Transfer Screen
+        Transfer.transferWithFile(result.fileItem);
+      }
+    } else {
+      // Request Permissions
+      var status = await Get.find<UserService>().requestGallery();
+      SonrOverlay.back();
+
+      // Check Status
+      if (status) {
+        await Future.delayed(100.milliseconds);
+
+        // Continue With Picker
+        var result = await FileService.selectFile();
+        if (result.hasItem) {
+          // Shrink Button after Delay
+          shrink(delay: 150.milliseconds);
+
+          // Push to Transfer
+          Transfer.transferWithFile(result.fileItem);
+        }
+      } else {
+        SonrSnack.error("Cannot pick Media without Permissions");
+      }
     }
   }
 
-  // ^ Set current Media Item ^ //
-  setMedia(MediaItem item) async {
-    SonrService.queueMedia(item);
-    Get.toNamed("/transfer");
-    status(ShareStatus.Default);
+  // ^ Select Media
+  selectMedia() async {
+    // Check Permissions
+    if (UserService.permissions.value.hasGallery) {
+      var result = await FileService.selectMedia();
+      if (result.hasItem) {
+        // Push to Transfer
+        Transfer.transferWithFile(result.fileItem);
+
+        // Shrink Button after Delay
+        shrink(delay: 150.milliseconds);
+      }
+    } else {
+      // Request Permissions
+      var status = await Get.find<UserService>().requestGallery();
+      SonrOverlay.back();
+
+      // Check Status
+      if (status) {
+        await Future.delayed(100.milliseconds);
+
+        // Continue With Picker
+        var result = await FileService.selectMedia();
+        if (result.hasItem) {
+          // Push to Transfer
+          Transfer.transferWithFile(result.fileItem);
+
+          // Shrink Button after Delay
+          shrink(delay: 150.milliseconds);
+        }
+      } else {
+        SonrSnack.error("Cannot pick Media without Permissions");
+      }
+    }
+  }
+
+  // ^ Select a URL ^ //
+  selectExternal(Payload payload, URLLink url, MediaFile mediaFile) {
+    if (payload == Payload.URL) {
+      Transfer.transferWithUrl(url.link);
+    } else {
+      Transfer.transferWithFile(FileItem.capture(mediaFile));
+    }
   }
 
   // ^ Close Share Button ^ //
-  void shrink({Duration delay = const Duration(milliseconds: 0)}) {
+  void shrink({Duration delay = const Duration(milliseconds: 600)}) {
     Future.delayed(delay, () {
       if (_timer != null) {
         _timer.cancel();
         _timer = null;
-        HapticFeedback.mediumImpact();
         status(ShareStatus.Default);
+        HapticFeedback.mediumImpact();
         _counter = 0;
       }
     });
@@ -91,21 +172,9 @@ class ShareController extends GetxController {
   }
 
   // # Present Camera View ^ //
-  _presentCameraView() {
-    // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-      SonrService.queueCapture(file);
-      Get.toNamed("/transfer");
-    }), transition: Transition.downToUp);
-
-    // Shrink Button after Delay
-    shrink(delay: 150.milliseconds);
-  }
 
   // # Update Size Based on State
   _handleStatus(ShareStatus status) {
     size(status.size);
-    alignment(status.alignment);
-    translation(status.translation);
   }
 }

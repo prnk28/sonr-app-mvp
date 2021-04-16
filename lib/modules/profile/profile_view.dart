@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/common/tile/tile_item.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'profile.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -10,12 +10,10 @@ class ProfileView extends GetView<ProfileController> {
         width: Get.width,
         height: Get.height,
         margin: SonrStyle.viewMargin,
-        child: Neumorphic(
-          style: SonrStyle.normal,
-          child: AnimatedSlideSwitcher.fade(
-            child: _buildView(controller.status.value),
-            duration: const Duration(milliseconds: 2500),
-          ),
+        decoration: Neumorph.floating(radius: 20),
+        child: AnimatedSlideSwitcher.fade(
+          child: _buildView(controller.status.value),
+          duration: const Duration(milliseconds: 2500),
         )));
   }
 
@@ -89,16 +87,16 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
       flexibleSpace: _ProfileHeaderView(),
-      expandedHeight: Get.height / 5,
+      expandedHeight: Get.height / 5 + 36,
       title: Container(
           alignment: Alignment.topCenter,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            PlainButton(
-              icon: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
+            PlainIconButton(
+              icon: SonrIcons.Add.gradient(gradient: SonrPalette.primary(), size: 36),
               onPressed: controller.setAddTile,
             ),
-            PlainButton(
-              icon: SonrIcon.more,
+            PlainIconButton(
+              icon: SonrIcons.More_Vertical.gradient(gradient: SonrPalette.secondary(), size: 36),
               onPressed: controller.setEditingMode,
             ),
           ])),
@@ -121,9 +119,7 @@ class _ProfileHeaderView extends GetView<ProfileController> {
               _AvatarField(),
               Padding(padding: EdgeInsets.all(8)),
               GestureDetector(
-                  onLongPress: controller.setEditingMode,
-                  child: Obx(() =>
-                      SonrText.medium(UserService.firstName.value + " " + UserService.lastName.value, color: SonrColor.fromHex("FFFDFA"), size: 24))),
+                  onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
             ],
           ),
         ),
@@ -141,25 +137,18 @@ class _AvatarField extends GetView<ProfileController> {
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 4.0),
-        child: Neumorphic(
+        child: Container(
           padding: EdgeInsets.all(10),
-          style: NeumorphicStyle(
-            boxShape: NeumorphicBoxShape.circle(),
-            depth: -10,
-          ),
-          child: Obx(() => UserService.picture.value != null
-              ? Container(
-                  width: 120,
-                  height: 120,
-                  child: CircleAvatar(
-                    backgroundImage: MemoryImage(UserService.picture.value),
-                  ),
-                )
-              : Icon(
-                  Icons.insert_emoticon,
-                  size: 120,
-                  color: SonrColor.Black.withOpacity(0.5),
-                )),
+          decoration: Neumorph.indented(shape: BoxShape.circle),
+          child: Obx(() => Container(
+                width: 120,
+                height: 120,
+                child: UserService.picture.value.length > 0
+                    ? CircleAvatar(
+                        backgroundImage: MemoryImage(UserService.picture.value),
+                      )
+                    : SonrIcons.Avatar.greyWith(size: 120),
+              )),
         ),
       ),
     );

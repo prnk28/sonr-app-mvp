@@ -1,5 +1,5 @@
 import 'profile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
 
 // ** Builds Add Social Form Dialog ** //
@@ -22,7 +22,7 @@ class AddTileView extends GetView<ProfileController> {
                     radius: 20,
                     shape: NeumorphicShape.convex,
                     onPressed: controller.exitToViewing,
-                    icon: SonrIcon.neumorphicGradient(Icons.close, FlutterGradientNames.phoenixStart, size: 38, style: SonrStyle.appBarIcon))),
+                    icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart, size: 38))),
             Container(
               height: controller.step.value.height,
               child: PageView.builder(
@@ -149,12 +149,12 @@ class _InfoText extends StatelessWidget {
       Padding(padding: EdgeInsets.all(14)),
       Text(index.toString(),
           style: TextStyle(
-              fontFamily: 'Poppins', fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
+              fontFamily: 'Manrope', fontSize: 108, fontWeight: FontWeight.w900, color: UserService.isDarkMode ? Colors.white38 : Colors.black38)),
       Padding(padding: EdgeInsets.all(8)),
       Expanded(
         child: Text(text,
             style: TextStyle(
-              fontFamily: 'Poppins',
+              fontFamily: 'Manrope',
               fontSize: 34,
               fontWeight: FontWeight.bold,
               color: UserService.isDarkMode ? Colors.white : SonrColor.Black,

@@ -1,5 +1,6 @@
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'remote_controller.dart';
 
 // ^ Main Card View ^ //
@@ -11,14 +12,13 @@ class RemoteView extends GetView<RemoteController> {
     return Obx(() => AnimatedContainer(
           width: Get.width,
           height: Get.height,
+          padding: const EdgeInsets.only(top: 24.0),
           margin: controller.status.value.currentMargin,
           duration: 1500.milliseconds,
-          child: Neumorphic(
-            style: SonrStyle.normal,
-            child: AnimatedSlideSwitcher.fade(
-              child: _buildView(controller.status.value),
-              duration: const Duration(milliseconds: 2500),
-            ),
+          decoration: Neumorph.floating(),
+          child: AnimatedSlideSwitcher.fade(
+            child: _buildView(controller.status.value),
+            duration: const Duration(milliseconds: 2500),
           ),
         ));
   }
@@ -48,7 +48,6 @@ class _JoinRemoteView extends GetView<RemoteController> {
     return Obx(() => Container(
           width: SonrStyle.viewSize.width,
           height: SonrStyle.viewSize.height,
-          padding: EdgeWith.top(SonrStyle.viewSize.height / 5),
           child: CustomScrollView(
             physics: NeverScrollableScrollPhysics(),
             slivers: [
@@ -62,13 +61,13 @@ class _JoinRemoteView extends GetView<RemoteController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Title
-                          SonrText.header("Join Remote"),
+                          "Join Remote".h2,
 
                           // Check for Button Tap
                           controller.isJoinFieldTapped.value
-                              ? SonrText.normal("Enter lobby code below.", color: SonrColor.Black.withOpacity(0.7), size: 18)
+                              ? "Enter lobby code below.".p_Grey
                               : LottieContainer(
-                                  type: LottieBoard.JoinRemote,
+                                  type: SonrAssetLottie.JoinRemote,
                                   repeat: true,
                                   height: 150,
                                 ),
@@ -90,26 +89,29 @@ class _JoinRemoteView extends GetView<RemoteController> {
 }
 
 // ^ Card Aspect Ratio Remote View ^ //
-class RemoteLobbyCardView extends GetView<RemoteController> {
+class RemoteLobbyCardView extends HookWidget {
   RemoteLobbyCardView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          SonrText.header("${controller.currentRemote.value.display}"),
-          Expanded(
-              child: ListView.builder(
-            itemCount: controller.currentLobby.value != null ? controller.currentLobby.value.length + 1 : 1,
-            itemBuilder: (BuildContext context, int index) {
-              // Build List Item
-              return PeerListItem(
-                controller.currentLobby.value.atIndex(index - 1),
-                index - 1,
-                remote: controller.currentRemote.value,
-              );
-            },
-          )),
-          Padding(padding: EdgeInsets.all(8)),
-        ]));
+    final remote = Get.find<RemoteController>().currentRemote.value;
+    final remoteStream = LobbyService.useRemoteLobby(remote);
+
+    return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+      "${remote.display}".h2,
+      Expanded(
+          child: ListView.builder(
+        itemCount: remoteStream.data != null ? remoteStream.data.length : 0,
+        itemBuilder: (BuildContext context, int index) {
+          // Build List Item
+          return PeerListItem(
+            remoteStream.data.atIndex(index - 1),
+            index - 1,
+            remote: remote,
+          );
+        },
+      )),
+      Padding(padding: EdgeInsets.all(8)),
+    ]);
   }
 }
 
@@ -135,7 +137,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                 textInputAction: TextInputAction.next,
                 textAlign: TextAlign.center,
                 autofocus: controller.isJoinFieldTapped.value,
-                style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
               width: SonrStyle.viewSize.width / 4.2,
             ),
@@ -148,7 +150,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textAlign: TextAlign.center,
                   textInputAction: TextInputAction.next,
                   style:
-                      TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+                      TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
               width: SonrStyle.viewSize.width / 4.2,
             ),
             Container(
@@ -161,7 +163,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textAlign: TextAlign.center,
                   textInputAction: TextInputAction.done,
                   style:
-                      TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
+                      TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
               width: SonrStyle.viewSize.width / 4.2,
             ),
           ],
@@ -177,8 +179,8 @@ class RemoteInviteView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote Invite View"),
-      SonrText.normal("TODO: Display Invite thats received ", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "Remote Invite View".h2,
+      "TODO: Display Invite thats received ".p_Grey,
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }
@@ -192,8 +194,8 @@ class RemoteProgressView extends GetView<RemoteController> {
   Widget build(BuildContext context) {
     //return Center();
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote Progress View"),
-      SonrText.normal("TODO: Display Lottie File with Animation Controller by Progress", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "Remote Progress View".h2,
+      "TODO: Display Lottie File with Animation Controller by Progress".p_Grey,
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }
@@ -206,8 +208,8 @@ class RemoteCompletedView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      SonrText.header("Remote View"),
-      SonrText.normal("TODO: Display Received Transfer Card", color: SonrColor.Black.withOpacity(0.7), size: 18),
+      "Remote View".h2,
+      "TODO: Display Received Transfer Card".p_Grey,
       Padding(padding: EdgeInsets.all(16)),
     ]);
   }

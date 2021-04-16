@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
-import 'package:sonr_app/pages/register/form_page.dart';
+import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/cards.dart';
 import 'package:sonr_app/service/lobby.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'bindings.dart';
 
 // ^ Constant Routing Information ^ //
@@ -14,16 +14,13 @@ class SonrRouting {
         GetPage(
             name: '/home',
             page: () {
-              // Check if User is Not Connected
-              if (SonrService.status.value.isNotConnected) {
-                // Update Contact for New User
-                if (UserService.isNewUser.value) {
-                  Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
-                } else {
-                  Get.find<SonrService>().connect();
-                }
+              // Update Contact for New User
+              if (UserService.isNewUser.value) {
+                Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+              } else {
+                Get.find<SonrService>().connect();
               }
-              return HomeScreen();
+              return HomePage();
             },
             binding: HomeBinding(),
             transition: Transition.topLevel,
@@ -31,7 +28,7 @@ class SonrRouting {
             middlewares: [GetMiddleware()]),
 
         // ** Register Page ** //
-        GetPage(name: '/register', page: () => FormPage(), transition: Transition.fade, curve: Curves.easeIn),
+        GetPage(name: '/register', page: () => RegisterPage(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
 
         // ** Transfer Page ** //
         GetPage(
@@ -45,12 +42,14 @@ class SonrRouting {
 
   // ^ Services (Files, Contacts) ^ //
   static initServices() async {
-    await Get.putAsync(() => DeviceService().init(), permanent: true); // First Required Service
-    await Get.putAsync(() => UserService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => UserService().init(), permanent: true); // Third Required Service
+    await Get.putAsync(() => FileService().init(), permanent: true);
     await Get.putAsync(() => MediaService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
+
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
   }

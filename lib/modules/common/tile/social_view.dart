@@ -1,4 +1,5 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:intl/intl.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
 import 'tile_controller.dart';
 
@@ -22,19 +23,19 @@ class SocialView extends StatelessWidget {
           // Medium
           case Contact_SocialTile_Provider.Medium:
             var posts = controller.medium.value;
-            return Stack(children: [_MediumItem(posts, 0, true), item.provider.badge()]);
+            return Stack(children: [_MediumItem(posts, 0, true), item.provider.black]);
             break;
 
           // Twitter
           case Contact_SocialTile_Provider.Twitter:
             var twitter = controller.twitter.value;
-            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.badge()]);
+            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.black]);
             break;
 
           // Youtube
           case Contact_SocialTile_Provider.YouTube:
             var youtube = controller.youtube.value;
-            return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.badge()]);
+            return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.black]);
             break;
 
           // Other
@@ -46,8 +47,7 @@ class SocialView extends StatelessWidget {
 
       // @ Build Loading View
       else {
-        var icon = item.provider.icon(IconType.Gradient);
-        return AnimatedWaveIcon(icon.data, gradient: icon.gradient);
+        return item.provider.gradient();
       }
     });
   }
@@ -88,7 +88,7 @@ class _MediumItem extends StatelessWidget {
           child: Column(
             children: [
               ShapeContainer.wave(child: Image.network(medium.posts.first.thumbnail), width: 150, height: 120),
-              SonrText.gradient(medium.posts.first.title, FlutterGradientNames.premiumDark, size: 16),
+              medium.posts.first.title.gradient(gradient: FlutterGradientNames.premiumDark, size: 16)
             ],
           ),
         ),
@@ -101,9 +101,9 @@ class _MediumItem extends StatelessWidget {
         child: Column(
           children: [
             ShapeContainer.wave(child: Image.network(medium.posts[index].thumbnail), width: 275, height: 140),
-            SonrText.gradient(medium.posts[index].title, FlutterGradientNames.premiumDark, size: 20),
-            SonrText.postDescription(medium.posts[index].title.length, medium.posts[index].description),
-            SonrText.postDate(medium.posts[index].pubDate, size: 14)
+            medium.posts[index].title.gradient(gradient: FlutterGradientNames.premiumDark, size: 20),
+            PostText.description(medium.posts[index].title.length, medium.posts[index].description),
+            PostText.date(medium.posts[index].pubDate)
           ],
         ),
       ),
@@ -137,7 +137,7 @@ class _TweetItem extends StatelessWidget {
         width: 150,
         child: SingleChildScrollView(
           child: Column(
-            children: [SonrText.normal(latestTweet.text, size: 14), SonrText.postDate(latestTweet.createdAt, size: 14)],
+            children: [latestTweet.text.p, PostText.date(latestTweet.createdAt)],
           ),
         ),
       );
@@ -153,17 +153,16 @@ class _TweetItem extends StatelessWidget {
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             Container(
               width: 55,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [ClipOval(child: Image.network(user.profilePicUrl)), SonrText.medium(user.username, size: 10)]),
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [ClipOval(child: Image.network(user.profilePicUrl)), user.username.p]),
             ),
             Container(
               width: 265,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SonrText.postDate((tweets[index].createdAt), size: 20),
-                  SonrText.normal(tweets[index].text, size: 14),
+                  PostText.date((tweets[index].createdAt)),
+                  tweets[index].text.p,
                 ],
               ),
             ),
@@ -190,9 +189,36 @@ class _YoutubeItem extends StatelessWidget {
       width: 150,
       child: SingleChildScrollView(
         child: Column(
-          children: [SonrText.normal(video.title, size: 14), SonrText.postDate(video.publishTime, size: 14)],
+          children: [video.title.p, PostText.date(video.publishTime)],
         ),
       ),
     );
+  }
+}
+
+class PostText {
+  // @ Build Date Text
+  static Widget date(String pubDate) {
+    var date = DateTime.parse(pubDate);
+    var output = DateFormat.yMMMMd('en_US');
+    return output.format(date).toString().p;
+  }
+
+  // @ Build Description Text
+  static Widget description(int titleLength, String postDesc) {
+    // Calculate Description length
+    int maxDesc = 118;
+    if (titleLength > 50) {
+      int factor = titleLength - 50;
+      maxDesc = maxDesc - factor;
+    }
+
+    // Clean from HTML Tags
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    String cleaned = postDesc.replaceAll(exp, '');
+
+    // Limit Characters
+    var text = cleaned.substring(0, maxDesc) + "...";
+    return text.p;
   }
 }

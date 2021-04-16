@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/modules/common/peer/item_view.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'title_widget.dart';
 
 // ^ Sheet Lobby View ^ //
@@ -39,34 +39,31 @@ class _LobbySheetState extends State<LobbySheet> {
   @override
   Widget build(BuildContext context) {
     // Build View
-    return NeumorphicBackground(
-        backendColor: Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
-        child: Neumorphic(
-            style: SonrStyle.normal,
-            child: ListView.builder(
-              itemCount: lobby != null ? lobby.length + 1 : 1,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return LobbyTitleView(
-                    title: "Local Lobby",
-                    onChanged: (index) {
-                      setState(() {
-                        toggleIndex = index;
-                      });
-                    },
-                  );
-                } else {
-                  // Build List Item
-                  return Column(children: [
-                    PeerListItem(lobby.atIndex(index - 1), index - 1),
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                    )
-                  ]);
-                }
-              },
-            )));
+    return Container(
+        decoration: Neumorph.floating(),
+        child: ListView.builder(
+          itemCount: lobby != null ? lobby.length + 1 : 1,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return LobbyTitleView(
+                title: "Local Lobby",
+                onChanged: (index) {
+                  setState(() {
+                    toggleIndex = index;
+                  });
+                },
+              );
+            } else {
+              // Build List Item
+              return Column(children: [
+                PeerListItem(lobby.atIndex(index - 1), index - 1),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                )
+              ]);
+            }
+          },
+        ));
   }
 
   // ^ Updates Stack Children ^ //

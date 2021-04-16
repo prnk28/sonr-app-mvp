@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'overlay.dart';
 
 // ^ Class Controls Active Overlays ** //
@@ -16,7 +16,7 @@ class SonrPositionedOverlay extends GetxService {
   final currentOverlay = Rx<_SonrPositionedOverlayEntry>(null);
 
   // References
-  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length > 0;
+  static bool get isOpen => Get.find<SonrPositionedOverlay>().overlays.length == 0;
   static int get count => Get.find<SonrPositionedOverlay>().overlays.length;
   static SonrPositionedOverlay get _controller => Get.find<SonrPositionedOverlay>();
 

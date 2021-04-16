@@ -1,18 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_app/service/user.dart';
-import '../theme.dart';
+import '../form/theme.dart';
 
 enum _ButtonType { Icon, Text, IconText, DisabledIcon, DisabledText, DisabledIconText }
 
 class ShapeButton extends StatelessWidget {
   final bool hasIcon;
   final _ButtonType type;
-  final SonrText text;
+  final Widget text;
   final Color color;
   final Color shadowLightColor;
   final Color shadowDarkColor;
-  final SonrIcon icon;
+  final Widget icon;
   final WidgetPosition iconPosition;
   final EdgeInsets margin;
   final EdgeInsets padding;
@@ -50,9 +50,9 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.rectangle(
       {@required Function onPressed,
       Function onLongPressed,
-      SonrText text,
+      Widget text,
       Widget child,
-      SonrIcon icon,
+      Widget icon,
       Color shadowLightColor,
       Color shadowDarkColor,
       Color color = SonrColor.White,
@@ -146,9 +146,9 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.flat({
     @required Function onPressed,
     Function onLongPressed,
-    SonrText text,
+    Widget text,
     Widget child,
-    SonrIcon icon,
+    Widget icon,
     Color color = SonrColor.White,
     bool isDisabled = false,
     WidgetPosition iconPosition = WidgetPosition.Left,
@@ -231,8 +231,8 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.circle({
     @required Function onPressed,
     Function onLongPressed,
-    SonrIcon icon,
-    SonrText text,
+    Widget icon,
+    Widget text,
     Widget child,
     Color shadowLightColor,
     Color shadowDarkColor,
@@ -327,8 +327,8 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.stadium({
     @required Function onPressed,
     Function onLongPressed,
-    SonrIcon icon,
-    SonrText text,
+    Widget icon,
+    Widget text,
     Widget child,
     Color shadowLightColor,
     Color shadowDarkColor,
@@ -459,16 +459,14 @@ class ShapeButton extends StatelessWidget {
       // Update Children
       switch (type) {
         case _ButtonType.DisabledIcon:
-          iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
           isDisabled = true;
           break;
         case _ButtonType.DisabledText:
-          textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.Grey);
+          textChild = text;
           isDisabled = true;
           break;
         case _ButtonType.DisabledIconText:
-          iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
-          textChild = SonrText.medium(text.text, size: text.size, color: SonrColor.Grey);
+          textChild = text;
           isDisabled = true;
           break;
         default:

@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
@@ -11,12 +11,12 @@ class SonrColor {
   // ** General Theme Color Properties ** //
   static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
   static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
-  static const Color Black = Color(0xff202020);
+  static const Color Black = Color(0xff323232);
   static const Color Dark = Color(0xff2c2b2b);
-  static const Color Grey = Color(0xffC6C4C4);
   static const Color Blue = Color(0xff51C5DD);
-  static const Color White = Color(0xffE0E0E0);
+  static const Color White = Color(0xfff0f6fa);
   static const Color Neutral = Color(0xff62666a);
+  static const Color Grey = Color(0xff787878);
 
   // ^ ThemeMode Handling ^ //
   static Color get currentNeumorphic {
@@ -104,9 +104,12 @@ class SonrGradient {
 class SonrPalette {
   static const Color Neutral = Color(0xff62666a);
   static const Color Primary = Color(0xff1792ff);
-  static const Color Secondary = Color(0xffab17ff);
-  static const Color Tertiary = Color(0xff52ffc0);
-  static const Color Red = Color(0xffff176b);
+  static const Color Secondary = Color(0xffD0CCFF);
+  static const Color Tertiary = Color(0xffB9FFE5);
+  static const Color Critical = Color(0xffff176b);
+  static const Color AccentPink = Color(0xffFF84B1);
+  static const Color AccentBlue = Color(0xffC8E9FF);
+  static const Color AccentNavy = Color(0xff245379);
 
   static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
   static const AlignmentGeometry _K_END = Alignment.topCenter;

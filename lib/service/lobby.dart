@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class LobbyService extends GetxService {
@@ -63,9 +64,14 @@ class LobbyService extends GetxService {
     });
   }
 
+  // ^ Method to Listen to Specified Peer ^ //
+  static AsyncSnapshot<Peer> usePeer<T>(Peer peer) {
+    return useStream(PeerStream(peer, local.value).stream, initialData: peer);
+  }
+
   // ^ Method to Listen to Specified Lobby ^ //
-  static LobbyStream listenToLobby(RemoteInfo remote) {
-    return LobbyStream(remote);
+  static AsyncSnapshot<LobbyModel> useRemoteLobby<T>(RemoteInfo remote) {
+    return useStream(LobbyStream(remote).stream, initialData: LobbyModel());
   }
 
   // ^ Method to Listen to Specified Peer ^ //
@@ -76,8 +82,7 @@ class LobbyService extends GetxService {
   // ^ Method to Cancel Flat Mode ^ //
   bool sendFlatMode(Peer peer) {
     // Send Invite
-    SonrService.queueContact(isFlat: true);
-    SonrService.inviteWithPeer(peer);
+    SonrService.sendFlat(peer);
 
     // Reset Timers
     _flatModeCancelled(true);
@@ -97,7 +102,7 @@ class LobbyService extends GetxService {
     if (data.isLocal) {
       // Update Local
       _handleFlatPeers(data);
-      _local(LobbyModel(data));
+      _local(LobbyModel(lobby: data));
       _localSize(data.count);
 
       // Refresh Values
@@ -107,7 +112,7 @@ class LobbyService extends GetxService {
 
     // @ Update Other Topics
     else {
-      _lobbies.add(LobbyModel(data));
+      _lobbies.add(LobbyModel(lobby: data));
       _lobbies.refresh();
     }
   }
@@ -166,7 +171,7 @@ class LobbyService extends GetxService {
           SonrService.setFlatMode(true);
 
           // Present View
-          if (_localFlatPeers.length > 0 && !_flatModeCancelled.value) {
+          if (_localFlatPeers.length == 0 && !_flatModeCancelled.value) {
             FlatMode.outgoing();
           } else {
             _resetTimer();

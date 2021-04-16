@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/share/sheet_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'sonr.dart';
 import 'user.dart';
@@ -17,17 +17,11 @@ class MediaService extends GetxService {
   static MediaService get to => Get.find<MediaService>();
 
   // Reactive Instances
-  final _albums = <MediaAlbum>[].obs;
-  final _allAlbum = Rx<MediaAlbum>(MediaAlbum.blank());
-  final _hasGallery = false.obs;
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
   final _state = Rx<GalleryState>(GalleryState.Initial);
 
   // Properties
-  static Rx<MediaAlbum> get allAlbum => Get.find<MediaService>()._allAlbum;
-  static RxList<MediaAlbum> get albums => Get.find<MediaService>()._albums;
-  static RxBool get hasGallery => Get.find<MediaService>()._hasGallery;
   static Rx<GalleryState> get state => Get.find<MediaService>()._state;
 
   // References
@@ -64,42 +58,18 @@ class MediaService extends GetxService {
   void onClose() {
     _externalMediaStream.cancel();
     _externalTextStream.cancel();
-    PhotoManager.clearFileCache();
     super.onClose();
   }
 
   // ^ Initialize Service ^ //
   Future<MediaService> init() async {
     // Disable Log
-    PhotoManager.setLog(false);
+    await PhotoManager.setLog(false);
 
     // Check Permissions
     if (UserService.permissions.value.hasGallery) {
       // Get Collections
       _state(GalleryState.Loading);
-
-      // Remove Non existing albums for android
-      if (DeviceService.isAndroid) {
-        await PhotoManager.editor.android.removeAllNoExistsAsset();
-      }
-
-      // Get Albums
-      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
-      var albums = <MediaAlbum>[];
-      list.forEach((element) {
-        // Validate Album
-        if (element.name != "" && element.assetCount > 1) {
-          var album = MediaAlbum(element);
-          albums.add(album);
-          if (element.isAll) {
-            _allAlbum(album);
-          }
-        }
-      });
-
-      // Set Gallery
-      _albums.assignAll(albums);
-      _albums.refresh();
       _state(GalleryState.Ready);
     }
     return this;
@@ -111,9 +81,9 @@ class MediaService extends GetxService {
     var controller = Get.find<MediaService>();
 
     // @ Check for Media
-    if (controller._incomingMedia.isNotEmpty && !Get.isBottomSheetOpen) {
+    if (controller._incomingMedia.length > 0 && !Get.isBottomSheetOpen) {
       // Open Sheet
-      Get.bottomSheet(ShareSheet.media(controller._incomingMedia), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      await Get.bottomSheet(ShareSheet.media(controller._incomingMedia), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 
       // Reset Incoming
       controller._incomingMedia.clear();
@@ -124,7 +94,7 @@ class MediaService extends GetxService {
     if (controller._incomingText.value != "" && GetUtils.isURL(controller._incomingText.value) && !Get.isBottomSheetOpen) {
       var data = await SonrCore.getURL(controller._incomingText.value);
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      await Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
 
       // Reset Incoming
       controller._incomingText("");
@@ -142,38 +112,6 @@ class MediaService extends GetxService {
   static Future<MediaItem> loadItemFromMetadata(Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     return MediaItem(asset, -1);
-  }
-
-  // ^ Method Refreshes Gallery ^ //
-  static Future refreshGallery() async {
-    if (UserService.permissions.value.hasGallery) {
-      // Get Collections
-      to._state(GalleryState.Loading);
-
-      // Remove Non existing albums for android
-      if (DeviceService.isAndroid) {
-        await PhotoManager.editor.android.removeAllNoExistsAsset();
-      }
-
-      // Get Albums
-      List<AssetPathEntity> list = await PhotoManager.getAssetPathList();
-      var albums = <MediaAlbum>[];
-      list.forEach((element) {
-        // Validate Album
-        if (element.name != "" && element.assetCount > 1) {
-          var album = MediaAlbum(element);
-          albums.add(album);
-          if (element.isAll) {
-            to._allAlbum(album);
-          }
-        }
-      });
-
-      // Set Gallery
-      to._albums.assignAll(albums);
-      to._albums.refresh();
-      to._state(GalleryState.Ready);
-    }
   }
 
   // ^ Saves Photo to Gallery ^ //
@@ -248,7 +186,7 @@ class MediaService extends GetxService {
   // ^ Saves Received Media to Gallery ^ //
   _handleSharedFiles(List<SharedMediaFile> data) async {
     if (!Get.isBottomSheetOpen && UserService.hasUser.value) {
-      Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      await Get.bottomSheet(ShareSheet.media(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 
@@ -259,7 +197,7 @@ class MediaService extends GetxService {
       var data = await SonrCore.getURL(text);
 
       // Open Sheet
-      Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
+      await Get.bottomSheet(ShareSheet.url(data), barrierColor: SonrColor.DialogBackground, isDismissible: false);
     }
   }
 }

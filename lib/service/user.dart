@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/data/model/model_permissions.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/common/contact/contact.dart';
 
@@ -187,13 +187,13 @@ class UserService extends GetxService {
       userValue.contact = contact;
 
       // @ Save to SharedPreferences, Update SonrNode
-      _userBox.write("user", userValue.writeToJson());
+      await _userBox.write("user", userValue.writeToJson());
       SonrService.setProfile(contact);
     }
     // Create New User with Contact
     else {
-      userValue = new User(contact: contact);
-      _userBox.write("user", userValue.writeToJson());
+      userValue = User(contact: contact);
+      await _userBox.write("user", userValue.writeToJson());
       _hasUser(true);
     }
     user(userValue);
@@ -255,6 +255,7 @@ class UserService extends GetxService {
   Future<bool> requestCamera() async {
     var result = await _userPermissions.value.request(UserPermissionType.Camera);
     _userPermissions.refresh();
+    SonrOverlay.back();
     return result;
   }
 
@@ -263,10 +264,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasGallery != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Gallery);
       _userPermissions.refresh();
-
-      if (result) {
-        MediaService.refreshGallery();
-      }
+      SonrOverlay.back();
       return result;
     } else {
       return true;
@@ -278,6 +276,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasLocation != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Location);
       _userPermissions.refresh();
+      SonrOverlay.back();
       return result;
     } else {
       return true;
@@ -289,6 +288,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasMicrophone != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Microphone);
       _userPermissions.refresh();
+      SonrOverlay.back();
       return result;
     } else {
       return true;
@@ -300,6 +300,7 @@ class UserService extends GetxService {
     if (_userPermissions.value.hasNotifications != true) {
       var result = await _userPermissions.value.request(UserPermissionType.Notifications);
       _userPermissions.refresh();
+      SonrOverlay.back();
       return result;
     } else {
       return true;

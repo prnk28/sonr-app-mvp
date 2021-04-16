@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 import 'package:path_provider/path_provider.dart';
 import 'preview_widget.dart';
 
@@ -87,7 +87,7 @@ class CameraView extends GetView<CameraController> {
               onPressed: () {
                 Get.back();
               },
-              icon: SonrIcon.close),
+              icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
         ),
         Obx(() {
           if (controller.videoInProgress.value) {
@@ -96,7 +96,7 @@ class CameraView extends GetView<CameraController> {
               padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
               child: Neumorphic(
                 style: SonrStyle.timeStamp,
-                child: SonrText.duration(controller.videoDuration.value),
+                child: _buildDurationText(controller.videoDuration.value),
                 padding: EdgeInsets.all(10),
               ),
             );
@@ -107,6 +107,18 @@ class CameraView extends GetView<CameraController> {
       ],
     );
   }
+
+  Widget _buildDurationText(int milliseconds) {
+    int seconds = milliseconds ~/ 1000;
+    return RichText(
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.fade,
+        text: TextSpan(children: [
+          TextSpan(
+              text: seconds.toString(), style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 16, color: SonrColor.Black)),
+          TextSpan(text: "  s", style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 16, color: SonrColor.Black)),
+        ]));
+  }
 }
 
 class _CameraToolsView extends GetView<CameraController> {
@@ -114,44 +126,40 @@ class _CameraToolsView extends GetView<CameraController> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomCenter,
-      child: NeumorphicBackground(
-        borderRadius: BorderRadius.circular(20),
-        backendColor: Colors.transparent,
-        child: Neumorphic(
-          style: SonrStyle.normal,
-          padding: EdgeInsets.only(top: 20, bottom: 40),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            // Switch Camera
-            Obx(() {
-              var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
-              return GestureDetector(
-                  child: AnimatedSlideSwitcher.slideUp(
-                      child: SonrIcon.neumorphicGradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
-                  onTap: () async {
-                    HapticFeedback.heavyImpact();
-                    controller.toggleCameraSensor();
-                  });
-            }),
-
-            // Neumorphic Camera Button Stack
-            _CaptureButton(),
-
-            // Media Gallery Picker
-            GestureDetector(
-                child: SonrIcon.neumorphicGradient(
-                  Icons.perm_media,
-                  FlutterGradientNames.octoberSilence,
-                  size: 36,
-                ),
+      child: Container(
+        decoration: Neumorph.floating(),
+        padding: EdgeInsets.only(top: 20, bottom: 40),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          // Switch Camera
+          Obx(() {
+            var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
+            return GestureDetector(
+                child: AnimatedSlideSwitcher.slideUp(
+                    child: iconData.gradientNamed(name: FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                 onTap: () async {
-                  HapticFeedback.heavyImpact();
-                  // Check for Permssions
-                  var file = await MediaPicker.sheet();
-                  SonrService.queueMedia(file);
-                  Get.offNamed("/transfer");
-                }),
-          ]),
-        ),
+                  await HapticFeedback.heavyImpact();
+                  controller.toggleCameraSensor();
+                });
+          }),
+
+          // Neumorphic Camera Button Stack
+          _CaptureButton(),
+
+          // Media Gallery Picker
+          GestureDetector(
+              child: SonrIcons.Photos.gradientNamed(
+                name: FlutterGradientNames.octoberSilence,
+                size: 36,
+              ),
+              onTap: () async {
+                await HapticFeedback.heavyImpact();
+                // Check for Permssions
+                var result = await FileService.selectMedia();
+                if (result.hasItem) {
+                  Transfer.transferWithFile(result.fileItem);
+                }
+              }),
+        ]),
       ),
     );
   }
@@ -203,9 +211,8 @@ class _CaptureButton extends GetView<CameraController> {
                   child: Obx(
                     () => Neumorphic(
                         child: Center(
-                            child: SonrIcon.neumorphicGradient(
-                          SonrIconData.camera,
-                          UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                            child: SonrIcons.Camera.gradientNamed(
+                          name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                           size: 40,
                         )),
                         style: NeumorphicStyle(
@@ -214,7 +221,7 @@ class _CaptureButton extends GetView<CameraController> {
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value
-                                ? NeumorphicBorder(color: SonrPalette.Red, width: 4)
+                                ? NeumorphicBorder(color: SonrPalette.Critical, width: 4)
                                 : NeumorphicBorder(color: SonrColor.Black, width: 0))),
                   ),
                 ),
@@ -252,11 +259,11 @@ class CameraController extends GetxController {
   ValueNotifier<double> zoomNotifier = ValueNotifier(0);
 
   // Controllers
-  PictureController pictureController = new PictureController();
-  VideoController videoController = new VideoController();
+  PictureController pictureController = PictureController();
+  VideoController videoController = VideoController();
 
   // Video Duration Handling
-  Stopwatch _stopwatch = new Stopwatch();
+  Stopwatch _stopwatch = Stopwatch();
   Timer _timer;
 
   // ** Constructer ** //
@@ -315,7 +322,7 @@ class CameraController extends GetxController {
     videoInProgress(true);
 
     _stopwatch.start();
-    _timer = new Timer.periodic(new Duration(milliseconds: 50), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
       videoDuration(_stopwatch.elapsedMilliseconds);
     });
   }

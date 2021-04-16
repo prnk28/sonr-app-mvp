@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 // ^ Lobby Data Api Model ^ //
 class LobbyModel {
@@ -15,19 +15,21 @@ class LobbyModel {
   int get size => lobby.size;
   int get length => lobby.peers.length;
 
-  LobbyModel(this.lobby) {
-    // Iterate through peers and IDs
-    lobby.peers.forEach((id, peer) {
-      peers.add(peer);
-    });
-
-    // Check if Local Lobby
-    if (lobby.isLocal) {
+  LobbyModel({this.lobby}) {
+    if (this.lobby != null) {
+      // Iterate through peers and IDs
       lobby.peers.forEach((id, peer) {
-        if (peer.properties.isFlatMode) {
-          flatPeers[id] = peer;
-        }
+        peers.add(peer);
       });
+
+      // Check if Local Lobby
+      if (lobby.isLocal) {
+        lobby.peers.forEach((id, peer) {
+          if (peer.properties.isFlatMode) {
+            flatPeers[id] = peer;
+          }
+        });
+      }
     }
   }
 

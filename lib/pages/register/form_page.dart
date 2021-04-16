@@ -1,23 +1,22 @@
-import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_app/theme/form/theme.dart';
+import 'register_controller.dart';
 
-class FormPage extends StatelessWidget {
+class FormPage extends GetView<RegisterController> {
   final hintName = SonrTextField.hintName();
   final lastNameFocus = FocusNode();
+  FormPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetX<_FormPageController>(
-      init: _FormPageController(),
-      builder: (controller) {
+    return Obx(
+      () {
         return SonrScaffold(
             body: Container(
           width: Get.width,
           height: Get.height,
           margin: EdgeInsets.only(bottom: 8, top: 72),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Image.asset("assets/images/icon_dark.png", width: 128, height: 128, colorBlendMode: BlendMode.difference),
+            SonrAssetLogo.Top.widget,
             Expanded(
               child: Form(
                 child: Column(
@@ -42,6 +41,7 @@ class FormPage extends StatelessWidget {
                         },
                         onChanged: (String value) {
                           controller.firstName(value);
+                          controller.firstName.refresh();
                         }),
 
                     // ***************** //
@@ -62,11 +62,12 @@ class FormPage extends StatelessWidget {
                           FocusScopeNode currentFocus = FocusScope.of(Get.context);
                           if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                             FocusManager.instance.primaryFocus.unfocus();
-                            controller.submit();
+                            controller.setContact();
                           }
                         },
                         onChanged: (String value) {
                           controller.lastName(value);
+                          controller.lastName.refresh();
                         }),
 
                     // ********************* //
@@ -77,10 +78,10 @@ class FormPage extends StatelessWidget {
                         padding: EdgeInsets.only(top: 16.0),
                         child: ColorButton.primary(
                           margin: EdgeWith.horizontal(88),
-                          icon: SonrIcon.accept,
+                          icon: SonrIcons.Check,
                           text: "Get Started",
                           onPressed: () {
-                            controller.submit();
+                            controller.setContact();
                           },
                           //margin: EdgeInsets.only(top: 12),
                         ),
@@ -94,56 +95,5 @@ class FormPage extends StatelessWidget {
         ));
       },
     );
-  }
-}
-
-class _FormPageController extends GetxController {
-  // Properties
-  final firstName = "".obs;
-  final lastName = "".obs;
-  final isPending = false.obs;
-
-  // Error Status
-  final firstNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
-  final lastNameStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
-  final emailStatus = Rx<TextInputValidStatus>(TextInputValidStatus.None);
-
-  // ^ Submits Contact ^ //
-  submit() async {
-    if (validate()) {
-      isPending(true);
-      // Get Contact from Values
-      var contact = new Contact();
-      contact.firstName = firstName.value;
-      contact.lastName = lastName.value;
-
-      // Remove Textfield Focus
-      FocusScopeNode currentFocus = FocusScope.of(Get.context);
-      if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-        FocusManager.instance.primaryFocus.unfocus();
-      }
-
-      // Process data.
-      await UserService.newUser(contact);
-      var result = await Get.find<UserService>().requestLocation();
-      if (result) {
-        isPending(false);
-        Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-      }
-    }
-  }
-
-  // ^ Validates Fields ^ //
-  bool validate() {
-    // Check Valid
-    bool firstNameValid = GetUtils.isAlphabetOnly(firstName.value);
-    bool lastNameValid = GetUtils.isAlphabetOnly(lastName.value);
-
-    // Update Reactive Properties
-    firstNameStatus(TextInputValidStatusUtils.fromValidBool(firstNameValid));
-    lastNameStatus(TextInputValidStatusUtils.fromValidBool(lastNameValid));
-
-    // Return Result
-    return firstNameValid && lastNameValid;
   }
 }

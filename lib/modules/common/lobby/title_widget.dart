@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
 
 // ^ Lobby Title View ^ //
 class LobbyTitleView extends StatefulWidget {
@@ -23,7 +23,7 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
       widget.title != ''
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [SonrIcon.location, Padding(padding: EdgeWith.right(16)), SonrText.subtitle(widget.title)])
+              children: [SonrIcons.Location.gradient(), Padding(padding: EdgeWith.right(16)), widget.title.h3])
           : Container(),
 
       // Build Toggle View
@@ -43,16 +43,14 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
           },
           children: [
             ToggleElement(
-                background: Center(child: SonrText.medium("Mobile", color: SonrColor.Grey, size: 18)),
-                foreground: SonrIcon.neumorphicGradient(Icons.smartphone, FlutterGradientNames.newRetrowave, size: 24)),
+                background: Center(child: "Mobile".h6),
+                foreground: SonrIcons.IPhone.gradientNamed(name: FlutterGradientNames.newRetrowave, size: 24)),
             ToggleElement(
-                background: Center(child: SonrText.medium("All", color: SonrColor.Grey, size: 18)),
-                foreground: SonrIcon.neumorphicGradient(
-                    Icons.group, UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance,
-                    size: 22.5)),
+                background: Center(child: "All".h6),
+                foreground: SonrIcons.Group.gradientNamed(
+                    name: UserService.isDarkMode ? FlutterGradientNames.happyUnicorn : FlutterGradientNames.eternalConstance, size: 22.5)),
             ToggleElement(
-                background: Center(child: SonrText.medium("Desktop", color: SonrColor.Grey, size: 18)),
-                foreground: SonrIcon.neumorphicGradient(Icons.computer, FlutterGradientNames.orangeJuice, size: 24)),
+                background: Center(child: "Desktop".h6), foreground: Icons.computer.gradientNamed(name: FlutterGradientNames.orangeJuice, size: 24)),
           ],
         ),
       ),

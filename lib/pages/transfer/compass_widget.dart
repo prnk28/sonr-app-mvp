@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/theme/form/theme.dart';
+import 'bulb_view.dart';
 import 'transfer_controller.dart';
 
 // ** Build CompassView ** //
@@ -9,7 +10,7 @@ class CompassView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Align(
+      return Container(
           alignment: Alignment.bottomCenter,
           child: Stack(alignment: Alignment.topCenter, children: [
             // Compass Total
@@ -75,7 +76,7 @@ class _CompassView extends GetView<TransferController> {
           // Interior Compass
           child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
             // Center Circle
-            Obx(() => _CompassBulb(controller.directionTitle.value, controller.cardinalTitle.value,
+            Obx(() => BulbView(controller.directionTitle.value, controller.cardinalTitle.value,
                 controller.isShiftingEnabled.value ? SonrGradient.bulbLight : SonrGradient.bulbDark)),
 
             // Spokes
@@ -216,7 +217,7 @@ class _Spoke extends StatelessWidget {
             children: [
               // Create Spoke
               RotationTransition(
-                  turns: new AlwaysStoppedAnimation(degrees(direction) / 360),
+                  turns: AlwaysStoppedAnimation(degrees(direction) / 360),
                   child: Padding(
                       padding: EdgeInsets.only(left: _kMajorSpokeWidth),
                       child: Neumorphic(
@@ -231,12 +232,12 @@ class _Spoke extends StatelessWidget {
                       ))),
               // Create Text
               RotationTransition(
-                  turns: new AlwaysStoppedAnimation(degrees(direction + 90) / 360),
+                  turns: AlwaysStoppedAnimation(degrees(direction + 90) / 360),
                   child: Padding(
                       padding: textPadding,
                       child: Text(textValue,
                           style: TextStyle(
-              fontFamily: 'Poppins',
+                            fontFamily: 'Manrope',
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: UserService.isDarkMode ? Colors.white54 : Colors.black54,
@@ -249,7 +250,7 @@ class _Spoke extends StatelessWidget {
       return Align(
           alignment: alignment(-1, direction),
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(degrees(direction) / 360),
+            turns: AlwaysStoppedAnimation(degrees(direction) / 360),
             child: Padding(
               padding: EdgeInsets.only(left: _kMinorSpokeWidth),
               child: Neumorphic(
@@ -270,7 +271,7 @@ class _Spoke extends StatelessWidget {
       return Align(
           alignment: alignment(-1, direction),
           child: RotationTransition(
-            turns: new AlwaysStoppedAnimation(degrees(direction) / 360),
+            turns: AlwaysStoppedAnimation(degrees(direction) / 360),
             child: Padding(
               padding: EdgeInsets.only(left: _kMinorSpokeWidth),
               child: Neumorphic(
@@ -312,50 +313,5 @@ class _Spoke extends StatelessWidget {
     } else {
       return (deg + 90);
     }
-  }
-}
-
-// ** Builds Compass View Bulb ** //
-class _CompassBulb extends StatelessWidget {
-  final String direction;
-  final String heading;
-  final Gradient gradient;
-  _CompassBulb(this.direction, this.heading, this.gradient);
-  @override
-  Widget build(BuildContext context) {
-    // Return View
-    return Neumorphic(
-        style: NeumorphicStyle(
-          depth: -5,
-          boxShape: NeumorphicBoxShape.circle(),
-        ),
-        margin: EdgeInsets.all(65),
-        child: Neumorphic(
-            style: NeumorphicStyle(
-              depth: 10,
-              shape: NeumorphicShape.concave,
-              boxShape: NeumorphicBoxShape.circle(),
-            ),
-            margin: EdgeInsets.all(7.5),
-            child: AnimatedContainer(
-                duration: Duration(seconds: 1),
-                decoration: BoxDecoration(gradient: gradient),
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                  SonrText.gradient(
-                    direction,
-                    FlutterGradientNames.glassWater,
-                    weight: FontWeight.w900,
-                    size: 44,
-                    key: ValueKey<String>(direction),
-                  ),
-                  AnimatedSlideSwitcher.slideDown(
-                      child: SonrText.gradient(
-                    heading,
-                    FlutterGradientNames.glassWater,
-                    weight: FontWeight.w300,
-                    size: 24,
-                    key: ValueKey<String>(heading),
-                  ))
-                ]))));
   }
 }
