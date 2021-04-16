@@ -91,12 +91,12 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       title: Container(
           alignment: Alignment.topCenter,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            PlainButton(
-              icon: SonrIcons.Add,
+            PlainIconButton(
+              icon: SonrIcons.Add.gradient(gradient: SonrPalette.primary(), size: 36),
               onPressed: controller.setAddTile,
             ),
-            PlainButton(
-              icon: SonrIcons.More_Vertical,
+            PlainIconButton(
+              icon: SonrIcons.More_Vertical.gradient(gradient: SonrPalette.secondary(), size: 36),
               onPressed: controller.setEditingMode,
             ),
           ])),
@@ -140,19 +140,15 @@ class _AvatarField extends GetView<ProfileController> {
         child: Container(
           padding: EdgeInsets.all(10),
           decoration: Neumorph.indented(shape: BoxShape.circle),
-          child: Obx(() => UserService.picture.value != null
-              ? Container(
-                  width: 120,
-                  height: 120,
-                  child: CircleAvatar(
-                    backgroundImage: MemoryImage(UserService.picture.value),
-                  ),
-                )
-              : Icon(
-                  Icons.insert_emoticon,
-                  size: 120,
-                  color: SonrColor.Black.withOpacity(0.5),
-                )),
+          child: Obx(() => Container(
+                width: 120,
+                height: 120,
+                child: UserService.picture.value.length > 0
+                    ? CircleAvatar(
+                        backgroundImage: MemoryImage(UserService.picture.value),
+                      )
+                    : SonrIcons.Avatar.greyWith(size: 120),
+              )),
         ),
       ),
     );

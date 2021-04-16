@@ -37,3 +37,36 @@ class PlainButton extends StatelessWidget {
     );
   }
 }
+
+class PlainIconButton extends StatelessWidget {
+  final Function onPressed;
+  final Widget icon;
+
+  const PlainIconButton({Key key, this.onPressed, this.icon}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    RxBool isPressed = false.obs;
+    return Container(
+      child: ObxValue<RxBool>((pressed) {
+        return GestureDetector(
+            onTapDown: (details) {
+              pressed(true);
+            },
+            onTapUp: (details) {
+              pressed(false);
+              Future.delayed(ButtonUtility.K_BUTTON_DURATION, () {
+                onPressed();
+              });
+            },
+            child: AnimatedScale(
+              scale: pressed.value ? 0.95 : 1.0,
+              child: AnimatedContainer(
+                duration: ButtonUtility.K_BUTTON_DURATION,
+                curve: Curves.ease,
+                child: icon,
+              ),
+            ));
+      }, isPressed),
+    );
+  }
+}
