@@ -334,6 +334,7 @@ class SonrIcons {
   SonrIcons._();
   static const String _fontFamily = 'SonrIcons';
 
+  /// Audio
   static const IconData Audio = IconData(0xe97c, fontFamily: _fontFamily);
   static const IconData Yoda = IconData(0xe942, fontFamily: _fontFamily);
   static const IconData Cancel = IconData(0xe94d, fontFamily: _fontFamily);

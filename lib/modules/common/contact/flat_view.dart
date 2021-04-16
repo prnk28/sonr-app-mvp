@@ -67,7 +67,7 @@ class ContactFlatCard extends StatelessWidget {
                       depth: 4,
                       onPressed: () {},
                       text: "Video".p_Grey,
-                      icon: SonrIcons.Video1.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
+                      icon: SonrIcons.Video_Camera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
                       iconPosition: WidgetPosition.Top)),
             ]),
           ),

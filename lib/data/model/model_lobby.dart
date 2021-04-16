@@ -86,7 +86,7 @@ class LobbyModel {
   List<Peer> getIOSPeers() {
     var list = <Peer>[];
     lobby.peers.forEach((id, peer) {
-      if (peer.platform == Platform.iOS) {
+      if (peer.platform == Platform.IOS) {
         list.add(peer);
       }
     });

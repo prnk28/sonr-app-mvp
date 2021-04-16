@@ -13,7 +13,7 @@ extension PlatformUtils on Platform {
     switch (this) {
       case Platform.Android:
         return FlutterGradientNames.hiddenJaguar;
-      case Platform.iOS:
+      case Platform.IOS:
         return FlutterGradientNames.morpheusDen;
       case Platform.MacOS:
         return FlutterGradientNames.octoberSilence;
@@ -82,7 +82,7 @@ extension PositionUtils on Position {
 // ^ Peer Value Checker Extensions ^ //
 extension CheckerUtils on Peer {
   bool get isOnMobile {
-    return this.platform == Platform.Android || this.platform == Platform.iOS;
+    return this.platform == Platform.Android || this.platform == Platform.IOS;
   }
 
   bool get isOnDesktop {
