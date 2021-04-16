@@ -12,7 +12,7 @@ class ShapeButton extends StatelessWidget {
   final Color color;
   final Color shadowLightColor;
   final Color shadowDarkColor;
-  final SonrIcon icon;
+  final Widget icon;
   final WidgetPosition iconPosition;
   final EdgeInsets margin;
   final EdgeInsets padding;
@@ -52,7 +52,7 @@ class ShapeButton extends StatelessWidget {
       Function onLongPressed,
       Widget text,
       Widget child,
-      SonrIcon icon,
+      Widget icon,
       Color shadowLightColor,
       Color shadowDarkColor,
       Color color = SonrColor.White,
@@ -148,7 +148,7 @@ class ShapeButton extends StatelessWidget {
     Function onLongPressed,
     Widget text,
     Widget child,
-    SonrIcon icon,
+    Widget icon,
     Color color = SonrColor.White,
     bool isDisabled = false,
     WidgetPosition iconPosition = WidgetPosition.Left,
@@ -231,7 +231,7 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.circle({
     @required Function onPressed,
     Function onLongPressed,
-    SonrIcon icon,
+    Widget icon,
     Widget text,
     Widget child,
     Color shadowLightColor,
@@ -327,7 +327,7 @@ class ShapeButton extends StatelessWidget {
   factory ShapeButton.stadium({
     @required Function onPressed,
     Function onLongPressed,
-    SonrIcon icon,
+    Widget icon,
     Widget text,
     Widget child,
     Color shadowLightColor,
@@ -459,7 +459,6 @@ class ShapeButton extends StatelessWidget {
       // Update Children
       switch (type) {
         case _ButtonType.DisabledIcon:
-          iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
           isDisabled = true;
           break;
         case _ButtonType.DisabledText:
@@ -467,7 +466,6 @@ class ShapeButton extends StatelessWidget {
           isDisabled = true;
           break;
         case _ButtonType.DisabledIconText:
-          iconChild = SonrIcon.normal(icon.data, size: icon.size, color: SonrColor.Grey);
           textChild = text;
           isDisabled = true;
           break;

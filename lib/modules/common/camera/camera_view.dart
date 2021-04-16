@@ -87,7 +87,7 @@ class CameraView extends GetView<CameraController> {
               onPressed: () {
                 Get.back();
               },
-              icon: SonrIcon.close),
+              icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
         ),
         Obx(() {
           if (controller.videoInProgress.value) {
@@ -135,7 +135,7 @@ class _CameraToolsView extends GetView<CameraController> {
             var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
             return GestureDetector(
                 child: AnimatedSlideSwitcher.slideUp(
-                    child: SonrIcon.gradient(iconData, FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
+                    child: iconData.gradientNamed(name: FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
                 onTap: () async {
                   await HapticFeedback.heavyImpact();
                   controller.toggleCameraSensor();
@@ -147,9 +147,8 @@ class _CameraToolsView extends GetView<CameraController> {
 
           // Media Gallery Picker
           GestureDetector(
-              child: SonrIcon.gradient(
-                Icons.perm_media,
-                FlutterGradientNames.octoberSilence,
+              child: SonrIcons.Photos.gradientNamed(
+                name: FlutterGradientNames.octoberSilence,
                 size: 36,
               ),
               onTap: () async {
@@ -212,9 +211,8 @@ class _CaptureButton extends GetView<CameraController> {
                   child: Obx(
                     () => Neumorphic(
                         child: Center(
-                            child: SonrIcon.gradient(
-                          SonrIconData.camera,
-                          UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                            child: SonrIcons.Camera.gradientNamed(
+                          name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                           size: 40,
                         )),
                         style: NeumorphicStyle(

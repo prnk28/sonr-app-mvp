@@ -32,14 +32,8 @@ class PeerDetailsView extends StatelessWidget {
                           child: Neumorphic(
                             padding: EdgeInsets.all(4),
                             style: SonrStyle.compassStamp,
-                            child: Row(children: [
-                              SonrIcon.normal(
-                                SonrIconData.compass,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                              Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White)
-                            ]),
+                            child:
+                                Row(children: [SonrIcons.Discover.white, Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White)]),
                           ))),
 
                   // Peer Information
@@ -55,7 +49,7 @@ class PeerDetailsView extends StatelessWidget {
                             controller.invite();
                             Get.back();
                           },
-                          icon: SonrIcon.invite,
+                          icon: SonrIcons.Share.gradient(),
                           text: "Invite".h5)),
                   Spacer()
                 ]),

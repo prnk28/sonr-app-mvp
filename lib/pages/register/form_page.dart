@@ -78,7 +78,7 @@ class FormPage extends GetView<RegisterController> {
                         padding: EdgeInsets.only(top: 16.0),
                         child: ColorButton.primary(
                           margin: EdgeWith.horizontal(88),
-                          icon: SonrIcon.accept,
+                          icon: SonrIcons.Check,
                           text: "Get Started",
                           onPressed: () {
                             controller.setContact();

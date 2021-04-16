@@ -25,7 +25,7 @@ class EditPictureView extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  PlainButton(icon: SonrIcon.close, onPressed: controller.exitToViewing),
+                  PlainButton(icon: SonrIcons.Close, onPressed: controller.exitToViewing),
                   headerText.h2,
                   Padding(padding: EdgeInsets.all(16))
                 ]),

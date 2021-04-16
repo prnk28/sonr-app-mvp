@@ -62,7 +62,7 @@ class MediaAuthView extends StatelessWidget {
                     width: Get.width - 50,
                     height: Get.height / 3,
                   )
-                : SonrIcon.withMime(card.metadata.mime, size: 60),
+                : card.metadata.mime.type.gradient(),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -75,7 +75,7 @@ class MediaAuthView extends StatelessWidget {
                 onPressed: () => CardService.handleInviteResponse(true, invite, card),
                 text: "Accept",
                 gradient: SonrPalette.tertiary(),
-                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                icon: SonrIcons.Check,
               ),
             ],
           ),

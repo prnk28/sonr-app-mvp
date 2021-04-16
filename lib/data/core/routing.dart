@@ -42,7 +42,6 @@ class SonrRouting {
 
   // ^ Services (Files, Contacts) ^ //
   static initServices() async {
-    await Get.putAsync(() => AssetService().init(), permanent: true); // First Required Service
     await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
     await Get.putAsync(() => UserService().init(), permanent: true); // Third Required Service
     await Get.putAsync(() => FileService().init(), permanent: true);
@@ -50,6 +49,7 @@ class SonrRouting {
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
+
     await Get.putAsync(() => SonrOverlay().init(), permanent: true);
     await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
   }

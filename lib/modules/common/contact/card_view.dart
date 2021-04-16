@@ -33,8 +33,7 @@ class ContactCardView extends StatelessWidget {
             // Build Profile Pic
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
-              child:
-                  Container(decoration: Neumorph.indented(shape: BoxShape.circle), padding: EdgeInsets.all(10), child: contact.profilePicture),
+              child: Container(decoration: Neumorph.indented(shape: BoxShape.circle), padding: EdgeInsets.all(10), child: contact.profilePicture),
             ),
 
             // Build Name
@@ -51,7 +50,7 @@ class ContactCardView extends StatelessWidget {
                     depth: 4,
                     onPressed: () {},
                     text: "Mobile".p_Grey,
-                    icon: SonrIcon.gradient(Icons.phone, FlutterGradientNames.highFlight, size: 36),
+                    icon: SonrIcons.Call.gradientNamed(name: FlutterGradientNames.highFlight, size: 36),
                     iconPosition: WidgetPosition.Top),
               ),
               Padding(padding: EdgeInsets.all(6)),
@@ -62,7 +61,7 @@ class ContactCardView extends StatelessWidget {
                     depth: 4,
                     onPressed: () {},
                     text: "Text".p_Grey,
-                    icon: SonrIcon.gradient(Icons.mail, FlutterGradientNames.teenParty, size: 36),
+                    icon: SonrIcons.Mail.gradientNamed(name: FlutterGradientNames.teenParty, size: 36),
                     iconPosition: WidgetPosition.Top),
               ),
               Padding(padding: EdgeInsets.all(6)),
@@ -73,7 +72,7 @@ class ContactCardView extends StatelessWidget {
                       depth: 4,
                       onPressed: () {},
                       text: "Video".p_Grey,
-                      icon: SonrIcon.gradient(Icons.video_call_rounded, FlutterGradientNames.deepBlue, size: 36),
+                      icon: SonrIcons.Video1.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
                       iconPosition: WidgetPosition.Top)),
             ]),
 
@@ -84,7 +83,7 @@ class ContactCardView extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List<Widget>.generate(contact.socials.length, (index) {
-                  return contact.socials[index].provider.icon(IconType.Gradient, size: 35);
+                  return contact.socials[index].provider.gradient(size: 35);
                 }))
           ]),
         ),

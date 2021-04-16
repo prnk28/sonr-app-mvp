@@ -228,7 +228,7 @@ class _CardGridEmpty extends GetView<GridController> {
     return Container(
       height: K_LIST_HEIGHT,
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        AssetService.randomNoFiles(),
+        AssetController.randomNoFiles(),
         label.p_Grey,
         Padding(padding: EdgeInsets.all(16)),
       ]),

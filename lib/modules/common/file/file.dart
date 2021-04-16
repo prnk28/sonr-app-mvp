@@ -44,10 +44,6 @@ extension ProfileFileUtils on Profile {
   Widget get nameText {
     return " ${this.firstName} ${this.lastName}".h6;
   }
-
-  SonrIcon get platformIcon {
-    return this.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18);
-  }
 }
 
 extension TextUtils on TransferCardItem {

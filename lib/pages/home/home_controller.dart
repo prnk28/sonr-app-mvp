@@ -66,7 +66,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     super.onClose();
   }
 
-
   // ^ Method to Handle Action Button ^ //
   void handleAction() {
     if (view.value == HomeView.Main) {
@@ -189,7 +188,7 @@ extension HomeViewUtils on HomeView {
       case HomeView.Activity:
         return Icons.notifications;
       case HomeView.Remote:
-        return SonrIconData.remote;
+        return SonrIcons.Remote;
       default:
         return Icons.deck;
     }

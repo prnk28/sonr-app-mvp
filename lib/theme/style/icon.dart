@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
@@ -8,388 +7,464 @@ import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
 import '../form/theme.dart';
 
-enum IconType { Normal, Gradient, Thumbnail }
-
-class SonrIcon extends StatelessWidget {
-  final IconData data;
-  final IconType type;
-  final double size;
-  final FlutterGradientNames gradient;
-  final Color color;
-  final List<int> thumbnail;
-  final NeumorphicStyle style;
-
-  SonrIcon(this.data, this.type, this.color, this.gradient, {this.thumbnail, this.style, this.size, Key key}) : super(key: key);
-
-  // ^ Gradient Icon with Provided Data
-  factory SonrIcon.gradient(IconData data, FlutterGradientNames gradient, {double size = 40, Key key, Color color = Colors.white}) {
-    return SonrIcon(
-      data,
-      IconType.Gradient,
-      color,
-      gradient,
-      size: size,
-      key: key,
-    );
-  }
-
-  // ^ Normal Icon with Provided Data
-  factory SonrIcon.normal(IconData data, {double size = 24, Color color = SonrColor.White, Key key}) {
-    return SonrIcon(
-      data,
-      IconType.Normal,
-      color,
-      null,
-      size: size,
-      key: key,
-    );
-  }
-
-  // ^ Payload Data from TransferCard
-  factory SonrIcon.withPreview(TransferCard card, {double size = 30, Color color = SonrColor.Black, Key key}) {
-    IconGradientData iconData;
-    switch (card.metadata.mime.type) {
-      case MIME_Type.audio:
-        iconData = IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
-        break;
-      case MIME_Type.image:
-        iconData = IconGradientData(SonrIconData.photo, FlutterGradientNames.juicyCake);
-        break;
-      case MIME_Type.text:
-        iconData = IconGradientData(SonrIconData.document, FlutterGradientNames.farawayRiver);
-        break;
-      case MIME_Type.video:
-        iconData = IconGradientData(SonrIconData.video, FlutterGradientNames.nightCall);
-        break;
-      default:
-        iconData = IconGradientData(SonrIconData.file_unknown, FlutterGradientNames.newRetrowave);
-        break;
-    }
-    return SonrIcon(
-      iconData.data,
-      IconType.Thumbnail,
-      color,
-      iconData.gradient,
-      thumbnail: card.preview,
-      size: size,
-      key: key,
-    );
-  }
-
-  // ^ Payload Data from Mime
-  factory SonrIcon.withMime(MIME mime,
-      {double size = 30, Color color = SonrColor.Black, FlutterGradientNames gradient = FlutterGradientNames.orangeJuice, Key key}) {
-    return SonrIcon(
-      mime.type.gradientData.data,
-      IconType.Gradient,
-      color,
-      gradient,
-      size: size,
-      key: key,
-    );
-  }
-
-  // ^ UI Icons ^ //
-  static SonrIcon get success => SonrIcon(SonrIconData.success, IconType.Normal, SonrColor.Black, null);
-  static SonrIcon get missing => SonrIcon(SonrIconData.missing, IconType.Normal, SonrColor.Black, null);
-  static SonrIcon get error => SonrIcon(SonrIconData.error, IconType.Normal, SonrColor.Black, null);
-  static SonrIcon get cancel => SonrIcon(SonrIconData.cancel, IconType.Normal, SonrColor.Black, null);
-  static SonrIcon get clear => SonrIcon.gradient(SonrIconData.cancel, FlutterGradientNames.happyMemories, size: 20);
-  static SonrIcon get info => SonrIcon.gradient(SonrIconData.info, FlutterGradientNames.deepBlue, size: 20);
-  static SonrIcon get back => SonrIcon.gradient(Icons.arrow_left, FlutterGradientNames.eternalConstance, size: 30);
-  static SonrIcon get forward => SonrIcon.gradient(Icons.arrow_right, FlutterGradientNames.morpheusDen, size: 30);
-
-  static SonrIcon get invite => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.aquaGuidance, size: 28);
-  static SonrIcon get leave => SonrIcon.gradient(Icons.exit_to_app_rounded, FlutterGradientNames.happyMemories, size: 28);
-  static SonrIcon get message => SonrIcon.gradient(Icons.message, FlutterGradientNames.aquaGuidance, size: 28);
-  static SonrIcon get settings => SonrIcon.gradient(SonrIconData.settings, FlutterGradientNames.northMiracle, size: 36);
-  static SonrIcon get multiSettings => SonrIcon.gradient(SonrIconData.params, FlutterGradientNames.northMiracle, size: 36);
-  static SonrIcon get send => SonrIcon.gradient(SonrIconData.share, FlutterGradientNames.glassWater, size: 24);
-  static SonrIcon get sonr => SonrIcon.gradient(SonrIconData.sonr, FlutterGradientNames.fabledSunset, size: 20);
-  static SonrIcon get screenshots => SonrIcon.gradient(SonrIconData.screenshot, FlutterGradientNames.happyAcid, size: 20);
-  static SonrIcon get photos => SonrIcon.gradient(SonrIconData.photo, FlutterGradientNames.shadyWater, size: 22);
-  static SonrIcon get panorama => SonrIcon.gradient(SonrIconData.panorama, FlutterGradientNames.aboveTheSky, size: 20);
-  static SonrIcon get video => SonrIcon.gradient(SonrIconData.video, FlutterGradientNames.octoberSilence, size: 40);
-  static SonrIcon get url => SonrIcon.gradient(SonrIconData.url, FlutterGradientNames.magicRay, size: 24);
-  static SonrIcon get location => SonrIcon.gradient(Icons.location_city, FlutterGradientNames.itmeoBranding, size: 34);
-
-  // ^ AppBar Icons ^ //
-  static SonrIcon get accept => SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 36);
-  static SonrIcon get groups => SonrIcon.gradient(Icons.group, FlutterGradientNames.itmeoBranding, size: 34);
-  static SonrIcon get search => SonrIcon.gradient(Icons.search, FlutterGradientNames.plumBath, size: 36);
-  static SonrIcon get more => SonrIcon.gradient(Icons.more_horiz_outlined, FlutterGradientNames.northMiracle, size: 36);
-  static SonrIcon get close => SonrIcon.normal(Icons.close, color: SonrPalette.Critical, size: 36);
-  static SonrIcon get add => SonrIcon.normal(Icons.add, color: SonrColor.Blue, size: 36);
-  static SonrIcon get remote => SonrIcon.normal(SonrIconData.remote, color: SonrColor.Blue, size: 28);
-
-  // ^ Build View of Icon ^ //
-  @override
-  Widget build(BuildContext context) {
-    Widget result;
-    switch (type) {
-
-      // @ Creates Normal Icon
-      case IconType.Normal:
-        result = Icon(data, size: size, color: color);
-
-        break;
-
-      // @ Creates Gradient Icon
-      case IconType.Gradient:
-        result = ShaderMask(
-          blendMode: BlendMode.modulate,
-          shaderCallback: (bounds) {
-            var grad = FlutterGradients.findByName(gradient, tileMode: TileMode.clamp);
-            return grad.createShader(bounds);
-          },
-          child: Icon(
-            data,
-            size: size,
-            color: color,
-          ),
-        );
-        break;
-
-      // @ Creates Thumbnail or Icon
-      case IconType.Thumbnail:
-        if (thumbnail.length == 0) {
-          result = ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FittedBox(
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                  child: ConstrainedBox(
-                      constraints: BoxConstraints(minWidth: 1, minHeight: 1, maxWidth: 200, maxHeight: 200), // here
-                      child: Image.memory(Uint8List.fromList(thumbnail)))));
-        } else {
-          result = Icon(data, size: size);
-        }
-        break;
-    }
-    return result;
-  }
-}
-
-class SonrIconData {
-  SonrIconData._();
-
-  static const _kFontFam = 'SonrIcons';
-  static const _kFontPkg = null;
-
-  static const IconData all_categories = IconData(0xe81b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData profile = IconData(0xe81c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData spotify = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData friends = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData youtube = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData tiktok = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData compass = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData android = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData url = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData contact = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData error = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData mac = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData windows = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData iphone = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData settings = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData params = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData photo = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData sonr = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData screenshot = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData document = IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData invite = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData video = IconData(0xe812, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData audio = IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData videocamera = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData success = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData spreadsheet = IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData pdf = IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData cancel = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData presentation = IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData missing = IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData info = IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData panorama = IconData(0xe88c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData camera = IconData(0xf039, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData github_alt = IconData(0xf09b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData file_unknown = IconData(0xf0f6, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData github = IconData(0xf113, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData youtube_alt = IconData(0xf167, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData instagram = IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData share = IconData(0xf1d9, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData medium = IconData(0xf23a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData snapchat = IconData(0xf2ac, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData snapchat_alt = IconData(0xf2ad, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData facebook = IconData(0xf300, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData facebook_fill = IconData(0xf301, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData twitter = IconData(0xf309, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData medium_alt = IconData(0xf3c7, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData media = IconData(0xf87c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData remote = IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-}
-
-class IconGradientData {
-  final FlutterGradientNames gradient;
-  final IconData _data;
-  final IconData alt;
-  const IconGradientData(this._data, this.gradient, {this.alt});
-  IconData dataWithAlt(bool isAlt) {
-    return isAlt ? alt : _data;
-  }
-
-  IconData get data {
-    return _data;
-  }
-}
-
 extension MimeIcon on MIME_Type {
-  // -- Returns IconData with Gradient -- //
-  IconGradientData get gradientData {
+  Widget gradient({double size = 32}) {
     switch (this) {
       case MIME_Type.audio:
-        return IconGradientData(SonrIconData.audio, FlutterGradientNames.flyingLemon);
-        break;
+        return SonrIcons.Sound_2.gradientNamed(name: FlutterGradientNames.flyingLemon, size: size);
       case MIME_Type.image:
-        return IconGradientData(SonrIconData.photo, FlutterGradientNames.juicyCake);
-        break;
+        return SonrIcons.Photos.gradientNamed(name: FlutterGradientNames.juicyCake, size: size);
       case MIME_Type.text:
-        return IconGradientData(SonrIconData.document, FlutterGradientNames.farawayRiver);
-        break;
+        return SonrIcons.Typing.gradientNamed(name: FlutterGradientNames.farawayRiver, size: size);
       case MIME_Type.video:
-        return IconGradientData(SonrIconData.video, FlutterGradientNames.nightCall);
-        break;
+        return SonrIcons.Video1.gradientNamed(name: FlutterGradientNames.nightCall, size: size);
       default:
-        return IconGradientData(SonrIconData.file_unknown, FlutterGradientNames.newRetrowave);
-        break;
+        return SonrIcons.Add_File.gradientNamed(name: FlutterGradientNames.newRetrowave, size: size);
+    }
+  }
+
+  Icon get black {
+    switch (this) {
+      case MIME_Type.audio:
+        return SonrIcons.Sound_2.black;
+      case MIME_Type.image:
+        return SonrIcons.Photos.black;
+      case MIME_Type.text:
+        return SonrIcons.Typing.black;
+      case MIME_Type.video:
+        return SonrIcons.Video1.black;
+      default:
+        return SonrIcons.Add_File.black;
+    }
+  }
+
+  Icon get white {
+    switch (this) {
+      case MIME_Type.audio:
+        return SonrIcons.Sound_2.white;
+      case MIME_Type.image:
+        return SonrIcons.Photos.white;
+      case MIME_Type.text:
+        return SonrIcons.Typing.white;
+      case MIME_Type.video:
+        return SonrIcons.Video1.white;
+      default:
+        return SonrIcons.Add_File.white;
     }
   }
 }
 
 extension PayloadIcon on Payload {
-  // -- Returns Icon Widget -- //
-  SonrIcon icon(IconType type, {double size = 30, Color color = Colors.white, Key key, NeumorphicStyle style}) {
-    IconData data;
-    FlutterGradientNames gradient;
+  Widget gradient({double size = 32}) {
     if (this == Payload.CONTACT) {
-      data = SonrIconData.contact;
-      gradient = FlutterGradientNames.colorfulPeach;
+      return SonrIcons.Avatar.gradientNamed(name: FlutterGradientNames.colorfulPeach, size: size);
     } else if (this == Payload.MEDIA) {
-      data = SonrIconData.video;
-      gradient = FlutterGradientNames.loveKiss;
+      return SonrIcons.Video1.gradientNamed(name: FlutterGradientNames.loveKiss, size: size);
     } else if (this == Payload.URL) {
-      data = SonrIconData.url;
-      gradient = FlutterGradientNames.partyBliss;
+      return SonrIcons.Discover.gradientNamed(name: FlutterGradientNames.partyBliss, size: size);
     } else if (this == Payload.PDF) {
-      data = SonrIconData.pdf;
-      gradient = FlutterGradientNames.royalGarden;
+      return SonrIcons.PDF.gradientNamed(name: FlutterGradientNames.royalGarden, size: size);
     } else if (this == Payload.SPREADSHEET) {
-      data = SonrIconData.spreadsheet;
-      gradient = FlutterGradientNames.itmeoBranding;
+      return SonrIcons.Spreadsheet.gradientNamed(name: FlutterGradientNames.itmeoBranding, size: size);
     } else if (this == Payload.PRESENTATION) {
-      data = SonrIconData.presentation;
-      gradient = FlutterGradientNames.orangeJuice;
+      return SonrIcons.Presentation.gradientNamed(name: FlutterGradientNames.orangeJuice, size: size);
     } else if (this == Payload.TEXT) {
-      data = SonrIconData.document;
-      gradient = FlutterGradientNames.spaceShift;
+      return SonrIcons.List_File.gradientNamed(name: FlutterGradientNames.spaceShift, size: size);
     } else {
-      data = SonrIconData.file_unknown;
-      gradient = FlutterGradientNames.midnightBloom;
+      return SonrIcons.Add_File.gradientNamed(name: FlutterGradientNames.midnightBloom, size: size);
     }
-    return SonrIcon(
-      data,
-      type,
-      color,
-      gradient,
-      size: size,
-      style: style ?? SonrStyle.gradientIcon,
-      key: key,
-    );
+  }
+
+  Icon get black {
+    if (this == Payload.CONTACT) {
+      return SonrIcons.Avatar.black;
+    } else if (this == Payload.MEDIA) {
+      return SonrIcons.Video1.black;
+    } else if (this == Payload.URL) {
+      return SonrIcons.Discover.black;
+    } else if (this == Payload.PDF) {
+      return SonrIcons.PDF.black;
+    } else if (this == Payload.SPREADSHEET) {
+      return SonrIcons.Spreadsheet.black;
+    } else if (this == Payload.PRESENTATION) {
+      return SonrIcons.Presentation.black;
+    } else if (this == Payload.TEXT) {
+      return SonrIcons.List_File.black;
+    } else {
+      return SonrIcons.Add_File.black;
+    }
+  }
+
+  Icon get white {
+    if (this == Payload.CONTACT) {
+      return SonrIcons.Avatar.white;
+    } else if (this == Payload.MEDIA) {
+      return SonrIcons.Video1.white;
+    } else if (this == Payload.URL) {
+      return SonrIcons.Discover.white;
+    } else if (this == Payload.PDF) {
+      return SonrIcons.PDF.white;
+    } else if (this == Payload.SPREADSHEET) {
+      return SonrIcons.Spreadsheet.white;
+    } else if (this == Payload.PRESENTATION) {
+      return SonrIcons.Presentation.white;
+    } else if (this == Payload.TEXT) {
+      return SonrIcons.List_File.white;
+    } else {
+      return SonrIcons.Add_File.white;
+    }
   }
 }
 
 extension PlatformIcon on Platform {
   // -- Returns Icon Widget -- //
-  SonrIcon icon(IconType type, {Color color, double size = 30, Key key, NeumorphicStyle style = const NeumorphicStyle(color: SonrColor.White)}) {
-    IconGradientData gradientData;
+  Widget gradient({double size = 32}) {
     switch (this) {
       case Platform.Android:
-        gradientData = IconGradientData(SonrIconData.android, FlutterGradientNames.glassWater);
-        break;
+        return SonrIcons.Android.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       case Platform.iOS:
-        gradientData = IconGradientData(SonrIconData.iphone, FlutterGradientNames.glassWater);
-        break;
+        return SonrIcons.IPhone.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       case Platform.MacOS:
-        gradientData = IconGradientData(SonrIconData.mac, FlutterGradientNames.glassWater);
-        break;
+        return SonrIcons.Mac.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       case Platform.Windows:
-        gradientData = IconGradientData(SonrIconData.windows, FlutterGradientNames.glassWater);
-        break;
+        return SonrIcons.Windows.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       default:
-        gradientData = IconGradientData(Icons.device_unknown, FlutterGradientNames.viciousStance);
-        break;
+        return SonrIcons.Lock.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
     }
-    return SonrIcon(gradientData.data, type, color, gradientData.gradient, size: size, key: key, style: style);
+  }
+
+  Icon get black {
+    switch (this) {
+      case Platform.Android:
+        return SonrIcons.Android.black;
+      case Platform.iOS:
+        return SonrIcons.IPhone.black;
+      case Platform.MacOS:
+        return SonrIcons.Mac.black;
+      case Platform.Windows:
+        return SonrIcons.Windows.black;
+      default:
+        return SonrIcons.Lock.black;
+    }
+  }
+
+  Icon get white {
+    switch (this) {
+      case Platform.Android:
+        return SonrIcons.Android.white;
+      case Platform.iOS:
+        return SonrIcons.IPhone.white;
+      case Platform.MacOS:
+        return SonrIcons.Mac.white;
+      case Platform.Windows:
+        return SonrIcons.Windows.white;
+      default:
+        return SonrIcons.Lock.white;
+    }
   }
 }
 
-extension SocialTileIcon on Contact_SocialTile_Provider {
-  Padding badge(
-      {Alignment alignment = Alignment.bottomRight,
-      EdgeInsets padding = const EdgeInsets.only(
-        bottom: 8.0,
-        right: 8.0,
-      ),
-      double size = 30}) {
-    return Padding(
-      padding: padding,
-      child: Align(
-        alignment: alignment,
-        child: this.icon(IconType.Gradient, size: size),
-      ),
-    );
-  }
-
-  // -- Returns Icon with Gradient -- //
-  SonrIcon icon(IconType type, {double size = 24, Color color = Colors.white, bool alternate = false, Key key}) {
-    IconGradientData gradientData;
+extension SocialIconUtils on Contact_SocialTile_Provider {
+  Widget gradient({double size = 32}) {
     switch (this) {
-      case Contact_SocialTile_Provider.Spotify:
-        gradientData = IconGradientData(SonrIconData.spotify, FlutterGradientNames.newLife);
-        break;
-      case Contact_SocialTile_Provider.TikTok:
-        gradientData = IconGradientData(SonrIconData.tiktok, FlutterGradientNames.premiumDark);
-        break;
-      case Contact_SocialTile_Provider.Instagram:
-        gradientData = IconGradientData(SonrIconData.instagram, FlutterGradientNames.ripeMalinka);
-        break;
-      case Contact_SocialTile_Provider.Twitter:
-        gradientData = IconGradientData(SonrIconData.twitter, FlutterGradientNames.partyBliss);
-        break;
-      case Contact_SocialTile_Provider.YouTube:
-        gradientData = IconGradientData(SonrIconData.youtube, FlutterGradientNames.loveKiss, alt: SonrIconData.youtube_alt);
-        break;
-      case Contact_SocialTile_Provider.Medium:
-        gradientData = IconGradientData(SonrIconData.medium, FlutterGradientNames.eternalConstance, alt: SonrIconData.medium_alt);
-        break;
-      case Contact_SocialTile_Provider.Facebook:
-        gradientData = IconGradientData(SonrIconData.facebook, FlutterGradientNames.perfectBlue, alt: SonrIconData.facebook_fill);
-        break;
       case Contact_SocialTile_Provider.Snapchat:
-        gradientData = IconGradientData(SonrIconData.snapchat, FlutterGradientNames.sunnyMorning, alt: SonrIconData.snapchat_alt);
-        break;
+        return SonrIcons.Snapchat.gradientNamed(name: FlutterGradientNames.sunnyMorning, size: size);
       case Contact_SocialTile_Provider.Github:
-        gradientData = IconGradientData(SonrIconData.github, FlutterGradientNames.solidStone, alt: SonrIconData.github_alt);
-        break;
+        return SonrIcons.Github.gradientNamed(name: FlutterGradientNames.solidStone, size: size);
+      case Contact_SocialTile_Provider.Facebook:
+        return SonrIcons.Facebook.gradientNamed(name: FlutterGradientNames.perfectBlue, size: size);
+      case Contact_SocialTile_Provider.Medium:
+        return SonrIcons.Medium.gradientNamed(name: FlutterGradientNames.eternalConstance, size: size);
+      case Contact_SocialTile_Provider.YouTube:
+        return SonrIcons.YouTube.gradientNamed(name: FlutterGradientNames.loveKiss, size: size);
+      case Contact_SocialTile_Provider.Twitter:
+        return SonrIcons.Twitter.gradientNamed(name: FlutterGradientNames.partyBliss, size: size);
+      case Contact_SocialTile_Provider.Instagram:
+        return SonrIcons.Instagram.gradientNamed(name: FlutterGradientNames.ripeMalinka, size: size);
+      case Contact_SocialTile_Provider.TikTok:
+        return SonrIcons.Tiktok.gradientNamed(name: FlutterGradientNames.premiumDark, size: size);
       default:
-        gradientData = IconGradientData(Icons.error, FlutterGradientNames.viciousStance);
-        break;
+        return SonrIcons.Spotify.gradientNamed(name: FlutterGradientNames.newLife, size: size);
     }
+  }
 
-    return SonrIcon(
-      gradientData.dataWithAlt(alternate),
-      type,
-      color,
-      gradientData.gradient,
-      size: size,
-      key: key,
+  Icon get black {
+    switch (this) {
+      case Contact_SocialTile_Provider.Snapchat:
+        return SonrIcons.Snapchat.blackWith(size: 30);
+      case Contact_SocialTile_Provider.Github:
+        return SonrIcons.Github.blackWith(size: 30);
+      case Contact_SocialTile_Provider.Facebook:
+        return SonrIcons.Facebook.blackWith(size: 30);
+      case Contact_SocialTile_Provider.Medium:
+        return SonrIcons.Medium.blackWith(size: 30);
+      case Contact_SocialTile_Provider.YouTube:
+        return SonrIcons.YouTube.blackWith(size: 30);
+      case Contact_SocialTile_Provider.Twitter:
+        return SonrIcons.Twitter.blackWith(size: 30);
+      case Contact_SocialTile_Provider.Instagram:
+        return SonrIcons.Instagram.blackWith(size: 30);
+      case Contact_SocialTile_Provider.TikTok:
+        return SonrIcons.Tiktok.blackWith(size: 30);
+      default:
+        return SonrIcons.Spotify.blackWith(size: 30);
+    }
+  }
+
+  Icon get white {
+    switch (this) {
+      case Contact_SocialTile_Provider.Snapchat:
+        return SonrIcons.Snapchat.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.Github:
+        return SonrIcons.Github.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.Facebook:
+        return SonrIcons.Facebook.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.Medium:
+        return SonrIcons.Medium.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.YouTube:
+        return SonrIcons.YouTube.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.Twitter:
+        return SonrIcons.Twitter.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.Instagram:
+        return SonrIcons.Instagram.whiteWith(size: 30);
+      case Contact_SocialTile_Provider.TikTok:
+        return SonrIcons.Tiktok.whiteWith(size: 30);
+      default:
+        return SonrIcons.Spotify.whiteWith(size: 30);
+    }
+  }
+}
+
+extension DesignIcon on IconData {
+  Icon get black {
+    return Icon(
+      this,
+      size: 24,
+      color: SonrColor.Black,
     );
   }
+
+  Widget blackWith({double size = 24}) {
+    return Icon(
+      this,
+      size: size,
+      color: SonrColor.Black,
+    );
+  }
+
+  Icon get grey {
+    return Icon(
+      this,
+      size: 24,
+      color: SonrColor.Neutral,
+    );
+  }
+
+  Widget greyWith({double size = 24}) {
+    return Icon(
+      this,
+      size: size,
+      color: SonrColor.Neutral,
+    );
+  }
+
+  Icon get white {
+    return Icon(
+      this,
+      size: 24,
+      color: SonrColor.White,
+    );
+  }
+
+  Widget whiteWith({double size = 24}) {
+    return Icon(
+      this,
+      size: size,
+      color: SonrColor.White,
+    );
+  }
+
+  Widget gradient({Gradient gradient, double size = 32}) {
+    return ShaderMask(
+      blendMode: BlendMode.modulate,
+      shaderCallback: (bounds) {
+        var grad = gradient ?? SonrPalette.primary();
+        return grad.createShader(bounds);
+      },
+      child: Icon(
+        this,
+        size: size,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget gradientNamed({@required FlutterGradientNames name, double size = 32, Key key}) {
+    return ShaderMask(
+      key: key,
+      blendMode: BlendMode.modulate,
+      shaderCallback: (bounds) {
+        return FlutterGradients.findByName(name, tileMode: TileMode.clamp).createShader(bounds);
+      },
+      child: Icon(
+        this,
+        size: size,
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class SonrIcons {
+  SonrIcons._();
+  static const String _fontFamily = 'SonrIcons';
+
+  static const IconData Stop = IconData(0xe974, fontFamily: _fontFamily);
+  static const IconData Anchor = IconData(0xe963, fontFamily: _fontFamily);
+  static const IconData Check_All = IconData(0xe966, fontFamily: _fontFamily);
+  static const IconData Close = IconData(0xe967, fontFamily: _fontFamily);
+  static const IconData Gift = IconData(0xe968, fontFamily: _fontFamily);
+  static const IconData Scan = IconData(0xe969, fontFamily: _fontFamily);
+  static const IconData Server = IconData(0xe96a, fontFamily: _fontFamily);
+  static const IconData Ship = IconData(0xe96e, fontFamily: _fontFamily);
+  static const IconData Tag = IconData(0xe96f, fontFamily: _fontFamily);
+  static const IconData Trend_Up = IconData(0xe970, fontFamily: _fontFamily);
+  static const IconData Update = IconData(0xe972, fontFamily: _fontFamily);
+  static const IconData Facebook = IconData(0xe900, fontFamily: _fontFamily);
+  static const IconData Files = IconData(0xe929, fontFamily: _fontFamily);
+  static const IconData Film = IconData(0xe93a, fontFamily: _fontFamily);
+  static const IconData Internet = IconData(0xe94f, fontFamily: _fontFamily);
+  static const IconData Link = IconData(0xe95c, fontFamily: _fontFamily);
+  static const IconData Linkedin = IconData(0xe962, fontFamily: _fontFamily);
+  static const IconData Remote = IconData(0xe922, fontFamily: _fontFamily);
+  static const IconData Photos = IconData(0xe902, fontFamily: _fontFamily);
+  static const IconData Activity = IconData(0xe910, fontFamily: _fontFamily);
+  static const IconData Apple = IconData(0xe91a, fontFamily: _fontFamily);
+  static const IconData Bug = IconData(0xe91c, fontFamily: _fontFamily);
+  static const IconData Check = IconData(0xe91f, fontFamily: _fontFamily);
+  static const IconData Backward = IconData(0xe920, fontFamily: _fontFamily);
+  static const IconData Down = IconData(0xe921, fontFamily: _fontFamily);
+  static const IconData Forward = IconData(0xe924, fontFamily: _fontFamily);
+  static const IconData Up = IconData(0xe925, fontFamily: _fontFamily);
+  static const IconData Collapse = IconData(0xe928, fontFamily: _fontFamily);
+  static const IconData Screenshot = IconData(0xe92b, fontFamily: _fontFamily);
+  static const IconData Download = IconData(0xe92c, fontFamily: _fontFamily);
+  static const IconData Grid = IconData(0xe92d, fontFamily: _fontFamily);
+  static const IconData Group = IconData(0xe92e, fontFamily: _fontFamily);
+  static const IconData Hide = IconData(0xe92f, fontFamily: _fontFamily);
+  static const IconData Image = IconData(0xe930, fontFamily: _fontFamily);
+  static const IconData Inbox = IconData(0xe931, fontFamily: _fontFamily);
+  static const IconData Instagram = IconData(0xe932, fontFamily: _fontFamily);
+  static const IconData Layers = IconData(0xe933, fontFamily: _fontFamily);
+  static const IconData Leaderboard = IconData(0xe934, fontFamily: _fontFamily);
+  static const IconData Spreadsheet = IconData(0xe935, fontFamily: _fontFamily);
+  static const IconData Login = IconData(0xe936, fontFamily: _fontFamily);
+  static const IconData Logout = IconData(0xe938, fontFamily: _fontFamily);
+  static const IconData Map = IconData(0xe939, fontFamily: _fontFamily);
+  static const IconData Medal = IconData(0xe93b, fontFamily: _fontFamily);
+  static const IconData Moon = IconData(0xe93f, fontFamily: _fontFamily);
+  static const IconData More_Horizontal = IconData(0xe940, fontFamily: _fontFamily);
+  static const IconData More_Vertical = IconData(0xe944, fontFamily: _fontFamily);
+  static const IconData Open = IconData(0xe945, fontFamily: _fontFamily);
+  static const IconData User = IconData(0xe949, fontFamily: _fontFamily);
+  static const IconData Presentation = IconData(0xe94a, fontFamily: _fontFamily);
+  static const IconData Avatar = IconData(0xe94b, fontFamily: _fontFamily);
+  static const IconData Reload = IconData(0xe94c, fontFamily: _fontFamily);
+  static const IconData Rocket = IconData(0xe94d, fontFamily: _fontFamily);
+  static const IconData Search = IconData(0xe94e, fontFamily: _fontFamily);
+  static const IconData Settings = IconData(0xe951, fontFamily: _fontFamily);
+  static const IconData Show = IconData(0xe952, fontFamily: _fontFamily);
+  static const IconData Size = IconData(0xe953, fontFamily: _fontFamily);
+  static const IconData Smart_Watch = IconData(0xe954, fontFamily: _fontFamily);
+  static const IconData Snapchat = IconData(0xe955, fontFamily: _fontFamily);
+  static const IconData Sun = IconData(0xe956, fontFamily: _fontFamily);
+  static const IconData Twitter = IconData(0xe958, fontFamily: _fontFamily);
+  static const IconData Undo = IconData(0xe959, fontFamily: _fontFamily);
+  static const IconData Warning = IconData(0xe95e, fontFamily: _fontFamily);
+  static const IconData Wind = IconData(0xe95f, fontFamily: _fontFamily);
+  static const IconData Zap = IconData(0xe960, fontFamily: _fontFamily);
+  static const IconData Android = IconData(0xe903, fontFamily: _fontFamily);
+  static const IconData Github = IconData(0xe901, fontFamily: _fontFamily);
+  static const IconData Medium = IconData(0xe907, fontFamily: _fontFamily);
+  static const IconData Spotify = IconData(0xe911, fontFamily: _fontFamily);
+  static const IconData Tiktok = IconData(0xe912, fontFamily: _fontFamily);
+  static const IconData Windows = IconData(0xe913, fontFamily: _fontFamily);
+  static const IconData YouTube = IconData(0xe915, fontFamily: _fontFamily);
+  static const IconData Add = IconData(0xe904, fontFamily: _fontFamily);
+  static const IconData Blocked_Account = IconData(0xe905, fontFamily: _fontFamily);
+  static const IconData Blocked_User = IconData(0xe906, fontFamily: _fontFamily);
+  static const IconData Call_in = IconData(0xe908, fontFamily: _fontFamily);
+  static const IconData Call_Ringing = IconData(0xe909, fontFamily: _fontFamily);
+  static const IconData Call = IconData(0xe90a, fontFamily: _fontFamily);
+  static const IconData Camera = IconData(0xe90b, fontFamily: _fontFamily);
+  static const IconData Canceled_Call = IconData(0xe90c, fontFamily: _fontFamily);
+  static const IconData Cart = IconData(0xe90d, fontFamily: _fontFamily);
+  static const IconData Category = IconData(0xe90e, fontFamily: _fontFamily);
+  static const IconData Caution_Circle = IconData(0xe90f, fontFamily: _fontFamily);
+  static const IconData Coupon = IconData(0xe916, fontFamily: _fontFamily);
+  static const IconData Discount = IconData(0xe917, fontFamily: _fontFamily);
+  static const IconData Dislike = IconData(0xe919, fontFamily: _fontFamily);
+  static const IconData Edit = IconData(0xe91d, fontFamily: _fontFamily);
+  static const IconData Favorite = IconData(0xe91e, fontFamily: _fontFamily);
+  static const IconData Hastag = IconData(0xe923, fontFamily: _fontFamily);
+  static const IconData Key = IconData(0xe926, fontFamily: _fontFamily);
+  static const IconData Liked = IconData(0xe927, fontFamily: _fontFamily);
+  static const IconData Location = IconData(0xe92a, fontFamily: _fontFamily);
+  static const IconData Muted_Mic = IconData(0xe937, fontFamily: _fontFamily);
+  static const IconData Pin = IconData(0xe93c, fontFamily: _fontFamily);
+  static const IconData Play = IconData(0xe93d, fontFamily: _fontFamily);
+  static const IconData Pocket = IconData(0xe93e, fontFamily: _fontFamily);
+  static const IconData Seen = IconData(0xe941, fontFamily: _fontFamily);
+  static const IconData Setting = IconData(0xe942, fontFamily: _fontFamily);
+  static const IconData Share = IconData(0xe943, fontFamily: _fontFamily);
+  static const IconData Silent = IconData(0xe946, fontFamily: _fontFamily);
+  static const IconData Sound_1 = IconData(0xe947, fontFamily: _fontFamily);
+  static const IconData Sound_2 = IconData(0xe948, fontFamily: _fontFamily);
+  static const IconData Switch_Camera = IconData(0xe957, fontFamily: _fontFamily);
+  static const IconData Ticket = IconData(0xe950, fontFamily: _fontFamily);
+  static const IconData Video1 = IconData(0xe95a, fontFamily: _fontFamily);
+  static const IconData About = IconData(0xe95b, fontFamily: _fontFamily);
+  static const IconData Add_File = IconData(0xe95d, fontFamily: _fontFamily);
+  static const IconData Blocked = IconData(0xe961, fontFamily: _fontFamily);
+  static const IconData Chat = IconData(0xe96b, fontFamily: _fontFamily);
+  static const IconData Checklist = IconData(0xe96c, fontFamily: _fontFamily);
+  static const IconData Circle_Clock = IconData(0xe96d, fontFamily: _fontFamily);
+  static const IconData Discover = IconData(0xe971, fontFamily: _fontFamily);
+  static const IconData Download_File = IconData(0xe973, fontFamily: _fontFamily);
+  static const IconData Filter = IconData(0xe978, fontFamily: _fontFamily);
+  static const IconData Folder = IconData(0xe979, fontFamily: _fontFamily);
+  static const IconData Home = IconData(0xe97d, fontFamily: _fontFamily);
+  static const IconData Calendar = IconData(0xe97e, fontFamily: _fontFamily);
+  static const IconData List_File = IconData(0xe981, fontFamily: _fontFamily);
+  static const IconData List = IconData(0xe982, fontFamily: _fontFamily);
+  static const IconData Lock = IconData(0xe984, fontFamily: _fontFamily);
+  static const IconData Login_Saved = IconData(0xe987, fontFamily: _fontFamily);
+  static const IconData Love = IconData(0xe988, fontFamily: _fontFamily);
+  static const IconData Mail = IconData(0xe989, fontFamily: _fontFamily);
+  static const IconData Mention = IconData(0xe98a, fontFamily: _fontFamily);
+  static const IconData Mic = IconData(0xe98b, fontFamily: _fontFamily);
+  static const IconData More_Circle = IconData(0xe98c, fontFamily: _fontFamily);
+  static const IconData More_Square = IconData(0xe98d, fontFamily: _fontFamily);
+  static const IconData Muted_Call = IconData(0xe98e, fontFamily: _fontFamily);
+  static const IconData Notification = IconData(0xe98f, fontFamily: _fontFamily);
+  static const IconData Office_Bag = IconData(0xe990, fontFamily: _fontFamily);
+  static const IconData Saved = IconData(0xe996, fontFamily: _fontFamily);
+  static const IconData Shop_Bag = IconData(0xe99c, fontFamily: _fontFamily);
+  static const IconData Square_Clock = IconData(0xe99f, fontFamily: _fontFamily);
+  static const IconData Statistic = IconData(0xe9a0, fontFamily: _fontFamily);
+  static const IconData Statistic_2 = IconData(0xe9a1, fontFamily: _fontFamily);
+  static const IconData Theme = IconData(0xe9a5, fontFamily: _fontFamily);
+  static const IconData Trash = IconData(0xe9a7, fontFamily: _fontFamily);
+  static const IconData Typing = IconData(0xe9a8, fontFamily: _fontFamily);
+  static const IconData Check_Shield = IconData(0xe9a9, fontFamily: _fontFamily);
+  static const IconData Unchecklist = IconData(0xe9aa, fontFamily: _fontFamily);
+  static const IconData Unlocked = IconData(0xe9ab, fontFamily: _fontFamily);
+  static const IconData Upload_File = IconData(0xe9ad, fontFamily: _fontFamily);
+  static const IconData Success = IconData(0xe9af, fontFamily: _fontFamily);
+  static const IconData Verified = IconData(0xe9b0, fontFamily: _fontFamily);
+  static const IconData IPhone = IconData(0xe918, fontFamily: _fontFamily);
+  static const IconData Panorama = IconData(0xe914, fontFamily: _fontFamily);
+  static const IconData Linux = IconData(0xe91b, fontFamily: _fontFamily);
+  static const IconData PDF = IconData(0xe964, fontFamily: _fontFamily);
+  static const IconData Mac = IconData(0xe965, fontFamily: _fontFamily);
 }

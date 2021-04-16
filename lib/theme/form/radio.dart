@@ -139,7 +139,7 @@ class SonrRadioRowOption {
   }
 
   // * Static Icon Child * //
-  factory SonrRadioRowOption.icon(SonrIcon icon, String title) {
+  factory SonrRadioRowOption.icon(Icon icon, String title) {
     return SonrRadioRowOption(child: icon, title: title);
   }
 

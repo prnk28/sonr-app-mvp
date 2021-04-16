@@ -3,7 +3,7 @@ import 'utility.dart';
 
 class PlainButton extends StatelessWidget {
   final Function onPressed;
-  final SonrIcon icon;
+  final IconData icon;
   final String text;
   final Widget child;
   final WidgetPosition iconPosition;

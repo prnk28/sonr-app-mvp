@@ -100,10 +100,6 @@ extension WidgetUtils on Peer {
     }
   }
 
-  SonrIcon get platformIcon {
-    return this.platform.icon(IconType.Gradient, size: 24);
-  }
-
   Widget get platformExpanded {
     return RichText(
         textAlign: TextAlign.center,

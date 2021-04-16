@@ -41,7 +41,7 @@ class _DefaultButtonView extends GetView<ShareController> {
         onPressed: controller.toggle,
         style: SonrStyle.shareButton,
         child: Container(
-          child: SonrIcon.send,
+          child: SonrIcons.Share.white,
           padding: EdgeWith.vertical(8),
         ));
   }

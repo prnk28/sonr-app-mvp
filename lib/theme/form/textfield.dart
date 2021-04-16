@@ -234,7 +234,7 @@ class SonrSearchField extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.only(top: 8),
                       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                        SonrIcon.gradient(Icons.search, FlutterGradientNames.amourAmour, size: 30),
+                        SonrIcons.Search.gradientNamed(name: FlutterGradientNames.amourAmour, size: 30),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 4.0),

@@ -103,7 +103,7 @@ flutter:
 
   - family:  SonrIcons
     fonts:
-      - asset: assets/fonts/sonr_icons.ttf
+      - asset: assets/fonts/Sonricons.ttf
 
   # -- Media --
   assets:

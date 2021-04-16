@@ -70,12 +70,14 @@ class ShareSheet extends GetView<ShareController> {
                   // @ Top Banner
                   Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     // Bottom Left Close/Cancel Button
-                    ShapeButton.circle(onPressed: () => Get.back(), icon: SonrIcon.close),
+                    ShapeButton.circle(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
 
                     "Share".h2,
 
                     // @ Top Right Confirm Button
-                    ShapeButton.circle(onPressed: () => controller.selectExternal(payload, url, mediaFile), icon: SonrIcon.accept),
+                    ShapeButton.circle(
+                        onPressed: () => controller.selectExternal(payload, url, mediaFile),
+                        icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.hiddenJaguar)),
                   ]),
 
                   // @ Window Content
@@ -142,7 +144,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Sonr Icon
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: SonrIcon.url,
+          child: SonrIcons.Link.white,
         ),
 
         // @ Indent View
@@ -196,7 +198,7 @@ class _ShareItemURL extends StatelessWidget {
                 // URL Icon
                 Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcon.url,
+                  child: SonrIcons.Link.white,
                 ),
 
                 // Link Preview
@@ -237,14 +239,14 @@ class _ShareItemURL extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-decoration: Neumorph.indented(),
+              decoration: Neumorph.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
                 // URL Icon
                 Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcon.url,
+                  child: SonrIcons.Link.white,
                 ),
 
                 // Link Preview
@@ -265,7 +267,7 @@ decoration: Neumorph.indented(),
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(
-decoration: Neumorph.indented(),
+        decoration: Neumorph.indented(),
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

@@ -50,7 +50,7 @@ class FileCardView extends StatelessWidget {
                         child: Container(
                             decoration: Neumorph.indented(),
                             padding: EdgeInsets.all(20),
-                            child: Container(child: card.payload.icon(IconType.Gradient, size: (Get.height / 4))))),
+                            child: Container(child: card.payload.gradient(size: (Get.height / 4))))),
 
                     // Info Button
                     Align(
@@ -58,7 +58,7 @@ class FileCardView extends StatelessWidget {
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ShapeButton.circle(
-                            icon: SonrIcon.info,
+                            icon: SonrIcons.About.gradient(),
                             onPressed: () {
                               SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
                             },
@@ -99,7 +99,7 @@ class _FileCardInfo extends StatelessWidget {
 
             // Owner
             Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              card.owner.platform.icon(IconType.Normal, color: Colors.grey[600], size: 18),
+              card.owner.platform.gradient(),
               " ${card.owner.firstName} ${card.owner.lastName}".h6,
             ]),
 
@@ -159,12 +159,12 @@ class _FileCardInfo extends StatelessWidget {
                   });
                 },
                 text: "Delete".h6,
-                icon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+                icon: SonrIcons.Trash.grey,
               ),
               ShapeButton.rectangle(
                 onPressed: () {},
                 text: "Save".h6,
-                icon: SonrIcon.normal(Icons.download_rounded, size: 18, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
+                icon: SonrIcons.Download_File.white,
               ),
             ]),
           ]),

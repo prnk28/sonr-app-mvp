@@ -23,19 +23,19 @@ class SocialView extends StatelessWidget {
           // Medium
           case Contact_SocialTile_Provider.Medium:
             var posts = controller.medium.value;
-            return Stack(children: [_MediumItem(posts, 0, true), item.provider.badge()]);
+            return Stack(children: [_MediumItem(posts, 0, true), item.provider.black]);
             break;
 
           // Twitter
           case Contact_SocialTile_Provider.Twitter:
             var twitter = controller.twitter.value;
-            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.badge()]);
+            return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.black]);
             break;
 
           // Youtube
           case Contact_SocialTile_Provider.YouTube:
             var youtube = controller.youtube.value;
-            return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.badge()]);
+            return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.black]);
             break;
 
           // Other
@@ -47,8 +47,7 @@ class SocialView extends StatelessWidget {
 
       // @ Build Loading View
       else {
-        var icon = item.provider.icon(IconType.Gradient);
-        return AnimatedWaveIcon(icon.data, gradient: icon.gradient);
+        return item.provider.gradient();
       }
     });
   }

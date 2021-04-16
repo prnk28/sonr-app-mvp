@@ -49,7 +49,7 @@ class ContactAuthView extends StatelessWidget {
 
               // Phone/ Website
               Row(children: [
-                card.owner.platform.icon(IconType.Gradient, color: Colors.grey[700], size: 20),
+                card.owner.platform.gradient(size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
                 card.contact.phoneNumber,
@@ -63,7 +63,7 @@ class ContactAuthView extends StatelessWidget {
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
           child: Row(
               children: List.generate(card.contact.socials.length, (index) {
-            return card.contact.socials[index].provider.icon(IconType.Gradient, size: 32);
+            return card.contact.socials[index].provider.gradient(size: 32);
           })),
         ),
         Divider(),
@@ -85,7 +85,7 @@ class ContactAuthView extends StatelessWidget {
               },
               text: "Accept",
               gradient: SonrPalette.tertiary(),
-              icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+              icon: SonrIcons.Check,
             ),
           ],
         ),

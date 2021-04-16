@@ -64,7 +64,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.primary(
               onPressed: () => launchURL(card.url.link),
               text: "Open",
-              icon: SonrIcon.gradient(Icons.open_in_browser_rounded, FlutterGradientNames.aquaGuidance, size: 28),
+              icon: SonrIcons.Discover,
             ),
           ],
         ),
@@ -106,7 +106,7 @@ class URLAuthView extends StatelessWidget {
                 // URL Icon
                 Padding(
                   padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcon.url,
+                  child: SonrIcons.Link.gradient(),
                 ),
 
                 // Link Preview
@@ -152,10 +152,7 @@ class URLAuthView extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
                 // URL Icon
-                Padding(
-                  padding: const EdgeInsets.only(left: 14.0, right: 8),
-                  child: SonrIcon.url,
-                ),
+                Padding(padding: const EdgeInsets.only(left: 14.0, right: 8), child: SonrIcons.Link.gradient()),
 
                 // Link Preview
                 Container(

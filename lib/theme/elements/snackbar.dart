@@ -28,7 +28,7 @@ class SonrSnack {
 
   // ^ Custom Alert ^ //
   factory SonrSnack.remote({@required String message, int duration = 45000, Color color = Colors.purple}) {
-    return SonrSnack("Remote Code", message, SonrIcon.remote, color, duration, true);
+    return SonrSnack("Remote Code", message, SonrIcons.Remote.white, color, duration, true);
   }
 
   // ^ Custom Alert ^ //
@@ -38,7 +38,7 @@ class SonrSnack {
 
   // ^ Cancelled Operation ^ //
   factory SonrSnack.cancelled(String message) {
-    return SonrSnack("Cancelled.", message, SonrIcon.cancel, Colors.yellow, 2600, false);
+    return SonrSnack("Cancelled.", message, SonrIcons.Stop.white, Colors.yellow, 2600, false);
   }
 
   // ^ Error on Operation ^ //
@@ -54,35 +54,35 @@ class SonrSnack {
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
           DeviceService.playSound(type: UISoundType.Fatal);
-          return SonrSnack("Error", error.message, SonrIcon.error, Colors.red, 2600, false);
+          return SonrSnack("Error", error.message, SonrIcons.Caution_Circle.white, Colors.red, 2600, false);
 
         // Yellow - Title Warning
         default:
           DeviceService.playSound(type: UISoundType.Warning);
-          return SonrSnack("Warning", error.message, SonrIcon.missing, Colors.yellow, 2600, false);
+          return SonrSnack("Warning", error.message, SonrIcons.Warning.white, Colors.yellow, 2600, false);
       }
     }
     // @ App Error
     else {
       DeviceService.playSound(type: UISoundType.Warning);
-      return SonrSnack("Error", message, SonrIcon.error, Colors.red, 2600, false);
+      return SonrSnack("Error", message, SonrIcons.Caution_Circle.white, Colors.red, 2600, false);
     }
   }
 
   // ^ Invalid Operation ^ //
   factory SonrSnack.invalid(String message) {
-    return SonrSnack("Uh Oh!", message, SonrIcon.missing, Colors.orange[900], 2600, false);
+    return SonrSnack("Uh Oh!", message, SonrIcons.Warning.white, Colors.orange[900], 2600, false);
   }
 
   // ^ Missing Data ^ //
   factory SonrSnack.missing(String message, {bool isLast = false}) {
     // Get Missing Title
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
-    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcon.missing, SonrPalette.Critical, 2600, false);
+    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcons.Warning.white, SonrPalette.Critical, 2600, false);
   }
 
   // ^ Succesful Operation ^ //
   factory SonrSnack.success(String message) {
-    return SonrSnack("Success!!", message, SonrIcon.success, Colors.green, 2600, true);
+    return SonrSnack("Success!!", message, SonrIcons.Success.white, Colors.green, 2600, true);
   }
 }

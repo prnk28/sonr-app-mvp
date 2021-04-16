@@ -92,11 +92,11 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
           alignment: Alignment.topCenter,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             PlainButton(
-              icon: SonrIcon.gradient(Icons.add, FlutterGradientNames.morpheusDen),
+              icon: SonrIcons.Add,
               onPressed: controller.setAddTile,
             ),
             PlainButton(
-              icon: SonrIcon.more,
+              icon: SonrIcons.More_Vertical,
               onPressed: controller.setEditingMode,
             ),
           ])),

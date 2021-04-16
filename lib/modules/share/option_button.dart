@@ -101,7 +101,7 @@ class ShareContactButtonItem extends GetView<ShareController> {
                 width: 55,
                 child: Center(
                     child: rive.value == null
-                        ? SonrIcon.gradient(Icons.person, FlutterGradientNames.phoenixStart, size: 55)
+                        ? SonrIcons.User.gradientNamed(name: FlutterGradientNames.phoenixStart, size: 55)
                         : Rive(
                             artboard: rive.value,
                           ))),

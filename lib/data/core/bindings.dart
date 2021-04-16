@@ -15,6 +15,7 @@ import 'package:sonr_app/theme/form/theme.dart';
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
+    Get.put<AssetController>(AssetController(), permanent: true);
     Get.lazyPut<CameraController>(() => CameraController());
   }
 }

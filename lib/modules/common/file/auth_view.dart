@@ -79,7 +79,7 @@ class FileAuthView extends StatelessWidget {
                   onPressed: () => CardService.handleInviteResponse(true, invite, card),
                   text: "Accept",
                   gradient: SonrPalette.tertiary(),
-                  icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                  icon: SonrIcons.Check,
                 ),
               ],
             ),

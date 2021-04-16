@@ -71,7 +71,7 @@ class MediaPreviewView extends StatelessWidget {
                             onDecision(true);
                           },
                           text: "Continue".h6_Grey,
-                          icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28)),
+                          icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28)),
                     ),
                   ]),
                 )

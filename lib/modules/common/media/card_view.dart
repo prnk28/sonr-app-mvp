@@ -85,7 +85,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                       padding: const EdgeInsets.all(8.0),
                       child: ShapeButton.circle(
                         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-                        icon: SonrIcon.info,
+                        icon: SonrIcons.About.gradient(),
                         onPressed: () {
                           SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
                         },
@@ -137,7 +137,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                   boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                   depth: -10,
                 ),
-                child: SonrIcon.withMime(widget.card.metadata.mime, size: 60)),
+                child: widget.card.metadata.mime.type.gradient(size: 60)),
           ),
         ),
       );
@@ -200,7 +200,7 @@ class _MediaCardInfo extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [card.owner.platformIcon, card.owner.nameText]),
+                children: [card.owner.platform.gradient(), card.owner.nameText]),
 
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
@@ -248,9 +248,9 @@ class _MediaCardInfo extends StatelessWidget {
                   SonrOverlay.back();
                   CardService.deleteCard(card);
                 },
-                defaultIcon: SonrIcon.normal(Icons.delete_forever_rounded, size: 18),
+                defaultIcon: SonrIcons.Trash,
                 defaultText: "Delete",
-                confirmIcon: SonrIcon.success,
+                confirmIcon: SonrIcons.Check,
                 confirmText: "Confirm?",
               ),
             ]),

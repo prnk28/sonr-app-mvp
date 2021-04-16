@@ -42,17 +42,17 @@ class ConfirmButton extends StatefulWidget {
     @required Function onConfirmed,
     // Default
     Widget defaultChild,
-    SonrIcon defaultIcon,
+    IconData defaultIcon,
     String defaultText,
 
     // Confirm
     Widget confirmChild,
-    SonrIcon confirmIcon,
+    IconData confirmIcon,
     String confirmText,
 
     // Complete
     Widget completeChild,
-    SonrIcon completeIcon,
+    IconData completeIcon,
     String completeText,
 
     // Properties
@@ -89,7 +89,7 @@ class ConfirmButton extends StatefulWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Saved!", null),
+      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.Trash, "Saved!", null),
       tooltip: tooltip,
       width: width,
       padding: padding,
@@ -103,17 +103,17 @@ class ConfirmButton extends StatefulWidget {
     @required Function onConfirmed,
     // Default
     Widget defaultChild,
-    SonrIcon defaultIcon,
+    IconData defaultIcon,
     String defaultText,
 
     // Confirm
     Widget confirmChild,
-    SonrIcon confirmIcon,
+    IconData confirmIcon,
     String confirmText,
 
     // Complete
     Widget completeChild,
-    SonrIcon completeIcon,
+    IconData completeIcon,
     String completeText,
 
     // Properties
@@ -150,7 +150,7 @@ class ConfirmButton extends StatefulWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcon.normal(Icons.delete_forever), "Deleted.", null),
+      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.Trash, "Deleted.", null),
       tooltip: tooltip,
       width: width,
       padding: padding,

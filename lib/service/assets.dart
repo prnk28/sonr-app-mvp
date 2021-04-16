@@ -80,21 +80,21 @@ extension IconNetworkUtils on SonrAssetIcon {
   Widget get widget {
     switch (this) {
       case SonrAssetIcon.ProfileDefault:
-        return AssetService.to._profileDefaultIcon;
+        return AssetController.to._profileDefaultIcon;
       case SonrAssetIcon.RemoteDefault:
-        return AssetService.to._remoteDefaultIcon;
+        return AssetController.to._remoteDefaultIcon;
       case SonrAssetIcon.ActivityDefault:
-        return AssetService.to._activityDefaultIcon;
+        return AssetController.to._activityDefaultIcon;
       case SonrAssetIcon.HomeDefault:
-        return AssetService.to._homeDefaultIcon;
+        return AssetController.to._homeDefaultIcon;
       case SonrAssetIcon.ProfileSelected:
-        return AssetService.to._profileSelectIcon;
+        return AssetController.to._profileSelectIcon;
       case SonrAssetIcon.RemoteSelected:
-        return AssetService.to._remoteSelectIcon;
+        return AssetController.to._remoteSelectIcon;
       case SonrAssetIcon.ActivitySelected:
-        return AssetService.to._activitySelectIcon;
+        return AssetController.to._activitySelectIcon;
       case SonrAssetIcon.HomeSelected:
-        return AssetService.to._homeSelectIcon;
+        return AssetController.to._homeSelectIcon;
     }
     return Container();
   }
@@ -142,21 +142,21 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
   Widget get widget {
     switch (this) {
       case SonrAssetIllustration.NoFiles1:
-        return AssetService.to._noFiles1;
+        return AssetController.to._noFiles1;
       case SonrAssetIllustration.NoFiles2:
-        return AssetService.to._noFiles2;
+        return AssetController.to._noFiles2;
       case SonrAssetIllustration.NoFiles3:
-        return AssetService.to._noFiles3;
+        return AssetController.to._noFiles3;
       case SonrAssetIllustration.NoFiles4:
-        return AssetService.to._noFiles4;
+        return AssetController.to._noFiles4;
       case SonrAssetIllustration.LocationAccess:
-        return AssetService.to._locationAccess;
+        return AssetController.to._locationAccess;
       case SonrAssetIllustration.MediaAccess:
-        return AssetService.to._mediaAccess;
+        return AssetController.to._mediaAccess;
       case SonrAssetIllustration.CameraAccess:
-        return AssetService.to._cameraAccess;
+        return AssetController.to._cameraAccess;
       case SonrAssetIllustration.ConnectionLost:
-        return AssetService.to._noConnection;
+        return AssetController.to._noConnection;
     }
     return Container();
   }
@@ -189,16 +189,16 @@ extension LogoNetworkUtils on SonrAssetLogo {
   // ^ Get Logo ^ //
   Widget get widget {
     if (this == SonrAssetLogo.Top || this == SonrAssetLogo.TopWhite || this == SonrAssetLogo.TopBlack) {
-      return AssetService.to._logoTop;
+      return AssetController.to._logoTop;
     }
-    return AssetService.to._logoSide;
+    return AssetController.to._logoSide;
   }
 }
 
-class AssetService extends GetxService {
+class AssetController extends GetxController {
   // Service Accessors
-  static bool get isRegistered => Get.isRegistered<AssetService>();
-  static AssetService get to => Get.find<AssetService>();
+  static bool get isRegistered => Get.isRegistered<AssetController>();
+  static AssetController get to => Get.find<AssetController>();
 
   // @ Illustrations: Access/Connection
   Image _cameraAccess = Image(image: NetworkImage(SonrAssetIllustration.CameraAccess.link), fit: BoxFit.fitHeight);
@@ -254,23 +254,23 @@ class AssetService extends GetxService {
   LottieIcon _remoteSelectIcon = LottieIcon(link: SonrAssetIcon.RemoteSelected.link, size: 38, key: ValueKey<bool>(true));
 
   // * Constructer * //
-  Future<AssetService> init() async {
+  onInit() async {
     // Load Icons
-    await precacheImage(_homeDefaultIcon.image, Get.context);
-    await precacheImage(_profileDefaultIcon.image, Get.context);
-    await precacheImage(_activityDefaultIcon.image, Get.context);
-    await precacheImage(_remoteDefaultIcon.image, Get.context);
+    precacheImage(_homeDefaultIcon.image, Get.context);
+    precacheImage(_profileDefaultIcon.image, Get.context);
+    precacheImage(_activityDefaultIcon.image, Get.context);
+    precacheImage(_remoteDefaultIcon.image, Get.context);
 
     // Load Logos
-    await precacheImage(_logoTop.image, Get.context);
-    await precacheImage(_logoSide.image, Get.context);
+    precacheImage(_logoTop.image, Get.context);
+    precacheImage(_logoSide.image, Get.context);
 
     // Load Illustrations
-    await precacheImage(_cameraAccess.image, Get.context);
-    await precacheImage(_locationAccess.image, Get.context);
-    await precacheImage(_mediaAccess.image, Get.context);
-    await precacheImage(_noConnection.image, Get.context);
-    return this;
+    precacheImage(_cameraAccess.image, Get.context);
+    precacheImage(_locationAccess.image, Get.context);
+    precacheImage(_mediaAccess.image, Get.context);
+    precacheImage(_noConnection.image, Get.context);
+    super.onInit();
   }
 
   // ^ Static Get Icon for Home Tab Bar ^ //

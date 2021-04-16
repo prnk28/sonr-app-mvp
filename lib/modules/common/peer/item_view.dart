@@ -52,7 +52,7 @@ class _PeerListItemState extends State<PeerListItem> {
                       }
                     },
                     text: "Invite",
-                    icon: SonrIcon.invite,
+                    icon: SonrIcons.Share,
                   ),
                 ],
               ),

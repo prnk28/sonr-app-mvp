@@ -83,7 +83,7 @@ class AlertOverlayView extends StatelessWidget {
                   SonrOverlay.back();
                 }
               },
-              icon: SonrIcon.accept,
+              icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife),
               text: buttonText.h6,
             ),
           ),
@@ -243,7 +243,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
                     SonrOverlay.back();
                   }
                 },
-                icon: SonrIcon.gradient(Icons.check, FlutterGradientNames.newLife, size: 28),
+                icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28),
                 text: acceptTitle.h6,
               ),
             ),

@@ -91,7 +91,7 @@ class LottieShareContainer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = useAnimationController();
-    return Lottie.asset(
+    return Lottie.network(
       type.link,
       controller: controller,
       width: 55,

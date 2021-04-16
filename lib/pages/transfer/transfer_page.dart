@@ -57,8 +57,8 @@ class RemoteLobbyFullView extends HookWidget {
     final remoteStream = LobbyService.useRemoteLobby(info);
     return SonrScaffold(
         appBar: DesignAppBar(
-          action: PlainButton(icon: SonrIcon.leave, onPressed: () => Get.find<TransferController>().stopRemote()),
-          leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
+          action: PlainButton(icon: SonrIcons.Logout, onPressed: () => Get.find<TransferController>().stopRemote()),
+          leading: PlainButton(icon: SonrIcons.Close, onPressed: () => Get.offNamed("/home")),
           title: _buildTitleWidget(),
         ),
         body: ListView.builder(
@@ -94,9 +94,9 @@ class LocalLobbyView extends GetView<TransferController> {
     return Obx(() => SonrScaffold(
           appBar: DesignAppBar(
             action: controller.currentPayload != Payload.CONTACT
-                ? PlainButton(icon: SonrIcon.remote, onPressed: () async => controller.startRemote())
+                ? PlainButton(icon: SonrIcons.Remote, onPressed: () async => controller.startRemote())
                 : Container(),
-            leading: PlainButton(icon: SonrIcon.close, onPressed: () => Get.offNamed("/home")),
+            leading: PlainButton(icon: SonrIcons.Close, onPressed: () => Get.offNamed("/home")),
             title: Container(child: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet()))),
           ),
           body: Stack(
