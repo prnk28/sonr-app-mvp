@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'social_view.dart';
 import 'tile_controller.dart';
 

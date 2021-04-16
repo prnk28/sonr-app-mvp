@@ -1,5 +1,5 @@
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 enum UserPermissionType {
   Camera,

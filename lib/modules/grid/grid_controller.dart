@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 

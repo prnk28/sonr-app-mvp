@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:sonr_core/sonr_core.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 // ^ Lobby Data Api Model ^ //
 class LobbyModel {

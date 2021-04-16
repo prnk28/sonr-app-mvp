@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/common/tile/tile_item.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -92,7 +92,7 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
           alignment: Alignment.topCenter,
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             PlainIconButton(
-              icon: SonrIcons.Add.gradient(gradient: SonrPalette.primary(), size: 36),
+              icon: SonrIcons.Plus.gradient(gradient: SonrPalette.primary(), size: 36),
               onPressed: controller.setAddTile,
             ),
             PlainIconButton(

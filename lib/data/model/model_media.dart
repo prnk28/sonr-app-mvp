@@ -5,7 +5,7 @@ import 'package:open_file/open_file.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/service/sonr.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 const K_ALBUM_PAGE_SIZE = 40;
 

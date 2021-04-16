@@ -9,7 +9,7 @@ import 'package:sonr_app/modules/remote/remote_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 // ^ Initial Controller Bindings ^ //
 class InitialBinding implements Bindings {

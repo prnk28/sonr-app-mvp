@@ -1,6 +1,6 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'remote_controller.dart';
 
 // ^ Main Card View ^ //

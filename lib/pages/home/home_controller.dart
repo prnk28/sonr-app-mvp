@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeView { Main, Profile, Activity, Remote }

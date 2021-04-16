@@ -5,7 +5,7 @@ import 'package:motion_sensors/motion_sensors.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 class LobbyService extends GetxService {

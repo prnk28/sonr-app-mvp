@@ -5,7 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
-import '../form/theme.dart';
+import '../theme.dart';
 
 extension MimeIcon on MIME_Type {
   Widget gradient({double size = 32}) {
@@ -330,7 +330,11 @@ extension DesignIcon on IconData {
   }
 }
 
+// ^ Sonr Icon Class ^ //
 class SonrIcons {
+  // * [^.*(\s+([a-zA-Z]+\s+)+).*[a-zA-Z]+.*[a-zA-Z]+.*[a-zA-Z]+.*$] > Regex Expression for Comment Generation * //
+  //! Dont use underscores for fonts //
+
   SonrIcons._();
   static const String _fontFamily = 'SonrIcons';
 

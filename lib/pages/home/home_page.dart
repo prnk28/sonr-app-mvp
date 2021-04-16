@@ -2,7 +2,7 @@ import 'package:sonr_app/modules/grid/grid_view.dart';
 import 'package:sonr_app/modules/share/index_view.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/theme/form/theme.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/modules/profile/profile_view.dart';
 import 'package:sonr_app/modules/remote/remote_view.dart';
 import 'action_button.dart';

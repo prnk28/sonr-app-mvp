@@ -1,7 +1,7 @@
 export 'lottie.dart';
 export 'rive.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../form/theme.dart';
+import '../theme.dart';
 
 // ^ Animated Scale  ^ //
 class AnimatedScale extends StatefulWidget {

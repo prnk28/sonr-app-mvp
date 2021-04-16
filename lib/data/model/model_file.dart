@@ -10,18 +10,27 @@ class FileItem {
   final String path;
   final Payload payload;
   final MIME mime;
+  List<int> thumbnail;
 
-  // ^ Retreives Metadata Info ^
+  // # Retreives Metadata Info
   bool get isAudio => mime.type == MIME_Type.audio;
   bool get isImage => mime.type == MIME_Type.image;
   bool get isVideo => mime.type == MIME_Type.video;
+  bool get hasThumbnail => thumbnail != null;
 
-  // ^ Retreives Metadata Protobuf ^
+  // # Retreives Metadata Protobuf
   Metadata_Properties get properties => Metadata_Properties(payload: payload, isAudio: isAudio, isImage: isImage, isVideo: isVideo);
   Metadata get metadata => Metadata(name: name, size: size, path: path, mime: mime, properties: properties);
 
   // * Constructer * //
   FileItem(this.path, this.name, this.size, this.mime, this.payload);
+
+  // ^ Method to Add a thumbnail ^ //
+  void addThumbnail(List<int> thumbnail) {
+    if (thumbnail.length > 0) {
+      this.thumbnail = thumbnail;
+    }
+  }
 
   // @ Factory: Capture
   factory FileItem.capture(MediaFile capture) {
