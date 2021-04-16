@@ -10,6 +10,7 @@ class FileItem {
   final String path;
   final Payload payload;
   final MIME mime;
+  final FilePickerResult result;
   List<int> thumbnail;
 
   // # Retreives Metadata Info
@@ -23,7 +24,7 @@ class FileItem {
   Metadata get metadata => Metadata(name: name, size: size, path: path, mime: mime, properties: properties);
 
   // * Constructer * //
-  FileItem(this.path, this.name, this.size, this.mime, this.payload);
+  FileItem(this.path, this.name, this.size, this.mime, this.payload, {this.result});
 
   // ^ Method to Add a thumbnail ^ //
   void addThumbnail(List<int> thumbnail) {
@@ -44,7 +45,7 @@ class FileItem {
     var name = file.name;
     var size = file.size;
     var ext = file.extension;
-    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext));
+    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext), result: data);
   }
 
   // @ Factory: Media - (Audio, Image, Video)
@@ -53,7 +54,7 @@ class FileItem {
     var path = file.path;
     var name = file.name;
     var size = file.size;
-    return FileItem(path, name, size, _retreiveMime(name), Payload.MEDIA);
+    return FileItem(path, name, size, _retreiveMime(name), Payload.MEDIA, result: data);
   }
 
   // # File Mime from Name

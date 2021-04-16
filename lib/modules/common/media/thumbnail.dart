@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:path/path.dart';
+import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -10,8 +11,9 @@ import 'package:sonr_app/theme/theme.dart';
 class Thumbnail extends StatefulWidget {
   final Size size;
   final File image;
+  final FileItem file;
 
-  const Thumbnail({Key key, this.size, this.image}) : super(key: key);
+  const Thumbnail({Key key, this.size, this.image, this.file}) : super(key: key);
   @override
   _ThumbnailState createState() => _ThumbnailState();
 }

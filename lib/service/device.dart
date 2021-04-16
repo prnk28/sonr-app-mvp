@@ -129,7 +129,7 @@ class DeviceService extends GetxService {
     await to._audioPlayer.play(type.file);
   }
 
-  // ^ Method Determinse LaunchPage and Changes Screen ^
+  // ^ Method Determines LaunchPage and Changes Screen ^
   static void shiftPage({@required Duration delay}) async {
     Future.delayed(delay, () {
       // Check for User

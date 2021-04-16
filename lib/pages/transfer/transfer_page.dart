@@ -9,7 +9,7 @@ import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/common/lobby/lobby.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'compass_widget.dart';
+import 'bulb_view.dart';
 import 'transfer_controller.dart';
 
 // ^ Transfer Screen Entry with Arguments ^ //
@@ -19,7 +19,7 @@ class Transfer {
   }
 
   static void transferWithFile(FileItem fileItem) {
-    Get.offNamed("/transfer", arguments: TransferArguments(fileItem.payload, metadata: fileItem.metadata));
+    Get.offNamed("/transfer", arguments: TransferArguments(fileItem.payload, metadata: fileItem.metadata, item: fileItem));
   }
 
   static void transferWithUrl(String url) {
@@ -95,8 +95,8 @@ class LocalLobbyView extends GetView<TransferController> {
           appBar: DesignAppBar(
             action: controller.currentPayload != Payload.CONTACT
                 ? PlainButton(icon: SonrIcons.Remote, onPressed: () async => controller.startRemote())
-                : Container(),
-            leading: PlainButton(icon: SonrIcons.Close, onPressed: () => Get.offNamed("/home")),
+                : Container(width: 56, height: 56),
+            leading: PlainIconButton(icon: SonrIcons.Close.gradient(gradient: SonrPalette.critical()), onPressed: () => Get.offNamed("/home")),
             title: Container(child: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet()))),
           ),
           body: Stack(
@@ -129,7 +129,7 @@ class LocalLobbyView extends GetView<TransferController> {
                   onTap: () {
                     controller.toggleShifting();
                   },
-                  child: CompassView(),
+                  child: BulbView(),
                 ),
               ),
             ],

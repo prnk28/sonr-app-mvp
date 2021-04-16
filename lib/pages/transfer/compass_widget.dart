@@ -76,8 +76,7 @@ class _CompassView extends GetView<TransferController> {
           // Interior Compass
           child: Stack(fit: StackFit.expand, alignment: Alignment.center, children: [
             // Center Circle
-            Obx(() => BulbView(controller.directionTitle.value, controller.cardinalTitle.value,
-                controller.isShiftingEnabled.value ? SonrGradient.bulbLight : SonrGradient.bulbDark)),
+            Obx(() => BulbView()),
 
             // Spokes
             Obx(() => _Spokes(controller.angle.value)),

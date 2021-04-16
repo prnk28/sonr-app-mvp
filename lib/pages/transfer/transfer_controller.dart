@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/common/peer/bubble_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -13,6 +14,7 @@ class TransferController extends GetxController {
   final isBirdsEye = false.obs;
   final isFacingPeer = false.obs;
   final inviteRequest = InviteRequest().obs;
+  final fileItem = Rx<FileItem>(null);
 
   // @ Remote Properties
   final isRemoteActive = false.obs;
@@ -89,6 +91,8 @@ class TransferController extends GetxController {
   void setPayload(dynamic args) {
     // Validate Args
     if (args is TransferArguments) {
+      // Set Payload
+
       // Contact
       if (args.payload == Payload.CONTACT) {
         inviteRequest.update((val) {
@@ -107,6 +111,8 @@ class TransferController extends GetxController {
       }
       // File
       else {
+        // Set File Item
+        fileItem(args.item);
         inviteRequest.update((val) {
           val.payload = args.payload;
           val.files.add(args.metadata);

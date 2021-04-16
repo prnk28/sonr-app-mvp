@@ -1,4 +1,3 @@
-import 'package:sonr_app/pages/transfer/bulb_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'home_controller.dart';
 
@@ -8,10 +7,9 @@ class AlertsView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Get.width,
-      height: Get.height,
-      margin: EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05),
-      child: HexagonView(),
-    );
+        width: Get.width,
+        height: Get.height,
+        margin: EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05),
+        child: "Under Construction".h4);
   }
 }
