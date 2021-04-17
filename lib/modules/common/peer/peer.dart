@@ -7,23 +7,6 @@ import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-// ^ Platform Model Extensions ^ //
-extension PlatformUtils on Platform {
-  FlutterGradientNames get gradient {
-    switch (this) {
-      case Platform.Android:
-        return FlutterGradientNames.hiddenJaguar;
-      case Platform.IOS:
-        return FlutterGradientNames.morpheusDen;
-      case Platform.MacOS:
-        return FlutterGradientNames.octoberSilence;
-      case Platform.Windows:
-        return FlutterGradientNames.deepBlue;
-      default:
-        return FlutterGradientNames.viciousStance;
-    }
-  }
-}
 
 // ^ Proximity Model Extensions ^ //
 extension PositionUtils on Position {

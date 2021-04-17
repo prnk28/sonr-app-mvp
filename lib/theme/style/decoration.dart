@@ -6,7 +6,7 @@ extension Neumorph on BoxDecoration {
     return BoxDecoration(
         shape: shape,
         borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-        color: Color(0xfff0f6fa).withOpacity(0.8),
+        color: Color(0xfff0f6fa).withOpacity(0.85),
         boxShadow: [
           BoxShadow(
             color: Color(

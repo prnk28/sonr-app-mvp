@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/common/lobby/lobby.dart';
+import 'package:sonr_app/modules/common/peer/card_view.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bulb_view.dart';
@@ -56,7 +57,7 @@ class RemoteLobbyFullView extends HookWidget {
   Widget build(BuildContext context) {
     final remoteStream = LobbyService.useRemoteLobby(info);
     return SonrScaffold(
-        gradientName: FlutterGradientNames.spaceShift,
+        gradientName: FlutterGradientNames.plumBath,
         appBar: DesignAppBar(
           action: PlainButton(icon: SonrIcons.Logout, onPressed: () => Get.find<TransferController>().stopRemote()),
           leading: PlainButton(icon: SonrIcons.Close, onPressed: () => Get.offNamed("/home")),
@@ -93,7 +94,7 @@ class LocalLobbyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
-          gradientName: FlutterGradientNames.spaceShift,
+          gradientName: FlutterGradientNames.plumBath,
           appBar: DesignAppBar(
             action: controller.currentPayload != Payload.CONTACT
                 ? PlainButton(icon: SonrIcons.Remote, onPressed: () async => controller.startRemote())
@@ -152,7 +153,7 @@ class _LocalLobbyStack extends StatefulWidget {
 
 class _LocalLobbyStackState extends State<_LocalLobbyStack> {
   // References
-  List<PeerBubble> stackChildren = <PeerBubble>[];
+  List<PeerCard> stackChildren = <PeerCard>[];
   StreamSubscription<LobbyModel> localLobbyStream;
 
   // * Initial State * //
@@ -183,7 +184,7 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
   // * Updates Stack Children * //
   _handleLobbyUpdate(LobbyModel data) {
     // Initialize
-    var children = <PeerBubble>[];
+    var children = <PeerCard>[];
 
     // Clear List
     stackChildren.clear();
@@ -193,7 +194,7 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
       data.peers.forEach((peer) {
         if (peer.platform == Platform.IOS || peer.platform == Platform.Android) {
           // Add to Stack Items
-          children.add(PeerBubble(peer));
+          children.add(PeerCard(peer));
         }
       });
     }

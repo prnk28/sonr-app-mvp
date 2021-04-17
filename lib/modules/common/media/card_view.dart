@@ -84,7 +84,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ActionButton(
-                        icon: SonrIcons.About.gradient(),
+                        icon: SonrIcons.About.grey,
                         onPressed: () {
                           SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
                         },

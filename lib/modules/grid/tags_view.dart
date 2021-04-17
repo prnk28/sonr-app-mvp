@@ -39,7 +39,7 @@ class _TagItem extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() => AnimatedContainer(
         decoration: controller.tagIndex.value == index
-            ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.Primary.withOpacity(0.9))
+            ? BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.Secondary.withOpacity(0.9))
             : BoxDecoration(),
         constraints: BoxConstraints(maxHeight: 50),
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),

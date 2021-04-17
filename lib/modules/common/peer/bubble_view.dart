@@ -65,6 +65,7 @@ class BubbleController extends GetxController {
   // Reactive Elements
   final board = Rx<Artboard>(null);
   final counter = 0.0.obs;
+  final isFlipped = false.obs;
   final isReady = false.obs;
   final isFacing = false.obs;
   final isVisible = true.obs;
@@ -166,6 +167,12 @@ class BubbleController extends GetxController {
   // ^ Toggle Expanded View
   void expandDetails() {
     Get.bottomSheet(PeerDetailsView(this), barrierColor: SonrColor.DialogBackground);
+    HapticFeedback.heavyImpact();
+  }
+
+  // ^ Toggle Expanded View
+  void flipView() {
+    isFlipped(!isFlipped.value);
     HapticFeedback.heavyImpact();
   }
 

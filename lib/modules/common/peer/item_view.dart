@@ -34,7 +34,7 @@ class _PeerListItemState extends State<PeerListItem> {
                       style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
                   TextSpan(
                       text: " - ${widget.peer.model}",
-                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.Secondary)),
+                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.AccentPurple)),
                 ])),
             children: [
               Padding(padding: EdgeInsets.all(8)),

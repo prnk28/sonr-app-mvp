@@ -82,3 +82,48 @@ class SonrStyle {
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
       );
 }
+
+extension WidgetListUtils on List<Widget> {
+  /// Accessor Method to Create a Row
+  Widget row(
+      {Key key,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+      MainAxisSize mainAxisSize = MainAxisSize.max,
+      CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+      VerticalDirection verticalDirection = VerticalDirection.down,
+      TextDirection textDirection,
+      TextBaseline textBaseline}) {
+    return Row(
+      children: this,
+      key: key,
+      mainAxisAlignment: mainAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      crossAxisAlignment: crossAxisAlignment,
+      verticalDirection: verticalDirection,
+      textDirection: textDirection ?? textDirection,
+      textBaseline: textBaseline ?? textBaseline,
+    );
+  }
+
+  /// Accessor Method to Create a Column
+  Widget column({
+    Key key,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextDirection textDirection,
+    TextBaseline textBaseline,
+  }) {
+    return Column(
+      children: this,
+      key: key,
+      mainAxisAlignment: mainAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      crossAxisAlignment: crossAxisAlignment,
+      verticalDirection: verticalDirection,
+      textDirection: textDirection ?? textDirection,
+      textBaseline: textBaseline ?? textBaseline,
+    );
+  }
+}

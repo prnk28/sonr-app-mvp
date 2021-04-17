@@ -22,7 +22,7 @@ class HomeActionButton extends GetView<HomeController> {
     } else {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Main),
-        icon: SonrIcons.Category.greyWith(size: 28),
+        icon: SonrIcons.Category.gradient(size: 28),
         onPressed: () => print("Action"),
       );
     }
