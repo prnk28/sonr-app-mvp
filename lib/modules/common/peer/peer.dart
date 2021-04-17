@@ -1,5 +1,4 @@
 export 'bubble_view.dart';
-export 'details_view.dart';
 export 'item_view.dart';
 
 export 'vector_position.dart';

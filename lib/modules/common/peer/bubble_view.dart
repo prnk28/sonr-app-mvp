@@ -25,7 +25,6 @@ class PeerBubble extends GetWidget<BubbleController> {
         duration: 150.milliseconds,
         child: GestureDetector(
           onTap: controller.invite,
-          onLongPress: controller.expandDetails,
           child: Stack(alignment: Alignment.center, children: [
             // Rive Board
             controller.isReady.value
@@ -165,14 +164,9 @@ class BubbleController extends GetxController {
   }
 
   // ^ Toggle Expanded View
-  void expandDetails() {
-    Get.bottomSheet(PeerDetailsView(this), barrierColor: SonrColor.DialogBackground);
-    HapticFeedback.heavyImpact();
-  }
-
-  // ^ Toggle Expanded View
-  void flipView() {
-    isFlipped(!isFlipped.value);
+  void flipView(bool value) {
+    isFlipped(value);
+    isFlipped.refresh();
     HapticFeedback.heavyImpact();
   }
 
