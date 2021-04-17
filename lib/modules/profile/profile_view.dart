@@ -1,6 +1,7 @@
-import 'package:sonr_app/modules/common/tile/tile_item.dart';
+
 import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
+import 'tile/tile_item.dart';
 
 class ProfileView extends GetView<ProfileController> {
   ProfileView({Key key}) : super(key: key);

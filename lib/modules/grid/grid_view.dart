@@ -99,9 +99,21 @@ class _CardSearchView extends GetView<GridController> {
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: NeumorphCard(alignment: Alignment.center, sizeFactor: Size(0.8, 0.6), child: "Search ".h4),
+        background: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: Neumorph.floating(),
+          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.all(32),
+          width: Get.width,
+          child: Container(
+            width: context.widthTransformer(reducedBy: 0.8),
+            height: context.heightTransformer(reducedBy: 0.6),
+            alignment: Alignment.center,
+            child: "Search ".h4,
+          ),
+        ),
       ),
-      expandedHeight: 160,
+      expandedHeight: 120,
       // bottom:
     );
   }
