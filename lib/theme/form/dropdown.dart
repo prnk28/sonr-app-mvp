@@ -6,7 +6,7 @@ import '../theme.dart';
 class SonrDropdown extends StatelessWidget {
   // Properties
   final int selectedFlex;
-  final NeumorphicStyle style;
+  // final NeumorphicStyle style;
 
   // Overlay Properties
   final double overlayHeight;
@@ -33,12 +33,11 @@ class SonrDropdown extends StatelessWidget {
       overlayHeight: -80,
       selectedFlex: 6,
       selectedIconPosition: WidgetPosition.Left,
-      style: SonrStyle.dropDownFlat,
     );
   }
 
   SonrDropdown(this.items, this.initial, this.index,
-      {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right, this.selectedFlex, this.style});
+      {this.overlayHeight, this.overlayWidth, this.overlayMargin, this.selectedIconPosition = WidgetPosition.Right, this.selectedFlex});
   @override
   Widget build(BuildContext context) {
     GlobalKey _dropKey = LabeledGlobalKey("Sonr_Dropdown");
@@ -46,16 +45,19 @@ class SonrDropdown extends StatelessWidget {
     return Obx(() {
       return Container(
         key: _dropKey,
-        child: NeumorphicButton(
+        child: GestureDetector(
+          onTapUp: (details) {
+            SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {
+              index(newIdx);
+              index.refresh();
+            }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
+          },
+          child: Container(
             margin: EdgeInsets.symmetric(horizontal: 3),
-            style: style,
+            decoration: Neumorph.floating(radius: 0),
             child: AnimatedSlideSwitcher.slideUp(child: Container(key: ValueKey<int>(index.value), child: _buildSelected(index.value))),
-            onPressed: () {
-              SonrPositionedOverlay.dropdown(items, _dropKey, (newIdx) {
-                index(newIdx);
-                index.refresh();
-              }, height: overlayHeight, width: overlayWidth, margin: overlayMargin);
-            }),
+          ),
+        ),
       );
     });
   }

@@ -128,23 +128,24 @@ class DropdownOverlayView extends StatelessWidget {
         child: Container(
           height: (items.length * size.height) / 1.5 + height,
           width: size.width + width,
-          child: Neumorphic(
+          child: Container(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            style: SonrStyle.dropDownBackground,
+            decoration: Neumorph.floating(radius: 0),
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: NeumorphicButton(
-                    style: SonrStyle.flat,
-                    padding: EdgeInsets.all(8),
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       onChanged(index);
                       SonrPositionedOverlay.back();
                     },
-                    child: Stack(children: [items[index]]),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Stack(children: [items[index]]),
+                    ),
                   ),
                 );
               },

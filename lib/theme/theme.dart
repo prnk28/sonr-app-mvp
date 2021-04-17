@@ -47,9 +47,6 @@ export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/client/user.dart';
-import 'package:sonr_core/sonr_core.dart';
-
-import 'elements/painter.dart';
 import 'style/color.dart';
 
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -61,58 +58,12 @@ class SonrStyle {
   static NeumorphicStyle get compassStamp =>
       NeumorphicStyle(intensity: 0.4, depth: UserService.isDarkMode ? 4 : 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
 
-  static NeumorphicStyle get dropDownBackground => NeumorphicStyle(
-      intensity: UserService.isDarkMode ? 0.45 : 0.85,
-      depth: UserService.isDarkMode ? 4 : 8,
-      shape: NeumorphicShape.flat,
-      color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      shadowLightColor: Colors.black38);
-
-  static NeumorphicStyle get dropDownItem => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        depth: UserService.isDarkMode ? 4 : 8,
-        shape: NeumorphicShape.flat,
-        boxShape: NeumorphicBoxShape.stadium(),
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      );
-
-  static NeumorphicStyle get dropDownFlat => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        depth: UserService.isDarkMode ? 4 : 8,
-        shape: NeumorphicShape.flat,
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      );
-  static NeumorphicStyle get dropDownCurved => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        depth: UserService.isDarkMode ? 4 : 8,
-        shape: NeumorphicShape.flat,
-        boxShape: NeumorphicBoxShape.stadium(),
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      );
-
-  static NeumorphicStyle get flat => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        depth: UserService.isDarkMode ? 4 : 8,
-        shape: NeumorphicShape.flat,
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      );
-
-  static NeumorphicStyle get gradientIcon => NeumorphicStyle(
-      color: SonrColor.White, shadowLightColor: Colors.transparent, intensity: 0.85, depth: UserService.isDarkMode ? 4 : 8, surfaceIntensity: 0.6);
-
   static NeumorphicStyle get overlay => NeumorphicStyle(
         intensity: UserService.isDarkMode ? 0.45 : 0.85,
         depth: UserService.isDarkMode ? 4 : 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
       );
-
-  static NeumorphicStyle get photo => NeumorphicStyle(
-      intensity: UserService.isDarkMode ? 0.45 : 0.85,
-      depth: UserService.isDarkMode ? 4 : 8,
-      boxShape: NeumorphicBoxShape.circle(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Dark,
-      shadowLightColor: Colors.black38);
 
   static NeumorphicStyle get shareButton => NeumorphicStyle(
         color: SonrColor.Black,
@@ -138,18 +89,5 @@ class SonrStyle {
         shape: NeumorphicShape.flat,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      );
-
-  static NeumorphicStyle zonePath({@required Position_Proximity proximity}) => NeumorphicStyle(
-        border: NeumorphicBorder(
-          color: UserService.isDarkMode ? SonrColor.White : SonrColor.Grey,
-          width: 1,
-        ),
-        depth: UserService.isDarkMode ? 4 : 8,
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-        surfaceIntensity: 0.6,
-        shape: NeumorphicShape.flat,
-        intensity: 0.85,
-        boxShape: NeumorphicBoxShape.path(ZonePathProvider(proximity)),
       );
 }
