@@ -7,43 +7,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/service/client/sonr.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-const K_ALBUM_PAGE_SIZE = 40;
-
-// ^ Class for Media Album ^ //
-class MediaAlbum {
-  final AssetPathEntity data;
-  // Properties
-  bool isAll = false;
-  bool get isEmpty => assets.length == 0;
-  var assets = <MediaItem>[];
-  String name = "";
-  int count = 0;
-  int currentPage = 0;
-  int totalPages = 0;
-
-  factory MediaAlbum.blank() {
-    return MediaAlbum(null);
-  }
-
-  // * Constructer * //
-  MediaAlbum(this.data) {
-    if (this.data != null) {
-      this.isAll = data.isAll;
-      this.name = data.name;
-      this.count = data.assetCount;
-      this.totalPages = (data.assetCount / K_ALBUM_PAGE_SIZE).ceil();
-
-      // Items on Range
-      data.getAssetListRange(start: 0, end: 100).then((items) {
-        // Iterate through Items
-        items.forEach((element) {
-          assets.add(MediaItem(element, items.indexOf(element)));
-        });
-      });
-    }
-  }
-}
-
 // ^ Class for Media Item in Gallery ^ //
 class MediaItem {
   // Inherited References

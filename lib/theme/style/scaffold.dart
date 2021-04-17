@@ -69,7 +69,7 @@ class PageBackground extends StatelessWidget {
       child: Stack(
         children: [
           // Gradient
-          _BackgroundGradient(),
+          _BackgroundGradient(gradientName: gradientName),
 
           // Overlay Color
           _BackgroundOverlay(),
@@ -96,7 +96,7 @@ class _BackgroundGradient extends StatelessWidget {
       return Opacity(
           opacity: 0.5,
           child: CustomAnimatedWidget(
-              enabled: true,
+              enabled: gradientName != FlutterGradientNames.northMiracle,
               duration: Duration(seconds: 4),
               curve: Curves.easeOut,
               builder: (context, percent) {
