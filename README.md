@@ -19,7 +19,7 @@ Anyone with multiple devices not running in the same ecosystem.
 - Audio Watermark: http://mattmontag.com/audio-listening-test/
 - Utilize library for encoding: https://pub.dev/packages/flutter_ffmpeg
 
-Offline P2P File Sharing:
+#### Offline P2P File Sharing:
 - Send Files as chunk with sound, warn user slow transfer speeds
 - Implement Dual Diagonal Infusion
 
