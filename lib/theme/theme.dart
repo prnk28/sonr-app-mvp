@@ -18,7 +18,6 @@ export 'package:sonr_app/modules/common/camera/camera_view.dart';
 
 // Custom Theme Aspects
 export 'buttons/action.dart';
-export 'buttons/shape.dart';
 export 'buttons/color.dart';
 export 'buttons/plain.dart';
 export 'buttons/confirm.dart';
