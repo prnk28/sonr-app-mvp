@@ -56,6 +56,7 @@ class RemoteLobbyFullView extends HookWidget {
   Widget build(BuildContext context) {
     final remoteStream = LobbyService.useRemoteLobby(info);
     return SonrScaffold(
+        gradientName: FlutterGradientNames.spaceShift,
         appBar: DesignAppBar(
           action: PlainButton(icon: SonrIcons.Logout, onPressed: () => Get.find<TransferController>().stopRemote()),
           leading: PlainButton(icon: SonrIcons.Close, onPressed: () => Get.offNamed("/home")),
@@ -92,6 +93,7 @@ class LocalLobbyView extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => SonrScaffold(
+          gradientName: FlutterGradientNames.spaceShift,
           appBar: DesignAppBar(
             action: controller.currentPayload != Payload.CONTACT
                 ? PlainButton(icon: SonrIcons.Remote, onPressed: () async => controller.startRemote())

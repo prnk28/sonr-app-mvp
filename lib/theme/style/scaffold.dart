@@ -12,7 +12,7 @@ class SonrScaffold extends StatelessWidget {
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool resizeToAvoidBottomInset;
   final Function bodyAction;
-  final Color backgroundColor;
+  final FlutterGradientNames gradientName;
 
   SonrScaffold({
     Key key,
@@ -22,7 +22,7 @@ class SonrScaffold extends StatelessWidget {
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset,
     this.bodyAction,
-    this.backgroundColor,
+    this.gradientName,
     this.bottomNavigationBar,
     this.bottomSheet,
     this.shareView,
@@ -30,6 +30,7 @@ class SonrScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageBackground(
+      gradientName: gradientName,
       scaffold: NeumorphicTheme(
         themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
@@ -59,8 +60,8 @@ class SonrScaffold extends StatelessWidget {
 
 class PageBackground extends StatelessWidget {
   final Widget scaffold;
-
-  const PageBackground({Key key, this.scaffold}) : super(key: key);
+  final FlutterGradientNames gradientName;
+  const PageBackground({Key key, this.scaffold, this.gradientName}) : super(key: key);
   @override
   Widget build(Object context) {
     return NeumorphicBackground(
@@ -87,20 +88,42 @@ class PageBackground extends StatelessWidget {
 
 // ^ Animated Background Gradient ^ //
 class _BackgroundGradient extends StatelessWidget {
+  final FlutterGradientNames gradientName;
+  const _BackgroundGradient({Key key, this.gradientName = FlutterGradientNames.northMiracle}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.5,
-      child: Container(
-        height: Get.height,
-        width: Get.width,
-        decoration: BoxDecoration(
-          color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-          // ignore: invalid_use_of_protected_member
-          gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.topLeft, radius: 2.5),
+    if (gradientName != FlutterGradientNames.northMiracle) {
+      return Opacity(
+          opacity: 0.5,
+          child: CustomAnimatedWidget(
+              enabled: true,
+              duration: Duration(seconds: 4),
+              curve: Curves.easeOut,
+              builder: (context, percent) {
+                return Container(
+                  height: Get.height,
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+                    gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.topLeft, radius: 2.5)
+                        // ignore: invalid_use_of_protected_member
+                        .lerpTo(FlutterGradients.findByName(gradientName), percent),
+                  ),
+                );
+              }));
+    } else {
+      return Opacity(
+        opacity: 0.5,
+        child: Container(
+          height: Get.height,
+          width: Get.width,
+          decoration: BoxDecoration(
+            color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
+            gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.topLeft, radius: 2.5),
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
 
