@@ -1,7 +1,4 @@
-import 'package:sonr_app/modules/common/media/thumbnail.dart';
-import 'package:sonr_app/theme/elements/clipper.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 import 'transfer_controller.dart';
 
 class BulbView extends GetView<TransferController> {
@@ -40,7 +37,9 @@ class BulbView extends GetView<TransferController> {
                   decoration: Neumorph.rainbow(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [],
+                    children: [
+                      _BulbViewChild(),
+                    ],
                   ),
                 ),
               ),
@@ -65,28 +64,45 @@ class BulbView extends GetView<TransferController> {
   }
 }
 
-class BulbViewChild extends GetView<TransferController> {
+class _BulbViewChild extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      // Undefined Type
+      // # Undefined Type
       if (controller.inviteRequest.value.payload == Payload.UNDEFINED) {
         return CircularProgressIndicator();
       }
 
-      // File Type
+      // # Check for Media File Type
       else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
+        // Image
         if (controller.fileItem.value.mime.type == MIME_Type.image) {
-          return Thumbnail(
-            file: controller.fileItem.value,
-            size: Size(320, 320),
-          );
-        } else {
+          return SizedBox(
+              width: 80,
+              height: 80,
+              child: controller.fileItem.value.hasThumbnail
+                  ? Image.memory(
+                      controller.fileItem.value.thumbnail,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.grey[100], Colors.grey[300]],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                      ),
+                    ));
+        }
+
+        // Other Media (Video, Audio)
+        else {
           return controller.fileItem.value.mime.type.gradient(size: 80);
         }
       }
 
-      // Other File
+      // # Other File
       else {
         return controller.inviteRequest.value.payload.gradient(size: 80);
       }

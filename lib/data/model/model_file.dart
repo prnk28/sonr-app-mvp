@@ -1,7 +1,12 @@
+import 'dart:ui';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 import 'package:sonr_core/sonr_core.dart';
-
+import 'dart:io';
+import 'dart:isolate';
+import 'package:image/image.dart' as img;
 import 'model_media.dart';
 
 class FileItem {
@@ -11,7 +16,10 @@ class FileItem {
   final Payload payload;
   final MIME mime;
   final FilePickerResult result;
+
+  // Thumbnail Vars
   List<int> thumbnail;
+  Isolate isolate;
 
   // # Retreives Metadata Info
   bool get isAudio => mime.type == MIME_Type.audio;
@@ -24,13 +32,47 @@ class FileItem {
   Metadata get metadata => Metadata(name: name, size: size, path: path, mime: mime, properties: properties);
 
   // * Constructer * //
-  FileItem(this.path, this.name, this.size, this.mime, this.payload, {this.result});
-
-  // ^ Method to Add a thumbnail ^ //
-  void addThumbnail(List<int> thumbnail) {
-    if (thumbnail.length > 0) {
-      this.thumbnail = thumbnail;
+  FileItem(this.path, this.name, this.size, this.mime, this.payload, {this.result}) {
+    if (mime.type == MIME_Type.image) {
+      _asyncThumbInit(path);
     }
+  }
+
+  // ^ Method to Start thumbnail Generation ^ //
+  _asyncThumbInit(String path) async {
+    final ReceivePort receivePort = ReceivePort();
+    isolate = await Isolate.spawn(_isolateThumbEntry, receivePort.sendPort);
+
+    receivePort.listen((dynamic data) {
+      if (data is SendPort) {
+        data.send({
+          'path': path,
+          'size': Size(320, 320),
+        });
+      } else {
+        thumbnail = data;
+      }
+    });
+  }
+
+  // ^ Method to Handle thumbnail Generation ^ //
+  static _isolateThumbEntry(dynamic d) async {
+    final ReceivePort receivePort = ReceivePort();
+    d.send(receivePort.sendPort);
+
+    // Retreive Data
+    final config = await receivePort.first;
+    final file = File(config['path']);
+    final bytes = await file.readAsBytes();
+
+    // Generate Thumbnail
+    img.Image image = img.decodeImage(bytes);
+    img.Image thumbnail = img.copyResize(
+      image,
+      width: config['size'].width.toInt(),
+    );
+
+    d.send(img.encodeNamedImage(thumbnail, basename(config['path'])));
   }
 
   // @ Factory: Capture
