@@ -18,11 +18,8 @@ class AddTileView extends GetView<ProfileController> {
             Container(
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.only(top: 8, left: 8),
-                child: ShapeButton.rectangle(
-                    radius: 20,
-                    shape: NeumorphicShape.convex,
-                    onPressed: controller.exitToViewing,
-                    icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart, size: 38))),
+                child: PlainIconButton(
+                    onPressed: controller.exitToViewing, icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart, size: 38))),
             Container(
               height: controller.step.value.height,
               child: PageView.builder(

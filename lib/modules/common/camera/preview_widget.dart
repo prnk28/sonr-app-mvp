@@ -53,25 +53,25 @@ class MediaPreviewView extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                     // Left Button - Cancel and Retake
-                    ShapeButton.flat(
+                    PlainButton(
                       onPressed: () {
                         HapticFeedback.heavyImpact();
                         onDecision(false);
                       },
-                      text: "Redo".headSix(color: Colors.orange[700]),
+                      text: "Redo",
                     ),
 
                     // Right Button - Continue
                     Container(
                       width: Get.width / 3 + 20,
                       height: 50,
-                      child: ShapeButton.stadium(
+                      child: ColorButton.primary(
                           onPressed: () {
                             HapticFeedback.heavyImpact();
                             onDecision(true);
                           },
-                          text: "Continue".h6_Grey,
-                          icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28)),
+                          text: "Continue",
+                          icon: SonrIcons.Check),
                     ),
                   ]),
                 )

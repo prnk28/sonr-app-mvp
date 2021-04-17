@@ -41,16 +41,14 @@ class PeerDetailsView extends StatelessWidget {
                   controller.peer.value.platformExpanded,
                   Container(
                       margin: EdgeInsets.symmetric(horizontal: 90, vertical: 10),
-                      child: ShapeButton.rectangle(
+                      child: ColorButton.primary(
                           padding: EdgeInsets.symmetric(vertical: 8),
-                          shape: NeumorphicShape.convex,
-                          depth: 4,
                           onPressed: () {
                             controller.invite();
                             Get.back();
                           },
-                          icon: SonrIcons.Share.gradient(),
-                          text: "Invite".h5)),
+                          icon: SonrIcons.Share,
+                          text: "Invite")),
                   Spacer()
                 ]),
               ),

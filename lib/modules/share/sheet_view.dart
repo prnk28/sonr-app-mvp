@@ -70,12 +70,12 @@ class ShareSheet extends GetView<ShareController> {
                   // @ Top Banner
                   Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     // Bottom Left Close/Cancel Button
-                    ShapeButton.circle(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
+                    ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
 
                     "Share".h2,
 
                     // @ Top Right Confirm Button
-                    ShapeButton.circle(
+                    ActionButton(
                         onPressed: () => controller.selectExternal(payload, url, mediaFile),
                         icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.hiddenJaguar)),
                   ]),

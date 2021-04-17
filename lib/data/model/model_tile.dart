@@ -91,28 +91,29 @@ class TileStep {
   Widget get bottomButtons {
     //  Step Three: Cancel and Confirm
     if (current == 2) {
-      return ShapeButton.stadium(
-        text: "Save".h6,
+      return ColorButton.primary(
+        text: "Save",
         onPressed: save,
-        icon: SonrIcons.Success.gradientNamed(name: FlutterGradientNames.newLife),
+        icon: SonrIcons.Check_All,
         margin: EdgeInsets.only(left: 60, right: 80),
       );
     }
     // Step Two: Dual Bottom Buttons, Back and Next
     else if (current == 1) {
       return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        ShapeButton.stadium(text: "Back".h6, onPressed: previous, icon: SonrIcons.Backward.black),
-        ShapeButton.stadium(text: "Next".h6, onPressed: next, icon: SonrIcons.Forward.black, iconPosition: WidgetPosition.Right),
+        PlainButton(text: "Back", onPressed: previous, icon: SonrIcons.Backward),
+        ColorButton.primary(text: "Next", onPressed: next, icon: SonrIcons.Forward, iconPosition: WidgetPosition.Right),
       ]);
     }
     // Step One: Top Cancel Button
     else {
-      return ShapeButton.stadium(
-          text: "Next".h6,
-          onPressed: next,
-          icon: SonrIcons.Forward.black,
-          margin: EdgeInsets.only(left: 60, right: 80),
-          iconPosition: WidgetPosition.Right);
+      return ColorButton.primary(
+        text: "Next",
+        onPressed: next,
+        icon: SonrIcons.Forward,
+        margin: EdgeInsets.only(left: 60, right: 80),
+        iconPosition: WidgetPosition.Right,
+      );
     }
   }
 

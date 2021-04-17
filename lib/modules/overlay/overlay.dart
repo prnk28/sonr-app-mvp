@@ -76,15 +76,15 @@ class AlertOverlayView extends StatelessWidget {
           // Accept Button
           Container(
             width: Get.width / 3,
-            child: ShapeButton.stadium(
+            child: ColorButton.primary(
               onPressed: () {
                 onPressed();
                 if (closeOnResponse) {
                   SonrOverlay.back();
                 }
               },
-              icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife),
-              text: buttonText.h6,
+              icon: SonrIcons.Check,
+              text: buttonText,
             ),
           ),
         ]),
@@ -236,15 +236,15 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
             Container(
               width: Get.width / 2.5,
               height: 50,
-              child: ShapeButton.stadium(
+              child: ColorButton.primary(
                 onPressed: () {
                   onDecision(true);
                   if (closeOnResponse) {
                     SonrOverlay.back();
                   }
                 },
-                icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28),
-                text: acceptTitle.h6,
+                icon: SonrIcons.Check,
+                text: acceptTitle,
               ),
             ),
           ]),

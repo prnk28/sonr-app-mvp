@@ -5,9 +5,9 @@ class HomeActionButton extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlideSwitcher.fade(
-      child: _buildView(controller.view.value),
-      duration: const Duration(milliseconds: 2500),
-    ));
+          child: _buildView(controller.view.value),
+          duration: const Duration(milliseconds: 2500),
+        ));
   }
 
   // @ Build Page View by Navigation Item
@@ -20,31 +20,11 @@ class HomeActionButton extends GetView<HomeController> {
     } else if (page == HomeView.Remote) {
       return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Remote));
     } else {
-      return _MenuActionButton(key: ValueKey<HomeView>(HomeView.Main));
+      return ActionButton(
+        key: ValueKey<HomeView>(HomeView.Main),
+        icon: SonrIcons.Category.greyWith(size: 28),
+        onPressed: () => print("Action"),
+      );
     }
-  }
-}
-
-class _MenuActionButton extends GetView<HomeController> {
-  _MenuActionButton({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => print("Action"),
-      child: Opacity(
-        opacity: 0.6,
-        child: Container(
-          width: 56,
-          height: 56,
-          alignment: Alignment.center,
-          decoration: Neumorph.floating(shape: BoxShape.circle),
-          child: Icon(
-            Icons.filter_alt_outlined,
-            color: SonrColor.Black,
-            size: 34,
-          ),
-        ),
-      ),
-    );
   }
 }

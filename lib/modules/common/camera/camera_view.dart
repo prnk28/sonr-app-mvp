@@ -82,8 +82,7 @@ class CameraView extends GetView<CameraController> {
         Container(
           alignment: Alignment.topLeft,
           padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
-          child: ShapeButton.circle(
-              intensity: 0.5,
+          child: ActionButton(
               onPressed: () {
                 Get.back();
               },

@@ -83,13 +83,11 @@ class _MediaCardViewState extends State<MediaCardView> {
                   alignment: Alignment.topRight,
                   child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: ShapeButton.circle(
-                        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                      child: ActionButton(
                         icon: SonrIcons.About.gradient(),
                         onPressed: () {
                           SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
                         },
-                        shadowLightColor: Colors.black38,
                       )),
                 ),
               ],

@@ -57,12 +57,11 @@ class FileCardView extends StatelessWidget {
                       alignment: Alignment.topRight,
                       child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ShapeButton.circle(
+                          child: ActionButton(
                             icon: SonrIcons.About.gradient(),
                             onPressed: () {
                               SonrOverlay.show(_FileCardInfo(card), disableAnimation: true, barrierDismissible: true);
                             },
-                            shadowLightColor: Colors.black38,
                           )),
                     ),
                   ],
@@ -137,8 +136,7 @@ class _FileCardInfo extends StatelessWidget {
 
             // Save File to Device
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              ShapeButton.rectangle(
-                isDisabled: true,
+              ColorButton.neutral(
                 onPressed: () {
                   // Prompt Question
                   SonrOverlay.question(
@@ -158,14 +156,10 @@ class _FileCardInfo extends StatelessWidget {
                     }
                   });
                 },
-                text: "Delete".h6,
-                icon: SonrIcons.Trash.grey,
+                text: "Delete",
+                icon: SonrIcons.Trash,
               ),
-              ShapeButton.rectangle(
-                onPressed: () {},
-                text: "Save".h6,
-                icon: SonrIcons.Download_File.white,
-              ),
+
             ]),
           ]),
         ));

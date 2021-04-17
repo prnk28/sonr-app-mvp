@@ -38,40 +38,31 @@ class ContactFlatCard extends StatelessWidget {
           // Quick Actions
           Container(
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(
-                width: 78,
-                height: 78,
-                child: ShapeButton.circle(
-                    depth: 4,
-                    onPressed: () {},
-                    text: "Mobile".p_Grey,
-                    icon: SonrIcons.Call.gradientNamed(name: FlutterGradientNames.highFlight, size: 36),
-                    iconPosition: WidgetPosition.Top),
+              ActionButton(
+                onPressed: () {},
+                label: "Mobile",
+                icon: SonrIcons.Call.gradientNamed(
+                  name: FlutterGradientNames.highFlight,
+                  size: 36,
+                ),
+                size: 72,
               ),
               Padding(padding: EdgeInsets.all(6)),
-              SizedBox(
-                width: 78,
-                height: 78,
-                child: ShapeButton.circle(
-                    depth: 4,
-                    onPressed: () {},
-                    text: "Text".p_Grey,
-                    icon: SonrIcons.Mail.gradientNamed(name: FlutterGradientNames.teenParty, size: 36),
-                    iconPosition: WidgetPosition.Top),
+              ActionButton(
+                onPressed: () {},
+                label: "Text",
+                icon: SonrIcons.Mail.gradientNamed(name: FlutterGradientNames.teenParty, size: 36),
+                size: 72,
               ),
               Padding(padding: EdgeInsets.all(6)),
-              SizedBox(
-                  width: 78,
-                  height: 78,
-                  child: ShapeButton.circle(
-                      depth: 4,
-                      onPressed: () {},
-                      text: "Video".p_Grey,
-                      icon: SonrIcons.Video_Camera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
-                      iconPosition: WidgetPosition.Top)),
+              ActionButton(
+                onPressed: () {},
+                label: "Video",
+                size: 72,
+                icon: SonrIcons.Video_Camera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
+              ),
             ]),
           ),
-
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
 
