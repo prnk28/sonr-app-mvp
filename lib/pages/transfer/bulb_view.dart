@@ -1,3 +1,4 @@
+import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'transfer_controller.dart';
 
@@ -11,50 +12,62 @@ class BulbView extends GetView<TransferController> {
       child: Stack(
         children: [
           /// Poistioned Top Right
-          Container(
-            alignment: Alignment.topCenter,
-            padding: EdgeInsets.all(4),
-            height: 32,
-            width: 86,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.AccentNavy.withOpacity(0.75)),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [SonrIcons.Discover.white, Obx(() => " ${controller.directionTitle.value}".h6_White)]),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.all(4),
+              height: 32,
+              width: 86,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.AccentNavy.withOpacity(0.75)),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [SonrIcons.Discover.white, Obx(() => " ${controller.directionTitle.value}".h6_White)]),
+            ),
           ),
 
           /// Central Polygon
           Container(
-            margin: EdgeInsets.all(32),
+            margin: EdgeInsets.all(24),
+            padding: EdgeInsets.only(bottom: 16),
             alignment: Alignment.center,
-            child: ClipPolygon(
-              sides: 6,
-              rotate: 30,
-              child: Opacity(
-                opacity: 0.5,
-                child: Container(
-                  width: 140,
-                  height: 140,
-                  decoration: Neumorph.rainbow(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _BulbViewChild(),
-                    ],
-                  ),
+            child: Opacity(
+              opacity: 0.5,
+              child: Container(
+                width: 250,
+                height: 250,
+                decoration: Neumorph.rainbow(shape: BoxShape.circle),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _BulbViewChild(),
+                  ],
                 ),
+              ),
+            ),
+          ),
+
+          /// Cancel Button
+          Container(
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.only(right: 8),
+            child: Opacity(
+              opacity: 0.6,
+              child: PlainIconButton(
+                onPressed: () {},
+                icon: SonrIcons.Close.gradient(gradient: SonrPalette.critical()),
               ),
             ),
           ),
 
           /// Replace Button
           Container(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment.topRight,
             padding: EdgeInsets.only(right: 8),
             child: Opacity(
               opacity: 0.6,
               child: PlainIconButton(
                 onPressed: () {},
-                icon: SonrIcons.Edit.gradient(gradient: SonrPalette.secondary()),
+                icon: SonrIcons.More_Vertical.gradient(gradient: SonrPalette.secondary()),
               ),
             ),
           )
@@ -64,6 +77,7 @@ class BulbView extends GetView<TransferController> {
   }
 }
 
+// ^ Builds Hexagon Child View
 class _BulbViewChild extends GetView<TransferController> {
   @override
   Widget build(BuildContext context) {
@@ -77,23 +91,7 @@ class _BulbViewChild extends GetView<TransferController> {
       else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
         // Image
         if (controller.fileItem.value.mime.type == MIME_Type.image) {
-          return SizedBox(
-              width: 80,
-              height: 80,
-              child: controller.fileItem.value.hasThumbnail
-                  ? Image.memory(
-                      controller.fileItem.value.thumbnail,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.grey[100], Colors.grey[300]],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                      ),
-                    ));
+          return _BulbViewThumbnail(item: controller.fileItem.value);
         }
 
         // Other Media (Video, Audio)
@@ -107,5 +105,45 @@ class _BulbViewChild extends GetView<TransferController> {
         return controller.inviteRequest.value.payload.gradient(size: 80);
       }
     });
+  }
+}
+
+// ^ Builds Thumbnail from Future
+class _BulbViewThumbnail extends StatelessWidget {
+  final FileItem item;
+
+  const _BulbViewThumbnail({Key key, @required this.item}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: item.isThumbnailReady(),
+      initialData: false,
+      builder: (context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.data) {
+          return GestureDetector(
+            onTap: () => OpenFile.open(item.path),
+            child: Container(
+                decoration: Neumorph.indented(),
+                width: 140,
+                height: 140,
+                clipBehavior: Clip.hardEdge,
+                child: Image.memory(
+                  item.thumbnail,
+                  fit: BoxFit.cover,
+                )),
+          );
+        } else {
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.grey[100], Colors.grey[300]],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 }

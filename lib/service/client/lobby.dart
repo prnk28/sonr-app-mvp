@@ -40,8 +40,8 @@ class LobbyService extends GetxService {
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
-    _accelStream = DeviceService.accelerometer.listen(_handleAccelStream);
-    _compassStream = DeviceService.compass.listen(_handleCompassStream);
+    _accelStream = SensorService.accelerometer.listen(_handleAccelStream);
+    _compassStream = SensorService.compass.listen(_handleCompassStream);
     return this;
   }
 
@@ -154,7 +154,7 @@ class LobbyService extends GetxService {
 
   void _handleCompassStream(CompassEvent data) {
     // Set Vector Position
-    _position(VectorPosition.fromQuadruple(DeviceService.direction));
+    _position(VectorPosition.fromQuadruple(SensorService.direction));
   }
 
   // # Begin Facing Invite Check

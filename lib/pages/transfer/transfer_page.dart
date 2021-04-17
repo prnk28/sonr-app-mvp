@@ -123,13 +123,16 @@ class LocalLobbyView extends GetView<TransferController> {
               _LocalLobbyStack(),
 
               // @ Compass View
-              Padding(
-                padding: EdgeWith.bottom(32.0),
-                child: GestureDetector(
-                  onTap: () {
-                    controller.toggleShifting();
-                  },
-                  child: BulbView(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 32),
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.toggleShifting();
+                    },
+                    child: BulbView(),
+                  ),
                 ),
               ),
             ],

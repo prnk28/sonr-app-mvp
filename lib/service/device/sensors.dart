@@ -14,10 +14,10 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 
-class DeviceService extends GetxService {
+class SensorService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<DeviceService>();
-  static DeviceService get to => Get.find<DeviceService>();
+  static bool get isRegistered => Get.isRegistered<SensorService>();
+  static SensorService get to => Get.find<SensorService>();
 
   // Device/Location Properties
   final _compass = Rx<CompassEvent>(null);
@@ -59,25 +59,25 @@ class DeviceService extends GetxService {
 
   // Platform Checkers
   static bool get isDesktop =>
-      Get.find<DeviceService>()._platform.value == Platform.Linux ||
-      Get.find<DeviceService>()._platform.value == Platform.MacOS ||
-      Get.find<DeviceService>()._platform.value == Platform.Windows;
+      Get.find<SensorService>()._platform.value == Platform.Linux ||
+      Get.find<SensorService>()._platform.value == Platform.MacOS ||
+      Get.find<SensorService>()._platform.value == Platform.Windows;
   static bool get isMobile =>
-      Get.find<DeviceService>()._platform.value == Platform.IOS || Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isAndroid => Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.IOS;
-  static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
-  static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
-  static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+      Get.find<SensorService>()._platform.value == Platform.IOS || Get.find<SensorService>()._platform.value == Platform.Android;
+  static bool get isAndroid => Get.find<SensorService>()._platform.value == Platform.Android;
+  static bool get isIOS => Get.find<SensorService>()._platform.value == Platform.IOS;
+  static bool get isLinux => Get.find<SensorService>()._platform.value == Platform.Linux;
+  static bool get isMacOS => Get.find<SensorService>()._platform.value == Platform.MacOS;
+  static bool get isWindows => Get.find<SensorService>()._platform.value == Platform.Windows;
   static bool get isNotApple =>
-      Get.find<DeviceService>()._platform.value != Platform.IOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
+      Get.find<SensorService>()._platform.value != Platform.IOS && Get.find<SensorService>()._platform.value != Platform.MacOS;
 
   // References
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisibleController = KeyboardVisibilityController();
 
   // ^ Open SharedPreferences on Init ^ //
-  Future<DeviceService> init() async {
+  Future<SensorService> init() async {
     // @ 1. Set Platform
     if (io.Platform.isAndroid) {
       _platform(Platform.Android);

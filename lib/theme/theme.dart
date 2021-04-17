@@ -1,11 +1,11 @@
-export '../service/device.dart';
-export '../service/file.dart';
-export '../service/lobby.dart';
-export '../service/media.dart';
-export '../service/sonr.dart';
-export '../service/cards.dart';
-export '../service/user.dart';
-export '../service/assets.dart';
+export '../service/device/sensors.dart';
+export '../service/device/file.dart';
+export '../service/client/lobby.dart';
+export '../service/interface/media.dart';
+export '../service/client/sonr.dart';
+export '../service/device/cards.dart';
+export '../service/client/user.dart';
+export '../service/interface/assets.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';
@@ -46,7 +46,7 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/user.dart';
+import 'package:sonr_app/service/client/user.dart';
 import 'package:sonr_core/sonr_core.dart';
 
 import 'elements/painter.dart';

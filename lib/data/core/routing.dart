@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
-import 'package:sonr_app/service/cards.dart';
-import 'package:sonr_app/service/lobby.dart';
+import 'package:sonr_app/service/device/cards.dart';
+import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'bindings.dart';
 
@@ -42,7 +42,7 @@ class SonrRouting {
 
   // ^ Services (Files, Contacts) ^ //
   static initServices() async {
-    await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
+    await Get.putAsync(() => SensorService().init(), permanent: true); // Second Required Service
     await Get.putAsync(() => UserService().init(), permanent: true); // Third Required Service
     await Get.putAsync(() => FileService().init(), permanent: true);
     await Get.putAsync(() => MediaService().init(), permanent: true);
@@ -56,7 +56,7 @@ class SonrRouting {
 
   // ^ Method Validates Required Services Registered ^ //
   static bool get areServicesRegistered {
-    return DeviceService.isRegistered &&
+    return SensorService.isRegistered &&
         UserService.isRegistered &&
         MediaService.isRegistered &&
         CardService.isRegistered &&

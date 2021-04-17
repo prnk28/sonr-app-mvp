@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:ui';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
@@ -20,6 +20,7 @@ class FileItem {
   // Thumbnail Vars
   List<int> thumbnail;
   Isolate isolate;
+  Completer<bool> _thumbReady = Completer();
 
   // # Retreives Metadata Info
   bool get isAudio => mime.type == MIME_Type.audio;
@@ -51,8 +52,13 @@ class FileItem {
         });
       } else {
         thumbnail = data;
+        _thumbReady.complete(true);
       }
     });
+  }
+
+  Future<bool> isThumbnailReady() {
+    return _thumbReady.future;
   }
 
   // ^ Method to Handle thumbnail Generation ^ //

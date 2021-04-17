@@ -1,5 +1,5 @@
 import 'package:sonr_app/data/model/model_file.dart';
-import 'package:sonr_app/service/sonr.dart';
+import 'package:sonr_app/service/client/sonr.dart';
 
 class HomeArguments {
   final bool isFirstLoad;

@@ -68,7 +68,7 @@ class RegisterController extends GetxController {
 
   // ^ Request Gallery Permissions ^ //
   Future<bool> requestGallery() async {
-    if (DeviceService.isAndroid) {
+    if (SensorService.isAndroid) {
       if (await Permission.storage.request().isGranted) {
         UserService.permissions.value.update();
         UserService.permissions.refresh();

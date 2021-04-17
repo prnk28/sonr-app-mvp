@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:sonr_app/service/user.dart';
+import 'package:sonr_app/service/client/user.dart';
 import '../theme.dart';
 
 final darkBoxShadow = [
