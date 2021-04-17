@@ -5,7 +5,7 @@ const double K_CARD_WIDTH = 160;
 const double K_CARD_HEIGHT = 190;
 
 // ^ Root Peer Card View ^ //
-class PeerCard extends GetWidget<BubbleController> {
+class PeerCard extends GetWidget<PeerController> {
   final Peer peer;
   PeerCard(this.peer);
 
@@ -44,7 +44,7 @@ class PeerCard extends GetWidget<BubbleController> {
 
 // ^ Main Peer Card View ^ //
 class _PeerMainCard extends StatelessWidget {
-  final BubbleController controller;
+  final PeerController controller;
   const _PeerMainCard({Key key, @required this.controller}) : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class _PeerMainCard extends StatelessWidget {
 
 // ^ Details Peer Card View ^ //
 class _PeerDetailsCard extends StatelessWidget {
-  final BubbleController controller;
+  final PeerController controller;
   const _PeerDetailsCard({Key key, @required this.controller}) : super(key: key);
 
   @override

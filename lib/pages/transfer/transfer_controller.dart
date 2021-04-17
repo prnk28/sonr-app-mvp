@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
-import 'package:sonr_app/modules/common/peer/bubble_view.dart';
+import 'package:sonr_app/modules/common/peer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {
@@ -34,7 +34,7 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
-  BubbleController currentPeerController;
+  PeerController currentPeerController;
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -69,7 +69,7 @@ class TransferController extends GetxController {
   }
 
   // ^ Send Invite with Bubble Controller ^ //
-  void inviteWithBubble(BubbleController bubble) {
+  void inviteWithBubble(PeerController bubble) {
     // Set Controller
     currentPeerController = bubble;
     setFacingPeer(false);
@@ -223,11 +223,11 @@ class TransferController extends GetxController {
     if (currentPeerController != null) {
       // Check Decision
       if (data == TransferStatus.Accepted) {
-        currentPeerController.updateStatus(BubbleStatus.Accepted);
+        currentPeerController.updateStatus(PeerStatus.Accepted);
       } else if (data == TransferStatus.Denied) {
-        currentPeerController.updateStatus(BubbleStatus.Declined);
+        currentPeerController.updateStatus(PeerStatus.Declined);
       } else {
-        currentPeerController.updateStatus(BubbleStatus.Complete);
+        currentPeerController.updateStatus(PeerStatus.Complete);
         inviteRequest.value.clear();
       }
     }

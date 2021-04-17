@@ -47,7 +47,7 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
-    Get.create<BubbleController>(() => BubbleController(_getRiveDataFile()));
+    Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
 
   // Get Rive File for Peer Bubble

@@ -6,58 +6,19 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'peer.dart';
 
-const double K_BUBBLE_SIZE = 80;
+// ^ Peer Controller Status ^ //
+enum PeerStatus { Default, Pending, Accepted, Declined, Complete }
 
-// ^ PeerBubble Utilizes Controller and Lottie Files ^ //
-class PeerBubble extends GetWidget<BubbleController> {
-  final Peer peer;
-  PeerBubble(this.peer);
-
-  @override
-  Widget build(BuildContext context) {
-    controller.initalize(peer);
-    return Obx(() {
-      return AnimatedPositioned(
-        width: K_BUBBLE_SIZE,
-        height: K_BUBBLE_SIZE,
-        top: controller.offset.value.dy - (ZonePathProvider.size / 2),
-        left: controller.offset.value.dx - (ZonePathProvider.size / 2),
-        duration: 150.milliseconds,
-        child: GestureDetector(
-          onTap: controller.invite,
-          child: Stack(alignment: Alignment.center, children: [
-            // Rive Board
-            controller.isReady.value
-                ? SizedBox(width: K_BUBBLE_SIZE, height: K_BUBBLE_SIZE, child: Rive(artboard: controller.board.value))
-                : Container(),
-
-            // Peer Info
-            OpacityAnimatedWidget(
-                enabled: controller.isVisible.value,
-                values: controller.isVisible.value ? [0, 1] : [1, 0],
-                duration: Duration(milliseconds: 250),
-                delay: controller.isVisible.value ? Duration(milliseconds: 250) : Duration(milliseconds: 100),
-                child: Center(child: controller.peer.value.initials))
-          ]),
-        ),
-      );
-    });
-  }
-}
-
-// ^ Bubble Controller Status ^ //
-enum BubbleStatus { Default, Pending, Accepted, Declined, Complete }
-
-extension BubbleStatusUtils on BubbleStatus {
-  bool get isIdle => this == BubbleStatus.Default;
-  bool get isPending => this == BubbleStatus.Pending;
-  bool get isAccepted => this == BubbleStatus.Accepted;
-  bool get isDeclined => this == BubbleStatus.Declined;
-  bool get isComplete => this == BubbleStatus.Complete;
+extension PeerStatusUtils on PeerStatus {
+  bool get isIdle => this == PeerStatus.Default;
+  bool get isPending => this == PeerStatus.Pending;
+  bool get isAccepted => this == PeerStatus.Accepted;
+  bool get isDeclined => this == PeerStatus.Declined;
+  bool get isComplete => this == PeerStatus.Complete;
 }
 
 // ^ Reactive Controller for Peer Bubble ^ //
-class BubbleController extends GetxController {
+class PeerController extends GetxController {
   // Required Properties
   final Future<RiveFile> riveFile;
 
@@ -70,7 +31,7 @@ class BubbleController extends GetxController {
   final isVisible = true.obs;
   final isWithin = false.obs;
   final peer = Rx<Peer>(null);
-  final status = Rx<BubbleStatus>(BubbleStatus.Default);
+  final status = Rx<PeerStatus>(PeerStatus.Default);
 
   // Vector Properties
   final offset = Offset(0, 0).obs;
@@ -89,7 +50,7 @@ class BubbleController extends GetxController {
   StateMachineInput<bool> _hasDenied;
   StateMachineInput<bool> _isComplete;
 
-  BubbleController(this.riveFile);
+  PeerController(this.riveFile);
 
   @override
   void onInit() {
@@ -185,14 +146,14 @@ class BubbleController extends GetxController {
         }
         // Contact/URL
         else {
-          updateStatus(BubbleStatus.Complete);
+          updateStatus(PeerStatus.Complete);
         }
       }
     }
   }
 
   // ^ Handle Updated Bubble Status ^ //
-  void updateStatus(BubbleStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
+  void updateStatus(PeerStatus newStatus, {Duration delay = const Duration(milliseconds: 0)}) {
     // @ Update Status
     status(newStatus);
 
@@ -202,7 +163,7 @@ class BubbleController extends GetxController {
       Future.delayed(delay, () {
         // Set Animation
         switch (status.value) {
-          case BubbleStatus.Default:
+          case PeerStatus.Default:
             isVisible(true);
             _isComplete.value = false;
             _isPending.value = false;
@@ -210,18 +171,18 @@ class BubbleController extends GetxController {
             _hasDenied.value = false;
             _isIdle.value = true;
             break;
-          case BubbleStatus.Pending:
+          case PeerStatus.Pending:
             _isPending.value = true;
             break;
-          case BubbleStatus.Accepted:
+          case PeerStatus.Accepted:
             isVisible(false);
             _hasAccepted.value = true;
             break;
-          case BubbleStatus.Declined:
+          case PeerStatus.Declined:
             isVisible(false);
             _hasDenied.value = true;
             break;
-          case BubbleStatus.Complete:
+          case PeerStatus.Complete:
             isVisible(false);
             _isComplete.value = true;
             break;
