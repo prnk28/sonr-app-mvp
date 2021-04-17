@@ -1,16 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
-import 'package:sonr_app/modules/common/lobby/lobby.dart';
-import 'package:sonr_app/modules/common/peer/card_view.dart';
 import 'package:sonr_app/modules/common/peer/peer.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'bulb_view.dart';
 import 'lobby_view.dart';
 import 'transfer_controller.dart';
 

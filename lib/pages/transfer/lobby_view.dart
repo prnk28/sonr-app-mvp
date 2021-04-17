@@ -108,7 +108,7 @@ class _LocalLobbyStackState extends State<_LocalLobbyStack> {
     }
   }
 
-  // * Updates Stack Children * //
+  // @ Updates Stack Children
   _handleLobbyUpdate(LobbyModel data) {
     // Initialize
     var children = <PeerCard>[];
