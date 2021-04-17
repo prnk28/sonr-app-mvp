@@ -55,20 +55,11 @@ class SonrStyle {
   static Size get viewSize => Size(Get.width * 0.95, Get.height * 0.85);
   static EdgeInsets get viewMargin => EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
 
-  static NeumorphicStyle get compassStamp =>
-      NeumorphicStyle(intensity: 0.4, depth: UserService.isDarkMode ? 4 : 8, boxShape: NeumorphicBoxShape.stadium(), color: Colors.black87);
-
   static NeumorphicStyle get overlay => NeumorphicStyle(
         intensity: UserService.isDarkMode ? 0.45 : 0.85,
         depth: UserService.isDarkMode ? 4 : 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
         color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
-      );
-
-  static NeumorphicStyle get shareButton => NeumorphicStyle(
-        color: SonrColor.Black,
-        depth: UserService.isDarkMode ? 4 : 8,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(40)),
       );
 
   static NeumorphicStyle get timeStamp => NeumorphicStyle(

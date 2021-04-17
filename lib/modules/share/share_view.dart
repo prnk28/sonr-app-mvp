@@ -37,13 +37,17 @@ class _DefaultButtonView extends GetView<ShareController> {
   _DefaultButtonView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return NeumorphicButton(
-        onPressed: controller.toggle,
-        style: SonrStyle.shareButton,
-        child: Container(
-          child: SonrIcons.Share.white,
-          padding: EdgeWith.vertical(8),
-        ));
+    return GestureDetector(
+      onTap: controller.toggle,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: SonrColor.Black,
+        ),
+        alignment: Alignment.center,
+        child: SonrIcons.Share.white,
+      ),
+    );
   }
 }
 
@@ -52,20 +56,22 @@ class _QueueView extends GetView<ShareController> {
   _QueueView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return NeumorphicButton(
-      onPressed: controller.toggle,
-      style: SonrStyle.shareButton,
-      child: OpacityAnimatedWidget(
-          enabled: true,
-          duration: 150.milliseconds,
-          delay: 350.milliseconds,
-          curve: Curves.easeIn,
-          child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            const ShareCameraButtonItem(),
-            const ShareGalleryButtonItem(),
-            const ShareFileButtonItem(),
-            const ShareContactButtonItem(),
-          ])),
+    return GestureDetector(
+      onTap: controller.toggle,
+      child: Container(
+        decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(40)),
+        child: OpacityAnimatedWidget(
+            enabled: true,
+            duration: 150.milliseconds,
+            delay: 350.milliseconds,
+            curve: Curves.easeIn,
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              const ShareCameraButtonItem(),
+              const ShareGalleryButtonItem(),
+              const ShareFileButtonItem(),
+              const ShareContactButtonItem(),
+            ])),
+      ),
     );
   }
 }

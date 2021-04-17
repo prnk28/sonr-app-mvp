@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/grid/grid_view.dart';
-import 'package:sonr_app/modules/share/index_view.dart';
+import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';

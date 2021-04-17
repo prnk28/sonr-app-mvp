@@ -27,14 +27,13 @@ class PeerDetailsView extends StatelessWidget {
                       heightFactor: 0.9,
                       alignment: Alignment.topRight,
                       child: Container(
-                          width: 100,
-                          padding: EdgeInsets.all(10),
-                          child: Neumorphic(
-                            padding: EdgeInsets.all(4),
-                            style: SonrStyle.compassStamp,
-                            child:
-                                Row(children: [SonrIcons.Discover.white, Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White)]),
-                          ))),
+                          padding: EdgeInsets.all(4),
+                          height: 32,
+                          width: 86,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.AccentNavy.withOpacity(0.75)),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [SonrIcons.Discover.white, Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White)]))),
 
                   // Peer Information
                   controller.peer.value.fullName,
