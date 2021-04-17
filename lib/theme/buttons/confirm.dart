@@ -4,7 +4,6 @@ import '../theme.dart';
 import 'utility.dart';
 
 enum ConfirmButtonType { Save, Delete }
-
 class ConfirmButton extends StatefulWidget {
   final ConfirmButtonType type;
   final EdgeInsets margin;

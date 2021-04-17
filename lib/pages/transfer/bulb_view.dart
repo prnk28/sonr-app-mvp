@@ -49,7 +49,6 @@ class BulbView extends GetView<TransferController> {
           /// Cancel Button
           Container(
             alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(right: 8),
             child: Opacity(
               opacity: 0.6,
               child: PlainIconButton(
@@ -62,7 +61,6 @@ class BulbView extends GetView<TransferController> {
           /// Replace Button
           Container(
             alignment: Alignment.topRight,
-            padding: EdgeInsets.only(right: 8),
             child: Opacity(
               opacity: 0.6,
               child: PlainIconButton(

@@ -63,7 +63,10 @@ class PlainIconButton extends StatelessWidget {
               child: AnimatedContainer(
                 duration: ButtonUtility.K_BUTTON_DURATION,
                 curve: Curves.ease,
-                child: icon,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: icon,
+                ),
               ),
             ));
       }, isPressed),

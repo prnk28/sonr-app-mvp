@@ -1,7 +1,7 @@
 import '../theme.dart';
 
 extension Neumorph on BoxDecoration {
-  /// Floating Default Neumorphic Box
+  /// @ Floating Default Neumorphic Box
   static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
         shape: shape,
@@ -48,7 +48,7 @@ extension Neumorph on BoxDecoration {
         border: Border.all(color: Colors.white.withOpacity(0.65), width: 1));
   }
 
-  /// Orange Red Hue Neumorphic Box
+  /// @ Orange Red Hue Neumorphic Box
   static BoxDecoration rainbow({double radius = 20, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
       shape: shape,
@@ -90,7 +90,7 @@ extension Neumorph on BoxDecoration {
     );
   }
 
-  /// Slightly Indented Neumorphic Box
+  /// @ Slightly Indented Neumorphic Box
   static BoxDecoration indented({double radius = 20, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(
       shape: shape,

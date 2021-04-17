@@ -28,9 +28,38 @@ class FileItem {
   bool get isVideo => mime.type == MIME_Type.video;
   bool get hasThumbnail => thumbnail != null;
 
+  // # Retreives MetadataProperties Protobuf
+  Metadata_Properties get properties => Metadata_Properties(
+        payload: payload,
+        isAudio: isAudio,
+        isImage: isImage,
+        isVideo: isVideo,
+        hasThumbnail: hasThumbnail,
+      );
+
   // # Retreives Metadata Protobuf
-  Metadata_Properties get properties => Metadata_Properties(payload: payload, isAudio: isAudio, isImage: isImage, isVideo: isVideo);
-  Metadata get metadata => Metadata(name: name, size: size, path: path, mime: mime, properties: properties);
+  Metadata get metadata {
+    if (hasThumbnail) {
+      // With Thumbnail
+      return Metadata(
+        name: name,
+        size: size,
+        path: path,
+        mime: mime,
+        properties: properties,
+        thumbnail: thumbnail,
+      );
+    } else {
+      // Without Thumbnail
+      return Metadata(
+        name: name,
+        size: size,
+        path: path,
+        mime: mime,
+        properties: properties,
+      );
+    }
+  }
 
   // * Constructer * //
   FileItem(this.path, this.name, this.size, this.mime, this.payload, {this.result}) {

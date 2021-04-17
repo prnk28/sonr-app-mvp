@@ -254,7 +254,7 @@ class AssetController extends GetxController {
   LottieIcon _remoteSelectIcon = LottieIcon(link: SonrAssetIcon.RemoteSelected.link, size: 38, key: ValueKey<bool>(true));
 
   // * Constructer * //
-  onInit() async {
+  onReady() async {
     // Load Icons
     precacheImage(_homeDefaultIcon.image, Get.context);
     precacheImage(_profileDefaultIcon.image, Get.context);
@@ -270,7 +270,7 @@ class AssetController extends GetxController {
     precacheImage(_locationAccess.image, Get.context);
     precacheImage(_mediaAccess.image, Get.context);
     precacheImage(_noConnection.image, Get.context);
-    super.onInit();
+    super.onReady();
   }
 
   // ^ Static Get Icon for Home Tab Bar ^ //
