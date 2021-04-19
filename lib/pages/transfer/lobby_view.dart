@@ -25,24 +25,6 @@ class LocalLobbyView extends GetView<TransferController> {
           ),
           body: Stack(
             children: <Widget>[
-              // @ Range Lines
-              Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Stack(
-                    children: [
-                      ClipOval(
-                          child: Container(
-                        width: Get.width,
-                        height: Get.height,
-                      )),
-                      ClipOval(
-                          child: Container(
-                        width: Get.width,
-                        height: Get.height,
-                      ))
-                    ],
-                  )),
-
               // @ Lobby View
               _LocalLobbyStack(),
 

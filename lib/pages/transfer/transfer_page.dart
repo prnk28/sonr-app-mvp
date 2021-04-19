@@ -32,15 +32,11 @@ class TransferScreen extends GetView<TransferController> {
     controller.setPayload(Get.arguments);
 
     // Build View
-    return Obx(
-      () {
-        if (controller.isRemoteActive.value) {
-          return RemoteLobbyFullView(info: controller.remote.value);
-        } else {
-          return LocalLobbyView();
-        }
-      },
-    );
+    return Obx(() => controller.isRemoteActive.value
+        ? RemoteLobbyFullView(
+            info: controller.remote.value,
+          )
+        : LocalLobbyView());
   }
 }
 
