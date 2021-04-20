@@ -6,7 +6,6 @@ import 'package:sonr_app/theme/theme.dart';
 // # Lottie
 enum SonrAssetLottie {
   David,
-  JoinRemote,
   MediaAccess,
   Progress,
   Camera,
@@ -21,8 +20,6 @@ extension LottieNetworkUtils on SonrAssetLottie {
     switch (this) {
       case SonrAssetLottie.David:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f507e00e828537af1_david.json";
-      case SonrAssetLottie.JoinRemote:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f783403762f50fcab_join-remote.json";
       case SonrAssetLottie.Camera:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078941b16c335b7c05e1543_camera.json";
       case SonrAssetLottie.Gallery:
@@ -101,16 +98,7 @@ extension IconNetworkUtils on SonrAssetIcon {
 }
 
 // # Illustrations
-enum SonrAssetIllustration {
-  NoFiles1,
-  NoFiles2,
-  NoFiles3,
-  NoFiles4,
-  LocationAccess,
-  MediaAccess,
-  CameraAccess,
-  ConnectionLost,
-}
+enum SonrAssetIllustration { NoFiles1, NoFiles2, NoFiles3, NoFiles4, LocationAccess, MediaAccess, CameraAccess, ConnectionLost, CreateGroup }
 
 // @ Helper method to retreive asset
 extension IllustrationNetworkUtils on SonrAssetIllustration {
@@ -133,6 +121,8 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/60787699a572987f0d11afd8_camera_access.png";
       case SonrAssetIllustration.ConnectionLost:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/60787699880cc8c9cb1434c0_connection_lost.png";
+      case SonrAssetIllustration.CreateGroup:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607ef74598fc8f0f9276d125_create-group.png";
       default:
         return "";
     }
@@ -157,6 +147,8 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
         return AssetController.to._cameraAccess;
       case SonrAssetIllustration.ConnectionLost:
         return AssetController.to._noConnection;
+      case SonrAssetIllustration.CreateGroup:
+        return AssetController.to._createGroup;
     }
     return Container();
   }
@@ -202,6 +194,7 @@ class AssetController extends GetxController {
 
   // @ Illustrations: Access/Connection
   Image _cameraAccess = Image(image: NetworkImage(SonrAssetIllustration.CameraAccess.link), fit: BoxFit.fitHeight);
+  Image _createGroup = Image(image: NetworkImage(SonrAssetIllustration.CreateGroup.link), fit: BoxFit.fitHeight);
   Image _locationAccess = Image(image: NetworkImage(SonrAssetIllustration.LocationAccess.link), fit: BoxFit.fitHeight);
   Image _mediaAccess = Image(image: NetworkImage(SonrAssetIllustration.MediaAccess.link), fit: BoxFit.fitHeight);
   Image _noConnection = Image(image: NetworkImage(SonrAssetIllustration.ConnectionLost.link), fit: BoxFit.fitHeight);
@@ -267,6 +260,7 @@ class AssetController extends GetxController {
 
     // Load Illustrations
     precacheImage(_cameraAccess.image, Get.context);
+    precacheImage(_createGroup.image, Get.context);
     precacheImage(_locationAccess.image, Get.context);
     precacheImage(_mediaAccess.image, Get.context);
     precacheImage(_noConnection.image, Get.context);

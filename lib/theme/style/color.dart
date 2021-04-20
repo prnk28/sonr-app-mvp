@@ -9,8 +9,7 @@ import 'package:sonr_app/data/data.dart';
 
 class SonrColor {
   // ** General Theme Color Properties ** //
-  static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
-  static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
+
   static const Color Black = Color(0xff323232);
   static const Color Dark = Color(0xff2c2b2b);
   static const Color Blue = Color(0xff51C5DD);
