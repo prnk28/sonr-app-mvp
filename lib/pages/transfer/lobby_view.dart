@@ -7,7 +7,7 @@ import 'package:sonr_app/modules/common/peer/card_view.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-import 'bulb_view.dart';
+import 'payload_view.dart';
 
 // ^ Local Lobby View ^ //
 class LocalLobbyView extends GetView<TransferController> {
@@ -20,7 +20,7 @@ class LocalLobbyView extends GetView<TransferController> {
             action: controller.currentPayload != Payload.CONTACT
                 ? PlainButton(icon: SonrIcons.Remote, onPressed: () async => controller.startRemote())
                 : Container(width: 56, height: 56),
-            leading: PlainIconButton(icon: SonrIcons.Close.gradient(gradient: SonrPalette.critical()), onPressed: () => Get.offNamed("/home")),
+            leading: PlainIconButton(icon: SonrIcons.Close.gradient(gradient: SonrGradient.Critical), onPressed: () => Get.offNamed("/home")),
             title: Container(child: GestureDetector(child: controller.title.value.h3, onTap: () => Get.bottomSheet(LobbySheet()))),
           ),
           body: Stack(
@@ -37,7 +37,7 @@ class LocalLobbyView extends GetView<TransferController> {
                     onTap: () {
                       controller.toggleShifting();
                     },
-                    child: BulbView(),
+                    child: PayloadView(),
                   ),
                 ),
               ),

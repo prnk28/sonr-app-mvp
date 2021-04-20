@@ -96,7 +96,7 @@ class AnimatedWaveIcon extends HookWidget {
                   iconKey: iconKey,
                   waveAnimation: controller,
                   percent: controller.value,
-                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrGradient.progress(),
+                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrGradient.Progress,
                   boxHeight: size,
                 ),
               );

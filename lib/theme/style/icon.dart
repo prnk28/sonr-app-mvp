@@ -303,7 +303,7 @@ extension DesignIcon on IconData {
     return ShaderMask(
       blendMode: BlendMode.modulate,
       shaderCallback: (bounds) {
-        var grad = gradient ?? SonrPalette.primary();
+        var grad = gradient ?? SonrGradient.Primary;
         return grad.createShader(bounds);
       },
       child: Icon(

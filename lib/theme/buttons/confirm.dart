@@ -63,19 +63,19 @@ class ConfirmButton extends StatefulWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrPalette.neutral(),
+        gradient: SonrGradient.Neutral,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
-        gradient: SonrPalette.primary(),
+        gradient: SonrGradient.Primary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
-        gradient: SonrPalette.tertiary(),
+        gradient: SonrGradient.Tertiary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
@@ -124,19 +124,19 @@ class ConfirmButton extends StatefulWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrPalette.neutral(),
+        gradient: SonrGradient.Neutral,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
-        gradient: SonrPalette.primary(),
+        gradient: SonrGradient.Primary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
-        gradient: SonrPalette.critical(),
+        gradient: SonrGradient.Critical,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 

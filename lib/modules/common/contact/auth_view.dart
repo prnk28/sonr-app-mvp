@@ -84,7 +84,7 @@ class ContactAuthView extends StatelessWidget {
                 }
               },
               text: "Accept",
-              gradient: SonrPalette.tertiary(),
+              gradient: SonrGradient.Tertiary,
               icon: SonrIcons.Check,
             ),
           ],

@@ -78,7 +78,7 @@ class FileAuthView extends StatelessWidget {
                 ColorButton.primary(
                   onPressed: () => CardService.handleInviteResponse(true, invite, card),
                   text: "Accept",
-                  gradient: SonrPalette.tertiary(),
+                  gradient: SonrGradient.Tertiary,
                   icon: SonrIcons.Check,
                 ),
               ],

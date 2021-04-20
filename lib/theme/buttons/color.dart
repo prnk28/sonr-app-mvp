@@ -45,7 +45,7 @@ class ColorButton extends StatefulWidget {
   }) {
     // Build Decoration
     BoxDecoration decoration = BoxDecoration(
-        gradient: gradient != null ? gradient : SonrPalette.primary(),
+        gradient: gradient != null ? gradient : SonrGradient.Primary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
         boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 

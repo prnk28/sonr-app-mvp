@@ -25,14 +25,14 @@ class SonrColor {
 }
 
 class SonrGradient {
-  // ** Gradients ** //
+  // ^ General Gradients ^ //
   static Gradient get bulbDark => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
   static Gradient get bulbLight => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
   static Gradient get logo => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
 
   // ^ Generates Random Gradient for Progress View ^ //
-  static Gradient progress() {
-    var name = [
+  static Gradient get Progress {
+    var name = <FlutterGradientNames>[
       FlutterGradientNames.amyCrisp,
       FlutterGradientNames.sugarLollipop,
       FlutterGradientNames.summerGames,
@@ -43,34 +43,20 @@ class SonrGradient {
     ].random();
     return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
   }
-}
 
-class SonrPalette {
+  // ^ Palette Gradients ^ //
   static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
   static const AlignmentGeometry _K_END = Alignment.topCenter;
-
-  static Gradient primary() {
-    return LinearGradient(colors: [Color(0xff4aaaff), Color(0xff1792ff)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient secondary() {
-    return LinearGradient(colors: [Color(0xff7f30ff), Color(0xff9757ff)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient tertiary() {
-    return LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient neutral() {
-    return LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient critical() {
-    return LinearGradient(colors: [Color(0xffff176b), Color(0xffff176b).withOpacity(0.7)], begin: _K_BEGIN, end: _K_END);
-  }
+  static Gradient get Primary => LinearGradient(colors: [Color(0xff4aaaff), Color(0xff1792ff)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Secondary => LinearGradient(colors: [Color(0xff7f30ff), Color(0xff9757ff)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Tertiary => LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Neutral => LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Critical => LinearGradient(colors: [Color(0xffff176b), Color(0xffff176b).withOpacity(0.7)], begin: _K_BEGIN, end: _K_END);
 }
 
 extension GradientValue on FlutterGradientNames {
+  Gradient get clamp => FlutterGradients.findByName(this, tileMode: TileMode.clamp);
+
   Gradient linear({TileMode tileMode = TileMode.repeated}) {
     return FlutterGradients.findByName(this, tileMode: tileMode);
   }

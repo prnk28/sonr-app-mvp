@@ -2,8 +2,8 @@ import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'transfer_controller.dart';
 
-class BulbView extends GetView<TransferController> {
-  const BulbView();
+class PayloadView extends GetView<TransferController> {
+  const PayloadView();
   @override
   Widget build(BuildContext context) {
     return GlassContainer(
@@ -53,7 +53,7 @@ class BulbView extends GetView<TransferController> {
               opacity: 0.6,
               child: PlainIconButton(
                 onPressed: () {},
-                icon: SonrIcons.Close.gradient(gradient: SonrPalette.critical()),
+                icon: SonrIcons.Close.gradient(gradient: SonrGradient.Critical),
               ),
             ),
           ),
@@ -65,7 +65,7 @@ class BulbView extends GetView<TransferController> {
               opacity: 0.6,
               child: PlainIconButton(
                 onPressed: () {},
-                icon: SonrIcons.More_Vertical.gradient(gradient: SonrPalette.secondary()),
+                icon: SonrIcons.More_Vertical.gradient(gradient: SonrGradient.Secondary),
               ),
             ),
           )
