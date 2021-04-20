@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/common/contact/contact.dart';
-import 'package:sonr_app/modules/common/url/url.dart';
-import 'package:sonr_app/modules/common/file/file.dart';
-import 'package:sonr_app/modules/common/media/media.dart';
+import 'package:sonr_app/modules/contact/contact.dart';
+import 'package:sonr_app/modules/url/url.dart';
+import 'package:sonr_app/modules/file/file.dart';
+import 'package:sonr_app/modules/media/media.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'fixed_overlay.dart';
@@ -76,15 +76,15 @@ class AlertOverlayView extends StatelessWidget {
           // Accept Button
           Container(
             width: Get.width / 3,
-            child: ShapeButton.stadium(
+            child: ColorButton.primary(
               onPressed: () {
                 onPressed();
                 if (closeOnResponse) {
                   SonrOverlay.back();
                 }
               },
-              icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife),
-              text: buttonText.h6,
+              icon: SonrIcons.Check,
+              text: buttonText,
             ),
           ),
         ]),
@@ -119,7 +119,7 @@ class DropdownOverlayView extends StatelessWidget {
           child: Container(
             width: 17,
             height: 17,
-            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+            color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
           ),
         ),
       ),
@@ -128,23 +128,24 @@ class DropdownOverlayView extends StatelessWidget {
         child: Container(
           height: (items.length * size.height) / 1.5 + height,
           width: size.width + width,
-          child: Neumorphic(
+          child: Container(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            style: SonrStyle.dropDownBackground,
+            decoration: Neumorph.floating(radius: 0),
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: NeumorphicButton(
-                    style: SonrStyle.flat,
-                    padding: EdgeInsets.all(8),
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       onChanged(index);
                       SonrPositionedOverlay.back();
                     },
-                    child: Stack(children: [items[index]]),
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Stack(children: [items[index]]),
+                    ),
                   ),
                 );
               },
@@ -236,15 +237,15 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
             Container(
               width: Get.width / 2.5,
               height: 50,
-              child: ShapeButton.stadium(
+              child: ColorButton.primary(
                 onPressed: () {
                   onDecision(true);
                   if (closeOnResponse) {
                     SonrOverlay.back();
                   }
                 },
-                icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.newLife, size: 28),
-                text: acceptTitle.h6,
+                icon: SonrIcons.Check,
+                text: acceptTitle,
               ),
             ),
           ]),

@@ -10,7 +10,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final isBottomBarVisible = true.obs;
   final isTitleVisible = true.obs;
-  final isFilterOpen = false.obs;
 
   // Elements
   final titleText = "Home".obs;
@@ -52,7 +51,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
 
     // Handle Streams
-    DeviceService.keyboardVisible.listen(_handleKeyboardVisibility);
+    SensorService.keyboardVisible.listen(_handleKeyboardVisibility);
     _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
@@ -64,23 +63,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     _statusStream.cancel();
     pageIndex(0);
     super.onClose();
-  }
-
-  // ^ Method to Handle Action Button ^ //
-  void handleAction() {
-    if (view.value == HomeView.Main) {
-      // Set Open and Close Title
-      isFilterOpen(!isFilterOpen.value);
-      isTitleVisible(!isFilterOpen.value);
-
-      // Close after Delay
-      Future.delayed(5.seconds, () {
-        if (isFilterOpen.value) {
-          isFilterOpen(false);
-          isTitleVisible(!isFilterOpen.value);
-        }
-      });
-    }
   }
 
   // ^ Update Bottom Bar Index ^ //
@@ -147,7 +129,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      DeviceService.playSound(type: UISoundType.Joined);
+      SensorService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

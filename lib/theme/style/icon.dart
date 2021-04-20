@@ -133,48 +133,48 @@ extension PlatformIcon on Platform {
     }
   }
 
-  Icon get black {
+  Icon black({double size = 32}) {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android.black;
+        return SonrIcons.Android.blackWith(size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.black;
+        return SonrIcons.IOS.blackWith(size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.black;
+        return SonrIcons.Mac.blackWith(size: size);
       case Platform.Windows:
-        return SonrIcons.Windows.black;
+        return SonrIcons.Windows.blackWith(size: size);
       default:
-        return SonrIcons.Unknown_Device.black;
+        return SonrIcons.Unknown_Device.blackWith(size: size);
     }
   }
 
-  Icon get grey {
+  Icon grey({double size = 32}) {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android.grey;
+        return SonrIcons.Android.greyWith(size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.grey;
+        return SonrIcons.IOS.greyWith(size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.grey;
+        return SonrIcons.Mac.greyWith(size: size);
       case Platform.Windows:
-        return SonrIcons.Windows.grey;
+        return SonrIcons.Windows.greyWith(size: size);
       default:
-        return SonrIcons.Unknown_Device.grey;
+        return SonrIcons.Unknown_Device.greyWith(size: size);
     }
   }
 
-  Icon get white {
+  Icon white({double size = 32}) {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android.white;
+        return SonrIcons.Android.whiteWith(size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.white;
+        return SonrIcons.IOS.whiteWith(size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.white;
+        return SonrIcons.Mac.whiteWith(size: size);
       case Platform.Windows:
-        return SonrIcons.Windows.white;
+        return SonrIcons.Windows.whiteWith(size: size);
       default:
-        return SonrIcons.Unknown_Device.white;
+        return SonrIcons.Unknown_Device.whiteWith(size: size);
     }
   }
 }
@@ -271,7 +271,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: 24,
-      color: SonrColor.Neutral,
+      color: SonrColor.Grey,
     );
   }
 
@@ -279,7 +279,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: size,
-      color: SonrColor.Neutral,
+      color: SonrColor.Grey,
     );
   }
 
@@ -303,7 +303,7 @@ extension DesignIcon on IconData {
     return ShaderMask(
       blendMode: BlendMode.modulate,
       shaderCallback: (bounds) {
-        var grad = gradient ?? SonrPalette.primary();
+        var grad = gradient ?? SonrGradient.Primary;
         return grad.createShader(bounds);
       },
       child: Icon(

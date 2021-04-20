@@ -45,9 +45,9 @@ class ColorButton extends StatefulWidget {
   }) {
     // Build Decoration
     BoxDecoration decoration = BoxDecoration(
-        gradient: gradient != null ? gradient : SonrPalette.primary(),
+        gradient: gradient != null ? gradient : SonrGradient.Primary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ColorButton(
@@ -78,7 +78,7 @@ class ColorButton extends StatefulWidget {
   }) {
     // Decoration
     BoxDecoration decoration = BoxDecoration(
-      color: color != null ? color : SonrPalette.Secondary,
+      color: color != null ? color : SonrColor.AccentPurple,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
     );
 
@@ -110,7 +110,7 @@ class ColorButton extends StatefulWidget {
   }) {
     // Decoration
     BoxDecoration decoration = BoxDecoration(
-      color: SonrColor.Neutral,
+      color: SonrColor.Grey,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
     );
 

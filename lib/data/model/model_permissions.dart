@@ -20,7 +20,7 @@ class UserPermissions {
   bool _hasLocation = false;
 
   bool get hasGallery {
-    if (DeviceService.isIOS) {
+    if (SensorService.isIOS) {
       return _hasPhotos;
     } else {
       return _hasStorage;
@@ -89,7 +89,7 @@ class UserPermissions {
 
   // ^ Request Camera optional overlay ^ //
   Future<bool> _requestCamera() async {
-    if (DeviceService.isMobile) {
+    if (SensorService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Requires Permission',
@@ -112,10 +112,10 @@ class UserPermissions {
 
   // ^ Request Gallery optional overlay ^ //
   Future<bool> _requestGallery({String description = 'Sonr needs your Permission to access your phones Gallery.'}) async {
-    if (DeviceService.isMobile) {
+    if (SensorService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(title: 'Photos', description: description, acceptTitle: "Allow", declineTitle: "Decline")) {
-        if (DeviceService.isAndroid) {
+        if (SensorService.isAndroid) {
           if (await Permission.storage.request().isGranted) {
             this.update();
             return true;
@@ -144,7 +144,7 @@ class UserPermissions {
 
   // ^ Request Location optional overlay ^ //
   Future<bool> _requestLocation() async {
-    if (DeviceService.isMobile) {
+    if (SensorService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Location',
@@ -170,7 +170,7 @@ class UserPermissions {
 
   // ^ Request Microphone optional overlay ^ //
   Future<bool> _requestMicrophone() async {
-    if (DeviceService.isMobile) {
+    if (SensorService.isMobile) {
       // Present Overlay
       if (await SonrOverlay.question(
           title: 'Microphone',
@@ -197,7 +197,7 @@ class UserPermissions {
   // ^ Request Notifications optional overlay ^ //
   Future<bool> _requestNotifications() async {
     // Present Overlay
-    if (DeviceService.isMobile) {
+    if (SensorService.isMobile) {
       if (await SonrOverlay.question(
           title: 'Requires Permission',
           description: 'Sonr would like to send you Notifications for Transfer Invites.',
@@ -219,7 +219,7 @@ class UserPermissions {
 
   // ^ Trigger iOS Local Network with Alert ^ //
   Future _triggerNetwork() async {
-    if (!hasLocalNetwork && DeviceService.isIOS) {
+    if (!hasLocalNetwork && SensorService.isIOS) {
       await SonrOverlay.alert(
           title: 'Requires Permission',
           description: 'Sonr requires local network permissions in order to maximize transfer speed.',

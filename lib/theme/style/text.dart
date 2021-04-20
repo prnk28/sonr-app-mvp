@@ -29,70 +29,70 @@ extension DesignTextUtils on String {
 
   // Heading 2
   DesignText get h2 => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Black);
-  DesignText get h2_Blue => DesignText(this, DesignTextStyle.HeadTwo, color: SonrPalette.Primary);
-  DesignText get h2_Green => DesignText(this, DesignTextStyle.HeadTwo, color: SonrPalette.Tertiary);
-  DesignText get h2_Grey => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Neutral);
-  DesignText get h2_Red => DesignText(this, DesignTextStyle.HeadTwo, color: SonrPalette.Critical);
+  DesignText get h2_Blue => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Primary);
+  DesignText get h2_Green => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Tertiary);
+  DesignText get h2_Grey => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Grey);
+  DesignText get h2_Red => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.Critical);
   DesignText get h2_White => DesignText(this, DesignTextStyle.HeadTwo, color: SonrColor.White);
   DesignText headTwo({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.HeadTwo, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 3
   DesignText get h3 => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Black);
-  DesignText get h3_Blue => DesignText(this, DesignTextStyle.HeadThree, color: SonrPalette.Primary);
-  DesignText get h3_Green => DesignText(this, DesignTextStyle.HeadThree, color: SonrPalette.Tertiary);
-  DesignText get h3_Grey => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Neutral);
-  DesignText get h3_Red => DesignText(this, DesignTextStyle.HeadThree, color: SonrPalette.Critical);
+  DesignText get h3_Blue => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Primary);
+  DesignText get h3_Green => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Tertiary);
+  DesignText get h3_Grey => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Grey);
+  DesignText get h3_Red => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.Critical);
   DesignText get h3_White => DesignText(this, DesignTextStyle.HeadThree, color: SonrColor.White);
   DesignText headThree({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.HeadThree, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 4
   DesignText get h4 => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Black);
-  DesignText get h4_Blue => DesignText(this, DesignTextStyle.HeadFour, color: SonrPalette.Primary);
-  DesignText get h4_Green => DesignText(this, DesignTextStyle.HeadFour, color: SonrPalette.Tertiary);
-  DesignText get h4_Grey => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Neutral);
-  DesignText get h4_Red => DesignText(this, DesignTextStyle.HeadFour, color: SonrPalette.Critical);
+  DesignText get h4_Blue => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Primary);
+  DesignText get h4_Green => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Tertiary);
+  DesignText get h4_Grey => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Grey);
+  DesignText get h4_Red => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.Critical);
   DesignText get h4_White => DesignText(this, DesignTextStyle.HeadFour, color: SonrColor.White);
   DesignText headFour({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.HeadFour, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 5
   DesignText get h5 => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Black);
-  DesignText get h5_Blue => DesignText(this, DesignTextStyle.HeadFive, color: SonrPalette.Primary);
-  DesignText get h5_Green => DesignText(this, DesignTextStyle.HeadFive, color: SonrPalette.Tertiary);
-  DesignText get h5_Grey => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Neutral);
-  DesignText get h5_Red => DesignText(this, DesignTextStyle.HeadFive, color: SonrPalette.Critical);
+  DesignText get h5_Blue => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Primary);
+  DesignText get h5_Green => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Tertiary);
+  DesignText get h5_Grey => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Grey);
+  DesignText get h5_Red => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.Critical);
   DesignText get h5_White => DesignText(this, DesignTextStyle.HeadFive, color: SonrColor.White);
   DesignText headFive({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.HeadFive, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Heading 6
   DesignText get h6 => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Black);
-  DesignText get h6_Blue => DesignText(this, DesignTextStyle.HeadSix, color: SonrPalette.Primary);
-  DesignText get h6_Green => DesignText(this, DesignTextStyle.HeadSix, color: SonrPalette.Tertiary);
-  DesignText get h6_Grey => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Neutral);
-  DesignText get h6_Red => DesignText(this, DesignTextStyle.HeadSix, color: SonrPalette.Critical);
+  DesignText get h6_Blue => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Primary);
+  DesignText get h6_Green => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Tertiary);
+  DesignText get h6_Grey => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Grey);
+  DesignText get h6_Red => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.Critical);
   DesignText get h6_White => DesignText(this, DesignTextStyle.HeadSix, color: SonrColor.White);
   DesignText headSix({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.HeadSix, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Paragraph
   DesignText get p => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Black);
-  DesignText get p_Blue => DesignText(this, DesignTextStyle.Paragraph, color: SonrPalette.Primary);
-  DesignText get p_Green => DesignText(this, DesignTextStyle.Paragraph, color: SonrPalette.Tertiary);
-  DesignText get p_Grey => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Neutral);
-  DesignText get p_Red => DesignText(this, DesignTextStyle.Paragraph, color: SonrPalette.Critical);
+  DesignText get p_Blue => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Primary);
+  DesignText get p_Green => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Tertiary);
+  DesignText get p_Grey => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Grey);
+  DesignText get p_Red => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.Critical);
   DesignText get p_White => DesignText(this, DesignTextStyle.Paragraph, color: SonrColor.White);
   DesignText paragraph({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.Paragraph, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Light
   DesignText get l => DesignText(this, DesignTextStyle.Light, color: SonrColor.Black);
-  DesignText get l_Blue => DesignText(this, DesignTextStyle.Light, color: SonrPalette.Primary);
-  DesignText get l_Green => DesignText(this, DesignTextStyle.Light, color: SonrPalette.Tertiary);
-  DesignText get l_Grey => DesignText(this, DesignTextStyle.Light, color: SonrColor.Neutral);
-  DesignText get l_Red => DesignText(this, DesignTextStyle.Light, color: SonrPalette.Critical);
+  DesignText get l_Blue => DesignText(this, DesignTextStyle.Light, color: SonrColor.Primary);
+  DesignText get l_Green => DesignText(this, DesignTextStyle.Light, color: SonrColor.Tertiary);
+  DesignText get l_Grey => DesignText(this, DesignTextStyle.Light, color: SonrColor.Grey);
+  DesignText get l_Red => DesignText(this, DesignTextStyle.Light, color: SonrColor.Critical);
   DesignText get l_White => DesignText(this, DesignTextStyle.Light, color: SonrColor.White);
   DesignText light({Color color = SonrColor.Black, FontWeight weight, TextAlign align = TextAlign.left, Key key}) =>
       DesignText(this, DesignTextStyle.Light, color: color, align: align, key: key, weight: weight); // Custom Options

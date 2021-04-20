@@ -48,23 +48,23 @@ class SonrSnack {
       switch (error.severity) {
         // Orange - Title Failed
         case ErrorMessage_Severity.CRITICAL:
-          DeviceService.playSound(type: UISoundType.Critical);
+          SensorService.playSound(type: UISoundType.Critical);
           return SonrSnack("Failed", error.message, Icon(Icons.sms_failed_outlined), Colors.orange, 2600, false);
 
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
-          DeviceService.playSound(type: UISoundType.Fatal);
+          SensorService.playSound(type: UISoundType.Fatal);
           return SonrSnack("Error", error.message, SonrIcons.Caution_Circle.white, Colors.red, 2600, false);
 
         // Yellow - Title Warning
         default:
-          DeviceService.playSound(type: UISoundType.Warning);
+          SensorService.playSound(type: UISoundType.Warning);
           return SonrSnack("Warning", error.message, SonrIcons.Warning.white, Colors.yellow, 2600, false);
       }
     }
     // @ App Error
     else {
-      DeviceService.playSound(type: UISoundType.Warning);
+      SensorService.playSound(type: UISoundType.Warning);
       return SonrSnack("Error", message, SonrIcons.Caution_Circle.white, Colors.red, 2600, false);
     }
   }
@@ -78,7 +78,7 @@ class SonrSnack {
   factory SonrSnack.missing(String message, {bool isLast = false}) {
     // Get Missing Title
     final list = ['Wait!', 'Hold Up!', "Uh Oh!"];
-    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcons.Warning.white, SonrPalette.Critical, 2600, false);
+    return SonrSnack(isLast ? "Almost There!" : list.random(), message, SonrIcons.Warning.white, SonrColor.Critical, 2600, false);
   }
 
   // ^ Succesful Operation ^ //

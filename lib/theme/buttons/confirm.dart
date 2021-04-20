@@ -4,7 +4,6 @@ import '../theme.dart';
 import 'utility.dart';
 
 enum ConfirmButtonType { Save, Delete }
-
 class ConfirmButton extends StatefulWidget {
   final ConfirmButtonType type;
   final EdgeInsets margin;
@@ -64,21 +63,21 @@ class ConfirmButton extends StatefulWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrPalette.neutral(),
+        gradient: SonrGradient.Neutral,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
-        gradient: SonrPalette.primary(),
+        gradient: SonrGradient.Primary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
-        gradient: SonrPalette.tertiary(),
+        gradient: SonrGradient.Tertiary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ConfirmButton(
@@ -125,21 +124,21 @@ class ConfirmButton extends StatefulWidget {
   }) {
     // Default Decoration
     BoxDecoration defaultDecoration = BoxDecoration(
-        gradient: SonrPalette.neutral(),
+        gradient: SonrGradient.Neutral,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
-        gradient: SonrPalette.primary(),
+        gradient: SonrGradient.Primary,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
-        gradient: SonrPalette.critical(),
+        gradient: SonrGradient.Critical,
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ConfirmButton(
@@ -281,9 +280,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
     // Play Sound
     if (widget.type == ConfirmButtonType.Save) {
-      DeviceService.playSound(type: UISoundType.Confirmed);
+      SensorService.playSound(type: UISoundType.Confirmed);
     } else if (widget.type == ConfirmButtonType.Delete) {
-      DeviceService.playSound(type: UISoundType.Deleted);
+      SensorService.playSound(type: UISoundType.Deleted);
     }
 
     widget.onConfirmed();

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/common/peer/bubble_view.dart';
+import 'package:sonr_app/data/model/model_file.dart';
+import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {
@@ -13,6 +14,7 @@ class TransferController extends GetxController {
   final isBirdsEye = false.obs;
   final isFacingPeer = false.obs;
   final inviteRequest = InviteRequest().obs;
+  final fileItem = Rx<FileItem>(null);
 
   // @ Remote Properties
   final isRemoteActive = false.obs;
@@ -32,16 +34,16 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
-  BubbleController currentPeerController;
+  PeerController currentPeerController;
 
   // ^ Controller Constructer ^
   void onInit() {
     // Set Initial Value
-    _handleCompassUpdate(DeviceService.compass.value);
+    _handleCompassUpdate(SensorService.compass.value);
     _handleLobbySizeUpdate(LobbyService.localSize.value);
 
     // Add Stream Handlers
-    compassStream = DeviceService.compass.listen(_handleCompassUpdate);
+    compassStream = SensorService.compass.listen(_handleCompassUpdate);
     lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
 
     super.onInit();
@@ -67,7 +69,7 @@ class TransferController extends GetxController {
   }
 
   // ^ Send Invite with Bubble Controller ^ //
-  void inviteWithBubble(BubbleController bubble) {
+  void inviteWithBubble(PeerController bubble) {
     // Set Controller
     currentPeerController = bubble;
     setFacingPeer(false);
@@ -89,6 +91,8 @@ class TransferController extends GetxController {
   void setPayload(dynamic args) {
     // Validate Args
     if (args is TransferArguments) {
+      // Set Payload
+
       // Contact
       if (args.payload == Payload.CONTACT) {
         inviteRequest.update((val) {
@@ -107,6 +111,8 @@ class TransferController extends GetxController {
       }
       // File
       else {
+        // Set File Item
+        fileItem(args.item);
         inviteRequest.update((val) {
           val.payload = args.payload;
           val.files.add(args.metadata);
@@ -217,11 +223,11 @@ class TransferController extends GetxController {
     if (currentPeerController != null) {
       // Check Decision
       if (data == TransferStatus.Accepted) {
-        currentPeerController.updateStatus(BubbleStatus.Accepted);
+        currentPeerController.updateStatus(PeerStatus.Accepted);
       } else if (data == TransferStatus.Denied) {
-        currentPeerController.updateStatus(BubbleStatus.Declined);
+        currentPeerController.updateStatus(PeerStatus.Declined);
       } else {
-        currentPeerController.updateStatus(BubbleStatus.Complete);
+        currentPeerController.updateStatus(PeerStatus.Complete);
         inviteRequest.value.clear();
       }
     }

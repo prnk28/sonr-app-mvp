@@ -3,46 +3,60 @@ import 'dart:ui';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:get/get.dart';
 import 'icon.dart';
 import 'package:sonr_app/data/data.dart';
 
 class SonrColor {
   // ** General Theme Color Properties ** //
-  static Color get neuoIconShadow => const Color(0xffDDDDDD).withOpacity(0.6);
-  static const Color DialogBackground = Color.fromRGBO(0, 0, 0, 0.7);
   static const Color Black = Color(0xff323232);
-  static const Color Dark = Color(0xff2c2b2b);
-  static const Color Blue = Color(0xff51C5DD);
   static const Color White = Color(0xfff0f6fa);
-  static const Color Neutral = Color(0xff62666a);
-  static const Color Grey = Color(0xff787878);
+  static const Color Grey = Color(0xff62666a);
 
-  // ^ ThemeMode Handling ^ //
-  static Color get currentNeumorphic {
-    return UserService.isDarkMode ? SonrColor.Dark : SonrColor.White;
+  // ** Palette Colors ** //
+  static const Color Primary = Color(0xff1792ff);
+  static const Color Secondary = Color(0xff7f30ff);
+  static const Color Tertiary = Color(0xffB9FFE5);
+  static const Color Critical = Color(0xffff176b);
+
+  static const Color AccentPink = Color(0xffFF84B1);
+  static const Color AccentBlue = Color(0xffC8E9FF);
+  static const Color AccentNavy = Color(0xff245379);
+  static const Color AccentPurple = Color(0xffD0CCFF);
+}
+
+class SonrGradient {
+  // ^ General Gradients ^ //
+  static Gradient get bulbDark => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
+  static Gradient get bulbLight => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
+  static Gradient get logo => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
+
+  // ^ Generates Random Gradient for Progress View ^ //
+  static Gradient get Progress {
+    var name = <FlutterGradientNames>[
+      FlutterGradientNames.amyCrisp,
+      FlutterGradientNames.sugarLollipop,
+      FlutterGradientNames.summerGames,
+      FlutterGradientNames.supremeSky,
+      FlutterGradientNames.juicyCake,
+      FlutterGradientNames.northMiracle,
+      FlutterGradientNames.seaLord
+    ].random();
+    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
   }
 
-  // ^ Returns Color from Hexidecimal ^ //
-  static Color fromHex(String hexString) {
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-    buffer.write(hexString.replaceFirst('#', ''));
-    return Color(int.parse(buffer.toString(), radix: 16));
-  }
-
-  // ^ Finds Current Theme Icon Color ^ //
-  static Color icons() {
-    final theme = NeumorphicTheme.of(Get.context);
-    if (UserService.isDarkMode) {
-      return theme.current.accentColor;
-    } else {
-      return theme.current.accentColor;
-    }
-  }
+  // ^ Palette Gradients ^ //
+  static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
+  static const AlignmentGeometry _K_END = Alignment.topCenter;
+  static Gradient get Primary => LinearGradient(colors: [Color(0xff4aaaff), Color(0xff1792ff)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Secondary => LinearGradient(colors: [Color(0xff7f30ff), Color(0xff9757ff)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Tertiary => LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Neutral => LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
+  static Gradient get Critical => LinearGradient(colors: [Color(0xffff176b), Color(0xffff176b).withOpacity(0.7)], begin: _K_BEGIN, end: _K_END);
 }
 
 extension GradientValue on FlutterGradientNames {
+  Gradient get clamp => FlutterGradients.findByName(this, tileMode: TileMode.clamp);
+
   Gradient linear({TileMode tileMode = TileMode.repeated}) {
     return FlutterGradients.findByName(this, tileMode: tileMode);
   }
@@ -77,60 +91,5 @@ extension GradientValue on FlutterGradientNames {
       startAngle: startAngle,
       endAngle: endAngle,
     );
-  }
-}
-
-class SonrGradient {
-  // ** Gradients ** //
-  static Gradient get bulbDark => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
-  static Gradient get bulbLight => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
-  static Gradient get logo => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
-
-  // ^ Generates Random Gradient for Progress View ^ //
-  static Gradient progress() {
-    var name = [
-      FlutterGradientNames.amyCrisp,
-      FlutterGradientNames.sugarLollipop,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.supremeSky,
-      FlutterGradientNames.juicyCake,
-      FlutterGradientNames.northMiracle,
-      FlutterGradientNames.seaLord
-    ].random();
-    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
-  }
-}
-
-class SonrPalette {
-  static const Color Neutral = Color(0xff62666a);
-  static const Color Primary = Color(0xff1792ff);
-  static const Color Secondary = Color(0xffD0CCFF);
-  static const Color Tertiary = Color(0xffB9FFE5);
-  static const Color Critical = Color(0xffff176b);
-  static const Color AccentPink = Color(0xffFF84B1);
-  static const Color AccentBlue = Color(0xffC8E9FF);
-  static const Color AccentNavy = Color(0xff245379);
-
-  static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
-  static const AlignmentGeometry _K_END = Alignment.topCenter;
-
-  static Gradient primary() {
-    return LinearGradient(colors: [Color(0xff4aaaff), Color(0xff1792ff)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient secondary() {
-    return LinearGradient(colors: [Color(0xff7f30ff), Color(0xff9757ff)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient tertiary() {
-    return LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient neutral() {
-    return LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
-  }
-
-  static Gradient critical() {
-    return LinearGradient(colors: [Color(0xffff176b), Color(0xffff176b).withOpacity(0.7)], begin: _K_BEGIN, end: _K_END);
   }
 }

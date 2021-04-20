@@ -30,8 +30,8 @@ class SettingsSheet extends StatelessWidget {
                       // Dark Mode Switch
                       NeumorphicSwitch(
                         style: NeumorphicSwitchStyle(
-                          activeTrackColor: UserService.isDarkMode ? SonrPalette.Critical : SonrColor.Blue,
-                          inactiveTrackColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                          activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
+                          inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                         ),
                         value: controller.isDarkModeEnabled.value,
                         onChanged: (val) => controller.setDarkMode(val),
@@ -47,8 +47,8 @@ class SettingsSheet extends StatelessWidget {
                       // Dark Mode Switch
                       NeumorphicSwitch(
                         style: NeumorphicSwitchStyle(
-                          activeTrackColor: UserService.isDarkMode ? SonrPalette.Critical : SonrColor.Blue,
-                          inactiveTrackColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                          activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
+                          inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                         ),
                         value: controller.isFlatModeEnabled.value,
                         onChanged: (val) => controller.setFlatMode(val),
@@ -64,8 +64,8 @@ class SettingsSheet extends StatelessWidget {
                       // Point Share Mode Switch
                       NeumorphicSwitch(
                           style: NeumorphicSwitchStyle(
-                            activeTrackColor: UserService.isDarkMode ? SonrPalette.Critical : SonrColor.Blue,
-                            inactiveTrackColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                            activeTrackColor: UserService.isDarkMode ? SonrColor.Critical : SonrColor.Primary,
+                            inactiveTrackColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                           ),
                           value: controller.isDarkModeEnabled.value,
                           onChanged: (val) async {

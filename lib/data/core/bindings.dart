@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
-import 'package:sonr_app/modules/common/peer/peer.dart';
-import 'package:sonr_app/modules/common/tile/tile_controller.dart';
-import 'package:sonr_app/modules/grid/grid_controller.dart';
-import 'package:sonr_app/modules/profile/profile.dart';
+import 'package:sonr_app/modules/camera/camera.dart';
+import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/pages/home/grid/grid_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/modules/remote/remote_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/pages/home/profile/profile.dart';
+import 'package:sonr_app/pages/home/profile/tile/tile_controller.dart';
+import 'package:sonr_app/pages/home/remote/remote_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -47,7 +48,7 @@ class TransferBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<TransferController>(TransferController(), permanent: true);
-    Get.create<BubbleController>(() => BubbleController(_getRiveDataFile()));
+    Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
   }
 
   // Get Rive File for Peer Bubble

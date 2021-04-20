@@ -1,59 +1,119 @@
+import 'dart:async';
+import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 import 'package:sonr_core/sonr_core.dart';
-
+import 'dart:io';
+import 'dart:isolate';
+import 'package:image/image.dart' as img;
 import 'model_media.dart';
 
+/// Class for Managing a selection from File Picker
 class FileItem {
+  // File Properties
   final int size;
   final String name;
   final String path;
   final Payload payload;
   final MIME mime;
-  List<int> thumbnail;
+  final FilePickerResult result;
 
-  // # Retreives Metadata Info
+  // Thumbnail Properties
+  List<int> thumbnail;
+  Isolate isolate;
+  Completer<bool> _thumbReady = Completer();
+  bool get hasThumbnail => thumbnail != null;
+  Future<bool> isThumbnailReady() => _thumbReady.future;
+
+  // Retreives Metadata Info
   bool get isAudio => mime.type == MIME_Type.audio;
   bool get isImage => mime.type == MIME_Type.image;
   bool get isVideo => mime.type == MIME_Type.video;
-  bool get hasThumbnail => thumbnail != null;
-
-  // # Retreives Metadata Protobuf
-  Metadata_Properties get properties => Metadata_Properties(payload: payload, isAudio: isAudio, isImage: isImage, isVideo: isVideo);
-  Metadata get metadata => Metadata(name: name, size: size, path: path, mime: mime, properties: properties);
 
   // * Constructer * //
-  FileItem(this.path, this.name, this.size, this.mime, this.payload);
-
-  // ^ Method to Add a thumbnail ^ //
-  void addThumbnail(List<int> thumbnail) {
-    if (thumbnail.length > 0) {
-      this.thumbnail = thumbnail;
+  FileItem(this.path, this.name, this.size, this.mime, this.payload, {this.result}) {
+    if (mime.type == MIME_Type.image) {
+      _asyncThumbInit(path);
     }
   }
 
-  // @ Factory: Capture
+  // * Factory: Capture * //
   factory FileItem.capture(MediaFile capture) {
     return FileItem(capture.path, capture.name, capture.size, _retreiveMime(capture.name), Payload.MEDIA);
   }
 
-  // @ Factory: File
+  // * Factory: File * //
   factory FileItem.file(FilePickerResult data) {
     var file = data.files.first;
     var path = file.path;
     var name = file.name;
     var size = file.size;
     var ext = file.extension;
-    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext));
+    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext), result: data);
   }
 
-  // @ Factory: Media - (Audio, Image, Video)
+  // * Factory: Media - (Audio, Image, Video) * //
   factory FileItem.media(FilePickerResult data) {
     var file = data.files.first;
     var path = file.path;
     var name = file.name;
     var size = file.size;
-    return FileItem(path, name, size, _retreiveMime(name), Payload.MEDIA);
+    return FileItem(path, name, size, _retreiveMime(name), Payload.MEDIA, result: data);
+  }
+
+  // ^ Retreives Metadata Protobuf ^ //
+  Metadata get metadata => Metadata(
+        name: name,
+        size: size,
+        path: path,
+        mime: mime,
+        thumbnail: thumbnail,
+        properties: Metadata_Properties(
+          payload: payload,
+          isAudio: isAudio,
+          isImage: isImage,
+          isVideo: isVideo,
+          hasThumbnail: hasThumbnail,
+        ),
+      );
+
+  // # Method to Start thumbnail Generation
+  _asyncThumbInit(String path) async {
+    final ReceivePort receivePort = ReceivePort();
+    isolate = await Isolate.spawn(_isolateThumbEntry, receivePort.sendPort);
+
+    receivePort.listen((dynamic data) {
+      if (data is SendPort) {
+        data.send({
+          'path': path,
+          'size': Size(320, 320),
+        });
+      } else {
+        thumbnail = data;
+        _thumbReady.complete(true);
+      }
+    });
+  }
+
+  // # Method to Handle thumbnail Generation
+  static _isolateThumbEntry(dynamic d) async {
+    final ReceivePort receivePort = ReceivePort();
+    d.send(receivePort.sendPort);
+
+    // Retreive Data
+    final config = await receivePort.first;
+    final file = File(config['path']);
+    final bytes = await file.readAsBytes();
+
+    // Generate Thumbnail
+    img.Image image = img.decodeImage(bytes);
+    img.Image thumbnail = img.copyResize(
+      image,
+      width: config['size'].width.toInt(),
+    );
+
+    d.send(img.encodeNamedImage(thumbnail, basename(config['path'])));
   }
 
   // # File Mime from Name

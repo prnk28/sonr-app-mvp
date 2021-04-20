@@ -1,12 +1,11 @@
 import 'dart:math';
-
 import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
+import 'package:sonr_app/theme/theme.dart';
 
 extension ListUtils<T> on List<T> {
   random() {
-    final rand =  Random();
+    final rand = Random();
     return this[rand.nextInt(this.length)];
   }
 
@@ -21,6 +20,7 @@ extension ListUtils<T> on List<T> {
     }
   }
 }
+
 
 extension StringUtils on String {
   String replaceAt(int index, String newChar) {

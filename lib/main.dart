@@ -23,7 +23,7 @@ class _AppState extends State<App> {
     super.initState();
 
     // Shift Page
-    DeviceService.shiftPage(delay: 3.seconds);
+    SensorService.shiftPage(delay: 3.seconds);
   }
 
   @override

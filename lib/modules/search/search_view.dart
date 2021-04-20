@@ -34,12 +34,11 @@
 //                                     padding: const EdgeInsets.only(top: 8.0, right: 32),
 //                                     child: SonrText.header("Find Card", size: 32),
 //                                   ),
-//                                   leading: ShapeButton.circle(
+//                                   leading: ActionButton(
 //                                     onPressed: () {
 //                                       SonrOverlay.back();
 //                                     },
-//                                     icon: SonrIcon.close,
-//                                     padding: const EdgeInsets.only(top: 8),
+//                                     icon: SonrIcons.Close.grey,
 //                                   )),
 
 //                               // @ Window Content

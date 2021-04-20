@@ -5,16 +5,19 @@ import 'package:sonr_app/theme/theme.dart';
 
 // ^ Lobby Data Api Model ^ //
 class LobbyModel {
+  // Properties
   final Lobby lobby;
   List<Peer> peers = <Peer>[];
   Map<String, Peer> flatPeers = <String, Peer>{};
 
+  // Accessors
   bool get isEmpty => lobby.count == 0;
   bool get isLocal => lobby.isLocal;
   String get name => lobby.name;
   int get size => lobby.size;
   int get length => lobby.peers.length;
 
+  // * Constructer * //
   LobbyModel({this.lobby}) {
     if (this.lobby != null) {
       // Iterate through peers and IDs
@@ -33,10 +36,17 @@ class LobbyModel {
     }
   }
 
+  // # Check for Remote Lobby from Info
+  bool isRemoteLobby(RemoteInfo info) => info.topic == this.name;
+
+  // # Return Peer at Index for Mobile List
+  Peer atFlatID(String i) => flatPeers[i];
+
+  // # Return Peer at Index for Mobile List
+  Peer firstFlat() => flatPeers.values.first;
+
   // # Return Peer at Index
-  Peer atIndex(int i) {
-    return peers[i];
-  }
+  Peer atIndex(int i) => peers[i];
 
   // # Return Peer at Index
   Peer atID(Peer_ID id) {
@@ -54,21 +64,6 @@ class LobbyModel {
       return (value.id.peer == peer.id.peer);
     });
     return false;
-  }
-
-  // # Check for Remote Lobby from Info
-  bool isRemoteLobby(RemoteInfo info) {
-    return info.topic == this.name;
-  }
-
-  // # Return Peer at Index for Mobile List
-  Peer atFlatID(String i) {
-    return flatPeers[i];
-  }
-
-  // # Return Peer at Index for Mobile List
-  Peer firstFlat() {
-    return flatPeers.values.first;
   }
 
   // # Return All Android Peers
