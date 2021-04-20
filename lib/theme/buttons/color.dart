@@ -110,7 +110,7 @@ class ColorButton extends StatefulWidget {
   }) {
     // Decoration
     BoxDecoration decoration = BoxDecoration(
-      color: SonrColor.Neutral,
+      color: SonrColor.Grey,
       borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
     );
 

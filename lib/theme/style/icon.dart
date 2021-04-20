@@ -271,7 +271,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: 24,
-      color: SonrColor.Neutral,
+      color: SonrColor.Grey,
     );
   }
 
@@ -279,7 +279,7 @@ extension DesignIcon on IconData {
     return Icon(
       this,
       size: size,
-      color: SonrColor.Neutral,
+      color: SonrColor.Grey,
     );
   }
 

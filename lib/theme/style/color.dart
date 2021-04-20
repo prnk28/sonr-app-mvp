@@ -10,7 +10,7 @@ class SonrColor {
   // ** General Theme Color Properties ** //
   static const Color Black = Color(0xff323232);
   static const Color White = Color(0xfff0f6fa);
-  static const Color Neutral = Color(0xff62666a);
+  static const Color Grey = Color(0xff62666a);
 
   // ** Palette Colors ** //
   static const Color Primary = Color(0xff1792ff);
