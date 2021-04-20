@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'home_controller.dart';
+import '../home_controller.dart';
 
 // ^ Alerts View ^ //
 class AlertsView extends GetView<HomeController> {

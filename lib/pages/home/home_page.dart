@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'action_button.dart';
 import 'grid/grid_view.dart';
 import 'home_controller.dart';
-import 'alerts_view.dart';
+import 'alerts/alerts_view.dart';
 import 'profile/profile_view.dart';
 
 class HomePage extends GetView<HomeController> {
