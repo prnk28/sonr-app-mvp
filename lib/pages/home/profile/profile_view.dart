@@ -87,28 +87,8 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       snap: false,
       backgroundColor: Colors.transparent,
       foregroundColor: Colors.transparent,
-      flexibleSpace: _ProfileHeaderView(),
       expandedHeight: Get.height / 5 + 36,
-      title: Container(
-          alignment: Alignment.topCenter,
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            PlainIconButton(
-              icon: SonrIcons.Plus.gradient(gradient: SonrGradient.Primary, size: 36),
-              onPressed: controller.setAddTile,
-            ),
-            PlainIconButton(
-              icon: SonrIcons.More_Vertical.gradient(gradient: SonrGradient.Secondary, size: 36),
-              onPressed: controller.setEditingMode,
-            ),
-          ])),
-    );
-  }
-}
-
-class _ProfileHeaderView extends GetView<ProfileController> {
-  @override
-  Widget build(BuildContext context) {
-    return FlexibleSpaceBar(
+      flexibleSpace: FlexibleSpaceBar(
       centerTitle: true,
       background: GestureDetector(
         child: Container(
@@ -125,6 +105,7 @@ class _ProfileHeaderView extends GetView<ProfileController> {
           ),
         ),
       ),
+    ),
     );
   }
 }

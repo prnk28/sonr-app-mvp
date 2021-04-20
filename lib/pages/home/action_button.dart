@@ -14,16 +14,28 @@ class HomeActionButton extends GetView<HomeController> {
   Widget _buildView(HomeView page) {
     // Return View
     if (page == HomeView.Profile) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Profile));
+      return ActionButton(
+        key: ValueKey<HomeView>(HomeView.Main),
+        icon: SonrIcons.Edit.gradient(size: 28),
+        onPressed: () => print("Action: Edit Profile"),
+      );
     } else if (page == HomeView.Activity) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Activity));
+      return ActionButton(
+        key: ValueKey<HomeView>(HomeView.Main),
+        icon: SonrIcons.Check_All.gradient(size: 28),
+        onPressed: () => print("Action: Clear Notifications"),
+      );
     } else if (page == HomeView.Remote) {
-      return Container(width: 56, height: 56, key: ValueKey<HomeView>(HomeView.Remote));
+      return ActionButton(
+        key: ValueKey<HomeView>(HomeView.Main),
+        icon: SonrIcons.Plus.gradient(size: 28),
+        onPressed: () => print("Action: Create Remote"),
+      );
     } else {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Main),
         icon: SonrIcons.Category.gradient(size: 28),
-        onPressed: () => print("Action"),
+        onPressed: () => print("Action: Dashboard"),
       );
     }
   }

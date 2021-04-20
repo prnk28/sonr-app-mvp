@@ -1,7 +1,8 @@
-import 'package:sonr_app/modules/profile/profile.dart';
+
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_social.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../profile_controller.dart';
 
 class TileController extends GetxController {
   // Properties

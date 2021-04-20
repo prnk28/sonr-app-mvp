@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
-import 'package:sonr_app/modules/common/peer/peer_controller.dart';
+import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {

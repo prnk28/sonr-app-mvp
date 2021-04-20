@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:animated_widgets/animated_widgets.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
-import 'package:sonr_app/modules/common/lobby/lobby.dart';
-import 'package:sonr_app/modules/common/peer/card_view.dart';
+import 'package:sonr_app/modules/lobby/lobby.dart';
+import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 

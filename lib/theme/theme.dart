@@ -14,7 +14,7 @@ export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
 export 'package:sonr_app/theme/elements/clipper.dart';
 export 'package:animated_widgets/animated_widgets.dart';
-export 'package:sonr_app/modules/common/camera/camera_view.dart';
+export 'package:sonr_app/modules/camera/camera_view.dart';
 
 // Custom Theme Aspects
 export 'buttons/action.dart';

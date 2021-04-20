@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:sonr_app/modules/common/peer/item_view.dart';
+import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'title_widget.dart';
