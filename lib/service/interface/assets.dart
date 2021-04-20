@@ -192,6 +192,20 @@ class AssetController extends GetxController {
   static bool get isRegistered => Get.isRegistered<AssetController>();
   static AssetController get to => Get.find<AssetController>();
 
+  // @ Images: Card Design
+  static Image get randomCard {
+    // Get Random
+    var rand = Random().nextInt(75);
+    rand = rand + 1;
+
+    // Return Image
+    if (rand < 10) {
+      return Image(image: AssetImage("assets/cards/0$rand.png"));
+    } else {
+      return Image(image: AssetImage("assets/cards/$rand.png"));
+    }
+  }
+
   // @ Illustrations: Access/Connection
   Image _cameraAccess = Image(image: NetworkImage(SonrAssetIllustration.CameraAccess.link), fit: BoxFit.fitHeight);
   Image _createGroup = Image(image: NetworkImage(SonrAssetIllustration.CreateGroup.link), fit: BoxFit.fitHeight);
