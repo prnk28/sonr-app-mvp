@@ -119,7 +119,7 @@ class DropdownOverlayView extends StatelessWidget {
           child: Container(
             width: 17,
             height: 17,
-            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+            color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
           ),
         ),
       ),

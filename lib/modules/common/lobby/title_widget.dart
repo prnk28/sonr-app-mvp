@@ -32,7 +32,7 @@ class _LobbyTitleViewState extends State<LobbyTitleView> {
         margin: EdgeWith.horizontal(24),
         child: NeumorphicToggle(
           duration: 100.milliseconds,
-          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White),
+          style: NeumorphicToggleStyle(depth: 20, backgroundColor: UserService.isDarkMode ? SonrColor.Black : SonrColor.White),
           thumb: Neumorphic(style: SonrStyle.toggle),
           selectedIndex: toggleIndex,
           onChanged: (val) {

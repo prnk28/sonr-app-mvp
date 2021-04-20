@@ -176,20 +176,20 @@ class _CaptureButton extends GetView<CameraController> {
           child: Neumorphic(
             margin: EdgeInsets.all(14),
             style: NeumorphicStyle(
-              color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+              color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
               boxShape: NeumorphicBoxShape.circle(),
             ),
             child: Neumorphic(
               style: NeumorphicStyle(
                 depth: 14,
-                color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                 boxShape: NeumorphicBoxShape.circle(),
               ),
               margin: EdgeInsets.all(10),
               child: Neumorphic(
                 style: NeumorphicStyle(
                   depth: -8,
-                  color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                  color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                   boxShape: NeumorphicBoxShape.circle(),
                 ),
                 margin: EdgeInsets.all(14),
@@ -216,11 +216,11 @@ class _CaptureButton extends GetView<CameraController> {
                         )),
                         style: NeumorphicStyle(
                             depth: 14,
-                            color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+                            color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
                             intensity: 0.85,
                             boxShape: NeumorphicBoxShape.circle(),
                             border: controller.videoInProgress.value
-                                ? NeumorphicBorder(color: SonrPalette.Critical, width: 4)
+                                ? NeumorphicBorder(color: SonrColor.Critical, width: 4)
                                 : NeumorphicBorder(color: SonrColor.Black, width: 0))),
                   ),
                 ),

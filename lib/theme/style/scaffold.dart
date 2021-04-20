@@ -35,7 +35,7 @@ class SonrScaffold extends StatelessWidget {
         themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light, //or dark / system
         darkTheme: NeumorphicThemeData(
           defaultTextColor: Colors.white,
-          baseColor: SonrColor.Dark,
+          baseColor: SonrColor.Black,
           lightSource: LightSource.topLeft,
         ),
         theme: NeumorphicThemeData(
@@ -132,7 +132,7 @@ class _BackgroundOverlay extends StatelessWidget {
         ? Container(
             height: Get.height,
             width: Get.width,
-            color: SonrColor.Dark.withOpacity(0.75),
+            color: SonrColor.Black.withOpacity(0.75),
           )
         : Container(
             height: Get.height,

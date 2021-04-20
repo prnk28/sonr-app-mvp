@@ -90,7 +90,7 @@ class SonrDropdown extends StatelessWidget {
           Spacer(),
           item.hasIcon ? item.icon : Container(),
           Padding(padding: EdgeInsets.only(right: 10)),
-          item.text.headSix(color: SonrColor.Grey),
+          item.text.headSix(color: SonrColor.Neutral),
           Spacer(flex: selectedFlex),
           Get.find<SonrPositionedOverlay>().overlays.length == 0
               ? UserService.isDarkMode
@@ -103,7 +103,7 @@ class SonrDropdown extends StatelessWidget {
         ]);
       } else {
         return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center, children: [
-          item.text.headSix(color: SonrColor.Grey),
+          item.text.headSix(color: SonrColor.Neutral),
           Padding(padding: EdgeInsets.only(right: 6)),
           item.hasIcon ? item.icon : Container(),
           Get.find<SonrPositionedOverlay>().overlays.length == 0

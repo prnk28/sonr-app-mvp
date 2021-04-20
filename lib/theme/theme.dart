@@ -59,27 +59,27 @@ class SonrStyle {
         intensity: UserService.isDarkMode ? 0.45 : 0.85,
         depth: UserService.isDarkMode ? 4 : 8,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
       );
 
   static NeumorphicStyle get timeStamp => NeumorphicStyle(
       intensity: 0.4,
       depth: UserService.isDarkMode ? 4 : 8,
       boxShape: NeumorphicBoxShape.stadium(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Dark);
+      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black);
 
   static NeumorphicStyle get timeStampDark => NeumorphicStyle(
       intensity: 0.4,
       depth: UserService.isDarkMode ? 4 : 8,
       boxShape: NeumorphicBoxShape.stadium(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Dark);
+      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black);
 
   static NeumorphicStyle get toggle => NeumorphicStyle(
         intensity: UserService.isDarkMode ? 0.25 : 0.5,
         depth: UserService.isDarkMode ? 4 : 6,
         shape: NeumorphicShape.flat,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-        color: UserService.isDarkMode ? SonrColor.Dark : SonrColor.White,
+        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
       );
 }
 

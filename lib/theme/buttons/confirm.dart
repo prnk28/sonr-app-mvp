@@ -65,19 +65,19 @@ class ConfirmButton extends StatefulWidget {
     BoxDecoration defaultDecoration = BoxDecoration(
         gradient: SonrPalette.neutral(),
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
         gradient: SonrPalette.primary(),
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
         gradient: SonrPalette.tertiary(),
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ConfirmButton(
@@ -126,19 +126,19 @@ class ConfirmButton extends StatefulWidget {
     BoxDecoration defaultDecoration = BoxDecoration(
         gradient: SonrPalette.neutral(),
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Confirm Decoration
     BoxDecoration confirmDecoration = BoxDecoration(
         gradient: SonrPalette.primary(),
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Complete Decoration
     BoxDecoration completeDecoration = BoxDecoration(
         gradient: SonrPalette.critical(),
         borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrPalette.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
+        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
 
     // Build Child
     return ConfirmButton(

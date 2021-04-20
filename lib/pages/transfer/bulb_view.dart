@@ -18,7 +18,7 @@ class BulbView extends GetView<TransferController> {
               padding: EdgeInsets.all(4),
               height: 32,
               width: 86,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrPalette.AccentNavy.withOpacity(0.75)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [SonrIcons.Discover.white, Obx(() => " ${controller.directionTitle.value}".h6_White)]),

@@ -31,10 +31,10 @@ class _PeerListItemState extends State<PeerListItem> {
                 text: TextSpan(children: [
                   TextSpan(
                       text: widget.peer.platform.toString(),
-                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 20, color: SonrPalette.Primary)),
+                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w600, fontSize: 20, color: SonrColor.Primary)),
                   TextSpan(
                       text: " - ${widget.peer.model}",
-                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 20, color: SonrPalette.AccentPurple)),
+                      style: TextStyle(fontFamily: 'Manrope', fontWeight: FontWeight.w300, fontSize: 20, color: SonrColor.AccentPurple)),
                 ])),
             children: [
               Padding(padding: EdgeInsets.all(8)),
