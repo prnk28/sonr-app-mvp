@@ -53,7 +53,7 @@ enum WidgetPosition { Left, Right, Top, Bottom, Center }
 
 class SonrStyle {
   static Size get viewSize => Size(Get.width * 0.95, Get.height * 0.85);
-  static EdgeInsets get viewMargin => EdgeInsets.symmetric(vertical: Get.height * 0.15, horizontal: Get.width * 0.05);
+  static EdgeInsets get viewMargin => EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
 
   static NeumorphicStyle get overlay => NeumorphicStyle(
         intensity: UserService.isDarkMode ? 0.45 : 0.85,

@@ -1,6 +1,57 @@
 import '../theme.dart';
 
 extension Neumorph on BoxDecoration {
+  /// @ Floating Contact Neumorphic Box
+  static BoxDecoration contact({@required Image image}) {
+    return BoxDecoration(
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(12),
+        image: DecorationImage(
+          image: image.image,
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Color(0xfff0f6fa), BlendMode.difference),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color(
+              0xb9b0c3d2,
+            ),
+            offset: Offset(
+              8,
+              8,
+            ),
+            spreadRadius: 4,
+            blurRadius: 20,
+          ),
+          BoxShadow(
+            color: Color(
+              0x61f6fbff,
+            ),
+            offset: Offset(
+              -8,
+              -8,
+            ),
+            blurRadius: 20,
+          ),
+          BoxShadow(
+            color: Color(
+              0x45ffffff,
+            ),
+            offset: Offset(
+              -11,
+              -11,
+            ),
+            blurRadius: 20,
+          ),
+          BoxShadow(
+            color: Colors.white.withOpacity(0.15),
+            offset: Offset(-6.0, -6.0),
+            blurRadius: 16.0,
+          ),
+        ],
+        border: Border.all(color: Colors.white.withOpacity(0.65), width: 1));
+  }
+
   /// @ Floating Default Neumorphic Box
   static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle}) {
     return BoxDecoration(

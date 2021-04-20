@@ -122,7 +122,7 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
       case SonrAssetIllustration.ConnectionLost:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/60787699880cc8c9cb1434c0_connection_lost.png";
       case SonrAssetIllustration.CreateGroup:
-        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607ef74598fc8f0f9276d125_create-group.png";
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607f1b993ce6db87fb96abc2_create-group.png";
       default:
         return "";
     }

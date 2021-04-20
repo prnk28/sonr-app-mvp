@@ -10,7 +10,8 @@ class ProfileView extends GetView<ProfileController> {
         width: Get.width,
         height: Get.height,
         margin: SonrStyle.viewMargin,
-        decoration: Neumorph.floating(radius: 20),
+        // image: AssetController.randomCard
+        decoration: Neumorph.floating(radius: 12),
         child: AnimatedSlideSwitcher.fade(
           child: _buildView(controller.status.value),
           duration: const Duration(milliseconds: 2500),

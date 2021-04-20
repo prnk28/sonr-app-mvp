@@ -60,22 +60,26 @@ class _JoinRemoteView extends GetView<RemoteController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Title
-                          "Join Remote".h2,
-
                           // Check for Button Tap
                           controller.isJoinFieldTapped.value
                               ? "Enter lobby code below.".p_Grey
                               : Container(
                                   child: SonrAssetIllustration.CreateGroup.widget,
-                                  height: 150,
+                                  height: 275,
                                 ),
-                          Padding(padding: EdgeInsets.all(8)),
+
+                          // Title
+                          "Remote Lobby".h3,
+
+                          "Enter a Lobby Code, to join a \nRemote Lobby.".p_Grey,
 
                           // Swap Between Button and Text Field View
-                          controller.isJoinFieldTapped.value
-                              ? _RemoteTextCodeField()
-                              : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Enter Code"),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12.0),
+                            child: controller.isJoinFieldTapped.value
+                                ? _RemoteTextCodeField()
+                                : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Join"),
+                          ),
                           Padding(padding: EdgeInsets.all(8)),
                         ])
                   ],

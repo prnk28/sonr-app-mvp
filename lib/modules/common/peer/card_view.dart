@@ -70,7 +70,7 @@ class _PeerMainCard extends StatelessWidget {
           Spacer(),
 
           // Device Icon and Full Name
-          "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h4,
+          "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h6,
 
           // Username
           controller.peer.value.profile.username.p_Grey,
