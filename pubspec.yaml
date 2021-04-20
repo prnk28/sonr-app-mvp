@@ -107,6 +107,7 @@ flutter:
 
   # -- Media --
   assets:
+    - assets/cards/
     - assets/fonts/
     - assets/rive/
     - assets/sounds/
