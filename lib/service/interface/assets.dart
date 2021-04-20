@@ -98,7 +98,20 @@ extension IconNetworkUtils on SonrAssetIcon {
 }
 
 // # Illustrations
-enum SonrAssetIllustration { NoFiles1, NoFiles2, NoFiles3, NoFiles4, LocationAccess, MediaAccess, CameraAccess, ConnectionLost, CreateGroup }
+enum SonrAssetIllustration {
+  NoFiles1,
+  NoFiles2,
+  NoFiles3,
+  NoFiles4,
+  LocationAccess,
+  MediaAccess,
+  CameraAccess,
+  ConnectionLost,
+  CreateGroup,
+  NoPeers,
+  NoAlerts,
+  AddPicture
+}
 
 // @ Helper method to retreive asset
 extension IllustrationNetworkUtils on SonrAssetIllustration {
@@ -123,9 +136,14 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/60787699880cc8c9cb1434c0_connection_lost.png";
       case SonrAssetIllustration.CreateGroup:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607f1b993ce6db87fb96abc2_create-group.png";
-      default:
-        return "";
+      case SonrAssetIllustration.NoPeers:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607f3b7f1864e77cc43e5298_no-peers.png";
+      case SonrAssetIllustration.NoAlerts:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607f3b8086827c51039f33cf_no-alerts.png";
+      case SonrAssetIllustration.AddPicture:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/607f3b7fc0b85aedda12ed5f_add-picture.png";
     }
+    return "";
   }
 
   // ^ Get Illustration ^ //
@@ -149,6 +167,12 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
         return AssetController.to._noConnection;
       case SonrAssetIllustration.CreateGroup:
         return AssetController.to._createGroup;
+      case SonrAssetIllustration.NoPeers:
+        return AssetController.to._noPeers;
+      case SonrAssetIllustration.NoAlerts:
+        return AssetController.to._noAlerts;
+      case SonrAssetIllustration.AddPicture:
+        return AssetController.to._addPicture;
     }
     return Container();
   }
@@ -207,11 +231,14 @@ class AssetController extends GetxController {
   }
 
   // @ Illustrations: Access/Connection
+  Image _addPicture = Image(image: NetworkImage(SonrAssetIllustration.AddPicture.link), fit: BoxFit.fitHeight);
   Image _cameraAccess = Image(image: NetworkImage(SonrAssetIllustration.CameraAccess.link), fit: BoxFit.fitHeight);
   Image _createGroup = Image(image: NetworkImage(SonrAssetIllustration.CreateGroup.link), fit: BoxFit.fitHeight);
   Image _locationAccess = Image(image: NetworkImage(SonrAssetIllustration.LocationAccess.link), fit: BoxFit.fitHeight);
   Image _mediaAccess = Image(image: NetworkImage(SonrAssetIllustration.MediaAccess.link), fit: BoxFit.fitHeight);
   Image _noConnection = Image(image: NetworkImage(SonrAssetIllustration.ConnectionLost.link), fit: BoxFit.fitHeight);
+  Image _noPeers = Image(image: NetworkImage(SonrAssetIllustration.NoPeers.link), fit: BoxFit.fitHeight);
+  Image _noAlerts = Image(image: NetworkImage(SonrAssetIllustration.NoAlerts.link), fit: BoxFit.fitHeight);
 
   // @ Illustrations: No Files
   Image _noFiles1 = Image(
@@ -278,6 +305,11 @@ class AssetController extends GetxController {
     precacheImage(_locationAccess.image, Get.context);
     precacheImage(_mediaAccess.image, Get.context);
     precacheImage(_noConnection.image, Get.context);
+
+    // Load Empty States
+    precacheImage(_addPicture.image, Get.context);
+    precacheImage(_noAlerts.image, Get.context);
+    precacheImage(_noPeers.image, Get.context);
     super.onReady();
   }
 

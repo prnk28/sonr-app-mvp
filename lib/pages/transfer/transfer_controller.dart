@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
@@ -35,6 +36,7 @@ class TransferController extends GetxController {
   StreamSubscription<CompassEvent> compassStream;
   StreamSubscription<int> lobbySizeStream;
   PeerController currentPeerController;
+  CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
   void onInit() {
@@ -169,15 +171,6 @@ class TransferController extends GetxController {
   void setFacingPeer(bool value) {
     isFacingPeer(value);
     isFacingPeer.refresh();
-  }
-
-  // ^ Switch Transfer Views ^ //
-  void toggleBirdsEye() {
-    if (!isRemoteActive.value) {
-      isBirdsEye(!isBirdsEye.value);
-      print("isBirdsEye ${isBirdsEye.value}");
-      isBirdsEye.refresh();
-    }
   }
 
   // ^ Toggles Peer Shifting ^ //
