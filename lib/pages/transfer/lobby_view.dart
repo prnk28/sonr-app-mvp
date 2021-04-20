@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_widgets/animated_widgets.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/modules/lobby/lobby.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
@@ -26,7 +27,11 @@ class LocalLobbyView extends GetView<TransferController> {
           body: Stack(
             children: <Widget>[
               // @ Lobby View
-              _LocalLobbyStack(),
+              //_LocalLobbyStack(),
+              CarouselSlider(
+                options: CarouselOptions(height: 400.0),
+                items: LobbyService.local.value.peers.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
+              ),
 
               // @ Compass View
               Align(

@@ -57,6 +57,7 @@ dependencies:
 
   # -- UI/UX --
   animated_widgets: ^1.0.6
+  carousel_slider: ^3.0.0
   flutter_gradients: ^1.0.0+3
   flutter_neumorphic: ^3.0.4+1
   lottie: ^1.0.1
