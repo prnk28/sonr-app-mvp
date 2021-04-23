@@ -30,7 +30,7 @@ class CardMainView extends GetView<GridController> {
           SliverToBoxAdapter(
               child: Container(
             height: K_LIST_HEIGHT,
-            child: TabBarView(controller: controller.tabController, children: _buildViews()),
+            child: Obx(() => TabBarView(controller: controller.tabController, children: _buildViews())),
           )),
           SliverPadding(padding: EdgeInsets.all(8)),
         ]));

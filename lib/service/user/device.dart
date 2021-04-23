@@ -194,7 +194,7 @@ class DeviceService extends GetxService {
 // ^ Asset Sound Types ^ //
 enum UISoundType { Confirmed, Connected, Critical, Deleted, Fatal, Joined, Linked, Received, Swipe, Transmitted, Warning }
 
-// ^ Asset Sound Type Utility ^ //
+// @ Asset Sound Type Utility ^ //
 extension UISoundTypeUtil on UISoundType {
   String get file {
     return '${this.value.toLowerCase()}.wav';
