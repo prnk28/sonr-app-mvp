@@ -56,7 +56,7 @@ class DeviceService extends GetxService {
   StreamSubscription<MagnetometerEvent> _magnoStream;
   StreamSubscription<OrientationEvent> _orienStream;
 
-  // ^ Open SharedPreferences on Init ^ //
+  // * Device Service Initialization * //
   Future<DeviceService> init() async {
     // @ 1. Set Platform
     if (io.Platform.isAndroid) {
@@ -98,6 +98,7 @@ class DeviceService extends GetxService {
     return this;
   }
 
+  // * Close Streams * //
   @override
   void onClose() {
     _audioPlayer.clearCache();
@@ -156,9 +157,7 @@ class DeviceService extends GetxService {
   // # Handle Accelerometer
   void _handleAccelerometer(AccelerometerEvent event) {
     _position.update((val) {
-      val.accelerometer.x = event.x;
-      val.accelerometer.y = event.y;
-      val.accelerometer.z = event.z;
+      val.accelerometer = Position_Accelerometer(x: event.x, y: event.y, z: event.z);
     });
   }
 
@@ -173,19 +172,23 @@ class DeviceService extends GetxService {
   // # Handle Gyroscope
   void _handleGyroscope(GyroscopeEvent event) {
     _position.update((val) {
-      val.gyroscope.x = event.x;
-      val.gyroscope.y = event.y;
-      val.gyroscope.z = event.z;
+      val.gyroscope = Position_Gyroscope(x: event.x, y: event.y, z: event.z);
     });
   }
 
   // # Handle Magnometer
   void _handleMagnometer(MagnetometerEvent event) {
-    _position.update((val) {});
+    _position.update((val) {
+      val.magnometer = Position_Magnometer(x: event.x, y: event.y, z: event.z);
+    });
   }
 
   // # Handle Orientation
-  void _handleOrientation(OrientationEvent event) {}
+  void _handleOrientation(OrientationEvent event) {
+    _position.update((val) {
+      val.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
+    });
+  }
 }
 
 // ^ Asset Sound Types ^ //
