@@ -136,6 +136,7 @@ class TransferController extends GetxController {
 
         // Set thumbnail
         val.files.first.thumbnail = thumb;
+        print("Thumbnail Set");
       });
     }
   }

@@ -107,7 +107,7 @@ class _BulbViewChild extends GetView<TransferController> {
 }
 
 // ^ Builds Thumbnail from Future
-class _BulbViewThumbnail extends GetView<TransferController> {
+class _BulbViewThumbnail extends StatelessWidget {
   final FileItem item;
 
   const _BulbViewThumbnail({Key key, @required this.item}) : super(key: key);
@@ -118,8 +118,7 @@ class _BulbViewThumbnail extends GetView<TransferController> {
       initialData: false,
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data) {
-          // Set Thumbnail
-          controller.setThumbnail(item.thumbnail);
+
 
           // Return View
           return GestureDetector(
