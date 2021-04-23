@@ -51,7 +51,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
 
     // Handle Streams
-    SensorService.keyboardVisible.listen(_handleKeyboardVisibility);
+    DeviceService.keyboardVisible.listen(_handleKeyboardVisibility);
     _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
@@ -129,7 +129,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      SensorService.playSound(type: UISoundType.Joined);
+      DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

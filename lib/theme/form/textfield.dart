@@ -45,7 +45,7 @@ class SonrTextField extends StatelessWidget {
   // ^ Returns Random Hint Name ^
   static Tuple<String, String> hintName() {
     return <Tuple<String, String>>[
-      SensorService.isNotApple ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
+      DeviceService.isNotApple ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
       Tuple("Michelangelo", "Buonarroti"),
       Tuple("Albert", "Einstein"),
       Tuple("Douglas", "Engelbart"),

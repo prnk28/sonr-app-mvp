@@ -4,7 +4,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import '../device/cards.dart';
+import '../user/cards.dart';
 import 'lobby.dart';
 import 'user.dart';
 export 'package:sonr_core/sonr_core.dart';
@@ -44,10 +44,10 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (SensorService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
+      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          SensorService.compass.value ?? _node.update(direction: SensorService.direction);
+          DeviceService.position.value ?? _node.update(position: DeviceService.position.value);
         }
       }
     });
@@ -70,7 +70,7 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     if (UserService.hasRequiredToConnect) {
-      var pos = await SensorService.currentLocation();
+      var pos = await DeviceService.currentLocation();
 
       // Create Node
       _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
@@ -92,7 +92,7 @@ class SonrService extends GetxService {
   Future<void> connect() async {
     if (_node == null) {
       // Get Data
-      var pos = await SensorService.currentLocation();
+      var pos = await DeviceService.currentLocation();
 
       // Create Node
       _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
@@ -108,11 +108,11 @@ class SonrService extends GetxService {
 
       // Connect Node
       _node.connect();
-      _node.update(direction: SensorService.direction);
+      _node.update(position: DeviceService.position.value);
     } else {
       if (_status.value == Status.NONE) {
         _node.connect();
-        _node.update(direction: SensorService.direction);
+        _node.update(position: DeviceService.position.value);
       }
     }
   }
@@ -120,7 +120,7 @@ class SonrService extends GetxService {
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact, String username) async {
     // Get Data
-    var pos = await SensorService.currentLocation();
+    var pos = await DeviceService.currentLocation();
 
     // Create Node
     _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
@@ -136,7 +136,7 @@ class SonrService extends GetxService {
     // Connect Node
     if (_status.value == Status.NONE) {
       _node.connect();
-      _node.update(direction: SensorService.direction);
+      _node.update(position: DeviceService.position.value);
     }
   }
 
@@ -212,14 +212,14 @@ class SonrService extends GetxService {
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
-    if (Get.isRegistered<SensorService>() && data.value == Status.BOOTSTRAPPED) {
+    if (Get.isRegistered<DeviceService>() && data.value == Status.BOOTSTRAPPED) {
       // Update Status
       _isReady(true);
       _status(data.value);
-      SensorService.playSound(type: UISoundType.Connected);
+      DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
-      _node.update(direction: SensorService.direction);
+      _node.update(position: DeviceService.position.value);
     }
   }
 
@@ -272,7 +272,7 @@ class SonrService extends GetxService {
     }
 
     // Feedback
-    SensorService.playSound(type: UISoundType.Transmitted);
+    DeviceService.playSound(type: UISoundType.Transmitted);
     await HapticFeedback.heavyImpact();
 
     // Remove Callback
@@ -285,7 +285,7 @@ class SonrService extends GetxService {
 
     // Save Card to Gallery
     CardService.addCard(data);
-    SensorService.playSound(type: UISoundType.Received);
+    DeviceService.playSound(type: UISoundType.Received);
   }
 
   // ^ An Error Has Occurred ^ //

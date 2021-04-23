@@ -64,36 +64,6 @@ class VectorPosition {
   double zGyro; // Z Axis Gyro in Rad/s
   Matrix4 get rotoZGyro => Matrix4.rotationZ(zGyro);
 
-  // # Factory Constructer from Direction Quadruple
-  factory VectorPosition.fromQuadruple(Quadruple<double, double, Position_Accelerometer, Position_Gyroscope> data) {
-    // Initialize
-    double antiFacing;
-    double antiHeading;
-
-    // Set Anti Facing
-    if (data.item1 < 180) {
-      antiFacing = 180 - data.item1;
-    } else {
-      antiFacing = data.item1 - 180;
-    }
-
-    // Set Anti Heading
-    if (data.item2 < 180) {
-      antiHeading = 180 - data.item2;
-    } else {
-      antiHeading = data.item2 - 180;
-    }
-
-    // Return Position
-    return VectorPosition(Position(
-        facing: data.item1,
-        heading: data.item2,
-        accelerometer: data.item3,
-        gyroscope: data.item4,
-        facingAntipodal: antiFacing,
-        headingAntipodal: antiHeading));
-  }
-
   // # Constructer
   VectorPosition(this.data) {
     // Set Direction

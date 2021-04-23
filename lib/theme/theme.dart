@@ -1,9 +1,9 @@
-export '../service/device/sensors.dart';
-export '../service/device/file.dart';
+export '../service/user/device.dart';
+export '../service/user/file.dart';
 export '../service/client/lobby.dart';
 export '../service/interface/media.dart';
 export '../service/client/sonr.dart';
-export '../service/device/cards.dart';
+export '../service/user/cards.dart';
 export '../service/client/user.dart';
 export '../service/interface/assets.dart';
 export 'package:flutter/services.dart';

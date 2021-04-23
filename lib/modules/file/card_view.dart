@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
-import 'package:sonr_app/service/device/cards.dart';
+import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
 import 'file.dart';
@@ -159,7 +159,6 @@ class _FileCardInfo extends StatelessWidget {
                 text: "Delete",
                 icon: SonrIcons.Trash,
               ),
-
             ]),
           ]),
         ));

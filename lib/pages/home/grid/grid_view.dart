@@ -3,7 +3,7 @@ import 'package:sonr_app/modules/contact/contact.dart';
 import 'package:sonr_app/modules/file/file.dart';
 import 'package:sonr_app/modules/media/card_view.dart';
 import 'package:sonr_app/modules/url/card_view.dart';
-import 'package:sonr_app/service/device/cards.dart';
+import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'grid_controller.dart';
 import 'tags_view.dart';

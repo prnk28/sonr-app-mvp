@@ -280,9 +280,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
     // Play Sound
     if (widget.type == ConfirmButtonType.Save) {
-      SensorService.playSound(type: UISoundType.Confirmed);
+      DeviceService.playSound(type: UISoundType.Confirmed);
     } else if (widget.type == ConfirmButtonType.Delete) {
-      SensorService.playSound(type: UISoundType.Deleted);
+      DeviceService.playSound(type: UISoundType.Deleted);
     }
 
     widget.onConfirmed();
