@@ -53,7 +53,7 @@ extension Neumorph on BoxDecoration {
   }
 
   /// @ Floating Default Neumorphic Box
-  static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle}) {
+  static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
     return BoxDecoration(
         shape: shape,
         borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
@@ -96,7 +96,7 @@ extension Neumorph on BoxDecoration {
             blurRadius: 16.0,
           ),
         ],
-        border: Border.all(color: Colors.white.withOpacity(0.65), width: 1));
+        border: border != null ? border : Border.all(color: Colors.white.withOpacity(0.65), width: 1));
   }
 
   /// @ Orange Red Hue Neumorphic Box
