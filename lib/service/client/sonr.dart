@@ -184,9 +184,6 @@ class SonrService extends GetxService {
 
   // ^ Invite Peer with Built Request ^ //
   static void invite(InviteRequest request) async {
-    // Log
-    print("Sent Request on [${SensorService.platform.value.toString()}]: " + request.toString());
-
     // Send Invite
     await to._node.invite(request);
   }
@@ -228,9 +225,6 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
-    // Log
-    print("Invited on [${SensorService.platform.value.toString()}]: " + data.toString());
-
     if (data.hasRemote() && _remoteCallback != null) {
       _remoteCallback(data);
     }
