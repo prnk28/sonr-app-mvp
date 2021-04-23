@@ -15,7 +15,7 @@ class TagsView extends GetView<GridController> {
         padding: EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List<Widget>.generate(
+          children: List<Widget>.generate( 
               tags.length,
               (index) => GestureDetector(
                     onTap: () {
