@@ -11,6 +11,8 @@ enum SonrAssetLottie {
   Camera,
   Files,
   Gallery,
+  Success,
+  Denied,
 }
 
 // @ Helper method to retreive asset
@@ -30,9 +32,12 @@ extension LottieNetworkUtils on SonrAssetLottie {
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773fbeb6eb5253002b22_access.json";
       case SonrAssetLottie.Progress:
         return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6078773f0b611698e3ad7561_progress.json";
-      default:
-        return "";
+      case SonrAssetLottie.Success:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/60834598e3a2bf18b09c6f8a_37265-success-animation.json";
+      case SonrAssetLottie.Denied:
+        return "https://uploads-ssl.webflow.com/606fa27d65b92bdfae5c2e58/6083451f8a710f4661f235b2_denied.json";
     }
+    return "";
   }
 }
 

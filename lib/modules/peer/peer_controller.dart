@@ -172,6 +172,7 @@ class PeerController extends GetxController {
             _isIdle.value = true;
             break;
           case PeerStatus.Pending:
+            isVisible(true);
             _isPending.value = true;
             break;
           case PeerStatus.Accepted:

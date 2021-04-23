@@ -1,3 +1,4 @@
+import 'package:rive/rive.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'peer.dart';
 
@@ -21,22 +22,44 @@ class PeerCard extends GetWidget<PeerController> {
         height: K_CARD_HEIGHT,
         clipBehavior: Clip.antiAlias,
         decoration: Neumorph.floating(),
-        padding: EdgeInsets.all(8),
         margin: EdgeInsets.all(32),
-        child: GestureDetector(
-          onTap: controller.invite,
-          child: AnimatedSlideSwitcher.fade(
-            child: controller.isFlipped.value
-                ? _PeerDetailsCard(
-                    controller: controller,
-                    key: ValueKey<bool>(true),
-                  )
-                : _PeerMainCard(
-                    controller: controller,
-                    key: ValueKey<bool>(false),
-                  ),
+        child: Stack(children: [
+          // Rive Board
+          Center(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 38),
+              child: Container(
+                alignment: Alignment.center,
+                height: 96,
+                width: 96,
+                child: controller.board.value == null
+                    ? Container()
+                    : Rive(
+                        artboard: controller.board.value,
+                      ),
+              ),
+            ),
           ),
-        ),
+
+          // Content
+          Container(
+            padding: EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: controller.invite,
+              child: AnimatedSlideSwitcher.fade(
+                child: controller.isFlipped.value
+                    ? _PeerDetailsCard(
+                        controller: controller,
+                        key: ValueKey<bool>(true),
+                      )
+                    : _PeerMainCard(
+                        controller: controller,
+                        key: ValueKey<bool>(false),
+                      ),
+              ),
+            ),
+          ),
+        ]),
       ),
     );
   }
@@ -66,7 +89,12 @@ class _PeerMainCard extends StatelessWidget {
               )),
 
           // Avatar
-          controller.peer.value.profilePicture(size: 68),
+          Obx(() => OpacityAnimatedWidget(
+                enabled: controller.isVisible.value,
+                duration: 125.milliseconds,
+                child: controller.peer.value.profilePicture(size: 68),
+              )),
+
           Spacer(),
 
           // Device Icon and Full Name
