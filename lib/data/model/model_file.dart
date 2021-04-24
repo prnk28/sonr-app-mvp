@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
@@ -158,13 +159,47 @@ class FileItem {
     }
   }
 
+  // # Return Cleaned Name
+  String prettyName() {
+    if (this.name.length > 8) {
+      return this.name.substring(0, 8) + ".${this.mime.subtype}";
+    } else {
+      return this.name;
+    }
+  }
+
+  // # Return Size as String
+  String sizeToString() {
+    // @ Less than 1KB
+    if (this.size < pow(10, 3)) {
+      return "${this.size} B";
+    }
+    // @ Less than 1MB
+    else if (this.size >= pow(10, 3) && this.size < pow(10, 6)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 3);
+      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
+    }
+    // @ Less than 1GB
+    else if (this.size >= pow(10, 6) && this.size < pow(10, 9)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 6);
+      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
+    }
+    // @ Greater than GB
+    else {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 9);
+      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
+    }
+  }
+
   // # Return File Info as String
   @override
   String toString() {
     return "metadata: ${metadata.toString()}";
   }
 }
-
 
 // ^ Class for Media Item in Gallery ^ //
 class MediaItem {
