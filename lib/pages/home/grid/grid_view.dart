@@ -56,7 +56,7 @@ class CardMainView extends GetView<GridController> {
     }
 
     // Check URLs Length
-    if (CardService.hasURLs) {
+    if (CardService.hasLinks) {
       list.add("Links");
     }
     return list;
@@ -82,7 +82,7 @@ class CardMainView extends GetView<GridController> {
     }
 
     // Check URLs Length
-    if (CardService.hasURLs) {
+    if (CardService.hasLinks) {
       list.add(_CardGridLinks());
     }
     return list;
@@ -125,11 +125,11 @@ class _CardGridAll extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.allCards.length > 0) {
+      if (CardService.all.length > 0) {
         return ListView.builder(
-          itemCount: CardService.allCards.length,
+          itemCount: CardService.all.length,
           itemBuilder: (BuildContext context, int index) {
-            return buildCard(CardService.allCards[index]);
+            return buildCard(CardService.all[index]);
           },
         );
       } else {
@@ -156,11 +156,11 @@ class _CardGridMedia extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.mediaCards.length > 0) {
+      if (CardService.media.length > 0) {
         return ListView.builder(
-          itemCount: CardService.mediaCards.length,
+          itemCount: CardService.media.length,
           itemBuilder: (BuildContext context, int index) {
-            return MediaCardView(CardService.mediaCards[index]);
+            return MediaCardView(CardService.media[index]);
           },
         );
       } else {
@@ -176,11 +176,11 @@ class _CardGridFiles extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.fileCards.length > 0) {
+      if (CardService.files.length > 0) {
         return ListView.builder(
-          itemCount: CardService.fileCards.length,
+          itemCount: CardService.files.length,
           itemBuilder: (BuildContext context, int index) {
-            return FileCardView(CardService.fileCards[index]);
+            return FileCardView(CardService.files[index]);
           },
         );
       } else {
@@ -196,11 +196,11 @@ class _CardGridContacts extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.contactCards.length > 0) {
+      if (CardService.contacts.length > 0) {
         return ListView.builder(
-          itemCount: CardService.contactCards.length,
+          itemCount: CardService.contacts.length,
           itemBuilder: (BuildContext context, int index) {
-            return ContactCardView(CardService.contactCards[index]);
+            return ContactCardView(CardService.contacts[index]);
           },
         );
       } else {
@@ -216,11 +216,11 @@ class _CardGridLinks extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.urlCards.length > 0) {
+      if (CardService.links.length > 0) {
         return ListView.builder(
-          itemCount: CardService.urlCards.length,
+          itemCount: CardService.links.length,
           itemBuilder: (BuildContext context, int index) {
-            return URLCardView(CardService.urlCards[index]);
+            return URLCardView(CardService.links[index]);
           },
         );
       } else {

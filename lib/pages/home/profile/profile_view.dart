@@ -7,9 +7,8 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-        width: Get.width,
-        height: Get.height,
-        margin: SonrStyle.viewMargin,
+        width: Get.widthReduced(0.1),
+        height: Get.heightRatio(0.7),
         // image: AssetController.randomCard
         decoration: Neumorph.floating(radius: 12),
         child: AnimatedSlideSwitcher.fade(
@@ -89,23 +88,23 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       foregroundColor: Colors.transparent,
       expandedHeight: Get.height / 5 + 36,
       flexibleSpace: FlexibleSpaceBar(
-      centerTitle: true,
-      background: GestureDetector(
-        child: Container(
-          height: Get.height / 5, // Same Header Color
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // @ Avatar
-              _AvatarField(),
-              Padding(padding: EdgeInsets.all(8)),
-              GestureDetector(
-                  onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
-            ],
+        centerTitle: true,
+        background: GestureDetector(
+          child: Container(
+            height: Get.height / 5, // Same Header Color
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // @ Avatar
+                _AvatarField(),
+                Padding(padding: EdgeInsets.all(8)),
+                GestureDetector(
+                    onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }

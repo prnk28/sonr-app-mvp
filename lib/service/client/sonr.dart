@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import '../user/cards.dart';
 import 'lobby.dart';
-import 'user.dart';
+import '../user/user.dart';
 export 'package:sonr_core/sonr_core.dart';
 
 extension StatusUtils on Status {

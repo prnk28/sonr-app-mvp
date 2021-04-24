@@ -22,9 +22,7 @@ class ShareView extends GetView<ShareController> {
   // @ Build Page View by Navigation Item
   Widget _buildView() {
     // Return View
-    if (controller.status.value == ShareStatus.PickMedia) {
-      return Container(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
-    } else if (controller.status.value == ShareStatus.Queue) {
+    if (controller.status.value == ShareStatus.Queue) {
       return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
     } else {
       return _DefaultButtonView(key: ValueKey<ShareStatus>(ShareStatus.Default));

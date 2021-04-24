@@ -111,15 +111,9 @@ class DeviceService extends GetxService {
   }
 
   // ^ Method Closes Keyboard if Active ^ //
-  static void closeKeyboard() async {
+  static void closeKeyboard({BuildContext context}) async {
     if (to._keyboardVisible.value) {
-      // Get Focus Node
-      FocusScopeNode currentFocus = FocusScope.of(Get.context);
-
-      // Check for Focuse
-      if (!currentFocus.hasPrimaryFocus) {
-        currentFocus.unfocus();
-      }
+      FocusScope.of(context ?? Get.context).unfocus();
     }
   }
 

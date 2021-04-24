@@ -5,39 +5,10 @@ import 'package:sonr_app/data/data.dart';
 enum RemoteViewStatus { NotJoined, Created, Joined, Invited, InProgress, Done }
 
 extension RemoteViewStatusUtil on RemoteViewStatus {
-  EdgeInsets get currentMargin {
-    switch (this) {
-      case RemoteViewStatus.NotJoined:
-        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-      case RemoteViewStatus.Joined:
-        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-      case RemoteViewStatus.Invited:
-        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-      case RemoteViewStatus.InProgress:
-        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-      case RemoteViewStatus.Done:
-        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-      default:
-        return EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-    }
-  }
-
-  Size get currentSize {
-    switch (this) {
-      case RemoteViewStatus.NotJoined:
-        return Size(Get.width * 0.95, Get.height * 0.85);
-      case RemoteViewStatus.Joined:
-        return Size(Get.width * 0.95, Get.height * 0.85);
-      case RemoteViewStatus.Invited:
-        return Size(Get.width * 0.95, Get.height * 0.85);
-      case RemoteViewStatus.InProgress:
-        return Size(Get.width * 0.95, Get.height * 0.85);
-      case RemoteViewStatus.Done:
-        return Size(Get.width * 0.95, Get.height * 0.85);
-      default:
-        return Size(Get.width * 0.95, Get.height * 0.85);
-    }
-  }
+  bool get isDefault => this == RemoteViewStatus.NotJoined;
+  bool get isCreated => this == RemoteViewStatus.Created;
+  bool get isJoined => this == RemoteViewStatus.Joined;
+  bool get isInRemote => this == RemoteViewStatus.Created || this == RemoteViewStatus.Joined;
 }
 
 class RemoteController extends GetxController {

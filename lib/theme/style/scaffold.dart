@@ -26,65 +26,49 @@ class SonrScaffold extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return PageBackground(
-      gradientName: gradientName,
-      scaffold: NeumorphicTheme(
-        themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light, //or dark / system
-        darkTheme: NeumorphicThemeData(
-          defaultTextColor: Colors.white,
-          baseColor: SonrColor.Black,
-          lightSource: LightSource.topLeft,
-        ),
-        theme: NeumorphicThemeData(
-          defaultTextColor: SonrColor.Black,
-          baseColor: SonrColor.White,
-          lightSource: LightSource.topLeft,
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          floatingActionButtonLocation: FixedCenterDockedFabLocation(),
-          body: body,
+    return Obx(() => Scaffold(
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          resizeToAvoidBottomInset: false,
+          backgroundColor: UserService.isDarkMode ? SonrColor.Black.withOpacity(0.75) : SonrColor.White.withOpacity(0.75),
+          floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
+          body: Stack(
+            children: [
+              // Gradient
+              _BackgroundGradient(gradientName: gradientName),
+
+              // Overlay Color
+              UserService.isDarkMode
+                  ? Container(
+                      height: Get.height,
+                      width: Get.width,
+                      color: SonrColor.Black.withOpacity(0.75),
+                    )
+                  : Container(
+                      height: Get.height,
+                      width: Get.width,
+                      color: SonrColor.White.withOpacity(0.75),
+                    ),
+
+              // Blue
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.1188, sigmaY: 5.1188),
+                child: Container(width: Get.width, height: Get.height),
+              ),
+              SafeArea(child: body)
+            ],
+          ),
           appBar: appBar,
           bottomNavigationBar: bottomNavigationBar,
-          floatingActionButton: floatingAction,
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+          floatingActionButton: DeviceService.keyboardVisible.value ? Container() : floatingAction,
           bottomSheet: bottomSheet,
-        ),
-      ),
-    );
+        ));
   }
 }
 
-class PageBackground extends StatelessWidget {
-  final Widget scaffold;
-  final FlutterGradientNames gradientName;
-  const PageBackground({Key key, this.scaffold, this.gradientName}) : super(key: key);
-  @override
-  Widget build(Object context) {
-    return NeumorphicBackground(
-      backendColor: Colors.transparent,
-      child: Stack(
-        children: [
-          // Gradient
-          _BackgroundGradient(gradientName: gradientName),
-
-          // Overlay Color
-          _BackgroundOverlay(),
-
-          // Blue
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5.1188, sigmaY: 5.1188),
-            child: Container(width: Get.width, height: Get.height),
-          ),
-          scaffold
-        ],
-      ),
-    );
-  }
-}
-
-class FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
-  const FixedCenterDockedFabLocation();
+// ^ Fixed Location for Center Docked ^ //
+class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
+  const _FixedCenterDockedFabLocation();
 
   @protected
   double getDockedY(ScaffoldPrelayoutGeometry scaffoldGeometry) {
@@ -147,22 +131,5 @@ class _BackgroundGradient extends StatelessWidget {
         ),
       );
     }
-  }
-}
-
-class _BackgroundOverlay extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return UserService.isDarkMode
-        ? Container(
-            height: Get.height,
-            width: Get.width,
-            color: SonrColor.Black.withOpacity(0.75),
-          )
-        : Container(
-            height: Get.height,
-            width: Get.width,
-            color: SonrColor.White.withOpacity(0.75),
-          );
   }
 }

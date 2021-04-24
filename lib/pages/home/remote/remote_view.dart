@@ -9,18 +9,12 @@ class RemoteView extends GetView<RemoteController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedContainer(
-          width: Get.width,
-          height: Get.height,
-          padding: const EdgeInsets.only(top: 24.0),
-          margin: EdgeInsets.only(
-            bottom: Get.height * 0.1,
-            left: Get.width * 0.05,
-            right: Get.width * 0.05,
-          ),
-          duration: 1500.milliseconds,
-          decoration: Neumorph.floating(),
-          child: AnimatedSlideSwitcher.fade(
+    return Container(
+        width: Get.widthReduced(0.1),
+        height: Get.heightRatio(0.7),
+        decoration: Neumorph.floating(),
+        child: Obx(
+          () => AnimatedSlideSwitcher.fade(
             child: _buildView(controller.status.value),
             duration: const Duration(milliseconds: 2500),
           ),
@@ -50,8 +44,9 @@ class _JoinRemoteView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-          width: SonrStyle.viewSize.width,
-          height: SonrStyle.viewSize.height,
+        width: SonrStyle.viewSize.width,
+        height: SonrStyle.viewSize.height,
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Column(
@@ -83,7 +78,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
                   ])
             ],
           ),
-        ));
+        )));
   }
 }
 

@@ -1,10 +1,10 @@
 export '../service/user/device.dart';
-export '../service/user/file.dart';
+export '../service/client/file.dart';
 export '../service/client/lobby.dart';
 export '../service/interface/media.dart';
 export '../service/client/sonr.dart';
 export '../service/user/cards.dart';
-export '../service/client/user.dart';
+export '../service/user/user.dart';
 export '../service/interface/assets.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
@@ -45,7 +45,7 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/client/user.dart';
+import 'package:sonr_app/service/user/user.dart';
 import 'style/color.dart';
 
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
@@ -124,5 +124,33 @@ extension WidgetListUtils on List<Widget> {
       textDirection: textDirection ?? textDirection,
       textBaseline: textBaseline ?? textBaseline,
     );
+  }
+}
+
+extension SizeUtils on GetInterface {
+  /// Return Width reduced by given Ratio from Screen between 0.0 and 1.0
+  double widthRatio(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    return Get.width * ratio;
+  }
+
+  /// Return Height reduced by given Ratio from Screen between 0.0 and 1.0
+  double heightRatio(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    return Get.height * ratio;
+  }
+
+  /// Return Width reduced by given Ratio from Screen between 0.0 and 1.0
+  double widthReduced(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    var factor = Get.width * ratio;
+    return Get.width - factor;
+  }
+
+  /// Return Height reduced by given Ratio from Screen between 0.0 and 1.0
+  double heightReduced(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    var factor = Get.height * ratio;
+    return Get.height - factor;
   }
 }

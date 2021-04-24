@@ -6,7 +6,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'action_button.dart';
 import 'grid/grid_view.dart';
 import 'home_controller.dart';
-import 'alerts/alerts_view.dart';
+import 'activity/activity_view.dart';
 import 'profile/profile_view.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -34,12 +34,28 @@ class HomePage extends GetView<HomeController> {
                 ),
               )),
         ),
-        body: TabBarView(controller: controller.tabController, children: [
+        body: _HomePageView());
+  }
+}
+
+// ^ Handles Active Views on Home Page ^ //
+class _HomePageView extends GetView<HomeController> {
+  // View References
+  final main = CardMainView(key: ValueKey<HomeView>(HomeView.Main));
+  final profile = ProfileView(key: ValueKey<HomeView>(HomeView.Profile));
+  final alerts = ActivityView(key: ValueKey<HomeView>(HomeView.Activity));
+  final remote = RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Container(
+        margin: SonrStyle.viewMargin,
+        child: TabBarView(controller: controller.tabController, children: [
           CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
           ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-          AlertsView(key: ValueKey<HomeView>(HomeView.Activity)),
+          ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
           RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-        ]));
+        ])));
   }
 }
 
@@ -47,34 +63,32 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.isBottomBarVisible.value
-        ? ClipPath(
-            clipper: BottomBarClip(),
-            child: Container(
-              decoration: Neumorph.floating(),
-              width: Get.width,
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
-                  ),
-                  Container(
-                    width: Get.width * 0.20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
-                  ),
-                  HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
-                ],
-              ),
+    return Obx(() => ClipPath(
+          clipper: BottomBarClip(),
+          child: Container(
+            decoration: Neumorph.floating(),
+            width: Get.width,
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
+                ),
+                Container(
+                  width: Get.width * 0.20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
+                ),
+                HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
+              ],
             ),
-          )
-        : Container());
+          ),
+        ));
   }
 }
 

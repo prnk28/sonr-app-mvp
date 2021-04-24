@@ -172,8 +172,6 @@ class ShareController extends GetxController {
     }
   }
 
-  // # Present Camera View ^ //
-
   // # Update Size Based on State
   _handleStatus(ShareStatus status) {
     size(status.size);

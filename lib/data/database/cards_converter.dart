@@ -1,6 +1,45 @@
 // stores preferences as strings
 import 'package:moor/moor.dart';
 import 'package:sonr_core/sonr_core.dart';
+import 'cards_db.dart';
+
+class ActivityConverter extends TypeConverter<ActivityType, int> {
+  const ActivityConverter();
+  @override
+  ActivityType mapToDart(int fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return ActivityType.values[fromDb];
+  }
+
+  @override
+  int mapToSql(ActivityType value) {
+    if (value == null) {
+      return null;
+    }
+    return value.index;
+  }
+}
+
+class CardConverter extends TypeConverter<TransferCard, String> {
+  const CardConverter();
+  @override
+  TransferCard mapToDart(String fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return TransferCard.fromJson(fromDb);
+  }
+
+  @override
+  String mapToSql(TransferCard value) {
+    if (value == null) {
+      return null;
+    }
+    return value.writeToJson();
+  }
+}
 
 class ContactConverter extends TypeConverter<Contact, String> {
   const ContactConverter();

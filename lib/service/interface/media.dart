@@ -6,7 +6,7 @@ import 'package:sonr_app/modules/share/sheet_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import '../client/sonr.dart';
-import '../client/user.dart';
+import '../user/user.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 enum GalleryState { Initial, Loading, Ready }

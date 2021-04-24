@@ -7,6 +7,13 @@ import 'package:sonr_app/data/data.dart';
 // @ PeerStatus Enum
 enum ProfileViewStatus { Viewing, EditDetails, AddSocial, AddPicture }
 
+extension ProfileViewStatusUtils on ProfileViewStatus {
+  bool get isEditing => this == ProfileViewStatus.EditDetails;
+  bool get isViewing => this == ProfileViewStatus.Viewing;
+  bool get isAddingPicture => this == ProfileViewStatus.AddPicture;
+  bool get isAddingSocial => this == ProfileViewStatus.AddSocial;
+}
+
 class ProfileController extends GetxController {
   // Properties
   final status = ProfileViewStatus.Viewing.obs;
