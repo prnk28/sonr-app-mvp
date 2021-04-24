@@ -48,14 +48,14 @@ class _HomePageView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
+    return Container(
         margin: SonrStyle.viewMargin,
         child: TabBarView(controller: controller.tabController, children: [
           CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
           ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
           ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
           RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-        ])));
+        ]));
   }
 }
 
@@ -63,32 +63,32 @@ class _HomePageView extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => ClipPath(
-          clipper: BottomBarClip(),
-          child: Container(
-            decoration: Neumorph.floating(),
-            width: Get.width,
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
-                ),
-                Container(
-                  width: Get.width * 0.20,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
-                ),
-                HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
-              ],
+    return ClipPath(
+      clipper: BottomBarClip(),
+      child: Container(
+        decoration: Neumorph.floating(),
+        width: Get.width,
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
             ),
-          ),
-        ));
+            Container(
+              width: Get.width * 0.20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
+            ),
+            HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
+          ],
+        ),
+      ),
+    );
   }
 }
 

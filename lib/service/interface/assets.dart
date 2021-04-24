@@ -241,9 +241,9 @@ class AssetController extends GetxController {
   Image _createGroup = Image(image: NetworkImage(SonrAssetIllustration.CreateGroup.link), fit: BoxFit.fitHeight);
   Image _locationAccess = Image(image: NetworkImage(SonrAssetIllustration.LocationAccess.link), fit: BoxFit.fitHeight);
   Image _mediaAccess = Image(image: NetworkImage(SonrAssetIllustration.MediaAccess.link), fit: BoxFit.fitHeight);
-  Image _noConnection = Image(image: NetworkImage(SonrAssetIllustration.ConnectionLost.link), fit: BoxFit.fitHeight);
-  Image _noPeers = Image(image: NetworkImage(SonrAssetIllustration.NoPeers.link), fit: BoxFit.fitHeight);
-  Image _noAlerts = Image(image: NetworkImage(SonrAssetIllustration.NoAlerts.link), fit: BoxFit.fitHeight);
+  Image _noConnection = Image(image: NetworkImage(SonrAssetIllustration.ConnectionLost.link), fit: BoxFit.contain);
+  Image _noPeers = Image(image: NetworkImage(SonrAssetIllustration.NoPeers.link), fit: BoxFit.contain);
+  Image _noAlerts = Image(image: NetworkImage(SonrAssetIllustration.NoAlerts.link), fit: BoxFit.contain);
 
   // @ Illustrations: No Files
   Image _noFiles1 = Image(
@@ -334,8 +334,7 @@ class AssetController extends GetxController {
   }
 
   //  ^ Get Random No Files Image ^ //
-  static Widget randomNoFiles() {
-    var rand = Random().nextInt(3) + 1;
+  static Widget getNoFiles(int rand) {
     if (rand == 1) {
       return to._noFiles1;
     } else if (rand == 2) {

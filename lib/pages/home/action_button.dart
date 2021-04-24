@@ -21,7 +21,7 @@ class HomeActionButton extends GetView<HomeController> {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Activity),
         icon: SonrIcons.Check_All.gradient(size: 28),
-        onPressed: () => print("Action: Clear Notifications"),
+        onPressed: () => CardService.clearAllActivity(),
       );
     } else if (page == HomeView.Remote) {
       return _RemoteActionButton();

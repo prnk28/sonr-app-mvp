@@ -264,8 +264,8 @@ class SonrService extends GetxService {
     _progress(data);
   }
 
-  // ^ Resets Peer Info Event ^
-  void _handleTransmitted(Peer data) async {
+  // ^ Completes Transmission Sequence ^
+  void _handleTransmitted(TransferCard data) async {
     // Check for Callback
     if (_transferCallback != null) {
       _transferCallback(TransferStatus.Completed);
@@ -274,6 +274,9 @@ class SonrService extends GetxService {
     // Feedback
     DeviceService.playSound(type: UISoundType.Transmitted);
     await HapticFeedback.heavyImpact();
+
+    // Log Activity
+    CardService.sharedCard(data);
 
     // Remove Callback
     _transferCallback = null;

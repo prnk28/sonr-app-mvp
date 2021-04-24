@@ -9,6 +9,12 @@ part 'cards_db.g.dart';
 
 enum ActivityType { Deleted, Shared, Received }
 
+extension ActivityTypeUtils on ActivityType {
+  String get value {
+    return this.toString().substring(this.toString().indexOf('.') + 1);
+  }
+}
+
 @DataClassName("TransferCardActivity")
 class TransferCardActivities extends Table {
   IntColumn get id => integer().autoIncrement()();

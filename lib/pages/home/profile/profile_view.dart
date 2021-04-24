@@ -10,7 +10,7 @@ class ProfileView extends GetView<ProfileController> {
         width: Get.widthReduced(0.1),
         height: Get.heightRatio(0.7),
         // image: AssetController.randomCard
-        decoration: Neumorph.floating(radius: 12),
+        decoration: Neumorph.floating(),
         child: AnimatedSlideSwitcher.fade(
           child: _buildView(controller.status.value),
           duration: const Duration(milliseconds: 2500),

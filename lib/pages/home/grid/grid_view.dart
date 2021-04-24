@@ -133,7 +133,7 @@ class _CardGridAll extends GetView<GridController> {
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Cards Found");
+        return _CardGridEmpty(0, label: "No Cards Found");
       }
     });
   }
@@ -164,7 +164,7 @@ class _CardGridMedia extends GetView<GridController> {
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Media yet");
+        return _CardGridEmpty(0, label: "No Media yet");
       }
     });
   }
@@ -184,7 +184,7 @@ class _CardGridFiles extends GetView<GridController> {
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Files yet");
+        return _CardGridEmpty(1, label: "No Files yet");
       }
     });
   }
@@ -204,7 +204,7 @@ class _CardGridContacts extends GetView<GridController> {
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Contacts yet");
+        return _CardGridEmpty(2, label: "No Contacts yet");
       }
     });
   }
@@ -224,7 +224,7 @@ class _CardGridLinks extends GetView<GridController> {
           },
         );
       } else {
-        return _CardGridEmpty(label: "No URL Links yet");
+        return _CardGridEmpty(3, label: "No URL Links yet");
       }
     });
   }
@@ -233,14 +233,14 @@ class _CardGridLinks extends GetView<GridController> {
 // @ Helper Method to Build Empty List Value
 class _CardGridEmpty extends GetView<GridController> {
   final String label;
-
-  const _CardGridEmpty({Key key, @required this.label}) : super(key: key);
+  final int emptyImageIndex;
+  const _CardGridEmpty(this.emptyImageIndex, {Key key, @required this.label}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       height: K_LIST_HEIGHT,
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        AssetController.randomNoFiles(),
+        AssetController.getNoFiles(emptyImageIndex),
         label.p_Grey,
         Padding(padding: EdgeInsets.all(16)),
       ]),

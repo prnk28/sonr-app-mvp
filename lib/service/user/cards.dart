@@ -91,6 +91,20 @@ class CardService extends GetxService {
     return cards.length;
   }
 
+  // ^ Clear Single Activity ^ //
+  static clearActivity(TransferCardActivity activity) async {
+    if (hasActivity) {
+      await to._database.clearActivity(activity);
+    }
+  }
+
+  // ^ Clear All Activity ^ //
+  static clearAllActivity() async {
+    if (hasActivity) {
+      await to._database.clearAllActivity();
+    }
+  }
+
   // ^ Remove Card and Add Deleted Activity to Database ^ //
   static deleteCard(TransferCardItem card) async {
     await to._database.deleteCard(card);
