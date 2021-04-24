@@ -16,6 +16,7 @@ class CardService extends GetxService {
   final _files = RxList<TransferCardItem>();
   final _links = RxList<TransferCardItem>();
   final _media = RxList<TransferCardItem>();
+  final _categoryCount = RxInt(1);
 
   // Property Accessors
   static RxList<TransferCardActivity> get activity => to._activity;
@@ -33,26 +34,28 @@ class CardService extends GetxService {
   static bool get hasMedia => to._media.length > 0;
 
   // Total Count
-  static int get categoryCount {
-    int counter = 1;
-    hasContacts ? counter += 1 : counter += 0;
-    hasFiles ? counter += 1 : counter += 0;
-    hasMedia ? counter += 1 : counter += 0;
-    hasLinks ? counter += 1 : counter += 0;
-    return counter;
-  }
+  static RxInt get categoryCount => to._categoryCount;
 
   // References
   final _database = CardsDatabase();
 
   // * Constructer * //
   Future<CardService> init() async {
+    // Bind Streams
     _activity.bindStream(_database.watchActivity());
     _all.bindStream(_database.watchAll());
     _contacts.bindStream(_database.watchContacts());
     _files.bindStream(_database.watchFiles());
     _media.bindStream(_database.watchMedia());
     _links.bindStream(_database.watchUrls());
+
+    // Set Initial Counter
+    int counter = 1;
+    _contacts.length > 0 ? counter += 1 : counter += 0;
+    _files.length > 0 ? counter += 1 : counter += 0;
+    _media.length > 0 ? counter += 1 : counter += 0;
+    _links.length > 0 ? counter += 1 : counter += 0;
+    _categoryCount(counter);
     return this;
   }
 
@@ -69,6 +72,7 @@ class CardService extends GetxService {
     // Store in Database
     await to._database.addCard(card);
     await to._database.addActivity(ActivityType.Received, card);
+    _refreshCount();
   }
 
   // ^ Returns total Card Count ^ //
@@ -109,6 +113,7 @@ class CardService extends GetxService {
   static deleteCard(TransferCardItem card) async {
     await to._database.deleteCard(card);
     await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
+    _refreshCount();
   }
 
   // ^ Add Shared Card to Activity Datavase
@@ -187,6 +192,16 @@ class CardService extends GetxService {
     if (Get.currentRoute != "/transfer") {
       Get.offNamed('/home/received');
     }
+  }
+
+  // @ Helper: Refresh Category Count
+  static void _refreshCount() {
+    int counter = 1;
+    hasContacts ? counter += 1 : counter += 0;
+    hasFiles ? counter += 1 : counter += 0;
+    hasMedia ? counter += 1 : counter += 0;
+    hasLinks ? counter += 1 : counter += 0;
+    to._categoryCount(counter);
   }
 
   // @ Helper: Converts Transfer Card Item into TransferCard Protobuf
