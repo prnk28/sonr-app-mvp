@@ -53,7 +53,7 @@ class TransferBinding implements Bindings {
 
   // Get Rive File for Peer Bubble
   Future<RiveFile> _getRiveDataFile() async {
-    var data = await rootBundle.load('assets/rive/peer_bubble.riv');
+    var data = await rootBundle.load('assets/rive/peer_border.riv');
     return RiveFile.import(data);
   }
 }

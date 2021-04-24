@@ -28,7 +28,7 @@ class HomeActionButton extends GetView<HomeController> {
     } else {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Main),
-        icon: SonrIcons.Category.gradient(size: 28),
+        icon: SonrIcons.Search.gradient(size: 28),
         onPressed: () => print("Action: Dashboard"),
       );
     }

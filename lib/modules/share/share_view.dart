@@ -22,9 +22,7 @@ class ShareView extends GetView<ShareController> {
   // @ Build Page View by Navigation Item
   Widget _buildView() {
     // Return View
-    if (controller.status.value == ShareStatus.PickMedia) {
-      return Container(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
-    } else if (controller.status.value == ShareStatus.Queue) {
+    if (controller.status.value == ShareStatus.Queue) {
       return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
     } else {
       return _DefaultButtonView(key: ValueKey<ShareStatus>(ShareStatus.Default));
@@ -59,19 +57,100 @@ class _QueueView extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.toggle,
       child: Container(
-        decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(40)),
+        decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(24)),
         child: OpacityAnimatedWidget(
             enabled: true,
             duration: 150.milliseconds,
             delay: 350.milliseconds,
             curve: Curves.easeIn,
-            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              const ShareCameraButtonItem(),
-              const ShareGalleryButtonItem(),
-              const ShareFileButtonItem(),
-              const ShareContactButtonItem(),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              Padding(padding: EdgeInsets.all(4)),
+              const _ShareCameraButtonItem(),
+              VerticalDivider(color: SonrColor.Grey),
+              const _ShareGalleryButtonItem(),
+              VerticalDivider(color: SonrColor.Grey),
+              const _ShareFileButtonItem(),
+              VerticalDivider(color: SonrColor.Grey),
+              const _ShareContactButtonItem(),
+              Padding(padding: EdgeInsets.all(4)),
             ])),
       ),
+    );
+  }
+}
+
+// ^ Camera Share Button ^ //
+class _ShareCameraButtonItem extends GetView<ShareController> {
+  const _ShareCameraButtonItem();
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        // Check for Permissions
+        if (controller.cameraPermitted.value) {
+          controller.presentCameraView();
+        }
+
+        // Request Permissions
+        else {
+          var result = await Get.find<UserService>().requestCamera();
+          result ? controller.presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
+        }
+      },
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Camera.gradientNamed(name: FlutterGradientNames.aquaGuidance, size: 42))),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        'Camera'.p_White,
+      ]),
+    );
+  }
+}
+
+// ^ Gallery Share Button ^ //
+class _ShareGalleryButtonItem extends GetView<ShareController> {
+  const _ShareGalleryButtonItem();
+  @override
+  Widget build(BuildContext context) {
+    // Return View
+    return GestureDetector(
+      onTap: controller.selectMedia,
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Photos.gradientNamed(name: FlutterGradientNames.frozenHeat, size: 42))),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        'Gallery'.p_White,
+      ]),
+    );
+  }
+}
+
+// ^ File Share Button ^ //
+class _ShareFileButtonItem extends GetView<ShareController> {
+  const _ShareFileButtonItem();
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: controller.selectFile,
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradientNamed(name: FlutterGradientNames.loveKiss, size: 42))),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        'File'.p_White,
+      ]),
+    );
+  }
+}
+
+// ^ Contact Share Button ^ //
+class _ShareContactButtonItem extends GetView<ShareController> {
+  const _ShareContactButtonItem();
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: controller.selectContact,
+      child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.User.gradientNamed(name: FlutterGradientNames.smartIndigo, size: 42))),
+        Padding(padding: EdgeInsets.only(top: 4)),
+        'Contact'.p_White,
+      ]),
     );
   }
 }

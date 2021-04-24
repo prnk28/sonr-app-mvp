@@ -35,7 +35,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
     // Listen for Updates
     tabController.addListener(() {
+      // Play Sound
+      if (tabController.index != bottomIndex.value) {
+        DeviceService.playSound(type: UISoundType.Swipe);
+      }
+
+      // Set Index
       bottomIndex(tabController.index);
+
       // Set Page
       view(HomeView.values[tabController.index]);
 
