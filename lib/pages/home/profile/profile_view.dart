@@ -6,15 +6,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-        width: Get.widthReduced(0.1),
-        height: Get.heightRatio(0.7),
-        // image: AssetController.randomCard
-        decoration: Neumorph.floating(),
-        child: AnimatedSlideSwitcher.fade(
-          child: _buildView(controller.status.value),
-          duration: const Duration(milliseconds: 2500),
-        )));
+    return Obx(() => NeumorphCard(parameters: controller.viewParameters, child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -96,7 +88,7 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // @ Avatar
-                _AvatarField(),
+                _ProfileAvatarField(),
                 Padding(padding: EdgeInsets.all(8)),
                 GestureDetector(
                     onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
@@ -109,29 +101,52 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
   }
 }
 
-class _AvatarField extends GetView<ProfileController> {
+class _ProfileAvatarField extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () async {
-        controller.setAddPicture();
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: Neumorph.indented(shape: BoxShape.circle),
-          child: Obx(() => Container(
-                width: 120,
-                height: 120,
-                child: UserService.picture.value.length > 0
-                    ? CircleAvatar(
-                        backgroundImage: MemoryImage(UserService.picture.value),
-                      )
-                    : SonrIcons.Avatar.greyWith(size: 120),
-              )),
-        ),
-      ),
-    );
+    return Obx(() {
+      if (UserService.picture.value.length > 0) {
+        return GestureDetector(
+          onLongPress: () async {
+            controller.setAddPicture();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: Neumorph.indented(shape: BoxShape.circle),
+              child: Obx(() => Container(
+                    width: 120,
+                    height: 120,
+                    child: UserService.picture.value.length > 0
+                        ? CircleAvatar(
+                            backgroundImage: MemoryImage(UserService.picture.value),
+                          )
+                        : SonrIcons.Avatar.greyWith(size: 120),
+                  )),
+            ),
+          ),
+        );
+      } else {
+        return GestureDetector(
+          onTap: () async {
+            controller.setAddPicture();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: Neumorph.indented(shape: BoxShape.circle),
+                child: Container(
+                    width: 120,
+                    height: 120,
+                    child: CircleAvatar(
+                      child: SonrAssetIllustration.AddPicture.widget,
+                      backgroundColor: Color(0xfff0f6fa).withOpacity(0.8),
+                    ))),
+          ),
+        );
+      }
+    });
   }
 }

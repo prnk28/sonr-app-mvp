@@ -191,8 +191,7 @@ class InviteReplyOverlayView extends StatelessWidget {
     }
 
     // Build View
-    return NeumorphicBackground(
-        margin: EdgeInsets.symmetric(horizontal: 16), borderRadius: BorderRadius.circular(30), backendColor: Colors.transparent, child: view);
+    return Container(margin: EdgeInsets.symmetric(horizontal: 16), color: Colors.transparent, child: view);
   }
 }
 

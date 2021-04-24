@@ -6,8 +6,8 @@ class ActivityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: Get.widthReduced(0.1),
-        height: Get.heightRatio(0.7),
+        width: Width.reduced(0.1),
+        height: Height.ratio(0.7),
         child: Obx(() => CardService.activity.length > 0
             ? ListView.builder(
                 itemCount: CardService.activity.length,

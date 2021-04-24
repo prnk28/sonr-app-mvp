@@ -13,36 +13,14 @@ class FileAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final card = invite.card;
-    return Container(
-        height: context.heightTransformer(reducedBy: 35),
-        width: context.widthTransformer(reducedBy: 10),
-        decoration: Neumorph.floating(),
+    return NeumorphAvatarCard(
+        profile: invite.from.profile,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           key: UniqueKey(),
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(children: [
-              // Build Profile Pic
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4.0, left: 8),
-                  child: Neumorphic(
-                    padding: EdgeInsets.all(4),
-                    style: NeumorphicStyle(
-                      boxShape: NeumorphicBoxShape.circle(),
-                      depth: -10,
-                    ),
-                    child: invite.from.profile.hasPicture()
-                        ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
-                        : Icon(
-                            Icons.insert_emoticon,
-                            size: 100,
-                            color: SonrColor.Black.withOpacity(0.5),
-                          ),
-                  ),
-                ),
-              ),
               // Create Spacing
               Padding(padding: EdgeInsets.all(6)),
               // From Information
@@ -70,17 +48,18 @@ class FileAuthView extends StatelessWidget {
             ),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
-            Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ColorButton.neutral(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
-                Padding(padding: EdgeInsets.all(8)),
                 ColorButton.primary(
                   onPressed: () => CardService.handleInviteResponse(true, invite, card),
                   text: "Accept",
                   gradient: SonrGradient.Tertiary,
                   icon: SonrIcons.Check,
+                  margin: EdgeInsets.symmetric(horizontal: 54),
                 ),
+                Padding(padding: EdgeInsets.all(8)),
+                PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
               ],
             ),
           ],

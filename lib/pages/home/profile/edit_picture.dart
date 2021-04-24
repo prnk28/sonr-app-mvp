@@ -13,28 +13,30 @@ class EditPictureView extends GetView<ProfileController> {
   EditPictureView({this.headerText = "Edit Picture", Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      child: CustomScrollView(slivers: [
-        // @ Top Banner
-        SliverToBoxAdapter(
-          child: Container(
-            height: kToolbarHeight + 24,
-            child: Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PlainButton(icon: SonrIcons.Close, onPressed: controller.exitToViewing),
-                  headerText.h2,
-                  Padding(padding: EdgeInsets.all(16))
-                ]),
-          ),
-        ),
-        // @ Window Content
-        _ProfilePictureCameraView()
-      ]),
-    );
+    return Obx(() => Get.find<ProfilePictureController>().status.value == ProfilePictureStatus.NeedsPermissions
+        ? _CameraPermissionsView()
+        : Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: CustomScrollView(slivers: [
+              // @ Top Banner
+              SliverToBoxAdapter(
+                child: Container(
+                  height: kToolbarHeight + 24,
+                  child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PlainButton(icon: SonrIcons.Close, onPressed: controller.exitToViewing),
+                        headerText.h2,
+                        Padding(padding: EdgeInsets.all(16))
+                      ]),
+                ),
+              ),
+              // @ Window Content
+              _ProfilePictureCameraView()
+            ]),
+          ));
   }
 }
 
@@ -54,9 +56,6 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   // # Handles Controller Status
   Widget _buildChildFromStatus(ProfilePictureStatus status) {
     switch (status) {
-      case ProfilePictureStatus.NeedsPermissions:
-        return _buildPermissions();
-        break;
       case ProfilePictureStatus.Captured:
         return _buildCaptured();
         break;
@@ -112,14 +111,19 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
       )
     ]);
   }
+}
 
-  // @ Build Permissions Request
-  Widget _buildPermissions() {
-    return Column(
-      children: [
-        "Need Camera Permissions".h3,
-        ColorButton.primary(onPressed: controller.requestPermission, text: "Proceed"),
-      ],
+class _CameraPermissionsView extends GetView<ProfilePictureController> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(image: SonrAssetIllustration.CameraAccess.image, fit: BoxFit.fitWidth), borderRadius: BorderRadius.circular(12)),
+      padding: EdgeInsets.only(bottom: 24),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: ColorButton.primary(onPressed: controller.requestPermission, text: "Proceed"),
+      ),
     );
   }
 }

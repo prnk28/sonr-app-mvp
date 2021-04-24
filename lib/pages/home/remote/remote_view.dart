@@ -9,10 +9,8 @@ class RemoteView extends GetView<RemoteController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: Get.widthReduced(0.1),
-        height: Get.heightRatio(0.7),
-        decoration: Neumorph.floating(),
+    return NeumorphCard(
+        parameters: controller.viewParameters,
         child: Obx(
           () => AnimatedSlideSwitcher.fade(
             child: _buildView(controller.status.value),
@@ -113,7 +111,8 @@ class RemoteLobbyView extends HookWidget {
 class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
+    return Container(
+      decoration: Neumorph.floating(),
       padding: EdgeInsets.only(bottom: 8),
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: OpacityAnimatedWidget(

@@ -49,13 +49,12 @@ class _HomePageView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: SonrStyle.viewMargin,
         child: TabBarView(controller: controller.tabController, children: [
-          CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-          ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
-          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-        ]));
+      CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+      ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+      ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+      RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+    ]));
   }
 }
 

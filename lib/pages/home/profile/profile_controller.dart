@@ -29,6 +29,7 @@ class ProfileController extends GetxController {
   // References
   final step = Rx<TileStep>(null);
   final pageController = PageController();
+  final viewParameters = Rx<NeumorphCardParams>(NeumorphCardParams());
 
   // ** Initialize Method ** //
   onInit() async {
@@ -56,6 +57,7 @@ class ProfileController extends GetxController {
 
   // ^ End Add/Edit State ^ //
   void exitToViewing() {
+    HapticFeedback.mediumImpact();
     status(ProfileViewStatus.Viewing);
   }
 

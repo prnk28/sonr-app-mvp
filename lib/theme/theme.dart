@@ -25,6 +25,7 @@ export 'style/color.dart';
 export 'style/icon.dart';
 export 'style/scaffold.dart';
 export 'elements/snackbar.dart';
+export 'style/card.dart';
 export 'style/text.dart';
 export 'style/decoration.dart';
 export 'elements/appbar.dart';
@@ -127,28 +128,50 @@ extension WidgetListUtils on List<Widget> {
   }
 }
 
-extension SizeUtils on GetInterface {
-  /// Return Width reduced by given Ratio from Screen between 0.0 and 1.0
-  double widthRatio(double ratio) {
+/// * Class that Handles Device Screen Width Management * //
+class Width {
+  /// Return Full Screen Width
+  static double get full => Get.width;
+
+  /// Return Full Screen Width Divided by Value <= ScreenWidth
+  static double divided(double val) {
+    assert(val <= Get.width);
+    return Get.width / val;
+  }
+
+  /// Return Width as Ratio from Screen between 0.0 and 1.0
+  static double ratio(double ratio) {
     assert(ratio <= 1.0 && ratio > 0.0);
     return Get.width * ratio;
   }
 
-  /// Return Height reduced by given Ratio from Screen between 0.0 and 1.0
-  double heightRatio(double ratio) {
-    assert(ratio <= 1.0 && ratio > 0.0);
-    return Get.height * ratio;
-  }
-
   /// Return Width reduced by given Ratio from Screen between 0.0 and 1.0
-  double widthReduced(double ratio) {
+  static double reduced(double ratio) {
     assert(ratio <= 1.0 && ratio > 0.0);
     var factor = Get.width * ratio;
     return Get.width - factor;
   }
+}
+
+/// * Class that Handles Device Screen Height Management * //
+class Height {
+  /// Return Full Screen Height
+  static double get full => Get.height;
+
+  /// Return Full Screen Height Divided by Value <= ScreenHeight
+  static double divided(double val) {
+    assert(val <= Get.height);
+    return Get.height / val;
+  }
+
+  /// Return Height as Ratio from Screen between 0.0 and 1.0
+  static double ratio(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    return Get.height * ratio;
+  }
 
   /// Return Height reduced by given Ratio from Screen between 0.0 and 1.0
-  double heightReduced(double ratio) {
+  static double reduced(double ratio) {
     assert(ratio <= 1.0 && ratio > 0.0);
     var factor = Get.height * ratio;
     return Get.height - factor;

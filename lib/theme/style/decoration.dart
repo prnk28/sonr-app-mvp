@@ -52,51 +52,80 @@ extension Neumorph on BoxDecoration {
         border: Border.all(color: Colors.white.withOpacity(0.65), width: 1));
   }
 
+  /// @ Compact Neumorphic Box Flat for Overlays
+  static BoxDecoration compact({double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
+    return BoxDecoration(
+      shape: shape,
+      border: border != null ? border : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
+      borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
+      color: Color(0xfff0f6fa).withOpacity(0.85),
+      boxShadow: [
+        BoxShadow(
+          blurRadius: 14,
+          color: Color(0xff363636).withOpacity(0.45),
+          offset: Offset(
+            5,
+            5,
+          ),
+        ),
+        BoxShadow(
+          blurRadius: 14,
+          color: Color(0xff484848).withOpacity(0.35),
+          offset: Offset(
+            -5,
+            -5,
+          ),
+        ),
+      ],
+    );
+  }
+
   /// @ Floating Default Neumorphic Box
   static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
     return BoxDecoration(
-        shape: shape,
-        borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-        color: Color(0xfff0f6fa).withOpacity(0.85),
-        boxShadow: [
-          BoxShadow(
-            color: Color(
-              0xb9b0c3d2,
-            ),
-            offset: Offset(
-              8,
-              8,
-            ),
-            spreadRadius: 4,
-            blurRadius: 20,
+      shape: shape,
+      border: border != null ? border : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
+      borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
+      color: Color(0xfff0f6fa).withOpacity(0.85),
+      boxShadow: [
+        BoxShadow(
+          color: Color(
+            0xb9b0c3d2,
           ),
-          BoxShadow(
-            color: Color(
-              0x61f6fbff,
-            ),
-            offset: Offset(
-              -8,
-              -8,
-            ),
-            blurRadius: 20,
+          offset: Offset(
+            8,
+            8,
           ),
-          BoxShadow(
-            color: Color(
-              0x45ffffff,
-            ),
-            offset: Offset(
-              -11,
-              -11,
-            ),
-            blurRadius: 20,
+          spreadRadius: 4,
+          blurRadius: 20,
+        ),
+        BoxShadow(
+          color: Color(
+            0x61f6fbff,
           ),
-          BoxShadow(
-            color: Colors.white.withOpacity(0.15),
-            offset: Offset(-6.0, -6.0),
-            blurRadius: 16.0,
+          offset: Offset(
+            -8,
+            -8,
           ),
-        ],
-        border: border != null ? border : Border.all(color: Colors.white.withOpacity(0.65), width: 1));
+          blurRadius: 20,
+        ),
+        BoxShadow(
+          color: Color(
+            0x45ffffff,
+          ),
+          offset: Offset(
+            -11,
+            -11,
+          ),
+          blurRadius: 20,
+        ),
+        BoxShadow(
+          color: Colors.white.withOpacity(0.15),
+          offset: Offset(-6.0, -6.0),
+          blurRadius: 16.0,
+        ),
+      ],
+    );
   }
 
   /// @ Orange Red Hue Neumorphic Box

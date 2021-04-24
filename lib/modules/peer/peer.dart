@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
-
 // ^ Proximity Model Extensions ^ //
 extension PositionUtils on Position {
   double get maxHeight {
@@ -102,20 +101,18 @@ extension WidgetUtils on Peer {
   }
 
   Widget profilePicture({double size = 100}) {
-    return Neumorphic(
-      padding: EdgeInsets.all(4),
-      style: NeumorphicStyle(
-        boxShape: NeumorphicBoxShape.circle(),
-        depth: -10,
-      ),
-      child: this.profile.hasPicture()
-          ? Image.memory(Uint8List.fromList(this.profile.picture))
-          : Icon(
-              Icons.insert_emoticon,
-              size: size,
-              color: SonrColor.Black.withOpacity(0.5),
-            ),
-    );
+    return Container(
+        decoration: Neumorph.indented(shape: BoxShape.circle),
+        padding: EdgeInsets.all(4),
+        child: Container(
+          width: size,
+          height: size,
+          child: profile.hasPicture()
+              ? CircleAvatar(
+                  backgroundImage: MemoryImage(Uint8List.fromList(profile.picture)),
+                )
+              : SonrIcons.Avatar.greyWith(size: size),
+        ));
   }
 }
 

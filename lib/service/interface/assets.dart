@@ -152,7 +152,7 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
   }
 
   // ^ Get Illustration ^ //
-  Widget get widget {
+  Image get widget {
     switch (this) {
       case SonrAssetIllustration.NoFiles1:
         return AssetController.to._noFiles1;
@@ -179,7 +179,37 @@ extension IllustrationNetworkUtils on SonrAssetIllustration {
       case SonrAssetIllustration.AddPicture:
         return AssetController.to._addPicture;
     }
-    return Container();
+    return AssetController.to._noFiles4;
+  }
+
+  ImageProvider<Object> get image {
+    switch (this) {
+      case SonrAssetIllustration.NoFiles1:
+        return AssetController.to._noFiles1.image;
+      case SonrAssetIllustration.NoFiles2:
+        return AssetController.to._noFiles2.image;
+      case SonrAssetIllustration.NoFiles3:
+        return AssetController.to._noFiles3.image;
+      case SonrAssetIllustration.NoFiles4:
+        return AssetController.to._noFiles4.image;
+      case SonrAssetIllustration.LocationAccess:
+        return AssetController.to._locationAccess.image;
+      case SonrAssetIllustration.MediaAccess:
+        return AssetController.to._mediaAccess.image;
+      case SonrAssetIllustration.CameraAccess:
+        return AssetController.to._cameraAccess.image;
+      case SonrAssetIllustration.ConnectionLost:
+        return AssetController.to._noConnection.image;
+      case SonrAssetIllustration.CreateGroup:
+        return AssetController.to._createGroup.image;
+      case SonrAssetIllustration.NoPeers:
+        return AssetController.to._noPeers.image;
+      case SonrAssetIllustration.NoAlerts:
+        return AssetController.to._noAlerts.image;
+      case SonrAssetIllustration.AddPicture:
+        return AssetController.to._addPicture.image;
+    }
+    return AssetController.to._noFiles4.image;
   }
 }
 
