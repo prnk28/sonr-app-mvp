@@ -47,6 +47,7 @@ dependencies:
   vector_math: ^2.1.0
 
   # -- Network --
+  mime: ^1.0.0
   moor: ^4.2.1
   sqlite3_flutter_libs: ^0.4.1
   receive_sharing_intent: ^1.4.3
@@ -63,7 +64,6 @@ dependencies:
   lottie: ^1.0.1
   photo_view: ^0.11.1
   rive: ^0.7.1
-  mime: ^1.0.0
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:
