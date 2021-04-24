@@ -53,12 +53,12 @@ extension Neumorph on BoxDecoration {
   }
 
   /// @ Compact Neumorphic Box Flat for Overlays
-  static BoxDecoration compact({double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
+  static BoxDecoration compact({Color color, double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
     return BoxDecoration(
       shape: shape,
       border: border != null ? border : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
       borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-      color: Color(0xfff0f6fa).withOpacity(0.85),
+      color: color != null ? color : Color(0xfff0f6fa).withOpacity(0.85),
       boxShadow: [
         BoxShadow(
           blurRadius: 14,
@@ -81,12 +81,12 @@ extension Neumorph on BoxDecoration {
   }
 
   /// @ Floating Default Neumorphic Box
-  static BoxDecoration floating({double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
+  static BoxDecoration floating({Color color, double radius = 12, BoxShape shape = BoxShape.rectangle, Border border}) {
     return BoxDecoration(
       shape: shape,
       border: border != null ? border : Border.all(color: Colors.white.withOpacity(0.65), width: 1),
       borderRadius: shape != BoxShape.circle ? BorderRadius.circular(radius) : null,
-      color: Color(0xfff0f6fa).withOpacity(0.85),
+      color: color != null ? color : Color(0xfff0f6fa).withOpacity(0.85),
       boxShadow: [
         BoxShadow(
           color: Color(

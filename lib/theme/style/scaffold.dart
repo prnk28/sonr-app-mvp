@@ -42,12 +42,12 @@ class SonrScaffold extends StatelessWidget {
                   ? Container(
                       height: Get.height,
                       width: Get.width,
-                      color: SonrColor.Black.withOpacity(0.75),
+                      color: SonrColor.Black.withOpacity(0.85),
                     )
                   : Container(
                       height: Get.height,
                       width: Get.width,
-                      color: SonrColor.White.withOpacity(0.75),
+                      color: SonrColor.White.withOpacity(0.85),
                     ),
 
               // Blue

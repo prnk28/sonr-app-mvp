@@ -32,7 +32,7 @@ class PeerCard extends GetWidget<PeerController> {
                 alignment: Alignment.center,
                 height: 96,
                 width: 96,
-                child: controller.board.value == null
+                child: controller.board.value == null || controller.isFlipped.value
                     ? Container()
                     : Rive(
                         artboard: controller.board.value,

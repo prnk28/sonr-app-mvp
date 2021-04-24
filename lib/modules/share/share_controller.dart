@@ -4,29 +4,39 @@ import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'share.dart';
+export 'share_view.dart';
+export 'share_controller.dart';
+export 'sheet_view.dart';
 
 // ** Share Reactive Controller ** //
-class ShareController extends GetxController {
+class ShareController extends GetxController with SingleGetTickerProviderMixin {
   // Permissions
   final cameraPermitted = RxBool(UserService.permissions.value.hasCamera);
   final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
 
   // Properties
-  final size = Size(60, 60).obs;
+  final size = Size(75, 75).obs;
   final status = ShareStatus.Default.obs;
 
   // Shared Files
   final currentMedia = Rx<MediaItem>(null);
 
   // References
+  AnimationController animationController;
   int _counter = 0;
   Timer _timer;
 
   @override
   onInit() {
+    animationController = AnimationController(duration: Duration(milliseconds: 600), vsync: this);
     status.listen(_handleStatus);
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    animationController.dispose();
+    super.onClose();
   }
 
   // ^ Expand Share Button ^ //
@@ -48,15 +58,32 @@ class ShareController extends GetxController {
   }
 
   // ^ Present Camera View ^ //
-  presentCameraView() {
-    // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-      // Shrink Button after Delay
-      shrink(delay: 150.milliseconds);
+  openCamera() async {
+    // Check for Permissions
+    if (cameraPermitted.value) {
+      // Move to View
+      Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+        // Shrink Button after Delay
+        shrink(delay: 150.milliseconds);
 
-      // Transfer with File
-      Transfer.transferWithFile(FileItem.capture(file));
-    }), transition: Transition.downToUp);
+        // Transfer with File
+        Transfer.transferWithFile(FileItem.capture(file));
+      }), transition: Transition.downToUp);
+    }
+
+    // Request Permissions
+    else {
+      var result = await Get.find<UserService>().requestCamera();
+      result
+          ? Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+              // Shrink Button after Delay
+              shrink(delay: 150.milliseconds);
+
+              // Transfer with File
+              Transfer.transferWithFile(FileItem.capture(file));
+            }), transition: Transition.downToUp)
+          : SonrSnack.error("Sonr cannot open Camera without Permissions");
+    }
   }
 
   // ^ Select Contact to Transfer ^
@@ -175,5 +202,22 @@ class ShareController extends GetxController {
   // # Update Size Based on State
   _handleStatus(ShareStatus status) {
     size(status.size);
+  }
+}
+
+enum ShareStatus { Default, Queue }
+
+extension ShareStatusUtils on ShareStatus {
+  bool get isExpanded => this != ShareStatus.Default;
+
+  // @ Method Builds Size for Status
+  Size get size {
+    switch (this) {
+      case ShareStatus.Queue:
+        return Size(Get.width / 2 + 200, 110);
+        break;
+      default:
+        return Size(75, 75);
+    }
   }
 }
