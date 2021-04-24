@@ -12,7 +12,7 @@ class TransferController extends GetxController {
 
   // @ Properties
   final title = "Nobody Here".obs;
-  final isBirdsEye = false.obs;
+  final isNotEmpty = false.obs;
   final isFacingPeer = false.obs;
   final inviteRequest = InviteRequest().obs;
   final fileItem = Rx<FileItem>(null);
@@ -203,10 +203,13 @@ class TransferController extends GetxController {
   _handleLobbySizeUpdate(int size) {
     if (!isRemoteActive.value) {
       if (size == 0) {
+        isNotEmpty(false);
         title("Nobody Here");
       } else if (size == 1) {
+        isNotEmpty(true);
         title("1 Person");
       } else {
+        isNotEmpty(true);
         title("$size People");
       }
     }

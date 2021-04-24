@@ -58,7 +58,7 @@ class _LocalPeerCarousel extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // Carousel View
-      if (LobbyService.local.value.peers != null) {
+      if (controller.isNotEmpty.value) {
         return CarouselSlider(
           carouselController: controller.carouselController,
           options: K_CAROUSEL_OPTS,
@@ -69,6 +69,7 @@ class _LocalPeerCarousel extends GetView<TransferController> {
       // Default Empty View
       else {
         return Container(
+          padding: EdgeInsets.all(24),
           height: 260,
           child: SonrAssetIllustration.NoPeers.widget,
         );
