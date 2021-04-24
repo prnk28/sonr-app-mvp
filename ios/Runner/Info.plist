@@ -2,12 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Usage for discovering nearby devices</string>
 	<key>HERECredentials</key>
 	<dict>
-    	<key>AccessKeyId</key>
-    		<string>WLCvm13SPXK4xSDMYbqWog</string>
-    	<key>AccessKeySecret</key>
-    		<string>qssKHphhuG2khFg_fTfyF0StoJJQzKMWIVRbBLkI7qko9BFTbi8U3ZxuPfndq3o9Ge6e9awG7_pQFcsJDDkikA</string>
+		<key>AccessKeyId</key>
+		<string>WLCvm13SPXK4xSDMYbqWog</string>
+		<key>AccessKeySecret</key>
+		<string>qssKHphhuG2khFg_fTfyF0StoJJQzKMWIVRbBLkI7qko9BFTbi8U3ZxuPfndq3o9Ge6e9awG7_pQFcsJDDkikA</string>
 	</dict>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
@@ -28,9 +30,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
-	<string>74</string>
+	<string>76</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.0</string>
+	<string>0.9.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
