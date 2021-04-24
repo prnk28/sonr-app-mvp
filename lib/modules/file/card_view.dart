@@ -34,13 +34,10 @@ class FileCardView extends StatelessWidget {
                     // Time Stamp
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Neumorphic(
-                          style: SonrStyle.timeStampDark,
-                          child: card.dateText,
-                          padding: EdgeInsets.all(10),
-                        ),
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
+                        child: card.dateText,
                       ),
                     ),
 
@@ -88,9 +85,9 @@ class _FileCardInfo extends StatelessWidget {
     // Build Overlay View
     return Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Neumorphic(
+        child: Container(
+          decoration: Neumorph.compact(),
           margin: EdgeInsets.only(left: 6, right: 6),
-          style: SonrStyle.overlay,
           padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 20),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type

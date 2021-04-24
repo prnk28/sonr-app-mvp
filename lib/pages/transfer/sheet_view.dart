@@ -20,15 +20,13 @@ class _PayloadListItem extends GetView<TransferController> {
               _buildLeading(),
               _buildTitle(),
               Container(
-                  alignment: Alignment.topRight,
-                  padding: EdgeInsets.only(left: 8),
-                  child: Opacity(
-                    opacity: 0.6,
-                    child: PlainIconButton(
-                      onPressed: () {},
-                      icon: SonrIcons.More_Vertical.gradient(gradient: SonrGradient.Primary),
-                    ),
-                  )),
+                padding: EdgeInsets.only(left: 8),
+                alignment: Alignment.topRight,
+                child: PlainIconButton(
+                  onPressed: () {},
+                  icon: SonrIcons.More_Vertical.gradient(gradient: SonrGradient.Primary),
+                ),
+              ),
             ])));
   }
 
@@ -47,33 +45,66 @@ class _PayloadListItem extends GetView<TransferController> {
 
       // Other Media (Video, Audio)
       else {
-        return controller.fileItem.value.mime.type.gradient(size: 80);
+        return controller.fileItem.value.mime.type.gradient(size: Height.ratio(0.125));
       }
     }
 
     // # Other File
     else {
-      return controller.inviteRequest.value.payload.gradient(size: 80);
+      return controller.inviteRequest.value.payload.gradient(size: Height.ratio(0.125));
     }
   }
 
   Widget _buildTitle() {
-    //
-    // Build Text View
-    return Container(
-        width: Width.ratio(0.6),
-        height: Height.ratio(0.15),
-        padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: controller.fileItem.value.prettyName().h6,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: controller.fileItem.value.sizeToString().p_Grey,
-          )
-        ]));
+    if (controller.inviteRequest.value.payload == Payload.CONTACT) {
+      // Build Text View
+      return Container(
+          width: Width.ratio(0.5),
+          height: Height.ratio(0.15),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: [UserService.firstName.value.h6, " ".h6, UserService.lastName.value.l].row(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: "Contact Card".p_Grey,
+            )
+          ]));
+    } else if (controller.inviteRequest.value.payload == Payload.URL) {
+      // Build Text View
+      return Container(
+          width: Width.ratio(0.5),
+          height: Height.ratio(0.15),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: controller.fileItem.value.prettyName().h6,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: controller.fileItem.value.sizeToString().p_Grey,
+            )
+          ]));
+    } else {
+      // Build Text View
+      return Container(
+          width: Width.ratio(0.5),
+          height: Height.ratio(0.15),
+          padding: EdgeInsets.only(left: 16, right: 8, top: 8, bottom: 8),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: controller.fileItem.value.prettyName().h6,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: controller.fileItem.value.sizeToString().p_Grey,
+            )
+          ]));
+    }
   }
 }
 

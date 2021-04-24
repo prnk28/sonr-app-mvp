@@ -46,42 +46,8 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/user/user.dart';
-import 'style/color.dart';
 
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
-
-class SonrStyle {
-  static Size get viewSize => Size(Get.width * 0.95, Get.height * 0.85);
-  static EdgeInsets get viewMargin => EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-
-  static NeumorphicStyle get overlay => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        depth: UserService.isDarkMode ? 4 : 8,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-      );
-
-  static NeumorphicStyle get timeStamp => NeumorphicStyle(
-      intensity: 0.4,
-      depth: UserService.isDarkMode ? 4 : 8,
-      boxShape: NeumorphicBoxShape.stadium(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black);
-
-  static NeumorphicStyle get timeStampDark => NeumorphicStyle(
-      intensity: 0.4,
-      depth: UserService.isDarkMode ? 4 : 8,
-      boxShape: NeumorphicBoxShape.stadium(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black);
-
-  static NeumorphicStyle get toggle => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.25 : 0.5,
-        depth: UserService.isDarkMode ? 4 : 6,
-        shape: NeumorphicShape.flat,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-      );
-}
 
 extension WidgetListUtils on List<Widget> {
   /// Accessor Method to Create a Row

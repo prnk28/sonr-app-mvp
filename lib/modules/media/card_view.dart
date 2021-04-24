@@ -9,14 +9,6 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'media.dart';
 
-class MediaCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-
 // ^ TransferCard Media Item Details ^ //
 class MediaCardView extends StatefulWidget {
   final TransferCardItem card;
@@ -68,14 +60,10 @@ class _MediaCardViewState extends State<MediaCardView> {
                 // Time Stamp
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Neumorphic(
-                      style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                      child: widget.card.dateText,
-                      padding: EdgeInsets.all(10),
-                    ),
-                  ),
+                  child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
+                      child: widget.card.dateText),
                 ),
 
                 // Info Button

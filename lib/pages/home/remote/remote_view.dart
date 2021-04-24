@@ -42,9 +42,7 @@ class _JoinRemoteView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-        width: SonrStyle.viewSize.width,
-        height: SonrStyle.viewSize.height,
-        child: SingleChildScrollView(
+            child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Column(
@@ -132,7 +130,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                 autofocus: controller.isJoinFieldTapped.value,
                 style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
-              width: SonrStyle.viewSize.width / 4.2,
+              width: Width.ratio(0.2),
             ),
             Container(
               margin: EdgeInsets.only(left: 2, right: 2),
@@ -144,7 +142,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textInputAction: TextInputAction.next,
                   style:
                       TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
-              width: SonrStyle.viewSize.width / 4.2,
+              width: Width.ratio(0.2),
             ),
             Container(
               margin: EdgeInsets.only(right: 4),
@@ -157,7 +155,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textInputAction: TextInputAction.done,
                   style:
                       TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
-              width: SonrStyle.viewSize.width / 4.2,
+              width: Width.ratio(0.2),
             ),
           ],
         ),
