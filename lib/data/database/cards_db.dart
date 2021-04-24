@@ -4,13 +4,24 @@ import 'package:path/path.dart' as p;
 import 'package:moor/moor.dart';
 import 'dart:io';
 import 'package:sonr_core/sonr_core.dart';
-
 import 'cards_converter.dart';
-
 part 'cards_db.g.dart';
 
-// this will generate a table called "todos" for us. The rows of that table will
-// be represented by a class called "Todo".
+enum ActivityType { Deleted, Shared, Received }
+
+extension ActivityTypeUtils on ActivityType {
+  String get value {
+    return this.toString().substring(this.toString().indexOf('.') + 1);
+  }
+}
+
+@DataClassName("TransferCardActivity")
+class TransferCardActivities extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get card => text().map(const CardConverter())();
+  IntColumn get activity => integer().map(const ActivityConverter())();
+}
+
 class TransferCardItems extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get owner => text().map(const ProfileConverter())();
@@ -23,7 +34,7 @@ class TransferCardItems extends Table {
 
 // this annotation tells moor to prepare a database class that uses both of the
 // tables we just defined. We'll see how to use that database class in a moment.
-@UseMoor(tables: [TransferCardItems])
+@UseMoor(tables: [TransferCardItems, TransferCardActivities])
 class CardsDatabase extends _$CardsDatabase {
   // we tell the database where to store the data with this constructor
   CardsDatabase() : super(_openConnection());
@@ -37,6 +48,10 @@ class CardsDatabase extends _$CardsDatabase {
   Future<List<TransferCardItem>> get allCardEntries => select(transferCardItems).get();
   Stream<List<TransferCardItem>> watchAll() {
     return (select(transferCardItems).watch());
+  }
+
+  Stream<List<TransferCardActivity>> watchActivity() {
+    return (select(transferCardActivities).watch());
   }
 
   Stream<List<TransferCardItem>> watchContacts() {
@@ -56,6 +71,10 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   // returns the generated id
+  Future<int> addActivity(ActivityType type, TransferCard card) {
+    return into(transferCardActivities).insert(TransferCardActivitiesCompanion(card: Value(card), activity: Value(type)));
+  }
+
   Future<int> addCard(TransferCard card) async {
     return into(transferCardItems).insert(TransferCardItemsCompanion(
         owner: Value(card.owner),
@@ -64,6 +83,14 @@ class CardsDatabase extends _$CardsDatabase {
         metadata: card.hasMetadata() ? Value(card.metadata) : Value.absent(),
         url: card.hasUrl() ? Value(card.url) : Value.absent(),
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
+  }
+
+  Future clearActivity(TransferCardActivity activity) {
+    return (delete(transferCardActivities)..where((t) => t.id.equals(activity.id))).go();
+  }
+
+  Future clearAllActivity() {
+    return (delete(transferCardActivities).go());
   }
 
   Future deleteCard(TransferCardItem item) {

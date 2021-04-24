@@ -7,6 +7,13 @@ import 'package:sonr_app/data/data.dart';
 // @ PeerStatus Enum
 enum ProfileViewStatus { Viewing, EditDetails, AddSocial, AddPicture }
 
+extension ProfileViewStatusUtils on ProfileViewStatus {
+  bool get isEditing => this == ProfileViewStatus.EditDetails;
+  bool get isViewing => this == ProfileViewStatus.Viewing;
+  bool get isAddingPicture => this == ProfileViewStatus.AddPicture;
+  bool get isAddingSocial => this == ProfileViewStatus.AddSocial;
+}
+
 class ProfileController extends GetxController {
   // Properties
   final status = ProfileViewStatus.Viewing.obs;
@@ -22,6 +29,7 @@ class ProfileController extends GetxController {
   // References
   final step = Rx<TileStep>(null);
   final pageController = PageController();
+  final viewParameters = Rx<NeumorphCardParams>(NeumorphCardParams());
 
   // ** Initialize Method ** //
   onInit() async {
@@ -49,6 +57,7 @@ class ProfileController extends GetxController {
 
   // ^ End Add/Edit State ^ //
   void exitToViewing() {
+    HapticFeedback.mediumImpact();
     status(ProfileViewStatus.Viewing);
   }
 

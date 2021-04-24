@@ -6,7 +6,7 @@ class PayloadView extends GetView<TransferController> {
   const PayloadView();
   @override
   Widget build(BuildContext context) {
-    return GlassContainer(
+    return Container(
       width: context.widthTransformer(reducedBy: 20),
       height: context.heightTransformer(reducedBy: 60),
       child: Stack(
@@ -118,6 +118,9 @@ class _BulbViewThumbnail extends StatelessWidget {
       initialData: false,
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data) {
+
+
+          // Return View
           return GestureDetector(
             onTap: () => OpenFile.open(item.path),
             child: Container(

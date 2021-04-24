@@ -172,6 +172,7 @@ class PeerController extends GetxController {
             _isIdle.value = true;
             break;
           case PeerStatus.Pending:
+            isVisible(true);
             _isPending.value = true;
             break;
           case PeerStatus.Accepted:
@@ -185,6 +186,9 @@ class PeerController extends GetxController {
           case PeerStatus.Complete:
             isVisible(false);
             _isComplete.value = true;
+
+            // Reset Status
+            updateStatus(PeerStatus.Default, delay: 1200.milliseconds);
             break;
         }
       });
@@ -207,7 +211,7 @@ class PeerController extends GetxController {
     }
   }
 
-  // ^ Handle Peer Position ^ //
+  // @ Handle Peer Position ^ //
   void _handleUserUpdate(VectorPosition pos) {
     if (!isClosed && !status.value.isComplete) {
       // Initialize
@@ -240,7 +244,7 @@ class PeerController extends GetxController {
     }
   }
 
-  // ^ Handle Facing Check ^ //
+  // @ Handle Facing Check ^ //
   void _handleFacingUpdate() {
     if (!isClosed && !status.value.isComplete) {
       // Find Offset

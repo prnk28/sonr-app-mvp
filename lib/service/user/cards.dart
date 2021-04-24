@@ -10,43 +10,52 @@ class CardService extends GetxService {
   static CardService get to => Get.find<CardService>();
 
   // Properties
-  final _allCards = RxList<TransferCardItem>();
-  final _contactCards = RxList<TransferCardItem>();
-  final _fileCards = RxList<TransferCardItem>();
-  final _mediaCards = RxList<TransferCardItem>();
-  final _urlCards = RxList<TransferCardItem>();
+  final _activity = RxList<TransferCardActivity>();
+  final _all = RxList<TransferCardItem>();
+  final _contacts = RxList<TransferCardItem>();
+  final _files = RxList<TransferCardItem>();
+  final _links = RxList<TransferCardItem>();
+  final _media = RxList<TransferCardItem>();
+  final _categoryCount = RxInt(1);
 
   // Property Accessors
-  static RxList<TransferCardItem> get allCards => to._allCards;
-  static RxList<TransferCardItem> get contactCards => to._contactCards;
-  static RxList<TransferCardItem> get fileCards => to._fileCards;
-  static RxList<TransferCardItem> get mediaCards => to._mediaCards;
-  static RxList<TransferCardItem> get urlCards => to._urlCards;
+  static RxList<TransferCardActivity> get activity => to._activity;
+  static RxList<TransferCardItem> get all => to._all;
+  static RxList<TransferCardItem> get contacts => to._contacts;
+  static RxList<TransferCardItem> get files => to._files;
+  static RxList<TransferCardItem> get links => to._links;
+  static RxList<TransferCardItem> get media => to._media;
 
-  // Utility
-  static bool get hasContacts => to._contactCards.length > 0;
-  static bool get hasFiles => to._fileCards.length > 0;
-  static bool get hasMedia => to._mediaCards.length > 0;
-  static bool get hasURLs => to._urlCards.length > 0;
-  static int get categoryCount {
-    int counter = 1;
-    hasContacts ? counter += 1 : counter += 0;
-    hasFiles ? counter += 1 : counter += 0;
-    hasMedia ? counter += 1 : counter += 0;
-    hasURLs ? counter += 1 : counter += 0;
-    return counter;
-  }
+  // Category Specific Count
+  static bool get hasActivity => to._activity.length > 0;
+  static bool get hasContacts => to._contacts.length > 0;
+  static bool get hasFiles => to._files.length > 0;
+  static bool get hasLinks => to._links.length > 0;
+  static bool get hasMedia => to._media.length > 0;
+
+  // Total Count
+  static RxInt get categoryCount => to._categoryCount;
 
   // References
   final _database = CardsDatabase();
 
   // * Constructer * //
   Future<CardService> init() async {
-    _allCards.bindStream(_database.watchAll());
-    _contactCards.bindStream(_database.watchContacts());
-    _fileCards.bindStream(_database.watchFiles());
-    _mediaCards.bindStream(_database.watchMedia());
-    _urlCards.bindStream(_database.watchUrls());
+    // Bind Streams
+    _activity.bindStream(_database.watchActivity());
+    _all.bindStream(_database.watchAll());
+    _contacts.bindStream(_database.watchContacts());
+    _files.bindStream(_database.watchFiles());
+    _media.bindStream(_database.watchMedia());
+    _links.bindStream(_database.watchUrls());
+
+    // Set Initial Counter
+    int counter = 1;
+    _contacts.length > 0 ? counter += 1 : counter += 0;
+    _files.length > 0 ? counter += 1 : counter += 0;
+    _media.length > 0 ? counter += 1 : counter += 0;
+    _links.length > 0 ? counter += 1 : counter += 0;
+    _categoryCount(counter);
     return this;
   }
 
@@ -62,6 +71,8 @@ class CardService extends GetxService {
 
     // Store in Database
     await to._database.addCard(card);
+    await to._database.addActivity(ActivityType.Received, card);
+    _refreshCount();
   }
 
   // ^ Returns total Card Count ^ //
@@ -84,9 +95,30 @@ class CardService extends GetxService {
     return cards.length;
   }
 
-  // ^ Add New Card to Database ^ //
+  // ^ Clear Single Activity ^ //
+  static clearActivity(TransferCardActivity activity) async {
+    if (hasActivity) {
+      await to._database.clearActivity(activity);
+    }
+  }
+
+  // ^ Clear All Activity ^ //
+  static clearAllActivity() async {
+    if (hasActivity) {
+      await to._database.clearAllActivity();
+    }
+  }
+
+  // ^ Remove Card and Add Deleted Activity to Database ^ //
   static deleteCard(TransferCardItem card) async {
     await to._database.deleteCard(card);
+    await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
+    _refreshCount();
+  }
+
+  // ^ Add Shared Card to Activity Datavase
+  static sharedCard(TransferCard card) async {
+    await to._database.addActivity(ActivityType.Shared, card);
   }
 
   // ^ Handles User Invite Response
@@ -160,5 +192,40 @@ class CardService extends GetxService {
     if (Get.currentRoute != "/transfer") {
       Get.offNamed('/home/received');
     }
+  }
+
+  // @ Helper: Refresh Category Count
+  static void _refreshCount() {
+    int counter = 1;
+    hasContacts ? counter += 1 : counter += 0;
+    hasFiles ? counter += 1 : counter += 0;
+    hasMedia ? counter += 1 : counter += 0;
+    hasLinks ? counter += 1 : counter += 0;
+    to._categoryCount(counter);
+  }
+
+  // @ Helper: Converts Transfer Card Item into TransferCard Protobuf
+  static TransferCard _transferCardFromItem(TransferCardItem item) {
+    // Set Initial Data
+    var card = TransferCard(
+      id: item.id,
+      payload: item.payload,
+      received: item.received.millisecondsSinceEpoch,
+      owner: item.owner,
+    );
+
+    // Check Payload
+    switch (item.payload) {
+      case Payload.CONTACT:
+        card.contact = item.contact;
+        break;
+      case Payload.URL:
+        card.url = item.url;
+        break;
+      default:
+        card.metadata = item.metadata;
+        break;
+    }
+    return card;
   }
 }

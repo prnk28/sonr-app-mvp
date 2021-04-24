@@ -3,7 +3,7 @@ import 'package:sonr_app/modules/contact/contact.dart';
 import 'package:sonr_app/modules/file/file.dart';
 import 'package:sonr_app/modules/media/card_view.dart';
 import 'package:sonr_app/modules/url/card_view.dart';
-import 'package:sonr_app/service/device/cards.dart';
+import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'grid_controller.dart';
 import 'tags_view.dart';
@@ -28,62 +28,38 @@ class CardMainView extends GetView<GridController> {
           ),
           SliverPadding(padding: EdgeInsets.only(top: 24)),
           SliverToBoxAdapter(
-              child: Container(
-            height: K_LIST_HEIGHT,
-            child: TabBarView(controller: controller.tabController, children: _buildViews()),
-          )),
+            child: Container(
+                height: K_LIST_HEIGHT,
+                child: TabBarView(
+                    controller: controller.tabController,
+                    children: [_CardGridAll(), _CardGridFiles(), _CardGridMedia(), _CardGridContacts(), _CardGridLinks()])),
+          ),
           SliverPadding(padding: EdgeInsets.all(8)),
         ]));
   }
 
   // # Build Tags
-  List<String> _buildTags() {
-    var list = <String>["All"];
+  List<Tuple<String, int>> _buildTags() {
+    var list = <Tuple<String, int>>[Tuple("All", 0)];
 
     // Check Files Length
     if (CardService.hasFiles) {
-      list.add("Files");
+      list.add(Tuple("Files", 1));
     }
 
     // Check Media Length
     if (CardService.hasMedia) {
-      list.add("Media");
+      list.add(Tuple("Media", 2));
     }
 
     // Check Contacts Length
     if (CardService.hasContacts) {
-      list.add("Contacts");
+      list.add(Tuple("Contacts", 3));
     }
 
     // Check URLs Length
-    if (CardService.hasURLs) {
-      list.add("Links");
-    }
-    return list;
-  }
-
-  // # Build Views
-  List<Widget> _buildViews() {
-    var list = <Widget>[_CardGridAll()];
-
-    // Check Files Length
-    if (CardService.hasFiles) {
-      list.add(_CardGridFiles());
-    }
-
-    // Check Media Length
-    if (CardService.hasMedia) {
-      list.add(_CardGridMedia());
-    }
-
-    // Check Contacts Length
-    if (CardService.hasContacts) {
-      list.add(_CardGridContacts());
-    }
-
-    // Check URLs Length
-    if (CardService.hasURLs) {
-      list.add(_CardGridLinks());
+    if (CardService.hasLinks) {
+      list.add(Tuple("Links", 4));
     }
     return list;
   }
@@ -125,15 +101,15 @@ class _CardGridAll extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.allCards.length > 0) {
+      if (CardService.all.length > 0) {
         return ListView.builder(
-          itemCount: CardService.allCards.length,
+          itemCount: CardService.all.length,
           itemBuilder: (BuildContext context, int index) {
-            return buildCard(CardService.allCards[index]);
+            return buildCard(CardService.all[index]);
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Cards Found");
+        return _CardGridEmpty(0, label: "No Cards Found");
       }
     });
   }
@@ -156,15 +132,15 @@ class _CardGridMedia extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.mediaCards.length > 0) {
+      if (CardService.media.length > 0) {
         return ListView.builder(
-          itemCount: CardService.mediaCards.length,
+          itemCount: CardService.media.length,
           itemBuilder: (BuildContext context, int index) {
-            return MediaCardView(CardService.mediaCards[index]);
+            return MediaCardView(CardService.media[index]);
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Media yet");
+        return _CardGridEmpty(0, label: "No Media yet");
       }
     });
   }
@@ -176,15 +152,15 @@ class _CardGridFiles extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.fileCards.length > 0) {
+      if (CardService.files.length > 0) {
         return ListView.builder(
-          itemCount: CardService.fileCards.length,
+          itemCount: CardService.files.length,
           itemBuilder: (BuildContext context, int index) {
-            return FileCardView(CardService.fileCards[index]);
+            return FileCardView(CardService.files[index]);
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Files yet");
+        return _CardGridEmpty(1, label: "No Files yet");
       }
     });
   }
@@ -196,15 +172,15 @@ class _CardGridContacts extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.contactCards.length > 0) {
+      if (CardService.contacts.length > 0) {
         return ListView.builder(
-          itemCount: CardService.contactCards.length,
+          itemCount: CardService.contacts.length,
           itemBuilder: (BuildContext context, int index) {
-            return ContactCardView(CardService.contactCards[index]);
+            return ContactCardView(CardService.contacts[index]);
           },
         );
       } else {
-        return _CardGridEmpty(label: "No Contacts yet");
+        return _CardGridEmpty(2, label: "No Contacts yet");
       }
     });
   }
@@ -216,15 +192,15 @@ class _CardGridLinks extends GetView<GridController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.urlCards.length > 0) {
+      if (CardService.links.length > 0) {
         return ListView.builder(
-          itemCount: CardService.urlCards.length,
+          itemCount: CardService.links.length,
           itemBuilder: (BuildContext context, int index) {
-            return URLCardView(CardService.urlCards[index]);
+            return URLCardView(CardService.links[index]);
           },
         );
       } else {
-        return _CardGridEmpty(label: "No URL Links yet");
+        return _CardGridEmpty(3, label: "No URL Links yet");
       }
     });
   }
@@ -233,14 +209,14 @@ class _CardGridLinks extends GetView<GridController> {
 // @ Helper Method to Build Empty List Value
 class _CardGridEmpty extends GetView<GridController> {
   final String label;
-
-  const _CardGridEmpty({Key key, @required this.label}) : super(key: key);
+  final int emptyImageIndex;
+  const _CardGridEmpty(this.emptyImageIndex, {Key key, @required this.label}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       height: K_LIST_HEIGHT,
       child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, crossAxisAlignment: CrossAxisAlignment.center, children: [
-        AssetController.randomNoFiles(),
+        AssetController.getNoFiles(emptyImageIndex),
         label.p_Grey,
         Padding(padding: EdgeInsets.all(16)),
       ]),

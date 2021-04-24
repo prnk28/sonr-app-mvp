@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'media.dart';
-import 'package:sonr_app/service/device/cards.dart';
+import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 
@@ -13,10 +13,8 @@ class MediaAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final card = invite.card;
-    return Container(
-      height: context.heightTransformer(reducedBy: 35),
-      width: context.widthTransformer(reducedBy: 10),
-      decoration: Neumorph.floating(),
+    return NeumorphAvatarCard(
+      profile: invite.from.profile,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         key: UniqueKey(),
@@ -24,23 +22,6 @@ class MediaAuthView extends StatelessWidget {
         children: [
           // @ Header
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            // Build Profile Pic
-            Container(
-              child: Icon(
-                Icons.insert_emoticon,
-                size: 60,
-                color: SonrColor.Black.withOpacity(0.5),
-              ),
-
-              //   invite.from.profile.hasPicture()
-              // ? Image.memory(
-              //     Uint8List.fromList(invite.from.profile.picture),
-              //     width: 60,
-              //     height: 60,
-              //   )
-              // :
-            ),
-
             // From Information
             Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
               invite.from.profile.hasLastName()
@@ -66,17 +47,18 @@ class MediaAuthView extends StatelessWidget {
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ColorButton.neutral(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
-              Padding(padding: EdgeInsets.all(8)),
               ColorButton.primary(
                 onPressed: () => CardService.handleInviteResponse(true, invite, card),
                 text: "Accept",
                 gradient: SonrGradient.Tertiary,
                 icon: SonrIcons.Check,
+                margin: EdgeInsets.symmetric(horizontal: 54),
               ),
+              Padding(padding: EdgeInsets.all(8)),
+              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
             ],
           ),
         ],

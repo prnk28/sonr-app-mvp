@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:sonr_app/data/core/arguments.dart';
-import 'package:sonr_app/modules/share/share.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -8,7 +8,6 @@ enum HomeView { Main, Profile, Activity, Remote }
 
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
-  final isBottomBarVisible = true.obs;
   final isTitleVisible = true.obs;
 
   // Elements
@@ -18,8 +17,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   final view = HomeView.Main.obs;
   final sonrStatus = Rx<Status>(SonrService.status.value);
 
-  // References
+  // Controllers
   TabController tabController;
+
+  // References
   HomeView _lastPage = HomeView.Main;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
@@ -51,7 +52,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
 
     // Handle Streams
-    SensorService.keyboardVisible.listen(_handleKeyboardVisibility);
     _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
@@ -91,6 +91,10 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // @ Swaps Title when Lobby Size Changes ^ //
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
+    // Check Keyboard
+    DeviceService.closeKeyboard();
+
+    // Check Valid
     if (!_timeoutActive && !isClosed && isTitleVisible.value) {
       // Swap Text
       titleText(val);
@@ -118,18 +122,13 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
-  // @ Handle Keyboard Visibility
-  _handleKeyboardVisibility(bool keyboardVisible) {
-    isBottomBarVisible(!keyboardVisible);
-  }
-
   // @ Handle Size Update ^ //
   _handleLobbySizeStream(int onData) {
     // Peer Joined
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      SensorService.playSound(type: UISoundType.Joined);
+      DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

@@ -1,12 +1,11 @@
 import 'package:sonr_app/modules/share/share_view.dart';
-import 'package:sonr_app/modules/share/share.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'action_button.dart';
 import 'grid/grid_view.dart';
 import 'home_controller.dart';
-import 'alerts/alerts_view.dart';
+import 'activity/activity_view.dart';
 import 'profile/profile_view.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -14,18 +13,47 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
         resizeToAvoidBottomInset: false,
-        shareView: ShareView(),
+        floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
         appBar: DesignAppBar(
-          title: HomeAppBarTitle(),
+          subtitle: Obx(() => controller.view.value == HomeView.Main
+              ? "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
+              : Container()),
           action: HomeActionButton(),
+          title: Obx(() => AnimatedSlideSwitcher.fade(
+                duration: 2.seconds,
+                child: GestureDetector(
+                  key: ValueKey<String>(controller.titleText.value),
+                  onTap: () {
+                    if (controller.isTitleVisible.value) {
+                      controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                    }
+                  },
+                  child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
+                ),
+              )),
         ),
-        body: TabBarView(controller: controller.tabController, children: [
-          CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
-          ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
-          AlertsView(key: ValueKey<HomeView>(HomeView.Activity)),
-          RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
-        ]));
+        body: _HomePageView());
+  }
+}
+
+// ^ Handles Active Views on Home Page ^ //
+class _HomePageView extends GetView<HomeController> {
+  // View References
+  final main = CardMainView(key: ValueKey<HomeView>(HomeView.Main));
+  final profile = ProfileView(key: ValueKey<HomeView>(HomeView.Profile));
+  final alerts = ActivityView(key: ValueKey<HomeView>(HomeView.Activity));
+  final remote = RemoteView(key: ValueKey<HomeView>(HomeView.Remote));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: TabBarView(controller: controller.tabController, children: [
+      CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
+      ProfileView(key: ValueKey<HomeView>(HomeView.Profile)),
+      ActivityView(key: ValueKey<HomeView>(HomeView.Activity)),
+      RemoteView(key: ValueKey<HomeView>(HomeView.Remote)),
+    ]));
   }
 }
 
@@ -33,39 +61,37 @@ class HomePage extends GetView<HomeController> {
 class HomeBottomNavBar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => controller.isBottomBarVisible.value
-        ? ClipPath(
-            clipper: BottomBarClip(),
-            child: Container(
-              decoration: Neumorph.floating(),
-              width: Get.width,
-              height: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
-                  ),
-                  Container(
-                    width: Get.width * 0.20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
-                  ),
-                  HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
-                ],
-              ),
+    return ClipPath(
+      clipper: BottomBarClip(),
+      child: Container(
+        decoration: Neumorph.floating(),
+        width: Get.width,
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            HomeBottomTabButton(HomeView.Main, controller.setBottomIndex, controller.bottomIndex),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: HomeBottomTabButton(HomeView.Profile, controller.setBottomIndex, controller.bottomIndex),
             ),
-          )
-        : Container());
+            Container(
+              width: Get.width * 0.20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: HomeBottomTabButton(HomeView.Activity, controller.setBottomIndex, controller.bottomIndex),
+            ),
+            HomeBottomTabButton(HomeView.Remote, controller.setBottomIndex, controller.bottomIndex),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 // ^ Bottom Bar Button Widget ^ //
-class HomeBottomTabButton extends GetView<HomeController> {
+class HomeBottomTabButton extends StatelessWidget {
   final HomeView view;
   final Function(int) onPressed;
   final RxInt currentIndex;
@@ -87,58 +113,5 @@ class HomeBottomTabButton extends GetView<HomeController> {
                   ),
               currentIndex),
         ));
-  }
-}
-
-// ^ Dynamic App bar title for Lobby Size ^ //
-class HomeAppBarTitle extends GetView<HomeController> {
-  const HomeAppBarTitle({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => controller.isTitleVisible.value
-        ? Container(
-            height: 112,
-            width: Get.width - 60,
-            alignment: Alignment.centerLeft,
-            child: OpacityAnimatedWidget(
-              enabled: true,
-              delay: 200.milliseconds,
-              duration: 100.milliseconds,
-              child: controller.view.value == HomeView.Main
-                  ? Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        "Hi ${UserService.contact.value.firstName},"
-                            .headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start),
-                        AnimatedSlideSwitcher.fade(
-                          duration: 2.seconds,
-                          child: GestureDetector(
-                            key: ValueKey<String>(controller.titleText.value),
-                            onTap: () {
-                              if (controller.isTitleVisible.value) {
-                                controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                              }
-                            },
-                            child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
-                          ),
-                        )
-                      ],
-                    )
-                  : AnimatedSlideSwitcher.fade(
-                      duration: 2.seconds,
-                      child: GestureDetector(
-                        key: ValueKey<String>(controller.titleText.value),
-                        onTap: () {
-                          if (controller.isTitleVisible.value) {
-                            controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                          }
-                        },
-                        child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
-                      ),
-                    ),
-            ))
-        : Container());
   }
 }

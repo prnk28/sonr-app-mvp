@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
@@ -11,13 +12,12 @@ class TransferController extends GetxController {
 
   // @ Properties
   final title = "Nobody Here".obs;
-  final isBirdsEye = false.obs;
+  final isNotEmpty = false.obs;
   final isFacingPeer = false.obs;
   final inviteRequest = InviteRequest().obs;
   final fileItem = Rx<FileItem>(null);
 
   // @ Remote Properties
-  final isRemoteActive = false.obs;
   final counter = 0.obs;
   final remote = Rx<RemoteInfo>(null);
 
@@ -32,19 +32,20 @@ class TransferController extends GetxController {
   final cardinalTitle = "".obs;
 
   // References
-  StreamSubscription<CompassEvent> compassStream;
-  StreamSubscription<int> lobbySizeStream;
+  StreamSubscription<int> _lobbySizeStream;
+  StreamSubscription<Position> _positionStream;
   PeerController currentPeerController;
+  CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
   void onInit() {
     // Set Initial Value
-    _handleCompassUpdate(SensorService.compass.value);
+    _handlePositionUpdate(DeviceService.position.value);
     _handleLobbySizeUpdate(LobbyService.localSize.value);
 
     // Add Stream Handlers
-    compassStream = SensorService.compass.listen(_handleCompassUpdate);
-    lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
+    _positionStream = DeviceService.position.listen(_handlePositionUpdate);
+    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
 
     super.onInit();
   }
@@ -52,8 +53,8 @@ class TransferController extends GetxController {
   // ^ On Dispose ^ //
   @override
   void onClose() {
-    compassStream.cancel();
-    lobbySizeStream.cancel();
+    _positionStream.cancel();
+    _lobbySizeStream.cancel();
     super.onClose();
   }
 
@@ -134,35 +135,9 @@ class TransferController extends GetxController {
 
         // Set thumbnail
         val.files.first.thumbnail = thumb;
+        print("Thumbnail Set");
       });
     }
-  }
-
-  // ^ Start Remote Session ^ //
-  void startRemote() async {
-    // Start Remote
-    remote(await SonrService.createRemote());
-    isRemoteActive(true);
-
-    // Update Invite Request
-    inviteRequest.update((val) {
-      val.remote = remote.value;
-      val.isRemote = true;
-    });
-  }
-
-  // ^ Stop Remote Session ^ //
-  void stopRemote() async {
-    // Start Remote
-    SonrService.leaveRemote(remote.value);
-    remote(RemoteInfo());
-    isRemoteActive(false);
-
-    // Clear Remote from Invite Request
-    inviteRequest.update((val) {
-      val.remote.clear();
-      val.isRemote = false;
-    });
   }
 
   // ^ User is Facing or No longer Facing a Peer ^ //
@@ -171,50 +146,42 @@ class TransferController extends GetxController {
     isFacingPeer.refresh();
   }
 
-  // ^ Switch Transfer Views ^ //
-  void toggleBirdsEye() {
-    if (!isRemoteActive.value) {
-      isBirdsEye(!isBirdsEye.value);
-      print("isBirdsEye ${isBirdsEye.value}");
-      isBirdsEye.refresh();
-    }
-  }
-
   // ^ Toggles Peer Shifting ^ //
   void toggleShifting() {
     isShiftingEnabled(!isShiftingEnabled.value);
   }
 
   // # Handle Compass Update ^ //
-  _handleCompassUpdate(CompassEvent newDir) {
+  _handlePositionUpdate(Position pos) {
     // Update String Elements
-    if (newDir != null && !isClosed) {
-      directionTitle(_stringForDirection(newDir.headingForCameraMode));
-      cardinalTitle(_cardinalStringForDirection(newDir.headingForCameraMode));
+    if (pos != null && !isClosed) {
+      directionTitle(_stringForDirection(pos.facing));
+      cardinalTitle(_cardinalStringForDirection(pos.facing));
 
       // Reference
-      direction(newDir.headingForCameraMode);
-      angle(((newDir.headingForCameraMode ?? 0) * (pi / 180) * -1));
+      direction(pos.facing);
+      angle(((pos.facing ?? 0) * (pi / 180) * -1));
 
       // Calculate Degrees
-      if (newDir.headingForCameraMode + 90 > 360) {
-        degrees(newDir.headingForCameraMode - 270);
+      if (pos.facing + 90 > 360) {
+        degrees(pos.facing - 270);
       } else {
-        degrees(newDir.headingForCameraMode + 90);
+        degrees(pos.facing + 90);
       }
     }
   }
 
   // # Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(int size) {
-    if (!isRemoteActive.value) {
-      if (size == 0) {
-        title("Nobody Here");
-      } else if (size == 1) {
-        title("1 Person");
-      } else {
-        title("$size People");
-      }
+    if (size == 0) {
+      isNotEmpty(false);
+      title("Nobody Here");
+    } else if (size == 1) {
+      isNotEmpty(true);
+      title("1 Person");
+    } else {
+      isNotEmpty(true);
+      title("$size People");
     }
   }
 

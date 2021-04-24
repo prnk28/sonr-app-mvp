@@ -4,18 +4,10 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
-import 'package:sonr_app/service/device/cards.dart';
+import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'media.dart';
-
-class MediaCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
 
 // ^ TransferCard Media Item Details ^ //
 class MediaCardView extends StatefulWidget {
@@ -68,14 +60,10 @@ class _MediaCardViewState extends State<MediaCardView> {
                 // Time Stamp
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Neumorphic(
-                      style: widget.card.metadata.mime.type == MIME_Type.image ? SonrStyle.timeStamp : SonrStyle.timeStampDark,
-                      child: widget.card.dateText,
-                      padding: EdgeInsets.all(10),
-                    ),
-                  ),
+                  child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
+                      child: widget.card.dateText),
                 ),
 
                 // Info Button
@@ -188,8 +176,8 @@ class _MediaCardInfo extends StatelessWidget {
     // Build Overlay View
     return Padding(
         padding: const EdgeInsets.all(24.0),
-        child: GlassContainer(
-          blurRadius: 26,
+        child: Container(
+          decoration: Neumorph.floating(),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
             "$mimeType From".h3,

@@ -8,6 +8,7 @@ class BoardingLocationView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
+      color: Color.fromRGBO(255, 255, 255, 1),
       child: Stack(
         children: [
           SonrAssetIllustration.LocationAccess.widget,
@@ -29,6 +30,7 @@ class BoardingGalleryView extends GetView<RegisterController> {
     return Container(
       width: Get.width,
       height: Get.height,
+      color: Color.fromRGBO(223, 138, 70, 1),
       child: Stack(
         children: [
           SonrAssetIllustration.MediaAccess.widget,

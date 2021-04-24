@@ -4,6 +4,7 @@ import '../theme.dart';
 import 'utility.dart';
 
 enum ConfirmButtonType { Save, Delete }
+
 class ConfirmButton extends StatefulWidget {
   final ConfirmButtonType type;
   final EdgeInsets margin;
@@ -88,7 +89,7 @@ class ConfirmButton extends StatefulWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.Trash, "Saved!", null),
+      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.Check_Shield, "Saved!", null),
       tooltip: tooltip,
       width: width,
       padding: padding,
@@ -280,9 +281,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
     // Play Sound
     if (widget.type == ConfirmButtonType.Save) {
-      SensorService.playSound(type: UISoundType.Confirmed);
+      DeviceService.playSound(type: UISoundType.Confirmed);
     } else if (widget.type == ConfirmButtonType.Delete) {
-      SensorService.playSound(type: UISoundType.Deleted);
+      DeviceService.playSound(type: UISoundType.Deleted);
     }
 
     widget.onConfirmed();

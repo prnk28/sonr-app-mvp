@@ -43,15 +43,12 @@ class ColorButton extends StatefulWidget {
     double width,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
-    // Build Decoration
-    BoxDecoration decoration = BoxDecoration(
-        gradient: gradient != null ? gradient : SonrGradient.Primary,
-        borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-        boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]);
-
     // Build Child
     return ColorButton(
-        decoration: decoration,
+        decoration: BoxDecoration(
+            gradient: gradient != null ? gradient : SonrGradient.Primary,
+            borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+            boxShadow: [BoxShadow(offset: Offset(0, 4), color: SonrColor.Primary.withOpacity(0.4), blurRadius: 12, spreadRadius: 4)]),
         onPressed: onPressed,
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
         tooltip: tooltip,
@@ -76,15 +73,12 @@ class ColorButton extends StatefulWidget {
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
-    // Decoration
-    BoxDecoration decoration = BoxDecoration(
-      color: color != null ? color : SonrColor.AccentPurple,
-      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-    );
-
     // Build Child
     return ColorButton(
-        decoration: decoration,
+        decoration: BoxDecoration(
+          color: color != null ? color : SonrColor.AccentPurple,
+          borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+        ),
         onPressed: onPressed,
         width: width,
         child: ButtonUtility.buildChild(iconPosition, icon, text, child),
@@ -99,27 +93,22 @@ class ColorButton extends StatefulWidget {
   factory ColorButton.neutral({
     @required Function onPressed,
     Function onLongPressed,
-    Widget child,
     String tooltip,
     EdgeInsets padding,
     EdgeInsets margin,
-    IconData icon,
     double width,
     String text,
     WidgetPosition iconPosition = WidgetPosition.Left,
   }) {
-    // Decoration
-    BoxDecoration decoration = BoxDecoration(
-      color: SonrColor.Grey,
-      borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
-    );
-
     // Build Child
     return ColorButton(
-        decoration: decoration,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(ButtonUtility.K_BORDER_RADIUS),
+        ),
         onPressed: onPressed,
         width: width,
-        child: ButtonUtility.buildChild(iconPosition, icon, text, child),
+        child: ButtonUtility.buildText(text),
         tooltip: tooltip,
         padding: padding,
         margin: margin,

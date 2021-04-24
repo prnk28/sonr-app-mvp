@@ -9,14 +9,10 @@ class RemoteView extends GetView<RemoteController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedContainer(
-          width: Get.width,
-          height: Get.height,
-          padding: const EdgeInsets.only(top: 24.0),
-          margin: controller.status.value.currentMargin,
-          duration: 1500.milliseconds,
-          decoration: Neumorph.floating(),
-          child: AnimatedSlideSwitcher.fade(
+    return NeumorphCard(
+        parameters: controller.viewParameters,
+        child: Obx(
+          () => AnimatedSlideSwitcher.fade(
             child: _buildView(controller.status.value),
             duration: const Duration(milliseconds: 2500),
           ),
@@ -29,7 +25,7 @@ class RemoteView extends GetView<RemoteController> {
     if (status == RemoteViewStatus.NotJoined) {
       return _JoinRemoteView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.NotJoined));
     } else if (status == RemoteViewStatus.Joined) {
-      return RemoteLobbyCardView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
+      return RemoteLobbyView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
     } else if (status == RemoteViewStatus.Invited) {
       return RemoteInviteView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Invited));
     } else if (status == RemoteViewStatus.InProgress) {
@@ -46,57 +42,48 @@ class _JoinRemoteView extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-          width: SonrStyle.viewSize.width,
-          height: SonrStyle.viewSize.height,
-          child: CustomScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  children: <Widget>[
-                    Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Check for Button Tap
-                          controller.isJoinFieldTapped.value
-                              ? "Enter lobby code below.".p_Grey
-                              : Container(
-                                  child: SonrAssetIllustration.CreateGroup.widget,
-                                  height: 275,
-                                ),
-
-                          // Title
-                          "Remote Lobby".h3,
-
-                          "Enter a Lobby Code, to join a \nRemote Lobby.".p_Grey,
-
-                          // Swap Between Button and Text Field View
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12.0),
-                            child: controller.isJoinFieldTapped.value
-                                ? _RemoteTextCodeField()
-                                : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Join"),
+            child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Check for Button Tap
+                    controller.isJoinFieldTapped.value
+                        ? "Enter lobby code below.".p_Grey
+                        : Container(
+                            child: SonrAssetIllustration.CreateGroup.widget,
+                            height: 275,
                           ),
-                          Padding(padding: EdgeInsets.all(8)),
-                        ])
-                  ],
-                ),
-              ),
+
+                    // Title
+                    "Remote Lobby".h3,
+
+                    "Enter a Lobby Code, to join a \nRemote Lobby.".p_Grey,
+
+                    // Swap Between Button and Text Field View
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: controller.isJoinFieldTapped.value
+                          ? _RemoteTextCodeField()
+                          : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Join"),
+                    ),
+                    Padding(padding: EdgeInsets.all(8)),
+                  ])
             ],
           ),
-        ));
+        )));
   }
 }
 
 // ^ Card Aspect Ratio Remote View ^ //
-class RemoteLobbyCardView extends HookWidget {
-  RemoteLobbyCardView({Key key}) : super(key: key);
+class RemoteLobbyView extends HookWidget {
+  RemoteLobbyView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final remote = Get.find<RemoteController>().currentRemote.value;
+    final remote = Get.find<RemoteController>().remoteInfo.value;
     final remoteStream = LobbyService.useRemoteLobby(remote);
 
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -122,7 +109,8 @@ class RemoteLobbyCardView extends HookWidget {
 class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
-    return Neumorphic(
+    return Container(
+      decoration: Neumorph.floating(),
       padding: EdgeInsets.only(bottom: 8),
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: OpacityAnimatedWidget(
@@ -142,7 +130,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                 autofocus: controller.isJoinFieldTapped.value,
                 style: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black),
               ),
-              width: SonrStyle.viewSize.width / 4.2,
+              width: Width.ratio(0.2),
             ),
             Container(
               margin: EdgeInsets.only(left: 2, right: 2),
@@ -154,7 +142,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textInputAction: TextInputAction.next,
                   style:
                       TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
-              width: SonrStyle.viewSize.width / 4.2,
+              width: Width.ratio(0.2),
             ),
             Container(
               margin: EdgeInsets.only(right: 4),
@@ -167,7 +155,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
                   textInputAction: TextInputAction.done,
                   style:
                       TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.w400, color: UserService.isDarkMode ? Colors.white : SonrColor.Black)),
-              width: SonrStyle.viewSize.width / 4.2,
+              width: Width.ratio(0.2),
             ),
           ],
         ),

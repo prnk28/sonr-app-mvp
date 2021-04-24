@@ -3,7 +3,7 @@ import 'grid_controller.dart';
 
 // ^ Card Tag View ^ //
 class TagsView extends GetView<GridController> {
-  final List<String> tags;
+  final List<Tuple<String, int>> tags;
 
   const TagsView({Key key, this.tags}) : super(key: key);
   @override
@@ -19,9 +19,9 @@ class TagsView extends GetView<GridController> {
               tags.length,
               (index) => GestureDetector(
                     onTap: () {
-                      controller.setTag(index);
+                      controller.setTag(tags[index].item2);
                     },
-                    child: _TagItem(tags[index], index),
+                    child: _TagItem(tags[index].item1, tags[index].item2),
                   )),
         ),
       ),

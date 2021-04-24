@@ -434,13 +434,257 @@ class $TransferCardItemsTable extends TransferCardItems
   static TypeConverter<URLLink, String> $converter4 = const URLConverter();
 }
 
+class TransferCardActivity extends DataClass
+    implements Insertable<TransferCardActivity> {
+  final int id;
+  final TransferCard card;
+  final ActivityType activity;
+  TransferCardActivity(
+      {@required this.id, @required this.card, @required this.activity});
+  factory TransferCardActivity.fromData(
+      Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final intType = db.typeSystem.forDartType<int>();
+    final stringType = db.typeSystem.forDartType<String>();
+    return TransferCardActivity(
+      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      card: $TransferCardActivitiesTable.$converter0.mapToDart(
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}card'])),
+      activity: $TransferCardActivitiesTable.$converter1.mapToDart(
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}activity'])),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || card != null) {
+      final converter = $TransferCardActivitiesTable.$converter0;
+      map['card'] = Variable<String>(converter.mapToSql(card));
+    }
+    if (!nullToAbsent || activity != null) {
+      final converter = $TransferCardActivitiesTable.$converter1;
+      map['activity'] = Variable<int>(converter.mapToSql(activity));
+    }
+    return map;
+  }
+
+  TransferCardActivitiesCompanion toCompanion(bool nullToAbsent) {
+    return TransferCardActivitiesCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      card: card == null && nullToAbsent ? const Value.absent() : Value(card),
+      activity: activity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(activity),
+    );
+  }
+
+  factory TransferCardActivity.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return TransferCardActivity(
+      id: serializer.fromJson<int>(json['id']),
+      card: serializer.fromJson<TransferCard>(json['card']),
+      activity: serializer.fromJson<ActivityType>(json['activity']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer serializer}) {
+    serializer ??= moorRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'card': serializer.toJson<TransferCard>(card),
+      'activity': serializer.toJson<ActivityType>(activity),
+    };
+  }
+
+  TransferCardActivity copyWith(
+          {int id, TransferCard card, ActivityType activity}) =>
+      TransferCardActivity(
+        id: id ?? this.id,
+        card: card ?? this.card,
+        activity: activity ?? this.activity,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TransferCardActivity(')
+          ..write('id: $id, ')
+          ..write('card: $card, ')
+          ..write('activity: $activity')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(card.hashCode, activity.hashCode)));
+  @override
+  bool operator ==(dynamic other) =>
+      identical(this, other) ||
+      (other is TransferCardActivity &&
+          other.id == this.id &&
+          other.card == this.card &&
+          other.activity == this.activity);
+}
+
+class TransferCardActivitiesCompanion
+    extends UpdateCompanion<TransferCardActivity> {
+  final Value<int> id;
+  final Value<TransferCard> card;
+  final Value<ActivityType> activity;
+  const TransferCardActivitiesCompanion({
+    this.id = const Value.absent(),
+    this.card = const Value.absent(),
+    this.activity = const Value.absent(),
+  });
+  TransferCardActivitiesCompanion.insert({
+    this.id = const Value.absent(),
+    @required TransferCard card,
+    @required ActivityType activity,
+  })  : card = Value(card),
+        activity = Value(activity);
+  static Insertable<TransferCardActivity> custom({
+    Expression<int> id,
+    Expression<TransferCard> card,
+    Expression<ActivityType> activity,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (card != null) 'card': card,
+      if (activity != null) 'activity': activity,
+    });
+  }
+
+  TransferCardActivitiesCompanion copyWith(
+      {Value<int> id, Value<TransferCard> card, Value<ActivityType> activity}) {
+    return TransferCardActivitiesCompanion(
+      id: id ?? this.id,
+      card: card ?? this.card,
+      activity: activity ?? this.activity,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (card.present) {
+      final converter = $TransferCardActivitiesTable.$converter0;
+      map['card'] = Variable<String>(converter.mapToSql(card.value));
+    }
+    if (activity.present) {
+      final converter = $TransferCardActivitiesTable.$converter1;
+      map['activity'] = Variable<int>(converter.mapToSql(activity.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TransferCardActivitiesCompanion(')
+          ..write('id: $id, ')
+          ..write('card: $card, ')
+          ..write('activity: $activity')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TransferCardActivitiesTable extends TransferCardActivities
+    with TableInfo<$TransferCardActivitiesTable, TransferCardActivity> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $TransferCardActivitiesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedIntColumn _id;
+  @override
+  GeneratedIntColumn get id => _id ??= _constructId();
+  GeneratedIntColumn _constructId() {
+    return GeneratedIntColumn('id', $tableName, false,
+        hasAutoIncrement: true, declaredAsPrimaryKey: true);
+  }
+
+  final VerificationMeta _cardMeta = const VerificationMeta('card');
+  GeneratedTextColumn _card;
+  @override
+  GeneratedTextColumn get card => _card ??= _constructCard();
+  GeneratedTextColumn _constructCard() {
+    return GeneratedTextColumn(
+      'card',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _activityMeta = const VerificationMeta('activity');
+  GeneratedIntColumn _activity;
+  @override
+  GeneratedIntColumn get activity => _activity ??= _constructActivity();
+  GeneratedIntColumn _constructActivity() {
+    return GeneratedIntColumn(
+      'activity',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, card, activity];
+  @override
+  $TransferCardActivitiesTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'transfer_card_activities';
+  @override
+  final String actualTableName = 'transfer_card_activities';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TransferCardActivity> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
+    }
+    context.handle(_cardMeta, const VerificationResult.success());
+    context.handle(_activityMeta, const VerificationResult.success());
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TransferCardActivity map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return TransferCardActivity.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  $TransferCardActivitiesTable createAlias(String alias) {
+    return $TransferCardActivitiesTable(_db, alias);
+  }
+
+  static TypeConverter<TransferCard, String> $converter0 =
+      const CardConverter();
+  static TypeConverter<ActivityType, int> $converter1 =
+      const ActivityConverter();
+}
+
 abstract class _$CardsDatabase extends GeneratedDatabase {
   _$CardsDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $TransferCardItemsTable _transferCardItems;
   $TransferCardItemsTable get transferCardItems =>
       _transferCardItems ??= $TransferCardItemsTable(this);
+  $TransferCardActivitiesTable _transferCardActivities;
+  $TransferCardActivitiesTable get transferCardActivities =>
+      _transferCardActivities ??= $TransferCardActivitiesTable(this);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [transferCardItems];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [transferCardItems, transferCardActivities];
 }

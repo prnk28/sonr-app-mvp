@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart' hide Node;
-import 'package:motion_sensors/motion_sensors.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/modules/peer/peer.dart';
@@ -34,22 +33,19 @@ class LobbyService extends GetxService {
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
-  StreamSubscription<AccelerometerEvent> _accelStream;
-  StreamSubscription<CompassEvent> _compassStream;
+  StreamSubscription<Position> _positionStream;
   Timer _timer;
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
-    _accelStream = SensorService.accelerometer.listen(_handleAccelStream);
-    _compassStream = SensorService.compass.listen(_handleCompassStream);
+    _positionStream = DeviceService.position.listen(_handlePosition);
     return this;
   }
 
   // # On Service Close //
   @override
   void onClose() {
-    _accelStream.cancel();
-    _compassStream.cancel();
+    _positionStream.cancel();
     super.onClose();
   }
 
@@ -137,24 +133,23 @@ class LobbyService extends GetxService {
     _localFlatPeers.refresh();
   }
 
-  // # Handle Incoming Acceleromter Stream
-  void _handleAccelStream(AccelerometerEvent data) {
+  // # Handle Incoming Position Stream
+  void _handlePosition(Position data) {
+    // Update Orientation
     if (_flatModeEnabled) {
-      var newIsFacingFlat = data.y < 2.75;
+      var newIsFacingFlat = data.accelerometer.y < 2.75;
       if (newIsFacingFlat != _lastIsFacingFlat.value) {
         if (newIsFacingFlat) {
           _startTimer();
-          _lastIsFacingFlat(data.y < 2.75);
+          _lastIsFacingFlat(data.accelerometer.y < 2.75);
         } else {
           _resetTimer();
         }
       }
     }
-  }
 
-  void _handleCompassStream(CompassEvent data) {
     // Set Vector Position
-    _position(VectorPosition.fromQuadruple(SensorService.direction));
+    _position(VectorPosition(data));
   }
 
   // # Begin Facing Invite Check

@@ -1,13 +1,20 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
+import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:image/image.dart' as img;
-import 'model_media.dart';
+import 'dart:typed_data';
+import 'package:open_file/open_file.dart';
+import 'package:photo_manager/photo_manager.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/service/client/sonr.dart';
 
 /// Class for Managing a selection from File Picker
 class FileItem {
@@ -90,7 +97,13 @@ class FileItem {
           'size': Size(320, 320),
         });
       } else {
+        // Set Data
         thumbnail = data;
+
+        // Set Thumbnail for Invite
+        Get.find<TransferController>().setThumbnail(data);
+
+        // Call Complete
         _thumbReady.complete(true);
       }
     });
@@ -146,9 +159,179 @@ class FileItem {
     }
   }
 
+  // # Return Cleaned Name
+  String prettyName() {
+    if (this.name.length > 8) {
+      return this.name.substring(0, 8) + ".${this.mime.subtype}";
+    } else {
+      return this.name;
+    }
+  }
+
+  // # Return Size as String
+  String sizeToString() {
+    // @ Less than 1KB
+    if (this.size < pow(10, 3)) {
+      return "${this.size} B";
+    }
+    // @ Less than 1MB
+    else if (this.size >= pow(10, 3) && this.size < pow(10, 6)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 3);
+      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
+    }
+    // @ Less than 1GB
+    else if (this.size >= pow(10, 6) && this.size < pow(10, 9)) {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 6);
+      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
+    }
+    // @ Greater than GB
+    else {
+      // Adjust Size Value, Return String
+      var adjusted = this.size / pow(10, 9);
+      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
+    }
+  }
+
   // # Return File Info as String
   @override
   String toString() {
     return "metadata: ${metadata.toString()}";
+  }
+}
+
+// ^ Class for Media Item in Gallery ^ //
+class MediaItem {
+  // Inherited References
+  final AssetEntity entity;
+  final int index;
+
+  // Properties
+  String id;
+  int width;
+  int height;
+  AssetType type;
+  Duration duration;
+  Uint8List thumbnail;
+
+  // Calculated
+  OpenResult openResult;
+
+  // # Getter for is Audio
+  bool get isAudio {
+    if (type != null) {
+      return type == AssetType.audio;
+    }
+    return false;
+  }
+
+  // # Getter for is Image
+  bool get isImage {
+    if (type != null) {
+      return type == AssetType.image;
+    }
+    return false;
+  }
+
+  // # Getter for is Video
+  bool get isVideo {
+    if (type != null) {
+      return type == AssetType.video;
+    }
+    return false;
+  }
+
+  // * Constructer * //
+  MediaItem(this.entity, this.index) {
+    // Set Properties
+    this.id = entity.id;
+    this.duration = entity.videoDuration;
+    this.type = entity.type;
+    this.width = entity.width;
+    this.height = entity.height;
+  }
+
+  // @ Fetch Uint8List
+  Future<Uint8List> getThumbnail() async {
+    // Set Thumbnail
+    thumbnail = await entity.thumbDataWithSize(320, 320);
+    return thumbnail;
+  }
+
+  // @ Return File Info for Invite Request
+  Future<Metadata> getMetadata() async {
+    thumbnail = thumbnail != null ? thumbnail : await getThumbnail();
+    var file = await entity.file;
+    var path = file.path;
+    return Metadata(
+      path: path,
+      thumbnail: thumbnail,
+      properties: Metadata_Properties(
+        hasThumbnail: thumbnail.length == 0,
+        width: width,
+        height: height,
+        isImage: this.isImage,
+        isVideo: this.isVideo,
+        duration: this.duration.inSeconds,
+      ),
+    );
+  }
+
+  // @ Fetch Image
+  Future<ImageProvider<Object>> getImageProvider() async {
+    return NetworkImage(await entity.getMediaUrl());
+  }
+
+  // @ Fetch File
+  openFile() async {
+    File file = await entity.file;
+    var result = await OpenFile.open(file.path);
+    return result;
+  }
+}
+
+// ^ Class for Media Item from Capture or External Share ^ //
+class MediaFile {
+  // Media Properties
+  final File _file;
+  final Uint8List thumbnail;
+  final bool isVideo;
+  final int duration;
+
+  String get path => _file.path;
+  int get size => _file.lengthSync();
+  String get name => _file.path.split('/').last;
+  File get file => _file;
+
+  // Constructer
+  MediaFile(this._file, this.thumbnail, this.isVideo, this.duration);
+
+  factory MediaFile.externalShare(SharedMediaFile mediaShared) {
+    // Initialize
+    int duration = 0;
+    Uint8List thumbnail = Uint8List(0);
+    File file = File(mediaShared.path);
+    bool isVideo = mediaShared.type == SharedMediaType.VIDEO;
+
+    // Get Video Thumbnail
+    if (isVideo) {
+      duration = mediaShared.duration;
+      File thumbFile = File(mediaShared.thumbnail);
+      thumbFile.readAsBytes().then((value) {
+        thumbnail = value;
+      });
+    }
+
+    // Return MediaFile
+    return MediaFile(file, thumbnail, isVideo, duration);
+  }
+
+  factory MediaFile.capture(String path, bool isVideo, int duration) {
+    return MediaFile(File(path), Uint8List(0), isVideo, duration);
+  }
+
+  Future<Uint8List> toUint8List() async {
+    return await _file.readAsBytes();
   }
 }

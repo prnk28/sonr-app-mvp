@@ -11,7 +11,7 @@ extension MetadataMediaUtils on Metadata {
   String get sizeString {
     // @ Less than 1KB
     if (this.size < pow(10, 3)) {
-      return "$this B";
+      return "${this.size} B";
     }
     // @ Less than 1MB
     else if (this.size >= pow(10, 3) && this.size < pow(10, 6)) {

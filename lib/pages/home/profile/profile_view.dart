@@ -6,16 +6,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-        width: Get.width,
-        height: Get.height,
-        margin: SonrStyle.viewMargin,
-        // image: AssetController.randomCard
-        decoration: Neumorph.floating(radius: 12),
-        child: AnimatedSlideSwitcher.fade(
-          child: _buildView(controller.status.value),
-          duration: const Duration(milliseconds: 2500),
-        )));
+    return Obx(() => NeumorphCard(parameters: controller.viewParameters, child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -89,50 +80,73 @@ class _ProfileHeaderBar extends GetView<ProfileController> {
       foregroundColor: Colors.transparent,
       expandedHeight: Get.height / 5 + 36,
       flexibleSpace: FlexibleSpaceBar(
-      centerTitle: true,
-      background: GestureDetector(
-        child: Container(
-          height: Get.height / 5, // Same Header Color
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // @ Avatar
-              _AvatarField(),
-              Padding(padding: EdgeInsets.all(8)),
-              GestureDetector(
-                  onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
-            ],
+        centerTitle: true,
+        background: GestureDetector(
+          child: Container(
+            height: Get.height / 5, // Same Header Color
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // @ Avatar
+                _ProfileAvatarField(),
+                Padding(padding: EdgeInsets.all(8)),
+                GestureDetector(
+                    onLongPress: controller.setEditingMode, child: Obx(() => "${UserService.firstName.value} ${UserService.lastName.value}".h4)),
+              ],
+            ),
           ),
         ),
       ),
-    ),
     );
   }
 }
 
-class _AvatarField extends GetView<ProfileController> {
+class _ProfileAvatarField extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () async {
-        controller.setAddPicture();
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Container(
-          padding: EdgeInsets.all(10),
-          decoration: Neumorph.indented(shape: BoxShape.circle),
-          child: Obx(() => Container(
-                width: 120,
-                height: 120,
-                child: UserService.picture.value.length > 0
-                    ? CircleAvatar(
-                        backgroundImage: MemoryImage(UserService.picture.value),
-                      )
-                    : SonrIcons.Avatar.greyWith(size: 120),
-              )),
-        ),
-      ),
-    );
+    return Obx(() {
+      if (UserService.picture.value.length > 0) {
+        return GestureDetector(
+          onLongPress: () async {
+            controller.setAddPicture();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: Neumorph.indented(shape: BoxShape.circle),
+              child: Obx(() => Container(
+                    width: 120,
+                    height: 120,
+                    child: UserService.picture.value.length > 0
+                        ? CircleAvatar(
+                            backgroundImage: MemoryImage(UserService.picture.value),
+                          )
+                        : SonrIcons.Avatar.greyWith(size: 120),
+                  )),
+            ),
+          ),
+        );
+      } else {
+        return GestureDetector(
+          onTap: () async {
+            controller.setAddPicture();
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: Neumorph.indented(shape: BoxShape.circle),
+                child: Container(
+                    width: 120,
+                    height: 120,
+                    child: CircleAvatar(
+                      child: SonrAssetIllustration.AddPicture.widget,
+                      backgroundColor: Color(0xfff0f6fa).withOpacity(0.8),
+                    ))),
+          ),
+        );
+      }
+    });
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -18,14 +17,13 @@ class GridController extends GetxController with SingleGetTickerProviderMixin {
     // Set Scroll Controller
     scrollController = ScrollController(keepScrollOffset: false);
 
+    // Set Default Properties
+    tagIndex(0);
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: CardService.categoryCount);
+    tabController = TabController(vsync: this, length: 5);
     tabController.addListener(() {
       tagIndex(tabController.index);
     });
-
-    // Set Default Properties
-    tagIndex(0);
 
     // Initialize
     super.onInit();

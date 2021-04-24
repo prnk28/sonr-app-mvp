@@ -92,12 +92,9 @@ class CameraView extends GetView<CameraController> {
           if (controller.videoInProgress.value) {
             return Container(
               alignment: Alignment.topRight,
-              padding: EdgeInsets.only(left: 14, top: Get.statusBarHeight / 2),
-              child: Neumorphic(
-                style: SonrStyle.timeStamp,
-                child: _buildDurationText(controller.videoDuration.value),
-                padding: EdgeInsets.all(10),
-              ),
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
+              child: _buildDurationText(controller.videoDuration.value),
             );
           } else {
             return Container();

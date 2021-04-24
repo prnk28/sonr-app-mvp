@@ -1,10 +1,10 @@
-export '../service/device/sensors.dart';
-export '../service/device/file.dart';
+export '../service/user/device.dart';
+export '../service/client/file.dart';
 export '../service/client/lobby.dart';
 export '../service/interface/media.dart';
 export '../service/client/sonr.dart';
-export '../service/device/cards.dart';
-export '../service/client/user.dart';
+export '../service/user/cards.dart';
+export '../service/user/user.dart';
 export '../service/interface/assets.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
@@ -25,6 +25,7 @@ export 'style/color.dart';
 export 'style/icon.dart';
 export 'style/scaffold.dart';
 export 'elements/snackbar.dart';
+export 'style/card.dart';
 export 'style/text.dart';
 export 'style/decoration.dart';
 export 'elements/appbar.dart';
@@ -32,7 +33,6 @@ export 'animation/animation.dart';
 
 // Global UI Widgets
 export 'elements/shape.dart';
-export 'elements/glass.dart';
 export 'elements/painter.dart';
 export '../modules/overlay/overlay.dart';
 export '../modules/overlay/flat_overlay.dart';
@@ -46,42 +46,8 @@ export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/service/client/user.dart';
-import 'style/color.dart';
 
 enum WidgetPosition { Left, Right, Top, Bottom, Center }
-
-class SonrStyle {
-  static Size get viewSize => Size(Get.width * 0.95, Get.height * 0.85);
-  static EdgeInsets get viewMargin => EdgeInsets.only(bottom: Get.height * 0.1, left: Get.width * 0.05, right: Get.width * 0.05);
-
-  static NeumorphicStyle get overlay => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.45 : 0.85,
-        depth: UserService.isDarkMode ? 4 : 8,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-      );
-
-  static NeumorphicStyle get timeStamp => NeumorphicStyle(
-      intensity: 0.4,
-      depth: UserService.isDarkMode ? 4 : 8,
-      boxShape: NeumorphicBoxShape.stadium(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black);
-
-  static NeumorphicStyle get timeStampDark => NeumorphicStyle(
-      intensity: 0.4,
-      depth: UserService.isDarkMode ? 4 : 8,
-      boxShape: NeumorphicBoxShape.stadium(),
-      color: UserService.isDarkMode ? SonrColor.White : SonrColor.Black);
-
-  static NeumorphicStyle get toggle => NeumorphicStyle(
-        intensity: UserService.isDarkMode ? 0.25 : 0.5,
-        depth: UserService.isDarkMode ? 4 : 6,
-        shape: NeumorphicShape.flat,
-        boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-        color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-      );
-}
 
 extension WidgetListUtils on List<Widget> {
   /// Accessor Method to Create a Row
@@ -125,5 +91,55 @@ extension WidgetListUtils on List<Widget> {
       textDirection: textDirection ?? textDirection,
       textBaseline: textBaseline ?? textBaseline,
     );
+  }
+}
+
+/// * Class that Handles Device Screen Width Management * //
+class Width {
+  /// Return Full Screen Width
+  static double get full => Get.width;
+
+  /// Return Full Screen Width Divided by Value <= ScreenWidth
+  static double divided(double val) {
+    assert(val <= Get.width);
+    return Get.width / val;
+  }
+
+  /// Return Width as Ratio from Screen between 0.0 and 1.0
+  static double ratio(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    return Get.width * ratio;
+  }
+
+  /// Return Width reduced by given Ratio from Screen between 0.0 and 1.0
+  static double reduced(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    var factor = Get.width * ratio;
+    return Get.width - factor;
+  }
+}
+
+/// * Class that Handles Device Screen Height Management * //
+class Height {
+  /// Return Full Screen Height
+  static double get full => Get.height;
+
+  /// Return Full Screen Height Divided by Value <= ScreenHeight
+  static double divided(double val) {
+    assert(val <= Get.height);
+    return Get.height / val;
+  }
+
+  /// Return Height as Ratio from Screen between 0.0 and 1.0
+  static double ratio(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    return Get.height * ratio;
+  }
+
+  /// Return Height reduced by given Ratio from Screen between 0.0 and 1.0
+  static double reduced(double ratio) {
+    assert(ratio <= 1.0 && ratio > 0.0);
+    var factor = Get.height * ratio;
+    return Get.height - factor;
   }
 }
