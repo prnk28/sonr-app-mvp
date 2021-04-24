@@ -60,7 +60,8 @@ class AlertOverlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassContainer(
+    return Container(
+      decoration: Neumorph.floating(),
       // backendColor: Colors.transparent,
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
@@ -210,7 +211,8 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return GlassContainer(
+    return Container(
+      decoration: Neumorph.floating(),
       margin: EdgeInsets.symmetric(horizontal: 16),
       height: Get.height / 3 + 50,
       child: Container(

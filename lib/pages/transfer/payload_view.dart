@@ -6,7 +6,7 @@ class PayloadView extends GetView<TransferController> {
   const PayloadView();
   @override
   Widget build(BuildContext context) {
-    return GlassContainer(
+    return Container(
       width: context.widthTransformer(reducedBy: 20),
       height: context.heightTransformer(reducedBy: 60),
       child: Stack(

@@ -32,7 +32,6 @@ export 'animation/animation.dart';
 
 // Global UI Widgets
 export 'elements/shape.dart';
-export 'elements/glass.dart';
 export 'elements/painter.dart';
 export '../modules/overlay/overlay.dart';
 export '../modules/overlay/flat_overlay.dart';

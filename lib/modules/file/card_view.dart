@@ -157,7 +157,6 @@ class _FileCardInfo extends StatelessWidget {
                   });
                 },
                 text: "Delete",
-                icon: SonrIcons.Trash,
               ),
             ]),
           ]),

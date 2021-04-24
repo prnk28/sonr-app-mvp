@@ -13,7 +13,11 @@ class RemoteView extends GetView<RemoteController> {
           width: Get.width,
           height: Get.height,
           padding: const EdgeInsets.only(top: 24.0),
-          margin: controller.status.value.currentMargin,
+          margin: EdgeInsets.only(
+            bottom: Get.height * 0.1,
+            left: Get.width * 0.05,
+            right: Get.width * 0.05,
+          ),
           duration: 1500.milliseconds,
           decoration: Neumorph.floating(),
           child: AnimatedSlideSwitcher.fade(
@@ -48,43 +52,35 @@ class _JoinRemoteView extends GetView<RemoteController> {
     return Obx(() => Container(
           width: SonrStyle.viewSize.width,
           height: SonrStyle.viewSize.height,
-          child: CustomScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  children: <Widget>[
-                    Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Check for Button Tap
-                          controller.isJoinFieldTapped.value
-                              ? "Enter lobby code below.".p_Grey
-                              : Container(
-                                  child: SonrAssetIllustration.CreateGroup.widget,
-                                  height: 275,
-                                ),
-
-                          // Title
-                          "Remote Lobby".h3,
-
-                          "Enter a Lobby Code, to join a \nRemote Lobby.".p_Grey,
-
-                          // Swap Between Button and Text Field View
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12.0),
-                            child: controller.isJoinFieldTapped.value
-                                ? _RemoteTextCodeField()
-                                : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Join"),
+          child: Column(
+            children: <Widget>[
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Check for Button Tap
+                    controller.isJoinFieldTapped.value
+                        ? "Enter lobby code below.".p_Grey
+                        : Container(
+                            child: SonrAssetIllustration.CreateGroup.widget,
+                            height: 275,
                           ),
-                          Padding(padding: EdgeInsets.all(8)),
-                        ])
-                  ],
-                ),
-              ),
+
+                    // Title
+                    "Remote Lobby".h3,
+
+                    "Enter a Lobby Code, to join a \nRemote Lobby.".p_Grey,
+
+                    // Swap Between Button and Text Field View
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: controller.isJoinFieldTapped.value
+                          ? _RemoteTextCodeField()
+                          : ColorButton.primary(onPressed: controller.handleJoinTap, text: "Join"),
+                    ),
+                    Padding(padding: EdgeInsets.all(8)),
+                  ])
             ],
           ),
         ));
