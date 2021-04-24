@@ -14,11 +14,25 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
         resizeToAvoidBottomInset: false,
-        shareView: ShareView(),
+        floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
         appBar: DesignAppBar(
-          title: HomeAppBarTitle(),
+          subtitle: Obx(() => controller.view.value == HomeView.Main
+              ? "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
+              : Container()),
           action: HomeActionButton(),
+          title: Obx(() => AnimatedSlideSwitcher.fade(
+                duration: 2.seconds,
+                child: GestureDetector(
+                  key: ValueKey<String>(controller.titleText.value),
+                  onTap: () {
+                    if (controller.isTitleVisible.value) {
+                      controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                    }
+                  },
+                  child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
+                ),
+              )),
         ),
         body: TabBarView(controller: controller.tabController, children: [
           CardMainView(key: ValueKey<HomeView>(HomeView.Main)),
@@ -65,7 +79,7 @@ class HomeBottomNavBar extends GetView<HomeController> {
 }
 
 // ^ Bottom Bar Button Widget ^ //
-class HomeBottomTabButton extends GetView<HomeController> {
+class HomeBottomTabButton extends StatelessWidget {
   final HomeView view;
   final Function(int) onPressed;
   final RxInt currentIndex;
@@ -87,58 +101,5 @@ class HomeBottomTabButton extends GetView<HomeController> {
                   ),
               currentIndex),
         ));
-  }
-}
-
-// ^ Dynamic App bar title for Lobby Size ^ //
-class HomeAppBarTitle extends GetView<HomeController> {
-  const HomeAppBarTitle({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => controller.isTitleVisible.value
-        ? Container(
-            height: 112,
-            width: Get.width - 60,
-            alignment: Alignment.centerLeft,
-            child: OpacityAnimatedWidget(
-              enabled: true,
-              delay: 200.milliseconds,
-              duration: 100.milliseconds,
-              child: controller.view.value == HomeView.Main
-                  ? Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        "Hi ${UserService.contact.value.firstName},"
-                            .headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start),
-                        AnimatedSlideSwitcher.fade(
-                          duration: 2.seconds,
-                          child: GestureDetector(
-                            key: ValueKey<String>(controller.titleText.value),
-                            onTap: () {
-                              if (controller.isTitleVisible.value) {
-                                controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                              }
-                            },
-                            child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
-                          ),
-                        )
-                      ],
-                    )
-                  : AnimatedSlideSwitcher.fade(
-                      duration: 2.seconds,
-                      child: GestureDetector(
-                        key: ValueKey<String>(controller.titleText.value),
-                        onTap: () {
-                          if (controller.isTitleVisible.value) {
-                            controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
-                          }
-                        },
-                        child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
-                      ),
-                    ),
-            ))
-        : Container());
   }
 }

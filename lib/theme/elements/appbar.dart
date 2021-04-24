@@ -7,21 +7,32 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget subtitle;
   final Widget leading;
   final Widget action;
-  DesignAppBar({@required this.title, this.leading, this.action, this.subtitle});
+  DesignAppBar({
+    @required this.title,
+    this.leading,
+    this.action,
+    this.subtitle,
+    Key key,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 14.0, right: 14, top: 28.0),
       child: NavigationToolbar(
+        centerMiddle: false,
         leading: leading,
         trailing: action != null ? action : Container(width: 56, height: 56),
-        middle: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [subtitle ?? subtitle, title],
+        middle: AnimatedSlideSwitcher.fade(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              subtitle != null ? subtitle : Container(),
+              title,
+            ],
+          ),
         ),
-        centerMiddle: false,
       ),
     );
   }

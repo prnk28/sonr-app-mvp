@@ -29,7 +29,7 @@ class RemoteView extends GetView<RemoteController> {
     if (status == RemoteViewStatus.NotJoined) {
       return _JoinRemoteView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.NotJoined));
     } else if (status == RemoteViewStatus.Joined) {
-      return RemoteLobbyCardView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
+      return RemoteLobbyView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Joined));
     } else if (status == RemoteViewStatus.Invited) {
       return RemoteInviteView(key: ValueKey<RemoteViewStatus>(RemoteViewStatus.Invited));
     } else if (status == RemoteViewStatus.InProgress) {
@@ -92,11 +92,11 @@ class _JoinRemoteView extends GetView<RemoteController> {
 }
 
 // ^ Card Aspect Ratio Remote View ^ //
-class RemoteLobbyCardView extends HookWidget {
-  RemoteLobbyCardView({Key key}) : super(key: key);
+class RemoteLobbyView extends HookWidget {
+  RemoteLobbyView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final remote = Get.find<RemoteController>().currentRemote.value;
+    final remote = Get.find<RemoteController>().remoteInfo.value;
     final remoteStream = LobbyService.useRemoteLobby(remote);
 
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [

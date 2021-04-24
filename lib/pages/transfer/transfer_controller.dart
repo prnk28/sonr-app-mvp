@@ -18,7 +18,6 @@ class TransferController extends GetxController {
   final fileItem = Rx<FileItem>(null);
 
   // @ Remote Properties
-  final isRemoteActive = false.obs;
   final counter = 0.obs;
   final remote = Rx<RemoteInfo>(null);
 
@@ -141,33 +140,6 @@ class TransferController extends GetxController {
     }
   }
 
-  // ^ Start Remote Session ^ //
-  void startRemote() async {
-    // Start Remote
-    remote(await SonrService.createRemote());
-    isRemoteActive(true);
-
-    // Update Invite Request
-    inviteRequest.update((val) {
-      val.remote = remote.value;
-      val.isRemote = true;
-    });
-  }
-
-  // ^ Stop Remote Session ^ //
-  void stopRemote() async {
-    // Start Remote
-    SonrService.leaveRemote(remote.value);
-    remote(RemoteInfo());
-    isRemoteActive(false);
-
-    // Clear Remote from Invite Request
-    inviteRequest.update((val) {
-      val.remote.clear();
-      val.isRemote = false;
-    });
-  }
-
   // ^ User is Facing or No longer Facing a Peer ^ //
   void setFacingPeer(bool value) {
     isFacingPeer(value);
@@ -201,17 +173,15 @@ class TransferController extends GetxController {
 
   // # Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(int size) {
-    if (!isRemoteActive.value) {
-      if (size == 0) {
-        isNotEmpty(false);
-        title("Nobody Here");
-      } else if (size == 1) {
-        isNotEmpty(true);
-        title("1 Person");
-      } else {
-        isNotEmpty(true);
-        title("$size People");
-      }
+    if (size == 0) {
+      isNotEmpty(false);
+      title("Nobody Here");
+    } else if (size == 1) {
+      isNotEmpty(true);
+      title("1 Person");
+    } else {
+      isNotEmpty(true);
+      title("$size People");
     }
   }
 

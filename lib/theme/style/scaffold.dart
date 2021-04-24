@@ -5,9 +5,8 @@ import 'package:sonr_app/theme/theme.dart';
 class SonrScaffold extends StatelessWidget {
   final Widget body;
   final Widget bottomSheet;
-  final Widget floatingActionButton;
   final Widget bottomNavigationBar;
-  final Widget shareView;
+  final Widget floatingAction;
   final PreferredSizeWidget appBar;
   final FloatingActionButtonLocation floatingActionButtonLocation;
   final bool resizeToAvoidBottomInset;
@@ -18,13 +17,12 @@ class SonrScaffold extends StatelessWidget {
     Key key,
     this.body,
     this.appBar,
-    this.floatingActionButton,
     this.floatingActionButtonLocation,
     this.resizeToAvoidBottomInset,
     this.bodyAction,
     this.bottomNavigationBar,
     this.bottomSheet,
-    this.shareView,
+    this.floatingAction,
     this.gradientName = FlutterGradientNames.northMiracle,
   }) : super(key: key);
   @override
@@ -43,16 +41,16 @@ class SonrScaffold extends StatelessWidget {
           baseColor: SonrColor.White,
           lightSource: LightSource.topLeft,
         ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          body: body,
-          appBar: appBar,
-          bottomNavigationBar: bottomNavigationBar,
-          floatingActionButton: shareView,
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-          bottomSheet: bottomSheet,
-        ),
+        child: Obx(() => Scaffold(
+              backgroundColor: Colors.transparent,
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              body: body,
+              appBar: appBar,
+              bottomNavigationBar: bottomNavigationBar,
+              floatingActionButton: DeviceService.keyboardVisible.value ? Container() : floatingAction,
+              resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+              bottomSheet: bottomSheet,
+            )),
       ),
     );
   }

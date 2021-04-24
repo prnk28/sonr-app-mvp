@@ -110,6 +110,19 @@ class DeviceService extends GetxService {
     super.onClose();
   }
 
+  // ^ Method Closes Keyboard if Active ^ //
+  static void closeKeyboard() async {
+    if (to._keyboardVisible.value) {
+      // Get Focus Node
+      FocusScopeNode currentFocus = FocusScope.of(Get.context);
+
+      // Check for Focuse
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+    }
+  }
+
   // ^ Method Plays a UI Sound ^
   static void playSound({@required UISoundType type}) async {
     await to._audioPlayer.play(type.file);

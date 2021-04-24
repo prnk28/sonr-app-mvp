@@ -2,7 +2,7 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:sonr_app/data/data.dart';
 
-enum RemoteViewStatus { NotJoined, Joined, Invited, InProgress, Done }
+enum RemoteViewStatus { NotJoined, Created, Joined, Invited, InProgress, Done }
 
 extension RemoteViewStatusUtil on RemoteViewStatus {
   EdgeInsets get currentMargin {
@@ -41,28 +41,34 @@ extension RemoteViewStatusUtil on RemoteViewStatus {
 }
 
 class RemoteController extends GetxController {
+  // Form Properties
   final firstWord = "".obs;
   final secondWord = "".obs;
   final thirdWord = "".obs;
-  final currentRemote = Rx<RemoteInfo>(null);
+
+  // Information Properties
+  final remoteInfo = Rx<RemoteInfo>(null);
   final currentInvite = Rx<AuthInvite>(null);
   final receivedCard = Rx<TransferCard>(null);
+
+  // Status Properties
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
   final isJoinFieldTapped = false.obs;
+  final isRemoteActive = false.obs;
 
   // References
   LobbyStream _lobbyStream;
   final _keyboardVisible = KeyboardVisibilityController();
 
   // ** Initializer ** //
-  onInit() {
+  void onInit() {
     Get.find<SonrService>().registerRemoteInvite(_handleRemoteInvite);
     super.onInit();
     _keyboardVisible.onChange.listen(_handleKeyboardVisibility);
   }
 
   // ** Disposer ** //
-  onClose() {
+  void onClose() {
     if (_lobbyStream != null) {
       _lobbyStream.close();
     }
@@ -70,32 +76,47 @@ class RemoteController extends GetxController {
   }
 
   // ^ Handle Initial Join Tap
-  handleJoinTap() {
+  void handleJoinTap() {
     isJoinFieldTapped(true);
   }
 
+  // ^ Method to Create Remote Lobby ^ //
+  void create() async {
+    // Start Remote
+    remoteInfo(await SonrService.createRemote());
+    isRemoteActive(true);
+  }
+
+  // ^ Method to End Created Remote Lobby ^ //
+  void stop() async {
+    // Start Remote
+    SonrService.leaveRemote(remoteInfo.value);
+    remoteInfo(RemoteInfo());
+    isRemoteActive(false);
+  }
+
   // ^ Method to Join New Remote Lobby ^ //
-  join() async {
+  void join() async {
     isJoinFieldTapped(false);
-    currentRemote(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
+    remoteInfo(await SonrService.joinRemote([firstWord.value, secondWord.value, thirdWord.value]));
     status(RemoteViewStatus.Joined);
   }
 
   // ^ Method to Leave Current Remote Lobby ^ //
-  leave() async {
-    if (currentRemote.value != null) {
-      SonrService.leaveRemote(currentRemote.value);
-      currentRemote(null);
+  void leave() async {
+    if (remoteInfo.value != null) {
+      SonrService.leaveRemote(remoteInfo.value);
+      remoteInfo(null);
       currentInvite(null);
       status(RemoteViewStatus.NotJoined);
     }
   }
 
   // ^ Method to Respond to Invite ^ //
-  respond(bool decision) {
-    if (currentRemote.value != null && currentInvite != null) {
+  void respond(bool decision) {
+    if (remoteInfo.value != null && currentInvite != null) {
       // Respond Decision
-      SonrService.respond(decision, info: currentRemote.value);
+      SonrService.respond(decision, info: remoteInfo.value);
 
       // Wait for Complete if Accepted
       if (decision) {
@@ -119,14 +140,14 @@ class RemoteController extends GetxController {
   }
 
   // @ Handle Keyboard Visibility
-  _handleKeyboardVisibility(bool visible) {
+  void _handleKeyboardVisibility(bool visible) {
     if (!visible && status.value == RemoteViewStatus.NotJoined) {
       isJoinFieldTapped(false);
     }
   }
 
   // @ Handle A remote Invite
-  _handleRemoteInvite(AuthInvite invite) {
+  void _handleRemoteInvite(AuthInvite invite) {
     currentInvite(invite);
     status(RemoteViewStatus.Invited);
   }
