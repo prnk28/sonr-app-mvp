@@ -5,37 +5,57 @@ import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/theme/theme.dart';
 export 'share_view.dart';
+export 'option_button.dart';
 export 'share_controller.dart';
 export 'sheet_view.dart';
 
+// ** Share State Extension ** //
+
+enum ShareStatus { Default, Queue, PickMedia }
+
+extension ShareStatusUtils on ShareStatus {
+  bool get isExpanded => this != ShareStatus.Default;
+
+  // @ Method Builds Size for Status
+  Size get size {
+    switch (this) {
+      case ShareStatus.Queue:
+        return Size(Get.width / 2 + 200, 110);
+        break;
+      case ShareStatus.PickMedia:
+        return Size(Get.width * 0.9, Get.height * 0.65);
+        break;
+      default:
+        return Size(60, 60);
+    }
+  }
+}
+
 // ** Share Reactive Controller ** //
-class ShareController extends GetxController with SingleGetTickerProviderMixin {
+class ShareController extends GetxController {
   // Permissions
   final cameraPermitted = RxBool(UserService.permissions.value.hasCamera);
   final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
 
   // Properties
+  final size = Size(60, 60).obs;
   final status = ShareStatus.Default.obs;
 
+  // Shared Files
+  final currentMedia = Rx<MediaItem>(null);
+
   // References
-  AnimationController animator;
   int _counter = 0;
   Timer _timer;
 
   @override
   onInit() {
+    status.listen(_handleStatus);
     super.onInit();
-    animator = AnimationController(duration: Duration(milliseconds: 650), vsync: this);
-  }
-
-  @override
-  void onClose() {
-    animator.dispose();
-    super.onClose();
   }
 
   // ^ Expand Share Button ^ //
-  void expand(double timeout, ShareStatus previousState) {
+  expand(double timeout, ShareStatus previousState) {
     HapticFeedback.heavyImpact();
 
     // Create Timeout
@@ -53,36 +73,19 @@ class ShareController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // ^ Present Camera View ^ //
-  void openCamera() async {
-    // Check for Permissions
-    if (cameraPermitted.value) {
-      // Move to View
-      Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-        // Shrink Button after Delay
-        shrink(delay: 150.milliseconds);
+  presentCameraView() {
+    // Move to View
+    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+      // Shrink Button after Delay
+      shrink(delay: 150.milliseconds);
 
-        // Transfer with File
-        Transfer.transferWithFile(FileItem.capture(file));
-      }), transition: Transition.downToUp);
-    }
-
-    // Request Permissions
-    else {
-      var result = await Get.find<UserService>().requestCamera();
-      result
-          ? Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
-              // Shrink Button after Delay
-              shrink(delay: 150.milliseconds);
-
-              // Transfer with File
-              Transfer.transferWithFile(FileItem.capture(file));
-            }), transition: Transition.downToUp)
-          : SonrSnack.error("Sonr cannot open Camera without Permissions");
-    }
+      // Transfer with File
+      Transfer.transferWithFile(FileItem.capture(file));
+    }), transition: Transition.downToUp);
   }
 
   // ^ Select Contact to Transfer ^
-  void selectContact() async {
+  selectContact() async {
     // Shrink Button after Delay
     shrink(delay: 150.milliseconds);
 
@@ -91,7 +94,7 @@ class ShareController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // ^ Select a File
-  void selectFile() async {
+  selectFile() async {
     // Check Permissions
     if (UserService.permissions.value.hasGallery) {
       var result = await FileService.selectMedia();
@@ -127,7 +130,7 @@ class ShareController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // ^ Select Media
-  void selectMedia() async {
+  selectMedia() async {
     // Check Permissions
     if (UserService.permissions.value.hasGallery) {
       var result = await FileService.selectMedia();
@@ -163,7 +166,7 @@ class ShareController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // ^ Select a URL ^ //
-  void selectExternal(Payload payload, URLLink url, MediaFile mediaFile) {
+  selectExternal(Payload payload, URLLink url, MediaFile mediaFile) {
     if (payload == Payload.URL) {
       Transfer.transferWithUrl(url.link);
     } else {
@@ -177,7 +180,6 @@ class ShareController extends GetxController with SingleGetTickerProviderMixin {
       if (_timer != null) {
         _timer.cancel();
         _timer = null;
-        animator.reverse();
         status(ShareStatus.Default);
         HapticFeedback.mediumImpact();
         _counter = 0;
@@ -188,17 +190,17 @@ class ShareController extends GetxController with SingleGetTickerProviderMixin {
   // ^ Toggles Expanded Share Button ^ //
   void toggle() {
     if (status.value == ShareStatus.Default) {
-      animator.forward();
       status(ShareStatus.Queue);
       expand(6000, status.value);
     } else {
       shrink();
     }
   }
-}
 
-enum ShareStatus { Default, Queue }
+  // # Present Camera View ^ //
 
-extension ShareStatusUtils on ShareStatus {
-  bool get isExpanded => this != ShareStatus.Default;
+  // # Update Size Based on State
+  _handleStatus(ShareStatus status) {
+    size(status.size);
+  }
 }

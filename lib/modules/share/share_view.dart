@@ -1,82 +1,77 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'dart:math';
-import 'package:vector_math/vector_math_64.dart' as vector;
-import 'share_controller.dart';
 
 class ShareView extends GetView<ShareController> {
-  final Animation<double> rotation;
-  final Animation<double> translation;
-  final Animation<double> scale;
-
-  ShareView({
-    Key key,
-  })  : translation = Tween<double>(
-          begin: 0.0,
-          end: 120.0,
-        ).animate(
-          CurvedAnimation(parent: Get.find<ShareController>().animator, curve: Curves.elasticInOut),
-        ),
-        scale = Tween<double>(
-          begin: 1.1,
-          end: 0.0,
-        ).animate(
-          CurvedAnimation(parent: Get.find<ShareController>().animator, curve: Curves.fastOutSlowIn),
-        ),
-        rotation = Tween<double>(
-          begin: 0.0,
-          end: 360.0,
-        ).animate(
-          CurvedAnimation(
-            parent: Get.find<ShareController>().animator,
-            curve: Interval(
-              0.0,
-              0.9,
-              curve: Curves.decelerate,
-            ),
-          ),
-        ),
-        super(key: key);
-
+  ShareView() : super(key: GlobalKey());
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 36),
-      child: AnimatedBuilder(
-          animation: Get.find<ShareController>().animator,
-          builder: (context, widget) {
-            return Transform.rotate(
-                angle: vector.radians(rotation.value),
-                child: Stack(alignment: Alignment.center, children: <Widget>[
-                  _buildButton(210, color: Colors.red, icon: SonrIcons.Camera, onPressed: controller.openCamera),
-                  _buildButton(250, color: Colors.green, icon: SonrIcons.Photos, onPressed: controller.selectMedia),
-                  _buildButton(290, color: Colors.orange, icon: SonrIcons.Folder, onPressed: controller.selectFile),
-                  _buildButton(330, color: Colors.blue, icon: SonrIcons.User, onPressed: controller.selectContact),
-                  Transform.scale(
-                    scale: scale.value - 1,
-                    child: FloatingActionButton(child: Icon(SonrIcons.Close), onPressed: controller.toggle, backgroundColor: SonrColor.Critical),
-                  ),
-                  Transform.scale(
-                    scale: scale.value,
-                    child: FloatingActionButton(child: Icon(SonrIcons.Share), onPressed: controller.toggle, backgroundColor: SonrColor.Black),
-                  )
-                ]));
-          }),
+    return Padding(
+      padding: const EdgeInsets.only(top: 24.0),
+      child: Obx(
+        () => AnimatedContainer(
+            curve: Curves.bounceOut,
+            duration: Duration(milliseconds: 600),
+            width: controller.size.value.width,
+            height: controller.size.value.height,
+            child: _buildView()),
+      ),
     );
   }
 
-  _buildButton(double angle, {Color color, IconData icon, Function onPressed}) {
-    return Transform(
-        transform: Matrix4.identity()..translate((translation.value) * cos(vector.radians(angle)), (translation.value) * sin(vector.radians(angle))),
-        child: FloatingActionButton(
-          backgroundColor: color,
-          child: icon.white,
-          elevation: 0,
-          isExtended: true,
-          onPressed: () {
-            onPressed();
-            print("Tapped");
-          },
-        ));
+  // @ Build Page View by Navigation Item
+  Widget _buildView() {
+    // Return View
+    if (controller.status.value == ShareStatus.PickMedia) {
+      return Container(key: ValueKey<ShareStatus>(ShareStatus.PickMedia));
+    } else if (controller.status.value == ShareStatus.Queue) {
+      return _QueueView(key: ValueKey<ShareStatus>(ShareStatus.Queue));
+    } else {
+      return _DefaultButtonView(key: ValueKey<ShareStatus>(ShareStatus.Default));
+    }
+  }
+}
+
+// ** Close Share Button View ** //
+class _DefaultButtonView extends GetView<ShareController> {
+  _DefaultButtonView({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: controller.toggle,
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: SonrColor.Black,
+        ),
+        alignment: Alignment.center,
+        child: SonrIcons.Share.white,
+      ),
+    );
+  }
+}
+
+// ** Expanded Share Button View ** //
+class _QueueView extends GetView<ShareController> {
+  _QueueView({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: controller.toggle,
+      child: Container(
+        decoration: BoxDecoration(color: SonrColor.Black, borderRadius: BorderRadius.circular(40)),
+        child: OpacityAnimatedWidget(
+            enabled: true,
+            duration: 150.milliseconds,
+            delay: 350.milliseconds,
+            curve: Curves.easeIn,
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              const ShareCameraButtonItem(),
+              const ShareGalleryButtonItem(),
+              const ShareFileButtonItem(),
+              const ShareContactButtonItem(),
+            ])),
+      ),
+    );
   }
 }
