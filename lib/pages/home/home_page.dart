@@ -3,7 +3,7 @@ import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'action_button.dart';
-import 'grid/grid_view.dart';
+import 'main/grid_view.dart';
 import 'home_controller.dart';
 import 'activity/activity_view.dart';
 import 'profile/profile_view.dart';
