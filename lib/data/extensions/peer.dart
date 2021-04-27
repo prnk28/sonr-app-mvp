@@ -1,7 +1,3 @@
-export 'peer_controller.dart';
-export 'item_view.dart';
-
-export 'vector_position.dart';
 import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
@@ -114,8 +110,4 @@ extension WidgetUtils on Peer {
               : SonrIcons.Avatar.greyWith(size: size),
         ));
   }
-}
-
-extension PayloadUtils on Payload {
-  bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
 }

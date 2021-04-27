@@ -54,7 +54,7 @@ class SonrSnack {
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
           DeviceService.playSound(type: UISoundType.Fatal);
-          return SonrSnack("Error", error.message, SonrIcons.Caution_Circle.white, Colors.red, 2600, false);
+          return SonrSnack("Error", error.message, SonrIcons.Caution.white, Colors.red, 2600, false);
 
         // Yellow - Title Warning
         default:
@@ -65,7 +65,7 @@ class SonrSnack {
     // @ App Error
     else {
       DeviceService.playSound(type: UISoundType.Warning);
-      return SonrSnack("Error", message, SonrIcons.Caution_Circle.white, Colors.red, 2600, false);
+      return SonrSnack("Error", message, SonrIcons.Caution.white, Colors.red, 2600, false);
     }
   }
 

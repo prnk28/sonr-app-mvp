@@ -24,7 +24,7 @@ class _PayloadListItem extends GetView<TransferController> {
                 alignment: Alignment.topRight,
                 child: PlainIconButton(
                   onPressed: () {},
-                  icon: SonrIcons.More_Vertical.gradient(gradient: SonrGradient.Primary),
+                  icon: SonrIcons.MoreVertical.gradient(gradient: SonrGradient.Primary),
                 ),
               ),
             ])));

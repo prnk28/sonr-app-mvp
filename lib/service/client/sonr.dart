@@ -285,10 +285,10 @@ class SonrService extends GetxService {
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
     await HapticFeedback.heavyImpact();
+    DeviceService.playSound(type: UISoundType.Received);
 
     // Save Card to Gallery
     CardService.addCard(data);
-    DeviceService.playSound(type: UISoundType.Received);
   }
 
   // ^ An Error Has Occurred ^ //

@@ -147,7 +147,7 @@ class _ShareContactButtonItem extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.selectContact,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.User.gradientNamed(name: FlutterGradientNames.smartIndigo, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradientNamed(name: FlutterGradientNames.smartIndigo, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Contact'.p_White,
       ]),

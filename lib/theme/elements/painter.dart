@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/data/extensions/peer.dart';
 import 'package:sonr_core/sonr_core.dart';
 import '../theme.dart';
 

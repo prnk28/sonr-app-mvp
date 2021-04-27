@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/modules/auth/auth.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'overlay.dart';
@@ -128,7 +129,7 @@ class SonrOverlay extends GetxService {
         SonrOffset.Top,
         entryDuration,
         barrierDismissible,
-        InviteReplyOverlayView(count, false, invite: invite),
+        InviteOverlayView(invite: invite),
         backgroundColor: Colors.black54,
       );
 
@@ -146,14 +147,11 @@ class SonrOverlay extends GetxService {
     if (!isOpen) {
       // Create Overlay
       var cardOverlay = _SonrFixedOverlayEntry(
-          SonrOffset.Top,
-          entryDuration,
-          barrierDismissible,
-          InviteReplyOverlayView(
-            count,
-            true,
-            reply: reply,
-          ));
+        SonrOffset.Top,
+        entryDuration,
+        barrierDismissible,
+        ReplyOverlayView(reply: reply),
+      );
 
       // Add Overlay to List
       _controller.currentOverlay(cardOverlay);

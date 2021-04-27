@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:get/get.dart';
-import 'media.dart';
+import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';

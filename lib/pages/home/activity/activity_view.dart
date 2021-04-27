@@ -30,7 +30,8 @@ class _ActivityListItem extends StatelessWidget {
   const _ActivityListItem({Key key, @required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24),
       padding: EdgeInsets.only(bottom: 24),
       child: Dismissible(
         key: ValueKey(item),

@@ -1,6 +1,14 @@
-// import 'dart:typed_data';
 // import 'package:sonr_app/theme/theme.dart';
-// import 'home_controller.dart';
+
+// class _SearchListItemsView extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       margin: EdgeInsets.all(8),
+//       height: Height.ratio(0.2),
+//     );
+//   }
+// }
 
 // class SearchView extends StatelessWidget {
 //   @override

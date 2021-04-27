@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'contact.dart';
+import 'package:sonr_app/data/data.dart';
 
 // ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
 class ContactFlatCard extends StatelessWidget {
@@ -59,7 +59,7 @@ class ContactFlatCard extends StatelessWidget {
                 onPressed: () {},
                 label: "Video",
                 size: 72,
-                icon: SonrIcons.Video_Camera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
+                icon: SonrIcons.VideoCamera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
               ),
             ]),
           ),

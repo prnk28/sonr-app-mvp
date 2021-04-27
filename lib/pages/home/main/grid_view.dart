@@ -1,11 +1,9 @@
 import 'dart:ui';
-import 'package:sonr_app/modules/contact/contact.dart';
-import 'package:sonr_app/modules/file/file.dart';
-import 'package:sonr_app/modules/media/card_view.dart';
-import 'package:sonr_app/modules/url/card_view.dart';
+import 'package:sonr_app/modules/card/card.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'grid_controller.dart';
+import 'storage_chart.dart';
 import 'tags_view.dart';
 
 const K_LIST_HEIGHT = 225.0;
@@ -16,10 +14,10 @@ class CardMainView extends GetView<GridController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 24),
         child: CustomScrollView(primary: true, slivers: [
-          _CardSearchView(),
-          SliverPadding(padding: EdgeInsets.only(top: 24)),
+          _CardStatsView(),
+          SliverPadding(padding: EdgeInsets.only(top: 8)),
           SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start)),
           SliverToBoxAdapter(
             child: TagsView(
@@ -65,7 +63,7 @@ class CardMainView extends GetView<GridController> {
   }
 }
 
-class _CardSearchView extends GetView<GridController> {
+class _CardStatsView extends GetView<GridController> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -77,19 +75,16 @@ class _CardSearchView extends GetView<GridController> {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           clipBehavior: Clip.antiAlias,
-          decoration: Neumorph.floating(),
+          decoration: Neumorph.floating(color: SonrColor.Primary),
           padding: EdgeInsets.all(8),
-          margin: EdgeInsets.all(32),
-          width: Get.width,
-          child: Container(
-            width: context.widthTransformer(reducedBy: 0.8),
-            height: context.heightTransformer(reducedBy: 0.6),
-            alignment: Alignment.center,
-            child: "Search ".h4,
-          ),
+          margin: EdgeInsets.all(16),
+          height: 100,
+          width: Width.ratio(0.4),
+          alignment: Alignment.center,
+          child: StorageChart(),
         ),
       ),
-      expandedHeight: 120,
+      expandedHeight: 200,
       // bottom:
     );
   }
@@ -105,24 +100,13 @@ class _CardGridAll extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.all.length,
           itemBuilder: (BuildContext context, int index) {
-            return buildCard(CardService.all[index]);
+            return TransferItem(CardService.all[index]);
           },
         );
       } else {
         return _CardGridEmpty(0, label: "No Cards Found");
       }
     });
-  }
-
-  // @ Helper Method Builds Cards for List
-  Widget buildCard(TransferCardItem item) {
-    if (item.payload == Payload.MEDIA) {
-      return MediaCardView(item);
-    } else if (item.payload == Payload.CONTACT) {
-      return ContactCardView(item);
-    } else {
-      return FileCardView(item);
-    }
   }
 }
 
@@ -136,7 +120,7 @@ class _CardGridMedia extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.media.length,
           itemBuilder: (BuildContext context, int index) {
-            return MediaCardView(CardService.media[index]);
+            return TransferItem(CardService.media[index]);
           },
         );
       } else {
@@ -156,7 +140,7 @@ class _CardGridFiles extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.files.length,
           itemBuilder: (BuildContext context, int index) {
-            return FileCardView(CardService.files[index]);
+            return TransferItem(CardService.files[index]);
           },
         );
       } else {
@@ -176,7 +160,7 @@ class _CardGridContacts extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.contacts.length,
           itemBuilder: (BuildContext context, int index) {
-            return ContactCardView(CardService.contacts[index]);
+            return TransferItem(CardService.contacts[index]);
           },
         );
       } else {
@@ -196,7 +180,7 @@ class _CardGridLinks extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.links.length,
           itemBuilder: (BuildContext context, int index) {
-            return URLCardView(CardService.links[index]);
+            return TransferItem(CardService.links[index]);
           },
         );
       } else {

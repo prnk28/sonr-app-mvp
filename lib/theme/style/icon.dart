@@ -19,7 +19,7 @@ extension MimeIcon on MIME_Type {
       case MIME_Type.video:
         return SonrIcons.Video.gradientNamed(name: FlutterGradientNames.nightCall, size: size);
       default:
-        return SonrIcons.Unknown_File.gradientNamed(name: FlutterGradientNames.newRetrowave, size: size);
+        return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.newRetrowave, size: size);
     }
   }
 
@@ -34,7 +34,7 @@ extension MimeIcon on MIME_Type {
       case MIME_Type.video:
         return SonrIcons.Video.black;
       default:
-        return SonrIcons.Unknown_File.black;
+        return SonrIcons.Unknown.black;
     }
   }
 
@@ -49,7 +49,7 @@ extension MimeIcon on MIME_Type {
       case MIME_Type.video:
         return SonrIcons.Video.white;
       default:
-        return SonrIcons.Unknown_File.white;
+        return SonrIcons.Unknown.white;
     }
   }
 }
@@ -71,7 +71,7 @@ extension PayloadIcon on Payload {
     } else if (this == Payload.TEXT) {
       return SonrIcons.Document.gradientNamed(name: FlutterGradientNames.spaceShift, size: size);
     } else {
-      return SonrIcons.Unknown_File.gradientNamed(name: FlutterGradientNames.midnightBloom, size: size);
+      return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.midnightBloom, size: size);
     }
   }
 
@@ -91,7 +91,7 @@ extension PayloadIcon on Payload {
     } else if (this == Payload.TEXT) {
       return SonrIcons.Document.black;
     } else {
-      return SonrIcons.Unknown_File.black;
+      return SonrIcons.Unknown.black;
     }
   }
 
@@ -111,7 +111,7 @@ extension PayloadIcon on Payload {
     } else if (this == Payload.TEXT) {
       return SonrIcons.Document.white;
     } else {
-      return SonrIcons.Unknown_File.white;
+      return SonrIcons.Unknown.white;
     }
   }
 }
@@ -123,13 +123,13 @@ extension PlatformIcon on Platform {
       case Platform.Android:
         return SonrIcons.Android.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.IPhone.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.IMac.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       case Platform.Windows:
         return SonrIcons.Windows.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
       default:
-        return SonrIcons.Unknown_Device.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
     }
   }
 
@@ -138,13 +138,13 @@ extension PlatformIcon on Platform {
       case Platform.Android:
         return SonrIcons.Android.blackWith(size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.blackWith(size: size);
+        return SonrIcons.IPhone.blackWith(size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.blackWith(size: size);
+        return SonrIcons.IMac.blackWith(size: size);
       case Platform.Windows:
         return SonrIcons.Windows.blackWith(size: size);
       default:
-        return SonrIcons.Unknown_Device.blackWith(size: size);
+        return SonrIcons.Unknown.blackWith(size: size);
     }
   }
 
@@ -153,13 +153,13 @@ extension PlatformIcon on Platform {
       case Platform.Android:
         return SonrIcons.Android.greyWith(size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.greyWith(size: size);
+        return SonrIcons.IPhone.greyWith(size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.greyWith(size: size);
+        return SonrIcons.IMac.greyWith(size: size);
       case Platform.Windows:
         return SonrIcons.Windows.greyWith(size: size);
       default:
-        return SonrIcons.Unknown_Device.greyWith(size: size);
+        return SonrIcons.Unknown.greyWith(size: size);
     }
   }
 
@@ -168,13 +168,13 @@ extension PlatformIcon on Platform {
       case Platform.Android:
         return SonrIcons.Android.whiteWith(size: size);
       case Platform.IOS:
-        return SonrIcons.IOS.whiteWith(size: size);
+        return SonrIcons.IPhone.whiteWith(size: size);
       case Platform.MacOS:
-        return SonrIcons.Mac.whiteWith(size: size);
+        return SonrIcons.IMac.whiteWith(size: size);
       case Platform.Windows:
         return SonrIcons.Windows.whiteWith(size: size);
       default:
-        return SonrIcons.Unknown_Device.whiteWith(size: size);
+        return SonrIcons.Unknown.whiteWith(size: size);
     }
   }
 }
@@ -332,470 +332,669 @@ extension DesignIcon on IconData {
 
 // ^ Sonr Icon Class ^ //
 class SonrIcons {
-  // * [^.*(\s+([a-zA-Z]+\s+)+).*[a-zA-Z]+.*[a-zA-Z]+.*[a-zA-Z]+.*$] > Regex Expression for Comment Generation * //
+  // PCRE (PHP < 7.3)
+  /// -> ^.*(\s([a-zA-Z]+\s)+).*$ > Regex
+  // Substitution: /// SonrIcons -$2![Icon of $2 ](/Users/prad/Sonr/docs/icons/PNG/$2.png)\n\0\n
+  // Expression for Comment Generation * //
   //! Dont use underscores for fonts //
 
   SonrIcons._();
   static const String _fontFamily = 'SonrIcons';
 
-  /// Sonricons - Audio ![Icon of Audio](/Users/prad/Sonr/docs/icons/PNG/Audio.png)
-  static const IconData Audio = IconData(0xe97c, fontFamily: _fontFamily);
+  /// SonrIcons - Archive ![Icon of Archive](/Users/prad/Sonr/docs/icons/PNG/Archive.png)
+  static const IconData Archive = IconData(0xe914, fontFamily: _fontFamily);
 
-  /// Sonricons - Yoda ![Icon of Yoda](/Users/prad/Sonr/docs/icons/PNG/Yoda.png)
+  /// SonrIcons - ATSign ![Icon of ATSign](/Users/prad/Sonr/docs/icons/PNG/ATSign.png)
+  static const IconData ATSign = IconData(0xe918, fontFamily: _fontFamily);
+
+  /// SonrIcons - Barcode ![Icon of Barcode](/Users/prad/Sonr/docs/icons/PNG/Barcode.png)
+  static const IconData Barcode = IconData(0xe964, fontFamily: _fontFamily);
+
+  /// SonrIcons - Camera ![Icon of Camera](/Users/prad/Sonr/docs/icons/PNG/Camera.png)
+  static const IconData Camera = IconData(0xe975, fontFamily: _fontFamily);
+
+  /// SonrIcons - Capture ![Icon of Capture](/Users/prad/Sonr/docs/icons/PNG/Capture.png)
+  static const IconData Capture = IconData(0xe9c0, fontFamily: _fontFamily);
+
+  /// SonrIcons - Clear ![Icon of Clear](/Users/prad/Sonr/docs/icons/PNG/Clear.png)
+  static const IconData Clear = IconData(0xe9c1, fontFamily: _fontFamily);
+
+  /// SonrIcons - Compass ![Icon of Compass](/Users/prad/Sonr/docs/icons/PNG/Compass.png)
+  static const IconData Compass = IconData(0xe9d0, fontFamily: _fontFamily);
+
+  /// SonrIcons - Database ![Icon of Database](/Users/prad/Sonr/docs/icons/PNG/Database.png)
+  static const IconData Database = IconData(0xe9d1, fontFamily: _fontFamily);
+
+  /// SonrIcons - Diagram ![Icon of Diagram](/Users/prad/Sonr/docs/icons/PNG/Diagram.png)
+  static const IconData Diagram = IconData(0xe9d2, fontFamily: _fontFamily);
+
+  /// SonrIcons - Diamond ![Icon of Diamond](/Users/prad/Sonr/docs/icons/PNG/Diamond.png)
+  static const IconData Diamond = IconData(0xe9d3, fontFamily: _fontFamily);
+
+  /// SonrIcons - Gamepad ![Icon of Gamepad](/Users/prad/Sonr/docs/icons/PNG/Gamepad.png)
+  static const IconData Gamepad = IconData(0xe9d4, fontFamily: _fontFamily);
+
+  /// SonrIcons - Heart ![Icon of Heart](/Users/prad/Sonr/docs/icons/PNG/Heart.png)
+  static const IconData Heart = IconData(0xe9d5, fontFamily: _fontFamily);
+
+  /// SonrIcons - Help ![Icon of Help](/Users/prad/Sonr/docs/icons/PNG/Help.png)
+  static const IconData Help = IconData(0xe9d6, fontFamily: _fontFamily);
+
+  /// SonrIcons - NoConnection ![Icon of NoConnection](/Users/prad/Sonr/docs/icons/PNG/NoConnection.png)
+  static const IconData NoConnection = IconData(0xe9d7, fontFamily: _fontFamily);
+
+  /// SonrIcons - Pause ![Icon of Pause](/Users/prad/Sonr/docs/icons/PNG/Pause.png)
+  static const IconData Pause = IconData(0xe9d8, fontFamily: _fontFamily);
+
+  /// SonrIcons - WifiOff ![Icon of WifiOff](/Users/prad/Sonr/docs/icons/PNG/WifiOff.png)
+  static const IconData WifiOff = IconData(0xe9d9, fontFamily: _fontFamily);
+
+  /// SonrIcons - Alexa ![Icon of Alexa](/Users/prad/Sonr/docs/icons/PNG/Alexa.png)
+  static const IconData Alexa = IconData(0xe945, fontFamily: _fontFamily);
+
+  /// SonrIcons - AndroidClassic ![Icon of AndroidClassic](/Users/prad/Sonr/docs/icons/PNG/AndroidClassic.png)
+  static const IconData AndroidClassic = IconData(0xe9c2, fontFamily: _fontFamily);
+
+  /// SonrIcons - GoogleHome ![Icon of GoogleHome](/Users/prad/Sonr/docs/icons/PNG/GoogleHome.png)
+  static const IconData GoogleHome = IconData(0xe9c3, fontFamily: _fontFamily);
+
+  /// SonrIcons - IMac ![Icon of IMac](/Users/prad/Sonr/docs/icons/PNG/IMac.png)
+  static const IconData IMac = IconData(0xe9c4, fontFamily: _fontFamily);
+
+  /// SonrIcons - IPad ![Icon of IPad](/Users/prad/Sonr/docs/icons/PNG/IPad.png)
+  static const IconData IPad = IconData(0xe9c5, fontFamily: _fontFamily);
+
+  /// SonrIcons - IPadClassic ![Icon of IPadClassic](/Users/prad/Sonr/docs/icons/PNG/IPadClassic.png)
+  static const IconData IPadClassic = IconData(0xe9c6, fontFamily: _fontFamily);
+
+  /// SonrIcons - IPhoneClassic ![Icon of IPhoneClassic](/Users/prad/Sonr/docs/icons/PNG/IPhoneClassic.png)
+  static const IconData IPhoneClassic = IconData(0xe9c7, fontFamily: _fontFamily);
+
+  /// SonrIcons - LinuxDesktop ![Icon of LinuxDesktop](/Users/prad/Sonr/docs/icons/PNG/LinuxDesktop.png)
+  static const IconData LinuxDesktop = IconData(0xe9c8, fontFamily: _fontFamily);
+
+  /// SonrIcons - LinuxLaptop ![Icon of LinuxLaptop](/Users/prad/Sonr/docs/icons/PNG/LinuxLaptop.png)
+  static const IconData LinuxLaptop = IconData(0xe9c9, fontFamily: _fontFamily);
+
+  /// SonrIcons - Macbook ![Icon of Macbook](/Users/prad/Sonr/docs/icons/PNG/Macbook.png)
+  static const IconData Macbook = IconData(0xe9ca, fontFamily: _fontFamily);
+
+  /// SonrIcons - NintendoSwitch ![Icon of NintendoSwitch](/Users/prad/Sonr/docs/icons/PNG/NintendoSwitch.png)
+  static const IconData NintendoSwitch = IconData(0xe9cb, fontFamily: _fontFamily);
+
+  /// SonrIcons - WatchAndroid ![Icon of WatchAndroid](/Users/prad/Sonr/docs/icons/PNG/WatchAndroid.png)
+  static const IconData WatchAndroid = IconData(0xe9cc, fontFamily: _fontFamily);
+
+  /// SonrIcons - WatchApple ![Icon of WatchApple](/Users/prad/Sonr/docs/icons/PNG/WatchApple.png)
+  static const IconData WatchApple = IconData(0xe9cd, fontFamily: _fontFamily);
+
+  /// SonrIcons - WindowsDesktop ![Icon of WindowsDesktop](/Users/prad/Sonr/docs/icons/PNG/WindowsDesktop.png)
+  static const IconData WindowsDesktop = IconData(0xe9ce, fontFamily: _fontFamily);
+
+  /// SonrIcons - WindowsLaptop ![Icon of WindowsLaptop](/Users/prad/Sonr/docs/icons/PNG/WindowsLaptop.png)
+  static const IconData WindowsLaptop = IconData(0xe9cf, fontFamily: _fontFamily);
+
+  /// SonrIcons - AddFolder ![Icon of AddFolder](/Users/prad/Sonr/docs/icons/PNG/AddFolder.png)
+  static const IconData AddFolder = IconData(0xe9bd, fontFamily: _fontFamily);
+
+  /// SonrIcons - ContactCard ![Icon of ContactCard](/Users/prad/Sonr/docs/icons/PNG/ContactCard.png)
+  static const IconData ContactCard = IconData(0xe9be, fontFamily: _fontFamily);
+
+  /// SonrIcons - DeleteFolder ![Icon of DeleteFolder](/Users/prad/Sonr/docs/icons/PNG/DeleteFolder.png)
+  static const IconData DeleteFolder = IconData(0xe9bf, fontFamily: _fontFamily);
+
+  /// SonrIcons - Message ![Icon of Message](/Users/prad/Sonr/docs/icons/PNG/Message.png)
+  static const IconData Message = IconData(0xe9b1, fontFamily: _fontFamily);
+
+  /// SonrIcons - Unknown ![Icon of Unknown](/Users/prad/Sonr/docs/icons/PNG/Unknown.png)
+  static const IconData Unknown = IconData(0xe9b5, fontFamily: _fontFamily);
+
+  /// SonrIcons - Refresh ![Icon of Refresh](/Users/prad/Sonr/docs/icons/PNG/Refresh.png)
+  static const IconData Refresh = IconData(0xe9b6, fontFamily: _fontFamily);
+
+  /// SonrIcons - Open ![Icon of Open](/Users/prad/Sonr/docs/icons/PNG/Open.png)
+  static const IconData Open = IconData(0xe9b7, fontFamily: _fontFamily);
+
+  /// SonrIcons - Safe ![Icon of Safe](/Users/prad/Sonr/docs/icons/PNG/Safe.png)
+  static const IconData Safe = IconData(0xe9b8, fontFamily: _fontFamily);
+
+  /// SonrIcons - Sale ![Icon of Sale](/Users/prad/Sonr/docs/icons/PNG/Sale.png)
+  static const IconData Sale = IconData(0xe9b9, fontFamily: _fontFamily);
+
+  /// SonrIcons - Science ![Icon of Science](/Users/prad/Sonr/docs/icons/PNG/Science.png)
+  static const IconData Science = IconData(0xe9ba, fontFamily: _fontFamily);
+
+  /// SonrIcons - Sync ![Icon of Sync](/Users/prad/Sonr/docs/icons/PNG/Sync.png)
+  static const IconData Sync = IconData(0xe9bb, fontFamily: _fontFamily);
+
+  /// SonrIcons - Transform ![Icon of Transform](/Users/prad/Sonr/docs/icons/PNG/Transform.png)
+  static const IconData Transform = IconData(0xe9bc, fontFamily: _fontFamily);
+
+  /// SonrIcons - Apple ![Icon of Apple](/Users/prad/Sonr/docs/icons/PNG/Apple.png)
+  static const IconData Apple = IconData(0xe90b, fontFamily: _fontFamily);
+
+  /// SonrIcons - Browser ![Icon of Browser](/Users/prad/Sonr/docs/icons/PNG/Browser.png)
+  static const IconData Browser = IconData(0xe9ae, fontFamily: _fontFamily);
+
+  /// SonrIcons - ColorPalette ![Icon of ColorPalette](/Users/prad/Sonr/docs/icons/PNG/ColorPalette.png)
+  static const IconData ColorPalette = IconData(0xe9b2, fontFamily: _fontFamily);
+
+  /// SonrIcons - Clip ![Icon of Clip](/Users/prad/Sonr/docs/icons/PNG/Clip.png)
+  static const IconData Clip = IconData(0xe9b3, fontFamily: _fontFamily);
+
+  /// SonrIcons - Like ![Icon of Like](/Users/prad/Sonr/docs/icons/PNG/Like.png)
+  static const IconData Like = IconData(0xe9b4, fontFamily: _fontFamily);
+
+  /// SonrIcons - Album ![Icon of Album](/Users/prad/Sonr/docs/icons/PNG/Album.png)
+  static const IconData Album = IconData(0xe97c, fontFamily: _fontFamily);
+
+  /// SonrIcons - Alert ![Icon of Alert](/Users/prad/Sonr/docs/icons/PNG/Alert.png)
+  static const IconData Alert = IconData(0xe97f, fontFamily: _fontFamily);
+
+  /// SonrIcons - CircleDown ![Icon of CircleDown](/Users/prad/Sonr/docs/icons/PNG/CircleDown.png)
+  static const IconData CircleDown = IconData(0xe980, fontFamily: _fontFamily);
+
+  /// SonrIcons - CircleLeft ![Icon of CircleLeft](/Users/prad/Sonr/docs/icons/PNG/CircleLeft.png)
+  static const IconData CircleLeft = IconData(0xe983, fontFamily: _fontFamily);
+
+  /// SonrIcons - CircleRight ![Icon of CircleRight](/Users/prad/Sonr/docs/icons/PNG/CircleRight.png)
+  static const IconData CircleRight = IconData(0xe985, fontFamily: _fontFamily);
+
+  /// SonrIcons - CircleTop ![Icon of CircleTop](/Users/prad/Sonr/docs/icons/PNG/CircleTop.png)
+  static const IconData CircleTop = IconData(0xe986, fontFamily: _fontFamily);
+
+  /// SonrIcons - Bolt ![Icon of Bolt](/Users/prad/Sonr/docs/icons/PNG/Bolt.png)
+  static const IconData Bolt = IconData(0xe991, fontFamily: _fontFamily);
+
+  /// SonrIcons - Burger ![Icon of Burger](/Users/prad/Sonr/docs/icons/PNG/Burger.png)
+  static const IconData Burger = IconData(0xe992, fontFamily: _fontFamily);
+
+  /// SonrIcons - Lens ![Icon of Lens](/Users/prad/Sonr/docs/icons/PNG/Lens.png)
+  static const IconData Lens = IconData(0xe993, fontFamily: _fontFamily);
+
+  /// SonrIcons - Clock ![Icon of Clock](/Users/prad/Sonr/docs/icons/PNG/Clock.png)
+  static const IconData Clock = IconData(0xe994, fontFamily: _fontFamily);
+
+  /// SonrIcons - Crown ![Icon of Crown](/Users/prad/Sonr/docs/icons/PNG/Crown.png)
+  static const IconData Crown = IconData(0xe995, fontFamily: _fontFamily);
+
+  /// SonrIcons - Exchange ![Icon of Exchange](/Users/prad/Sonr/docs/icons/PNG/Exchange.png)
+  static const IconData Exchange = IconData(0xe997, fontFamily: _fontFamily);
+
+  /// SonrIcons - Eye ![Icon of Eye](/Users/prad/Sonr/docs/icons/PNG/Eye.png)
+  static const IconData Eye = IconData(0xe998, fontFamily: _fontFamily);
+
+  /// SonrIcons - FaceID ![Icon of FaceID](/Users/prad/Sonr/docs/icons/PNG/FaceID.png)
+  static const IconData FaceID = IconData(0xe999, fontFamily: _fontFamily);
+
+  /// SonrIcons - Hdd ![Icon of Hdd](/Users/prad/Sonr/docs/icons/PNG/Hdd.png)
+  static const IconData Hdd = IconData(0xe99a, fontFamily: _fontFamily);
+
+  /// SonrIcons - Info ![Icon of Info](/Users/prad/Sonr/docs/icons/PNG/Info.png)
+  static const IconData Info = IconData(0xe99b, fontFamily: _fontFamily);
+
+  /// SonrIcons - Pen ![Icon of Pen](/Users/prad/Sonr/docs/icons/PNG/Pen.png)
+  static const IconData Pen = IconData(0xe99d, fontFamily: _fontFamily);
+
+  /// SonrIcons - Rocket ![Icon of Rocket](/Users/prad/Sonr/docs/icons/PNG/Rocket.png)
+  static const IconData Rocket = IconData(0xe99e, fontFamily: _fontFamily);
+
+  /// SonrIcons - Star ![Icon of Star](/Users/prad/Sonr/docs/icons/PNG/Star.png)
+  static const IconData Star = IconData(0xe9a2, fontFamily: _fontFamily);
+
+  /// SonrIcons - Ufo ![Icon of Ufo](/Users/prad/Sonr/docs/icons/PNG/Ufo.png)
+  static const IconData Ufo = IconData(0xe9a3, fontFamily: _fontFamily);
+
+  /// SonrIcons - Upload ![Icon of Upload](/Users/prad/Sonr/docs/icons/PNG/Upload.png)
+  static const IconData Upload = IconData(0xe9a4, fontFamily: _fontFamily);
+
+  /// SonrIcons - ZoomMinus ![Icon of ZoomMinus](/Users/prad/Sonr/docs/icons/PNG/ZoomMinus.png)
+  static const IconData ZoomMinus = IconData(0xe9a6, fontFamily: _fontFamily);
+
+  /// SonrIcons - ZoomPlus ![Icon of ZoomPlus](/Users/prad/Sonr/docs/icons/PNG/ZoomPlus.png)
+  static const IconData ZoomPlus = IconData(0xe9ac, fontFamily: _fontFamily);
+
+  /// SonrIcons - Audio ![Icon of Audio](/Users/prad/Sonr/docs/icons/PNG/Audio.png)
+  static const IconData Audio = IconData(0x1f508, fontFamily: _fontFamily);
+
+  /// SonrIcons - Yoda ![Icon of Yoda](/Users/prad/Sonr/docs/icons/PNG/Yoda.png)
   static const IconData Yoda = IconData(0xe942, fontFamily: _fontFamily);
 
-  /// Sonricons - Cancel ![Icon of Cancel](/Users/prad/Sonr/docs/icons/PNG/Cancel.png)
+  /// SonrIcons - Cancel ![Icon of Cancel](/Users/prad/Sonr/docs/icons/PNG/Cancel.png)
   static const IconData Cancel = IconData(0xe94d, fontFamily: _fontFamily);
 
-  /// Sonricons - Plus ![Icon of Plus](/Users/prad/Sonr/docs/icons/PNG/Plus.png)
+  /// SonrIcons - Plus ![Icon of Plus](/Users/prad/Sonr/docs/icons/PNG/Plus.png)
   static const IconData Plus = IconData(0xe961, fontFamily: _fontFamily);
 
-  /// Sonricons - Copy ![Icon of Copy](/Users/prad/Sonr/docs/icons/PNG/Copy.png)
+  /// SonrIcons - Copy ![Icon of Copy](/Users/prad/Sonr/docs/icons/PNG/Copy.png)
   static const IconData Copy = IconData(0xe97b, fontFamily: _fontFamily);
 
-  /// Sonricons - Unknown_Device ![Icon of Unknown_Device](/Users/prad/Sonr/docs/icons/PNG/Unknown-Device.png)
-  static const IconData Unknown_Device = IconData(0xe914, fontFamily: _fontFamily);
-
-  /// Sonricons - Unknown_File ![Icon of Unknown_File](/Users/prad/Sonr/docs/icons/PNG/Unknown-File.png)
-  static const IconData Unknown_File = IconData(0xe918, fontFamily: _fontFamily);
-
-  /// Sonricons - Panorama ![Icon of Panorama](/Users/prad/Sonr/docs/icons/PNG/Panorama.png)
+  /// SonrIcons - Panorama ![Icon of Panorama](/Users/prad/Sonr/docs/icons/PNG/Panorama.png)
   static const IconData Panorama = IconData(0xe91a, fontFamily: _fontFamily);
 
-  /// Sonricons - WebApp ![Icon of WebApp](/Users/prad/Sonr/docs/icons/PNG/WebApp.png)
+  /// SonrIcons - WebApp ![Icon of WebApp](/Users/prad/Sonr/docs/icons/PNG/WebApp.png)
   static const IconData WebApp = IconData(0xe91b, fontFamily: _fontFamily);
 
-  /// Sonricons - Linux ![Icon of Linux](/Users/prad/Sonr/docs/icons/PNG/Linux.png)
-  static const IconData Linux = IconData(0xe964, fontFamily: _fontFamily);
+  /// SonrIcons - DarthVader ![Icon of DarthVader](/Users/prad/Sonr/docs/icons/PNG/DarthVader.png)
+  static const IconData DarthVader = IconData(0xe965, fontFamily: _fontFamily);
 
-  /// Sonricons - Darth_Vader ![Icon of Darth_Vader](/Users/prad/Sonr/docs/icons/PNG/Darth-Vader.png)
-  static const IconData Darth_Vader = IconData(0xe965, fontFamily: _fontFamily);
-
-  /// Sonricons - Mac ![Icon of Mac](/Users/prad/Sonr/docs/icons/PNG/Mac.png)
-  static const IconData Mac = IconData(0xe975, fontFamily: _fontFamily);
-
-  /// Sonricons - PDF ![Icon of PDF](/Users/prad/Sonr/docs/icons/PNG/PDF.png)
+  /// SonrIcons - PDF ![Icon of PDF](/Users/prad/Sonr/docs/icons/PNG/PDF.png)
   static const IconData PDF = IconData(0xe976, fontFamily: _fontFamily);
 
-  /// Sonricons - IOS ![Icon of IOS](/Users/prad/Sonr/docs/icons/PNG/iPhone.png)
-  static const IconData IOS = IconData(0xe977, fontFamily: _fontFamily);
+  /// SonrIcons - IPhone ![Icon of IPhone](/Users/prad/Sonr/docs/icons/PNG/IPhone.png)
+  static const IconData IPhone = IconData(0xe977, fontFamily: _fontFamily);
 
-  /// Sonricons - Android ![Icon of Android](/Users/prad/Sonr/docs/icons/PNG/Android.png)
+  /// SonrIcons - Android ![Icon of Android](/Users/prad/Sonr/docs/icons/PNG/Android.png)
   static const IconData Android = IconData(0xe97a, fontFamily: _fontFamily);
 
-  /// Sonricons - Stop ![Icon of Stop](/Users/prad/Sonr/docs/icons/PNG/Stop.png)
+  /// SonrIcons - Stop ![Icon of Stop](/Users/prad/Sonr/docs/icons/PNG/Stop.png)
   static const IconData Stop = IconData(0xe974, fontFamily: _fontFamily);
 
-  /// Sonricons - Anchor ![Icon of Anchor](/Users/prad/Sonr/docs/icons/PNG/Anchor.png)
+  /// SonrIcons - Anchor ![Icon of Anchor](/Users/prad/Sonr/docs/icons/PNG/Anchor.png)
   static const IconData Anchor = IconData(0xe963, fontFamily: _fontFamily);
 
-  /// Sonricons - Check_All ![Icon of Check_All](/Users/prad/Sonr/docs/icons/PNG/Check-All.png)
-  static const IconData Check_All = IconData(0xe966, fontFamily: _fontFamily);
+  /// SonrIcons - CheckAll ![Icon of CheckAll](/Users/prad/Sonr/docs/icons/PNG/CheckAll.png)
+  static const IconData CheckAll = IconData(0xe966, fontFamily: _fontFamily);
 
-  /// Sonricons - Close ![Icon of Close](/Users/prad/Sonr/docs/icons/PNG/Close.png)
+  /// SonrIcons - Close ![Icon of Close](/Users/prad/Sonr/docs/icons/PNG/Close.png)
   static const IconData Close = IconData(0xe967, fontFamily: _fontFamily);
 
-  /// Sonricons - Gift ![Icon of Gift](/Users/prad/Sonr/docs/icons/PNG/Gift.png)
+  /// SonrIcons - Gift ![Icon of Gift](/Users/prad/Sonr/docs/icons/PNG/Gift.png)
   static const IconData Gift = IconData(0xe968, fontFamily: _fontFamily);
 
-  /// Sonricons - Scan ![Icon of Scan](/Users/prad/Sonr/docs/icons/PNG/Scan.png
+  /// SonrIcons - Scan ![Icon of Scan](/Users/prad/Sonr/docs/icons/PNG/Scan.png)
   static const IconData Scan = IconData(0xe969, fontFamily: _fontFamily);
 
-  /// Sonricons - Server ![Icon of Server](/Users/prad/Sonr/docs/icons/PNG/Server.png)
+  /// SonrIcons - Server ![Icon of Server](/Users/prad/Sonr/docs/icons/PNG/Server.png)
   static const IconData Server = IconData(0xe96a, fontFamily: _fontFamily);
 
-  /// Sonricons - Ship ![Icon of Ship](/Users/prad/Sonr/docs/icons/PNG/Ship.png)
+  /// SonrIcons - Ship ![Icon of Ship](/Users/prad/Sonr/docs/icons/PNG/Ship.png)
   static const IconData Ship = IconData(0xe96e, fontFamily: _fontFamily);
 
-  /// Sonricons - Tag ![Icon of Tag](/Users/prad/Sonr/docs/icons/PNG/Tag.png)
+  /// SonrIcons - Tag ![Icon of Tag](/Users/prad/Sonr/docs/icons/PNG/Tag.png)
   static const IconData Tag = IconData(0xe96f, fontFamily: _fontFamily);
 
-  /// Sonricons - Trend_Up ![Icon of Trend_Up](/Users/prad/Sonr/docs/icons/PNG/Trend-Up.png)
-  static const IconData Trend_Up = IconData(0xe970, fontFamily: _fontFamily);
+  /// SonrIcons - TrendUp ![Icon of TrendUp](/Users/prad/Sonr/docs/icons/PNG/TrendUp.png)
+  static const IconData TrendUp = IconData(0xe970, fontFamily: _fontFamily);
 
-  /// Sonricons - Update ![Icon of Update](/Users/prad/Sonr/docs/icons/PNG/Update.png)
+  /// SonrIcons - Update ![Icon of Update](/Users/prad/Sonr/docs/icons/PNG/Update.png)
   static const IconData Update = IconData(0xe972, fontFamily: _fontFamily);
 
-  /// Sonricons - Facebook ![Icon of Facebook](/Users/prad/Sonr/docs/icons/PNG/Facebook.png)
+  /// SonrIcons - Facebook ![Icon of Facebook](/Users/prad/Sonr/docs/icons/PNG/Facebook.png)
   static const IconData Facebook = IconData(0xe900, fontFamily: _fontFamily);
 
-  /// Sonricons - Files ![Icon of Files](/Users/prad/Sonr/docs/icons/PNG/Files.png)
+  /// SonrIcons - Files ![Icon of Files](/Users/prad/Sonr/docs/icons/PNG/Files.png)
   static const IconData Files = IconData(0xe929, fontFamily: _fontFamily);
 
-  /// Sonricons - Video ![Icon of Video](/Users/prad/Sonr/docs/icons/PNG/Video.png)
+  /// SonrIcons - Video ![Icon of Video](/Users/prad/Sonr/docs/icons/PNG/Video.png)
   static const IconData Video = IconData(0xe93a, fontFamily: _fontFamily);
 
-  /// Sonricons - Internet ![Icon of Internet](/Users/prad/Sonr/docs/icons/PNG/Internet.png)
+  /// SonrIcons - Internet ![Icon of Internet](/Users/prad/Sonr/docs/icons/PNG/Internet.png)
   static const IconData Internet = IconData(0xe94f, fontFamily: _fontFamily);
 
-  /// Sonricons - Link ![Icon of Link](/Users/prad/Sonr/docs/icons/PNG/Link.png)
+  /// SonrIcons - Link ![Icon of Link](/Users/prad/Sonr/docs/icons/PNG/Link.png)
   static const IconData Link = IconData(0xe95c, fontFamily: _fontFamily);
 
-  /// Sonricons - Linkedin ![Icon of Linkedin](/Users/prad/Sonr/docs/icons/PNG/Linkedin.png)
+  /// SonrIcons - Linkedin ![Icon of Linkedin](/Users/prad/Sonr/docs/icons/PNG/Linkedin.png)
   static const IconData Linkedin = IconData(0xe962, fontFamily: _fontFamily);
 
-  /// Sonricons - Remote ![Icon of Remote](/Users/prad/Sonr/docs/icons/PNG/Remote.png)
+  /// SonrIcons - Remote ![Icon of Remote](/Users/prad/Sonr/docs/icons/PNG/Remote.png)
   static const IconData Remote = IconData(0xe922, fontFamily: _fontFamily);
 
-  /// Sonricons - Photos ![Icon of Photos](/Users/prad/Sonr/docs/icons/PNG/Photos.png)
+  /// SonrIcons - Photos ![Icon of Photos](/Users/prad/Sonr/docs/icons/PNG/Photos.png)
   static const IconData Photos = IconData(0xe902, fontFamily: _fontFamily);
 
-  /// Sonricons - Activity ![Icon of Activity](/Users/prad/Sonr/docs/icons/PNG/Activity.png)
+  /// SonrIcons - Activity ![Icon of Activity](/Users/prad/Sonr/docs/icons/PNG/Activity.png)
   static const IconData Activity = IconData(0xe910, fontFamily: _fontFamily);
 
-  /// Sonricons - Bug ![Icon of Bug](/Users/prad/Sonr/docs/icons/PNG/Bug.png)
+  /// SonrIcons - Bug ![Icon of Bug](/Users/prad/Sonr/docs/icons/PNG/Bug.png)
   static const IconData Bug = IconData(0xe91c, fontFamily: _fontFamily);
 
-  /// Sonricons - Check ![Icon of Check](/Users/prad/Sonr/docs/icons/PNG/Check.png)
+  /// SonrIcons - Check ![Icon of Check](/Users/prad/Sonr/docs/icons/PNG/Check.png)
   static const IconData Check = IconData(0xe91f, fontFamily: _fontFamily);
 
-  /// Sonricons - Backward ![Icon of Backward](/Users/prad/Sonr/docs/icons/PNG/Backward.png)
+  /// SonrIcons - Backward ![Icon of Backward](/Users/prad/Sonr/docs/icons/PNG/Backward.png)
   static const IconData Backward = IconData(0xe920, fontFamily: _fontFamily);
 
-  /// Sonricons - Down ![Icon of Down](/Users/prad/Sonr/docs/icons/PNG/Down.png)
+  /// SonrIcons - Down ![Icon of Down](/Users/prad/Sonr/docs/icons/PNG/Down.png)
   static const IconData Down = IconData(0xe921, fontFamily: _fontFamily);
 
-  /// Sonricons - Forward ![Icon of Forward](/Users/prad/Sonr/docs/icons/PNG/Forward.png)
+  /// SonrIcons - Forward ![Icon of Forward](/Users/prad/Sonr/docs/icons/PNG/Forward.png)
   static const IconData Forward = IconData(0xe924, fontFamily: _fontFamily);
 
-  /// Sonricons - Up ![Icon of Up](/Users/prad/Sonr/docs/icons/PNG/Up.png)
+  /// SonrIcons - Up ![Icon of Up](/Users/prad/Sonr/docs/icons/PNG/Up.png)
   static const IconData Up = IconData(0xe925, fontFamily: _fontFamily);
 
-  /// Sonricons - Collapse ![Icon of Collapse](/Users/prad/Sonr/docs/icons/PNG/Collapse.png)
+  /// SonrIcons - Collapse ![Icon of Collapse](/Users/prad/Sonr/docs/icons/PNG/Collapse.png)
   static const IconData Collapse = IconData(0xe928, fontFamily: _fontFamily);
 
-  /// Sonricons - Screenshot ![Icon of Screenshot](/Users/prad/Sonr/docs/icons/PNG/Screenshot.png)
+  /// SonrIcons - Screenshot ![Icon of Screenshot](/Users/prad/Sonr/docs/icons/PNG/Screenshot.png)
   static const IconData Screenshot = IconData(0xe92b, fontFamily: _fontFamily);
 
-  /// Sonricons - Download ![Icon of Download](/Users/prad/Sonr/docs/icons/PNG/Download.png)
+  /// SonrIcons - Download ![Icon of Download](/Users/prad/Sonr/docs/icons/PNG/Download.png)
   static const IconData Download = IconData(0xe92c, fontFamily: _fontFamily);
 
-  /// Sonricons - Grid ![Icon of Grid](/Users/prad/Sonr/docs/icons/PNG/Grid.png)
+  /// SonrIcons - Grid ![Icon of Grid](/Users/prad/Sonr/docs/icons/PNG/Grid.png)
   static const IconData Grid = IconData(0xe92d, fontFamily: _fontFamily);
 
-  /// Sonricons - Group ![Icon of Group](/Users/prad/Sonr/docs/icons/PNG/Group.png)
+  /// SonrIcons - Group ![Icon of Group](/Users/prad/Sonr/docs/icons/PNG/Group.png)
   static const IconData Group = IconData(0xe92e, fontFamily: _fontFamily);
 
-  /// Sonricons - Hide ![Icon of Hide](/Users/prad/Sonr/docs/icons/PNG/Hide.png)
+  /// SonrIcons - Hide ![Icon of Hide](/Users/prad/Sonr/docs/icons/PNG/Hide.png)
   static const IconData Hide = IconData(0xe92f, fontFamily: _fontFamily);
 
-  /// Sonricons - Image ![Icon of Image](/Users/prad/Sonr/docs/icons/PNG/Image.png)
+  /// SonrIcons - Image ![Icon of Image](/Users/prad/Sonr/docs/icons/PNG/Image.png)
   static const IconData Image = IconData(0xe930, fontFamily: _fontFamily);
 
-  /// Sonricons - Inbox ![Icon of Inbox](/Users/prad/Sonr/docs/icons/PNG/Inbox.png)
+  /// SonrIcons - Inbox ![Icon of Inbox](/Users/prad/Sonr/docs/icons/PNG/Inbox.png)
   static const IconData Inbox = IconData(0xe931, fontFamily: _fontFamily);
 
-  /// Sonricons - Instagram ![Icon of Instagram](/Users/prad/Sonr/docs/icons/PNG/Instagram.png)
+  /// SonrIcons - Instagram ![Icon of Instagram](/Users/prad/Sonr/docs/icons/PNG/Instagram.png)
   static const IconData Instagram = IconData(0xe932, fontFamily: _fontFamily);
 
-  /// Sonricons - Layers ![Icon of Layers](/Users/prad/Sonr/docs/icons/PNG/Layers.png)
+  /// SonrIcons - Layers ![Icon of Layers](/Users/prad/Sonr/docs/icons/PNG/Layers.png)
   static const IconData Layers = IconData(0xe933, fontFamily: _fontFamily);
 
-  /// Sonricons - Leaderboard ![Icon of Leaderboard](/Users/prad/Sonr/docs/icons/PNG/Leaderboard.png)
+  /// SonrIcons - Leaderboard ![Icon of Leaderboard](/Users/prad/Sonr/docs/icons/PNG/Leaderboard.png)
   static const IconData Leaderboard = IconData(0xe934, fontFamily: _fontFamily);
 
-  /// Sonricons - Spreadsheet ![Icon of Spreadsheet](/Users/prad/Sonr/docs/icons/PNG/Spreadsheet.png)
+  /// SonrIcons - Spreadsheet ![Icon of Spreadsheet](/Users/prad/Sonr/docs/icons/PNG/Spreadsheet.png)
   static const IconData Spreadsheet = IconData(0xe935, fontFamily: _fontFamily);
 
-  /// Sonricons - Login ![Icon of Login](/Users/prad/Sonr/docs/icons/PNG/Login.png)
+  /// SonrIcons - Login ![Icon of Login](/Users/prad/Sonr/docs/icons/PNG/Login.png)
   static const IconData Login = IconData(0xe936, fontFamily: _fontFamily);
 
-  /// Sonricons - Logout ![Icon of Logout](/Users/prad/Sonr/docs/icons/PNG/Logout.png)
+  /// SonrIcons - Logout ![Icon of Logout](/Users/prad/Sonr/docs/icons/PNG/Logout.png)
   static const IconData Logout = IconData(0xe938, fontFamily: _fontFamily);
 
-  /// Sonricons - Map ![Icon of Map](/Users/prad/Sonr/docs/icons/PNG/Map.png)
+  /// SonrIcons - Map ![Icon of Map](/Users/prad/Sonr/docs/icons/PNG/Map.png)
   static const IconData Map = IconData(0xe939, fontFamily: _fontFamily);
 
-  /// Sonricons - Medal ![Icon of Medal](/Users/prad/Sonr/docs/icons/PNG/Medal.png)
+  /// SonrIcons - Medal ![Icon of Medal](/Users/prad/Sonr/docs/icons/PNG/Medal.png)
   static const IconData Medal = IconData(0xe93b, fontFamily: _fontFamily);
 
-  /// Sonricons - Moon ![Icon of Moon](/Users/prad/Sonr/docs/icons/PNG/Moon.png)
+  /// SonrIcons - Moon ![Icon of Moon](/Users/prad/Sonr/docs/icons/PNG/Moon.png)
   static const IconData Moon = IconData(0xe93f, fontFamily: _fontFamily);
 
-  /// Sonricons - More_Horizontal ![Icon of More_Horizontal](/Users/prad/Sonr/docs/icons/PNG/More-Horizontal.png)
-  static const IconData More_Horizontal = IconData(0xe940, fontFamily: _fontFamily);
+  /// SonrIcons - MoreHorizontal ![Icon of MoreHorizontal](/Users/prad/Sonr/docs/icons/PNG/MoreHorizontal.png)
+  static const IconData MoreHorizontal = IconData(0xe940, fontFamily: _fontFamily);
 
-  /// Sonricons - More_Vertical ![Icon of More_Vertical](/Users/prad/Sonr/docs/icons/PNG/More-Vertical.png)
-  static const IconData More_Vertical = IconData(0xe944, fontFamily: _fontFamily);
+  /// SonrIcons - MoreVertical ![Icon of MoreVertical](/Users/prad/Sonr/docs/icons/PNG/MoreVertical.png)
+  static const IconData MoreVertical = IconData(0xe944, fontFamily: _fontFamily);
 
-  /// Sonricons - Open ![Icon of Open](/Users/prad/Sonr/docs/icons/PNG/Open.png)
-  static const IconData Open = IconData(0xe945, fontFamily: _fontFamily);
-
-  /// Sonricons - User ![Icon of User](/Users/prad/Sonr/docs/icons/PNG/User.png)
+  /// SonrIcons - User ![Icon of User](/Users/prad/Sonr/docs/icons/PNG/User.png)
   static const IconData User = IconData(0xe949, fontFamily: _fontFamily);
 
-  /// Sonricons - Presentation ![Icon of Presentation](/Users/prad/Sonr/docs/icons/PNG/Presentation.png)
+  /// SonrIcons - Presentation ![Icon of Presentation](/Users/prad/Sonr/docs/icons/PNG/Presentation.png)
   static const IconData Presentation = IconData(0xe94a, fontFamily: _fontFamily);
 
-  /// Sonricons - Avatar ![Icon of Avatar](/Users/prad/Sonr/docs/icons/PNG/Avatar.png)
+  /// SonrIcons - Avatar ![Icon of Avatar](/Users/prad/Sonr/docs/icons/PNG/Avatar.png)
   static const IconData Avatar = IconData(0xe94b, fontFamily: _fontFamily);
 
-  /// Sonricons - Reload ![Icon of Reload](/Users/prad/Sonr/docs/icons/PNG/Reload.png)
+  /// SonrIcons - Reload ![Icon of Reload](/Users/prad/Sonr/docs/icons/PNG/Reload.png)
   static const IconData Reload = IconData(0xe94c, fontFamily: _fontFamily);
 
-  /// Sonricons - Search ![Icon of Search](/Users/prad/Sonr/docs/icons/PNG/Search.png)
+  /// SonrIcons - Search ![Icon of Search](/Users/prad/Sonr/docs/icons/PNG/Search.png)
   static const IconData Search = IconData(0xe94e, fontFamily: _fontFamily);
 
-  /// Sonricons - Settings ![Icon of Settings](/Users/prad/Sonr/docs/icons/PNG/Settings.png)
+  /// SonrIcons - Settings ![Icon of Settings](/Users/prad/Sonr/docs/icons/PNG/Settings.png)
   static const IconData Settings = IconData(0xe951, fontFamily: _fontFamily);
 
-  /// Sonricons - Show ![Icon of Show](/Users/prad/Sonr/docs/icons/PNG/Show.png)
+  /// SonrIcons - Show ![Icon of Show](/Users/prad/Sonr/docs/icons/PNG/Show.png)
   static const IconData Show = IconData(0xe952, fontFamily: _fontFamily);
 
-  /// Sonricons - Expand ![Icon of Expand](/Users/prad/Sonr/docs/icons/PNG/Expand.png)
+  /// SonrIcons - Expand ![Icon of Expand](/Users/prad/Sonr/docs/icons/PNG/Expand.png)
   static const IconData Expand = IconData(0xe953, fontFamily: _fontFamily);
 
-  /// Sonricons - Smart_Watch ![Icon of ExpSmart_Watchand](/Users/prad/Sonr/docs/icons/PNG/Smart-Watch.png)
-  static const IconData Smart_Watch = IconData(0xe954, fontFamily: _fontFamily);
+  /// SonrIcons - SmartWatch ![Icon of SmartWatch](/Users/prad/Sonr/docs/icons/PNG/SmartWatch.png)
+  static const IconData SmartWatch = IconData(0xe954, fontFamily: _fontFamily);
 
-  /// Sonricons - Snapchat ![Icon of Snapchat](/Users/prad/Sonr/docs/icons/PNG/Snapchat.png)
+  /// SonrIcons - Snapchat ![Icon of Snapchat](/Users/prad/Sonr/docs/icons/PNG/Snapchat.png)
   static const IconData Snapchat = IconData(0xe955, fontFamily: _fontFamily);
 
-  /// Sonricons - Sun ![Icon of Sun](/Users/prad/Sonr/docs/icons/PNG/Sun.png)
+  /// SonrIcons - Sun ![Icon of Sun](/Users/prad/Sonr/docs/icons/PNG/Sun.png)
   static const IconData Sun = IconData(0xe956, fontFamily: _fontFamily);
 
-  /// Sonricons - Twitter ![Icon of Twitter](/Users/prad/Sonr/docs/icons/PNG/Twitter.png)
+  /// SonrIcons - Twitter ![Icon of Twitter](/Users/prad/Sonr/docs/icons/PNG/Twitter.png)
   static const IconData Twitter = IconData(0xe958, fontFamily: _fontFamily);
 
-  /// Sonricons - Undo ![Icon of Undo](/Users/prad/Sonr/docs/icons/PNG/Undo.png)
+  /// SonrIcons - Undo ![Icon of Undo](/Users/prad/Sonr/docs/icons/PNG/Undo.png)
   static const IconData Undo = IconData(0xe959, fontFamily: _fontFamily);
 
-  /// Sonricons - Warning ![Icon of Warning](/Users/prad/Sonr/docs/icons/PNG/Warning.png)
+  /// SonrIcons - Warning ![Icon of Warning](/Users/prad/Sonr/docs/icons/PNG/Warning.png)
   static const IconData Warning = IconData(0xe95e, fontFamily: _fontFamily);
 
-  /// Sonricons - Wind ![Icon of Wind](/Users/prad/Sonr/docs/icons/PNG/Wind.png)
+  /// SonrIcons - Wind ![Icon of Wind](/Users/prad/Sonr/docs/icons/PNG/Wind.png)
   static const IconData Wind = IconData(0xe95f, fontFamily: _fontFamily);
 
-  /// Sonricons - Zap ![Icon of Zap](/Users/prad/Sonr/docs/icons/PNG/Zap.png)
+  /// SonrIcons - Zap ![Icon of Zap](/Users/prad/Sonr/docs/icons/PNG/Zap.png)
   static const IconData Zap = IconData(0xe960, fontFamily: _fontFamily);
 
-  /// Sonricons - Android_Logo ![Icon of Android_Logo](/Users/prad/Sonr/docs/icons/PNG/Android-Logo.png)
-  static const IconData Android_Logo = IconData(0xe903, fontFamily: _fontFamily);
+  /// SonrIcons - AndroidLogo ![Icon of AndroidLogo](/Users/prad/Sonr/docs/icons/PNG/AndroidLogo.png)
+  static const IconData AndroidLogo = IconData(0xe903, fontFamily: _fontFamily);
 
-  /// Sonricons - Github ![Icon of Github](/Users/prad/Sonr/docs/icons/PNG/Github.png)
+  /// SonrIcons - Github ![Icon of Github](/Users/prad/Sonr/docs/icons/PNG/Github.png)
   static const IconData Github = IconData(0xe901, fontFamily: _fontFamily);
 
-  /// Sonricons - Medium ![Icon of Medium](/Users/prad/Sonr/docs/icons/PNG/Medium.png)
+  /// SonrIcons - Medium ![Icon of Medium](/Users/prad/Sonr/docs/icons/PNG/Medium.png)
   static const IconData Medium = IconData(0xe907, fontFamily: _fontFamily);
 
-  /// Sonricons - Spotify ![Icon of Spotify](/Users/prad/Sonr/docs/icons/PNG/Spotify.png)
+  /// SonrIcons - Spotify ![Icon of Spotify](/Users/prad/Sonr/docs/icons/PNG/Spotify.png)
   static const IconData Spotify = IconData(0xe911, fontFamily: _fontFamily);
 
-  /// Sonricons - Tiktok ![Icon of Tiktok](/Users/prad/Sonr/docs/icons/PNG/Tiktok.png)
+  /// SonrIcons - Tiktok ![Icon of Tiktok](/Users/prad/Sonr/docs/icons/PNG/Tiktok.png)
   static const IconData Tiktok = IconData(0xe912, fontFamily: _fontFamily);
 
-  /// Sonricons - Windows ![Icon of Windows](/Users/prad/Sonr/docs/icons/PNG/Windows.png)
+  /// SonrIcons - Windows ![Icon of Windows](/Users/prad/Sonr/docs/icons/PNG/Windows.png)
   static const IconData Windows = IconData(0xe913, fontFamily: _fontFamily);
 
-  /// Sonricons - YouTube ![Icon of YouTube](/Users/prad/Sonr/docs/icons/PNG/YouTube.png)
+  /// SonrIcons - YouTube ![Icon of YouTube](/Users/prad/Sonr/docs/icons/PNG/YouTube.png)
   static const IconData YouTube = IconData(0xe915, fontFamily: _fontFamily);
 
-  /// Sonricons - Add ![Icon of Add](/Users/prad/Sonr/docs/icons/PNG/Add.png)
+  /// SonrIcons - Add ![Icon of Add](/Users/prad/Sonr/docs/icons/PNG/Add.png)
   static const IconData Add = IconData(0xe904, fontFamily: _fontFamily);
 
-  /// Sonricons - Blocked_Account ![Icon of Blocked_Account](/Users/prad/Sonr/docs/icons/PNG/Blocked-Account.png)
-  static const IconData Blocked_Account = IconData(0xe905, fontFamily: _fontFamily);
+  /// SonrIcons - BlockedAccount ![Icon of BlockedAccount](/Users/prad/Sonr/docs/icons/PNG/BlockedAccount.png)
+  static const IconData BlockedAccount = IconData(0xe905, fontFamily: _fontFamily);
 
-  /// Sonricons - Blocked_User ![Icon of Blocked_User](/Users/prad/Sonr/docs/icons/PNG/Blocked-User.png)
-  static const IconData Blocked_User = IconData(0xe906, fontFamily: _fontFamily);
+  /// SonrIcons - BlockedUser ![Icon of BlockedUser](/Users/prad/Sonr/docs/icons/PNG/BlockedUser.png)
+  static const IconData BlockedUser = IconData(0xe906, fontFamily: _fontFamily);
 
-  /// Sonricons - Call_in ![Icon of Call_in](/Users/prad/Sonr/docs/icons/PNG/Call-in.png)
-  static const IconData Call_in = IconData(0xe908, fontFamily: _fontFamily);
+  /// SonrIcons - CallIn ![Icon of CallIn](/Users/prad/Sonr/docs/icons/PNG/CallIn.png)
+  static const IconData CallIn = IconData(0xe908, fontFamily: _fontFamily);
 
-  /// Sonricons - Call_Ringing ![Icon of Call_Ringing](/Users/prad/Sonr/docs/icons/PNG/Call-Ringing.png)
-  static const IconData Call_Ringing = IconData(0xe909, fontFamily: _fontFamily);
+  /// SonrIcons - CallRinging ![Icon of CallRinging](/Users/prad/Sonr/docs/icons/PNG/CallRinging.png)
+  static const IconData CallRinging = IconData(0xe909, fontFamily: _fontFamily);
 
-  /// Sonricons - Call ![Icon of Call](/Users/prad/Sonr/docs/icons/PNG/Call.png)
+  /// SonrIcons - Call ![Icon of Call](/Users/prad/Sonr/docs/icons/PNG/Call.png)
   static const IconData Call = IconData(0xe90a, fontFamily: _fontFamily);
 
-  /// Sonricons - Camera ![Icon of Camera](/Users/prad/Sonr/docs/icons/PNG/Camera.png)
-  static const IconData Camera = IconData(0xe90b, fontFamily: _fontFamily);
+  /// SonrIcons - CanceledCall ![Icon of CanceledCall](/Users/prad/Sonr/docs/icons/PNG/CanceledCall.png)
+  static const IconData CanceledCall = IconData(0xe90c, fontFamily: _fontFamily);
 
-  /// Sonricons - Canceled_Call ![Icon of Canceled_Call](/Users/prad/Sonr/docs/icons/PNG/Canceled-Call.png)
-  static const IconData Canceled_Call = IconData(0xe90c, fontFamily: _fontFamily);
-
-  /// Sonricons - Cart ![Icon of Cart](/Users/prad/Sonr/docs/icons/PNG/Cart.png)
+  /// SonrIcons - Cart ![Icon of Cart](/Users/prad/Sonr/docs/icons/PNG/Cart.png)
   static const IconData Cart = IconData(0xe90d, fontFamily: _fontFamily);
 
-  /// Sonricons - Category ![Icon of Category](/Users/prad/Sonr/docs/icons/PNG/Category.png)
+  /// SonrIcons - Category ![Icon of Category](/Users/prad/Sonr/docs/icons/PNG/Category.png)
   static const IconData Category = IconData(0xe90e, fontFamily: _fontFamily);
 
-  static const IconData Caution_Circle = IconData(0xe90f, fontFamily: _fontFamily);
+  /// SonrIcons - Caution ![Icon of Caution](/Users/prad/Sonr/docs/icons/PNG/Caution.png)
+  static const IconData Caution = IconData(0xe90f, fontFamily: _fontFamily);
 
-  /// Sonricons - Coupon ![Icon of Coupon](/Users/prad/Sonr/docs/icons/PNG/Coupon.png)
+  /// SonrIcons - Coupon ![Icon of Coupon](/Users/prad/Sonr/docs/icons/PNG/Coupon.png)
   static const IconData Coupon = IconData(0xe916, fontFamily: _fontFamily);
 
-  /// Sonricons - Discount ![Icon of Discount](/Users/prad/Sonr/docs/icons/PNG/Discount.png)
+  /// SonrIcons - Discount ![Icon of Discount](/Users/prad/Sonr/docs/icons/PNG/Discount.png)
   static const IconData Discount = IconData(0xe917, fontFamily: _fontFamily);
 
-  /// Sonricons - Dislike ![Icon of Dislike](/Users/prad/Sonr/docs/icons/PNG/Dislike.png)
+  /// SonrIcons - Dislike ![Icon of Dislike](/Users/prad/Sonr/docs/icons/PNG/Dislike.png)
   static const IconData Dislike = IconData(0xe919, fontFamily: _fontFamily);
 
-  /// Sonricons - Edit ![Icon of Edit](/Users/prad/Sonr/docs/icons/PNG/Edit.png)
+  /// SonrIcons - Edit ![Icon of Edit](/Users/prad/Sonr/docs/icons/PNG/Edit.png)
   static const IconData Edit = IconData(0xe91d, fontFamily: _fontFamily);
 
-  /// Sonricons - Favorite ![Icon of Favorite](/Users/prad/Sonr/docs/icons/PNG/Favorite.png)
+  /// SonrIcons - Favorite ![Icon of Favorite](/Users/prad/Sonr/docs/icons/PNG/Favorite.png)
   static const IconData Favorite = IconData(0xe91e, fontFamily: _fontFamily);
 
-  /// Sonricons - Hastag ![Icon of Hastag](/Users/prad/Sonr/docs/icons/PNG/Hastag.png)
+  /// SonrIcons - Hastag ![Icon of Hastag](/Users/prad/Sonr/docs/icons/PNG/Hastag.png)
   static const IconData Hastag = IconData(0xe923, fontFamily: _fontFamily);
 
-  /// Sonricons - Key ![Icon of Key](/Users/prad/Sonr/docs/icons/PNG/Key.png)
+  /// SonrIcons - Key ![Icon of Key](/Users/prad/Sonr/docs/icons/PNG/Key.png)
   static const IconData Key = IconData(0xe926, fontFamily: _fontFamily);
 
-  /// Sonricons - Liked ![Icon of Liked](/Users/prad/Sonr/docs/icons/PNG/Liked.png)
+  /// SonrIcons - Liked ![Icon of Liked](/Users/prad/Sonr/docs/icons/PNG/Liked.png)
   static const IconData Liked = IconData(0xe927, fontFamily: _fontFamily);
 
-  /// Sonricons - Location ![Icon of Location](/Users/prad/Sonr/docs/icons/PNG/Location.png)
+  /// SonrIcons - Location ![Icon of Location](/Users/prad/Sonr/docs/icons/PNG/Location.png)
   static const IconData Location = IconData(0xe92a, fontFamily: _fontFamily);
 
-  /// Sonricons - Muted_Mic ![Icon of Muted_Mic](/Users/prad/Sonr/docs/icons/PNG/Muted-Mic.png)
-  static const IconData Muted_Mic = IconData(0xe937, fontFamily: _fontFamily);
+  /// SonrIcons - Muted ![Icon of Muted](/Users/prad/Sonr/docs/icons/PNG/Muted.png)
+  static const IconData Muted = IconData(0xe937, fontFamily: _fontFamily);
 
-  /// Sonricons - Pin ![Icon of Pin](/Users/prad/Sonr/docs/icons/PNG/Pin.png)
+  /// SonrIcons - Pin ![Icon of Pin](/Users/prad/Sonr/docs/icons/PNG/Pin.png)
   static const IconData Pin = IconData(0xe93c, fontFamily: _fontFamily);
 
-  /// Sonricons - Play ![Icon of Play](/Users/prad/Sonr/docs/icons/PNG/Play.png)
+  /// SonrIcons - Play ![Icon of Play](/Users/prad/Sonr/docs/icons/PNG/Play.png)
   static const IconData Play = IconData(0xe93d, fontFamily: _fontFamily);
 
-  /// Sonricons - Pocket ![Icon of Pocket](/Users/prad/Sonr/docs/icons/PNG/Pocket.png)
+  /// SonrIcons - Pocket ![Icon of Pocket](/Users/prad/Sonr/docs/icons/PNG/Pocket.png)
   static const IconData Pocket = IconData(0xe93e, fontFamily: _fontFamily);
 
-  /// Sonricons - Seen ![Icon of Seen](/Users/prad/Sonr/docs/icons/PNG/Seen.png)
+  /// SonrIcons - Seen ![Icon of Seen](/Users/prad/Sonr/docs/icons/PNG/Seen.png)
   static const IconData Seen = IconData(0xe941, fontFamily: _fontFamily);
 
-  /// Sonricons - Share ![Icon of Share](/Users/prad/Sonr/docs/icons/PNG/Share.png)
+  /// SonrIcons - Share ![Icon of Share](/Users/prad/Sonr/docs/icons/PNG/Share.png)
   static const IconData Share = IconData(0xe943, fontFamily: _fontFamily);
 
-  /// Sonricons - Silent ![Icon of Silent](/Users/prad/Sonr/docs/icons/PNG/Silent.png)
+  /// SonrIcons - Silent ![Icon of Silent](/Users/prad/Sonr/docs/icons/PNG/Silent.png)
   static const IconData Silent = IconData(0xe946, fontFamily: _fontFamily);
 
-  /// Sonricons - Sound_1 ![Icon of Sound_1](/Users/prad/Sonr/docs/icons/PNG/Sound-1.png)
-  static const IconData Sound_1 = IconData(0xe947, fontFamily: _fontFamily);
+  /// SonrIcons - SoundOne ![Icon of SoundOne](/Users/prad/Sonr/docs/icons/PNG/SoundOne.png)
+  static const IconData SoundOne = IconData(0xe947, fontFamily: _fontFamily);
 
-  /// Sonricons - Sound_2 ![Icon of Sound_2](/Users/prad/Sonr/docs/icons/PNG/Sound-2.png)
-  static const IconData Sound_2 = IconData(0xe948, fontFamily: _fontFamily);
+  /// SonrIcons - SoundTwo ![Icon of SoundTwo](/Users/prad/Sonr/docs/icons/PNG/SoundTwo.png)
+  static const IconData SoundTwo = IconData(0xe948, fontFamily: _fontFamily);
 
-  /// Sonricons - Switch_Camera ![Icon of Switch_Camera](/Users/prad/Sonr/docs/icons/PNG/Switch-Camera.png)
-  static const IconData Switch_Camera = IconData(0xe957, fontFamily: _fontFamily);
+  /// SonrIcons - SwitchCamera ![Icon of SwitchCamera](/Users/prad/Sonr/docs/icons/PNG/SwitchCamera.png)
+  static const IconData SwitchCamera = IconData(0xe957, fontFamily: _fontFamily);
 
-  /// Sonricons - Ticket ![Icon of Ticket](/Users/prad/Sonr/docs/icons/PNG/Ticket.png)
+  /// SonrIcons - Ticket ![Icon of Ticket](/Users/prad/Sonr/docs/icons/PNG/Ticket.png)
   static const IconData Ticket = IconData(0xe950, fontFamily: _fontFamily);
 
-  /// Sonricons - Switch_Camera ![Icon of Switch_Camera](/Users/prad/Sonr/docs/icons/PNG/Switch-Camera.png)
-  static const IconData Video_Camera = IconData(0xe95a, fontFamily: _fontFamily);
+  /// SonrIcons - VideoCamera ![Icon of VideoCamera](/Users/prad/Sonr/docs/icons/PNG/VideoCamera.png)
+  static const IconData VideoCamera = IconData(0xe95a, fontFamily: _fontFamily);
 
-  /// Sonricons - About ![Icon of About](/Users/prad/Sonr/docs/icons/PNG/About.png)
+  /// SonrIcons - About ![Icon of About](/Users/prad/Sonr/docs/icons/PNG/About.png)
   static const IconData About = IconData(0xe95b, fontFamily: _fontFamily);
 
-  /// Sonricons - Add_File ![Icon of Add_File](/Users/prad/Sonr/docs/icons/PNG/Add-File.png)
-  static const IconData Add_File = IconData(0xe95d, fontFamily: _fontFamily);
+  /// SonrIcons - AddFile ![Icon of AddFile](/Users/prad/Sonr/docs/icons/PNG/AddFile.png)
+  static const IconData AddFile = IconData(0xe95d, fontFamily: _fontFamily);
 
-  /// Sonricons - Chat ![Icon of Chat](/Users/prad/Sonr/docs/icons/PNG/Chat.png)
+  /// SonrIcons - Chat ![Icon of Chat](/Users/prad/Sonr/docs/icons/PNG/Chat.png)
   static const IconData Chat = IconData(0xe96b, fontFamily: _fontFamily);
 
-  /// Sonricons - Checklist ![Icon of Checklist](/Users/prad/Sonr/docs/icons/PNG/Checklist.png)
+  /// SonrIcons - Checklist ![Icon of Checklist](/Users/prad/Sonr/docs/icons/PNG/Checklist.png)
   static const IconData Checklist = IconData(0xe96c, fontFamily: _fontFamily);
 
-  /// Sonricons - Circle_Clock ![Icon of Circle_Clock](/Users/prad/Sonr/docs/icons/PNG/Circle-Clock.png)
-  static const IconData Circle_Clock = IconData(0xe96d, fontFamily: _fontFamily);
+  /// SonrIcons - CircleClock ![Icon of CircleClock](/Users/prad/Sonr/docs/icons/PNG/CircleClock.png)
+  static const IconData CircleClock = IconData(0xe96d, fontFamily: _fontFamily);
 
-  /// Sonricons - Discover ![Icon of Discover](/Users/prad/Sonr/docs/icons/PNG/Discover.png)
+  /// SonrIcons - Discover ![Icon of Discover](/Users/prad/Sonr/docs/icons/PNG/Discover.png)
   static const IconData Discover = IconData(0xe971, fontFamily: _fontFamily);
 
-  /// Sonricons - Download_File ![Icon of Circle_Clock](/Users/prad/Sonr/docs/icons/PNG/Download-File.png)
-  static const IconData Download_File = IconData(0xe973, fontFamily: _fontFamily);
+  /// SonrIcons - DownloadFile ![Icon of DownloadFile](/Users/prad/Sonr/docs/icons/PNG/DownloadFile.png)
+  static const IconData DownloadFile = IconData(0xe973, fontFamily: _fontFamily);
 
-  /// Sonricons - Filter ![Icon of Filter](/Users/prad/Sonr/docs/icons/PNG/Filter.png)
+  /// SonrIcons - Filter ![Icon of Filter](/Users/prad/Sonr/docs/icons/PNG/Filter.png)
   static const IconData Filter = IconData(0xe978, fontFamily: _fontFamily);
 
-  /// Sonricons - Folder ![Icon of Folder](/Users/prad/Sonr/docs/icons/PNG/Folder.png)
+  /// SonrIcons - Folder ![Icon of Folder](/Users/prad/Sonr/docs/icons/PNG/Folder.png)
   static const IconData Folder = IconData(0xe979, fontFamily: _fontFamily);
 
-  /// Sonricons - Home ![Icon of Home](/Users/prad/Sonr/docs/icons/PNG/Home.png)
+  /// SonrIcons - Home ![Icon of Home](/Users/prad/Sonr/docs/icons/PNG/Home.png)
   static const IconData Home = IconData(0xe97d, fontFamily: _fontFamily);
 
-  /// Sonricons - Calendar ![Icon of Calendar](/Users/prad/Sonr/docs/icons/PNG/Calendar.png)
+  /// SonrIcons - Calendar ![Icon of Calendar](/Users/prad/Sonr/docs/icons/PNG/Calendar.png)
   static const IconData Calendar = IconData(0xe97e, fontFamily: _fontFamily);
 
-  /// Sonricons - Document ![Icon of Document](/Users/prad/Sonr/docs/icons/PNG/Document.png)
+  /// SonrIcons - Document ![Icon of Document](/Users/prad/Sonr/docs/icons/PNG/Document.png)
   static const IconData Document = IconData(0xe981, fontFamily: _fontFamily);
 
-  /// Sonricons - List ![Icon of List](/Users/prad/Sonr/docs/icons/PNG/List.png)
+  /// SonrIcons - List ![Icon of List](/Users/prad/Sonr/docs/icons/PNG/List.png)
   static const IconData List = IconData(0xe982, fontFamily: _fontFamily);
 
-  /// Sonricons - Lock ![Icon of Lock](/Users/prad/Sonr/docs/icons/PNG/Lock.png)
+  /// SonrIcons - Lock ![Icon of Lock](/Users/prad/Sonr/docs/icons/PNG/Lock.png)
   static const IconData Lock = IconData(0xe984, fontFamily: _fontFamily);
 
-  /// Sonricons - Login_Saved ![Icon of Login_Saved](/Users/prad/Sonr/docs/icons/PNG/Login-Saved.png)
-  static const IconData Login_Saved = IconData(0xe987, fontFamily: _fontFamily);
+  /// SonrIcons - LoginSaved ![Icon of LoginSaved](/Users/prad/Sonr/docs/icons/PNG/LoginSaved.png)
+  static const IconData LoginSaved = IconData(0xe987, fontFamily: _fontFamily);
 
-  /// Sonricons - Love ![Icon of Love](/Users/prad/Sonr/docs/icons/PNG/Love.png)
+  /// SonrIcons - Love ![Icon of Love](/Users/prad/Sonr/docs/icons/PNG/Love.png)
   static const IconData Love = IconData(0xe988, fontFamily: _fontFamily);
 
-  /// Sonricons - Mail ![Icon of Mail](/Users/prad/Sonr/docs/icons/PNG/Mail.png)
+  /// SonrIcons - Mail ![Icon of Mail](/Users/prad/Sonr/docs/icons/PNG/Mail.png)
   static const IconData Mail = IconData(0xe989, fontFamily: _fontFamily);
 
-  /// Sonricons - Mention ![Icon of Mention](/Users/prad/Sonr/docs/icons/PNG/Mention.png)
+  /// SonrIcons - Mention ![Icon of Mention](/Users/prad/Sonr/docs/icons/PNG/Mention.png)
   static const IconData Mention = IconData(0xe98a, fontFamily: _fontFamily);
 
-  /// Sonricons - Mic ![Icon of Mic](/Users/prad/Sonr/docs/icons/PNG/Mic.png)
+  /// SonrIcons - Mic ![Icon of Mic](/Users/prad/Sonr/docs/icons/PNG/Mic.png)
   static const IconData Mic = IconData(0xe98b, fontFamily: _fontFamily);
 
-  /// Sonricons - More_Circle ![Icon of More_Circle](/Users/prad/Sonr/docs/icons/PNG/More-Circle.png)
-  static const IconData More_Circle = IconData(0xe98c, fontFamily: _fontFamily);
+  /// SonrIcons - MoreCircle ![Icon of MoreCircle](/Users/prad/Sonr/docs/icons/PNG/MoreCircle.png)
+  static const IconData MoreCircle = IconData(0xe98c, fontFamily: _fontFamily);
 
-  /// Sonricons - More_Square ![Icon of More_Square](/Users/prad/Sonr/docs/icons/PNG/More-Square.png)
-  static const IconData More_Square = IconData(0xe98d, fontFamily: _fontFamily);
+  /// SonrIcons - MoreSquare ![Icon of MoreSquare](/Users/prad/Sonr/docs/icons/PNG/MoreSquare.png)
+  static const IconData MoreSquare = IconData(0xe98d, fontFamily: _fontFamily);
 
-  /// Sonricons - Muted_Call ![Icon of Muted_Call](/Users/prad/Sonr/docs/icons/PNG/Muted-Call.png)
-  static const IconData Muted_Call = IconData(0xe98e, fontFamily: _fontFamily);
+  /// SonrIcons - MutedCall ![Icon of MutedCall](/Users/prad/Sonr/docs/icons/PNG/MutedCall.png)
+  static const IconData MutedCall = IconData(0xe98e, fontFamily: _fontFamily);
 
-  /// Sonricons - Notification ![Icon of Notification](/Users/prad/Sonr/docs/icons/PNG/Notification.png)
+  /// SonrIcons - Notification ![Icon of Notification](/Users/prad/Sonr/docs/icons/PNG/Notification.png)
   static const IconData Notification = IconData(0xe98f, fontFamily: _fontFamily);
 
-  /// Sonricons - Office_Bag ![Icon of Office_Bag](/Users/prad/Sonr/docs/icons/PNG/Office-Bag.png)
-  static const IconData Office_Bag = IconData(0xe990, fontFamily: _fontFamily);
+  /// SonrIcons - OfficeBag ![Icon of OfficeBag](/Users/prad/Sonr/docs/icons/PNG/OfficeBag.png)
+  static const IconData OfficeBag = IconData(0xe990, fontFamily: _fontFamily);
 
-  /// Sonricons - Saved ![Icon of Saved](/Users/prad/Sonr/docs/icons/PNG/Saved.png)
+  /// SonrIcons - Saved ![Icon of Saved](/Users/prad/Sonr/docs/icons/PNG/Saved.png)
   static const IconData Saved = IconData(0xe996, fontFamily: _fontFamily);
 
-  /// Sonricons - Shop_Bag ![Icon of Shop_Bag](/Users/prad/Sonr/docs/icons/PNG/Shop-Bag.png)
-  static const IconData Shop_Bag = IconData(0xe99c, fontFamily: _fontFamily);
+  /// SonrIcons - ShopBag ![Icon of ShopBag](/Users/prad/Sonr/docs/icons/PNG/ShopBag.png)
+  static const IconData ShopBag = IconData(0xe99c, fontFamily: _fontFamily);
 
-  /// Sonricons - Square_Clock ![Icon of Square_Clock](/Users/prad/Sonr/docs/icons/PNG/Square-Clock.png)
-  static const IconData Square_Clock = IconData(0xe99f, fontFamily: _fontFamily);
+  /// SonrIcons - SquareClock ![Icon of SquareClock](/Users/prad/Sonr/docs/icons/PNG/SquareClock.png)
+  static const IconData SquareClock = IconData(0xe99f, fontFamily: _fontFamily);
 
-  /// Sonricons - Statistic ![Icon of Statistic](/Users/prad/Sonr/docs/icons/PNG/Statistic.png)
+  /// SonrIcons - Statistic ![Icon of Statistic](/Users/prad/Sonr/docs/icons/PNG/Statistic.png)
   static const IconData Statistic = IconData(0xe9a0, fontFamily: _fontFamily);
 
-  /// Sonricons - Statistic_2 ![Icon of Statistic_2](/Users/prad/Sonr/docs/icons/PNG/Statistic-2.png)
-  static const IconData Statistic_2 = IconData(0xe9a1, fontFamily: _fontFamily);
+  /// SonrIcons - StatisticAlt ![Icon of StatisticAlt](/Users/prad/Sonr/docs/icons/PNG/StatisticAlt.png)
+  static const IconData StatisticAlt = IconData(0xe9a1, fontFamily: _fontFamily);
 
-  /// Sonricons - Theme ![Icon of Theme](/Users/prad/Sonr/docs/icons/PNG/Theme.png)
+  /// SonrIcons - Theme ![Icon of Theme](/Users/prad/Sonr/docs/icons/PNG/Theme.png)
   static const IconData Theme = IconData(0xe9a5, fontFamily: _fontFamily);
 
-  /// Sonricons - Trash ![Icon of Trash](/Users/prad/Sonr/docs/icons/PNG/Trash.png)
+  /// SonrIcons - Trash ![Icon of Trash](/Users/prad/Sonr/docs/icons/PNG/Trash.png)
   static const IconData Trash = IconData(0xe9a7, fontFamily: _fontFamily);
 
-  /// Sonricons - Typing ![Icon of Typing](/Users/prad/Sonr/docs/icons/PNG/Typing.png)
+  /// SonrIcons - Typing ![Icon of Typing](/Users/prad/Sonr/docs/icons/PNG/Typing.png)
   static const IconData Typing = IconData(0xe9a8, fontFamily: _fontFamily);
 
-  /// Sonricons - Check_Shield ![Icon of Check_Shield](/Users/prad/Sonr/docs/icons/PNG/Check-Shield.png)
-  static const IconData Check_Shield = IconData(0xe9a9, fontFamily: _fontFamily);
+  /// SonrIcons - CheckShield ![Icon of CheckShield](/Users/prad/Sonr/docs/icons/PNG/CheckShield.png)
+  static const IconData CheckShield = IconData(0xe9a9, fontFamily: _fontFamily);
 
-  /// Sonricons - Unchecklist ![Icon of Unchecklist](/Users/prad/Sonr/docs/icons/PNG/Unchecklist.png)
+  /// SonrIcons - Unchecklist ![Icon of Unchecklist](/Users/prad/Sonr/docs/icons/PNG/Unchecklist.png)
   static const IconData Unchecklist = IconData(0xe9aa, fontFamily: _fontFamily);
 
-  /// Sonricons - Unlocked ![Icon of Unlocked](/Users/prad/Sonr/docs/icons/PNG/Unlocked.png)
+  /// SonrIcons - Unlocked ![Icon of Unlocked](/Users/prad/Sonr/docs/icons/PNG/Unlocked.png)
   static const IconData Unlocked = IconData(0xe9ab, fontFamily: _fontFamily);
 
-  /// Sonricons - Upload_File ![Icon of Upload_File](/Users/prad/Sonr/docs/icons/PNG/Upload-File.png)
-  static const IconData Upload_File = IconData(0xe9ad, fontFamily: _fontFamily);
+  /// SonrIcons - UploadFile ![Icon of UploadFile](/Users/prad/Sonr/docs/icons/PNG/UploadFile.png)
+  static const IconData UploadFile = IconData(0xe9ad, fontFamily: _fontFamily);
 
-  /// Sonricons - Success ![Icon of Success](/Users/prad/Sonr/docs/icons/PNG/Success.png)
+  /// SonrIcons - Success ![Icon of Success](/Users/prad/Sonr/docs/icons/PNG/Success.png)
   static const IconData Success = IconData(0xe9af, fontFamily: _fontFamily);
 
-  /// Sonricons - Verified ![Icon of Verified](/Users/prad/Sonr/docs/icons/PNG/Verified.png)
+  /// SonrIcons - Verified ![Icon of Verified](/Users/prad/Sonr/docs/icons/PNG/Verified.png)
   static const IconData Verified = IconData(0xe9b0, fontFamily: _fontFamily);
 }

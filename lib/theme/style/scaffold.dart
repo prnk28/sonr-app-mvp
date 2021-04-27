@@ -24,43 +24,43 @@ class SonrScaffold extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
-          resizeToAvoidBottomInset: false,
-          backgroundColor: UserService.isDarkMode ? SonrColor.Black.withOpacity(0.75) : SonrColor.White.withOpacity(0.75),
-          floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
-          body: Stack(
-            children: [
-              // Gradient
-              _BackgroundGradient(gradientName: gradientName),
+    return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: UserService.isDarkMode ? SonrColor.Black.withOpacity(0.75) : SonrColor.White.withOpacity(0.75),
+      floatingActionButtonLocation: _FixedCenterDockedFabLocation(),
+      body: Stack(
+        children: [
+          // Gradient
+          _BackgroundGradient(gradientName: gradientName),
 
-              // Overlay Color
-              UserService.isDarkMode
-                  ? Container(
-                      height: Get.height,
-                      width: Get.width,
-                      color: SonrColor.Black.withOpacity(0.85),
-                    )
-                  : Container(
-                      height: Get.height,
-                      width: Get.width,
-                      color: SonrColor.White.withOpacity(0.85),
-                    ),
+          // Overlay Color
+          UserService.isDarkMode
+              ? Container(
+                  height: Get.height,
+                  width: Get.width,
+                  color: SonrColor.Black.withOpacity(0.85),
+                )
+              : Container(
+                  height: Get.height,
+                  width: Get.width,
+                  color: SonrColor.White.withOpacity(0.85),
+                ),
 
-              // Blue
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5.1188, sigmaY: 5.1188),
-                child: Container(width: Get.width, height: Get.height),
-              ),
-              SafeArea(child: body)
-            ],
+          // Blue
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5.1188, sigmaY: 5.1188),
+            child: Container(width: Get.width, height: Get.height),
           ),
-          appBar: appBar,
-          bottomNavigationBar: bottomNavigationBar,
-          floatingActionButton: DeviceService.keyboardVisible.value ? Container() : floatingAction,
-          bottomSheet: bottomSheet,
-        ));
+          SafeArea(child: body ?? Container())
+        ],
+      ),
+      appBar: appBar,
+      bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingAction,
+      bottomSheet: bottomSheet,
+    );
   }
 }
 

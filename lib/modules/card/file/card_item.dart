@@ -4,13 +4,12 @@ import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
-import 'file.dart';
 
 // ^ TransferCard Media Item Details ^ //
-class FileCardView extends StatelessWidget {
+class FileCardItemView extends StatelessWidget {
   final TransferCardItem card;
 
-  FileCardView(this.card);
+  FileCardItemView(this.card);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -161,32 +160,3 @@ class _FileCardInfo extends StatelessWidget {
   }
 }
 
-// ^ Payload Model Extensions ^ //
-extension PayloadUtils on Payload {
-  FlutterGradientNames get gradientName {
-    return [
-      FlutterGradientNames.itmeoBranding,
-      FlutterGradientNames.norseBeauty,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.healthyWater,
-      FlutterGradientNames.frozenHeat,
-      FlutterGradientNames.mindCrawl,
-      FlutterGradientNames.seashore
-    ].random();
-  }
-
-  String get asString {
-    if (this == Payload.PDF) {
-      return this.toString();
-    }
-    return this.toString().capitalizeFirst;
-  }
-
-  bool get isFile {
-    return this != Payload.UNDEFINED && this != Payload.CONTACT && this != Payload.URL;
-  }
-
-  bool get isMedia {
-    return this == Payload.MEDIA;
-  }
-}

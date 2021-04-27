@@ -1,7 +1,7 @@
-// ^ Home Screen Header ^ //
 import 'dart:ui';
 import '../theme.dart';
 
+// ^ Home Screen Header ^ //
 class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final Widget subtitle;

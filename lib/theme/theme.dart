@@ -34,8 +34,8 @@ export 'animation/animation.dart';
 // Global UI Widgets
 export 'elements/shape.dart';
 export 'elements/painter.dart';
-export '../modules/overlay/overlay.dart';
-export '../modules/overlay/flat_overlay.dart';
+export '../pages/overlay/overlay.dart';
+export '../pages/overlay/flat_overlay.dart';
 export 'form/dropdown.dart';
 export 'form/radio.dart';
 export 'form/textfield.dart';
@@ -141,5 +141,20 @@ class Height {
     assert(ratio <= 1.0 && ratio > 0.0);
     var factor = Get.height * ratio;
     return Get.height - factor;
+  }
+}
+
+/// * Class that Handles Screen Margin Management * //
+class Margin {
+  static EdgeInsetsGeometry ratio(double vertical, {double horizontal = 24}) {
+    var difference = Height.full - Height.ratio(vertical);
+    return EdgeInsets.only(left: horizontal, right: horizontal, bottom: difference - horizontal, top: horizontal);
+  }
+
+  /// Return Margin as Ratio from Screen between 0.0 and 1.0 for Vertical, Horizontal defaults to 24
+  /// Aligns to Center of Screen
+  static EdgeInsetsGeometry ratioCentered(double vertical, {double horizontal = 24}) {
+    var difference = Height.full - Height.ratio(vertical);
+    return EdgeInsets.symmetric(horizontal: horizontal, vertical: difference / 2);
   }
 }
