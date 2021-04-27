@@ -68,7 +68,7 @@ class ContactCardView extends StatelessWidget {
                   onPressed: () {},
                   label: "Video",
                   size: 72,
-                  icon: SonrIcons.Video_Camera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
+                  icon: SonrIcons.VideoCamera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
                 ),
               ]),
             ),

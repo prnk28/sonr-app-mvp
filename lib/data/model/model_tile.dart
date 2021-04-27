@@ -95,7 +95,7 @@ class TileStep {
       return ColorButton.primary(
         text: "Save",
         onPressed: save,
-        icon: SonrIcons.Check_All,
+        icon: SonrIcons.CheckAll,
         margin: EdgeInsets.only(left: 60, right: 80),
       );
     }

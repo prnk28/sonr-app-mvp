@@ -37,7 +37,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
     searchBarController = FloatingSearchBarController();
-    searchBarController.close();
 
     // Listen for Updates
     tabController.addListener(() {
@@ -131,7 +130,9 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     isSearchVisible(!isSearchVisible.value);
 
     // Present View
-    if (isSearchVisible.value) {}
+    if (isSearchVisible.value) {
+      searchBarController.open();
+    }
   }
 
   // @ Return Animation by Page Index

@@ -65,7 +65,7 @@ class PayloadView extends GetView<TransferController> {
               opacity: 0.6,
               child: PlainIconButton(
                 onPressed: () {},
-                icon: SonrIcons.More_Vertical.gradient(gradient: SonrGradient.Secondary),
+                icon: SonrIcons.MoreVertical.gradient(gradient: SonrGradient.Secondary),
               ),
             ),
           )

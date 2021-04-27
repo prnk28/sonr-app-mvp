@@ -89,7 +89,7 @@ class ConfirmButton extends StatefulWidget {
       onConfirmed: onConfirmed,
       defaultChild: ButtonUtility.buildChild(iconPosition, defaultIcon, defaultText, defaultChild),
       confirmChild: ButtonUtility.buildChild(iconPosition, confirmIcon, confirmText, confirmChild),
-      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.Check_Shield, "Saved!", null),
+      completeChild: ButtonUtility.buildChild(WidgetPosition.Left, SonrIcons.CheckShield, "Saved!", null),
       tooltip: tooltip,
       width: width,
       padding: padding,
