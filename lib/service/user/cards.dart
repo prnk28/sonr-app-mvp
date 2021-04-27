@@ -9,7 +9,7 @@ class CardService extends GetxService {
   static bool get isRegistered => Get.isRegistered<CardService>();
   static CardService get to => Get.find<CardService>();
 
-  // Properties
+  // File Objects
   final _activity = RxList<TransferCardActivity>();
   final _all = RxList<TransferCardItem>();
   final _contacts = RxList<TransferCardItem>();
@@ -17,6 +17,14 @@ class CardService extends GetxService {
   final _links = RxList<TransferCardItem>();
   final _media = RxList<TransferCardItem>();
   final _categoryCount = RxInt(1);
+
+  // File Count
+  final documentCount = 0.obs;
+  final otherCount = 0.obs;
+  final presentationCount = 0.obs;
+  final photosCount = 0.obs;
+  final spreadsheetCount = 0.obs;
+  final videosCount = 0.obs;
 
   // Property Accessors
   static RxList<TransferCardActivity> get activity => to._activity;

@@ -6,7 +6,7 @@ import 'package:sonr_app/modules/url/card_view.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'grid_controller.dart';
-import 'stats_header.dart';
+import 'storage_chart.dart';
 import 'tags_view.dart';
 
 const K_LIST_HEIGHT = 225.0;
@@ -17,10 +17,10 @@ class CardMainView extends GetView<GridController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 24),
         child: CustomScrollView(primary: true, slivers: [
-          CardStatsView(),
-          SliverPadding(padding: EdgeInsets.only(top: 24)),
+          _CardStatsView(),
+          SliverPadding(padding: EdgeInsets.only(top: 8)),
           SliverToBoxAdapter(child: "Recents".headFour(align: TextAlign.start)),
           SliverToBoxAdapter(
             child: TagsView(
@@ -66,7 +66,32 @@ class CardMainView extends GetView<GridController> {
   }
 }
 
-
+class _CardStatsView extends GetView<GridController> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      pinned: false,
+      floating: false,
+      snap: false,
+      backgroundColor: Colors.transparent,
+      foregroundColor: Colors.transparent,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: Neumorph.floating(color: SonrColor.Primary),
+          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.all(16),
+          height: 100,
+          width: Width.ratio(0.4),
+          alignment: Alignment.center,
+          child: StorageChart(),
+        ),
+      ),
+      expandedHeight: 200,
+      // bottom:
+    );
+  }
+}
 
 // ^ Card Grid View - All Cards ^ //
 class _CardGridAll extends GetView<GridController> {

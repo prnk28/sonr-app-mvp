@@ -4,12 +4,14 @@ import 'package:sonr_app/theme/theme.dart';
 enum ToggleFilter { All, Media, Contact, Links }
 
 class GridController extends GetxController with SingleGetTickerProviderMixin {
+  // Tag Management
   final category = Rx<ToggleFilter>(ToggleFilter.All);
   final tagIndex = 0.obs;
 
   // References
   TabController tabController;
   ScrollController scrollController;
+
 
   // ^ Controller Constructer ^
   @override
@@ -19,6 +21,7 @@ class GridController extends GetxController with SingleGetTickerProviderMixin {
 
     // Set Default Properties
     tagIndex(0);
+
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 5);
     tabController.addListener(() {
