@@ -8,7 +8,7 @@ import 'sheet_view.dart';
 import 'transfer_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
-import 'package:sonr_app/pages/transfer/transfer_controller.dart';
+import 'package:sonr_app/views/transfer/transfer_controller.dart';
 
 // ^ Transfer Screen Entry with Arguments ^ //
 class Transfer {

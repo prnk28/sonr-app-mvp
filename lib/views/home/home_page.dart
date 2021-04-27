@@ -1,6 +1,6 @@
 import 'package:sonr_app/modules/share/share_view.dart';
-import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/pages/home/remote/remote_view.dart';
+import 'package:sonr_app/views/home/home_controller.dart';
+import 'package:sonr_app/views/home/remote/remote_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'action_button.dart';
 import 'main/grid_view.dart';

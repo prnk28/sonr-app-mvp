@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:sonr_app/pages/home/home_controller.dart';
+import 'package:sonr_app/views/home/home_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // # Lottie
@@ -306,8 +306,8 @@ class AssetController extends GetxController {
   );
 
   // @ Logos
-  Image _logoTop = Image.network(SonrAssetLogo.Top.link, width: 128, height: 128);
-  Image _logoSide = Image.network(SonrAssetLogo.Top.link, height: 128, fit: BoxFit.fitHeight);
+  Image _logoTop = Image.network(SonrAssetLogo.Top.link, width: 128, height: 128, fit: BoxFit.contain);
+  Image _logoSide = Image.network(SonrAssetLogo.Top.link, height: 128, fit: BoxFit.contain);
 
   // @ Icons: Tab Bar
   ImageIcon _homeDefaultIcon = ImageIcon(NetworkImage(SonrAssetIcon.HomeDefault.link), size: 32, color: Colors.grey[400], key: ValueKey<bool>(false));
