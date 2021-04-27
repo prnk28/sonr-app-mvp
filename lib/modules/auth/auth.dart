@@ -1,9 +1,9 @@
-export 'contact/flat_view.dart';
+export 'contact_flat.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'contact/auth_view.dart';
-import 'file/auth_view.dart';
-import 'media/auth_view.dart';
-import 'url/auth_view.dart';
+import 'contact_auth.dart';
+import 'file_auth.dart';
+import 'media_auth.dart';
+import 'url_auth.dart';
 
 /// ^ TransferCardView: Builds Invite View based on AuthInvite Payload Type ^
 class InviteOverlayView extends StatelessWidget {

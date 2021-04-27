@@ -25,92 +25,60 @@ class TransferItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Media Card
+    // @ Build Media Card by Size
     if (item.payload == Payload.MEDIA) {
-      return _buildMediaCard();
+      switch (type) {
+        case TransferItemViewType.CardItem:
+          return MediaCardItemView(item);
+        case TransferItemViewType.GridItem:
+          return MediaGridItemView(item);
+        case TransferItemViewType.ListItem:
+          return MediaListItemView(item);
+        default:
+          return Container();
+      }
     }
 
-    // Contact Card
+    // @ Build Contact Card by Size
     else if (item.payload == Payload.CONTACT) {
-      return _buildContactCard();
+      switch (type) {
+        case TransferItemViewType.CardItem:
+          return ContactCardItemView(item);
+        case TransferItemViewType.GridItem:
+          return ContactGridItemView(item);
+        case TransferItemViewType.ListItem:
+          return ContactListItemView(item);
+        default:
+          return Container();
+      }
     }
 
-    // URL View
+    // @ Build URL Card by Size
     else if (item.payload == Payload.URL) {
-      return _buildURLCard();
+      switch (type) {
+        case TransferItemViewType.CardItem:
+          return URLCardItemView(item);
+        case TransferItemViewType.GridItem:
+          return URLGridItemView(item);
+        case TransferItemViewType.ListItem:
+          return URLListItemView(item);
+        default:
+          return Container();
+      }
     }
 
-    // File Card
+    // @ Build File Card by Size
     else {
-      return _buildFileCard();
-    }
-  }
-
-  // @ Build Contact Card by Size
-  Widget _buildContactCard() {
-    switch (type) {
-      case TransferItemViewType.CardItem:
-        return ContactCardItemView(item);
-        break;
-      case TransferItemViewType.GridItem:
-        return ContactGridItemView(item);
-        break;
-      case TransferItemViewType.ListItem:
-        return ContactListItemView(item);
-        break;
-    }
-    return Container();
-  }
-
-  // @ Build File Card by Size
-  Widget _buildFileCard() {
-    switch (type) {
-      case TransferItemViewType.CardItem:
-        return FileCardItemView(item);
-        break;
-      case TransferItemViewType.GridItem:
-        return FileGridItemView(item);
-        break;
-      case TransferItemViewType.ListItem:
-        return FileListItemView(item);
-        break;
-    }
-    return Container();
-  }
-
-  // @ Build Media Card by Size
-  Widget _buildMediaCard() {
-    switch (type) {
-      case TransferItemViewType.CardItem:
-        return MediaCardItemView(item);
-        break;
-      case TransferItemViewType.GridItem:
-        return MediaGridItemView(item);
-        break;
-      case TransferItemViewType.ListItem:
-        return MediaListItemView(item);
-        break;
-      default:
-        return Container();
-        break;
-    }
-  }
-
-  // @ Build URL Card by Size
-  Widget _buildURLCard() {
-    switch (type) {
-      case TransferItemViewType.CardItem:
-        return URLCardItemView(item);
-        break;
-      case TransferItemViewType.GridItem:
-        return URLGridItemView(item);
-        break;
-      case TransferItemViewType.ListItem:
-        return URLListItemView(item);
-        break;
-      default:
-        return Container();
-        break;
+      switch (type) {
+        case TransferItemViewType.CardItem:
+          return FileCardItemView(item);
+        case TransferItemViewType.GridItem:
+          return FileGridItemView(item);
+        case TransferItemViewType.ListItem:
+          return FileListItemView(item);
+        default:
+          return Container();
+      }
     }
   }
 }
