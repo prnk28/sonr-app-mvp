@@ -55,7 +55,9 @@ class HomePage extends GetView<HomeController> {
 
   Widget buildFloatingSearchBar() {
     return FloatingSearchBar(
+      controller: controller.searchBarController,
       hint: 'Search...',
+      backgroundColor: Colors.transparent,
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
       transitionDuration: const Duration(milliseconds: 800),
       transitionCurve: Curves.easeInOut,
@@ -67,16 +69,25 @@ class HomePage extends GetView<HomeController> {
       onQueryChanged: (query) {
         // Call your model, bloc, controller here.
       },
+      title: Obx(() => AnimatedSlideSwitcher.fade(
+            duration: 2.seconds,
+            child: GestureDetector(
+              key: ValueKey<String>(controller.titleText.value),
+              onTap: () {
+                if (controller.isTitleVisible.value) {
+                  controller.swapTitleText("${LobbyService.localSize.value} Around", timeout: 2500.milliseconds);
+                }
+              },
+              child: controller.titleText.value.headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start),
+            ),
+          )),
       // Specify a custom transition to be used for
       // animating between opened and closed stated.
       transition: CircularFloatingSearchBarTransition(),
       actions: [
         FloatingSearchBarAction(
           showIfOpened: false,
-          child: CircularButton(
-            icon: const Icon(Icons.place),
-            onPressed: () {},
-          ),
+          child: HomeActionButton(),
         ),
         FloatingSearchBarAction.searchToClear(
           showIfClosed: false,
