@@ -19,12 +19,12 @@ class CardService extends GetxService {
   final _categoryCount = RxInt(1);
 
   // File Count
-  final documentCount = 0.obs;
-  final otherCount = 0.obs;
-  final presentationCount = 0.obs;
-  final photosCount = 0.obs;
-  final spreadsheetCount = 0.obs;
-  final videosCount = 0.obs;
+  final _documentCount = 0.obs;
+  final _otherCount = 0.obs;
+  final _presentationCount = 0.obs;
+  final _photosCount = 0.obs;
+  final _spreadsheetCount = 0.obs;
+  final _videosCount = 0.obs;
 
   // Property Accessors
   static RxList<TransferCardActivity> get activity => to._activity;
@@ -33,6 +33,14 @@ class CardService extends GetxService {
   static RxList<TransferCardItem> get files => to._files;
   static RxList<TransferCardItem> get links => to._links;
   static RxList<TransferCardItem> get media => to._media;
+
+  // Count Accessors
+  static RxInt get documentCount => to._documentCount;
+  static RxInt get otherCount => to._otherCount;
+  static RxInt get presentationCount => to._presentationCount;
+  static RxInt get photosCount => to._photosCount;
+  static RxInt get spreadsheetCount => to._spreadsheetCount;
+  static RxInt get videosCount => to._videosCount;
 
   // Category Specific Count
   static bool get hasActivity => to._activity.length > 0;
@@ -204,12 +212,27 @@ class CardService extends GetxService {
 
   // @ Helper: Refresh Category Count
   static void _refreshCount() {
+    // Set Category Count
     int counter = 1;
     hasContacts ? counter += 1 : counter += 0;
     hasFiles ? counter += 1 : counter += 0;
     hasMedia ? counter += 1 : counter += 0;
     hasLinks ? counter += 1 : counter += 0;
     to._categoryCount(counter);
+
+    // Set Individual File Count
+    if (hasFiles) {
+      to._documentCount(to._files.count((i) => i.payload == Payload.TEXT));
+      to._presentationCount(to._files.count((i) => i.payload == Payload.PRESENTATION));
+      to._spreadsheetCount(to._files.count((i) => i.payload == Payload.SPREADSHEET));
+      to._otherCount(to._files.length - (to._documentCount.value - to._presentationCount.value - to._spreadsheetCount.value));
+    }
+
+    // Set Individual Media Count
+    if (hasMedia) {
+      to._photosCount(to._media.count((i) => i.metadata.mime.type == MIME_Type.image));
+      to._videosCount(to._media.count((i) => i.metadata.mime.type == MIME_Type.video));
+    }
   }
 
   // @ Helper: Converts Transfer Card Item into TransferCard Protobuf
