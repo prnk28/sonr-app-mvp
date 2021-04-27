@@ -2,14 +2,14 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
-import 'package:sonr_app/views/home/main/grid_controller.dart';
-import 'package:sonr_app/views/home/home_controller.dart';
+import 'package:sonr_app/pages/home/main/grid_controller.dart';
+import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
-import 'package:sonr_app/views/home/profile/profile.dart';
-import 'package:sonr_app/views/home/profile/tile/tile_controller.dart';
-import 'package:sonr_app/views/home/remote/remote_controller.dart';
-import 'package:sonr_app/views/register/register_controller.dart';
-import 'package:sonr_app/views/transfer/transfer_controller.dart';
+import 'package:sonr_app/pages/home/profile/profile.dart';
+import 'package:sonr_app/pages/home/profile/tile/tile_controller.dart';
+import 'package:sonr_app/pages/home/remote/remote_controller.dart';
+import 'package:sonr_app/pages/register/register_controller.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ^ Initial Controller Bindings ^ //

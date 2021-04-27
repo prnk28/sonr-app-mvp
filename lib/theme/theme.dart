@@ -34,8 +34,8 @@ export 'animation/animation.dart';
 // Global UI Widgets
 export 'elements/shape.dart';
 export 'elements/painter.dart';
-export '../views/overlay/overlay.dart';
-export '../views/overlay/flat_overlay.dart';
+export '../pages/overlay/overlay.dart';
+export '../pages/overlay/flat_overlay.dart';
 export 'form/dropdown.dart';
 export 'form/radio.dart';
 export 'form/textfield.dart';

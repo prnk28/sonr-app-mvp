@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/views/home/home_page.dart';
-import 'package:sonr_app/views/register/register_page.dart';
-import 'package:sonr_app/views/transfer/transfer_page.dart';
+import 'package:sonr_app/pages/home/home_page.dart';
+import 'package:sonr_app/pages/register/register_page.dart';
+import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';

@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/views/home/main/storage_chart.dart';
+import 'package:sonr_app/pages/home/main/storage_chart.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 

@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
-import 'package:sonr_app/views/transfer/transfer_controller.dart';
+import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
 import 'dart:io';
