@@ -17,7 +17,6 @@ class URLGridItemView extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(8),
                   child: GestureDetector(
-                    // TODO: onTap: controller.invite,
                     child: AnimatedSlideSwitcher.fade(
                       child: isFlipped.value
                           ? _URLGridItemDetailsView(
@@ -56,7 +55,10 @@ class _URLGridItemMainView extends StatelessWidget {
           Align(
               alignment: Alignment.topRight,
               child: GestureDetector(
-                // TODO: onTap: () => controller.flipView(true),
+                onTap: () {
+                  isFlipped(true);
+                  isFlipped.refresh();
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: SonrIcons.About.gradient(gradient: SonrGradient.Secondary, size: 24),
@@ -97,11 +99,14 @@ class _URLGridItemDetailsView extends StatelessWidget {
           [
             // Align Platform
             GestureDetector(
-                // TODO: onTap: () => controller.flipView(false),
+                onTap: () {
+                  isFlipped(false);
+                  isFlipped.refresh();
+                },
                 child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 24),
-            )),
+                  padding: const EdgeInsets.all(4.0),
+                  child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 24),
+                )),
 
             // Align Compass
             Container(
