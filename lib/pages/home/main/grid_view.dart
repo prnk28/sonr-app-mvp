@@ -100,7 +100,7 @@ class _CardGridAll extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.all.length,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(CardService.all[index]);
+            return TransferItem(CardService.all[index], type: TransferItemViewType.GridItem);
           },
         );
       } else {
