@@ -1,12 +1,12 @@
-import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/pages/home/main/storage_chart.dart';
+
+import 'recents_view.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 
-class GridController extends GetxController with SingleGetTickerProviderMixin {
+class RecentsController extends GetxController with SingleGetTickerProviderMixin {
   // Tag Management
   final category = Rx<ToggleFilter>(ToggleFilter.All);
   final tagIndex = 0.obs;
@@ -45,11 +45,6 @@ class GridController extends GetxController with SingleGetTickerProviderMixin {
 
     // Haptic Feedback
     HapticFeedback.mediumImpact();
-  }
-
-  // ^ Method for Returning Random Image Path
-  String randomNoFilesPath() {
-    return "assets/illustrations/no_files-${Random().nextInt(3) + 1}.png";
   }
 
   // ^ Handles Chart Item Tap ^ //

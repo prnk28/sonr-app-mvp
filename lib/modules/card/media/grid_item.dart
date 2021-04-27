@@ -69,11 +69,11 @@ class _MediaGridItemMainView extends StatelessWidget {
               )),
 
           // Avatar
-          Obx(() => OpacityAnimatedWidget(
-                // TODO: enabled: controller.isVisible.value,
-                duration: 125.milliseconds,
-                // TODO: child: controller.peer.value.profilePicture(size: 68),
-              )),
+          OpacityAnimatedWidget(
+            // TODO: enabled: controller.isVisible.value,
+            duration: 125.milliseconds,
+            // TODO: child: controller.peer.value.profilePicture(size: 68),
+          ),
 
           Spacer(),
 
