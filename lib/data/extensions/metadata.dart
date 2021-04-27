@@ -1,6 +1,4 @@
-export 'auth_view.dart';
-export 'card_view.dart';
-
+import 'package:sonr_app/data/data.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -57,4 +55,36 @@ extension TextUtils on TransferCardItem {
     String timeText = timeFormat.format(this.received);
     return Row(children: [dateText.h6_White, timeText.p_White]);
   }
+}
+
+// ^ Payload Model Extensions ^ //
+extension PayloadUtils on Payload {
+  FlutterGradientNames get gradientName {
+    return [
+      FlutterGradientNames.itmeoBranding,
+      FlutterGradientNames.norseBeauty,
+      FlutterGradientNames.summerGames,
+      FlutterGradientNames.healthyWater,
+      FlutterGradientNames.frozenHeat,
+      FlutterGradientNames.mindCrawl,
+      FlutterGradientNames.seashore
+    ].random();
+  }
+
+  String get asString {
+    if (this == Payload.PDF) {
+      return this.toString();
+    }
+    return this.toString().capitalizeFirst;
+  }
+
+  bool get isFile {
+    return this != Payload.UNDEFINED && this != Payload.CONTACT && this != Payload.URL;
+  }
+
+  bool get isMedia {
+    return this == Payload.MEDIA;
+  }
+
+  bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
 }

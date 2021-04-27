@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:sonr_app/views/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
-import 'peer.dart';
+import 'vector_position.dart';
 
 // ^ Peer Controller Status ^ //
 enum PeerStatus { Default, Pending, Accepted, Declined, Complete }

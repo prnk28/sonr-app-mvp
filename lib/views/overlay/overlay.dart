@@ -1,12 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/modules/contact/contact.dart';
-import 'package:sonr_app/modules/url/url.dart';
-import 'package:sonr_app/modules/file/file.dart';
-import 'package:sonr_app/modules/media/media.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
 import 'fixed_overlay.dart';
 import 'positioned_overlay.dart';
 export 'fixed_overlay.dart';
@@ -155,43 +150,6 @@ class DropdownOverlayView extends StatelessWidget {
         ),
       )
     ]);
-  }
-}
-
-// ^ Class Builds Alert View Widget for Overlay ** //
-class InviteReplyOverlayView extends StatelessWidget {
-  final int index; // Index of Overlay
-  final AuthInvite invite;
-  final AuthReply reply;
-  final bool isReply;
-
-  // Constructer
-  InviteReplyOverlayView(this.index, this.isReply, {this.invite, this.reply});
-
-  @override
-  Widget build(BuildContext context) {
-    // Check Payload
-    Widget view;
-    // Invite Provided - Get View from Payload
-    if (!isReply) {
-      if (invite.payload == Payload.MEDIA) {
-        view = MediaAuthView(invite);
-      } else if (invite.payload == Payload.CONTACT) {
-        view = ContactAuthView(false, invite: invite);
-      } else if (invite.payload == Payload.URL) {
-        view = URLAuthView(invite);
-      } else {
-        view = FileAuthView(invite);
-      }
-    }
-
-    // Reply Provided
-    else {
-      view = ContactAuthView(true, reply: reply);
-    }
-
-    // Build View
-    return Container(margin: EdgeInsets.symmetric(horizontal: 16), color: Colors.transparent, child: view);
   }
 }
 

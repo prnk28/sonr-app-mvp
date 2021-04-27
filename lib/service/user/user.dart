@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/data/model/model_permissions.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/modules/contact/contact.dart';
 
 class UserService extends GetxService {
   // Accessors
@@ -59,8 +58,7 @@ class UserService extends GetxService {
   static int get tileCount => to._socials.length;
 
   // Username
-  static String get username =>
-      UserService.user.value.hasProfile() ? UserService.user.value.profile.username : UserService.user.value.contact.tempUsername;
+  static String get username => UserService.user.value.hasProfile() ? UserService.user.value.profile.username : "@TempUsername";
 
   // ** Checks if Required Data for Connection Exists ** //
 

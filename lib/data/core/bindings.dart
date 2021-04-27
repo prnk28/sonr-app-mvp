@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
-import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/views/home/main/grid_controller.dart';
 import 'package:sonr_app/views/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';

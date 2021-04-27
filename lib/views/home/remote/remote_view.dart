@@ -1,5 +1,5 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:sonr_app/modules/peer/peer.dart';
+import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'remote_controller.dart';
 

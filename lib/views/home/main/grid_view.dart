@@ -1,8 +1,5 @@
 import 'dart:ui';
-import 'package:sonr_app/modules/contact/contact.dart';
-import 'package:sonr_app/modules/file/file.dart';
-import 'package:sonr_app/modules/media/card_view.dart';
-import 'package:sonr_app/modules/url/card_view.dart';
+import 'package:sonr_app/modules/card/card.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'grid_controller.dart';
@@ -103,24 +100,13 @@ class _CardGridAll extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.all.length,
           itemBuilder: (BuildContext context, int index) {
-            return buildCard(CardService.all[index]);
+            return TransferItem(CardService.all[index]);
           },
         );
       } else {
         return _CardGridEmpty(0, label: "No Cards Found");
       }
     });
-  }
-
-  // @ Helper Method Builds Cards for List
-  Widget buildCard(TransferCardItem item) {
-    if (item.payload == Payload.MEDIA) {
-      return MediaCardView(item);
-    } else if (item.payload == Payload.CONTACT) {
-      return ContactCardView(item);
-    } else {
-      return FileCardView(item);
-    }
   }
 }
 
@@ -134,7 +120,7 @@ class _CardGridMedia extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.media.length,
           itemBuilder: (BuildContext context, int index) {
-            return MediaCardView(CardService.media[index]);
+            return TransferItem(CardService.media[index]);
           },
         );
       } else {
@@ -154,7 +140,7 @@ class _CardGridFiles extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.files.length,
           itemBuilder: (BuildContext context, int index) {
-            return FileCardView(CardService.files[index]);
+            return TransferItem(CardService.files[index]);
           },
         );
       } else {
@@ -174,7 +160,7 @@ class _CardGridContacts extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.contacts.length,
           itemBuilder: (BuildContext context, int index) {
-            return ContactCardView(CardService.contacts[index]);
+            return TransferItem(CardService.contacts[index]);
           },
         );
       } else {
@@ -194,7 +180,7 @@ class _CardGridLinks extends GetView<GridController> {
         return ListView.builder(
           itemCount: CardService.links.length,
           itemBuilder: (BuildContext context, int index) {
-            return URLCardView(CardService.links[index]);
+            return TransferItem(CardService.links[index]);
           },
         );
       } else {

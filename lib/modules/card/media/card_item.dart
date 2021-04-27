@@ -1,25 +1,24 @@
 import 'dart:io';
 import 'package:better_player/better_player.dart';
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'media.dart';
+import 'details_view.dart';
 
 // ^ TransferCard Media Item Details ^ //
-class MediaCardView extends StatefulWidget {
+class MediaCardItemView extends StatefulWidget {
   final TransferCardItem card;
 
-  MediaCardView(this.card);
+  MediaCardItemView(this.card);
 
   @override
-  _MediaCardViewState createState() => _MediaCardViewState();
+  _MediaCardItemViewState createState() => _MediaCardItemViewState();
 }
 
-class _MediaCardViewState extends State<MediaCardView> {
+class _MediaCardItemViewState extends State<MediaCardItemView> {
   File mediaFile;
   bool hasLoaded = false;
 
@@ -45,7 +44,7 @@ class _MediaCardViewState extends State<MediaCardView> {
       child: GestureDetector(
         onTap: () {
           // Push to Page
-          Get.to(_MediaCardExpanded(widget.card, mediaFile), transition: Transition.fadeIn);
+          Get.to(MediaDetailsView(widget.card, mediaFile), transition: Transition.fadeIn);
         },
         child: Hero(
           tag: widget.card.received,
@@ -74,7 +73,7 @@ class _MediaCardViewState extends State<MediaCardView> {
                       child: ActionButton(
                         icon: SonrIcons.About.grey,
                         onPressed: () {
-                          SonrOverlay.show(_MediaCardInfo(widget.card), disableAnimation: true, barrierDismissible: true);
+                          SonrOverlay.show(_MediaInfoView(widget.card), disableAnimation: true, barrierDismissible: true);
                         },
                       )),
                 ),
@@ -133,38 +132,11 @@ class _MediaCardViewState extends State<MediaCardView> {
   }
 }
 
-// ^ Widget for Expanded Media View
-class _MediaCardExpanded extends StatelessWidget {
-  final TransferCardItem card;
-  final File mediaFile;
-  const _MediaCardExpanded(this.card, this.mediaFile);
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: Get.back,
-      child: SizedBox(
-        width: Get.width,
-        child: GestureDetector(
-          onTap: () {
-            Get.back(closeOverlays: true);
-          },
-          child: Hero(
-            tag: card.received,
-            child: Material(
-              color: Colors.transparent,
-              child: PhotoView(imageProvider: FileImage(mediaFile)),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // ^ Overlay View for Media Info
-class _MediaCardInfo extends StatelessWidget {
+class _MediaInfoView extends StatelessWidget {
   final TransferCardItem card;
-  _MediaCardInfo(this.card);
+  _MediaInfoView(this.card);
 
   @override
   Widget build(BuildContext context) {

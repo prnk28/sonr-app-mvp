@@ -3,25 +3,25 @@ import 'package:sonr_core/sonr_core.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ^ Widget for Expanded Media View
-class URLCardView extends StatelessWidget {
-  final TransferCardItem card;
-  const URLCardView(this.card);
+class URLCardItemView extends StatelessWidget {
+  final TransferCardItem item;
+  const URLCardItemView(this.item);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => launchURL(card.url.link),
+      onTap: () => launchURL(item.url.link),
       child: Container(
         decoration: Neumorph.floating(),
         child: Hero(
-          tag: card.id,
+          tag: item.id,
           child: Container(
             height: 75,
-            decoration: card.payload == Payload.MEDIA && card.metadata.mime.type == MIME_Type.image
+            decoration: item.payload == Payload.MEDIA && item.metadata.mime.type == MIME_Type.image
                 ? BoxDecoration(
                     image: DecorationImage(
                     colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
                     fit: BoxFit.cover,
-                    image: MemoryImage(card.metadata.thumbnail),
+                    image: MemoryImage(item.metadata.thumbnail),
                   ))
                 : null,
             child: Container(),

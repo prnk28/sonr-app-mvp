@@ -3,15 +3,12 @@ import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
-import 'contact.dart';
-
-enum ContactOrientation { Portrait, Landscape }
+import '../../../data/extensions/contact.dart';
 
 // ^ TransferCard Contact Item Details ^ //
-class ContactCardView extends StatelessWidget {
+class ContactCardItemView extends StatelessWidget {
   final TransferCardItem card;
-  final ContactOrientation orientation;
-  ContactCardView(this.card, {Key key, this.orientation}) : super(key: key);
+  ContactCardItemView(this.card, {Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
