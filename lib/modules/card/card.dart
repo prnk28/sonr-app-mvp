@@ -1,11 +1,9 @@
 import 'package:sonr_app/modules/card/url/grid_item.dart';
 import 'package:sonr_app/modules/card/url/list_item.dart';
 import 'contact/card_item.dart';
-import 'contact/details_view.dart';
 import 'contact/grid_item.dart';
 import 'contact/list_item.dart';
 import 'file/card_item.dart';
-import 'file/details_view.dart';
 import 'file/grid_item.dart';
 import 'file/list_item.dart';
 import 'media/card_item.dart';
@@ -14,7 +12,7 @@ import 'media/list_item.dart';
 import 'url/card_item.dart';
 import 'package:sonr_app/theme/theme.dart';
 
-enum TransferItemViewType { CardItem, GridItem, ListItem, Details }
+enum TransferItemViewType { CardItem, GridItem, ListItem }
 
 /// ^ TransferCardView: Builds View based on TransferCardItem Payload Type ^
 class TransferItem extends StatelessWidget {
@@ -60,9 +58,6 @@ class TransferItem extends StatelessWidget {
       case TransferItemViewType.ListItem:
         return ContactListItemView(item);
         break;
-      case TransferItemViewType.Details:
-        return ContactDetailsView(item);
-        break;
     }
     return Container();
   }
@@ -78,9 +73,6 @@ class TransferItem extends StatelessWidget {
         break;
       case TransferItemViewType.ListItem:
         return FileListItemView(item);
-        break;
-      case TransferItemViewType.Details:
-        return FileDetailsView(item);
         break;
     }
     return Container();
