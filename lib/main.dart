@@ -1,16 +1,12 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 // ^ Main Method ^ //
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices();
-  await SentryFlutter.init(
-    (options) => options.dsn = 'http://eaf4e944d14b4f77b0794d87daaa5ad6:4ac8dc72bd6945408141483fe97540b8@ec2-34-201-54-61.compute-1.amazonaws.com/3',
-    appRunner: () => runApp(App()),
-  );
+  runApp(App());
 }
 
 // ^ Root App Widget ^ //

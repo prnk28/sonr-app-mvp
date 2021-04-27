@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'search/search_view.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
 enum HomeView { Main, Profile, Activity, Remote }
@@ -9,6 +11,7 @@ enum HomeView { Main, Profile, Activity, Remote }
 class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // Properties
   final isTitleVisible = true.obs;
+  final isSearchVisible = false.obs;
 
   // Elements
   final titleText = "Home".obs;
@@ -19,6 +22,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
 
   // Controllers
   TabController tabController;
+  FloatingSearchBarController searchBarController;
 
   // References
   HomeView _lastPage = HomeView.Main;
@@ -32,6 +36,8 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   onInit() {
     // Handle Tab Controller
     tabController = TabController(vsync: this, length: 4);
+    searchBarController = FloatingSearchBarController();
+    searchBarController.close();
 
     // Listen for Updates
     tabController.addListener(() {
@@ -49,6 +55,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
       // Update Title
       titleText(view.value.title);
     });
+
     // Initialize
     super.onInit();
 
@@ -73,7 +80,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // ^ Update Bottom Bar Index ^ //
-  setBottomIndex(int newIndex) {
+  void setBottomIndex(int newIndex) {
     // Check if Bottom Index is different
     if (newIndex != bottomIndex.value) {
       // Shrink Share Button
@@ -116,6 +123,15 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
         }
       });
     }
+  }
+
+  // @ Toggle Search View
+  void toggleSearch() {
+    // Update Value
+    isSearchVisible(!isSearchVisible.value);
+
+    // Present View
+    if (isSearchVisible.value) {}
   }
 
   // @ Return Animation by Page Index

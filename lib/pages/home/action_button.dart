@@ -4,6 +4,8 @@ import 'profile/profile_controller.dart';
 import 'remote/remote_controller.dart';
 
 class HomeActionButton extends GetView<HomeController> {
+  HomeActionButton();
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => AnimatedSlideSwitcher.fade(
@@ -29,7 +31,7 @@ class HomeActionButton extends GetView<HomeController> {
       return ActionButton(
         key: ValueKey<HomeView>(HomeView.Main),
         icon: SonrIcons.Search.gradient(size: 28),
-        onPressed: () => print("Action: Dashboard"),
+        onPressed: () => controller.toggleSearch(),
       );
     }
   }
