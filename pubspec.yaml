@@ -54,7 +54,7 @@ dependencies:
 
   # -- Plugins --
   sonr_core:
-    path: plugins/sonr
+    path: ../plugin
 
   # -- UI/UX --
   animated_widgets: ^1.0.6

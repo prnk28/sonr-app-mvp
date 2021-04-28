@@ -6,8 +6,8 @@ ANDROID_DIR=/Users/prad/Sonr/mobile/android
 IOS_DIR=/Users/prad/Sonr/mobile/ios
 
 # Plugin Dirs
-PLUGIN_DIR=/Users/prad/Sonr/mobile/plugins/sonr
-PLUGIN_EXAMPLE_DIR=/Users/prad/Sonr/mobile/plugins/sonr/example
+PLUGIN_DIR=/Users/prad/Sonr/plugin
+PLUGIN_EXAMPLE_DIR=/Users/prad/Sonr/plugin/example
 
 # Mobile Actions
 FLUTTER=flutter
