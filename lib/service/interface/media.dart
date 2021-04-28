@@ -30,34 +30,38 @@ class MediaService extends GetxService {
 
   @override
   void onInit() {
-    // @ For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> data) {
-      if (data != null) {
-        _incomingMedia(data);
-        _incomingMedia.refresh();
-      }
-    });
+    if (DeviceService.isMobile) {
+      // @ For sharing images coming from outside the app while the app is closed
+      ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> data) {
+        if (data != null) {
+          _incomingMedia(data);
+          _incomingMedia.refresh();
+        }
+      });
 
-    // @ For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String text) {
-      if (text != null) {
-        _incomingText(text);
-        _incomingText.refresh();
-      }
-    });
+      // @ For sharing or opening urls/text coming from outside the app while the app is closed
+      ReceiveSharingIntent.getInitialText().then((String text) {
+        if (text != null) {
+          _incomingText(text);
+          _incomingText.refresh();
+        }
+      });
 
-    // @ Listen to Incoming Text
-    _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
+      // @ Listen to Incoming Text
+      _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
 
-    // @ Listen to Incoming File
-    _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
+      // @ Listen to Incoming File
+      _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
+    }
     super.onInit();
   }
 
   @override
   void onClose() {
-    _externalMediaStream.cancel();
-    _externalTextStream.cancel();
+    if (DeviceService.isMobile) {
+      _externalMediaStream.cancel();
+      _externalTextStream.cancel();
+    }
     super.onClose();
   }
 

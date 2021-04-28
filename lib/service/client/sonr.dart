@@ -109,11 +109,20 @@ class SonrService extends GetxService {
 
       // Connect Node
       _node.connect();
-      _node.update(position: MobileService.position.value);
+
+      // Update for Mobile
+      if (DeviceService.isMobile) {
+        _node.update(position: MobileService.position.value);
+      }
     } else {
       if (_status.value == Status.NONE) {
+        // Connect Node
         _node.connect();
-        _node.update(position: MobileService.position.value);
+
+        // Update for Mobile
+        if (DeviceService.isMobile) {
+          _node.update(position: MobileService.position.value);
+        }
       }
     }
   }

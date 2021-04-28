@@ -150,9 +150,14 @@ class UserService extends GetxService {
   }
 
   // ^ Method to Create New User from Contact ^ //
-  static Future<User> newUser(Contact providedContact) async {
+  static Future<User> newUser(Contact providedContact, {bool withSonrConnect = false}) async {
     // Set Valuse
     to._isNewUser(true);
+
+    // Connect Sonr Node
+    if (withSonrConnect) {
+      Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+    }
 
     // Set Contact for User
     return await to._saveContactForUser(providedContact);

@@ -25,7 +25,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   FloatingSearchBarController searchBarController;
 
   // References
-  HomeView _lastPage = HomeView.Main;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
@@ -132,17 +131,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Present View
     if (isSearchVisible.value) {
       searchBarController.open();
-    }
-  }
-
-  // @ Return Animation by Page Index
-  SwitchType get switchAnimation {
-    if (_lastPage.index > view.value.index) {
-      _lastPage = view.value;
-      return SwitchType.SlideLeft;
-    } else {
-      _lastPage = view.value;
-      return SwitchType.SlideRight;
     }
   }
 

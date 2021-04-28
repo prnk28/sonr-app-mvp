@@ -4,8 +4,11 @@ import 'package:path/path.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class DesktopService extends GetxService {
+  // References
   MainEntry _main;
   FlutterSystray _systemTray;
+
+  // * Initialize * //
   Future<DesktopService> init() async {
     // @ 2. Root Main Entry
     _main = MainEntry(

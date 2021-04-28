@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/pages/desktop/window.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
@@ -25,6 +26,23 @@ class SonrRouting {
               return HomePage();
             },
             binding: HomeBinding(),
+            transition: Transition.topLevel,
+            curve: Curves.easeIn,
+            middlewares: [GetMiddleware()]),
+
+        // ** Home Page ** //
+        GetPage(
+            name: '/desktop',
+            page: () {
+              // // Update Contact for New User
+              // if (UserService.isNewUser.value) {
+              //   Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+              // } else {
+              //   Get.find<SonrService>().connect();
+              // }
+              return DesktopWindow();
+            },
+            binding: DesktopBinding(),
             transition: Transition.topLevel,
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
@@ -58,12 +76,12 @@ class SonrRouting {
     // Initialize Data/Networking Services
     await Get.putAsync(() => FileService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
+    await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
 
     // Start Platform Orientated Services
     if (!isDesktop) {
       await Get.putAsync(() => MediaService().init(), permanent: true);
-      await Get.putAsync(() => LobbyService().init(), permanent: true);
       await Get.putAsync(() => SonrOverlay().init(), permanent: true);
       await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
     }

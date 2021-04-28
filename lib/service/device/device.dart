@@ -63,23 +63,30 @@ class DeviceService extends GetxService {
   // ^ Method Determines LaunchPage and Changes Screen ^
   static void shiftPage({@required Duration delay}) async {
     Future.delayed(delay, () {
-      // Check for User
-      if (!UserService.hasUser.value) {
-        Get.offNamed("/register");
-      } else {
-        // All Valid
-        if (UserService.permissions.value.hasLocation) {
-          Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-        }
+      // @ Mobile Page
+      if (isMobile) {
+        // Check for User
+        if (!UserService.hasUser.value) {
+          Get.offNamed("/register");
+        } else {
+          // All Valid
+          if (UserService.permissions.value.hasLocation) {
+            Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+          }
 
-        // No Location
-        else {
-          Get.find<UserService>().requestLocation().then((value) {
-            if (value) {
-              Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
-            }
-          });
+          // No Location
+          else {
+            Get.find<UserService>().requestLocation().then((value) {
+              if (value) {
+                Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
+              }
+            });
+          }
         }
+      }
+      // @ Desktop Page
+      else {
+        Get.offNamed("/desktop");
       }
     });
   }
