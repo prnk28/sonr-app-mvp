@@ -1,6 +1,6 @@
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ^ Contact Invite from AuthInvite Proftobuf ^ //
@@ -28,12 +28,9 @@ class ContactAuthView extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8),
-              child: Neumorphic(
+              child: Container(
+                decoration: Neumorph.floating(),
                 padding: EdgeInsets.all(4),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  depth: -10,
-                ),
                 child: card.contact.profilePicture,
               ),
             ),

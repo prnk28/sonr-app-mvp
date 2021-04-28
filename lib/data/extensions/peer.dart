@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Proximity Model Extensions ^ //
 extension PositionUtils on Position {

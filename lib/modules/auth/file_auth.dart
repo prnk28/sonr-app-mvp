@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ^ File Invite Builds from Invite Protobuf ^ //
@@ -37,13 +37,9 @@ class FileAuthView extends StatelessWidget {
             Container(
               width: Get.width - 50,
               height: Get.height / 3,
-              child: Neumorphic(
-                  padding: EdgeInsets.all(8),
-                  style: NeumorphicStyle(
-                    boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-                    depth: -10,
-                  ),
-                  child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3)),
+              decoration: Neumorph.floating(),
+              padding: EdgeInsets.all(8),
+              child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3),
             ),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),

@@ -364,12 +364,12 @@ class AssetController extends GetxController {
   }
 
   //  ^ Get Random No Files Image ^ //
-  static Widget getNoFiles(int rand) {
-    if (rand == 1) {
+  static Widget getNoFiles(int val) {
+    if (val == 1) {
       return to._noFiles1;
-    } else if (rand == 2) {
+    } else if (val == 2) {
       return to._noFiles2;
-    } else if (rand == 3) {
+    } else if (val == 3) {
       return to._noFiles3;
     } else {
       return to._noFiles4;

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/extensions/peer.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import '../theme.dart';
 
 // ^ Arrow Painter for Dropdown ^ //

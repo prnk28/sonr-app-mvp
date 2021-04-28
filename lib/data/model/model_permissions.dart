@@ -226,7 +226,7 @@ class UserPermissions {
           buttonText: "Continue",
           barrierDismissible: false);
 
-      await SonrCore.requestLocalNetwork();
+      await SonrService.requestLocalNetwork();
       this.update();
     }
     return true;

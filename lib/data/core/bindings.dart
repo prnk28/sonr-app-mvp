@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
-import 'package:sonr_app/pages/home/main/grid_controller.dart';
+import 'package:sonr_app/pages/home/recents/recents_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
 import 'package:sonr_app/pages/home/profile/profile.dart';
@@ -27,7 +27,7 @@ class HomeBinding implements Bindings {
   void dependencies() {
     Get.put<HomeController>(HomeController(), permanent: true);
     Get.put<ShareController>(ShareController(), permanent: true);
-    Get.put<GridController>(GridController(), permanent: true);
+    Get.put<RecentsController>(RecentsController(), permanent: true);
     Get.lazyPut<RemoteController>(() => RemoteController());
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.lazyPut<ProfilePictureController>(() => ProfilePictureController());

@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Contact Model Extensions ^ //
 extension ContactUtils on Contact {

@@ -13,14 +13,14 @@ class CardService extends GetxService {
   final _activity = RxList<TransferCardActivity>();
   final _all = RxList<TransferCardItem>();
   final _contacts = RxList<TransferCardItem>();
-  final _files = RxList<TransferCardItem>();
   final _links = RxList<TransferCardItem>();
-  final _media = RxList<TransferCardItem>();
+  final _metadata = RxList<TransferCardItem>();
   final _categoryCount = RxInt(1);
 
   // File Count
   final _documentCount = 0.obs;
   final _otherCount = 0.obs;
+  final _pdfCount = 0.obs;
   final _presentationCount = 0.obs;
   final _photosCount = 0.obs;
   final _spreadsheetCount = 0.obs;
@@ -30,13 +30,13 @@ class CardService extends GetxService {
   static RxList<TransferCardActivity> get activity => to._activity;
   static RxList<TransferCardItem> get all => to._all;
   static RxList<TransferCardItem> get contacts => to._contacts;
-  static RxList<TransferCardItem> get files => to._files;
   static RxList<TransferCardItem> get links => to._links;
-  static RxList<TransferCardItem> get media => to._media;
+  static RxList<TransferCardItem> get metadata => to._metadata;
 
   // Count Accessors
   static RxInt get documentCount => to._documentCount;
   static RxInt get otherCount => to._otherCount;
+  static RxInt get pdfCount => to._pdfCount;
   static RxInt get presentationCount => to._presentationCount;
   static RxInt get photosCount => to._photosCount;
   static RxInt get spreadsheetCount => to._spreadsheetCount;
@@ -45,9 +45,8 @@ class CardService extends GetxService {
   // Category Specific Count
   static bool get hasActivity => to._activity.length > 0;
   static bool get hasContacts => to._contacts.length > 0;
-  static bool get hasFiles => to._files.length > 0;
+  static bool get hasMetadata => to._metadata.length > 0;
   static bool get hasLinks => to._links.length > 0;
-  static bool get hasMedia => to._media.length > 0;
 
   // Total Count
   static RxInt get categoryCount => to._categoryCount;
@@ -61,15 +60,13 @@ class CardService extends GetxService {
     _activity.bindStream(_database.watchActivity());
     _all.bindStream(_database.watchAll());
     _contacts.bindStream(_database.watchContacts());
-    _files.bindStream(_database.watchFiles());
-    _media.bindStream(_database.watchMedia());
+    _metadata.bindStream(_database.watchMetadata());
     _links.bindStream(_database.watchUrls());
 
     // Set Initial Counter
     int counter = 1;
     _contacts.length > 0 ? counter += 1 : counter += 0;
-    _files.length > 0 ? counter += 1 : counter += 0;
-    _media.length > 0 ? counter += 1 : counter += 0;
+    _metadata.length > 0 ? counter += 1 : counter += 0;
     _links.length > 0 ? counter += 1 : counter += 0;
     _categoryCount(counter);
     return this;
@@ -215,23 +212,19 @@ class CardService extends GetxService {
     // Set Category Count
     int counter = 1;
     hasContacts ? counter += 1 : counter += 0;
-    hasFiles ? counter += 1 : counter += 0;
-    hasMedia ? counter += 1 : counter += 0;
+    hasMetadata ? counter += 1 : counter += 0;
     hasLinks ? counter += 1 : counter += 0;
     to._categoryCount(counter);
 
     // Set Individual File Count
-    if (hasFiles) {
-      to._documentCount(to._files.count((i) => i.payload == Payload.TEXT));
-      to._presentationCount(to._files.count((i) => i.payload == Payload.PRESENTATION));
-      to._spreadsheetCount(to._files.count((i) => i.payload == Payload.SPREADSHEET));
-      to._otherCount(to._files.length - (to._documentCount.value - to._presentationCount.value - to._spreadsheetCount.value));
-    }
-
-    // Set Individual Media Count
-    if (hasMedia) {
-      to._photosCount(to._media.count((i) => i.metadata.mime.type == MIME_Type.image));
-      to._videosCount(to._media.count((i) => i.metadata.mime.type == MIME_Type.video));
+    if (hasMetadata) {
+      to._documentCount(to._metadata.count((i) => i.payload == Payload.TEXT));
+      to._pdfCount(to._metadata.count((i) => i.payload == Payload.PDF));
+      to._presentationCount(to._metadata.count((i) => i.payload == Payload.PRESENTATION));
+      to._spreadsheetCount(to._metadata.count((i) => i.payload == Payload.SPREADSHEET));
+      to._otherCount(to._metadata.count((i) => i.payload == Payload.OTHER));
+      to._photosCount(to._metadata.count((i) => i.metadata.mime.type == MIME_Type.image));
+      to._videosCount(to._metadata.count((i) => i.metadata.mime.type == MIME_Type.video));
     }
   }
 

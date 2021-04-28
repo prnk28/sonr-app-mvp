@@ -2,10 +2,24 @@ import 'package:sonr_app/data/data.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Metadata Model Extensions ^ //
 extension MetadataFileUtils on Metadata {
+  /// Checks if Metadata is for Image File
+  bool get isImage => this.mime.type == MIME_Type.image;
+  bool get isVideo => this.mime.type == MIME_Type.video;
+
+  ///  Return Cleaned Name
+  String get prettyName {
+    if (this.name.length > 8) {
+      return this.name.substring(0, 8) + ".${this.mime.subtype}";
+    } else {
+      return this.name;
+    }
+  }
+
+  /// Returns Size as Readable String
   String get sizeString {
     // @ Less than 1KB
     if (this.size < pow(10, 3)) {
@@ -30,11 +44,9 @@ extension MetadataFileUtils on Metadata {
       return "${double.parse((adjusted).toStringAsFixed(2))} GB";
     }
   }
-}
 
-extension MIMEFileUtils on MIME {
-  String get asString {
-    return this.type.toString().capitalizeFirst;
+  String get typeString {
+    return this.mime.type.toString().capitalizeFirst;
   }
 }
 
@@ -45,7 +57,7 @@ extension ProfileFileUtils on Profile {
 }
 
 extension TextUtils on TransferCardItem {
-  Widget get dateText {
+  Widget get dateTimeText {
     // Formatters
     final dateFormat = DateFormat.yMd();
     final timeFormat = DateFormat.jm();
@@ -54,6 +66,14 @@ extension TextUtils on TransferCardItem {
     String dateText = dateFormat.format(this.received);
     String timeText = timeFormat.format(this.received);
     return Row(children: [dateText.h6_White, timeText.p_White]);
+  }
+
+  Widget get dateText {
+    // Formatters
+    final dateFormat = DateFormat.yMd();
+
+    // Get String
+    return dateFormat.format(this.received).h6_White;
   }
 }
 
@@ -87,4 +107,36 @@ extension PayloadUtils on Payload {
   }
 
   bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
+}
+
+// @ Helper Enum for Video/Image Orientation
+enum MediaOrientation { Portrait, Landscape }
+
+extension MediaOrientationUtils on MediaOrientation {
+  double get aspectRatio {
+    switch (this) {
+      case MediaOrientation.Landscape:
+        return 16 / 9;
+      default:
+        return 9 / 16;
+    }
+  }
+
+  double get defaultHeight {
+    switch (this) {
+      case MediaOrientation.Landscape:
+        return 180;
+      default:
+        return 320;
+    }
+  }
+
+  double get defaultWidth {
+    switch (this) {
+      case MediaOrientation.Landscape:
+        return 320;
+      default:
+        return 180;
+    }
+  }
 }

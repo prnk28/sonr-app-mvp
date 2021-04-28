@@ -92,7 +92,7 @@ class MediaService extends GetxService {
 
     // @ Check for Text
     if (controller._incomingText.value != "" && GetUtils.isURL(controller._incomingText.value) && !Get.isBottomSheetOpen) {
-      var data = await SonrCore.getURL(controller._incomingText.value);
+      var data = await SonrService.getURL(controller._incomingText.value);
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
 
@@ -194,7 +194,7 @@ class MediaService extends GetxService {
   _handleSharedText(String text) async {
     if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.hasUser.value) {
       // Get Data
-      var data = await SonrCore.getURL(text);
+      var data = await SonrService.getURL(text);
 
       // Open Sheet
       await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);

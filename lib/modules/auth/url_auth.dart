@@ -1,5 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ^ URL Invite from AuthInvite Proftobuf ^ //
@@ -18,12 +18,9 @@ class URLAuthView extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
-            child: Neumorphic(
+            child: Container(
               padding: EdgeInsets.all(4),
-              style: NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.circle(),
-                depth: -10,
-              ),
+              decoration: Neumorph.floating(shape: BoxShape.circle),
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(

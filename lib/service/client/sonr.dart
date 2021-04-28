@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import '../user/cards.dart';
 import 'lobby.dart';
 import '../user/user.dart';
-export 'package:sonr_core/sonr_core.dart';
+export 'package:sonr_plugin/sonr_plugin.dart';
 
 extension StatusUtils on Status {
   bool get isNotConnected => this == Status.NONE;
@@ -138,6 +138,14 @@ class SonrService extends GetxService {
       _node.connect();
       _node.update(position: DeviceService.position.value);
     }
+  }
+
+  static Future<URLLink> getURL(String url) async {
+    return await to._node.getURL(url);
+  }
+
+  static void requestLocalNetwork() async {
+    await to._node.requestLocalNetwork();
   }
 
   // ^ Join a New Group ^
@@ -284,11 +292,18 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
+    // Save Card to Gallery
+    await CardService.addCard(data);
+    to.received.complete(data);
+
+    // Close any Existing Overlays
+    if (SonrOverlay.isOpen) {
+      SonrOverlay.closeAll();
+    }
+
+    // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: UISoundType.Received);
-
-    // Save Card to Gallery
-    CardService.addCard(data);
   }
 
   // ^ An Error Has Occurred ^ //

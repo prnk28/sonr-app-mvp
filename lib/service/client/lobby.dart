@@ -5,7 +5,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/modules/peer/vector_position.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 class LobbyService extends GetxService {
   // Accessors
