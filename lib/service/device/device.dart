@@ -3,6 +3,8 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'mobile.dart';
+
 class DeviceService extends GetxService {
   // Initializers
   bool _isDesktop;
@@ -53,6 +55,13 @@ class DeviceService extends GetxService {
   void onClose() {
     _audioPlayer.clearCache();
     super.onClose();
+  }
+
+  static Future<ConnectionRequest> getConnectionRequest() async {
+    if (isMobile) {
+            var pos = await MobileService.currentLocation();
+      return ConnectionRequest(latitude: pos.latitude, longitude: pos.longitude, username: UserService.username, contact: UserService.contact.value, device: );
+    } else {}
   }
 
   // ^ Method Plays a UI Sound ^
