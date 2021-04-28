@@ -97,7 +97,15 @@ class SonrService extends GetxService {
       var pos = await MobileService.currentLocation();
 
       // Create Node
-      _setNode(contact: UserService.contact.value, latitude: pos.latitude, longitude: pos.longitude, username: UserService.username);
+      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
+      _node.onStatus = _handleStatus;
+      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+      _node.onInvited = _handleInvited;
+      _node.onReplied = _handleResponded;
+      _node.onProgressed = _handleProgress;
+      _node.onReceived = _handleReceived;
+      _node.onTransmitted = _handleTransmitted;
+      _node.onError = _handleError;
 
       // Connect Node
       _node.connect();
@@ -116,7 +124,15 @@ class SonrService extends GetxService {
     var pos = await MobileService.currentLocation();
 
     // Create Node
-    _setNode(contact: contact, latitude: pos.latitude, longitude: pos.longitude, username: username);
+    _node = await SonrCore.initialize(pos.latitude, pos.longitude, username, contact);
+    _node.onStatus = _handleStatus;
+    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+    _node.onInvited = _handleInvited;
+    _node.onReplied = _handleResponded;
+    _node.onProgressed = _handleProgress;
+    _node.onReceived = _handleReceived;
+    _node.onTransmitted = _handleTransmitted;
+    _node.onError = _handleError;
 
     // Connect Node
     if (_status.value == Status.NONE) {
@@ -197,19 +213,6 @@ class SonrService extends GetxService {
   // ^ Async Function notifies transfer complete ^ //
   static Future<TransferCard> completed() async {
     return to.received.future;
-  }
-
-  // # Helper to Set Service Node
-  void _setNode({@required double latitude, @required double longitude, @required Contact contact, @required String username}) async {
-    _node = await SonrCore.initialize(latitude, longitude, username, contact);
-    _node.onStatus = _handleStatus;
-    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-    _node.onInvited = _handleInvited;
-    _node.onReplied = _handleResponded;
-    _node.onProgressed = _handleProgress;
-    _node.onReceived = _handleReceived;
-    _node.onTransmitted = _handleTransmitted;
-    _node.onError = _handleError;
   }
 
   // **************************

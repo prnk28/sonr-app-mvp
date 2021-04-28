@@ -2,8 +2,6 @@ import 'dart:io' as io;
 import 'package:audioplayers/audio_cache.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'mobile.dart';
-import 'desktop.dart';
 
 class DeviceService extends GetxService {
   // Initializers
@@ -26,7 +24,7 @@ class DeviceService extends GetxService {
   static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
 
   // * Device Service Initialization * //
-  Future<DeviceService> init({bool isDesktop = false}) async {
+  Future<DeviceService> init(bool isDesktop) async {
     // Set Initializers
     _isDesktop = isDesktop;
     _isMobile = !isDesktop;
@@ -47,17 +45,6 @@ class DeviceService extends GetxService {
     // Audio Player
     _audioPlayer.disableLog();
     await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
-
-    // Initialize Correct Device Service
-    if (isDesktop) {
-      await Get.putAsync(() => DesktopService().init(), permanent: true);
-    } else {
-      await Get.putAsync(() => MobileService().init(), permanent: true);
-      await Get.putAsync(() => MediaService().init(), permanent: true);
-      await Get.putAsync(() => LobbyService().init(), permanent: true);
-      await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-      await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
-    }
     return this;
   }
 

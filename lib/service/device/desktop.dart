@@ -1,35 +1,12 @@
-import 'dart:io';
 import 'package:flutter_systray/flutter_systray.dart';
 import 'package:get/get.dart';
-import 'dart:io' as io;
 import 'package:path/path.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class DesktopService extends GetxService {
   MainEntry _main;
   FlutterSystray _systemTray;
-
-  final _platform = Rx<Platform>(null);
-
-  // Platform Checkers
-  static bool get isLinux => Get.find<DesktopService>()._platform.value == Platform.Linux;
-  static bool get isMacOS => Get.find<DesktopService>()._platform.value == Platform.MacOS;
-  static bool get isWindows => Get.find<DesktopService>()._platform.value == Platform.Windows;
-
   Future<DesktopService> init() async {
-    // @ 1. Set Platform
-    if (io.Platform.isAndroid) {
-      _platform(Platform.Android);
-    } else if (io.Platform.isIOS) {
-      _platform(Platform.IOS);
-    } else if (io.Platform.isLinux) {
-      _platform(Platform.Linux);
-    } else if (io.Platform.isMacOS) {
-      _platform(Platform.MacOS);
-    } else if (io.Platform.isWindows) {
-      _platform(Platform.Windows);
-    }
-
     // @ 2. Root Main Entry
     _main = MainEntry(
       title: "Sonr",
@@ -63,7 +40,7 @@ class DesktopService extends GetxService {
 
   // # Helper: Returns Icon Path
   String _getIconPath() {
-    if (isWindows) {
+    if (DeviceService.isWindows) {
       return absolute('go\\assets', 'tray.ico');
     } else {
       return absolute('go/assets', 'tray.png');
