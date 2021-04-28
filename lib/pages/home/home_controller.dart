@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -41,7 +42,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     tabController.addListener(() {
       // Play Sound
       if (tabController.index != bottomIndex.value) {
-        MobileService.playSound(type: UISoundType.Swipe);
+        DeviceService.playSound(type: UISoundType.Swipe);
       }
 
       // Set Index
@@ -151,7 +152,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      MobileService.playSound(type: UISoundType.Joined);
+      DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

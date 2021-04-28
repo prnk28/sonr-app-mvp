@@ -48,23 +48,23 @@ class SonrSnack {
       switch (error.severity) {
         // Orange - Title Failed
         case ErrorMessage_Severity.CRITICAL:
-          MobileService.playSound(type: UISoundType.Critical);
+          DeviceService.playSound(type: UISoundType.Critical);
           return SonrSnack("Failed", error.message, Icon(Icons.sms_failed_outlined), Colors.orange, 2600, false);
 
         // Red - Title Error
         case ErrorMessage_Severity.FATAL:
-          MobileService.playSound(type: UISoundType.Fatal);
+          DeviceService.playSound(type: UISoundType.Fatal);
           return SonrSnack("Error", error.message, SonrIcons.Caution.white, Colors.red, 2600, false);
 
         // Yellow - Title Warning
         default:
-          MobileService.playSound(type: UISoundType.Warning);
+          DeviceService.playSound(type: UISoundType.Warning);
           return SonrSnack("Warning", error.message, SonrIcons.Warning.white, Colors.yellow, 2600, false);
       }
     }
     // @ App Error
     else {
-      MobileService.playSound(type: UISoundType.Warning);
+      DeviceService.playSound(type: UISoundType.Warning);
       return SonrSnack("Error", message, SonrIcons.Caution.white, Colors.red, 2600, false);
     }
   }

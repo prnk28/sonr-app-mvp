@@ -6,7 +6,7 @@ import 'service/device/desktop.dart';
 // This file is the default main entry-point for go-flutter application.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrRouting.initDesktopServices();
+  await SonrRouting.initServices(isDesktop: true);
   runApp(DesktopApp());
 }
 

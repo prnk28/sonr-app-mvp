@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:sonr_app/service/device/device.dart';
 import '../theme.dart';
 import 'utility.dart';
 
@@ -281,9 +282,9 @@ class _ConfirmButtonState extends State<ConfirmButton> {
 
     // Play Sound
     if (widget.type == ConfirmButtonType.Save) {
-      MobileService.playSound(type: UISoundType.Confirmed);
+      DeviceService.playSound(type: UISoundType.Confirmed);
     } else if (widget.type == ConfirmButtonType.Delete) {
-      MobileService.playSound(type: UISoundType.Deleted);
+      DeviceService.playSound(type: UISoundType.Deleted);
     }
 
     widget.onConfirmed();

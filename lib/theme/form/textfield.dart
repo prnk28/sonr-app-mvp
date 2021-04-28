@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
+import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
@@ -45,7 +46,7 @@ class SonrTextField extends StatelessWidget {
   // ^ Returns Random Hint Name ^
   static Tuple<String, String> hintName() {
     return <Tuple<String, String>>[
-      MobileService.isNotApple ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
+      !DeviceService.isIOS && !DeviceService.isMacOS ? Tuple("Bill", "Gates") : Tuple("Steve", "Jobs"),
       Tuple("Michelangelo", "Buonarroti"),
       Tuple("Albert", "Einstein"),
       Tuple("Douglas", "Engelbart"),

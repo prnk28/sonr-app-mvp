@@ -1,5 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum RegisterStatus { Form, Location, Gallery }
@@ -68,7 +69,7 @@ class RegisterController extends GetxController {
 
   // ^ Request Gallery Permissions ^ //
   Future<bool> requestGallery() async {
-    if (MobileService.isAndroid) {
+    if (DeviceService.isAndroid) {
       if (await Permission.storage.request().isGranted) {
         UserService.permissions.value.update();
         UserService.permissions.refresh();

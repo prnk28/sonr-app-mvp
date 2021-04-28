@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../user/cards.dart';
@@ -44,7 +46,7 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (MobileService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
+      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
           MobileService.position.value ?? _node.update(position: MobileService.position.value);
@@ -220,7 +222,7 @@ class SonrService extends GetxService {
       // Update Status
       _isReady(true);
       _status(data.value);
-      MobileService.playSound(type: UISoundType.Connected);
+      DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
       _node.update(position: MobileService.position.value);
@@ -276,7 +278,7 @@ class SonrService extends GetxService {
     }
 
     // Feedback
-    MobileService.playSound(type: UISoundType.Transmitted);
+    DeviceService.playSound(type: UISoundType.Transmitted);
     await HapticFeedback.heavyImpact();
 
     // Log Activity
@@ -299,7 +301,7 @@ class SonrService extends GetxService {
 
     // Present Feedback
     await HapticFeedback.heavyImpact();
-    MobileService.playSound(type: UISoundType.Received);
+    DeviceService.playSound(type: UISoundType.Received);
   }
 
   // ^ An Error Has Occurred ^ //
