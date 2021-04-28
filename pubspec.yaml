@@ -28,6 +28,9 @@ dependencies:
   intl: ^0.17.0
   supercharged: ^2.0.0
 
+  # -- Desktop --
+  flutter_systray:
+
   # -- Device --
   camerawesome: ^0.3.0-nullsafety
   flutter_compass: ^0.6.0
