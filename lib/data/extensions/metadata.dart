@@ -10,6 +10,15 @@ extension MetadataFileUtils on Metadata {
   bool get isImage => this.mime.type == MIME_Type.image;
   bool get isVideo => this.mime.type == MIME_Type.video;
 
+  ///  Return Cleaned Name
+  String get prettyName {
+    if (this.name.length > 8) {
+      return this.name.substring(0, 8) + ".${this.mime.subtype}";
+    } else {
+      return this.name;
+    }
+  }
+
   /// Returns Size as Readable String
   String get sizeString {
     // @ Less than 1KB
@@ -40,6 +49,7 @@ extension MetadataFileUtils on Metadata {
     return this.mime.type.toString().capitalizeFirst;
   }
 }
+
 extension ProfileFileUtils on Profile {
   Widget get nameText {
     return " ${this.firstName} ${this.lastName}".h6;
@@ -47,7 +57,7 @@ extension ProfileFileUtils on Profile {
 }
 
 extension TextUtils on TransferCardItem {
-  Widget get dateText {
+  Widget get dateTimeText {
     // Formatters
     final dateFormat = DateFormat.yMd();
     final timeFormat = DateFormat.jm();
@@ -56,6 +66,14 @@ extension TextUtils on TransferCardItem {
     String dateText = dateFormat.format(this.received);
     String timeText = timeFormat.format(this.received);
     return Row(children: [dateText.h6_White, timeText.p_White]);
+  }
+
+  Widget get dateText {
+    // Formatters
+    final dateFormat = DateFormat.yMd();
+
+    // Get String
+    return dateFormat.format(this.received).h6_White;
   }
 }
 

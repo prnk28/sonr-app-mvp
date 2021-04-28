@@ -170,7 +170,7 @@ class CardsListView extends StatelessWidget {
         return ListView.builder(
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(type.transferCardItemAtIndex(index));
+            return TransferItem(type.transferCardItemAtIndex(index), type: TransferItemView.ListItem);
           },
         );
       } else {

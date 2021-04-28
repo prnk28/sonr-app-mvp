@@ -67,12 +67,9 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
 
   // @ Build Circular Camera
   Widget _buildCamera() {
-    return Neumorphic(
+    return Container(
         padding: EdgeInsets.all(10),
-        style: NeumorphicStyle(
-          boxShape: NeumorphicBoxShape.circle(),
-          depth: -10,
-        ),
+        decoration: Neumorph.indented(shape: BoxShape.circle),
         child: GestureDetector(
           onTap: controller.capturePhoto,
           child: CameraAwesome(
@@ -88,12 +85,9 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
   Widget _buildCaptured() {
     return Column(children: [
       // @ Picture Preview
-      Neumorphic(
+      Container(
           padding: EdgeInsets.all(10),
-          style: NeumorphicStyle(
-            boxShape: NeumorphicBoxShape.circle(),
-            depth: -10,
-          ),
+          decoration: Neumorph.floating(shape: BoxShape.circle),
           child: Container(
             width: 120,
             height: 120,

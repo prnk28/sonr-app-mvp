@@ -53,10 +53,8 @@ class SocialTileItem extends GetWidget<TileController> {
         controller.launchURL(item.links.postLink);
         HapticFeedback.mediumImpact();
       },
-      child: Neumorphic(
-        style: isEditing
-            ? NeumorphicStyle(intensity: 0.75, shape: NeumorphicShape.flat, depth: 15)
-            : NeumorphicStyle(intensity: 0.75, shape: NeumorphicShape.convex, depth: 8),
+      child: Container(
+        decoration: Neumorph.floating(),
         child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,

@@ -3,6 +3,8 @@ import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 
+import 'meta_view.dart';
+
 class MediaGridItemView extends StatelessWidget {
   final TransferCardItem item;
   const MediaGridItemView(this.item, {Key key}) : super(key: key);
@@ -11,14 +13,13 @@ class MediaGridItemView extends StatelessWidget {
     return ObxValue<RxBool>(
         (isFlipped) => Container(
               width: 160,
-              height: 190,
+              height: 160,
               clipBehavior: Clip.antiAlias,
               decoration: Neumorph.floating(),
-              margin: EdgeInsets.all(32),
+              padding: EdgeInsets.all(4),
               child: Stack(children: [
                 // Content
                 Container(
-                  padding: EdgeInsets.all(8),
                   child: GestureDetector(
                     child: AnimatedSlideSwitcher.fade(
                       child: isFlipped.value
@@ -49,11 +50,9 @@ class _MediaGridItemMainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: context.widthTransformer(reducedBy: 0.8),
-        height: context.heightTransformer(reducedBy: 0.6),
-        alignment: Alignment.center,
-        child: [
+    return MetaBox(
+        metadata: item.metadata,
+        child: Stack(children: [
           // Align Platform
           Align(
               alignment: Alignment.topRight,
@@ -64,25 +63,10 @@ class _MediaGridItemMainView extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.About.gradient(gradient: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.Unknown.gradient(gradient: SonrGradient.Secondary, size: 32),
                 ),
               )),
-
-          // Avatar
-          OpacityAnimatedWidget(
-            // TODO: enabled: controller.isVisible.value,
-            duration: 125.milliseconds,
-            // TODO: child: controller.peer.value.profilePicture(size: 68),
-          ),
-
-          Spacer(),
-
-          // Device Icon and Full Name
-          // TODO: "${controller.peer.value.profile.firstName} ${controller.peer.value.profile.lastName}".h6,
-
-          // Username
-          // TODO: controller.peer.value.profile.username.p_Grey,
-        ].column());
+        ]));
   }
 }
 
@@ -95,39 +79,52 @@ class _MediaGridItemDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: context.widthTransformer(reducedBy: 0.8),
-        height: context.heightTransformer(reducedBy: 0.6),
-        alignment: Alignment.center,
-        child: [
-          [
-            // Align Platform
-            GestureDetector(
-                onTap: () {
-                  isFlipped(false);
-                  isFlipped.refresh();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 24),
-                )),
+        child: Stack(alignment: Alignment.topCenter, children: [
+      // Align Back Button
+      Align(
+        alignment: Alignment.topLeft,
+        child: GestureDetector(
+            onTap: () {
+              isFlipped(false);
+              isFlipped.refresh();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 32),
+            )),
+      ),
 
-            // Align Compass
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-              // TODO: child: Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White),
-            ),
-          ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center),
+      // Space Between
+      Spacer(),
 
-          // Space Between
-          Spacer(),
+      // Device Information
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Mime Icon
+            Expanded(child: item.metadata.mime.type.gradient(size: 96)),
 
-          // Device Information
-          // TODO: controller.peer.value.platform.grey(size: 92),
-          Spacer(),
+            item.metadata.sizeString.p_Grey,
 
-          // Device Icon and Full Name
-          // TODO:"${controller.peer.value.model}".h5,
-        ].column());
+            // Basic Info
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
+                child: SizedBox(height: 30, child: item.dateText),
+              ),
+            )
+          ],
+        ),
+      ),
+      Spacer(),
+
+      // Device Icon and Full Name
+      // TODO:"${controller.peer.value.model}".h5,
+    ]));
   }
 }

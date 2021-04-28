@@ -54,7 +54,7 @@ class _FileGridItemMainView extends StatelessWidget {
         height: context.heightTransformer(reducedBy: 0.6),
         alignment: Alignment.center,
         child: [
-          // Align Platform
+          // Align Back Button
           Align(
               alignment: Alignment.topRight,
               child: GestureDetector(

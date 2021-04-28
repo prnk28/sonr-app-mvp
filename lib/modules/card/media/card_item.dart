@@ -20,9 +20,8 @@ class MediaCardItemView extends StatelessWidget {
       decoration: Neumorph.floating(),
       child: Hero(
         tag: card.metadata.path,
-        child: MetaDecoration(
+        child: MetaBox(
           metadata: card.metadata,
-          height: 75,
           child: Stack(
             children: <Widget>[
               // Display Mime Type if Not Image
@@ -34,7 +33,7 @@ class MediaCardItemView extends StatelessWidget {
                 child: Container(
                     padding: EdgeInsets.all(4),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-                    child: card.dateText),
+                    child: card.dateTimeText),
               ),
 
               // Info Button

@@ -170,59 +170,42 @@ class _CaptureButton extends GetView<CameraController> {
         height: 150,
         child: AspectRatio(
           aspectRatio: 1,
-          child: Neumorphic(
+          child: Container(
             margin: EdgeInsets.all(14),
-            style: NeumorphicStyle(
-              color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-              boxShape: NeumorphicBoxShape.circle(),
-            ),
-            child: Neumorphic(
-              style: NeumorphicStyle(
-                depth: 14,
-                color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                boxShape: NeumorphicBoxShape.circle(),
-              ),
-              margin: EdgeInsets.all(10),
-              child: Neumorphic(
-                style: NeumorphicStyle(
-                  depth: -8,
-                  color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                  boxShape: NeumorphicBoxShape.circle(),
-                ),
-                margin: EdgeInsets.all(14),
-                child: GestureDetector(
-                  onTap: () {
-                    controller.capturePhoto();
-                  },
-                  onLongPressStart: (LongPressStartDetails tapUpDetails) {
-                    if (GetPlatform.isIOS) {
-                      controller.startCaptureVideo();
-                    }
-                  },
-                  onLongPressEnd: (LongPressEndDetails tapUpDetails) {
-                    if (GetPlatform.isIOS) {
-                      controller.stopCaptureVideo();
-                    }
-                  },
-                  child: Obx(
-                    () => Neumorphic(
-                        child: Center(
-                            child: SonrIcons.Camera.gradientNamed(
-                          name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
-                          size: 40,
-                        )),
-                        style: NeumorphicStyle(
-                            depth: 14,
-                            color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                            intensity: 0.85,
-                            boxShape: NeumorphicBoxShape.circle(),
-                            border: controller.videoInProgress.value
-                                ? NeumorphicBorder(color: SonrColor.Critical, width: 4)
-                                : NeumorphicBorder(color: SonrColor.Black, width: 0))),
+            decoration: Neumorph.floating(shape: BoxShape.circle),
+            child: Container(
+              decoration: Neumorph.floating(shape: BoxShape.circle),
+              margin: EdgeInsets.all(14),
+              child: GestureDetector(
+                onTap: () {
+                  controller.capturePhoto();
+                },
+                onLongPressStart: (LongPressStartDetails tapUpDetails) {
+                  if (GetPlatform.isIOS) {
+                    controller.startCaptureVideo();
+                  }
+                },
+                onLongPressEnd: (LongPressEndDetails tapUpDetails) {
+                  if (GetPlatform.isIOS) {
+                    controller.stopCaptureVideo();
+                  }
+                },
+                child: Obx(
+                  () => Container(
+                    child: Center(
+                        child: SonrIcons.Camera.gradientNamed(
+                      name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                      size: 40,
+                    )),
+                    decoration: Neumorph.floating(
+                        shape: BoxShape.circle,
+                        border: controller.videoInProgress.value
+                            ? Border.all(color: SonrColor.Critical, width: 4)
+                            : Border.all(color: SonrColor.Black, width: 0)),
                   ),
                 ),
-                // Interior Compass
               ),
+              // Interior Compass
             ),
           ),
         ),

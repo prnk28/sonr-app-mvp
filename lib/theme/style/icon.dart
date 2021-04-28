@@ -13,7 +13,7 @@ extension MimeIcon on MIME_Type {
       case MIME_Type.audio:
         return SonrIcons.Audio.gradientNamed(name: FlutterGradientNames.flyingLemon, size: size);
       case MIME_Type.image:
-        return SonrIcons.Photos.gradientNamed(name: FlutterGradientNames.juicyCake, size: size);
+        return SonrIcons.Image.gradientNamed(name: FlutterGradientNames.juicyCake, size: size);
       case MIME_Type.text:
         return SonrIcons.Document.gradientNamed(name: FlutterGradientNames.farawayRiver, size: size);
       case MIME_Type.video:
@@ -28,7 +28,7 @@ extension MimeIcon on MIME_Type {
       case MIME_Type.audio:
         return SonrIcons.Audio.black;
       case MIME_Type.image:
-        return SonrIcons.Photos.black;
+        return SonrIcons.Image.black;
       case MIME_Type.text:
         return SonrIcons.Document.black;
       case MIME_Type.video:
@@ -43,7 +43,7 @@ extension MimeIcon on MIME_Type {
       case MIME_Type.audio:
         return SonrIcons.Audio.white;
       case MIME_Type.image:
-        return SonrIcons.Photos.white;
+        return SonrIcons.Image.white;
       case MIME_Type.text:
         return SonrIcons.Document.white;
       case MIME_Type.video:

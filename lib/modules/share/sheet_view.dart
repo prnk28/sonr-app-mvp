@@ -59,42 +59,35 @@ class ShareSheet extends GetView<ShareController> {
     return NeumorphicBackground(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         backendColor: Colors.transparent,
-        child: Neumorphic(
-            style: NeumorphicStyle(color: SonrColor.White),
-            child: Container(
+        child: Container(
+            decoration: Neumorph.floating(),
+            width: size.width,
+            height: size.height,
+            padding: EdgeInsets.only(top: 6),
+            margin: EdgeInsets.only(left: 10, right: 10),
+            child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              // @ Top Banner
+              Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                // Bottom Left Close/Cancel Button
+                ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
+
+                "Share".h2,
+
+                // @ Top Right Confirm Button
+                ActionButton(
+                    onPressed: () => controller.selectExternal(payload, url, mediaFile),
+                    icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.hiddenJaguar)),
+              ]),
+
+              // @ Window Content
+              Spacer(),
+              Container(
                 width: size.width,
                 height: size.height,
-                padding: EdgeInsets.only(top: 6),
-                margin: EdgeInsets.only(left: 10, right: 10),
-                child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  // @ Top Banner
-                  Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    // Bottom Left Close/Cancel Button
-                    ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
-
-                    "Share".h2,
-
-                    // @ Top Right Confirm Button
-                    ActionButton(
-                        onPressed: () => controller.selectExternal(payload, url, mediaFile),
-                        icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.hiddenJaguar)),
-                  ]),
-
-                  // @ Window Content
-                  Spacer(),
-                  Container(
-                    width: size.width,
-                    height: size.height,
-                    child: Neumorphic(
-                        margin: EdgeInsets.only(top: 4, bottom: 4, left: 8),
-                        style: NeumorphicStyle(
-                          color: SonrColor.White,
-                          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                        ),
-                        child: child),
-                  ),
-                  Spacer()
-                ]))));
+                child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: Neumorph.floating(), child: child),
+              ),
+              Spacer()
+            ])));
   }
 }
 
@@ -108,11 +101,8 @@ class _ShareItemMedia extends StatelessWidget {
   Widget build(BuildContext context) {
     // Get Shared File
     SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
-    return Neumorphic(
-        style: NeumorphicStyle(
-          depth: -8,
-          boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-        ),
+    return Container(
+        decoration: Neumorph.indented(),
         margin: EdgeInsets.all(10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -149,11 +139,8 @@ class _ShareItemURL extends StatelessWidget {
 
         // @ Indent View
         Expanded(
-          child: Neumorphic(
-              style: NeumorphicStyle(
-                depth: -8,
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-              ),
+          child: Container(
+              decoration: Neumorph.indented(radius: 20),
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

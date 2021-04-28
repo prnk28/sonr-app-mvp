@@ -21,12 +21,9 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Neumorphic(
+            child: Container(
                 padding: EdgeInsets.all(10),
-                style: NeumorphicStyle(
-                  boxShape: NeumorphicBoxShape.circle(),
-                  depth: -10,
-                ),
+                decoration: Neumorph.floating(shape: BoxShape.circle),
                 child: contact.profilePicture),
           ),
 

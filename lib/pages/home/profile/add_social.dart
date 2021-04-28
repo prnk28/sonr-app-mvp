@@ -75,9 +75,9 @@ class DropdownAddView extends GetView<ProfileController> {
           ),
 
           // @ Public/Private Checker
-          Obx(() => controller.step.value.provider.allowsVisibility
-              ? SonrCheckbox(onUpdate: (val) => controller.isPrivate(val), label: "Is your account Private?")
-              : Container())
+          // Obx(() => controller.step.value.provider.allowsVisibility
+          //     ? SonrCheckbox(onUpdate: (val) => controller.isPrivate(val), label: "Is your account Private?")
+          //     : Container())
         ],
       ),
     );
@@ -119,16 +119,6 @@ class SetTypeView extends GetView<ProfileController> {
         _InfoText(index: 3, text: "Set your Tile's type"),
         Divider(),
         // @ Toggle Buttons for Widget Size
-        SonrRadio(
-            options: [
-              // SonrRadioRowOption.animated(RiveBoard.Icon, "Link"),
-              // SonrRadioRowOption.animated(RiveBoard.Gallery, "Post"),
-              // SonrRadioRowOption.animated(RiveBoard.Feed, "Feed"),
-            ],
-            onUpdated: (int index, String title) {
-              var type = Contact_SocialTile_Type.values.firstWhere((p) => p.toString() == title);
-              controller.type(type);
-            }),
       ]),
     );
   }

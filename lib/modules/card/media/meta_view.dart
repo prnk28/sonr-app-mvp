@@ -6,16 +6,13 @@ import 'package:sonr_core/sonr_core.dart';
 import 'details_view.dart';
 
 ///  Builds Container With Image as Decoration or Defaults to None if Not Image
-class MetaDecoration extends StatelessWidget {
+class MetaBox extends StatelessWidget {
   /// TransferCard Metadata Protobuf
   final Metadata metadata;
 
   /// Child to Display above Decoration
   final Widget child;
-
-  final double width;
-  final double height;
-  const MetaDecoration({Key key, @required this.metadata, this.width, this.height, this.child}) : super(key: key);
+  const MetaBox({Key key, @required this.metadata, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +28,19 @@ class MetaDecoration extends StatelessWidget {
                     decoration: BoxDecoration(
                         image: DecorationImage(
                       colorFilter: ColorFilter.mode(Colors.black12, BlendMode.luminosity),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fitWidth,
                       image: FileImage(snapshot.data),
                     )),
-                    height: height,
-                    child: child,
+                    child: child ?? Container(),
                   ),
                 );
               } else {
                 return Container(
-                  width: width,
-                  height: height,
                   child: CircularProgressIndicator(),
                 );
               }
             })
         : Container(
-            height: height,
             child: child,
           );
   }
@@ -84,7 +77,7 @@ class MetaImageBox extends StatelessWidget {
   final double height;
   final BoxFit fit;
 
-  const MetaImageBox({Key key, @required this.metadata, this.width, this.height, this.fit}) : super(key: key);
+  const MetaImageBox({Key key, @required this.metadata, this.width = 150, this.height = 150, this.fit = BoxFit.contain}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return metadata.isImage
