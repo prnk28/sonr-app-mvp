@@ -140,6 +140,14 @@ class SonrService extends GetxService {
     }
   }
 
+  static Future<URLLink> getURL(String url) async {
+    return await to._node.getURL(url);
+  }
+
+  static void requestLocalNetwork() async {
+    await to._node.requestLocalNetwork();
+  }
+
   // ^ Join a New Group ^
   static Future<RemoteInfo> createRemote() async {
     var data = await to._node.createRemote();
