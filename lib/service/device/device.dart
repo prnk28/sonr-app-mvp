@@ -2,8 +2,9 @@ import 'dart:io' as io;
 import 'package:audioplayers/audio_cache.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-
+import 'package:platform_device_id/platform_device_id.dart';
 import 'mobile.dart';
+import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
 
 class DeviceService extends GetxService {
   // Initializers
@@ -57,11 +58,32 @@ class DeviceService extends GetxService {
     super.onClose();
   }
 
-  static Future<ConnectionRequest> getConnectionRequest() async {
+  // ^ Builds Connection Request based on Platform ^
+  static Future<ConnectionRequest> buildConnectionRequest() async {
+    // Initialize Variables
+    String deviceId = await PlatformDeviceId.getDeviceId;
+    var device = await provider.buildDevice(platform: to._platform.value, id: deviceId);
+
+    // @ Mobile - Passes Location
     if (isMobile) {
-            var pos = await MobileService.currentLocation();
-      return ConnectionRequest(latitude: pos.latitude, longitude: pos.longitude, username: UserService.username, contact: UserService.contact.value, device: );
-    } else {}
+      var pos = await MobileService.currentLocation();
+      return ConnectionRequest(
+        latitude: pos.latitude,
+        longitude: pos.longitude,
+        username: UserService.username,
+        contact: UserService.contact.value,
+        device: device,
+      );
+    }
+
+    // @ Desktop - Calculates Location
+    else {
+      return ConnectionRequest(
+        username: UserService.username,
+        contact: UserService.contact.value,
+        device: device,
+      );
+    }
   }
 
   // ^ Method Plays a UI Sound ^

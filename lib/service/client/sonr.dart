@@ -72,10 +72,11 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     if (UserService.hasRequiredToConnect) {
-      var pos = await MobileService.currentLocation();
+      // Get Request
+      var connReq = await DeviceService.buildConnectionRequest();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
+      _node = await SonrCore.initRequest(connReq);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -93,11 +94,11 @@ class SonrService extends GetxService {
   // ^ Connect to Service Method ^ //
   Future<void> connect() async {
     if (_node == null) {
-      // Get Data
-      var pos = await MobileService.currentLocation();
+      // Get Request
+      var connReq = await DeviceService.buildConnectionRequest();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
+      _node = await SonrCore.initRequest(connReq);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -129,11 +130,11 @@ class SonrService extends GetxService {
 
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact, String username) async {
-    // Get Data
-    var pos = await MobileService.currentLocation();
+    // Get Request
+    var connReq = await DeviceService.buildConnectionRequest();
 
     // Create Node
-    _node = await SonrCore.initialize(pos.latitude, pos.longitude, username, contact);
+    _node = await SonrCore.initRequest(connReq);
     _node.onStatus = _handleStatus;
     _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
     _node.onInvited = _handleInvited;
