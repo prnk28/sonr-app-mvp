@@ -15,7 +15,7 @@ class DesktopApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Sonr Desktop',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

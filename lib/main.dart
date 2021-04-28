@@ -6,16 +6,16 @@ import 'data/data.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices();
-  runApp(App());
+  runApp(MobileApp());
 }
 
 // ^ Root App Widget ^ //
-class App extends StatefulWidget {
+class MobileApp extends StatefulWidget {
   @override
-  _AppState createState() => _AppState();
+  _MobileAppState createState() => _MobileAppState();
 }
 
-class _AppState extends State<App> {
+class _MobileAppState extends State<MobileApp> {
   @override
   void initState() {
     super.initState();
