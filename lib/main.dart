@@ -8,7 +8,6 @@ Future<void> main() async {
   await SonrRouting.initServices();
   runApp(MobileApp());
 }
-
 // ^ Root App Widget ^ //
 class MobileApp extends StatefulWidget {
   @override

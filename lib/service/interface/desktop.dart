@@ -1,22 +1,21 @@
 import 'dart:io';
 import 'package:flutter_systray/flutter_systray.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 
-class SonrTray {
+class DesktopService extends GetxService {
   MainEntry _main;
   FlutterSystray _systemTray;
 
-  // ^ Initialize System Tray ^ //
-  static Future<SonrTray> init() async {
-    var tray = SonrTray();
+  Future<DesktopService> init() async {
     // root Systray entry
-    tray._main = MainEntry(
+    _main = MainEntry(
       title: "Sonr",
-      iconPath: tray._getIconPath(),
+      iconPath: _getIconPath(),
     );
 
     // We first init the systray menu and then add the menu entries
-    await FlutterSystray.initSystray(tray._main);
+    await FlutterSystray.initSystray(_main);
     await FlutterSystray.updateMenu([
       SystrayAction(name: "focus", label: "Focus", actionType: ActionType.Focus),
       SystrayAction(name: "counterEvent", label: "Counter event", actionType: ActionType.SystrayEvent),
@@ -25,8 +24,8 @@ class SonrTray {
     ]);
 
     // Init Tray
-    tray._systemTray = FlutterSystray.init();
-    return tray;
+    _systemTray = FlutterSystray.init();
+    return this;
   }
 
   /// @ Add Event Handler to Tray Action
