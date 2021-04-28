@@ -143,11 +143,12 @@ class CardsGridView extends StatelessWidget {
     return Obx(() {
       // @ 2. Build View
       if (CardService.all.length > 0) {
-        return ListView.builder(
+        return GridView.builder(
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
-            return TransferItem(type.transferCardItemAtIndex(index), type: TransferItemView.CardItem);
+            return TransferItem(type.transferCardItemAtIndex(index), type: TransferItemView.GridItem);
           },
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         );
       } else {
         return _CardsViewEmpty(type);
