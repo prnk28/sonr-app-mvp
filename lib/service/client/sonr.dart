@@ -146,8 +146,13 @@ class SonrService extends GetxService {
 
     // Connect Node
     if (_status.value == Status.NONE) {
+      // Connect Node
       _node.connect();
-      _node.update(position: MobileService.position.value);
+
+      // Update for Mobile
+      if (DeviceService.isMobile) {
+        _node.update(position: MobileService.position.value);
+      }
     }
   }
 
@@ -230,15 +235,18 @@ class SonrService extends GetxService {
   // **************************
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
+    print(data.value.toString());
     // Check for Homescreen Controller
-    if (Get.isRegistered<MobileService>() && data.value == Status.BOOTSTRAPPED) {
+    if (data.value == Status.BOOTSTRAPPED) {
       // Update Status
       _isReady(true);
       _status(data.value);
       DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
-      _node.update(position: MobileService.position.value);
+      if (DeviceService.isMobile) {
+        _node.update(position: MobileService.position.value);
+      }
     }
   }
 
