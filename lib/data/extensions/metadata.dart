@@ -6,6 +6,11 @@ import 'package:sonr_core/sonr_core.dart';
 
 // ^ Metadata Model Extensions ^ //
 extension MetadataFileUtils on Metadata {
+  /// Checks if Metadata is for Image File
+  bool get isImage => this.mime.type == MIME_Type.image;
+  bool get isVideo => this.mime.type == MIME_Type.video;
+
+  /// Returns Size as Readable String
   String get sizeString {
     // @ Less than 1KB
     if (this.size < pow(10, 3)) {
@@ -30,14 +35,11 @@ extension MetadataFileUtils on Metadata {
       return "${double.parse((adjusted).toStringAsFixed(2))} GB";
     }
   }
-}
 
-extension MIMEFileUtils on MIME {
-  String get asString {
-    return this.type.toString().capitalizeFirst;
+  String get typeString {
+    return this.mime.type.toString().capitalizeFirst;
   }
 }
-
 extension ProfileFileUtils on Profile {
   Widget get nameText {
     return " ${this.firstName} ${this.lastName}".h6;
@@ -87,4 +89,36 @@ extension PayloadUtils on Payload {
   }
 
   bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
+}
+
+// @ Helper Enum for Video/Image Orientation
+enum MediaOrientation { Portrait, Landscape }
+
+extension MediaOrientationUtils on MediaOrientation {
+  double get aspectRatio {
+    switch (this) {
+      case MediaOrientation.Landscape:
+        return 16 / 9;
+      default:
+        return 9 / 16;
+    }
+  }
+
+  double get defaultHeight {
+    switch (this) {
+      case MediaOrientation.Landscape:
+        return 180;
+      default:
+        return 320;
+    }
+  }
+
+  double get defaultWidth {
+    switch (this) {
+      case MediaOrientation.Landscape:
+        return 320;
+      default:
+        return 180;
+    }
+  }
 }

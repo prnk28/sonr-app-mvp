@@ -8,7 +8,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 // ^ Widget for Details Media View
 class MediaDetailsView extends StatelessWidget {
-  final TransferCardItem card;
+  final Metadata card;
   final File mediaFile;
   const MediaDetailsView(this.card, this.mediaFile);
   @override
@@ -22,7 +22,7 @@ class MediaDetailsView extends StatelessWidget {
             Get.back(closeOverlays: true);
           },
           child: Hero(
-            tag: card.received,
+            tag: card.path,
             child: Material(
               color: Colors.transparent,
               child: PhotoView(imageProvider: FileImage(mediaFile)),
