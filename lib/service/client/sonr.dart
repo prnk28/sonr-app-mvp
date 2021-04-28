@@ -284,11 +284,18 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
+    // Save Card to Gallery
+    await CardService.addCard(data);
+    to.received.complete(data);
+
+    // Close any Existing Overlays
+    if (SonrOverlay.isOpen) {
+      SonrOverlay.closeAll();
+    }
+
+    // Present Feedback
     await HapticFeedback.heavyImpact();
     DeviceService.playSound(type: UISoundType.Received);
-
-    // Save Card to Gallery
-    CardService.addCard(data);
   }
 
   // ^ An Error Has Occurred ^ //
