@@ -2,7 +2,7 @@ import 'package:sonr_app/data/data.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Metadata Model Extensions ^ //
 extension MetadataFileUtils on Metadata {

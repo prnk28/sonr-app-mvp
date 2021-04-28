@@ -53,7 +53,7 @@ dependencies:
   receive_sharing_intent: ^1.4.3
 
   # -- Plugins --
-  sonr_core:
+  sonr_plugin:
     path: ../plugin
 
   # -- UI/UX --

@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import '../user/cards.dart';
 import 'lobby.dart';
 import '../user/user.dart';
-export 'package:sonr_core/sonr_core.dart';
+export 'package:sonr_plugin/sonr_plugin.dart';
 
 extension StatusUtils on Status {
   bool get isNotConnected => this == Status.NONE;

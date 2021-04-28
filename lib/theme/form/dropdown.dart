@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import '../theme.dart';
 
 // ^ Builds Overlay Based Positional Dropdown Menu ^ //

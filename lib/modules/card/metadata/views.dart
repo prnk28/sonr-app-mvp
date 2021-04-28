@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:better_player/better_player.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'details_view.dart';
 
 ///  Builds Container With Image as Decoration or Defaults to None if Not Image

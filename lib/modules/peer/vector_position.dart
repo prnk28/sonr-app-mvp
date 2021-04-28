@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:vector_math/vector_math_64.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 // * Constants * //

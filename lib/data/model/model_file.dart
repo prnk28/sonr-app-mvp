@@ -6,7 +6,7 @@ import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:image/image.dart' as img;

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_core/sonr_core.dart';
+import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ^ Flat Contact Invite/Reply from AuthInvite/AuthReply Proftobuf ^ //
@@ -21,10 +21,7 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: Neumorph.floating(shape: BoxShape.circle),
-                child: contact.profilePicture),
+            child: Container(padding: EdgeInsets.all(10), decoration: Neumorph.floating(shape: BoxShape.circle), child: contact.profilePicture),
           ),
 
           // Build Name
