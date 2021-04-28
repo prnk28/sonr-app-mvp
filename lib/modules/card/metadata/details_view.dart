@@ -4,10 +4,10 @@ import 'package:photo_view/photo_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ^ Widget for Details Media View
-class MediaDetailsView extends StatelessWidget {
+class MetaDetailsView extends StatelessWidget {
   final Metadata card;
   final File mediaFile;
-  const MediaDetailsView(this.card, this.mediaFile);
+  const MetaDetailsView(this.card, this.mediaFile);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

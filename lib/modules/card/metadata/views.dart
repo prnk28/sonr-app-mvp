@@ -23,7 +23,7 @@ class MetaBox extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return GestureDetector(
-                  onTap: () => Get.to(MediaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
+                  onTap: () => Get.to(MetaDetailsView(metadata, snapshot.data), transition: Transition.fadeIn),
                   child: Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
@@ -41,7 +41,7 @@ class MetaBox extends StatelessWidget {
               }
             })
         : Container(
-            child: child,
+            child: child ?? Container(),
           );
   }
 }

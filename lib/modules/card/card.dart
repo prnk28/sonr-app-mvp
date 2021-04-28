@@ -3,12 +3,9 @@ import 'package:sonr_app/modules/card/url/list_item.dart';
 import 'contact/card_item.dart';
 import 'contact/grid_item.dart';
 import 'contact/list_item.dart';
-import 'file/card_item.dart';
-import 'file/grid_item.dart';
-import 'file/list_item.dart';
-import 'media/card_item.dart';
-import 'media/grid_item.dart';
-import 'media/list_item.dart';
+import 'metadata/card_item.dart';
+import 'metadata/grid_item.dart';
+import 'metadata/list_item.dart';
 import 'url/card_item.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -27,22 +24,8 @@ class TransferItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // @ Build Media Card by Size
-    if (item.payload == Payload.MEDIA) {
-      switch (type) {
-        case TransferItemView.CardItem:
-          return MediaCardItemView(item);
-        case TransferItemView.GridItem:
-          return MediaGridItemView(item);
-        case TransferItemView.ListItem:
-          return MediaListItemView(item);
-        default:
-          return Container();
-      }
-    }
-
     // @ Build Contact Card by Size
-    else if (item.payload == Payload.CONTACT) {
+    if (item.payload == Payload.CONTACT) {
       switch (type) {
         case TransferItemView.CardItem:
           return ContactCardItemView(item);
@@ -69,15 +52,15 @@ class TransferItem extends StatelessWidget {
       }
     }
 
-    // @ Build File Card by Size
+    // @ Build Media/File Card by Size
     else {
       switch (type) {
         case TransferItemView.CardItem:
-          return FileCardItemView(item);
+          return MetaCardItemView(item);
         case TransferItemView.GridItem:
-          return FileGridItemView(item);
+          return MetaGridItemView(item);
         case TransferItemView.ListItem:
-          return FileListItemView(item);
+          return MetaListItemView(item);
         default:
           return Container();
       }

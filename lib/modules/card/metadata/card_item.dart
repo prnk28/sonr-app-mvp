@@ -4,13 +4,13 @@ import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_core/sonr_core.dart';
-import 'meta_view.dart';
+import 'views.dart';
 
 // ^ TransferCard Media Item Details ^ //
-class MediaCardItemView extends StatelessWidget {
+class MetaCardItemView extends StatelessWidget {
   final TransferCardItem card;
 
-  MediaCardItemView(this.card);
+  MetaCardItemView(this.card);
 
   @override
   Widget build(BuildContext context) {
