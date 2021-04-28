@@ -5,7 +5,7 @@ import 'data/data.dart';
 // ^ Main Method ^ //
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SonrRouting.initServices();
+  await SonrRouting.initMobileServices();
   runApp(MobileApp());
 }
 // ^ Root App Widget ^ //
@@ -20,7 +20,7 @@ class _MobileAppState extends State<MobileApp> {
     super.initState();
 
     // Shift Page
-    DeviceService.shiftPage(delay: 3.seconds);
+    MobileService.shiftPage(delay: 3.seconds);
   }
 
   @override

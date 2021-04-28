@@ -40,11 +40,11 @@ class TransferController extends GetxController {
   // ^ Controller Constructer ^
   void onInit() {
     // Set Initial Value
-    _handlePositionUpdate(DeviceService.position.value);
+    _handlePositionUpdate(MobileService.position.value);
     _handleLobbySizeUpdate(LobbyService.localSize.value);
 
     // Add Stream Handlers
-    _positionStream = DeviceService.position.listen(_handlePositionUpdate);
+    _positionStream = MobileService.position.listen(_handlePositionUpdate);
     _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
 
     super.onInit();

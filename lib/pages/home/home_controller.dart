@@ -41,7 +41,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     tabController.addListener(() {
       // Play Sound
       if (tabController.index != bottomIndex.value) {
-        DeviceService.playSound(type: UISoundType.Swipe);
+        MobileService.playSound(type: UISoundType.Swipe);
       }
 
       // Set Index
@@ -104,7 +104,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // @ Swaps Title when Lobby Size Changes ^ //
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
     // Check Keyboard
-    DeviceService.closeKeyboard();
+    MobileService.closeKeyboard();
 
     // Check Valid
     if (!_timeoutActive && !isClosed && isTitleVisible.value) {
@@ -151,7 +151,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     if (onData > _lobbySizeRef) {
       var diff = onData - _lobbySizeRef;
       swapTitleText("$diff Joined");
-      DeviceService.playSound(type: UISoundType.Joined);
+      MobileService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
     else if (onData < _lobbySizeRef) {

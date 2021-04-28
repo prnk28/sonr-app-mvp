@@ -14,10 +14,10 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 enum PermissionType { Camera, Gallery, Location, Notifications, Sound }
 const K_SENSOR_INTERVAL = Duration.microsecondsPerSecond ~/ 30;
 
-class DeviceService extends GetxService {
+class MobileService extends GetxService {
   // Accessors
-  static bool get isRegistered => Get.isRegistered<DeviceService>();
-  static DeviceService get to => Get.find<DeviceService>();
+  static bool get isRegistered => Get.isRegistered<MobileService>();
+  static MobileService get to => Get.find<MobileService>();
 
   // Device/Location Properties
   final _keyboardVisible = false.obs;
@@ -32,18 +32,18 @@ class DeviceService extends GetxService {
 
   // Platform Checkers
   static bool get isDesktop =>
-      Get.find<DeviceService>()._platform.value == Platform.Linux ||
-      Get.find<DeviceService>()._platform.value == Platform.MacOS ||
-      Get.find<DeviceService>()._platform.value == Platform.Windows;
+      Get.find<MobileService>()._platform.value == Platform.Linux ||
+      Get.find<MobileService>()._platform.value == Platform.MacOS ||
+      Get.find<MobileService>()._platform.value == Platform.Windows;
   static bool get isMobile =>
-      Get.find<DeviceService>()._platform.value == Platform.IOS || Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isAndroid => Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.IOS;
-  static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
-  static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
-  static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+      Get.find<MobileService>()._platform.value == Platform.IOS || Get.find<MobileService>()._platform.value == Platform.Android;
+  static bool get isAndroid => Get.find<MobileService>()._platform.value == Platform.Android;
+  static bool get isIOS => Get.find<MobileService>()._platform.value == Platform.IOS;
+  static bool get isLinux => Get.find<MobileService>()._platform.value == Platform.Linux;
+  static bool get isMacOS => Get.find<MobileService>()._platform.value == Platform.MacOS;
+  static bool get isWindows => Get.find<MobileService>()._platform.value == Platform.Windows;
   static bool get isNotApple =>
-      Get.find<DeviceService>()._platform.value != Platform.IOS && Get.find<DeviceService>()._platform.value != Platform.MacOS;
+      Get.find<MobileService>()._platform.value != Platform.IOS && Get.find<MobileService>()._platform.value != Platform.MacOS;
 
   // Controllers
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
@@ -57,7 +57,7 @@ class DeviceService extends GetxService {
   StreamSubscription<OrientationEvent> _orienStream;
 
   // * Device Service Initialization * //
-  Future<DeviceService> init() async {
+  Future<MobileService> init() async {
     // @ 1. Set Platform
     if (io.Platform.isAndroid) {
       _platform(Platform.Android);
@@ -112,7 +112,7 @@ class DeviceService extends GetxService {
 
   // ^ Method Closes Keyboard if Active ^ //
   static void closeKeyboard({BuildContext context}) async {
-    if (to._keyboardVisible.value) {
+    if (to._keyboardVisible.value && isMobile) {
       FocusScope.of(context ?? Get.context).unfocus();
     }
   }

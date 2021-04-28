@@ -1,4 +1,4 @@
-export '../service/user/device.dart';
+export '../service/device/mobile.dart';
 export '../service/client/file.dart';
 export '../service/client/lobby.dart';
 export '../service/interface/media.dart';

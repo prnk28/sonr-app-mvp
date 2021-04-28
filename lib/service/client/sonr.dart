@@ -44,10 +44,10 @@ class SonrService extends GetxService {
   // ^ Updates Node^ //
   SonrService() {
     Timer.periodic(250.milliseconds, (timer) {
-      if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
+      if (MobileService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          DeviceService.position.value ?? _node.update(position: DeviceService.position.value);
+          MobileService.position.value ?? _node.update(position: MobileService.position.value);
         }
       }
     });
@@ -70,7 +70,7 @@ class SonrService extends GetxService {
 
     // Check for Connect Requirements
     if (UserService.hasRequiredToConnect) {
-      var pos = await DeviceService.currentLocation();
+      var pos = await MobileService.currentLocation();
 
       // Create Node
       _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
@@ -92,27 +92,18 @@ class SonrService extends GetxService {
   Future<void> connect() async {
     if (_node == null) {
       // Get Data
-      var pos = await DeviceService.currentLocation();
+      var pos = await MobileService.currentLocation();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
-      _node.onStatus = _handleStatus;
-      _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node.onEvent = Get.find<LobbyService>().handleEvent;
-      _node.onInvited = _handleInvited;
-      _node.onReplied = _handleResponded;
-      _node.onProgressed = _handleProgress;
-      _node.onReceived = _handleReceived;
-      _node.onTransmitted = _handleTransmitted;
-      _node.onError = _handleError;
+      _setNode(contact: UserService.contact.value, latitude: pos.latitude, longitude: pos.longitude, username: UserService.username);
 
       // Connect Node
       _node.connect();
-      _node.update(position: DeviceService.position.value);
+      _node.update(position: MobileService.position.value);
     } else {
       if (_status.value == Status.NONE) {
         _node.connect();
-        _node.update(position: DeviceService.position.value);
+        _node.update(position: MobileService.position.value);
       }
     }
   }
@@ -120,23 +111,15 @@ class SonrService extends GetxService {
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact, String username) async {
     // Get Data
-    var pos = await DeviceService.currentLocation();
+    var pos = await MobileService.currentLocation();
 
     // Create Node
-    _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
-    _node.onStatus = _handleStatus;
-    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-    _node.onInvited = _handleInvited;
-    _node.onReplied = _handleResponded;
-    _node.onProgressed = _handleProgress;
-    _node.onReceived = _handleReceived;
-    _node.onTransmitted = _handleTransmitted;
-    _node.onError = _handleError;
+    _setNode(contact: contact, latitude: pos.latitude, longitude: pos.longitude, username: username);
 
     // Connect Node
     if (_status.value == Status.NONE) {
       _node.connect();
-      _node.update(position: DeviceService.position.value);
+      _node.update(position: MobileService.position.value);
     }
   }
 
@@ -214,20 +197,33 @@ class SonrService extends GetxService {
     return to.received.future;
   }
 
+  // # Helper to Set Service Node
+  void _setNode({@required double latitude, @required double longitude, @required Contact contact, @required String username}) async {
+    _node = await SonrCore.initialize(latitude, longitude, username, contact);
+    _node.onStatus = _handleStatus;
+    _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
+    _node.onInvited = _handleInvited;
+    _node.onReplied = _handleResponded;
+    _node.onProgressed = _handleProgress;
+    _node.onReceived = _handleReceived;
+    _node.onTransmitted = _handleTransmitted;
+    _node.onError = _handleError;
+  }
+
   // **************************
   // ******* Callbacks ********
   // **************************
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
     // Check for Homescreen Controller
-    if (Get.isRegistered<DeviceService>() && data.value == Status.BOOTSTRAPPED) {
+    if (Get.isRegistered<MobileService>() && data.value == Status.BOOTSTRAPPED) {
       // Update Status
       _isReady(true);
       _status(data.value);
-      DeviceService.playSound(type: UISoundType.Connected);
+      MobileService.playSound(type: UISoundType.Connected);
 
       // Handle Available
-      _node.update(position: DeviceService.position.value);
+      _node.update(position: MobileService.position.value);
     }
   }
 
@@ -280,7 +276,7 @@ class SonrService extends GetxService {
     }
 
     // Feedback
-    DeviceService.playSound(type: UISoundType.Transmitted);
+    MobileService.playSound(type: UISoundType.Transmitted);
     await HapticFeedback.heavyImpact();
 
     // Log Activity
@@ -303,7 +299,7 @@ class SonrService extends GetxService {
 
     // Present Feedback
     await HapticFeedback.heavyImpact();
-    DeviceService.playSound(type: UISoundType.Received);
+    MobileService.playSound(type: UISoundType.Received);
   }
 
   // ^ An Error Has Occurred ^ //
