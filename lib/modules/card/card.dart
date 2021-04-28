@@ -10,7 +10,7 @@ import 'url/card_item.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 // ^ Card Element/View type Enums ^ //
-enum TransferItemsType { All, Media, Files, Contacts, Links }
+enum TransferItemsType { All, Metadata, Contacts, Links }
 enum TransferItemView { CardItem, GridItem, ListItem }
 
 /// ^ TransferCardView: Builds View based on TransferCardItem Payload Type ^
@@ -75,11 +75,8 @@ extension CardsViewElementTypeUtils on TransferItemsType {
   // @ Return Item Count
   int get itemCount {
     switch (this) {
-      case TransferItemsType.Media:
-        return CardService.media.length;
-        break;
-      case TransferItemsType.Files:
-        return CardService.files.length;
+      case TransferItemsType.Metadata:
+        return CardService.metadata.length;
         break;
       case TransferItemsType.Contacts:
         return CardService.contacts.length;
@@ -96,11 +93,8 @@ extension CardsViewElementTypeUtils on TransferItemsType {
   // @ Return TransferCardItem
   TransferCardItem transferCardItemAtIndex(int index) {
     switch (this) {
-      case TransferItemsType.Media:
-        return CardService.media[index];
-        break;
-      case TransferItemsType.Files:
-        return CardService.files[index];
+      case TransferItemsType.Metadata:
+        return CardService.metadata[index];
         break;
       case TransferItemsType.Contacts:
         return CardService.contacts[index];
@@ -125,7 +119,7 @@ class CardsGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.all.length > 0) {
+      if (type.itemCount > 0) {
         return GridView.builder(
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {
@@ -149,7 +143,7 @@ class CardsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       // @ 2. Build View
-      if (CardService.media.length > 0) {
+      if (type.itemCount > 0) {
         return ListView.builder(
           itemCount: type.itemCount,
           itemBuilder: (BuildContext context, int index) {

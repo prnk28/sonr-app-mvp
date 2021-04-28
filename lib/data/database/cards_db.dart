@@ -58,12 +58,16 @@ class CardsDatabase extends _$CardsDatabase {
     return (select(transferCardItems)..where((t) => t.payload.equals(Payload.CONTACT.value))).watch();
   }
 
-  Stream<List<TransferCardItem>> watchFiles() {
-    return (select(transferCardItems)..where((t) => t.payload.isBiggerOrEqualValue(Payload.TEXT.value))).watch();
-  }
-
-  Stream<List<TransferCardItem>> watchMedia() {
-    return (select(transferCardItems)..where((t) => t.payload.equals(Payload.MEDIA.value))).watch();
+  Stream<List<TransferCardItem>> watchMetadata() {
+    return (select(transferCardItems)
+          ..where((t) =>
+              t.payload.equals(Payload.MEDIA.value) |
+              t.payload.equals(Payload.PDF.value) |
+              t.payload.equals(Payload.PRESENTATION.value) |
+              t.payload.equals(Payload.SPREADSHEET.value) |
+              t.payload.equals(Payload.TEXT.value) |
+              t.payload.equals(Payload.OTHER.value)))
+        .watch();
   }
 
   Stream<List<TransferCardItem>> watchUrls() {

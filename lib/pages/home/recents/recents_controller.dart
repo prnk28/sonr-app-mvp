@@ -28,7 +28,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
     tagIndex(0);
 
     // Handle Tab Controller
-    tabController = TabController(vsync: this, length: 5);
+    tabController = TabController(vsync: this, length: 4);
     tabController.addListener(() {
       tagIndex(tabController.index);
     });

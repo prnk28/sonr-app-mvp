@@ -31,8 +31,7 @@ class CardMainView extends GetView<RecentsController> {
                 height: K_LIST_HEIGHT,
                 child: TabBarView(controller: controller.tabController, children: [
                   CardsGridView(type: TransferItemsType.All),
-                  CardsListView(type: TransferItemsType.Files),
-                  CardsListView(type: TransferItemsType.Media),
+                  CardsListView(type: TransferItemsType.Metadata),
                   CardsListView(type: TransferItemsType.Contacts),
                   CardsListView(type: TransferItemsType.Links)
                 ])),
@@ -46,23 +45,18 @@ class CardMainView extends GetView<RecentsController> {
     var list = <Tuple<String, int>>[Tuple("All", 0)];
 
     // Check Files Length
-    if (CardService.hasFiles) {
+    if (CardService.hasMetadata) {
       list.add(Tuple("Files", 1));
-    }
-
-    // Check Media Length
-    if (CardService.hasMedia) {
-      list.add(Tuple("Media", 2));
     }
 
     // Check Contacts Length
     if (CardService.hasContacts) {
-      list.add(Tuple("Contacts", 3));
+      list.add(Tuple("Contacts", 2));
     }
 
     // Check URLs Length
     if (CardService.hasLinks) {
-      list.add(Tuple("Links", 4));
+      list.add(Tuple("Links", 3));
     }
     return list;
   }
