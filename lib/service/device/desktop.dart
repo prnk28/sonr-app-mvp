@@ -23,6 +23,7 @@ class DesktopService extends GetxService {
     await FlutterSystray.updateMenu([
       SystrayAction(name: "focus", label: "Open", actionType: ActionType.Focus),
       SystrayAction(name: "counterEvent", label: "Counter", actionType: ActionType.SystrayEvent),
+      SystrayAction(),
       SystrayAction(name: "quit", label: "Quit", actionType: ActionType.Quit)
     ]);
 
