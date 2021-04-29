@@ -1,4 +1,3 @@
-import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/pages/desktop/views/explorer_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'controllers/window_controller.dart';
@@ -9,11 +8,10 @@ class DesktopWindow extends GetView<WindowController> {
   Widget build(BuildContext context) {
     return SonrScaffold(
       resizeToAvoidBottomInset: false,
-      floatingAction: ShareView(),
       appBar: DesignAppBar(
         subtitle: Obx(() => controller.view.value == DesktopView.Register
             ? "Hello,".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
-            : "Hi Test,".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
+            : "Hi ${UserService.firstName.value},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
         title: Obx(() => controller.view.value == DesktopView.Register
             ? "Let's Register".headThree(color: SonrColor.Black, weight: FontWeight.w800, align: TextAlign.start)
             : AnimatedSlideSwitcher.fade(

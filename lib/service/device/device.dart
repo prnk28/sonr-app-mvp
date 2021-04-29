@@ -2,7 +2,6 @@ import 'dart:io' as io;
 import 'package:audioplayers/audio_cache.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:platform_device_id/platform_device_id.dart';
 import 'mobile.dart';
 import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
 
