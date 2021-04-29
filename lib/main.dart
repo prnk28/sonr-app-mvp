@@ -39,7 +39,7 @@ class _MobileAppState extends State<MobileApp> {
             children: [
               // @ Rive Animation
               RiveContainer(
-                type: RiveBoard.Splash,
+                type: RiveBoard.SplashPortrait,
                 width: Get.width,
                 height: Get.height,
                 placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),

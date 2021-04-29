@@ -3,7 +3,7 @@ import '../theme.dart';
 
 // ^ Home Screen Header ^ //
 class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
-  static const draggableChannel = MethodChannel('samples.go-flutter.dev/draggable');
+  static const draggableChannel = MethodChannel('io.sonr.desktop/window');
   final Widget title;
   final Widget subtitle;
   final Widget leading;
@@ -63,8 +63,7 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildTrailing() {
     if (DeviceService.isDesktop) {
-      return PlainIconButton(
-          icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose"));
+      return PlainIconButton(icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose"));
     } else {
       return action != null ? action : Container(width: 56, height: 56);
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices(isDesktop: true);
@@ -20,7 +21,7 @@ class _DesktopAppState extends State<DesktopApp> {
     super.initState();
 
     // Shift Page
-    DeviceService.shiftPage(delay: 3.seconds);
+    DeviceService.shiftPage(delay: 1.seconds);
   }
 
   @override
@@ -33,22 +34,19 @@ class _DesktopAppState extends State<DesktopApp> {
       navigatorObservers: [GetObserver()],
       themeMode: UserService.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: Scaffold(
-          backgroundColor: Colors.black,
+          backgroundColor: SonrColor.White,
           body: Stack(
             alignment: Alignment.topCenter,
             children: [
               // @ Rive Animation
-              RiveContainer(
-                type: RiveBoard.Splash,
-                width: Get.width,
-                height: Get.height,
-                placeholder: SizedBox(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blueAccent))),
+              Center(
+                child: CircularProgressIndicator(),
               ),
 
               // @ Fade Animation of Text
               Positioned(
                 bottom: 100,
-                child: OpacityAnimatedWidget(enabled: true, duration: 350.milliseconds, delay: 2222.milliseconds, child: "Sonr".hero),
+                child: OpacityAnimatedWidget(enabled: true, duration: 350.milliseconds, child: "Sonr".hero),
               ),
             ],
           )),

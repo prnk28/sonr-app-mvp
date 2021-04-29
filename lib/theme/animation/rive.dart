@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import '../theme.dart';
 import 'package:rive/rive.dart' hide LinearGradient, RadialGradient;
 
-enum RiveBoard { Splash, Documents }
+enum RiveBoard { SplashPortrait, SplashLandscape, Documents }
 
 // ^ Rive Animation Container Widget ^ //
 class RiveContainer extends StatefulWidget {
@@ -18,7 +18,6 @@ class RiveContainer extends StatefulWidget {
 
 class _RiveContainer extends State<RiveContainer> {
   // References
-  final String _splashPath = 'assets/rive/splash_screen.riv';
   final String _documentsPath = 'assets/rive/documents.riv';
 
   // Properties
@@ -28,8 +27,24 @@ class _RiveContainer extends State<RiveContainer> {
   @override
   void initState() {
     // Load the RiveFile from the binary data.
-    if (widget.type == RiveBoard.Splash) {
-      rootBundle.load(_splashPath).then(
+    if (widget.type == RiveBoard.SplashPortrait) {
+      rootBundle.load('assets/rive/splash_portrait.riv').then(
+        (data) async {
+          // Load the RiveFile from the binary data.
+          final file = RiveFile.import(data);
+
+          // Retreive Artboard
+          final artboard = file.mainArtboard;
+
+          // Determine Animation by Tile Type
+          artboard.addController(SimpleAnimation('Default'));
+          if (mounted) {
+            setState(() => _riveArtboard = artboard);
+          }
+        },
+      );
+    } else if (widget.type == RiveBoard.SplashLandscape) {
+      rootBundle.load('assets/rive/splash_landscape.riv').then(
         (data) async {
           // Load the RiveFile from the binary data.
           final file = RiveFile.import(data);
