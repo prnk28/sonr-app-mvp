@@ -22,9 +22,11 @@ Gemfile
 *.ipr
 *.iws
 .idea/
+.sonr/
 
 # Visual Studio Code related
 .vscode/
+workspace.code-workspace
 
 # Flutter/Dart/Pub related
 **/doc/api/

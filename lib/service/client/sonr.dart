@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/service/device/device.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../user/cards.dart';
@@ -47,7 +49,7 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile && SonrRouting.areServicesRegistered && isRegistered) {
         // Publish Position
         if (to._isReady.value) {
-          DeviceService.position.value ?? _node.update(position: DeviceService.position.value);
+          MobileService.position.value ?? _node.update(position: MobileService.position.value);
         }
       }
     });
@@ -69,11 +71,12 @@ class SonrService extends GetxService {
     _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
 
     // Check for Connect Requirements
-    if (UserService.hasRequiredToConnect) {
-      var pos = await DeviceService.currentLocation();
+    if (DeviceService.isReadyToConnect) {
+      // Get Request
+      var connReq = await DeviceService.buildConnectionRequest();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
+      _node = await SonrCore.initRequest(connReq);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
       _node.onInvited = _handleInvited;
@@ -91,14 +94,13 @@ class SonrService extends GetxService {
   // ^ Connect to Service Method ^ //
   Future<void> connect() async {
     if (_node == null) {
-      // Get Data
-      var pos = await DeviceService.currentLocation();
+      // Get Request
+      var connReq = await DeviceService.buildConnectionRequest();
 
       // Create Node
-      _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
+      _node = await SonrCore.initRequest(connReq);
       _node.onStatus = _handleStatus;
       _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
-      _node.onEvent = Get.find<LobbyService>().handleEvent;
       _node.onInvited = _handleInvited;
       _node.onReplied = _handleResponded;
       _node.onProgressed = _handleProgress;
@@ -108,22 +110,31 @@ class SonrService extends GetxService {
 
       // Connect Node
       _node.connect();
-      _node.update(position: DeviceService.position.value);
+
+      // Update for Mobile
+      if (DeviceService.isMobile) {
+        _node.update(position: MobileService.position.value);
+      }
     } else {
       if (_status.value == Status.NONE) {
+        // Connect Node
         _node.connect();
-        _node.update(position: DeviceService.position.value);
+
+        // Update for Mobile
+        if (DeviceService.isMobile) {
+          _node.update(position: MobileService.position.value);
+        }
       }
     }
   }
 
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact, String username) async {
-    // Get Data
-    var pos = await DeviceService.currentLocation();
+    // Get Request
+    var connReq = await DeviceService.buildConnectionRequest();
 
     // Create Node
-    _node = await SonrCore.initialize(pos.latitude, pos.longitude, UserService.username, UserService.contact.value);
+    _node = await SonrCore.initRequest(connReq);
     _node.onStatus = _handleStatus;
     _node.onRefreshed = Get.find<LobbyService>().handleRefresh;
     _node.onInvited = _handleInvited;
@@ -135,8 +146,13 @@ class SonrService extends GetxService {
 
     // Connect Node
     if (_status.value == Status.NONE) {
+      // Connect Node
       _node.connect();
-      _node.update(position: DeviceService.position.value);
+
+      // Update for Mobile
+      if (DeviceService.isMobile) {
+        _node.update(position: MobileService.position.value);
+      }
     }
   }
 
@@ -219,15 +235,18 @@ class SonrService extends GetxService {
   // **************************
   // ^ Handle Bootstrap Result ^ //
   void _handleStatus(StatusUpdate data) {
+    print(data.value.toString());
     // Check for Homescreen Controller
-    if (Get.isRegistered<DeviceService>() && data.value == Status.BOOTSTRAPPED) {
+    if (data.value == Status.BOOTSTRAPPED) {
       // Update Status
       _isReady(true);
       _status(data.value);
       DeviceService.playSound(type: UISoundType.Connected);
 
       // Handle Available
-      _node.update(position: DeviceService.position.value);
+      if (DeviceService.isMobile) {
+        _node.update(position: MobileService.position.value);
+      }
     }
   }
 

@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
+import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
+import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
+import 'package:sonr_app/pages/desktop/controllers/window_controller.dart';
 import 'package:sonr_app/pages/home/recents/recents_controller.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
@@ -17,11 +20,24 @@ class InitialBinding implements Bindings {
   @override
   void dependencies() {
     Get.put<AssetController>(AssetController(), permanent: true);
-    Get.lazyPut<CameraController>(() => CameraController());
+    if (DeviceService.isMobile) {
+      Get.lazyPut<CameraController>(() => CameraController());
+    }
   }
 }
 
-// ^ Profile Controller Bindings ^ //
+// ^ Desktop Window Bindings ^ //
+class DesktopBinding implements Bindings {
+  @override
+  void dependencies() {
+    Get.put<WindowController>(WindowController(), permanent: true);
+    Get.put<LinkController>(LinkController());
+    Get.put<ExplorerController>(ExplorerController(), permanent: true);
+    //Get.put<ShareController>(ShareController(), permanent: true);
+  }
+}
+
+// ^ Home Controller Bindings ^ //
 class HomeBinding implements Bindings {
   @override
   void dependencies() {

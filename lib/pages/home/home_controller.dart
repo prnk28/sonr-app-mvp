@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:sonr_app/data/core/arguments.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 enum ToggleFilter { All, Media, Contact, Links }
@@ -24,7 +25,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   FloatingSearchBarController searchBarController;
 
   // References
-  HomeView _lastPage = HomeView.Main;
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
@@ -104,7 +104,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   // @ Swaps Title when Lobby Size Changes ^ //
   void swapTitleText(String val, {Duration timeout = const Duration(milliseconds: 3500)}) {
     // Check Keyboard
-    DeviceService.closeKeyboard();
+    MobileService.closeKeyboard();
 
     // Check Valid
     if (!_timeoutActive && !isClosed && isTitleVisible.value) {
@@ -131,17 +131,6 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Present View
     if (isSearchVisible.value) {
       searchBarController.open();
-    }
-  }
-
-  // @ Return Animation by Page Index
-  SwitchType get switchAnimation {
-    if (_lastPage.index > view.value.index) {
-      _lastPage = view.value;
-      return SwitchType.SlideLeft;
-    } else {
-      _lastPage = view.value;
-      return SwitchType.SlideRight;
     }
   }
 

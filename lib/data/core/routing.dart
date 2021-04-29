@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
+import 'package:sonr_app/pages/desktop/window.dart';
 import 'package:sonr_app/pages/home/home_page.dart';
 import 'package:sonr_app/pages/register/register_page.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
+import 'package:sonr_app/service/device/desktop.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/service/client/lobby.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -27,6 +30,23 @@ class SonrRouting {
             curve: Curves.easeIn,
             middlewares: [GetMiddleware()]),
 
+        // ** Home Page ** //
+        GetPage(
+            name: '/desktop',
+            page: () {
+              // // Update Contact for New User
+              // if (UserService.isNewUser.value) {
+              //   Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+              // } else {
+              //   Get.find<SonrService>().connect();
+              // }
+              return DesktopWindow();
+            },
+            binding: DesktopBinding(),
+            transition: Transition.topLevel,
+            curve: Curves.easeIn,
+            middlewares: [GetMiddleware()]),
+
         // ** Register Page ** //
         GetPage(name: '/register', page: () => RegisterPage(), transition: Transition.fade, curve: Curves.easeIn, binding: RegisterBinding()),
 
@@ -40,18 +60,31 @@ class SonrRouting {
             fullscreenDialog: true),
       ];
 
-  // ^ Services (Files, Contacts) ^ //
-  static initServices() async {
-    await Get.putAsync(() => DeviceService().init(), permanent: true); // Second Required Service
-    await Get.putAsync(() => UserService().init(), permanent: true); // Third Required Service
+  // ^ Application Services ^ //
+  static initServices({bool isDesktop = false}) async {
+    // First Services
+    await Get.putAsync(() => DeviceService().init(isDesktop), permanent: true);
+    await Get.putAsync(() => UserService().init(), permanent: true);
+
+    // Initialize Platform Services
+    if (isDesktop) {
+      await Get.putAsync(() => DesktopService().init(), permanent: true);
+    } else {
+      await Get.putAsync(() => MobileService().init(), permanent: true);
+    }
+
+    // Initialize Data/Networking Services
     await Get.putAsync(() => FileService().init(), permanent: true);
-    await Get.putAsync(() => MediaService().init(), permanent: true);
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
 
-    await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-    await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
+    // Start Platform Orientated Services
+    if (!isDesktop) {
+      await Get.putAsync(() => MediaService().init(), permanent: true);
+      await Get.putAsync(() => SonrOverlay().init(), permanent: true);
+      await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
+    }
   }
 
   // ^ Method Validates Required Services Registered ^ //

@@ -4,6 +4,7 @@ import 'package:get/get.dart' hide Node;
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_lobby.dart';
 import 'package:sonr_app/modules/peer/vector_position.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
@@ -38,14 +39,19 @@ class LobbyService extends GetxService {
 
   // # Initialize Service Method ^ //
   Future<LobbyService> init() async {
-    _positionStream = DeviceService.position.listen(_handlePosition);
+    if (DeviceService.isMobile) {
+      _positionStream = MobileService.position.listen(_handlePosition);
+    }
     return this;
   }
 
   // # On Service Close //
   @override
   void onClose() {
-    _positionStream.cancel();
+    if (_positionStream != null) {
+      _positionStream.cancel();
+    }
+
     super.onClose();
   }
 

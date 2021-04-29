@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/modules/share/share_controller.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class ShareView extends GetView<ShareController> {
@@ -93,7 +94,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
 
         // Request Permissions
         else {
-          var result = await Get.find<UserService>().requestCamera();
+          var result = await Get.find<MobileService>().requestCamera();
           result ? controller.presentCameraView() : SonrSnack.error("Sonr cannot open Camera without Permissions");
         }
       },

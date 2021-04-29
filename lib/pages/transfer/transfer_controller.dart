@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/peer/peer_controller.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class TransferController extends GetxController {
@@ -40,11 +41,11 @@ class TransferController extends GetxController {
   // ^ Controller Constructer ^
   void onInit() {
     // Set Initial Value
-    _handlePositionUpdate(DeviceService.position.value);
+    _handlePositionUpdate(MobileService.position.value);
     _handleLobbySizeUpdate(LobbyService.localSize.value);
 
     // Add Stream Handlers
-    _positionStream = DeviceService.position.listen(_handlePositionUpdate);
+    _positionStream = MobileService.position.listen(_handlePositionUpdate);
     _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
 
     super.onInit();
