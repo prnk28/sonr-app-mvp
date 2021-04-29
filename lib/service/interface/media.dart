@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/share/sheet_view.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import '../client/sonr.dart';
@@ -71,7 +72,7 @@ class MediaService extends GetxService {
     await PhotoManager.setLog(false);
 
     // Check Permissions
-    if (UserService.permissions.value.hasGallery) {
+    if (MobileService.hasGallery.value) {
       // Get Collections
       _state(GalleryState.Loading);
       _state(GalleryState.Ready);
@@ -155,7 +156,7 @@ class MediaService extends GetxService {
     // Get Data from Media
     final path = meta.path;
     // Save Image to Gallery
-    if (meta.mime.type == MIME_Type.image && UserService.permissions.value.hasGallery) {
+    if (meta.mime.type == MIME_Type.image && MobileService.hasGallery.value) {
       var asset = await PhotoManager.editor.saveImageWithPath(path);
       var result = await asset.exists;
 
@@ -169,7 +170,7 @@ class MediaService extends GetxService {
     }
 
     // Save Video to Gallery
-    else if (meta.mime.type == MIME_Type.video && UserService.permissions.value.hasGallery) {
+    else if (meta.mime.type == MIME_Type.video && MobileService.hasGallery.value) {
       // Set Video File
       File videoFile = File(path);
       var asset = await PhotoManager.editor.saveVideo(videoFile);

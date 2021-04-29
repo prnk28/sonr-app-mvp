@@ -71,7 +71,7 @@ class SonrService extends GetxService {
     _properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled));
 
     // Check for Connect Requirements
-    if (UserService.hasRequiredToConnect) {
+    if (DeviceService.isReadyToConnect) {
       // Get Request
       var connReq = await DeviceService.buildConnectionRequest();
 

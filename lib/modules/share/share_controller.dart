@@ -3,6 +3,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 export 'share_view.dart';
 export 'share_controller.dart';
@@ -30,8 +31,8 @@ extension ShareStatusUtils on ShareStatus {
 // ** Share Reactive Controller ** //
 class ShareController extends GetxController {
   // Permissions
-  final cameraPermitted = RxBool(UserService.permissions.value.hasCamera);
-  final galleryPermitted = RxBool(UserService.permissions.value.hasGallery);
+  final cameraPermitted = RxBool(MobileService.hasCamera.value);
+  final galleryPermitted = RxBool(MobileService.hasGallery.value);
 
   // Properties
   final size = Size(60, 60).obs;
@@ -92,7 +93,7 @@ class ShareController extends GetxController {
   // ^ Select a File
   selectFile() async {
     // Check Permissions
-    if (UserService.permissions.value.hasGallery) {
+    if (MobileService.hasGallery.value) {
       var result = await FileService.selectMedia();
       if (result.hasItem) {
         // Shrink Button after Delay
@@ -103,7 +104,7 @@ class ShareController extends GetxController {
       }
     } else {
       // Request Permissions
-      var status = await Get.find<UserService>().requestGallery();
+      var status = await Get.find<MobileService>().requestGallery();
       SonrOverlay.back();
 
       // Check Status
@@ -128,7 +129,7 @@ class ShareController extends GetxController {
   // ^ Select Media
   selectMedia() async {
     // Check Permissions
-    if (UserService.permissions.value.hasGallery) {
+    if (MobileService.hasGallery.value) {
       var result = await FileService.selectMedia();
       if (result.hasItem) {
         // Push to Transfer
@@ -139,7 +140,7 @@ class ShareController extends GetxController {
       }
     } else {
       // Request Permissions
-      var status = await Get.find<UserService>().requestGallery();
+      var status = await Get.find<MobileService>().requestGallery();
       SonrOverlay.back();
 
       // Check Status

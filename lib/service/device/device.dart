@@ -26,6 +26,15 @@ class DeviceService extends GetxService {
   static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
   static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
 
+  // Connection Requirements
+  static bool get isReadyToConnect {
+    if (isMobile) {
+      return MobileService.hasLocation.value && MobileService.hasLocalNetwork.value && UserService.hasUser.value;
+    } else {
+      return UserService.hasUser.value;
+    }
+  }
+
   // * Device Service Initialization * //
   Future<DeviceService> init(bool isDesktop) async {
     // Set Initializers
@@ -101,13 +110,13 @@ class DeviceService extends GetxService {
           Get.offNamed("/register");
         } else {
           // All Valid
-          if (UserService.permissions.value.hasLocation) {
+          if (MobileService.hasLocation.value) {
             Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
           }
 
           // No Location
           else {
-            Get.find<UserService>().requestLocation().then((value) {
+            Get.find<MobileService>().requestLocation().then((value) {
               if (value) {
                 Get.offNamed("/home", arguments: HomeArguments(isFirstLoad: true));
               }

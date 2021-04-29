@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 import 'profile_controller.dart';
@@ -147,7 +148,7 @@ class ProfilePictureController extends GetxController {
 
   // Properties
   final result = Rx<MediaFile>(null);
-  final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(UserService.permissions.value.hasCamera));
+  final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(MobileService.hasCamera.value));
 
   // References
   PictureController _pictureController = PictureController();
@@ -179,7 +180,7 @@ class ProfilePictureController extends GetxController {
   // @ Method to Request Camera Permissions
   requestPermission() async {
     var granted = await Permission.camera.request().isGranted;
-    UserService.permissions.value.update();
+    Get.find<MobileService>().updatePermissionsStatus();
     status(ProfilePictureStatusUtils.statusFromPermissions(granted));
   }
 }
