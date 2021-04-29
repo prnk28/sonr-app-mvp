@@ -14,7 +14,6 @@ class DesktopApp extends StatefulWidget {
   @override
   _DesktopAppState createState() => _DesktopAppState();
 }
-
 class _DesktopAppState extends State<DesktopApp> {
   @override
   void initState() {

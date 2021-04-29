@@ -81,7 +81,6 @@ class MobileService extends GetxService {
 
     // Set Permissions Status
     updatePermissionsStatus();
-    SonrOverlay.back();
     return this;
   }
 

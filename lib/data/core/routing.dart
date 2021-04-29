@@ -34,12 +34,6 @@ class SonrRouting {
         GetPage(
             name: '/desktop',
             page: () {
-              // // Update Contact for New User
-              // if (UserService.isNewUser.value) {
-              //   Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
-              // } else {
-              //   Get.find<SonrService>().connect();
-              // }
               return DesktopWindow();
             },
             binding: DesktopBinding(),
@@ -71,6 +65,9 @@ class SonrRouting {
       await Get.putAsync(() => DesktopService().init(), permanent: true);
     } else {
       await Get.putAsync(() => MobileService().init(), permanent: true);
+      await Get.putAsync(() => MediaService().init(), permanent: true);
+      await Get.putAsync(() => SonrOverlay().init(), permanent: true);
+      await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
     }
 
     // Initialize Data/Networking Services
@@ -78,13 +75,6 @@ class SonrRouting {
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
-
-    // Start Platform Orientated Services
-    if (!isDesktop) {
-      await Get.putAsync(() => MediaService().init(), permanent: true);
-      await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-      await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
-    }
   }
 
   // ^ Method Validates Required Services Registered ^ //

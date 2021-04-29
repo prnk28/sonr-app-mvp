@@ -33,7 +33,6 @@ class DesktopBinding implements Bindings {
     Get.put<WindowController>(WindowController(), permanent: true);
     Get.put<LinkController>(LinkController());
     Get.put<ExplorerController>(ExplorerController(), permanent: true);
-    //Get.put<ShareController>(ShareController(), permanent: true);
   }
 }
 

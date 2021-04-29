@@ -94,9 +94,6 @@ class _MediaGridItemDetailsView extends StatelessWidget {
             )),
       ),
 
-      // Space Between
-      Spacer(),
-
       // Device Information
       Padding(
         padding: const EdgeInsets.only(left: 8.0),
@@ -105,7 +102,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Mime Icon
-            Expanded(child: item.metadata.mime.type.gradient(size: 96)),
+            item.metadata.mime.type.gradient(size: 96),
 
             item.metadata.sizeString.p_Grey,
 
@@ -121,7 +118,6 @@ class _MediaGridItemDetailsView extends StatelessWidget {
           ],
         ),
       ),
-      Spacer(),
     ]));
   }
 }
