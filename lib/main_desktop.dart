@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices(isDesktop: true);
@@ -14,6 +13,7 @@ class DesktopApp extends StatefulWidget {
   @override
   _DesktopAppState createState() => _DesktopAppState();
 }
+
 class _DesktopAppState extends State<DesktopApp> {
   @override
   void initState() {
