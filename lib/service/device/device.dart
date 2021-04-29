@@ -70,8 +70,7 @@ class DeviceService extends GetxService {
   // ^ Builds Connection Request based on Platform ^
   static Future<ConnectionRequest> buildConnectionRequest() async {
     // Initialize Variables
-    String deviceId = await PlatformDeviceId.getDeviceId;
-    var device = await provider.buildDevice(platform: to._platform.value, id: deviceId);
+    var device = await provider.buildDevice(platform: to._platform.value);
 
     // @ Mobile - Passes Location
     if (isMobile) {
