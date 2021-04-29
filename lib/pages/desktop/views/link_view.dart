@@ -12,7 +12,7 @@ class LinkDesktopView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'You have pushed the button this many times:',
+          SonrService.locationInfo().toString(),
         ),
       ],
     ));

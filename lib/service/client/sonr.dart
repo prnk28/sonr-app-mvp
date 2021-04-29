@@ -156,21 +156,28 @@ class SonrService extends GetxService {
     }
   }
 
+  // ^ Retreive Node Location Info ^ //
+  static Future<Location> locationInfo() async {
+    return await to._node.location();
+  }
+
+  // ^ Retreive URLLink Metadata ^ //
   static Future<URLLink> getURL(String url) async {
     return await to._node.getURL(url);
   }
 
+  // ^ Request Local Network Access on iOS ^
   static void requestLocalNetwork() async {
     await to._node.requestLocalNetwork();
   }
 
-  // ^ Join a New Group ^
+  // ^ Create a New Remote ^
   static Future<RemoteInfo> createRemote() async {
     var data = await to._node.createRemote();
     return data;
   }
 
-  // ^ Join a New Group ^
+  // ^ Join an Existing Remote ^
   static Future<RemoteInfo> joinRemote(List<String> words) async {
     // Extract Data
     var display = "${words[0]} ${words[1]} ${words[2]}";

@@ -44,6 +44,7 @@ dependencies:
   permission_handler: ^6.1.1
   platform_device_id: ^1.0.1
   url_launcher: ^6.0.2
+  warble: ^0.0.2
 
   # -- Data --
   audioplayers: ^0.18.3

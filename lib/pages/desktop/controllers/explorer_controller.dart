@@ -11,15 +11,18 @@ class ExplorerController extends GetxController {
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
   final fileItem = Rx<FileItem>(null);
+  final location = Rx<Location>(Location());
 
   // References
   StreamSubscription<int> _lobbySizeStream;
   CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
-  void onInit() {
+  void onInit() async {
     // Set Initial Value
     _handleLobbySizeUpdate(LobbyService.localSize.value);
+    location(await SonrService.locationInfo());
+    location.refresh();
 
     // Add Stream Handlers
     _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
