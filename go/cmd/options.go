@@ -7,6 +7,7 @@ import (
 	"github.com/go-flutter-desktop/plugins/path_provider"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	warble "github.com/jslater89/warble/go"
+	file_picker "github.com/miguelpruivo/flutter_file_picker/go"
 )
 
 var options = []flutter.Option{
@@ -19,6 +20,7 @@ var options = []flutter.Option{
 		VendorName:      "https://sonr.io",
 		ApplicationName: "Sonr",
 	}),
+	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 	flutter.AddPlugin(&AppBarDraggable{}),
 }
 
@@ -35,9 +37,9 @@ var _ flutter.PluginGLFW = &AppBarDraggable{} // compile-time type check
 
 // InitPlugin creates a MethodChannel for "samples.go-flutter.dev/draggable"
 func (p *AppBarDraggable) InitPlugin(messenger plugin.BinaryMessenger) error {
-	channel := plugin.NewMethodChannel(messenger, "samples.go-flutter.dev/draggable", plugin.StandardMethodCodec{})
+	channel := plugin.NewMethodChannel(messenger, "io.sonr.desktop/window", plugin.StandardMethodCodec{})
 	channel.HandleFunc("onPanStart", p.onPanStart)
-	channel.HandleFuncSync("onPanUpdate", p.onPanUpdate) // MUST RUN ON THE MAIN THREAD (use of HandleFuncSync)
+	channel.HandleFuncSync("onPanUpdate", p.onPanUpdate)
 	channel.HandleFunc("onClose", p.onClose)
 	return nil
 }
