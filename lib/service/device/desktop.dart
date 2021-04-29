@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_systray/flutter_systray.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -10,18 +12,17 @@ class DesktopService extends GetxService {
 
   // * Initialize * //
   Future<DesktopService> init() async {
-    // @ 2. Root Main Entry
+    // @ 1. Root Main Entry
     _main = MainEntry(
       title: "Sonr",
-      iconPath: _getIconPath(),
+      iconPath: await _getIconPath(),
     );
 
-    // @ 3. Init SystemTray
+    // @ 2. Init SystemTray
     await FlutterSystray.initSystray(_main);
     await FlutterSystray.updateMenu([
       SystrayAction(name: "focus", label: "Open", actionType: ActionType.Focus),
       SystrayAction(name: "counterEvent", label: "Counter", actionType: ActionType.SystrayEvent),
-      SystrayAction(name: "systrayEvent2", label: "Event 2", actionType: ActionType.SystrayEvent),
       SystrayAction(name: "quit", label: "Quit", actionType: ActionType.Quit)
     ]);
 
@@ -42,11 +43,27 @@ class DesktopService extends GetxService {
   }
 
   // # Helper: Returns Icon Path
-  String _getIconPath() {
+  Future<String> _getIconPath() async {
+    // Set Temporary Directory
+    Directory directory = await getApplicationDocumentsDirectory();
+    String name = "";
+
+    // Get File Name
     if (DeviceService.isWindows) {
-      return absolute('go\\assets', 'tray.ico');
+      name = "tray.ico";
     } else {
-      return absolute('go/assets', 'tray.png');
+      name = "tray.png";
     }
+
+    // Load into DB
+    var dbPath = join(directory.path, name);
+    ByteData data = await rootBundle.load("assets/images/$name");
+
+    // Write File
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    var file = await File(dbPath).writeAsBytes(bytes);
+
+    // Return Path
+    return file.path;
   }
 }
