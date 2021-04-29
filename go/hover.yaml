@@ -1,7 +1,7 @@
-application-name: "Sonr Desktop" # Uncomment to modify this value.
-executable-name: "Sonr" # Uncomment to modify this value. Only lowercase a-z, numbers, underscores and no spaces
-package-name: "sonrdesktop" # Uncomment to modify this value. Only lowercase a-z, numbers and no underscores or spaces
+application-name: "Sonr Desktop"
+executable-name: "Sonr"
+package-name: "Sonr Installer"
 organization-name: "io.sonr.desktop"
 target: lib/main_desktop.dart
-docker: false
-engine-version: "" # change to a engine version commit
+docker: true
+engine-version: ""
