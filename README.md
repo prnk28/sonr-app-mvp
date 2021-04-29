@@ -5,6 +5,3 @@
 
 # Description
 > Share anything to everyone and everything.
-
-App utilizes Libp2p, QUIC, and OLC to be able to send any file to a nearby person. Also has robust contact sharing feature.
-
