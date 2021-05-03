@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:sonr_app/theme/theme.dart';
-
 class WindowController extends GetxController {
   static get to => Get.find<WindowController>();
 

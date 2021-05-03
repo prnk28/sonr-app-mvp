@@ -1,7 +1,7 @@
 application-name: "Sonr Desktop"
 executable-name: "Sonr"
-package-name: "Sonr Installer"
+package-name: "Sonr-Installer"
 organization-name: "io.sonr.desktop"
 target: lib/main_desktop.dart
-docker: false
+docker: true
 engine-version: ""
