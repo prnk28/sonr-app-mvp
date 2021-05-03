@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_systray/flutter_systray.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';

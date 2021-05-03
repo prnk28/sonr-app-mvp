@@ -1,9 +1,9 @@
-import 'dart:io' as io;
 import 'package:audioplayers/audio_cache.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'mobile.dart';
 import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
+import 'package:location/location.dart' as loc;
 
 class DeviceService extends GetxService {
   // Initializers
@@ -41,17 +41,7 @@ class DeviceService extends GetxService {
     _isMobile = !isDesktop;
 
     // Set Platform
-    if (io.Platform.isAndroid) {
-      _platform(Platform.Android);
-    } else if (io.Platform.isIOS) {
-      _platform(Platform.IOS);
-    } else if (io.Platform.isLinux) {
-      _platform(Platform.Linux);
-    } else if (io.Platform.isMacOS) {
-      _platform(Platform.MacOS);
-    } else if (io.Platform.isWindows) {
-      _platform(Platform.Windows);
-    }
+    _platform(PlatformUtils.determineFromIO());
 
     // Audio Player
     _audioPlayer.disableLog();
@@ -70,10 +60,21 @@ class DeviceService extends GetxService {
   static Future<ConnectionRequest> buildConnectionRequest() async {
     // Initialize Variables
     var device = await provider.buildDevice(platform: to._platform.value);
+    var pos = await getCurrentLocation();
 
     // @ Mobile - Passes Location
     if (isMobile) {
-      var pos = await MobileService.currentLocation();
+      return ConnectionRequest(
+        latitude: pos.latitude,
+        longitude: pos.longitude,
+        username: UserService.username,
+        contact: UserService.contact.value,
+        device: device,
+      );
+    }
+
+    // @ MacOS - Has Location Permissions
+    else if (isMacOS) {
       return ConnectionRequest(
         latitude: pos.latitude,
         longitude: pos.longitude,
@@ -90,6 +91,39 @@ class DeviceService extends GetxService {
         contact: UserService.contact.value,
         device: device,
       );
+    }
+  }
+
+  // ^ Returns location information ^
+  static Future<loc.LocationData> getCurrentLocation() async {
+    if (to._platform.value.hasLocationAbility) {
+      // Initialize
+      loc.Location location = loc.Location();
+      bool _serviceEnabled;
+      loc.PermissionStatus _permissionGranted;
+
+      // Check for Service
+      _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return null;
+        }
+      }
+
+      // Check for Permissions
+      _permissionGranted = await location.hasPermission();
+      if (_permissionGranted == loc.PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != loc.PermissionStatus.granted) {
+          return null;
+        }
+      }
+
+      // Return Location Data
+      return await location.getLocation();
+    } else {
+      return null;
     }
   }
 
