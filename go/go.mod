@@ -16,6 +16,6 @@ require (
 	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 // indirect
 )
 
-replace github.com/sonr-io/plugin/go => /Users/prad/Sonr/app/plugin/go
+replace github.com/sonr-io/plugin/go => /Users/prad/Sonr/plugin/go
 
 replace github.com/sonr-io/core => /Users/prad/Sonr/core
