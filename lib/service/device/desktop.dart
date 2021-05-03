@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter_systray/flutter_systray.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
+import 'package:sonr_app/data/model/model_location.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:http/http.dart' as http;
 
 class DesktopService extends GetxService {
   // References
@@ -28,6 +30,13 @@ class DesktopService extends GetxService {
     // Init Tray
     _systemTray = FlutterSystray.init();
     return this;
+  }
+
+  static Future<Location> currentLocation() async {
+    var url = Uri.parse('http://api.ipstack.com/check?access_key=28da32809f3bcd2edc418d62802d1fc6');
+    var response = await http.get(url);
+    var geoIp = GeoIP.fromResponse(response.body);
+    return Location(latitude: geoIp.latitude, longitude: geoIp.longitude);
   }
 
   /// @ Add Event Handler to Tray Action

@@ -63,7 +63,10 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildTrailing() {
     if (DeviceService.isDesktop) {
-      return PlainIconButton(icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose"));
+      return Container(
+          width: 56,
+          height: 56,
+          child: PlainIconButton(icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose")));
     } else {
       return action != null ? action : Container(width: 56, height: 56);
     }
