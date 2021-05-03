@@ -1,4 +1,3 @@
-
 import 'package:audioplayers/audio_cache.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -77,9 +76,10 @@ class DeviceService extends GetxService {
     // @ Desktop - Calculates Location
     else {
       var pos = await DesktopService.currentLocation();
+      print(pos.toString());
       return ConnectionRequest(
-        latitude: pos.latitude,
-        longitude: pos.longitude,
+        //latitude: pos.latitude,
+        //longitude: pos.longitude,
         username: UserService.username,
         contact: UserService.contact.value,
         device: device,
