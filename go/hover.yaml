@@ -4,3 +4,4 @@ package-name: "Sonr-Installer"
 organization-name: "io.sonr.desktop"
 target: lib/main_desktop.dart
 engine-version: ""
+docker: true

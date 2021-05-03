@@ -78,8 +78,8 @@ class DeviceService extends GetxService {
       var pos = await DesktopService.currentLocation();
       print(pos.toString());
       return ConnectionRequest(
-        //latitude: pos.latitude,
-        //longitude: pos.longitude,
+        latitude: pos.latitude,
+        longitude: pos.longitude,
         username: UserService.username,
         contact: UserService.contact.value,
         device: device,
