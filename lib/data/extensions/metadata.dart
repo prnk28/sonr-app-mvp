@@ -4,51 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
-// ^ Metadata Model Extensions ^ //
-extension MetadataFileUtils on SonrFile_Metadata {
-  /// Checks if Metadata is for Image File
-  bool get isImage => this.mime.type == MIME_Type.IMAGE;
-  bool get isVideo => this.mime.type == MIME_Type.VIDEO;
 
-  ///  Return Cleaned Name
-  String get prettyName {
-    if (this.name.length > 8) {
-      return this.name.substring(0, 8) + ".${this.mime.subtype}";
-    } else {
-      return this.name;
-    }
-  }
-
-  /// Returns Size as Readable String
-  String get sizeString {
-    // @ Less than 1KB
-    if (this.size < pow(10, 3)) {
-      return "${this.size} B";
-    }
-    // @ Less than 1MB
-    else if (this.size >= pow(10, 3) && this.size < pow(10, 6)) {
-      // Adjust Size Value, Return String
-      var adjusted = this.size / pow(10, 3);
-      return "${double.parse((adjusted).toStringAsFixed(2))} KB";
-    }
-    // @ Less than 1GB
-    else if (this.size >= pow(10, 6) && this.size < pow(10, 9)) {
-      // Adjust Size Value, Return String
-      var adjusted = this.size / pow(10, 6);
-      return "${double.parse((adjusted).toStringAsFixed(2))} MB";
-    }
-    // @ Greater than GB
-    else {
-      // Adjust Size Value, Return String
-      var adjusted = this.size / pow(10, 9);
-      return "${double.parse((adjusted).toStringAsFixed(2))} GB";
-    }
-  }
-
-  String get typeString {
-    return this.mime.type.toString().capitalizeFirst;
-  }
-}
 
 extension ProfileFileUtils on Profile {
   Widget get nameText {
@@ -90,23 +46,6 @@ extension MIMETypeUtils on MIME_Type {
       FlutterGradientNames.seashore
     ].random();
   }
-
-  String get asString {
-    if (this == MIME_Type.PDF) {
-      return this.toString();
-    }
-    return this.toString().capitalizeFirst;
-  }
-
-  bool get isFile {
-    return this != MIME_Type.OTHER && this != Payload.CONTACT && this != Payload.URL;
-  }
-
-  bool get isMedia {
-    return this == MIME_Type.IMAGE || this == MIME_Type.AUDIO || this == MIME_Type.VIDEO;
-  }
-
-  bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;
 }
 
 // @ Helper Enum for Video/Image Orientation

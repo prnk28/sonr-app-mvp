@@ -52,7 +52,11 @@ class DeviceService extends GetxService {
     // @ Mobile - Passes Location
     if (isMobile) {
       var pos = await MobileService.currentLocation();
-      return newConnectionRequest(location: Location(latitude: pos.latitude, longitude: pos.longitude));
+      return newConnectionRequest(
+        location: Location(latitude: pos.latitude, longitude: pos.longitude),
+        device: device,
+        contact: UserService.contact.value,
+      );
     }
 
     // @ Desktop - Calculates Location
