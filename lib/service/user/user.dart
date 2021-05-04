@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_app/data/data.dart';
 
 class UserService extends GetxService {
   // Accessors
@@ -105,16 +104,14 @@ class UserService extends GetxService {
 
   // ^ Add Social to List ^ //
   static addSocial(Contact_Social value) {
-    var controller = to;
-    controller._socials[value.username] = value;
+    to._socials[value.username] = value;
     saveChanges();
   }
 
   // ^ Delete Social from List ^ //
   static bool deleteSocial(Contact_Social value) {
-    var controller = to;
-    if (controller._socials.containsKey(value.username)) {
-      controller._socials.remove(value);
+    if (to._socials.containsKey(value.username)) {
+      to._socials.remove(value);
       saveChanges();
       return true;
     }
@@ -123,9 +120,8 @@ class UserService extends GetxService {
 
   // ^ Update Social in List ^ //
   static bool swapSocials(Contact_Social first, Contact_Social second) {
-    var controller = to;
-    int idxOne = controller._socials.keys.toList().indexOf(first.username);
-    int idxTwo = controller._socials.keys.toList().indexOf(second.username);
+    // int idxOne = to._socials.keys.toList().indexOf(first.username);
+    //int idxTwo = to._socials.keys.toList().indexOf(second.username);
     // controller._socials.swap(idxOne, idxTwo);
     saveChanges();
     return true;
@@ -133,9 +129,8 @@ class UserService extends GetxService {
 
   // ^ Update Social in List ^ //
   static bool updateSocial(Contact_Social value) {
-    var controller = to;
-    if (controller._socials.containsKey(value.username)) {
-      controller._socials[value.username] = value;
+    if (to._socials.containsKey(value.username)) {
+      to._socials[value.username] = value;
       saveChanges();
       return true;
     }

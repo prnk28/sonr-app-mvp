@@ -12,9 +12,6 @@ require (
 	github.com/miguelpruivo/flutter_file_picker/go v0.0.0-20210401125244-74289af412c2
 	github.com/pkg/errors v0.9.1
 	github.com/sonr-io/plugin/go v0.9.1
-	github.com/ugorji/go v1.2.5 // indirect
-	go.opencensus.io v0.23.0 // indirect
-	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 // indirect
 )
 
 replace github.com/sonr-io/plugin/go => /Users/prad/Sonr/plugin/go

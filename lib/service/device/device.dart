@@ -2,6 +2,8 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'desktop.dart';
 import 'mobile.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DeviceService extends GetxService {
   // Initializers
@@ -16,11 +18,11 @@ class DeviceService extends GetxService {
   // Platform Checkers
   static bool get isDesktop => Get.find<DeviceService>()._isDesktop;
   static bool get isMobile => Get.find<DeviceService>()._isMobile;
-  static bool get isAndroid => Get.find<DeviceService>()._platform.value == Platform.Android;
-  static bool get isIOS => Get.find<DeviceService>()._platform.value == Platform.IOS;
-  static bool get isLinux => Get.find<DeviceService>()._platform.value == Platform.Linux;
-  static bool get isMacOS => Get.find<DeviceService>()._platform.value == Platform.MacOS;
-  static bool get isWindows => Get.find<DeviceService>()._platform.value == Platform.Windows;
+  static bool get isAndroid => Get.find<DeviceService>()._platform.value.isAndroid;
+  static bool get isIOS => Get.find<DeviceService>()._platform.value.isIOS;
+  static bool get isLinux => Get.find<DeviceService>()._platform.value.isLinux;
+  static bool get isMacOS => Get.find<DeviceService>()._platform.value.isMacOS;
+  static bool get isWindows => Get.find<DeviceService>()._platform.value.isWindows;
 
   // Connection Requirements
   static bool get isReadyToConnect {
@@ -39,33 +41,22 @@ class DeviceService extends GetxService {
 
     // Set Platform
     _platform(PlatformUtils.find());
+    print("Current Platform: " + _platform.value.toString());
 
     // Audio Player
     return this;
   }
 
   // ^ Builds Connection Request based on Platform ^
-  static Future<ConnectionRequest> buildConnectionRequest() async {
+  static Future<ConnectionRequest> connectionRequest() async {
     // Initialize Variables
     var device = await newDevice(platform: to._platform.value);
-
-    // @ Mobile - Passes Location
-    if (isMobile) {
-      var pos = await MobileService.currentLocation();
-      return newConnectionRequest(
-        location: Location(latitude: pos.latitude, longitude: pos.longitude),
-        device: device,
-        contact: UserService.contact.value,
-      );
-    }
-
-    // @ Desktop - Calculates Location
-    else {
-      return ConnectionRequest(
-        contact: UserService.contact.value,
-        device: device,
-      );
-    }
+    return newConnectionRequest(
+      geoLocation: isMobile ? await MobileService.currentLocation() : null,
+      ipLocation: await findIPLocation(),
+      device: device,
+      contact: UserService.contact.value,
+    );
   }
 
   // ^ Provide Device Feedback ^ //
@@ -74,6 +65,32 @@ class DeviceService extends GetxService {
       await HapticFeedback.heavyImpact();
     } else {
       DesktopService.openWindow();
+    }
+  }
+
+  // ^ Retreive Location by IP Address ^ //
+  static Future<Location> findIPLocation() async {
+    var url =
+        Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=873dbe322aea47f89dcf729dcc8f60e8");
+
+    final response = await http.get(url, headers: {
+      'x-rapidapi-key': 'a09329a7a8mshc7688c2dc3de4f9p197eb4jsn186162847bfb',
+      'x-rapidapi-host': 'find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com'
+    });
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(response.body);
+      var loc = Location(
+        state: json["state"],
+        continent: json["continent"],
+        country: json["country"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+      );
+      print(loc.toString());
+      return loc;
+    } else {
+      throw Exception('Failed to Fetch Geolocation IP');
     }
   }
 

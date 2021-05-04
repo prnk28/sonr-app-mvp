@@ -1,10 +1,7 @@
 import 'package:sonr_app/data/data.dart';
-import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-
-
 
 extension ProfileFileUtils on Profile {
   Widget get nameText {

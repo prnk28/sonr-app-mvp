@@ -35,7 +35,7 @@ class MobileService extends GetxService {
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
-  final _location = Rx<geo.Position>(null);
+  final _location = Rx<Location>(Location());
   final _position = Rx<Position>(Position());
   final _incomingMedia = <SharedMediaFile>[].obs;
   final _incomingText = "".obs;
@@ -50,6 +50,7 @@ class MobileService extends GetxService {
   static RxBool get hasNotifications => to._hasNotifications;
   static RxBool get hasPhotos => to._hasPhotos;
   static RxBool get hasStorage => to._hasStorage;
+  
   static RxBool get hasGallery {
     if (DeviceService.isIOS) {
       return to._hasPhotos;
@@ -162,9 +163,10 @@ class MobileService extends GetxService {
   }
 
   // ^ Refresh User Location Position ^ //
-  static Future<geo.Position> currentLocation() async {
+  static Future<Location> currentLocation() async {
     if (to._hasLocation.value) {
-      to._location(await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high));
+      var result = await geo.Geolocator.getCurrentPosition(desiredAccuracy: geo.LocationAccuracy.high);
+      to._location(Location(latitude: result.latitude, longitude: result.longitude));
       return to._location.value;
     } else {
       print("No Location Permissions");

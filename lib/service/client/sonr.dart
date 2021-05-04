@@ -73,7 +73,7 @@ class SonrService extends GetxService {
     // Check for Connect Requirements
     if (DeviceService.isReadyToConnect) {
       // Get Request
-      var connReq = await DeviceService.buildConnectionRequest();
+      var connReq = await DeviceService.connectionRequest();
 
       // Create Node
       _node = await SonrCore.initRequest(connReq);
@@ -95,7 +95,7 @@ class SonrService extends GetxService {
   Future<void> connect() async {
     if (_node == null) {
       // Get Request
-      var connReq = await DeviceService.buildConnectionRequest();
+      var connReq = await DeviceService.connectionRequest();
 
       // Create Node
       _node = await SonrCore.initRequest(connReq);
@@ -134,7 +134,7 @@ class SonrService extends GetxService {
   // ^ Connect to Service Method ^ //
   Future<void> connectNewUser(Contact contact) async {
     // Get Request
-    var connReq = await DeviceService.buildConnectionRequest();
+    var connReq = await DeviceService.connectionRequest();
 
     // Create Node
     _node = await SonrCore.initRequest(connReq);

@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:warble/warble.dart';
 
+
 class DesktopService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<DesktopService>();
@@ -41,6 +42,8 @@ class DesktopService extends GetxService {
     _systemTray.registerEventHandler('focus', openWindow);
     return this;
   }
+
+
 
   // ^ Closes Desktop Window
   static void closeWindow() async {
