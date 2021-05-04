@@ -22,12 +22,17 @@ class BaseOverlayView extends StatefulWidget {
 
 class _BaseOverlayViewState extends State<BaseOverlayView> with TickerProviderStateMixin {
   Animation<Offset> position;
-
+  AnimationController controller;
   void initState() {
-    AnimationController controller = AnimationController(vsync: this, duration: widget.duration);
+    controller = AnimationController(vsync: this, duration: widget.duration);
     position = widget.entryLocation.tweenTo(Offset.zero).animatedBy(controller);
     controller.forward();
     super.initState();
+  }
+
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
