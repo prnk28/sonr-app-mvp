@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/video/video_view.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:better_player/better_player.dart';
 
 class MediaPreviewView extends StatelessWidget {
   final MediaFile mediaFile;
@@ -27,14 +27,9 @@ class MediaPreviewView extends StatelessWidget {
                             margin: EdgeInsets.only(left: 10, right: 10),
                             child: AspectRatio(
                                 aspectRatio: 9 / 16,
-                                child: BetterPlayer.file(mediaFile.path,
-                                    betterPlayerConfiguration: BetterPlayerConfiguration(
-                                      controlsConfiguration: BetterPlayerControlsConfiguration(),
-                                      allowedScreenSleep: false,
-                                      autoPlay: true,
-                                      looping: true,
-                                      aspectRatio: 9 / 16,
-                                    )))),
+                                child: VideoPlayerView.file(
+                                  mediaFile.file,
+                                ))),
                       )
 
                     // Photo View

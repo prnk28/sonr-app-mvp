@@ -1,6 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'settings_controller.dart';
-
 class SettingsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

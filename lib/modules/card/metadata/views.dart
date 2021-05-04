@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:better_player/better_player.dart';
 import 'package:sonr_app/data/data.dart';
+import 'package:sonr_app/modules/video/video_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'details_view.dart';
@@ -135,15 +135,9 @@ class MetaVideo extends StatelessWidget {
                 return Container(
                   width: width ?? orientation.defaultWidth,
                   height: height ?? orientation.defaultHeight,
-                  child: BetterPlayer.file(snapshot.data.path,
-                      betterPlayerConfiguration: BetterPlayerConfiguration(
-                        controlsConfiguration: BetterPlayerControlsConfiguration(),
-                        allowedScreenSleep: allowScreenSleep,
-                        autoPlay: autoPlay,
-                        looping: looping,
-                        autoDetectFullscreenDeviceOrientation: true,
-                        aspectRatio: orientation.aspectRatio,
-                      )),
+                  child: VideoPlayerView.file(
+                    snapshot.data,
+                  ),
                 );
               } else {
                 return Container(

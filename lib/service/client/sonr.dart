@@ -124,6 +124,9 @@ class SonrService extends GetxService {
         if (DeviceService.isMobile) {
           _node.update(position: MobileService.position.value);
         }
+
+        var locInfo = await locationInfo();
+        print(locInfo.toString());
       }
     }
   }
@@ -153,6 +156,9 @@ class SonrService extends GetxService {
       if (DeviceService.isMobile) {
         _node.update(position: MobileService.position.value);
       }
+
+      var locInfo = await locationInfo();
+      print(locInfo.toString());
     }
   }
 

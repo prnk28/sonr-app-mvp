@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as geo;
@@ -27,6 +28,7 @@ class MobileService extends GetxService {
   final _hasStorage = false.obs;
 
   // Device/Location Properties
+  final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
   final _keyboardVisible = false.obs;
   final _location = Rx<geo.Position>(null);
   final _position = Rx<Position>(Position());
@@ -79,6 +81,10 @@ class MobileService extends GetxService {
     _magnoStream = motionSensors.magnetometer.listen(_handleMagnometer);
     _orienStream = motionSensors.orientation.listen(_handleOrientation);
 
+    // Audio Player
+    _audioPlayer.disableLog();
+    await _audioPlayer.loadAll(List<String>.generate(UISoundType.values.length, (index) => UISoundType.values[index].file));
+
     // Set Permissions Status
     updatePermissionsStatus();
     return this;
@@ -92,6 +98,7 @@ class MobileService extends GetxService {
     _gyroStream.cancel();
     _magnoStream.cancel();
     _orienStream.cancel();
+    _audioPlayer.clearCache();
     super.onClose();
   }
 
@@ -111,6 +118,11 @@ class MobileService extends GetxService {
       print("No Location Permissions");
       return null;
     }
+  }
+
+  // ^ Method Plays a UI Sound ^
+  static void playSound(UISoundType type) async {
+    await to._audioPlayer.play(type.file);
   }
 
   // ^ Update Method ^ //

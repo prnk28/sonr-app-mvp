@@ -2,11 +2,14 @@ import 'dart:io';
 import 'package:flutter_systray/flutter_systray.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:sonr_app/data/model/model_location.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:http/http.dart' as http;
+import 'package:warble/warble.dart';
 
 class DesktopService extends GetxService {
+  // Accessors
+  static bool get isRegistered => Get.isRegistered<DesktopService>();
+  static DesktopService get to => Get.find<DesktopService>();
+
   // References
   MainEntry _main;
   FlutterSystray _systemTray;
@@ -22,8 +25,7 @@ class DesktopService extends GetxService {
     // @ 2. Init SystemTray
     await FlutterSystray.initSystray(_main);
     await FlutterSystray.updateMenu([
-      SystrayAction(name: "focus", label: "Open", actionType: ActionType.Focus),
-      SystrayAction(name: "counterEvent", label: "Counter", actionType: ActionType.SystrayEvent),
+      SystrayAction(name: "focus", label: "Open Window", actionType: ActionType.Focus),
       SystrayAction(name: "quit", label: "Quit", actionType: ActionType.Quit)
     ]);
 
@@ -32,11 +34,11 @@ class DesktopService extends GetxService {
     return this;
   }
 
-  static Future<Location> currentLocation() async {
-    var url = Uri.parse('http://api.ipstack.com/check?access_key=28da32809f3bcd2edc418d62802d1fc6');
-    var response = await http.get(url);
-    var geoIp = GeoIP.fromResponse(response.body);
-    return Location(latitude: geoIp.latitude, longitude: geoIp.longitude);
+  // ^ Method Plays a UI Sound ^
+  static void playSound(UISoundType type) async {
+    WarbleStream stream = (await Warble.wrapAsset(rootBundle, "assets/${type.file}", buffered: true));
+    await stream.play();
+    await stream.close();
   }
 
   /// @ Add Event Handler to Tray Action
