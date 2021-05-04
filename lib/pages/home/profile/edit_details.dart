@@ -1,3 +1,4 @@
+import 'package:sonr_app/modules/keyboard/keyboard_field.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'profile.dart';
 
@@ -62,6 +63,7 @@ class EditDetailsView extends GetView<ProfileController> {
                     }
                   },
                   onChanged: (val) => controller.editedPhone(val)),
+              CardField()
             ]),
           ),
         ),
