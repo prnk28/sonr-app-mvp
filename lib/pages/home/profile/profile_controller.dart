@@ -18,7 +18,7 @@ class ProfileController extends GetxController {
   // Properties
   final status = ProfileViewStatus.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
-  final options = SonrSocial.options(UserService.socials);
+  final options = SonrSocial.options(UserService.socials.values);
   final dropdownIndex = (-1).obs;
 
   // Edited Values
@@ -88,7 +88,7 @@ class ProfileController extends GetxController {
   }
 
   // -- Set Tile Type -- //
-  type(Contact_SocialTile_Type type) {
+  type(Contact_Social_Tile_Display type) {
     step.update((val) {
       val.type = type;
     });
@@ -165,13 +165,11 @@ class ProfileController extends GetxController {
     // Validate
     if (step.value.hasType && step.value.current == 2) {
       // Create Tile from Values
-      var tile = Contact_SocialTile(
+      var tile = Contact_Social(
         username: step.value.user.username,
-        isPrivate: step.value.isPrivate,
         provider: step.value.provider,
-        type: step.value.type,
         links: step.value.links,
-        position: Contact_SocialTile_Position(index: UserService.tileCount),
+        tile: Contact_Social_Tile(index: UserService.tileCount, type: step.value.type),
       );
 
       // Save to Profile

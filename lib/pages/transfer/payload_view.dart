@@ -81,14 +81,14 @@ class _BulbViewChild extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Obx(() {
       // # Undefined Type
-      if (controller.inviteRequest.value.payload == Payload.UNDEFINED) {
+      if (controller.inviteRequest.value.payload == Payload.NONE) {
         return CircularProgressIndicator();
       }
 
       // # Check for Media File Type
-      else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
+      else if (controller.inviteRequest.value.payload == Payload.FILE) {
         // Image
-        if (controller.fileItem.value.mime.type == MIME_Type.image) {
+        if (controller.fileItem.value.mime.type == MIME_Type.IMAGE) {
           return _BulbViewThumbnail(item: controller.fileItem.value);
         }
 
@@ -118,8 +118,6 @@ class _BulbViewThumbnail extends StatelessWidget {
       initialData: false,
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data) {
-
-
           // Return View
           return GestureDetector(
             onTap: () => OpenFile.open(item.path),

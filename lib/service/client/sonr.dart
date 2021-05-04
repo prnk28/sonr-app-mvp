@@ -12,9 +12,9 @@ import '../user/user.dart';
 export 'package:sonr_plugin/sonr_plugin.dart';
 
 extension StatusUtils on Status {
-  bool get isNotConnected => this == Status.NONE;
-  bool get isConnecting => this == Status.NONE || this == Status.CONNECTED;
-  bool get isConnected => this != Status.NONE;
+  bool get isNotConnected => this == Status.IDLE;
+  bool get isConnecting => this == Status.IDLE || this == Status.CONNECTED;
+  bool get isConnected => this != Status.IDLE;
   bool get isReady => this == Status.BOOTSTRAPPED;
 }
 
@@ -28,7 +28,7 @@ class SonrService extends GetxService {
   final _isReady = false.obs;
   final _progress = 0.0.obs;
   final _properties = Peer_Properties().obs;
-  final _status = Rx<Status>(Status.NONE);
+  final _status = Rx<Status>(Status.IDLE);
 
   // @ Static Accessors
   static RxDouble get progress => to._progress;
@@ -116,7 +116,7 @@ class SonrService extends GetxService {
         _node.update(position: MobileService.position.value);
       }
     } else {
-      if (_status.value == Status.NONE) {
+      if (_status.value == Status.IDLE) {
         // Connect Node
         _node.connect();
 
@@ -132,7 +132,7 @@ class SonrService extends GetxService {
   }
 
   // ^ Connect to Service Method ^ //
-  Future<void> connectNewUser(Contact contact, String username) async {
+  Future<void> connectNewUser(Contact contact) async {
     // Get Request
     var connReq = await DeviceService.buildConnectionRequest();
 
@@ -148,7 +148,7 @@ class SonrService extends GetxService {
     _node.onError = _handleError;
 
     // Connect Node
-    if (_status.value == Status.NONE) {
+    if (_status.value == Status.IDLE) {
       // Connect Node
       _node.connect();
 
@@ -233,8 +233,7 @@ class SonrService extends GetxService {
   // ^ Invite Peer with Built Request ^ //
   static void sendFlat(Peer peer) async {
     // Send Invite
-    InviteRequest request = InviteRequest(
-        type: InviteRequest_TransferType.FlatContact, to: peer, isRemote: false, payload: Payload.CONTACT, contact: UserService.contact.value);
+    InviteRequest request = InviteRequest(payload: Payload.FLAT_CONTACT, to: peer, isRemote: false, contact: UserService.contact.value);
     await to._node.invite(request);
   }
 

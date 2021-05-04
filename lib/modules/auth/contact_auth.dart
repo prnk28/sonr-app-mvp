@@ -49,8 +49,8 @@ class ContactAuthView extends StatelessWidget {
                 card.owner.platform.gradient(size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
-                card.contact.phoneNumber,
-                card.contact.webSite,
+                // card.contact.phoneNumber,
+                // card.contact.webSite,
               ]),
             ]),
           ),

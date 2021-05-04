@@ -17,7 +17,8 @@ class HomePage extends GetView<HomeController> {
         bottomNavigationBar: HomeBottomNavBar(),
         appBar: HomeSearchAppBar(
           subtitle: Obx(() => controller.view.value == HomeView.Main
-              ? "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
+              ? "Hi ${UserService.contact.value.profile.firstName},"
+                  .headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
               : Container()),
           action: HomeActionButton(),
           title: Obx(() => AnimatedSlideSwitcher.fade(

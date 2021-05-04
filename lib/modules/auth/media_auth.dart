@@ -29,21 +29,21 @@ class MediaAuthView extends StatelessWidget {
                   : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
               Row(children: [
                 card.payload.toString().capitalizeFirst.gradient(gradient: FlutterGradientNames.plumBath, size: 22),
-                "   ${card.metadata.sizeString}".h5
+                "   ${card.file.singleFile.sizeString}".h5
               ]),
             ]),
           ]),
           Divider(),
           Container(
-            width: card.metadata.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
-            height: card.metadata.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
-            child: card.metadata.thumbnail.length > 0
+            width: card.file.singleFile.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
+            height: card.file.singleFile.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
+            child: card.file.singleFile.thumbnail.length > 0
                 ? Image.memory(
-                    Uint8List.fromList(card.metadata.thumbnail),
+                    Uint8List.fromList(card.file.singleFile.thumbnail),
                     width: Get.width - 50,
                     height: Get.height / 3,
                   )
-                : card.metadata.mime.type.gradient(),
+                : card.file.singleFile.mime.type.gradient(),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),

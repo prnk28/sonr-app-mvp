@@ -100,7 +100,7 @@ class TransferController extends GetxController {
         inviteRequest.update((val) {
           val.payload = args.payload;
           val.contact = args.contact;
-          val.type = InviteRequest_TransferType.Contact;
+          val.payload = Payload.CONTACT;
         });
       }
       // URL
@@ -108,7 +108,7 @@ class TransferController extends GetxController {
         inviteRequest.update((val) {
           val.payload = args.payload;
           val.url = args.url;
-          val.type = InviteRequest_TransferType.URL;
+          val.payload = Payload.URL;
         });
       }
       // File
@@ -117,8 +117,8 @@ class TransferController extends GetxController {
         fileItem(args.item);
         inviteRequest.update((val) {
           val.payload = args.payload;
-          val.files.add(args.metadata);
-          val.type = InviteRequest_TransferType.File;
+
+          val.payload = Payload.FILE;
         });
       }
     } else {
@@ -132,10 +132,10 @@ class TransferController extends GetxController {
     if (thumb.length > 0) {
       inviteRequest.update((val) {
         // Validate File Exists
-        assert(val.files.length > 0);
+        assert(val.file.singleFile != null);
 
         // Set thumbnail
-        val.files.first.thumbnail = thumb;
+        val.file.singleFile.thumbnail = thumb;
         print("Thumbnail Set");
       });
     }
@@ -156,18 +156,18 @@ class TransferController extends GetxController {
   _handlePositionUpdate(Position pos) {
     // Update String Elements
     if (pos != null && !isClosed) {
-      directionTitle(_stringForDirection(pos.facing));
-      cardinalTitle(_cardinalStringForDirection(pos.facing));
+      directionTitle(_stringForDirection(pos.facing.direction));
+      cardinalTitle(_cardinalStringForDirection(pos.facing.direction));
 
       // Reference
-      direction(pos.facing);
-      angle(((pos.facing ?? 0) * (pi / 180) * -1));
+      direction(pos.facing.direction);
+      angle(((pos.facing.direction ?? 0) * (pi / 180) * -1));
 
       // Calculate Degrees
-      if (pos.facing + 90 > 360) {
-        degrees(pos.facing - 270);
+      if (pos.facing.direction + 90 > 360) {
+        degrees(pos.facing.direction - 270);
       } else {
-        degrees(pos.facing + 90);
+        degrees(pos.facing.direction + 90);
       }
     }
   }
@@ -220,7 +220,7 @@ class TransferController extends GetxController {
   // # Return Cardinal Value for Direction ^ //
   _cardinalStringForDirection(double dir) {
     var adjustedDesignation = ((dir.round() / 11.25) + 0.25).toInt();
-    var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];
+    var compassEnum = Cardinal.values[(adjustedDesignation % 32)];
     return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }

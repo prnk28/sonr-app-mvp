@@ -3,30 +3,26 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Contact Model Extensions ^ //
 extension ContactUtils on Contact {
-  Widget get phoneNumber {
-    return this.hasPhone() ? this.phone.l : "1-555-555-5555".l;
-  }
-
   Row get headerName {
     return Row(children: [
-      "${this.firstName} ".h6,
-      this.lastName.l,
+      "${this.profile.firstName} ".h6,
+      this.profile.lastName.l,
     ]);
   }
 
   Widget get fullName {
-    return this.hasLastName()
-        ? "${this.firstName} ${this.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
-        : "${this.firstName}".gradient(gradient: FlutterGradientNames.solidStone);
+    return this.profile.hasLastName()
+        ? "${this.profile.firstName} ${this.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
+        : "${this.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone);
   }
 
   Widget get profilePicture {
-    return this.hasPicture()
+    return this.profile.hasPicture()
         ? Container(
             width: 120,
             height: 120,
             child: CircleAvatar(
-              backgroundImage: MemoryImage(this.picture),
+              backgroundImage: MemoryImage(this.profile.picture),
             ),
           )
         : Icon(
@@ -34,9 +30,5 @@ extension ContactUtils on Contact {
             size: 120,
             color: SonrColor.Black.withOpacity(0.5),
           );
-  }
-
-  Widget get webSite {
-    return this.hasWebsite() ? this.website.p : Container();
   }
 }

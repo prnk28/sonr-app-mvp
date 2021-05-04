@@ -27,7 +27,7 @@ class TransferCardItems extends Table {
   TextColumn get owner => text().map(const ProfileConverter())();
   IntColumn get payload => integer().map(const PayloadConverter())();
   TextColumn get contact => text().map(const ContactConverter()).nullable()();
-  TextColumn get metadata => text().map(const MetadataConverter()).nullable()();
+  TextColumn get file => text().map(const FileConverter()).nullable()();
   TextColumn get url => text().map(const URLConverter()).nullable()();
   DateTimeColumn get received => dateTime()();
 }
@@ -60,13 +60,8 @@ class CardsDatabase extends _$CardsDatabase {
 
   Stream<List<TransferCardItem>> watchMetadata() {
     return (select(transferCardItems)
-          ..where((t) =>
-              t.payload.equals(Payload.MEDIA.value) |
-              t.payload.equals(Payload.PDF.value) |
-              t.payload.equals(Payload.PRESENTATION.value) |
-              t.payload.equals(Payload.SPREADSHEET.value) |
-              t.payload.equals(Payload.TEXT.value) |
-              t.payload.equals(Payload.OTHER.value)))
+          ..where(
+              (t) => t.payload.equals(Payload.FILE.value) | t.payload.equals(Payload.MULTI_FILES.value) | t.payload.equals(MIME_Type.OTHER.value)))
         .watch();
   }
 
@@ -84,7 +79,7 @@ class CardsDatabase extends _$CardsDatabase {
         owner: Value(card.owner),
         payload: Value(card.payload),
         contact: card.hasContact() ? Value(card.contact) : Value.absent(),
-        metadata: card.hasMetadata() ? Value(card.metadata) : Value.absent(),
+        metadata: card.hasFile() ? Value(card.hasFile()) : Value.absent(),
         url: card.hasUrl() ? Value(card.url) : Value.absent(),
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
   }

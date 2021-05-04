@@ -67,12 +67,12 @@ class VectorPosition {
   // # Constructer
   VectorPosition(this.data) {
     // Set Direction
-    this.facing = data.facing;
-    this.heading = data.heading;
+    this.facing = data.facing.direction;
+    this.heading = data.heading.direction;
 
     // Set Antipodal
-    this.antiFacing = data.facingAntipodal;
-    this.antiHeading = data.headingAntipodal;
+    this.antiFacing = data.facing.antipodal;
+    this.antiHeading = data.heading.antipodal;
 
     // Set Rotation
     this.xGyro = data.gyroscope.x;

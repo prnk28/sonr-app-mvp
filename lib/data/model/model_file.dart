@@ -34,20 +34,20 @@ class FileItem {
   Future<bool> isThumbnailReady() => _thumbReady.future;
 
   // Retreives Metadata Info
-  bool get isAudio => mime.type == MIME_Type.audio;
-  bool get isImage => mime.type == MIME_Type.image;
-  bool get isVideo => mime.type == MIME_Type.video;
+  bool get isAudio => mime.type == MIME_Type.AUDIO;
+  bool get isImage => mime.type == MIME_Type.IMAGE;
+  bool get isVideo => mime.type == MIME_Type.VIDEO;
 
   // * Constructer * //
   FileItem(this.path, this.name, this.size, this.mime, this.payload, {this.result}) {
-    if (mime.type == MIME_Type.image) {
+    if (mime.type == MIME_Type.IMAGE) {
       _asyncThumbInit(path);
     }
   }
 
   // * Factory: Capture * //
   factory FileItem.capture(MediaFile capture) {
-    return FileItem(capture.path, capture.name, capture.size, _retreiveMime(capture.name), Payload.MEDIA);
+    return FileItem(capture.path, capture.name, capture.size, _retreiveMime(capture.name), Payload.FILE);
   }
 
   // * Factory: File * //
@@ -57,7 +57,7 @@ class FileItem {
     var name = file.name;
     var size = file.size;
     var ext = file.extension;
-    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(ext), result: data);
+    return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(data), result: data);
   }
 
   // * Factory: Media - (Audio, Image, Video) * //
@@ -66,22 +66,24 @@ class FileItem {
     var path = file.path;
     var name = file.name;
     var size = file.size;
-    return FileItem(path, name, size, _retreiveMime(name), Payload.MEDIA, result: data);
+    return FileItem(path, name, size, _retreiveMime(name), Payload.FILE, result: data);
   }
 
   // ^ Retreives Metadata Protobuf ^ //
-  Metadata get metadata => Metadata(
-        name: name,
-        size: size,
-        path: path,
-        mime: mime,
-        thumbnail: thumbnail,
-        properties: Metadata_Properties(
-          payload: payload,
-          isAudio: isAudio,
-          isImage: isImage,
-          isVideo: isVideo,
-          hasThumbnail: hasThumbnail,
+  SonrFile get metadata => SonrFile(
+        singleFile: SonrFile_Metadata(
+          name: name,
+          size: size,
+          path: path,
+          mime: mime,
+          thumbnail: thumbnail,
+          properties: SonrFile_Metadata_Properties(
+            payload: payload,
+            isAudio: isAudio,
+            isImage: isImage,
+            isVideo: isVideo,
+            hasThumbnail: hasThumbnail,
+          ),
         ),
       );
 
@@ -137,7 +139,7 @@ class FileItem {
     // String Manipulation
     var splitIdx = mimeString.indexOf('/');
     var ext = mimeString.substring(splitIdx + 1);
-    var mimeValue = mimeString.substring(0, splitIdx);
+    var mimeValue = mimeString.substring(0, splitIdx).toUpperCase();
 
     // Find Protobuf Type
     var mimeType = MIME_Type.values.firstWhere((e) => e.toString() == mimeValue);
@@ -145,17 +147,11 @@ class FileItem {
   }
 
   // # File Payload from Ext
-  static Payload _retreivePayload(String ext) {
-    if (ext == ".pdf") {
-      return Payload.PDF;
-    } else if (ext == ".ppt" || ext == ".pptx") {
-      return Payload.PRESENTATION;
-    } else if (ext == ".xls" || ext == ".xlsm" || ext == ".xlsx" || ext == ".csv") {
-      return Payload.SPREADSHEET;
-    } else if (ext == ".txt" || ext == ".doc" || ext == ".docx" || ext == ".ttf") {
-      return Payload.TEXT;
+  static Payload _retreivePayload(FilePickerResult result) {
+    if (result.files.length > 1) {
+      return Payload.FILE;
     } else {
-      return Payload.OTHER;
+      return Payload.MULTI_FILES;
     }
   }
 
@@ -260,14 +256,15 @@ class MediaItem {
   }
 
   // @ Return File Info for Invite Request
-  Future<Metadata> getMetadata() async {
+  Future<SonrFile> getMetadata() async {
     thumbnail = thumbnail != null ? thumbnail : await getThumbnail();
     var file = await entity.file;
     var path = file.path;
-    return Metadata(
+    return SonrFile(
+        singleFile: SonrFile_Metadata(
       path: path,
       thumbnail: thumbnail,
-      properties: Metadata_Properties(
+      properties: SonrFile_Metadata_Properties(
         hasThumbnail: thumbnail.length == 0,
         width: width,
         height: height,
@@ -275,7 +272,7 @@ class MediaItem {
         isVideo: this.isVideo,
         duration: this.duration.inSeconds,
       ),
-    );
+    ));
   }
 
   // @ Fetch Image

@@ -21,8 +21,12 @@ class InviteOverlayView extends StatelessWidget {
 
   // Builds View By Payload
   Widget _buildView() {
-    if (invite.payload == Payload.MEDIA) {
-      return MediaAuthView(invite);
+    if (invite.payload == Payload.FILE) {
+      if (invite.card.file.singleFile.mime.type.isMedia) {
+        return MediaAuthView(invite);
+      } else {
+        return FileAuthView(invite);
+      }
     } else if (invite.payload == Payload.CONTACT) {
       return ContactAuthView(false, invite: invite);
     } else if (invite.payload == Payload.URL) {

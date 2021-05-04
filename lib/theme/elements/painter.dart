@@ -213,7 +213,7 @@ extension SonrOffset on Offset {
     return Offset(dx * (Get.width / 4), dy * (Get.height / 8));
   }
 
-  static Offset fromPosition(Position position, Position_Designation diffDesg, double diffRad) {
+  static Offset fromPosition(Position position, Cardinal diffDesg, double diffRad) {
     // Convert Rad to Point on Path
     var path = ZonePathProvider(position.proximity);
     var metrics = path.getPath(Get.size).computeMetrics().elementAt(0);
@@ -224,11 +224,11 @@ extension SonrOffset on Offset {
     var calcPos = tangent.position;
 
     // Top of View
-    if (diffDesg == Position_Designation.NNE || diffDesg == Position_Designation.NEbN || diffDesg == Position_Designation.NbE) {
+    if (diffDesg == Cardinal.NNE || diffDesg == Cardinal.NEbN || diffDesg == Cardinal.NbE) {
       return Offset(180, position.topOffset);
-    } else if (diffDesg == Position_Designation.NE) {
+    } else if (diffDesg == Cardinal.NE) {
       return Offset(270, position.topOffset + 20);
-    } else if (diffDesg == Position_Designation.N) {
+    } else if (diffDesg == Cardinal.N) {
       return Offset(90, position.topOffset + 20);
     } else {
       return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZonePathProvider.proximityMaxHeight(position.proximity), calcPos.dy).toDouble());

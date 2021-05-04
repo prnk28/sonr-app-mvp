@@ -5,7 +5,7 @@ import 'package:sonr_app/theme/theme.dart';
 
 // ^ Widget for Details Media View
 class MetaDetailsView extends StatelessWidget {
-  final Metadata card;
+  final SonrFile_Metadata card;
   final File mediaFile;
   const MetaDetailsView(this.card, this.mediaFile);
   @override

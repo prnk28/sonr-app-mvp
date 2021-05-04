@@ -10,45 +10,66 @@ import '../theme.dart';
 extension MimeIcon on MIME_Type {
   Widget gradient({double size = 32}) {
     switch (this) {
-      case MIME_Type.audio:
+      case MIME_Type.AUDIO:
         return SonrIcons.Audio.gradientNamed(name: FlutterGradientNames.flyingLemon, size: size);
-      case MIME_Type.image:
+      case MIME_Type.IMAGE:
         return SonrIcons.Image.gradientNamed(name: FlutterGradientNames.juicyCake, size: size);
-      case MIME_Type.text:
+      case MIME_Type.DOCUMENT:
         return SonrIcons.Document.gradientNamed(name: FlutterGradientNames.farawayRiver, size: size);
-      case MIME_Type.video:
+      case MIME_Type.VIDEO:
         return SonrIcons.Video.gradientNamed(name: FlutterGradientNames.nightCall, size: size);
       default:
+        if (this == MIME_Type.PDF) {
+          return SonrIcons.PDF.gradientNamed(name: FlutterGradientNames.royalGarden, size: size);
+        } else if (this == MIME_Type.SPREADSHEET) {
+          return SonrIcons.Spreadsheet.gradientNamed(name: FlutterGradientNames.itmeoBranding, size: size);
+        } else if (this == MIME_Type.PRESENTATION) {
+          return SonrIcons.Presentation.gradientNamed(name: FlutterGradientNames.orangeJuice, size: size);
+        }
         return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.newRetrowave, size: size);
     }
   }
 
   Icon get black {
     switch (this) {
-      case MIME_Type.audio:
+      case MIME_Type.AUDIO:
         return SonrIcons.Audio.black;
-      case MIME_Type.image:
+      case MIME_Type.IMAGE:
         return SonrIcons.Image.black;
-      case MIME_Type.text:
+      case MIME_Type.DOCUMENT:
         return SonrIcons.Document.black;
-      case MIME_Type.video:
+      case MIME_Type.VIDEO:
         return SonrIcons.Video.black;
       default:
+        if (this == MIME_Type.PDF) {
+          return SonrIcons.PDF.black;
+        } else if (this == MIME_Type.SPREADSHEET) {
+          return SonrIcons.Spreadsheet.black;
+        } else if (this == MIME_Type.PRESENTATION) {
+          return SonrIcons.Presentation.black;
+        }
         return SonrIcons.Unknown.black;
     }
   }
 
   Icon get white {
     switch (this) {
-      case MIME_Type.audio:
+      case MIME_Type.AUDIO:
         return SonrIcons.Audio.white;
-      case MIME_Type.image:
+      case MIME_Type.IMAGE:
         return SonrIcons.Image.white;
-      case MIME_Type.text:
+      case MIME_Type.DOCUMENT:
         return SonrIcons.Document.white;
-      case MIME_Type.video:
+      case MIME_Type.VIDEO:
         return SonrIcons.Video.white;
       default:
+        if (this == MIME_Type.PDF) {
+          return SonrIcons.PDF.white;
+        } else if (this == MIME_Type.SPREADSHEET) {
+          return SonrIcons.Spreadsheet.white;
+        } else if (this == MIME_Type.PRESENTATION) {
+          return SonrIcons.Presentation.white;
+        }
         return SonrIcons.Unknown.white;
     }
   }
@@ -58,18 +79,8 @@ extension PayloadIcon on Payload {
   Widget gradient({double size = 32}) {
     if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.gradientNamed(name: FlutterGradientNames.colorfulPeach, size: size);
-    } else if (this == Payload.MEDIA) {
-      return SonrIcons.Video.gradientNamed(name: FlutterGradientNames.loveKiss, size: size);
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.gradientNamed(name: FlutterGradientNames.partyBliss, size: size);
-    } else if (this == Payload.PDF) {
-      return SonrIcons.PDF.gradientNamed(name: FlutterGradientNames.royalGarden, size: size);
-    } else if (this == Payload.SPREADSHEET) {
-      return SonrIcons.Spreadsheet.gradientNamed(name: FlutterGradientNames.itmeoBranding, size: size);
-    } else if (this == Payload.PRESENTATION) {
-      return SonrIcons.Presentation.gradientNamed(name: FlutterGradientNames.orangeJuice, size: size);
-    } else if (this == Payload.TEXT) {
-      return SonrIcons.Document.gradientNamed(name: FlutterGradientNames.spaceShift, size: size);
     } else {
       return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.midnightBloom, size: size);
     }
@@ -78,18 +89,8 @@ extension PayloadIcon on Payload {
   Icon get black {
     if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.black;
-    } else if (this == Payload.MEDIA) {
-      return SonrIcons.Video.black;
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.black;
-    } else if (this == Payload.PDF) {
-      return SonrIcons.PDF.black;
-    } else if (this == Payload.SPREADSHEET) {
-      return SonrIcons.Spreadsheet.black;
-    } else if (this == Payload.PRESENTATION) {
-      return SonrIcons.Presentation.black;
-    } else if (this == Payload.TEXT) {
-      return SonrIcons.Document.black;
     } else {
       return SonrIcons.Unknown.black;
     }
@@ -98,18 +99,8 @@ extension PayloadIcon on Payload {
   Icon get white {
     if (this == Payload.CONTACT) {
       return SonrIcons.Avatar.white;
-    } else if (this == Payload.MEDIA) {
-      return SonrIcons.Video.white;
     } else if (this == Payload.URL) {
       return SonrIcons.Discover.white;
-    } else if (this == Payload.PDF) {
-      return SonrIcons.PDF.white;
-    } else if (this == Payload.SPREADSHEET) {
-      return SonrIcons.Spreadsheet.white;
-    } else if (this == Payload.PRESENTATION) {
-      return SonrIcons.Presentation.white;
-    } else if (this == Payload.TEXT) {
-      return SonrIcons.Document.white;
     } else {
       return SonrIcons.Unknown.white;
     }
@@ -179,24 +170,24 @@ extension PlatformIcon on Platform {
   }
 }
 
-extension SocialIconUtils on Contact_SocialTile_Provider {
+extension SocialIconUtils on Contact_Social_Provider {
   Widget gradient({double size = 32}) {
     switch (this) {
-      case Contact_SocialTile_Provider.Snapchat:
+      case Contact_Social_Provider.Snapchat:
         return SonrIcons.Snapchat.gradientNamed(name: FlutterGradientNames.sunnyMorning, size: size);
-      case Contact_SocialTile_Provider.Github:
+      case Contact_Social_Provider.Github:
         return SonrIcons.Github.gradientNamed(name: FlutterGradientNames.solidStone, size: size);
-      case Contact_SocialTile_Provider.Facebook:
+      case Contact_Social_Provider.Facebook:
         return SonrIcons.Facebook.gradientNamed(name: FlutterGradientNames.perfectBlue, size: size);
-      case Contact_SocialTile_Provider.Medium:
+      case Contact_Social_Provider.Medium:
         return SonrIcons.Medium.gradientNamed(name: FlutterGradientNames.eternalConstance, size: size);
-      case Contact_SocialTile_Provider.YouTube:
+      case Contact_Social_Provider.YouTube:
         return SonrIcons.YouTube.gradientNamed(name: FlutterGradientNames.loveKiss, size: size);
-      case Contact_SocialTile_Provider.Twitter:
+      case Contact_Social_Provider.Twitter:
         return SonrIcons.Twitter.gradientNamed(name: FlutterGradientNames.partyBliss, size: size);
-      case Contact_SocialTile_Provider.Instagram:
+      case Contact_Social_Provider.Instagram:
         return SonrIcons.Instagram.gradientNamed(name: FlutterGradientNames.ripeMalinka, size: size);
-      case Contact_SocialTile_Provider.TikTok:
+      case Contact_Social_Provider.TikTok:
         return SonrIcons.Tiktok.gradientNamed(name: FlutterGradientNames.premiumDark, size: size);
       default:
         return SonrIcons.Spotify.gradientNamed(name: FlutterGradientNames.newLife, size: size);
@@ -205,21 +196,21 @@ extension SocialIconUtils on Contact_SocialTile_Provider {
 
   Icon get black {
     switch (this) {
-      case Contact_SocialTile_Provider.Snapchat:
+      case Contact_Social_Provider.Snapchat:
         return SonrIcons.Snapchat.blackWith(size: 30);
-      case Contact_SocialTile_Provider.Github:
+      case Contact_Social_Provider.Github:
         return SonrIcons.Github.blackWith(size: 30);
-      case Contact_SocialTile_Provider.Facebook:
+      case Contact_Social_Provider.Facebook:
         return SonrIcons.Facebook.blackWith(size: 30);
-      case Contact_SocialTile_Provider.Medium:
+      case Contact_Social_Provider.Medium:
         return SonrIcons.Medium.blackWith(size: 30);
-      case Contact_SocialTile_Provider.YouTube:
+      case Contact_Social_Provider.YouTube:
         return SonrIcons.YouTube.blackWith(size: 30);
-      case Contact_SocialTile_Provider.Twitter:
+      case Contact_Social_Provider.Twitter:
         return SonrIcons.Twitter.blackWith(size: 30);
-      case Contact_SocialTile_Provider.Instagram:
+      case Contact_Social_Provider.Instagram:
         return SonrIcons.Instagram.blackWith(size: 30);
-      case Contact_SocialTile_Provider.TikTok:
+      case Contact_Social_Provider.TikTok:
         return SonrIcons.Tiktok.blackWith(size: 30);
       default:
         return SonrIcons.Spotify.blackWith(size: 30);
@@ -228,21 +219,21 @@ extension SocialIconUtils on Contact_SocialTile_Provider {
 
   Icon get white {
     switch (this) {
-      case Contact_SocialTile_Provider.Snapchat:
+      case Contact_Social_Provider.Snapchat:
         return SonrIcons.Snapchat.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.Github:
+      case Contact_Social_Provider.Github:
         return SonrIcons.Github.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.Facebook:
+      case Contact_Social_Provider.Facebook:
         return SonrIcons.Facebook.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.Medium:
+      case Contact_Social_Provider.Medium:
         return SonrIcons.Medium.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.YouTube:
+      case Contact_Social_Provider.YouTube:
         return SonrIcons.YouTube.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.Twitter:
+      case Contact_Social_Provider.Twitter:
         return SonrIcons.Twitter.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.Instagram:
+      case Contact_Social_Provider.Instagram:
         return SonrIcons.Instagram.whiteWith(size: 30);
-      case Contact_SocialTile_Provider.TikTok:
+      case Contact_Social_Provider.TikTok:
         return SonrIcons.Tiktok.whiteWith(size: 30);
       default:
         return SonrIcons.Spotify.whiteWith(size: 30);

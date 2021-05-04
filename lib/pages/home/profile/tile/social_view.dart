@@ -5,7 +5,7 @@ import 'tile_controller.dart';
 
 class SocialView extends StatelessWidget {
   final TileController controller;
-  final Contact_SocialTile item;
+  final Contact_Social item;
   final int index;
   SocialView(this.controller, this.item, this.index);
 
@@ -21,19 +21,19 @@ class SocialView extends StatelessWidget {
 
         switch (item.provider) {
           // Medium
-          case Contact_SocialTile_Provider.Medium:
+          case Contact_Social_Provider.Medium:
             var posts = controller.medium.value;
             return Stack(children: [_MediumItem(posts, 0, true), item.provider.black]);
             break;
 
           // Twitter
-          case Contact_SocialTile_Provider.Twitter:
+          case Contact_Social_Provider.Twitter:
             var twitter = controller.twitter.value;
             return Stack(children: [_TweetItem(twitter, 0, true, controller), item.provider.black]);
             break;
 
           // Youtube
-          case Contact_SocialTile_Provider.YouTube:
+          case Contact_Social_Provider.YouTube:
             var youtube = controller.youtube.value;
             return Stack(children: [_YoutubeItem(youtube, 0, true), item.provider.black]);
             break;
@@ -53,11 +53,11 @@ class SocialView extends StatelessWidget {
   }
 
   // ** Builds Expanded Tile View - List/Grid ** //
-  _buildExpanded(Contact_SocialTile_Provider provider) {
+  _buildExpanded(Contact_Social_Provider provider) {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: controller.twitter.value.count,
-      scrollDirection: provider == Contact_SocialTile_Provider.Twitter ? Axis.vertical : Axis.horizontal,
+      scrollDirection: provider == Contact_Social_Provider.Twitter ? Axis.vertical : Axis.horizontal,
       itemBuilder: (BuildContext context, int index) {
         return _TweetItem(controller.twitter.value, index, false, controller);
       },

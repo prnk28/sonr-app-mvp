@@ -210,11 +210,12 @@ class MobileService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery ^ //
-  static Future<void> saveTransfer(Metadata meta) async {
+  static Future<void> saveTransfer(SonrFile file) async {
     // Get Data from Media
+    final meta = file.singleFile;
     final path = meta.path;
     // Save Image to Gallery
-    if (meta.mime.type == MIME_Type.image && MobileService.hasGallery.value) {
+    if (meta.mime.type == MIME_Type.IMAGE && MobileService.hasGallery.value) {
       var asset = await PhotoManager.editor.saveImageWithPath(path);
       var result = await asset.exists;
 
@@ -228,7 +229,7 @@ class MobileService extends GetxService {
     }
 
     // Save Video to Gallery
-    else if (meta.mime.type == MIME_Type.video && MobileService.hasGallery.value) {
+    else if (meta.mime.type == MIME_Type.VIDEO && MobileService.hasGallery.value) {
       // Set Video File
       File videoFile = File(path);
       var asset = await PhotoManager.editor.saveVideo(videoFile);
@@ -434,8 +435,8 @@ class MobileService extends GetxService {
   // # Handle Compass
   void _handleCompass(CompassEvent event) {
     _position.update((val) {
-      val.heading = event.heading;
-      val.facing = event.headingForCameraMode;
+      val.heading = Position_Compass(direction: event.heading);
+      val.facing = Position_Compass(direction: event.headingForCameraMode);
     });
   }
 

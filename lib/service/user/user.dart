@@ -17,13 +17,14 @@ class UserService extends GetxService {
   final _user = Rx<User>(null);
 
   // ** Contact Reactive Properties **
+  final _username = "@TempUsername".obs;
   final _firstName = "".obs;
   final _lastName = "".obs;
   final _phone = "".obs;
   final _email = "".obs;
   final _website = "".obs;
   final _picture = Rx<Uint8List>(null);
-  final _socials = <Contact_SocialTile>[].obs;
+  final _socials = <String, Contact_Social>{}.obs;
 
   // Preferences
   final _brightness = Rx<Brightness>(Brightness.light);
@@ -44,19 +45,15 @@ class UserService extends GetxService {
   static bool get pointShareEnabled => to._hasPointToShare.val;
 
   // Contact Values
+  static RxString get username => to._username;
   static RxString get firstName => to._firstName;
   static RxString get lastName => to._lastName;
   static RxString get phone => to._phone;
   static Rx<Uint8List> get picture => to._picture;
   static RxString get email => to._email;
   static RxString get website => to._website;
-  static RxList<Contact_SocialTile> get socials => to._socials;
+  static RxMap<String, Contact_Social> get socials => to._socials;
   static int get tileCount => to._socials.length;
-
-  // Username
-  static String get username => UserService.user.value.hasProfile() ? UserService.user.value.profile.username : "@TempUsername";
-
-  // ** Checks if Required Data for Connection Exists ** //
 
   // ** References **
   final _userBox = GetStorage('User');
@@ -79,12 +76,13 @@ class UserService extends GetxService {
       // Set Contact Values
       _user(user);
       _contact(user.contact);
-      _firstName(user.contact.firstName);
-      _lastName(user.contact.lastName);
-      _phone(user.contact.phone);
-      _email(user.contact.email);
-      _website(user.contact.website);
-      _picture(Uint8List.fromList(user.contact.picture));
+      _username(user.contact.profile.username);
+      _firstName(user.contact.profile.firstName);
+      _lastName(user.contact.profile.lastName);
+      _phone("");
+      _email("");
+      _website("");
+      _picture(Uint8List.fromList(user.contact.profile.picture));
       _socials(user.contact.socials);
     } else {
       _isNewUser(true);
@@ -106,16 +104,16 @@ class UserService extends GetxService {
   }
 
   // ^ Add Social to List ^ //
-  static addSocial(Contact_SocialTile value) {
+  static addSocial(Contact_Social value) {
     var controller = to;
-    controller._socials.add(value);
+    controller._socials[value.username] = value;
     saveChanges();
   }
 
   // ^ Delete Social from List ^ //
-  static bool deleteSocial(Contact_SocialTile value) {
+  static bool deleteSocial(Contact_Social value) {
     var controller = to;
-    if (controller._socials.contains(value)) {
+    if (controller._socials.containsKey(value.username)) {
       controller._socials.remove(value);
       saveChanges();
       return true;
@@ -124,21 +122,20 @@ class UserService extends GetxService {
   }
 
   // ^ Update Social in List ^ //
-  static bool swapSocials(Contact_SocialTile first, Contact_SocialTile second) {
+  static bool swapSocials(Contact_Social first, Contact_Social second) {
     var controller = to;
-    int idxOne = controller._socials.indexOf(first);
-    int idxTwo = controller._socials.indexOf(second);
-    controller._socials.swap(idxOne, idxTwo);
+    int idxOne = controller._socials.keys.toList().indexOf(first.username);
+    int idxTwo = controller._socials.keys.toList().indexOf(second.username);
+    // controller._socials.swap(idxOne, idxTwo);
     saveChanges();
     return true;
   }
 
   // ^ Update Social in List ^ //
-  static bool updateSocial(Contact_SocialTile value) {
+  static bool updateSocial(Contact_Social value) {
     var controller = to;
-    if (controller._socials.contains(value)) {
-      var idx = controller._socials.indexOf(value);
-      controller._socials[idx] = value;
+    if (controller._socials.containsKey(value.username)) {
+      controller._socials[value.username] = value;
       saveChanges();
       return true;
     }
@@ -152,7 +149,7 @@ class UserService extends GetxService {
 
     // Connect Sonr Node
     if (withSonrConnect) {
-      Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+      Get.find<SonrService>().connectNewUser(UserService.contact.value);
     }
 
     // Set Contact for User
@@ -163,12 +160,12 @@ class UserService extends GetxService {
   static Future<User> saveChanges() async {
     // Set Contact for User
     return await to._saveContactForUser(Contact(
-        firstName: to._firstName.value,
-        lastName: to._lastName.value,
-        phone: to._phone.value,
-        email: to._email.value,
-        website: to._website.value,
-        picture: to._picture.value.toList() ?? [],
+        profile: Profile(
+          username: to._username.value,
+          firstName: to._firstName.value,
+          lastName: to._lastName.value,
+          picture: to._picture.value.toList() ?? [],
+        ),
         socials: to._socials ?? []));
   }
 
@@ -202,12 +199,12 @@ class UserService extends GetxService {
   // # Listen to Contact Updates
   _handleContactUpdate(Contact contact) async {
     // Set Values
-    to._firstName(contact.firstName);
-    to._lastName(contact.lastName);
-    to._phone(contact.phone);
-    to._email(contact.email);
-    to._website(contact.website);
-    to._picture(Uint8List.fromList(contact.picture));
+    to._firstName(contact.profile.firstName);
+    to._lastName(contact.profile.lastName);
+    // to._phone(contact.phone);
+    // to._email(contact.email);
+    // to._website(contact.website);
+    to._picture(Uint8List.fromList(contact.profile.picture));
     to._socials(contact.socials);
 
     // Refresh Lists

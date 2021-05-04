@@ -2,7 +2,6 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'desktop.dart';
 import 'mobile.dart';
-import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
 
 class DeviceService extends GetxService {
   // Initializers
@@ -39,7 +38,7 @@ class DeviceService extends GetxService {
     _isMobile = !isDesktop;
 
     // Set Platform
-    _platform(PlatformUtils.determineFromIO());
+    _platform(PlatformUtils.find());
 
     // Audio Player
     return this;
@@ -48,24 +47,17 @@ class DeviceService extends GetxService {
   // ^ Builds Connection Request based on Platform ^
   static Future<ConnectionRequest> buildConnectionRequest() async {
     // Initialize Variables
-    var device = await provider.buildDevice(platform: to._platform.value);
+    var device = await newDevice(platform: to._platform.value);
 
     // @ Mobile - Passes Location
     if (isMobile) {
       var pos = await MobileService.currentLocation();
-      return ConnectionRequest(
-        latitude: pos.latitude,
-        longitude: pos.longitude,
-        username: UserService.username,
-        contact: UserService.contact.value,
-        device: device,
-      );
+      return newConnectionRequest(location: Location(latitude: pos.latitude, longitude: pos.longitude));
     }
 
     // @ Desktop - Calculates Location
     else {
       return ConnectionRequest(
-        username: UserService.username,
         contact: UserService.contact.value,
         device: device,
       );
@@ -91,11 +83,11 @@ class DeviceService extends GetxService {
   }
 
   // ^ Saves Received Media to Gallery by Platform ^ //
-  static void saveTransfer(Metadata metadata) async {
+  static void saveTransfer(SonrFile file) async {
     if (isMobile) {
-      await MobileService.saveTransfer(metadata);
+      await MobileService.saveTransfer(file);
     } else {
-      OpenFile.open(metadata.path);
+      OpenFile.open(file.singleFile.path);
     }
   }
 

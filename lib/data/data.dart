@@ -13,7 +13,6 @@ export 'database/cards_db.dart';
 export 'extensions/contact.dart';
 export 'extensions/metadata.dart';
 export 'extensions/peer.dart';
-export 'extensions/platform.dart';
 
 // Models
 export 'model/model_lobby.dart';

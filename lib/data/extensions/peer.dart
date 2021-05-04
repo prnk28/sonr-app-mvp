@@ -36,7 +36,7 @@ extension PositionUtils on Position {
 
   String get directionString {
     // Calculated
-    var adjustedDegrees = this.heading.round();
+    var adjustedDegrees = this.heading.direction.round();
     final unit = "°";
 
     // @ Convert To String
@@ -50,8 +50,8 @@ extension PositionUtils on Position {
   }
 
   String get cardinalValueString {
-    var adjustedDesignation = ((this.heading.round() / 11.25) + 0.25).toInt();
-    var compassEnum = Position_Designation.values[(adjustedDesignation % 32)];
+    var adjustedDesignation = ((this.heading.direction.round() / 11.25) + 0.25).toInt();
+    var compassEnum = Cardinal.values[(adjustedDesignation % 32)];
     return compassEnum.toString().substring(compassEnum.toString().indexOf('.') + 1);
   }
 }

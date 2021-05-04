@@ -20,7 +20,7 @@ class SonrDropdown extends StatelessWidget {
   final RxInt index;
 
   // * Builds Social Media Dropdown * //
-  factory SonrDropdown.social(List<Contact_SocialTile_Provider> data,
+  factory SonrDropdown.social(List<Contact_Social_Provider> data,
       {@required RxInt index, EdgeInsets margin = const EdgeInsets.only(left: 14, right: 14), double width, double height = 60}) {
     var items = List<SonrDropdownItem>.generate(data.length, (index) {
       return SonrDropdownItem(true, data[index].toString(), icon: data[index].gradient());

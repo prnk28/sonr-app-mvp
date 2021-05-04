@@ -21,9 +21,9 @@ class TileStep {
   bool get hasCurrent => _step != null;
 
   // @ Form -> Provider
-  Contact_SocialTile_Provider _provider;
-  Contact_SocialTile_Provider get provider => _provider;
-  set provider(Contact_SocialTile_Provider s) => _provider;
+  Contact_Social_Provider _provider;
+  Contact_Social_Provider get provider => _provider;
+  set provider(Contact_Social_Provider s) => _provider;
   bool get hasProvider => _provider != null;
 
   // @ Form -> User Data
@@ -39,9 +39,9 @@ class TileStep {
   bool get hasPrivate => _isPrivate != null;
 
   // @ Form -> Type
-  Contact_SocialTile_Type _type;
-  Contact_SocialTile_Type get type => _type;
-  set type(Contact_SocialTile_Type s) => _type;
+  Contact_Social_Tile_Display _type;
+  Contact_Social_Tile_Display get type => _type;
+  set type(Contact_Social_Tile_Display s) => _type;
   bool get hasType => _type != null;
 
   // @ Properties
@@ -118,7 +118,7 @@ class TileStep {
     }
   }
 
-  Contact_SocialTile_Links get links {
+  Contact_Social_Links get links {
     return provider.links(user.username);
   }
 }

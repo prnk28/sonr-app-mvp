@@ -60,18 +60,18 @@ class ContactConverter extends TypeConverter<Contact, String> {
   }
 }
 
-class MetadataConverter extends TypeConverter<Metadata, String> {
-  const MetadataConverter();
+class FileConverter extends TypeConverter<SonrFile, String> {
+  const FileConverter();
   @override
-  Metadata mapToDart(String fromDb) {
+  SonrFile mapToDart(String fromDb) {
     if (fromDb == null) {
       return null;
     }
-    return Metadata.fromJson(fromDb);
+    return SonrFile.fromJson(fromDb);
   }
 
   @override
-  String mapToSql(Metadata value) {
+  String mapToSql(SonrFile value) {
     if (value == null) {
       return null;
     }

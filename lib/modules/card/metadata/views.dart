@@ -8,7 +8,7 @@ import 'details_view.dart';
 ///  Builds Container With Image as Decoration or Defaults to None if Not Image
 class MetaBox extends StatelessWidget {
   /// TransferCard Metadata Protobuf
-  final Metadata metadata;
+  final SonrFile_Metadata metadata;
 
   /// Child to Display above Decoration
   final Widget child;
@@ -49,7 +49,7 @@ class MetaBox extends StatelessWidget {
 /// Builds Icon View from Metadata
 class MetaIcon extends StatelessWidget {
   /// TransferCard Metadata Protobuf
-  final Metadata metadata;
+  final SonrFile_Metadata metadata;
   final double iconSize;
   final double width;
   final double height;
@@ -72,7 +72,7 @@ class MetaIcon extends StatelessWidget {
 ///  Builds Container With Image as SizedBox
 class MetaImageBox extends StatelessWidget {
   /// TransferCard Metadata Protobuf
-  final Metadata metadata;
+  final SonrFile_Metadata metadata;
   final double width;
   final double height;
   final BoxFit fit;
@@ -106,7 +106,7 @@ class MetaImageBox extends StatelessWidget {
 /// Builds Metadata Video Player
 class MetaVideo extends StatelessWidget {
   /// TransferCard Metadata Protobuf
-  final Metadata metadata;
+  final SonrFile_Metadata metadata;
   final double width;
   final double height;
   final bool autoPlay;

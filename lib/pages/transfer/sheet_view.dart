@@ -32,14 +32,14 @@ class _PayloadListItem extends GetView<TransferController> {
 
   Widget _buildLeading() {
     // # Undefined Type
-    if (controller.inviteRequest.value.payload == Payload.UNDEFINED) {
+    if (controller.inviteRequest.value.payload == Payload.NONE) {
       return CircularProgressIndicator();
     }
 
     // # Check for Media File Type
-    else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
+    else if (controller.inviteRequest.value.payload == Payload.FILE) {
       // Image
-      if (controller.fileItem.value.mime.type == MIME_Type.image) {
+      if (controller.fileItem.value.mime.type == MIME_Type.IMAGE) {
         return _PayloadItemThumbnail(item: controller.fileItem.value);
       }
 

@@ -5,10 +5,10 @@ import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Metadata Model Extensions ^ //
-extension MetadataFileUtils on Metadata {
+extension MetadataFileUtils on SonrFile_Metadata {
   /// Checks if Metadata is for Image File
-  bool get isImage => this.mime.type == MIME_Type.image;
-  bool get isVideo => this.mime.type == MIME_Type.video;
+  bool get isImage => this.mime.type == MIME_Type.IMAGE;
+  bool get isVideo => this.mime.type == MIME_Type.VIDEO;
 
   ///  Return Cleaned Name
   String get prettyName {
@@ -78,7 +78,7 @@ extension TextUtils on TransferCardItem {
 }
 
 // ^ Payload Model Extensions ^ //
-extension PayloadUtils on Payload {
+extension MIMETypeUtils on MIME_Type {
   FlutterGradientNames get gradientName {
     return [
       FlutterGradientNames.itmeoBranding,
@@ -92,18 +92,18 @@ extension PayloadUtils on Payload {
   }
 
   String get asString {
-    if (this == Payload.PDF) {
+    if (this == MIME_Type.PDF) {
       return this.toString();
     }
     return this.toString().capitalizeFirst;
   }
 
   bool get isFile {
-    return this != Payload.UNDEFINED && this != Payload.CONTACT && this != Payload.URL;
+    return this != MIME_Type.OTHER && this != Payload.CONTACT && this != Payload.URL;
   }
 
   bool get isMedia {
-    return this == Payload.MEDIA;
+    return this == MIME_Type.IMAGE || this == MIME_Type.AUDIO || this == MIME_Type.VIDEO;
   }
 
   bool get isTransfer => this != Payload.CONTACT && this != Payload.URL;

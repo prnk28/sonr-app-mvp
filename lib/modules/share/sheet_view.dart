@@ -40,7 +40,7 @@ class ShareSheet extends GetView<ShareController> {
     return ShareSheet(
       child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
       size: window,
-      payload: Payload.MEDIA,
+      payload: Payload.FILE,
       mediaFile: MediaFile.externalShare(sharedIntent),
     );
   }
