@@ -78,8 +78,8 @@ class CardService extends GetxService {
   // ^ Add New Card to Database ^ //
   static addCard(TransferCard card) async {
     // Save Media to Device
-    if (card.payload == Payload.MEDIA) {
-      await DeviceService.saveTransfer(card.metadata);
+    if (card.payload == Payload.FILE) {
+      await DeviceService.saveTransfer(card.file);
     }
 
     // Store in Database
@@ -98,7 +98,7 @@ class CardService extends GetxService {
       cards.removeWhere((element) => element.payload == Payload.CONTACT);
     }
     if (withoutMedia) {
-      cards.removeWhere((element) => element.payload == Payload.MEDIA);
+      cards.removeWhere((element) => element.payload == Payload.FILE);
     }
     if (withoutURLs) {
       cards.removeWhere((element) => element.payload == Payload.URL);
@@ -130,13 +130,13 @@ class CardService extends GetxService {
   }
 
   // ^ Load IO File from Metadata ^ //
-  static Future<File> loadFileFromMetadata(Metadata metadata) async {
+  static Future<File> loadFileFromMetadata(SonrFile_Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     return await asset.file;
   }
 
   // ^ Load MediaItem from Metadata ^ //
-  static Future<MediaItem> loadItemFromMetadata(Metadata metadata) async {
+  static Future<MediaItem> loadItemFromMetadata(SonrFile_Metadata metadata) async {
     var asset = await AssetEntity.fromId(metadata.id);
     return MediaItem(asset, -1);
   }
@@ -167,12 +167,12 @@ class CardService extends GetxService {
     // Switch View
     SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(card, card.metadata.size > 5000000),
+      ProgressView(card, card.file.singleFile.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
 
-    if (card.metadata.size > 5000000) {
+    if (card.file.singleFile.size > 5000000) {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();
@@ -230,13 +230,13 @@ class CardService extends GetxService {
 
     // Set Individual File Count
     if (hasMetadata) {
-      to._documentCount(to._metadata.count((i) => i.payload == Payload.TEXT));
-      to._pdfCount(to._metadata.count((i) => i.payload == Payload.PDF));
-      to._presentationCount(to._metadata.count((i) => i.payload == Payload.PRESENTATION));
-      to._spreadsheetCount(to._metadata.count((i) => i.payload == Payload.SPREADSHEET));
-      to._otherCount(to._metadata.count((i) => i.payload == Payload.OTHER));
-      to._photosCount(to._metadata.count((i) => i.metadata.mime.type == MIME_Type.image));
-      to._videosCount(to._metadata.count((i) => i.metadata.mime.type == MIME_Type.video));
+      to._documentCount(to._metadata.count((i) => i.mime == MIME_Type.DOCUMENT));
+      to._pdfCount(to._metadata.count((i) => i.mime == MIME_Type.PDF));
+      to._presentationCount(to._metadata.count((i) => i.mime == MIME_Type.PRESENTATION));
+      to._spreadsheetCount(to._metadata.count((i) => i.mime == MIME_Type.SPREADSHEET));
+      to._otherCount(to._metadata.count((i) => i.mime == MIME_Type.OTHER));
+      to._photosCount(to._metadata.count((i) => i.mime == MIME_Type.IMAGE));
+      to._videosCount(to._metadata.count((i) => i.mime == MIME_Type.VIDEO));
     }
   }
 
@@ -259,7 +259,7 @@ class CardService extends GetxService {
         card.url = item.url;
         break;
       default:
-        card.metadata = item.metadata;
+        card.file = item.file;
         break;
     }
     return card;

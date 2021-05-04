@@ -16,14 +16,6 @@ class URLCardItemView extends StatelessWidget {
           tag: item.id,
           child: Container(
             height: 75,
-            decoration: item.payload == Payload.MEDIA && item.metadata.mime.type == MIME_Type.image
-                ? BoxDecoration(
-                    image: DecorationImage(
-                    colorFilter: ColorFilter.mode(Colors.black26, BlendMode.luminosity),
-                    fit: BoxFit.cover,
-                    image: MemoryImage(item.metadata.thumbnail),
-                  ))
-                : null,
             child: Container(),
           ),
         ),

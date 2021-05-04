@@ -25,6 +25,7 @@ class TransferCardActivities extends Table {
 class TransferCardItems extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get owner => text().map(const ProfileConverter())();
+  IntColumn get mime => integer().map(const MimeConverter())();
   IntColumn get payload => integer().map(const PayloadConverter())();
   TextColumn get contact => text().map(const ContactConverter()).nullable()();
   TextColumn get file => text().map(const FileConverter()).nullable()();
@@ -75,11 +76,20 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   Future<int> addCard(TransferCard card) async {
+    var mime = Value.absent();
+
+    if (card.hasFile()) {
+      if (!card.file.isMultiple) {
+        mime = Value(card.file.singleFile.mime.type);
+      }
+    }
+
     return into(transferCardItems).insert(TransferCardItemsCompanion(
         owner: Value(card.owner),
+        mime: mime,
         payload: Value(card.payload),
         contact: card.hasContact() ? Value(card.contact) : Value.absent(),
-        metadata: card.hasFile() ? Value(card.hasFile()) : Value.absent(),
+        file: card.hasFile() ? Value(card.file) : Value.absent(),
         url: card.hasUrl() ? Value(card.url) : Value.absent(),
         received: Value(DateTime.fromMillisecondsSinceEpoch(card.received * 1000))));
   }

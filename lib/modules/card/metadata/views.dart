@@ -16,7 +16,7 @@ class MetaBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return metadata.isImage
+    return metadata.properties.isImage
         ? FutureBuilder<File>(
             initialData: null,
             future: CardService.loadFileFromMetadata(metadata),
@@ -80,7 +80,7 @@ class MetaImageBox extends StatelessWidget {
   const MetaImageBox({Key key, @required this.metadata, this.width = 150, this.height = 150, this.fit = BoxFit.contain}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return metadata.isImage
+    return metadata.properties.isImage
         ? FutureBuilder<File>(
             initialData: null,
             future: CardService.loadFileFromMetadata(metadata),
@@ -126,7 +126,7 @@ class MetaVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return metadata.isVideo
+    return metadata.properties.isVideo
         ? FutureBuilder<File>(
             initialData: null,
             future: CardService.loadFileFromMetadata(metadata),

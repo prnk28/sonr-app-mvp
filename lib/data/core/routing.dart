@@ -19,7 +19,7 @@ class SonrRouting {
             page: () {
               // Update Contact for New User
               if (UserService.isNewUser.value) {
-                Get.find<SonrService>().connectNewUser(UserService.contact.value, UserService.username);
+                Get.find<SonrService>().connectNewUser(UserService.contact.value);
               } else {
                 Get.find<SonrService>().connect();
               }

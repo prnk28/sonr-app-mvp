@@ -79,6 +79,25 @@ class FileConverter extends TypeConverter<SonrFile, String> {
   }
 }
 
+class MimeConverter extends TypeConverter<MIME_Type, int> {
+  const MimeConverter();
+  @override
+  MIME_Type mapToDart(int fromDb) {
+    if (fromDb == null) {
+      return null;
+    }
+    return MIME_Type.valueOf(fromDb);
+  }
+
+  @override
+  int mapToSql(MIME_Type value) {
+    if (value == null) {
+      return null;
+    }
+    return value.value;
+  }
+}
+
 class PayloadConverter extends TypeConverter<Payload, int> {
   const PayloadConverter();
   @override

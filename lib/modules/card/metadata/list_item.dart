@@ -29,26 +29,26 @@ class MetaListItemView extends StatelessWidget {
 
   Widget _buildLeading() {
     // # Undefined Type
-    if (item.payload == Payload.UNDEFINED) {
+    if (item.mime == MIME_Type.OTHER) {
       return CircularProgressIndicator();
     }
 
     // # Check for Media File Type
-    else if (item.payload == Payload.MEDIA) {
+    else if (item.mime.isMedia) {
       // Image
-      if (item.metadata.mime.type == MIME_Type.image) {
-        return MetaImageBox(metadata: item.metadata, width: 72);
+      if (item.file.singleFile.mime.type == MIME_Type.IMAGE) {
+        return MetaImageBox(metadata: item.file.singleFile, width: 72);
       }
 
       // Other Media (Video, Audio)
       else {
-        return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.metadata);
+        return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.singleFile);
       }
     }
 
     // # Other File
     else {
-      return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.metadata);
+      return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.singleFile);
     }
   }
 
@@ -76,11 +76,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.metadata.prettyName.h6,
+              child: item.file.prettyName.h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.metadata.sizeString.p_Grey,
+              child: item.file.sizeString.p_Grey,
             )
           ]));
     } else {
@@ -90,11 +90,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.metadata.prettyName.h6,
+              child: item.file.prettyName.h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.metadata.sizeString.p_Grey,
+              child: item.file.sizeString.p_Grey,
             )
           ]));
     }

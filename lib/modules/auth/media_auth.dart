@@ -29,7 +29,7 @@ class MediaAuthView extends StatelessWidget {
                   : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
               Row(children: [
                 card.payload.toString().capitalizeFirst.gradient(gradient: FlutterGradientNames.plumBath, size: 22),
-                "   ${card.file.singleFile.sizeString}".h5
+                "   ${card.file.sizeString}".h5
               ]),
             ]),
           ]),

@@ -16,7 +16,7 @@ class Transfer {
   }
 
   static void transferWithFile(FileItem fileItem) {
-    Get.offNamed("/transfer", arguments: TransferArguments(fileItem.payload, metadata: fileItem.metadata, item: fileItem));
+    Get.offNamed("/transfer", arguments: TransferArguments(fileItem.payload, file: fileItem.file, item: fileItem));
   }
 
   static void transferWithUrl(String url) {

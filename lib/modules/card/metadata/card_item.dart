@@ -19,9 +19,9 @@ class MetaCardItemView extends StatelessWidget {
       width: Get.width - 64,
       decoration: Neumorph.floating(),
       child: Hero(
-        tag: card.metadata.path,
+        tag: card.file.singleFile.path,
         child: MetaBox(
-          metadata: card.metadata,
+          metadata: card.file.singleFile,
           child: Stack(
             children: <Widget>[
               // Display Mime Type if Not Image
@@ -57,10 +57,10 @@ class MetaCardItemView extends StatelessWidget {
 
   // @ Build Card for Video Type
   Widget _buildChildView() {
-    if (card.metadata.mime.type == MIME_Type.video) {
-      return MetaVideo(metadata: card.metadata);
-    } else if (card.metadata.mime.type != MIME_Type.image) {
-      return MetaIcon(metadata: card.metadata, width: Get.width - 200, height: Get.height / 5);
+    if (card.file.singleFile.mime.type == MIME_Type.VIDEO) {
+      return MetaVideo(metadata: card.file.singleFile);
+    } else if (card.file.singleFile.mime.type != MIME_Type.IMAGE) {
+      return MetaIcon(metadata: card.file.singleFile, width: Get.width - 200, height: Get.height / 5);
     } else {
       return Container();
     }
@@ -80,7 +80,7 @@ class _MediaInfoView extends StatelessWidget {
           decoration: Neumorph.floating(),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            "${card.metadata.typeString} From".h3,
+            "${card.file.typeString} From".h3,
 
             // Owner
             Row(
@@ -97,7 +97,7 @@ class _MediaInfoView extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: "${card.metadata.name}".p,
+                child: "${card.file.singleFile.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -107,21 +107,21 @@ class _MediaInfoView extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "Size ".h6,
               Spacer(),
-              "${card.metadata.sizeString}".p,
+              "${card.file.sizeString}".p,
             ]),
 
             // File Mime Value
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "Kind ".h6,
               Spacer(),
-              "${card.metadata.mime.value}".p,
+              "${card.file.singleFile.mime.value}".p,
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "ID ".h6,
               Spacer(),
-              "${card.metadata.id}".p,
+              "${card.file.singleFile.id}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),

@@ -56,7 +56,6 @@ class FileItem {
     var path = file.path;
     var name = file.name;
     var size = file.size;
-    var ext = file.extension;
     return FileItem(path, name, size, _retreiveMime(name), _retreivePayload(data), result: data);
   }
 
@@ -70,7 +69,7 @@ class FileItem {
   }
 
   // ^ Retreives Metadata Protobuf ^ //
-  SonrFile get metadata => SonrFile(
+  SonrFile get file => SonrFile(
         singleFile: SonrFile_Metadata(
           name: name,
           size: size,
@@ -193,7 +192,7 @@ class FileItem {
   // # Return File Info as String
   @override
   String toString() {
-    return "metadata: ${metadata.toString()}";
+    return "metadata: ${file.toString()}";
   }
 }
 

@@ -13,8 +13,8 @@ class HomeArguments {
 class TransferArguments {
   final FileItem item;
   final Payload payload;
-  final Metadata metadata;
+  final SonrFile file;
   final Contact contact;
   final String url;
-  TransferArguments(this.payload, {this.item, this.metadata, this.contact, this.url});
+  TransferArguments(this.payload, {this.item, this.file, this.contact, this.url});
 }
