@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:sonr_app/service/device/desktop.dart';
+
 import '../theme.dart';
 
 // ^ Home Screen Header ^ //
@@ -66,7 +68,11 @@ class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {
       return Container(
           width: 56,
           height: 56,
-          child: PlainIconButton(icon: SonrIcons.Close.greyWith(size: 32), onPressed: () async => await draggableChannel.invokeMethod("onClose")));
+          child: PlainIconButton(
+              icon: SonrIcons.Close.greyWith(size: 32),
+              onPressed: () async {
+                DesktopService.closeWindow();
+              }));
     } else {
       return action != null ? action : Container(width: 56, height: 56);
     }

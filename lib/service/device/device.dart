@@ -5,6 +5,8 @@ import 'mobile.dart';
 import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
 
 class DeviceService extends GetxService {
+
+
   // Initializers
   bool _isDesktop;
   bool _isMobile;

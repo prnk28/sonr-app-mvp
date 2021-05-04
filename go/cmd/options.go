@@ -42,6 +42,7 @@ func (p *AppBarDraggable) InitPlugin(messenger plugin.BinaryMessenger) error {
 	channel := plugin.NewMethodChannel(messenger, "io.sonr.desktop/window", plugin.StandardMethodCodec{})
 	channel.HandleFunc("onPanStart", p.onPanStart)
 	channel.HandleFuncSync("onPanUpdate", p.onPanUpdate)
+	channel.HandleFunc("onOpen", p.onOpen)
 	channel.HandleFunc("onClose", p.onClose)
 	return nil
 }
@@ -72,6 +73,12 @@ func (p *AppBarDraggable) onPanUpdate(arguments interface{}) (reply interface{},
 	x, y := p.window.GetPos()           // This function must only be called from the main thread.
 	p.window.SetPos(x+deltaX, y+deltaY) // This function must only be called from the main thread.
 
+	return nil, nil
+}
+
+func (p *AppBarDraggable) onOpen(arguments interface{}) (reply interface{}, err error) {
+	// This function may be called from any thread. Access is not synchronized.
+	p.window.Focus()
 	return nil, nil
 }
 
