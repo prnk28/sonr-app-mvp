@@ -265,12 +265,15 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Invited ^ //
   void _handleInvited(AuthInvite data) async {
+    // Check for Overlay
     if (data.hasRemote() && _remoteCallback != null) {
       _remoteCallback(data);
     }
 
-    // Present Overlay
-    await HapticFeedback.heavyImpact();
+    // Handle Feedback
+    DeviceService.playSound(type: UISoundType.Swipe);
+    DeviceService.feedback();
+
     // Check for Flat
     if (data.isFlat && data.payload == Payload.CONTACT) {
       FlatMode.invite(data.card);
@@ -281,6 +284,7 @@ class SonrService extends GetxService {
 
   // ^ Node Has Been Accepted ^ //
   void _handleResponded(AuthReply data) async {
+    // Handle Contact Response
     if (data.type == AuthReply_Type.FlatContact) {
       await HapticFeedback.heavyImpact();
       FlatMode.response(data.card);
@@ -288,6 +292,7 @@ class SonrService extends GetxService {
       await HapticFeedback.vibrate();
       SonrOverlay.reply(data);
     }
+
     // For Cancel
     else if (data.type == AuthReply_Type.Cancel) {
       await HapticFeedback.vibrate();

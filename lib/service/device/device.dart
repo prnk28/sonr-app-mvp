@@ -5,8 +5,6 @@ import 'mobile.dart';
 import 'package:sonr_plugin/src/core/node/provider.dart' as provider;
 
 class DeviceService extends GetxService {
-
-
   // Initializers
   bool _isDesktop;
   bool _isMobile;
@@ -71,6 +69,15 @@ class DeviceService extends GetxService {
         contact: UserService.contact.value,
         device: device,
       );
+    }
+  }
+
+  // ^ Provide Device Feedback ^ //
+  static void feedback() async {
+    if (DeviceService.isMobile) {
+      await HapticFeedback.heavyImpact();
+    } else {
+      DesktopService.openWindow();
     }
   }
 

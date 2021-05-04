@@ -32,25 +32,30 @@ class DesktopService extends GetxService {
     // @ 2. Init SystemTray
     await FlutterSystray.initSystray(_main);
     await FlutterSystray.updateMenu([
-      SystrayAction(name: "focus", label: "Open Window", actionType: ActionType.Focus),
+      SystrayAction(name: "focus", label: "Open Window", actionType: ActionType.SystrayEvent),
       SystrayAction(name: "quit", label: "Quit", actionType: ActionType.Quit)
     ]);
 
     // Init Tray
     _systemTray = FlutterSystray.init();
+    _systemTray.registerEventHandler('focus', openWindow);
     return this;
   }
 
   // ^ Closes Desktop Window
   static void closeWindow() async {
-    await _channel.invokeMethod("onClose");
-    to._isWindowOpen(false);
+    if (to._isWindowOpen.value) {
+      await _channel.invokeMethod("onClose");
+      to._isWindowOpen(false);
+    }
   }
 
   // ^ Opens Desktop Window
   static void openWindow() async {
-    await _channel.invokeMethod("onOpen");
-    to._isWindowOpen(true);
+    if (!to._isWindowOpen.value) {
+      await _channel.invokeMethod("onOpen");
+      to._isWindowOpen(true);
+    }
   }
 
   // ^ Method Plays a UI Sound ^
