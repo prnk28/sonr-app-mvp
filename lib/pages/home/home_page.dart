@@ -15,7 +15,7 @@ class HomePage extends GetView<HomeController> {
         resizeToAvoidBottomInset: false,
         floatingAction: ShareView(),
         bottomNavigationBar: HomeBottomNavBar(),
-        appBar: DesignAppBar(
+        appBar: HomeSearchAppBar(
           subtitle: Obx(() => controller.view.value == HomeView.Main
               ? "Hi ${UserService.contact.value.firstName},".headThree(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)
               : Container()),

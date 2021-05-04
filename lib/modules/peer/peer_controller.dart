@@ -85,7 +85,11 @@ class PeerController extends GetxController {
 
     // Add Stream Handlers
     _peerStream = LobbyService.listenToPeer(peer.value).listen(_handlePeerUpdate);
-    _userStream = LobbyService.userPosition.listen(_handleUserUpdate);
+
+    // Check for Mobile
+    if (DeviceService.isMobile) {
+      _userStream = LobbyService.userPosition.listen(_handleUserUpdate);
+    }
 
     // Set If Animated
     if (setAnimated) {

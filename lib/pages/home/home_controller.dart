@@ -60,7 +60,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     // Check Entry Arguments
     HomeArguments args = Get.arguments;
     if (args.isFirstLoad) {
-      MediaService.checkInitialShare();
+      MobileService.checkInitialShare();
     }
 
     // Handle Streams

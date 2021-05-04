@@ -33,6 +33,13 @@ class DesktopBinding implements Bindings {
     Get.put<WindowController>(WindowController(), permanent: true);
     Get.put<LinkController>(LinkController());
     Get.put<ExplorerController>(ExplorerController(), permanent: true);
+    Get.create<PeerController>(() => PeerController(_getRiveDataFile()));
+  }
+
+  // Get Rive File for Peer Bubble
+  Future<RiveFile> _getRiveDataFile() async {
+    var data = await rootBundle.load('assets/rive/peer_border.riv');
+    return RiveFile.import(data);
   }
 }
 

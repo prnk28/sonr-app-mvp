@@ -5,8 +5,8 @@ import (
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
 	"github.com/go-flutter-desktop/plugins/path_provider"
-	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/go-flutter-desktop/plugins/video_player"
+	"github.com/go-gl/glfw/v3.3/glfw"
 	warble "github.com/jslater89/warble/go"
 	file_picker "github.com/miguelpruivo/flutter_file_picker/go"
 )

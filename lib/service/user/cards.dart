@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/pages/overlay/overlay.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -76,10 +79,7 @@ class CardService extends GetxService {
   static addCard(TransferCard card) async {
     // Save Media to Device
     if (card.payload == Payload.MEDIA) {
-      var asset = await MediaService.saveTransfer(card.metadata);
-      if (asset != null) {
-        card.metadata.id = asset.id;
-      }
+      await DeviceService.saveTransfer(card.metadata);
     }
 
     // Store in Database
@@ -127,6 +127,18 @@ class CardService extends GetxService {
     await to._database.deleteCard(card);
     await to._database.addActivity(ActivityType.Deleted, _transferCardFromItem(card));
     _refreshCount();
+  }
+
+  // ^ Load IO File from Metadata ^ //
+  static Future<File> loadFileFromMetadata(Metadata metadata) async {
+    var asset = await AssetEntity.fromId(metadata.id);
+    return await asset.file;
+  }
+
+  // ^ Load MediaItem from Metadata ^ //
+  static Future<MediaItem> loadItemFromMetadata(Metadata metadata) async {
+    var asset = await AssetEntity.fromId(metadata.id);
+    return MediaItem(asset, -1);
   }
 
   // ^ Add Shared Card to Activity Datavase

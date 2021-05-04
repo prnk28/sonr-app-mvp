@@ -30,11 +30,8 @@ class ExplorerDesktopView extends GetView<ExplorerController> {
         // Default Empty View
         else {
           return Center(
-            child: Container(
-              padding: EdgeInsets.all(54),
-              width: 500,
-              child: controller.location.value.toString().h3,
-            ),
+            child: [Container(padding: EdgeInsets.all(54), width: 500, child: SonrAssetIllustration.NoPeers.widget), "Nobody Around".h5_Grey]
+                .column(mainAxisAlignment: MainAxisAlignment.center),
           );
         }
       }),

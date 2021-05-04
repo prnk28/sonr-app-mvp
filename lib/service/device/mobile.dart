@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass/flutter_compass.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import 'package:get/get.dart';
+import 'package:photo_manager/photo_manager.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:sonr_app/modules/share/sheet_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -27,11 +31,14 @@ class MobileService extends GetxService {
   final _hasPhotos = false.obs;
   final _hasStorage = false.obs;
 
-  // Device/Location Properties
+  // Mobile Platform Controllers/Properties
   final _audioPlayer = AudioCache(prefix: 'assets/sounds/', respectSilence: true);
+  final _keyboardVisibleController = KeyboardVisibilityController();
   final _keyboardVisible = false.obs;
   final _location = Rx<geo.Position>(null);
   final _position = Rx<Position>(Position());
+  final _incomingMedia = <SharedMediaFile>[].obs;
+  final _incomingText = "".obs;
 
   // Getters for Device/Location References
   static RxBool get keyboardVisible => to._keyboardVisible;
@@ -51,10 +58,9 @@ class MobileService extends GetxService {
     }
   }
 
-  // Controllers
-  final _keyboardVisibleController = KeyboardVisibilityController();
-
   // References
+  StreamSubscription _externalMediaStream;
+  StreamSubscription _externalTextStream;
   StreamSubscription<AccelerometerEvent> _accelStream;
   StreamSubscription<CompassEvent> _compassStream;
   StreamSubscription<GyroscopeEvent> _gyroStream;
@@ -87,6 +93,26 @@ class MobileService extends GetxService {
 
     // Set Permissions Status
     updatePermissionsStatus();
+
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialMedia().then((List<SharedMediaFile> data) {
+      if (data != null) {
+        _incomingMedia(data);
+        _incomingMedia.refresh();
+      }
+    });
+
+    // For sharing or opening urls/text coming from outside the app while the app is closed
+    ReceiveSharingIntent.getInitialText().then((String text) {
+      if (text != null) {
+        _incomingText(text);
+        _incomingText.refresh();
+      }
+    });
+
+    // Listen to Incoming Text/File
+    _externalTextStream = ReceiveSharingIntent.getTextStream().listen(_handleSharedText);
+    _externalMediaStream = ReceiveSharingIntent.getMediaStream().listen(_handleSharedFiles);
     return this;
   }
 
@@ -99,7 +125,33 @@ class MobileService extends GetxService {
     _magnoStream.cancel();
     _orienStream.cancel();
     _audioPlayer.clearCache();
+    _externalMediaStream.cancel();
+    _externalTextStream.cancel();
     super.onClose();
+  }
+
+  // ^ Checks for Initial Media/Text to Share ^ //
+  static checkInitialShare() async {
+    // @ Check for Media
+    if (to._incomingMedia.length > 0 && !Get.isBottomSheetOpen) {
+      // Open Sheet
+      await Get.bottomSheet(ShareSheet.media(to._incomingMedia), isDismissible: false);
+
+      // Reset Incoming
+      to._incomingMedia.clear();
+      to._incomingMedia.refresh();
+    }
+
+    // @ Check for Text
+    if (to._incomingText.value != "" && GetUtils.isURL(to._incomingText.value) && !Get.isBottomSheetOpen) {
+      var data = await SonrService.getURL(to._incomingText.value);
+      // Open Sheet
+      await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
+
+      // Reset Incoming
+      to._incomingText("");
+      to._incomingText.refresh();
+    }
   }
 
   // ^ Method Closes Keyboard if Active ^ //
@@ -123,6 +175,75 @@ class MobileService extends GetxService {
   // ^ Method Plays a UI Sound ^
   static void playSound(UISoundType type) async {
     await to._audioPlayer.play(type.file);
+  }
+
+  // ^ Saves Photo to Gallery ^ //
+  static Future<bool> saveCapture(String path, bool isVideo) async {
+    // Validate Path
+    var file = File(path);
+    var exists = await file.exists();
+    if (!exists) {
+      SonrSnack.error("Unable to save Captured Media to your Gallery");
+      return false;
+    } else {
+      if (isVideo) {
+        // Set Video File
+        File videoFile = File(path);
+        var asset = await PhotoManager.editor.saveVideo(videoFile);
+        var result = await asset.exists;
+
+        // Visualize Result
+        if (result) {
+          SonrSnack.error("Unable to save Captured Photo to your Gallery");
+        }
+        return result;
+      } else {
+        // Save Image to Gallery
+        var asset = await PhotoManager.editor.saveImageWithPath(path);
+        var result = await asset.exists;
+        if (!result) {
+          SonrSnack.error("Unable to save Captured Video to your Gallery");
+        }
+        return result;
+      }
+    }
+  }
+
+  // ^ Saves Received Media to Gallery ^ //
+  static Future<void> saveTransfer(Metadata meta) async {
+    // Get Data from Media
+    final path = meta.path;
+    // Save Image to Gallery
+    if (meta.mime.type == MIME_Type.image && MobileService.hasGallery.value) {
+      var asset = await PhotoManager.editor.saveImageWithPath(path);
+      var result = await asset.exists;
+
+      // Visualize Result
+      if (result) {
+        meta.id = asset.id;
+        SonrSnack.success("Saved Transferred Photo to your Device's Gallery");
+      } else {
+        SonrSnack.error("Unable to save Photo to your Gallery");
+      }
+    }
+
+    // Save Video to Gallery
+    else if (meta.mime.type == MIME_Type.video && MobileService.hasGallery.value) {
+      // Set Video File
+      File videoFile = File(path);
+      var asset = await PhotoManager.editor.saveVideo(videoFile);
+      var result = await asset.exists;
+
+      // Visualize Result
+      if (result) {
+        SonrSnack.success("Saved Transferred Video to your Device's Gallery");
+      } else {
+        SonrSnack.error("Unable to save Video to your Gallery");
+      }
+      return asset;
+    } else {
+      return null;
+    }
   }
 
   // ^ Update Method ^ //
@@ -337,5 +458,23 @@ class MobileService extends GetxService {
     _position.update((val) {
       val.orientation = Position_Orientation(pitch: event.pitch, roll: event.roll, yaw: event.yaw);
     });
+  }
+
+  // # Saves Received Media to Gallery
+  _handleSharedFiles(List<SharedMediaFile> data) async {
+    if (!Get.isBottomSheetOpen && UserService.hasUser.value) {
+      await Get.bottomSheet(ShareSheet.media(data), isDismissible: false);
+    }
+  }
+
+  // # Saves Received Media to Gallery
+  _handleSharedText(String text) async {
+    if (!Get.isBottomSheetOpen && GetUtils.isURL(text) && UserService.hasUser.value) {
+      // Get Data
+      var data = await SonrService.getURL(text);
+
+      // Open Sheet
+      await Get.bottomSheet(ShareSheet.url(data), isDismissible: false);
+    }
   }
 }

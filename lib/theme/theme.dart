@@ -1,11 +1,10 @@
 export '../service/device/device.dart';
 export '../service/client/file.dart';
 export '../service/client/lobby.dart';
-export '../service/interface/media.dart';
 export '../service/client/sonr.dart';
 export '../service/user/cards.dart';
 export '../service/user/user.dart';
-export '../service/interface/assets.dart';
+export '../service/user/assets.dart';
 export 'package:flutter/services.dart';
 export 'package:get/get.dart' hide Node;
 export 'dart:typed_data';

@@ -81,6 +81,15 @@ class DeviceService extends GetxService {
     }
   }
 
+  // ^ Saves Received Media to Gallery by Platform ^ //
+  static void saveTransfer(Metadata metadata) async {
+    if (isMobile) {
+      await MobileService.saveTransfer(metadata);
+    } else {
+      OpenFile.open(metadata.path);
+    }
+  }
+
   // ^ Method Determines LaunchPage and Changes Screen ^
   static void shiftPage({@required Duration delay}) async {
     Future.delayed(delay, () {

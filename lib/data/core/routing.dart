@@ -65,9 +65,6 @@ class SonrRouting {
       await Get.putAsync(() => DesktopService().init(), permanent: true);
     } else {
       await Get.putAsync(() => MobileService().init(), permanent: true);
-      await Get.putAsync(() => MediaService().init(), permanent: true);
-      await Get.putAsync(() => SonrOverlay().init(), permanent: true);
-      await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
     }
 
     // Initialize Data/Networking Services
@@ -75,13 +72,14 @@ class SonrRouting {
     await Get.putAsync(() => CardService().init(), permanent: true);
     await Get.putAsync(() => LobbyService().init(), permanent: true);
     await Get.putAsync(() => SonrService().init(), permanent: true);
+    await Get.putAsync(() => SonrOverlay().init(), permanent: true);
+    await Get.putAsync(() => SonrPositionedOverlay().init(), permanent: true);
   }
 
   // ^ Method Validates Required Services Registered ^ //
   static bool get areServicesRegistered {
     return DeviceService.isRegistered &&
         UserService.isRegistered &&
-        MediaService.isRegistered &&
         CardService.isRegistered &&
         LobbyService.isRegistered &&
         UserService.isRegistered;
