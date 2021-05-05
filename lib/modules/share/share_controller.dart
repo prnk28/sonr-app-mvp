@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/device/mobile.dart';
@@ -39,7 +38,7 @@ class ShareController extends GetxController {
   final status = ShareStatus.Default.obs;
 
   // Shared Files
-  final currentMedia = Rx<MediaItem>(null);
+  final currentMedia = Rx<SonrFile>(null);
 
   // References
   int _counter = 0;
@@ -72,12 +71,12 @@ class ShareController extends GetxController {
   // ^ Present Camera View ^ //
   presentCameraView() {
     // Move to View
-    Get.to(CameraView.withPreview(onMediaSelected: (MediaFile file) {
+    Get.to(CameraView.withPreview(onMediaSelected: (SonrFile file) {
       // Shrink Button after Delay
       shrink(delay: 150.milliseconds);
 
       // Transfer with File
-      Transfer.transferWithFile(FileItem.capture(file));
+      Transfer.transferWithFile(file);
     }), transition: Transition.downToUp);
   }
 
@@ -95,12 +94,14 @@ class ShareController extends GetxController {
     // Check Permissions
     if (MobileService.hasGallery.value) {
       var result = await FileService.selectMedia();
-      if (result.hasItem) {
+
+      // Check has Item
+      if (result.item1) {
         // Shrink Button after Delay
         shrink(delay: 150.milliseconds);
 
         // Push to Transfer Screen
-        Transfer.transferWithFile(result.fileItem);
+        Transfer.transferWithFile(result.item2);
       }
     } else {
       // Request Permissions
@@ -113,12 +114,12 @@ class ShareController extends GetxController {
 
         // Continue With Picker
         var result = await FileService.selectFile();
-        if (result.hasItem) {
+        if (result.item1) {
           // Shrink Button after Delay
           shrink(delay: 150.milliseconds);
 
           // Push to Transfer
-          Transfer.transferWithFile(result.fileItem);
+          Transfer.transferWithFile(result.item2);
         }
       } else {
         SonrSnack.error("Cannot pick Media without Permissions");
@@ -131,9 +132,9 @@ class ShareController extends GetxController {
     // Check Permissions
     if (MobileService.hasGallery.value) {
       var result = await FileService.selectMedia();
-      if (result.hasItem) {
+      if (result.item1) {
         // Push to Transfer
-        Transfer.transferWithFile(result.fileItem);
+        Transfer.transferWithFile(result.item2);
 
         // Shrink Button after Delay
         shrink(delay: 150.milliseconds);
@@ -149,9 +150,9 @@ class ShareController extends GetxController {
 
         // Continue With Picker
         var result = await FileService.selectMedia();
-        if (result.hasItem) {
+        if (result.item1) {
           // Push to Transfer
-          Transfer.transferWithFile(result.fileItem);
+          Transfer.transferWithFile(result.item2);
 
           // Shrink Button after Delay
           shrink(delay: 150.milliseconds);
@@ -163,11 +164,11 @@ class ShareController extends GetxController {
   }
 
   // ^ Select a URL ^ //
-  selectExternal(Payload payload, URLLink url, MediaFile mediaFile) {
+  selectExternal(Payload payload, URLLink url, SonrFile mediaFile) {
     if (payload == Payload.URL) {
       Transfer.transferWithUrl(url.link);
     } else {
-      Transfer.transferWithFile(FileItem.capture(mediaFile));
+      Transfer.transferWithFile(mediaFile);
     }
   }
 

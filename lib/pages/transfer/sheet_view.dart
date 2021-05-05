@@ -1,4 +1,3 @@
-import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'transfer_controller.dart';
 
@@ -39,13 +38,13 @@ class _PayloadListItem extends GetView<TransferController> {
     // # Check for Media File Type
     else if (controller.inviteRequest.value.payload == Payload.FILE) {
       // Image
-      if (controller.fileItem.value.mime.type == MIME_Type.IMAGE) {
-        return _PayloadItemThumbnail(item: controller.fileItem.value);
+      if (controller.sonrFile.value.singleFile.mime.isImage) {
+        return _PayloadItemThumbnail(item: controller.sonrFile.value);
       }
 
       // Other Media (Video, Audio)
       else {
-        return controller.fileItem.value.mime.type.gradient(size: Height.ratio(0.125));
+        return controller.sonrFile.value.singleFile.mime.type.gradient(size: Height.ratio(0.125));
       }
     }
 
@@ -81,11 +80,11 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: controller.fileItem.value.prettyName().h6,
+              child: controller.sonrFile.value.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: controller.fileItem.value.sizeToString().p_Grey,
+              child: controller.sonrFile.value.sizeToString().p_Grey,
             )
           ]));
     } else {
@@ -97,11 +96,11 @@ class _PayloadListItem extends GetView<TransferController> {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: controller.fileItem.value.prettyName().h6,
+              child: controller.sonrFile.value.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: controller.fileItem.value.sizeToString().p_Grey,
+              child: controller.sonrFile.value.sizeToString().p_Grey,
             )
           ]));
     }
@@ -110,26 +109,26 @@ class _PayloadListItem extends GetView<TransferController> {
 
 // ^ Builds Thumbnail from Future
 class _PayloadItemThumbnail extends StatelessWidget {
-  final FileItem item;
+  final SonrFile item;
 
   const _PayloadItemThumbnail({Key key, @required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: item.isThumbnailReady(),
+      future: item.setThumbnail(),
       initialData: false,
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data) {
           // Return View
           return GestureDetector(
-            onTap: () => OpenFile.open(item.path),
+            onTap: () => OpenFile.open(item.singleFile.path),
             child: Container(
                 height: Height.ratio(0.125),
                 width: Height.ratio(0.125),
                 decoration: Neumorph.indented(),
                 clipBehavior: Clip.hardEdge,
                 child: Image.memory(
-                  item.thumbnail,
+                  item.singleFile.thumbnail,
                   fit: BoxFit.cover,
                 )),
           );

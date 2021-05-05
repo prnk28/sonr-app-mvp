@@ -24,6 +24,8 @@ Gemfile
 .idea/
 .sonr/
 
+/lib/env.dart
+
 # Visual Studio Code related
 .vscode/
 workspace.code-workspace

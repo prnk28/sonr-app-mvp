@@ -1,5 +1,6 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
+import '../../env.dart';
 import 'desktop.dart';
 import 'mobile.dart';
 import 'package:http/http.dart' as http;
@@ -13,16 +14,16 @@ class DeviceService extends GetxService {
   // Accessors
   static bool get isRegistered => Get.isRegistered<DeviceService>();
   static DeviceService get to => Get.find<DeviceService>();
-  final _platform = Rx<Platform>(null);
+  final _platform = Rx<Platform>(Platform.Undefined);
 
   // Platform Checkers
-  static bool get isDesktop => Get.find<DeviceService>()._isDesktop;
-  static bool get isMobile => Get.find<DeviceService>()._isMobile;
-  static bool get isAndroid => Get.find<DeviceService>()._platform.value.isAndroid;
-  static bool get isIOS => Get.find<DeviceService>()._platform.value.isIOS;
-  static bool get isLinux => Get.find<DeviceService>()._platform.value.isLinux;
-  static bool get isMacOS => Get.find<DeviceService>()._platform.value.isMacOS;
-  static bool get isWindows => Get.find<DeviceService>()._platform.value.isWindows;
+  static bool get isDesktop => to._isDesktop;
+  static bool get isMobile => to._isMobile;
+  static bool get isAndroid => to._platform.value.isAndroid;
+  static bool get isIOS => to._platform.value.isIOS;
+  static bool get isLinux => to._platform.value.isLinux;
+  static bool get isMacOS => to._platform.value.isMacOS;
+  static bool get isWindows => to._platform.value.isWindows;
 
   // Connection Requirements
   static bool get isReadyToConnect {
@@ -41,7 +42,6 @@ class DeviceService extends GetxService {
 
     // Set Platform
     _platform(PlatformUtils.find());
-    print("Current Platform: " + _platform.value.toString());
 
     // Audio Player
     return this;
@@ -70,25 +70,19 @@ class DeviceService extends GetxService {
 
   // ^ Retreive Location by IP Address ^ //
   static Future<Location> findIPLocation() async {
-    var url =
-        Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=873dbe322aea47f89dcf729dcc8f60e8");
+    var url = Uri.parse("https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?apikey=${EnvConfig.ip_key}");
 
-    final response = await http.get(url, headers: {
-      'x-rapidapi-key': 'a09329a7a8mshc7688c2dc3de4f9p197eb4jsn186162847bfb',
-      'x-rapidapi-host': 'find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com'
-    });
+    final response = await http.get(url, headers: {'x-rapidapi-key': EnvConfig.rapid_key, 'x-rapidapi-host': EnvConfig.rapid_host});
 
     if (response.statusCode == 200) {
       var json = jsonDecode(response.body);
-      var loc = Location(
+      return Location(
         state: json["state"],
         continent: json["continent"],
         country: json["country"],
         latitude: json["latitude"],
         longitude: json["longitude"],
       );
-      print(loc.toString());
-      return loc;
     } else {
       throw Exception('Failed to Fetch Geolocation IP');
     }

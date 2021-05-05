@@ -16,5 +16,4 @@ export 'extensions/peer.dart';
 
 // Models
 export 'model/model_lobby.dart';
-export 'model/model_file.dart';
 export 'model/model_tile.dart';

@@ -11,6 +11,19 @@ publish_to: none
 environment:
   sdk: ">=2.8.0 <3.0.1"
 
+environment_config:
+  path: env.dart # optional, result file path against `lib/` folder
+  dotenv_path: .env # optional, result file path for .env file against project root folder
+  class: EnvConfig # optional, class name
+
+  fields: # set of fields for command
+    ip_key:
+      type: 'String'
+    rapid_host:
+      type: 'String'
+    rapid_key:
+      type: 'String'
+
 # ** ================== **
 # **    DEPENDENCIES    **
 # ** ================== **
@@ -21,6 +34,7 @@ dependencies:
 
   # ** - User Defined - **
   # -- Management --
+  environment_config: ^2.3.0
   file_picker: ^3.0.1
   file_picker_cross: ^4.3.2
   flutter_hooks: ^0.16.0
@@ -71,6 +85,7 @@ dependencies:
   material_floating_search_bar: ^0.3.4
   photo_view: ^0.11.1
   rive: ^0.7.1
+
 
 # ** -- DEV Dependencies -- **
 dev_dependencies:

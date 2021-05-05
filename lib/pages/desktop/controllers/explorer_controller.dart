@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class ExplorerController extends GetxController {
@@ -10,7 +9,7 @@ class ExplorerController extends GetxController {
   // @ Properties
   final isNotEmpty = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final fileItem = Rx<FileItem>(null);
+  final fileItem = Rx<SonrFile>(null);
   final location = Rx<Location>(Location());
 
   // References

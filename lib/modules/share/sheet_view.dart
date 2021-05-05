@@ -4,7 +4,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-
 import 'share_controller.dart';
 
 const double S_CONTENT_HEIGHT_MODIFIER = 110;
@@ -16,7 +15,7 @@ class ShareSheet extends GetView<ShareController> {
   final Widget child;
   final Size size;
   final Payload payload;
-  final MediaFile mediaFile;
+  final SonrFile mediaFile;
   final URLLink url;
   const ShareSheet({
     Key key,
@@ -41,7 +40,7 @@ class ShareSheet extends GetView<ShareController> {
       child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
       size: window,
       payload: Payload.FILE,
-      mediaFile: MediaFile.externalShare(sharedIntent),
+      mediaFile: SharedFileUtils.newFromExternal(sharedIntent),
     );
   }
 

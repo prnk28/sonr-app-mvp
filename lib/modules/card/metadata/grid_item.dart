@@ -104,7 +104,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
             // Mime Icon
             item.file.singleFile.mime.type.gradient(size: 96),
 
-            item.file.sizeString.p_Grey,
+            item.file.sizeToString().p_Grey,
 
             // Basic Info
             Padding(

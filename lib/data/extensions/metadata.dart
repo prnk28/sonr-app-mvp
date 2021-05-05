@@ -1,7 +1,38 @@
+import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
+extension SharedFileUtils on SonrFile {
+  static SonrFile newFromExternal(SharedMediaFile mediaShared) {
+    // Initialize
+    int duration = 0;
+    Uint8List thumbnail = Uint8List(0);
+    File file = File(mediaShared.path);
+    bool isVideo = mediaShared.type == SharedMediaType.VIDEO;
+
+    // Get Video Thumbnail
+    if (isVideo) {
+      duration = mediaShared.duration;
+      File thumbFile = File(mediaShared.thumbnail);
+      thumbFile.readAsBytes().then((value) {
+        thumbnail = value;
+      });
+    }
+
+    // Return File
+    return SonrFileUtils.newSingle(
+      path: file.path,
+      size: file.lengthSync(),
+      duration: duration,
+      thumbnail: thumbnail,
+    );
+  }
+}
 
 extension ProfileFileUtils on Profile {
   Widget get nameText {

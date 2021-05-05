@@ -1,4 +1,5 @@
-import 'package:sonr_app/data/model/model_file.dart';
+import 'dart:isolate';
+
 import 'package:sonr_app/theme/theme.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -11,17 +12,25 @@ class FileService extends GetxService {
   static bool get isRegistered => Get.isRegistered<FileService>();
   static FileService get to => Get.find<FileService>();
 
+  // References
+  Isolate isolate;
+
   // ^ Initialize Service ^ //
   Future<FileService> init() async {
     return this;
   }
 
   // @ Select Audio File //
-  static Future<Tuple<bool, FileItem>> selectAudio() async {
+  static Future<Tuple<bool, SonrFile>> selectAudio() async {
     var result = await _handleSelectRequest(FileType.audio);
     // Check File
     if (result != null) {
-      return Tuple(true, FileItem.media(result));
+      return Tuple(
+          true,
+          await SonrFileUtils.newSingleMedia(
+            path: result.files.first.path,
+            size: result.files.first.size,
+          ));
     }
 
     // Cancelled Picker
@@ -31,13 +40,18 @@ class FileService extends GetxService {
   }
 
   // @ Select Media File //
-  static Future<Tuple<bool, FileItem>> selectMedia() async {
+  static Future<Tuple<bool, SonrFile>> selectMedia() async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.media);
 
     // Check File
     if (result != null) {
-      return Tuple(true, FileItem.media(result));
+      return Tuple(
+          true,
+          await SonrFileUtils.newSingleMedia(
+            path: result.files.first.path,
+            size: result.files.first.size,
+          ));
     }
 
     // Cancelled Picker
@@ -47,13 +61,33 @@ class FileService extends GetxService {
   }
 
   // @ Select Other File //
-  static Future<Tuple<bool, FileItem>> selectFile() async {
+  static Future<Tuple<bool, SonrFile>> selectFile() async {
     // Load Picker
     var result = await _handleSelectRequest(FileType.custom);
 
     // Check File
     if (result != null) {
-      return Tuple(true, FileItem.file(result));
+      // Check If Single
+      if (result.isSinglePick) {
+        return Tuple(
+            true,
+            SonrFileUtils.newSingle(
+              path: result.files.first.path,
+              size: result.files.first.size,
+            ));
+      }
+      // Multiple: Iterate Items
+      else {
+        // Initialize
+        var file = SonrFile(direction: SonrFile_Direction.Outgoing);
+
+        // Add Items
+        result.files.forEach((e) {
+          file.addItem(path: e.path, size: e.size);
+        });
+
+        return Tuple(true, file);
+      }
     }
 
     // Cancelled Picker
@@ -77,15 +111,9 @@ class FileService extends GetxService {
     // For Media/Audio Files
     else {
       return await FilePicker.platform.pickFiles(
-        type: type,
+        type: FileType.media,
         withData: true,
       );
     }
   }
-}
-
-// @ Helper Extension to Retreive Items
-extension FileItemTupleUtils on Tuple<bool, FileItem> {
-  bool get hasItem => this.item1;
-  FileItem get fileItem => this.item2;
 }

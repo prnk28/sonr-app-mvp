@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/data/model/model_file.dart';
+
 import 'package:sonr_app/theme/theme.dart';
 import 'sheet_view.dart';
 import 'transfer_controller.dart';
@@ -15,8 +15,8 @@ class Transfer {
     Get.offNamed("/transfer", arguments: TransferArguments(Payload.CONTACT, contact: UserService.contact.value));
   }
 
-  static void transferWithFile(FileItem fileItem) {
-    Get.offNamed("/transfer", arguments: TransferArguments(fileItem.payload, file: fileItem.file, item: fileItem));
+  static void transferWithFile(SonrFile file) {
+    Get.offNamed("/transfer", arguments: TransferArguments(file.payload, file: file));
   }
 
   static void transferWithUrl(String url) {
@@ -46,7 +46,7 @@ class TransferScreen extends GetView<TransferController> {
             centerTitle: true,
             leading: PlainIconButton(icon: SonrIcons.Close.black, onPressed: () => Get.offNamed("/home")),
             subtitle: Container(child: controller.title.value.headFive(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
-            title: "Sharing ${controller.fileItem.value.payload.toString().capitalizeFirst}".h3,
+            title: "Sharing ${controller.sonrFile.value.payload.toString().capitalizeFirst}".h3,
           ),
           bottomSheet: PayloadSheetView(),
           body: Column(

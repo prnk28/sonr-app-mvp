@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
-import 'package:sonr_app/data/model/model_file.dart';
+
 import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
@@ -16,7 +16,7 @@ class TransferController extends GetxController {
   final isNotEmpty = false.obs;
   final isFacingPeer = false.obs;
   final inviteRequest = InviteRequest().obs;
-  final fileItem = Rx<FileItem>(null);
+  final sonrFile = Rx<SonrFile>(null);
 
   // @ Remote Properties
   final counter = 0.obs;
@@ -114,30 +114,14 @@ class TransferController extends GetxController {
       // File
       else {
         // Set File Item
-        fileItem(args.item);
+        sonrFile(args.file);
         inviteRequest.update((val) {
           val.payload = args.payload;
-
-          val.payload = Payload.FILE;
+          val.payload = args.file.payload;
         });
       }
     } else {
       print("Invalid Arguments Provided for Transfer");
-    }
-  }
-
-  // ^ Set Thumbnail ^ //
-  void setThumbnail(List<int> thumb) {
-    // Validate Thumbnail
-    if (thumb.length > 0) {
-      inviteRequest.update((val) {
-        // Validate File Exists
-        assert(val.file.singleFile != null);
-
-        // Set thumbnail
-        val.file.singleFile.thumbnail = thumb;
-        print("Thumbnail Set");
-      });
     }
   }
 

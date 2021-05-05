@@ -14,11 +14,11 @@ enum CameraViewType { Default, Preview }
 
 class CameraView extends GetView<CameraController> {
   // Properties
-  final Function(MediaFile file) onMediaSelected;
+  final Function(SonrFile file) onMediaSelected;
   final CameraViewType type;
   CameraView({@required this.onMediaSelected, this.type = CameraViewType.Default});
 
-  factory CameraView.withPreview({@required Function(MediaFile file) onMediaSelected}) {
+  factory CameraView.withPreview({@required Function(SonrFile file) onMediaSelected}) {
     return CameraView(onMediaSelected: onMediaSelected, type: CameraViewType.Preview);
   }
 
@@ -28,11 +28,11 @@ class CameraView extends GetView<CameraController> {
     controller.hasCaptured.listen((val) {
       if (val) {
         if (type == CameraViewType.Default) {
-          onMediaSelected(controller.getMediaFile());
+          onMediaSelected(controller.getFile());
         } else if (type == CameraViewType.Preview) {
           Get.dialog(
               MediaPreviewView(
-                  mediaFile: controller.getMediaFile(),
+                  mediaFile: controller.getFile(),
                   onDecision: (value) {
                     value ? controller.continueWithCapture(onMediaSelected) : controller.clearFromPreview();
                   }),
@@ -151,8 +151,10 @@ class _CameraToolsView extends GetView<CameraController> {
                 await HapticFeedback.heavyImpact();
                 // Check for Permssions
                 var result = await FileService.selectMedia();
-                if (result.hasItem) {
-                  Transfer.transferWithFile(result.fileItem);
+
+                // Selected Item
+                if (result.item1) {
+                  Transfer.transferWithFile(result.item2);
                 }
               }),
         ]),
@@ -260,9 +262,9 @@ class CameraController extends GetxController {
     Get.back();
   }
 
-  continueWithCapture(Function(MediaFile file) selected) {
+  continueWithCapture(Function(SonrFile file) selected) {
     Get.back();
-    selected(getMediaFile());
+    selected(getFile());
     _photoCapturePath = "";
     _videoCapturePath = "";
     _isVideo = false;
@@ -283,8 +285,8 @@ class CameraController extends GetxController {
   }
 
   // ^ Returns Captured Media File ^ //
-  MediaFile getMediaFile() {
-    return MediaFile.capture(_isVideo ? _videoCapturePath : _photoCapturePath, _isVideo, videoDuration.value);
+  SonrFile getFile() {
+    return SonrFileUtils.newSingle(path: _isVideo ? _videoCapturePath : _photoCapturePath, duration: videoDuration.value);
   }
 
   // ^ Captures Video ^ //

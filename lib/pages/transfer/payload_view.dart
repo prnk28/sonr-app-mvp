@@ -1,4 +1,3 @@
-import 'package:sonr_app/data/model/model_file.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'transfer_controller.dart';
 
@@ -88,13 +87,13 @@ class _BulbViewChild extends GetView<TransferController> {
       // # Check for Media File Type
       else if (controller.inviteRequest.value.payload == Payload.FILE) {
         // Image
-        if (controller.fileItem.value.mime.type == MIME_Type.IMAGE) {
-          return _BulbViewThumbnail(item: controller.fileItem.value);
+        if (controller.sonrFile.value.singleFile.mime.type == MIME_Type.IMAGE) {
+          return _BulbViewThumbnail(item: controller.sonrFile.value);
         }
 
         // Other Media (Video, Audio)
         else {
-          return controller.fileItem.value.mime.type.gradient(size: 80);
+          return controller.sonrFile.value.singleFile.mime.type.gradient(size: 80);
         }
       }
 
@@ -108,26 +107,26 @@ class _BulbViewChild extends GetView<TransferController> {
 
 // ^ Builds Thumbnail from Future
 class _BulbViewThumbnail extends StatelessWidget {
-  final FileItem item;
+  final SonrFile item;
 
   const _BulbViewThumbnail({Key key, @required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: item.isThumbnailReady(),
+      future: item.setThumbnail(),
       initialData: false,
       builder: (context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.data) {
           // Return View
           return GestureDetector(
-            onTap: () => OpenFile.open(item.path),
+            onTap: () => OpenFile.open(item.singleFile.path),
             child: Container(
                 decoration: Neumorph.indented(),
                 width: 140,
                 height: 140,
                 clipBehavior: Clip.hardEdge,
                 child: Image.memory(
-                  item.thumbnail,
+                  item.singleFile.thumbnail,
                   fit: BoxFit.cover,
                 )),
           );

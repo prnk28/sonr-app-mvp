@@ -4,7 +4,7 @@ import 'package:sonr_app/modules/video/video_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 
 class MediaPreviewView extends StatelessWidget {
-  final MediaFile mediaFile;
+  final SonrFile mediaFile;
   final Function(bool decision) onDecision;
   MediaPreviewView({@required this.mediaFile, @required this.onDecision});
   @override
@@ -20,7 +20,7 @@ class MediaPreviewView extends StatelessWidget {
             color: SonrColor.White,
             child: Column(
               children: [
-                mediaFile.isVideo
+                mediaFile.singleFile.mime.isVideo
                     // Video Player View
                     ? Expanded(
                         child: Container(
@@ -28,7 +28,7 @@ class MediaPreviewView extends StatelessWidget {
                             child: AspectRatio(
                                 aspectRatio: 9 / 16,
                                 child: VideoPlayerView.file(
-                                  mediaFile.file,
+                                  mediaFile.getFile(),
                                 ))),
                       )
 
@@ -37,7 +37,7 @@ class MediaPreviewView extends StatelessWidget {
                         child: Container(
                           margin: EdgeInsets.only(left: 10, right: 10),
                           decoration: BoxDecoration(
-                            image: DecorationImage(image: FileImage(File(mediaFile.path)), fit: BoxFit.fill),
+                            image: DecorationImage(image: FileImage(mediaFile.getFile()), fit: BoxFit.fill),
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),

@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -93,7 +91,7 @@ class _ProfilePictureCameraView extends GetView<ProfilePictureController> {
             width: 120,
             height: 120,
             child: CircleAvatar(
-              backgroundImage: FileImage(controller.result.value.file),
+              backgroundImage: FileImage(controller.result.value),
             ),
           )),
       Padding(padding: EdgeWith.bottom(8)),
@@ -147,7 +145,7 @@ class ProfilePictureController extends GetxController {
   ValueNotifier<Sensors> sensor = ValueNotifier(Sensors.FRONT);
 
   // Properties
-  final result = Rx<MediaFile>(null);
+  final result = Rx<File>(null);
   final status = Rx<ProfilePictureStatus>(ProfilePictureStatusUtils.statusFromPermissions(MobileService.hasCamera.value));
 
   // References
@@ -163,14 +161,14 @@ class ProfilePictureController extends GetxController {
 
     // Capture Photo
     await _pictureController.takePicture(_photoCapturePath);
-    result(MediaFile.capture(_photoCapturePath, false, 0));
+    result(File(_photoCapturePath));
     status(ProfilePictureStatus.Captured);
   }
 
   // @ Method to Confirm New Picture
   confirm() async {
     if (_photoCapturePath != "") {
-      UserService.picture(await result.value.toUint8List());
+      UserService.picture(await result.value.readAsBytes());
       await UserService.saveChanges();
       Get.find<ProfileController>().exitToViewing();
       status(ProfilePictureStatus.Ready);

@@ -80,7 +80,7 @@ class _MediaInfoView extends StatelessWidget {
           decoration: Neumorph.floating(),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
-            "${card.file.typeString} From".h3,
+            "${card.file.typeToString()} From".h3,
 
             // Owner
             Row(
@@ -107,7 +107,7 @@ class _MediaInfoView extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "Size ".h6,
               Spacer(),
-              "${card.file.sizeString}".p,
+              "${card.file.sizeToString()}".p,
             ]),
 
             // File Mime Value

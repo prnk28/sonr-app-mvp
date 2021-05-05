@@ -135,10 +135,9 @@ class CardService extends GetxService {
     return await asset.file;
   }
 
-  // ^ Load MediaItem from Metadata ^ //
-  static Future<MediaItem> loadItemFromMetadata(SonrFile_Metadata metadata) async {
-    var asset = await AssetEntity.fromId(metadata.id);
-    return MediaItem(asset, -1);
+  // ^ Load SonrFile from Metadata ^ //
+  static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
+    return SonrFileUtils.getSingle(metadata);
   }
 
   // ^ Add Shared Card to Activity Datavase

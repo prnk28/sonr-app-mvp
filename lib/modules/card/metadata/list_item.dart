@@ -34,7 +34,7 @@ class MetaListItemView extends StatelessWidget {
     }
 
     // # Check for Media File Type
-    else if (item.mime.isMedia) {
+    else if (item.file.isMedia) {
       // Image
       if (item.file.singleFile.mime.type == MIME_Type.IMAGE) {
         return MetaImageBox(metadata: item.file.singleFile, width: 72);
@@ -76,11 +76,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.file.prettyName.h6,
+              child: item.file.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file.sizeString.p_Grey,
+              child: item.file.sizeToString().p_Grey,
             )
           ]));
     } else {
@@ -90,11 +90,11 @@ class MetaListItemView extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: item.file.prettyName.h6,
+              child: item.file.prettyName().h6,
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: item.file.sizeString.p_Grey,
+              child: item.file.sizeToString().p_Grey,
             )
           ]));
     }
