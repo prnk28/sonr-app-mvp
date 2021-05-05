@@ -1,7 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_gradients/flutter_gradients.dart';
-import 'icon.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
 import 'package:sonr_app/data/data.dart';
 
@@ -104,7 +102,7 @@ extension DesignTextUtils on String {
       DesignText(this, DesignTextStyle.Light, color: color, align: align, key: key, weight: weight); // Custom Options
 
   // Miscelaneous
-  GradientText gradient({double size = 32, @required FlutterGradientNames gradient, Key key}) => GradientText(this, gradient, size, key: key);
+  GradientText gradient({double size = 32, @required Gradient value, Key key}) => GradientText(this, value, size, key: key);
   URLText get url => URLText(this);
 }
 
@@ -164,7 +162,7 @@ class DesignText extends StatelessWidget {
     if (type == DesignTextStyle.Hero || type == DesignTextStyle.HeadOne) {
       return Center(
         child: ShaderMask(
-            shaderCallback: (bounds) => FlutterGradients.crystalRiver(endAngle: 2.40855).createShader(
+            shaderCallback: (bounds) => SonrGradients.CrystalRiver.createShader(
                   Rect.fromLTWH(0, 0, bounds.width, bounds.height),
                 ),
             child: _buildText(TextAlign.center)),
@@ -197,7 +195,7 @@ class DesignText extends StatelessWidget {
 // ^ Gradient Text Type ^ //
 class GradientText extends StatelessWidget {
   final String text;
-  final FlutterGradientNames gradient;
+  final Gradient gradient;
   final double size;
 
   const GradientText(this.text, this.gradient, this.size, {Key key}) : super(key: key);
@@ -205,7 +203,7 @@ class GradientText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ShaderMask(
-          shaderCallback: (bounds) => FlutterGradients.findByName(gradient).createShader(
+          shaderCallback: (bounds) => gradient.createShader(
                 Rect.fromLTWH(0, 0, bounds.width, bounds.height),
               ),
           child: Text(

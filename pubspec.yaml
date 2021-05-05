@@ -80,7 +80,6 @@ dependencies:
   animated_widgets: ^1.0.6
   carousel_slider: ^3.0.0
   fl_chart: ^0.35.0
-  flutter_gradients: ^1.0.0+3
   keyboard_actions: ^3.4.0
   lottie: ^1.0.1
   material_floating_search_bar: ^0.3.4

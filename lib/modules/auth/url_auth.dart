@@ -33,9 +33,9 @@ class URLAuthView extends StatelessWidget {
           // From Information
           Column(mainAxisSize: MainAxisSize.min, children: [
             invite.from.profile.hasLastName()
-                ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
-                : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
-            Center(child: "Website Link".gradient(gradient: FlutterGradientNames.magicRay, size: 22)),
+                ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(value: SonrGradients.SolidStone)
+                : "${invite.from.profile.firstName}".gradient(value: SonrGradients.SolidStone),
+            Center(child: "Website Link".gradient(value: SonrGradients.PlumBath, size: 22)),
           ]),
         ]),
         Divider(),

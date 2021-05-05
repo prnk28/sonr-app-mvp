@@ -75,8 +75,8 @@ extension WidgetUtils on Peer {
 
   Widget get fullName {
     return this.profile.hasLastName()
-        ? "${this.profile.firstName} ${this.profile.lastName}".gradient(gradient: FlutterGradientNames.frozenHeat)
-        : "${this.profile.firstName}".gradient(gradient: FlutterGradientNames.frozenHeat);
+        ? "${this.profile.firstName} ${this.profile.lastName}".gradient(value: SonrGradients.FrozenHeat)
+        : "${this.profile.firstName}".gradient(value: SonrGradients.FrozenHeat);
   }
 
   Widget profilePicture({double size = 100}) {

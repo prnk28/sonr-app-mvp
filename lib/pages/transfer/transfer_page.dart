@@ -40,7 +40,7 @@ class TransferScreen extends GetView<TransferController> {
 
     // Build View
     return Obx(() => SonrScaffold(
-          gradientName: FlutterGradientNames.plumBath,
+          gradient: SonrGradients.PlumBath,
           appBar: DesignAppBar(
             centerTitle: true,
             leading: PlainIconButton(icon: SonrIcons.Close.black, onPressed: () => Get.offNamed("/home")),

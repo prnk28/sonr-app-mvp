@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -74,8 +73,7 @@ class _SocialUserSearchFieldState extends State<SocialUserSearchField> {
                     child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                       ShaderMask(
                         shaderCallback: (bounds) {
-                          var grad = FlutterGradients.findByName(FlutterGradientNames.amourAmour);
-                          return grad.createShader(bounds);
+                          return SonrGradients.AmourAmour.createShader(bounds);
                         },
                         child: Icon(
                           Icons.search,

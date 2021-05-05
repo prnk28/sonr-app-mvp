@@ -1,9 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_gradients/flutter_gradients.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'color.dart';
-export 'package:flutter_gradients/flutter_gradients.dart';
 import '../theme.dart';
 
 extension MimeIcon on MIME_Type {

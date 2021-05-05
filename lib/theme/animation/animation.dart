@@ -68,7 +68,7 @@ class AnimatedWaveIcon extends HookWidget {
   final double size;
   final Duration duration;
   final Function onCompleted;
-  final FlutterGradientNames gradient;
+  final Gradient gradient;
 
   // Constructer
   AnimatedWaveIcon(this.iconData, {this.gradient, this.onCompleted, this.duration = const Duration(milliseconds: 1250), this.size = 325})
@@ -97,7 +97,7 @@ class AnimatedWaveIcon extends HookWidget {
                   iconKey: iconKey,
                   waveAnimation: controller,
                   percent: controller.value,
-                  gradient: gradient != null ? FlutterGradients.findByName(gradient) : SonrGradient.Progress,
+                  gradient: gradient != null ? gradient : SonrGradient.Progress,
                   boxHeight: size,
                 ),
               );

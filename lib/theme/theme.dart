@@ -23,7 +23,7 @@ export 'buttons/confirm.dart';
 export 'style/color.dart';
 export 'style/icon.dart';
 export 'style/gradient.dart';
-export 'style/scaffold.dart';
+export 'elements/scaffold.dart';
 export 'elements/snackbar.dart';
 export 'style/card.dart';
 export 'style/text.dart';

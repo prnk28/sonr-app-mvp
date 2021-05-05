@@ -11,7 +11,7 @@ extension ContactUtils on Contact {
   }
 
   Widget fullNameText() {
-    return "${this.fullName}".gradient(gradient: FlutterGradientNames.solidStone);
+    return "${this.fullName}".gradient(value: SonrGradients.SolidStone);
   }
 
   Widget pictureImage() {

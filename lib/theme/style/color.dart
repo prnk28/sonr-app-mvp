@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'dart:ui';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'icon.dart';
 
 
 class SonrColor {
@@ -36,47 +34,5 @@ class SonrColor {
     if (text.length == 6) return text;
 
     return text.substring(1, text.length);
-  }
-}
-
-
-
-extension GradientValue on FlutterGradientNames {
-  Gradient get clamp => FlutterGradients.findByName(this, tileMode: TileMode.clamp);
-
-  Gradient linear({TileMode tileMode = TileMode.repeated}) {
-    return FlutterGradients.findByName(this, tileMode: tileMode);
-  }
-
-  Gradient radial(
-      {AlignmentGeometry center = Alignment.center,
-      double radius = 0.5,
-      double startAngle = 0.0,
-      double endAngle = pi * 2,
-      TileMode tileMode = TileMode.repeated}) {
-    return FlutterGradients.findByName(
-      this,
-      type: GradientType.radial,
-      tileMode: tileMode,
-      radius: radius,
-      startAngle: startAngle,
-      endAngle: endAngle,
-    );
-  }
-
-  Gradient sweep(
-      {AlignmentGeometry center = Alignment.center,
-      double radius = 0.5,
-      double startAngle = 0.0,
-      double endAngle = pi * 2,
-      TileMode tileMode = TileMode.repeated}) {
-    return FlutterGradients.findByName(
-      this,
-      type: GradientType.sweep,
-      tileMode: tileMode,
-      radius: radius,
-      startAngle: startAngle,
-      endAngle: endAngle,
-    );
   }
 }

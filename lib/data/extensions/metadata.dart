@@ -60,21 +60,6 @@ extension TextUtils on TransferCardItem {
   }
 }
 
-// ^ Payload Model Extensions ^ //
-extension MIMETypeUtils on MIME_Type {
-  FlutterGradientNames get gradientName {
-    return [
-      FlutterGradientNames.itmeoBranding,
-      FlutterGradientNames.norseBeauty,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.healthyWater,
-      FlutterGradientNames.frozenHeat,
-      FlutterGradientNames.mindCrawl,
-      FlutterGradientNames.seashore
-    ].random();
-  }
-}
-
 // @ Helper Enum for Video/Image Orientation
 enum MediaOrientation { Portrait, Landscape }
 

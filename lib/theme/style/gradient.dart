@@ -7,23 +7,17 @@ class SonrGradient {
   static LinearGradient _bottomUp(List<Color> colors) =>
       LinearGradient(colors: colors, begin: Alignment.bottomCenter, end: Alignment.topCenter, tileMode: TileMode.clamp);
 
-  // ^ General Gradients ^ //
-  static Gradient get bulbDark => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
-  static Gradient get bulbLight => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
-  static Gradient get logo => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
-
   // ^ Generates Random Gradient for Progress View ^ //
   static Gradient get Progress {
-    var name = <FlutterGradientNames>[
-      FlutterGradientNames.amyCrisp,
-      FlutterGradientNames.sugarLollipop,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.supremeSky,
-      FlutterGradientNames.juicyCake,
-      FlutterGradientNames.northMiracle,
-      FlutterGradientNames.seaLord
+    return <Gradient>[
+      SonrGradients.AmyCrisp,
+      SonrGradients.Lollipop,
+      SonrGradients.SummerGames,
+      SonrGradients.SupremeSky,
+      SonrGradients.JuicyCake,
+      SonrGradients.NorthMiracle,
+      SonrGradients.SeaLord,
     ].random();
-    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
   }
 
   // ^ Palette Gradients ^ //

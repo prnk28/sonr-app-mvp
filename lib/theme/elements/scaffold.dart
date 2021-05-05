@@ -10,7 +10,7 @@ class SonrScaffold extends StatelessWidget {
   final Widget floatingAction;
   final PreferredSizeWidget appBar;
   final bool resizeToAvoidBottomInset;
-  final FlutterGradientNames gradientName;
+  final Gradient gradient;
 
   SonrScaffold({
     Key key,
@@ -20,7 +20,7 @@ class SonrScaffold extends StatelessWidget {
     this.bottomNavigationBar,
     this.bottomSheet,
     this.floatingAction,
-    this.gradientName = FlutterGradientNames.northMiracle,
+    this.gradient,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class SonrScaffold extends StatelessWidget {
       body: Stack(
         children: [
           // Gradient
-          _BackgroundGradient(gradientName: gradientName),
+          _BackgroundGradient(gradient: gradient ?? SonrGradients.NorthMiracle),
 
           // Overlay Color
           UserService.isDarkMode
@@ -95,11 +95,11 @@ class _FixedCenterDockedFabLocation extends FloatingActionButtonLocation {
 
 // ^ Animated Background Gradient ^ //
 class _BackgroundGradient extends StatelessWidget {
-  final FlutterGradientNames gradientName;
-  const _BackgroundGradient({Key key, this.gradientName}) : super(key: key);
+  final Gradient gradient;
+  const _BackgroundGradient({Key key, this.gradient}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (gradientName != FlutterGradientNames.northMiracle) {
+    if (gradient != SonrGradients.NorthMiracle) {
       return CustomAnimatedWidget(
           enabled: true,
           duration: Duration(seconds: 4),
@@ -110,9 +110,9 @@ class _BackgroundGradient extends StatelessWidget {
               width: Get.width,
               decoration: BoxDecoration(
                 color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-                gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.topLeft, radius: 2.5)
+                gradient: SonrGradients.NorthMiracle
                     // ignore: invalid_use_of_protected_member
-                    .lerpTo(FlutterGradients.findByName(gradientName), percent),
+                    .lerpTo(gradient, percent),
               ),
             );
           });
@@ -122,10 +122,7 @@ class _BackgroundGradient extends StatelessWidget {
         child: Container(
           height: Get.height,
           width: Get.width,
-          decoration: BoxDecoration(
-            color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White,
-            gradient: FlutterGradients.northMiracle(type: GradientType.radial, center: Alignment.topLeft, radius: 2.5),
-          ),
+          decoration: BoxDecoration(color: UserService.isDarkMode ? SonrColor.Black : SonrColor.White, gradient: SonrGradients.NorthMiracle),
         ),
       );
     }
