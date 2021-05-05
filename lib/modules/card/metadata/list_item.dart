@@ -14,7 +14,7 @@ class MetaListItemView extends StatelessWidget {
     return Container(
         margin: EdgeInsets.all(12),
         padding: EdgeInsets.all(4),
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         height: Height.ratio(0.15),
         child: Row(children: [
           _buildLeading(),

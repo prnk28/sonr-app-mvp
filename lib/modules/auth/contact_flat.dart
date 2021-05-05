@@ -13,7 +13,7 @@ class ContactFlatCard extends StatelessWidget {
     return Container(
       height: 420 * scale,
       width: (Get.width - 64) * scale,
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       child: Container(
         height: 75,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -21,7 +21,7 @@ class ContactFlatCard extends StatelessWidget {
           // Build Profile Pic
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: Container(padding: EdgeInsets.all(10), decoration: Neumorph.floating(shape: BoxShape.circle), child: contact.pictureImage()),
+            child: Container(padding: EdgeInsets.all(10), decoration: Neumorphic.floating(shape: BoxShape.circle), child: contact.pictureImage()),
           ),
 
           // Build Name

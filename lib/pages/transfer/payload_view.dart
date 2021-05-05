@@ -34,7 +34,7 @@ class PayloadView extends GetView<TransferController> {
               child: Container(
                 width: 250,
                 height: 250,
-                decoration: Neumorph.rainbow(shape: BoxShape.circle),
+                decoration: Neumorphic.rainbow(shape: BoxShape.circle),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -121,7 +121,7 @@ class _BulbViewThumbnail extends StatelessWidget {
           return GestureDetector(
             onTap: () => OpenFile.open(item.singleFile.path),
             child: Container(
-                decoration: Neumorph.indented(),
+                decoration: Neumorphic.indented(),
                 width: 140,
                 height: 140,
                 clipBehavior: Clip.hardEdge,

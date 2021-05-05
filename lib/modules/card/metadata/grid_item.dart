@@ -15,7 +15,7 @@ class MetaGridItemView extends StatelessWidget {
               width: 160,
               height: 160,
               clipBehavior: Clip.antiAlias,
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               padding: EdgeInsets.all(4),
               child: Stack(children: [
                 // Content

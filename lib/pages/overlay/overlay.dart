@@ -61,7 +61,7 @@ class AlertOverlayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       // backendColor: Colors.transparent,
       margin: EdgeInsets.all(30),
       // borderRadius: BorderRadius.circular(20),
@@ -131,7 +131,7 @@ class DropdownOverlayView extends StatelessWidget {
           width: size.width + width,
           child: Container(
             margin: margin ?? EdgeInsets.symmetric(horizontal: 6),
-            decoration: Neumorph.floating(radius: 0),
+            decoration: Neumorphic.floating(radius: 0),
             child: ListView.builder(
               padding: EdgeInsets.zero,
               itemCount: items.length,
@@ -174,7 +174,7 @@ class QuestionOverlayView extends GetView<SonrOverlay> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       margin: EdgeInsets.symmetric(horizontal: 16),
       height: Get.height / 3 + 50,
       child: Container(

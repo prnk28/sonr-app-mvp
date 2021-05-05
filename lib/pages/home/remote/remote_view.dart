@@ -110,7 +110,7 @@ class _RemoteTextCodeField extends GetView<RemoteController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       padding: EdgeInsets.only(bottom: 8),
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: OpacityAnimatedWidget(

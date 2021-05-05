@@ -17,7 +17,7 @@ class MetaCardItemView extends StatelessWidget {
     return Container(
       height: 420,
       width: Get.width - 64,
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       child: Hero(
         tag: card.file.singleFile.path,
         child: MetaBox(
@@ -77,7 +77,7 @@ class _MediaInfoView extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.all(24.0),
         child: Container(
-          decoration: Neumorph.floating(),
+          decoration: Neumorphic.floating(),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             // File Type
             "${card.file.typeToString()} From".h3,

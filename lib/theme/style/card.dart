@@ -9,7 +9,7 @@ class NeumorphCard extends StatelessWidget {
     return ObxValue<Rx<NeumorphCardParams>>(
         (props) => AnimatedContainer(
               padding: EdgeInsets.all(8),
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               width: Width.reduced(props.value.widthReduction),
               height: Height.ratio(props.value.heightRatio),
               margin: props.value.margin ?? props.value.defaultMargin,
@@ -36,7 +36,7 @@ class NeumorphAvatarCard extends StatelessWidget {
           padding: const EdgeInsets.only(top: 42.0),
           child: Container(
             padding: EdgeInsets.all(8),
-            decoration: Neumorph.compact(),
+            decoration: Neumorphic.compact(),
             width: Width.reduced(props.widthReduction),
             height: Height.ratio(props.heightRatio),
             margin: props.margin,
@@ -49,7 +49,7 @@ class NeumorphAvatarCard extends StatelessWidget {
         Align(
           alignment: Alignment.topRight,
           child: Container(
-              decoration: Neumorph.compact(shape: BoxShape.circle),
+              decoration: Neumorphic.compact(shape: BoxShape.circle),
               padding: EdgeInsets.all(4),
               child: Container(
                 width: 120,

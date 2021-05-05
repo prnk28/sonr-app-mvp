@@ -1,6 +1,6 @@
 import '../theme.dart';
 
-extension Neumorph on BoxDecoration {
+extension Neumorphic on BoxDecoration {
   /// @ Floating Contact Neumorphic Box
   static BoxDecoration contact({@required Image image}) {
     return BoxDecoration(

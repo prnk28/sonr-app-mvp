@@ -35,7 +35,7 @@ class FileAuthView extends StatelessWidget {
             Container(
               width: Get.width - 50,
               height: Get.height / 3,
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               padding: EdgeInsets.all(8),
               child: RiveContainer(type: RiveBoard.Documents, width: Get.width - 150, height: Get.height / 3),
             ),

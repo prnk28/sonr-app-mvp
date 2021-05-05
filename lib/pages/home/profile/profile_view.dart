@@ -114,7 +114,7 @@ class _ProfileAvatarField extends GetView<ProfileController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
               padding: EdgeInsets.all(10),
-              decoration: Neumorph.indented(shape: BoxShape.circle),
+              decoration: Neumorphic.indented(shape: BoxShape.circle),
               child: Obx(() => Container(
                     width: 120,
                     height: 120,
@@ -136,7 +136,7 @@ class _ProfileAvatarField extends GetView<ProfileController> {
             padding: const EdgeInsets.only(top: 4.0),
             child: Container(
                 padding: EdgeInsets.all(10),
-                decoration: Neumorph.indented(shape: BoxShape.circle),
+                decoration: Neumorphic.indented(shape: BoxShape.circle),
                 child: Container(
                     width: 120,
                     height: 120,

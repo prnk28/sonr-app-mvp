@@ -56,7 +56,7 @@ class ShareSheet extends GetView<ShareController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         width: size.width,
         height: size.height,
         padding: EdgeInsets.only(top: 6),
@@ -80,7 +80,7 @@ class ShareSheet extends GetView<ShareController> {
           Container(
             width: size.width,
             height: size.height,
-            child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: Neumorph.floating(), child: child),
+            child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: Neumorphic.floating(), child: child),
           ),
           Spacer()
         ]));
@@ -98,7 +98,7 @@ class _ShareItemMedia extends StatelessWidget {
     // Get Shared File
     SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
     return Container(
-        decoration: Neumorph.indented(),
+        decoration: Neumorphic.indented(),
         margin: EdgeInsets.all(10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -136,7 +136,7 @@ class _ShareItemURL extends StatelessWidget {
         // @ Indent View
         Expanded(
           child: Container(
-              decoration: Neumorph.indented(radius: 20),
+              decoration: Neumorphic.indented(radius: 20),
               margin: EdgeInsets.all(10),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -174,7 +174,7 @@ class _ShareItemURL extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-              decoration: Neumorph.indented(),
+              decoration: Neumorphic.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -222,7 +222,7 @@ class _ShareItemURL extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-              decoration: Neumorph.indented(),
+              decoration: Neumorphic.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -250,7 +250,7 @@ class _ShareItemURL extends StatelessWidget {
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(
-        decoration: Neumorph.indented(),
+        decoration: Neumorphic.indented(),
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

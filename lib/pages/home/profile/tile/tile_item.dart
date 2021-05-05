@@ -54,7 +54,7 @@ class SocialTileItem extends GetWidget<TileController> {
         HapticFeedback.mediumImpact();
       },
       child: Container(
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         child: Container(
           width: isDragging ? 125 : Get.width,
           height: isDragging ? 125 : Get.height,

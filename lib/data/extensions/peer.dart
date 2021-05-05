@@ -81,7 +81,7 @@ extension WidgetUtils on Peer {
 
   Widget profilePicture({double size = 100}) {
     return Container(
-        decoration: Neumorph.indented(shape: BoxShape.circle),
+        decoration: Neumorphic.indented(shape: BoxShape.circle),
         padding: EdgeInsets.all(4),
         child: Container(
           width: size,

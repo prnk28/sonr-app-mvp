@@ -6,8 +6,8 @@ class PayloadSheetView extends GetView<TransferController> {
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(8),
-        decoration: Neumorph.floating(),
-        child: Container(decoration: Neumorph.floating(), height: Height.ratio(0.15), child: _PayloadListItem()));
+        decoration: Neumorphic.floating(),
+        child: Container(decoration: Neumorphic.floating(), height: Height.ratio(0.15), child: _PayloadListItem()));
   }
 }
 
@@ -125,7 +125,7 @@ class _PayloadItemThumbnail extends StatelessWidget {
             child: Container(
                 height: Height.ratio(0.125),
                 width: Height.ratio(0.125),
-                decoration: Neumorph.indented(),
+                decoration: Neumorphic.indented(),
                 clipBehavior: Clip.hardEdge,
                 child: Image.memory(
                   item.singleFile.thumbnail,

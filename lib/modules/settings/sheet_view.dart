@@ -7,7 +7,7 @@ class SettingsSheet extends StatelessWidget {
       init: SettingsController(),
       builder: (controller) {
         return Container(
-          decoration: Neumorph.floating(),
+          decoration: Neumorphic.floating(),
           height: Get.height / 2,
           child: Stack(children: [
             Container(

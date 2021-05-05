@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 import 'package:sonr_app/theme/theme.dart' hide Platform;
@@ -104,7 +103,6 @@ class SonrTextField extends StatelessWidget {
                         label,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          color: NeumorphicTheme.defaultTextColor(context),
                         ),
                       ),
                       isError
@@ -116,7 +114,7 @@ class SonrTextField extends StatelessWidget {
                     ]))
                 : Container(),
             Container(
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
               padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
               child: TextField(
@@ -229,7 +227,7 @@ class SonrSearchField extends StatelessWidget {
           children: <Widget>[
             Container(
                 margin: EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 4),
-                decoration: Neumorph.floating(),
+                decoration: Neumorphic.floating(),
                 padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                 child: Stack(children: [
                   Padding(

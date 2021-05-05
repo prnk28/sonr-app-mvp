@@ -10,7 +10,7 @@ class URLGridItemView extends StatelessWidget {
               width: 160,
               height: 190,
               clipBehavior: Clip.antiAlias,
-              decoration: Neumorph.floating(),
+              decoration: Neumorphic.floating(),
               margin: EdgeInsets.all(32),
               child: Stack(children: [
                 // Content

@@ -122,7 +122,7 @@ class _CameraToolsView extends GetView<CameraController> {
     return Container(
       alignment: Alignment.bottomCenter,
       child: Container(
-        decoration: Neumorph.floating(),
+        decoration: Neumorphic.floating(),
         padding: EdgeInsets.only(top: 20, bottom: 40),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           // Switch Camera
@@ -173,9 +173,9 @@ class _CaptureButton extends GetView<CameraController> {
           aspectRatio: 1,
           child: Container(
             margin: EdgeInsets.all(14),
-            decoration: Neumorph.floating(shape: BoxShape.circle),
+            decoration: Neumorphic.floating(shape: BoxShape.circle),
             child: Container(
-              decoration: Neumorph.floating(shape: BoxShape.circle),
+              decoration: Neumorphic.floating(shape: BoxShape.circle),
               margin: EdgeInsets.all(14),
               child: GestureDetector(
                 onTap: () {
@@ -198,7 +198,7 @@ class _CaptureButton extends GetView<CameraController> {
                       name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
                       size: 40,
                     )),
-                    decoration: Neumorph.floating(
+                    decoration: Neumorphic.floating(
                         shape: BoxShape.circle,
                         border: controller.videoInProgress.value
                             ? Border.all(color: SonrColor.Critical, width: 4)

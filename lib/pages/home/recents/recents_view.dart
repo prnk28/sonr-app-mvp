@@ -75,7 +75,7 @@ class _CardStatsView extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           clipBehavior: Clip.antiAlias,
-          decoration: Neumorph.floating(color: SonrColor.Primary),
+          decoration: Neumorphic.floating(color: SonrColor.Primary),
           padding: EdgeInsets.all(8),
           margin: EdgeInsets.all(16),
           height: 100,
@@ -128,7 +128,7 @@ class Badge extends StatelessWidget {
       duration: PieChart.defaultDuration,
       width: size,
       height: size,
-      decoration: Neumorph.compact(shape: BoxShape.circle),
+      decoration: Neumorphic.compact(shape: BoxShape.circle),
       child: Center(child: child),
     );
   }

@@ -12,7 +12,7 @@ class ContactCardItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 420,
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       child: Hero(
         tag: card.id,
         child: Container(
@@ -29,7 +29,7 @@ class ContactCardItemView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4.0),
               child: Container(
-                decoration: Neumorph.indented(shape: BoxShape.circle),
+                decoration: Neumorphic.indented(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
                 child: card.contact.pictureImage(),
               ),

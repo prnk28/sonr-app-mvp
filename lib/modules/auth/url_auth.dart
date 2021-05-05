@@ -10,7 +10,7 @@ class URLAuthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
         // @ Header
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -19,7 +19,7 @@ class URLAuthView extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
             child: Container(
               padding: EdgeInsets.all(4),
-              decoration: Neumorph.floating(shape: BoxShape.circle),
+              decoration: Neumorphic.floating(shape: BoxShape.circle),
               child: invite.from.profile.hasPicture()
                   ? Image.memory(Uint8List.fromList(invite.from.profile.picture))
                   : Icon(
@@ -94,7 +94,7 @@ class URLAuthView extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-              decoration: Neumorph.indented(),
+              decoration: Neumorphic.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -142,7 +142,7 @@ class URLAuthView extends StatelessWidget {
             SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
           },
           child: Container(
-              decoration: Neumorph.indented(),
+              decoration: Neumorphic.indented(),
               margin: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
               padding: EdgeInsets.symmetric(vertical: 6),
               child: Row(children: [
@@ -167,7 +167,7 @@ class URLAuthView extends StatelessWidget {
         SonrSnack.alert(title: "Copied!", message: "URL copied to clipboard", icon: Icon(Icons.copy, color: Colors.white));
       },
       child: Container(
-        decoration: Neumorph.indented(),
+        decoration: Neumorphic.indented(),
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

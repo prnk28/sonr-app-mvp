@@ -21,7 +21,7 @@ class ContactAuthView extends StatelessWidget {
     return Container(
       height: context.heightTransformer(reducedBy: 35),
       width: context.widthTransformer(reducedBy: 10),
-      decoration: Neumorph.floating(),
+      decoration: Neumorphic.floating(),
       child: Column(children: [
         Row(children: [
           // @ Photo
@@ -29,7 +29,7 @@ class ContactAuthView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 4.0, left: 8),
               child: Container(
-                decoration: Neumorph.floating(),
+                decoration: Neumorphic.floating(),
                 padding: EdgeInsets.all(4),
                 child: card.pictureImage(),
               ),

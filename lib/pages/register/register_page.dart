@@ -9,7 +9,7 @@ class RegisterPage extends GetView<RegisterController> {
     return Obx(() => Container(
           width: Get.width,
           height: Get.height,
-          decoration: Neumorph.floating(),
+          decoration: Neumorphic.floating(),
           child: AnimatedSlideSwitcher.slideRight(
             child: _buildView(controller.status.value),
             duration: const Duration(milliseconds: 2500),
