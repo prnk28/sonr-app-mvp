@@ -2,9 +2,7 @@ import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/style/style.dart';
-
 import 'views.dart';
-
 class MetaListItemView extends StatelessWidget {
   final TransferCardItem item;
   const MetaListItemView(this.item, {Key key}) : super(key: key);
