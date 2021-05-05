@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:sonr_app/modules/auth/auth.dart';
+import 'package:sonr_app/modules/auth/contact_auth.dart';
 
 import '../../style/style.dart';
 

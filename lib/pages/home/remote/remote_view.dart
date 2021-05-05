@@ -85,7 +85,7 @@ class RemoteLobbyView extends GetView<RemoteController> {
       "${controller.remoteInfo.value.display}".h2,
       Expanded(
           child: ListView.builder(
-        itemCount: controller.remoteLobby.value.length,
+        itemCount: controller.remoteLobby.value.count,
         itemBuilder: (BuildContext context, int index) {
           // Build List Item
           return PeerListItem(
