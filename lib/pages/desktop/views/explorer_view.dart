@@ -23,7 +23,7 @@ class ExplorerDesktopView extends GetView<ExplorerController> {
           return CarouselSlider(
             carouselController: controller.carouselController,
             options: K_CAROUSEL_OPTS,
-            items: LobbyService.local.value.peers.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
+            items: LobbyService.local.value.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
           );
         }
 

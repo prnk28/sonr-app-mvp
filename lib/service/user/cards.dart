@@ -166,12 +166,12 @@ class CardService extends GetxService {
     // Switch View
     SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(invite.file, invite.file.singleFile.size > 5000000),
+      ProgressView(invite.file, invite.file.single.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
 
-    if (invite.file.singleFile.size > 5000000) {
+    if (invite.file.single.size > 5000000) {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();

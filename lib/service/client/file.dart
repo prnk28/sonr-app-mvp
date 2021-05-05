@@ -3,9 +3,6 @@ import 'dart:isolate';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:file_picker/file_picker.dart';
 
-// ^ List of Allowed Types ^ //
-const K_ALLOWED_FILE_TYPES = ['pdf', 'doc', 'docx', 'ttf', 'mp3', 'xml', 'csv', 'key', 'ppt', 'pptx', 'xls', 'xlsm', 'xlsx', 'rtf', 'txt'];
-
 // ^ Class for Managing Files ^ //
 class FileService extends GetxService {
   // Accessors
@@ -27,7 +24,8 @@ class FileService extends GetxService {
     if (result != null) {
       return Tuple(
           true,
-          await SonrFileUtils.newSingleMedia(
+          await SonrFileUtils.newSingle(
+            payload: Payload.MEDIA,
             path: result.files.first.path,
             size: result.files.first.size,
           ));
@@ -48,7 +46,8 @@ class FileService extends GetxService {
     if (result != null) {
       return Tuple(
           true,
-          await SonrFileUtils.newSingleMedia(
+          await SonrFileUtils.newSingle(
+            payload: Payload.MEDIA,
             path: result.files.first.path,
             size: result.files.first.size,
           ));
@@ -72,6 +71,7 @@ class FileService extends GetxService {
         return Tuple(
             true,
             SonrFileUtils.newSingle(
+              payload: Payload.FILE,
               path: result.files.first.path,
               size: result.files.first.size,
             ));
@@ -79,7 +79,7 @@ class FileService extends GetxService {
       // Multiple: Iterate Items
       else {
         // Initialize
-        var file = SonrFile(direction: SonrFile_Direction.Outgoing);
+        var file = SonrFile(direction: SonrFile_Direction.Outgoing, payload: Payload.MULTI_FILES);
 
         // Add Items
         result.files.forEach((e) {

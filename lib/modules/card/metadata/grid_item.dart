@@ -51,7 +51,7 @@ class _MediaGridItemMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MetaBox(
-        metadata: item.file.singleFile,
+        metadata: item.file.single,
         child: Stack(children: [
           // Align Platform
           Align(
@@ -102,7 +102,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Mime Icon
-            item.file.singleFile.mime.type.gradient(size: 96),
+            item.file.single.mime.type.gradient(size: 96),
 
             item.file.sizeToString().p_Grey,
 

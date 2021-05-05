@@ -80,7 +80,7 @@ class CardsDatabase extends _$CardsDatabase {
 
     if (card.hasFile()) {
       if (!card.file.isMultiple) {
-        mime = Value(card.file.singleFile.mime.type);
+        mime = Value(card.file.single.mime.type);
       }
     }
 

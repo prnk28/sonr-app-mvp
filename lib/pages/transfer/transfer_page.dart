@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 
 import 'package:sonr_app/theme/theme.dart';
-import 'sheet_view.dart';
+import 'payload_view.dart';
 import 'transfer_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
@@ -58,7 +58,7 @@ class TransferScreen extends GetView<TransferController> {
                   return CarouselSlider(
                     carouselController: controller.carouselController,
                     options: K_CAROUSEL_OPTS,
-                    items: LobbyService.local.value.peers.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
+                    items: LobbyService.local.value.map((i) => Builder(builder: (context) => PeerCard(i))).toList(),
                   );
                 }
 

@@ -50,7 +50,7 @@ class MobileService extends GetxService {
   static RxBool get hasNotifications => to._hasNotifications;
   static RxBool get hasPhotos => to._hasPhotos;
   static RxBool get hasStorage => to._hasStorage;
-  
+
   static RxBool get hasGallery {
     if (DeviceService.isIOS) {
       return to._hasPhotos;
@@ -214,7 +214,7 @@ class MobileService extends GetxService {
   // ^ Saves Received Media to Gallery ^ //
   static Future<void> saveTransfer(SonrFile file) async {
     // Get Data from Media
-    final meta = file.singleFile;
+    final meta = file.single;
     final path = meta.path;
     // Save Image to Gallery
     if (meta.mime.type == MIME_Type.IMAGE && MobileService.hasGallery.value) {

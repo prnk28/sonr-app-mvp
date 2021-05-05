@@ -25,7 +25,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   FloatingSearchBarController searchBarController;
 
   // References
-  StreamSubscription<int> _lobbySizeStream;
+  StreamSubscription<Lobby> _lobbyStream;
   StreamSubscription<Status> _statusStream;
   int _lobbySizeRef = 0;
   bool _timeoutActive = false;
@@ -59,14 +59,14 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     }
 
     // Handle Streams
-    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
+    _lobbyStream = LobbyService.local.listen(_handleLobbyStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
   // ^ On Dispose ^ //
   @override
   void onClose() {
-    _lobbySizeStream.cancel();
+    _lobbyStream.cancel();
     _statusStream.cancel();
     pageIndex(0);
     super.onClose();
@@ -130,19 +130,19 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   // @ Handle Size Update ^ //
-  _handleLobbySizeStream(int onData) {
+  _handleLobbyStream(Lobby onData) {
     // Peer Joined
-    if (onData > _lobbySizeRef) {
-      var diff = onData - _lobbySizeRef;
+    if (onData.size > _lobbySizeRef) {
+      var diff = onData.size - _lobbySizeRef;
       swapTitleText("$diff Joined");
       DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
-    else if (onData < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData;
+    else if (onData.size < _lobbySizeRef) {
+      var diff = _lobbySizeRef - onData.size;
       swapTitleText("$diff Left");
     }
-    _lobbySizeRef = onData;
+    _lobbySizeRef = onData.size;
   }
 
   // @ Handle Status Update ^ //
@@ -150,7 +150,7 @@ class HomeController extends GetxController with SingleGetTickerProviderMixin {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.localSize.value} Nearby");
+      titleText("${LobbyService.local.value.size} Nearby");
       _timeoutActive = true;
 
       // Revert Text

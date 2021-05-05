@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:sonr_app/theme/theme.dart';
+
 class WindowController extends GetxController {
   static get to => Get.find<WindowController>();
 
@@ -12,7 +13,7 @@ class WindowController extends GetxController {
   final view = Rx<DesktopView>(DesktopView.Default);
 
   // References
-  StreamSubscription<int> _lobbySizeStream;
+  StreamSubscription<Lobby> _lobbySizeStream;
   StreamSubscription<Status> _statusStream;
   bool _timeoutActive = false;
   int _lobbySizeRef = 0;
@@ -30,7 +31,7 @@ class WindowController extends GetxController {
     super.onInit();
 
     // Handle Streams
-    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeStream);
+    _lobbySizeStream = LobbyService.local.listen(_handleLobbySizeStream);
     _statusStream = SonrService.status.listen(_handleStatus);
   }
 
@@ -48,19 +49,19 @@ class WindowController extends GetxController {
   }
 
   // @ Handle Size Update ^ //
-  _handleLobbySizeStream(int onData) {
+  _handleLobbySizeStream(Lobby onData) {
     // Peer Joined
-    if (onData > _lobbySizeRef) {
-      var diff = onData - _lobbySizeRef;
+    if (onData.size > _lobbySizeRef) {
+      var diff = onData.size - _lobbySizeRef;
       swapTitleText("$diff Joined");
       DeviceService.playSound(type: UISoundType.Joined);
     }
     // Peer Left
-    else if (onData < _lobbySizeRef) {
-      var diff = _lobbySizeRef - onData;
+    else if (onData.size < _lobbySizeRef) {
+      var diff = _lobbySizeRef - onData.size;
       swapTitleText("$diff Left");
     }
-    _lobbySizeRef = onData;
+    _lobbySizeRef = onData.size;
   }
 
   // @ Handle Status Update ^ //
@@ -68,7 +69,7 @@ class WindowController extends GetxController {
     sonrStatus(val);
     if (val.isConnected) {
       // Entry Text
-      titleText("${LobbyService.localSize.value} Nearby");
+      titleText("${LobbyService.local.value.size} Nearby");
       _timeoutActive = true;
 
       // Revert Text

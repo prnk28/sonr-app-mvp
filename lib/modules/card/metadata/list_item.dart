@@ -36,19 +36,19 @@ class MetaListItemView extends StatelessWidget {
     // # Check for Media File Type
     else if (item.file.isMedia) {
       // Image
-      if (item.file.singleFile.mime.type == MIME_Type.IMAGE) {
-        return MetaImageBox(metadata: item.file.singleFile, width: 72);
+      if (item.file.single.mime.type == MIME_Type.IMAGE) {
+        return MetaImageBox(metadata: item.file.single, width: 72);
       }
 
       // Other Media (Video, Audio)
       else {
-        return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.singleFile);
+        return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.single);
       }
     }
 
     // # Other File
     else {
-      return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.singleFile);
+      return MetaIcon(iconSize: Height.ratio(0.125), metadata: item.file.single);
     }
   }
 

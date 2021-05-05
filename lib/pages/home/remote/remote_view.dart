@@ -1,4 +1,3 @@
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:sonr_app/modules/peer/item_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'remote_controller.dart';
@@ -79,24 +78,21 @@ class _JoinRemoteView extends GetView<RemoteController> {
 }
 
 // ^ Card Aspect Ratio Remote View ^ //
-class RemoteLobbyView extends HookWidget {
+class RemoteLobbyView extends GetView<RemoteController> {
   RemoteLobbyView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final remote = Get.find<RemoteController>().remoteInfo.value;
-    final remoteStream = LobbyService.useRemoteLobby(remote);
-
     return Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-      "${remote.display}".h2,
+      "${controller.remoteInfo.value.display}".h2,
       Expanded(
           child: ListView.builder(
-        itemCount: remoteStream.data != null ? remoteStream.data.length : 0,
+        itemCount: controller.remoteLobby.value.length,
         itemBuilder: (BuildContext context, int index) {
           // Build List Item
           return PeerListItem(
-            remoteStream.data.atIndex(index - 1),
+            controller.remoteLobby.value.peerAtIndex(index - 1),
             index - 1,
-            remote: remote,
+            remote: controller.remoteInfo.value,
           );
         },
       )),

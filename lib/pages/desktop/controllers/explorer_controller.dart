@@ -13,18 +13,18 @@ class ExplorerController extends GetxController {
   final location = Rx<Location>(Location());
 
   // References
-  StreamSubscription<int> _lobbySizeStream;
+  StreamSubscription<Lobby> _lobbySizeStream;
   CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
   void onInit() async {
     // Set Initial Value
-    _handleLobbySizeUpdate(LobbyService.localSize.value);
+    _handleLobbySizeUpdate(LobbyService.local.value);
     location(await SonrService.locationInfo());
     location.refresh();
 
     // Add Stream Handlers
-    _lobbySizeStream = LobbyService.localSize.listen(_handleLobbySizeUpdate);
+    _lobbySizeStream = LobbyService.local.listen(_handleLobbySizeUpdate);
     super.onInit();
   }
 
@@ -36,13 +36,7 @@ class ExplorerController extends GetxController {
   }
 
   // # Handle Lobby Size Update ^ //
-  _handleLobbySizeUpdate(int size) {
-    if (size == 0) {
-      isNotEmpty(false);
-    } else if (size == 1) {
-      isNotEmpty(true);
-    } else {
-      isNotEmpty(true);
-    }
+  _handleLobbySizeUpdate(Lobby lobby) {
+    isNotEmpty(lobby.isNotEmpty);
   }
 }

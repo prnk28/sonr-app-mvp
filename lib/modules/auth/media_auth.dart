@@ -33,15 +33,15 @@ class MediaAuthView extends StatelessWidget {
           ]),
           Divider(),
           Container(
-            width: invite.file.singleFile.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
-            height: invite.file.singleFile.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
-            child: invite.file.singleFile.thumbnail.length > 0
+            width: invite.file.single.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
+            height: invite.file.single.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
+            child: invite.file.single.thumbnail.length > 0
                 ? Image.memory(
-                    Uint8List.fromList(invite.file.singleFile.thumbnail),
+                    Uint8List.fromList(invite.file.single.thumbnail),
                     width: Get.width - 50,
                     height: Get.height / 3,
                   )
-                : invite.file.singleFile.mime.type.gradient(),
+                : invite.file.single.mime.type.gradient(),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),

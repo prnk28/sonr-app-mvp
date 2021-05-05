@@ -39,7 +39,6 @@ class PeerController extends GetxController {
   final userVector = Rx<VectorPosition>(null);
 
   // References
-  PeerStream _peerStream;
   StreamSubscription<VectorPosition> _userStream;
   FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
@@ -60,9 +59,7 @@ class PeerController extends GetxController {
   // ** Dispose on Close ** //
   @override
   void onClose() {
-    if (_peerStream != null) {
-      _peerStream.close();
-    }
+    LobbyService.unregisterPeerCallback(peer.value);
     if (_userStream != null) {
       _userStream.cancel();
     }
@@ -84,7 +81,7 @@ class PeerController extends GetxController {
     }
 
     // Add Stream Handlers
-    _peerStream = LobbyService.listenToPeer(peer.value).listen(_handlePeerUpdate);
+    LobbyService.registerPeerCallback(peer.value, _handlePeerUpdate);
 
     // Check for Mobile
     if (DeviceService.isMobile) {

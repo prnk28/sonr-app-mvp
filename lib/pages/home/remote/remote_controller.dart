@@ -1,6 +1,5 @@
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:sonr_app/data/data.dart';
 
 enum RemoteViewStatus { NotJoined, Created, Joined, Invited, InProgress, Done }
 
@@ -28,8 +27,9 @@ class RemoteController extends GetxController {
   final isJoinFieldTapped = false.obs;
   final isRemoteActive = false.obs;
 
+  final remoteLobby = Rx<Lobby>(Lobby());
+
   // References
-  LobbyStream _lobbyStream;
   final _keyboardVisible = KeyboardVisibilityController();
 
   // ** Initializer ** //
@@ -41,9 +41,6 @@ class RemoteController extends GetxController {
 
   // ** Disposer ** //
   void onClose() {
-    if (_lobbyStream != null) {
-      _lobbyStream.close();
-    }
     super.onClose();
   }
 
@@ -57,14 +54,21 @@ class RemoteController extends GetxController {
     // Start Remote
     remoteInfo(await SonrService.createRemote());
     isRemoteActive(true);
+    LobbyService.registerRemoteCallback(remoteInfo.value, _handleRemoteLobby);
   }
 
   // ^ Method to End Created Remote Lobby ^ //
   void stop() async {
-    // Start Remote
-    SonrService.leaveRemote(remoteInfo.value);
-    remoteInfo(RemoteInfo());
-    isRemoteActive(false);
+    if (remoteInfo.value != null) {
+      // Start Remote
+      SonrService.leaveRemote(remoteInfo.value);
+      remoteInfo(RemoteInfo());
+      isRemoteActive(false);
+    }
+
+    if (remoteLobby.value != null) {
+      LobbyService.unregisterRemoteCallback(remoteLobby.value);
+    }
   }
 
   // ^ Method to Join New Remote Lobby ^ //
@@ -81,6 +85,10 @@ class RemoteController extends GetxController {
       remoteInfo(null);
       currentInvite(null);
       status(RemoteViewStatus.NotJoined);
+    }
+
+    if (remoteLobby.value != null) {
+      LobbyService.unregisterRemoteCallback(remoteLobby.value);
     }
   }
 
@@ -122,5 +130,9 @@ class RemoteController extends GetxController {
   void _handleRemoteInvite(AuthInvite invite) {
     currentInvite(invite);
     status(RemoteViewStatus.Invited);
+  }
+
+  void _handleRemoteLobby(Lobby lobby) {
+    remoteLobby(lobby);
   }
 }

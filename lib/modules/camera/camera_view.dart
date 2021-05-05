@@ -31,7 +31,7 @@ class CameraView extends GetView<CameraController> {
         } else if (type == CameraViewType.Preview) {
           Get.dialog(
               MediaPreviewView(
-                  mediaFile: controller.getFile(),
+                  file: controller.getFile(),
                   onDecision: (value) {
                     value ? controller.continueWithCapture(onMediaSelected) : controller.clearFromPreview();
                   }),

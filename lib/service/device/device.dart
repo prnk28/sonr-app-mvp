@@ -103,7 +103,7 @@ class DeviceService extends GetxService {
     if (isMobile) {
       await MobileService.saveTransfer(file);
     } else {
-      OpenFile.open(file.singleFile.path);
+      OpenFile.open(file.single.path);
     }
   }
 

@@ -19,9 +19,9 @@ class MetaCardItemView extends StatelessWidget {
       width: Get.width - 64,
       decoration: Neumorphic.floating(),
       child: Hero(
-        tag: card.file.singleFile.path,
+        tag: card.file.single.path,
         child: MetaBox(
-          metadata: card.file.singleFile,
+          metadata: card.file.single,
           child: Stack(
             children: <Widget>[
               // Display Mime Type if Not Image
@@ -57,10 +57,10 @@ class MetaCardItemView extends StatelessWidget {
 
   // @ Build Card for Video Type
   Widget _buildChildView() {
-    if (card.file.singleFile.mime.type == MIME_Type.VIDEO) {
-      return MetaVideo(metadata: card.file.singleFile);
-    } else if (card.file.singleFile.mime.type != MIME_Type.IMAGE) {
-      return MetaIcon(metadata: card.file.singleFile, width: Get.width - 200, height: Get.height / 5);
+    if (card.file.single.mime.type == MIME_Type.VIDEO) {
+      return MetaVideo(metadata: card.file.single);
+    } else if (card.file.single.mime.type != MIME_Type.IMAGE) {
+      return MetaIcon(metadata: card.file.single, width: Get.width - 200, height: Get.height / 5);
     } else {
       return Container();
     }
@@ -97,7 +97,7 @@ class _MediaInfoView extends StatelessWidget {
               Spacer(),
               Container(
                 alignment: Alignment.centerRight,
-                child: "${card.file.singleFile.name}".p,
+                child: "${card.file.single.name}".p,
                 width: Get.width - 220,
                 height: 22,
               ),
@@ -114,14 +114,14 @@ class _MediaInfoView extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "Kind ".h6,
               Spacer(),
-              "${card.file.singleFile.mime.value}".p,
+              "${card.file.single.mime.value}".p,
             ]),
 
             // File Exported
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               "ID ".h6,
               Spacer(),
-              "${card.file.singleFile.id}".p,
+              "${card.file.single.id}".p,
             ]),
 
             Padding(padding: EdgeInsets.all(4)),
