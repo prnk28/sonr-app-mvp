@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 typedef BoolFunction = bool Function();
 

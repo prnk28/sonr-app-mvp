@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'data/data.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

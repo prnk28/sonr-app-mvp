@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:sonr_app/data/database/cards_db.dart';
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ^ TransferCard Contact Item Details ^ //
@@ -77,9 +77,7 @@ class ContactCardItemView extends StatelessWidget {
             Padding(padding: EdgeInsets.all(4)),
 
             // Brief Contact Card Info
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: card.contact.mapSocials((social) => social.provider.gradient(size: 35)))
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: card.contact.mapSocials((social) => social.provider.gradient(size: 35)))
           ]),
         ),
       ),

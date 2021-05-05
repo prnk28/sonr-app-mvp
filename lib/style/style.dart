@@ -1,4 +1,6 @@
 export '../service/device/device.dart';
+export '../service/device/desktop.dart';
+export '../service/device/mobile.dart';
 export '../service/client/file.dart';
 export '../service/client/lobby.dart';
 export '../service/client/sonr.dart';
@@ -11,7 +13,7 @@ export 'dart:typed_data';
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_compass/flutter_compass.dart';
 export 'package:open_file/open_file.dart';
-export 'package:sonr_app/theme/elements/clipper.dart';
+export 'package:sonr_app/style/elements/clipper.dart';
 export 'package:animated_widgets/animated_widgets.dart';
 export 'package:sonr_app/modules/camera/camera_view.dart';
 

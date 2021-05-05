@@ -7,7 +7,7 @@ import 'package:sonr_app/service/device/desktop.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/service/user/cards.dart';
 import 'package:sonr_app/service/client/lobby.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'bindings.dart';
 
 // ^ Constant Routing Information ^ //
@@ -88,7 +88,6 @@ class SonrRouting {
   static List<String> get excludedModules => [
         'open_file',
         'animated_widgets',
-
         'get',
         'path_provider',
         'camerawesome_plugin',

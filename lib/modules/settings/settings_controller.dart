@@ -1,5 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
-
+import 'package:sonr_app/style/style.dart';
 
 class SettingsController extends GetxController {
   final isDarkModeEnabled = UserService.isDarkMode.obs;

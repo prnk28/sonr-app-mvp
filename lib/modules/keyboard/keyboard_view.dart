@@ -1,6 +1,6 @@
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:keyboard_actions/keyboard_custom.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ColorPickerKeyboard extends StatelessWidget with KeyboardCustomPanelMixin<Color> implements PreferredSizeWidget {
   final ValueNotifier<Color> notifier;

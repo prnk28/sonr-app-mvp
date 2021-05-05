@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'profile.dart';
 import 'tile/tile_item.dart';
 

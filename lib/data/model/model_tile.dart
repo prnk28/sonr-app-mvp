@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/pages/home/profile/profile.dart';
 
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ** Focused Tile ** //

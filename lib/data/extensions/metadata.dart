@@ -1,6 +1,6 @@
 import 'package:sonr_app/data/data.dart';
 import 'package:intl/intl.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 
 extension ProfileFileUtils on Profile {

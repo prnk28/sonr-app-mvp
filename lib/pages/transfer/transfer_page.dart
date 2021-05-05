@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/data/data.dart';
 
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'payload_view.dart';
 import 'transfer_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';

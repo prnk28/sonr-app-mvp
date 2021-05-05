@@ -1,5 +1,5 @@
 export 'contact_flat.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'contact_auth.dart';
 import 'file_auth.dart';
 import 'media_auth.dart';

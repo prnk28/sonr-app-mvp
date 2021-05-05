@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:sonr_app/service/device/desktop.dart';
 
-import '../theme.dart';
+import '../style.dart';
 
 // ^ Home Screen Header ^ //
 class DesignAppBar extends StatelessWidget implements PreferredSizeWidget {

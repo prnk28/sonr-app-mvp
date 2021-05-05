@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../style.dart';
 import 'utility.dart';
 
 class PlainButton extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:keyboard_actions/keyboard_actions_config.dart';
 import 'package:keyboard_actions/keyboard_custom.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'keyboard_view.dart';
 
 class ColorField extends StatelessWidget {

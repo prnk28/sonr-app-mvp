@@ -1,5 +1,5 @@
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'home_controller.dart';
 import 'profile/profile_controller.dart';
 import 'remote/remote_controller.dart';

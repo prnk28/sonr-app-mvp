@@ -7,7 +7,7 @@ import 'metadata/card_item.dart';
 import 'metadata/grid_item.dart';
 import 'metadata/list_item.dart';
 import 'url/card_item.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 // ^ Card Element/View type Enums ^ //
 enum TransferItemsType { All, Metadata, Contacts, Links }

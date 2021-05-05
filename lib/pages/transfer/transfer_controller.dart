@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 enum ThumbnailStatus { None, Loading, Complete }
 

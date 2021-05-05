@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sonr_app/modules/peer/card_view.dart';
 import 'package:sonr_app/pages/desktop/controllers/explorer_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class ExplorerDesktopView extends GetView<ExplorerController> {
   ExplorerDesktopView({Key key}) : super(key: key);

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class UserService extends GetxService {
   // Accessors

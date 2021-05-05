@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/keyboard/keyboard_field.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'profile.dart';
 
 // ^ Edit Profile Details View ^ //

@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'dart:math';
 
 // ^ Standardized Uniform Scaffold ^ //

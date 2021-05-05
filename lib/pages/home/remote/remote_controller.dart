@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 enum RemoteViewStatus { NotJoined, Created, Joined, Invited, InProgress, Done }

@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'boarding_view.dart';
 import 'form_page.dart';
 import 'register_controller.dart';

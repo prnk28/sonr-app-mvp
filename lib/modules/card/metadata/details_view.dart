@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 // ^ Widget for Details Media View
 class MetaDetailsView extends StatelessWidget {

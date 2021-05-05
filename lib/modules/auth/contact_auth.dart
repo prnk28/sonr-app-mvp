@@ -1,5 +1,5 @@
 import 'package:sonr_app/service/user/cards.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
 

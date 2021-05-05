@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:file_picker/file_picker.dart';
 
 // ^ Class for Managing Files ^ //

@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../profile_controller.dart';
 

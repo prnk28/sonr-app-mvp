@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../theme.dart';
+import '../style.dart';
 import 'package:lottie/lottie.dart';
 
 // ^ Lottie Icon Widget ^ //

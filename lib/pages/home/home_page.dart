@@ -1,7 +1,7 @@
 import 'package:sonr_app/modules/share/share_view.dart';
 import 'package:sonr_app/pages/home/home_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'action_button.dart';
 import 'recents/recents_view.dart';
 import 'home_controller.dart';

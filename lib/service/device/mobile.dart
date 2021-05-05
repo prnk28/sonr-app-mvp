@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:sonr_app/modules/share/sheet_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:motion_sensors/motion_sensors.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:permission_handler/permission_handler.dart';

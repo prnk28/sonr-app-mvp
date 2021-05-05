@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:sonr_app/pages/home/home_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 // # Lottie
 enum SonrAssetLottie {

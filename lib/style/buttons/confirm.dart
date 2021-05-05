@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:sonr_app/service/device/device.dart';
-import '../theme.dart';
+import '../style.dart';
 import 'utility.dart';
 
 enum ConfirmButtonType { Save, Delete }

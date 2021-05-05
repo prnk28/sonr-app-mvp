@@ -1,5 +1,5 @@
 import 'package:sonr_app/modules/video/video_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class MediaPreviewView extends StatelessWidget {
   final SonrFile file;

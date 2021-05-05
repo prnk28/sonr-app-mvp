@@ -13,7 +13,7 @@ import 'package:sonr_app/pages/home/profile/tile/tile_controller.dart';
 import 'package:sonr_app/pages/home/remote/remote_controller.dart';
 import 'package:sonr_app/pages/register/register_controller.dart';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 // ^ Initial Controller Bindings ^ //
 class InitialBinding implements Bindings {

@@ -1,4 +1,4 @@
-import '../theme.dart';
+import '../style.dart';
 class ShapeContainer extends StatelessWidget {
   // Properties
   final CustomClipper<Path> path;

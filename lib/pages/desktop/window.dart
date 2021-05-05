@@ -1,5 +1,5 @@
 import 'package:sonr_app/pages/desktop/views/explorer_view.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'controllers/window_controller.dart';
 import 'views/register_view.dart';
 

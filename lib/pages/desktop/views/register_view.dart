@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sonr_app/pages/desktop/controllers/link_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class RegisterDesktopView extends GetView<LinkController> {
   final RxInt counter = 0.obs;

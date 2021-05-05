@@ -2,7 +2,7 @@ import 'package:rive/rive.dart';
 import 'dart:async';
 import 'dart:ui';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sonr_app/data/data.dart';
 
 // ^ Peer Controller Status ^ //

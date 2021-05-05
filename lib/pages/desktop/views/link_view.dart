@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 class LinkDesktopView extends StatelessWidget {
   LinkDesktopView({Key key}) : super(key: key);

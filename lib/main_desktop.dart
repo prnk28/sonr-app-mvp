@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'data/data.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {

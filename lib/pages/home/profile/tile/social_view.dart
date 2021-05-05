@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'tile_controller.dart';
 
 class SocialView extends StatelessWidget {

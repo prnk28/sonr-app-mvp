@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sonr_app/service/device/mobile.dart';
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 import 'profile_controller.dart';
 

@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 import 'register_controller.dart';
 
 class FormPage extends GetView<RegisterController> {

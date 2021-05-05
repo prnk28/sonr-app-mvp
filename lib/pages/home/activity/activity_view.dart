@@ -1,4 +1,4 @@
-import 'package:sonr_app/theme/theme.dart';
+import 'package:sonr_app/style/style.dart';
 
 // ^ Activity View ^ //
 class ActivityView extends StatelessWidget {
