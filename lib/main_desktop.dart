@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'data/data.dart';
 import 'package:sonr_app/theme/theme.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices(isDesktop: true);
-  runApp(DesktopApp());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
+      options.autoSessionTrackingIntervalMillis = 60000;
+      options.sampleRate = 0.6;
+      options.inAppIncludes.addAll(SonrRouting.excludedModules);
+      options.serverName = "[App] ${DeviceService.platform.toString()}";
+    },
+    // Init your App.
+    appRunner: () => runApp(DesktopApp()),
+  );
 }
 
 class DesktopApp extends StatefulWidget {

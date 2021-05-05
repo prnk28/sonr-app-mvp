@@ -1,12 +1,23 @@
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'data/data.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 // ^ Main Method ^ //
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices();
-  runApp(MobileApp());
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
+      options.autoSessionTrackingIntervalMillis = 60000;
+      options.sampleRate = 0.6;
+      options.inAppIncludes.addAll(SonrRouting.excludedModules);
+      options.serverName = "[App] ${DeviceService.platform.toString()}";
+    },
+    // Init your App.
+    appRunner: () => runApp(MobileApp()),
+  );
 }
 
 // ^ Root App Widget ^ //

@@ -24,6 +24,7 @@ class DeviceService extends GetxService {
   static bool get isLinux => to._platform.value.isLinux;
   static bool get isMacOS => to._platform.value.isMacOS;
   static bool get isWindows => to._platform.value.isWindows;
+  static Platform get platform => to._platform.value;
 
   // Connection Requirements
   static bool get isReadyToConnect {

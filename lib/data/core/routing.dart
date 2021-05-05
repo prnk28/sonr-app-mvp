@@ -84,4 +84,14 @@ class SonrRouting {
         LobbyService.isRegistered &&
         UserService.isRegistered;
   }
+
+  static List<String> get excludedModules => [
+        'open_file',
+        'animated_widgets',
+        'flutter_neumorphic',
+        'get',
+        'path_provider',
+        'camerawesome_plugin',
+        'file_picker',
+      ];
 }
