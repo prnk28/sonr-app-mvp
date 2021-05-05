@@ -275,7 +275,7 @@ class SonrService extends GetxService {
 
     // Check for Flat
     if (data.isFlat && data.payload == Payload.CONTACT) {
-      FlatMode.invite(data.card);
+      FlatMode.invite(data.contact);
     } else {
       SonrOverlay.invite(data);
     }
@@ -286,7 +286,7 @@ class SonrService extends GetxService {
     // Handle Contact Response
     if (data.type == AuthReply_Type.FlatContact) {
       await HapticFeedback.heavyImpact();
-      FlatMode.response(data.card);
+      FlatMode.response(data.card.contact);
     } else if (data.type == AuthReply_Type.Contact) {
       await HapticFeedback.vibrate();
       SonrOverlay.reply(data);

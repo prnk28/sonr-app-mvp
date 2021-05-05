@@ -5,13 +5,13 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 
 class ProgressView extends HookWidget {
   //  Properties
-  final TransferCard card;
+  final SonrFile file;
   final Gradient gradient = SonrGradient.Progress;
   final Duration duration = const Duration(milliseconds: 1500);
   final bool utilizeProgress;
 
   // Constructer
-  ProgressView(this.card, this.utilizeProgress) : super(key: UniqueKey());
+  ProgressView(this.file, this.utilizeProgress) : super(key: UniqueKey());
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class ProgressView extends HookWidget {
         child: utilizeProgress
             ? Obx(() {
                 if (SonrService.progress.value >= 0.5) {
-                  return OpacityAnimatedWidget(duration: Duration(milliseconds: 200), child: card.file.singleFile.mime.type.gradient(size: 165));
+                  return OpacityAnimatedWidget(duration: Duration(milliseconds: 200), child: file.singleFile.mime.type.gradient(size: 165));
                 } else {
                   return Container();
                 }
@@ -105,6 +105,6 @@ class ProgressView extends HookWidget {
             : OpacityAnimatedWidget(
                 delay: Duration(milliseconds: (duration.inMilliseconds / 2).round()),
                 duration: Duration(milliseconds: (duration.inMilliseconds / 5).round()),
-                child: card.file.singleFile.mime.type.gradient(size: 165)));
+                child: file.singleFile.mime.type.gradient(size: 165)));
   }
 }

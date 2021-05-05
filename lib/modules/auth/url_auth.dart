@@ -9,7 +9,6 @@ class URLAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = invite.card;
     return Container(
       decoration: Neumorph.floating(),
       child: Column(mainAxisSize: MainAxisSize.max, children: [
@@ -46,7 +45,7 @@ class URLAuthView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(child: Container(child: _buildURLView(card))),
+            Expanded(child: Container(child: _buildURLView(invite.url))),
           ],
         ),
 
@@ -59,7 +58,7 @@ class URLAuthView extends StatelessWidget {
             ColorButton.neutral(onPressed: () => SonrOverlay.back(), text: "Dismiss"),
             Padding(padding: EdgeInsets.all(8)),
             ColorButton.primary(
-              onPressed: () => launchURL(card.url.link),
+              onPressed: () => launchURL(invite.url.link),
               text: "Open",
               icon: SonrIcons.Discover,
             ),
@@ -71,8 +70,7 @@ class URLAuthView extends StatelessWidget {
   }
 
   // ^ Method to Build View from Data ^ //
-  Widget _buildURLView(TransferCard card) {
-    final data = card.url;
+  Widget _buildURLView(URLLink data) {
     // Check open graph images
     if (data.images.length > 0) {
       return Column(children: [
@@ -110,7 +108,7 @@ class URLAuthView extends StatelessWidget {
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: card.url.link.url,
+                    child: data.link.url,
                   ),
                 )
               ])),
@@ -155,7 +153,7 @@ class URLAuthView extends StatelessWidget {
                 Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: card.url.link.url,
+                    child: data.link.url,
                   ),
                 )
               ])),
@@ -173,7 +171,7 @@ class URLAuthView extends StatelessWidget {
         margin: EdgeInsets.all(10),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: card.url.link.url,
+          child: data.link.url,
         ),
       ),
     );

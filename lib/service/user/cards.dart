@@ -146,16 +146,16 @@ class CardService extends GetxService {
   }
 
   // ^ Handles User Invite Response
-  static handleInviteResponse(bool decision, AuthInvite invite, TransferCard card, {bool sendBackContact = false, bool closeOverlay = false}) {
+  static handleInviteResponse(bool decision, AuthInvite invite, {bool sendBackContact = false, bool closeOverlay = false}) {
     if (invite.payload == Payload.CONTACT) {
-      to._handleAcceptContact(invite, card, sendBackContact);
+      to._handleAcceptContact(invite, sendBackContact);
     } else {
-      decision ? to._handleAcceptTransfer(invite, card) : to._handleDeclineTransfer(invite);
+      decision ? to._handleAcceptTransfer(invite) : to._handleDeclineTransfer(invite);
     }
   }
 
   // @ Handle Accept Transfer Response
-  _handleAcceptTransfer(AuthInvite invite, TransferCard card) {
+  _handleAcceptTransfer(AuthInvite invite) {
     // Check for Remote
     if (invite.hasRemote()) {
       SonrService.respond(true, info: invite.remote);
@@ -166,12 +166,12 @@ class CardService extends GetxService {
     // Switch View
     SonrOverlay.back();
     SonrOverlay.show(
-      ProgressView(card, card.file.singleFile.size > 5000000),
+      ProgressView(invite.file, invite.file.singleFile.size > 5000000),
       barrierDismissible: false,
       disableAnimation: true,
     );
 
-    if (card.file.singleFile.size > 5000000) {
+    if (invite.file.singleFile.size > 5000000) {
       // Handle Card Received
       SonrService.completed().then((value) {
         SonrOverlay.back();
@@ -195,9 +195,9 @@ class CardService extends GetxService {
   }
 
 // @ Handle Accept Contact Response
-  _handleAcceptContact(AuthInvite invite, TransferCard card, bool sendBackContact) {
+  _handleAcceptContact(AuthInvite invite, bool sendBackContact) {
     // Save Card
-    _database.addCard(card);
+    // _database.addCard(card);
 
     // Check if Send Back
     if (sendBackContact) {

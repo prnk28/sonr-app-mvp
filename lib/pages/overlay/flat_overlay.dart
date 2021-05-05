@@ -14,12 +14,12 @@ class FlatMode {
     }
   }
 
-  static response(TransferCard data) {
-    Get.find<_FlatModeController>().animateIn(data.contact, delayModifier: 2);
+  static response(Contact data) {
+    Get.find<_FlatModeController>().animateIn(data, delayModifier: 2);
   }
 
-  static invite(TransferCard data) {
-    Get.find<_FlatModeController>().animateSwap(data.contact);
+  static invite(Contact data) {
+    Get.find<_FlatModeController>().animateSwap(data);
   }
 }
 

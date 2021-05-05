@@ -12,11 +12,11 @@ class ContactAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TransferCard card;
+    Contact card;
     if (isReply) {
-      card = reply.card;
+      card = reply.card.contact;
     } else {
-      card = invite.card;
+      card = invite.contact;
     }
     return Container(
       height: context.heightTransformer(reducedBy: 35),
@@ -31,7 +31,7 @@ class ContactAuthView extends StatelessWidget {
               child: Container(
                 decoration: Neumorph.floating(),
                 padding: EdgeInsets.all(4),
-                child: card.contact.pictureImage(),
+                child: card.pictureImage(),
               ),
             ),
           ),
@@ -42,11 +42,11 @@ class ContactAuthView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              card.contact.headerNameText(),
+              card.headerNameText(),
 
               // Phone/ Website
               Row(children: [
-                card.owner.platform.gradient(size: 20),
+                card.platform.gradient(size: 20),
                 // Hide PhoneNumber
                 Padding(padding: EdgeInsets.all(10)),
                 // card.contact.phoneNumber,
@@ -59,8 +59,8 @@ class ContactAuthView extends StatelessWidget {
         Container(
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
           child: Row(
-              children: List.generate(card.contact.socials.length, (index) {
-            return card.contact.socials[index].provider.gradient(size: 32);
+              children: List.generate(card.socials.length, (index) {
+            return card.socials[index].provider.gradient(size: 32);
           })),
         ),
         Divider(),
@@ -75,9 +75,9 @@ class ContactAuthView extends StatelessWidget {
                 SonrOverlay.back();
                 if (!isReply) {
                   var result = await SonrOverlay.question(title: "Send Back", description: "Would you like to send your contact back?");
-                  CardService.handleInviteResponse(true, invite, card, sendBackContact: result);
+                  CardService.handleInviteResponse(true, invite, sendBackContact: result);
                 } else {
-                  CardService.handleInviteResponse(true, invite, card, sendBackContact: false);
+                  CardService.handleInviteResponse(true, invite);
                 }
               },
               text: "Accept",

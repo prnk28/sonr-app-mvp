@@ -11,7 +11,6 @@ class MediaAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final card = invite.card;
     return NeumorphAvatarCard(
       profile: invite.from.profile,
       child: Column(
@@ -27,22 +26,22 @@ class MediaAuthView extends StatelessWidget {
                   ? "${invite.from.profile.firstName} ${invite.from.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
                   : "${invite.from.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone),
               Row(children: [
-                card.payload.toString().capitalizeFirst.gradient(gradient: FlutterGradientNames.plumBath, size: 22),
-                "   ${card.file.sizeToString()}".h5
+                invite.payload.toString().capitalizeFirst.gradient(gradient: FlutterGradientNames.plumBath, size: 22),
+                "   ${invite.file.sizeToString()}".h5
               ]),
             ]),
           ]),
           Divider(),
           Container(
-            width: card.file.singleFile.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
-            height: card.file.singleFile.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
-            child: card.file.singleFile.thumbnail.length > 0
+            width: invite.file.singleFile.thumbnail.length > 0 ? Get.width - 50 : Get.width - 150,
+            height: invite.file.singleFile.thumbnail.length > 0 ? Get.height / 3 : Get.height / 5,
+            child: invite.file.singleFile.thumbnail.length > 0
                 ? Image.memory(
-                    Uint8List.fromList(card.file.singleFile.thumbnail),
+                    Uint8List.fromList(invite.file.singleFile.thumbnail),
                     width: Get.width - 50,
                     height: Get.height / 3,
                   )
-                : card.file.singleFile.mime.type.gradient(),
+                : invite.file.singleFile.mime.type.gradient(),
           ),
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
@@ -50,14 +49,14 @@ class MediaAuthView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ColorButton.primary(
-                onPressed: () => CardService.handleInviteResponse(true, invite, card),
+                onPressed: () => CardService.handleInviteResponse(true, invite),
                 text: "Accept",
                 gradient: SonrGradient.Tertiary,
                 icon: SonrIcons.Check,
                 margin: EdgeInsets.symmetric(horizontal: 54),
               ),
               Padding(padding: EdgeInsets.all(8)),
-              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite, card), text: "Decline"),
+              PlainTextButton(onPressed: () => CardService.handleInviteResponse(false, invite), text: "Decline"),
             ],
           ),
         ],
