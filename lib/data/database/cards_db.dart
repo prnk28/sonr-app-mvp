@@ -76,7 +76,7 @@ class CardsDatabase extends _$CardsDatabase {
   }
 
   Future<int> addCard(TransferCard card) async {
-    var mime = Value.absent();
+    Value<MIME_Type> mime = Value.absent();
 
     if (card.hasFile()) {
       if (!card.file.isMultiple) {

@@ -9,11 +9,15 @@ Future<void> main() async {
   await SonrRouting.initServices();
   await SentryFlutter.init(
     (options) {
+      // Properties
       options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
-      options.autoSessionTrackingIntervalMillis = 60000;
-      options.sampleRate = 0.6;
-      options.inAppIncludes.addAll(SonrRouting.excludedModules);
+      options.sampleRate = 0.1;
       options.serverName = "[App] ${DeviceService.platform.toString()}";
+
+      // Add Excludes
+      SonrRouting.excludedModules.forEach((ex) {
+        options.addInAppExclude(ex);
+      });
     },
     // Init your App.
     appRunner: () => runApp(MobileApp()),
