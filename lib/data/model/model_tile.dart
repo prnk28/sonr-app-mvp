@@ -3,7 +3,6 @@ import 'package:sonr_app/pages/home/profile/profile.dart';
 
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:sonr_plugin/sonr_social.dart';
 
 // ** Focused Tile ** //
 class FocusedTile {

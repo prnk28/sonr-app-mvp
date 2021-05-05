@@ -58,10 +58,7 @@ class ContactAuthView extends StatelessWidget {
         // Social Media
         Container(
           margin: EdgeInsets.only(top: 8, left: 40, right: 40, bottom: 8),
-          child: Row(
-              children: List.generate(card.socials.length, (index) {
-            return card.socials[index].provider.gradient(size: 32);
-          })),
+          child: Row(children: card.mapSocials((social) => social.provider.gradient(size: 32))),
         ),
         Divider(),
         Padding(padding: EdgeInsets.all(4)),

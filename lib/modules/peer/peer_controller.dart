@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:sonr_app/pages/transfer/transfer_controller.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_app/data/data.dart';
-import 'vector_position.dart';
 
 // ^ Peer Controller Status ^ //
 enum PeerStatus { Default, Pending, Accepted, Declined, Complete }
@@ -35,11 +34,11 @@ class PeerController extends GetxController {
 
   // Vector Properties
   final offset = Offset(0, 0).obs;
-  final peerVector = Rx<VectorPosition>(null);
-  final userVector = Rx<VectorPosition>(null);
+  final peerVector = Rx<Position>(null);
+  final userVector = Rx<Position>(null);
 
   // References
-  StreamSubscription<VectorPosition> _userStream;
+  StreamSubscription<Position> _userStream;
   FunctionTimer _timer = FunctionTimer(deadline: 2500.milliseconds, interval: 500.milliseconds);
 
   // State Machine
@@ -71,7 +70,7 @@ class PeerController extends GetxController {
     // Set Initial
     peer(data);
     isVisible(true);
-    peerVector(VectorPosition(peer.value.position));
+    peerVector(peer.value.position);
     userVector(LobbyService.userPosition.value);
 
     if (peer.value.platform.isDesktop) {
@@ -205,7 +204,7 @@ class PeerController extends GetxController {
       // Update Direction
       if (data.id.peer == peer.value.id.peer && !_isPending.value) {
         peer(data);
-        peerVector(VectorPosition(data.position));
+        peerVector(data.position);
 
         // Handle Changes
         if (Get.find<TransferController>().isShiftingEnabled.value) {
@@ -227,7 +226,7 @@ class PeerController extends GetxController {
   }
 
   // @ Handle Peer Position ^ //
-  void _handleUserUpdate(VectorPosition pos) {
+  void _handleUserUpdate(Position pos) {
     if (!isClosed && !status.value.isComplete) {
       // Initialize
       userVector(pos);

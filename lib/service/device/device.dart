@@ -51,8 +51,8 @@ class DeviceService extends GetxService {
   // ^ Builds Connection Request based on Platform ^
   static Future<ConnectionRequest> connectionRequest() async {
     // Initialize Variables
-    var device = await newDevice(platform: to._platform.value);
-    return newConnectionRequest(
+    var device = await RequestUtility.newDevice(platform: to._platform.value);
+    return RequestUtility.newConnectionRequest(
       geoLocation: isMobile ? await MobileService.currentLocation() : null,
       ipLocation: await findIPLocation(),
       device: device,

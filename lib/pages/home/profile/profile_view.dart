@@ -6,7 +6,7 @@ class ProfileView extends GetView<ProfileController> {
   ProfileView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Obx(() => NeumorphCard(parameters: controller.viewParameters, child: _buildView(controller.status.value)));
+    return Obx(() => NeumorphicCard(child: _buildView(controller.status.value)));
   }
 
   // @ Build Page View by Navigation Item
@@ -52,7 +52,8 @@ class _DefaultProfileView extends GetView<ProfileController> {
               return SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      return SocialTileItem(UserService.socials[index], index);
+                      var socialsList = UserService.socials.values.toList();
+                      return SocialTileItem(socialsList[index], index);
                     },
                     childCount: UserService.socials.length,
                   ),

@@ -132,7 +132,7 @@ class _PeerDetailsCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: SonrColor.AccentNavy.withOpacity(0.75)),
-              child: Obx(() => " ${controller.peerVector.value.data.directionString}".h6_White),
+              child: Obx(() => " ${controller.peerVector.value.heading.directionString}".h6_White),
             ),
           ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.center),
 

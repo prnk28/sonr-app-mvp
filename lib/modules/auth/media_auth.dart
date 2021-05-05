@@ -11,7 +11,7 @@ class MediaAuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphAvatarCard(
+    return NeumorphicAvatarCard(
       profile: invite.from.profile,
       child: Column(
         mainAxisSize: MainAxisSize.max,

@@ -66,11 +66,7 @@ class ContactFlatCard extends StatelessWidget {
           Padding(padding: EdgeInsets.all(4)),
 
           // Brief Contact Card Info
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List<Widget>.generate(contact.socials.length, (index) {
-                return contact.socials[index].provider.gradient(size: 35);
-              }))
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: contact.mapSocials((social) => social.provider.gradient(size: 35)))
         ]),
       ),
     );

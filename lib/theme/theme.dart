@@ -20,14 +20,8 @@ export 'buttons/action.dart';
 export 'buttons/color.dart';
 export 'buttons/plain.dart';
 export 'buttons/confirm.dart';
-export 'style/color.dart';
-export 'style/icon.dart';
-export 'style/gradient.dart';
 export 'elements/scaffold.dart';
 export 'elements/snackbar.dart';
-export 'style/card.dart';
-export 'style/text.dart';
-export 'style/decoration.dart';
 export 'elements/appbar.dart';
 export 'animation/animation.dart';
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'package:sonr_plugin/sonr_social.dart';
 
 class SocialUserSearchField extends StatefulWidget {
   final String value;

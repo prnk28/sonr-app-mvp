@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/extensions/peer.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import '../theme.dart';
 
@@ -212,28 +211,6 @@ extension SonrOffset on Offset {
     var dy = sin(rad);
     return Offset(dx * (Get.width / 4), dy * (Get.height / 8));
   }
-
-  static Offset fromPosition(Position position, Cardinal diffDesg, double diffRad) {
-    // Convert Rad to Point on Path
-    var path = ZoneClip(position.proximity);
-    var metrics = path.getClip(Get.size).computeMetrics().elementAt(0);
-    var point = diffRad * metrics.length;
-
-    // Get Tanget for Point
-    var tangent = metrics.getTangentForOffset(point);
-    var calcPos = tangent.position;
-
-    // Top of View
-    if (diffDesg == Cardinal.NNE || diffDesg == Cardinal.NEbN || diffDesg == Cardinal.NbE) {
-      return Offset(180, position.topOffset);
-    } else if (diffDesg == Cardinal.NE) {
-      return Offset(270, position.topOffset + 20);
-    } else if (diffDesg == Cardinal.N) {
-      return Offset(90, position.topOffset + 20);
-    } else {
-      return Offset(calcPos.dx.clamp(0, 340).toDouble(), min(ZoneClip.proximityMaxHeight(position.proximity), calcPos.dy).toDouble());
-    }
-  }
 }
 
 // ^ Wave Painter for File Progress ^ //
@@ -284,24 +261,6 @@ class ZoneClip extends CustomClipper<Path> {
   ZoneClip(this.proximity);
 
   // ^ Returns Path Size ^
-  static double get size {
-    final ThemeData themeData = Theme.of(Get.context);
-    final MaterialTapTargetSize effectiveMaterialTapTargetSize = themeData.checkboxTheme.materialTapTargetSize ?? themeData.materialTapTargetSize;
-    final VisualDensity effectiveVisualDensity = themeData.checkboxTheme.visualDensity ?? themeData.visualDensity;
-    Size size;
-    switch (effectiveMaterialTapTargetSize) {
-      case MaterialTapTargetSize.padded:
-        size = const Size(kMinInteractiveDimension, kMinInteractiveDimension);
-        break;
-      case MaterialTapTargetSize.shrinkWrap:
-        size = const Size(kMinInteractiveDimension - 8.0, kMinInteractiveDimension - 8.0);
-        break;
-    }
-    size += effectiveVisualDensity.baseSizeAdjustment;
-    return size.longestSide;
-  }
-
-  // ^ Returns Path Size ^
   static double arcLength(double angle) {
     return sqrt((Get.height / 2 * Get.height / 2) / 2) * angle;
   }
@@ -341,21 +300,6 @@ class ZoneClip extends CustomClipper<Path> {
       Path path = Path();
       path.addArc(distantRect, pi, pi);
       return path;
-    }
-  }
-
-  static double proximityMaxHeight(Position_Proximity proximity) {
-    // Bottom Zone
-    if (proximity == Position_Proximity.Immediate) {
-      return 235;
-    }
-    // Middle Zone
-    else if (proximity == Position_Proximity.Near) {
-      return 150;
-    }
-    // Top Zone
-    else {
-      return 75;
     }
   }
 

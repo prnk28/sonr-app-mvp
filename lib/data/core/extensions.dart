@@ -1,7 +1,4 @@
 import 'dart:math';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
-import 'package:sonr_app/theme/theme.dart';
 
 extension ListUtils<T> on List<T> {
   random() {
@@ -18,18 +15,5 @@ extension ListUtils<T> on List<T> {
       this[index1] = this[index2];
       this[index2] = tmp1;
     }
-  }
-}
-
-
-extension StringUtils on String {
-  String replaceAt(int index, String newChar) {
-    return this.substring(0, index) + newChar + this.substring(index + 1);
-  }
-}
-
-extension StringDataUtils on String {
-  Future<ByteData> get import async {
-    return await rootBundle.load(this);
   }
 }

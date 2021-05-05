@@ -8,14 +8,13 @@ class RemoteView extends GetView<RemoteController> {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphCard(
-        parameters: controller.viewParameters,
+    return NeumorphicCard(
         child: Obx(
-          () => AnimatedSlideSwitcher.fade(
-            child: _buildView(controller.status.value),
-            duration: const Duration(milliseconds: 2500),
-          ),
-        ));
+      () => AnimatedSlideSwitcher.fade(
+        child: _buildView(controller.status.value),
+        duration: const Duration(milliseconds: 2500),
+      ),
+    ));
   }
 
   // @ Build Page View by Navigation Item

@@ -33,14 +33,22 @@ class ShareSheet extends GetView<ShareController> {
     final Size content = Size(window.width - E_CONTENT_WIDTH_MODIFIER, window.height - S_CONTENT_HEIGHT_MODIFIER);
 
     // Get Shared File
-    SharedMediaFile sharedIntent = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+    SharedMediaFile mediaShared = sharedFiles.length > 1 ? sharedFiles.last : sharedFiles.first;
+
+    // Initialize
+    Uint8List thumbdata = File(mediaShared.thumbnail).readAsBytesSync();
+    List<int> thumbnail = thumbdata.toList();
 
     // Build View
     return ShareSheet(
       child: _ShareItemMedia(sharedFiles: sharedFiles, size: content),
       size: window,
       payload: Payload.FILE,
-      mediaFile: SharedFileUtils.newFromExternal(sharedIntent),
+      mediaFile: SonrFileUtils.newWith(
+        path: mediaShared.path,
+        duration: mediaShared.duration ?? 0,
+        thumbnail: thumbnail,
+      ),
     );
   }
 

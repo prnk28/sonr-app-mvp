@@ -1,5 +1,4 @@
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_plugin/sonr_social.dart';
 import 'package:get/get.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'package:sonr_app/data/data.dart';
@@ -18,7 +17,7 @@ class ProfileController extends GetxController {
   // Properties
   final status = ProfileViewStatus.Viewing.obs;
   final focused = FocusedTile(-1, false).obs;
-  final options = SonrSocial.options(UserService.socials.values);
+  final options = SonrSocial.options(UserService.socials);
   final dropdownIndex = (-1).obs;
 
   // Edited Values
@@ -29,7 +28,6 @@ class ProfileController extends GetxController {
   // References
   final step = Rx<TileStep>(null);
   final pageController = PageController();
-  final viewParameters = Rx<NeumorphCardParams>(NeumorphCardParams());
 
   // ** Initialize Method ** //
   onInit() async {

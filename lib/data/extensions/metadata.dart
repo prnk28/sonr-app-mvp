@@ -2,24 +2,6 @@ import 'package:sonr_app/data/data.dart';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-
-extension SharedFileUtils on SonrFile {
-  static SonrFile newFromExternal(SharedMediaFile mediaShared) {
-    // Initialize
-    Uint8List thumbdata = File(mediaShared.thumbnail).readAsBytesSync();
-    List<int> thumbnail = thumbdata.toList();
-
-    // Return File
-    return SonrFileUtils.newWith(
-      path: mediaShared.path,
-      duration: mediaShared.duration ?? 0,
-      thumbnail: thumbnail,
-    );
-  }
-}
 
 extension ProfileFileUtils on Profile {
   Widget get nameText {

@@ -23,7 +23,6 @@ class RemoteController extends GetxController {
 
   // Status Properties
   final status = Rx<RemoteViewStatus>(RemoteViewStatus.NotJoined);
-  final viewParameters = Rx<NeumorphCardParams>(NeumorphCardParams());
   final isJoinFieldTapped = false.obs;
   final isRemoteActive = false.obs;
 

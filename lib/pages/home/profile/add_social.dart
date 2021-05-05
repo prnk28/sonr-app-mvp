@@ -1,8 +1,6 @@
 import 'package:sonr_app/modules/search/social_search.dart';
-
 import 'profile.dart';
 import 'package:sonr_app/theme/theme.dart';
-import 'package:sonr_plugin/sonr_social.dart';
 
 // ** Builds Add Social Form Dialog ** //
 class AddTileView extends GetView<ProfileController> {

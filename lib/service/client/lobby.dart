@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:get/get.dart' hide Node;
-import 'package:sonr_app/modules/peer/vector_position.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
@@ -19,7 +18,7 @@ class LobbyService extends GetxService {
   final _lobbies = RxList<Lobby>();
   final _local = Rx<Lobby>(null);
   final _localFlatPeers = RxMap<String, Peer>();
-  final _position = Rx<VectorPosition>(null);
+  final _position = Rx<Position>(null);
   final counter = 0.0.obs;
   final flatOverlayIndex = (-1).obs;
 
@@ -27,7 +26,7 @@ class LobbyService extends GetxService {
   static RxBool get isFlatMode => Get.find<LobbyService>()._isFlatMode;
   static RxList<Lobby> get lobbies => Get.find<LobbyService>()._lobbies;
   static Rx<Lobby> get local => Get.find<LobbyService>()._local;
-  static Rx<VectorPosition> get userPosition => to._position;
+  static Rx<Position> get userPosition => to._position;
 
   // @ References
   bool get _flatModeEnabled => !_flatModeCancelled.value && UserService.flatModeEnabled && Get.currentRoute != "/transfer";
@@ -189,7 +188,7 @@ class LobbyService extends GetxService {
     }
 
     // Set Vector Position
-    _position(VectorPosition(data));
+    _position(data);
   }
 
   // # Begin Facing Invite Check
