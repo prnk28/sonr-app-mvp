@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/video/video_view.dart';
 import 'package:sonr_app/theme/theme.dart';
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/modules/camera/camera.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/service/device/mobile.dart';

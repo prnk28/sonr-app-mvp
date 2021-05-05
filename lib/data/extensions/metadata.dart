@@ -1,4 +1,3 @@
-import 'package:photo_manager/photo_manager.dart';
 import 'package:sonr_app/data/data.dart';
 import 'package:intl/intl.dart';
 import 'package:sonr_app/theme/theme.dart';

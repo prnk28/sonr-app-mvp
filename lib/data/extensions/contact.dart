@@ -3,21 +3,19 @@ import 'package:sonr_plugin/sonr_plugin.dart';
 
 // ^ Contact Model Extensions ^ //
 extension ContactUtils on Contact {
-  Row get headerName {
+  Widget headerNameText() {
     return Row(children: [
-      "${this.profile.firstName} ".h6,
-      this.profile.lastName.l,
+      "${this.firstName} ".h6,
+      this.lastName.l,
     ]);
   }
 
-  Widget get fullName {
-    return this.profile.hasLastName()
-        ? "${this.profile.firstName} ${this.profile.lastName}".gradient(gradient: FlutterGradientNames.solidStone)
-        : "${this.profile.firstName}".gradient(gradient: FlutterGradientNames.solidStone);
+  Widget fullNameText() {
+    return "${this.fullName}".gradient(gradient: FlutterGradientNames.solidStone);
   }
 
-  Widget get profilePicture {
-    return this.profile.hasPicture()
+  Widget pictureImage() {
+    return this.hasPicture()
         ? Container(
             width: 120,
             height: 120,

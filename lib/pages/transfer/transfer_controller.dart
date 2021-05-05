@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:sonr_app/data/data.dart';
-
-import 'package:sonr_app/modules/peer/peer_controller.dart';
 import 'package:sonr_app/service/device/mobile.dart';
 import 'package:sonr_app/theme/theme.dart';
 
@@ -35,7 +33,6 @@ class TransferController extends GetxController {
   // References
   StreamSubscription<int> _lobbySizeStream;
   StreamSubscription<Position> _positionStream;
-  PeerController currentPeerController;
   CarouselController carouselController = CarouselController();
 
   // ^ Controller Constructer ^
@@ -60,29 +57,13 @@ class TransferController extends GetxController {
   }
 
   // ^ Send Invite with Peer ^ //
-  void inviteWithPeer(Peer peer) {
-    // Update Request
-    inviteRequest.update((val) {
-      val.to = peer;
-    });
-
-    // Send Invite
-    SonrService.invite(inviteRequest.value);
-  }
-
-  // ^ Send Invite with Bubble Controller ^ //
-  void inviteWithBubble(PeerController bubble) {
-    // Set Controller
-    currentPeerController = bubble;
+  void invitePeer(Peer peer) {
     setFacingPeer(false);
     isShiftingEnabled(false);
 
-    // Register Callback
-    Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
-
     // Update Request
     inviteRequest.update((val) {
-      val.to = bubble.peer.value;
+      val.to = peer;
     });
 
     // Send Invite
@@ -93,8 +74,6 @@ class TransferController extends GetxController {
   void setPayload(dynamic args) {
     // Validate Args
     if (args is TransferArguments) {
-      // Set Payload
-
       // Contact
       if (args.payload == Payload.CONTACT) {
         inviteRequest.update((val) {
@@ -116,7 +95,7 @@ class TransferController extends GetxController {
         // Set File Item
         sonrFile(args.file);
         inviteRequest.update((val) {
-          val.payload = args.payload;
+          val.file = args.file;
           val.payload = args.file.payload;
         });
       }
@@ -167,21 +146,6 @@ class TransferController extends GetxController {
     } else {
       isNotEmpty(true);
       title("$size People");
-    }
-  }
-
-  // # Handle Peer Response ^ //
-  _handleTransferStatus(TransferStatus data) {
-    if (currentPeerController != null) {
-      // Check Decision
-      if (data == TransferStatus.Accepted) {
-        currentPeerController.updateStatus(PeerStatus.Accepted);
-      } else if (data == TransferStatus.Denied) {
-        currentPeerController.updateStatus(PeerStatus.Declined);
-      } else {
-        currentPeerController.updateStatus(PeerStatus.Complete);
-        inviteRequest.value.clear();
-      }
     }
   }
 

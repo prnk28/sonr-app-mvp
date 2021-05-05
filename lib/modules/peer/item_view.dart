@@ -46,9 +46,9 @@ class _PeerListItemState extends State<PeerListItem> {
                   ColorButton.primary(
                     onPressed: () {
                       if (widget.remote != null) {
-                        Get.find<TransferController>().inviteWithPeer(widget.peer);
+                        Get.find<TransferController>().invitePeer(widget.peer);
                       } else {
-                        Get.find<TransferController>().inviteWithPeer(widget.peer);
+                        Get.find<TransferController>().invitePeer(widget.peer);
                       }
                     },
                     text: "Invite",

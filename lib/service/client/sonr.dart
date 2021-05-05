@@ -313,6 +313,7 @@ class SonrService extends GetxService {
     // Check for Callback
     if (_transferCallback != null) {
       _transferCallback(TransferStatus.Completed);
+      _transferCallback = null;
     }
 
     // Feedback
@@ -321,9 +322,6 @@ class SonrService extends GetxService {
 
     // Log Activity
     CardService.sharedCard(data);
-
-    // Remove Callback
-    _transferCallback = null;
   }
 
   // ^ Mark as Received File ^ //

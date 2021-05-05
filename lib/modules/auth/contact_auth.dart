@@ -31,7 +31,7 @@ class ContactAuthView extends StatelessWidget {
               child: Container(
                 decoration: Neumorph.floating(),
                 padding: EdgeInsets.all(4),
-                child: card.contact.profilePicture,
+                child: card.contact.pictureImage(),
               ),
             ),
           ),
@@ -42,7 +42,7 @@ class ContactAuthView extends StatelessWidget {
             margin: EdgeInsets.only(right: 8),
             child: Column(children: [
               // Name
-              card.contact.headerName,
+              card.contact.headerNameText(),
 
               // Phone/ Website
               Row(children: [

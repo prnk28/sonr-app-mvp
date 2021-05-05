@@ -77,7 +77,7 @@ class PeerController extends GetxController {
     peerVector(VectorPosition(peer.value.position));
     userVector(LobbyService.userPosition.value);
 
-    if (peer.value.isOnDesktop) {
+    if (peer.value.platform.isDesktop) {
       offset(Offset.zero);
     } else {
       offset(peerVector.value.offsetAgainstVector(userVector.value));
@@ -141,8 +141,11 @@ class PeerController extends GetxController {
     if (isReady.value) {
       // Check not already Pending
       if (!_isPending.value) {
+        // Register Callback
+        Get.find<SonrService>().registerTransferUpdates(_handleTransferStatus);
+
         // Perform Invite
-        Get.find<TransferController>().inviteWithBubble(this);
+        Get.find<TransferController>().invitePeer(this.peer.value);
 
         // Check for File
         if (Get.find<TransferController>().currentPayload.isTransfer) {
@@ -215,6 +218,17 @@ class PeerController extends GetxController {
     }
   }
 
+  // @ Handle Peer Response ^ //
+  _handleTransferStatus(TransferStatus data) {
+    if (data == TransferStatus.Accepted) {
+      updateStatus(PeerStatus.Accepted);
+    } else if (data == TransferStatus.Denied) {
+      updateStatus(PeerStatus.Declined);
+    } else {
+      updateStatus(PeerStatus.Complete);
+    }
+  }
+
   // @ Handle Peer Position ^ //
   void _handleUserUpdate(VectorPosition pos) {
     if (!isClosed && !status.value.isComplete) {
@@ -223,7 +237,7 @@ class PeerController extends GetxController {
 
       // Find Offset
       if (Get.find<TransferController>().isShiftingEnabled.value) {
-        if (peer.value.isOnDesktop) {
+        if (peer.value.platform.isDesktop) {
           offset(Offset.zero);
         } else {
           offset(peerVector.value.offsetAgainstVector(userVector.value));
@@ -252,7 +266,7 @@ class PeerController extends GetxController {
   void _handleFacingUpdate() {
     if (!isClosed && !status.value.isComplete) {
       // Find Offset
-      if (peer.value.isOnDesktop) {
+      if (peer.value.platform.isDesktop) {
         offset(Offset.zero);
       } else {
         offset(peerVector.value.offsetAgainstVector(userVector.value));

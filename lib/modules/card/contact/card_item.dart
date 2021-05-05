@@ -31,12 +31,12 @@ class ContactCardItemView extends StatelessWidget {
               child: Container(
                 decoration: Neumorph.indented(shape: BoxShape.circle),
                 padding: EdgeInsets.all(10),
-                child: card.contact.profilePicture,
+                child: card.contact.pictureImage(),
               ),
             ),
 
             // Build Name
-            card.contact.fullName,
+            card.contact.fullNameText(),
             Divider(),
             Padding(padding: EdgeInsets.all(4)),
 

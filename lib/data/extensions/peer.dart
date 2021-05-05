@@ -56,26 +56,9 @@ extension PositionUtils on Position {
   }
 }
 
-// ^ Peer Value Checker Extensions ^ //
-extension CheckerUtils on Peer {
-  bool get isOnMobile {
-    return this.platform == Platform.Android || this.platform == Platform.IOS;
-  }
-
-  bool get isOnDesktop {
-    return this.platform == Platform.MacOS || this.platform == Platform.Windows || this.platform == Platform.Linux;
-  }
-}
-
 // ^ Peer Widget Builder Extensions ^ //
 extension WidgetUtils on Peer {
-  Widget get initials {
-    if (this.profile.hasFirstName() && this.profile.hasLastName()) {
-      return " ${this.profile.firstName} ${this.profile.lastName}".h6;
-    } else {
-      return "SNR".h6;
-    }
-  }
+  Widget get initials => this.profile.initials.h6;
 
   Widget get platformExpanded {
     return RichText(

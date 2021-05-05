@@ -4,7 +4,6 @@ import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:sonr_app/data/data.dart';
 import 'package:sonr_app/pages/transfer/transfer_page.dart';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:path_provider/path_provider.dart';
