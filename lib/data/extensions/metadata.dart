@@ -9,25 +9,13 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 extension SharedFileUtils on SonrFile {
   static SonrFile newFromExternal(SharedMediaFile mediaShared) {
     // Initialize
-    int duration = 0;
-    Uint8List thumbnail = Uint8List(0);
-    File file = File(mediaShared.path);
-    bool isVideo = mediaShared.type == SharedMediaType.VIDEO;
-
-    // Get Video Thumbnail
-    if (isVideo) {
-      duration = mediaShared.duration;
-      File thumbFile = File(mediaShared.thumbnail);
-      thumbFile.readAsBytes().then((value) {
-        thumbnail = value;
-      });
-    }
+    Uint8List thumbdata = File(mediaShared.thumbnail).readAsBytesSync();
+    List<int> thumbnail = thumbdata.toList();
 
     // Return File
-    return SonrFileUtils.newSingle(
-      path: file.path,
-      size: file.lengthSync(),
-      duration: duration,
+    return SonrFileUtils.newWith(
+      path: mediaShared.path,
+      duration: mediaShared.duration ?? 0,
       thumbnail: thumbnail,
     );
   }

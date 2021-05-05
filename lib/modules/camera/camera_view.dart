@@ -290,7 +290,7 @@ class CameraController extends GetxController {
 
   // ^ Returns Captured Media File ^ //
   SonrFile getFile() {
-    return SonrFileUtils.newSingle(path: _isVideo ? _videoCapturePath : _photoCapturePath, duration: videoDuration.value);
+    return SonrFileUtils.newWith(path: _isVideo ? _videoCapturePath : _photoCapturePath, duration: videoDuration.value);
   }
 
   // ^ Captures Video ^ //

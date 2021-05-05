@@ -24,7 +24,7 @@ class FileService extends GetxService {
     if (result != null) {
       return Tuple(
           true,
-          await SonrFileUtils.newSingle(
+          await SonrFileUtils.newWith(
             payload: Payload.MEDIA,
             path: result.files.first.path,
             size: result.files.first.size,
@@ -46,7 +46,7 @@ class FileService extends GetxService {
     if (result != null) {
       return Tuple(
           true,
-          await SonrFileUtils.newSingle(
+          await SonrFileUtils.newWith(
             payload: Payload.MEDIA,
             path: result.files.first.path,
             size: result.files.first.size,
@@ -70,7 +70,7 @@ class FileService extends GetxService {
       if (result.isSinglePick) {
         return Tuple(
             true,
-            SonrFileUtils.newSingle(
+            SonrFileUtils.newWith(
               payload: Payload.FILE,
               path: result.files.first.path,
               size: result.files.first.size,

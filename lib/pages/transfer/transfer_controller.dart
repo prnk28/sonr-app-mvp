@@ -132,8 +132,10 @@ class TransferController extends GetxController {
 
   // # Handle Lobby Size Update ^ //
   _handleLobbyUpdate(Lobby data) {
-    isNotEmpty(data.isNotEmpty);
-    title(data.countString);
+    if (data != null && !isClosed) {
+      isNotEmpty(data.isNotEmpty);
+      title(data.countString);
+    }
   }
 
   // # Loads SonrFile for Media Payload

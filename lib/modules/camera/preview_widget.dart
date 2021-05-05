@@ -22,7 +22,7 @@ class MediaPreviewView extends StatelessWidget {
                         child: AspectRatio(
                             aspectRatio: 9 / 16,
                             child: VideoPlayerView.file(
-                              file.fileAtIndex(),
+                              file.itemAtIndex().file,
                             ))),
                   )
 
@@ -31,7 +31,7 @@ class MediaPreviewView extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(left: 10, right: 10),
                       decoration: BoxDecoration(
-                        image: DecorationImage(image: FileImage(file.fileAtIndex()), fit: BoxFit.fill),
+                        image: DecorationImage(image: FileImage(file.itemAtIndex().file), fit: BoxFit.fill),
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),

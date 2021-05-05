@@ -137,7 +137,7 @@ class CardService extends GetxService {
 
   // ^ Load SonrFile from Metadata ^ //
   static Future<SonrFile> loadSonrFileFromMetadata(SonrFile_Metadata metadata) async {
-    return SonrFileUtils.getSingle(metadata);
+    return SonrFileUtils.newWithItem(metadata);
   }
 
   // ^ Add Shared Card to Activity Datavase
