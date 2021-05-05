@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_gradients/flutter_gradients.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sonr_plugin/sonr_plugin.dart';
 import 'color.dart';
 export 'package:flutter_gradients/flutter_gradients.dart';
@@ -11,22 +10,22 @@ extension MimeIcon on MIME_Type {
   Widget gradient({double size = 32}) {
     switch (this) {
       case MIME_Type.AUDIO:
-        return SonrIcons.Audio.gradientNamed(name: FlutterGradientNames.flyingLemon, size: size);
+        return SonrIcons.Audio.gradient(value: SonrGradients.FlyingLemon, size: size);
       case MIME_Type.IMAGE:
-        return SonrIcons.Image.gradientNamed(name: FlutterGradientNames.juicyCake, size: size);
+        return SonrIcons.Image.gradient(value: SonrGradients.JuicyCake, size: size);
       case MIME_Type.DOCUMENT:
-        return SonrIcons.Document.gradientNamed(name: FlutterGradientNames.farawayRiver, size: size);
+        return SonrIcons.Document.gradient(value: SonrGradients.FarawayRiver, size: size);
       case MIME_Type.VIDEO:
-        return SonrIcons.Video.gradientNamed(name: FlutterGradientNames.nightCall, size: size);
+        return SonrIcons.Video.gradient(value: SonrGradients.NightCall, size: size);
       default:
         if (this == MIME_Type.PDF) {
-          return SonrIcons.PDF.gradientNamed(name: FlutterGradientNames.royalGarden, size: size);
+          return SonrIcons.PDF.gradient(value: SonrGradients.RoyalGarden, size: size);
         } else if (this == MIME_Type.SPREADSHEET) {
-          return SonrIcons.Spreadsheet.gradientNamed(name: FlutterGradientNames.itmeoBranding, size: size);
+          return SonrIcons.Spreadsheet.gradient(value: SonrGradients.ItmeoBranding, size: size);
         } else if (this == MIME_Type.PRESENTATION) {
-          return SonrIcons.Presentation.gradientNamed(name: FlutterGradientNames.orangeJuice, size: size);
+          return SonrIcons.Presentation.gradient(value: SonrGradients.OrangeJuice, size: size);
         }
-        return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.newRetrowave, size: size);
+        return SonrIcons.Unknown.gradient(value: SonrGradients.SolidStone, size: size);
     }
   }
 
@@ -78,11 +77,11 @@ extension MimeIcon on MIME_Type {
 extension PayloadIcon on Payload {
   Widget gradient({double size = 32}) {
     if (this == Payload.CONTACT) {
-      return SonrIcons.Avatar.gradientNamed(name: FlutterGradientNames.colorfulPeach, size: size);
+      return SonrIcons.Avatar.gradient(value: SonrGradients.SunnyMorning, size: size);
     } else if (this == Payload.URL) {
-      return SonrIcons.Discover.gradientNamed(name: FlutterGradientNames.partyBliss, size: size);
+      return SonrIcons.Discover.gradient(value: SonrGradients.Lollipop, size: size);
     } else {
-      return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.midnightBloom, size: size);
+      return SonrIcons.Unknown.gradient(value: SonrGradients.SolidStone, size: size);
     }
   }
 
@@ -112,15 +111,15 @@ extension PlatformIcon on Platform {
   Widget gradient({double size = 32}) {
     switch (this) {
       case Platform.Android:
-        return SonrIcons.Android.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.Android.gradient(value: SonrGradients.PremiumWhite, size: size);
       case Platform.IOS:
-        return SonrIcons.IPhone.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.IPhone.gradient(value: SonrGradients.PremiumWhite, size: size);
       case Platform.MacOS:
-        return SonrIcons.IMac.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.IMac.gradient(value: SonrGradients.PremiumWhite, size: size);
       case Platform.Windows:
-        return SonrIcons.Windows.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.Windows.gradient(value: SonrGradients.PremiumWhite, size: size);
       default:
-        return SonrIcons.Unknown.gradientNamed(name: FlutterGradientNames.glassWater, size: size);
+        return SonrIcons.Unknown.gradient(value: SonrGradients.PremiumWhite, size: size);
     }
   }
 
@@ -174,23 +173,23 @@ extension SocialIconUtils on Contact_Social_Provider {
   Widget gradient({double size = 32}) {
     switch (this) {
       case Contact_Social_Provider.Snapchat:
-        return SonrIcons.Snapchat.gradientNamed(name: FlutterGradientNames.sunnyMorning, size: size);
+        return SonrIcons.Snapchat.gradient(value: SonrGradients.SunnyMorning, size: size);
       case Contact_Social_Provider.Github:
-        return SonrIcons.Github.gradientNamed(name: FlutterGradientNames.solidStone, size: size);
+        return SonrIcons.Github.gradient(value: SonrGradients.SolidStone, size: size);
       case Contact_Social_Provider.Facebook:
-        return SonrIcons.Facebook.gradientNamed(name: FlutterGradientNames.perfectBlue, size: size);
+        return SonrIcons.Facebook.gradient(value: SonrGradients.PerfectBlue, size: size);
       case Contact_Social_Provider.Medium:
-        return SonrIcons.Medium.gradientNamed(name: FlutterGradientNames.eternalConstance, size: size);
+        return SonrIcons.Medium.gradient(value: SonrGradients.SolidStone, size: size);
       case Contact_Social_Provider.YouTube:
-        return SonrIcons.YouTube.gradientNamed(name: FlutterGradientNames.loveKiss, size: size);
+        return SonrIcons.YouTube.gradient(value: SonrGradients.LoveKiss, size: size);
       case Contact_Social_Provider.Twitter:
-        return SonrIcons.Twitter.gradientNamed(name: FlutterGradientNames.partyBliss, size: size);
+        return SonrIcons.Twitter.gradient(value: SonrGradients.MalibuBeach, size: size);
       case Contact_Social_Provider.Instagram:
-        return SonrIcons.Instagram.gradientNamed(name: FlutterGradientNames.ripeMalinka, size: size);
+        return SonrIcons.Instagram.gradient(value: SonrGradients.AmourAmour, size: size);
       case Contact_Social_Provider.TikTok:
-        return SonrIcons.Tiktok.gradientNamed(name: FlutterGradientNames.premiumDark, size: size);
+        return SonrIcons.Tiktok.gradient(value: SonrGradients.PremiumDark, size: size);
       default:
-        return SonrIcons.Spotify.gradientNamed(name: FlutterGradientNames.newLife, size: size);
+        return SonrIcons.Spotify.gradient(value: SonrGradients.SummerGames, size: size);
     }
   }
 
@@ -290,27 +289,12 @@ extension DesignIcon on IconData {
     );
   }
 
-  Widget gradient({Gradient gradient, double size = 32}) {
+  Widget gradient({Gradient value, double size = 32}) {
     return ShaderMask(
       blendMode: BlendMode.modulate,
       shaderCallback: (bounds) {
-        var grad = gradient ?? SonrGradient.Primary;
+        var grad = value ?? SonrGradient.Primary;
         return grad.createShader(bounds);
-      },
-      child: Icon(
-        this,
-        size: size,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  Widget gradientNamed({@required FlutterGradientNames name, double size = 32, Key key}) {
-    return ShaderMask(
-      key: key,
-      blendMode: BlendMode.modulate,
-      shaderCallback: (bounds) {
-        return FlutterGradients.findByName(name, tileMode: TileMode.clamp).createShader(bounds);
       },
       child: Icon(
         this,

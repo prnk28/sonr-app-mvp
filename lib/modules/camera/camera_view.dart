@@ -85,7 +85,7 @@ class CameraView extends GetView<CameraController> {
               onPressed: () {
                 Get.back();
               },
-              icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
+              icon: SonrIcons.Close.gradient(value: SonrGradients.PhoenixStart)),
         ),
         Obx(() {
           if (controller.videoInProgress.value) {
@@ -130,7 +130,12 @@ class _CameraToolsView extends GetView<CameraController> {
             var iconData = controller.isFlipped.value ? Icons.camera_rear_rounded : Icons.camera_front_rounded;
             return GestureDetector(
                 child: AnimatedSlideSwitcher.slideUp(
-                    child: iconData.gradientNamed(name: FlutterGradientNames.loveKiss, size: 36, key: ValueKey<IconData>(iconData))),
+                    child: Container(
+                        key: ValueKey<IconData>(iconData),
+                        child: iconData.gradient(
+                          value: SonrGradients.LoveKiss,
+                          size: 36,
+                        ))),
                 onTap: () async {
                   await HapticFeedback.heavyImpact();
                   controller.toggleCameraSensor();
@@ -142,8 +147,8 @@ class _CameraToolsView extends GetView<CameraController> {
 
           // Media Gallery Picker
           GestureDetector(
-              child: SonrIcons.Photos.gradientNamed(
-                name: FlutterGradientNames.octoberSilence,
+              child: SonrIcons.Photos.gradient(
+                value: SonrGradients.OctoberSilence,
                 size: 36,
               ),
               onTap: () async {
@@ -194,8 +199,8 @@ class _CaptureButton extends GetView<CameraController> {
                 child: Obx(
                   () => Container(
                     child: Center(
-                        child: SonrIcons.Camera.gradientNamed(
-                      name: UserService.isDarkMode ? FlutterGradientNames.premiumWhite : FlutterGradientNames.premiumDark,
+                        child: SonrIcons.Camera.gradient(
+                      value: UserService.isDarkMode ? SonrGradients.PremiumWhite : SonrGradients.PremiumDark,
                       size: 40,
                     )),
                     decoration: Neumorphic.floating(

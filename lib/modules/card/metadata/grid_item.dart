@@ -63,7 +63,7 @@ class _MediaGridItemMainView extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Unknown.gradient(gradient: SonrGradient.Secondary, size: 32),
+                  child: SonrIcons.Unknown.gradient(value: SonrGradient.Secondary, size: 32),
                 ),
               )),
         ]));
@@ -90,7 +90,7 @@ class _MediaGridItemDetailsView extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 32),
+              child: SonrIcons.Backward.gradient(value: SonrGradient.Secondary, size: 32),
             )),
       ),
 

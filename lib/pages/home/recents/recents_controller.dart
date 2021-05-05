@@ -76,7 +76,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             badgeWidget: Badge(
               size: widgetSize,
               borderColor: SonrColor.Secondary,
-              child: SonrIcons.Video.gradient(gradient: SonrGradient.Primary, size: 18),
+              child: SonrIcons.Video.gradient(value: SonrGradient.Primary, size: 18),
             ),
             badgePositionPercentageOffset: .96,
           );
@@ -90,7 +90,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             badgeWidget: Badge(
               size: widgetSize,
               borderColor: SonrColor.Tertiary,
-              child: SonrIcons.Files.gradient(gradient: SonrGradient.Tertiary, size: 18),
+              child: SonrIcons.Files.gradient(value: SonrGradient.Tertiary, size: 18),
             ),
             badgePositionPercentageOffset: 1.02,
           );
@@ -104,7 +104,7 @@ class RecentsController extends GetxController with SingleGetTickerProviderMixin
             badgeWidget: Badge(
               size: widgetSize,
               borderColor: SonrColor.AccentPink,
-              child: SonrIcons.Photos.gradient(gradient: SonrGradient.Critical, size: 18),
+              child: SonrIcons.Photos.gradient(value: SonrGradient.Critical, size: 18),
             ),
             badgePositionPercentageOffset: .96,
           );

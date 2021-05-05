@@ -31,32 +31,37 @@ class ContactFlatCard extends StatelessWidget {
 
           // Quick Actions
           Container(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              ActionButton(
-                onPressed: () {},
-                label: "Mobile",
-                icon: SonrIcons.Call.gradientNamed(
-                  name: FlutterGradientNames.highFlight,
-                  size: 36,
-                ),
-                size: 72,
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ActionButton(
+              onPressed: () {},
+              label: "Mobile",
+              icon: SonrIcons.Call.gradient(
+                value: SonrGradients.CrystalRiver,
+                size: 36,
               ),
-              Padding(padding: EdgeInsets.all(6)),
-              ActionButton(
-                onPressed: () {},
-                label: "Text",
-                icon: SonrIcons.Mail.gradientNamed(name: FlutterGradientNames.teenParty, size: 36),
-                size: 72,
+              size: 72,
+            ),
+            Padding(padding: EdgeInsets.all(6)),
+            ActionButton(
+              onPressed: () {},
+              label: "Text",
+              icon: SonrIcons.Mail.gradient(
+                value: SonrGradients.NightCall,
+                size: 36,
               ),
-              Padding(padding: EdgeInsets.all(6)),
-              ActionButton(
+              size: 72,
+            ),
+            Padding(padding: EdgeInsets.all(6)),
+            ActionButton(
                 onPressed: () {},
                 label: "Video",
                 size: 72,
-                icon: SonrIcons.VideoCamera.gradientNamed(name: FlutterGradientNames.deepBlue, size: 36),
-              ),
-            ]),
-          ),
+                icon: SonrIcons.VideoCamera.gradient(
+                  value: SonrGradients.OctoberSilence,
+                  size: 36,
+                )),
+          ])),
+
           Divider(),
           Padding(padding: EdgeInsets.all(4)),
 

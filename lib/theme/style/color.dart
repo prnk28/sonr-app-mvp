@@ -2,9 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:sonr_app/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'icon.dart';
-import 'package:sonr_app/data/data.dart';
+
 
 class SonrColor {
   // ** General Theme Color Properties ** //
@@ -22,37 +21,25 @@ class SonrColor {
   static const Color AccentBlue = Color(0xffC8E9FF);
   static const Color AccentNavy = Color(0xff245379);
   static const Color AccentPurple = Color(0xffD0CCFF);
-}
 
-class SonrGradient {
-  // ^ General Gradients ^ //
-  static Gradient get bulbDark => FlutterGradients.findByName(FlutterGradientNames.amourAmour);
-  static Gradient get bulbLight => FlutterGradients.findByName(FlutterGradientNames.malibuBeach);
-  static Gradient get logo => FlutterGradients.fabledSunset(tileMode: TileMode.decal);
+  static Color _intToColor(int hexNumber) => Color.fromARGB(255, (hexNumber >> 16) & 0xFF, ((hexNumber >> 8) & 0xFF), (hexNumber >> 0) & 0xFF);
 
-  // ^ Generates Random Gradient for Progress View ^ //
-  static Gradient get Progress {
-    var name = <FlutterGradientNames>[
-      FlutterGradientNames.amyCrisp,
-      FlutterGradientNames.sugarLollipop,
-      FlutterGradientNames.summerGames,
-      FlutterGradientNames.supremeSky,
-      FlutterGradientNames.juicyCake,
-      FlutterGradientNames.northMiracle,
-      FlutterGradientNames.seaLord
-    ].random();
-    return FlutterGradients.findByName(name, tileMode: TileMode.clamp);
+  /// String To Material color
+  static Color fromHex(String hex, {double opacity = 1.0}) => _intToColor(int.parse(_textSubString(hex), radix: 16)).withOpacity(opacity);
+
+//Substring
+  static String _textSubString(String text) {
+    if (text == null) return null;
+
+    if (text.length < 6) return null;
+
+    if (text.length == 6) return text;
+
+    return text.substring(1, text.length);
   }
-
-  // ^ Palette Gradients ^ //
-  static const AlignmentGeometry _K_BEGIN = Alignment.bottomCenter;
-  static const AlignmentGeometry _K_END = Alignment.topCenter;
-  static Gradient get Primary => LinearGradient(colors: [Color(0xff4aaaff), Color(0xff1792ff)], begin: _K_BEGIN, end: _K_END);
-  static Gradient get Secondary => LinearGradient(colors: [Color(0xff7f30ff), Color(0xff9757ff)], begin: _K_BEGIN, end: _K_END);
-  static Gradient get Tertiary => LinearGradient(colors: [Color(0xff17ffab), Color(0xff52ffc0)], begin: _K_BEGIN, end: _K_END);
-  static Gradient get Neutral => LinearGradient(colors: [Color(0xffa2a2a2), Color(0xffa2a2a2)], begin: _K_BEGIN, end: _K_END);
-  static Gradient get Critical => LinearGradient(colors: [Color(0xffff176b), Color(0xffff176b).withOpacity(0.7)], begin: _K_BEGIN, end: _K_END);
 }
+
+
 
 extension GradientValue on FlutterGradientNames {
   Gradient get clamp => FlutterGradients.findByName(this, tileMode: TileMode.clamp);

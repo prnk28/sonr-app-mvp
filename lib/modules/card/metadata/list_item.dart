@@ -22,7 +22,7 @@ class MetaListItemView extends StatelessWidget {
           Spacer(),
           PlainIconButton(
             onPressed: () {},
-            icon: SonrIcons.MoreVertical.gradient(gradient: SonrGradient.Primary, size: 26),
+            icon: SonrIcons.MoreVertical.gradient(value: SonrGradient.Primary, size: 26),
           ),
         ]));
   }

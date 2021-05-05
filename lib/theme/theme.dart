@@ -22,6 +22,7 @@ export 'buttons/plain.dart';
 export 'buttons/confirm.dart';
 export 'style/color.dart';
 export 'style/icon.dart';
+export 'style/gradient.dart';
 export 'style/scaffold.dart';
 export 'elements/snackbar.dart';
 export 'style/card.dart';
@@ -42,7 +43,7 @@ export 'form/textfield.dart';
 export 'package:flutter/material.dart';
 export 'package:supercharged/supercharged.dart';
 export 'package:flutter/services.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sonr_app/service/device/device.dart';
 

@@ -64,7 +64,7 @@ class _ContactGridItemMainView extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.About.gradient(gradient: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.About.gradient(value: SonrGradient.Secondary, size: 24),
                 ),
               )),
 
@@ -108,7 +108,7 @@ class _ContactGridItemDetailsView extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: SonrIcons.Backward.gradient(gradient: SonrGradient.Secondary, size: 24),
+                  child: SonrIcons.Backward.gradient(value: SonrGradient.Secondary, size: 24),
                 )),
 
             // Align Compass

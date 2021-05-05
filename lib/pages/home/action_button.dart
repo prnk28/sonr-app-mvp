@@ -96,7 +96,7 @@ class _ProfileActionButton extends GetView<ProfileController> {
           key: ValueKey<HomeView>(HomeView.Main),
           icon: controller.status.value.isViewing
               ? SonrIcons.Edit.gradient(size: 28)
-              : SonrIcons.Close.gradient(gradient: SonrGradient.Critical, size: 28),
+              : SonrIcons.Close.gradient(value: SonrGradient.Critical, size: 28),
           onPressed: () {
             if (controller.status.value.isViewing) {
               controller.setEditingMode();
@@ -138,10 +138,10 @@ class _RemoteActionButton extends GetView<RemoteController> {
   Widget _buildIcon(RemoteViewStatus status) {
     switch (status) {
       case RemoteViewStatus.Created:
-        return SonrIcons.Logout.gradient(gradient: SonrGradient.Critical, size: 28);
+        return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
         break;
       case RemoteViewStatus.Joined:
-        return SonrIcons.Logout.gradient(gradient: SonrGradient.Critical, size: 28);
+        return SonrIcons.Logout.gradient(value: SonrGradient.Critical, size: 28);
         break;
       default:
         return SonrIcons.Plus.gradient(size: 28);

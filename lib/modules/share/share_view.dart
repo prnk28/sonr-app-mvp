@@ -99,7 +99,7 @@ class _ShareCameraButtonItem extends GetView<ShareController> {
         }
       },
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Camera.gradientNamed(name: FlutterGradientNames.aquaGuidance, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Camera.gradient(value: SonrGradients.CrystalRiver, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Camera'.p_White,
       ]),
@@ -116,7 +116,7 @@ class _ShareGalleryButtonItem extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.selectMedia,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Photos.gradientNamed(name: FlutterGradientNames.frozenHeat, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Photos.gradient(value: SonrGradients.FrozenHeat, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Gallery'.p_White,
       ]),
@@ -132,7 +132,7 @@ class _ShareFileButtonItem extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.selectFile,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradientNamed(name: FlutterGradientNames.loveKiss, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.Folder.gradient(value: SonrGradients.LoveKiss, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'File'.p_White,
       ]),
@@ -148,7 +148,7 @@ class _ShareContactButtonItem extends GetView<ShareController> {
     return GestureDetector(
       onTap: controller.selectContact,
       child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, children: [
-        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradientNamed(name: FlutterGradientNames.smartIndigo, size: 42))),
+        SizedBox(height: 55, width: 55, child: Center(child: SonrIcons.ContactCard.gradient(value: SonrGradients.NightCall, size: 42))),
         Padding(padding: EdgeInsets.only(top: 4)),
         'Contact'.p_White,
       ]),
