@@ -55,38 +55,35 @@ class ShareSheet extends GetView<ShareController> {
   }
   @override
   Widget build(BuildContext context) {
-    return NeumorphicBackground(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        backendColor: Colors.transparent,
-        child: Container(
-            decoration: Neumorph.floating(),
+    return Container(
+        decoration: Neumorph.floating(),
+        width: size.width,
+        height: size.height,
+        padding: EdgeInsets.only(top: 6),
+        margin: EdgeInsets.only(left: 10, right: 10),
+        child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          // @ Top Banner
+          Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            // Bottom Left Close/Cancel Button
+            ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
+
+            "Share".h2,
+
+            // @ Top Right Confirm Button
+            ActionButton(
+                onPressed: () => controller.selectExternal(payload, url, mediaFile),
+                icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.hiddenJaguar)),
+          ]),
+
+          // @ Window Content
+          Spacer(),
+          Container(
             width: size.width,
             height: size.height,
-            padding: EdgeInsets.only(top: 6),
-            margin: EdgeInsets.only(left: 10, right: 10),
-            child: Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              // @ Top Banner
-              Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                // Bottom Left Close/Cancel Button
-                ActionButton(onPressed: () => Get.back(), icon: SonrIcons.Close.gradientNamed(name: FlutterGradientNames.phoenixStart)),
-
-                "Share".h2,
-
-                // @ Top Right Confirm Button
-                ActionButton(
-                    onPressed: () => controller.selectExternal(payload, url, mediaFile),
-                    icon: SonrIcons.Check.gradientNamed(name: FlutterGradientNames.hiddenJaguar)),
-              ]),
-
-              // @ Window Content
-              Spacer(),
-              Container(
-                width: size.width,
-                height: size.height,
-                child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: Neumorph.floating(), child: child),
-              ),
-              Spacer()
-            ])));
+            child: Container(margin: EdgeInsets.only(top: 4, bottom: 4, left: 8), decoration: Neumorph.floating(), child: child),
+          ),
+          Spacer()
+        ]));
   }
 }
 

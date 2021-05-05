@@ -36,7 +36,7 @@ class _PayloadListItem extends GetView<TransferController> {
     }
 
     // # Check for Media File Type
-    else if (controller.inviteRequest.value.payload == Payload.FILE) {
+    else if (controller.inviteRequest.value.payload == Payload.MEDIA) {
       // Image
       if (controller.sonrFile.value.singleFile.mime.isImage) {
         return _PayloadItemThumbnail(item: controller.sonrFile.value);
@@ -50,7 +50,7 @@ class _PayloadListItem extends GetView<TransferController> {
 
     // # Other File
     else {
-      return controller.inviteRequest.value.payload.gradient(size: Height.ratio(0.125));
+      return controller.sonrFile.value.singleFile.mime.type.gradient(size: Height.ratio(0.125));
     }
   }
 

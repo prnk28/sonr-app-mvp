@@ -99,7 +99,7 @@ class _BulbViewChild extends GetView<TransferController> {
 
       // # Other File
       else {
-        return controller.inviteRequest.value.payload.gradient(size: 80);
+        return controller.sonrFile.value.singleFile.mime.type.gradient(size: 80);
       }
     });
   }

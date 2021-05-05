@@ -142,7 +142,7 @@ class _TweetItem extends StatelessWidget {
         ),
       );
     }
-    return NeumorphicButton(
+    return ColorButton.primary(
       padding: EdgeInsets.all(12),
       onPressed: () {
         controller.launchURL("https://twitter.com/${user.username}/status/${tweets[index].id}");
