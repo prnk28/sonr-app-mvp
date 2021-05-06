@@ -3,6 +3,7 @@ module github.com/sonr-io/app/go
 go 1.16
 
 require (
+	github.com/BestBurning/platform_device_id/go v0.1.1
 	github.com/JanezStupar/flutter_systray/go v0.4.0
 	github.com/go-flutter-desktop/go-flutter v0.43.0
 	github.com/go-flutter-desktop/plugins/path_provider v0.4.0

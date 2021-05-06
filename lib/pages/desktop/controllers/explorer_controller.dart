@@ -20,7 +20,11 @@ class ExplorerController extends GetxController {
   void onInit() async {
     // Set Initial Value
     _handleLobbySizeUpdate(LobbyService.local.value);
-    location(await (SonrService.locationInfo() as FutureOr<Location>));
+    var info = await SonrService.locationInfo();
+    if (info != null) {
+      location(info);
+    }
+
     location.refresh();
 
     // Add Stream Handlers
@@ -37,6 +41,8 @@ class ExplorerController extends GetxController {
 
   // # Handle Lobby Size Update ^ //
   _handleLobbySizeUpdate(Lobby? lobby) {
-    isNotEmpty(lobby!.isNotEmpty);
+    if (lobby != null) {
+      isNotEmpty(lobby.isNotEmpty);
+    }
   }
 }

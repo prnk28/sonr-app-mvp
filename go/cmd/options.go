@@ -1,6 +1,7 @@
 package main
 
 import (
+	platform_device_id "github.com/BestBurning/platform_device_id/go"
 	flutter_systray "github.com/JanezStupar/flutter_systray/go"
 	"github.com/go-flutter-desktop/go-flutter"
 	"github.com/go-flutter-desktop/go-flutter/plugin"
@@ -26,6 +27,7 @@ var options = []flutter.Option{
 	flutter.AddPlugin(&open_file.OpenFilePlugin{}),
 	flutter.AddPlugin(&file_picker.FilePickerPlugin{}),
 	flutter.AddPlugin(&AppBarDraggable{}),
+	flutter.AddPlugin(&platform_device_id.PlatformDeviceIdPlugin{}),
 }
 
 // AppBarDraggable is a plugin that makes moving the bordreless window possible

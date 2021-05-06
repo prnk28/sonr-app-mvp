@@ -1,5 +1,7 @@
 import 'package:sonr_app/style/style.dart';
 
+import 'window_controller.dart';
+
 class LinkController extends GetxController {
   final firstName = "".obs;
   final lastName = "".obs;
@@ -34,6 +36,7 @@ class LinkController extends GetxController {
 
       // Process data.
       await UserService.newUser(contact, withSonrConnect: true);
+      Get.find<WindowController>().changeView(DesktopView.Explorer);
     }
   }
 }

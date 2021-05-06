@@ -170,12 +170,16 @@ class SonrService extends GetxService {
 
   // ^ Retreive Node Location Info ^ //
   static Future<Location?> locationInfo() async {
-    return await to._node!.location();
+    if (to._node != null) {
+      return await to._node!.location();
+    }
   }
 
   // ^ Retreive URLLink Metadata ^ //
   static Future<URLLink?> getURL(String url) async {
-    return await to._node!.getURL(url);
+    if (to._node != null) {
+      return await to._node!.getURL(url);
+    }
   }
 
   // ^ Request Local Network Access on iOS ^
@@ -185,8 +189,9 @@ class SonrService extends GetxService {
 
   // ^ Create a New Remote ^
   static Future<RemoteInfo?> createRemote() async {
-    var data = await to._node!.createRemote();
-    return data;
+    if (to._node != null) {
+      return await to._node!.createRemote();
+    }
   }
 
   // ^ Join an Existing Remote ^
@@ -197,50 +202,69 @@ class SonrService extends GetxService {
 
     // Perform Routine
     var remote = RemoteInfo(isJoin: true, topic: topic, display: display, words: words);
-    to._node!.joinRemote(remote);
+
+    if (to._node != null) {
+      to._node!.joinRemote(remote);
+    }
     return remote;
   }
 
   // ^ Leave a Remote Group ^
   static void leaveRemote(RemoteInfo info) async {
     // Perform Routine
-    to._node!.leaveRemote(info);
+    if (to._node != null) {
+      to._node!.leaveRemote(info);
+    }
   }
 
   // ^ Sets Properties for Node ^
   static void setFlatMode(bool isFlatMode) async {
     if (to._properties.value.isFlatMode != isFlatMode) {
       to._properties(Peer_Properties(hasPointToShare: UserService.pointShareEnabled, isFlatMode: isFlatMode));
-      to._node!.update(properties: to._properties.value);
+
+      if (to._node != null) {
+        to._node!.update(properties: to._properties.value);
+      }
     }
   }
 
   // ^ Sets Contact for Node ^
   static void setProfile(Contact contact) async {
-    to._node!.update(contact: contact);
+    if (to._node != null) {
+      to._node!.update(contact: contact);
+    }
   }
 
   // ^ Direct Message a Peer ^
   static void message(Peer peer, String content) {
-    to._node!.message(peer, content);
+    if (to._node != null) {
+      to._node!.message(peer, content);
+    }
   }
 
   // ^ Invite Peer with Built Request ^ //
   static void invite(InviteRequest request) async {
     // Send Invite
-    to._node!.invite(request);
+    if (to._node != null) {
+      to._node!.invite(request);
+    }
   }
 
   // ^ Respond-Peer Event ^
   static void respond(bool decision, {RemoteInfo? info}) async {
-    to._node!.respond(decision, info: info);
+    if (to._node != null) {
+      to._node!.respond(decision, info: info);
+    }
   }
 
   // ^ Invite Peer with Built Request ^ //
   static void sendFlat(Peer? peer) async {
     // Send Invite
     InviteRequest request = InviteRequest(payload: Payload.FLAT_CONTACT, to: peer, isRemote: false, contact: UserService.contact.value);
-    to._node!.invite(request);
+
+    if (to._node != null) {
+      to._node!.invite(request);
+    }
   }
 
   // ^ Async Function notifies transfer complete ^ //

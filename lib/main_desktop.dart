@@ -1,26 +1,11 @@
 import 'package:flutter/material.dart';
 import 'data/data.dart';
 import 'package:sonr_app/style/style.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SonrRouting.initServices(isDesktop: true);
-  await SentryFlutter.init(
-    (options) {
-      // Properties
-      options.dsn = 'https://fbc20bb5a46a41e39a3376ce8124f4bb@o549479.ingest.sentry.io/5672326';
-      options.sampleRate = 0.1;
-      options.serverName = "[App] ${DeviceService.platform.toString()}";
-
-      // Add Excludes
-      SonrRouting.excludedModules.forEach((ex) {
-        options.addInAppExclude(ex);
-      });
-    },
-    // Init your App.
-    appRunner: () => runApp(DesktopApp()),
-  );
+  runApp(DesktopApp());
 }
 
 class DesktopApp extends StatefulWidget {
