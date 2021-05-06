@@ -310,6 +310,7 @@ class SonrService extends GetxService {
 
   // ^ Completes Transmission Sequence ^
   void _handleTransmitted(TransferCard data) async {
+    print(data.toString());
     // Check for Callback
     if (_transferCallback != null) {
       _transferCallback(TransferStatus.Completed);
@@ -326,6 +327,7 @@ class SonrService extends GetxService {
 
   // ^ Mark as Received File ^ //
   Future<void> _handleReceived(TransferCard data) async {
+    print(data.toString());
     // Save Card to Gallery
     await CardService.addCard(data);
     to.received.complete(data);

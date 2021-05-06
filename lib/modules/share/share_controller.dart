@@ -93,7 +93,6 @@ class ShareController extends GetxController {
     // Check Permissions
     if (MobileService.hasGallery.value) {
       var result = await FileService.selectMedia();
-      print(result.item2.toString());
       // Check has Item
       if (result.item1) {
         // Shrink Button after Delay
@@ -116,7 +115,6 @@ class ShareController extends GetxController {
         if (result.item1) {
           // Shrink Button after Delay
           shrink(delay: 150.milliseconds);
-          print(result.item2.toString());
 
           // Push to Transfer
           Transfer.transferWithFile(result.item2);
@@ -133,7 +131,6 @@ class ShareController extends GetxController {
     if (MobileService.hasGallery.value) {
       var result = await FileService.selectMedia();
       if (result.item1) {
-        print(result.item2.toString());
         // Push to Transfer
         Transfer.transferWithFile(result.item2);
 
@@ -152,7 +149,6 @@ class ShareController extends GetxController {
         // Continue With Picker
         var result = await FileService.selectMedia();
         if (result.item1) {
-          print(result.item2.toString());
           // Push to Transfer
           Transfer.transferWithFile(result.item2);
 
