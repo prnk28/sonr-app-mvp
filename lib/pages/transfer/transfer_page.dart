@@ -34,7 +34,7 @@ class TransferScreen extends GetView<TransferController> {
           gradient: SonrGradients.PlumBath,
           appBar: DesignAppBar(
             centerTitle: true,
-            leading: PlainIconButton(icon: SonrIcons.Close.black, onPressed: () => Get.offNamed("/home")),
+            leading: ActionButton(icon: SonrIcons.Close.black, onPressed: () => Get.offNamed("/home")),
             subtitle: Container(child: controller.title.value.headFive(color: SonrColor.Black, weight: FontWeight.w400, align: TextAlign.start)),
             title: "Sharing ${controller.sonrFile.value!.payload.toString().capitalizeFirst}".h3,
           ),
